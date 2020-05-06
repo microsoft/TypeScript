@@ -24,15 +24,15 @@ interface MyDoc { // Document
 >tagName : string
 
     createElement(tagName: 'canvas'): Derived1;
->createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
 >tagName : "canvas"
 
     createElement(tagName: 'div'): Derived2;
->createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: 'div'): Derived2; (tagName: "span"): Derived3; }
 >tagName : "div"
 
     createElement(tagName: 'span'): Derived3;
->createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: 'span'): Derived3; }
 >tagName : "span"
 
     // + 100 more
@@ -46,15 +46,15 @@ class D implements MyDoc {
 >tagName : string
 
     createElement(tagName: 'canvas'): Derived1;
->createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>createElement : { (tagName: string): Base; (tagName: 'canvas'): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
 >tagName : "canvas"
 
     createElement(tagName: 'div'): Derived2;
->createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: 'div'): Derived2; (tagName: "span"): Derived3; }
 >tagName : "div"
 
     createElement(tagName: 'span'): Derived3;
->createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
+>createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: 'span'): Derived3; }
 >tagName : "span"
 
     createElement(tagName:any): Base {

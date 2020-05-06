@@ -83,6 +83,10 @@
         "category": "Error",
         "code": 1024
     },
+    "An index signature cannot have a trailing comma.": {
+        "category": "Error",
+        "code": 1025
+    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
@@ -211,7 +215,7 @@
         "category": "Error",
         "code": 1063
     },
-    "The return type of an async function or method must be the global Promise<T> type.": {
+    "The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{0}>'?": {
         "category": "Error",
         "code": 1064
     },
@@ -610,6 +614,10 @@
     "Export declarations are not permitted in a namespace.": {
         "category": "Error",
         "code": 1194
+    },
+    "'export *' does not re-export a default.": {
+        "category": "Error",
+        "code": 1195
     },
     "Catch clause variable cannot have a type annotation.": {
         "category": "Error",
@@ -1147,6 +1155,10 @@
         "category": "Error",
         "code": 1383
     },
+    "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
+        "category": "Error",
+        "code": 1384
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1465,11 +1477,11 @@
         "category": "Error",
         "code": 2371
     },
-    "Parameter '{0}' cannot be referenced in its initializer.": {
+    "Parameter '{0}' cannot reference itself.": {
         "category": "Error",
         "code": 2372
     },
-    "Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
+    "Parameter '{0}' cannot reference identifier '{1}' declared after it.": {
         "category": "Error",
         "code": 2373
     },
@@ -2133,10 +2145,6 @@
         "category": "Error",
         "code": 2545
     },
-    "Property '{0}' has conflicting declarations and is inaccessible in type '{1}'.": {
-        "category": "Error",
-        "code": 2546
-    },
     "The type returned by the '{0}()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2547
@@ -2313,6 +2321,22 @@
         "category": "Error",
         "code": 2594
     },
+    "'{0}' can only be imported by using a default import.": {
+        "category": "Error",
+        "code": 2595
+    },
+    "'{0}' can only be imported by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2596
+    },
+    "'{0}' can only be imported by using a 'require' call or by using a default import.": {
+        "category": "Error",
+        "code": 2597
+    },
+    "'{0}' can only be imported by using a 'require' call or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2598
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2376,6 +2400,14 @@
     "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
         "category": "Error",
         "code": 2615
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or a default import.": {
+        "category": "Error",
+        "code": 2616
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2617
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -2914,6 +2946,30 @@
     "This spread always overwrites this property.": {
         "category": "Error",
         "code": 2785
+    },
+    "'{0}' cannot be used as a JSX component.": {
+        "category": "Error",
+        "code": 2786
+    },
+    "Its return type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2787
+    },
+    "Its instance type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2788
+    },
+    "Its element type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2789
+    },
+    "The operand of a 'delete' operator must be optional.": {
+        "category": "Error",
+        "code": 2790
+    },
+    "Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.": {
+        "category": "Error",
+        "code": 2791
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3456,6 +3512,10 @@
     "'{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.": {
         "category": "Error",
         "code": 5082
+    },
+    "Cannot read file '{0}'.": {
+        "category": "Error",
+        "code": 5083
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4332,6 +4392,14 @@
         "category": "Error",
         "code": 6231
     },
+    "Declaration augments declaration in another file. This cannot be serialized.": {
+        "category": "Error",
+        "code": 6232
+    },
+    "This is the declaration being augmented. Consider moving the augmenting declaration into the same file.": {
+        "category": "Error",
+        "code": 6233
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -5129,6 +5197,14 @@
         "category": "Message",
         "code": 90035
     },
+    "Replace '{0}' with 'Promise<{1}>'": {
+        "category": "Message",
+        "code": 90036
+    },
+    "Fix all incorrect return type of an async functions": {
+        "category": "Message",
+        "code": 90037
+    },
     "Declare a private field named '{0}'.": {
         "category": "Message",
         "code": 90053
@@ -5525,7 +5601,7 @@
         "category": "Message",
         "code": 95100
     },
-    "Wrap invalid character in an expression container": {
+    "Convert all invalid characters to HTML entity code": {
         "category": "Message",
         "code": 95101
     },
@@ -5553,7 +5629,43 @@
         "category": "Message",
         "code": 95107
     },
-
+    "Wrap invalid character in an expression container": {
+        "category": "Message",
+        "code": 95108
+    },
+    "Wrap all invalid characters in an expression container": {
+        "category": "Message",
+        "code": 95109
+    },
+    "Visit https://aka.ms/tsconfig.json to read more about this file": {
+        "category": "Message",
+        "code": 95110
+    },
+    "Add a return statement": {
+        "category": "Message",
+        "code": 95111
+    },
+    "Remove block body braces": {
+        "category": "Message",
+        "code": 95112
+    },
+    "Wrap the following body with parentheses which should be an object literal": {
+        "category": "Message",
+        "code": 95113
+    },
+    "Add all missing return statement": {
+        "category": "Message",
+        "code": 95114
+    },
+    "Remove all incorrect body block braces": {
+        "category": "Message",
+        "code": 95115
+    },
+    "Wrap all object literal with parentheses": {
+        "category": "Message",
+        "code": 95116
+    },
+    
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
@@ -5641,5 +5753,17 @@
     "An optional chain cannot contain private identifiers.": {
         "category": "Error",
         "code": 18030
+    },
+    "The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.": {
+        "category": "Error",
+        "code": 18031
+    },
+    "The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.": {
+        "category": "Error",
+        "code": 18032
+    },
+    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+        "category": "Error",
+        "code": 18033
     }
 }

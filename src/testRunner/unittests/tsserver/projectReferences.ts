@@ -1487,13 +1487,7 @@ function foo() {
                     project,
                     [aConfig.path, aTest.path, bFoo.path, bBar.path, libFile.path]
                 );
-                verifyGetErrRequest({
-                    host,
-                    session,
-                    expected: [
-                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [aTest] });
                 session.executeCommandSeq<protocol.UpdateOpenRequest>({
                     command: protocol.CommandTypes.UpdateOpen,
                     arguments: {
@@ -1507,13 +1501,7 @@ function foo() {
                         }]
                     }
                 });
-                verifyGetErrRequest({
-                    host,
-                    session,
-                    expected: [
-                        { file: aTest, syntax: [], semantic: [], suggestion: [] }
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [aTest] });
             }
 
             function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
@@ -1937,13 +1925,7 @@ foo;`
                 assert.equal(service.findDefaultConfiguredProject(info), project);
 
                 // Verify errors
-                verifyGetErrRequest({
-                    session,
-                    host,
-                    expected: [
-                        { file: main, syntax: [], semantic: [], suggestion: [] },
-                    ]
-                });
+                verifyGetErrRequestNoErrors({ session, host, files: [main] });
 
                 // Verify collection of script infos
                 service.openClientFile(dummyFile.path);
@@ -2171,6 +2153,115 @@ foo;`
                         symbolDisplayString: "(alias) const foo: 1\nimport foo",
                     }
                 });
+            });
+        });
+
+        describe("auto import with referenced project", () => {
+            function verifyAutoImport(built: boolean, disableSourceOfProjectReferenceRedirect?: boolean) {
+                const solnConfig: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        files: [],
+                        references: [
+                            { path: "shared/src/library" },
+                            { path: "app/src/program" }
+                        ]
+                    })
+                };
+                const sharedConfig: File = {
+                    path: `${tscWatch.projectRoot}/shared/src/library/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "../../bld/library"
+                        }
+                    })
+                };
+                const sharedIndex: File = {
+                    path: `${tscWatch.projectRoot}/shared/src/library/index.ts`,
+                    content: `export function foo() {}`
+                };
+                const sharedPackage: File = {
+                    path: `${tscWatch.projectRoot}/shared/package.json`,
+                    content: JSON.stringify({
+                        name: "shared",
+                        version: "1.0.0",
+                        main: "bld/library/index.js",
+                        types: "bld/library/index.d.ts"
+                    })
+                };
+                const appConfig: File = {
+                    path: `${tscWatch.projectRoot}/app/src/program/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "../../bld/program",
+                            disableSourceOfProjectReferenceRedirect
+                        },
+                        references: [
+                            { path: "../../../shared/src/library" }
+                        ]
+                    })
+                };
+                const appBar: File = {
+                    path: `${tscWatch.projectRoot}/app/src/program/bar.ts`,
+                    content: `import {foo} from "shared";`
+                };
+                const appIndex: File = {
+                    path: `${tscWatch.projectRoot}/app/src/program/index.ts`,
+                    content: `foo`
+                };
+                const sharedSymlink: SymLink = {
+                    path: `${tscWatch.projectRoot}/node_modules/shared`,
+                    symLink: `${tscWatch.projectRoot}/shared`
+                };
+                const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink, libFile];
+                const host = createServerHost(files);
+                if (built) {
+                    const solutionBuilder = tscWatch.createSolutionBuilder(host, [solnConfig.path], {});
+                    solutionBuilder.build();
+                    host.clearOutput();
+                }
+                const session = createSession(host);
+                openFilesForSession([appIndex], session);
+                const response = session.executeCommandSeq<protocol.CodeFixRequest>({
+                    command: protocol.CommandTypes.GetCodeFixes,
+                    arguments: {
+                        file: appIndex.path,
+                        startLine: 1,
+                        startOffset: 1,
+                        endLine: 1,
+                        endOffset: 4,
+                        errorCodes: [Diagnostics.Cannot_find_name_0.code],
+                    }
+                }).response as protocol.CodeFixAction[];
+                assert.deepEqual(response, [
+                    {
+                        fixName: "import",
+                        description: `Import 'foo' from module "shared"`,
+                        changes: [{
+                            fileName: appIndex.path,
+                            textChanges: [{
+                                start: { line: 1, offset: 1 },
+                                end: { line: 1, offset: 1 },
+                                newText: 'import { foo } from "shared";\n\n',
+                            }],
+                        }],
+                        commands: undefined,
+                        fixAllDescription: undefined,
+                        fixId: undefined
+                    }
+                ]);
+            }
+
+            it("when project is built", () => {
+                verifyAutoImport(/*built*/ true);
+            });
+            it("when project is not built", () => {
+                verifyAutoImport(/*built*/ false);
+            });
+            it("when disableSourceOfProjectReferenceRedirect is true", () => {
+                verifyAutoImport(/*built*/ true, /*disableSourceOfProjectReferenceRedirect*/ true);
             });
         });
     });

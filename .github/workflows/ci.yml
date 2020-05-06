@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [10.x, 12.x, 13.x]
 
     steps:
     - uses: actions/checkout@v1
@@ -35,6 +35,7 @@ jobs:
         npm install
         npm update
         npm test
+        
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
     

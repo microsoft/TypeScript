@@ -185,9 +185,9 @@ class M extends L {
 
         console.log(this.a);  // should be OK, M.a is ambient
 >console.log(this.a) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this.a : number
 >this : this
 >a : number

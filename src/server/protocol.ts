@@ -857,10 +857,25 @@ namespace ts.server.protocol {
     }
 
     /** @internal */
-    export interface EmitOutputRequest extends FileRequest {}
+    export interface EmitOutputRequest extends FileRequest {
+        command: CommandTypes.EmitOutput;
+        arguments: EmitOutputRequestArgs;
+    }
+    /** @internal */
+    export interface EmitOutputRequestArgs extends FileRequestArgs {
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
     /** @internal */
     export interface EmitOutputResponse extends Response {
-        readonly body: EmitOutput;
+        readonly body: EmitOutput | ts.EmitOutput;
+    }
+    /** @internal */
+    export interface EmitOutput {
+        outputFiles: OutputFile[];
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
@@ -1808,6 +1823,18 @@ namespace ts.server.protocol {
          * if true - then file should be recompiled even if it does not have any changes.
          */
         forced?: boolean;
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
+
+    export interface CompileOnSaveEmitFileResponse extends Response {
+        body: boolean | EmitResult;
+    }
+
+    export interface EmitResult {
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
@@ -2757,7 +2784,7 @@ namespace ts.server.protocol {
     /**
      * Arguments for navto request message.
      */
-    export interface NavtoRequestArgs extends FileRequestArgs {
+    export interface NavtoRequestArgs {
         /**
          * Search term to navigate to from current location; term can
          * be '.*' or an identifier prefix.
@@ -2767,6 +2794,10 @@ namespace ts.server.protocol {
          *  Optional limit on the number of items to return.
          */
         maxResultCount?: number;
+        /**
+         * The file for the request (absolute pathname required).
+         */
+        file?: string;
         /**
          * Optional flag to indicate we want results for just the current file
          * or the entire project.
@@ -2782,7 +2813,7 @@ namespace ts.server.protocol {
      * match the search term given in argument 'searchTerm'.  The
      * context for the search is given by the named file.
      */
-    export interface NavtoRequest extends FileRequest {
+    export interface NavtoRequest extends Request {
         command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }

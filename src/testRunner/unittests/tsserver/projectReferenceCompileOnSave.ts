@@ -252,7 +252,8 @@ ${appendJs}`
                     text: content,
                     writeByteOrderMark: false
                 })),
-                emitSkipped: false
+                emitSkipped: false,
+                diagnostics: emptyArray
             };
         }
 
@@ -270,7 +271,8 @@ ${appendJs}`
         function noEmitOutput(): EmitOutput {
             return {
                 emitSkipped: true,
-                outputFiles: []
+                outputFiles: [],
+                diagnostics: emptyArray
             };
         }
 

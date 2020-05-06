@@ -707,8 +707,8 @@ else isNumber(zeroOrBigOne);
 
 // Distinguishing truthy from falsy
 const isOne = (x: 1 | 1n) => x;
->isOne : (x: 1n | 1) => 1n | 1
->(x: 1 | 1n) => x : (x: 1n | 1) => 1n | 1
+>isOne : (x: 1 | 1n) => 1n | 1
+>(x: 1 | 1n) => x : (x: 1 | 1n) => 1n | 1
 >x : 1n | 1
 >x : 1n | 1
 

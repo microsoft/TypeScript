@@ -1,5 +1,7 @@
 /* @internal */
 namespace ts.SymbolDisplay {
+    const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+
     // TODO(drosen): use contextual SemanticMeaning.
     export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
         const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
@@ -471,7 +473,7 @@ namespace ts.SymbolDisplay {
                         // If the type is type parameter, format it specially
                         if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                             const typeParameterParts = mapToDisplayParts(writer => {
-                                const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration)!;
+                                const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
                                 getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                             });
                             addRange(displayParts, typeParameterParts);
@@ -631,7 +633,7 @@ namespace ts.SymbolDisplay {
 
         function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined) {
             const typeParameterParts = mapToDisplayParts(writer => {
-                const params = typeChecker.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration);
+                const params = typeChecker.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration, symbolDisplayNodeBuilderFlags);
                 getPrinter().writeList(ListFormat.TypeParameters, params, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
             });
             addRange(displayParts, typeParameterParts);

@@ -21,6 +21,7 @@ node_modules/bluebird/js/release/errors.js(10,49): error TS2350: Only a void fun
 node_modules/bluebird/js/release/generators.js(159,21): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(190,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(208,15): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/generators.js(218,17): error TS2554: Expected 4 arguments, but got 2.
 node_modules/bluebird/js/release/generators.js(220,16): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/map.js(37,10): error TS2551: Property '_init$' does not exist on type 'MappingPromiseArray'. Did you mean '_init'?
 node_modules/bluebird/js/release/map.js(43,23): error TS2339: Property '_values' does not exist on type 'MappingPromiseArray'.
@@ -55,7 +56,9 @@ node_modules/bluebird/js/release/promise.js(180,21): error TS2551: Property 'isR
 node_modules/bluebird/js/release/promise.js(181,36): error TS2339: Property 'reason' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(189,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(206,9): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(211,13): error TS2554: Expected 3 arguments, but got 2.
 node_modules/bluebird/js/release/promise.js(236,9): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(237,9): error TS2554: Expected 3 arguments, but got 2.
 node_modules/bluebird/js/release/promise.js(243,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/promise.js(267,63): error TS2339: Property '_boundTo' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(270,14): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.

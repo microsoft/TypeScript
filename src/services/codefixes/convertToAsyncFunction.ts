@@ -36,11 +36,6 @@ namespace ts.codefix {
         hasBeenDeclared: boolean;
     }
 
-    interface SymbolAndIdentifier {
-        readonly identifier: Identifier;
-        readonly symbol: Symbol;
-    }
-
     interface Transformer {
         readonly checker: TypeChecker;
         readonly synthNamesMap: Map<SynthIdentifier>; // keys are the symbol id of the identifier
@@ -139,12 +134,6 @@ namespace ts.codefix {
         return !!(nodeType && checker.getPromisedTypeOfPromise(nodeType));
     }
 
-    function isParameterOfPromiseCallback(node: Node, checker: TypeChecker): node is ParameterDeclaration {
-        return isParameter(node) && (
-            isPromiseReturningCallExpression(node.parent.parent, checker, "then") ||
-            isPromiseReturningCallExpression(node.parent.parent, checker, "catch"));
-    }
-
     function isPromiseTypedExpression(node: Node, checker: TypeChecker): node is Expression {
         if (!isExpression(node)) return false;
         return !!checker.getPromisedTypeOfPromise(checker.getTypeAtLocation(node));
@@ -160,7 +149,6 @@ namespace ts.codefix {
         It then checks for any collisions and renames them through getSynthesizedDeepClone
     */
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, sourceFile: SourceFile): FunctionLikeDeclaration {
-        const variableNames: SymbolAndIdentifier[] = [];
         const identsToRenameMap = createMap<Identifier>(); // key is the symbol id
         const collidingSymbolMap = createMultiMap<Symbol>();
         forEachChild(nodeToRename, function visit(node: Node) {
@@ -188,7 +176,6 @@ namespace ts.codefix {
                     const ident = firstParameter && isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || createOptimisticUniqueName("result");
                     const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
                     synthNamesMap.set(symbolIdString, synthName);
-                    variableNames.push({ identifier: synthName.identifier, symbol });
                     collidingSymbolMap.add(ident.text, symbol);
                 }
                 // We only care about identifiers that are parameters, variable declarations, or binding elements
@@ -201,17 +188,12 @@ namespace ts.codefix {
                         const newName = getNewNameIfConflict(node, collidingSymbolMap);
                         identsToRenameMap.set(symbolIdString, newName.identifier);
                         synthNamesMap.set(symbolIdString, newName);
-                        variableNames.push({ identifier: newName.identifier, symbol });
                         collidingSymbolMap.add(originalName, symbol);
                     }
                     else {
                         const identifier = getSynthesizedDeepClone(node);
-                        identsToRenameMap.set(symbolIdString, identifier);
                         synthNamesMap.set(symbolIdString, createSynthIdentifier(identifier));
-                        if (isParameterOfPromiseCallback(node.parent, checker) || isVariableDeclaration(node.parent)) {
-                            variableNames.push({ identifier, symbol });
-                            collidingSymbolMap.add(originalName, symbol);
-                        }
+                        collidingSymbolMap.add(originalName, symbol);
                     }
                 }
             }
@@ -300,7 +282,7 @@ namespace ts.codefix {
             varDeclIdentifier = getSynthesizedDeepClone(possibleNameForVarDecl.identifier);
             const typeArray: Type[] = possibleNameForVarDecl.types;
             const unionType = transformer.checker.getUnionType(typeArray, UnionReduction.Subtype);
-            const unionTypeNode = transformer.isInJSFile ? undefined : transformer.checker.typeToTypeNode(unionType);
+            const unionTypeNode = transformer.isInJSFile ? undefined : transformer.checker.typeToTypeNode(unionType, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
             const varDecl = [createVariableDeclaration(varDeclIdentifier, unionTypeNode)];
             varDeclList = createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList(varDecl, NodeFlags.Let));
         }
@@ -336,17 +318,17 @@ namespace ts.codefix {
     }
 
     /**
-     * Transforms the 'x' part of `x.then(...)`, or the 'y()' part of `y.catch(...)`, where 'x' and 'y()' are Promises.
+     * Transforms the 'x' part of `x.then(...)`, or the 'y()' part of `y().catch(...)`, where 'x' and 'y()' are Promises.
      */
     function transformPromiseExpressionOfPropertyAccess(node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
         if (shouldReturn(node, transformer)) {
             return [createReturn(getSynthesizedDeepClone(node))];
         }
 
-        return createVariableOrAssignmentOrExpressionStatement(prevArgName, createAwait(node));
+        return createVariableOrAssignmentOrExpressionStatement(prevArgName, createAwait(node), /*typeAnnotation*/ undefined);
     }
 
-    function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBindingName | undefined, rightHandSide: Expression): readonly Statement[] {
+    function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBindingName | undefined, rightHandSide: Expression, typeAnnotation: TypeNode | undefined): readonly Statement[] {
         if (!variableName || isEmptyBindingName(variableName)) {
             // if there's no argName to assign to, there still might be side effects
             return [createExpressionStatement(rightHandSide)];
@@ -363,9 +345,20 @@ namespace ts.codefix {
                 createVariableDeclarationList([
                     createVariableDeclaration(
                         getSynthesizedDeepClone(getNode(variableName)),
-                        /*type*/ undefined,
+                        typeAnnotation,
                         rightHandSide)],
                     NodeFlags.Const))];
+    }
+
+    function maybeAnnotateAndReturn(expressionToReturn: Expression | undefined, typeAnnotation: TypeNode | undefined): readonly Statement[] {
+        if (typeAnnotation && expressionToReturn) {
+            const name = createOptimisticUniqueName("result");
+            return [
+                ...createVariableOrAssignmentOrExpressionStatement(createSynthIdentifier(name), expressionToReturn, typeAnnotation),
+                createReturn(name)
+            ];
+        }
+        return [createReturn(expressionToReturn)];
     }
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
@@ -382,7 +375,7 @@ namespace ts.codefix {
 
                 const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, isSynthIdentifier(argName) ? [argName.identifier] : []);
                 if (shouldReturn(parent, transformer)) {
-                    return [createReturn(synthCall)];
+                    return maybeAnnotateAndReturn(synthCall, parent.typeArguments?.[0]);
                 }
 
                 const type = transformer.checker.getTypeAtLocation(func);
@@ -392,7 +385,7 @@ namespace ts.codefix {
                     return silentFail();
                 }
                 const returnType = callSignatures[0].getReturnType();
-                const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(prevArgName, createAwait(synthCall));
+                const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(prevArgName, createAwait(synthCall), parent.typeArguments?.[0]);
                 if (prevArgName) {
                     prevArgName.types.push(returnType);
                 }
@@ -409,10 +402,12 @@ namespace ts.codefix {
                     for (const statement of funcBody.statements) {
                         if (isReturnStatement(statement)) {
                             seenReturnStatement = true;
-                        }
-
-                        if (isReturnStatementWithFixablePromiseHandler(statement)) {
-                            refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
+                            if (isReturnStatementWithFixablePromiseHandler(statement)) {
+                                refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
+                            }
+                            else {
+                                refactoredStmts.push(...maybeAnnotateAndReturn(statement.expression, parent.typeArguments?.[0]));
+                            }
                         }
                         else {
                             refactoredStmts.push(statement);
@@ -440,14 +435,14 @@ namespace ts.codefix {
                     const rightHandSide = getSynthesizedDeepClone(funcBody);
                     const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? createAwait(rightHandSide) : rightHandSide;
                     if (!shouldReturn(parent, transformer)) {
-                        const transformedStatement = createVariableOrAssignmentOrExpressionStatement(prevArgName, possiblyAwaitedRightHandSide);
+                        const transformedStatement = createVariableOrAssignmentOrExpressionStatement(prevArgName, possiblyAwaitedRightHandSide, /*typeAnnotation*/ undefined);
                         if (prevArgName) {
                             prevArgName.types.push(returnType);
                         }
                         return transformedStatement;
                     }
                     else {
-                        return [createReturn(possiblyAwaitedRightHandSide)];
+                        return maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, parent.typeArguments?.[0]);
                     }
                 }
             }

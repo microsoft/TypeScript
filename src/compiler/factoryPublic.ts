@@ -1076,10 +1076,8 @@ namespace ts {
     }
 
     export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier) {
-        if (isOptionalChain(node) && isIdentifier(node.name) && isIdentifier(name)) {
-            // Not sure why this cast was necessary: the previous line should already establish that node.name is an identifier
-            const theNode = node as (typeof node & { name: Identifier });
-            return updatePropertyAccessChain(theNode, expression, node.questionDotToken, name);
+        if (isPropertyAccessChain(node)) {
+            return updatePropertyAccessChain(node, expression, node.questionDotToken, cast(name, isIdentifier));
         }
         // Because we are updating existed propertyAccess we want to inherit its emitFlags
         // instead of using the default from createPropertyAccess
@@ -1413,10 +1411,11 @@ namespace ts {
         return node;
     }
 
-    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken) {
+    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator: BinaryOperator | BinaryOperatorToken = node.operatorToken) {
         return node.left !== left
             || node.right !== right
-            ? updateNode(createBinary(left, operator || node.operatorToken, right), node)
+            || node.operatorToken !== operator
+            ? updateNode(createBinary(left, operator, right), node)
             : node;
     }
 
@@ -1557,9 +1556,11 @@ namespace ts {
     export function createYield(expression?: Expression): YieldExpression;
     export function createYield(asteriskToken: AsteriskToken | undefined, expression: Expression): YieldExpression;
     export function createYield(asteriskTokenOrExpression?: AsteriskToken | undefined | Expression, expression?: Expression) {
+        const asteriskToken = asteriskTokenOrExpression && asteriskTokenOrExpression.kind === SyntaxKind.AsteriskToken ? <AsteriskToken>asteriskTokenOrExpression : undefined;
+        expression = asteriskTokenOrExpression && asteriskTokenOrExpression.kind !== SyntaxKind.AsteriskToken ? asteriskTokenOrExpression : expression;
         const node = <YieldExpression>createSynthesizedNode(SyntaxKind.YieldExpression);
-        node.asteriskToken = asteriskTokenOrExpression && asteriskTokenOrExpression.kind === SyntaxKind.AsteriskToken ? <AsteriskToken>asteriskTokenOrExpression : undefined;
-        node.expression = asteriskTokenOrExpression && asteriskTokenOrExpression.kind !== SyntaxKind.AsteriskToken ? asteriskTokenOrExpression : expression;
+        node.asteriskToken = asteriskToken;
+        node.expression = expression && parenthesizeExpressionForList(expression);
         return node;
     }
 
@@ -1653,8 +1654,25 @@ namespace ts {
     }
 
     export function updateNonNullExpression(node: NonNullExpression, expression: Expression) {
+        if (isNonNullChain(node)) {
+            return updateNonNullChain(node, expression);
+        }
         return node.expression !== expression
             ? updateNode(createNonNullExpression(expression), node)
+            : node;
+    }
+
+    export function createNonNullChain(expression: Expression) {
+        const node = <NonNullChain>createSynthesizedNode(SyntaxKind.NonNullExpression);
+        node.flags |= NodeFlags.OptionalChain;
+        node.expression = parenthesizeForAccess(expression);
+        return node;
+    }
+
+    export function updateNonNullChain(node: NonNullChain, expression: Expression) {
+        Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a NonNullExpression using updateNonNullChain. Use updateNonNullExpression instead.");
+        return node.expression !== expression
+            ? updateNode(createNonNullChain(expression), node)
             : node;
     }
 
@@ -2040,6 +2058,26 @@ namespace ts {
             || node.body !== body
             ? updateNode(createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
             : node;
+    }
+
+    /* @internal */
+    export function updateFunctionLikeBody(declaration: FunctionLikeDeclaration, body: Block): FunctionLikeDeclaration {
+        switch (declaration.kind) {
+            case SyntaxKind.FunctionDeclaration:
+                return createFunctionDeclaration(declaration.decorators, declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.typeParameters, declaration.parameters, declaration.type, body);
+            case SyntaxKind.MethodDeclaration:
+                return createMethod(declaration.decorators, declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.questionToken, declaration.typeParameters, declaration.parameters, declaration.type, body);
+            case SyntaxKind.GetAccessor:
+                return createGetAccessor(declaration.decorators, declaration.modifiers, declaration.name, declaration.parameters, declaration.type, body);
+            case SyntaxKind.SetAccessor:
+                return createSetAccessor(declaration.decorators, declaration.modifiers, declaration.name, declaration.parameters, body);
+            case SyntaxKind.Constructor:
+                return createConstructor(declaration.decorators, declaration.modifiers, declaration.parameters, body);
+            case SyntaxKind.FunctionExpression:
+                return createFunctionExpression(declaration.modifiers, declaration.asteriskToken, declaration.name, declaration.typeParameters, declaration.parameters, declaration.type, body);
+            case SyntaxKind.ArrowFunction:
+                return createArrowFunction(declaration.modifiers, declaration.typeParameters, declaration.parameters, declaration.type, declaration.equalsGreaterThanToken, body);
+        }
     }
 
     export function createClassDeclaration(
@@ -3564,6 +3602,12 @@ namespace ts {
         const emit = getOrCreateEmitNode(original);
         emit.leadingComments = undefined;
         emit.trailingComments = undefined;
+        return node;
+    }
+
+    /** @internal */
+    export function ignoreSourceNewlines<T extends Node>(node: T): T {
+        getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
         return node;
     }
 

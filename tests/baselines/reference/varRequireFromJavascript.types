@@ -25,7 +25,7 @@ crunch.n
  * @param {ex.Crunch} wrap
  */
 function f(wrap) {
->f : (wrap: import("tests/cases/conformance/salsa/ex").Crunch) => void
+>f : (wrap: ex.Crunch) => void
 >wrap : import("tests/cases/conformance/salsa/ex").Crunch
 
     wrap.n
@@ -44,9 +44,9 @@ export class Crunch {
 
         this.n = n
 >this.n = n : number
->this.n : number
+>this.n : any
 >this : this
->n : number
+>n : any
 >n : number
     }
     m() {

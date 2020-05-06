@@ -5,9 +5,10 @@ node_modules/discord.js/typings/index.d.ts(18,30): error TS7016: Could not find 
 node_modules/discord.js/typings/index.d.ts(96,37): error TS2694: Namespace 'NodeJS' has no exported member 'Immediate'.
 node_modules/discord.js/typings/index.d.ts(103,43): error TS2694: Namespace 'NodeJS' has no exported member 'Immediate'.
 node_modules/discord.js/typings/index.d.ts(107,79): error TS2694: Namespace 'NodeJS' has no exported member 'Immediate'.
-node_modules/discord.js/typings/index.d.ts(1851,103): error TS2694: Namespace 'NodeJS' has no exported member 'Timeout'.
-node_modules/discord.js/typings/index.d.ts(1853,34): error TS2694: Namespace 'NodeJS' has no exported member 'Timeout'.
-node_modules/discord.js/typings/index.d.ts(1856,34): error TS2694: Namespace 'NodeJS' has no exported member 'Timeout'.
+node_modules/discord.js/typings/index.d.ts(1749,103): error TS2694: Namespace 'NodeJS' has no exported member 'Timeout'.
+node_modules/discord.js/typings/index.d.ts(1751,34): error TS2694: Namespace 'NodeJS' has no exported member 'Timeout'.
+node_modules/discord.js/typings/index.d.ts(1754,34): error TS2694: Namespace 'NodeJS' has no exported member 'Timeout'.
+node_modules/discord.js/typings/index.d.ts(2989,21): error TS2694: Namespace 'NodeJS' has no exported member 'Timeout'.
 
 
 

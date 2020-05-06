@@ -1,0 +1,32 @@
+=== tests/cases/compiler/privatePropertyInUnion.ts ===
+// Repro from #38236
+
+type Type = string | object;
+>Type : Symbol(Type, Decl(privatePropertyInUnion.ts, 0, 0))
+
+class SyncableObject {
+>SyncableObject : Symbol(SyncableObject, Decl(privatePropertyInUnion.ts, 2, 28))
+
+  private foo: unknown;
+>foo : Symbol(SyncableObject.foo, Decl(privatePropertyInUnion.ts, 4, 22))
+}
+
+interface SyncableRef<T extends ISyncableObject> {}
+>SyncableRef : Symbol(SyncableRef, Decl(privatePropertyInUnion.ts, 6, 1))
+>T : Symbol(T, Decl(privatePropertyInUnion.ts, 8, 22))
+>ISyncableObject : Symbol(ISyncableObject, Decl(privatePropertyInUnion.ts, 8, 51))
+
+interface ISyncableObject<T = object> extends SyncableObject {}
+>ISyncableObject : Symbol(ISyncableObject, Decl(privatePropertyInUnion.ts, 8, 51))
+>T : Symbol(T, Decl(privatePropertyInUnion.ts, 10, 26))
+>SyncableObject : Symbol(SyncableObject, Decl(privatePropertyInUnion.ts, 2, 28))
+
+type __ValueDescriptorType<T extends string | object> = T extends ISyncableObject ? SyncableRef<T> : T;
+>__ValueDescriptorType : Symbol(__ValueDescriptorType, Decl(privatePropertyInUnion.ts, 10, 63))
+>T : Symbol(T, Decl(privatePropertyInUnion.ts, 12, 27))
+>T : Symbol(T, Decl(privatePropertyInUnion.ts, 12, 27))
+>ISyncableObject : Symbol(ISyncableObject, Decl(privatePropertyInUnion.ts, 8, 51))
+>SyncableRef : Symbol(SyncableRef, Decl(privatePropertyInUnion.ts, 6, 1))
+>T : Symbol(T, Decl(privatePropertyInUnion.ts, 12, 27))
+>T : Symbol(T, Decl(privatePropertyInUnion.ts, 12, 27))
+

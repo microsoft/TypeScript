@@ -1,7 +1,5 @@
 === tests/cases/conformance/classes/members/privateNames/privateNameJsBadAssignment.js ===
 exports.#nope = 1;           // Error (outside class body)
->exports : Symbol(#nope, Decl(privateNameJsBadAssignment.js, 0, 0))
-
 function A() { }
 >A : Symbol(A, Decl(privateNameJsBadAssignment.js, 0, 18))
 
@@ -11,10 +9,10 @@ A.prototype.#no = 2;         // Error (outside class body)
 >prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
 class B {}
->B : Symbol(B, Decl(privateNameJsBadAssignment.js, 2, 20), Decl(privateNameJsBadAssignment.js, 4, 10))
+>B : Symbol(B, Decl(privateNameJsBadAssignment.js, 2, 20))
 
 B.#foo = 3;                  // Error (outside class body)
->B : Symbol(B, Decl(privateNameJsBadAssignment.js, 2, 20), Decl(privateNameJsBadAssignment.js, 4, 10))
+>B : Symbol(B, Decl(privateNameJsBadAssignment.js, 2, 20))
 
 class C {
 >C : Symbol(C, Decl(privateNameJsBadAssignment.js, 5, 11))

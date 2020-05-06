@@ -540,6 +540,12 @@ namespace ts {
                     // TypeScript namespace or external module import.
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
+                case SyntaxKind.JsxSelfClosingElement:
+                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
+
+                case SyntaxKind.JsxOpeningElement:
+                    return visitJsxJsxOpeningElement(<JsxOpeningElement>node);
+
                 default:
                     // node contains some other TypeScript syntax
                     return visitEachChild(node, visitor, context);
@@ -1584,6 +1590,18 @@ namespace ts {
                 case SyntaxKind.ImportType:
                     break;
 
+                // handle JSDoc types from an invalid parse
+                case SyntaxKind.JSDocAllType:
+                case SyntaxKind.JSDocUnknownType:
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocVariadicType:
+                case SyntaxKind.JSDocNamepathType:
+                    break;
+
+                case SyntaxKind.JSDocNullableType:
+                case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.JSDocOptionalType:
+                    return serializeTypeNode((<JSDocNullableType | JSDocNonNullableType | JSDocOptionalType>node).type);
 
                 default:
                     return Debug.failBadSyntaxKind(node);
@@ -2271,6 +2289,22 @@ namespace ts {
                 visitNode(node.template, visitor, isExpression));
         }
 
+        function visitJsxSelfClosingElement(node: JsxSelfClosingElement) {
+            return updateJsxSelfClosingElement(
+                node,
+                visitNode(node.tagName, visitor, isJsxTagNameExpression),
+                /*typeArguments*/ undefined,
+                visitNode(node.attributes, visitor, isJsxAttributes));
+        }
+
+        function visitJsxJsxOpeningElement(node: JsxOpeningElement) {
+            return updateJsxOpeningElement(
+                node,
+                visitNode(node.tagName, visitor, isJsxTagNameExpression),
+                /*typeArguments*/ undefined,
+                visitNode(node.attributes, visitor, isJsxAttributes));
+        }
+
         /**
          * Determines whether to emit an enum declaration.
          *
@@ -2693,27 +2727,28 @@ namespace ts {
             const statements: Statement[] = [];
             startLexicalEnvironment();
 
-            let statementsLocation: TextRange;
+            let statementsLocation: TextRange | undefined;
             let blockLocation: TextRange | undefined;
-            const body = node.body!;
-            if (body.kind === SyntaxKind.ModuleBlock) {
-                saveStateAndInvoke(body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
-                statementsLocation = body.statements;
-                blockLocation = body;
-            }
-            else {
-                const result = visitModuleDeclaration(<ModuleDeclaration>body);
-                if (result) {
-                    if (isArray(result)) {
-                        addRange(statements, result);
-                    }
-                    else {
-                        statements.push(result);
-                    }
+            if (node.body) {
+                if (node.body.kind === SyntaxKind.ModuleBlock) {
+                    saveStateAndInvoke(node.body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
+                    statementsLocation = node.body.statements;
+                    blockLocation = node.body;
                 }
+                else {
+                    const result = visitModuleDeclaration(<ModuleDeclaration>node.body);
+                    if (result) {
+                        if (isArray(result)) {
+                            addRange(statements, result);
+                        }
+                        else {
+                            statements.push(result);
+                        }
+                    }
 
-                const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node)!.body;
-                statementsLocation = moveRangePos(moduleBlock.statements, -1);
+                    const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node)!.body;
+                    statementsLocation = moveRangePos(moduleBlock.statements, -1);
+                }
             }
 
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
@@ -2750,7 +2785,7 @@ namespace ts {
             //     })(hi = hello.hi || (hello.hi = {}));
             // })(hello || (hello = {}));
             // We only want to emit comment on the namespace which contains block body itself, not the containing namespaces.
-            if (body.kind !== SyntaxKind.ModuleBlock) {
+            if (!node.body || node.body.kind !== SyntaxKind.ModuleBlock) {
                 setEmitFlags(block, getEmitFlags(block) | EmitFlags.NoComments);
             }
             return block;

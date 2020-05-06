@@ -320,16 +320,6 @@ namespace ts {
             }
         }
 
-        function setValueDeclaration(symbol: Symbol, node: Declaration): void {
-            const { valueDeclaration } = symbol;
-            if (!valueDeclaration ||
-                (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
-                (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
-                // other kinds of value declarations take precedence over modules and assignment declarations
-                symbol.valueDeclaration = node;
-            }
-        }
-
         // Should not be called on a declaration with a computed property name,
         // unless it is a well known Symbol.
         function getDeclarationName(node: Declaration): __String | undefined {
@@ -423,7 +413,7 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean): Symbol {
             Debug.assert(!hasDynamicName(node));
 
-            const isDefaultExport = hasModifier(node, ModifierFlags.Default);
+            const isDefaultExport = hasModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
 
             // The exported symbol for an export default function/class node is always named "default"
             const name = isDefaultExport && parent ? InternalSymbolName.Default : getDeclarationName(node);
@@ -659,7 +649,7 @@ namespace ts {
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
                 // we use the return control flow graph in strict property initialization checks.
-                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor ? createBranchLabel() : undefined;
+                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || (isInJSFile && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
                 currentExceptionTarget = undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
@@ -680,8 +670,8 @@ namespace ts {
                 if (currentReturnTarget) {
                     addAntecedent(currentReturnTarget, currentFlow);
                     currentFlow = finishFlowLabel(currentReturnTarget);
-                    if (node.kind === SyntaxKind.Constructor) {
-                        (<ConstructorDeclaration>node).returnFlowNode = currentFlow;
+                    if (node.kind === SyntaxKind.Constructor || (isInJSFile && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
+                        (<FunctionLikeDeclaration>node).returnFlowNode = currentFlow;
                     }
                 }
                 if (!isIIFE) {
@@ -832,6 +822,9 @@ namespace ts {
                     break;
                 case SyntaxKind.CallExpression:
                     bindCallExpressionFlow(<CallExpression>node);
+                    break;
+                case SyntaxKind.NonNullExpression:
+                    bindNonNullExpressionFlow(<NonNullExpression>node);
                     break;
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
@@ -1668,15 +1661,17 @@ namespace ts {
         }
 
         function bindOptionalChainRest(node: OptionalChain) {
-            bind(node.questionDotToken);
             switch (node.kind) {
                 case SyntaxKind.PropertyAccessExpression:
+                    bind(node.questionDotToken);
                     bind(node.name);
                     break;
                 case SyntaxKind.ElementAccessExpression:
+                    bind(node.questionDotToken);
                     bind(node.argumentExpression);
                     break;
                 case SyntaxKind.CallExpression:
+                    bind(node.questionDotToken);
                     bindEach(node.typeArguments);
                     bindEach(node.arguments);
                     break;
@@ -1695,7 +1690,7 @@ namespace ts {
             // and build it's CFA graph as if it were the first condition (`a && ...`). Then we bind the rest
             // of the node as part of the "true" branch, and continue to do so as we ascend back up to the outermost
             // chain node. We then treat the entire node as the right side of the expression.
-            const preChainLabel = node.questionDotToken ? createBranchLabel() : undefined;
+            const preChainLabel = isOptionalChainRoot(node) ? createBranchLabel() : undefined;
             bindOptionalExpression(node.expression, preChainLabel || trueTarget, falseTarget);
             if (preChainLabel) {
                 currentFlow = finishFlowLabel(preChainLabel);
@@ -1718,7 +1713,7 @@ namespace ts {
             }
         }
 
-        function bindAccessExpressionFlow(node: AccessExpression) {
+        function bindNonNullExpressionFlow(node: NonNullExpression | NonNullChain) {
             if (isOptionalChain(node)) {
                 bindOptionalChainFlow(node);
             }
@@ -1727,7 +1722,16 @@ namespace ts {
             }
         }
 
-        function bindCallExpressionFlow(node: CallExpression) {
+        function bindAccessExpressionFlow(node: AccessExpression | PropertyAccessChain | ElementAccessChain) {
+            if (isOptionalChain(node)) {
+                bindOptionalChainFlow(node);
+            }
+            else {
+                bindEachChild(node);
+            }
+        }
+
+        function bindCallExpressionFlow(node: CallExpression | CallChain) {
             if (isOptionalChain(node)) {
                 bindOptionalChainFlow(node);
             }
@@ -2960,7 +2964,7 @@ namespace ts {
 
         function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
             // Class declarations in Typescript do not allow property declarations
-            const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression);
+            const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) || lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) ;
             if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
                 return;
             }
@@ -3069,7 +3073,7 @@ namespace ts {
         }
 
         function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
-            let namespaceSymbol = lookupSymbolForPropertyAccess(name);
+            let namespaceSymbol = lookupSymbolForPropertyAccess(name, container) || lookupSymbolForPropertyAccess(name, blockScopeContainer);
             const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
             namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
             bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
@@ -3528,6 +3532,10 @@ namespace ts {
             case SyntaxKind.ElementAccessExpression:
                 return computeElementAccess(<ElementAccessExpression>node, subtreeFlags);
 
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+                return computeJsxOpeningLikeElement(<JsxOpeningLikeElement>node, subtreeFlags);
+
             default:
                 return computeOther(node, kind, subtreeFlags);
         }
@@ -3575,6 +3583,15 @@ namespace ts {
         }
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.ArrayLiteralOrCallOrNewExcludes;
+    }
+
+    function computeJsxOpeningLikeElement(node: JsxOpeningLikeElement, subtreeFlags: TransformFlags) {
+        let transformFlags = subtreeFlags | TransformFlags.AssertJsx;
+        if (node.typeArguments) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeBinaryExpression(node: BinaryExpression, subtreeFlags: TransformFlags) {
@@ -4110,8 +4127,6 @@ namespace ts {
                 break;
 
             case SyntaxKind.JsxElement:
-            case SyntaxKind.JsxSelfClosingElement:
-            case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxText:
             case SyntaxKind.JsxClosingElement:
             case SyntaxKind.JsxFragment:

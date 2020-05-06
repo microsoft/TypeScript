@@ -185,7 +185,7 @@ function getVar() {
         },
         {
           "pos": 220,
-          "end": 361,
+          "end": 377,
           "kind": "text"
         }
       ]
@@ -241,11 +241,11 @@ type MyNominal = string & {
 };
 
 ----------------------------------------------------------------------
-text: (220-361)
+text: (220-377)
 /**
  * @return {keyof typeof variable}
  */
-declare function getVar(): "key";
+declare function getVar(): keyof typeof variable;
 declare namespace variable {
     const key: MyNominal;
 }

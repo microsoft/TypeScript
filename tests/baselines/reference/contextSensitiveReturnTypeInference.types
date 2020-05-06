@@ -63,7 +63,7 @@ test(
 >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
 
   (deps: typeof DEPS, data) => ({
->(deps: typeof DEPS, data) => ({    fn1: function() { return deps.foo },    fn2: data.bar  }) : (deps: { foo: number; }, data: IData) => { fn1: () => number; fn2: boolean; }
+>(deps: typeof DEPS, data) => ({    fn1: function() { return deps.foo },    fn2: data.bar  }) : (deps: typeof DEPS, data: IData) => { fn1: () => number; fn2: boolean; }
 >deps : { foo: number; }
 >DEPS : { foo: number; }
 >data : IData

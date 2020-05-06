@@ -177,7 +177,7 @@ Object.defineProperty(x, "zipStr", {
  * @param {{name: string}} named
  */
 function takeName(named) { return named.name; }
->takeName : (named: { name: string; }) => string
+>takeName : (named: {    name: string;}) => string
 >named : { name: string; }
 >named.name : string
 >named : { name: string; }
@@ -231,7 +231,7 @@ const expected = /** @type {{name: string, readonly middleInit: string, readonly
  * @param {typeof needsExemplar} b 
  */
 function match(a, b) {}
->match : (a: () => typeof x, b: (_?: typeof x) => undefined) => void
+>match : (a: typeof returnExemplar, b: typeof needsExemplar) => void
 >a : () => typeof x
 >b : (_?: typeof x) => undefined
 

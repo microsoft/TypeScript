@@ -3,16 +3,16 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(43,9): error TS7
 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(87,9): error TS7027: Unreachable code detected.
 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(122,9): error TS7027: Unreachable code detected.
 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(137,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(143,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(144,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(145,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(148,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(149,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(150,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(151,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(156,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(158,5): error TS2776: Assertions require the call target to be an identifier or qualified name.
-tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(160,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(153,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(154,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(155,37): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(158,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(159,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(160,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(161,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(166,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(168,5): error TS2776: Assertions require the call target to be an identifier or qualified name.
+tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(170,5): error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
 
 
 ==== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts (15 errors) ====
@@ -166,6 +166,16 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(160,5): error TS
         }
     }
     
+    function f11(items: Test[]) {
+        for (let item of items) {
+            if (item.isTest2()) {
+                item.z;
+            }
+            item.assertIsTest2();
+            item.z;
+        }
+    }
+    
     // Invalid constructs
     
     declare let Q1: new (x: unknown) => x is string;
@@ -198,7 +208,7 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(160,5): error TS
         assert(typeof x === "string");  // Error
         ~~~~~~
 !!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:155:11: 'assert' needs an explicit type annotation.
+!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:165:11: 'assert' needs an explicit type annotation.
         const a = [assert];
         a[0](typeof x === "string");  // Error
         ~~~~
@@ -207,8 +217,26 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(160,5): error TS
         t1.assert(typeof x === "string");  // Error
         ~~~~~~~~~
 !!! error TS2775: Assertions require every name in the call target to be declared with an explicit type annotation.
-!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:159:11: 't1' needs an explicit type annotation.
+!!! related TS2782 tests/cases/conformance/controlFlow/assertionTypePredicates1.ts:169:11: 't1' needs an explicit type annotation.
         const t2: Test = new Test();
         t2.assert(typeof x === "string");
+    }
+    
+    // Repro from #35940
+    
+    interface Thing {
+        good: boolean;
+        isGood(): asserts this is GoodThing;
+    }
+    
+    interface GoodThing {
+        good: true;
+    }
+    
+    function example1(things: Thing[]) {
+        for (let thing of things) {
+            thing.isGood();
+            thing.good;
+        }
     }
     

@@ -110,7 +110,7 @@ if (x == xAndObj) {
 // Repro from #24991
 
 function test(level: number | string):number {
->test : (level: string | number) => number
+>test : (level: number | string) => number
 >level : string | number
 
     if (level == +level) {
