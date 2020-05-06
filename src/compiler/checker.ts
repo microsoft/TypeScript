@@ -5503,6 +5503,10 @@ namespace ts {
                 return symbol.declarations && find(symbol.declarations, s => !!getEffectiveTypeAnnotationNode(s) && (!enclosingDeclaration || !!findAncestor(s, n => n === enclosingDeclaration)));
             }
 
+            function getExistingNodeHasNoTypeParametersOrMatchingTypeParameters(existing: TypeNode, type: Type) {
+                return !(getObjectFlags(type) & ObjectFlags.Reference) || !isTypeReferenceNode(existing) || length(existing.typeArguments) >= getMinTypeArgumentCount((type as TypeReference).target.typeParameters);
+            }
+
             /**
              * Unlike `typeToTypeNodeHelper`, this handles setting up the `AllowUniqueESSymbolType` flag
              * so a `unique symbol` is returned when appropriate for the input symbol, rather than `typeof sym`
@@ -5513,7 +5517,7 @@ namespace ts {
                     if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation)) {
                         // try to reuse the existing annotation
                         const existing = getEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
-                        if (getTypeFromTypeNode(existing) === type) {
+                        if (getTypeFromTypeNode(existing) === type && getExistingNodeHasNoTypeParametersOrMatchingTypeParameters(existing, type)) {
                             const result = serializeExistingTypeNode(context, existing, includePrivateSymbol, bundled);
                             if (result) {
                                 return result;
@@ -5534,7 +5538,7 @@ namespace ts {
             function serializeReturnTypeForSignature(context: NodeBuilderContext, type: Type, signature: Signature, includePrivateSymbol?: (s: Symbol) => void, bundled?: boolean) {
                 if (type !== errorType && context.enclosingDeclaration) {
                     const annotation = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
-                    if (!!findAncestor(annotation, n => n === context.enclosingDeclaration) && annotation && instantiateType(getTypeFromTypeNode(annotation), signature.mapper) === type) {
+                    if (!!findAncestor(annotation, n => n === context.enclosingDeclaration) && annotation && instantiateType(getTypeFromTypeNode(annotation), signature.mapper) === type && getExistingNodeHasNoTypeParametersOrMatchingTypeParameters(annotation, type)) {
                         const result = serializeExistingTypeNode(context, annotation, includePrivateSymbol, bundled);
                         if (result) {
                             return result;
@@ -5574,6 +5578,21 @@ namespace ts {
                     }
                     if (isJSDocVariadicType(node)) {
                         return createArrayTypeNode(visitNode((node as JSDocVariadicType).type, visitExistingNodeTreeSymbols));
+                    }
+                    if (isJSDocTypeLiteral(node)) {
+                        return createTypeLiteralNode(map(node.jsDocPropertyTags, t => {
+                            const name = isIdentifier(t.name) ? t.name : t.name.right;
+                            const typeViaParent = getTypeOfPropertyOfType(getTypeFromTypeNode(node), name.escapedText);
+                            const overrideTypeNode = typeViaParent && t.typeExpression && getTypeFromTypeNode(t.typeExpression.type) !== typeViaParent ? typeToTypeNodeHelper(typeViaParent, context) : undefined;
+
+                            return createPropertySignature(
+                                /*modifiers*/ undefined,
+                                name,
+                                t.typeExpression && isJSDocOptionalType(t.typeExpression.type) ? createToken(SyntaxKind.QuestionToken) : undefined,
+                                overrideTypeNode || (t.typeExpression && visitNode(t.typeExpression.type, visitExistingNodeTreeSymbols)) || createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                                /*initializer*/ undefined
+                            );
+                        }));
                     }
                     if (isTypeReferenceNode(node) && isIdentifier(node.typeName) && node.typeName.escapedText === "") {
                         return setOriginalNode(createKeywordTypeNode(SyntaxKind.AnyKeyword), node);
