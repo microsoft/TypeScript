@@ -4550,7 +4550,7 @@ namespace ts {
                     badNode.right = invalidElement;
                     badNode.operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false);
                     badNode.operatorToken.pos = badNode.operatorToken.end = badNode.right.pos;
-                    parseErrorAt(topBadPos, invalidElement.end, Diagnostics.JSX_expressions_must_have_one_parent_element);
+                    parseErrorAt(skipTrivia(sourceText, topBadPos), invalidElement.end, Diagnostics.JSX_expressions_must_have_one_parent_element);
                     return <JsxElement><Node>badNode;
                 }
             }

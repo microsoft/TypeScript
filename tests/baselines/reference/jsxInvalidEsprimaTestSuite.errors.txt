@@ -33,8 +33,8 @@ tests/cases/conformance/jsx/16.tsx(1,2): error TS17008: JSX element 'a' has no c
 tests/cases/conformance/jsx/16.tsx(1,10): error TS1005: '</' expected.
 tests/cases/conformance/jsx/17.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 tests/cases/conformance/jsx/17.tsx(1,10): error TS1005: '</' expected.
-tests/cases/conformance/jsx/18.tsx(1,8): error TS2657: JSX expressions must have one parent element.
-tests/cases/conformance/jsx/19.tsx(1,8): error TS2657: JSX expressions must have one parent element.
+tests/cases/conformance/jsx/18.tsx(1,9): error TS2657: JSX expressions must have one parent element.
+tests/cases/conformance/jsx/19.tsx(1,9): error TS2657: JSX expressions must have one parent element.
 tests/cases/conformance/jsx/2.tsx(1,3): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/20.tsx(1,10): error TS1005: '}' expected.
 tests/cases/conformance/jsx/20.tsx(1,11): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
@@ -228,11 +228,11 @@ tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
 !!! error TS1005: '</' expected.
 ==== tests/cases/conformance/jsx/18.tsx (1 errors) ====
     var x = <div>one</div><div>two</div>;;
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
 ==== tests/cases/conformance/jsx/19.tsx (1 errors) ====
     var x = <div>one</div> /* intervening comment */ <div>two</div>;;
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
 ==== tests/cases/conformance/jsx/20.tsx (2 errors) ====
     <a>{"str";}</a>;

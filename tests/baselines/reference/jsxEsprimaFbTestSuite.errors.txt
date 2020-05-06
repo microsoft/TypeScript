@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(37,43): error TS2657: JSX expressions must have one parent element.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,1): error TS2657: JSX expressions must have one parent element.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,17): error TS1005: '{' expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,23): error TS1005: ';' expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,23): error TS2304: Cannot find name 'right'.
@@ -45,8 +45,6 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,58): error TS1109: Expr
     <div>@test content</div>;
     
     <div><br />7x invalid-js-identifier</div>;
-                                              
-    
     
     <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
     ~~~~~~~~~~~~~~~~~~~~~

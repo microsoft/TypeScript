@@ -28743,12 +28743,10 @@ namespace ts {
                 case SyntaxKind.CommaToken:
                     if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isEvalNode(right)) {
                         const sf = getSourceFileOfNode(left);
+                        const sourceText = sf.text;
                         const isInDiag2657 = sf.parseDiagnostics.some(diag => {
                             if (diag.code !== Diagnostics.JSX_expressions_must_have_one_parent_element.code) return false;
-                            const start = diag.start;
-                            const end = start + diag.length;
-                            if (left.pos >= start && left.pos <= end) return true;
-                            return false;
+                            return textSpanContainsPosition(diag, skipTrivia(sourceText, left.pos));
                         });
                         if (!isInDiag2657) error(left, Diagnostics.Left_side_of_comma_operator_is_unused_and_has_no_side_effects);
                     }
