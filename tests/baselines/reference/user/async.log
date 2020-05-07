@@ -96,6 +96,7 @@ node_modules/async/dist/async.js(754,49): error TS2339: Property 'process' does 
   Property 'process' does not exist on type 'false'.
 node_modules/async/dist/async.js(810,45): error TS2554: Expected 0 arguments, but got 1.
 node_modules/async/dist/async.js(923,32): error TS2554: Expected 2 arguments, but got 1.
+node_modules/async/dist/async.js(1294,27): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(1299,18): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1303,3): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
   Type 'undefined' is not assignable to type 'any[]'.
@@ -103,6 +104,7 @@ node_modules/async/dist/async.js(1509,9): error TS2322: Type 'null' is not assig
 node_modules/async/dist/async.js(1578,20): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(1580,51): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1622,17): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/async/dist/async.js(1681,26): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(1687,30): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1761,7): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1762,14): error TS2532: Object is possibly 'undefined'.
@@ -116,6 +118,7 @@ node_modules/async/dist/async.js(1768,32): error TS2532: Object is possibly 'und
 node_modules/async/dist/async.js(1768,38): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1769,3): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(1773,35): error TS2532: Object is possibly 'undefined'.
+node_modules/async/dist/async.js(1964,30): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(1990,16): error TS2554: Expected 3 arguments, but got 1.
 node_modules/async/dist/async.js(2116,20): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'number | undefined'.
   Type 'Function' is not assignable to type 'number'.
@@ -154,11 +157,14 @@ node_modules/async/dist/async.js(3848,24): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,25): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(4381,5): error TS2322: Type 'any[] | {}' is not assignable to type 'any[]'.
   Type '{}' is missing the following properties from type 'any[]': length, pop, push, concat, and 28 more.
+node_modules/async/dist/async.js(4570,22): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(4617,17): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(4617,17): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
+node_modules/async/dist/async.js(4653,33): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(4931,19): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/async/dist/async.js(4933,23): error TS2339: Property 'info' does not exist on type 'Error'.
+node_modules/async/dist/async.js(5092,40): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/dist/async.js(5104,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(5160,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(5179,20): error TS2339: Property 'unmemoized' does not exist on type 'Function'.
@@ -590,6 +596,7 @@ node_modules/async/reject.js(44,20): error TS2695: Left side of comma operator i
 node_modules/async/rejectLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/rejectSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retry.js(48,12): error TS2304: Cannot find name 'AsyncFunction'.
+node_modules/async/retry.js(106,22): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/retry.js(112,24): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retry.js(119,81): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retry.js(141,18): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -641,6 +648,7 @@ node_modules/async/timesLimit.js(40,28): error TS2695: Left side of comma operat
 node_modules/async/timesSeries.js(27,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/timesSeries.js(31,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/transform.js(43,12): error TS2304: Cannot find name 'AsyncFunction'.
+node_modules/async/transform.js(72,39): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/async/transform.js(76,24): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/transform.js(78,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/transform.js(79,22): error TS2695: Left side of comma operator is unused and has no side effects.

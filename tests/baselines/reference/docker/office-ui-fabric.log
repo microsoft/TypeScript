@@ -5,62 +5,28 @@ Standard output:
 @fluentui/ability-attributes: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
 @fluentui/ability-attributes: > allyschema -c "process.env.NODE_ENV !== 'production'" schema.json > ./src/schema.ts
 @fluentui/ability-attributes: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
-@fluentui/ability-attributes: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/ability-attributes/gulpfile.ts
-@fluentui/ability-attributes: Done in ?s.
-@fluentui/digest: yarn run vX.X.X
-@fluentui/digest: $ just-scripts build
-@fluentui/digest: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/fluentui/digest/tsconfig.json
-@fluentui/digest: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --module esnext --outDir lib --project "/office-ui-fabric-react/packages/fluentui/digest/tsconfig.json"
-@fluentui/digest: [XX:XX:XX XM] ■ Running Webpack
-@fluentui/digest: [XX:XX:XX XM] ■ Webpack Config Path: null
-@fluentui/digest: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
-@fluentui/digest: Done in ?s.
-@fluentui/docs-components: yarn run vX.X.X
-@fluentui/docs-components: $ gulp bundle:package:no-umd
-@fluentui/docs-components: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
-@fluentui/docs-components: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/docs-components/gulpfile.ts
-@fluentui/docs-components: Done in ?s.
-@uifabric/build: yarn run vX.X.X
-@uifabric/build: $ node ./just-scripts.js no-op
-@uifabric/build: Done in ?s.
-@uifabric/example-data: yarn run vX.X.X
-@uifabric/example-data: $ just-scripts build
-@uifabric/example-data: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
-@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
-@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
-@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
-@uifabric/example-data: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/example-data/lib/index.d.ts'
-@uifabric/example-data: Done in ?s.
-@fluentui/keyboard-key: yarn run vX.X.X
-@fluentui/keyboard-key: $ just-scripts build
-@fluentui/keyboard-key: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@fluentui/keyboard-key: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/keyboard-key/tsconfig.json
-@fluentui/keyboard-key: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/keyboard-key/tsconfig.json"
-@fluentui/keyboard-key: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/keyboard-key/tsconfig.json
-@fluentui/keyboard-key: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/keyboard-key/tsconfig.json"
-@fluentui/keyboard-key: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/keyboard-key/lib/index.d.ts'
-@fluentui/keyboard-key: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+@fluentui/ability-attributes: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 
 
 Standard error:
 info cli using local version of lerna
 @fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
-@uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@fluentui/keyboard-key: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@fluentui/keyboard-key: Warning: You have changed the public API signature for this project. Please copy the file "temp/keyboard-key.api.md" to "etc/keyboard-key.api.md", or perform a local build (which does this automatically). See the Git repo documentation for more info.
-@fluentui/keyboard-key: [XX:XX:XX XM] x Error detected while running 'api-extractor:verify'
-@fluentui/keyboard-key: [XX:XX:XX XM] x ------------------------------------
-@fluentui/keyboard-key: [XX:XX:XX XM] x Error: The public API file is out of date. Please run the API snapshot and commit the updated API file.
-@fluentui/keyboard-key:     at apiExtractorVerify (/office-ui-fabric-react/node_modules/just-scripts/src/tasks/apiExtractorTask.ts:73:13)
-@fluentui/keyboard-key:     at _wrapFunction (/office-ui-fabric-react/node_modules/just-task/lib/wrapTask.js:13:36)
-@fluentui/keyboard-key:     at api-extractor:verify (/office-ui-fabric-react/node_modules/undertaker/lib/set-task.js:13:15)
-@fluentui/keyboard-key:     at bound (domain.js:426:14)
-@fluentui/keyboard-key:     at runBound (domain.js:439:12)
-@fluentui/keyboard-key:     at asyncRunner (/office-ui-fabric-react/node_modules/async-done/index.js:55:18)
-@fluentui/keyboard-key:     at processTicksAndRejections (internal/process/task_queues.js:79:11)
-@fluentui/keyboard-key: [XX:XX:XX XM] x ------------------------------------
-@fluentui/keyboard-key: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@fluentui/keyboard-key: error Command failed with exit code 1.
-lerna ERR! yarn run build exited 1 in '@fluentui/keyboard-key'
+@fluentui/ability-attributes: internal/modules/cjs/loader.js:491
+@fluentui/ability-attributes:   throw new ERR_PACKAGE_PATH_NOT_EXPORTED(basePath, mappingKey);
+@fluentui/ability-attributes:   ^
+@fluentui/ability-attributes: Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: No "exports" main resolved in /office-ui-fabric-react/node_modules/@babel/helper-compilation-targets/package.json
+@fluentui/ability-attributes:     at applyExports (internal/modules/cjs/loader.js:491:9)
+@fluentui/ability-attributes:     at resolveExports (internal/modules/cjs/loader.js:507:23)
+@fluentui/ability-attributes:     at Function.Module._findPath (internal/modules/cjs/loader.js:635:31)
+@fluentui/ability-attributes:     at Function.Module._resolveFilename (internal/modules/cjs/loader.js:1007:27)
+@fluentui/ability-attributes:     at Function.Module._load (internal/modules/cjs/loader.js:890:27)
+@fluentui/ability-attributes:     at Module.require (internal/modules/cjs/loader.js:1080:19)
+@fluentui/ability-attributes:     at require (internal/modules/cjs/helpers.js:72:18)
+@fluentui/ability-attributes:     at Object.<anonymous> (/office-ui-fabric-react/node_modules/@babel/preset-env/lib/debug.js:8:33)
+@fluentui/ability-attributes:     at Module._compile (internal/modules/cjs/loader.js:1176:30)
+@fluentui/ability-attributes:     at Module._compile (/office-ui-fabric-react/node_modules/pirates/lib/index.js:99:24) {
+@fluentui/ability-attributes:   code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+@fluentui/ability-attributes: }
+@fluentui/ability-attributes: error Command failed with exit code 1.
+lerna ERR! yarn run build exited 1 in '@fluentui/ability-attributes'
