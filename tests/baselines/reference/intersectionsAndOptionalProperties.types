@@ -63,3 +63,14 @@ function foo(v: From) {
 >field : null
 }
 
+// Repro from #38348
+
+const yy: number[] & [number, ...number[]] = [1];
+>yy : number[] & [number, ...number[]]
+>[1] : [number]
+>1 : 1
+
+const xx: [number, ...number[]] = yy;
+>xx : [number, ...number[]]
+>yy : number[] & [number, ...number[]]
+
