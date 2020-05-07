@@ -3568,9 +3568,9 @@ namespace ts {
         /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): Type;
         /* @internal */ createSignature(
             declaration: SignatureDeclaration,
-            typeParameters: TypeParameter[] | undefined,
+            typeParameters: readonly TypeParameter[] | undefined,
             thisParameter: Symbol | undefined,
-            parameters: Symbol[],
+            parameters: readonly Symbol[],
             resolvedReturnType: Type,
             typePredicate: TypePredicate | undefined,
             minArgumentCount: number,

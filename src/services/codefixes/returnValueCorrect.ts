@@ -72,11 +72,18 @@ namespace ts.codefix {
         }),
     });
 
+    function createObjectTypeFromLabeledExpression(checker: TypeChecker, label: Identifier, expression: Expression) {
+        const member = checker.createSymbol(SymbolFlags.Property, label.escapedText);
+        member.type = checker.getTypeAtLocation(expression);
+        const members = createSymbolTable([member]);
+        return checker.createAnonymousType(/*symbol*/ undefined, members, [], [], /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+    }
+
     function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, expectType: Type, isFunctionType: boolean): Info | undefined {
         if (!declaration.body || !isBlock(declaration.body) || length(declaration.body.statements) !== 1) return undefined;
 
         const firstStatement = first(declaration.body.statements);
-        if (isExpressionStatement(firstStatement) && checkFixedAssignableTo(checker, declaration, firstStatement.expression, expectType, isFunctionType)) {
+        if (isExpressionStatement(firstStatement) && checkFixedAssignableTo(checker, declaration, checker.getTypeAtLocation(firstStatement.expression), expectType, isFunctionType)) {
             return {
                 declaration,
                 kind: ProblemKind.MissingReturnStatement,
@@ -87,7 +94,8 @@ namespace ts.codefix {
         }
         else if (isLabeledStatement(firstStatement) && isExpressionStatement(firstStatement.statement)) {
             const node = createObjectLiteral([createPropertyAssignment(firstStatement.label, firstStatement.statement.expression)]);
-            if (checkFixedAssignableTo(checker, declaration, node, expectType, isFunctionType)) {
+            const nodeType = createObjectTypeFromLabeledExpression(checker, firstStatement.label, firstStatement.statement.expression);
+            if (checkFixedAssignableTo(checker, declaration, nodeType, expectType, isFunctionType)) {
                 return isArrowFunction(declaration) ? {
                     declaration,
                     kind: ProblemKind.MissingParentheses,
@@ -107,7 +115,8 @@ namespace ts.codefix {
             const firstBlockStatement = first(firstStatement.statements);
             if (isLabeledStatement(firstBlockStatement) && isExpressionStatement(firstBlockStatement.statement)) {
                 const node = createObjectLiteral([createPropertyAssignment(firstBlockStatement.label, firstBlockStatement.statement.expression)]);
-                if (checkFixedAssignableTo(checker, declaration, node, expectType, isFunctionType)) {
+                const nodeType = createObjectTypeFromLabeledExpression(checker, firstBlockStatement.label, firstBlockStatement.statement.expression);
+                if (checkFixedAssignableTo(checker, declaration, nodeType, expectType, isFunctionType)) {
                     return {
                         declaration,
                         kind: ProblemKind.MissingReturnStatement,
@@ -122,8 +131,35 @@ namespace ts.codefix {
         return undefined;
     }
 
-    function checkFixedAssignableTo(checker: TypeChecker, declaration: FunctionLikeDeclaration, expr: Expression, type: Type, isFunctionType: boolean) {
-        return checker.isTypeAssignableTo(checker.getTypeAtLocation(isFunctionType ? updateFunctionLikeBody(declaration, createBlock([createReturn(expr)])) : expr), type);
+    function checkFixedAssignableTo(checker: TypeChecker, declaration: FunctionLikeDeclaration, exprType: Type, type: Type, isFunctionType: boolean) {
+        if (isFunctionType) {
+            const sig = checker.getSignatureFromDeclaration(declaration);
+            if (sig) {
+                if (hasModifier(declaration, ModifierFlags.Async)) {
+                    exprType = checker.createPromiseType(exprType);
+                }
+                const newSig = checker.createSignature(
+                    declaration,
+                    sig.typeParameters,
+                    sig.thisParameter,
+                    sig.parameters,
+                    exprType,
+                    /*typePredicate*/ undefined,
+                    sig.minArgumentCount,
+                    sig.flags);
+                exprType = checker.createAnonymousType(
+                    /*symbol*/ undefined,
+                    createSymbolTable(),
+                    [newSig],
+                    [],
+                    /*stringIndexInfo*/ undefined,
+                    /*numberIndexInfo*/ undefined);
+            }
+            else {
+                exprType = checker.getAnyType();
+            }
+        }
+        return checker.isTypeAssignableTo(exprType, type);
     }
 
     function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number, errorCode: number): Info | undefined {
