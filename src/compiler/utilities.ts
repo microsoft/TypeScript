@@ -4029,11 +4029,11 @@ namespace ts {
                         }
 
                         if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                            getAccessor = <GetAccessorDeclaration>member;
+                            getAccessor = member;
                         }
 
                         if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                            setAccessor = <SetAccessorDeclaration>member;
+                            setAccessor = member;
                         }
                     }
                 }
