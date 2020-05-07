@@ -1,9 +1,22 @@
 Exit Code: 1
 Standard output:
+lib/AbstractMethodError.js(26,16): error TS2532: Object is possibly 'undefined'.
+lib/ContextModule.js(333,29): error TS2345: Argument of type 'Error' is not assignable to parameter of type 'WebpackError'.
+  Type 'Error' is missing the following properties from type 'WebpackError': details, module, loc, hideStack, and 4 more.
 lib/ExternalModule.js(305,28): error TS2554: Expected 1 arguments, but got 0.
+lib/MainTemplate.js(40,29): error TS1016: A required parameter cannot follow an optional parameter.
+lib/ModuleGraphConnection.js(23,3): error TS1016: A required parameter cannot follow an optional parameter.
 lib/Stats.js(68,31): error TS2554: Expected 3 arguments, but got 2.
+lib/config/normalization.js(27,30): error TS1016: A required parameter cannot follow an optional parameter.
+lib/config/normalization.js(37,38): error TS1016: A required parameter cannot follow an optional parameter.
+lib/config/normalization.js(47,29): error TS1016: A required parameter cannot follow an optional parameter.
+lib/config/normalization.js(56,37): error TS1016: A required parameter cannot follow an optional parameter.
 lib/library/SystemLibraryPlugin.js(127,35): error TS2554: Expected 1 arguments, but got 0.
+lib/library/UmdLibraryPlugin.js(38,31): error TS1016: A required parameter cannot follow an optional parameter.
 lib/optimize/ConcatenatedModule.js(205,32): error TS2554: Expected 1 arguments, but got 0.
+lib/util/fs.js(57,23): error TS1016: A required parameter cannot follow an optional parameter.
+lib/util/fs.js(78,19): error TS1016: A required parameter cannot follow an optional parameter.
+lib/util/fs.js(98,22): error TS1016: A required parameter cannot follow an optional parameter.
 lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(36,15): error TS2304: Cannot find name 'Chunk'.
 lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(37,15): error TS2304: Cannot find name 'DependencyTemplates'.
 lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(38,15): error TS2304: Cannot find name 'RuntimeTemplate'.
