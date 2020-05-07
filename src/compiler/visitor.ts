@@ -684,7 +684,7 @@ namespace ts {
     function aggregateTransformFlagsForSubtree(node: Node): TransformFlags {
         // We do not transform ambient declarations or types, so there is no need to
         // recursively aggregate transform flags.
-        if (hasModifier(node, ModifierFlags.Ambient) || (isTypeNode(node) && node.kind !== SyntaxKind.ExpressionWithTypeArguments)) {
+        if (hasSyntacticModifier(node, ModifierFlags.Ambient) || (isTypeNode(node) && node.kind !== SyntaxKind.ExpressionWithTypeArguments)) {
             return TransformFlags.None;
         }
 

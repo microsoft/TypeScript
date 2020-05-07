@@ -38,7 +38,7 @@ namespace ts.refactor {
 
         const exportingModuleSymbol = isSourceFile(exportNode.parent) ? exportNode.parent.symbol : exportNode.parent.parent.symbol;
 
-        const flags = getModifierFlags(exportNode);
+        const flags = getSyntacticModifierFlags(exportNode);
         const wasDefault = !!(flags & ModifierFlags.Default);
         // If source file already has a default export, don't offer refactor.
         if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {

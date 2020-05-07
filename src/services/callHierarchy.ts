@@ -410,7 +410,7 @@ namespace ts.CallHierarchy {
     }
 
     function collectCallSitesOfModuleDeclaration(node: ModuleDeclaration, collect: (node: Node | undefined) => void) {
-        if (!hasModifier(node, ModifierFlags.Ambient) && node.body && isModuleBlock(node.body)) {
+        if (!hasSyntacticModifier(node, ModifierFlags.Ambient) && node.body && isModuleBlock(node.body)) {
             forEach(node.body.statements, collect);
         }
     }
