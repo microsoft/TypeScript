@@ -1,0 +1,91 @@
+=== tests/cases/conformance/jsdoc/jsdocAccessibilityTagDeclarations.js ===
+class Protected {
+>Protected : Symbol(Protected, Decl(jsdocAccessibilityTagDeclarations.js, 0, 0))
+
+    /** @protected */
+    constructor(c) {
+>c : Symbol(c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 16))
+
+        /** @protected */
+        this.c = c
+>this.c : Symbol(Protected.c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 20), Decl(jsdocAccessibilityTagDeclarations.js, 13, 18))
+>this : Symbol(Protected, Decl(jsdocAccessibilityTagDeclarations.js, 0, 0))
+>c : Symbol(Protected.c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 20), Decl(jsdocAccessibilityTagDeclarations.js, 13, 18))
+>c : Symbol(c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 16))
+    }
+    /** @protected */
+    m() {
+>m : Symbol(Protected.m, Decl(jsdocAccessibilityTagDeclarations.js, 5, 5))
+
+        return this.c
+>this.c : Symbol(Protected.c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 20), Decl(jsdocAccessibilityTagDeclarations.js, 13, 18))
+>this : Symbol(Protected, Decl(jsdocAccessibilityTagDeclarations.js, 0, 0))
+>c : Symbol(Protected.c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 20), Decl(jsdocAccessibilityTagDeclarations.js, 13, 18))
+    }
+    /** @protected */
+    get p() { return this.c }
+>p : Symbol(Protected.p, Decl(jsdocAccessibilityTagDeclarations.js, 9, 5), Decl(jsdocAccessibilityTagDeclarations.js, 11, 29))
+>this.c : Symbol(Protected.c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 20), Decl(jsdocAccessibilityTagDeclarations.js, 13, 18))
+>this : Symbol(Protected, Decl(jsdocAccessibilityTagDeclarations.js, 0, 0))
+>c : Symbol(Protected.c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 20), Decl(jsdocAccessibilityTagDeclarations.js, 13, 18))
+
+    /** @protected */
+    set p(value) { this.c = value }
+>p : Symbol(Protected.p, Decl(jsdocAccessibilityTagDeclarations.js, 9, 5), Decl(jsdocAccessibilityTagDeclarations.js, 11, 29))
+>value : Symbol(value, Decl(jsdocAccessibilityTagDeclarations.js, 13, 10))
+>this.c : Symbol(Protected.c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 20), Decl(jsdocAccessibilityTagDeclarations.js, 13, 18))
+>this : Symbol(Protected, Decl(jsdocAccessibilityTagDeclarations.js, 0, 0))
+>c : Symbol(Protected.c, Decl(jsdocAccessibilityTagDeclarations.js, 2, 20), Decl(jsdocAccessibilityTagDeclarations.js, 13, 18))
+>value : Symbol(value, Decl(jsdocAccessibilityTagDeclarations.js, 13, 10))
+}
+
+class Private {
+>Private : Symbol(Private, Decl(jsdocAccessibilityTagDeclarations.js, 14, 1))
+
+    /** @private */
+    constructor(c) {
+>c : Symbol(c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 16))
+
+        /** @private */
+        this.c = c
+>this.c : Symbol(Private.c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 20), Decl(jsdocAccessibilityTagDeclarations.js, 29, 18))
+>this : Symbol(Private, Decl(jsdocAccessibilityTagDeclarations.js, 14, 1))
+>c : Symbol(Private.c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 20), Decl(jsdocAccessibilityTagDeclarations.js, 29, 18))
+>c : Symbol(c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 16))
+    }
+    /** @private */
+    m() {
+>m : Symbol(Private.m, Decl(jsdocAccessibilityTagDeclarations.js, 21, 5))
+
+        return this.c
+>this.c : Symbol(Private.c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 20), Decl(jsdocAccessibilityTagDeclarations.js, 29, 18))
+>this : Symbol(Private, Decl(jsdocAccessibilityTagDeclarations.js, 14, 1))
+>c : Symbol(Private.c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 20), Decl(jsdocAccessibilityTagDeclarations.js, 29, 18))
+    }
+    /** @private */
+    get p() { return this.c }
+>p : Symbol(Private.p, Decl(jsdocAccessibilityTagDeclarations.js, 25, 5), Decl(jsdocAccessibilityTagDeclarations.js, 27, 29))
+>this.c : Symbol(Private.c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 20), Decl(jsdocAccessibilityTagDeclarations.js, 29, 18))
+>this : Symbol(Private, Decl(jsdocAccessibilityTagDeclarations.js, 14, 1))
+>c : Symbol(Private.c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 20), Decl(jsdocAccessibilityTagDeclarations.js, 29, 18))
+
+    /** @private */
+    set p(value) { this.c = value }
+>p : Symbol(Private.p, Decl(jsdocAccessibilityTagDeclarations.js, 25, 5), Decl(jsdocAccessibilityTagDeclarations.js, 27, 29))
+>value : Symbol(value, Decl(jsdocAccessibilityTagDeclarations.js, 29, 10))
+>this.c : Symbol(Private.c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 20), Decl(jsdocAccessibilityTagDeclarations.js, 29, 18))
+>this : Symbol(Private, Decl(jsdocAccessibilityTagDeclarations.js, 14, 1))
+>c : Symbol(Private.c, Decl(jsdocAccessibilityTagDeclarations.js, 18, 20), Decl(jsdocAccessibilityTagDeclarations.js, 29, 18))
+>value : Symbol(value, Decl(jsdocAccessibilityTagDeclarations.js, 29, 10))
+}
+
+// https://github.com/microsoft/TypeScript/issues/38401
+class C {
+>C : Symbol(C, Decl(jsdocAccessibilityTagDeclarations.js, 30, 1))
+
+    constructor(/** @public */ x, /** @protected */ y, /** @private */ z) {
+>x : Symbol(x, Decl(jsdocAccessibilityTagDeclarations.js, 34, 16))
+>y : Symbol(y, Decl(jsdocAccessibilityTagDeclarations.js, 34, 33))
+>z : Symbol(z, Decl(jsdocAccessibilityTagDeclarations.js, 34, 54))
+    }
+}

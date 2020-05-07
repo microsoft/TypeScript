@@ -4,10 +4,10 @@
         "outFile": "../../built/local/tsc.js"
     },
     "files": [
-        "executeCommandLine.ts",
         "tsc.ts"
     ],
     "references": [
-        { "path": "../compiler", "prepend": true }
+        { "path": "../compiler", "prepend": true },
+        { "path": "../executeCommandLine", "prepend": true }
     ]
 }

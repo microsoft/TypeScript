@@ -1,0 +1,28 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesUseBeforeDef.ts ===
+class A {
+>A : A
+
+    #foo = this.#bar; // Error
+>#foo : number
+>this.#bar : number
+>this : this
+
+    #bar = 3;
+>#bar : number
+>3 : 3
+}
+
+class B {
+>B : B
+
+    #foo = this.#bar; // Error
+>#foo : any
+>this.#bar : any
+>this : this
+
+    #bar = this.#foo;
+>#bar : any
+>this.#foo : any
+>this : this
+}
+

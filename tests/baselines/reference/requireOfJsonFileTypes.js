@@ -85,25 +85,5 @@ numberLiteral = f[0];
 booleanLiteral = g[0];
 
 
-//// [out/b.d.ts]
-export declare const a: boolean;
-export declare const b: string;
-export declare const c: null;
-export declare const d: boolean;
-//// [out/c.d.ts]
-declare const _exports: (string | null)[];
-export = _exports;
-//// [out/d.d.ts]
-declare const _exports: string;
-export = _exports;
-//// [out/e.d.ts]
-declare const _exports: number;
-export = _exports;
-//// [out/f.d.ts]
-declare const _exports: number[];
-export = _exports;
-//// [out/g.d.ts]
-declare const _exports: boolean[];
-export = _exports;
 //// [out/file1.d.ts]
 export {};

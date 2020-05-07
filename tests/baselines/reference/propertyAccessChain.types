@@ -9,7 +9,7 @@ o1?.b;
 >b : string | undefined
 
 declare const o2: undefined | { b: { c: string } };
->o2 : { b: { c: string; }; } | undefined
+>o2 : { b: {    c: string;}; } | undefined
 >b : { c: string; }
 >c : string
 
@@ -21,7 +21,7 @@ o2?.b.c;
 >c : string | undefined
 
 declare const o3: { b: undefined | { c: string } };
->o3 : { b: { c: string; } | undefined; }
+>o3 : { b: undefined | {    c: string;}; }
 >b : { c: string; } | undefined
 >c : string
 
@@ -33,8 +33,8 @@ o3.b?.c;
 >c : string | undefined
 
 declare const o4: { b?: { c: { d?: { e: string } } } };
->o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
->b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o4 : { b?: { c: {    d?: {        e: string;    };}; } | undefined; }
+>b : { c: {    d?: {        e: string;    };}; } | undefined
 >c : { d?: { e: string; } | undefined; }
 >d : { e: string; } | undefined
 >e : string
@@ -51,8 +51,8 @@ o4.b?.c.d?.e;
 >e : string | undefined
 
 declare const o5: { b?(): { c: { d?: { e: string } } } };
->o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
->b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?(): {    c: {        d?: {            e: string;        };    };}; }
+>b : (() => {    c: {        d?: {            e: string;        };    };}) | undefined
 >c : { d?: { e: string; } | undefined; }
 >d : { e: string; } | undefined
 >e : string
@@ -71,7 +71,7 @@ o5.b?.().c.d?.e;
 
 // GH#33744
 declare const o6: <T>() => undefined | ({ x: number });
->o6 : <T>() => { x: number; } | undefined
+>o6 : <T>() => undefined | ({    x: number;})
 >x : number
 
 o6<number>()?.x;
@@ -88,4 +88,22 @@ o1?.b ? 1 : 0;
 >b : string | undefined
 >1 : 1
 >0 : 0
+
+// GH#36031
+o2?.b!.c;
+>o2?.b!.c : string | undefined
+>o2?.b! : { c: string; } | undefined
+>o2?.b : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>b : { c: string; } | undefined
+>c : string | undefined
+
+o2?.b!.c!;
+>o2?.b!.c! : string
+>o2?.b!.c : string | undefined
+>o2?.b! : { c: string; } | undefined
+>o2?.b : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>b : { c: string; } | undefined
+>c : string | undefined
 

@@ -4,7 +4,7 @@ namespace ts {
             scenario: "listFilesOnly",
             subScenario: "combined with watch",
             fs: () => loadProjectFromFiles({
-                "/src/test.ts": utils.dedent`
+                "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
             }),
             commandLineArgs: ["/src/test.ts", "--watch", "--listFilesOnly"]
@@ -14,7 +14,7 @@ namespace ts {
             scenario: "listFilesOnly",
             subScenario: "loose file",
             fs: () => loadProjectFromFiles({
-                "/src/test.ts": utils.dedent`
+                "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
             }),
             commandLineArgs: ["/src/test.ts", "--listFilesOnly"]

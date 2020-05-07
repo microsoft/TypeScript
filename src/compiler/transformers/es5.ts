@@ -83,6 +83,9 @@ namespace ts {
          * @param node A PropertyAccessExpression
          */
         function substitutePropertyAccessExpression(node: PropertyAccessExpression): Expression {
+            if (isPrivateIdentifier(node.name)) {
+                return node;
+            }
             const literalName = trySubstituteReservedName(node.name);
             if (literalName) {
                 return setTextRange(factory.createElementAccess(node.expression, literalName), node);

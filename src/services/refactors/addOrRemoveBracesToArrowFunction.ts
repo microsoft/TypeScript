@@ -44,6 +44,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         const { expression, returnStatement, func } = info;
 
         let body: ConciseBody;
+
         if (actionName === addBracesActionName) {
             const returnStatement = factory.createReturn(expression);
             body = factory.createBlock([returnStatement], /* multiLine */ true);
@@ -54,18 +55,19 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             const actualExpression = expression || factory.createVoidZero();
             body = needsParentheses(actualExpression) ? factory.createParen(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
+            copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
         else {
             Debug.fail("invalid action");
         }
 
-        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func.body, body));
-        return { renameFilename: undefined, renameLocation: undefined, edits };
-    }
+        const edits = textChanges.ChangeTracker.with(context, t => {
+            t.replaceNode(file, func.body, body);
+        });
 
-    function needsParentheses(expression: Expression) {
-        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
+        return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
     function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): Info | undefined {

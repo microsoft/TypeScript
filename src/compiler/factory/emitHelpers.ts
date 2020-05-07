@@ -13,7 +13,7 @@ namespace ts {
         createAsyncDelegatorHelper(expression: Expression): Expression;
         createAsyncValuesHelper(expression: Expression): Expression;
         // ES2018 Destructuring Helpers
-        createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[]): Expression;
+        createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression;
         // ES2017 Helpers
         createAwaiterHelper(hasLexicalThis: boolean, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block): Expression;
         // ES2015 Helpers
@@ -27,9 +27,13 @@ namespace ts {
         // ES2015 Generator Helpers
         createGeneratorHelper(body: FunctionExpression): Expression;
         // ES Module Helpers
+        createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined): Expression;
         createImportStarHelper(expression: Expression): Expression;
         createImportStarCallbackHelper(): Expression;
         createImportDefaultHelper(expression: Expression): Expression;
+        // Class Fields Helpers
+        createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier): Expression;
+        createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression): Expression;
     }
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
@@ -61,9 +65,13 @@ namespace ts {
             // ES2015 Generator Helpers
             createGeneratorHelper,
             // ES Module Helpers
+            createCreateBindingHelper,
             createImportStarHelper,
             createImportStarCallbackHelper,
             createImportDefaultHelper,
+            // Class Fields Helpers
+            createClassPrivateFieldGetHelper,
+            createClassPrivateFieldSetHelper,
         };
 
         /**
@@ -148,7 +156,7 @@ namespace ts {
             context.requestEmitHelper(asyncGeneratorHelper);
 
             // Mark this node as originally an async function
-            (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody;
+            (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
             return factory.createCall(
                 getUnscopedHelperName("__asyncGenerator"),
@@ -185,7 +193,7 @@ namespace ts {
         /** Given value: o, propName: p, pattern: { a, b, ...p } from the original statement
          * `{ a, b, ...p } = o`, create `p = __rest(o, ["a", "b"]);`
          */
-        function createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[]): Expression {
+        function createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression {
             context.requestEmitHelper(restHelper);
             const propertyNames: Expression[] = [];
             let computedTempVariableOffset = 0;
@@ -193,6 +201,7 @@ namespace ts {
                 const propertyName = getPropertyNameOfBindingOrAssignmentElement(elements[i]);
                 if (propertyName) {
                     if (isComputedPropertyName(propertyName)) {
+                        Debug.assertIsDefined(computedTempVariables, "Encountered computed property name but 'computedTempVariables' argument was not provided.");
                         const temp = computedTempVariables[computedTempVariableOffset];
                         computedTempVariableOffset++;
                         // typeof _tmp === "symbol" ? _tmp : _tmp + ""
@@ -214,7 +223,12 @@ namespace ts {
             return factory.createCall(
                 getUnscopedHelperName("__rest"),
                 /*typeArguments*/ undefined,
-                [value, factory.createArrayLiteral(propertyNames)]
+                [
+                    value,
+                    setTextRange(
+                        factory.createArrayLiteral(propertyNames),
+                        location
+                    )]
             );
         }
 
@@ -255,7 +269,7 @@ namespace ts {
             return factory.createCall(
                 getUnscopedHelperName("__extends"),
                 /*typeArguments*/ undefined,
-                [name, factory.createFileLevelUniqueName("_super")]
+                [name, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)]
             );
         }
 
@@ -321,6 +335,14 @@ namespace ts {
 
         // ES Module Helpers
 
+        function createCreateBindingHelper(module: Expression, inputName: Expression, outputName: Expression | undefined) {
+            context.requestEmitHelper(createBindingHelper);
+            return factory.createCall(
+                getUnscopedHelperName("__createBinding"),
+                /*typeArguments*/ undefined,
+                [factory.createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])]);
+        }
+
         function createImportStarHelper(expression: Expression) {
             context.requestEmitHelper(importStarHelper);
             return factory.createCall(
@@ -342,6 +364,18 @@ namespace ts {
                 /*typeArguments*/ undefined,
                 [expression]
             );
+        }
+
+        // Class Fields Helpers
+
+        function createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier) {
+            context.requestEmitHelper(classPrivateFieldGetHelper);
+            return factory.createCall(getUnscopedHelperName("__classPrivateFieldGet"), /*typeArguments*/ undefined, [receiver, privateField]);
+        }
+
+        function createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression) {
+            context.requestEmitHelper(classPrivateFieldSetHelper);
+            return factory.createCall(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, [receiver, privateField, value]);
         }
     }
 
@@ -441,6 +475,7 @@ namespace ts {
         name: "typescript:asyncGenerator",
         importName: "__asyncGenerator",
         scoped: false,
+        dependencies: [awaitHelper],
         text: `
             var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -459,6 +494,7 @@ namespace ts {
         name: "typescript:asyncDelegator",
         importName: "__asyncDelegator",
         scoped: false,
+        dependencies: [awaitHelper],
         text: `
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
                 var i, p;
@@ -556,10 +592,34 @@ namespace ts {
             };`
     };
 
+    export const readHelper: UnscopedEmitHelper = {
+        name: "typescript:read",
+        importName: "__read",
+        scoped: false,
+        text: `
+            var __read = (this && this.__read) || function (o, n) {
+                var m = typeof Symbol === "function" && o[Symbol.iterator];
+                if (!m) return o;
+                var i = m.call(o), r, ar = [], e;
+                try {
+                    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+                }
+                catch (error) { e = { error: error }; }
+                finally {
+                    try {
+                        if (r && !r.done && (m = i["return"])) m.call(i);
+                    }
+                    finally { if (e) throw e.error; }
+                }
+                return ar;
+            };`
+    };
+
     export const spreadHelper: UnscopedEmitHelper = {
         name: "typescript:spread",
         importName: "__spread",
         scoped: false,
+        dependencies: [readHelper],
         text: `
             var __spread = (this && this.__spread) || function () {
                 for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
@@ -598,29 +658,6 @@ namespace ts {
                     }
                 };
                 throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-            };`
-    };
-
-    export const readHelper: UnscopedEmitHelper = {
-        name: "typescript:read",
-        importName: "__read",
-        scoped: false,
-        text: `
-            var __read = (this && this.__read) || function (o, n) {
-                var m = typeof Symbol === "function" && o[Symbol.iterator];
-                if (!m) return o;
-                var i = m.call(o), r, ar = [], e;
-                try {
-                    while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-                }
-                catch (error) { e = { error: error }; }
-                finally {
-                    try {
-                        if (r && !r.done && (m = i["return"])) m.call(i);
-                    }
-                    finally { if (e) throw e.error; }
-                }
-                return ar;
             };`
     };
 
@@ -722,17 +759,47 @@ namespace ts {
 
     // ES Module Helpers
 
+    export const createBindingHelper: UnscopedEmitHelper = {
+        name: "typescript:commonjscreatebinding",
+        importName: "__createBinding",
+        scoped: false,
+        priority: 1,
+        text: `
+            var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+            }) : (function(o, m, k, k2) {
+                if (k2 === undefined) k2 = k;
+                o[k2] = m[k];
+            }));`
+    };
+
+    export const setModuleDefaultHelper: UnscopedEmitHelper = {
+        name: "typescript:commonjscreatevalue",
+        importName: "__setModuleDefault",
+        scoped: false,
+        priority: 1,
+        text: `
+            var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+                Object.defineProperty(o, "default", { enumerable: true, value: v });
+            }) : function(o, v) {
+                o["default"] = v;
+            });`
+    };
+
     // emit helper for `import * as Name from "foo"`
     export const importStarHelper: UnscopedEmitHelper = {
         name: "typescript:commonjsimportstar",
         importName: "__importStar",
         scoped: false,
+        dependencies: [createBindingHelper, setModuleDefaultHelper],
+        priority: 2,
         text: `
             var __importStar = (this && this.__importStar) || function (mod) {
                 if (mod && mod.__esModule) return mod;
                 var result = {};
-                if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-                result["default"] = mod;
+                if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+                __setModuleDefault(result, mod);
                 return result;
             };`
     };
@@ -745,6 +812,32 @@ namespace ts {
         text: `
             var __importDefault = (this && this.__importDefault) || function (mod) {
                 return (mod && mod.__esModule) ? mod : { "default": mod };
+            };`
+    };
+
+    // Class fields helpers
+    export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateFieldGet",
+        scoped: false,
+        text: `
+            var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
+                if (!privateMap.has(receiver)) {
+                    throw new TypeError("attempted to get private field on non-instance");
+                }
+                return privateMap.get(receiver);
+            };`
+    };
+
+    export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateFieldSet",
+        scoped: false,
+        text: `
+            var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
+                if (!privateMap.has(receiver)) {
+                    throw new TypeError("attempted to set private field on non-instance");
+                }
+                privateMap.set(receiver, value);
+                return value;
             };`
     };
 
@@ -770,7 +863,11 @@ namespace ts {
             readHelper,
             generatorHelper,
             importStarHelper,
-            importDefaultHelper
+            importDefaultHelper,
+            classPrivateFieldGetHelper,
+            classPrivateFieldSetHelper,
+            createBindingHelper,
+            setModuleDefaultHelper
         ], helper => helper.name));
     }
 

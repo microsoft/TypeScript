@@ -20,25 +20,25 @@ var LanguageSpec_section_4_5_error_cases = /** @class */ (function () {
     Object.defineProperty(LanguageSpec_section_4_5_error_cases.prototype, "AnnotatedSetter_SetterFirst", {
         get: function () { return ""; },
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(LanguageSpec_section_4_5_error_cases.prototype, "AnnotatedSetter_SetterLast", {
         get: function () { return ""; },
         set: function (a) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(LanguageSpec_section_4_5_error_cases.prototype, "AnnotatedGetter_GetterFirst", {
         get: function () { return ""; },
         set: function (aStr) { aStr = 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(LanguageSpec_section_4_5_error_cases.prototype, "AnnotatedGetter_GetterLast", {
         get: function () { return ""; },
         set: function (aStr) { aStr = 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return LanguageSpec_section_4_5_error_cases;

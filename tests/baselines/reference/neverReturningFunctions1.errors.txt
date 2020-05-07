@@ -302,3 +302,20 @@ tests/cases/conformance/controlFlow/neverReturningFunctions1.ts(153,5): error TS
     	}
     });
     
+    // Repro from #36147
+    
+    class MyThrowable {
+        throw(): never {
+            throw new Error();
+        }
+    }
+    
+    class SuperThrowable extends MyThrowable {
+        err(msg: string): never {
+            super.throw()
+        }
+        ok(): never {
+            this.throw()
+        }
+    }
+    

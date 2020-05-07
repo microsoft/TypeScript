@@ -55,6 +55,10 @@ namespace ts {
         return node.kind === SyntaxKind.ComputedPropertyName;
     }
 
+    export function isPrivateIdentifier(node: Node): node is PrivateIdentifier {
+        return node.kind === SyntaxKind.PrivateIdentifier;
+    }
+
     // Signature elements
 
     export function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration {
@@ -486,6 +490,10 @@ namespace ts {
         return node.kind === SyntaxKind.NamespaceImport;
     }
 
+    export function isNamespaceExport(node: Node): node is NamespaceExport {
+        return node.kind === SyntaxKind.NamespaceExport;
+    }
+
     export function isNamedImports(node: Node): node is NamedImports {
         return node.kind === SyntaxKind.NamedImports;
     }
@@ -718,6 +726,22 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocCallbackTag;
     }
 
+    export function isJSDocPublicTag(node: Node): node is JSDocPublicTag {
+        return node.kind === SyntaxKind.JSDocPublicTag;
+    }
+
+    export function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag {
+        return node.kind === SyntaxKind.JSDocPrivateTag;
+    }
+
+    export function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag {
+        return node.kind === SyntaxKind.JSDocProtectedTag;
+    }
+
+    export function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag {
+        return node.kind === SyntaxKind.JSDocReadonlyTag;
+    }
+
     export function isJSDocEnumTag(node: Node): node is JSDocEnumTag {
         return node.kind === SyntaxKind.JSDocEnumTag;
     }
@@ -752,6 +776,10 @@ namespace ts {
 
     export function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag {
         return node.kind === SyntaxKind.JSDocPropertyTag;
+    }
+
+    export function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag {
+        return node.kind === SyntaxKind.JSDocImplementsTag;
     }
 
     // Synthesized list

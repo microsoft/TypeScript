@@ -93,10 +93,13 @@ namespace ts {
 
             const statements: Statement[] = [];
             const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
-            const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict, sourceElementVisitor);
+            const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict && !isJsonSourceFile(node), sourceElementVisitor);
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
+            }
+            if (length(currentModuleInfo.exportedNames)) {
+                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccess(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
             }
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
@@ -105,11 +108,6 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const updated = factory.updateSourceFile(node, setTextRange(factory.createNodeArray(statements), node.statements));
-            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
-                // If we have any `export * from ...` declarations
-                // we need to inform the emitter to add the __export helper.
-                addEmitHelper(updated, exportStarHelper);
-            }
             addEmitHelpers(updated, context.readEmitHelpers());
             return updated;
         }
@@ -422,6 +420,9 @@ namespace ts {
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
+            if (length(currentModuleInfo.exportedNames)) {
+                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccess(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+            }
 
             // Visit each statement of the module body.
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
@@ -438,11 +439,6 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const body = factory.createBlock(statements, /*multiLine*/ true);
-            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
-                // If we have any `export * from ...` declarations
-                // we need to inform the emitter to add the __export helper.
-                addEmitHelper(body, exportStarHelper);
-            }
             if (needUMDDynamicImportHelper) {
                 addEmitHelper(body, dynamicImportUMDHelper);
             }
@@ -754,6 +750,17 @@ namespace ts {
             return factory.createCall(factory.createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
+        function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
+            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+                return innerExpr;
+            }
+            if (getExportNeedsImportStarHelper(node)) {
+                context.requestEmitHelper(importStarHelper);
+                return factory.createCall(context.getEmitHelperFactory().getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+            }
+            return innerExpr;
+        }
+
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
             if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
@@ -899,7 +906,7 @@ namespace ts {
 
             let statements: Statement[] | undefined;
             if (moduleKind !== ModuleKind.AMD) {
-                if (hasModifier(node, ModifierFlags.Export)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
                         setOriginalNode(
                             setTextRange(
@@ -939,7 +946,7 @@ namespace ts {
                 }
             }
             else {
-                if (hasModifier(node, ModifierFlags.Export)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
                         setOriginalNode(
                             setTextRange(
@@ -979,7 +986,7 @@ namespace ts {
 
             const generatedName = factory.getGeneratedNameForNode(node);
 
-            if (node.exportClause) {
+            if (node.exportClause && isNamedExports(node.exportClause)) {
                 const statements: Statement[] = [];
                 // export { x, y } from "mod";
                 if (moduleKind !== ModuleKind.AMD) {
@@ -1003,21 +1010,57 @@ namespace ts {
                     );
                 }
                 for (const specifier of node.exportClause.elements) {
-                    const exportedValue = factory.createPropertyAccess(
-                        generatedName,
-                        specifier.propertyName || specifier.name
-                    );
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createExpressionStatement(
-                                    createExportExpression(factory.getExportName(specifier), exportedValue)
-                                ),
-                                specifier),
-                            specifier
-                        )
-                    );
+                    if (languageVersion === ScriptTarget.ES3) {
+                        statements.push(
+                            setOriginalNode(
+                                setTextRange(
+                                    factory.createExpressionStatement(
+                                        context.getEmitHelperFactory().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
+                                    ),
+                                    specifier),
+                                specifier
+                            )
+                        );
+                    }
+                    else {
+                        const exportedValue = factory.createPropertyAccess(
+                            generatedName,
+                            specifier.propertyName || specifier.name
+                        );
+                        statements.push(
+                            setOriginalNode(
+                                setTextRange(
+                                    factory.createExpressionStatement(
+                                        createExportExpression(factory.getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
+                                    ),
+                                    specifier),
+                                specifier
+                            )
+                        );
+                    }
                 }
+
+                return singleOrMany(statements);
+            }
+            else if (node.exportClause) {
+                const statements: Statement[] = [];
+                // export * as ns from "mod";
+                statements.push(
+                    setOriginalNode(
+                        setTextRange(
+                            factory.createExpressionStatement(
+                                createExportExpression(
+                                    factory.cloneNode(node.exportClause.name),
+                                    moduleKind !== ModuleKind.AMD ?
+                                        getHelperExpressionForExport(node, createRequireCall(node)) :
+                                        factory.createIdentifier(idText(node.exportClause.name))
+                                )
+                            ),
+                            node
+                        ),
+                        node
+                    )
+                );
 
                 return singleOrMany(statements);
             }
@@ -1065,7 +1108,7 @@ namespace ts {
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             let statements: Statement[] | undefined;
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
                         setTextRange(
@@ -1108,7 +1151,7 @@ namespace ts {
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             let statements: Statement[] | undefined;
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
                         setTextRange(
@@ -1152,11 +1195,10 @@ namespace ts {
             let variables: VariableDeclaration[] | undefined;
             let expressions: Expression[] | undefined;
 
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 let modifiers: NodeArray<Modifier> | undefined;
 
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
-                // We only want to emit assignments for variables with initializers.
                 for (const variable of node.declarationList.declarations) {
                     if (isIdentifier(variable.name) && isLocalName(variable.name)) {
                         if (!modifiers) {
@@ -1235,7 +1277,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    visitNode(node.initializer, moduleExpressionElementVisitor)
+                    node.initializer ? visitNode(node.initializer, moduleExpressionElementVisitor) : factory.createVoidZero()
                 );
             }
         }
@@ -1323,7 +1365,7 @@ namespace ts {
 
                     case SyntaxKind.NamedImports:
                         for (const importBinding of namedBindings.elements) {
-                            statements = appendExportsOfDeclaration(statements, importBinding);
+                            statements = appendExportsOfDeclaration(statements, importBinding, /* liveBinding */ true);
                         }
 
                         break;
@@ -1413,8 +1455,8 @@ namespace ts {
                 return statements;
             }
 
-            if (hasModifier(decl, ModifierFlags.Export)) {
-                const exportName = hasModifier(decl, ModifierFlags.Default) ? factory.createIdentifier("default") : factory.getDeclarationName(decl);
+            if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
+                const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? factory.createIdentifier("default") : factory.getDeclarationName(decl);
                 statements = appendExportStatement(statements, exportName, factory.getLocalName(decl), /*location*/ decl);
             }
 
@@ -1433,12 +1475,12 @@ namespace ts {
          * appended.
          * @param decl The declaration to export.
          */
-        function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration): Statement[] | undefined {
+        function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
             const name = factory.getDeclarationName(decl);
             const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
-                    statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name);
+                    statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /* allowComments */ undefined, liveBinding);
                 }
             }
             return statements;
@@ -1456,8 +1498,8 @@ namespace ts {
          * @param location The location to use for source maps and comments for the export.
          * @param allowComments Whether to allow comments on the export.
          */
-        function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean): Statement[] | undefined {
-            statements = append(statements, createExportStatement(exportName, expression, location, allowComments));
+        function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
+            statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
             return statements;
         }
 
@@ -1498,8 +1540,8 @@ namespace ts {
          * @param location The location to use for source maps and comments for the export.
          * @param allowComments An optional value indicating whether to emit comments for the statement.
          */
-        function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean) {
-            const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value)), location);
+        function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
+            const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /* location */ undefined, liveBinding)), location);
             startOnNewLine(statement);
             if (!allowComments) {
                 setEmitFlags(statement, EmitFlags.NoComments);
@@ -1515,9 +1557,31 @@ namespace ts {
          * @param value The exported value.
          * @param location The location to use for source maps and comments for the export.
          */
-        function createExportExpression(name: Identifier, value: Expression, location?: TextRange) {
+        function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
             return setTextRange(
-                factory.createAssignment(
+                liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCall(
+                    factory.createPropertyAccess(
+                        factory.createIdentifier("Object"),
+                        "defineProperty"
+                    ),
+                    /*typeArguments*/ undefined,
+                    [
+                        factory.createIdentifier("exports"),
+                        factory.createStringLiteralFromNode(name),
+                        factory.createObjectLiteral([
+                            factory.createPropertyAssignment("enumerable", factory.createTrue()),
+                            factory.createPropertyAssignment("get", factory.createFunctionExpression(
+                                /*modifiers*/ undefined,
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
+                                /*typeParameters*/ undefined,
+                                /*parameters*/ [],
+                                /*type*/ undefined,
+                                factory.createBlock([factory.createReturn(value)])
+                            ))
+                        ])
+                    ]
+                ) : factory.createAssignment(
                     factory.createPropertyAccess(
                         factory.createIdentifier("exports"),
                         factory.cloneNode(name)
@@ -1794,20 +1858,21 @@ namespace ts {
     }
 
     // emit output for the __export helper function
-    const exportStarHelper: EmitHelper = {
+    const exportStarHelper: UnscopedEmitHelper = {
         name: "typescript:export-star",
-        scoped: true,
+        importName: "__exportStar",
+        scoped: false,
+        dependencies: [createBindingHelper],
+        priority: 2,
         text: `
-            function __export(m) {
-                for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+            var __exportStar = (this && this.__exportStar) || function(m, exports) {
+                for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
             }`
     };
 
     function createExportStarHelper(context: TransformationContext, module: Expression) {
-        const compilerOptions = context.getCompilerOptions();
-        return compilerOptions.importHelpers
-            ? context.factory.createCall(context.getEmitHelperFactory().getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, context.factory.createIdentifier("exports")])
-            : context.factory.createCall(context.factory.createIdentifier("__export"), /*typeArguments*/ undefined, [module]);
+        context.requestEmitHelper(exportStarHelper);
+        return context.factory.createCall(context.getEmitHelperFactory().getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, context.factory.createIdentifier("exports")]);
     }
 
     // emit helper for dynamic import

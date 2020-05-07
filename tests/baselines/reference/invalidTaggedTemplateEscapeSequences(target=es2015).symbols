@@ -1,0 +1,85 @@
+=== tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences.ts ===
+function tag (str: any, ...args: any[]): any {
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+>str : Symbol(str, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 14))
+>args : Symbol(args, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 23))
+
+  return str
+>str : Symbol(str, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 14))
+}
+
+const a = tag`123`
+>a : Symbol(a, Decl(invalidTaggedTemplateEscapeSequences.ts, 4, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const b = tag`123 ${100}`
+>b : Symbol(b, Decl(invalidTaggedTemplateEscapeSequences.ts, 5, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const x = tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
+>x : Symbol(x, Decl(invalidTaggedTemplateEscapeSequences.ts, 6, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`; // should error with NoSubstitutionTemplate
+>y : Symbol(y, Decl(invalidTaggedTemplateEscapeSequences.ts, 7, 5))
+
+const z = tag`\u{hello} \xtraordinary wonderful \uworld` // should work with Tagged NoSubstitutionTemplate
+>z : Symbol(z, Decl(invalidTaggedTemplateEscapeSequences.ts, 8, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a1 = tag`${ 100 }\0` // \0
+>a1 : Symbol(a1, Decl(invalidTaggedTemplateEscapeSequences.ts, 10, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a2 = tag`${ 100 }\00` // \\00
+>a2 : Symbol(a2, Decl(invalidTaggedTemplateEscapeSequences.ts, 11, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a3 = tag`${ 100 }\u` // \\u
+>a3 : Symbol(a3, Decl(invalidTaggedTemplateEscapeSequences.ts, 12, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a4 = tag`${ 100 }\u0` // \\u0
+>a4 : Symbol(a4, Decl(invalidTaggedTemplateEscapeSequences.ts, 13, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a5 = tag`${ 100 }\u00` // \\u00
+>a5 : Symbol(a5, Decl(invalidTaggedTemplateEscapeSequences.ts, 14, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a6 = tag`${ 100 }\u000` // \\u000
+>a6 : Symbol(a6, Decl(invalidTaggedTemplateEscapeSequences.ts, 15, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a7 = tag`${ 100 }\u0000` // \u0000
+>a7 : Symbol(a7, Decl(invalidTaggedTemplateEscapeSequences.ts, 16, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a8 = tag`${ 100 }\u{` // \\u{
+>a8 : Symbol(a8, Decl(invalidTaggedTemplateEscapeSequences.ts, 17, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a9 = tag`${ 100 }\u{10FFFF}` // \\u{10FFFF
+>a9 : Symbol(a9, Decl(invalidTaggedTemplateEscapeSequences.ts, 18, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a10 = tag`${ 100 }\u{1f622` // \\u{1f622
+>a10 : Symbol(a10, Decl(invalidTaggedTemplateEscapeSequences.ts, 19, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a11 = tag`${ 100 }\u{1f622}` // \u{1f622}
+>a11 : Symbol(a11, Decl(invalidTaggedTemplateEscapeSequences.ts, 20, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a12 = tag`${ 100 }\x` // \\x
+>a12 : Symbol(a12, Decl(invalidTaggedTemplateEscapeSequences.ts, 21, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a13 = tag`${ 100 }\x0` // \\x0
+>a13 : Symbol(a13, Decl(invalidTaggedTemplateEscapeSequences.ts, 22, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+
+const a14 = tag`${ 100 }\x00` // \x00
+>a14 : Symbol(a14, Decl(invalidTaggedTemplateEscapeSequences.ts, 23, 5))
+>tag : Symbol(tag, Decl(invalidTaggedTemplateEscapeSequences.ts, 0, 0))
+

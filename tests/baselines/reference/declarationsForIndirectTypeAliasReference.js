@@ -39,6 +39,7 @@ exports.__esModule = true;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.doSome = void 0;
 var MAP = {
     a: "a"
 };

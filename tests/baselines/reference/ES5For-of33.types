@@ -8,8 +8,8 @@ for (var v of ['a', 'b', 'c']) {
 
     console.log(v);
 >console.log(v) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >v : string
 }

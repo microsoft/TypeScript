@@ -17,7 +17,7 @@ namespace ts.NavigationBar {
 
     /**
      * Maximum amount of characters to return
-     * The amount was choosen arbitrarily.
+     * The amount was chosen arbitrarily.
      */
     const maxLength = 150;
 
@@ -141,7 +141,7 @@ namespace ts.NavigationBar {
             const name = getNameOrArgument(entityName);
             const nameText = getElementOrPropertyAccessName(entityName);
             entityName = entityName.expression;
-            if (nameText === "prototype") continue;
+            if (nameText === "prototype" || isPrivateIdentifier(name)) continue;
             names.push(name);
         }
         names.push(entityName);
@@ -307,6 +307,7 @@ namespace ts.NavigationBar {
                 addNodeWithRecursiveChild(node, getInteriorModule(<ModuleDeclaration>node).body);
                 break;
 
+            case SyntaxKind.ExportAssignment:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.IndexSignature:
@@ -589,7 +590,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return hasModifier(a, ModifierFlags.Static) === hasModifier(b, ModifierFlags.Static);
+                return hasSyntacticModifier(a, ModifierFlags.Static) === hasSyntacticModifier(b, ModifierFlags.Static);
             case SyntaxKind.ModuleDeclaration:
                 return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b);
             default:
@@ -681,12 +682,15 @@ namespace ts.NavigationBar {
                 return isExternalModule(sourceFile)
                     ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName))))}"`
                     : "<global>";
+            case SyntaxKind.ExportAssignment:
+                return isExportAssignment(node) && node.isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                if (getModifierFlags(node) & ModifierFlags.Default) {
+                if (getSyntacticModifierFlags(node) & ModifierFlags.Default) {
                     return "default";
                 }
                 // We may get a string with newlines or other whitespace in the case of an object dereference
@@ -879,7 +883,7 @@ namespace ts.NavigationBar {
             return nodeText(parent.name);
         }
         // Default exports are named "default"
-        else if (getModifierFlags(node) & ModifierFlags.Default) {
+        else if (getSyntacticModifierFlags(node) & ModifierFlags.Default) {
             return "default";
         }
         else if (isClassLike(node)) {

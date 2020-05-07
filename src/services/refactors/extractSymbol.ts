@@ -66,19 +66,19 @@ namespace ts.refactor.extractSymbol {
 
         const infos: ApplicableRefactorInfo[] = [];
 
-        if (functionActions.length) {
-            infos.push({
-                name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: functionActions
-            });
-        }
-
         if (constantActions.length) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: constantActions
+            });
+        }
+
+        if (functionActions.length) {
+            infos.push({
+                name: refactorName,
+                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
+                actions: functionActions
             });
         }
 
@@ -309,7 +309,7 @@ namespace ts.refactor.extractSymbol {
             let current: Node = nodeToCheck;
             while (current !== containingClass) {
                 if (current.kind === SyntaxKind.PropertyDeclaration) {
-                    if (hasModifier(current, ModifierFlags.Static)) {
+                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                     break;
@@ -322,7 +322,7 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
                 else if (current.kind === SyntaxKind.MethodDeclaration) {
-                    if (hasModifier(current, ModifierFlags.Static)) {
+                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                 }
@@ -375,7 +375,7 @@ namespace ts.refactor.extractSymbol {
 
                 if (isDeclaration(node)) {
                     const declaringNode = (node.kind === SyntaxKind.VariableDeclaration) ? node.parent.parent : node;
-                    if (hasModifier(declaringNode, ModifierFlags.Export)) {
+                    if (hasSyntacticModifier(declaringNode, ModifierFlags.Export)) {
                         // TODO: GH#18217 Silly to use `errors ||` since it's definitely not defined (see top of `visit`)
                         // Also, if we're only pushing one error, just use `let error: Diagnostic | undefined`!
                         // Also TODO: GH#19956
@@ -437,6 +437,7 @@ namespace ts.refactor.extractSymbol {
                             permittedJumps = PermittedJumps.Return;
                         }
                         break;
+                    case SyntaxKind.DefaultClause:
                     case SyntaxKind.CaseClause:
                         // allow unlabeled break inside case clauses
                         permittedJumps |= PermittedJumps.Break;
@@ -676,7 +677,7 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.FunctionDeclaration:
                 return scope.name
                     ? `function '${scope.name.text}'`
-                    : "anonymous function";
+                    : ANONYMOUS;
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
             case SyntaxKind.MethodDeclaration:
@@ -1381,7 +1382,7 @@ namespace ts.refactor.extractSymbol {
                 }
 
                 // There must be at least one statement since we started in one.
-                return Debug.assertDefined(prevStatement, "prevStatement failed to get set");
+                return Debug.checkDefined(prevStatement, "prevStatement failed to get set");
             }
 
             Debug.assert(curr !== scope, "Didn't encounter a block-like before encountering scope");
@@ -1580,7 +1581,7 @@ namespace ts.refactor.extractSymbol {
                     hasWrite = true;
                     if (value.symbol.flags & SymbolFlags.ClassMember &&
                         value.symbol.valueDeclaration &&
-                        hasModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)) {
+                        hasEffectiveModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)) {
                         readonlyClassPropertyWrite = value.symbol.valueDeclaration;
                     }
                 }

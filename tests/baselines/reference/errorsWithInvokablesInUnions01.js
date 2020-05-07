@@ -22,6 +22,7 @@ export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<n
 //// [errorsWithInvokablesInUnions01.js]
 "use strict";
 exports.__esModule = true;
+exports.ctor = exports.blah = void 0;
 exports.blah = function (x) { };
 exports.ctor = /** @class */ (function () {
     function class_1() {

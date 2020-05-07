@@ -108,7 +108,8 @@
                     "length": 2,
                     "pos": -1,
                     "end": -1
-                }
+                },
+                "isArrayType": false
             },
             "fullName": {
                 "kind": "Identifier",

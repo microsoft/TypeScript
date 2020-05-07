@@ -9,7 +9,7 @@ namespace ts.refactor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === refactorName, "Wrong refactor invoked");
-            const statements = Debug.assertDefined(getStatementsToMove(context));
+            const statements = Debug.checkDefined(getStatementsToMove(context));
             const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
@@ -84,7 +84,7 @@ namespace ts.refactor {
             case SyntaxKind.ImportDeclaration:
                 return true;
             case SyntaxKind.ImportEqualsDeclaration:
-                return !hasModifier(node, ModifierFlags.Export);
+                return !hasSyntacticModifier(node, ModifierFlags.Export);
             case SyntaxKind.VariableStatement:
                 return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true));
             default:
@@ -121,7 +121,7 @@ namespace ts.refactor {
         const quotePreference = getQuotePreference(oldFile, preferences);
         const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, quotePreference);
         if (importsFromNewFile) {
-            insertImport(changes, oldFile, importsFromNewFile);
+            insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
         }
 
         deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
@@ -225,7 +225,7 @@ namespace ts.refactor {
             case SyntaxKind.ImportDeclaration:
                 return factory.createImportDeclaration(
                     /*decorators*/ undefined, /*modifiers*/ undefined,
-                    factory.createImportClause(/*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
+                    factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(newNamespaceId)),
                     newModuleString);
             case SyntaxKind.ImportEqualsDeclaration:
                 return factory.createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, newNamespaceId, factory.createExternalModuleReference(newModuleString));
@@ -310,7 +310,7 @@ namespace ts.refactor {
         return flatMap(toMove, statement => {
             if (isTopLevelDeclarationStatement(statement) &&
                 !isExported(sourceFile, statement, useEs6Exports) &&
-                forEachTopLevelDeclaration(statement, d => needExport.has(Debug.assertDefined(d.symbol)))) {
+                forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(d.symbol)))) {
                 const exports = addExport(statement, useEs6Exports);
                 if (exports) return exports;
             }
@@ -353,7 +353,7 @@ namespace ts.refactor {
                     changes.replaceNode(
                         sourceFile,
                         importDecl.importClause,
-                        factory.updateImportClause(importDecl.importClause, name, /*namedBindings*/ undefined)
+                        factory.updateImportClause(importDecl.importClause, importDecl.importClause.isTypeOnly, name, /*namedBindings*/ undefined)
                     );
                 }
                 else if (namedBindings.kind === SyntaxKind.NamedImports) {
@@ -420,7 +420,7 @@ namespace ts.refactor {
                 if (markSeenTop(top)) {
                     addExportToChanges(oldFile, top, changes, useEs6ModuleSyntax);
                 }
-                if (hasModifier(decl, ModifierFlags.Default)) {
+                if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
                     oldFileDefault = name;
                 }
                 else {
@@ -472,7 +472,7 @@ namespace ts.refactor {
 
         for (const statement of toMove) {
             forEachTopLevelDeclaration(statement, decl => {
-                movedSymbols.add(Debug.assertDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
+                movedSymbols.add(Debug.checkDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol, "Need a symbol here"));
             });
         }
         for (const statement of toMove) {
@@ -555,7 +555,7 @@ namespace ts.refactor {
                 const defaultImport = clause.name && keep(clause.name) ? clause.name : undefined;
                 const namedBindings = clause.namedBindings && filterNamedBindings(clause.namedBindings, keep);
                 return defaultImport || namedBindings
-                    ? factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(defaultImport, namedBindings), moduleSpecifier)
+                    ? factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImport, namedBindings), moduleSpecifier)
                     : undefined;
             }
             case SyntaxKind.ImportEqualsDeclaration:
@@ -708,7 +708,7 @@ namespace ts.refactor {
     }
 
     function nameOfTopLevelDeclaration(d: TopLevelDeclaration): Identifier | undefined {
-        return isExpressionStatement(d) ? d.expression.left.name : tryCast(d.name, isIdentifier);
+        return isExpressionStatement(d) ? tryCast(d.expression.left.name, isIdentifier) : tryCast(d.name, isIdentifier);
     }
 
     function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLevelDeclarationStatement {
@@ -736,7 +736,7 @@ namespace ts.refactor {
 
     function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean): boolean {
         if (useEs6Exports) {
-            return !isExpressionStatement(decl) && hasModifier(decl, ModifierFlags.Export);
+            return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export);
         }
         else {
             return getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));

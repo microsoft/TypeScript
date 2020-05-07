@@ -1,6 +1,7 @@
 tests/cases/compiler/test.ts(4,5): error TS2322: Type 'PassportStatic' is not assignable to type 'Passport'.
   The types returned by 'use()' are incompatible between these types.
     Type 'PassportStatic' is not assignable to type 'this'.
+      'this' could be instantiated with an arbitrary type which could be unrelated to 'PassportStatic'.
 
 
 ==== tests/cases/compiler/passport.d.ts (0 errors) ====
@@ -28,3 +29,4 @@ tests/cases/compiler/test.ts(4,5): error TS2322: Type 'PassportStatic' is not as
 !!! error TS2322: Type 'PassportStatic' is not assignable to type 'Passport'.
 !!! error TS2322:   The types returned by 'use()' are incompatible between these types.
 !!! error TS2322:     Type 'PassportStatic' is not assignable to type 'this'.
+!!! error TS2322:       'this' could be instantiated with an arbitrary type which could be unrelated to 'PassportStatic'.

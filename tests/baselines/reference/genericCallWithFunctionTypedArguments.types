@@ -100,8 +100,8 @@ var r7 = foo3(1, <Z>(a: Z) => '', ''); // string
 >'' : ""
 
 var r8 = foo3(1, function (a) { return '' }, 1); // error
->r8 : any
->foo3(1, function (a) { return '' }, 1) : any
+>r8 : number
+>foo3(1, function (a) { return '' }, 1) : 1
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
 >1 : 1
 >function (a) { return '' } : (a: number) => string
@@ -125,8 +125,8 @@ function other<T, U>(t: T, u: U) {
 >u : U
 
     var r10 = foo2(1, (x: T) => ''); // error
->r10 : any
->foo2(1, (x: T) => '') : any
+>r10 : string
+>foo2(1, (x: T) => '') : string
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >1 : 1
 >(x: T) => '' : (x: T) => string
@@ -134,7 +134,7 @@ function other<T, U>(t: T, u: U) {
 >'' : ""
 
     var r10 = foo2(1, (x) => ''); // string
->r10 : any
+>r10 : string
 >foo2(1, (x) => '') : string
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >1 : 1
@@ -143,8 +143,8 @@ function other<T, U>(t: T, u: U) {
 >'' : ""
 
     var r11 = foo3(1, (x: T) => '', ''); // error
->r11 : any
->foo3(1, (x: T) => '', '') : any
+>r11 : string
+>foo3(1, (x: T) => '', '') : string
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
 >1 : 1
 >(x: T) => '' : (x: T) => string
@@ -153,8 +153,8 @@ function other<T, U>(t: T, u: U) {
 >'' : ""
 
     var r11b = foo3(1, (x: T) => '', 1); // error
->r11b : any
->foo3(1, (x: T) => '', 1) : any
+>r11b : string
+>foo3(1, (x: T) => '', 1) : string
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
 >1 : 1
 >(x: T) => '' : (x: T) => string
@@ -163,8 +163,8 @@ function other<T, U>(t: T, u: U) {
 >1 : 1
 
     var r12 = foo3(1, function (a) { return '' }, 1); // error
->r12 : any
->foo3(1, function (a) { return '' }, 1) : any
+>r12 : number
+>foo3(1, function (a) { return '' }, 1) : 1
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
 >1 : 1
 >function (a) { return '' } : (a: number) => string

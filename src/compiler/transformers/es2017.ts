@@ -7,6 +7,11 @@ namespace ts {
         AsyncMethodsWithSuper = 1 << 0
     }
 
+    const enum ContextFlags {
+        NonTopLevel = 1 << 0,
+        HasLexicalThis = 1 << 1
+    }
+
     export function transformES2017(context: TransformationContext) {
         const {
             factory,
@@ -43,7 +48,7 @@ namespace ts {
         /** A set of node IDs for generated super accessors (variable statements). */
         const substitutedSuperAccessors: boolean[] = [];
 
-        let topLevel: boolean;
+        let contextFlags: ContextFlags = 0;
 
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
@@ -60,17 +65,35 @@ namespace ts {
                 return node;
             }
 
-            topLevel = isEffectiveStrictModeSourceFile(node, compilerOptions);
+            setContextFlag(ContextFlags.NonTopLevel, false);
+            setContextFlag(ContextFlags.HasLexicalThis, !isEffectiveStrictModeSourceFile(node, compilerOptions));
             const visited = visitEachChild(node, visitor, context);
             addEmitHelpers(visited, context.readEmitHelpers());
             return visited;
         }
 
-        function doOutsideOfTopLevel<T, U>(cb: (value: T) => U, value: T) {
-            if (topLevel) {
-                topLevel = false;
+        function setContextFlag(flag: ContextFlags, val: boolean) {
+            contextFlags = val ? contextFlags | flag : contextFlags & ~flag;
+        }
+
+        function inContext(flags: ContextFlags) {
+            return (contextFlags & flags) !== 0;
+        }
+
+        function inTopLevelContext() {
+            return !inContext(ContextFlags.NonTopLevel);
+        }
+
+        function inHasLexicalThisContext() {
+            return inContext(ContextFlags.HasLexicalThis);
+        }
+
+        function doWithContext<T, U>(flags: ContextFlags, cb: (value: T) => U, value: T) {
+            const contextFlagsToSet = flags & ~contextFlags;
+            if (contextFlagsToSet) {
+                setContextFlag(contextFlagsToSet, /*val*/ true);
                 const result = cb(value);
-                topLevel = true;
+                setContextFlag(contextFlagsToSet, /*val*/ false);
                 return result;
             }
             return cb(value);
@@ -93,16 +116,16 @@ namespace ts {
                     return visitAwaitExpression(<AwaitExpression>node);
 
                 case SyntaxKind.MethodDeclaration:
-                    return doOutsideOfTopLevel(visitMethodDeclaration, <MethodDeclaration>node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitMethodDeclaration, <MethodDeclaration>node);
 
                 case SyntaxKind.FunctionDeclaration:
-                    return doOutsideOfTopLevel(visitFunctionDeclaration, <FunctionDeclaration>node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionDeclaration, <FunctionDeclaration>node);
 
                 case SyntaxKind.FunctionExpression:
-                    return doOutsideOfTopLevel(visitFunctionExpression, <FunctionExpression>node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionExpression, <FunctionExpression>node);
 
                 case SyntaxKind.ArrowFunction:
-                    return visitArrowFunction(<ArrowFunction>node);
+                    return doWithContext(ContextFlags.NonTopLevel, visitArrowFunction, <ArrowFunction>node);
 
                 case SyntaxKind.PropertyAccessExpression:
                     if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
@@ -121,7 +144,7 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-                    return doOutsideOfTopLevel(visitDefault, node);
+                    return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitDefault, node);
 
                 default:
                     return visitEachChild(node, visitor, context);
@@ -239,6 +262,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitAwaitExpression(node: AwaitExpression): Expression {
+            // do not downlevel a top-level await as it is module syntax...
+            if (inTopLevelContext()) {
+                return visitEachChild(node, visitor, context);
+            }
             return setOriginalNode(
                 setTextRange(
                     factory.createYield(
@@ -458,7 +485,7 @@ namespace ts {
                 statements.push(
                     factory.createReturn(
                         emitHelpers().createAwaiterHelper(
-                            !topLevel,
+                            inHasLexicalThisContext(),
                             hasLexicalArguments,
                             promiseConstructor,
                             transformAsyncFunctionBodyWorker(<Block>node.body, statementOffset)
@@ -498,7 +525,7 @@ namespace ts {
             }
             else {
                 const expression = emitHelpers().createAwaiterHelper(
-                    !topLevel,
+                    inHasLexicalThisContext(),
                     hasLexicalArguments,
                     promiseConstructor,
                     transformAsyncFunctionBodyWorker(node.body!)
@@ -627,7 +654,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return setTextRange(
                     factory.createPropertyAccess(
-                        factory.createFileLevelUniqueName("_super"),
+                        factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         node.name),
                     node
                 );
@@ -677,7 +704,7 @@ namespace ts {
                 return setTextRange(
                     factory.createPropertyAccess(
                         factory.createCall(
-                            factory.createFileLevelUniqueName("_superIndex"),
+                            factory.createUniqueName("_superIndex", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                             /*typeArguments*/ undefined,
                             [argumentExpression]
                         ),
@@ -689,7 +716,7 @@ namespace ts {
             else {
                 return setTextRange(
                     factory.createCall(
-                        factory.createFileLevelUniqueName("_superIndex"),
+                        factory.createUniqueName("_superIndex", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
@@ -777,7 +804,7 @@ namespace ts {
             factory.createVariableDeclarationList(
                 [
                     factory.createVariableDeclaration(
-                        factory.createFileLevelUniqueName("_super"),
+                        factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         /*exclamationToken*/ undefined,
                         /* type */ undefined,
                         factory.createCall(

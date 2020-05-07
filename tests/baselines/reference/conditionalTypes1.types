@@ -135,7 +135,7 @@ type T15 = Extract<Options, { q: "a" }>;  // never
 >q : "a"
 
 declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: K }>;
->f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
+>f5 : <T extends Options, K extends string>(p: K) => Extract<T, {    k: K;}>
 >p : K
 >k : K
 
@@ -245,7 +245,7 @@ type T31 = NonFunctionProperties<Part>;
 >T31 : Pick<Part, "id" | "name" | "subparts">
 
 function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
->f7 : <T>(x: T, y: Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>, z: Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>) => void
+>f7 : <T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) => void
 >x : T
 >y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
 >z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
@@ -282,7 +282,7 @@ function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
 }
 
 function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {
->f8 : <T>(x: keyof T, y: { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T], z: { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]) => void
+>f8 : <T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) => void
 >x : keyof T
 >y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
 >z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
@@ -334,7 +334,7 @@ type DeepReadonlyObject<T> = {
 };
 
 function f10(part: DeepReadonly<Part>) {
->f10 : (part: DeepReadonlyObject<Part>) => void
+>f10 : (part: DeepReadonly<Part>) => void
 >part : DeepReadonlyObject<Part>
 
     let name: string = part.name;

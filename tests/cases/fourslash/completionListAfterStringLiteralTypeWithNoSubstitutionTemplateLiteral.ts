@@ -1,6 +1,10 @@
 /// <reference path="fourslash.ts" />
 
 ////let count: 'one' | 'two';
-////count = `/**/`
+////count = `[|/**/|]`
 
-verify.completions({ marker: "", exact: ["one", "two"] });
+const replacementSpan = test.ranges()[0]
+verify.completions({ marker: "", exact: [
+    { name: "one", replacementSpan },
+    { name: "two", replacementSpan }
+] });

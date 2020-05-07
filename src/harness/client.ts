@@ -291,7 +291,7 @@ namespace ts.server {
 
             const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
             const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
-            const body = Debug.assertDefined(response.body); // TODO: GH#18217
+            const body = Debug.checkDefined(response.body); // TODO: GH#18217
 
             return {
                 definitions: body.definitions.map(entry => ({
@@ -358,7 +358,7 @@ namespace ts.server {
         getEmitOutput(file: string): EmitOutput {
             const request = this.processRequest<protocol.EmitOutputRequest>(protocol.CommandTypes.EmitOutput, { file });
             const response = this.processResponse<protocol.EmitOutputResponse>(request);
-            return response.body;
+            return response.body as EmitOutput;
         }
 
         getSyntacticDiagnostics(file: string): DiagnosticWithLocation[] {
@@ -374,16 +374,18 @@ namespace ts.server {
         private getDiagnostics(file: string, command: CommandNames): DiagnosticWithLocation[] {
             const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
             const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
+            const sourceText = getSnapshotText(this.host.getScriptSnapshot(file)!);
+            const fakeSourceFile = { fileName: file, text: sourceText } as SourceFile; // Warning! This is a huge lie!
 
             return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): DiagnosticWithLocation => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
                     isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
                 return {
-                    file: undefined!, // TODO: GH#18217
+                    file: fakeSourceFile,
                     start: entry.start,
                     length: entry.length,
                     messageText: entry.message,
-                    category: Debug.assertDefined(category, "convertDiagnostic: category should not be undefined"),
+                    category: Debug.checkDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
                     reportsUnnecessary: entry.reportsUnnecessary,
                 };
@@ -518,14 +520,14 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems {
+        getSignatureHelpItems(fileName: string, position: number): SignatureHelpItems | undefined {
             const args: protocol.SignatureHelpRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
             const request = this.processRequest<protocol.SignatureHelpRequest>(CommandNames.SignatureHelp, args);
             const response = this.processResponse<protocol.SignatureHelpResponse>(request);
 
             if (!response.body) {
-                return undefined!; // TODO: GH#18217
+                return undefined;
             }
 
             const { items, applicableSpan: encodedApplicableSpan, selectedItemIndex, argumentIndex, argumentCount } = response.body;
@@ -741,6 +743,51 @@ namespace ts.server {
             return notImplemented();
         }
 
+        private convertCallHierarchyItem(item: protocol.CallHierarchyItem): CallHierarchyItem {
+            return {
+                file: item.file,
+                name: item.name,
+                kind: item.kind,
+                span: this.decodeSpan(item.span, item.file),
+                selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
+            };
+        }
+
+        prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.PrepareCallHierarchyRequest>(CommandNames.PrepareCallHierarchy, args);
+            const response = this.processResponse<protocol.PrepareCallHierarchyResponse>(request);
+            return response.body && mapOneOrMany(response.body, item => this.convertCallHierarchyItem(item));
+        }
+
+        private convertCallHierarchyIncomingCall(item: protocol.CallHierarchyIncomingCall): CallHierarchyIncomingCall {
+            return {
+                from: this.convertCallHierarchyItem(item.from),
+                fromSpans: item.fromSpans.map(span => this.decodeSpan(span, item.from.file))
+            };
+        }
+
+        provideCallHierarchyIncomingCalls(fileName: string, position: number) {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.ProvideCallHierarchyIncomingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const response = this.processResponse<protocol.ProvideCallHierarchyIncomingCallsResponse>(request);
+            return response.body.map(item => this.convertCallHierarchyIncomingCall(item));
+        }
+
+        private convertCallHierarchyOutgoingCall(file: string, item: protocol.CallHierarchyOutgoingCall): CallHierarchyOutgoingCall {
+            return {
+                to: this.convertCallHierarchyItem(item.to),
+                fromSpans: item.fromSpans.map(span => this.decodeSpan(span, file))
+            };
+        }
+
+        provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
+            const args = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.PrepareCallHierarchy, args);
+            const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
+            return response.body.map(item => this.convertCallHierarchyOutgoingCall(fileName, item));
+        }
+
         getProgram(): Program {
             throw new Error("SourceFile objects are not serializable through the server protocol.");
         }
@@ -758,6 +805,10 @@ namespace ts.server {
         }
 
         getSourceMapper(): never {
+            return notImplemented();
+        }
+
+        clearSourceMapperCache(): never {
             return notImplemented();
         }
 

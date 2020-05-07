@@ -524,7 +524,7 @@ namespace ts {
                     factory.createVariableStatement(/*modifiers*/ undefined,
                         factory.createVariableDeclarationList(taggedTemplateStringDeclarations)));
             }
-            mergeLexicalEnvironment(prologue, endLexicalEnvironment());
+            factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureThisForNodeIfNeeded(prologue, node);
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return factory.updateSourceFile(
@@ -553,7 +553,7 @@ namespace ts {
         }
 
         function returnCapturedThis(node: Node): ReturnStatement {
-            return setOriginalNode(factory.createReturn(factory.createFileLevelUniqueName("_this")), node);
+            return setOriginalNode(factory.createReturn(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)), node);
         }
 
         function visitReturnStatement(node: ReturnStatement): Statement {
@@ -699,8 +699,8 @@ namespace ts {
             statements.push(statement);
 
             // Add an `export default` statement for default exports (for `--target es5 --module es6`)
-            if (hasModifier(node, ModifierFlags.Export)) {
-                const exportStatement = hasModifier(node, ModifierFlags.Default)
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                const exportStatement = hasSyntacticModifier(node, ModifierFlags.Default)
                     ? factory.createExportDefault(factory.getLocalName(node))
                     : factory.createExternalModuleExport(factory.getLocalName(node));
 
@@ -776,7 +776,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                extendsClauseElement ? [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createFileLevelUniqueName("_super"))] : [],
+                extendsClauseElement ? [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel))] : [],
                 /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
@@ -921,7 +921,7 @@ namespace ts {
             // If that's the case we can just immediately return the result of a 'super()' call.
             const statements: Statement[] = [];
             resumeLexicalEnvironment();
-            mergeLexicalEnvironment(statements, endLexicalEnvironment());
+            factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
 
             if (isDerivedClass) {
                 // return _super !== null && _super.apply(this, arguments) || this;
@@ -1002,7 +1002,7 @@ namespace ts {
             // visit the remaining statements
             addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
 
-            mergeLexicalEnvironment(prologue, endLexicalEnvironment());
+            factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
 
             if (isDerivedClass) {
@@ -1060,7 +1060,7 @@ namespace ts {
                     insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
 
                     if (!isSufficientlyCoveredByReturnStatements(constructor.body)) {
-                        statements.push(factory.createReturn(factory.createFileLevelUniqueName("_this")));
+                        statements.push(factory.createReturn(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
                     }
                 }
             }
@@ -1134,11 +1134,11 @@ namespace ts {
             return factory.createLogicalOr(
                 factory.createLogicalAnd(
                     factory.createStrictInequality(
-                        factory.createFileLevelUniqueName("_super"),
+                        factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         factory.createNull()
                     ),
                     factory.createFunctionApplyCall(
-                        factory.createFileLevelUniqueName("_super"),
+                        factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         createActualThis(),
                         factory.createIdentifier("arguments"),
                     )
@@ -1473,7 +1473,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList([
                     factory.createVariableDeclaration(
-                        factory.createFileLevelUniqueName("_this"),
+                        factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         /*exclamationToken*/ undefined,
                         /*type*/ undefined,
                         initializer
@@ -1540,7 +1540,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList([
                         factory.createVariableDeclaration(
-                            factory.createFileLevelUniqueName("_newTarget"),
+                            factory.createUniqueName("_newTarget", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
                             newTarget
@@ -1617,16 +1617,16 @@ namespace ts {
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
             const memberFunction = transformFunctionLikeToExpression(member, /*location*/ member, /*name*/ undefined, container);
+            const propertyName = visitNode(member.name, visitor, isPropertyName);
             let e: Expression;
-            if (context.getCompilerOptions().useDefineForClassFields) {
-                const propertyName = visitNode(member.name, visitor, isPropertyName);
+            if (!isPrivateIdentifier(propertyName) && context.getCompilerOptions().useDefineForClassFields) {
                 const name = isComputedPropertyName(propertyName) ? propertyName.expression
                     : isIdentifier(propertyName) ? factory.createStringLiteral(unescapeLeadingUnderscores(propertyName.escapedText))
                     : propertyName;
                 e = factory.createObjectDefinePropertyCall(receiver, name, factory.createPropertyDescriptor({ value: memberFunction, enumerable: false, writable: true, configurable: true }));
             }
             else {
-                const memberName = createMemberAccessForPropertyName(factory, receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
+                const memberName = createMemberAccessForPropertyName(factory, receiver, propertyName, /*location*/ member.name);
                 e = factory.createAssignment(memberName, memberFunction);
             }
             setEmitFlags(memberFunction, EmitFlags.NoComments);
@@ -1673,7 +1673,11 @@ namespace ts {
             setEmitFlags(target, EmitFlags.NoComments | EmitFlags.NoTrailingSourceMap);
             setSourceMapRange(target, firstAccessor.name);
 
-            const propertyName = createExpressionForPropertyName(factory, visitNode(firstAccessor.name, visitor, isPropertyName));
+            const visitedAccessorName = visitNode(firstAccessor.name, visitor, isPropertyName);
+            if (isPrivateIdentifier(visitedAccessorName)) {
+                return Debug.failBadSyntaxKind(visitedAccessorName, "Encountered unhandled private identifier while transforming ES2015.");
+            }
+            const propertyName = createExpressionForPropertyName(factory, visitedAccessorName);
             setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoLeadingSourceMap);
             setSourceMapRange(propertyName, firstAccessor.name);
 
@@ -1697,7 +1701,7 @@ namespace ts {
             }
 
             properties.push(
-                factory.createPropertyAssignment("enumerable", factory.createTrue()),
+                factory.createPropertyAssignment("enumerable", getAccessor || setAccessor ? factory.createFalse() : factory.createTrue()),
                 factory.createPropertyAssignment("configurable", factory.createTrue())
             );
 
@@ -1826,7 +1830,7 @@ namespace ts {
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const ancestorFacts = container && isClassLike(container) && !hasModifier(node, ModifierFlags.Static)
+            const ancestorFacts = container && isClassLike(container) && !hasSyntacticModifier(node, ModifierFlags.Static)
                 ? enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes | HierarchyFacts.NonStaticClassElement)
                 : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
@@ -1875,6 +1879,8 @@ namespace ts {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
                 statementOffset = factory.copyStandardPrologue(body.statements, prologue, /*ensureUseStrict*/ false);
+                statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedFunction);
+                statementOffset = factory.copyCustomPrologue(body.statements, statements, statementOffset, visitor, isHoistedVariableStatement);
             }
 
             multiLine = addDefaultValueAssignmentsIfNeeded(statements, node) || multiLine;
@@ -1901,7 +1907,7 @@ namespace ts {
                 // being emitted for the end position only.
                 statementsLocation = moveRangeEnd(body, -1);
 
-                const equalsGreaterThanToken = (<ArrowFunction>node).equalsGreaterThanToken;
+                const equalsGreaterThanToken = node.equalsGreaterThanToken;
                 if (!nodeIsSynthesized(equalsGreaterThanToken) && !nodeIsSynthesized(body)) {
                     if (rangeEndIsOnSameLineAsRangeStart(equalsGreaterThanToken, body, currentSourceFile)) {
                         singleLine = true;
@@ -1923,7 +1929,7 @@ namespace ts {
                 closeBraceLocation = body;
             }
 
-            mergeLexicalEnvironment(prologue, endLexicalEnvironment());
+            factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureNewTargetIfNeeded(prologue, node, /*copyOnWrite*/ false);
             insertCaptureThisForNodeIfNeeded(prologue, node);
 
@@ -2024,10 +2030,16 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
+        function isVariableStatementOfTypeScriptClassWrapper(node: VariableStatement) {
+            return node.declarationList.declarations.length === 1
+                && !!node.declarationList.declarations[0].initializer
+                && !!(getEmitFlags(node.declarationList.declarations[0].initializer) & EmitFlags.TypeScriptClassWrapper);
+        }
+
         function visitVariableStatement(node: VariableStatement): Statement | undefined {
-            const ancestorFacts = enterSubtree(HierarchyFacts.None, hasModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
+            const ancestorFacts = enterSubtree(HierarchyFacts.None, hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
             let updated: Statement | undefined;
-            if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0) {
+            if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
                 // we are inside a converted loop - hoist variable declarations
                 let assignments: Expression[] | undefined;
                 for (const decl of node.declarationList.declarations) {
@@ -3454,12 +3466,12 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             let updated: CatchClause;
             Debug.assert(!!node.variableDeclaration, "Catch clause variable should always be present when downleveling ES2015.");
-            if (isBindingPattern(node.variableDeclaration!.name)) {
+            if (isBindingPattern(node.variableDeclaration.name)) {
                 const temp = factory.createTempVariable(/*recordTempVariable*/ undefined);
                 const newVariableDeclaration = factory.createVariableDeclaration(temp);
                 setTextRange(newVariableDeclaration, node.variableDeclaration);
                 const vars = flattenDestructuringBinding(
-                    node.variableDeclaration!,
+                    node.variableDeclaration,
                     visitor,
                     context,
                     FlattenLevel.All,
@@ -3635,7 +3647,13 @@ namespace ts {
             // The class statements are the statements generated by visiting the first statement with initializer of the
             // body (1), while all other statements are added to remainingStatements (2)
             const isVariableStatementWithInitializer = (stmt: Statement) => isVariableStatement(stmt) && !!first(stmt.declarationList.declarations).initializer;
+
+            // visit the class body statements outside of any converted loop body.
+            const savedConvertedLoopState = convertedLoopState;
+            convertedLoopState = undefined;
             const bodyStatements = visitNodes(body.statements, visitor, isStatement);
+            convertedLoopState = savedConvertedLoopState;
+
             const classStatements = filter(bodyStatements, isVariableStatementWithInitializer);
             const remainingStatements = filter(bodyStatements, stmt => !isVariableStatementWithInitializer(stmt));
             const varStatement = cast(first(classStatements), isVariableStatement);
@@ -3811,7 +3829,7 @@ namespace ts {
                             createActualThis()
                         );
                     resultingCall = assignToCapturedThis
-                        ? factory.createAssignment(factory.createFileLevelUniqueName("_this"), initializer)
+                        ? factory.createAssignment(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), initializer)
                         : initializer;
                 }
                 return setOriginalNode(resultingCall, node);
@@ -3982,78 +4000,14 @@ namespace ts {
          * @param node A TaggedTemplateExpression node.
          */
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            // Visit the tag expression
-            const tag = visitNode(node.tag, visitor, isExpression);
-
-            // Build up the template arguments and the raw and cooked strings for the template.
-            // We start out with 'undefined' for the first argument and revisit later
-            // to avoid walking over the template string twice and shifting all our arguments over after the fact.
-            const templateArguments: Expression[] = [undefined!];
-            const cookedStrings: Expression[] = [];
-            const rawStrings: Expression[] = [];
-            const template = node.template;
-            if (isNoSubstitutionTemplateLiteral(template)) {
-                cookedStrings.push(factory.createStringLiteral(template.text));
-                rawStrings.push(getRawLiteral(template));
-            }
-            else {
-                cookedStrings.push(factory.createStringLiteral(template.head.text));
-                rawStrings.push(getRawLiteral(template.head));
-                for (const templateSpan of template.templateSpans) {
-                    cookedStrings.push(factory.createStringLiteral(templateSpan.literal.text));
-                    rawStrings.push(getRawLiteral(templateSpan.literal));
-                    templateArguments.push(visitNode(templateSpan.expression, visitor, isExpression));
-                }
-            }
-
-            const helperCall = emitHelpers().createTemplateObjectHelper(factory.createArrayLiteral(cookedStrings), factory.createArrayLiteral(rawStrings));
-
-            // Create a variable to cache the template object if we're in a module.
-            // Do not do this in the global scope, as any variable we currently generate could conflict with
-            // variables from outside of the current compilation. In the future, we can revisit this behavior.
-            if (isExternalModule(currentSourceFile)) {
-                const tempVar = factory.createUniqueName("templateObject");
-                recordTaggedTemplateString(tempVar);
-                templateArguments[0] = factory.createLogicalOr(
-                    tempVar,
-                    factory.createAssignment(
-                        tempVar,
-                        helperCall)
-                );
-            }
-            else {
-                templateArguments[0] = helperCall;
-            }
-
-            return factory.createCall(tag, /*typeArguments*/ undefined, templateArguments);
-        }
-
-        /**
-         * Creates an ES5 compatible literal from an ES6 template literal.
-         *
-         * @param node The ES6 template literal.
-         */
-        function getRawLiteral(node: TemplateLiteralLikeNode) {
-            // Find original source text, since we need to emit the raw strings of the tagged template.
-            // The raw strings contain the (escaped) strings of what the user wrote.
-            // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
-            let text = node.rawText;
-            if (text === undefined) {
-                text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
-
-                // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
-                // thus we need to remove those characters.
-                // First template piece starts with "`", others with "}"
-                // Last template piece ends with "`", others with "${"
-                const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
-                text = text.substring(1, text.length - (isLast ? 1 : 2));
-            }
-
-            // Newline normalization:
-            // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
-            // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
-            text = text.replace(/\r\n?/g, "\n");
-            return setTextRange(factory.createStringLiteral(text), node);
+            return processTaggedTemplateExpression(
+                context,
+                node,
+                visitor,
+                currentSourceFile,
+                recordTaggedTemplateString,
+                ProcessLevel.All
+            );
         }
 
         /**
@@ -4150,14 +4104,14 @@ namespace ts {
         function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
             return hierarchyFacts & HierarchyFacts.NonStaticClassElement
                 && !isExpressionOfCall
-                    ? factory.createPropertyAccess(factory.createFileLevelUniqueName("_super"), "prototype")
-                    : factory.createFileLevelUniqueName("_super");
+                    ? factory.createPropertyAccess(factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), "prototype")
+                    : factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
         }
 
         function visitMetaProperty(node: MetaProperty) {
             if (node.keywordToken === SyntaxKind.NewKeyword && node.name.escapedText === "target") {
                 hierarchyFacts |= HierarchyFacts.NewTarget;
-                return factory.createFileLevelUniqueName("_newTarget");
+                return factory.createUniqueName("_newTarget", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
             }
             return node;
         }
@@ -4333,13 +4287,13 @@ namespace ts {
         function substituteThisKeyword(node: PrimaryExpression): PrimaryExpression {
             if (enabledSubstitutions & ES2015SubstitutionFlags.CapturedThis
                 && hierarchyFacts & HierarchyFacts.CapturesThis) {
-                return setTextRange(factory.createFileLevelUniqueName("_this"), node);
+                return setTextRange(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), node);
             }
             return node;
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasModifier(member, ModifierFlags.Static)
+            return hasSyntacticModifier(member, ModifierFlags.Static)
                 ? factory.getInternalName(node)
                 : factory.createPropertyAccess(factory.getInternalName(node), "prototype");
         }

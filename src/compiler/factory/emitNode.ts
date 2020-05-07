@@ -1,30 +1,9 @@
 namespace ts {
     /**
-     * Clears any EmitNode entries from parse-tree nodes.
-     * @param sourceFile A source file.
-     */
-    export function disposeEmitNodes(sourceFile: SourceFile | undefined) {
-        // During transformation we may need to annotate a parse tree node with transient
-        // transformation properties. As parse tree nodes live longer than transformation
-        // nodes, we need to make sure we reclaim any memory allocated for custom ranges
-        // from these nodes to ensure we do not hold onto entire subtrees just for position
-        // information. We also need to reset these nodes to a pre-transformation state
-        // for incremental parsing scenarios so that we do not impact later emit.
-        sourceFile = getSourceFileOfNode(getParseTreeNode(sourceFile));
-        const emitNode = sourceFile && sourceFile.emitNode;
-        const annotatedNodes = emitNode && emitNode.annotatedNodes;
-        if (annotatedNodes) {
-            for (const node of annotatedNodes) {
-                node.emitNode = undefined;
-            }
-        }
-    }
-
-    /**
      * Associates a node with the current transformation, initializing
      * various transient transformation properties.
+     * @internal
      */
-    /* @internal */
     export function getOrCreateEmitNode(node: Node): EmitNode {
         if (!node.emitNode) {
             if (isParseTreeNode(node)) {
@@ -35,7 +14,7 @@ namespace ts {
                     return node.emitNode = { annotatedNodes: [node] } as EmitNode;
                 }
 
-                const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) || Debug.fail("Could not determine parsed source file.");
+                const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node))) ?? Debug.fail("Could not determine parsed source file.");
                 getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
             }
 
@@ -43,6 +22,25 @@ namespace ts {
         }
 
         return node.emitNode;
+    }
+
+    /**
+     * Clears any `EmitNode` entries from parse-tree nodes.
+     * @param sourceFile A source file.
+     */
+    export function disposeEmitNodes(sourceFile: SourceFile | undefined) {
+        // During transformation we may need to annotate a parse tree node with transient
+        // transformation properties. As parse tree nodes live longer than transformation
+        // nodes, we need to make sure we reclaim any memory allocated for custom ranges
+        // from these nodes to ensure we do not hold onto entire subtrees just for position
+        // information. We also need to reset these nodes to a pre-transformation state
+        // for incremental parsing scenarios so that we do not impact later emit.
+        const annotatedNodes = getSourceFileOfNode(getParseTreeNode(sourceFile))?.emitNode?.annotatedNodes;
+        if (annotatedNodes) {
+            for (const node of annotatedNodes) {
+                node.emitNode = undefined;
+            }
+        }
     }
 
     /**
@@ -79,8 +77,7 @@ namespace ts {
      * Gets a custom text range to use when emitting source maps.
      */
     export function getSourceMapRange(node: Node): SourceMapRange {
-        const emitNode = node.emitNode;
-        return (emitNode && emitNode.sourceMapRange) || node;
+        return node.emitNode?.sourceMapRange ?? node;
     }
 
     /**
@@ -95,9 +92,7 @@ namespace ts {
      * Gets the TextRange to use for source maps for a token of a node.
      */
     export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
-        const emitNode = node.emitNode;
-        const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
-        return tokenSourceMapRanges && tokenSourceMapRanges[token];
+        return node.emitNode?.tokenSourceMapRanges?.[token];
     }
 
     /**
@@ -105,7 +100,7 @@ namespace ts {
      */
     export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined) {
         const emitNode = getOrCreateEmitNode(node);
-        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
+        const tokenSourceMapRanges = emitNode.tokenSourceMapRanges ?? (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
         return node;
     }
@@ -115,8 +110,7 @@ namespace ts {
      */
     /*@internal*/
     export function getStartsOnNewLine(node: Node) {
-        const emitNode = node.emitNode;
-        return emitNode && emitNode.startsOnNewLine;
+        return node.emitNode?.startsOnNewLine;
     }
 
     /**
@@ -132,8 +126,7 @@ namespace ts {
      * Gets a custom text range to use when emitting comments.
      */
     export function getCommentRange(node: Node) {
-        const emitNode = node.emitNode;
-        return (emitNode && emitNode.commentRange) || node;
+        return node.emitNode?.commentRange ?? node;
     }
 
     /**
@@ -145,8 +138,7 @@ namespace ts {
     }
 
     export function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined {
-        const emitNode = node.emitNode;
-        return emitNode && emitNode.leadingComments;
+        return node.emitNode?.leadingComments;
     }
 
     export function setSyntheticLeadingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined) {
@@ -159,8 +151,7 @@ namespace ts {
     }
 
     export function getSyntheticTrailingComments(node: Node): SynthesizedComment[] | undefined {
-        const emitNode = node.emitNode;
-        return emitNode && emitNode.trailingComments;
+        return node.emitNode?.trailingComments;
     }
 
     export function setSyntheticTrailingComments<T extends Node>(node: T, comments: SynthesizedComment[] | undefined) {
@@ -182,17 +173,16 @@ namespace ts {
     }
 
     /**
-     * Gets the constant value to emit for an expression.
+     * Gets the constant value to emit for an expression representing an enum.
      */
-    export function getConstantValue(node: PropertyAccessExpression | ElementAccessExpression): string | number | undefined {
-        const emitNode = node.emitNode;
-        return emitNode && emitNode.constantValue;
+    export function getConstantValue(node: AccessExpression): string | number | undefined {
+        return node.emitNode?.constantValue;
     }
 
     /**
      * Sets the constant value to emit for an expression.
      */
-    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number) {
+    export function setConstantValue(node: AccessExpression, value: string | number): AccessExpression {
         const emitNode = getOrCreateEmitNode(node);
         emitNode.constantValue = value;
         return node;
@@ -224,12 +214,9 @@ namespace ts {
      * Removes an EmitHelper from a node.
      */
     export function removeEmitHelper(node: Node, helper: EmitHelper): boolean {
-        const emitNode = node.emitNode;
-        if (emitNode) {
-            const helpers = emitNode.helpers;
-            if (helpers) {
-                return orderedRemoveItem(helpers, helper);
-            }
+        const helpers = node.emitNode?.helpers;
+        if (helpers) {
+            return orderedRemoveItem(helpers, helper);
         }
         return false;
     }
@@ -238,8 +225,7 @@ namespace ts {
      * Gets the EmitHelpers of a node.
      */
     export function getEmitHelpers(node: Node): EmitHelper[] | undefined {
-        const emitNode = node.emitNode;
-        return emitNode && emitNode.helpers;
+        return node.emitNode?.helpers;
     }
 
     /**
@@ -266,5 +252,11 @@ namespace ts {
         if (helpersRemoved > 0) {
             sourceEmitHelpers.length -= helpersRemoved;
         }
+    }
+
+    /* @internal */
+    export function ignoreSourceNewlines<T extends Node>(node: T): T {
+        getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
+        return node;
     }
 }

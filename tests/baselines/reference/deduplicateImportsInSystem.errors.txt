@@ -1,29 +1,29 @@
-tests/cases/compiler/deduplicateImportsInSystem.ts(1,17): error TS2307: Cannot find module 'f1'.
-tests/cases/compiler/deduplicateImportsInSystem.ts(2,17): error TS2307: Cannot find module 'f2'.
-tests/cases/compiler/deduplicateImportsInSystem.ts(3,17): error TS2307: Cannot find module 'f3'.
-tests/cases/compiler/deduplicateImportsInSystem.ts(4,17): error TS2307: Cannot find module 'f2'.
-tests/cases/compiler/deduplicateImportsInSystem.ts(5,17): error TS2307: Cannot find module 'f2'.
-tests/cases/compiler/deduplicateImportsInSystem.ts(6,17): error TS2307: Cannot find module 'f1'.
+tests/cases/compiler/deduplicateImportsInSystem.ts(1,17): error TS2307: Cannot find module 'f1' or its corresponding type declarations.
+tests/cases/compiler/deduplicateImportsInSystem.ts(2,17): error TS2307: Cannot find module 'f2' or its corresponding type declarations.
+tests/cases/compiler/deduplicateImportsInSystem.ts(3,17): error TS2307: Cannot find module 'f3' or its corresponding type declarations.
+tests/cases/compiler/deduplicateImportsInSystem.ts(4,17): error TS2307: Cannot find module 'f2' or its corresponding type declarations.
+tests/cases/compiler/deduplicateImportsInSystem.ts(5,17): error TS2307: Cannot find module 'f2' or its corresponding type declarations.
+tests/cases/compiler/deduplicateImportsInSystem.ts(6,17): error TS2307: Cannot find module 'f1' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/deduplicateImportsInSystem.ts (6 errors) ====
     import {A} from "f1";
                     ~~~~
-!!! error TS2307: Cannot find module 'f1'.
+!!! error TS2307: Cannot find module 'f1' or its corresponding type declarations.
     import {B} from "f2";
                     ~~~~
-!!! error TS2307: Cannot find module 'f2'.
+!!! error TS2307: Cannot find module 'f2' or its corresponding type declarations.
     import {C} from "f3";
                     ~~~~
-!!! error TS2307: Cannot find module 'f3'.
+!!! error TS2307: Cannot find module 'f3' or its corresponding type declarations.
     import {D} from 'f2';
                     ~~~~
-!!! error TS2307: Cannot find module 'f2'.
+!!! error TS2307: Cannot find module 'f2' or its corresponding type declarations.
     import {E} from "f2";
                     ~~~~
-!!! error TS2307: Cannot find module 'f2'.
+!!! error TS2307: Cannot find module 'f2' or its corresponding type declarations.
     import {F} from 'f1';
                     ~~~~
-!!! error TS2307: Cannot find module 'f1'.
+!!! error TS2307: Cannot find module 'f1' or its corresponding type declarations.
     
     console.log(A + B + C + D + E + F)

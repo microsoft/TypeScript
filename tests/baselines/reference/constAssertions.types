@@ -125,9 +125,9 @@ let a3 = [10, 'hello', true] as const;
 >true : true
 
 let a4 = [...[1, 2, 3]] as const;
->a4 : readonly (1 | 2 | 3)[]
->[...[1, 2, 3]] as const : readonly (1 | 2 | 3)[]
->[...[1, 2, 3]] : readonly (1 | 2 | 3)[]
+>a4 : readonly [1, 2, 3]
+>[...[1, 2, 3]] as const : readonly [1, 2, 3]
+>[...[1, 2, 3]] : readonly [1, 2, 3]
 >...[1, 2, 3] : 1 | 2 | 3
 >[1, 2, 3] : readonly [1, 2, 3]
 >1 : 1

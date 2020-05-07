@@ -70,8 +70,8 @@ namespace ts.formatting {
             rule("NoSpaceAfterUnaryPrefixOperator", unaryPrefixOperators, unaryPrefixExpressions, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.DeleteSpace),
             rule("NoSpaceAfterUnaryPreincrementOperator", SyntaxKind.PlusPlusToken, unaryPreincrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
             rule("NoSpaceAfterUnaryPredecrementOperator", SyntaxKind.MinusMinusToken, unaryPredecrementExpressions, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-            rule("NoSpaceBeforeUnaryPostincrementOperator", unaryPostincrementExpressions, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
-            rule("NoSpaceBeforeUnaryPostdecrementOperator", unaryPostdecrementExpressions, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeUnaryPostincrementOperator", unaryPostincrementExpressions, SyntaxKind.PlusPlusToken, [isNonJsxSameLineTokenContext, isNotStatementConditionContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeUnaryPostdecrementOperator", unaryPostdecrementExpressions, SyntaxKind.MinusMinusToken, [isNonJsxSameLineTokenContext, isNotStatementConditionContext], RuleAction.DeleteSpace),
 
             // More unary operator special-casing.
             // DevDiv 181814: Be careful when removing leading whitespace
@@ -129,7 +129,7 @@ namespace ts.formatting {
 
             // Async-await
             rule("SpaceBetweenAsyncAndOpenParen", SyntaxKind.AsyncKeyword, SyntaxKind.OpenParenToken, [isArrowFunctionContext, isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
-            rule("SpaceBetweenAsyncAndFunctionKeyword", SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+            rule("SpaceBetweenAsyncAndFunctionKeyword", SyntaxKind.AsyncKeyword, [SyntaxKind.FunctionKeyword, SyntaxKind.Identifier], [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
 
             // Template string
             rule("NoSpaceBetweenTagAndTemplateString", [SyntaxKind.Identifier, SyntaxKind.CloseParenToken], [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
@@ -241,7 +241,7 @@ namespace ts.formatting {
             rule("SpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionEnabled("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
             rule("NoSpaceAfterConstructor", SyntaxKind.ConstructorKeyword, SyntaxKind.OpenParenToken, [isOptionDisabledOrUndefined("insertSpaceAfterConstructor"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            rule("SpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNextTokenNotCloseBracket], RuleAction.InsertSpace),
+            rule("SpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionEnabled("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNextTokenNotCloseBracket, isNextTokenNotCloseParen], RuleAction.InsertSpace),
             rule("NoSpaceAfterComma", SyntaxKind.CommaToken, anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterCommaDelimiter"), isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext], RuleAction.DeleteSpace),
 
             // Insert space after function keyword for anonymous functions
@@ -273,6 +273,10 @@ namespace ts.formatting {
             rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isNonJsxSameLineTokenContext, isObjectContext], RuleAction.DeleteSpace),
             rule("NoSpaceAfterOpenBrace", SyntaxKind.OpenBraceToken, anyToken, [isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
             rule("NoSpaceBeforeCloseBrace", anyToken, SyntaxKind.CloseBraceToken, [isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+
+            // Insert a space after opening and before closing empty brace brackets
+            rule("SpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces")], RuleAction.InsertSpace),
+            rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
             // Insert space after opening and before closing template string braces
             rule("SpaceAfterTemplateHeadAndMiddle", [SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle], anyToken, [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
@@ -433,9 +437,9 @@ namespace ts.formatting {
     }
 
     function isBinaryOpContext(context: FormattingContext): boolean {
-
         switch (context.contextNode.kind) {
             case SyntaxKind.BinaryExpression:
+                return (<BinaryExpression>context.contextNode).operatorToken.kind !== SyntaxKind.CommaToken;
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.ConditionalType:
             case SyntaxKind.AsExpression:
@@ -670,6 +674,10 @@ namespace ts.formatting {
         return context.nextTokenSpan.kind !== SyntaxKind.CloseBracketToken;
     }
 
+    function isNextTokenNotCloseParen(context: FormattingContext): boolean {
+        return context.nextTokenSpan.kind !== SyntaxKind.CloseParenToken;
+    }
+
     function isArrowFunctionContext(context: FormattingContext): boolean {
         return context.contextNode.kind === SyntaxKind.ArrowFunction;
     }
@@ -788,6 +796,25 @@ namespace ts.formatting {
 
     function isNonNullAssertionContext(context: FormattingContext): boolean {
         return context.contextNode.kind === SyntaxKind.NonNullExpression;
+    }
+
+    function isNotStatementConditionContext(context: FormattingContext): boolean {
+        return !isStatementConditionContext(context);
+    }
+
+    function isStatementConditionContext(context: FormattingContext): boolean {
+        switch (context.contextNode.kind) {
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.ForStatement:
+            case SyntaxKind.ForInStatement:
+            case SyntaxKind.ForOfStatement:
+            case SyntaxKind.DoStatement:
+            case SyntaxKind.WhileStatement:
+                return true;
+
+            default:
+                return false;
+        }
     }
 
     function isSemicolonDeletionContext(context: FormattingContext): boolean {

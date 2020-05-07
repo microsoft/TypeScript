@@ -490,27 +490,6 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }
     }
 
-    function copyComments(sourceNode: Node, targetNode: Node) {
-        const sourceFile = sourceNode.getSourceFile();
-        const text = sourceFile.text;
-        if (hasLeadingLineBreak(sourceNode, text)) {
-            copyLeadingComments(sourceNode, targetNode, sourceFile);
-        }
-        else {
-            copyTrailingAsLeadingComments(sourceNode, targetNode, sourceFile);
-        }
-        copyTrailingComments(sourceNode, targetNode, sourceFile);
-    }
-
-    function hasLeadingLineBreak(node: Node, text: string) {
-        const start = node.getFullStart();
-        const end = node.getStart();
-        for (let i = start; i < end; i++) {
-            if (text.charCodeAt(i) === CharacterCodes.lineFeed) return true;
-        }
-        return false;
-    }
-
     function getParameterName(paramDeclaration: ValidParameterDeclaration) {
         return getTextOfIdentifierOrLiteral(paramDeclaration.name);
     }
@@ -522,7 +501,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 if (classDeclaration.name) return [classDeclaration.name];
                 // If the class declaration doesn't have a name, it should have a default modifier.
                 // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
-                const defaultModifier = Debug.assertDefined(
+                const defaultModifier = Debug.checkDefined(
                     findModifier(classDeclaration, SyntaxKind.DefaultKeyword),
                     "Nameless class declaration should be a default export");
                 return [defaultModifier];
@@ -541,14 +520,14 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 if (functionDeclaration.name) return [functionDeclaration.name];
                 // If the function declaration doesn't have a name, it should have a default modifier.
                 // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
-                const defaultModifier = Debug.assertDefined(
+                const defaultModifier = Debug.checkDefined(
                     findModifier(functionDeclaration, SyntaxKind.DefaultKeyword),
                     "Nameless function declaration should be a default export");
                 return [defaultModifier];
             case SyntaxKind.MethodDeclaration:
                 return [functionDeclaration.name];
             case SyntaxKind.Constructor:
-                const ctrKeyword = Debug.assertDefined(
+                const ctrKeyword = Debug.checkDefined(
                     findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile()),
                     "Constructor declaration should have constructor keyword");
                 if (functionDeclaration.parent.kind === SyntaxKind.ClassExpression) {

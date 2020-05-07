@@ -5,7 +5,7 @@ export var config: {}
 === tests/cases/conformance/jsdoc/test.js ===
 /** @param {import('./ex')} a */
 function demo(a) {
->demo : (a: typeof import("tests/cases/conformance/jsdoc/ex")) => void
+>demo : (a: import('./ex')) => void
 >a : typeof import("tests/cases/conformance/jsdoc/ex")
 
     a.config

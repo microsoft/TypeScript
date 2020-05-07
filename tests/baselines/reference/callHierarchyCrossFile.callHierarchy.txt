@@ -1,0 +1,63 @@
+╭ name: createModelReference
+├ kind: function
+├ file: /a.ts
+├ span:
+│ ╭ /a.ts:1:1-1:42
+│ │ 1: export function createModelReference() {}
+│ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /a.ts:1:17-1:37
+│ │ 1: export function createModelReference() {}
+│ │                    ^^^^^^^^^^^^^^^^^^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: openElementsAtEditor
+│ │ ├ kind: function
+│ │ ├ file: /b.ts
+│ │ ├ span:
+│ │ │ ╭ /b.ts:2:1-4:2
+│ │ │ │ 2: function openElementsAtEditor() {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:   createModelReference();
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /b.ts:2:10-2:30
+│ │ │ │ 2: function openElementsAtEditor() {
+│ │ │ │             ^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /b.ts:3:3-3:23
+│ │ │ 3:   createModelReference();
+│ │ │      ^^^^^^^^^^^^^^^^^^^^
+│ ╰ ╰
+│ ╭ from:
+│ │ ╭ name: registerDefaultLanguageCommand
+│ │ ├ kind: function
+│ │ ├ file: /c.ts
+│ │ ├ span:
+│ │ │ ╭ /c.ts:2:1-4:2
+│ │ │ │ 2: function registerDefaultLanguageCommand() {
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 3:   createModelReference();
+│ │ │ │    ^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ 4: }
+│ │ │ │    ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /c.ts:2:10-2:40
+│ │ │ │ 2: function registerDefaultLanguageCommand() {
+│ │ │ │             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ ╰
+│ │ ╰ incoming: none
+│ ├ fromSpans:
+│ │ ╭ /c.ts:3:3-3:23
+│ │ │ 3:   createModelReference();
+│ │ │      ^^^^^^^^^^^^^^^^^^^^
+│ ╰ ╰
+╰ outgoing: none

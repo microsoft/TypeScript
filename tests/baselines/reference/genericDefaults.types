@@ -1770,7 +1770,7 @@ const i06c02 = (<i06<number, string>>x).a;
 >a : [number, string]
 
 interface i07 { a: A; }
->a : A
+>a : globalThis.A
 
 interface i07<A = number> { b: A; }
 >b : A

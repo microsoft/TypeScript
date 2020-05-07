@@ -1,0 +1,17 @@
+=== tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop1.ts ===
+function f() {
+>f : Symbol(f, Decl(unusedVariablesWithUnderscoreInForOfLoop1.ts, 0, 0))
+
+    for (const [_a, b] of [['key', 1]]) {}
+>_a : Symbol(_a, Decl(unusedVariablesWithUnderscoreInForOfLoop1.ts, 1, 16))
+>b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop1.ts, 1, 19))
+
+    for (const [a, _b] of [['key', 1]]) {}
+>a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop1.ts, 3, 16))
+>_b : Symbol(_b, Decl(unusedVariablesWithUnderscoreInForOfLoop1.ts, 3, 18))
+
+    for (const [a, b] of [['key', 1]]) {}
+>a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop1.ts, 5, 16))
+>b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop1.ts, 5, 18))
+}
+

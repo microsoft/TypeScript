@@ -2,15 +2,15 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: document registry in project service", () => {
         const importModuleContent = `import {a} from "./module1"`;
         const file: File = {
-            path: `${projectRoot}/index.ts`,
+            path: `${tscWatch.projectRoot}/index.ts`,
             content: importModuleContent
         };
         const moduleFile: File = {
-            path: `${projectRoot}/module1.d.ts`,
+            path: `${tscWatch.projectRoot}/module1.d.ts`,
             content: "export const a: number;"
         };
         const configFile: File = {
-            path: `${projectRoot}/tsconfig.json`,
+            path: `${tscWatch.projectRoot}/tsconfig.json`,
             content: JSON.stringify({ files: ["index.ts"] })
         };
 

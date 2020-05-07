@@ -4,7 +4,7 @@ namespace ts {
     // Compound nodes
 
     export function createEmptyExports(factory: NodeFactory) {
-        return factory.createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
+        return factory.createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
     }
 
     export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
@@ -13,7 +13,7 @@ namespace ts {
         }
         else {
             const expression = setTextRange(
-                isIdentifier(memberName)
+                isIdentifierOrPrivateIdentifier(memberName)
                     ? factory.createPropertyAccess(target, memberName)
                     : factory.createElementAccess(target, memberName),
                 memberName
@@ -166,7 +166,7 @@ namespace ts {
         }
     }
 
-    export function createExpressionForPropertyName(factory: NodeFactory, memberName: PropertyName): Expression {
+    export function createExpressionForPropertyName(factory: NodeFactory, memberName: Exclude<PropertyName, PrivateIdentifier>): Expression {
         if (isIdentifier(memberName)) {
             return factory.createStringLiteralFromNode(memberName);
         }
@@ -180,7 +180,7 @@ namespace ts {
         }
     }
 
-    function createExpressionForAccessorDeclaration(factory: NodeFactory, properties: NodeArray<Declaration>, property: AccessorDeclaration, receiver: Expression, multiLine: boolean) {
+    function createExpressionForAccessorDeclaration(factory: NodeFactory, properties: NodeArray<Declaration>, property: AccessorDeclaration & { readonly name: Exclude<PropertyName, PrivateIdentifier>; }, receiver: Expression, multiLine: boolean) {
         const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
         if (property === firstAccessor) {
             return setTextRange(
@@ -188,7 +188,7 @@ namespace ts {
                     receiver,
                     createExpressionForPropertyName(factory, property.name),
                     factory.createPropertyDescriptor({
-                        enumerable: true,
+                        enumerable: factory.createFalse(),
                         configurable: true,
                         get: getAccessor && setTextRange(
                             setOriginalNode(
@@ -283,10 +283,13 @@ namespace ts {
     }
 
     export function createExpressionForObjectLiteralElementLike(factory: NodeFactory, node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression | undefined {
+        if (property.name && isPrivateIdentifier(property.name)) {
+            Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
+        }
         switch (property.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return createExpressionForAccessorDeclaration(factory, node.properties, property, receiver, !!node.multiLine);
+                return createExpressionForAccessorDeclaration(factory, node.properties, property as typeof property & { readonly name: Exclude<PropertyName, PrivateIdentifier> }, receiver, !!node.multiLine);
             case SyntaxKind.PropertyAssignment:
                 return createExpressionForPropertyAssignment(factory, property, receiver);
             case SyntaxKind.ShorthandPropertyAssignment:
@@ -348,16 +351,15 @@ namespace ts {
             node.kind === SyntaxKind.CommaListExpression;
     }
 
-    export type OuterExpression = ParenthesizedExpression | TypeAssertion | AsExpression | NonNullExpression | PartiallyEmittedExpression;
-
     export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
                 return (kinds & OuterExpressionKinds.Parentheses) !== 0;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
+                return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
             case SyntaxKind.NonNullExpression:
-                return (kinds & OuterExpressionKinds.Assertions) !== 0;
+                return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
             case SyntaxKind.PartiallyEmittedExpression:
                 return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
         }
@@ -367,34 +369,16 @@ namespace ts {
     export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
     export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
     export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
-        let previousNode: Node;
-        do {
-            previousNode = node;
-            if (kinds & OuterExpressionKinds.Parentheses) {
-                node = skipParentheses(node);
-            }
-
-            if (kinds & OuterExpressionKinds.Assertions) {
-                node = skipAssertions(node);
-            }
-
-            if (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) {
-                node = skipPartiallyEmittedExpressions(node);
-            }
+        while (isOuterExpression(node, kinds)) {
+            node = node.expression;
         }
-        while (previousNode !== node);
-
         return node;
     }
 
     export function skipAssertions(node: Expression): Expression;
     export function skipAssertions(node: Node): Node;
     export function skipAssertions(node: Node): Node {
-        while (isAssertionExpression(node) || node.kind === SyntaxKind.NonNullExpression) {
-            node = (<AssertionExpression | NonNullExpression>node).expression;
-        }
-
-        return node;
+        return skipOuterExpressions(node, OuterExpressionKinds.Assertions);
     }
 
     export function startOnNewLine<T extends Node>(node: T): T {
@@ -457,7 +441,7 @@ namespace ts {
                 const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
-                    nodeFactory.createImportClause(/*name*/ undefined, namedBindings),
+                    nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
                     nodeFactory.createStringLiteral(externalHelpersModuleNameText)
                 );
                 addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
@@ -476,8 +460,7 @@ namespace ts {
             const moduleKind = getEmitModuleKind(compilerOptions);
             let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
-                && moduleKind !== ModuleKind.ES2015
-                && moduleKind !== ModuleKind.ESNext;
+                && moduleKind < ModuleKind.ES2015;
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {
@@ -708,13 +691,13 @@ namespace ts {
     /**
      * Gets the property name of a BindingOrAssignmentElement
      */
-    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
+    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
         const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement);
         Debug.assert(!!propertyName || isSpreadAssignment(bindingElement), "Invalid property name for binding element.");
         return propertyName;
     }
 
-    export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
+    export function tryGetPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
         switch (bindingElement.kind) {
             case SyntaxKind.BindingElement:
                 // `a` in `let { a: b } = ...`
@@ -723,6 +706,9 @@ namespace ts {
                 // `1` in `let { 1: b } = ...`
                 if (bindingElement.propertyName) {
                     const propertyName = bindingElement.propertyName;
+                    if (isPrivateIdentifier(propertyName)) {
+                        return Debug.failBadSyntaxKind(propertyName);
+                    }
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -737,6 +723,9 @@ namespace ts {
                 // `1` in `({ 1: b } = ...)`
                 if (bindingElement.name) {
                     const propertyName = bindingElement.name;
+                    if (isPrivateIdentifier(propertyName)) {
+                        return Debug.failBadSyntaxKind(propertyName);
+                    }
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -746,14 +735,15 @@ namespace ts {
 
             case SyntaxKind.SpreadAssignment:
                 // `a` in `({ ...a } = ...)`
+                if (bindingElement.name && isPrivateIdentifier(bindingElement.name)) {
+                    return Debug.failBadSyntaxKind(bindingElement.name);
+                }
                 return bindingElement.name;
         }
 
         const target = getTargetOfBindingOrAssignmentElement(bindingElement);
         if (target && isPropertyName(target)) {
-            return isComputedPropertyName(target) && isStringOrNumericLiteral(target.expression)
-                ? target.expression
-                : target;
+            return target;
         }
     }
 
@@ -778,6 +768,19 @@ namespace ts {
             case SyntaxKind.ObjectLiteralExpression:
                 // `a` in `{a}`
                 return <readonly BindingOrAssignmentElement[]>name.properties;
+        }
+    }
+
+    /* @internal */
+    export function getJSDocTypeAliasName(fullName: JSDocNamespaceBody | undefined) {
+        if (fullName) {
+            let rightNode = fullName;
+            while (true) {
+                if (isIdentifier(rightNode) || !rightNode.body) {
+                    return isIdentifier(rightNode) ? rightNode : rightNode.name;
+                }
+                rightNode = rightNode.body;
+            }
         }
     }
 
@@ -806,5 +809,15 @@ namespace ts {
             || kind === SyntaxKind.ImportDeclaration
             || kind === SyntaxKind.ExportAssignment
             || kind === SyntaxKind.ExportDeclaration;
+    }
+
+    /* @internal */
+    export function isAsyncModifier(node: Modifier): node is AsyncKeyword {
+        return node.kind === SyntaxKind.AsyncKeyword;
+    }
+
+    /* @internal */
+    export function isStaticModifier(node: Modifier): node is StaticKeyword {
+        return node.kind === SyntaxKind.StaticKeyword;
     }
 }

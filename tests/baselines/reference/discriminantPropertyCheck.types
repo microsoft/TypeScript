@@ -82,9 +82,9 @@ function goo2(x: Item) {
 
         x.foo.length;  // Error, intervening discriminant guard
 >x.foo.length : number
->x.foo : string | undefined
+>x.foo : string
 >x : Item1
->foo : string | undefined
+>foo : string
 >length : number
     }
 }
@@ -226,9 +226,9 @@ function foo6(x: Item) {
 
         x.foo.length;  // Error, intervening discriminant guard
 >x.foo.length : number
->x.foo : string | undefined
+>x.foo : string
 >x : Item1
->foo : string | undefined
+>foo : string
 >length : number
     }
 }
@@ -424,7 +424,7 @@ export function foo(obj: Obj) {
 }
 
 function onlyPlus(arg: '+') {
->onlyPlus : (arg: "+") => "+"
+>onlyPlus : (arg: '+') => "+"
 >arg : "+"
 
   return arg;
@@ -463,7 +463,7 @@ type TypeBar2 = { type: BarEnum.bar2 };
 >BarEnum : any
 
 function func3(value: Partial<UnionOfBar>) {
->func3 : (value: Partial<TypeBar1> | Partial<TypeBar2>) => void
+>func3 : (value: Partial<UnionOfBar>) => void
 >value : Partial<TypeBar1> | Partial<TypeBar2>
 
     if (value.type !== undefined) {

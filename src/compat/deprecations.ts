@@ -11,8 +11,8 @@ namespace ts {
 
     // DEPRECATION: Node factory top-level exports
     // DEPRECATION PLAN:
-    //     - soft: 3.8
-    //     - warn: 3.9
+    //     - soft: 4.0
+    //     - warn: 4.1
     //     - error: TBD
     // #region Node factory top-level exports
 
@@ -52,13 +52,9 @@ namespace ts {
          */
         createUniqueName,
         /**
-         * @deprecated Use `factory.createOptimisticUniqueName` or the factory supplied by your transformation context instead.
+         * @deprecated Use `factory.createPrivateIdentifier` or the factory supplied by your transformation context instead.
          */
-        createOptimisticUniqueName,
-        /**
-         * @deprecated Use `factory.createFileLevelUniqueName` or the factory supplied by your transformation context instead.
-         */
-        createFileLevelUniqueName,
+        createPrivateIdentifier,
         /**
          * @deprecated Use `factory.createSuper` or the factory supplied by your transformation context instead.
          */
@@ -524,10 +520,6 @@ namespace ts {
          */
         createBinary,
         /**
-         * @deprecated Use `factory.updateBinary` or the factory supplied by your transformation context instead.
-         */
-        updateBinary,
-        /**
          * @deprecated Use `factory.updateConditional` or the factory supplied by your transformation context instead.
          */
         updateConditional,
@@ -587,6 +579,14 @@ namespace ts {
          * @deprecated Use `factory.updateNonNullExpression` or the factory supplied by your transformation context instead.
          */
         updateNonNullExpression,
+        /**
+         * @deprecated Use `factory.createNonNullChain` or the factory supplied by your transformation context instead.
+         */
+        createNonNullChain,
+        /**
+         * @deprecated Use `factory.updateNonNullChain` or the factory supplied by your transformation context instead.
+         */
+        updateNonNullChain,
         /**
          * @deprecated Use `factory.createMetaProperty` or the factory supplied by your transformation context instead.
          */
@@ -858,14 +858,6 @@ namespace ts {
          */
         updateImportDeclaration,
         /**
-         * @deprecated Use `factory.createImportClause` or the factory supplied by your transformation context instead.
-         */
-        createImportClause,
-        /**
-         * @deprecated Use `factory.updateImportClause` or the factory supplied by your transformation context instead.
-         */
-        updateImportClause,
-        /**
          * @deprecated Use `factory.createNamespaceImport` or the factory supplied by your transformation context instead.
          */
         createNamespaceImport,
@@ -897,14 +889,6 @@ namespace ts {
          * @deprecated Use `factory.updateExportAssignment` or the factory supplied by your transformation context instead.
          */
         updateExportAssignment,
-        /**
-         * @deprecated Use `factory.createExportDeclaration` or the factory supplied by your transformation context instead.
-         */
-        createExportDeclaration,
-        /**
-         * @deprecated Use `factory.updateExportDeclaration` or the factory supplied by your transformation context instead.
-         */
-        updateExportDeclaration,
         /**
          * @deprecated Use `factory.createNamedExports` or the factory supplied by your transformation context instead.
          */
@@ -949,6 +933,74 @@ namespace ts {
          * @deprecated Use `factory.createJSDocComment` or the factory supplied by your transformation context instead.
          */
         createJSDocComment,
+        /**
+         * @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocParameterTag,
+        /**
+         * @deprecated Use `factory.createJSDocClassTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocClassTag,
+        /**
+         * @deprecated Use `factory.createJSDocAugmentsTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocAugmentsTag,
+        /**
+         * @deprecated Use `factory.createJSDocEnumTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocEnumTag,
+        /**
+         * @deprecated Use `factory.createJSDocTemplateTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocTemplateTag,
+        /**
+         * @deprecated Use `factory.createJSDocTypedefTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocTypedefTag,
+        /**
+         * @deprecated Use `factory.createJSDocCallbackTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocCallbackTag,
+        /**
+         * @deprecated Use `factory.createJSDocSignature` or the factory supplied by your transformation context instead.
+         */
+        createJSDocSignature,
+        /**
+         * @deprecated Use `factory.createJSDocPropertyTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocPropertyTag,
+        /**
+         * @deprecated Use `factory.createJSDocTypeLiteral` or the factory supplied by your transformation context instead.
+         */
+        createJSDocTypeLiteral,
+        /**
+         * @deprecated Use `factory.createJSDocImplementsTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocImplementsTag,
+        /**
+         * @deprecated Use `factory.createJSDocAuthorTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocAuthorTag,
+        /**
+         * @deprecated Use `factory.createJSDocPublicTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocPublicTag,
+        /**
+         * @deprecated Use `factory.createJSDocPrivateTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocPrivateTag,
+        /**
+         * @deprecated Use `factory.createJSDocProtectedTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocProtectedTag,
+        /**
+         * @deprecated Use `factory.createJSDocReadonlyTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocReadonlyTag,
+        /**
+         * @deprecated Use `factory.createJSDocUnknownTag` or the factory supplied by your transformation context instead.
+         */
+        createJSDocUnknownTag: createJSDocTag,
         /**
          * @deprecated Use `factory.createJsxElement` or the factory supplied by your transformation context instead.
          */
@@ -1152,7 +1204,15 @@ namespace ts {
         /**
          * @deprecated Use `factory.createExternalModuleExport` or the factory supplied by your transformation context instead.
          */
-        createExternalModuleExport
+        createExternalModuleExport,
+        /**
+         * @deprecated Use `factory.createNamespaceExport` or the factory supplied by your transformation context instead.
+         */
+        createNamespaceExport,
+        /**
+         * @deprecated Use `factory.updateNamespaceExport` or the factory supplied by your transformation context instead.
+         */
+        updateNamespaceExport,
     } = factory;
     // #endregion export const { ... } = factory;
 
@@ -1182,6 +1242,20 @@ namespace ts {
      */
     export function getGeneratedNameForNode(node: Node | undefined): Identifier {
         return factory.getGeneratedNameForNode(node, /*flags*/ undefined);
+    }
+
+    /**
+     * @deprecated Use `factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic)` or the factory supplied by your transformation context instead.
+     */
+    export function createOptimisticUniqueName(text: string): Identifier {
+        return factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic);
+    }
+
+    /**
+     * @deprecated Use `factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)` or the factory supplied by your transformation context instead.
+     */
+    export function createFileLevelUniqueName(text: string): Identifier {
+        return factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
     }
 
     /**
@@ -1325,6 +1399,16 @@ namespace ts {
     }
 
     /**
+     * @deprecated Use `factory.updateBinary` or the factory supplied by your transformation context instead.
+     */
+    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator: BinaryOperator | BinaryOperatorToken = node.operatorToken) {
+        if (typeof operator === "number") {
+            operator = operator === node.operatorToken.kind ? node.operatorToken : factory.createToken(operator);
+        }
+        return factory.updateBinary(node, left, operator, right);
+    }
+
+    /**
      * @deprecated Use `factory.createConditional` or the factory supplied by your transformation context instead.
      */
     export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
@@ -1333,7 +1417,7 @@ namespace ts {
      */
     export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
     export function createConditional(condition: Expression, questionTokenOrWhenTrue: QuestionToken | Expression, whenTrueOrWhenFalse: Expression, colonToken?: ColonToken, whenFalse?: Expression) {
-        return arguments.length === 5 ? factory.createConditional(condition, questionTokenOrWhenTrue as QuestionToken, whenTrueOrWhenFalse, colonToken!, whenFalse!) :
+        return arguments.length === 5 ? factory.createConditional(condition, questionTokenOrWhenTrue as QuestionToken, whenTrueOrWhenFalse, colonToken, whenFalse!) :
             arguments.length === 3 ? factory.createConditional(condition, factory.createToken(SyntaxKind.QuestionToken), questionTokenOrWhenTrue as Expression, factory.createToken(SyntaxKind.ColonToken), whenTrueOrWhenFalse) :
             Debug.fail("Argument count mismatch");
     }
@@ -1491,6 +1575,47 @@ namespace ts {
     }
 
     /**
+     * @deprecated Use `factory.createImportClause` or the factory supplied by your transformation context instead.
+     */
+    export function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, isTypeOnly = false): ImportClause {
+        return factory.createImportClause(isTypeOnly, name, namedBindings);
+    }
+
+    /**
+     * @deprecated Use `factory.updateImportClause` or the factory supplied by your transformation context instead.
+     */
+    export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined, isTypeOnly: boolean) {
+        return factory.updateImportClause(node, isTypeOnly, name, namedBindings);
+    }
+
+    /**
+     * @deprecated Use `factory.createExportDeclaration` or the factory supplied by your transformation context instead.
+     */
+    export function createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, isTypeOnly = false) {
+        return factory.createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier);
+    }
+
+    /**
+     * @deprecated Use `factory.updateExportDeclaration` or the factory supplied by your transformation context instead.
+     */
+    export function updateExportDeclaration(
+        node: ExportDeclaration,
+        decorators: readonly Decorator[] | undefined,
+        modifiers: readonly Modifier[] | undefined,
+        exportClause: NamedExportBindings | undefined,
+        moduleSpecifier: Expression | undefined,
+        isTypeOnly: boolean) {
+        return factory.updateExportDeclaration(node, decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier);
+    }
+
+    /**
+     * @deprecated Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead.
+     */
+    export function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
+        return factory.createJSDocParameterTag(/*tagName*/ undefined, name, isBracketed, typeExpression, /*isNameFirst*/ false, comment);
+    }
+
+    /**
      * @deprecated Use `factory.createComma` or the factory supplied by your transformation context instead.
      */
     export function createComma(left: Expression, right: Expression): Expression {
@@ -1579,8 +1704,6 @@ namespace ts {
         "createRegularExpressionLiteral",
         "createLoopVariable",
         "createUniqueName",
-        "createOptimisticUniqueName",
-        "createFileLevelUniqueName",
         "createToken",
         "createSuper",
         "createThis",
@@ -1703,6 +1826,8 @@ namespace ts {
         "updateAsExpression",
         "createNonNullExpression",
         "updateNonNullExpression",
+        "createNonNullChain",
+        "updateNonNullChain",
         "createMetaProperty",
         "updateMetaProperty",
         "createTemplateSpan",
@@ -1774,6 +1899,8 @@ namespace ts {
         "updateImportClause",
         "createNamespaceImport",
         "updateNamespaceImport",
+        "createNamespaceExport",
+        "updateNamespaceExport",
         "createNamedImports",
         "updateNamedImports",
         "createImportSpecifier",
@@ -1846,6 +1973,7 @@ namespace ts {
         "createIdentifier",
         "createTempVariable",
         "getGeneratedNameForNode",
+        "createPrivateIdentifier",
         "createIndexSignature",
         "createMethodSignature",
         "updateMethodSignature",
@@ -1872,10 +2000,26 @@ namespace ts {
         "createPostfixIncrement",
         "createLogicalNot",
         "createArrayLiteral",
+        "createJSDocParameterTag",
+        "createJSDocClassTag",
+        "createJSDocAugmentsTag",
+        "createJSDocEnumTag",
+        "createJSDocTemplateTag",
+        "createJSDocTypedefTag",
+        "createJSDocCallbackTag",
+        "createJSDocSignature",
+        "createJSDocPropertyTag",
+        "createJSDocTypeLiteral",
+        "createJSDocImplementsTag",
+        "createJSDocAuthorTag",
+        "createJSDocPublicTag",
+        "createJSDocPrivateTag",
+        "createJSDocProtectedTag",
+        "createJSDocReadonlyTag",
     ], {
         message: "Use `factory.{0}` or the factory supplied by your transformation context instead.",
-        since: "3.8",
-        warnAfter: "3.9"
+        since: "4.0",
+        warnAfter: "4.1"
     });
 
     Debug.deprecateExports(ts, [
@@ -1893,38 +2037,75 @@ namespace ts {
         "updateSetAccessor",
     ], {
         message: "Use `factory.{0}Declaration` or the factory supplied by your transformation context instead.",
-        since: "3.8",
-        warnAfter: "3.9"
+        since: "4.0",
+        warnAfter: "4.1"
+    });
+
+    Debug.deprecateExport(ts, "createJSDocParamTag", {
+        message: "Use `factory.createJSDocParameterTag` or the factory supplied by your transformation context instead.",
+        since: "4.0",
+        warnAfter: "4.1"
+    });
+
+    Debug.deprecateExport(ts, "createJSDocTag", {
+        message: "Use `factory.createJSDocUnknownTag` or the factory supplied by your transformation context instead.",
+        since: "4.0",
+        warnAfter: "4.1"
+    });
+
+    Debug.deprecateExport(ts, "createOptimisticUniqueName", {
+        message: "Use `factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic)` or the factory supplied by your transformation context instead.",
+        since: "4.0",
+        warnAfter: "4.1"
+    });
+
+    Debug.deprecateExport(ts, "createFileLevelUniqueName", {
+        message: "Use `factory.createUniqueName(text, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)` or the factory supplied by your transformation context instead.",
+        since: "4.0",
+        warnAfter: "4.1"
     });
 
     Debug.deprecateExport(ts, "createStatement", {
         message: "Use `factory.createExpressionStatement` or the factory supplied by your transformation context instead.",
-        since: "3.8",
-        warnAfter: "3.9"
+        since: "4.0",
+        warnAfter: "4.1"
     });
 
     Debug.deprecateExport(ts, "updateStatement", {
         message: "Use `factory.updateExpressionStatement` or the factory supplied by your transformation context instead.",
-        since: "3.8",
-        warnAfter: "3.9"
+        since: "4.0",
+        warnAfter: "4.1"
     });
 
     Debug.deprecateExport(ts, "updateSourceFileNode", {
         message: "Use `factory.updateSourceFile` or the factory supplied by your transformation context instead.",
-        since: "3.8",
-        warnAfter: "3.9"
+        since: "4.0",
+        warnAfter: "4.1"
     });
 
     Debug.deprecateExport(ts, "createLiteral", {
         message: "Use `factory.createStringLiteral`, `factory.createStringLiteralFromNode`, `factory.createNumericLiteral`, `factory.createBigIntLiteral`, `factory.createTrue`, `factory.createFalse`, or the factory supplied by your transformation context instead.",
-        since: "3.8",
-        warnAfter: "3.9"
+        since: "4.0",
+        warnAfter: "4.1"
     });
+
+    /** @deprecated Use an appropriate `factory` method instead. */
+    export function createNode(kind: SyntaxKind, pos = 0, end = 0): Node {
+        return setTextRangePosEnd(
+            kind === SyntaxKind.SourceFile ? parseBaseNodeFactory.createBaseSourceFileNode(kind) :
+            kind === SyntaxKind.Identifier ? parseBaseNodeFactory.createBaseIdentifierNode(kind) :
+            kind === SyntaxKind.PrivateIdentifier ? parseBaseNodeFactory.createBasePrivateIdentifierNode(kind) :
+            !isNodeKind(kind) ? parseBaseNodeFactory.createBaseTokenNode(kind) :
+            parseBaseNodeFactory.createBaseNode(kind),
+            pos,
+            end
+        );
+    }
 
     Debug.deprecateExport(ts, "createNode", {
         message: "Use an appropriate `factory` method instead.",
-        since: "3.8",
-        warnAfter: "3.9"
+        since: "4.0",
+        warnAfter: "4.1"
     });
 
     /**
@@ -1943,17 +2124,17 @@ namespace ts {
     }
 
     Debug.deprecateExport(ts, "getMutableClone", {
-        message: "Use `factory.cloneNode` instead and set `pos`, `end`, and `parent` as needed.",
-        since: "3.8",
-        warnAfter: "3.9"
+        message: "Use `factory.cloneNode` instead and use `setCommentRange` or `setSourceMapRange` and avoid setting `parent`.",
+        since: "4.0",
+        warnAfter: "4.1"
     });
 
     // #endregion Node Factory top-level exports
 
     // DEPRECATION: Renamed node tests
     // DEPRECATION PLAN:
-    //     - soft: 3.8
-    //     - warn: 3.9
+    //     - soft: 4.0
+    //     - warn: 4.1
     //     - error: TBD
     // #region Renamed node Tests
     /**
@@ -1965,8 +2146,8 @@ namespace ts {
 
     Debug.deprecateExport(ts, "isTypeAssertion", {
         message: "Use `isTypeAssertionExpression` instead.",
-        since: "3.8",
-        warnAfter: "3.9"
+        since: "4.0",
+        warnAfter: "4.1"
     });
 
     // #endregion Renamed node Tests

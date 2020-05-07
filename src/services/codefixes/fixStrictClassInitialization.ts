@@ -47,12 +47,12 @@ namespace ts.codefix {
         },
     });
 
-    function getPropertyDeclaration (sourceFile: SourceFile, pos: number): PropertyDeclaration | undefined {
+    function getPropertyDeclaration(sourceFile: SourceFile, pos: number): PropertyDeclaration | undefined {
         const token = getTokenAtPosition(sourceFile, pos);
         return isIdentifier(token) ? cast(token.parent, isPropertyDeclaration) : undefined;
     }
 
-    function getActionForAddMissingDefiniteAssignmentAssertion (context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
+    function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, propertyDeclaration));
         return createCodeFixAction(fixName, changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, propertyDeclaration.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
     }
@@ -70,7 +70,7 @@ namespace ts.codefix {
         changeTracker.replaceNode(propertyDeclarationSourceFile, propertyDeclaration, property);
     }
 
-    function getActionForAddMissingUndefinedType (context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
+    function getActionForAddMissingUndefinedType(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction {
         const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, propertyDeclaration));
         return createCodeFixAction(fixName, changes, [Diagnostics.Add_undefined_type_to_property_0, propertyDeclaration.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
     }
@@ -91,7 +91,7 @@ namespace ts.codefix {
         return createCodeFixAction(fixName, changes, [Diagnostics.Add_initializer_to_property_0, propertyDeclaration.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
     }
 
-    function addInitializer (changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
+    function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
         const property = factory.updatePropertyDeclaration(
             propertyDeclaration,
             propertyDeclaration.decorators,
@@ -126,7 +126,7 @@ namespace ts.codefix {
         }
         else if (type.isClass()) {
             const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
-            if (!classDeclaration || hasModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
+            if (!classDeclaration || hasSyntacticModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
 
             const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
             if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;

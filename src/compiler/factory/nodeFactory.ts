@@ -1,5 +1,5 @@
+let nextAutoGenerateId = 0;
 namespace ts {
-    let nextAutoGenerateId = 0;
 
     /* @internal */
     export const enum NodeFactoryFlags {
@@ -75,6 +75,7 @@ namespace ts {
         const createNode = observeResult(baseFactory.createBaseNode, treeStateObserver && treeStateObserver.onCreateNode);
         const createTokenNode = observeResult(baseFactory.createBaseTokenNode, treeStateObserver && treeStateObserver.onCreateNode);
         const createIdentifierNode = observeResult(baseFactory.createBaseIdentifierNode, treeStateObserver && treeStateObserver.onCreateNode);
+        const createPrivateIdentifierNode = observeResult(baseFactory.createBasePrivateIdentifierNode, treeStateObserver && treeStateObserver.onCreateNode);
         const createSourceFileNode = observeResult(baseFactory.createBaseSourceFileNode, treeStateObserver && treeStateObserver.onCreateNode);
         const setChild = observeArguments(setChildWorker, treeStateObserver && treeStateObserver.onSetChild);
         const setChildren = observeArguments(setChildrenWorker, treeStateObserver && treeStateObserver.onSetChildren);
@@ -106,9 +107,8 @@ namespace ts {
             createTempVariable,
             createLoopVariable,
             createUniqueName,
-            createOptimisticUniqueName,
-            createFileLevelUniqueName,
             getGeneratedNameForNode,
+            createPrivateIdentifier,
             createToken,
             createSuper,
             createThis,
@@ -263,6 +263,8 @@ namespace ts {
             updateAsExpression,
             createNonNullExpression,
             updateNonNullExpression,
+            createNonNullChain,
+            updateNonNullChain,
             createMetaProperty,
             updateMetaProperty,
             createTemplateSpan,
@@ -334,6 +336,8 @@ namespace ts {
             updateImportClause,
             createNamespaceImport,
             updateNamespaceImport,
+            createNamespaceExport,
+            updateNamespaceExport,
             createNamedImports,
             updateNamedImports,
             createImportSpecifier,
@@ -349,31 +353,64 @@ namespace ts {
             createMissingDeclaration,
             createExternalModuleReference,
             updateExternalModuleReference,
-            createJSDocAllType,
-            createJSDocUnknownType,
-            createJSDocNonNullableType,
-            createJSDocNullableType,
-            createJSDocOptionalType,
+            createJSDocAllType: createCreateJSDocPrimaryType(SyntaxKind.JSDocAllType),
+            createJSDocUnknownType: createCreateJSDocPrimaryType(SyntaxKind.JSDocUnknownType),
+            createJSDocNonNullableType: createCreateJSDocUnaryType(SyntaxKind.JSDocNonNullableType),
+            updateJSDocNonNullableType: createUpdateJSDocUnaryType(SyntaxKind.JSDocNonNullableType),
+            createJSDocNullableType: createCreateJSDocUnaryType(SyntaxKind.JSDocNullableType),
+            updateJSDocNullableType: createUpdateJSDocUnaryType(SyntaxKind.JSDocNullableType),
+            createJSDocOptionalType: createCreateJSDocUnaryType(SyntaxKind.JSDocOptionalType),
+            updateJSDocOptionalType: createUpdateJSDocUnaryType(SyntaxKind.JSDocOptionalType),
+            createJSDocVariadicType: createCreateJSDocUnaryType(SyntaxKind.JSDocVariadicType),
+            updateJSDocVariadicType: createUpdateJSDocUnaryType(SyntaxKind.JSDocVariadicType),
+            createJSDocNamepathType: createCreateJSDocUnaryType(SyntaxKind.JSDocNamepathType),
+            updateJSDocNamepathType: createUpdateJSDocUnaryType(SyntaxKind.JSDocNamepathType),
             createJSDocFunctionType,
-            createJSDocVariadicType,
-            createJSDocNamepathType,
+            updateJSDocFunctionType,
             createJSDocTypeLiteral,
+            updateJSDocTypeLiteral,
             createJSDocTypeExpression,
+            updateJSDocTypeExpression,
             createJSDocSignature,
+            updateJSDocSignature,
             createJSDocTemplateTag,
-            createJSDocTypeTag,
+            updateJSDocTemplateTag,
             createJSDocTypedefTag,
-            createJSDocReturnTag,
-            createJSDocThisTag,
+            updateJSDocTypedefTag,
             createJSDocParameterTag,
+            updateJSDocParameterTag,
             createJSDocPropertyTag,
-            createJSDocAuthorTag,
-            createJSDocAugmentsTag,
+            updateJSDocPropertyTag,
             createJSDocCallbackTag,
-            createJSDocClassTag,
-            createJSDocEnumTag,
+            updateJSDocCallbackTag,
+            createJSDocAugmentsTag,
+            updateJSDocAugmentsTag,
+            createJSDocImplementsTag,
+            updateJSDocImplementsTag,
+            createJSDocTypeTag: createCreateJSDocTypeLikeTag(SyntaxKind.JSDocTypeTag, "type"),
+            updateJSDocTypeTag: createUpdateJSDocTypeLikeTag(SyntaxKind.JSDocTypeTag, "type"),
+            createJSDocReturnTag: createCreateJSDocTypeLikeTag(SyntaxKind.JSDocReturnTag, "returns"),
+            updateJSDocReturnTag: createUpdateJSDocTypeLikeTag(SyntaxKind.JSDocReturnTag, "returns"),
+            createJSDocThisTag: createCreateJSDocTypeLikeTag(SyntaxKind.JSDocThisTag, "this"),
+            updateJSDocThisTag: createUpdateJSDocTypeLikeTag(SyntaxKind.JSDocThisTag, "this"),
+            createJSDocEnumTag: createCreateJSDocTypeLikeTag(SyntaxKind.JSDocEnumTag, "enum"),
+            updateJSDocEnumTag: createUpdateJSDocTypeLikeTag(SyntaxKind.JSDocEnumTag, "enum"),
+            createJSDocAuthorTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocAuthorTag, "author"),
+            updateJSDocAuthorTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocAuthorTag, "author"),
+            createJSDocClassTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocClassTag, "class"),
+            updateJSDocClassTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocClassTag, "class"),
+            createJSDocPublicTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocPublicTag, "public"),
+            updateJSDocPublicTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocPublicTag, "public"),
+            createJSDocPrivateTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocPrivateTag, "private"),
+            updateJSDocPrivateTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocPrivateTag, "private"),
+            createJSDocProtectedTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocProtectedTag, "protected"),
+            updateJSDocProtectedTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocProtectedTag, "protected"),
+            createJSDocReadonlyTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocReadonlyTag, "readonly"),
+            updateJSDocReadonlyTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocReadonlyTag, "readonly"),
             createJSDocUnknownTag,
+            updateJSDocUnknownTag,
             createJSDocComment,
+            updateJSDocComment,
             createJsxElement,
             updateJsxElement,
             createJsxSelfClosingElement,
@@ -500,7 +537,10 @@ namespace ts {
             get copyCustomPrologue() { return lazyFactory().copyCustomPrologue; },
             get ensureUseStrict() { return lazyFactory().ensureUseStrict; },
             get liftToBlock() { return lazyFactory().liftToBlock; },
+            get mergeLexicalEnvironment() { return lazyFactory().mergeLexicalEnvironment; },
             get updateModifiers() { return lazyFactory().updateModifiers; },
+            get updateBody() { return lazyFactory().updateBody; },
+            get updateType() { return lazyFactory().updateType; },
         };
 
         return factory;
@@ -554,7 +594,7 @@ namespace ts {
             kind: T["kind"],
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
-            name: Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined
+            name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined
         ) {
             const node = createBaseDeclaration(
                 kind,
@@ -569,7 +609,7 @@ namespace ts {
             kind: T["kind"],
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
-            name: Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
+            name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined
         ) {
             const node = createBaseNamedDeclaration(
@@ -591,7 +631,7 @@ namespace ts {
             kind: T["kind"],
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
-            name: Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
+            name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[] | undefined,
             type: TypeNode | undefined
@@ -621,7 +661,7 @@ namespace ts {
             kind: T["kind"],
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
-            name: Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
+            name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[] | undefined,
             type: TypeNode | undefined,
@@ -801,7 +841,7 @@ namespace ts {
                 case SyntaxKind.JsxText: return createJsxText(text, /*containsOnlyTriviaWhiteSpaces*/ false);
                 case SyntaxKind.JsxTextAllWhiteSpaces: return createJsxText(text, /*containsOnlyTriviaWhiteSpaces*/ true);
                 case SyntaxKind.RegularExpressionLiteral: return createRegularExpressionLiteral(text);
-                case SyntaxKind.NoSubstitutionTemplateLiteral: return createTemplateLiteralLikeNode(kind, text, /*rawText*/ undefined) as NoSubstitutionTemplateLiteral;
+                case SyntaxKind.NoSubstitutionTemplateLiteral: return createTemplateLiteralLikeNode(kind, text, /*rawText*/ undefined, /*templateFlags*/ 0) as NoSubstitutionTemplateLiteral;
             }
         }
 
@@ -869,27 +909,30 @@ namespace ts {
 
         /** Create a unique name based on the supplied text. */
         // @api
-        function createUniqueName(text: string): Identifier {
-            return finish(createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique));
-        }
-
-        // @api
-        function createOptimisticUniqueName(text: string): Identifier {
-            return finish(createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | GeneratedIdentifierFlags.Optimistic));
-        }
-
-        /** Create a unique name based on the supplied text. This does not consider names injected by the transformer. */
-        // @api
-        function createFileLevelUniqueName(text: string): Identifier {
-            return finish(createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel));
+        function createUniqueName(text: string, flags: GeneratedIdentifierFlags = GeneratedIdentifierFlags.None): Identifier {
+            Debug.assert(!(flags & GeneratedIdentifierFlags.KindMask), "Argument out of range: flags");
+            Debug.assert((flags & (GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)) !== GeneratedIdentifierFlags.FileLevel, "GeneratedIdentifierFlags.FileLevel cannot be set without also setting GeneratedIdentifierFlags.Optimistic");
+            return finish(createBaseGeneratedIdentifier(text, GeneratedIdentifierFlags.Unique | flags));
         }
 
         /** Create a unique name generated for a node. */
         // @api
         function getGeneratedNameForNode(node: Node | undefined, flags: GeneratedIdentifierFlags = 0): Identifier {
+            Debug.assert(!(flags & GeneratedIdentifierFlags.KindMask), "Argument out of range: flags");
             const name = createBaseGeneratedIdentifier(node && isIdentifier(node) ? idText(node) : "", GeneratedIdentifierFlags.Node | flags);
             name.original = node;
             return finish(name);
+        }
+
+        // @api
+        function createPrivateIdentifier(text: string): PrivateIdentifier {
+            if (!startsWith(text, "#")) Debug.fail("First character of private identifier must be #: " + text);
+            const node = createPrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as Mutable<PrivateIdentifier>;
+            node.escapedText = escapeLeadingUnderscores(text);
+            if (!skipTransformationFlags) {
+                markClassFields(node);
+            }
+            return node;
         }
 
         //
@@ -1107,7 +1150,7 @@ namespace ts {
                 }
                 else {
                     if (questionToken) markTypeScript(node);
-                    if (hasModifier(node, ModifierFlags.ParameterPropertyModifier)) markTypeScriptClassSyntax(node);
+                    if (hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) markTypeScriptClassSyntax(node);
                     if (initializer || dotDotDotToken) markES2015(node);
                 }
             }
@@ -1219,7 +1262,7 @@ namespace ts {
                     markTypeScriptClassSyntax(node);
                 }
                 markClassFields(node);
-                if (questionOrExclamationToken || hasModifier(node, ModifierFlags.Ambient)) {
+                if (questionOrExclamationToken || hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                     markTypeScript(node);
                 }
             }
@@ -1320,7 +1363,7 @@ namespace ts {
                 if (questionToken) {
                     markTypeScript(node);
                 }
-                if (hasModifier(node, ModifierFlags.Async)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Async)) {
                     if (asteriskToken) {
                         markES2018(node);
                     }
@@ -2119,7 +2162,7 @@ namespace ts {
         }
 
         // @api
-        function createPropertyAccessExpression(expression: Expression, name: string | Identifier) {
+        function createPropertyAccessExpression(expression: Expression, name: string | Identifier | PrivateIdentifier) {
             const node = createBaseNode<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
             setChild(node, node.name = asName(name));
@@ -2135,9 +2178,9 @@ namespace ts {
         }
 
         // @api
-        function updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: Identifier) {
-            if (isOptionalChain(node)) {
-                return updatePropertyAccessChain(node, expression, node.questionDotToken, name);
+        function updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier) {
+            if (isPropertyAccessChain(node)) {
+                return updatePropertyAccessChain(node, expression, node.questionDotToken, cast(name, isIdentifier));
             }
             return node.expression !== expression
                 || node.name !== name
@@ -2146,20 +2189,20 @@ namespace ts {
         }
 
         // @api
-        function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier) {
+        function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier) {
             const node = createBaseNode<PropertyAccessChain>(SyntaxKind.PropertyAccessExpression);
             node.flags |= NodeFlags.OptionalChain;
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
             setChild(node, node.questionDotToken = questionDotToken);
             setChild(node, node.name = asName(name));
             if (!skipTransformationFlags) {
-                markESNext(node);
+                markES2020(node);
             }
             return finish(node);
         }
 
         // @api
-        function updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier) {
+        function updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier) {
             Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a PropertyAccessExpression using updatePropertyAccessChain. Use updatePropertyAccess instead.");
             // Because we are updating an existing PropertyAccessChain we want to inherit its emitFlags
             // instead of using the default from createPropertyAccess
@@ -2188,7 +2231,7 @@ namespace ts {
 
         // @api
         function updateElementAccessExpression(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression) {
-            if (isOptionalChain(node)) {
+            if (isElementAccessChain(node)) {
                 return updateElementAccessChain(node, expression, node.questionDotToken, argumentExpression);
             }
             return node.expression !== expression
@@ -2205,7 +2248,7 @@ namespace ts {
             setChild(node, node.questionDotToken = questionDotToken);
             setChild(node, node.argumentExpression = asExpression(index));
             if (!skipTransformationFlags) {
-                markESNext(node);
+                markES2020(node);
             }
             return finish(node);
         }
@@ -2244,7 +2287,7 @@ namespace ts {
 
         // @api
         function updateCallExpression(node: CallExpression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[]) {
-            if (isOptionalChain(node)) {
+            if (isCallChain(node)) {
                 return updateCallChain(node, expression, node.questionDotToken, typeArguments, argumentsArray);
             }
             return node.expression !== expression
@@ -2263,7 +2306,7 @@ namespace ts {
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChildren(node, node.arguments = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)));
             if (!skipTransformationFlags) {
-                markESNext(node);
+                markES2020(node);
                 if (typeArguments) {
                     markTypeScript(node);
                 }
@@ -2318,6 +2361,9 @@ namespace ts {
                 markES2015(node);
                 if (typeArguments) {
                     markTypeScript(node);
+                }
+                if (hasInvalidEscape(template)) {
+                    markES2018(node);
                 }
             }
             return finish(node);
@@ -2390,7 +2436,7 @@ namespace ts {
                 if (typeParameters) {
                     markTypeScript(node);
                 }
-                if (hasModifier(node, ModifierFlags.Async)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Async)) {
                     if (asteriskToken) {
                         markES2018(node);
                     }
@@ -2448,7 +2494,7 @@ namespace ts {
             );
             setChild(node, node.equalsGreaterThanToken = equalsGreaterThanToken || createToken(SyntaxKind.EqualsGreaterThanToken));
             if (!skipTransformationFlags) {
-                if (hasModifier(node, ModifierFlags.Async)) markES2017(node);
+                if (hasSyntacticModifier(node, ModifierFlags.Async)) markES2017(node);
                 markES2015(node);
             }
             return finish(node);
@@ -2523,6 +2569,7 @@ namespace ts {
             if (!skipTransformationFlags) {
                 markES2017(node);
                 markES2018(node);
+                markAwait(node);
             }
             return finish(node);
         }
@@ -2574,7 +2621,7 @@ namespace ts {
             setChild(node, node.right = parenthesizerRules().parenthesizeRightSideOfBinary(operatorKind, node.left, right));
             if (!skipTransformationFlags) {
                 if (operatorKind === SyntaxKind.QuestionQuestionToken) {
-                    markESNext(node);
+                    markES2020(node);
                 }
                 else if (operatorKind === SyntaxKind.EqualsToken) {
                     if (node.left.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -2595,10 +2642,11 @@ namespace ts {
         }
 
         // @api
-        function updateBinaryExpression(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken) {
+        function updateBinaryExpression(node: BinaryExpression, left: Expression, operator: BinaryOperatorToken, right: Expression) {
             return node.left !== left
+                || node.operatorToken !== operator
                 || node.right !== right
-                ? update(createBinaryExpression(left, operator || node.operatorToken, right), node)
+                ? update(createBinaryExpression(left, operator, right), node)
                 : reuse(node);
         }
 
@@ -2650,7 +2698,8 @@ namespace ts {
                 : reuse(node);
         }
 
-        function createTemplateLiteralLikeNodeChecked(kind: TemplateLiteralToken["kind"], text: string | undefined, rawText: string | undefined) {
+        function createTemplateLiteralLikeNodeChecked(kind: TemplateLiteralToken["kind"], text: string | undefined, rawText: string | undefined, templateFlags = TokenFlags.None) {
+            Debug.assert(!(templateFlags & ~TokenFlags.TemplateLiteralLikeFlags), "Unsupported template flags.");
             // NOTE: without the assignment to `undefined`, we don't narrow the initial type of `cooked`.
             // eslint-disable-next-line no-undef-init
             let cooked: string | object | undefined = undefined;
@@ -2669,45 +2718,49 @@ namespace ts {
             else if (cooked !== undefined) {
                 Debug.assert(text === cooked, "Expected argument 'text' to be the normalized (i.e. 'cooked') version of argument 'rawText'.");
             }
-            return createTemplateLiteralLikeNode(kind, text, rawText);
+            return createTemplateLiteralLikeNode(kind, text, rawText, templateFlags);
         }
 
         // @api
-        function createTemplateLiteralLikeNode(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined) {
+        function createTemplateLiteralLikeNode(kind: TemplateLiteralToken["kind"], text: string, rawText: string | undefined, templateFlags: TokenFlags | undefined) {
             const node = createBaseToken<TemplateLiteralLikeNode>(kind);
             node.text = text;
             node.rawText = rawText;
+            node.templateFlags = templateFlags! & TokenFlags.TemplateLiteralLikeFlags;
             if (!skipTransformationFlags) {
                 markES2015(node);
+                if (templateFlags) {
+                    markES2018(node);
+                }
             }
             return finish(node);
         }
 
         // @api
-        function createTemplateHead(text: string | undefined, rawText?: string) {
-            return <TemplateHead>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateHead, text, rawText);
+        function createTemplateHead(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
+            return <TemplateHead>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateHead, text, rawText, templateFlags);
         }
 
         // @api
-        function createTemplateMiddle(text: string | undefined, rawText?: string) {
-            return <TemplateMiddle>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateMiddle, text, rawText);
+        function createTemplateMiddle(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
+            return <TemplateMiddle>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateMiddle, text, rawText, templateFlags);
         }
 
         // @api
-        function createTemplateTail(text: string | undefined, rawText?: string) {
-            return <TemplateTail>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateTail, text, rawText);
+        function createTemplateTail(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
+            return <TemplateTail>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateTail, text, rawText, templateFlags);
         }
 
         // @api
-        function createNoSubstitutionTemplateLiteral(text: string | undefined, rawText?: string) {
-            return <NoSubstitutionTemplateLiteral>createTemplateLiteralLikeNodeChecked(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText);
+        function createNoSubstitutionTemplateLiteral(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
+            return <NoSubstitutionTemplateLiteral>createTemplateLiteralLikeNodeChecked(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText, templateFlags);
         }
 
         // @api
         function createYieldExpression(asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression {
             Debug.assert(!asteriskToken || !!expression, "A `YieldExpression` with an asteriskToken must have an expression.");
             const node = createBaseNode<YieldExpression>(SyntaxKind.YieldExpression);
-            setChild(node, node.expression = expression);
+            setChild(node, node.expression = expression && parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression));
             setChild(node, node.asteriskToken = asteriskToken);
             if (!skipTransformationFlags) {
                 markES2015(node);
@@ -2842,8 +2895,30 @@ namespace ts {
 
         // @api
         function updateNonNullExpression(node: NonNullExpression, expression: Expression) {
+            if (isNonNullChain(node)) {
+                return updateNonNullChain(node, expression);
+            }
             return node.expression !== expression
                 ? update(createNonNullExpression(expression), node)
+                : reuse(node);
+        }
+
+        // @api
+        function createNonNullChain(expression: Expression) {
+            const node = createBaseNode<NonNullChain>(SyntaxKind.NonNullExpression);
+            node.flags |= NodeFlags.OptionalChain;
+            setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
+            if (!skipTransformationFlags) {
+                markTypeScript(node);
+            }
+            return finish(node);
+        }
+
+        // @api
+        function updateNonNullChain(node: NonNullChain, expression: Expression) {
+            Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a NonNullExpression using updateNonNullChain. Use updateNonNullExpression instead.");
+            return node.expression !== expression
+                ? update(createNonNullChain(expression), node)
                 : reuse(node);
         }
 
@@ -2928,7 +3003,7 @@ namespace ts {
             const node = createBaseDeclaration<VariableStatement>(SyntaxKind.VariableStatement, /*decorators*/ undefined, modifiers);
             setChild(node, node.declarationList = isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList);
             if (!skipTransformationFlags) {
-                if (hasModifier(node, ModifierFlags.Ambient)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                     markTypeScriptOnly(node);
                 }
             }
@@ -3286,12 +3361,12 @@ namespace ts {
             );
             setChild(node, node.asteriskToken = asteriskToken);
             if (!skipTransformationFlags) {
-                if (!body || hasModifier(node, ModifierFlags.Ambient)) {
+                if (!body || hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                     markTypeScriptOnly(node);
                 }
                 else {
                     markHoistedDeclarationOrCompletion(node);
-                    if (hasModifier(node, ModifierFlags.Async)) {
+                    if (hasSyntacticModifier(node, ModifierFlags.Async)) {
                         if (asteriskToken) {
                             markES2018(node);
                         }
@@ -3350,7 +3425,7 @@ namespace ts {
                 members
             );
             if (!skipTransformationFlags) {
-                if (hasModifier(node, ModifierFlags.Ambient)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                     markTypeScriptOnly(node);
                 }
                 else {
@@ -3519,7 +3594,7 @@ namespace ts {
             setChild(node, node.name = name);
             setChild(node, node.body = body);
             if (!skipTransformationFlags) {
-                if (hasModifier(node, ModifierFlags.Ambient)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                     markTypeScriptOnly(node);
                 }
                 else {
@@ -3660,18 +3735,25 @@ namespace ts {
         }
 
         // @api
-        function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
+        function createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
             const node = createBaseNode<ImportClause>(SyntaxKind.ImportClause);
+            node.isTypeOnly = isTypeOnly;
             setChild(node, node.name = name);
             setChild(node, node.namedBindings = namedBindings);
+            if (!skipTransformationFlags) {
+                if (isTypeOnly) {
+                    markTypeScript(node);
+                }
+            }
             return finish(node);
         }
 
         // @api
-        function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
-            return node.name !== name
+        function updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
+            return node.isTypeOnly !== isTypeOnly
+                || node.name !== name
                 || node.namedBindings !== namedBindings
-                ? update(createImportClause(name, namedBindings), node)
+                ? update(createImportClause(isTypeOnly, name, namedBindings), node)
                 : reuse(node);
         }
 
@@ -3686,6 +3768,23 @@ namespace ts {
         function updateNamespaceImport(node: NamespaceImport, name: Identifier) {
             return node.name !== name
                 ? update(createNamespaceImport(name), node)
+                : reuse(node);
+        }
+
+        // @api
+        function createNamespaceExport(name: Identifier): NamespaceExport {
+            const node = createBaseNode<NamespaceExport>(SyntaxKind.NamespaceExport);
+            setChild(node, node.name = name);
+            if (!skipTransformationFlags) {
+                markESNext(node);
+            }
+            return finish(node);
+        }
+
+        // @api
+        function updateNamespaceExport(node: NamespaceExport, name: Identifier) {
+            return node.name !== name
+                ? update(createNamespaceExport(name), node)
                 : reuse(node);
         }
 
@@ -3756,7 +3855,8 @@ namespace ts {
         function createExportDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
-            exportClause: NamedExports | undefined,
+            isTypeOnly: boolean,
+            exportClause: NamedExportBindings | undefined,
             moduleSpecifier?: Expression
         ) {
             const node = createBaseDeclaration<ExportDeclaration>(
@@ -3764,6 +3864,7 @@ namespace ts {
                 decorators,
                 modifiers
             );
+            node.isTypeOnly = isTypeOnly;
             setChild(node, node.exportClause = exportClause);
             setChild(node, node.moduleSpecifier = moduleSpecifier);
             return finish(node);
@@ -3774,14 +3875,16 @@ namespace ts {
             node: ExportDeclaration,
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
-            exportClause: NamedExports | undefined,
+            isTypeOnly: boolean,
+            exportClause: NamedExportBindings | undefined,
             moduleSpecifier: Expression | undefined
         ) {
             return node.decorators !== decorators
                 || node.modifiers !== modifiers
+                || node.isTypeOnly !== isTypeOnly
                 || node.exportClause !== exportClause
                 || node.moduleSpecifier !== moduleSpecifier
-                ? update(createExportDeclaration(decorators, modifiers, exportClause, moduleSpecifier), node)
+                ? update(createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier), node)
                 : reuse(node);
         }
 
@@ -3847,37 +3950,54 @@ namespace ts {
         // JSDoc
         //
 
-        // @api
-        function createJSDocAllType() {
-            const node = createBaseNode<JSDocAllType>(SyntaxKind.JSDocAllType);
+        function createJSDocPrimaryTypeWorker<T extends JSDocType>(kind: T["kind"]) {
+            const node = createBaseNode<T>(kind);
             return finishJSDoc(node);
         }
 
         // @api
-        function createJSDocUnknownType() {
-            const node = createBaseNode<JSDocUnknownType>(SyntaxKind.JSDocUnknownType);
-            return finishJSDoc(node);
+        // createJSDocAllType
+        // createJSDocUnknownType
+        function createCreateJSDocPrimaryType<T extends JSDocType>(kind: T["kind"]) {
+            return function createJSDocPrimaryType(): T {
+                return createJSDocPrimaryTypeWorker(kind);
+            };
         }
 
-        // @api
-        function createJSDocNonNullableType(type: TypeNode) {
-            const node = createBaseNode<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType);
+        function createJSDocUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"], type: T["type"]): T {
+            const node = createBaseNode<T>(kind);
             setChild(node, node.type = type);
             return finishJSDoc(node);
         }
 
         // @api
-        function createJSDocNullableType(type: TypeNode) {
-            const node = createBaseNode<JSDocNullableType>(SyntaxKind.JSDocNullableType);
-            setChild(node, node.type = type);
-            return finishJSDoc(node);
+        // createJSDocNonNullableType
+        // createJSDocNullableType
+        // createJSDocOptionalType
+        // createJSDocVariadicType
+        // createJSDocNamepathType
+        function createCreateJSDocUnaryType<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) {
+            return function createJSDocUnaryType(type: T["type"]): T {
+                return createJSDocUnaryTypeWorker<T>(kind, type);
+            };
+        }
+
+        function updateJSDocUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"], node: T, type: T["type"]): T {
+            return node.type !== type
+                ? update(createJSDocUnaryTypeWorker(kind, type), node)
+                : node;
         }
 
         // @api
-        function createJSDocOptionalType(type: TypeNode) {
-            const node = createBaseNode<JSDocOptionalType>(SyntaxKind.JSDocOptionalType);
-            setChild(node, node.type = type);
-            return finishJSDoc(node);
+        // updateJSDocNonNullableType
+        // updateJSDocNullableType
+        // updateJSDocOptionalType
+        // updateJSDocVariadicType
+        // updateJSDocNamepathType
+        function createUpdateJSDocUnaryType<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) {
+            return function updateJSDocUnaryType(node: T, type: T["type"]): T {
+                return updateJSDocUnaryTypeWorker(kind, node, type);
+            };
         }
 
         // @api
@@ -3895,21 +4015,15 @@ namespace ts {
         }
 
         // @api
-        function createJSDocVariadicType(type: TypeNode) {
-            const node = createBaseNode<JSDocVariadicType>(SyntaxKind.JSDocVariadicType);
-            setChild(node, node.type = type);
-            return finishJSDoc(node);
+        function updateJSDocFunctionType(node: JSDocFunctionType, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): JSDocFunctionType {
+            return node.parameters !== parameters
+                || node.type !== type
+                ? update(createJSDocFunctionType(parameters, type), node)
+                : node;
         }
 
         // @api
-        function createJSDocNamepathType(type: TypeNode) {
-            const node = createBaseNode<JSDocNamepathType>(SyntaxKind.JSDocNamepathType);
-            setChild(node, node.type = type);
-            return finishJSDoc(node);
-        }
-
-        // @api
-        function createJSDocTypeLiteral(propertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral {
+        function createJSDocTypeLiteral(propertyTags?: readonly JSDocPropertyLikeTag[], isArrayType = false): JSDocTypeLiteral {
             const node = createBaseNode<JSDocTypeLiteral>(SyntaxKind.JSDocTypeLiteral);
             setChildren(node, node.jsDocPropertyTags = asNodeArray(propertyTags));
             node.isArrayType = isArrayType;
@@ -3917,10 +4031,25 @@ namespace ts {
         }
 
         // @api
+        function updateJSDocTypeLiteral(node: JSDocTypeLiteral, propertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean): JSDocTypeLiteral {
+            return node.jsDocPropertyTags !== propertyTags
+                || node.isArrayType !== isArrayType
+                ? update(createJSDocTypeLiteral(propertyTags, isArrayType), node)
+                : node;
+        }
+
+        // @api
         function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
             const node = createBaseNode<JSDocTypeExpression>(SyntaxKind.JSDocTypeExpression);
             setChild(node, node.type = type);
             return finishJSDoc(node);
+        }
+
+        // @api
+        function updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression {
+            return node.type !== type
+                ? update(createJSDocTypeExpression(type), node)
+                : node;
         }
 
         // @api
@@ -3933,6 +4062,21 @@ namespace ts {
         }
 
         // @api
+        function updateJSDocSignature(node: JSDocSignature, typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type: JSDocReturnTag | undefined): JSDocSignature {
+            return node.typeParameters !== typeParameters
+                || node.parameters !== parameters
+                || node.type !== type
+                ? update(createJSDocSignature(typeParameters, parameters, type), node)
+                : node;
+        }
+
+        function getDefaultTagName(node: JSDocTag, defaultTagName: string) {
+            return node.tagName.escapedText === escapeLeadingUnderscores(defaultTagName)
+                ? node.tagName
+                : createIdentifier(defaultTagName);
+        }
+
+        // @api
         function createBaseJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier, comment: string | undefined) {
             const node = createBaseNode<T>(kind);
             setChild(node, node.tagName = tagName);
@@ -3942,22 +4086,25 @@ namespace ts {
 
         // @api
         function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string): JSDocTemplateTag {
-            const node = createBaseJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName || createIdentifier("template"), comment);
+            const node = createBaseJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName ?? createIdentifier("template"), comment);
             setChild(node, node.constraint = constraint);
             setChildren(node, node.typeParameters = createNodeArray(typeParameters));
             return finishJSDoc(node);
         }
 
         // @api
-        function createJSDocTypeTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag {
-            const node = createBaseJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, tagName || createIdentifier("type"), comment);
-            setChild(node, node.typeExpression = typeExpression);
-            return finishJSDoc(node);
+        function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier = getDefaultTagName(node, "template"), constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | undefined): JSDocTemplateTag {
+            return node.tagName !== tagName
+                || node.constraint !== constraint
+                || node.typeParameters !== typeParameters
+                || node.comment !== comment
+                ? update(createJSDocTemplateTag(tagName, constraint, typeParameters, comment), node)
+                : node;
         }
 
         // @api
         function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocTypedefTag {
-            const node = createBaseJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName || createIdentifier("typedef"), comment);
+            const node = createBaseJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName ?? createIdentifier("typedef"), comment);
             setChild(node, node.typeExpression = typeExpression);
             setChild(node, node.fullName = fullName);
             setChild(node, node.name = getJSDocTypeAliasName(fullName));
@@ -3965,32 +4112,40 @@ namespace ts {
         }
 
         // @api
-        function createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
-            const node = createBaseJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, tagName || createIdentifier("returns"), comment);
-            setChild(node, node.typeExpression = typeExpression);
-            return finishJSDoc(node);
-        }
-
-        // @api
-        function createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag {
-            const node = createBaseJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, tagName || createIdentifier("this"), comment);
-            setChild(node, node.typeExpression = typeExpression);
-            return finishJSDoc(node);
+        function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier = getDefaultTagName(node, "typedef"), typeExpression: JSDocTypeExpression | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocTypedefTag {
+            return node.tagName !== tagName
+                || node.typeExpression !== typeExpression
+                || node.fullName !== fullName
+                || node.comment !== comment
+                ? update(createJSDocTypedefTag(tagName, typeExpression, fullName, comment), node)
+                : node;
         }
 
         // @api
         function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag {
-            const node = createBaseJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName || createIdentifier("param"), comment);
+            const node = createBaseJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName ?? createIdentifier("param"), comment);
             setChild(node, node.typeExpression = typeExpression);
             setChild(node, node.name = name);
             node.isNameFirst = !!isNameFirst;
             node.isBracketed = isBracketed;
             return finishJSDoc(node);
+        }
+
+        // @api
+        function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node, "param"), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocParameterTag {
+            return node.tagName !== tagName
+                || node.name !== name
+                || node.isBracketed !== isBracketed
+                || node.typeExpression !== typeExpression
+                || node.isNameFirst !== isNameFirst
+                || node.comment !== comment
+                ? update(createJSDocParameterTag(tagName, name, isBracketed, typeExpression, isNameFirst, comment), node)
+                : node;
         }
 
         // @api
         function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag {
-            const node = createBaseJSDocTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName || createIdentifier("prop"), comment);
+            const node = createBaseJSDocTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName ?? createIdentifier("prop"), comment);
             setChild(node, node.typeExpression = typeExpression);
             setChild(node, node.name = name);
             node.isNameFirst = !!isNameFirst;
@@ -3999,21 +4154,20 @@ namespace ts {
         }
 
         // @api
-        function createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string): JSDocAuthorTag {
-            const node = createBaseJSDocTag<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag, tagName || createIdentifier("author"), comment);
-            return finishJSDoc(node);
-        }
-
-        // @api
-        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag {
-            const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName || createIdentifier("augments"), comment);
-            setChild(node, node.class = className);
-            return finishJSDoc(node);
+        function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node, "prop"), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag {
+            return node.tagName !== tagName
+                || node.name !== name
+                || node.isBracketed !== isBracketed
+                || node.typeExpression !== typeExpression
+                || node.isNameFirst !== isNameFirst
+                || node.comment !== comment
+                ? update(createJSDocPropertyTag(tagName, name, isBracketed, typeExpression, isNameFirst, comment), node)
+                : node;
         }
 
         // @api
         function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag {
-            const node = createBaseJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName || createIdentifier("callback"), comment);
+            const node = createBaseJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName ?? createIdentifier("callback"), comment);
             setChild(node, node.typeExpression = typeExpression);
             setChild(node, node.fullName = fullName);
             node.name = getJSDocTypeAliasName(fullName);
@@ -4021,16 +4175,119 @@ namespace ts {
         }
 
         // @api
-        function createJSDocClassTag(tagName: Identifier | undefined, comment?: string): JSDocClassTag {
-            const node = createBaseJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, tagName || createIdentifier("class"), comment);
+        function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier = getDefaultTagName(node, "callback"), typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag {
+            return node.tagName !== tagName
+                || node.typeExpression !== typeExpression
+                || node.fullName !== fullName
+                || node.comment !== comment
+                ? update(createJSDocCallbackTag(tagName, typeExpression, fullName, comment), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag {
+            const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName ?? createIdentifier("augments"), comment);
+            setChild(node, node.class = className);
             return finishJSDoc(node);
         }
 
         // @api
-        function createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag {
-            const node = createBaseJSDocTag<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName || createIdentifier("enum"), comment);
+        function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier = getDefaultTagName(node, "augments"), className: JSDocAugmentsTag["class"], comment: string | undefined): JSDocAugmentsTag {
+            return node.tagName !== tagName
+                || node.class !== className
+                || node.comment !== comment
+                ? update(createJSDocAugmentsTag(tagName, className, comment), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string): JSDocImplementsTag {
+            const node = createBaseJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, tagName ?? createIdentifier("implements"), comment);
+            setChild(node, node.class = className);
+            return finishJSDoc(node);
+        }
+
+        // @api
+        function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier = getDefaultTagName(node, "implements"), className: JSDocImplementsTag["class"], comment: string | undefined): JSDocImplementsTag {
+            return node.tagName !== tagName
+                || node.class !== className
+                || node.comment !== comment
+                ? update(createJSDocImplementsTag(tagName, className, comment), node)
+                : node;
+        }
+
+        function createJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], defaultTagName: string, tagName: Identifier | undefined, comment?: string) {
+            const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(defaultTagName), comment);
+            return finishJSDoc(node);
+        }
+
+        // @api
+        // createJSDocAuthorTag
+        // createJSDocClassTag
+        // createJSDocPublicTag
+        // createJSDocPrivateTag
+        // createJSDocProtectedTag
+        // createJSDocReadonlyTag
+        function createCreateJSDocSimpleTag<T extends JSDocTag>(kind: T["kind"], defaultTagName: string) {
+            return function createJSDocSimpleTag(tagName: Identifier | undefined, comment?: string) {
+                return createJSDocSimpleTagWorker(kind, defaultTagName, tagName, comment);
+            };
+        }
+
+        function updateJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], defaultTagName: string, node: T, tagName: Identifier = getDefaultTagName(node, defaultTagName), comment: string | undefined) {
+            return node.tagName !== tagName
+                || node.comment !== comment
+                ? updateNodeWorker(createJSDocSimpleTagWorker(kind, defaultTagName, tagName, comment), node) :
+                node;
+        }
+
+        // @api
+        // updateJSDocAuthorTag
+        // updateJSDocClassTag
+        // updateJSDocPublicTag
+        // updateJSDocPrivateTag
+        // updateJSDocProtectedTag
+        // updateJSDocReadonlyTag
+        function createUpdateJSDocSimpleTag<T extends JSDocTag>(kind: T["kind"], defaultTagName: string) {
+            return function updateJSDocSimpleTag(node: T, tagName: Identifier | undefined, comment: string | undefined) {
+                return updateJSDocSimpleTagWorker(kind, defaultTagName, node, tagName, comment);
+            };
+        }
+
+        function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], defaultTagName: string, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) {
+            const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(defaultTagName), comment);
             setChild(node, node.typeExpression = typeExpression);
             return finishJSDoc(node);
+        }
+
+        // @api
+        // createJSDocTypeTag
+        // createJSDocReturnTag
+        // createJSDocThisTag
+        // createJSDocEnumTag
+        function createCreateJSDocTypeLikeTag<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], defaultTagName: string) {
+            return function createJSDocTypeLikeTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) {
+                return createJSDocTypeLikeTagWorker(kind, defaultTagName, tagName, typeExpression, comment);
+            };
+        }
+
+        function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], defaultTagName: string, node: T, tagName: Identifier = getDefaultTagName(node, defaultTagName), typeExpression: JSDocTypeExpression | undefined, comment: string | undefined) {
+            return node.tagName !== tagName
+                || node.typeExpression !== typeExpression
+                || node.comment !== comment
+                ? update(createJSDocTypeLikeTagWorker(kind, defaultTagName, tagName, typeExpression, comment), node)
+                : node;
+        }
+
+        // @api
+        // updateJSDocTypeTag
+        // updateJSDocReturnTag
+        // updateJSDocThisTag
+        // updateJSDocEnumTag
+        function createUpdateJSDocTypeLikeTag<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], defaultTagName: string) {
+            return function updateJSDocTypeLikeTag(node: T, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined) {
+                return updateJSDocTypeLikeTagWorker(kind, defaultTagName, node, tagName, typeExpression, comment);
+            };
         }
 
         // @api
@@ -4040,11 +4297,27 @@ namespace ts {
         }
 
         // @api
-        function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
+        function updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | undefined): JSDocUnknownTag {
+            return node.tagName !== tagName
+                || node.comment !== comment
+                ? update(createJSDocUnknownTag(tagName, comment), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocComment(comment?: string | undefined, tags?: readonly JSDocTag[] | undefined) {
             const node = createBaseNode<JSDoc>(SyntaxKind.JSDocComment);
             node.comment = comment;
-            setChildren(node, node.tags = tags);
+            setChildren(node, node.tags = asNodeArray(tags));
             return finishJSDoc(node);
+        }
+
+        // @api
+        function updateJSDocComment(node: JSDoc, comment: string | undefined, tags: readonly JSDocTag[] | undefined) {
+            return node.comment !== comment
+                || node.tags !== tags
+                ? update(createJSDocComment(comment, tags), node)
+                : node;
         }
 
         //
@@ -4079,6 +4352,9 @@ namespace ts {
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChild(node, node.attributes = attributes);
             if (!skipTransformationFlags) {
+                if (typeArguments) {
+                    markTypeScript(node);
+                }
                 markJsx(node);
             }
             return finish(node);
@@ -4100,6 +4376,9 @@ namespace ts {
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChild(node, node.attributes = attributes);
             if (!skipTransformationFlags) {
+                if (typeArguments) {
+                    markTypeScript(node);
+                }
                 markJsx(node);
             }
             return finish(node);
@@ -4746,9 +5025,10 @@ namespace ts {
             }
 
             const clone =
-                node.kind === SyntaxKind.SourceFile ? createSourceFileNode(node.kind) as T:
-                node.kind === SyntaxKind.Identifier ? createIdentifierNode(node.kind) as T:
-                !isNodeKind(node.kind) ? createTokenNode(node.kind) as T:
+                node.kind === SyntaxKind.SourceFile ? createSourceFileNode(node.kind) as T :
+                node.kind === SyntaxKind.Identifier ? createIdentifierNode(node.kind) as T :
+                node.kind === SyntaxKind.PrivateIdentifier ? createPrivateIdentifierNode(node.kind) as T :
+                !isNodeKind(node.kind) ? createTokenNode(node.kind) as T :
                 createBaseNode(node.kind) as T;
 
             (clone as Mutable<T>).flags |= (node.flags & ~NodeFlags.Synthesized);
@@ -4901,7 +5181,10 @@ namespace ts {
             copyCustomPrologue,
             ensureUseStrict,
             liftToBlock,
+            mergeLexicalEnvironment,
             updateModifiers,
+            updateBody,
+            updateType,
         };
 
         function getBinaryFactory(operator: BinaryOperator) {
@@ -5013,6 +5296,7 @@ namespace ts {
             return factory.createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
                 factory.createNamedExports([
                     factory.createExportSpecifier(/*propertyName*/ undefined, exportName)
                 ])
@@ -5346,7 +5630,7 @@ namespace ts {
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
         function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression {
-            if (ns && hasModifier(node, ModifierFlags.Export)) {
+            if (ns && hasSyntacticModifier(node, ModifierFlags.Export)) {
                 return getNamespaceMemberName(ns, getName(node), allowComments, allowSourceMaps);
             }
             return getExportName(node, allowComments, allowSourceMaps);
@@ -5409,13 +5693,13 @@ namespace ts {
          * @param statementOffset The offset at which to begin the copy.
          * @param visitor Optional callback used to visit any custom prologue directives.
          */
-        function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>): number;
-        function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>): number | undefined;
-        function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>): number | undefined {
+        function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number;
+        function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number | undefined;
+        function copyCustomPrologue(source: readonly Statement[], target: Push<Statement>, statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter: (node: Node) => boolean = returnTrue): number | undefined {
             const numStatements = source.length;
             while (statementOffset !== undefined && statementOffset < numStatements) {
                 const statement = source[statementOffset];
-                if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
+                if (getEmitFlags(statement) & EmitFlags.CustomPrologue && filter(statement)) {
                     append(target, visitor ? visitNode(statement, visitor, isStatement) : statement);
                 }
                 else {
@@ -5451,12 +5735,113 @@ namespace ts {
             return <Statement>singleOrUndefined(nodes) || factory.createBlock(<readonly Statement[]>nodes);
         }
 
+        function findSpanEnd<T>(array: readonly T[], test: (value: T) => boolean, start: number) {
+            let i = start;
+            while (i < array.length && test(array[i])) {
+                i++;
+            }
+            return i;
+        }
+
+        function mergeLexicalEnvironment(statements: NodeArray<Statement>, declarations: readonly Statement[] | undefined): NodeArray<Statement>;
+        function mergeLexicalEnvironment(statements: Statement[], declarations: readonly Statement[] | undefined): Statement[];
+        function mergeLexicalEnvironment(statements: Statement[] | NodeArray<Statement>, declarations: readonly Statement[] | undefined) {
+            if (!some(declarations)) {
+                return statements;
+            }
+
+            // When we merge new lexical statements into an existing statement list, we merge them in the following manner:
+            //
+            // Given:
+            //
+            // | Left                               | Right                               |
+            // |------------------------------------|-------------------------------------|
+            // | [standard prologues (left)]        | [standard prologues (right)]        |
+            // | [hoisted functions (left)]         | [hoisted functions (right)]         |
+            // | [hoisted variables (left)]         | [hoisted variables (right)]         |
+            // | [lexical init statements (left)]   | [lexical init statements (right)]   |
+            // | [other statements (left)]          |                                     |
+            //
+            // The resulting statement list will be:
+            //
+            // | Result                              |
+            // |-------------------------------------|
+            // | [standard prologues (right)]        |
+            // | [standard prologues (left)]         |
+            // | [hoisted functions (right)]         |
+            // | [hoisted functions (left)]          |
+            // | [hoisted variables (right)]         |
+            // | [hoisted variables (left)]          |
+            // | [lexical init statements (right)]   |
+            // | [lexical init statements (left)]    |
+            // | [other statements (left)]           |
+            //
+            // NOTE: It is expected that new lexical init statements must be evaluated before existing lexical init statements,
+            // as the prior transformation may depend on the evaluation of the lexical init statements to be in the correct state.
+
+            // find standard prologues on left in the following order: standard directives, hoisted functions, hoisted variables, other custom
+            const leftStandardPrologueEnd = findSpanEnd(statements, isPrologueDirective, 0);
+            const leftHoistedFunctionsEnd = findSpanEnd(statements, isHoistedFunction, leftStandardPrologueEnd);
+            const leftHoistedVariablesEnd = findSpanEnd(statements, isHoistedVariableStatement, leftHoistedFunctionsEnd);
+
+            // find standard prologues on right in the following order: standard directives, hoisted functions, hoisted variables, other custom
+            const rightStandardPrologueEnd = findSpanEnd(declarations, isPrologueDirective, 0);
+            const rightHoistedFunctionsEnd = findSpanEnd(declarations, isHoistedFunction, rightStandardPrologueEnd);
+            const rightHoistedVariablesEnd = findSpanEnd(declarations, isHoistedVariableStatement, rightHoistedFunctionsEnd);
+            const rightCustomPrologueEnd = findSpanEnd(declarations, isCustomPrologue, rightHoistedVariablesEnd);
+            Debug.assert(rightCustomPrologueEnd === declarations.length, "Expected declarations to be valid standard or custom prologues");
+
+            // splice prologues from the right into the left. We do this in reverse order
+            // so that we don't need to recompute the index on the left when we insert items.
+            const left = isNodeArray(statements) ? statements.slice() : statements;
+
+            // splice other custom prologues from right into left
+            if (rightCustomPrologueEnd > rightHoistedVariablesEnd) {
+                left.splice(leftHoistedVariablesEnd, 0, ...declarations.slice(rightHoistedVariablesEnd, rightCustomPrologueEnd));
+            }
+
+            // splice hoisted variables from right into left
+            if (rightHoistedVariablesEnd > rightHoistedFunctionsEnd) {
+                left.splice(leftHoistedFunctionsEnd, 0, ...declarations.slice(rightHoistedFunctionsEnd, rightHoistedVariablesEnd));
+            }
+
+            // splice hoisted functions from right into left
+            if (rightHoistedFunctionsEnd > rightStandardPrologueEnd) {
+                left.splice(leftStandardPrologueEnd, 0, ...declarations.slice(rightStandardPrologueEnd, rightHoistedFunctionsEnd));
+            }
+
+            // splice standard prologues from right into left (that are not already in left)
+            if (rightStandardPrologueEnd > 0) {
+                if (leftStandardPrologueEnd === 0) {
+                    left.splice(0, 0, ...declarations.slice(0, rightStandardPrologueEnd));
+                }
+                else {
+                    const leftPrologues = createMap<boolean>();
+                    for (let i = 0; i < leftStandardPrologueEnd; i++) {
+                        const leftPrologue = statements[i] as PrologueDirective;
+                        leftPrologues.set(leftPrologue.expression.text, true);
+                    }
+                    for (let i = rightStandardPrologueEnd - 1; i >= 0; i--) {
+                        const rightPrologue = declarations[i] as PrologueDirective;
+                        if (!leftPrologues.has(rightPrologue.expression.text)) {
+                            left.unshift(rightPrologue);
+                        }
+                    }
+                }
+            }
+
+            if (isNodeArray(statements)) {
+                return setTextRange(factory.createNodeArray(left, statements.hasTrailingComma), statements);
+            }
+
+            return statements;
+        }
+
         function updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags): T;
         function updateModifiers(node: HasModifiers, modifiers: readonly Modifier[] | ModifierFlags) {
             if (typeof modifiers === "number") {
                 modifiers = factory.createModifiersFromModifierFlags(modifiers);
             }
-
             return node.kind === SyntaxKind.Parameter ? factory.updateParameterDeclaration(node, node.decorators, modifiers, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
                 node.kind === SyntaxKind.PropertySignature ? factory.updatePropertySignature(node, modifiers, node.name, node.questionToken, node.type) :
                 node.kind === SyntaxKind.PropertyDeclaration ? factory.updatePropertyDeclaration(node, node.decorators, modifiers, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
@@ -5465,7 +5850,7 @@ namespace ts {
                 node.kind === SyntaxKind.Constructor ? factory.updateConstructorDeclaration(node, node.decorators, modifiers, node.parameters, node.body) :
                 node.kind === SyntaxKind.GetAccessor ? factory.updateGetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.type, node.body) :
                 node.kind === SyntaxKind.SetAccessor ? factory.updateSetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.body) :
-                node.kind === SyntaxKind.IndexSignature ? factory.updateIndexSignature(node, node.decorators, modifiers, node.parameters, node.type!) :
+                node.kind === SyntaxKind.IndexSignature ? factory.updateIndexSignature(node, node.decorators, modifiers, node.parameters, node.type) :
                 node.kind === SyntaxKind.FunctionExpression ? factory.updateFunctionExpression(node, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
                 node.kind === SyntaxKind.ArrowFunction ? factory.updateArrowFunction(node, modifiers, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
                 node.kind === SyntaxKind.ClassExpression ? factory.updateClassExpression(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
@@ -5479,12 +5864,58 @@ namespace ts {
                 node.kind === SyntaxKind.ImportEqualsDeclaration ? factory.updateImportEqualsDeclaration(node, node.decorators, modifiers, node.name, node.moduleReference) :
                 node.kind === SyntaxKind.ImportDeclaration ? factory.updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier) :
                 node.kind === SyntaxKind.ExportAssignment ? factory.updateExportAssignment(node, node.decorators, modifiers, node.expression) :
-                node.kind === SyntaxKind.ExportDeclaration ? factory.updateExportDeclaration(node, node.decorators, modifiers, node.exportClause, node.moduleSpecifier) :
+                node.kind === SyntaxKind.ExportDeclaration ? factory.updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier) :
+                Debug.assertNever(node);
+        }
+
+        function updateBody<T extends FunctionLikeDeclaration>(node: T, body: T["body"]): T;
+        function updateBody(node: FunctionLikeDeclaration, body: FunctionLikeDeclaration["body"]) {
+            return node.kind === SyntaxKind.FunctionDeclaration ? factory.updateFunctionDeclaration(node, node.decorators, node.modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, body && cast(body, isBlock)) :
+                node.kind === SyntaxKind.MethodDeclaration ? factory.updateMethodDeclaration(node, node.decorators, node.modifiers, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, body && cast(body, isBlock)) :
+                node.kind === SyntaxKind.GetAccessor ? factory.updateGetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, node.parameters, node.type, body && cast(body, isBlock)) :
+                node.kind === SyntaxKind.SetAccessor ? factory.updateSetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, node.parameters, body && cast(body, isBlock)) :
+                node.kind === SyntaxKind.Constructor ? factory.updateConstructorDeclaration(node, node.decorators, node.modifiers, node.parameters, body && cast(body, isBlock)) :
+                node.kind === SyntaxKind.FunctionExpression ? factory.updateFunctionExpression(node, node.modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, cast(body ?? Debug.fail("Argument expected: body"), isBlock)) :
+                node.kind === SyntaxKind.ArrowFunction ? factory.updateArrowFunction(node, node.modifiers, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, cast(body ?? Debug.fail("Argument expected: body"), isConciseBody)) :
+                Debug.assertNever(node);
+        }
+
+        function updateType<T extends Exclude<HasType, SetAccessorDeclaration | ConstructorDeclaration>>(node: T, type: T["type"]): T;
+        function updateType(node: Exclude<HasType, SetAccessorDeclaration | ConstructorDeclaration>, type: Exclude<HasType, SetAccessorDeclaration | ConstructorDeclaration>["type"]) {
+            return node.kind === SyntaxKind.CallSignature ? factory.updateCallSignature(node, node.typeParameters, node.parameters, type) :
+                node.kind === SyntaxKind.ConstructSignature ? factory.updateConstructSignature(node, node.typeParameters, node.parameters, type) :
+                node.kind === SyntaxKind.MethodSignature ? factory.updateMethodSignature(node, node.modifiers, node.name, node.questionToken, node.typeParameters, node.parameters, type) :
+                node.kind === SyntaxKind.IndexSignature ? factory.updateIndexSignature(node, node.decorators, node.modifiers, node.parameters, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.FunctionType ? factory.updateFunctionTypeNode(node, node.typeParameters, node.parameters, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.ConstructorType ? factory.updateConstructorTypeNode(node, node.typeParameters, node.parameters, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.FunctionDeclaration ? factory.updateFunctionDeclaration(node, node.decorators, node.modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, type, node.body) :
+                node.kind === SyntaxKind.MethodDeclaration ? factory.updateMethodDeclaration(node, node.decorators, node.modifiers, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, type, node.body) :
+                node.kind === SyntaxKind.GetAccessor ? factory.updateGetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, node.parameters, type, node.body) :
+                node.kind === SyntaxKind.FunctionExpression ? factory.updateFunctionExpression(node, node.modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, type, node.body) :
+                node.kind === SyntaxKind.ArrowFunction ? factory.updateArrowFunction(node, node.modifiers, node.typeParameters, node.parameters, type, node.equalsGreaterThanToken, node.body) :
+                node.kind === SyntaxKind.VariableDeclaration ? factory.updateVariableDeclaration(node, node.name, node.exclamationToken, type, node.initializer) :
+                node.kind === SyntaxKind.Parameter ? factory.updateParameterDeclaration(node, node.decorators, node.modifiers, node.dotDotDotToken, node.name, node.questionToken, type, node.initializer) :
+                node.kind === SyntaxKind.PropertySignature ? factory.updatePropertySignature(node, node.modifiers, node.name, node.questionToken, type) :
+                node.kind === SyntaxKind.PropertyDeclaration ? factory.updatePropertyDeclaration(node, node.decorators, node.modifiers, node.name, node.questionToken ?? node.exclamationToken, type, node.initializer) :
+                node.kind === SyntaxKind.TypePredicate ? factory.updateTypePredicateNode(node, node.assertsModifier, node.parameterName, type) :
+                node.kind === SyntaxKind.ParenthesizedType ? factory.updateParenthesizedType(node, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.TypeOperator ? factory.updateTypeOperatorNode(node, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.MappedType ? factory.updateMappedTypeNode(node, node.readonlyToken, node.typeParameter, node.questionToken, type) :
+                node.kind === SyntaxKind.AsExpression ? factory.updateAsExpression(node, node.expression, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.TypeAssertionExpression ? factory.updateTypeAssertion(node, type ?? Debug.fail("Argument expected: type"), node.expression) :
+                node.kind === SyntaxKind.TypeAliasDeclaration ? factory.updateTypeAliasDeclaration(node, node.decorators, node.modifiers, node.name, node.typeParameters, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.JSDocFunctionType ? factory.updateJSDocFunctionType(node, node.parameters, type) :
+                node.kind === SyntaxKind.JSDocTypeExpression ? factory.updateJSDocTypeExpression(node, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.JSDocNonNullableType ? factory.updateJSDocNonNullableType(node, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.JSDocNullableType ? factory.updateJSDocNullableType(node, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.JSDocOptionalType ? factory.updateJSDocOptionalType(node, type ?? Debug.fail("Argument expected: type")) :
+                node.kind === SyntaxKind.JSDocVariadicType ? factory.updateJSDocVariadicType(node, type ?? Debug.fail("Argument expected: type")) :
                 Debug.assertNever(node);
         }
     }
 
     // Language-edition and feature specific node markers
+    const markAwait = createFlagMarker(TransformFlags.ContainsAwait);
     const markBindingPattern = createFlagMarker(TransformFlags.ContainsBindingPattern);
     const markBlockScopedBinding = createFlagMarker(TransformFlags.ContainsBlockScopedBinding);
     const markRestOrSpread = createFlagMarker(TransformFlags.ContainsRestOrSpread);
@@ -5502,6 +5933,7 @@ namespace ts {
     const markES2017 = createFlagMarker(TransformFlags.ContainsES2017);
     const markES2018 = createFlagMarker(TransformFlags.ContainsES2018);
     const markES2019 = createFlagMarker(TransformFlags.ContainsES2019);
+    const markES2020 = createFlagMarker(TransformFlags.ContainsES2020);
     const markESNext = createFlagMarker(TransformFlags.ContainsESNext);
     const markTypeScript = createFlagMarker(TransformFlags.ContainsTypeScript);
     const markTypeScriptOnly = createFlagMarker(TransformFlags.ContainsTypeScript, /*excludeSubtree*/ true);
@@ -5561,7 +5993,7 @@ namespace ts {
 
         let token = rawTextScanner.scan();
         if (token === SyntaxKind.CloseBracketToken) {
-            token = rawTextScanner.reScanTemplateToken();
+            token = rawTextScanner.reScanTemplateToken(/*isTaggedTemplate*/ false);
         }
 
         if (rawTextScanner.isUnterminated()) {
@@ -5714,7 +6146,7 @@ namespace ts {
             length = () => getText!().length;
             if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
                 Debug.assert(mapTextOrStripInternal === undefined || typeof mapTextOrStripInternal === "boolean");
-                stripInternal = mapTextOrStripInternal as boolean | undefined;
+                stripInternal = mapTextOrStripInternal;
                 bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
                 oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
             }

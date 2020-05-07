@@ -15,7 +15,7 @@ namespace ts.codefix {
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program) {
         const { statement, name, required } = getInfo(sourceFile, pos);
         changes.replaceNode(sourceFile, statement, getAllowSyntheticDefaultImports(program.getCompilerOptions())
-            ? factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(name, /*namedBindings*/ undefined), required)
+            ? factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, name, /*namedBindings*/ undefined), required)
             : factory.createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, name, factory.createExternalModuleReference(required)));
     }
 

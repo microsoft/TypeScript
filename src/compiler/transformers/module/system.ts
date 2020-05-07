@@ -264,13 +264,16 @@ namespace ts {
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const exportStarFunction = addExportStarIfNeeded(statements)!; // TODO: GH#18217
+            const modifiers = node.transformFlags & TransformFlags.ContainsAwait ?
+                factory.createModifiersFromModifierFlags(ModifierFlags.Async) :
+                undefined;
             const moduleObject = factory.createObjectLiteral([
                 factory.createPropertyAssignment("setters",
                     createSettersArray(exportStarFunction, dependencyGroups)
                 ),
                 factory.createPropertyAssignment("execute",
                     factory.createFunctionExpression(
-                        /*modifiers*/ undefined,
+                        modifiers,
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
@@ -347,11 +350,21 @@ namespace ts {
                     continue;
                 }
 
-                for (const element of externalImport.exportClause.elements) {
-                    // write name of indirectly exported entry, i.e. 'export {x} from ...'
+                if (isNamedExports(externalImport.exportClause)) {
+                    for (const element of externalImport.exportClause.elements) {
+                        // write name of indirectly exported entry, i.e. 'export {x} from ...'
+                        exportedNames.push(
+                            factory.createPropertyAssignment(
+                                factory.createStringLiteral(idText(element.name || element.propertyName)),
+                                factory.createTrue()
+                            )
+                        );
+                    }
+                }
+                else {
                     exportedNames.push(
                         factory.createPropertyAssignment(
-                            factory.createStringLiteral(idText(element.name || element.propertyName)),
+                            factory.createStringLiteral(idText(externalImport.exportClause.name)),
                             factory.createTrue()
                         )
                     );
@@ -492,36 +505,52 @@ namespace ts {
                         case SyntaxKind.ExportDeclaration:
                             Debug.assert(importVariableName !== undefined);
                             if (entry.exportClause) {
-                                //  export {a, b as c} from 'foo'
-                                //
-                                // emit as:
-                                //
-                                //  exports_({
-                                //     "a": _["a"],
-                                //     "c": _["b"]
-                                //  });
-                                const properties: PropertyAssignment[] = [];
-                                for (const e of entry.exportClause.elements) {
-                                    properties.push(
-                                        factory.createPropertyAssignment(
-                                            factory.createStringLiteral(idText(e.name)),
-                                            factory.createElementAccess(
-                                                parameterName,
-                                                factory.createStringLiteral(idText(e.propertyName || e.name))
+                                if (isNamedExports(entry.exportClause)) {
+                                    //  export {a, b as c} from 'foo'
+                                    //
+                                    // emit as:
+                                    //
+                                    //  exports_({
+                                    //     "a": _["a"],
+                                    //     "c": _["b"]
+                                    //  });
+                                    const properties: PropertyAssignment[] = [];
+                                    for (const e of entry.exportClause.elements) {
+                                        properties.push(
+                                            factory.createPropertyAssignment(
+                                                factory.createStringLiteral(idText(e.name)),
+                                                factory.createElementAccess(
+                                                    parameterName,
+                                                    factory.createStringLiteral(idText(e.propertyName || e.name))
+                                                )
+                                            )
+                                        );
+                                    }
+
+                                    statements.push(
+                                        factory.createExpressionStatement(
+                                            factory.createCall(
+                                                exportFunction,
+                                                /*typeArguments*/ undefined,
+                                                [factory.createObjectLiteral(properties, /*multiline*/ true)]
                                             )
                                         )
                                     );
                                 }
-
-                                statements.push(
-                                    factory.createExpressionStatement(
-                                        factory.createCall(
-                                            exportFunction,
-                                            /*typeArguments*/ undefined,
-                                            [factory.createObjectLiteral(properties, /*multiline*/ true)]
+                                else {
+                                    statements.push(
+                                        factory.createExpressionStatement(
+                                            factory.createCall(
+                                                exportFunction,
+                                                /*typeArguments*/ undefined,
+                                                [
+                                                    factory.createStringLiteral(idText(entry.exportClause.name)),
+                                                    parameterName
+                                                ]
+                                            )
                                         )
-                                    )
-                                );
+                                    );
+                                }
                             }
                             else {
                                 //  export * from 'foo'
@@ -577,9 +606,7 @@ namespace ts {
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
                 case SyntaxKind.ExportDeclaration:
-                    // ExportDeclarations are elided as they are handled via
-                    // `appendExportsOfDeclaration`.
-                    return undefined;
+                    return visitExportDeclaration(<ExportDeclaration>node);
 
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(<ExportAssignment>node);
@@ -610,6 +637,11 @@ namespace ts {
             }
 
             return singleOrMany(statements);
+        }
+
+        function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+            Debug.assertIsDefined(node);
+            return undefined;
         }
 
         /**
@@ -664,7 +696,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 hoistedStatements = append(hoistedStatements,
                     factory.updateFunctionDeclaration(
                         node,
@@ -752,7 +784,7 @@ namespace ts {
             }
 
             let expressions: Expression[] | undefined;
-            const isExportedDeclaration = hasModifier(node, ModifierFlags.Export);
+            const isExportedDeclaration = hasSyntacticModifier(node, ModifierFlags.Export);
             const isMarkedDeclaration = hasAssociatedEndOfDeclarationMarker(node);
             for (const variable of node.declarationList.declarations) {
                 if (variable.initializer) {
@@ -883,7 +915,7 @@ namespace ts {
             // statement until we visit this declaration's `EndOfDeclarationMarker`.
             if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
                 const id = getOriginalNodeId(node);
-                const isExportedDeclaration = hasModifier(node.original!, ModifierFlags.Export);
+                const isExportedDeclaration = hasSyntacticModifier(node.original!, ModifierFlags.Export);
                 deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], <VariableStatement>node.original, isExportedDeclaration);
             }
 
@@ -1059,8 +1091,8 @@ namespace ts {
             }
 
             let excludeName: string | undefined;
-            if (hasModifier(decl, ModifierFlags.Export)) {
-                const exportName = hasModifier(decl, ModifierFlags.Default) ? factory.createStringLiteral("default") : decl.name!;
+            if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
+                const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? factory.createStringLiteral("default") : decl.name!;
                 statements = appendExportStatement(statements, exportName, factory.getLocalName(decl));
                 excludeName = getTextOfIdentifierOrLiteral(exportName);
             }

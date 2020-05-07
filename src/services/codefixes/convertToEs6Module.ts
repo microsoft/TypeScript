@@ -13,7 +13,7 @@ namespace ts.codefix {
                 }
             });
             // No support for fix-all since this applies to the whole file at once anyway.
-            return [createCodeFixActionNoFixId("convertToEs6Module", changes, Diagnostics.Convert_to_ES6_module)];
+            return [createCodeFixActionWithoutFixAll("convertToEs6Module", changes, Diagnostics.Convert_to_ES6_module)];
         },
     });
 
@@ -67,7 +67,7 @@ namespace ts.codefix {
         forEachExportReference(sourceFile, node => {
             const { text, originalKeywordKind } = node.name;
             if (!res.has(text) && (originalKeywordKind !== undefined && isNonContextualKeyword(originalKeywordKind)
-                || checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ true))) {
+                || checker.resolveName(text, node, SymbolFlags.Value, /*excludeGlobals*/ true))) {
                 // Unconditionally add an underscore in case `text` is a keyword.
                 res.set(text, makeUniqueName(`_${text}`, identifiers));
             }
@@ -85,11 +85,11 @@ namespace ts.codefix {
         });
     }
 
-    function forEachExportReference(sourceFile: SourceFile, cb: (node: PropertyAccessExpression, isAssignmentLhs: boolean) => void): void {
+    function forEachExportReference(sourceFile: SourceFile, cb: (node: (PropertyAccessExpression & { name: Identifier }), isAssignmentLhs: boolean) => void): void {
         sourceFile.forEachChild(function recur(node) {
-            if (isPropertyAccessExpression(node) && isExportsOrModuleExportsOrAlias(sourceFile, node.expression)) {
+            if (isPropertyAccessExpression(node) && isExportsOrModuleExportsOrAlias(sourceFile, node.expression) && isIdentifier(node.name)) {
                 const { parent } = node;
-                cb(node, isBinaryExpression(parent) && parent.left === node && parent.operatorToken.kind === SyntaxKind.EqualsToken);
+                cb(node as typeof node & { name: Identifier }, isBinaryExpression(parent) && parent.left === node && parent.operatorToken.kind === SyntaxKind.EqualsToken);
             }
             node.forEachChild(recur);
         });
@@ -520,6 +520,7 @@ namespace ts.codefix {
         return factory.createExportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
+            /*isTypeOnly*/ false,
             exportSpecifiers && factory.createNamedExports(exportSpecifiers),
             moduleSpecifier === undefined ? undefined : factory.createStringLiteral(moduleSpecifier));
     }

@@ -23,7 +23,7 @@ namespace ts.refactor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             const { file } = context;
-            const info = Debug.assertDefined(getRangeToExtract(context), "Expected to find a range to extract");
+            const info = Debug.checkDefined(getRangeToExtract(context), "Expected to find a range to extract");
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => {
@@ -68,7 +68,7 @@ namespace ts.refactor {
         if (!selection || !isTypeNode(selection)) return undefined;
 
         const checker = context.program.getTypeChecker();
-        const firstStatement = Debug.assertDefined(findAncestor(selection, isStatement), "Should find a statement");
+        const firstStatement = Debug.checkDefined(findAncestor(selection, isStatement), "Should find a statement");
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
         if (!typeParameters) return undefined;
 
@@ -159,7 +159,7 @@ namespace ts.refactor {
             typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)),
             selection
         );
-        changes.insertNodeBefore(file, firstStatement, newTypeNode, /* blankLineBetween */ true);
+        changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
@@ -174,7 +174,7 @@ namespace ts.refactor {
             /* heritageClauses */ undefined,
             typeElements
         );
-        changes.insertNodeBefore(file, firstStatement, newTypeNode, /* blankLineBetween */ true);
+        changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 

@@ -4,6 +4,7 @@ namespace ts.codefix {
     const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;
     const errorCodes = [
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
+        Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies.code,
         didYouMeanStaticMemberCode,
     ];
     registerCodeFix({
@@ -24,11 +25,16 @@ namespace ts.codefix {
         }),
     });
 
-    interface Info { readonly node: Identifier; readonly className: string | undefined; }
+    interface Info {
+        readonly node: Identifier | PrivateIdentifier;
+        readonly className: string | undefined;
+    }
+
     function getInfo(sourceFile: SourceFile, pos: number, diagCode: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
-        if (!isIdentifier(node)) return undefined;
-        return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node)!.name!.text : undefined };
+        if (isIdentifier(node)) {
+            return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node)!.name!.text : undefined };
+        }
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node, className }: Info): void {

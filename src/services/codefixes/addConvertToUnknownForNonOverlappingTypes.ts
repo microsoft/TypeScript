@@ -14,7 +14,7 @@ namespace ts.codefix {
 
     function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
         const token = getTokenAtPosition(sourceFile, pos);
-        const assertion = Debug.assertDefined(findAncestor(token, (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertionExpression(n)), "Expected to find an assertion expression");
+        const assertion = Debug.checkDefined(findAncestor(token, (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertionExpression(n)), "Expected to find an assertion expression");
         const replacement = isAsExpression(assertion)
             ? factory.createAsExpression(assertion.expression, factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword))
             : factory.createTypeAssertion(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword), assertion.expression);

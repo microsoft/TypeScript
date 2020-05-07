@@ -1,0 +1,25 @@
+=== tests/cases/conformance/jsdoc/instantiateTemplateTagTypeParameterOnVariableStatement.js ===
+/**
+ * @template T
+ * @param {T} a
+ * @returns {(b: T) => T}
+ */
+const seq = a => b => b;
+>seq : Symbol(seq, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 5, 5))
+>a : Symbol(a, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 5, 11))
+>b : Symbol(b, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 5, 16))
+>b : Symbol(b, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 5, 16))
+
+const text1 = "hello";
+>text1 : Symbol(text1, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 7, 5))
+
+const text2 = "world";
+>text2 : Symbol(text2, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 8, 5))
+
+/** @type {string} */
+var text3 = seq(text1)(text2);
+>text3 : Symbol(text3, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 11, 3))
+>seq : Symbol(seq, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 5, 5))
+>text1 : Symbol(text1, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 7, 5))
+>text2 : Symbol(text2, Decl(instantiateTemplateTagTypeParameterOnVariableStatement.js, 8, 5))
+

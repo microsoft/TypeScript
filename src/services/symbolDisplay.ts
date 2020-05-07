@@ -16,8 +16,6 @@ namespace ts.SymbolDisplay {
         if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
         if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
         if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-
-        if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
         if (flags & SymbolFlags.EnumMember) return ScriptElementKind.enumMemberElement;
         if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
         if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
@@ -123,10 +121,9 @@ namespace ts.SymbolDisplay {
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
     export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
         location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
-
         const displayParts: SymbolDisplayPart[] = [];
-        let documentation: SymbolDisplayPart[] | undefined;
-        let tags: JSDocTagInfo[] | undefined;
+        let documentation: SymbolDisplayPart[] = [];
+        let tags: JSDocTagInfo[] = [];
         const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
         let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
         let hasAddedSymbolInfo = false;
@@ -135,6 +132,7 @@ namespace ts.SymbolDisplay {
         let printer: Printer;
         let documentationFromAlias: SymbolDisplayPart[] | undefined;
         let tagsFromAlias: JSDocTagInfo[] | undefined;
+        let hasMultipleSignatures = false;
 
         if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
             return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
@@ -230,6 +228,7 @@ namespace ts.SymbolDisplay {
                             addSignatureDisplayParts(signature, allSignatures);
                     }
                     hasAddedSymbolInfo = true;
+                    hasMultipleSignatures = allSignatures.length > 1;
                 }
             }
             else if ((isNameOfFunctionDeclaration(location) && !(symbolFlags & SymbolFlags.Accessor)) || // name of function declaration
@@ -262,6 +261,7 @@ namespace ts.SymbolDisplay {
 
                     addSignatureDisplayParts(signature, allSignatures);
                     hasAddedSymbolInfo = true;
+                    hasMultipleSignatures = allSignatures.length > 1;
                 }
             }
         }
@@ -387,7 +387,7 @@ namespace ts.SymbolDisplay {
                     if (declarationName) {
                         const isExternalModuleDeclaration =
                             isModuleWithStringLiteralName(resolvedNode) &&
-                            hasModifier(resolvedNode, ModifierFlags.Ambient);
+                            hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
                         const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
                         const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
                             typeChecker,
@@ -489,6 +489,7 @@ namespace ts.SymbolDisplay {
                         const allSignatures = type.getNonNullableType().getCallSignatures();
                         if (allSignatures.length) {
                             addSignatureDisplayParts(allSignatures[0], allSignatures);
+                            hasMultipleSignatures = allSignatures.length > 1;
                         }
                     }
                 }
@@ -498,42 +499,47 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        if (!documentation) {
+        if (documentation.length === 0 && !hasMultipleSignatures) {
             documentation = symbol.getDocumentationComment(typeChecker);
-            tags = symbol.getJsDocTags();
-            if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {
-                // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
-                // there documentation comments might be attached to the right hand side symbol of their declarations.
-                // The pattern of such special property access is that the parent symbol is the symbol of the file.
-                if (symbol.parent && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
-                    for (const declaration of symbol.declarations) {
-                        if (!declaration.parent || declaration.parent.kind !== SyntaxKind.BinaryExpression) {
-                            continue;
-                        }
+        }
 
-                        const rhsSymbol = typeChecker.getSymbolAtLocation((<BinaryExpression>declaration.parent).right);
-                        if (!rhsSymbol) {
-                            continue;
-                        }
+        if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {
+            // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
+            // there documentation comments might be attached to the right hand side symbol of their declarations.
+            // The pattern of such special property access is that the parent symbol is the symbol of the file.
+            if (symbol.parent && forEach(symbol.parent.declarations, declaration => declaration.kind === SyntaxKind.SourceFile)) {
+                for (const declaration of symbol.declarations) {
+                    if (!declaration.parent || declaration.parent.kind !== SyntaxKind.BinaryExpression) {
+                        continue;
+                    }
 
-                        documentation = rhsSymbol.getDocumentationComment(typeChecker);
-                        tags = rhsSymbol.getJsDocTags();
-                        if (documentation.length > 0) {
-                            break;
-                        }
+                    const rhsSymbol = typeChecker.getSymbolAtLocation((<BinaryExpression>declaration.parent).right);
+                    if (!rhsSymbol) {
+                        continue;
+                    }
+
+                    documentation = rhsSymbol.getDocumentationComment(typeChecker);
+                    tags = rhsSymbol.getJsDocTags();
+                    if (documentation.length > 0) {
+                        break;
                     }
                 }
             }
         }
 
+        if (tags.length === 0 && !hasMultipleSignatures) {
+            tags = symbol.getJsDocTags();
+        }
+
         if (documentation.length === 0 && documentationFromAlias) {
             documentation = documentationFromAlias;
         }
-        if (tags!.length === 0 && tagsFromAlias) {
+
+        if (tags.length === 0 && tagsFromAlias) {
             tags = tagsFromAlias;
         }
 
-        return { displayParts, documentation, symbolKind, tags: tags!.length === 0 ? undefined : tags };
+        return { displayParts, documentation, symbolKind, tags: tags.length === 0 ? undefined : tags };
 
         function getPrinter() {
             if (!printer) {
@@ -614,9 +620,13 @@ namespace ts.SymbolDisplay {
                 displayParts.push(textPart(allSignatures.length === 2 ? "overload" : "overloads"));
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
-            const docComment = signature.getDocumentationComment(typeChecker);
-            documentation = docComment.length === 0 ? undefined : docComment;
+            documentation = signature.getDocumentationComment(typeChecker);
             tags = signature.getJsDocTags();
+
+            if (allSignatures.length > 1 && documentation.length === 0 && tags.length === 0) {
+                documentation = allSignatures[0].getDocumentationComment(typeChecker);
+                tags = allSignatures[0].getJsDocTags();
+            }
         }
 
         function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined) {

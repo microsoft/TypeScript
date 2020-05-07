@@ -107,9 +107,6 @@ namespace ts {
         return context.factory.inlineExpressions(expressions!) || context.factory.createOmittedExpression();
 
         function emitExpression(expression: Expression) {
-            // NOTE: this completely disables source maps, but aligns with the behavior of
-            //       `emitAssignment` in the old emitter.
-            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
             expressions = append(expressions, expression);
         }
 
@@ -234,9 +231,6 @@ namespace ts {
             );
             variable.original = original;
             setTextRange(variable, location);
-            if (isIdentifier(name)) {
-                setEmitFlags(variable, EmitFlags.NoNestedSourceMaps);
-            }
             declarations.push(variable);
         }
         return declarations;
@@ -251,7 +245,7 @@ namespace ts {
                 value = context.factory.inlineExpressions(append(pendingExpressions, value));
                 pendingExpressions = undefined;
             }
-            pendingDeclarations.push({ pendingExpressions, name: <BindingName>target, value, location, original });
+            pendingDeclarations.push({ pendingExpressions, name: target, value, location, original });
         }
     }
 
@@ -324,7 +318,7 @@ namespace ts {
                     && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !isComputedPropertyName(propertyName)) {
-                    bindingElements = append(bindingElements, element);
+                    bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor));
                 }
                 else {
                     if (bindingElements) {
@@ -343,10 +337,7 @@ namespace ts {
                     flattenContext.emitBindingOrAssignment(flattenContext.createObjectBindingOrAssignmentPattern(bindingElements), value, location, pattern);
                     bindingElements = undefined;
                 }
-                const rhsValue = setTextRange(
-                    flattenContext.context.getEmitHelperFactory().createRestHelper(value, elements, computedTempVariables!),
-                    pattern
-                ); // TODO: GH#18217
+                const rhsValue = flattenContext.context.getEmitHelperFactory().createRestHelper(value, elements, computedTempVariables, pattern);
                 flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, element);
             }
         }

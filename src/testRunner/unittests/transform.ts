@@ -97,6 +97,17 @@ namespace ts {
             ]);
         });
 
+        testBaseline("transformDefiniteAssignmentAssertions", () => {
+            return transformSourceFile(`let a!: () => void`, [
+                context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
+                    if (node.kind === SyntaxKind.VoidKeyword) {
+                        return factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
+                    }
+                    return visitEachChild(node, visitor, context);
+                })
+            ]);
+        });
+
         testBaseline("fromTranspileModule", () => {
             return transpileModule(`var oldName = undefined;`, {
                 transformers: {
@@ -223,7 +234,7 @@ namespace ts {
                             const exports = [{ name: "x" }];
                             const exportSpecifiers = exports.map(e => factory.createExportSpecifier(e.name, e.name));
                             const exportClause = factory.createNamedExports(exportSpecifiers);
-                            const newEd = factory.updateExportDeclaration(ed, ed.decorators, ed.modifiers, exportClause, ed.moduleSpecifier);
+                            const newEd = factory.updateExportDeclaration(ed, ed.decorators, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier);
 
                             return newEd as Node as T;
                         }
@@ -256,6 +267,7 @@ namespace ts {
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         /*importClause*/ factory.createImportClause(
+                            /*isTypeOnly*/ false,
                             /*name*/ undefined,
                             factory.createNamespaceImport(factory.createIdentifier("i0"))
                         ),

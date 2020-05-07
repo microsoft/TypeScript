@@ -2,7 +2,7 @@
 namespace ts {
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
         const compilerOptions = host.getCompilerOptions();
-        const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : host.getSourceFiles(), [transformDeclarations], /*allowDtsFiles*/ false);
+        const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
         return result.diagnostics;
     }
 
@@ -74,7 +74,8 @@ namespace ts {
             reportLikelyUnsafeImportRequiredError,
             moduleResolverHost: host,
             trackReferencedAmbientModule,
-            trackExternalModuleSymbolOfImportTypeNode
+            trackExternalModuleSymbolOfImportTypeNode,
+            reportNonlocalAugmentation
         };
         let errorNameNode: DeclarationName | undefined;
 
@@ -185,6 +186,17 @@ namespace ts {
                 context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode),
                     specifier));
+            }
+        }
+
+        function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
+            const primaryDeclaration = find(parentSymbol.declarations, d => getSourceFileOfNode(d) === containingFile)!;
+            const augmentingDeclarations = filter(symbol.declarations, d => getSourceFileOfNode(d) !== containingFile);
+            for (const augmentations of augmentingDeclarations) {
+                context.addDiagnostic(addRelatedInfo(
+                    createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
+                    createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
+                ));
             }
         }
 
@@ -349,9 +361,7 @@ namespace ts {
                             toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
                             toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
                             host,
-                            host.getSourceFiles(),
                             /*preferences*/ undefined,
-                            host.redirectTargetsMap
                         );
                         if (!pathIsRelative(specifier)) {
                             // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
@@ -374,7 +384,7 @@ namespace ts {
 
                         // omit references to files from node_modules (npm may disambiguate module
                         // references when installing this package, making the path is unreliable).
-                        if (startsWith(fileName, "node_modules/") || fileName.indexOf("/node_modules/") !== -1) {
+                        if (startsWith(fileName, "node_modules/") || pathContainsNodeModules(fileName)) {
                             return;
                         }
 
@@ -399,7 +409,7 @@ namespace ts {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {
-                    ret.set(ref.fileName.toLocaleLowerCase(), true);
+                    ret.set(toFileNameLowerCase(ref.fileName), true);
                 }
             });
             return ret;
@@ -475,7 +485,7 @@ namespace ts {
             | PropertySignature;
 
         function ensureType(node: HasInferredType, type: TypeNode | undefined, ignorePrivate?: boolean): TypeNode | undefined {
-            if (!ignorePrivate && hasModifier(node, ModifierFlags.Private)) {
+            if (!ignorePrivate && hasEffectiveModifier(node, ModifierFlags.Private)) {
                 // Private nodes emit no types (except private parameter properties, whose parameter types are actually visible)
                 return;
             }
@@ -559,7 +569,7 @@ namespace ts {
         }
 
         function updateParamsList(node: Node, params: NodeArray<ParameterDeclaration>, modifierMask?: ModifierFlags) {
-            if (hasModifier(node, ModifierFlags.Private)) {
+            if (hasEffectiveModifier(node, ModifierFlags.Private)) {
                 return undefined!; // TODO: GH#18217
             }
             const newParams = map(params, p => ensureParameter(p, modifierMask));
@@ -596,11 +606,11 @@ namespace ts {
                 }
                 newParams = append(newParams, newValueParameter);
             }
-            return factory.createNodeArray(newParams || emptyArray) as NodeArray<ParameterDeclaration>;
+            return factory.createNodeArray(newParams || emptyArray);
         }
 
         function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration> | undefined) {
-            return hasModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationSubtree);
+            return hasEffectiveModifier(node, ModifierFlags.Private) ? undefined : visitNodes(params, visitDeclarationSubtree);
         }
 
         function isEnclosingDeclaration(node: Node) {
@@ -686,8 +696,9 @@ namespace ts {
                 // No named bindings (either namespace or list), meaning the import is just default or should be elided
                 return visibleDefaultBinding && factory.updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, factory.updateImportClause(
                     decl.importClause,
+                    decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
-                    /*namedBindings*/ undefined
+                    /*namedBindings*/ undefined,
                 ), rewriteModuleSpecifier(decl, decl.moduleSpecifier));
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -695,8 +706,9 @@ namespace ts {
                 const namedBindings = resolver.isDeclarationVisible(decl.importClause.namedBindings) ? decl.importClause.namedBindings : /*namedBindings*/ undefined;
                 return visibleDefaultBinding || namedBindings ? factory.updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, factory.updateImportClause(
                     decl.importClause,
+                    decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
-                    namedBindings
+                    namedBindings,
                 ), rewriteModuleSpecifier(decl, decl.moduleSpecifier)) : undefined;
             }
             // Named imports (optionally with visible default)
@@ -708,9 +720,20 @@ namespace ts {
                     decl.modifiers,
                     factory.updateImportClause(
                         decl.importClause,
+                        decl.importClause.isTypeOnly,
                         visibleDefaultBinding,
-                        bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined
+                        bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                     ),
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                );
+            }
+            // Augmentation of export depends on import
+            if (resolver.isImportRequiredByAugmentation(decl)) {
+                return factory.updateImportDeclaration(
+                    decl,
+                    /*decorators*/ undefined,
+                    decl.modifiers,
+                    /*importClause*/ undefined,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier)
                 );
             }
@@ -800,7 +823,7 @@ namespace ts {
 
             // Emit methods which are private as properties with no type information
             if (isMethodDeclaration(input) || isMethodSignature(input)) {
-                if (hasModifier(input, ModifierFlags.Private)) {
+                if (hasEffectiveModifier(input, ModifierFlags.Private)) {
                     if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
                     return cleanup(factory.createPropertyDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
                 }
@@ -841,17 +864,19 @@ namespace ts {
                             ensureType(input, input.type)
                         ));
                     case SyntaxKind.Constructor: {
-                        const isPrivate = hasModifier(input, ModifierFlags.Private);
                         // A constructor declaration may not have a type annotation
                         const ctor = factory.createConstructorDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ ensureModifiers(input),
-                            isPrivate ? [] : updateParamsList(input, input.parameters, ModifierFlags.None),
+                            updateParamsList(input, input.parameters, ModifierFlags.None),
                             /*body*/ undefined
                         );
                         return cleanup(ctor);
                     }
                     case SyntaxKind.MethodDeclaration: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         const sig = factory.createMethodDeclaration(
                             /*decorators*/ undefined,
                             ensureModifiers(input),
@@ -866,45 +891,59 @@ namespace ts {
                         return cleanup(sig);
                     }
                     case SyntaxKind.GetAccessor: {
-                        const isPrivate = hasModifier(input, ModifierFlags.Private);
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                         return cleanup(factory.updateGetAccessorDeclaration(
                             input,
                             /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
-                            updateAccessorParamsList(input, isPrivate),
-                            !isPrivate ? ensureType(input, accessorType) : undefined,
+                            updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
+                            ensureType(input, accessorType),
                             /*body*/ undefined));
                     }
                     case SyntaxKind.SetAccessor: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(factory.updateSetAccessorDeclaration(
                             input,
                             /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
-                            updateAccessorParamsList(input, hasModifier(input, ModifierFlags.Private)),
+                            updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
                             /*body*/ undefined));
                     }
                     case SyntaxKind.PropertyDeclaration:
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(factory.updatePropertyDeclaration(
                             input,
                             /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
                             input.questionToken,
-                            !hasModifier(input, ModifierFlags.Private) ? ensureType(input, input.type) : undefined,
+                            ensureType(input, input.type),
                             ensureNoInitializer(input)
                         ));
                     case SyntaxKind.PropertySignature:
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(factory.updatePropertySignature(
                             input,
                             ensureModifiers(input),
                             input.name,
                             input.questionToken,
-                            !hasModifier(input, ModifierFlags.Private) ? ensureType(input, input.type) : undefined
+                            ensureType(input, input.type)
                         ));
                     case SyntaxKind.MethodSignature: {
+                        if (isPrivateIdentifier(input.name)) {
+                            return cleanup(/*returnValue*/ undefined);
+                        }
                         return cleanup(factory.updateMethodSignature(
                             input,
                             ensureModifiers(input),
@@ -1001,7 +1040,7 @@ namespace ts {
         }
 
         function isPrivateMethodTypeParameter(node: TypeParameterDeclaration) {
-            return node.parent.kind === SyntaxKind.MethodDeclaration && hasModifier(node.parent, ModifierFlags.Private);
+            return node.parent.kind === SyntaxKind.MethodDeclaration && hasEffectiveModifier(node.parent, ModifierFlags.Private);
         }
 
         function visitDeclarationStatements(input: Node): VisitResult<Node> {
@@ -1019,7 +1058,14 @@ namespace ts {
                     resultHasScopeMarker = true;
                     // Always visible if the parent node isn't dropped for being not visible
                     // Rewrite external module names if necessary
-                    return factory.updateExportDeclaration(input, /*decorators*/ undefined, input.modifiers, input.exportClause, rewriteModuleSpecifier(input, input.moduleSpecifier));
+                    return factory.updateExportDeclaration(
+                        input,
+                        /*decorators*/ undefined,
+                        input.modifiers,
+                        input.isTypeOnly,
+                        input.exportClause,
+                        rewriteModuleSpecifier(input, input.moduleSpecifier),
+                    );
                 }
                 case SyntaxKind.ExportAssignment: {
                     // Always visible if the parent node isn't dropped for being not visible
@@ -1031,7 +1077,7 @@ namespace ts {
                         return input;
                     }
                     else {
-                        const newId = factory.createOptimisticUniqueName("_default");
+                        const newId = factory.createUniqueName("_default", GeneratedIdentifierFlags.Optimistic);
                         getSymbolAccessibilityDiagnostic = () => ({
                             diagnosticMessage: Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
                             errorNode: input
@@ -1050,13 +1096,13 @@ namespace ts {
         }
 
         function stripExportModifiers(statement: Statement): Statement {
-            if (isImportEqualsDeclaration(statement) || hasModifier(statement, ModifierFlags.Default) || !canHaveModifiers(statement)) {
+            if (isImportEqualsDeclaration(statement) || hasEffectiveModifier(statement, ModifierFlags.Default) || !canHaveModifiers(statement)) {
                 // `export import` statements should remain as-is, as imports are _not_ implicitly exported in an ambient namespace
                 // Likewise, `export default` classes and the like and just be `default`, so we preserve their `export` modifiers, too
                 return statement;
             }
 
-            const modifiers = factory.createModifiersFromModifierFlags(getModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export));
+            const modifiers = factory.createModifiersFromModifierFlags(getEffectiveModifierFlags(statement) & (ModifierFlags.All ^ ModifierFlags.Export));
             return factory.updateModifiers(statement, modifiers);
         }
 
@@ -1141,11 +1187,11 @@ namespace ts {
                         });
                         const namespaceDecl = factory.createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name!, factory.createModuleBlock(declarations), NodeFlags.Namespace);
 
-                        if (!hasModifier(clean, ModifierFlags.Default)) {
+                        if (!hasEffectiveModifier(clean, ModifierFlags.Default)) {
                             return [clean, namespaceDecl];
                         }
 
-                        const modifiers = factory.createModifiersFromModifierFlags((getModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient);
+                        const modifiers = factory.createModifiersFromModifierFlags((getEffectiveModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient);
                         const cleanDeclaration = factory.updateFunctionDeclaration(
                             clean,
                             /*decorators*/ undefined,
@@ -1248,7 +1294,7 @@ namespace ts {
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, (param) => {
-                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
+                            if (!hasSyntacticModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(factory.createPropertyDeclaration(
@@ -1286,14 +1332,27 @@ namespace ts {
                         }));
                         getSymbolAccessibilityDiagnostic = oldDiag;
                     }
-                    const members = factory.createNodeArray(concatenate(parameterProperties, visitNodes(input.members, visitDeclarationSubtree)));
+
+                    const hasPrivateIdentifier = some(input.members, member => !!member.name && isPrivateIdentifier(member.name));
+                    const privateIdentifier = hasPrivateIdentifier ? [
+                        factory.createPropertyDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            factory.createPrivateIdentifier("#private"),
+                            /*questionToken*/ undefined,
+                            /*type*/ undefined,
+                            /*initializer*/ undefined
+                        )
+                    ] : undefined;
+                    const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree));
+                    const members = factory.createNodeArray(memberNodes);
 
                     const extendsClause = getEffectiveBaseTypeNode(input);
                     if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
                         // We must add a temporary declaration for the extends clause expression
 
                         const oldId = input.name ? unescapeLeadingUnderscores(input.name.escapedText) : "default";
-                        const newId = factory.createOptimisticUniqueName(`${oldId}_base`);
+                        const newId = factory.createUniqueName(`${oldId}_base`, GeneratedIdentifierFlags.Optimistic);
                         getSymbolAccessibilityDiagnostic = () => ({
                             diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                             errorNode: extendsClause,
@@ -1422,7 +1481,7 @@ namespace ts {
         }
 
         function ensureModifiers(node: Node): readonly Modifier[] | undefined {
-            const currentFlags = getModifierFlags(node);
+            const currentFlags = getEffectiveModifierFlags(node);
             const newFlags = ensureModifierFlags(node);
             if (currentFlags === newFlags) {
                 return node.modifiers;
@@ -1476,7 +1535,7 @@ namespace ts {
     }
 
     function maskModifierFlags(node: Node, modifierMask: ModifierFlags = ModifierFlags.All ^ ModifierFlags.Public, modifierAdditions: ModifierFlags = ModifierFlags.None): ModifierFlags {
-        let flags = (getModifierFlags(node) & modifierMask) | modifierAdditions;
+        let flags = (getEffectiveModifierFlags(node) & modifierMask) | modifierAdditions;
         if (flags & ModifierFlags.Default && !(flags & ModifierFlags.Export)) {
             // A non-exported default is a nonsequitor - we usually try to remove all export modifiers
             // from statements in ambient declarations; but a default export must retain its export modifier to be syntactically valid
@@ -1503,7 +1562,7 @@ namespace ts {
         switch (node.kind) {
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
-                return !hasModifier(node, ModifierFlags.Private);
+                return !hasEffectiveModifier(node, ModifierFlags.Private);
             case SyntaxKind.Parameter:
             case SyntaxKind.VariableDeclaration:
                 return true;

@@ -5,6 +5,38 @@ namespace ts {
         AsyncMethodsWithSuper = 1 << 0
     }
 
+    // Facts we track as we traverse the tree
+    const enum HierarchyFacts {
+        None = 0,
+
+        //
+        // Ancestor facts
+        //
+
+        HasLexicalThis = 1 << 0,
+        IterationContainer = 1 << 1,
+        // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
+
+        //
+        // Ancestor masks
+        //
+
+        AncestorFactsMask = (IterationContainer << 1) - 1,
+
+        SourceFileIncludes = HasLexicalThis,
+        SourceFileExcludes = IterationContainer,
+        StrictModeSourceFileIncludes = None,
+
+        ClassOrFunctionIncludes = HasLexicalThis,
+        ClassOrFunctionExcludes = IterationContainer,
+
+        ArrowFunctionIncludes = None,
+        ArrowFunctionExcludes = ClassOrFunctionExcludes,
+
+        IterationStatementIncludes = IterationContainer,
+        IterationStatementExcludes = None,
+    }
+
     export function transformES2018(context: TransformationContext) {
         const {
             factory,
@@ -28,7 +60,10 @@ namespace ts {
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
-        let topLevel: boolean;
+        let hierarchyFacts: HierarchyFacts = 0;
+
+        let currentSourceFile: SourceFile;
+        let taggedTemplateStringDeclarations: VariableDeclaration[];
 
         /** Keeps track of property names accessed on super (`super.x`) within async functions. */
         let capturedSuperProperties: UnderscoreEscapedMap<true>;
@@ -39,15 +74,47 @@ namespace ts {
 
         return chainBundle(context, transformSourceFile);
 
+        function affectsSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
+            return hierarchyFacts !== (hierarchyFacts & ~excludeFacts | includeFacts);
+        }
+
+        /**
+         * Sets the `HierarchyFacts` for this node prior to visiting this node's subtree, returning the facts set prior to modification.
+         * @param excludeFacts The existing `HierarchyFacts` to reset before visiting the subtree.
+         * @param includeFacts The new `HierarchyFacts` to set before visiting the subtree.
+         */
+        function enterSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
+            const ancestorFacts = hierarchyFacts;
+            hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.AncestorFactsMask;
+            return ancestorFacts;
+        }
+
+        /**
+         * Restores the `HierarchyFacts` for this node's ancestor after visiting this node's
+         * subtree.
+         * @param ancestorFacts The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
+         */
+        function exitSubtree(ancestorFacts: HierarchyFacts) {
+            hierarchyFacts = ancestorFacts;
+        }
+
+        function recordTaggedTemplateString(temp: Identifier) {
+            taggedTemplateStringDeclarations = append(
+                taggedTemplateStringDeclarations,
+                factory.createVariableDeclaration(temp));
+        }
+
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
                 return node;
             }
 
-            exportedVariableStatement = false;
-            topLevel = isEffectiveStrictModeSourceFile(node, compilerOptions);
-            const visited = visitEachChild(node, visitor, context);
+            currentSourceFile = node;
+            const visited = visitSourceFile(node);
             addEmitHelpers(visited, context.readEmitHelpers());
+
+            currentSourceFile = undefined!;
+            taggedTemplateStringDeclarations = undefined!;
             return visited;
         }
 
@@ -66,11 +133,11 @@ namespace ts {
             return node;
         }
 
-        function doOutsideOfTopLevel<T, U>(cb: (value: T) => U, value: T) {
-            if (topLevel) {
-                topLevel = false;
+        function doWithHierarchyFacts<T, U>(cb: (value: T) => U, value: T, excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
+            if (affectsSubtree(excludeFacts, includeFacts)) {
+                const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
                 const result = cb(value);
-                topLevel = true;
+                exitSubtree(ancestorFacts);
                 return result;
             }
             return cb(value);
@@ -103,32 +170,74 @@ namespace ts {
                     return visitVariableStatement(node as VariableStatement);
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(node as VariableDeclaration);
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForInStatement:
+                    return doWithHierarchyFacts(
+                        visitDefault,
+                        node,
+                        HierarchyFacts.IterationStatementExcludes,
+                        HierarchyFacts.IterationStatementIncludes);
                 case SyntaxKind.ForOfStatement:
                     return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
                 case SyntaxKind.ForStatement:
-                    return visitForStatement(node as ForStatement);
+                    return doWithHierarchyFacts(
+                        visitForStatement,
+                        node as ForStatement,
+                        HierarchyFacts.IterationStatementExcludes,
+                        HierarchyFacts.IterationStatementIncludes);
                 case SyntaxKind.VoidExpression:
                     return visitVoidExpression(node as VoidExpression);
                 case SyntaxKind.Constructor:
-                    return doOutsideOfTopLevel(visitConstructorDeclaration, node as ConstructorDeclaration);
+                    return doWithHierarchyFacts(
+                        visitConstructorDeclaration,
+                        node as ConstructorDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.MethodDeclaration:
-                    return doOutsideOfTopLevel(visitMethodDeclaration, node as MethodDeclaration);
+                    return doWithHierarchyFacts(
+                        visitMethodDeclaration,
+                        node as MethodDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.GetAccessor:
-                    return doOutsideOfTopLevel(visitGetAccessorDeclaration, node as GetAccessorDeclaration);
+                    return doWithHierarchyFacts(
+                        visitGetAccessorDeclaration,
+                        node as GetAccessorDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.SetAccessor:
-                    return doOutsideOfTopLevel(visitSetAccessorDeclaration, node as SetAccessorDeclaration);
+                    return doWithHierarchyFacts(
+                        visitSetAccessorDeclaration,
+                        node as SetAccessorDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.FunctionDeclaration:
-                    return doOutsideOfTopLevel(visitFunctionDeclaration, node as FunctionDeclaration);
+                    return doWithHierarchyFacts(
+                        visitFunctionDeclaration,
+                        node as FunctionDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.FunctionExpression:
-                    return doOutsideOfTopLevel(visitFunctionExpression, node as FunctionExpression);
+                    return doWithHierarchyFacts(
+                        visitFunctionExpression,
+                        node as FunctionExpression,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.ArrowFunction:
-                    return visitArrowFunction(node as ArrowFunction);
+                    return doWithHierarchyFacts(
+                        visitArrowFunction,
+                        node as ArrowFunction,
+                        HierarchyFacts.ArrowFunctionExcludes,
+                        HierarchyFacts.ArrowFunctionIncludes);
                 case SyntaxKind.Parameter:
                     return visitParameter(node as ParameterDeclaration);
                 case SyntaxKind.ExpressionStatement:
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.PropertyAccessExpression:
                     if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
                         capturedSuperProperties.set(node.name.escapedText, true);
@@ -141,7 +250,11 @@ namespace ts {
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-                    return doOutsideOfTopLevel(visitDefault, node);
+                    return doWithHierarchyFacts(
+                        visitDefault,
+                        node,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -226,7 +339,7 @@ namespace ts {
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
-                return factory.restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
+                return factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock), node);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -305,6 +418,34 @@ namespace ts {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
         }
 
+        function visitSourceFile(node: SourceFile): SourceFile {
+            const ancestorFacts = enterSubtree(
+                HierarchyFacts.SourceFileExcludes,
+                isEffectiveStrictModeSourceFile(node, compilerOptions) ?
+                    HierarchyFacts.StrictModeSourceFileIncludes :
+                    HierarchyFacts.SourceFileIncludes);
+            exportedVariableStatement = false;
+            const visited = visitEachChild(node, visitor, context);
+            const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
+                factory.createVariableStatement(/*modifiers*/ undefined,
+                    factory.createVariableDeclarationList(taggedTemplateStringDeclarations))
+            ]);
+            const result = factory.updateSourceFile(visited, setTextRange(factory.createNodeArray(statement), node.statements));
+            exitSubtree(ancestorFacts);
+            return result;
+        }
+
+        function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            return processTaggedTemplateExpression(
+                context,
+                node,
+                visitor,
+                currentSourceFile,
+                recordTaggedTemplateString,
+                ProcessLevel.LiftRestriction
+            );
+        }
+
         /**
          * Visits a BinaryExpression that contains a destructuring assignment.
          *
@@ -324,6 +465,7 @@ namespace ts {
                 return factory.updateBinary(
                     node,
                     visitNode(node.left, visitorNoDestructuringValue, isExpression),
+                    node.operatorToken,
                     visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
                 );
             }
@@ -353,7 +495,7 @@ namespace ts {
         }
 
         function visitVariableStatement(node: VariableStatement): VisitResult<VariableStatement> {
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 const savedExportedVariableStatement = exportedVariableStatement;
                 exportedVariableStatement = true;
                 const visited = visitEachChild(node, visitor, context);
@@ -414,15 +556,15 @@ namespace ts {
          * @param node A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
+            const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
             if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 node = transformForOfStatementWithObjectRest(node);
             }
-            if (node.awaitModifier) {
-                return transformForAwaitOfStatement(node, outermostLabeledStatement);
-            }
-            else {
-                return factory.restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
-            }
+            const result = node.awaitModifier ?
+                transformForAwaitOfStatement(node, outermostLabeledStatement, ancestorFacts) :
+                factory.restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
+            exitSubtree(ancestorFacts);
+            return result;
         }
 
         function transformForOfStatementWithObjectRest(node: ForOfStatement) {
@@ -501,7 +643,7 @@ namespace ts {
                 : factory.createAwait(expression);
         }
 
-        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined) {
+        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts) {
             const expression = visitNode(node.expression, visitor, isExpression);
             const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
             const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
@@ -517,13 +659,18 @@ namespace ts {
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
 
+            // if we are enclosed in an outer loop ensure we reset 'errorRecord' per each iteration
+            const initializer = ancestorFacts & HierarchyFacts.IterationContainer ?
+                factory.inlineExpressions([factory.createAssignment(errorRecord, factory.createVoidZero()), callValues]) :
+                callValues;
+
             const forStatement = setEmitFlags(
                 setTextRange(
                     factory.createFor(
                         /*initializer*/ setEmitFlags(
                             setTextRange(
                                 factory.createVariableDeclarationList([
-                                    setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, callValues), node.expression),
+                                    setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
                                     factory.createVariableDeclaration(result)
                                 ]),
                                 node.expression
@@ -781,7 +928,7 @@ namespace ts {
                             visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                         )
                     ),
-                    !topLevel
+                    !!(hierarchyFacts & HierarchyFacts.HasLexicalThis)
                 )
             );
 
@@ -948,7 +1095,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return setTextRange(
                     factory.createPropertyAccess(
-                        factory.createFileLevelUniqueName("_super"),
+                        factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         node.name),
                     node
                 );

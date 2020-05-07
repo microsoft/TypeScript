@@ -1,7 +1,7 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: typeReferenceDirectives", () => {
         it("when typeReferenceDirective contains UpperCasePackage", () => {
-            const libProjectLocation = `${projectRoot}/lib`;
+            const libProjectLocation = `${tscWatch.projectRoot}/lib`;
             const typeLib: File = {
                 path: `${libProjectLocation}/@types/UpperCasePackage/index.d.ts`,
                 content: `declare class BrokenTest {
@@ -19,7 +19,7 @@ declare class TestLib {
     test(): void;
 }`
             };
-            const testProjectLocation = `${projectRoot}/test`;
+            const testProjectLocation = `${tscWatch.projectRoot}/test`;
             const testFile: File = {
                 path: `${testProjectLocation}/test.ts`,
                 content: `class TestClass1 {
@@ -57,7 +57,7 @@ declare class TestLib {
         });
 
         it("when typeReferenceDirective is relative path and in a sibling folder", () => {
-            const projectPath = `${projectRoot}/background`;
+            const projectPath = `${tscWatch.projectRoot}/background`;
             const file: File = {
                 path: `${projectPath}/a.ts`,
                 content: "let x = 10;"
@@ -73,7 +73,7 @@ declare class TestLib {
                 })
             };
             const filesystem: File = {
-                path: `${projectRoot}/typedefs/filesystem.d.ts`,
+                path: `${tscWatch.projectRoot}/typedefs/filesystem.d.ts`,
                 content: `interface LocalFileSystem { someProperty: string; }`
             };
             const files = [file, tsconfig, filesystem, libFile];

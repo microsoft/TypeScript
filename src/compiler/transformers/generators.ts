@@ -669,28 +669,6 @@ namespace ts {
             }
         }
 
-        function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssignmentOperator {
-            return kind >= SyntaxKind.FirstCompoundAssignment
-                && kind <= SyntaxKind.LastCompoundAssignment;
-        }
-
-        function getOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
-            switch (kind) {
-                case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
-                case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
-                case SyntaxKind.AsteriskEqualsToken: return SyntaxKind.AsteriskToken;
-                case SyntaxKind.AsteriskAsteriskEqualsToken: return SyntaxKind.AsteriskAsteriskToken;
-                case SyntaxKind.SlashEqualsToken: return SyntaxKind.SlashToken;
-                case SyntaxKind.PercentEqualsToken: return SyntaxKind.PercentToken;
-                case SyntaxKind.LessThanLessThanEqualsToken: return SyntaxKind.LessThanLessThanToken;
-                case SyntaxKind.GreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanToken;
-                case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
-                case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
-                case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
-                case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
-            }
-        }
-
         /**
          * Visits a right-associative binary expression containing `yield`.
          *
@@ -750,7 +728,7 @@ namespace ts {
                             setTextRange(
                                 factory.createBinary(
                                     cacheExpression(target),
-                                    getOperatorForCompoundAssignment(operator),
+                                    getNonAssignmentOperatorForCompoundAssignment(operator),
                                     visitNode(right, visitor, isExpression)
                                 ),
                                 node
@@ -760,7 +738,7 @@ namespace ts {
                     );
                 }
                 else {
-                    return factory.updateBinary(node, target, visitNode(right, visitor, isExpression));
+                    return factory.updateBinary(node, target, node.operatorToken, visitNode(right, visitor, isExpression));
                 }
             }
 
@@ -787,6 +765,7 @@ namespace ts {
 
                 return factory.updateBinary(node,
                     cacheExpression(visitNode(node.left, visitor, isExpression)),
+                    node.operatorToken,
                     visitNode(node.right, visitor, isExpression));
             }
 
@@ -2017,7 +1996,7 @@ namespace ts {
          */
         function markLabel(label: Label): void {
             Debug.assert(labelOffsets !== undefined, "No labels were defined.");
-            labelOffsets![label] = operations ? operations.length : 0;
+            labelOffsets[label] = operations ? operations.length : 0;
         }
 
         /**
