@@ -15874,7 +15874,7 @@ namespace ts {
                 // recursive intersections that are structurally similar but not exactly identical. See #37854.
                 if (result && !inPropertyCheck && (
                     target.flags & TypeFlags.Intersection && (isPerformingExcessPropertyChecks || isPerformingCommonPropertyChecks) ||
-                    isNonGenericObjectType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((<IntersectionType>source).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
+                    isNonGenericObjectType(target) && !isArrayType(target) && !isTupleType(target) && source.flags & TypeFlags.Intersection && getApparentType(source).flags & TypeFlags.StructuredType && !some((<IntersectionType>source).types, t => !!(getObjectFlags(t) & ObjectFlags.NonInferrableType)))) {
                     inPropertyCheck = true;
                     result &= recursiveTypeRelatedTo(source, target, reportErrors, IntersectionState.PropertyCheck);
                     inPropertyCheck = false;
