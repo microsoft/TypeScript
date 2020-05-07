@@ -47,3 +47,8 @@ tests/cases/compiler/intersectionsAndOptionalProperties.ts(20,5): error TS2322: 
 !!! error TS2322: Type 'null' is not assignable to type 'number | undefined'.
     }
     
+    // Repro from #38348
+    
+    const yy: number[] & [number, ...number[]] = [1];
+    const xx: [number, ...number[]] = yy;
+    
