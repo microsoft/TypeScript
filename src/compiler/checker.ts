@@ -13245,7 +13245,7 @@ namespace ts {
                         }
                         else {
                             let suggestion: string | undefined;
-                            if (propName !== undefined && (suggestion = getSuggestionForNonexistentProperty(propName as string, objectType))) {
+                            if (propName !== undefined && (suggestion = getSuggestionForNonexistentProperty(propName as string, objectType, false))) {
                                 if (suggestion !== undefined) {
                                     error(accessExpression.argumentExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName as string, typeToString(objectType), suggestion);
                                 }
@@ -16335,7 +16335,7 @@ namespace ts {
 
                                         const name = propDeclaration.name!;
                                         if (isIdentifier(name)) {
-                                            suggestion = getSuggestionForNonexistentProperty(name, errorTarget);
+                                            suggestion = getSuggestionForNonexistentProperty(name, errorTarget, false);
                                         }
                                     }
                                     if (suggestion !== undefined) {
@@ -24852,7 +24852,7 @@ namespace ts {
                     relatedInfo = createDiagnosticForNode(propNode, Diagnostics.Did_you_forget_to_use_await);
                 }
                 else {
-                    const suggestion = getSuggestedSymbolForNonexistentProperty(propNode, containingType);
+                    const suggestion = getSuggestedSymbolForNonexistentProperty(propNode, containingType, false);
                     if (suggestion !== undefined) {
                         const suggestedName = symbolName(suggestion);
                         errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestedName);
@@ -24875,12 +24875,12 @@ namespace ts {
             return prop !== undefined && prop.valueDeclaration && hasSyntacticModifier(prop.valueDeclaration, ModifierFlags.Static);
         }
 
-        function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type, isJSX = false): Symbol | undefined {
-            return getSpellingSuggestionForName(isString(name) ? name : idText(name), getPropertiesOfType(containingType), SymbolFlags.Value, isJSX);
+        function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type, isJsxAttr: boolean): Symbol | undefined {
+            return getSpellingSuggestionForName(isString(name) ? name : idText(name), getPropertiesOfType(containingType), SymbolFlags.Value, isJsxAttr);
         }
 
-        function getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type, isJSX = false): string | undefined {
-            const suggestion = getSuggestedSymbolForNonexistentProperty(name, containingType, isJSX);
+        function getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type, isJsxAttr: boolean): string | undefined {
+            const suggestion = getSuggestedSymbolForNonexistentProperty(name, containingType, isJsxAttr);
             return suggestion && symbolName(suggestion);
         }
 
@@ -24892,7 +24892,7 @@ namespace ts {
                 // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
                 // So the table *contains* `x` but `x` isn't actually in scope.
                 // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
-                return symbol || getSpellingSuggestionForName(unescapeLeadingUnderscores(name), arrayFrom(symbols.values()), meaning);
+                return symbol || getSpellingSuggestionForName(unescapeLeadingUnderscores(name), arrayFrom(symbols.values()), meaning, false);
             });
             return result;
         }
@@ -24903,7 +24903,7 @@ namespace ts {
         }
 
         function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
-            return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember);
+            return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember, false);
         }
 
         function getSuggestionForNonexistentExport(name: Identifier, targetModule: Symbol): string | undefined {
@@ -24953,8 +24953,8 @@ namespace ts {
          *        (0.4 allows 1 substitution/transposition for every 5 characters,
          *         and 1 insertion/deletion at 3 characters)
          */
-        function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags, isJSX = false): Symbol | undefined {
-            return getSpellingSuggestion(name, symbols, getCandidateName, isJSX);
+        function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags, isJsxAttr: boolean): Symbol | undefined {
+            return getSpellingSuggestion(name, symbols, getCandidateName, isJsxAttr);
             function getCandidateName(candidate: Symbol) {
                 const candidateName = symbolName(candidate);
                 if (startsWith(candidateName, "\"")) {
