@@ -811,7 +811,7 @@ declare namespace ts {
         kind: SyntaxKind.TupleType;
         elements: NodeArray<TypeNode | NamedTupleMember>;
     }
-    export interface NamedTupleMember extends TypeNode, JSDocContainer {
+    export interface NamedTupleMember extends TypeNode, JSDocContainer, Declaration {
         kind: SyntaxKind.NamedTupleMember;
         dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         name: Identifier;
@@ -2483,7 +2483,7 @@ declare namespace ts {
         minLength: number;
         hasRestElement: boolean;
         readonly: boolean;
-        associatedNames?: __String[];
+        labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
     }
     export interface TupleTypeReference extends TypeReference {
         target: TupleType;

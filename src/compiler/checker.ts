@@ -4568,9 +4568,9 @@ namespace ts {
                                         createRestTypeNode(createArrayTypeNode(tupleConstituentNodes[i])) :
                                         createOptionalTypeNode(tupleConstituentNodes[i]);
                                 }
-                                if ((type.target as TupleType).associatedNames) {
+                                if ((type.target as TupleType).labeledElementDeclarations) {
                                     for (let i = 0; i < tupleConstituentNodes.length; i++) {
-                                        tupleConstituentNodes[i] = createNamedTupleMember(createIdentifier(unescapeLeadingUnderscores((type.target as TupleType).associatedNames![i])), tupleConstituentNodes[i]);
+                                        tupleConstituentNodes[i] = createNamedTupleMember(createIdentifier(unescapeLeadingUnderscores(getTupleElementLabel((type.target as TupleType).labeledElementDeclarations![i]))), tupleConstituentNodes[i]);
                                     }
                                 }
                                 const tupleTypeNode = setEmitFlags(createTupleTypeNode(tupleConstituentNodes), EmitFlags.SingleLine);
@@ -12104,15 +12104,8 @@ namespace ts {
             const lastElement = lastOrUndefined(node.elements);
             const restElement = lastElement && unwrapNamedTupleMember(lastElement).kind === SyntaxKind.RestType ? lastElement : undefined;
             const minLength = findLastIndex(node.elements, n => unwrapNamedTupleMember(n).kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
-            let missingName = false;
-            const names = map(node.elements, e => {
-                if (e.kind !== SyntaxKind.NamedTupleMember) {
-                    missingName = true;
-                    return escapeLeadingUnderscores("arg");
-                }
-                return (e as NamedTupleMember).name.escapedText;
-            });
-            return getTupleTypeOfArity(node.elements.length, minLength, !!restElement, readonly, /*associatedNames*/ missingName ? undefined : names);
+            const missingName = some(node.elements, e => e.kind !== SyntaxKind.NamedTupleMember);
+            return getTupleTypeOfArity(node.elements.length, minLength, !!restElement, readonly, /*associatedNames*/ missingName ? undefined : node.elements as readonly NamedTupleMember[]);
         }
 
         // Return true if the given type reference node is directly aliased or if it needs to be deferred
@@ -12209,7 +12202,7 @@ namespace ts {
         //
         // Note that the generic type created by this function has no symbol associated with it. The same
         // is true for each of the synthesized type parameters.
-        function createTupleTypeOfArity(arity: number, minLength: number, hasRestElement: boolean, readonly: boolean, associatedNames: __String[] | undefined): TupleType {
+        function createTupleTypeOfArity(arity: number, minLength: number, hasRestElement: boolean, readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration)[] | undefined): TupleType {
             let typeParameters: TypeParameter[] | undefined;
             const properties: Symbol[] = [];
             const maxLength = hasRestElement ? arity - 1 : arity;
@@ -12220,6 +12213,7 @@ namespace ts {
                     if (i < maxLength) {
                         const property = createSymbol(SymbolFlags.Property | (i >= minLength ? SymbolFlags.Optional : 0),
                             "" + i as __String, readonly ? CheckFlags.Readonly : 0);
+                        property.tupleLabelDeclaration = namedMemberDeclarations?.[i];
                         property.type = typeParameter;
                         properties.push(property);
                     }
@@ -12249,25 +12243,25 @@ namespace ts {
             type.minLength = minLength;
             type.hasRestElement = hasRestElement;
             type.readonly = readonly;
-            type.associatedNames = associatedNames;
+            type.labeledElementDeclarations = namedMemberDeclarations;
             return type;
         }
 
-        function getTupleTypeOfArity(arity: number, minLength: number, hasRestElement: boolean, readonly: boolean, associatedNames?: __String[]): GenericType {
-            const key = arity + (hasRestElement ? "+" : ",") + minLength + (readonly ? "R" : "") + (associatedNames && associatedNames.length ? "," + associatedNames.join(",") : "");
+        function getTupleTypeOfArity(arity: number, minLength: number, hasRestElement: boolean, readonly: boolean, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]): GenericType {
+            const key = arity + (hasRestElement ? "+" : ",") + minLength + (readonly ? "R" : "") + (namedMemberDeclarations && namedMemberDeclarations.length ? "," + map(namedMemberDeclarations, getNodeId).join(",") : "");
             let type = tupleTypes.get(key);
             if (!type) {
-                tupleTypes.set(key, type = createTupleTypeOfArity(arity, minLength, hasRestElement, readonly, associatedNames));
+                tupleTypes.set(key, type = createTupleTypeOfArity(arity, minLength, hasRestElement, readonly, namedMemberDeclarations));
             }
             return type;
         }
 
-        function createTupleType(elementTypes: readonly Type[], minLength = elementTypes.length, hasRestElement = false, readonly = false, associatedNames?: __String[]) {
+        function createTupleType(elementTypes: readonly Type[], minLength = elementTypes.length, hasRestElement = false, readonly = false, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]) {
             const arity = elementTypes.length;
             if (arity === 1 && hasRestElement) {
                 return createArrayType(elementTypes[0], readonly);
             }
-            const tupleType = getTupleTypeOfArity(arity, minLength, arity > 0 && hasRestElement, readonly, associatedNames);
+            const tupleType = getTupleTypeOfArity(arity, minLength, arity > 0 && hasRestElement, readonly, namedMemberDeclarations);
             return elementTypes.length ? createTypeReference(tupleType, elementTypes) : tupleType;
         }
 
@@ -12282,7 +12276,7 @@ namespace ts {
                 Math.max(0, tuple.minLength - index),
                 tuple.hasRestElement,
                 tuple.readonly,
-                tuple.associatedNames && tuple.associatedNames.slice(index),
+                tuple.labeledElementDeclarations && tuple.labeledElementDeclarations.slice(index),
             );
         }
 
@@ -14282,7 +14276,7 @@ namespace ts {
                 minLength;
             const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, modifiers);
             return contains(elementTypes, errorType) ? errorType :
-                createTupleType(elementTypes, newMinLength, tupleType.target.hasRestElement, newReadonly, tupleType.target.associatedNames);
+                createTupleType(elementTypes, newMinLength, tupleType.target.hasRestElement, newReadonly, tupleType.target.labeledElementDeclarations);
         }
 
         function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
@@ -18539,7 +18533,7 @@ namespace ts {
                 const elementTypes = map(getTypeArguments(source), t => inferReverseMappedType(t, target, constraint));
                 const minLength = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
                     getTypeReferenceArity(source) - (source.target.hasRestElement ? 1 : 0) : source.target.minLength;
-                return createTupleType(elementTypes, minLength, source.target.hasRestElement, source.target.readonly, source.target.associatedNames);
+                return createTupleType(elementTypes, minLength, source.target.hasRestElement, source.target.readonly, source.target.labeledElementDeclarations);
             }
             // For all other object types we infer a new object type where the reverse mapping has been
             // applied to the type of each property.
@@ -25119,7 +25113,7 @@ namespace ts {
         function getArrayifiedType(type: Type) {
             return type.flags & TypeFlags.Union ? mapType(type, getArrayifiedType) :
                 type.flags & (TypeFlags.Any | TypeFlags.Instantiable) || isMutableArrayOrTuple(type) ? type :
-                isTupleType(type) ? createTupleType(getTypeArguments(type), type.target.minLength, type.target.hasRestElement, /*readonly*/ false, type.target.associatedNames) :
+                isTupleType(type) ? createTupleType(getTypeArguments(type), type.target.minLength, type.target.hasRestElement, /*readonly*/ false, type.target.labeledElementDeclarations) :
                 createArrayType(getIndexedAccessType(type, numberType));
         }
 
@@ -26979,6 +26973,11 @@ namespace ts {
             return type;
         }
 
+        function getTupleElementLabel(d: ParameterDeclaration | NamedTupleMember) {
+            Debug.assert(isIdentifier(d.name)); // Parameter declarations could be binding patterns, but we only allow identifier names
+            return d.name.escapedText;
+        }
+
         function getParameterNameAtPosition(signature: Signature, pos: number) {
             const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
             if (pos < paramCount) {
@@ -26987,11 +26986,31 @@ namespace ts {
             const restParameter = signature.parameters[paramCount] || unknownSymbol;
             const restType = getTypeOfSymbol(restParameter);
             if (isTupleType(restType)) {
-                const associatedNames = (<TupleType>(<TypeReference>restType).target).associatedNames;
+                const associatedNames = (<TupleType>(<TypeReference>restType).target).labeledElementDeclarations;
                 const index = pos - paramCount;
-                return associatedNames && associatedNames[index] || restParameter.escapedName + "_" + index as __String;
+                return associatedNames && getTupleElementLabel(associatedNames[index]) || restParameter.escapedName + "_" + index as __String;
             }
             return restParameter.escapedName;
+        }
+
+        function isValidDeclarationForTupleLabel(d: Declaration): d is NamedTupleMember | (ParameterDeclaration & { name: Identifier }) {
+            return d.kind === SyntaxKind.NamedTupleMember || (isParameter(d) && isIdentifier(d.name));
+        }
+
+        function getNameableDeclarationAtPosition(signature: Signature, pos: number) {
+            const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
+            if (pos < paramCount) {
+                const decl = signature.parameters[pos].valueDeclaration;
+                return decl && isValidDeclarationForTupleLabel(decl) ? decl : undefined;
+            }
+            const restParameter = signature.parameters[paramCount] || unknownSymbol;
+            const restType = getTypeOfSymbol(restParameter);
+            if (isTupleType(restType)) {
+                const associatedNames = (<TupleType>(<TypeReference>restType).target).labeledElementDeclarations;
+                const index = pos - paramCount;
+                return associatedNames && associatedNames[index];
+            }
+            return restParameter.valueDeclaration && isValidDeclarationForTupleLabel(restParameter.valueDeclaration) ? restParameter.valueDeclaration : undefined;
         }
 
         function getTypeAtPosition(signature: Signature, pos: number): Type {
@@ -27024,14 +27043,26 @@ namespace ts {
                 return restType;
             }
             const types = [];
-            const names = [];
+            let names: (NamedTupleMember | ParameterDeclaration)[] | undefined = [];
             for (let i = pos; i < nonRestCount; i++) {
                 types.push(getTypeAtPosition(source, i));
-                names.push(getParameterNameAtPosition(source, i));
+                const name = getNameableDeclarationAtPosition(source, i);
+                if (name && names) {
+                    names.push(name);
+                }
+                else {
+                    names = undefined;
+                }
             }
             if (restType) {
                 types.push(getIndexedAccessType(restType, numberType));
-                names.push(getParameterNameAtPosition(source, nonRestCount));
+                const name = getNameableDeclarationAtPosition(source, nonRestCount);
+                if (name && names) {
+                    names.push(name);
+                }
+                else {
+                    names = undefined;
+                }
             }
             const minArgumentCount = getMinArgumentCount(source);
             const minLength = minArgumentCount < pos ? 0 : minArgumentCount - pos;

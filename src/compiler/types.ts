@@ -1278,7 +1278,7 @@ namespace ts {
         elements: NodeArray<TypeNode | NamedTupleMember>;
     }
 
-    export interface NamedTupleMember extends TypeNode, JSDocContainer {
+    export interface NamedTupleMember extends TypeNode, JSDocContainer, Declaration {
         kind: SyntaxKind.NamedTupleMember;
         dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         name: Identifier;
@@ -4170,6 +4170,7 @@ namespace ts {
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
         isConstructorDeclaredProperty?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
+        tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     }
 
     /* @internal */
@@ -4642,7 +4643,7 @@ namespace ts {
         minLength: number;
         hasRestElement: boolean;
         readonly: boolean;
-        associatedNames?: __String[];
+        labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
     }
 
     export interface TupleTypeReference extends TypeReference {

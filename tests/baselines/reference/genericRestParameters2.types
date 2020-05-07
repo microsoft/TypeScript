@@ -423,7 +423,7 @@ type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
 >z : boolean[]
 
 type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
->T02 : [args_0: number, args_1: string, args_2: ...boolean[]]
+>T02 : [number, string, ...boolean[]]
 >args : [number, string, ...boolean[]]
 
 type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
@@ -433,7 +433,7 @@ type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => 
 >z : boolean[]
 
 type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
->T04 : [args_0: number, args_1: string, args_2: ...boolean[]]
+>T04 : [number, string, ...boolean[]]
 >args : [number, string, ...boolean[]]
 
 type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
@@ -442,7 +442,7 @@ type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
 >args : T
 
 type T06 = T05<[number, ...boolean[]]>;
->T06 : [x: string, args_0: number, args_1: ...boolean[]]
+>T06 : [string, number, ...boolean[]]
 
 type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? { head: A, tail: B } : any[];
 >P1 : P1<T>
