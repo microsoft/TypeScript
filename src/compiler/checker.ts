@@ -13245,7 +13245,7 @@ namespace ts {
                         }
                         else {
                             let suggestion: string | undefined;
-                            if (propName !== undefined && (suggestion = getSuggestionForNonexistentProperty(propName as string, objectType, false))) {
+                            if (propName !== undefined && (suggestion = getSuggestionForNonexistentProperty(propName as string, objectType, /** isJsxAttr */ false))) {
                                 if (suggestion !== undefined) {
                                     error(accessExpression.argumentExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName as string, typeToString(objectType), suggestion);
                                 }
@@ -16319,7 +16319,7 @@ namespace ts {
                                         errorNode = prop.valueDeclaration.name;
                                     }
                                     const propName = symbolToString(prop);
-                                    const suggestion = getSuggestionForNonexistentProperty(propName, errorTarget, true);
+                                    const suggestion = getSuggestionForNonexistentProperty(propName, errorTarget, /** isJsxAttr */ true);
                                     if (suggestion) reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(errorTarget), suggestion);
                                     else reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(errorTarget));
                                 }
@@ -16335,7 +16335,7 @@ namespace ts {
 
                                         const name = propDeclaration.name!;
                                         if (isIdentifier(name)) {
-                                            suggestion = getSuggestionForNonexistentProperty(name, errorTarget, false);
+                                            suggestion = getSuggestionForNonexistentProperty(name, errorTarget, /** isJsxAttr */ false);
                                         }
                                     }
                                     if (suggestion !== undefined) {
@@ -24852,7 +24852,7 @@ namespace ts {
                     relatedInfo = createDiagnosticForNode(propNode, Diagnostics.Did_you_forget_to_use_await);
                 }
                 else {
-                    const suggestion = getSuggestedSymbolForNonexistentProperty(propNode, containingType, false);
+                    const suggestion = getSuggestedSymbolForNonexistentProperty(propNode, containingType, /** isJsxAttr */ false);
                     if (suggestion !== undefined) {
                         const suggestedName = symbolName(suggestion);
                         errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestedName);
@@ -24892,7 +24892,7 @@ namespace ts {
                 // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
                 // So the table *contains* `x` but `x` isn't actually in scope.
                 // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
-                return symbol || getSpellingSuggestionForName(unescapeLeadingUnderscores(name), arrayFrom(symbols.values()), meaning, false);
+                return symbol || getSpellingSuggestionForName(unescapeLeadingUnderscores(name), arrayFrom(symbols.values()), meaning, /** isJsxAttr */ false);
             });
             return result;
         }
@@ -24903,7 +24903,7 @@ namespace ts {
         }
 
         function getSuggestedSymbolForNonexistentModule(name: Identifier, targetModule: Symbol): Symbol | undefined {
-            return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember, false);
+            return targetModule.exports && getSpellingSuggestionForName(idText(name), getExportsOfModuleAsArray(targetModule), SymbolFlags.ModuleMember, /** isJsxAttr */ false);
         }
 
         function getSuggestionForNonexistentExport(name: Identifier, targetModule: Symbol): string | undefined {

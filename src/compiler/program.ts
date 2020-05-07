@@ -2784,7 +2784,7 @@ namespace ts {
                 }
                 else {
                     const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
-                    const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity, false);
+                    const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity, /** isJsxAttr */ false);
                     const message = suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0;
                     fileProcessingDiagnostics.add(createFileDiagnostic(
                         file,
