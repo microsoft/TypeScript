@@ -4029,11 +4029,13 @@ namespace ts {
                         }
 
                         if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
-                            getAccessor = member;
+                            // eslint-disable-next-line
+                            getAccessor = <GetAccessorDeclaration>member;
                         }
 
                         if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
-                            setAccessor = member;
+                            // eslint-disable-next-line
+                            setAccessor = <SetAccessorDeclaration>member;
                         }
                     }
                 }
