@@ -176,7 +176,7 @@ interface RegExp {
      *               this regular expression will be replaced
      * @param replacer A function that returns the replacement text.
      */
-    [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string;
+    [Symbol.replace](string: string, replacer: (substring: string, ...args: string[]) => string): string;
 
     /**
      * Finds the position beginning first substring match in a regular expression search
@@ -225,7 +225,7 @@ interface String {
      * @param searchValue A object can search for and replace matches within a string.
      * @param replacer A function that returns the replacement text.
      */
-    replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: (number | string)[]) => string): string;
 
     /**
      * Finds the first substring match in a regular expression search.

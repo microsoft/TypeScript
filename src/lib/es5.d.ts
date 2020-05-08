@@ -431,7 +431,7 @@ interface String {
      * @param searchValue A string to search for.
      * @param replacer A function that returns the replacement text.
      */
-    replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: string | RegExp, replacer: (substring: string, ...args: (number | string)[]) => string): string;
 
     /**
      * Finds the first substring match in a regular expression search.
