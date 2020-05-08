@@ -5168,6 +5168,9 @@
       <Item ItemId=";Fix_all_incorrect_return_type_of_an_async_functions_90037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Fix all incorrect return type of an async functions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Исправьте все неправильные возвращаемые типы асинхронных функций.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
