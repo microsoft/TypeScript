@@ -346,7 +346,7 @@ namespace ts.codefix {
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
             const name = factory.cloneNode(param.name);
             setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-            return typeNode && factory.createJSDocParameterTag(/*tagName*/ undefined, name, !!inference.isOptional, factory.createJSDocTypeExpression(typeNode), /*isNameFirst*/ undefined, "");
+            return typeNode && factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!inference.isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
@@ -382,7 +382,7 @@ namespace ts.codefix {
                 const oldParam = oldTag as JSDocParameterTag;
                 const newParam = newTag as JSDocParameterTag;
                 return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                    ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, newParam.isBracketed, newParam.typeExpression, /*isNameFirst*/ undefined, oldParam.comment)
+                    ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
                     : undefined;
             }
             case SyntaxKind.JSDocReturnTag:

@@ -39,14 +39,20 @@ namespace ts.codefix {
     });
 
     function getInfo(sourceFile: SourceFile, checker: TypeChecker, pos: number): Info | undefined {
-        const returnTypeNode = getReturnTypeNode(sourceFile, pos);
+        if (isInJSFile(sourceFile)) {
+            return undefined;
+        }
+
+        const token = getTokenAtPosition(sourceFile, pos);
+        const func = findAncestor(token, isFunctionLikeDeclaration);
+        const returnTypeNode = func?.type;
         if (!returnTypeNode) {
             return undefined;
         }
 
         const returnType = checker.getTypeFromTypeNode(returnTypeNode);
         const promisedType = checker.getAwaitedType(returnType) || checker.getVoidType();
-        const promisedTypeNode = checker.typeToTypeNode(promisedType);
+        const promisedTypeNode = checker.typeToTypeNode(promisedType, /*enclosingDeclaration*/ returnTypeNode, /*flags*/ undefined);
         if (promisedTypeNode) {
             return { returnTypeNode, returnType, promisedTypeNode, promisedType };
         }
@@ -54,17 +60,5 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, returnTypeNode: TypeNode, promisedTypeNode: TypeNode): void {
         changes.replaceNode(sourceFile, returnTypeNode, factory.createTypeReferenceNode("Promise", [promisedTypeNode]));
-    }
-
-    function getReturnTypeNode(sourceFile: SourceFile, pos: number): TypeNode | undefined {
-        if (isInJSFile(sourceFile)) {
-            return undefined;
-        }
-
-        const token = getTokenAtPosition(sourceFile, pos);
-        const parent = findAncestor(token, isFunctionLikeDeclaration);
-        if (parent?.type) {
-            return parent.type;
-        }
     }
 }

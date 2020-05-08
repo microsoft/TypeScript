@@ -657,6 +657,7 @@ namespace vfs {
          */
         public readFileSync(path: string, encoding?: string | null): string | Buffer;
         public readFileSync(path: string, encoding: string | null = null) { // eslint-disable-line no-null/no-null
+            ts.Debug.assert(encoding === null || Buffer.isEncoding(encoding)); // eslint-disable-line no-null/no-null
             const { node } = this._walk(this._resolve(path));
             if (!node) throw createIOError("ENOENT");
             if (isDirectory(node)) throw createIOError("EISDIR");

@@ -533,6 +533,7 @@ namespace ts.refactor {
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ImportClause:
+            case SyntaxKind.NamespaceImport:
                 return true;
             case SyntaxKind.VariableDeclaration:
                 return isVariableDeclarationInImport(decl as VariableDeclaration);

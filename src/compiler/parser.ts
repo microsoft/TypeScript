@@ -5168,9 +5168,7 @@ namespace ts {
             }
             // Decorators, Modifiers, questionToken, and exclamationToken are not supported by property assignments and are reported in the grammar checker
             if (decorators) factory.trackExtraneousChildNodes(node, node.decorators = decorators);
-            // TODO(rbuckton): Use this instead...
-            // if (modifiers) factory.trackExtraneousChildNodes(node, node.modifiers = modifiers);
-            if (modifiers) node.modifiers = modifiers;
+            if (modifiers) factory.trackExtraneousChildNodes(node, node.modifiers = modifiers);
             if (questionToken) factory.trackExtraneousChildNode(node, node.questionToken = questionToken);
             if (exclamationToken) factory.trackExtraneousChildNode(node, node.exclamationToken = exclamationToken);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -5890,8 +5888,8 @@ namespace ts {
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.
                         const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                         setTextRangePos(missing, pos);
-                        missing.decorators = decorators;
-                        missing.modifiers = modifiers;
+                        if (decorators) factory.trackExtraneousChildNodes(missing, missing.decorators = decorators);
+                        if (modifiers) factory.trackExtraneousChildNodes(missing, missing.modifiers = modifiers);
                         return missing;
                     }
                     return undefined!; // TODO: GH#18217

@@ -293,6 +293,9 @@ namespace ts {
         // symbol has no doc comment, then the empty array will be returned.
         documentationComment?: SymbolDisplayPart[];
 
+        contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
+        contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
+
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no JSDoc tags, then the empty array will be returned.
         tags?: JSDocTagInfo[];
@@ -328,6 +331,25 @@ namespace ts {
                 this.documentationComment = getDocumentationComment(this.declarations, checker);
             }
             return this.documentationComment;
+        }
+
+        getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+            switch (context?.kind) {
+                case SyntaxKind.GetAccessor:
+                    if (!this.contextualGetAccessorDocumentationComment) {
+                        this.contextualGetAccessorDocumentationComment = emptyArray;
+                        this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
+                    }
+                    return this.contextualGetAccessorDocumentationComment;
+                case SyntaxKind.SetAccessor:
+                    if (!this.contextualSetAccessorDocumentationComment) {
+                        this.contextualSetAccessorDocumentationComment = emptyArray;
+                        this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
+                    }
+                    return this.contextualSetAccessorDocumentationComment;
+                default:
+                    return this.getDocumentationComment(checker);
+            }
         }
 
         getJsDocTags(): JSDocTagInfo[] {
