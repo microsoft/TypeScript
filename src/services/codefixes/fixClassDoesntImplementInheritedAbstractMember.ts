@@ -41,7 +41,9 @@ namespace ts.codefix {
         // so duplicates cannot occur.
         const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
-        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
+        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, context, preferences, importAdder, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        importAdder.writeFixes(changeTracker);
     }
 
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {

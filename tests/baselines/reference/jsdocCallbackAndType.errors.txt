@@ -1,0 +1,15 @@
+/a.js(8,3): error TS2554: Expected 0 arguments, but got 1.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @template T
+     * @callback B
+     */
+    /** @type {B<string>} */
+    let b;
+    b();
+    b(1);
+      ~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    

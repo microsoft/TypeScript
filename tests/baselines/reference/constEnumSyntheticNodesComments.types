@@ -1,0 +1,64 @@
+=== tests/cases/compiler/constEnumSyntheticNodesComments.ts ===
+const enum En { A, B, C, D }
+>En : En
+>A : En.A
+>B : En.B
+>C : En.C
+>D : En.D
+
+function assert<T>(x: T) {
+>assert : <T>(x: T) => T
+>x : T
+
+    return x;
+>x : T
+}
+
+function verify(a: En) {
+>verify : (a: En) => 0 | 1 | 2 | 3
+>a : En
+
+    switch (a) {
+>a : En
+
+        case En.A:
+>En.A : En.A
+>En : typeof En
+>A : En.A
+
+            return assert<0>(a);
+>assert<0>(a) : 0
+>assert : <T>(x: T) => T
+>a : En.A
+
+        case En["B"]:
+>En["B"] : En.B
+>En : typeof En
+>"B" : "B"
+
+            return assert<1>(a);
+>assert<1>(a) : 1
+>assert : <T>(x: T) => T
+>a : En.B
+
+        case En[`C`]:
+>En[`C`] : En.C
+>En : typeof En
+>`C` : "C"
+
+            return assert<2>(a);
+>assert<2>(a) : 2
+>assert : <T>(x: T) => T
+>a : En.C
+
+        case En["\u{44}"]:
+>En["\u{44}"] : En.D
+>En : typeof En
+>"\u{44}" : "D"
+
+            return assert<3>(a);
+>assert<3>(a) : 3
+>assert : <T>(x: T) => T
+>a : En.D
+    }
+}

@@ -168,6 +168,30 @@ namespace ts {
                 const expectedCoalescedImports = sortedImports;
                 assertListEqual(actualCoalescedImports, expectedCoalescedImports);
             });
+
+            it("Combine type-only imports separately from other imports", () => {
+                const sortedImports = parseImports(
+                    `import type { x } from "lib";`,
+                    `import type { y } from "lib";`,
+                    `import { z } from "lib";`);
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = parseImports(
+                    `import { z } from "lib";`,
+                    `import type { x, y } from "lib";`);
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
+
+            it("Do not combine type-only default, namespace, or named imports with each other", () => {
+                const sortedImports = parseImports(
+                    `import type { x } from "lib";`,
+                    `import type * as y from "lib";`,
+                    `import type z from "lib";`);
+                // Default import could be rewritten as a named import to combine with `x`,
+                // but seems of debatable merit.
+                const actualCoalescedImports = OrganizeImports.coalesceImports(sortedImports);
+                const expectedCoalescedImports = actualCoalescedImports;
+                assertListEqual(actualCoalescedImports, expectedCoalescedImports);
+            });
         });
 
         describe("Coalesce exports", () => {
@@ -240,7 +264,27 @@ namespace ts {
                     `export { x as a, y, z as b } from "lib";`);
                 assertListEqual(actualCoalescedExports, expectedCoalescedExports);
             });
+
+            it("Keep type-only exports separate", () => {
+                const sortedExports = parseExports(
+                    `export { x };`,
+                    `export type { y };`);
+                const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+                const expectedCoalescedExports = sortedExports;
+                assertListEqual(actualCoalescedExports, expectedCoalescedExports);
+            });
+
+            it("Combine type-only exports", () => {
+                const sortedExports = parseExports(
+                    `export type { x };`,
+                    `export type { y };`);
+                const actualCoalescedExports = OrganizeImports.coalesceExports(sortedExports);
+                const expectedCoalescedExports = parseExports(
+                    `export type { x, y };`);
+                assertListEqual(actualCoalescedExports, expectedCoalescedExports);
+            });
         });
+
 
         describe("Baselines", () => {
 
@@ -278,6 +322,16 @@ export const Other = 1;
                 const testFile = {
                     path: "/a.ts",
                     content: "declare module '*';",
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
+
+            it("doesn't return any changes when the text would be identical", () => {
+                const testFile = {
+                    path: "/a.ts",
+                    content: `import { f } from 'foo';\nf();`
                 };
                 const languageService = makeLanguageService(testFile);
                 const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
@@ -323,6 +377,16 @@ D();
                 },
                 libFile);
 
+                it("doesn't return any changes when the text would be identical", () => {
+                    const testFile = {
+                        path: "/a.ts",
+                        content: `import { f } from 'foo';\nf();`
+                    };
+                    const languageService = makeLanguageService(testFile);
+                    const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                    assert.isEmpty(changes);
+                });
+
             testOrganizeImports("Unused_All",
                 {
                     path: "/test.ts",
@@ -334,19 +398,22 @@ import D from "lib";
                 },
                 libFile);
 
-            testOrganizeImports("Unused_Empty",
-                {
+            it("Unused_Empty", () => {
+                const testFile = {
                     path: "/test.ts",
                     content: `
 import { } from "lib";
 `,
-                },
-                libFile);
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
 
             testOrganizeImports("Unused_false_positive_module_augmentation",
-            {
-                path: "/test.d.ts",
-                content: `
+                {
+                    path: "/test.d.ts",
+                    content: `
 import foo from 'foo';
 import { Caseless } from 'caseless';
 
@@ -356,12 +423,12 @@ declare module 'caseless' {
         test(name: KeyType): boolean;
     }
 }`
-            });
+                });
 
             testOrganizeImports("Unused_preserve_imports_for_module_augmentation_in_non_declaration_file",
-            {
-                path: "/test.ts",
-                content: `
+                {
+                    path: "/test.ts",
+                    content: `
 import foo from 'foo';
 import { Caseless } from 'caseless';
 
@@ -373,23 +440,31 @@ declare module 'caseless' {
 }`
             });
 
-            testOrganizeImports("Unused_false_positive_shorthand_assignment",
-            {
+            it("Unused_false_positive_shorthand_assignment", () => {
+                const testFile = {
                     path: "/test.ts",
                     content: `
 import { x } from "a";
 const o = { x };
 `
-                });
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
 
-            testOrganizeImports("Unused_false_positive_export_shorthand",
-            {
+            it("Unused_false_positive_export_shorthand", () => {
+                const testFile = {
                     path: "/test.ts",
                     content: `
 import { x } from "a";
 export { x };
 `
-                });
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
 
             testOrganizeImports("MoveToTop",
                 {
@@ -406,7 +481,7 @@ D();
                 },
                 libFile);
 
-            // tslint:disable no-invalid-template-strings
+            /* eslint-disable no-template-curly-in-string */
             testOrganizeImports("MoveToTop_Invalid",
                 {
                     path: "/test.ts",
@@ -423,7 +498,19 @@ D();
 `,
                 },
                 libFile);
-            // tslint:enable no-invalid-template-strings
+            /* eslint-enable no-template-curly-in-string */
+
+            testOrganizeImports("TypeOnly",
+                {
+                    path: "/test.ts",
+                    content: `
+import { X } from "lib";
+import type Y from "lib";
+import { Z } from "lib";
+import type { A, B } from "lib";
+
+export { A, B, X, Y, Z };`
+                });
 
             testOrganizeImports("CoalesceMultipleModules",
                 {
@@ -668,7 +755,7 @@ export * from "lib";
                     },
                     libFile);
 
-                // tslint:disable no-invalid-template-strings
+                /* eslint-disable no-template-curly-in-string */
                 testOrganizeExports("MoveToTop_Invalid",
                     {
                         path: "/test.ts",
@@ -684,7 +771,7 @@ export { D } from "lib";
 `,
                     },
                     libFile);
-                // tslint:enable no-invalid-template-strings
+                /* eslint-enable no-template-curly-in-string */
 
                 testOrganizeExports("MoveToTop_WithImportsFirst",
                     {
@@ -831,14 +918,14 @@ export * from "lib";
             }
         });
 
-        function parseImports(...importStrings: string[]): ReadonlyArray<ImportDeclaration> {
+        function parseImports(...importStrings: string[]): readonly ImportDeclaration[] {
             const sourceFile = createSourceFile("a.ts", importStrings.join("\n"), ScriptTarget.ES2015, /*setParentNodes*/ true, ScriptKind.TS);
             const imports = filter(sourceFile.statements, isImportDeclaration);
             assert.equal(imports.length, importStrings.length);
             return imports;
         }
 
-        function parseExports(...exportStrings: string[]): ReadonlyArray<ExportDeclaration> {
+        function parseExports(...exportStrings: string[]): readonly ExportDeclaration[] {
             const sourceFile = createSourceFile("a.ts", exportStrings.join("\n"), ScriptTarget.ES2015, /*setParentNodes*/ true, ScriptKind.TS);
             const exports = filter(sourceFile.statements, isExportDeclaration);
             assert.equal(exports.length, exportStrings.length);
@@ -920,7 +1007,7 @@ export * from "lib";
             }
         }
 
-        function assertListEqual(list1: ReadonlyArray<Node>, list2: ReadonlyArray<Node>) {
+        function assertListEqual(list1: readonly Node[], list2: readonly Node[]) {
             if (list1 === undefined || list2 === undefined) {
                 assert.isUndefined(list1);
                 assert.isUndefined(list2);

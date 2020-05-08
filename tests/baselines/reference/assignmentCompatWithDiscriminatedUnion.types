@@ -299,7 +299,7 @@ namespace GH30170 {
 >val : Blue | Yellow
 
     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
->drawWithColor : (currentColor: "blue" | "yellow") => void
+>drawWithColor : (currentColor: 'blue' | 'yellow' | undefined) => void
 >currentColor : "blue" | "yellow"
 
         return draw({ color: currentColor });

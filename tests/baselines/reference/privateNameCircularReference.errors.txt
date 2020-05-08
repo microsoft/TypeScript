@@ -1,0 +1,22 @@
+tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts(2,5): error TS7022: '#foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts(2,17): error TS2729: Property '#bar' is used before its initialization.
+tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts(3,5): error TS7022: '#bar' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts(4,5): error TS7022: '["#baz"]' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts (4 errors) ====
+    class A {
+        #foo = this.#bar;
+        ~~~~
+!!! error TS7022: '#foo' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+                    ~~~~
+!!! error TS2729: Property '#bar' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts:3:5: '#bar' is declared here.
+        #bar = this.#foo;
+        ~~~~
+!!! error TS7022: '#bar' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+        ["#baz"] = this["#baz"]; // Error (should *not* be private name error)
+        ~~~~~~~~
+!!! error TS7022: '["#baz"]' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+    }
+    

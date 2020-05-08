@@ -1,0 +1,18 @@
+=== tests/cases/compiler/a.ts ===
+export type A = {};
+>A : A
+
+=== tests/cases/compiler/b.ts ===
+export class B {}
+>B : B
+
+=== tests/cases/compiler/c.ts ===
+import { A } from './a';
+>A : any
+
+import { B } from './b';
+>B : typeof B
+
+let b: B;
+>b : B
+

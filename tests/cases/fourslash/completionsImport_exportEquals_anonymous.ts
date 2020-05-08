@@ -18,6 +18,7 @@ const exportEntry: FourSlashInterface.ExpectedCompletionEntryObject = {
     sourceDisplay: "./foo-bar",
     text: "(property) export=: 0",
     kind: "property",
+    kindModifiers: "export",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions
 };

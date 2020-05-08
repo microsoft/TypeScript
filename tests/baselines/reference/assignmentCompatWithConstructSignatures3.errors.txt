@@ -14,7 +14,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
   Types of parameters 'x' and 'x' are incompatible.
     Types of parameters 'arg' and 'arg' are incompatible.
       Type 'string' is not assignable to type 'T'.
-        'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+        'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(62,1): error TS2322: Type 'new (x: (arg: Base) => Derived) => Base' is not assignable to type 'new <T extends Base, U extends Derived>(x: (arg: T) => U) => T'.
   Types of parameters 'x' and 'x' are incompatible.
     Types of parameters 'arg' and 'arg' are incompatible.
@@ -143,7 +143,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Types of parameters 'arg' and 'arg' are incompatible.
 !!! error TS2322:       Type 'string' is not assignable to type 'T'.
-!!! error TS2322:         'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:         'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
     var b6: new <T extends Base, U extends Derived>(x: (arg: T) => U) => T; 
     a6 = b6; // ok
     b6 = a6; // ok

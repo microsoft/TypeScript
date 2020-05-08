@@ -1,0 +1,13 @@
+tests/cases/conformance/expressions/optionalChaining/taggedTemplateChain/taggedTemplateChain.ts(2,4): error TS1358: Tagged template expressions are not permitted in an optional chain.
+tests/cases/conformance/expressions/optionalChaining/taggedTemplateChain/taggedTemplateChain.ts(4,4): error TS1358: Tagged template expressions are not permitted in an optional chain.
+
+
+==== tests/cases/conformance/expressions/optionalChaining/taggedTemplateChain/taggedTemplateChain.ts (2 errors) ====
+    declare let a: any;
+    a?.`b`;
+       ~~~
+!!! error TS1358: Tagged template expressions are not permitted in an optional chain.
+    
+    a?.`b${1}c`;
+       ~~~~~~~~
+!!! error TS1358: Tagged template expressions are not permitted in an optional chain.

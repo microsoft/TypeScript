@@ -15,8 +15,8 @@ class Builder {
 }
 
 new Builder()
->new Builder()    .method("a")    .method()    .method("a") : any
->new Builder()    .method("a")    .method()    .method : any
+>new Builder()    .method("a")    .method()    .method("a") : Builder
+>new Builder()    .method("a")    .method()    .method : (param: string) => Builder
 >new Builder()    .method("a")    .method() : Builder
 >new Builder()    .method("a")    .method : (param: string) => Builder
 >new Builder()    .method("a") : Builder
@@ -32,7 +32,7 @@ new Builder()
 >method : (param: string) => Builder
 
     .method("a");
->method : any
+>method : (param: string) => Builder
 >"a" : "a"
 
     

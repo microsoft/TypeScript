@@ -1,0 +1,46 @@
+=== tests/cases/compiler/jsxExcessPropsAndAssignability.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from 'react';
+>React : Symbol(React, Decl(jsxExcessPropsAndAssignability.tsx, 2, 6))
+
+const myHoc = <ComposedComponentProps extends any>(
+>myHoc : Symbol(myHoc, Decl(jsxExcessPropsAndAssignability.tsx, 4, 5))
+>ComposedComponentProps : Symbol(ComposedComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 4, 15))
+
+    ComposedComponent: React.ComponentClass<ComposedComponentProps>,
+>ComposedComponent : Symbol(ComposedComponent, Decl(jsxExcessPropsAndAssignability.tsx, 4, 51))
+>React : Symbol(React, Decl(jsxExcessPropsAndAssignability.tsx, 2, 6))
+>ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
+>ComposedComponentProps : Symbol(ComposedComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 4, 15))
+
+) => {
+    type WrapperComponentProps = ComposedComponentProps & { myProp: string };
+>WrapperComponentProps : Symbol(WrapperComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 6, 6))
+>ComposedComponentProps : Symbol(ComposedComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 4, 15))
+>myProp : Symbol(myProp, Decl(jsxExcessPropsAndAssignability.tsx, 7, 59))
+
+    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;
+>WrapperComponent : Symbol(WrapperComponent, Decl(jsxExcessPropsAndAssignability.tsx, 8, 9))
+>React : Symbol(React, Decl(jsxExcessPropsAndAssignability.tsx, 2, 6))
+>ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
+>WrapperComponentProps : Symbol(WrapperComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 6, 6))
+
+    const props: ComposedComponentProps = null as any;
+>props : Symbol(props, Decl(jsxExcessPropsAndAssignability.tsx, 10, 9))
+>ComposedComponentProps : Symbol(ComposedComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 4, 15))
+
+    // Expected no error, got none - good
+    <WrapperComponent {...props} myProp={'1000000'} />;
+>WrapperComponent : Symbol(WrapperComponent, Decl(jsxExcessPropsAndAssignability.tsx, 8, 9))
+>props : Symbol(props, Decl(jsxExcessPropsAndAssignability.tsx, 10, 9))
+>myProp : Symbol(myProp, Decl(jsxExcessPropsAndAssignability.tsx, 13, 32))
+
+    // Expected error, but got none - bad!
+    <WrapperComponent {...props} myProp={1000000} />;
+>WrapperComponent : Symbol(WrapperComponent, Decl(jsxExcessPropsAndAssignability.tsx, 8, 9))
+>props : Symbol(props, Decl(jsxExcessPropsAndAssignability.tsx, 10, 9))
+>myProp : Symbol(myProp, Decl(jsxExcessPropsAndAssignability.tsx, 15, 32))
+
+};
+

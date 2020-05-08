@@ -1,19 +1,19 @@
 === /user.js ===
 const json0 = require("./json.json");
->json0 : { "a": number; }
->require("./json.json") : { "a": number; }
+>json0 : { a: number; }
+>require("./json.json") : { a: number; }
 >require : any
 >"./json.json" : "./json.json"
 
 json0.b; // Error (good)
 >json0.b : any
->json0 : { "a": number; }
+>json0 : { a: number; }
 >b : any
 
 /** @type {{ b: number }} */
 const json1 = require("./json.json"); // No error (bad)
 >json1 : { b: number; }
->require("./json.json") : { "a": number; }
+>require("./json.json") : { a: number; }
 >require : any
 >"./json.json" : "./json.json"
 
@@ -30,7 +30,7 @@ const js0 = require("./js.js");
 
 json0.b; // Error (good)
 >json0.b : any
->json0 : { "a": number; }
+>json0 : { a: number; }
 >b : any
 
 /** @type {{ b: number }} */
@@ -47,7 +47,7 @@ js1.b;
 
 === /json.json ===
 { "a": 0 }
->{ "a": 0 } : { "a": number; }
+>{ "a": 0 } : { a: number; }
 >"a" : number
 >0 : 0
 
@@ -55,7 +55,7 @@ js1.b;
 module.exports = { a: 0 };
 >module.exports = { a: 0 } : { a: number; }
 >module.exports : { a: number; }
->module : { "/js": { a: number; }; }
+>module : { "\"/js\"": { a: number; }; }
 >exports : { a: number; }
 >{ a: 0 } : { a: number; }
 >a : number

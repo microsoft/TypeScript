@@ -24,6 +24,7 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.A = void 0;
     var A = /** @class */ (function () {
         function A() {
         }
@@ -34,6 +35,7 @@ define("a", ["require", "exports"], function (require, exports) {
 define("b", ["require", "exports", "tslib", "a"], function (require, exports, tslib_1, a_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.B = void 0;
     var B = /** @class */ (function (_super) {
         tslib_1.__extends(B, _super);
         function B() {
@@ -46,6 +48,7 @@ define("b", ["require", "exports", "tslib", "a"], function (require, exports, ts
 define("c", ["require", "exports", "tslib", "a"], function (require, exports, tslib_2, a_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.C = void 0;
     var C = /** @class */ (function (_super) {
         tslib_2.__extends(C, _super);
         function C() {

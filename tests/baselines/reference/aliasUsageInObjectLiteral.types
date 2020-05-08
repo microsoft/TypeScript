@@ -28,7 +28,7 @@ var b: { x: IHasVisualizationModel } = { x: moduleA };
 >moduleA : typeof moduleA
 
 var c: { y: { z: IHasVisualizationModel } } = { y: { z: moduleA } };
->c : { y: { z: IHasVisualizationModel; }; }
+>c : { y: {    z: IHasVisualizationModel;}; }
 >y : { z: IHasVisualizationModel; }
 >z : IHasVisualizationModel
 >{ y: { z: moduleA } } : { y: { z: typeof moduleA; }; }

@@ -28,7 +28,7 @@ declare function list<T>(a: T): T[];
 >a : T
 
 declare function box<V>(x: V): { value: V };
->box : <V>(x: V) => { value: V; }
+>box : <V>(x: V) => {    value: V;}
 >x : V
 >value : V
 
@@ -621,7 +621,7 @@ var z = identityM(x);
 // #3038
 
 export function keyOf<a>(value: { key: a; }): a {
->keyOf : <a>(value: { key: a; }) => a
+>keyOf : <a>(value: {    key: a;}) => a
 >value : { key: a; }
 >key : a
 
@@ -649,7 +649,7 @@ declare function toKeys<a>(values: a[], toKey: (value: a) => string): string[];
 >value : a
 
 toKeys(data, keyOf);  // Error
->toKeys(data, keyOf) : any
+>toKeys(data, keyOf) : string[]
 >toKeys : <a>(values: a[], toKey: (value: a) => string) => string[]
 >data : Data[]
 >keyOf : <a>(value: { key: a; }) => a

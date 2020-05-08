@@ -1,0 +1,8 @@
+Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics17.ts':
+/tests/cases/fourslash/a.js(1,15): error TS8010: Type annotations can only be used in TypeScript files.
+
+
+==== /tests/cases/fourslash/a.js (1 errors) ====
+    function F(a: number) { }
+                  ~~~~~~
+!!! error TS8010: Type annotations can only be used in TypeScript files.

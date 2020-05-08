@@ -124,3 +124,6 @@ async function * awaitedType1() {
 async function * awaitedType2() {
     const x = await Promise.resolve(1);
 }
+async function * nextType1(): { next(...args: [] | [number | PromiseLike<number>]): any } {
+    const x = yield; // `number | PromiseLike<number>` (should not await TNext)
+}

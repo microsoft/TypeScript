@@ -10,8 +10,8 @@ class C {
 }
 
 var c = new C<number>();
->c : any
->new C<number>() : any
+>c : C
+>new C<number>() : C
 >C : typeof C
 
 function Foo(): void { }

@@ -34,7 +34,7 @@ module M1 {
 >Window : Window
 
         export var p: W; // No error
->p : string | Window
+>p : string | globalThis.Window
     }
 }
 

@@ -1,0 +1,72 @@
+=== tests/cases/compiler/ambientModuleWithTemplateLiterals.ts ===
+declare module Foo {
+>Foo : typeof Foo
+
+    enum Bar {
+>Bar : Bar
+
+        a = `1`,
+>a : Bar.a
+>`1` : "1"
+
+        b = '2',
+>b : Bar.b
+>'2' : "2"
+
+        c = '3'
+>c : Bar.c
+>'3' : "3"
+    }
+
+    export const a = 'string';
+>a : "string"
+>'string' : "string"
+
+    export const b = `template`;
+>b : "template"
+>`template` : "template"
+
+    export const c = Bar.a;
+>c : Bar.a
+>Bar.a : Bar.a
+>Bar : typeof Bar
+>a : Bar.a
+
+    export const d = Bar['b'];
+>d : Bar.b
+>Bar['b'] : Bar.b
+>Bar : typeof Bar
+>'b' : "b"
+
+    export const e = Bar[`c`];
+>e : Bar.c
+>Bar[`c`] : Bar.c
+>Bar : typeof Bar
+>`c` : "c"
+}
+
+Foo.a;
+>Foo.a : "string"
+>Foo : typeof Foo
+>a : "string"
+
+Foo.b;
+>Foo.b : "template"
+>Foo : typeof Foo
+>b : "template"
+
+Foo.c;
+>Foo.c : Foo.Bar.a
+>Foo : typeof Foo
+>c : Foo.Bar.a
+
+Foo.d;
+>Foo.d : Foo.Bar.b
+>Foo : typeof Foo
+>d : Foo.Bar.b
+
+Foo.e;
+>Foo.e : Foo.Bar.c
+>Foo : typeof Foo
+>e : Foo.Bar.c
+

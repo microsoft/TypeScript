@@ -46,8 +46,8 @@ var f3: any;
 // None of these declarations should have any errors!
 // Truly recursive types
 var g: { x: typeof g; };
->g : { x: any; }
->x : { x: any; }
+>g : { x: typeof g; }
+>x : { x: typeof g; }
 >g : { x: any; }
 
 var g: typeof g.x;
@@ -57,8 +57,8 @@ var g: typeof g.x;
 >x : { x: any; }
 
 var h: () => typeof h;
->h : () => any
->h : () => any
+>h : () => typeof h
+>h : () => typeof h
 
 var h = h();
 >h : () => any
@@ -66,10 +66,10 @@ var h = h();
 >h : () => any
 
 var i: (x: typeof i) => typeof x;
+>i : (x: typeof i) => any
+>x : (x: typeof i) => any
 >i : (x: any) => any
->x : (x: any) => any
->i : (x: any) => any
->x : (x: any) => any
+>x : (x: any) => typeof x
 
 var i = i(i);
 >i : (x: any) => any
@@ -90,8 +90,8 @@ var j = j(j);
 
 // Same as h, i, j with construct signatures
 var h2: new () => typeof h2;
->h2 : new () => any
->h2 : new () => any
+>h2 : new () => typeof h2
+>h2 : new () => typeof h2
 
 var h2 = new h2();
 >h2 : new () => any
@@ -99,10 +99,10 @@ var h2 = new h2();
 >h2 : new () => any
 
 var i2: new (x: typeof i2) => typeof x;
+>i2 : new (x: typeof i2) => any
+>x : new (x: typeof i2) => any
 >i2 : new (x: any) => any
->x : new (x: any) => any
->i2 : new (x: any) => any
->x : new (x: any) => any
+>x : new (x: any) => typeof x
 
 var i2 = new i2(i2);
 >i2 : new (x: any) => any
@@ -144,8 +144,8 @@ var k = k[''];
 // Hybrid - contains type literals as well as type arguments
 // These two are recursive
 var hy1: { x: typeof hy1 }[];
->hy1 : { x: any[]; }[]
->x : { x: any[]; }[]
+>hy1 : { x: typeof hy1; }[]
+>x : { x: typeof hy1; }[]
 >hy1 : { x: any[]; }[]
 
 var hy1 = hy1[0].x;
@@ -157,8 +157,8 @@ var hy1 = hy1[0].x;
 >x : { x: any[]; }[]
 
 var hy2: { x: Array<typeof hy2> };
->hy2 : { x: any[]; }
->x : { x: any[]; }[]
+>hy2 : { x: Array<typeof hy2>; }
+>x : { x: Array<typeof hy2>; }[]
 >hy2 : { x: any[]; }
 
 var hy2 = hy2.x[0];

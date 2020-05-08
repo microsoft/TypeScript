@@ -10,7 +10,7 @@ class C1 {
 }
 
 type TupleType1 = [string, number, boolean];
->TupleType1 : [string, number, boolean]
+>TupleType1 : TupleType1
 
 class C2 {
 >C2 : C2
@@ -115,7 +115,7 @@ c3 = new C3({x: 0, "y": "y", z: true});
 >c3 : C3
 >new C3({x: 0, "y": "y", z: true}) : C3
 >C3 : typeof C3
->{x: 0, "y": "y", z: true} : { x: number; "y": string; z: true; }
+>{x: 0, "y": "y", z: true} : { x: number; y: string; z: true; }
 >x : number
 >0 : 0
 >"y" : string

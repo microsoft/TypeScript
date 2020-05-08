@@ -14,7 +14,7 @@ var S0 = /** @class */ (function () {
     Object.defineProperty(S0.prototype, "S1", {
         set: function (S2) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return S0;

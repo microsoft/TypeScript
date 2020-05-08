@@ -8,6 +8,6 @@
 //// }
 
 verify.codeFix({
-    description: "Remove declaration for: 'j'",
+    description: "Remove unused declaration for: 'j'",
     newRangeContent: "for(var i = 0; ;i++)",
 });

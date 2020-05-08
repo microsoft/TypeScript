@@ -193,6 +193,7 @@ module privateModule {
 //// [privacyTypeParametersOfInterfaceDeclFile.js]
 "use strict";
 exports.__esModule = true;
+exports.publicModule = exports.publicClassT = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {
     }

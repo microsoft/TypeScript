@@ -1,0 +1,19 @@
+tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts(6,13): error TS2339: Property '#prop' does not exist on type '{}'.
+tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts(8,14): error TS2339: Property '#prop' does not exist on type '{}'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameAndObjectRestSpread.ts (2 errors) ====
+    class C {
+        #prop = 1;
+    
+        method(other: C) {
+            const obj = { ...other };
+            obj.#prop;
+                ~~~~~
+!!! error TS2339: Property '#prop' does not exist on type '{}'.
+            const { ...rest } = other;
+            rest.#prop;
+                 ~~~~~
+!!! error TS2339: Property '#prop' does not exist on type '{}'.
+        }
+    }

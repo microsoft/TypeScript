@@ -46,6 +46,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var _a;
 exports.__esModule = true;
+exports.Test = exports.WithTags = exports.FooItem = exports.noPrivates = void 0;
 exports.noPrivates = (_a = /** @class */ (function () {
         function class_1() {
             this.p = 12;

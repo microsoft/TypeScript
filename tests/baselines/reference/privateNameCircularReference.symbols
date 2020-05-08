@@ -1,0 +1,21 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameCircularReference.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameCircularReference.ts, 0, 0))
+
+    #foo = this.#bar;
+>#foo : Symbol(A.#foo, Decl(privateNameCircularReference.ts, 0, 9))
+>this.#bar : Symbol(A.#bar, Decl(privateNameCircularReference.ts, 1, 21))
+>this : Symbol(A, Decl(privateNameCircularReference.ts, 0, 0))
+
+    #bar = this.#foo;
+>#bar : Symbol(A.#bar, Decl(privateNameCircularReference.ts, 1, 21))
+>this.#foo : Symbol(A.#foo, Decl(privateNameCircularReference.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameCircularReference.ts, 0, 0))
+
+    ["#baz"] = this["#baz"]; // Error (should *not* be private name error)
+>["#baz"] : Symbol(A["#baz"], Decl(privateNameCircularReference.ts, 2, 21))
+>"#baz" : Symbol(A["#baz"], Decl(privateNameCircularReference.ts, 2, 21))
+>this : Symbol(A, Decl(privateNameCircularReference.ts, 0, 0))
+>"#baz" : Symbol(A["#baz"], Decl(privateNameCircularReference.ts, 2, 21))
+}
+

@@ -1,0 +1,190 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/derivedUninitializedPropertyDeclaration.ts ===
+class A {
+>A : Symbol(A, Decl(derivedUninitializedPropertyDeclaration.ts, 0, 0))
+
+    property = 'x';
+>property : Symbol(A.property, Decl(derivedUninitializedPropertyDeclaration.ts, 0, 9))
+
+    m() { return 1 }
+>m : Symbol(A.m, Decl(derivedUninitializedPropertyDeclaration.ts, 1, 19))
+}
+class B extends A {
+>B : Symbol(B, Decl(derivedUninitializedPropertyDeclaration.ts, 3, 1))
+>A : Symbol(A, Decl(derivedUninitializedPropertyDeclaration.ts, 0, 0))
+
+    property: any; // error
+>property : Symbol(B.property, Decl(derivedUninitializedPropertyDeclaration.ts, 4, 19))
+}
+class BD extends A {
+>BD : Symbol(BD, Decl(derivedUninitializedPropertyDeclaration.ts, 6, 1))
+>A : Symbol(A, Decl(derivedUninitializedPropertyDeclaration.ts, 0, 0))
+
+    declare property: any; // ok because it's implicitly initialised
+>property : Symbol(BD.property, Decl(derivedUninitializedPropertyDeclaration.ts, 7, 20))
+}
+class BDBang extends A {
+>BDBang : Symbol(BDBang, Decl(derivedUninitializedPropertyDeclaration.ts, 9, 1))
+>A : Symbol(A, Decl(derivedUninitializedPropertyDeclaration.ts, 0, 0))
+
+    declare property!: any; // ! is not allowed, this is an ambient declaration
+>property : Symbol(BDBang.property, Decl(derivedUninitializedPropertyDeclaration.ts, 10, 24))
+}
+class BOther extends A {
+>BOther : Symbol(BOther, Decl(derivedUninitializedPropertyDeclaration.ts, 12, 1))
+>A : Symbol(A, Decl(derivedUninitializedPropertyDeclaration.ts, 0, 0))
+
+    declare m() { return 2 } // not allowed on methods
+>m : Symbol(BOther.m, Decl(derivedUninitializedPropertyDeclaration.ts, 13, 24))
+
+    declare nonce: any; // ok, even though it's not in the base
+>nonce : Symbol(BOther.nonce, Decl(derivedUninitializedPropertyDeclaration.ts, 14, 28))
+
+    declare property = 'y' // initialiser not allowed with declare
+>property : Symbol(BOther.property, Decl(derivedUninitializedPropertyDeclaration.ts, 15, 23))
+}
+class U {
+>U : Symbol(U, Decl(derivedUninitializedPropertyDeclaration.ts, 17, 1))
+
+    declare nonce: any; // ok, even though there's no base
+>nonce : Symbol(U.nonce, Decl(derivedUninitializedPropertyDeclaration.ts, 18, 9))
+}
+
+class C {
+>C : Symbol(C, Decl(derivedUninitializedPropertyDeclaration.ts, 20, 1))
+
+    p: string;
+>p : Symbol(C.p, Decl(derivedUninitializedPropertyDeclaration.ts, 22, 9))
+}
+class D extends C {
+>D : Symbol(D, Decl(derivedUninitializedPropertyDeclaration.ts, 24, 1))
+>C : Symbol(C, Decl(derivedUninitializedPropertyDeclaration.ts, 20, 1))
+
+    p: 'hi'; // error
+>p : Symbol(D.p, Decl(derivedUninitializedPropertyDeclaration.ts, 25, 19))
+}
+class DD extends C {
+>DD : Symbol(DD, Decl(derivedUninitializedPropertyDeclaration.ts, 27, 1))
+>C : Symbol(C, Decl(derivedUninitializedPropertyDeclaration.ts, 20, 1))
+
+    declare p: 'bye'; // ok
+>p : Symbol(DD.p, Decl(derivedUninitializedPropertyDeclaration.ts, 28, 20))
+}
+
+
+declare class E {
+>E : Symbol(E, Decl(derivedUninitializedPropertyDeclaration.ts, 30, 1))
+
+    p1: string
+>p1 : Symbol(E.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 33, 17))
+
+    p2: string
+>p2 : Symbol(E.p2, Decl(derivedUninitializedPropertyDeclaration.ts, 34, 14))
+}
+class F extends E {
+>F : Symbol(F, Decl(derivedUninitializedPropertyDeclaration.ts, 36, 1))
+>E : Symbol(E, Decl(derivedUninitializedPropertyDeclaration.ts, 30, 1))
+
+    p1!: 'z'
+>p1 : Symbol(F.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 37, 19))
+
+    declare p2: 'alpha'
+>p2 : Symbol(F.p2, Decl(derivedUninitializedPropertyDeclaration.ts, 38, 12))
+}
+
+class G extends E {
+>G : Symbol(G, Decl(derivedUninitializedPropertyDeclaration.ts, 40, 1))
+>E : Symbol(E, Decl(derivedUninitializedPropertyDeclaration.ts, 30, 1))
+
+    p1: 'z'
+>p1 : Symbol(G.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 42, 19))
+
+    constructor() {
+        super()
+>super : Symbol(E, Decl(derivedUninitializedPropertyDeclaration.ts, 30, 1))
+
+        this.p1 = 'z'
+>this.p1 : Symbol(G.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 42, 19))
+>this : Symbol(G, Decl(derivedUninitializedPropertyDeclaration.ts, 40, 1))
+>p1 : Symbol(G.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 42, 19))
+    }
+}
+
+abstract class H extends E {
+>H : Symbol(H, Decl(derivedUninitializedPropertyDeclaration.ts, 48, 1))
+>E : Symbol(E, Decl(derivedUninitializedPropertyDeclaration.ts, 30, 1))
+
+    abstract p1: 'a' | 'b' | 'c'
+>p1 : Symbol(H.p1, Decl(derivedUninitializedPropertyDeclaration.ts, 50, 28))
+
+    declare abstract p2: 'a' | 'b' | 'c'
+>p2 : Symbol(H.p2, Decl(derivedUninitializedPropertyDeclaration.ts, 51, 32))
+}
+
+interface I {
+>I : Symbol(I, Decl(derivedUninitializedPropertyDeclaration.ts, 53, 1))
+
+    q: number
+>q : Symbol(I.q, Decl(derivedUninitializedPropertyDeclaration.ts, 55, 13))
+}
+interface J extends I { }
+>J : Symbol(J, Decl(derivedUninitializedPropertyDeclaration.ts, 57, 1), Decl(derivedUninitializedPropertyDeclaration.ts, 58, 25))
+>I : Symbol(I, Decl(derivedUninitializedPropertyDeclaration.ts, 53, 1))
+
+class J {
+>J : Symbol(J, Decl(derivedUninitializedPropertyDeclaration.ts, 57, 1), Decl(derivedUninitializedPropertyDeclaration.ts, 58, 25))
+
+    r = 5
+>r : Symbol(J.r, Decl(derivedUninitializedPropertyDeclaration.ts, 59, 9))
+}
+class K extends J {
+>K : Symbol(K, Decl(derivedUninitializedPropertyDeclaration.ts, 61, 1))
+>J : Symbol(J, Decl(derivedUninitializedPropertyDeclaration.ts, 57, 1), Decl(derivedUninitializedPropertyDeclaration.ts, 58, 25))
+
+    q!: 1 | 2 | 3 // ok, extends a property from an interface
+>q : Symbol(K.q, Decl(derivedUninitializedPropertyDeclaration.ts, 62, 19))
+
+    r!: 4 | 5 // error, from class
+>r : Symbol(K.r, Decl(derivedUninitializedPropertyDeclaration.ts, 63, 17))
+}
+
+// #35327
+class L {
+>L : Symbol(L, Decl(derivedUninitializedPropertyDeclaration.ts, 65, 1))
+
+    a: any;
+>a : Symbol(L.a, Decl(derivedUninitializedPropertyDeclaration.ts, 68, 9))
+
+    constructor(arg: any) {
+>arg : Symbol(arg, Decl(derivedUninitializedPropertyDeclaration.ts, 70, 16))
+
+        this.a = arg;
+>this.a : Symbol(L.a, Decl(derivedUninitializedPropertyDeclaration.ts, 68, 9))
+>this : Symbol(L, Decl(derivedUninitializedPropertyDeclaration.ts, 65, 1))
+>a : Symbol(L.a, Decl(derivedUninitializedPropertyDeclaration.ts, 68, 9))
+>arg : Symbol(arg, Decl(derivedUninitializedPropertyDeclaration.ts, 70, 16))
+    }
+}
+class M extends L {
+>M : Symbol(M, Decl(derivedUninitializedPropertyDeclaration.ts, 73, 1))
+>L : Symbol(L, Decl(derivedUninitializedPropertyDeclaration.ts, 65, 1))
+
+    declare a: number;
+>a : Symbol(M.a, Decl(derivedUninitializedPropertyDeclaration.ts, 74, 19))
+
+    constructor(arg: number) {
+>arg : Symbol(arg, Decl(derivedUninitializedPropertyDeclaration.ts, 76, 16))
+
+        super(arg);
+>super : Symbol(L, Decl(derivedUninitializedPropertyDeclaration.ts, 65, 1))
+>arg : Symbol(arg, Decl(derivedUninitializedPropertyDeclaration.ts, 76, 16))
+
+        console.log(this.a);  // should be OK, M.a is ambient
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.a : Symbol(M.a, Decl(derivedUninitializedPropertyDeclaration.ts, 74, 19))
+>this : Symbol(M, Decl(derivedUninitializedPropertyDeclaration.ts, 73, 1))
+>a : Symbol(M.a, Decl(derivedUninitializedPropertyDeclaration.ts, 74, 19))
+    }
+}
+

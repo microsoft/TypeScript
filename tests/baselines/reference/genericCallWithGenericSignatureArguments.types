@@ -76,11 +76,11 @@ var r4 = foo((x: typeof a) => a, (x: typeof b) => b); // typeof a => typeof a
 >r4 : (x: { x: number; y?: number; }) => { x: number; y?: number; }
 >foo((x: typeof a) => a, (x: typeof b) => b) : (x: { x: number; y?: number; }) => { x: number; y?: number; }
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->(x: typeof a) => a : (x: { x: number; y?: number; }) => { x: number; y?: number; }
+>(x: typeof a) => a : (x: typeof a) => { x: number; y?: number; }
 >x : { x: number; y?: number; }
 >a : { x: number; y?: number; }
 >a : { x: number; y?: number; }
->(x: typeof b) => b : (x: { x: number; z?: number; }) => { x: number; z?: number; }
+>(x: typeof b) => b : (x: typeof b) => { x: number; z?: number; }
 >x : { x: number; z?: number; }
 >b : { x: number; z?: number; }
 >b : { x: number; z?: number; }
@@ -89,11 +89,11 @@ var r5 = foo((x: typeof b) => b, (x: typeof a) => a); // typeof b => typeof b
 >r5 : (x: { x: number; z?: number; }) => { x: number; z?: number; }
 >foo((x: typeof b) => b, (x: typeof a) => a) : (x: { x: number; z?: number; }) => { x: number; z?: number; }
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->(x: typeof b) => b : (x: { x: number; z?: number; }) => { x: number; z?: number; }
+>(x: typeof b) => b : (x: typeof b) => { x: number; z?: number; }
 >x : { x: number; z?: number; }
 >b : { x: number; z?: number; }
 >b : { x: number; z?: number; }
->(x: typeof a) => a : (x: { x: number; y?: number; }) => { x: number; y?: number; }
+>(x: typeof a) => a : (x: typeof a) => { x: number; y?: number; }
 >x : { x: number; y?: number; }
 >a : { x: number; y?: number; }
 >a : { x: number; y?: number; }

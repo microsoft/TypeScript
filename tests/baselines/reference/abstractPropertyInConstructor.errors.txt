@@ -2,10 +2,11 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(4,24): error TS2715: Abstr
 tests/cases/compiler/abstractPropertyInConstructor.ts(7,18): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstract property 'cb' in class 'AbstractClass' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(25,18): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(25,18): error TS2729: Property 'prop' is used before its initialization.
 tests/cases/compiler/abstractPropertyInConstructor.ts(39,22): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 
 
-==== tests/cases/compiler/abstractPropertyInConstructor.ts (5 errors) ====
+==== tests/cases/compiler/abstractPropertyInConstructor.ts (6 errors) ====
     abstract class AbstractClass {
         constructor(str: string, other: AbstractClass) {
             this.method(parseInt(str));
@@ -39,6 +40,9 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(39,22): error TS2715: Abst
         other = this.prop;
                      ~~~~
 !!! error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
+                     ~~~~
+!!! error TS2729: Property 'prop' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/abstractPropertyInConstructor.ts:20:14: 'prop' is declared here.
         fn = () => this.prop;
     
         method2() {

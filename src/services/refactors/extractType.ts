@@ -5,7 +5,7 @@ namespace ts.refactor {
     const extractToInterface = "Extract to interface";
     const extractToTypeDef = "Extract to typedef";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+        getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context);
             if (!info) return emptyArray;
 
@@ -23,7 +23,7 @@ namespace ts.refactor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             const { file } = context;
-            const info = Debug.assertDefined(getRangeToExtract(context), "Expected to find a range to extract");
+            const info = Debug.checkDefined(getRangeToExtract(context), "Expected to find a range to extract");
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => {
@@ -49,11 +49,11 @@ namespace ts.refactor {
     });
 
     interface TypeAliasInfo {
-        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; typeElements?: ReadonlyArray<TypeElement>;
+        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: readonly TypeParameterDeclaration[]; typeElements?: readonly TypeElement[];
     }
 
     interface InterfaceInfo {
-        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; typeElements: ReadonlyArray<TypeElement>;
+        isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: readonly TypeParameterDeclaration[]; typeElements: readonly TypeElement[];
     }
 
     type Info = TypeAliasInfo | InterfaceInfo;
@@ -68,7 +68,7 @@ namespace ts.refactor {
         if (!selection || !isTypeNode(selection)) return undefined;
 
         const checker = context.program.getTypeChecker();
-        const firstStatement = Debug.assertDefined(isJS ? findAncestor(selection, isStatementAndHasJSDoc) : findAncestor(selection, isStatement), "Should find a statement");
+        const firstStatement = Debug.checkDefined(findAncestor(selection, isStatement), "Should find a statement");
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
         if (!typeParameters) return undefined;
 
@@ -76,7 +76,7 @@ namespace ts.refactor {
         return { isJS, selection, firstStatement, typeParameters, typeElements };
     }
 
-    function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): ReadonlyArray<TypeElement> | undefined {
+    function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): readonly TypeElement[] | undefined {
         if (!node) return undefined;
         if (isIntersectionTypeNode(node)) {
             const result: TypeElement[] = [];
@@ -98,10 +98,6 @@ namespace ts.refactor {
             return node.members;
         }
         return undefined;
-    }
-
-    function isStatementAndHasJSDoc(n: Node): n is (Statement & HasJSDoc) {
-        return isStatement(n) && hasJSDocNodes(n);
     }
 
     function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
@@ -163,7 +159,7 @@ namespace ts.refactor {
             typeParameters.map(id => updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)),
             selection
         );
-        changes.insertNodeBefore(file, firstStatement, newTypeNode, /* blankLineBetween */ true);
+        changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
@@ -178,7 +174,7 @@ namespace ts.refactor {
             /* heritageClauses */ undefined,
             typeElements
         );
-        changes.insertNodeBefore(file, firstStatement, newTypeNode, /* blankLineBetween */ true);
+        changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 

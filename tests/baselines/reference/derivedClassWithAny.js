@@ -78,7 +78,7 @@ var C = /** @class */ (function () {
     }
     Object.defineProperty(C.prototype, "X", {
         get: function () { return 1; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.prototype.foo = function () {
@@ -88,7 +88,7 @@ var C = /** @class */ (function () {
         get: function () {
             return 1;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.bar = function () {
@@ -105,7 +105,7 @@ var D = /** @class */ (function (_super) {
         get: function () {
             return null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     D.prototype.foo = function () {
@@ -115,7 +115,7 @@ var D = /** @class */ (function (_super) {
         get: function () {
             return null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     D.bar = function () {
@@ -131,7 +131,7 @@ var E = /** @class */ (function (_super) {
     }
     Object.defineProperty(E.prototype, "X", {
         get: function () { return ''; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     E.prototype.foo = function () {
@@ -141,7 +141,7 @@ var E = /** @class */ (function (_super) {
         get: function () {
             return '';
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     E.bar = function () {

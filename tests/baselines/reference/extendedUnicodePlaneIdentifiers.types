@@ -9,9 +9,9 @@ const 𝑀 = 5;
 
 console.log(𝑀 + 𝑚); // 9
 >console.log(𝑀 + 𝑚) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >𝑀 + 𝑚 : number
 >𝑀 : 5
 >𝑚 : 4
@@ -23,9 +23,9 @@ const ၡ = 6;
 
 console.log(ၡ ** ၡ);
 >console.log(ၡ ** ၡ) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >ၡ ** ၡ : number
 >ၡ : 6
 >ၡ : 6
@@ -37,9 +37,9 @@ const ဒ = 7;
 
 console.log(ဒ ** ဒ);
 >console.log(ဒ ** ဒ) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >ဒ ** ဒ : number
 >ဒ : 7
 >ဒ : 7
@@ -51,9 +51,9 @@ const ဒၡ𝑀 = 7;
 
 console.log(ဒၡ𝑀 ** ဒၡ𝑀);
 >console.log(ဒၡ𝑀 ** ဒၡ𝑀) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >ဒၡ𝑀 ** ဒၡ𝑀 : number
 >ဒၡ𝑀 : 7
 >ဒၡ𝑀 : 7
@@ -64,9 +64,9 @@ const ၡ𝑀ဒ = 7;
 
 console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ);
 >console.log(ၡ𝑀ဒ ** ၡ𝑀ဒ) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >ၡ𝑀ဒ ** ၡ𝑀ဒ : number
 >ၡ𝑀ဒ : 7
 >ၡ𝑀ဒ : 7
@@ -77,9 +77,9 @@ const 𝑀ဒၡ = 7;
 
 console.log(𝑀ဒၡ ** 𝑀ဒၡ);
 >console.log(𝑀ဒၡ ** 𝑀ဒၡ) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >𝑀ဒၡ ** 𝑀ဒၡ : number
 >𝑀ဒၡ : 7
 >𝑀ဒၡ : 7

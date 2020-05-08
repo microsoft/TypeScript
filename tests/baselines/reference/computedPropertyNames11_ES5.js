@@ -24,57 +24,57 @@ var a;
 var v = (_a = {},
     Object.defineProperty(_a, s, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, n, {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, s + s, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, s + n, {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, +s, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, "", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, 0, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, a, {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, true, {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, "hello bye", {
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     Object.defineProperty(_a, "hello " + a + " bye", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     }),
     _a);

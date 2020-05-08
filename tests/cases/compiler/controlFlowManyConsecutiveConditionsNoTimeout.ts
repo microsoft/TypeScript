@@ -1,0 +1,133 @@
+// @strict: true
+
+export enum Choice {
+    One,
+    Two,
+}
+
+const choice: Choice = Choice.One;
+const choiceOne = Choice.One;
+
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {}
+if (choice === choiceOne) {} 
+
+while (true) {
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {}
+    if (choice === choiceOne) {} 
+}

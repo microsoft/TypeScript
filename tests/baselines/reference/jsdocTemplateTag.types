@@ -42,12 +42,12 @@ let s = g('hi')()
  * @param {Array.<Object>} keyframes - Can't look up types on Element since it's a global in another file. (But it shouldn't crash).
  */
 Element.prototype.animate = function(keyframes) {};
->Element.prototype.animate = function(keyframes) {} : (keyframes: any[]) => void
+>Element.prototype.animate = function(keyframes) {} : (keyframes: Array<any>) => void
 >Element.prototype.animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
 >Element.prototype : Element
 >Element : { new (): Element; prototype: Element; }
 >prototype : Element
 >animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
->function(keyframes) {} : (keyframes: any[]) => void
+>function(keyframes) {} : (keyframes: Array<any>) => void
 >keyframes : any[]
 

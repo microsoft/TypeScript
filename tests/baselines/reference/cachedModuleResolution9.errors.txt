@@ -1,15 +1,15 @@
-/a/b/c/d/e/app.ts(1,17): error TS2307: Cannot find module 'foo'.
-/a/b/c/lib.ts(1,17): error TS2307: Cannot find module 'foo'.
+/a/b/c/d/e/app.ts(1,17): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+/a/b/c/lib.ts(1,17): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
 
 
 ==== /a/b/c/lib.ts (1 errors) ====
     import {x} from "foo";
                     ~~~~~
-!!! error TS2307: Cannot find module 'foo'.
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
     
     
 ==== /a/b/c/d/e/app.ts (1 errors) ====
     import {x} from "foo";
                     ~~~~~
-!!! error TS2307: Cannot find module 'foo'.
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
     

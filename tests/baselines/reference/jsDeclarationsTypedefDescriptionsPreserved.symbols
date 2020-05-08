@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/**
+No type information for this code. * Options for Foo <------------
+No type information for this code. * @typedef {Object} FooOptions
+No type information for this code. * @property {boolean} bar - Marvin K Mooney
+No type information for this code. * @property {string} baz - Sylvester McMonkey McBean
+No type information for this code. */
+No type information for this code.
+No type information for this code./**
+No type information for this code. * Multiline
+No type information for this code. * Options
+No type information for this code. * for Foo <------------
+No type information for this code. * @typedef {Object} BarOptions
+No type information for this code. * @property {boolean} bar - Marvin K Mooney
+No type information for this code. * @property {string} baz - Sylvester McMonkey McBean
+No type information for this code. */
+No type information for this code.
+No type information for this code.

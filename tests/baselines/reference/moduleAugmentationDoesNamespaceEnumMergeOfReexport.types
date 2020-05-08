@@ -1,0 +1,51 @@
+=== tests/cases/compiler/file.ts ===
+export namespace Root {
+    // type-only NS
+    export interface Foo {
+        x: number;
+>x : number
+    }
+}
+=== tests/cases/compiler/reexport.ts ===
+export * from "./file";
+No type information for this code.=== tests/cases/compiler/augment.ts ===
+import * as ns from "./reexport";
+>ns : typeof ns
+
+declare module "./reexport" {
+>"./reexport" : typeof ns
+
+    // Merging an enum into a type-only NS is OK
+    export enum Root {
+>Root : Root
+
+        A,
+>A : Root
+
+        B,
+>B : Root
+
+        C
+>C : Root
+    }
+}
+
+declare const f: ns.Root.Foo;
+>f : ns.Root.Foo
+>ns : any
+>Root : any
+
+const g: ns.Root = ns.Root.A;
+>g : ns.Root
+>ns : any
+>ns.Root.A : ns.Root
+>ns.Root : typeof ns.Root
+>ns : typeof ns
+>Root : typeof ns.Root
+>A : ns.Root
+
+f.x;
+>f.x : number
+>f : ns.Root.Foo
+>x : number
+

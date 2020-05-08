@@ -1,0 +1,24 @@
+=== tests/cases/compiler/jsElementAccessNoContextualTypeCrash.js ===
+var Common = {};
+>Common : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3), Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
+
+self['Common'] = self['Common'] || {};
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --), Decl(jsElementAccessNoContextualTypeCrash.js, 0, 16))
+>'Common' : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3), Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --), Decl(jsElementAccessNoContextualTypeCrash.js, 0, 16))
+>'Common' : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3), Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
+
+/**
+ * @param {string} string
+ * @return {string}
+ */
+Common.localize = function (string) {
+>Common.localize : Symbol(Common.localize, Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
+>Common : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3), Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
+>localize : Symbol(Common.localize, Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
+>string : Symbol(string, Decl(jsElementAccessNoContextualTypeCrash.js, 6, 28))
+
+    return string;
+>string : Symbol(string, Decl(jsElementAccessNoContextualTypeCrash.js, 6, 28))
+
+};
