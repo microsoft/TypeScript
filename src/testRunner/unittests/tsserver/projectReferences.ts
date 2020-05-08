@@ -2,12 +2,8 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: with project references and tsbuild", () => {
         function createHost(files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
             const host = createServerHost(files);
-
             // ts build should succeed
-            const solutionBuilder = tscWatch.createSolutionBuilder(host, rootNames, {});
-            solutionBuilder.build();
-            assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
-
+            tscWatch.ensureErrorFreeBuild(host, rootNames);
             return host;
         }
 
