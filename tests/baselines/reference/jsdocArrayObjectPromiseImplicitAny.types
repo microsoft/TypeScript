@@ -72,7 +72,7 @@ var paramedObject = {valueOf: 1};
  * @return {Object}
  */
 function returnAnyObject(obj) {
->returnAnyObject : (obj: Object) => Object
+>returnAnyObject : (obj: any) => any
 >obj : any
 
   return obj;
