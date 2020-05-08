@@ -5,28 +5,40 @@ node_modules/lodash/_ListCache.js(20,17): error TS2532: Object is possibly 'unde
 node_modules/lodash/_MapCache.js(20,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_SetCache.js(19,14): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_Stack.js(17,20): error TS2339: Property 'size' does not exist on type 'ListCache'.
+node_modules/lodash/_arrayAggregator.js(11,33): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayAggregator.js(16,17): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayEach.js(10,27): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayEach.js(15,18): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_arrayEach.js(19,3): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
   Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_arrayEachRight.js(10,32): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayEachRight.js(14,18): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_arrayEachRight.js(18,3): error TS2322: Type 'any[] | undefined' is not assignable to type 'any[]'.
   Type 'undefined' is not assignable to type 'any[]'.
+node_modules/lodash/_arrayEvery.js(11,28): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayEvery.js(16,20): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayFilter.js(10,29): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayFilter.js(17,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_arrayIncludes.js(9,15): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/_arrayIncludes.js(12,31): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayIncludes.js(14,34): error TS2345: Argument of type 'any[] | undefined' is not assignable to parameter of type 'any[]'.
   Type 'undefined' is not assignable to type 'any[]'.
 node_modules/lodash/_arrayIncludesWith.js(6,15): error TS8024: JSDoc '@param' tag has name 'target', but there is no parameter with that name.
+node_modules/lodash/_arrayIncludesWith.js(10,35): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayIncludesWith.js(15,27): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_arrayLikeKeys.js(25,45): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_arrayMap.js(10,26): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayMap.js(16,30): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayReduce.js(13,29): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayReduce.js(18,19): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_arrayReduce.js(21,41): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arrayReduceRight.js(13,34): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arrayReduceRight.js(16,19): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_arrayReduceRight.js(19,41): error TS2532: Object is possibly 'undefined'.
+node_modules/lodash/_arraySome.js(11,27): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_arraySome.js(16,19): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_asciiWords.js(8,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
+node_modules/lodash/_baseClamp.js(10,35): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_baseClone.js(91,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/lodash/_baseClone.js(92,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/lodash/_baseClone.js(93,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -43,9 +55,12 @@ node_modules/lodash/_baseFlatten.js(24,22): error TS2349: This expression is not
   Type 'Boolean' has no call signatures.
 node_modules/lodash/_baseFlatten.js(24,22): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_baseFlatten.js(24,22): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/_baseHas.js(15,26): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_baseHas.js(16,56): error TS2345: Argument of type 'string | any[]' is not assignable to parameter of type 'string | number | symbol'.
   Type 'any[]' is not assignable to type 'string | number | symbol'.
     Type 'any[]' is not assignable to type 'string'.
+node_modules/lodash/_baseHasIn.js(9,28): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/_baseHasIn.js(10,28): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
 node_modules/lodash/_baseIntersection.js(53,40): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
 node_modules/lodash/_baseIntersection.js(60,54): error TS2345: Argument of type 'Function | undefined' is not assignable to parameter of type 'Function'.
@@ -150,6 +165,7 @@ node_modules/lodash/_equalByTag.js(86,7): error TS2454: Variable 'convert' is us
 node_modules/lodash/_equalObjects.js(70,18): error TS2322: Type 'boolean' is not assignable to type 'number'.
 node_modules/lodash/_getHolder.js(10,17): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/_getRawTag.js(36,7): error TS2454: Variable 'unmasked' is used before being assigned.
+node_modules/lodash/_getValue.js(9,27): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_hasPath.js(35,50): error TS2454: Variable 'key' is used before being assigned.
 node_modules/lodash/_hashDelete.js(7,20): error TS8024: JSDoc '@param' tag has name 'hash', but there is no parameter with that name.
 node_modules/lodash/_initCloneArray.js(16,20): error TS2351: This expression is not constructable.
@@ -165,6 +181,7 @@ node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, bu
 node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/_nodeUtil\"": any; }'.
 node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'false | Global'.
   Property 'process' does not exist on type 'false'.
+node_modules/lodash/_overRest.js(15,32): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_overRest.js(20,42): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_overRest.js(24,27): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_overRest.js(27,27): error TS2532: Object is possibly 'undefined'.
@@ -175,6 +192,7 @@ node_modules/lodash/_stackSet.js(24,26): error TS2339: Property 'size' does not 
 node_modules/lodash/_unicodeWords.js(62,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
 node_modules/lodash/_updateWrapDetails.js(34,5): error TS1223: 'returns' tag already specified.
 node_modules/lodash/_wrapperClone.js(14,20): error TS2339: Property 'clone' does not exist on type 'LazyWrapper'.
+node_modules/lodash/ary.js(23,23): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/before.js(34,7): error TS2322: Type 'undefined' is not assignable to type 'Function'.
 node_modules/lodash/bind.js(51,55): error TS2454: Variable 'holders' is used before being assigned.
 node_modules/lodash/bind.js(55,6): error TS2339: Property 'placeholder' does not exist on type 'Function'.
@@ -182,6 +200,8 @@ node_modules/lodash/bindKey.js(62,53): error TS2454: Variable 'holders' is used 
 node_modules/lodash/bindKey.js(66,9): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/castArray.js(10,15): error TS8029: JSDoc '@param' tag has name 'value', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/lodash/chain.js(33,16): error TS2348: Value of type 'typeof lodash' is not callable. Did you mean to include 'new'?
+node_modules/lodash/chunk.js(30,29): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/clamp.js(23,31): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/clamp.js(25,5): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 node_modules/lodash/clone.js(33,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
@@ -221,6 +241,7 @@ node_modules/lodash/core.js(1313,20): error TS2322: Type 'boolean' is not assign
 node_modules/lodash/core.js(1338,60): error TS2554: Expected 1 arguments, but got 2.
 node_modules/lodash/core.js(1349,5): error TS2322: Type 'boolean | void' is not assignable to type 'boolean'.
   Type 'void' is not assignable to type 'boolean'.
+node_modules/lodash/core.js(1433,34): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/core.js(1434,23): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 node_modules/lodash/core.js(1438,44): error TS2532: Object is possibly 'undefined'.
@@ -231,6 +252,8 @@ node_modules/lodash/core.js(1449,17): error TS2538: Type 'undefined' cannot be u
 node_modules/lodash/core.js(1566,57): error TS2554: Expected 1 arguments, but got 2.
 node_modules/lodash/core.js(1709,41): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/core.js(1745,18): error TS2348: Value of type 'typeof lodash' is not callable. Did you mean to include 'new'?
+node_modules/lodash/core.js(1897,41): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/core.js(2167,40): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/core.js(2183,41): error TS8024: JSDoc '@param' tag has name 'iteratees', but there is no parameter with that name.
 node_modules/lodash/core.js(2473,21): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/lodash/core.js(2473,37): error TS2554: Expected 0 arguments, but got 1.
@@ -243,6 +266,7 @@ node_modules/lodash/core.js(3424,41): error TS2769: No overload matches this cal
   The last overload gave the following error.
     Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
       Type 'Function' provides no match for the signature '(substring: string, ...args: any[]): string'.
+node_modules/lodash/core.js(3562,26): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/core.js(3573,51): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/core.js(3590,63): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
@@ -252,7 +276,9 @@ node_modules/lodash/core.js(3830,45): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3830,71): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3839,5): error TS2304: Cannot find name 'define'.
 node_modules/lodash/core.js(3846,35): error TS2339: Property '_' does not exist on type 'typeof lodash'.
+node_modules/lodash/curry.js(47,29): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/curry.js(50,10): error TS2339: Property 'placeholder' does not exist on type 'Function'.
+node_modules/lodash/curryRight.js(44,34): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/curryRight.js(47,10): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/debounce.js(83,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/debounce.js(84,27): error TS2532: Object is possibly 'undefined'.
@@ -270,11 +296,14 @@ node_modules/lodash/differenceBy.js(40,52): error TS2345: Argument of type '(val
 node_modules/lodash/differenceBy.js(40,101): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/differenceWith.js(36,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
+node_modules/lodash/drop.js(29,25): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/dropRight.js(29,30): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/dropRightWhile.js(41,48): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/dropWhile.js(41,48): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/escape.js(39,39): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+node_modules/lodash/every.js(48,39): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/every.js(53,51): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/filter.js(45,51): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/findIndex.js(52,55): error TS2554: Expected 0-1 arguments, but got 2.
@@ -336,6 +365,8 @@ node_modules/lodash/fp/object.js(2,26): error TS2345: Argument of type '{ assign
 node_modules/lodash/fp/seq.js(2,26): error TS2345: Argument of type '{ at: Function; chain: (value: any) => any; commit: () => any; lodash: typeof lodash; next: typeof wrapperNext; plant: (value: any) => any; reverse: () => any; tap: (value: any, interceptor: Function) => any; ... 5 more ...; wrapperChain: () => any; }' is not assignable to parameter of type 'string'.
 node_modules/lodash/fp/string.js(2,26): error TS2345: Argument of type '{ camelCase: Function; capitalize: (string?: string | undefined) => string; deburr: (string?: string | undefined) => string; endsWith: (string?: string | undefined, target?: string | undefined, position?: number | undefined) => boolean; ... 26 more ...; words: (string?: string | undefined, pattern?: string | ... 1 m...' is not assignable to parameter of type 'string'.
 node_modules/lodash/fp/util.js(2,26): error TS2345: Argument of type '{ attempt: Function; bindAll: Function; cond: (pairs: any[]) => Function; conforms: (source: any) => Function; constant: (value: any) => Function; ... 26 more ...; uniqueId: (prefix?: string | undefined) => string; }' is not assignable to parameter of type 'string'.
+node_modules/lodash/inRange.js(43,33): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/includes.js(40,49): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/intersectionBy.js(41,55): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/isBuffer.js(5,69): error TS2339: Property 'nodeType' does not exist on type '() => boolean'.
 node_modules/lodash/isBuffer.js(8,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/isBuffer\"": () => boolean; }'.
@@ -356,11 +387,14 @@ node_modules/lodash/matchesProperty.js(34,56): error TS2345: Argument of type 'n
 node_modules/lodash/maxBy.js(30,50): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/meanBy.js(28,49): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/minBy.js(30,50): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/mixin.js(45,24): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/mixin.js(49,49): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/mixin.js(66,61): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/lodash/nthArg.js(28,26): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 node_modules/lodash/omit.js(48,32): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
+node_modules/lodash/orderBy.js(33,49): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/parseInt.js(34,34): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/partial.js(48,9): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/partialRight.js(47,14): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/pickBy.js(33,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
@@ -372,16 +406,23 @@ node_modules/lodash/reduce.js(48,50): error TS2554: Expected 0-1 arguments, but 
 node_modules/lodash/reduceRight.js(33,50): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/reject.js(43,58): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/remove.js(41,39): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/repeat.js(28,28): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/replace.js(15,29): error TS8029: JSDoc '@param' tag has name 'replacement', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/lodash/sampleSize.js(27,36): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/some.js(43,38): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/some.js(48,51): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/sortedIndexBy.js(30,65): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/sortedLastIndexBy.js(30,65): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/sortedUniqBy.js(22,52): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/split.js(31,24): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/split.js(33,5): error TS2322: Type 'undefined' is not assignable to type 'string | RegExp'.
 node_modules/lodash/spread.js(53,22): error TS2538: Type 'undefined' cannot be used as an index type.
 node_modules/lodash/sumBy.js(29,45): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/take.js(29,25): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/takeRight.js(29,30): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/takeRightWhile.js(41,48): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/takeWhile.js(41,48): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/template.js(140,36): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/template.js(152,34): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/template.js(159,21): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/template.js(164,6): error TS2532: Object is possibly 'undefined'.
@@ -401,6 +442,9 @@ node_modules/lodash/toUpper.js(11,21): error TS8024: JSDoc '@param' tag has name
 node_modules/lodash/transform.js(44,37): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/transform.js(46,37): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/transform.js(60,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/trim.js(33,30): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/trimEnd.js(29,33): error TS1016: A required parameter cannot follow an optional parameter.
+node_modules/lodash/trimStart.js(29,35): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/truncate.js(60,36): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/truncate.js(61,26): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/truncate.js(62,30): error TS2532: Object is possibly 'undefined'.
@@ -418,6 +462,7 @@ node_modules/lodash/unionBy.js(36,91): error TS2554: Expected 0-1 arguments, but
 node_modules/lodash/unionWith.js(31,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
 node_modules/lodash/uniqBy.js(28,75): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/lodash/words.js(25,33): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/wrapperAt.js(34,17): error TS2339: Property 'slice' does not exist on type 'LazyWrapper'.
 node_modules/lodash/wrapperAt.js(40,51): error TS2339: Property 'thru' does not exist on type 'LodashWrapper'.
 node_modules/lodash/wrapperReverse.js(33,23): error TS2339: Property 'reverse' does not exist on type 'LazyWrapper'.

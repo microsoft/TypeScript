@@ -1,8 +1,0 @@
-Exit Code: 1
-Standard output:
-src/Launcher.js(181,17): error TS1003: Identifier expected.
-src/Launcher.js(359,17): error TS1003: Identifier expected.
-
-
-
-Standard error:

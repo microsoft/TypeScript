@@ -502,7 +502,7 @@ namespace ts.SymbolDisplay {
         }
 
         if (documentation.length === 0 && !hasMultipleSignatures) {
-            documentation = symbol.getDocumentationComment(typeChecker);
+            documentation = symbol.getContextualDocumentationComment(enclosingDeclaration, typeChecker);
         }
 
         if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {

@@ -214,12 +214,12 @@ namespace ts.codefix {
 
     export function createMethodFromCallExpression(
         context: CodeFixContextBase,
+        importAdder: ImportAdder,
         call: CallExpression,
         methodName: string,
-        inJs: boolean,
-        makeStatic: boolean,
+        modifierFlags: ModifierFlags,
         contextNode: Node,
-        importAdder: ImportAdder
+        inJs: boolean
     ): MethodDeclaration {
         const body = !isInterfaceDeclaration(contextNode);
         const { typeArguments, arguments: args, parent } = call;
@@ -234,7 +234,7 @@ namespace ts.codefix {
         const returnType = (inJs || !contextualType) ? undefined : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
         return createMethod(
             /*decorators*/ undefined,
-            /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+            /*modifiers*/ modifierFlags ? createNodeArray(createModifiersFromModifierFlags(modifierFlags)) : undefined,
             /*asteriskToken*/ isYieldExpression(parent) ? createToken(SyntaxKind.AsteriskToken) : undefined,
             methodName,
             /*questionToken*/ undefined,

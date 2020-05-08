@@ -12,7 +12,7 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(270,9): error TS2322:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(280,5): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(283,12): error TS2554: Expected 2-3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(525,9): error TS2322: Type 'Window' is not assignable to type 'Window & typeof globalThis'.
-  Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 870 more.
+  Type 'Window' is missing the following properties from type 'typeof globalThis': globalThis, eval, parseInt, parseFloat, and 871 more.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(527,49): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'new () => any' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Window & typeof globalThis' provides no match for the signature 'new (): any'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(539,24): error TS2351: This expression is not constructable.
@@ -2969,9 +2969,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65285,7): error TS2339: Property 'description' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65310,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65379,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65468,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65533,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65576,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'comment' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]', but here has type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65576,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'comment' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]', but here has type '{ multiLine: boolean; slice: number[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66529,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66549,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66811,1): error TS2323: Cannot redeclare exported variable '__esModule'.
@@ -3348,7 +3346,7 @@ node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFil
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(285,12): error TS2339: Property 'onwriteend' does not exist on type 'Writer'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(292,14): error TS2339: Property 'onwriteend' does not exist on type 'Writer'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(293,12): error TS2339: Property 'onwriteend' does not exist on type 'Writer'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/OverridesTestRunner.js(7,13): error TS1064: The return type of an async function or method must be the global Promise<T> type.
+node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/OverridesTestRunner.js(7,13): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{ isolatedFileSystem: IsolatedFileSystem; project: Project; testFileSystem: TestFileSystem; }>'?
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(47,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(47,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(47,47): error TS2339: Property 'blankLine' does not exist on type 'void'.
@@ -3718,6 +3716,9 @@ node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(567,18)
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(570,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(714,24): error TS2339: Property 'value' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(716,24): error TS2339: Property 'value' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(726,29): error TS2339: Property 'value' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(728,31): error TS2339: Property 'value' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(730,27): error TS2339: Property 'value' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(745,16): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(767,22): error TS2339: Property 'value' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(771,60): error TS2339: Property 'value' does not exist on type 'Element'.
@@ -7692,6 +7693,7 @@ node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(211,31)
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(213,16): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(213,31): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(215,39): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string[]'.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(229,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(254,19): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(256,35): error TS2339: Property 'metaKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FilmStripView.js(263,35): error TS2339: Property 'metaKey' does not exist on type 'Event'.
@@ -8304,6 +8306,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/BottomUpProfileDataGrid
 node_modules/chrome-devtools-frontend/front_end/profiler/BottomUpProfileDataGrid.js(219,40): error TS2339: Property 'UID' does not exist on type 'ProfileNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/BottomUpProfileDataGrid.js(253,19): error TS2339: Property '_takePropertiesFromProfileDataGridNode' does not exist on type 'ProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/BottomUpProfileDataGrid.js(259,21): error TS2339: Property '_keepOnlyChild' does not exist on type 'ProfileDataGridNode'.
+node_modules/chrome-devtools-frontend/front_end/profiler/BottomUpProfileDataGrid.js(281,21): error TS2339: Property 'remove' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/profiler/CPUProfileFlameChart.js(45,49): error TS2551: Property '_colorGenerator' does not exist on type 'typeof ProfileFlameChartDataProvider'. Did you mean 'colorGenerator'?
 node_modules/chrome-devtools-frontend/front_end/profiler/CPUProfileFlameChart.js(52,46): error TS2551: Property '_colorGenerator' does not exist on type 'typeof ProfileFlameChartDataProvider'. Did you mean 'colorGenerator'?
 node_modules/chrome-devtools-frontend/front_end/profiler/CPUProfileFlameChart.js(54,51): error TS2551: Property '_colorGenerator' does not exist on type 'typeof ProfileFlameChartDataProvider'. Did you mean 'colorGenerator'?
@@ -8507,6 +8510,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(107
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(113,57): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(115,48): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(192,24): error TS2694: Namespace 'Protocol' has no exported member 'HeapProfiler'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(206,20): error TS2339: Property 'setDataSource' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(228,60): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(229,63): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(230,64): error TS2555: Expected at least 2 arguments, but got 1.
@@ -8516,17 +8520,26 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(233
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(243,80): error TS2339: Property 'bytesToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(256,17): error TS2345: Argument of type 'ToolbarText' is not assignable to parameter of type 'ToolbarComboBox | ToolbarInput'.
   Type 'ToolbarText' is missing the following properties from type 'ToolbarInput': _prompt, _proxyElement, setValue, _internalSetValue, and 4 more.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(335,39): error TS2339: Property 'revealObjectByHeapSnapshotId' does not exist on type 'DataGrid<any>'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(340,103): error TS2339: Property 'nodeFilter' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(344,50): error TS2551: Property 'jumpBackwards' does not exist on type 'SearchConfig'. Did you mean 'jumpBackward'?
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(375,37): error TS2339: Property 'revealObjectByHeapSnapshotId' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(397,25): error TS2339: Property '_loadPromise' does not exist on type 'ProfileHeader'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(405,24): error TS2345: Argument of type 'SearchConfig' is not assignable to parameter of type 'SearchConfig'.
   Property 'toSearchRegex' is missing in type 'SearchConfig' but required in type 'SearchConfig'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(410,20): error TS2339: Property 'filterSelectIndexChanged' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(418,24): error TS2345: Argument of type 'SearchConfig' is not assignable to parameter of type 'SearchConfig'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(434,22): error TS2339: Property 'populateContextMenu' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(451,65): error TS2339: Property 'allocationNodeId' does not exist on type 'DataGridNode<any>'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(492,76): error TS2339: Property 'value' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(500,31): error TS2339: Property 'snapshot' does not exist on type 'DataGrid<any>'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(507,18): error TS2339: Property 'snapshot' does not exist on type 'DataGrid<any>'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(508,16): error TS2339: Property 'setDataSource' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(514,53): error TS2339: Property '_loadPromise' does not exist on type 'ProfileHeader'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(524,42): error TS2339: Property 'selectedOptions' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(554,24): error TS2345: Argument of type 'SearchConfig' is not assignable to parameter of type 'SearchConfig'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(559,24): error TS2694: Namespace 'Protocol' has no exported member 'HeapProfiler'.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(563,37): error TS2339: Property 'revealObjectByHeapSnapshotId' does not exist on type 'DataGrid<any>'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(575,29): error TS2339: Property 'enclosingNodeOrSelfWithNodeName' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(576,28): error TS2339: Property 'enclosingNodeOrSelfWithNodeName' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(628,44): error TS2555: Expected at least 2 arguments, but got 1.
@@ -12530,12 +12543,13 @@ node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(322,39): error
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(325,35): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(350,19): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(365,13): error TS2339: Property 'consume' does not exist on type 'Event'.
+node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(386,57): error TS2339: Property 'lowerBound' does not exist on type 'Int32Array'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(478,39): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(500,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'variableOffsets' must be of type 'any', but here has type 'Int32Array'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(523,39): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(529,35): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(557,33): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListControl.js(592,18): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/ListModel.js(95,29): error TS2339: Property 'lowerBound' does not exist on type 'T[]'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(16,38): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(17,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(127,14): error TS2339: Property 'createChild' does not exist on type 'Element'.
