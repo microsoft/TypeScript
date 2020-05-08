@@ -70,5 +70,5 @@ type HandlerOptions = {
     /**
      * Should be able to export a type alias at the same time.
      */
-    name: String;
+    name: string;
 };
