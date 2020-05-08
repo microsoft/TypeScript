@@ -345,7 +345,7 @@ namespace ts {
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    if (hasEffectiveModifier(node.parent, ModifierFlags.Static)) {
+                    if (hasSyntacticModifier(node.parent, ModifierFlags.Static)) {
                         return symbolAccessibilityResult.errorModuleName ?
                             symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Parameter_0_of_public_static_method_from_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -413,7 +413,7 @@ namespace ts {
 
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
-                    if (hasEffectiveModifier(node.parent, ModifierFlags.Static)) {
+                    if (hasSyntacticModifier(node.parent, ModifierFlags.Static)) {
                         diagnosticMessage = Diagnostics.Type_parameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_name_1;
                     }
                     else if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {

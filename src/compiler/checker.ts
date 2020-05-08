@@ -37561,7 +37561,14 @@ namespace ts {
                     return grammarErrorOnNode(node.type, Diagnostics._0_expected, tokenToString(SyntaxKind.SymbolKeyword));
                 }
 
-                const parent = walkUpParenthesizedTypes(node.parent);
+                let parent = walkUpParenthesizedTypes(node.parent);
+                if (isInJSFile(parent) && isJSDocTypeExpression(parent)) {
+                    parent = parent.parent;
+                    if (isJSDocTypeTag(parent)) {
+                        // walk up past JSDoc comment node
+                        parent = parent.parent.parent;
+                    }
+                }
                 switch (parent.kind) {
                     case SyntaxKind.VariableDeclaration:
                         const decl = parent as VariableDeclaration;
@@ -37578,7 +37585,7 @@ namespace ts {
 
                     case SyntaxKind.PropertyDeclaration:
                         if (!hasSyntacticModifier(parent, ModifierFlags.Static) ||
-                            !hasSyntacticModifier(parent, ModifierFlags.Readonly)) {
+                            !hasEffectiveModifier(parent, ModifierFlags.Readonly)) {
                             return grammarErrorOnNode((<PropertyDeclaration>parent).name, Diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly);
                         }
                         break;
