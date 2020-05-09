@@ -613,6 +613,7 @@ namespace ts {
     function enableStatistics(sys: System, compilerOptions: CompilerOptions) {
         if (canReportDiagnostics(sys, compilerOptions)) {
             performance.enable();
+            performance.mark("beforeAll");
         }
     }
 
@@ -620,6 +621,9 @@ namespace ts {
         let statistics: Statistic[];
         const compilerOptions = program.getCompilerOptions();
         if (canReportDiagnostics(sys, compilerOptions)) {
+            performance.mark("afterAll");
+            performance.measure("Overall", "beforeAll", "afterAll");
+
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
