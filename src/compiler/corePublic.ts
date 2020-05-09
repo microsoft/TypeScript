@@ -3,7 +3,7 @@ namespace ts {
     // If changing the text in this section, be sure to test `configurePrerelease` too.
     export const versionMajorMinor = "3.9";
     /** The version of the TypeScript compiler release */
-    export const version = "3.9.2" as string;
+    export const version = `${versionMajorMinor}.2-insiders`;
 
     /**
      * Type of objects whose values are all of the same type.
