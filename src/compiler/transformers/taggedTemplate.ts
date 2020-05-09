@@ -63,7 +63,7 @@ namespace ts {
     }
 
     function createTemplateCooked(template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {
-        return template.templateFlags ? createIdentifier("undefined") : createLiteral(template.text);
+        return template.templateFlags ? createVoidZero() : createLiteral(template.text);
     }
 
     /**
