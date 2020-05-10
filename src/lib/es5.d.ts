@@ -2211,8 +2211,8 @@ interface Uint8Array {
 interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array;
     new(length: number): Uint8Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Uint8Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Uint8Array;
+    new(arrayOrArrayBuffer: ArrayLike<number>): Uint8Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
 
     /**
      * The size in bytes of each element in the array.
