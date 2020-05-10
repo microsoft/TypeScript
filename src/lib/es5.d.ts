@@ -1928,8 +1928,8 @@ interface Int8Array {
 interface Int8ArrayConstructor {
     readonly prototype: Int8Array;
     new(length: number): Int8Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Int8Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Int8Array;
+    new(arrayOrArrayBuffer: ArrayLike<number>): Int8Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -2493,8 +2493,8 @@ interface Uint8ClampedArray {
 interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray;
     new(length: number): Uint8ClampedArray;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Uint8ClampedArray;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Uint8ClampedArray;
+    new(arrayOrArrayBuffer: ArrayLike<number>): Uint8ClampedArray;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
 
     /**
      * The size in bytes of each element in the array.
@@ -2773,8 +2773,8 @@ interface Int16Array {
 interface Int16ArrayConstructor {
     readonly prototype: Int16Array;
     new(length: number): Int16Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Int16Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Int16Array;
+    new(arrayOrArrayBuffer: ArrayLike<number>): Int16Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3056,8 +3056,8 @@ interface Uint16Array {
 interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array;
     new(length: number): Uint16Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Uint16Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Uint16Array;
+    new(arrayOrArrayBuffer: ArrayLike<number>): Uint16Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3338,8 +3338,8 @@ interface Int32Array {
 interface Int32ArrayConstructor {
     readonly prototype: Int32Array;
     new(length: number): Int32Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Int32Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Int32Array;
+    new(arrayOrArrayBuffer: ArrayLike<number>): Int32Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3619,8 +3619,8 @@ interface Uint32Array {
 interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array;
     new(length: number): Uint32Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Uint32Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Uint32Array;
+    new(arrayOrArrayBuffer: ArrayLike<number>): Uint32Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3901,8 +3901,8 @@ interface Float32Array {
 interface Float32ArrayConstructor {
     readonly prototype: Float32Array;
     new(length: number): Float32Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Float32Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Float32Array;
+    new(arrayOrArrayBuffer: ArrayLike<number>): Float32Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -4175,8 +4175,8 @@ interface Float64Array {
 interface Float64ArrayConstructor {
     readonly prototype: Float64Array;
     new(length: number): Float64Array;
-    new(arrayOrArrayBuffer: ArrayLike<number> | ArrayBufferLike): Float64Array;
-    new(buffer: ArrayBufferLike, byteOffset: number, length?: number): Float64Array;
+    new(arrayOrArrayBuffer: ArrayLike<number>): Float64Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
 
     /**
      * The size in bytes of each element in the array.
