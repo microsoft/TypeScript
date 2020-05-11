@@ -15,35 +15,38 @@ export type SegmentAnnotated = [
     count: number
 ];
 
+export type WithOptAndRest = [first: number, second?: number, ...rest: string[]];
+>WithOptAndRest : Symbol(WithOptAndRest, Decl(namedTupleMembers.ts, 11, 2))
+
 export type Func<T extends any[]> = (...x: T) => void;
->Func : Symbol(Func, Decl(namedTupleMembers.ts, 11, 2))
->T : Symbol(T, Decl(namedTupleMembers.ts, 13, 17))
->x : Symbol(x, Decl(namedTupleMembers.ts, 13, 37))
->T : Symbol(T, Decl(namedTupleMembers.ts, 13, 17))
+>Func : Symbol(Func, Decl(namedTupleMembers.ts, 13, 81))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 15, 17))
+>x : Symbol(x, Decl(namedTupleMembers.ts, 15, 37))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 15, 17))
 
 export const c = null as any as Func<SegmentAnnotated>;
->c : Symbol(c, Decl(namedTupleMembers.ts, 15, 12))
->Func : Symbol(Func, Decl(namedTupleMembers.ts, 11, 2))
+>c : Symbol(c, Decl(namedTupleMembers.ts, 17, 12))
+>Func : Symbol(Func, Decl(namedTupleMembers.ts, 13, 81))
 >SegmentAnnotated : Symbol(SegmentAnnotated, Decl(namedTupleMembers.ts, 0, 54))
 
 export function useState<T>(initial: T): [value: T, setter: (T) => void] {
->useState : Symbol(useState, Decl(namedTupleMembers.ts, 15, 55))
->T : Symbol(T, Decl(namedTupleMembers.ts, 17, 25))
->initial : Symbol(initial, Decl(namedTupleMembers.ts, 17, 28))
->T : Symbol(T, Decl(namedTupleMembers.ts, 17, 25))
->T : Symbol(T, Decl(namedTupleMembers.ts, 17, 25))
->T : Symbol(T, Decl(namedTupleMembers.ts, 17, 61))
+>useState : Symbol(useState, Decl(namedTupleMembers.ts, 17, 55))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 19, 25))
+>initial : Symbol(initial, Decl(namedTupleMembers.ts, 19, 28))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 19, 25))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 19, 25))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 19, 61))
 
     return null as any;
 }
 
 
 export type Iter = Func<[step: number, iterations: number]>;
->Iter : Symbol(Iter, Decl(namedTupleMembers.ts, 19, 1))
->Func : Symbol(Func, Decl(namedTupleMembers.ts, 11, 2))
+>Iter : Symbol(Iter, Decl(namedTupleMembers.ts, 21, 1))
+>Func : Symbol(Func, Decl(namedTupleMembers.ts, 13, 81))
 
 export function readSegment([length, count]: [number, number]) {}
->readSegment : Symbol(readSegment, Decl(namedTupleMembers.ts, 22, 60))
->length : Symbol(length, Decl(namedTupleMembers.ts, 24, 29))
->count : Symbol(count, Decl(namedTupleMembers.ts, 24, 36))
+>readSegment : Symbol(readSegment, Decl(namedTupleMembers.ts, 24, 60))
+>length : Symbol(length, Decl(namedTupleMembers.ts, 26, 29))
+>count : Symbol(count, Decl(namedTupleMembers.ts, 26, 36))
 

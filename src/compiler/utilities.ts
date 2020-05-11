@@ -2702,10 +2702,7 @@ namespace ts {
     }
 
     export function walkUpParenthesizedTypes(node: Node) {
-        while (node && (node.kind === SyntaxKind.ParenthesizedType || node.kind === SyntaxKind.NamedTupleMember)) {
-            node = node.parent;
-        }
-        return node;
+        return walkUp(node, SyntaxKind.ParenthesizedType);
     }
 
     export function walkUpParenthesizedExpressions(node: Node) {

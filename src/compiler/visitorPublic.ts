@@ -519,7 +519,9 @@ namespace ts {
 
             case SyntaxKind.NamedTupleMember:
                 return updateNamedTupleMember(<NamedTupleMember>node,
+                    visitNode((<NamedTupleMember>node).dotDotDotToken, visitor, isToken),
                     visitNode((<NamedTupleMember>node).name, visitor, isIdentifierName),
+                    visitNode((<NamedTupleMember>node).questionToken, visitor, isToken),
                     visitNode((<NamedTupleMember>node).type, visitor, isTypeNode),
                 );
 

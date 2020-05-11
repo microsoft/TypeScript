@@ -4563,14 +4563,24 @@ namespace ts {
                             const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, arity), context);
                             const hasRestElement = (<TupleType>type.target).hasRestElement;
                             if (tupleConstituentNodes) {
-                                for (let i = (<TupleType>type.target).minLength; i < Math.min(arity, tupleConstituentNodes.length); i++) {
-                                    tupleConstituentNodes[i] = hasRestElement && i === arity - 1 ?
-                                        createRestTypeNode(createArrayTypeNode(tupleConstituentNodes[i])) :
-                                        createOptionalTypeNode(tupleConstituentNodes[i]);
-                                }
                                 if ((type.target as TupleType).labeledElementDeclarations) {
                                     for (let i = 0; i < tupleConstituentNodes.length; i++) {
-                                        tupleConstituentNodes[i] = createNamedTupleMember(createIdentifier(unescapeLeadingUnderscores(getTupleElementLabel((type.target as TupleType).labeledElementDeclarations![i]))), tupleConstituentNodes[i]);
+                                        const isOptionalOrRest = i >= (<TupleType>type.target).minLength;
+                                        const isRest = isOptionalOrRest && hasRestElement && i === arity - 1;
+                                        const isOptional = isOptionalOrRest && !isRest;
+                                        tupleConstituentNodes[i] = createNamedTupleMember(
+                                            isRest ? createToken(SyntaxKind.DotDotDotToken) : undefined,
+                                            createIdentifier(unescapeLeadingUnderscores(getTupleElementLabel((type.target as TupleType).labeledElementDeclarations![i]))),
+                                            isOptional ? createToken(SyntaxKind.QuestionToken) : undefined,
+                                            isRest ? createArrayTypeNode(tupleConstituentNodes[i]) : tupleConstituentNodes[i]
+                                        );
+                                    }
+                                }
+                                else {
+                                    for (let i = (<TupleType>type.target).minLength; i < Math.min(arity, tupleConstituentNodes.length); i++) {
+                                        tupleConstituentNodes[i] = hasRestElement && i === arity - 1 ?
+                                            createRestTypeNode(createArrayTypeNode(tupleConstituentNodes[i])) :
+                                            createOptionalTypeNode(tupleConstituentNodes[i]);
                                     }
                                 }
                                 const tupleTypeNode = setEmitFlags(createTupleTypeNode(tupleConstituentNodes), EmitFlags.SingleLine);
@@ -12092,18 +12102,22 @@ namespace ts {
             return createTypeFromGenericGlobalType(readonly ? globalReadonlyArrayType : globalArrayType, [elementType]);
         }
 
-        function unwrapNamedTupleMember(node: TypeNode): TypeNode {
-            return node.kind === SyntaxKind.NamedTupleMember ? (node as NamedTupleMember).type : node;
+        function isTupleRestElement(node: TypeNode) {
+            return node.kind === SyntaxKind.RestType || (node.kind === SyntaxKind.NamedTupleMember && !!(node as NamedTupleMember).dotDotDotToken);
+        }
+
+        function isTupleOptionalElement(node: TypeNode) {
+            return node.kind === SyntaxKind.OptionalType || (node.kind === SyntaxKind.NamedTupleMember && !!(node as NamedTupleMember).questionToken);
         }
 
         function getArrayOrTupleTargetType(node: ArrayTypeNode | TupleTypeNode): GenericType {
             const readonly = isReadonlyTypeOperator(node.parent);
-            if (node.kind === SyntaxKind.ArrayType || node.elements.length === 1 && node.elements[0].kind === SyntaxKind.RestType) {
+            if (node.kind === SyntaxKind.ArrayType || node.elements.length === 1 && isTupleRestElement(node.elements[0])) {
                 return readonly ? globalReadonlyArrayType : globalArrayType;
             }
             const lastElement = lastOrUndefined(node.elements);
-            const restElement = lastElement && unwrapNamedTupleMember(lastElement).kind === SyntaxKind.RestType ? lastElement : undefined;
-            const minLength = findLastIndex(node.elements, n => unwrapNamedTupleMember(n).kind !== SyntaxKind.OptionalType && n !== restElement) + 1;
+            const restElement = lastElement && isTupleRestElement(lastElement) ? lastElement : undefined;
+            const minLength = findLastIndex(node.elements, n => !isTupleOptionalElement(n) && n !== restElement) + 1;
             const missingName = some(node.elements, e => e.kind !== SyntaxKind.NamedTupleMember);
             return getTupleTypeOfArity(node.elements.length, minLength, !!restElement, readonly, /*associatedNames*/ missingName ? undefined : node.elements as readonly NamedTupleMember[]);
         }
@@ -13855,6 +13869,21 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromNamedTupleTypeNode(node: NamedTupleMember): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                let type = getTypeFromTypeNode(node.type);
+                if (node.dotDotDotToken) {
+                    type = getElementTypeOfArrayType(type) || errorType;
+                }
+                if (node.questionToken && strictNullChecks) {
+                    type = getOptionalType(type);
+                }
+                links.resolvedType = type;
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeNode(node: TypeNode): Type {
             return getConditionalFlowTypeOfType(getTypeFromTypeNodeWorker(node), node);
         }
@@ -13913,8 +13942,9 @@ namespace ts {
                     return getTypeFromJSDocNullableTypeNode(<JSDocNullableType>node);
                 case SyntaxKind.JSDocOptionalType:
                     return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type));
-                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.NamedTupleMember:
+                    return getTypeFromNamedTupleTypeNode(node as NamedTupleMember);
+                case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocTypeExpression:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression | NamedTupleMember>node).type);
@@ -30142,16 +30172,15 @@ namespace ts {
             let seenOptionalElement = false;
             let seenNamedElement = false;
             for (let i = 0; i < elementTypes.length; i++) {
-                let e = elementTypes[i];
+                const e = elementTypes[i];
                 if (e.kind === SyntaxKind.NamedTupleMember) {
                     seenNamedElement = true;
-                    e = (e as NamedTupleMember).type;
                 }
                 else if (seenNamedElement) {
                     grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_not_have_names);
                     break;
                 }
-                if (e.kind === SyntaxKind.RestType) {
+                if (isTupleRestElement(e)) {
                     if (i !== elementTypes.length - 1) {
                         grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
                         break;
@@ -30160,7 +30189,7 @@ namespace ts {
                         error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
                     }
                 }
-                else if (e.kind === SyntaxKind.OptionalType) {
+                else if (isTupleOptionalElement(e)) {
                     seenOptionalElement = true;
                 }
                 else if (seenOptionalElement) {
@@ -30255,11 +30284,14 @@ namespace ts {
         }
 
         function checkNamedTupleMember(node: NamedTupleMember) {
-            if (node.dotDotDotToken) {
-                grammarErrorOnNode(node, Diagnostics.Rest_tuple_members_are_declared_with_a_on_the_type_A_on_the_name_is_invalid);
+            if (node.dotDotDotToken && node.questionToken) {
+                grammarErrorOnNode(node, Diagnostics.A_tuple_member_cannot_be_both_optional_and_rest);
             }
-            if (node.questionToken) {
-                grammarErrorOnNode(node, Diagnostics.Tuple_members_express_optionality_with_a_trailing_question_mark_on_the_type_a_question_mark_on_the_member_name_is_invalid);
+            if (node.type.kind === SyntaxKind.OptionalType) {
+                grammarErrorOnNode(node.type, Diagnostics.A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_colon_rather_than_after_the_type);
+            }
+            if (node.type.kind === SyntaxKind.RestType) {
+                grammarErrorOnNode(node.type, Diagnostics.A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type);
             }
             checkSourceElement(node.type);
             getTypeFromTypeNode(node);

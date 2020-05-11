@@ -934,17 +934,21 @@ namespace ts {
             : node;
     }
 
-    export function createNamedTupleMember(name: Identifier, type: TypeNode) {
+    export function createNamedTupleMember(dotDotDotToken: Token<SyntaxKind.DotDotDotToken> | undefined, name: Identifier, questionToken: Token<SyntaxKind.QuestionToken> | undefined, type: TypeNode) {
         const node = <NamedTupleMember>createSynthesizedNode(SyntaxKind.NamedTupleMember);
+        node.dotDotDotToken = dotDotDotToken;
         node.name = name;
+        node.questionToken = questionToken;
         node.type = type;
         return node;
     }
 
-    export function updateNamedTupleMember(node: NamedTupleMember, name: Identifier, type: TypeNode) {
-        return node.name !== name
+    export function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: Token<SyntaxKind.DotDotDotToken> | undefined, name: Identifier, questionToken: Token<SyntaxKind.QuestionToken> | undefined, type: TypeNode) {
+        return node.dotDotDotToken !== dotDotDotToken
+            || node.name !== name
+            || node.questionToken !== questionToken
             || node.type !== type
-            ? updateNode(createNamedTupleMember(name, type), node)
+            ? updateNode(createNamedTupleMember(dotDotDotToken, name, questionToken, type), node)
             : node;
     }
 

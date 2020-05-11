@@ -13,6 +13,8 @@ export type SegmentAnnotated = [
     count: number
 ];
 
+export type WithOptAndRest = [first: number, second?: number, ...rest: string[]];
+
 export type Func<T extends any[]> = (...x: T) => void;
 
 export const c = null as any as Func<SegmentAnnotated>;

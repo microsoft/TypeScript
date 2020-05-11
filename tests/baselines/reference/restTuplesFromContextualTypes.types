@@ -333,7 +333,7 @@ function f4<T extends any[]>(t: T) {
 >f((...x) => {}) : void
 >f : (cb: (x: number, ...args: T) => void) => void
 >(...x) => {} : (x: number, ...args: T[number][]) => void
->x : [x: number, args: ...T[number][]]
+>x : [x: number, ...args: T[number][]]
 
     f((a, ...x) => {});
 >f((a, ...x) => {}) : void

@@ -8,9 +8,18 @@ export type List = [item: any, ...any];  // partially named, disallowed
 export type Pair = [item: any, any?];  // partially named, disallowed
 >Pair : Symbol(Pair, Decl(namedTupleMembersErrors.ts, 2, 39))
 
-export type Opt = [element?: string]; // question mark on name disallowed
+export type Opt = [element: string?]; // question mark on element disallowed
 >Opt : Symbol(Opt, Decl(namedTupleMembersErrors.ts, 4, 37))
 
-export type Trailing =  [first: string, ...rest: string[]] // dots on name disallowed
+export type Trailing = [first: string, rest: ...string[]]; // dots on element disallowed
 >Trailing : Symbol(Trailing, Decl(namedTupleMembersErrors.ts, 6, 37))
+
+export type OptTrailing = [first: string, rest: ...string[]?]; // dots+question on element disallowed
+>OptTrailing : Symbol(OptTrailing, Decl(namedTupleMembersErrors.ts, 8, 58))
+
+export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disallowed
+>OptRest : Symbol(OptRest, Decl(namedTupleMembersErrors.ts, 10, 62))
+
+export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike rest, disallowed
+>NonArrayRest : Symbol(NonArrayRest, Decl(namedTupleMembersErrors.ts, 12, 58))
 

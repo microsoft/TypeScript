@@ -3521,13 +3521,17 @@
         "category": "Error",
         "code": 5084
     },
-    "Tuple members express optionality with a trailing question mark on the type, a question mark on the member name is invalid.": {
+    "A tuple member cannot be both optional and rest.": {
         "category": "Error",
         "code": 5085
     },
-    "Rest tuple members are declared with a `...` on the type. A `...` on the name is invalid.": {
+    "A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.": {
         "category": "Error",
         "code": 5086
+    },
+    "A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.": {
+        "category": "Error",
+        "code": 5087
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

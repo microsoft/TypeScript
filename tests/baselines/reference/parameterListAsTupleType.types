@@ -56,6 +56,6 @@ class D {
     }
 }
 type Dcps = ConstructorParameters<typeof D>; // should be [number, ...string[]]
->Dcps : [a: number, rest: ...string[]]
+>Dcps : [a: number, ...rest: string[]]
 >D : typeof D
 

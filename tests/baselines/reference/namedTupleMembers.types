@@ -15,6 +15,9 @@ export type SegmentAnnotated = [
     count: number
 ];
 
+export type WithOptAndRest = [first: number, second?: number, ...rest: string[]];
+>WithOptAndRest : WithOptAndRest
+
 export type Func<T extends any[]> = (...x: T) => void;
 >Func : Func<T>
 >x : T

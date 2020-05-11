@@ -2108,7 +2108,9 @@ namespace ts {
         }
 
         function emitNamedTupleMember(node: NamedTupleMember) {
+            emit(node.dotDotDotToken);
             emit(node.name);
+            emit(node.questionToken);
             emitTokenWithComment(SyntaxKind.ColonToken, node.name.end, writePunctuation, node);
             writeSpace();
             emit(node.type);
