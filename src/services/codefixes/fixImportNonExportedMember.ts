@@ -67,7 +67,7 @@ namespace ts.codefix {
         }
         if(isFunctionSymbol(localSymbol)) {
             const start = localSymbol.valueDeclaration.pos;
-            changes.insertExportModifierAtPos(sourceFile, start? start+1:0);
+            changes.insertExportModifierAtPos(sourceFile, start ? start + 1 : 0);
             return;
         }
 
