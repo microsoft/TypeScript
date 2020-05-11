@@ -1,0 +1,18 @@
+Exit Code: 1
+Standard output:
+node_modules/eventemitter3/index.d.ts(22,13): error TS2344: Type 'T[K]' does not satisfy the constraint 'any[] | ((...args: any[]) => void)'.
+  Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'any[] | ((...args: any[]) => void)'.
+    Type 'T[string]' is not assignable to type 'any[] | ((...args: any[]) => void)'.
+      Type 'T[string]' is not assignable to type 'any[]'.
+        Type 'T[K]' is not assignable to type 'any[]'.
+          Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'any[]'.
+            Type 'T[string]' is not assignable to type 'any[]'.
+node_modules/eventemitter3/index.d.ts(122,62): error TS2344: Type 'EventTypes' does not satisfy the constraint 'string | symbol | {} | { [K in keyof EventTypes]: any[] | ((...args: any[]) => void); }'.
+  Type 'unknown' is not assignable to type 'string | symbol | {} | { [K in keyof EventTypes]: any[] | ((...args: any[]) => void); }'.
+    Type 'unknown' is not assignable to type '{ [K in keyof EventTypes]: any[] | ((...args: any[]) => void); }'.
+      Type 'EventTypes' is not assignable to type '{ [K in keyof EventTypes]: any[] | ((...args: any[]) => void); }'.
+        Type 'unknown' is not assignable to type '{ [K in keyof EventTypes]: any[] | ((...args: any[]) => void); }'.
+
+
+
+Standard error:
