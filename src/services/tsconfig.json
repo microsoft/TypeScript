@@ -64,6 +64,7 @@
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
         "codefixes/fixImplicitThis.ts",
+        "codefixes/fixIncorrectNamedTupleSyntax.ts",
         "codefixes/fixSpelling.ts",
         "codefixes/returnValueCorrect.ts",
         "codefixes/fixAddMissingMember.ts",

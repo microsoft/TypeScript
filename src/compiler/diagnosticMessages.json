@@ -5693,6 +5693,10 @@
         "category": "Message",
         "code": 95116
     },
+    "Move labeled tuple element modifiers to labels": {
+        "category": "Message",
+        "code": 95117
+    },
     
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
