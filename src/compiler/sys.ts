@@ -1256,7 +1256,8 @@ namespace ts {
                 require: (baseDir, moduleName) => {
                     try {
                         const modulePath = resolveJSModule(moduleName, baseDir, nodeSystem);
-                        return { module: require(modulePath), modulePath, error: undefined };
+                        // eslint-disable-next-line no-eval
+                        return { module: eval("module.require")(modulePath), modulePath, error: undefined };
                     }
                     catch (error) {
                         return { module: undefined, modulePath: undefined, error };
