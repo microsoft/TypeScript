@@ -389,7 +389,7 @@ namespace ts.SymbolDisplay {
                     if (declarationName) {
                         const isExternalModuleDeclaration =
                             isModuleWithStringLiteralName(resolvedNode) &&
-                            hasModifier(resolvedNode, ModifierFlags.Ambient);
+                            hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
                         const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
                         const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
                             typeChecker,
