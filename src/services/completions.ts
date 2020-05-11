@@ -852,34 +852,32 @@ namespace ts.Completions {
         let isInSnippetScope = false;
         if (insideComment) {
             if (hasDocComment(sourceFile, position)) {
-                // When completion is requested without "@", we will have check to make sure that
-                // there are no comments prefix the request position. We will only allow "*" and space.
-                // e.g
-                //   /** |c| */
-                //
-                //   /**
-                //     |c|
-                //    */
-                //
-                //   /**
-                //    * |c|
-                //    */
-                //
-                //   /**
-                //    *         |c|
-                //    */
-                const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                const jsdocFragment = sourceFile.text.substring(lineStart, position);
-                const reJSDocFragment = /^(?:\s*\/\*\*\s+|\s+\*?\s+)(@(?:\w+)?)?/g;
-                const match = reJSDocFragment.exec(jsdocFragment);
-                if (match && reJSDocFragment.lastIndex === jsdocFragment.length) {
-                    return {
-                        kind: match[1]
-                            // The current position is next to the '@' sign, when no tag name being provided yet.
-                            // Provide a full list of tag names
-                            ? CompletionDataKind.JsDocTagName
-                            : CompletionDataKind.JsDocTag
-                    };
+                if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
+                    // The current position is next to the '@' sign, when no tag name being provided yet.
+                    // Provide a full list of tag names
+                    return { kind: CompletionDataKind.JsDocTagName };
+                }
+                else {
+                    // When completion is requested without "@", we will have check to make sure that
+                    // there are no comments prefix the request position. We will only allow "*" and space.
+                    // e.g
+                    //   /** |c| /*
+                    //
+                    //   /**
+                    //     |c|
+                    //    */
+                    //
+                    //   /**
+                    //    * |c|
+                    //    */
+                    //
+                    //   /**
+                    //    *         |c|
+                    //    */
+                    const lineStart = getLineStartPositionForPosition(position, sourceFile);
+                    if (!/[^\*|\s(/)]/.test(sourceFile.text.substring(lineStart, position))) {
+                        return { kind: CompletionDataKind.JsDocTag };
+                    }
                 }
             }
 
