@@ -93,10 +93,13 @@ namespace ts.JsDoc {
         forEachUnique(declarations, declaration => {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
-                if (documentationComment.length) {
-                    documentationComment.push(lineBreakPart());
+                const commentTextPart = textPart(comment);
+                if (!contains(documentationComment, commentTextPart)) {
+                    if (documentationComment.length) {
+                        documentationComment.push(lineBreakPart());
+                    }
+                    documentationComment.push(commentTextPart);
                 }
-                documentationComment.push(textPart(comment));
             }
         });
         return documentationComment;
