@@ -53,22 +53,6 @@
         {
           "text": "A language id, like `typescript`.",
           "kind": "text"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "A language id, like `typescript`.",
-          "kind": "text"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "A language id, like `typescript`.",
-          "kind": "text"
         }
       ]
     }
