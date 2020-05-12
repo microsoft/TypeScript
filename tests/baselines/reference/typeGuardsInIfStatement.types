@@ -4,7 +4,7 @@
 // In the false branch statement of an 'if' statement, 
 // the type of a variable or parameter is narrowed by any type guard in the 'if' condition when false.
 function foo(x: number | string) {
->foo : (x: string | number) => number
+>foo : (x: number | string) => number
 >x : string | number
 
     if (typeof x === "string") {
@@ -25,7 +25,7 @@ function foo(x: number | string) {
     }
 }
 function foo2(x: number | string) {
->foo2 : (x: string | number) => number
+>foo2 : (x: number | string) => number
 >x : string | number
 
     if (typeof x === "string") {
@@ -48,7 +48,7 @@ function foo2(x: number | string) {
     }
 }
 function foo3(x: number | string) {
->foo3 : (x: string | number) => string | number
+>foo3 : (x: number | string) => string | number
 >x : string | number
 
     if (typeof x === "string") {
@@ -71,7 +71,7 @@ function foo3(x: number | string) {
     }
 }
 function foo4(x: number | string) {
->foo4 : (x: string | number) => string | number
+>foo4 : (x: number | string) => string | number
 >x : string | number
 
     if (typeof x === "string") {
@@ -94,7 +94,7 @@ function foo4(x: number | string) {
     }
 }
 function foo5(x: number | string) {
->foo5 : (x: string | number) => string
+>foo5 : (x: number | string) => string
 >x : string | number
 
     if (typeof x === "string") {
@@ -117,7 +117,7 @@ function foo5(x: number | string) {
     }
 }
 function foo6(x: number | string) {
->foo6 : (x: string | number) => string | number
+>foo6 : (x: number | string) => string | number
 >x : string | number
 
     if (typeof x === "string") {
@@ -145,7 +145,7 @@ function foo6(x: number | string) {
     }
 }
 function foo7(x: number | string | boolean) {
->foo7 : (x: string | number | boolean) => boolean
+>foo7 : (x: number | string | boolean) => boolean
 >x : string | number | boolean
 
     if (typeof x === "string") {
@@ -176,7 +176,7 @@ function foo7(x: number | string | boolean) {
     }
 }
 function foo8(x: number | string | boolean) {
->foo8 : (x: string | number | boolean) => boolean
+>foo8 : (x: number | string | boolean) => boolean
 >x : string | number | boolean
 
     if (typeof x === "string") {
@@ -213,7 +213,7 @@ function foo8(x: number | string | boolean) {
     }
 }
 function foo9(x: number | string) {
->foo9 : (x: string | number) => boolean
+>foo9 : (x: number | string) => boolean
 >x : string | number
 
     var y = 10;
@@ -247,7 +247,7 @@ function foo9(x: number | string) {
     }
 }
 function foo10(x: number | string | boolean) {
->foo10 : (x: string | number | boolean) => boolean
+>foo10 : (x: number | string | boolean) => boolean
 >x : string | number | boolean
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
@@ -287,7 +287,7 @@ function foo10(x: number | string | boolean) {
     }
 }
 function foo11(x: number | string | boolean) {
->foo11 : (x: string | number | boolean) => string
+>foo11 : (x: number | string | boolean) => string
 >x : string | number | boolean
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
@@ -349,7 +349,7 @@ function foo11(x: number | string | boolean) {
     }
 }
 function foo12(x: number | string | boolean) {
->foo12 : (x: string | number | boolean) => any
+>foo12 : (x: number | string | boolean) => any
 >x : string | number | boolean
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard

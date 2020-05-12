@@ -11,16 +11,37 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
 >>>var x = { x: 20 }.x;
 1 >
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^
-4 >                   ^
-5 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^
+4 >     ^^^
+5 >        ^^
+6 >          ^
+7 >           ^^
+8 >             ^^
+9 >               ^^
+10>                 ^^
+11>                   ^
+12>                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >var {
 2 >
 3 >    x
-4 >                   } = { x: 20 };
+4 >     } = 
+5 >        { 
+6 >          x
+7 >           : 
+8 >             20
+9 >                }
+10>                 
+11>                   } = { x: 20 };
 1 >Emitted(1, 1) Source(1, 6) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 6) + SourceIndex(0)
-3 >Emitted(1, 20) Source(1, 7) + SourceIndex(0)
-4 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 7) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 11) + SourceIndex(0)
+5 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
+6 >Emitted(1, 12) Source(1, 14) + SourceIndex(0)
+7 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
+8 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
+9 >Emitted(1, 18) Source(1, 20) + SourceIndex(0)
+10>Emitted(1, 20) Source(1, 7) + SourceIndex(0)
+11>Emitted(1, 21) Source(1, 21) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js.map

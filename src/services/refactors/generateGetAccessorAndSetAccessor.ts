@@ -46,12 +46,13 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration, renameAccessor } = fieldInfo;
 
         suppressLeadingAndTrailingTrivia(fieldName);
+        suppressLeadingAndTrailingTrivia(accessorName);
         suppressLeadingAndTrailingTrivia(declaration);
         suppressLeadingAndTrailingTrivia(container);
 
         const isInClassLike = isClassLike(container);
         // avoid Readonly modifier because it will convert to get accessor
-        const modifierFlags = getModifierFlags(declaration) & ~ModifierFlags.Readonly;
+        const modifierFlags = getEffectiveModifierFlags(declaration) & ~ModifierFlags.Readonly;
         const accessorModifiers = isInClassLike
             ? !modifierFlags || modifierFlags & ModifierFlags.Private
                 ? getModifiers(isJS, isStatic, SyntaxKind.PublicKeyword)
@@ -87,7 +88,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return { renameFilename, renameLocation, edits };
     }
 
-    function isConvertibleName (name: DeclarationName): name is AcceptedNameType {
+    function isConvertibleName(name: DeclarationName): name is AcceptedNameType {
         return isIdentifier(name) || isStringLiteral(name);
     }
 
@@ -95,11 +96,11 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return isParameterPropertyDeclaration(node, node.parent) || isPropertyDeclaration(node) || isPropertyAssignment(node);
     }
 
-    function createPropertyName (name: string, originalName: AcceptedNameType) {
+    function createPropertyName(name: string, originalName: AcceptedNameType) {
         return isIdentifier(originalName) ? createIdentifier(name) : createLiteral(name);
     }
 
-    function createAccessorAccessExpression (fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
+    function createAccessorAccessExpression(fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
         const leftHead = isStatic ? (<ClassLikeDeclaration>container).name! : createThis(); // TODO: GH#18217
         return isIdentifier(fieldName) ? createPropertyAccess(leftHead, fieldName) : createElementAccess(leftHead, createLiteral(fieldName));
     }
@@ -112,10 +113,6 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return modifiers && createNodeArray(modifiers);
     }
 
-    function startsWithUnderscore(name: string): boolean {
-        return name.charCodeAt(0) === CharacterCodes._;
-    }
-
     function getConvertibleFieldAtPosition(context: RefactorContext): Info | undefined {
         const { file, startPosition, endPosition } = context;
 
@@ -124,7 +121,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
         if (!declaration || !nodeOverlapsWithStartEnd(declaration.name, file, startPosition, endPosition!) // TODO: GH#18217
-            || !isConvertibleName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
+            || !isConvertibleName(declaration.name) || (getEffectiveModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
         const name = declaration.name.text;
         const startWithUnderscore = startsWithUnderscore(name);
@@ -132,7 +129,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
         return {
             isStatic: hasStaticModifier(declaration),
-            isReadonly: hasReadonlyModifier(declaration),
+            isReadonly: hasEffectiveReadonlyModifier(declaration),
             type: getTypeAnnotationNode(declaration),
             container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
             originalName: (<AcceptedNameType>declaration.name).text,

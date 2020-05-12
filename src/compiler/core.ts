@@ -845,6 +845,28 @@ namespace ts {
     }
 
     /**
+     * Combines two arrays, values, or undefineds into the smallest container that can accommodate the resulting set:
+     *
+     * ```
+     * undefined -> undefined -> undefined
+     * T -> undefined -> T
+     * T -> T -> T[]
+     * T[] -> undefined -> T[] (no-op)
+     * T[] -> T -> T[]         (append)
+     * T[] -> T[] -> T[]       (concatenate)
+     * ```
+     */
+    export function combine<T>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
+    export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;
+    export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined) {
+        if (xs === undefined) return ys;
+        if (ys === undefined) return xs;
+        if (isArray(xs)) return isArray(ys) ? concatenate(xs, ys) : append(xs, ys);
+        if (isArray(ys)) return append(ys, xs);
+        return [xs, ys];
+    }
+
+    /**
      * Gets the actual offset into an array for a relative offset. Negative offsets indicate a
      * position offset from the end of the array.
      */
@@ -1269,6 +1291,11 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Creates a new object by adding the own properties of `second`, then the own properties of `first`.
+     *
+     * NOTE: This means that if a property exists in both `first` and `second`, the property in `first` will be chosen.
+     */
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in second) {
@@ -1346,6 +1373,24 @@ namespace ts {
         }
     }
 
+    export interface UnderscoreEscapedMultiMap<T> extends UnderscoreEscapedMap<T[]> {
+        /**
+         * Adds the value to an array of values associated with the key, and returns the array.
+         * Creates the array if it does not already exist.
+         */
+        add(key: __String, value: T): T[];
+        /**
+         * Removes a value from an array of values associated with the key.
+         * Does not preserve the order of those values.
+         * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
+         */
+        remove(key: __String, value: T): void;
+    }
+
+    export function createUnderscoreEscapedMultiMap<T>(): UnderscoreEscapedMultiMap<T> {
+        return createMultiMap<T>() as UnderscoreEscapedMultiMap<T>;
+    }
+
     /**
      * Tests whether a value is an array.
      */
@@ -1398,6 +1443,46 @@ namespace ts {
 
     /** Returns lower case string */
     export function toLowerCase(x: string) { return x.toLowerCase(); }
+
+    // We convert the file names to lower case as key for file name on case insensitive file system
+    // While doing so we need to handle special characters (eg \u0130) to ensure that we dont convert
+    // it to lower case, fileName with its lowercase form can exist along side it.
+    // Handle special characters and make those case sensitive instead
+    //
+    // |-#--|-Unicode--|-Char code-|-Desc-------------------------------------------------------------------|
+    // | 1. | i        | 105       | Ascii i                                                                |
+    // | 2. | I        | 73        | Ascii I                                                                |
+    // |-------- Special characters ------------------------------------------------------------------------|
+    // | 3. | \u0130   | 304       | Uppper case I with dot above                                           |
+    // | 4. | i,\u0307 | 105,775   | i, followed by 775: Lower case of (3rd item)                           |
+    // | 5. | I,\u0307 | 73,775    | I, followed by 775: Upper case of (4th item), lower case is (4th item) |
+    // | 6. | \u0131   | 305       | Lower case i without dot, upper case is I (2nd item)                   |
+    // | 7. | \u00DF   | 223       | Lower case sharp s                                                     |
+    //
+    // Because item 3 is special where in its lowercase character has its own
+    // upper case form we cant convert its case.
+    // Rest special characters are either already in lower case format or
+    // they have corresponding upper case character so they dont need special handling
+    //
+    // But to avoid having to do string building for most common cases, also ignore
+    // a-z, 0-9, \u0131, \u00DF, \, /, ., : and space
+    const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_\. ]+/g;
+    /**
+     * Case insensitive file systems have descripencies in how they handle some characters (eg. turkish Upper case I with dot on top - \u0130)
+     * This function is used in places where we want to make file name as a key on these systems
+     * It is possible on mac to be able to refer to file name with I with dot on top as a fileName with its lower case form
+     * But on windows we cannot. Windows can have fileName with I with dot on top next to its lower case and they can not each be referred with the lowercase forms
+     * Technically we would want this function to be platform sepcific as well but
+     * our api has till now only taken caseSensitive as the only input and just for some characters we dont want to update API and ensure all customers use those api
+     * We could use upper case and we would still need to deal with the descripencies but
+     * we want to continue using lower case since in most cases filenames are lowercasewe and wont need any case changes and avoid having to store another string for the key
+     * So for this function purpose, we go ahead and assume character I with dot on top it as case sensitive since its very unlikely to use lower case form of that special character
+     */
+    export function toFileNameLowerCase(x: string) {
+        return fileNameLowerCaseRegExp.test(x) ?
+            x.replace(fileNameLowerCaseRegExp, toLowerCase) :
+            x;
+    }
 
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
@@ -1860,7 +1945,7 @@ namespace ts {
 
     export type GetCanonicalFileName = (fileName: string) => string;
     export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
-        return useCaseSensitiveFileNames ? identity : toLowerCase;
+        return useCaseSensitiveFileNames ? identity : toFileNameLowerCase;
     }
 
     /** Represents a "prefix*suffix" pattern. */
@@ -2005,5 +2090,20 @@ namespace ts {
                 cartesianProductWorker(arrays, result, inner, index + 1);
             }
         }
+    }
+
+    export function padLeft(s: string, length: number) {
+        while (s.length < length) {
+            s = " " + s;
+        }
+        return s;
+    }
+
+    export function padRight(s: string, length: number) {
+        while (s.length < length) {
+            s = s + " ";
+        }
+
+        return s;
     }
 }

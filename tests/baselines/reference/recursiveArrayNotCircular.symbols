@@ -1,0 +1,126 @@
+=== tests/cases/compiler/recursiveArrayNotCircular.ts ===
+type Action<T, P> = P extends void ? { type : T } : { type: T, payload: P }
+>Action : Symbol(Action, Decl(recursiveArrayNotCircular.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveArrayNotCircular.ts, 0, 12))
+>P : Symbol(P, Decl(recursiveArrayNotCircular.ts, 0, 14))
+>P : Symbol(P, Decl(recursiveArrayNotCircular.ts, 0, 14))
+>type : Symbol(type, Decl(recursiveArrayNotCircular.ts, 0, 38))
+>T : Symbol(T, Decl(recursiveArrayNotCircular.ts, 0, 12))
+>type : Symbol(type, Decl(recursiveArrayNotCircular.ts, 0, 53))
+>T : Symbol(T, Decl(recursiveArrayNotCircular.ts, 0, 12))
+>payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
+>P : Symbol(P, Decl(recursiveArrayNotCircular.ts, 0, 14))
+
+enum ActionType {
+>ActionType : Symbol(ActionType, Decl(recursiveArrayNotCircular.ts, 0, 75))
+
+    Foo,
+>Foo : Symbol(ActionType.Foo, Decl(recursiveArrayNotCircular.ts, 2, 17))
+
+    Bar,
+>Bar : Symbol(ActionType.Bar, Decl(recursiveArrayNotCircular.ts, 3, 8))
+
+    Baz,
+>Baz : Symbol(ActionType.Baz, Decl(recursiveArrayNotCircular.ts, 4, 8))
+
+    Batch
+>Batch : Symbol(ActionType.Batch, Decl(recursiveArrayNotCircular.ts, 5, 8))
+}
+
+type ReducerAction =
+>ReducerAction : Symbol(ReducerAction, Decl(recursiveArrayNotCircular.ts, 7, 1))
+
+  | Action<ActionType.Bar, number>
+>Action : Symbol(Action, Decl(recursiveArrayNotCircular.ts, 0, 0))
+>ActionType : Symbol(ActionType, Decl(recursiveArrayNotCircular.ts, 0, 75))
+>Bar : Symbol(ActionType.Bar, Decl(recursiveArrayNotCircular.ts, 3, 8))
+
+  | Action<ActionType.Baz, boolean>
+>Action : Symbol(Action, Decl(recursiveArrayNotCircular.ts, 0, 0))
+>ActionType : Symbol(ActionType, Decl(recursiveArrayNotCircular.ts, 0, 75))
+>Baz : Symbol(ActionType.Baz, Decl(recursiveArrayNotCircular.ts, 4, 8))
+
+  | Action<ActionType.Foo, string>
+>Action : Symbol(Action, Decl(recursiveArrayNotCircular.ts, 0, 0))
+>ActionType : Symbol(ActionType, Decl(recursiveArrayNotCircular.ts, 0, 75))
+>Foo : Symbol(ActionType.Foo, Decl(recursiveArrayNotCircular.ts, 2, 17))
+
+  | Action<ActionType.Batch, ReducerAction[]>
+>Action : Symbol(Action, Decl(recursiveArrayNotCircular.ts, 0, 0))
+>ActionType : Symbol(ActionType, Decl(recursiveArrayNotCircular.ts, 0, 75))
+>Batch : Symbol(ActionType.Batch, Decl(recursiveArrayNotCircular.ts, 5, 8))
+>ReducerAction : Symbol(ReducerAction, Decl(recursiveArrayNotCircular.ts, 7, 1))
+
+function assertNever(a: never): never {
+>assertNever : Symbol(assertNever, Decl(recursiveArrayNotCircular.ts, 13, 45))
+>a : Symbol(a, Decl(recursiveArrayNotCircular.ts, 15, 21))
+
+    throw new Error("Unreachable!");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function reducer(action: ReducerAction): void {
+>reducer : Symbol(reducer, Decl(recursiveArrayNotCircular.ts, 17, 1))
+>action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
+>ReducerAction : Symbol(ReducerAction, Decl(recursiveArrayNotCircular.ts, 7, 1))
+
+    switch(action.type) {
+>action.type : Symbol(type, Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53))
+>action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
+>type : Symbol(type, Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53), Decl(recursiveArrayNotCircular.ts, 0, 53))
+
+        case ActionType.Bar:
+>ActionType.Bar : Symbol(ActionType.Bar, Decl(recursiveArrayNotCircular.ts, 3, 8))
+>ActionType : Symbol(ActionType, Decl(recursiveArrayNotCircular.ts, 0, 75))
+>Bar : Symbol(ActionType.Bar, Decl(recursiveArrayNotCircular.ts, 3, 8))
+
+            const x: number = action.payload;
+>x : Symbol(x, Decl(recursiveArrayNotCircular.ts, 22, 17))
+>action.payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
+>action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
+>payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
+
+            break;
+        case ActionType.Baz:
+>ActionType.Baz : Symbol(ActionType.Baz, Decl(recursiveArrayNotCircular.ts, 4, 8))
+>ActionType : Symbol(ActionType, Decl(recursiveArrayNotCircular.ts, 0, 75))
+>Baz : Symbol(ActionType.Baz, Decl(recursiveArrayNotCircular.ts, 4, 8))
+
+            const y: boolean = action.payload;
+>y : Symbol(y, Decl(recursiveArrayNotCircular.ts, 25, 17))
+>action.payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62), Decl(recursiveArrayNotCircular.ts, 0, 62))
+>action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
+>payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62), Decl(recursiveArrayNotCircular.ts, 0, 62))
+
+            break;
+        case ActionType.Foo:
+>ActionType.Foo : Symbol(ActionType.Foo, Decl(recursiveArrayNotCircular.ts, 2, 17))
+>ActionType : Symbol(ActionType, Decl(recursiveArrayNotCircular.ts, 0, 75))
+>Foo : Symbol(ActionType.Foo, Decl(recursiveArrayNotCircular.ts, 2, 17))
+
+            const z: string = action.payload;
+>z : Symbol(z, Decl(recursiveArrayNotCircular.ts, 28, 17))
+>action.payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
+>action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
+>payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
+
+            break;
+        case ActionType.Batch:
+>ActionType.Batch : Symbol(ActionType.Batch, Decl(recursiveArrayNotCircular.ts, 5, 8))
+>ActionType : Symbol(ActionType, Decl(recursiveArrayNotCircular.ts, 0, 75))
+>Batch : Symbol(ActionType.Batch, Decl(recursiveArrayNotCircular.ts, 5, 8))
+
+            action.payload.map(reducer);
+>action.payload.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>action.payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
+>action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
+>payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>reducer : Symbol(reducer, Decl(recursiveArrayNotCircular.ts, 17, 1))
+
+            break;
+        default: return assertNever(action);
+>assertNever : Symbol(assertNever, Decl(recursiveArrayNotCircular.ts, 13, 45))
+>action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
+    }
+}

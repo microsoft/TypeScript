@@ -105,7 +105,7 @@ namespace ts {
 
         // Visit each original node.
         for (let i = 0; i < count; i++) {
-            const node = nodes[i + start];
+            const node: T = nodes[i + start];
             aggregateTransformFlags(node);
             const visited = node !== undefined ? visitor(node) : undefined;
             if (updated !== undefined || visited === undefined || visited !== node) {
@@ -149,11 +149,122 @@ namespace ts {
      * Starts a new lexical environment and visits a parameter list, suspending the lexical
      * environment upon completion.
      */
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor?: <T extends Node>(nodes: NodeArray<T>, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) => NodeArray<T>): NodeArray<ParameterDeclaration>;
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: <T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) => NodeArray<T> | undefined): NodeArray<ParameterDeclaration> | undefined;
     export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes) {
+        let updated: NodeArray<ParameterDeclaration> | undefined;
         context.startLexicalEnvironment();
-        const updated = nodesVisitor(nodes, visitor, isParameterDeclaration);
+        if (nodes) {
+            context.setLexicalEnvironmentFlags(LexicalEnvironmentFlags.InParameters, true);
+            updated = nodesVisitor(nodes, visitor, isParameterDeclaration);
+
+            // As of ES2015, any runtime execution of that occurs in for a parameter (such as evaluating an
+            // initializer or a binding pattern), occurs in its own lexical scope. As a result, any expression
+            // that we might transform that introduces a temporary variable would fail as the temporary variable
+            // exists in a different lexical scope. To address this, we move any binding patterns and initializers
+            // in a parameter list to the body if we detect a variable being hoisted while visiting a parameter list
+            // when the emit target is greater than ES2015.
+            if (context.getLexicalEnvironmentFlags() & LexicalEnvironmentFlags.VariablesHoistedInParameters &&
+                getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
+                updated = addDefaultValueAssignmentsIfNeeded(updated, context);
+            }
+            context.setLexicalEnvironmentFlags(LexicalEnvironmentFlags.InParameters, false);
+        }
         context.suspendLexicalEnvironment();
         return updated;
+    }
+
+    function addDefaultValueAssignmentsIfNeeded(parameters: NodeArray<ParameterDeclaration>, context: TransformationContext) {
+        let result: ParameterDeclaration[] | undefined;
+        for (let i = 0; i < parameters.length; i++) {
+            const parameter = parameters[i];
+            const updated = addDefaultValueAssignmentIfNeeded(parameter, context);
+            if (result || updated !== parameter) {
+                if (!result) result = parameters.slice(0, i);
+                result[i] = updated;
+            }
+        }
+        if (result) {
+            return setTextRange(createNodeArray(result, parameters.hasTrailingComma), parameters);
+        }
+        return parameters;
+    }
+
+    function addDefaultValueAssignmentIfNeeded(parameter: ParameterDeclaration, context: TransformationContext) {
+        // A rest parameter cannot have a binding pattern or an initializer,
+        // so let's just ignore it.
+        return parameter.dotDotDotToken ? parameter :
+            isBindingPattern(parameter.name) ? addDefaultValueAssignmentForBindingPattern(parameter, context) :
+            parameter.initializer ? addDefaultValueAssignmentForInitializer(parameter, parameter.name, parameter.initializer, context) :
+            parameter;
+    }
+
+    function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclaration, context: TransformationContext) {
+        context.addInitializationStatement(
+            createVariableStatement(
+                /*modifiers*/ undefined,
+                createVariableDeclarationList([
+                    createVariableDeclaration(
+                        parameter.name,
+                        parameter.type,
+                        parameter.initializer ?
+                            createConditional(
+                                createStrictEquality(
+                                    getGeneratedNameForNode(parameter),
+                                    createVoidZero()
+                                ),
+                                parameter.initializer,
+                                getGeneratedNameForNode(parameter)
+                            ) :
+                            getGeneratedNameForNode(parameter)
+                    ),
+                ])
+            )
+        );
+        return updateParameter(parameter,
+            parameter.decorators,
+            parameter.modifiers,
+            parameter.dotDotDotToken,
+            getGeneratedNameForNode(parameter),
+            parameter.questionToken,
+            parameter.type,
+            /*initializer*/ undefined);
+    }
+
+    function addDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration, name: Identifier, initializer: Expression, context: TransformationContext) {
+        context.addInitializationStatement(
+            createIf(
+                createTypeCheck(getSynthesizedClone(name), "undefined"),
+                setEmitFlags(
+                    setTextRange(
+                        createBlock([
+                            createExpressionStatement(
+                                setEmitFlags(
+                                    setTextRange(
+                                        createAssignment(
+                                            setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
+                                            setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer) | EmitFlags.NoComments)
+                                        ),
+                                        parameter
+                                    ),
+                                    EmitFlags.NoComments
+                                )
+                            )
+                        ]),
+                        parameter
+                    ),
+                    EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments
+                )
+            )
+        );
+        return updateParameter(parameter,
+            parameter.decorators,
+            parameter.modifiers,
+            parameter.dotDotDotToken,
+            parameter.name,
+            parameter.questionToken,
+            parameter.type,
+            /*initializer*/ undefined);
     }
 
     /**
@@ -459,7 +570,7 @@ namespace ts {
                 if (node.flags & NodeFlags.OptionalChain) {
                     return updatePropertyAccessChain(<PropertyAccessChain>node,
                         visitNode((<PropertyAccessChain>node).expression, visitor, isExpression),
-                        visitNode((<PropertyAccessChain>node).questionDotToken, visitor, isToken),
+                        visitNode((<PropertyAccessChain>node).questionDotToken, tokenVisitor, isToken),
                         visitNode((<PropertyAccessChain>node).name, visitor, isIdentifier));
                 }
                 return updatePropertyAccess(<PropertyAccessExpression>node,
@@ -470,7 +581,7 @@ namespace ts {
                 if (node.flags & NodeFlags.OptionalChain) {
                     return updateElementAccessChain(<ElementAccessChain>node,
                         visitNode((<ElementAccessChain>node).expression, visitor, isExpression),
-                        visitNode((<ElementAccessChain>node).questionDotToken, visitor, isToken),
+                        visitNode((<ElementAccessChain>node).questionDotToken, tokenVisitor, isToken),
                         visitNode((<ElementAccessChain>node).argumentExpression, visitor, isExpression));
                 }
                 return updateElementAccess(<ElementAccessExpression>node,
@@ -481,7 +592,7 @@ namespace ts {
                 if (node.flags & NodeFlags.OptionalChain) {
                     return updateCallChain(<CallChain>node,
                         visitNode((<CallChain>node).expression, visitor, isExpression),
-                        visitNode((<CallChain>node).questionDotToken, visitor, isToken),
+                        visitNode((<CallChain>node).questionDotToken, tokenVisitor, isToken),
                         nodesVisitor((<CallChain>node).typeArguments, visitor, isTypeNode),
                         nodesVisitor((<CallChain>node).arguments, visitor, isExpression));
                 }
@@ -527,7 +638,7 @@ namespace ts {
                     nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
-                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, visitor, isToken),
+                    visitNode((<ArrowFunction>node).equalsGreaterThanToken, tokenVisitor, isToken),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
 
             case SyntaxKind.DeleteExpression:
@@ -558,14 +669,14 @@ namespace ts {
                 return updateBinary(<BinaryExpression>node,
                     visitNode((<BinaryExpression>node).left, visitor, isExpression),
                     visitNode((<BinaryExpression>node).right, visitor, isExpression),
-                    visitNode((<BinaryExpression>node).operatorToken, visitor, isToken));
+                    visitNode((<BinaryExpression>node).operatorToken, tokenVisitor, isToken));
 
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,
                     visitNode((<ConditionalExpression>node).condition, visitor, isExpression),
-                    visitNode((<ConditionalExpression>node).questionToken, visitor, isToken),
+                    visitNode((<ConditionalExpression>node).questionToken, tokenVisitor, isToken),
                     visitNode((<ConditionalExpression>node).whenTrue, visitor, isExpression),
-                    visitNode((<ConditionalExpression>node).colonToken, visitor, isToken),
+                    visitNode((<ConditionalExpression>node).colonToken, tokenVisitor, isToken),
                     visitNode((<ConditionalExpression>node).whenFalse, visitor, isExpression));
 
             case SyntaxKind.TemplateExpression:
@@ -659,7 +770,7 @@ namespace ts {
 
             case SyntaxKind.ForOfStatement:
                 return updateForOf(<ForOfStatement>node,
-                    visitNode((<ForOfStatement>node).awaitModifier, visitor, isToken),
+                    visitNode((<ForOfStatement>node).awaitModifier, tokenVisitor, isToken),
                     visitNode((<ForOfStatement>node).initializer, visitor, isForInitializer),
                     visitNode((<ForOfStatement>node).expression, visitor, isExpression),
                     visitNode((<ForOfStatement>node).statement, visitor, isStatement, liftToBlock));

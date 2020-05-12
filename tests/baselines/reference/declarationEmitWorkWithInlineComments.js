@@ -37,6 +37,7 @@ export class Baz {
 //// [declarationEmitWorkWithInlineComments.js]
 "use strict";
 exports.__esModule = true;
+exports.Baz = exports.Bar = exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo(
     /** @internal */

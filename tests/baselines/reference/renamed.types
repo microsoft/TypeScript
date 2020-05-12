@@ -4,20 +4,20 @@ class A { a!: string }
 >a : string
 
 export type { A as B };
->A : A
+>A : typeof A
 >B : A
 
 === /b.ts ===
 export type { B as C } from './a';
->B : A
->C : A
+>B : typeof import("/a").B
+>C : import("/a").B
 
 === /c.ts ===
 import type { C as D } from './b';
->C : A
->D : A
+>C : typeof D
+>D : D
 
 const d: D = {};
->d : A
+>d : D
 >{} : {}
 

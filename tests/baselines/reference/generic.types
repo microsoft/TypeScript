@@ -4,30 +4,30 @@ export class A<T> { a!: T }
 >a : T
 
 export type { A as B };
->A : A<T>
+>A : typeof A
 >B : A<T>
 
 === /b.ts ===
 import type { A } from './a';
->A : import("/a").A<T>
+>A : A<T>
 
 import { B } from './a';
->B : any
+>B : typeof A
 
 let a: A<string> = { a: "" };
->a : import("/a").A<string>
+>a : A<string>
 >{ a: "" } : { a: string; }
 >a : string
 >"" : ""
 
 let b: B<number> = { a: 3 };
->b : import("/a").A<number>
+>b : A<number>
 >{ a: 3 } : { a: number; }
 >a : number
 >3 : 3
 
 let c: A<boolean> = {};
->c : import("/a").A<boolean>
+>c : A<boolean>
 >{} : {}
 
 let d: B = { a: "" };

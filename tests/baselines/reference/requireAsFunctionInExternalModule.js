@@ -19,6 +19,7 @@ hello();
 //// [c.js]
 "use strict";
 exports.__esModule = true;
+exports.has = void 0;
 function require(a) { }
 exports["default"] = require;
 function has(a) { return true; }
@@ -26,6 +27,7 @@ exports.has = has;
 //// [m.js]
 "use strict";
 exports.__esModule = true;
+exports.hello = void 0;
 var c_1 = require("./c");
 function hello() { }
 exports.hello = hello;

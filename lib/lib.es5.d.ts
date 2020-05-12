@@ -1,14 +1,14 @@
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved. 
+Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0  
- 
+License at http://www.apache.org/licenses/LICENSE-2.0
+
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
-MERCHANTABLITY OR NON-INFRINGEMENT. 
- 
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
@@ -318,7 +318,7 @@ declare var Function: FunctionConstructor;
 /**
  * Extracts the type of the 'this' parameter of a function type, or 'unknown' if the function type has no 'this' parameter.
  */
-type ThisParameterType<T> = T extends (this: unknown, ...args: any[]) => any ? unknown : T extends (this: infer U, ...args: any[]) => any ? U : unknown;
+type ThisParameterType<T> = T extends (this: infer U, ...args: any[]) => any ? U : unknown;
 
 /**
  * Removes the 'this' parameter from a function type.
@@ -986,7 +986,7 @@ declare var Error: ErrorConstructor;
 interface EvalError extends Error {
 }
 
-interface EvalErrorConstructor {
+interface EvalErrorConstructor extends ErrorConstructor {
     new(message?: string): EvalError;
     (message?: string): EvalError;
     readonly prototype: EvalError;
@@ -997,7 +997,7 @@ declare var EvalError: EvalErrorConstructor;
 interface RangeError extends Error {
 }
 
-interface RangeErrorConstructor {
+interface RangeErrorConstructor extends ErrorConstructor {
     new(message?: string): RangeError;
     (message?: string): RangeError;
     readonly prototype: RangeError;
@@ -1008,7 +1008,7 @@ declare var RangeError: RangeErrorConstructor;
 interface ReferenceError extends Error {
 }
 
-interface ReferenceErrorConstructor {
+interface ReferenceErrorConstructor extends ErrorConstructor {
     new(message?: string): ReferenceError;
     (message?: string): ReferenceError;
     readonly prototype: ReferenceError;
@@ -1019,7 +1019,7 @@ declare var ReferenceError: ReferenceErrorConstructor;
 interface SyntaxError extends Error {
 }
 
-interface SyntaxErrorConstructor {
+interface SyntaxErrorConstructor extends ErrorConstructor {
     new(message?: string): SyntaxError;
     (message?: string): SyntaxError;
     readonly prototype: SyntaxError;
@@ -1030,7 +1030,7 @@ declare var SyntaxError: SyntaxErrorConstructor;
 interface TypeError extends Error {
 }
 
-interface TypeErrorConstructor {
+interface TypeErrorConstructor extends ErrorConstructor {
     new(message?: string): TypeError;
     (message?: string): TypeError;
     readonly prototype: TypeError;
@@ -1041,7 +1041,7 @@ declare var TypeError: TypeErrorConstructor;
 interface URIError extends Error {
 }
 
-interface URIErrorConstructor {
+interface URIErrorConstructor extends ErrorConstructor {
     new(message?: string): URIError;
     (message?: string): URIError;
     readonly prototype: URIError;
@@ -1940,6 +1940,9 @@ interface Int8Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Int8Array;
+
     [index: number]: number;
 }
 interface Int8ArrayConstructor {
@@ -2218,6 +2221,9 @@ interface Uint8Array {
      * Returns a string representation of an array.
      */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint8Array;
 
     [index: number]: number;
 }
@@ -2498,6 +2504,9 @@ interface Uint8ClampedArray {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint8ClampedArray;
+
     [index: number]: number;
 }
 
@@ -2774,6 +2783,9 @@ interface Int16Array {
      * Returns a string representation of an array.
      */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Int16Array;
 
     [index: number]: number;
 }
@@ -3055,6 +3067,9 @@ interface Uint16Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint16Array;
+
     [index: number]: number;
 }
 
@@ -3334,6 +3349,9 @@ interface Int32Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Int32Array;
+
     [index: number]: number;
 }
 
@@ -3611,6 +3629,9 @@ interface Uint32Array {
      * Returns a string representation of an array.
      */
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Uint32Array;
 
     [index: number]: number;
 }
@@ -3891,6 +3912,9 @@ interface Float32Array {
      */
     toString(): string;
 
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Float32Array;
+
     [index: number]: number;
 }
 
@@ -4161,6 +4185,9 @@ interface Float64Array {
     subarray(begin?: number, end?: number): Float64Array;
 
     toString(): string;
+
+    /** Returns the primitive value of the specified object. */
+    valueOf(): Float64Array;
 
     [index: number]: number;
 }

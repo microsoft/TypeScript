@@ -29,24 +29,28 @@ export var z1 = 1;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.x = void 0;
     exports.x = 1;
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.y = void 0;
     exports.y = 1;
 });
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.z = void 0;
     exports.z = 1;
 });
 //// [file4.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.z1 = void 0;
     exports.z1 = 1;
 });
 //// [file1.js]

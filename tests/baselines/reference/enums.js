@@ -43,7 +43,7 @@ var SyntaxKind;
 "use strict";
 exports.__esModule = true;
 SyntaxKind.ImportClause;
-SymbolFlags.Type;
+"Type" /* Type */;
 var kind;
 var flags;
 //// [c.js]

@@ -23,7 +23,7 @@ normal(12);
  * @param {string} [opts1.w="hi"] doc5
  */
 function foo1(opts1) {
->foo1 : (opts1: { x: string; y?: string | undefined; z?: string; w?: string; }) => void
+>foo1 : (opts1: {    x: string;    y?: string | undefined;    z: string;    w: string;}) => void
 >opts1 : { x: string; y?: string | undefined; z?: string; w?: string; }
 
     opts1.x;
@@ -45,7 +45,7 @@ foo1({x: 'abc'});
  * @param {string=} opts2[].anotherY
  */
 function foo2(/** @param opts2 bad idea theatre! */opts2) {
->foo2 : (opts2: { anotherX: string; anotherY?: string | undefined; }[]) => void
+>foo2 : (opts2: {    anotherX: string;    anotherY?: string | undefined;}) => void
 >opts2 : { anotherX: string; anotherY?: string | undefined; }[]
 
     opts2[0].anotherX;
@@ -69,7 +69,7 @@ foo2([{anotherX: "world"}]);
  * @param {string} opts3.x
  */
 function foo3(opts3) {
->foo3 : (opts3: { x: string; }) => void
+>foo3 : (opts3: {    x: string;}) => void
 >opts3 : { x: string; }
 
     opts3.x;
@@ -92,7 +92,7 @@ foo3({x: 'abc'});
  * @param {string} [opts4[].w="hi"]
  */
 function foo4(opts4) {
->foo4 : (opts4: { x: string; y?: string | undefined; z?: string; w?: string; }[]) => void
+>foo4 : (opts4: {    x: string;    y?: string | undefined;    z: string;    w: string;}) => void
 >opts4 : { x: string; y?: string | undefined; z?: string; w?: string; }[]
 
     opts4[0].x;
@@ -122,7 +122,7 @@ foo4([{ x: 'hi' }]);
  * @param {number} opts5[].unnest - Here we are almost all the way back at the beginning.
  */
 function foo5(opts5) {
->foo5 : (opts5: { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }[]) => void
+>foo5 : (opts5: {    help: string;    what: {        a: string;        bad: {            idea: string;            oh: boolean;        };    };    unnest: number;}) => void
 >opts5 : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }[]
 
     opts5[0].what.bad[0].idea;

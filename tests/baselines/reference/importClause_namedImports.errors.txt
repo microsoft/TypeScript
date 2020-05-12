@@ -1,5 +1,4 @@
-/d.ts(1,21): error TS1361: Type-only import must reference a type, but 'C' is a value.
-/d.ts(2,5): error TS2693: 'A' only refers to a type, but is being used as a value here.
+/d.ts(2,5): error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
 
 
 ==== /abc.ts (0 errors) ====
@@ -7,14 +6,12 @@
     export type B  = { b: string };
     export const C = "";
     
-==== /d.ts (2 errors) ====
+==== /d.ts (1 errors) ====
     import type { A, B, C } from './abc';
-                        ~
-!!! error TS1361: Type-only import must reference a type, but 'C' is a value.
-!!! related TS2728 /abc.ts:3:14: 'C' is declared here.
     new A();
         ~
-!!! error TS2693: 'A' only refers to a type, but is being used as a value here.
+!!! error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /d.ts:1:15: 'A' was imported here.
     declare let a: A;
     declare let b: B;
     b.b;

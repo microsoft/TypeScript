@@ -126,6 +126,7 @@ declare namespace FourSlashInterface {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
     interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
@@ -226,7 +227,7 @@ declare namespace FourSlashInterface {
         jsxClosingTag(map: { [markerName: string]: { readonly newText: string } | undefined }): void;
         isInCommentAtPosition(onlyMultiLineDiverges?: boolean): void;
         codeFix(options: {
-            description: string | DiagnosticIgnoredInterpolations,
+            description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations,
             newFileContent?: NewFileContent,
             newRangeContent?: string,
             errorCode?: number,
@@ -236,6 +237,7 @@ declare namespace FourSlashInterface {
             commands?: {}[],
         });
         codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions> | string): void;
+        codeFixAllAvailable(fixName: string): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
@@ -316,7 +318,7 @@ declare namespace FourSlashInterface {
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
-        outliningSpansInCurrentFile(spans: Range[]): void;
+        outliningSpansInCurrentFile(spans: Range[], kind?: "comment" | "region" | "code" | "imports"): void;
         outliningHintSpansInCurrentFile(spans: Range[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
         matchingBracePositionInCurrentFile(bracePosition: number, expectedMatchPosition: number): void;
@@ -358,6 +360,7 @@ declare namespace FourSlashInterface {
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
         renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
+        baselineRename(marker: string, options: RenameOptions): void;
 
         /** Verify the quick info available at the current marker. */
         quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
@@ -432,6 +435,7 @@ declare namespace FourSlashInterface {
         printNavigationBar(): void;
         printNavigationItems(searchValue?: string): void;
         printScriptLexicalStructureItems(): void;
+        printOutliningSpans(): void;
         printReferences(): void;
         printContext(): void;
     }
@@ -609,6 +613,7 @@ declare namespace FourSlashInterface {
         readonly replacementSpan?: Range;
         readonly hasAction?: boolean;
         readonly isRecommended?: boolean;
+        readonly isFromUncheckedFile?: boolean;
         readonly kind?: string;
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;
@@ -720,6 +725,8 @@ declare namespace FourSlashInterface {
         readonly ranges: ReadonlyArray<RenameLocationOptions>;
         readonly providePrefixAndSuffixTextForRename?: boolean;
     };
+
+    type RenameOptions = { readonly findInStrings?: boolean, readonly findInComments?: boolean, readonly providePrefixAndSuffixTextForRename?: boolean };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
     type DiagnosticIgnoredInterpolations = { template: string }
 }
@@ -745,6 +752,9 @@ declare namespace completion {
         GlobalsOrKeywords = "4",
         AutoImportSuggestions = "5",
         JavascriptIdentifiers = "6"
+    }
+    export const enum CompletionSource {
+        ThisProperty = "ThisProperty/"
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

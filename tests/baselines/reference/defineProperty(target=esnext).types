@@ -15,6 +15,9 @@ class A {
     b
 >b : any
 
+    public c;
+>c : any
+
     ["computed"] = 13
 >["computed"] : number
 >"computed" : "computed"
@@ -42,10 +45,16 @@ class A {
 }
 class B {
 >B : B
+
+    public a;
+>a : any
 }
 class C extends B {
 >C : C
 >B : B
+
+    declare public a;
+>a : any
 
     z = this.ka
 >z : number

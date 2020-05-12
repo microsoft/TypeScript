@@ -6,10 +6,11 @@ export const y = (x: Foo<string>) => 1
 //// [declarationEmitTypeAliasWithTypeParameters1.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = function (x) { return 1; };
 
 
 //// [declarationEmitTypeAliasWithTypeParameters1.d.ts]
 export declare type Bar<X, Y> = () => [X, Y];
 export declare type Foo<Y> = Bar<any, Y>;
-export declare const y: (x: Bar<any, string>) => number;
+export declare const y: (x: Foo<string>) => number;

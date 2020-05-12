@@ -520,7 +520,6 @@ namespace Harness.LanguageService {
         getNavigationTree(fileName: string): ts.NavigationTree {
             return unwrapJSONCallResult(this.shim.getNavigationTree(fileName));
         }
-
         getOutliningSpans(fileName: string): ts.OutliningSpan[] {
             return unwrapJSONCallResult(this.shim.getOutliningSpans(fileName));
         }
@@ -596,6 +595,9 @@ namespace Harness.LanguageService {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
         getSourceMapper(): never {
+            return ts.notImplemented();
+        }
+        clearSourceMapperCache(): never {
             return ts.notImplemented();
         }
         dispose(): void { this.shim.dispose({}); }

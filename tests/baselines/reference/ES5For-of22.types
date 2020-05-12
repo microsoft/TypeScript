@@ -12,8 +12,8 @@ for (var x of [1, 2, 3]) {
 
     console.log(x);
 >console.log(x) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >x : number
 }

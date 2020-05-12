@@ -42,7 +42,7 @@ namespace ts.codefix {
         const parameter = first(indexSignature.parameters);
         const mappedTypeParameter = createTypeParameterDeclaration(cast(parameter.name, isIdentifier), parameter.type);
         const mappedIntersectionType = createMappedTypeNode(
-            hasReadonlyModifier(indexSignature) ? createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
+            hasEffectiveReadonlyModifier(indexSignature) ? createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
             mappedTypeParameter,
             indexSignature.questionToken,
             indexSignature.type);

@@ -1,4 +1,4 @@
-/b.ts(3,5): error TS2693: 'A' only refers to a type, but is being used as a value here.
+/b.ts(3,5): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
 
 
 ==== /a.ts (0 errors) ====
@@ -10,5 +10,6 @@
     declare const a: A;
     new A();
         ~
-!!! error TS2693: 'A' only refers to a type, but is being used as a value here.
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /a.ts:2:15: 'A' was exported here.
     

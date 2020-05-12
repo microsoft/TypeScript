@@ -149,13 +149,13 @@ type Bar = { bar: string };
 >bar : string
 
 declare function fooBar(x: { foo: string, bar: string }): void;
->fooBar : (x: { foo: string; bar: string; }) => void
+>fooBar : (x: {    foo: string;    bar: string;}) => void
 >x : { foo: string; bar: string; }
 >foo : string
 >bar : string
 
 declare function fooBat(x: { foo: string, bat: string }): void;
->fooBat : (x: { foo: string; bat: string; }) => void
+>fooBat : (x: {    foo: string;    bat: string;}) => void
 >x : { foo: string; bat: string; }
 >foo : string
 >bat : string
@@ -449,7 +449,7 @@ const w: What = { a: 4 };
 // Repro from #33568
 
 declare function save(_response: IRootResponse<string>): void;
->save : (_response: IResponse<string>) => void
+>save : (_response: IRootResponse<string>) => void
 >_response : IResponse<string>
 
 exportCommand(save);
@@ -488,7 +488,7 @@ declare type IResponse<T> = {
 >IResponse : IResponse<T>
 
 	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
->sendValue : (name: { [PropertyName in Extract<keyof T, string>]: Required<T>[PropertyName] extends string ? PropertyName : never; }[Extract<keyof T, string>]) => void
+>sendValue : (name: keyof GetAllPropertiesOfType<T, string>) => void
 >name : { [PropertyName in Extract<keyof T, string>]: Required<T>[PropertyName] extends string ? PropertyName : never; }[Extract<keyof T, string>]
 
 };
@@ -509,7 +509,7 @@ declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
 // Repro from #33568
 
 declare function ff(x: Foo3<string>): void;
->ff : (x: { x: string; }) => void
+>ff : (x: Foo3<string>) => void
 >x : { x: string; }
 
 declare function gg<T>(f: (x: Foo3<T>) => void): void;

@@ -59,6 +59,7 @@ interface I2 extends I1 { item:string; }
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.M2 = void 0;
     var M1;
     (function (M1) {
         var C1 = /** @class */ (function () {

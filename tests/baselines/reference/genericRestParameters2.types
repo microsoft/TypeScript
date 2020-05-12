@@ -49,7 +49,7 @@ declare let f11: (a: number, ...x: [string, ...boolean[]]) => void;
 >x : [string, ...boolean[]]
 
 declare let f12: (a: number, b: string, ...x: [...boolean[]]) => void;
->f12 : (a: number, b: string, ...x: boolean[]) => void
+>f12 : (a: number, b: string, ...x: [...boolean[]]) => void
 >a : number
 >b : string
 >x : boolean[]

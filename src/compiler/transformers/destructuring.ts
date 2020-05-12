@@ -107,9 +107,6 @@ namespace ts {
         return aggregateTransformFlags(inlineExpressions(expressions!)) || createOmittedExpression();
 
         function emitExpression(expression: Expression) {
-            // NOTE: this completely disables source maps, but aligns with the behavior of
-            //       `emitAssignment` in the old emitter.
-            setEmitFlags(expression, EmitFlags.NoNestedSourceMaps);
             aggregateTransformFlags(expression);
             expressions = append(expressions, expression);
         }
@@ -234,9 +231,6 @@ namespace ts {
             );
             variable.original = original;
             setTextRange(variable, location);
-            if (isIdentifier(name)) {
-                setEmitFlags(variable, EmitFlags.NoNestedSourceMaps);
-            }
             aggregateTransformFlags(variable);
             declarations.push(variable);
         }
@@ -252,7 +246,7 @@ namespace ts {
                 value = inlineExpressions(append(pendingExpressions, value));
                 pendingExpressions = undefined;
             }
-            pendingDeclarations.push({ pendingExpressions, name: <BindingName>target, value, location, original });
+            pendingDeclarations.push({ pendingExpressions, name: target, value, location, original });
         }
     }
 
@@ -325,7 +319,7 @@ namespace ts {
                     && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !isComputedPropertyName(propertyName)) {
-                    bindingElements = append(bindingElements, element);
+                    bindingElements = append(bindingElements, visitNode(element, flattenContext.visitor));
                 }
                 else {
                     if (bindingElements) {

@@ -114,48 +114,103 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 ---
 >>>    var _b = (_a === void 0 ? robotA : _a).skills, _c = _b === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _b, _d = _c.primary, primaryA = _d === void 0 ? "primary" : _d, _e = _c.secondary, secondaryA = _e === void 0 ? "secondary" : _e;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                 ^^
-4 >                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                                                             ^^
-6 >                                                                                                                               ^^^^^^^^^^^^^^^
-7 >                                                                                                                                              ^^
-8 >                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                                                                                                                         ^^
-10>                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^
-11>                                                                                                                                                                                                            ^^
-12>                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^
+3 >                              ^^^^^^
+4 >                                    ^^^^^^^^^^^^^
+5 >                                                 ^^
+6 >                                                   ^^^^^^^^^^^^^^^^^^^^^
+7 >                                                                        ^^
+8 >                                                                          ^^^^^^^
+9 >                                                                                 ^^
+10>                                                                                   ^^^^^^^^^^^
+11>                                                                                              ^^
+12>                                                                                                ^^^^^^^^^
+13>                                                                                                         ^^
+14>                                                                                                           ^^^^^^^^^^^
+15>                                                                                                                      ^^
+16>                                                                                                                        ^^^^^
+17>                                                                                                                             ^^
+18>                                                                                                                               ^^^^^^^^^^^^^^^
+19>                                                                                                                                              ^^
+20>                                                                                                                                                ^^^^^^^^
+21>                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^
+22>                                                                                                                                                                           ^^^^^^^^^
+23>                                                                                                                                                                                    ^^^^^
+24>                                                                                                                                                                                         ^^
+25>                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^
+26>                                                                                                                                                                                                            ^^
+27>                                                                                                                                                                                                              ^^^^^^^^^^
+28>                                                                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^
+29>                                                                                                                                                                                                                                           ^^^^^^^^^^^
+30>                                                                                                                                                                                                                                                      ^^^^^
 1->
 2 >        skills: {
   >                    primary: primaryA = "primary",
   >                    secondary: secondaryA = "secondary"
   >                } = { primary: "SomeSkill", secondary: "someSkill" }
-3 >                                                 
-4 >                                                   skills: {
+  >            }: Robot = 
+3 >                              robotA
+4 >                                    
+5 >                                                 
+6 >                                                   skills: {
   >                                                               primary: primaryA = "primary",
   >                                                               secondary: secondaryA = "secondary"
-  >                                                           } = { primary: "SomeSkill", secondary: "someSkill" }
-5 >                                                                                                                             
-6 >                                                                                                                               primary: primaryA = "primary"
-7 >                                                                                                                                              
-8 >                                                                                                                                                primary: primaryA = "primary"
-9 >                                                                                                                                                                                         ,
+  >                                                           } = 
+7 >                                                                        { 
+8 >                                                                          primary
+9 >                                                                                 : 
+10>                                                                                   "SomeSkill"
+11>                                                                                              , 
+12>                                                                                                secondary
+13>                                                                                                         : 
+14>                                                                                                           "someSkill"
+15>                                                                                                                       }
+16>                                                                                                                        
+17>                                                                                                                             
+18>                                                                                                                               primary: primaryA = "primary"
+19>                                                                                                                                              
+20>                                                                                                                                                primaryA
+21>                                                                                                                                                         = 
+22>                                                                                                                                                                           "primary"
+23>                                                                                                                                                                                    
+24>                                                                                                                                                                                         ,
   >                                                                                                                                                                                                     
-10>                                                                                                                                                                                           secondary: secondaryA = "secondary"
-11>                                                                                                                                                                                                            
-12>                                                                                                                                                                                                              secondary: secondaryA = "secondary"
+25>                                                                                                                                                                                           secondary: secondaryA = "secondary"
+26>                                                                                                                                                                                                            
+27>                                                                                                                                                                                                              secondaryA
+28>                                                                                                                                                                                                                         = 
+29>                                                                                                                                                                                                                                           "secondary"
+30>                                                                                                                                                                                                                                                      
 1->Emitted(3, 9) Source(15, 9) + SourceIndex(0)
-2 >Emitted(3, 50) Source(18, 61) + SourceIndex(0)
-3 >Emitted(3, 52) Source(15, 9) + SourceIndex(0)
-4 >Emitted(3, 126) Source(18, 61) + SourceIndex(0)
-5 >Emitted(3, 128) Source(16, 13) + SourceIndex(0)
-6 >Emitted(3, 143) Source(16, 42) + SourceIndex(0)
-7 >Emitted(3, 145) Source(16, 13) + SourceIndex(0)
-8 >Emitted(3, 186) Source(16, 42) + SourceIndex(0)
-9 >Emitted(3, 188) Source(17, 13) + SourceIndex(0)
-10>Emitted(3, 205) Source(17, 48) + SourceIndex(0)
-11>Emitted(3, 207) Source(17, 13) + SourceIndex(0)
-12>Emitted(3, 252) Source(17, 48) + SourceIndex(0)
+2 >Emitted(3, 31) Source(19, 16) + SourceIndex(0)
+3 >Emitted(3, 37) Source(19, 22) + SourceIndex(0)
+4 >Emitted(3, 50) Source(18, 61) + SourceIndex(0)
+5 >Emitted(3, 52) Source(15, 9) + SourceIndex(0)
+6 >Emitted(3, 73) Source(18, 13) + SourceIndex(0)
+7 >Emitted(3, 75) Source(18, 15) + SourceIndex(0)
+8 >Emitted(3, 82) Source(18, 22) + SourceIndex(0)
+9 >Emitted(3, 84) Source(18, 24) + SourceIndex(0)
+10>Emitted(3, 95) Source(18, 35) + SourceIndex(0)
+11>Emitted(3, 97) Source(18, 37) + SourceIndex(0)
+12>Emitted(3, 106) Source(18, 46) + SourceIndex(0)
+13>Emitted(3, 108) Source(18, 48) + SourceIndex(0)
+14>Emitted(3, 119) Source(18, 59) + SourceIndex(0)
+15>Emitted(3, 121) Source(18, 61) + SourceIndex(0)
+16>Emitted(3, 126) Source(18, 61) + SourceIndex(0)
+17>Emitted(3, 128) Source(16, 13) + SourceIndex(0)
+18>Emitted(3, 143) Source(16, 42) + SourceIndex(0)
+19>Emitted(3, 145) Source(16, 22) + SourceIndex(0)
+20>Emitted(3, 153) Source(16, 30) + SourceIndex(0)
+21>Emitted(3, 172) Source(16, 33) + SourceIndex(0)
+22>Emitted(3, 181) Source(16, 42) + SourceIndex(0)
+23>Emitted(3, 186) Source(16, 42) + SourceIndex(0)
+24>Emitted(3, 188) Source(17, 13) + SourceIndex(0)
+25>Emitted(3, 205) Source(17, 48) + SourceIndex(0)
+26>Emitted(3, 207) Source(17, 24) + SourceIndex(0)
+27>Emitted(3, 217) Source(17, 34) + SourceIndex(0)
+28>Emitted(3, 236) Source(17, 37) + SourceIndex(0)
+29>Emitted(3, 247) Source(17, 48) + SourceIndex(0)
+30>Emitted(3, 252) Source(17, 48) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^
@@ -224,23 +279,44 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 ---
 >>>    var _b = _a === void 0 ? robotA : _a, _c = _b.name, nameC = _c === void 0 ? "name" : _c, _d = _b.skills, _e = _d === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _d, _f = _e.primary, primaryB = _f === void 0 ? "primary" : _f, _g = _e.secondary, secondaryB = _g === void 0 ? "secondary" : _g;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                        ^^
-4 >                                          ^^^^^^^^^^^^
-5 >                                                      ^^
-6 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                           ^^
-8 >                                                                                             ^^^^^^^^^^^^^^
-9 >                                                                                                           ^^
-10>                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-11>                                                                                                                                                                                       ^^
-12>                                                                                                                                                                                         ^^^^^^^^^^^^^^^
-13>                                                                                                                                                                                                        ^^
-14>                                                                                                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-15>                                                                                                                                                                                                                                                   ^^
-16>                                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^
-17>                                                                                                                                                                                                                                                                      ^^
-18>                                                                                                                                                                                                                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^
+3 >                             ^^^^^^
+4 >                                   ^^^^^
+5 >                                        ^^
+6 >                                          ^^^^^^^^^^^^
+7 >                                                      ^^
+8 >                                                        ^^^^^
+9 >                                                             ^^^^^^^^^^^^^^^^^^^
+10>                                                                                ^^^^^^
+11>                                                                                      ^^^^^
+12>                                                                                           ^^
+13>                                                                                             ^^^^^^^^^^^^^^
+14>                                                                                                           ^^
+15>                                                                                                             ^^^^^^^^^^^^^^^^^^^^^
+16>                                                                                                                                  ^^
+17>                                                                                                                                    ^^^^^^^
+18>                                                                                                                                           ^^
+19>                                                                                                                                             ^^^^^^^^^^^
+20>                                                                                                                                                        ^^
+21>                                                                                                                                                          ^^^^^^^^^
+22>                                                                                                                                                                   ^^
+23>                                                                                                                                                                     ^^^^^^^^^^^
+24>                                                                                                                                                                                ^^
+25>                                                                                                                                                                                  ^^^^^
+26>                                                                                                                                                                                       ^^
+27>                                                                                                                                                                                         ^^^^^^^^^^^^^^^
+28>                                                                                                                                                                                                        ^^
+29>                                                                                                                                                                                                          ^^^^^^^^
+30>                                                                                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^
+31>                                                                                                                                                                                                                                     ^^^^^^^^^
+32>                                                                                                                                                                                                                                              ^^^^^
+33>                                                                                                                                                                                                                                                   ^^
+34>                                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^
+35>                                                                                                                                                                                                                                                                      ^^
+36>                                                                                                                                                                                                                                                                        ^^^^^^^^^^
+37>                                                                                                                                                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^
+38>                                                                                                                                                                                                                                                                                                     ^^^^^^^^^^^
+39>                                                                                                                                                                                                                                                                                                                ^^^^^
 1->
 2 >        {
   >                name: nameC = "name",
@@ -248,49 +324,91 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
   >                    primary: primaryB = "primary",
   >                    secondary: secondaryB = "secondary"
   >                } = { primary: "SomeSkill", secondary: "someSkill" }
-  >            }: Robot = robotA
-3 >                                        
-4 >                                          name: nameC = "name"
-5 >                                                      
-6 >                                                        name: nameC = "name"
-7 >                                                                                           ,
+  >            }: Robot = 
+3 >                             robotA
+4 >                                   
+5 >                                        
+6 >                                          name: nameC = "name"
+7 >                                                      
+8 >                                                        nameC
+9 >                                                              = 
+10>                                                                                "name"
+11>                                                                                      
+12>                                                                                           ,
   >                                                                                                   
-8 >                                                                                             skills: {
+13>                                                                                             skills: {
   >                                                                                                         primary: primaryB = "primary",
   >                                                                                                         secondary: secondaryB = "secondary"
   >                                                                                                     } = { primary: "SomeSkill", secondary: "someSkill" }
-9 >                                                                                                           
-10>                                                                                                             skills: {
+14>                                                                                                           
+15>                                                                                                             skills: {
   >                                                                                                                         primary: primaryB = "primary",
   >                                                                                                                         secondary: secondaryB = "secondary"
-  >                                                                                                                     } = { primary: "SomeSkill", secondary: "someSkill" }
-11>                                                                                                                                                                                       
-12>                                                                                                                                                                                         primary: primaryB = "primary"
-13>                                                                                                                                                                                                        
-14>                                                                                                                                                                                                          primary: primaryB = "primary"
-15>                                                                                                                                                                                                                                                   ,
+  >                                                                                                                     } = 
+16>                                                                                                                                  { 
+17>                                                                                                                                    primary
+18>                                                                                                                                           : 
+19>                                                                                                                                             "SomeSkill"
+20>                                                                                                                                                        , 
+21>                                                                                                                                                          secondary
+22>                                                                                                                                                                   : 
+23>                                                                                                                                                                     "someSkill"
+24>                                                                                                                                                                                 }
+25>                                                                                                                                                                                  
+26>                                                                                                                                                                                       
+27>                                                                                                                                                                                         primary: primaryB = "primary"
+28>                                                                                                                                                                                                        
+29>                                                                                                                                                                                                          primaryB
+30>                                                                                                                                                                                                                   = 
+31>                                                                                                                                                                                                                                     "primary"
+32>                                                                                                                                                                                                                                              
+33>                                                                                                                                                                                                                                                   ,
   >                                                                                                                                                                                                                                                               
-16>                                                                                                                                                                                                                                                     secondary: secondaryB = "secondary"
-17>                                                                                                                                                                                                                                                                      
-18>                                                                                                                                                                                                                                                                        secondary: secondaryB = "secondary"
+34>                                                                                                                                                                                                                                                     secondary: secondaryB = "secondary"
+35>                                                                                                                                                                                                                                                                      
+36>                                                                                                                                                                                                                                                                        secondaryB
+37>                                                                                                                                                                                                                                                                                   = 
+38>                                                                                                                                                                                                                                                                                                     "secondary"
+39>                                                                                                                                                                                                                                                                                                                
 1->Emitted(7, 9) Source(23, 5) + SourceIndex(0)
-2 >Emitted(7, 41) Source(29, 22) + SourceIndex(0)
-3 >Emitted(7, 43) Source(24, 9) + SourceIndex(0)
-4 >Emitted(7, 55) Source(24, 29) + SourceIndex(0)
-5 >Emitted(7, 57) Source(24, 9) + SourceIndex(0)
-6 >Emitted(7, 92) Source(24, 29) + SourceIndex(0)
-7 >Emitted(7, 94) Source(25, 9) + SourceIndex(0)
-8 >Emitted(7, 108) Source(28, 61) + SourceIndex(0)
-9 >Emitted(7, 110) Source(25, 9) + SourceIndex(0)
-10>Emitted(7, 184) Source(28, 61) + SourceIndex(0)
-11>Emitted(7, 186) Source(26, 13) + SourceIndex(0)
-12>Emitted(7, 201) Source(26, 42) + SourceIndex(0)
-13>Emitted(7, 203) Source(26, 13) + SourceIndex(0)
-14>Emitted(7, 244) Source(26, 42) + SourceIndex(0)
-15>Emitted(7, 246) Source(27, 13) + SourceIndex(0)
-16>Emitted(7, 263) Source(27, 48) + SourceIndex(0)
-17>Emitted(7, 265) Source(27, 13) + SourceIndex(0)
-18>Emitted(7, 310) Source(27, 48) + SourceIndex(0)
+2 >Emitted(7, 30) Source(29, 16) + SourceIndex(0)
+3 >Emitted(7, 36) Source(29, 22) + SourceIndex(0)
+4 >Emitted(7, 41) Source(29, 22) + SourceIndex(0)
+5 >Emitted(7, 43) Source(24, 9) + SourceIndex(0)
+6 >Emitted(7, 55) Source(24, 29) + SourceIndex(0)
+7 >Emitted(7, 57) Source(24, 15) + SourceIndex(0)
+8 >Emitted(7, 62) Source(24, 20) + SourceIndex(0)
+9 >Emitted(7, 81) Source(24, 23) + SourceIndex(0)
+10>Emitted(7, 87) Source(24, 29) + SourceIndex(0)
+11>Emitted(7, 92) Source(24, 29) + SourceIndex(0)
+12>Emitted(7, 94) Source(25, 9) + SourceIndex(0)
+13>Emitted(7, 108) Source(28, 61) + SourceIndex(0)
+14>Emitted(7, 110) Source(25, 9) + SourceIndex(0)
+15>Emitted(7, 131) Source(28, 13) + SourceIndex(0)
+16>Emitted(7, 133) Source(28, 15) + SourceIndex(0)
+17>Emitted(7, 140) Source(28, 22) + SourceIndex(0)
+18>Emitted(7, 142) Source(28, 24) + SourceIndex(0)
+19>Emitted(7, 153) Source(28, 35) + SourceIndex(0)
+20>Emitted(7, 155) Source(28, 37) + SourceIndex(0)
+21>Emitted(7, 164) Source(28, 46) + SourceIndex(0)
+22>Emitted(7, 166) Source(28, 48) + SourceIndex(0)
+23>Emitted(7, 177) Source(28, 59) + SourceIndex(0)
+24>Emitted(7, 179) Source(28, 61) + SourceIndex(0)
+25>Emitted(7, 184) Source(28, 61) + SourceIndex(0)
+26>Emitted(7, 186) Source(26, 13) + SourceIndex(0)
+27>Emitted(7, 201) Source(26, 42) + SourceIndex(0)
+28>Emitted(7, 203) Source(26, 22) + SourceIndex(0)
+29>Emitted(7, 211) Source(26, 30) + SourceIndex(0)
+30>Emitted(7, 230) Source(26, 33) + SourceIndex(0)
+31>Emitted(7, 239) Source(26, 42) + SourceIndex(0)
+32>Emitted(7, 244) Source(26, 42) + SourceIndex(0)
+33>Emitted(7, 246) Source(27, 13) + SourceIndex(0)
+34>Emitted(7, 263) Source(27, 48) + SourceIndex(0)
+35>Emitted(7, 265) Source(27, 24) + SourceIndex(0)
+36>Emitted(7, 275) Source(27, 34) + SourceIndex(0)
+37>Emitted(7, 294) Source(27, 37) + SourceIndex(0)
+38>Emitted(7, 305) Source(27, 48) + SourceIndex(0)
+39>Emitted(7, 310) Source(27, 48) + SourceIndex(0)
 ---
 >>>    console.log(secondaryB);
 1 >^^^^
@@ -352,17 +470,56 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 ---
 >>>    var _b = (_a === void 0 ? robotA : _a).skills, skills = _b === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _b;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                 ^^
-4 >                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^^^^^^^
+3 >                              ^^^^^^
+4 >                                    ^^^^^^^^^^^^^
+5 >                                                 ^^
+6 >                                                   ^^^^^^
+7 >                                                         ^^^^^^^^^^^^^^^^^^^
+8 >                                                                            ^^
+9 >                                                                              ^^^^^^^
+10>                                                                                     ^^
+11>                                                                                       ^^^^^^^^^^^
+12>                                                                                                  ^^
+13>                                                                                                    ^^^^^^^^^
+14>                                                                                                             ^^
+15>                                                                                                               ^^^^^^^^^^^
+16>                                                                                                                          ^^
+17>                                                                                                                            ^^^^^
 1->
-2 >        skills = { primary: "SomeSkill", secondary: "someSkill" }
-3 >                                                 
-4 >                                                   skills = { primary: "SomeSkill", secondary: "someSkill" }
+2 >        skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = 
+3 >                              robotA
+4 >                                    
+5 >                                                 
+6 >                                                   skills
+7 >                                                          = 
+8 >                                                                            { 
+9 >                                                                              primary
+10>                                                                                     : 
+11>                                                                                       "SomeSkill"
+12>                                                                                                  , 
+13>                                                                                                    secondary
+14>                                                                                                             : 
+15>                                                                                                               "someSkill"
+16>                                                                                                                           }
+17>                                                                                                                            
 1->Emitted(11, 9) Source(32, 17) + SourceIndex(0)
-2 >Emitted(11, 50) Source(32, 74) + SourceIndex(0)
-3 >Emitted(11, 52) Source(32, 17) + SourceIndex(0)
-4 >Emitted(11, 130) Source(32, 74) + SourceIndex(0)
+2 >Emitted(11, 31) Source(32, 87) + SourceIndex(0)
+3 >Emitted(11, 37) Source(32, 93) + SourceIndex(0)
+4 >Emitted(11, 50) Source(32, 74) + SourceIndex(0)
+5 >Emitted(11, 52) Source(32, 17) + SourceIndex(0)
+6 >Emitted(11, 58) Source(32, 23) + SourceIndex(0)
+7 >Emitted(11, 77) Source(32, 26) + SourceIndex(0)
+8 >Emitted(11, 79) Source(32, 28) + SourceIndex(0)
+9 >Emitted(11, 86) Source(32, 35) + SourceIndex(0)
+10>Emitted(11, 88) Source(32, 37) + SourceIndex(0)
+11>Emitted(11, 99) Source(32, 48) + SourceIndex(0)
+12>Emitted(11, 101) Source(32, 50) + SourceIndex(0)
+13>Emitted(11, 110) Source(32, 59) + SourceIndex(0)
+14>Emitted(11, 112) Source(32, 61) + SourceIndex(0)
+15>Emitted(11, 123) Source(32, 72) + SourceIndex(0)
+16>Emitted(11, 125) Source(32, 74) + SourceIndex(0)
+17>Emitted(11, 130) Source(32, 74) + SourceIndex(0)
 ---
 >>>    console.log(skills.primary);
 1 >^^^^

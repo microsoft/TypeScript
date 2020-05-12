@@ -4,7 +4,7 @@
  * @param {number} xyz.bar.p
  */
 function g(xyz) {
->g : (xyz: any) => any
+>g : (xyz: object) => any
 >xyz : any
 
     return xyz.bar.p;

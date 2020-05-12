@@ -2,7 +2,7 @@
 // from bcryptjs
 /** @param {function(...[*])} callback */
 function g(callback) {
->g : (callback: (...arg0: [any][]) => any) => void
+>g : (callback: (...args: [any][]) => ) => void
 >callback : (...arg0: [any][]) => any
 
     callback([1], [2], [3])

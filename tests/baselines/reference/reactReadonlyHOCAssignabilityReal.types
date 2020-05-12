@@ -4,7 +4,7 @@ import * as React from "react";
 >React : typeof React
 
 function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
->myHigherOrderComponent : <P>(Inner: React.ComponentClass<P & { name: string; }, any>) => React.ComponentClass<P, any>
+>myHigherOrderComponent : <P>(Inner: React.ComponentClass<P & {    name: string;}>) => React.ComponentClass<P>
 >Inner : React.ComponentClass<P & { name: string; }, any>
 >React : any
 >name : string

@@ -1,6 +1,5 @@
 tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts(37,5): error TS2322: Type '"y"' is not assignable to type '"x"'.
-tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts(60,5): error TS2322: Type 'string[]' is not assignable to type 'XY[]'.
-  Type 'string' is not assignable to type 'XY'.
+tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts(60,12): error TS2322: Type 'string' is not assignable to type 'XY'.
 
 
 ==== tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts (2 errors) ====
@@ -66,7 +65,6 @@ tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts(60,5): error TS23
         // Desired: OK
         // Error in all extant branches
         arr = [...['y']];
-        ~~~
-!!! error TS2322: Type 'string[]' is not assignable to type 'XY[]'.
-!!! error TS2322:   Type 'string' is not assignable to type 'XY'.
+               ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'XY'.
     }

@@ -12,16 +12,16 @@ export const C = "";
 
 === /d.ts ===
 import type { A, B, C } from './abc';
->A : import("/abc").A
+>A : A
 >B : B
 >C : any
 
 new A();
->new A() : any
->A : any
+>new A() : A
+>A : typeof A
 
 declare let a: A;
->a : import("/abc").A
+>a : A
 
 declare let b: B;
 >b : B

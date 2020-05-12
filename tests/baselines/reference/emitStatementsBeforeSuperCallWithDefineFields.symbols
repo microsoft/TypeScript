@@ -1,0 +1,46 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/emitStatementsBeforeSuperCallWithDefineFields.ts ===
+class Base {
+>Base : Symbol(Base, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 0, 0))
+}
+class Sub extends Base {
+>Sub : Symbol(Sub, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 1, 1))
+>Base : Symbol(Base, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 0, 0))
+
+    // @ts-ignore
+    constructor(public p: number) {
+>p : Symbol(Sub.p, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 4, 16))
+
+        console.log('hi');
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        super();
+>super : Symbol(Base, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 0, 0))
+    }
+    field = 0;
+>field : Symbol(Sub.field, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 7, 5))
+}
+
+class Test extends Base {
+>Test : Symbol(Test, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 9, 1))
+>Base : Symbol(Base, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 0, 0))
+
+    prop: number;
+>prop : Symbol(Test.prop, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 11, 25))
+
+    // @ts-ignore
+    constructor(public p: number) {
+>p : Symbol(Test.p, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 14, 16))
+
+        1;
+        super();
+>super : Symbol(Base, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 0, 0))
+
+        this.prop = 1;
+>this.prop : Symbol(Test.prop, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 11, 25))
+>this : Symbol(Test, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 9, 1))
+>prop : Symbol(Test.prop, Decl(emitStatementsBeforeSuperCallWithDefineFields.ts, 11, 25))
+    }
+}
+

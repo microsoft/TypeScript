@@ -1,0 +1,32 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const m = require("./exporter");
+>m : typeof import("tests/cases/conformance/jsdoc/declarations/exporter")
+>require("./exporter") : typeof import("tests/cases/conformance/jsdoc/declarations/exporter")
+>require : any
+>"./exporter" : "./exporter"
+
+module.exports = m.default;
+>module.exports = m.default : typeof import("tests/cases/conformance/jsdoc/declarations/exporter").default
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/exporter").default
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/exporter").default; }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/exporter").default
+>m.default : { (): void; memberName: string; }
+>m : typeof import("tests/cases/conformance/jsdoc/declarations/exporter")
+>default : { (): void; memberName: string; }
+
+module.exports.memberName = "thing";
+>module.exports.memberName = "thing" : "thing"
+>module.exports.memberName : string
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/exporter").default
+>module : { "\"tests/cases/conformance/jsdoc/declarations/index\"": typeof import("tests/cases/conformance/jsdoc/declarations/exporter").default; }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/exporter").default
+>memberName : string
+>"thing" : "thing"
+
+=== tests/cases/conformance/jsdoc/declarations/exporter.js ===
+function validate() {}
+>validate : typeof validate
+
+export default validate;
+>validate : typeof validate
+

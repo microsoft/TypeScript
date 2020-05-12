@@ -30,9 +30,9 @@ verify.quickInfoIs("var t: FooHandler");
 goTo.marker("2");
 verify.quickInfoIs("var t2: FooHandler2");
 goTo.marker("3");
-verify.quickInfoIs("type FooHandler2 = (eventName?: string, eventName2?: string) => any", "- What, another one?");
+verify.quickInfoIs("type FooHandler2 = (eventName?: string | undefined, eventName2?: string) => any", "- What, another one?");
 goTo.marker("8");
-verify.quickInfoIs("type FooHandler = (eventName: string, eventName2: string | number, eventName3: any) => number", "- A kind of magic");
+verify.quickInfoIs("type FooHandler = (eventName: string, eventName2: number | string, eventName3: any) => number", "- A kind of magic");
 verify.signatureHelp({
     marker: '4',
     text: "t(eventName: string, eventName2: string | number, eventName3: any): number",

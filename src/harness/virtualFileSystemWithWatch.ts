@@ -70,11 +70,11 @@ interface Array<T> { length: number; [n: number]: T; }`
     }
 
     export type FileOrFolderOrSymLink = File | Folder | SymLink;
-    function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
+    export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
         return isString((<File>fileOrFolderOrSymLink).content);
     }
 
-    function isSymLink(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is SymLink {
+    export function isSymLink(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is SymLink {
         return isString((<SymLink>fileOrFolderOrSymLink).symLink);
     }
 
@@ -199,17 +199,21 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkMap(`watchedFiles:: ${additionalInfo || ""}::`, host.watchedFiles, expectedFiles, /*eachKeyCount*/ undefined);
     }
 
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number>, expectedPollingIntervals?: Map<PollingInterval[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedPollingIntervals?: Map<PollingInterval[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number> | readonly string[], eachFileWatchCount?: number | Map<PollingInterval[]>, expectedPollingIntervals?: Map<PollingInterval[]>) {
-        if (!isNumber(eachFileWatchCount)) expectedPollingIntervals = eachFileWatchCount;
+    export interface WatchFileDetails {
+        fileName: string;
+        pollingInterval: PollingInterval;
+    }
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number>, expectedDetails?: Map<WatchFileDetails[]>): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedDetails?: Map<WatchFileDetails[]>): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number> | readonly string[], eachFileWatchCountOrExpectedDetails?: number | Map<WatchFileDetails[]>, expectedDetails?: Map<WatchFileDetails[]>) {
+        if (!isNumber(eachFileWatchCountOrExpectedDetails)) expectedDetails = eachFileWatchCountOrExpectedDetails;
         if (isArray(expectedFiles)) {
             checkMap(
                 "watchedFiles",
                 host.watchedFiles,
                 expectedFiles,
-                eachFileWatchCount as number,
-                [expectedPollingIntervals, ({ pollingInterval }) => pollingInterval]
+                eachFileWatchCountOrExpectedDetails as number,
+                [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]
             );
         }
         else {
@@ -217,7 +221,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 "watchedFiles",
                 host.watchedFiles,
                 expectedFiles,
-                [expectedPollingIntervals, ({ pollingInterval }) => pollingInterval]
+                [expectedDetails, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval })]
             );
         }
     }
@@ -226,30 +230,31 @@ interface Array<T> { length: number; [n: number]: T; }`
         checkMap(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.fsWatchesRecursive : host.fsWatches, expectedDirectories, /*eachKeyCount*/ undefined);
     }
 
-    export interface FallbackPollingOptions {
+    export interface WatchDirectoryDetails {
+        directoryName: string;
         fallbackPollingInterval: PollingInterval;
         fallbackOptions: WatchOptions | undefined;
     }
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number>, recursive: boolean, expectedFallbacks?: Map<FallbackPollingOptions[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedFallbacks?: Map<FallbackPollingOptions[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedFallbacks?: boolean | Map<FallbackPollingOptions[]>, expectedFallbacks?: Map<FallbackPollingOptions[]>) {
-        if (typeof recursiveOrExpectedFallbacks !== "boolean") expectedFallbacks = recursiveOrExpectedFallbacks;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number>, recursive: boolean, expectedDetails?: Map<WatchDirectoryDetails[]>): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedDetails?: Map<WatchDirectoryDetails[]>): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedDetails?: boolean | Map<WatchDirectoryDetails[]>, expectedDetails?: Map<WatchDirectoryDetails[]>) {
+        if (typeof recursiveOrExpectedDetails !== "boolean") expectedDetails = recursiveOrExpectedDetails;
         if (isArray(expectedDirectories)) {
             checkMap(
-                `fsWatches${recursiveOrExpectedFallbacks ? " recursive" : ""}`,
-                recursiveOrExpectedFallbacks as boolean ? host.fsWatchesRecursive : host.fsWatches,
+                `fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`,
+                recursiveOrExpectedDetails as boolean ? host.fsWatchesRecursive : host.fsWatches,
                 expectedDirectories,
                 recursiveOrEachDirectoryWatchCount as number,
-                [expectedFallbacks, ({ fallbackPollingInterval, fallbackOptions }) => ({ fallbackPollingInterval, fallbackOptions })]
+                [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
             );
         }
         else {
-            recursiveOrExpectedFallbacks = recursiveOrEachDirectoryWatchCount as boolean;
+            recursiveOrExpectedDetails = recursiveOrEachDirectoryWatchCount as boolean;
             checkMap(
                 `fsWatches{recursive ? " recursive" : ""}`,
-                recursiveOrExpectedFallbacks ? host.fsWatchesRecursive : host.fsWatches,
+                recursiveOrExpectedDetails ? host.fsWatchesRecursive : host.fsWatches,
                 expectedDirectories,
-                [expectedFallbacks, ({ fallbackPollingInterval, fallbackOptions }) => ({ fallbackPollingInterval, fallbackOptions })]
+                [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
             );
         }
     }
@@ -330,6 +335,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export interface TestFsWatcher {
         cb: FsWatchCallback;
+        directoryName: string;
         fallbackPollingInterval: PollingInterval;
         fallbackOptions: WatchOptions | undefined;
     }
@@ -437,6 +443,11 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.watchFile = watchFile;
             this.watchDirectory = watchDirectory;
             this.reloadFS(fileOrFolderorSymLinkList);
+        }
+
+        // Output is pretty
+        writeOutputIsTTY() {
+            return true;
         }
 
         getNewLine() {
@@ -611,28 +622,29 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
-        ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean) {
+        ensureFileOrFolder(fileOrDirectoryOrSymLink: FileOrFolderOrSymLink, ignoreWatchInvokedWithTriggerAsFileCreate?: boolean, ignoreParentWatch?: boolean) {
             if (isFile(fileOrDirectoryOrSymLink)) {
                 const file = this.toFsFile(fileOrDirectoryOrSymLink);
                 // file may already exist when updating existing type declaration file
                 if (!this.fs.get(file.path)) {
-                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath));
+                    const baseFolder = this.ensureFolder(getDirectoryPath(file.fullPath), ignoreParentWatch);
                     this.addFileOrFolderInFolder(baseFolder, file, ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
             }
             else if (isSymLink(fileOrDirectoryOrSymLink)) {
                 const symLink = this.toFsSymLink(fileOrDirectoryOrSymLink);
                 Debug.assert(!this.fs.get(symLink.path));
-                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath));
+                const baseFolder = this.ensureFolder(getDirectoryPath(symLink.fullPath), ignoreParentWatch);
                 this.addFileOrFolderInFolder(baseFolder, symLink, ignoreWatchInvokedWithTriggerAsFileCreate);
             }
             else {
                 const fullPath = getNormalizedAbsolutePath(fileOrDirectoryOrSymLink.path, this.currentDirectory);
-                this.ensureFolder(fullPath);
+                this.ensureFolder(getDirectoryPath(fullPath), ignoreParentWatch);
+                this.ensureFolder(fullPath, ignoreWatchInvokedWithTriggerAsFileCreate);
             }
         }
 
-        private ensureFolder(fullPath: string): FsFolder {
+        private ensureFolder(fullPath: string, ignoreWatch: boolean | undefined): FsFolder {
             const path = this.toPath(fullPath);
             let folder = this.fs.get(path) as FsFolder;
             if (!folder) {
@@ -640,8 +652,8 @@ interface Array<T> { length: number; [n: number]: T; }`
                 const baseFullPath = getDirectoryPath(fullPath);
                 if (fullPath !== baseFullPath) {
                     // Add folder in the base folder
-                    const baseFolder = this.ensureFolder(baseFullPath);
-                    this.addFileOrFolderInFolder(baseFolder, folder);
+                    const baseFolder = this.ensureFolder(baseFullPath, ignoreWatch);
+                    this.addFileOrFolderInFolder(baseFolder, folder, ignoreWatch);
                 }
                 else {
                     // root folder
@@ -739,7 +751,12 @@ interface Array<T> { length: number; [n: number]: T; }`
                 createWatcher(
                     recursive ? this.fsWatchesRecursive : this.fsWatches,
                     this.toFullPath(fileOrDirectory),
-                    { cb, fallbackPollingInterval, fallbackOptions }
+                    {
+                        directoryName: fileOrDirectory,
+                        cb,
+                        fallbackPollingInterval,
+                        fallbackOptions
+                    }
                 );
         }
 
@@ -1067,7 +1084,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         serializeWatches(baseline: string[]) {
-            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ pollingInterval }) => ({ pollingInterval }));
+            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles, ({ fileName, pollingInterval }) => ({ fileName, pollingInterval }));
             baseline.push("");
             serializeMultiMap(baseline, "FsWatches", this.fsWatches, serializeTestFsWatcher);
             baseline.push("");
@@ -1170,8 +1187,9 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    function serializeTestFsWatcher({ fallbackPollingInterval, fallbackOptions }: TestFsWatcher) {
+    function serializeTestFsWatcher({ directoryName, fallbackPollingInterval, fallbackOptions }: TestFsWatcher) {
         return {
+            directoryName,
             fallbackPollingInterval,
             fallbackOptions: serializeWatchOptions(fallbackOptions)
         };

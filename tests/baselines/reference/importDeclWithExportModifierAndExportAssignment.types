@@ -5,9 +5,9 @@ module x {
 }
 export import a = x.c;
 >a : any
->x : any
+>x : typeof x
 >c : any
 
 export = x;
->x : any
+>x : typeof x
 

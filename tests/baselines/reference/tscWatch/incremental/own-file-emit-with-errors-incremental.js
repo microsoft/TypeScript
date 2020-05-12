@@ -35,15 +35,18 @@ var y = 20;
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./file1.ts": {
         "version": "5029505981-const x = 10;",
-        "signature": "-4001438729-declare const x = 10;\n"
+        "signature": "-4001438729-declare const x = 10;\n",
+        "affectsGlobalScope": true
       },
       "./file2.ts": {
         "version": "2414573776-const y: string = 20;",
-        "signature": "509180395-declare const y: string;\n"
+        "signature": "509180395-declare const y: string;\n",
+        "affectsGlobalScope": true
       }
     },
     "options": {
@@ -75,7 +78,15 @@ var y = 20;
 
 
 Output::
-file2.ts(1,7): error TS2322: Type '20' is not assignable to type 'string'.
+[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '20' is not assignable to type 'string'.
+
+[7m1[0m const y: string = 20;
+[7m [0m [91m      ~[0m
+
+
+
+Found 1 error.
+
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
@@ -114,15 +125,18 @@ var z = 10;
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "affectsGlobalScope": true
       },
       "./file1.ts": {
         "version": "3317474623-const z = 10;",
-        "signature": "-368931399-declare const z = 10;\n"
+        "signature": "-368931399-declare const z = 10;\n",
+        "affectsGlobalScope": true
       },
       "./file2.ts": {
         "version": "2414573776-const y: string = 20;",
-        "signature": "509180395-declare const y: string;\n"
+        "signature": "509180395-declare const y: string;\n",
+        "affectsGlobalScope": true
       }
     },
     "options": {
@@ -154,7 +168,15 @@ var z = 10;
 
 
 Output::
-file2.ts(1,7): error TS2322: Type '20' is not assignable to type 'string'.
+[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '20' is not assignable to type 'string'.
+
+[7m1[0m const y: string = 20;
+[7m [0m [91m      ~[0m
+
+
+
+Found 1 error.
+
 
 
 Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]

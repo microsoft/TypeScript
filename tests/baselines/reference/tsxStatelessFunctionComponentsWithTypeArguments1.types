@@ -3,7 +3,7 @@ import React = require('react')
 >React : typeof React
 
 declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
->ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
+>ComponentWithTwoAttributes : <K, V>(l: {    key1: K;    value: V;}) => JSX.Element
 >l : { key1: K; value: V; }
 >key1 : K
 >value : V

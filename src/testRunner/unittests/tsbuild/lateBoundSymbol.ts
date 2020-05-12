@@ -1,16 +1,8 @@
 namespace ts {
     describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contains late bound member", () => {
-        let projFs: vfs.FileSystem;
-        before(() => {
-            projFs = loadProjectFromDisk("tests/projects/lateBoundSymbol");
-        });
-        after(() => {
-            projFs = undefined!; // Release the contents
-        });
-
         verifyTscIncrementalEdits({
             subScenario: "interface is merged and contains late bound member",
-            fs: () => projFs,
+            fs: () => loadProjectFromDisk("tests/projects/lateBoundSymbol"),
             scenario: "lateBoundSymbol",
             commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
             incrementalScenarios: [{

@@ -24,7 +24,7 @@ var A = /** @class */ (function () {
             }
             return A._a = 'helloworld';
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return A;
