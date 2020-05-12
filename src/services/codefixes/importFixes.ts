@@ -58,7 +58,7 @@ namespace ts.codefix {
             const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
             const checker = program.getTypeChecker();
             const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
-            const exportInfos = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, sourceFile, compilerOptions, checker, program.getSourceFiles());
+            const exportInfos = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, host, program);
             const preferTypeOnlyImport = !!usageIsTypeOnly && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error;
             const useRequire = shouldUseRequire(sourceFile, compilerOptions);
             const fix = getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, symbolName, program, /*position*/ undefined, preferTypeOnlyImport, useRequire, host, preferences);
@@ -206,7 +206,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
         const compilerOptions = program.getCompilerOptions();
-        const exportInfos = getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, sourceFile, compilerOptions, program.getTypeChecker(), program.getSourceFiles());
+        const exportInfos = getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, host, program);
         const useRequire = shouldUseRequire(sourceFile, compilerOptions);
         const preferTypeOnlyImport = compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error && !isSourceFileJS(sourceFile) && isValidTypeOnlyAliasUseSite(getTokenAtPosition(sourceFile, position));
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences)).moduleSpecifier;
@@ -224,11 +224,13 @@ namespace ts.codefix {
         return { description, changes, commands };
     }
 
-    function getAllReExportingModules(importingFile: SourceFile, exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, sourceFile: SourceFile, compilerOptions: CompilerOptions, checker: TypeChecker, allSourceFiles: readonly SourceFile[]): readonly SymbolExportInfo[] {
+    function getAllReExportingModules(importingFile: SourceFile, exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, host: LanguageServiceHost, program: Program): readonly SymbolExportInfo[] {
         const result: SymbolExportInfo[] = [];
-        forEachExternalModule(checker, allSourceFiles, (moduleSymbol, moduleFile) => {
+        const checker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
+        forEachExternalModuleFromEachAutoImportProvider(program, host, importingFile, /*filterByPackageJson*/ false, (moduleSymbol, moduleFile) => {
             // Don't import from a re-export when looking "up" like to `./index` or `../index`.
-            if (moduleFile && moduleSymbol !== exportingModuleSymbol && startsWith(sourceFile.fileName, getDirectoryPath(moduleFile.fileName))) {
+            if (moduleFile && moduleSymbol !== exportingModuleSymbol && startsWith(importingFile.fileName, getDirectoryPath(moduleFile.fileName))) {
                 return;
             }
 
@@ -519,7 +521,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
         }
-        forEachExternalModuleToImportFrom(program, host, sourceFile, /*filterByPackageJson*/ true, moduleSymbol => {
+        forEachExternalModuleFromEachAutoImportProvider(program, host, sourceFile, /*filterByPackageJson*/ true, moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, program.getCompilerOptions());
@@ -784,12 +786,25 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModuleToImportFrom(
+    export function forEachExternalModuleFromEachAutoImportProvider(
         program: Program,
         host: LanguageServiceHost,
         from: SourceFile,
         filterByPackageJson: boolean,
-        cb: (module: Symbol) => void,
+        cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program) => void,
+    ) {
+        forEachExternalModuleToImportFrom(program, host, from, filterByPackageJson, (module, file) => cb(module, file, program));
+        host.getAutoImportProviders?.(from.path)?.forEach(program => {
+            forEachExternalModuleToImportFrom(program, host, from, /*filterByPackageJson*/ false, (module, file) => cb(module, file, program));
+        });
+    }
+
+    function forEachExternalModuleToImportFrom(
+        program: Program,
+        host: LanguageServiceHost,
+        from: SourceFile,
+        filterByPackageJson: boolean,
+        cb: (module: Symbol, moduleFile: SourceFile | undefined) => void,
     ) {
         let filteredCount = 0;
         const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
@@ -797,7 +812,7 @@ namespace ts.codefix {
         forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, sourceFile) => {
             if (sourceFile === undefined) {
                 if (!packageJson || packageJson.allowsImportingAmbientModule(module)) {
-                    cb(module);
+                    cb(module, sourceFile);
                 }
                 else if (packageJson) {
                     filteredCount++;
@@ -808,7 +823,7 @@ namespace ts.codefix {
                 isImportableFile(program, from, sourceFile, moduleSpecifierResolutionHost)
             ) {
                 if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile)) {
-                    cb(module);
+                    cb(module, sourceFile);
                 }
                 else if (packageJson) {
                     filteredCount++;

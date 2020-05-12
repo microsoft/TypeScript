@@ -1,18 +1,34 @@
 /*@internal*/
 namespace ts.server {
+    export interface PackageJsonCacheHost {
+        toPath(fileName: string): Path;
+        readFile(fileName: string): string | undefined;
+        fileExists(fileName: string): boolean;
+    }
+
     export interface PackageJsonCache {
         addOrUpdate(fileName: Path): void;
+        forEach(action: (info: PackageJsonInfo, fileName: Path) => void): void;
         delete(fileName: Path): void;
+        get(fileName: Path): PackageJsonInfo | false | undefined;
         getInDirectory(directory: Path): PackageJsonInfo | undefined;
         directoryHasPackageJson(directory: Path): Ternary;
         searchDirectoryAndAncestors(directory: Path): void;
     }
 
-    export function createPackageJsonCache(project: Project): PackageJsonCache {
+    export function createPackageJsonCache(host: PackageJsonCacheHost): PackageJsonCache {
         const packageJsons = createMap<PackageJsonInfo | false>();
         const directoriesWithoutPackageJson = createMap<true>();
         return {
             addOrUpdate,
+            forEach: action => {
+                packageJsons.forEach((info, fileName) => {
+                    if (info !== false) {
+                        action(info, fileName as Path);
+                    }
+                });
+            },
+            get: packageJsons.get.bind(packageJsons),
             delete: fileName => {
                 packageJsons.delete(fileName);
                 directoriesWithoutPackageJson.set(getDirectoryPath(fileName), true);
@@ -26,8 +42,8 @@ namespace ts.server {
                     if (directoryHasPackageJson(ancestor) !== Ternary.Maybe) {
                         return true;
                     }
-                    const packageJsonFileName = project.toPath(combinePaths(ancestor, "package.json"));
-                    if (tryFileExists(project, packageJsonFileName)) {
+                    const packageJsonFileName = host.toPath(combinePaths(ancestor, "package.json"));
+                    if (tryFileExists(host, packageJsonFileName)) {
                         addOrUpdate(packageJsonFileName);
                     }
                     else {
@@ -38,7 +54,7 @@ namespace ts.server {
         };
 
         function addOrUpdate(fileName: Path) {
-            const packageJsonInfo = createPackageJsonInfo(fileName, project);
+            const packageJsonInfo = createPackageJsonInfo(fileName, host);
             if (packageJsonInfo !== undefined) {
                 packageJsons.set(fileName, packageJsonInfo);
                 directoriesWithoutPackageJson.delete(getDirectoryPath(fileName));

@@ -2685,7 +2685,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | false | undefined {
+    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): PackageJsonInfo | false | undefined {
         if (!host.readFile) {
             return undefined;
         }

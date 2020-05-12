@@ -1613,7 +1613,7 @@ namespace ts.Completions {
             /** Ids present in `results` for faster lookup */
             const resultSymbolIds = createMap<true>();
 
-            codefix.forEachExternalModuleToImportFrom(program, host, sourceFile, !detailsEntryId, moduleSymbol => {
+            codefix.forEachExternalModuleFromEachAutoImportProvider(program, host, sourceFile, !detailsEntryId, moduleSymbol => {
                 // Perf -- ignore other modules if this is a request for details
                 if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
                     return;

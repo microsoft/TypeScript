@@ -134,9 +134,6 @@ namespace ts.server {
         private plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
-        private packageJsonFilesMap: Map<FileWatcher> | undefined;
-
-        /*@internal*/
         /**
          * This is map from files to unresolved imports in it
          * Maop does not contain entries for files that do not have unresolved imports
@@ -244,9 +241,6 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
-        readonly packageJsonCache: PackageJsonCache;
-
-        /*@internal*/
         private importSuggestionsCache = Completions.createImportSuggestionsForFileCache();
         /*@internal*/
         private dirtyFilesForSuggestions: Map<true> | undefined;
@@ -302,7 +296,6 @@ namespace ts.server {
             }
             this.markAsDirty();
             this.projectService.pendingEnsureProjectForOpenFiles = true;
-            this.packageJsonCache = createPackageJsonCache(this);
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -717,10 +710,6 @@ namespace ts.server {
             if (this.missingFilesMap) {
                 clearMap(this.missingFilesMap, closeFileWatcher);
                 this.missingFilesMap = undefined!;
-            }
-            if (this.packageJsonFilesMap) {
-                clearMap(this.packageJsonFilesMap, closeFileWatcher);
-                this.packageJsonFilesMap = undefined;
             }
             this.clearGeneratedFileWatch();
 
@@ -1546,37 +1535,7 @@ namespace ts.server {
 
         /*@internal*/
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
-            const packageJsonCache = this.packageJsonCache;
-            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
-            const toPath = this.toPath.bind(this);
-            const rootPath = rootDir && toPath(rootDir);
-            const filePath = toPath(fileName);
-            const result: PackageJsonInfo[] = [];
-            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
-                switch (packageJsonCache.directoryHasPackageJson(directory)) {
-                    // Sync and check same directory again
-                    case Ternary.Maybe:
-                        packageJsonCache.searchDirectoryAndAncestors(directory);
-                        return processDirectory(directory);
-                    // Check package.json
-                    case Ternary.True:
-                        const packageJsonFileName = combinePaths(directory, "package.json");
-                        watchPackageJsonFile(packageJsonFileName);
-                        const info = packageJsonCache.getInDirectory(directory);
-                        if (info) result.push(info);
-                }
-                if (rootPath && rootPath === toPath(directory)) {
-                    return true;
-                }
-            });
-
-            return result;
-        }
-
-        /*@internal*/
-        onAddPackageJson(path: Path) {
-            this.packageJsonCache.addOrUpdate(path);
-            this.watchPackageJsonFile(path);
+            return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
         }
 
         /*@internal*/
@@ -1584,30 +1543,11 @@ namespace ts.server {
             return this.importSuggestionsCache;
         }
 
-        private watchPackageJsonFile(path: Path) {
-            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
-            if (!watchers.has(path)) {
-                watchers.set(path, this.projectService.watchFactory.watchFile(
-                    this.projectService.host,
-                    path,
-                    (fileName, eventKind) => {
-                        const path = this.toPath(fileName);
-                        switch (eventKind) {
-                            case FileWatcherEventKind.Created:
-                                return Debug.fail();
-                            case FileWatcherEventKind.Changed:
-                                this.packageJsonCache.addOrUpdate(path);
-                                break;
-                            case FileWatcherEventKind.Deleted:
-                                this.packageJsonCache.delete(path);
-                                watchers.get(path)!.close();
-                                watchers.delete(path);
-                        }
-                    },
-                    PollingInterval.Low,
-                    this.projectService.getWatchOptions(this),
-                    WatchType.PackageJsonFile,
-                ));
+        getAutoImportProviders(importingFilePath: string) {
+            if (this.projectService.packageJsonAutoImportProviders) {
+                return mapDefined(this.getPackageJsonsVisibleToFile(importingFilePath), info => {
+                    return this.projectService.packageJsonAutoImportProviders!.get(info.fileName);
+                });
             }
         }
     }

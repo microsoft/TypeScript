@@ -282,6 +282,8 @@ namespace ts {
         setCompilerHost?(host: CompilerHost): void;
         /* @internal */
         useSourceOfProjectReferenceRedirect?(): boolean;
+        /* @internal */
+        getAutoImportProviders?(importingFilePath: string): readonly Program[] | undefined;
     }
 
     /* @internal */

@@ -403,6 +403,7 @@ namespace ts.server {
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
         syntaxOnly?: boolean;
+        usePackageJsonAutoImportProvider?: boolean;
     }
 
     interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
@@ -673,6 +674,14 @@ namespace ts.server {
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
+        /*@internal*/
+        readonly packageJsonAutoImportProviders?: Map<Program>;
+        /*@internal*/
+        readonly packageJsonCache: PackageJsonCache;
+        /*@internal*/
+        private packageJsonFilesMap: Map<FileWatcher> | undefined;
+
+
         private performanceEventHandler?: PerformanceEventHandler;
 
         constructor(opts: ProjectServiceOptions) {
@@ -725,6 +734,16 @@ namespace ts.server {
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
             this.watchFactory = getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
+
+            this.packageJsonCache = createPackageJsonCache({
+                fileExists: this.host.fileExists,
+                readFile: this.host.readFile,
+                toPath: this.toPath.bind(this),
+            });
+
+            if (opts.usePackageJsonAutoImportProvider) {
+                this.packageJsonAutoImportProviders = createMap();
+            }
         }
 
         toPath(fileName: string) {
@@ -1184,7 +1203,7 @@ namespace ts.server {
                         (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
                     ) {
                         this.logger.info(`Project: ${configFilename} Detected new package.json: ${fileOrDirectory}`);
-                        project.onAddPackageJson(fileOrDirectoryPath);
+                        this.onAddPackageJson(fileOrDirectoryPath);
                     }
 
                     // If the the added or created file or directory is not supported file name, ignore the file
@@ -2017,7 +2036,7 @@ namespace ts.server {
                 };
             }
             project.configFileSpecs = parsedCommandLine.configFileSpecs;
-            project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInutFiles(parsedCommandLine.raw);
+            project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
             project.setProjectErrors(configFileErrors);
             project.updateReferences(parsedCommandLine.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
@@ -2034,6 +2053,48 @@ namespace ts.server {
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
+        }
+
+        private createOrUpdatePackageJsonAutoImportProvider(packageJsonFile: Path) {
+            if (!this.packageJsonAutoImportProviders) {
+                return;
+            }
+            const packageJson = this.packageJsonCache.get(packageJsonFile);
+            if (!packageJson) {
+                return;
+            }
+
+            const types = createMap<true>();
+            if (packageJson.dependencies) {
+                packageJson.dependencies.forEach((_, dep) => {
+                    if (!startsWith(dep, "@types/")) {
+                        types.set(dep, true);
+                    }
+                });
+            }
+            if (packageJson.devDependencies) {
+                packageJson.devDependencies.forEach((_, dep) => {
+                    if (!startsWith(dep, "@types/")) {
+                        types.set(dep, true);
+                    }
+                });
+            }
+            const options = {
+                noLib: true,
+                skipLibCheck: true,
+                diagnostics: false,
+                types: arrayFrom(types.keys())
+            };
+            const directory = getDirectoryPath(packageJsonFile);
+            this.packageJsonAutoImportProviders.set(packageJsonFile, createProgram({
+                options,
+                rootNames: [],
+                oldProgram: this.packageJsonAutoImportProviders.get(packageJsonFile),
+                host: {
+                    ...createCompilerHost(options, /*setParentNodes*/ false),
+                    getCurrentDirectory: () => directory
+                }
+            }));
         }
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {
@@ -3670,6 +3731,72 @@ namespace ts.server {
             // If a plugin is configured twice, only the latest configuration will be remembered.
             this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || createMap();
             this.currentPluginConfigOverrides.set(args.pluginName, args.configuration);
+        }
+
+        /*@internal*/
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+            const packageJsonCache = this.packageJsonCache;
+            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
+            const toPath = this.toPath.bind(this);
+            const rootPath = rootDir && toPath(rootDir);
+            const filePath = toPath(fileName);
+            const result: PackageJsonInfo[] = [];
+            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
+                switch (packageJsonCache.directoryHasPackageJson(directory)) {
+                    // Sync and check same directory again
+                    case Ternary.Maybe:
+                        packageJsonCache.searchDirectoryAndAncestors(directory);
+                        return processDirectory(directory);
+                    // Check package.json
+                    case Ternary.True:
+                        const packageJsonFileName = combinePaths(directory, "package.json");
+                        watchPackageJsonFile(packageJsonFileName);
+                        const info = packageJsonCache.getInDirectory(directory);
+                        if (info) result.push(info);
+                }
+                if (rootPath && rootPath === toPath(directory)) {
+                    return true;
+                }
+            });
+
+            return result;
+        }
+
+        private watchPackageJsonFile(path: Path) {
+            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
+            if (!watchers.has(path)) {
+                const project = this.getDefaultProjectForFile(asNormalizedPath(path), /*ensureProject*/ false);
+                this.createOrUpdatePackageJsonAutoImportProvider(path);
+                watchers.set(path, this.watchFactory.watchFile(
+                    this.host,
+                    path,
+                    (fileName, eventKind) => {
+                        const path = this.toPath(fileName);
+                        switch (eventKind) {
+                            case FileWatcherEventKind.Created:
+                                return Debug.fail();
+                            case FileWatcherEventKind.Changed:
+                                this.packageJsonCache.addOrUpdate(path);
+                                this.createOrUpdatePackageJsonAutoImportProvider(path);
+                                break;
+                            case FileWatcherEventKind.Deleted:
+                                this.packageJsonCache.delete(path);
+                                this.packageJsonAutoImportProviders?.delete(path);
+                                watchers.get(path)!.close();
+                                watchers.delete(path);
+                        }
+                    },
+                    PollingInterval.Low,
+                    project ? this.getWatchOptions(project) : undefined,
+                    WatchType.PackageJsonFile,
+                ));
+            }
+        }
+
+        /*@internal*/
+        onAddPackageJson(path: Path) {
+            this.packageJsonCache.addOrUpdate(path);
+            this.watchPackageJsonFile(path);
         }
     }
 
