@@ -5949,6 +5949,25 @@ namespace ts {
                     }
                 }
 
+                function isEffectiveClassSymbol(symbol: Symbol) {
+                    if (!(symbol.flags & SymbolFlags.Class)) {
+                        return false;
+                    }
+                    if (isInJSFile(symbol.valueDeclaration) && !isClassLike(symbol.valueDeclaration)) {
+                        // For a symbol that isn't syntactically a `class` in a JS file we have heuristics
+                        // that detect prototype assignments that indicate the symbol is *probably* a class.
+                        // Filter out any prototype assignments for non-class symbols, i.e.
+                        //
+                        //     let A;
+                        //     A = {};
+                        //     A.prototype.b = {};
+                        const type = getTypeOfSymbol(symbol);
+                        return some(getSignaturesOfType(type, SignatureKind.Construct))
+                            || some(getSignaturesOfType(type, SignatureKind.Call));
+                    }
+                    return true;
+                }
+
                 // Synthesize declarations for a symbol - might be an Interface, a Class, a Namespace, a Type, a Variable (const, let, or var), an Alias
                 // or a merge of some number of those.
                 // An interesting challenge is ensuring that when classes merge with namespaces and interfaces, is keeping
@@ -5990,14 +6009,14 @@ namespace ts {
                     if (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.FunctionScopedVariable | SymbolFlags.Property)
                         && symbol.escapedName !== InternalSymbolName.ExportEquals
                         && !(symbol.flags & SymbolFlags.Prototype)
-                        && !(symbol.flags & SymbolFlags.Class)
+                        && !isEffectiveClassSymbol(symbol)
                         && !isConstMergedWithNSPrintableAsSignatureMerge) {
                         serializeVariableOrProperty(symbol, symbolName, isPrivate, needsPostExportDefault, propertyAsAlias, modifierFlags);
                     }
                     if (symbol.flags & SymbolFlags.Enum) {
                         serializeEnum(symbol, symbolName, modifierFlags);
                     }
-                    if (symbol.flags & SymbolFlags.Class) {
+                    if (isEffectiveClassSymbol(symbol)) {
                         if (symbol.flags & SymbolFlags.Property && isBinaryExpression(symbol.valueDeclaration.parent) && isClassExpression(symbol.valueDeclaration.parent.right)) {
                             // Looks like a `module.exports.Sub = class {}` - if we serialize `symbol` as a class, the result will have no members,
                             // since the classiness is actually from the target of the effective alias the symbol is. yes. A BlockScopedVariable|Class|Property
@@ -6317,7 +6336,9 @@ namespace ts {
                     const baseTypes = getBaseTypes(classType);
                     const implementsTypes = getImplementsTypes(classType);
                     const staticType = getTypeOfSymbol(symbol);
-                    const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
+                    const staticBaseType = staticType.symbol?.valueDeclaration && isClassLike(staticType.symbol.valueDeclaration)
+                        ? getBaseConstructorTypeOfClass(staticType as InterfaceType)
+                        : anyType;
                     const heritageClauses = [
                         ...!length(baseTypes) ? [] : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))],
                         ...!length(implementsTypes) ? [] : [createHeritageClause(SyntaxKind.ImplementsKeyword, map(implementsTypes, b => serializeBaseType(b, staticBaseType, localName)))]
