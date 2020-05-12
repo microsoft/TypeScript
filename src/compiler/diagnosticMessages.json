@@ -5697,6 +5697,10 @@
         "category": "Message",
         "code": 95117
     },
+    "Convert overload list to single signature": {
+        "category": "Message",
+        "code": 95118
+    },
     
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
