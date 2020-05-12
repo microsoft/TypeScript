@@ -1,7 +1,0 @@
-Exit Code: 1
-Standard output:
-node_modules/eventemitter3/index.d.ts(117,17): error TS2536: Type 'K' cannot be used to index type 'ArgumentMap<T>'.
-
-
-
-Standard error:
