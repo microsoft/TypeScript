@@ -15,6 +15,9 @@ export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disa
 
 export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike rest, disallowed
 
+export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
+export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
+
 
 //// [namedTupleMembersErrors.js]
 "use strict";
@@ -30,3 +33,5 @@ export declare type Trailing = [first: string, rest: ...string[]];
 export declare type OptTrailing = [first: string, rest: ...?string[]];
 export declare type OptRest = [first: string, ...rest?: string[]];
 export declare type NonArrayRest = [first: string, ...rest: number];
+export declare type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
+export declare type RecusiveRest = [first: string, ...rest: RecusiveRest];

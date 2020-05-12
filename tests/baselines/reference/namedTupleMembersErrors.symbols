@@ -23,3 +23,11 @@ export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disa
 export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike rest, disallowed
 >NonArrayRest : Symbol(NonArrayRest, Decl(namedTupleMembersErrors.ts, 12, 58))
 
+export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
+>RecusiveRestUnlabeled : Symbol(RecusiveRestUnlabeled, Decl(namedTupleMembersErrors.ts, 14, 60))
+>RecusiveRestUnlabeled : Symbol(RecusiveRestUnlabeled, Decl(namedTupleMembersErrors.ts, 14, 60))
+
+export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
+>RecusiveRest : Symbol(RecusiveRest, Decl(namedTupleMembersErrors.ts, 16, 71))
+>RecusiveRest : Symbol(RecusiveRest, Decl(namedTupleMembersErrors.ts, 16, 71))
+

@@ -15,3 +15,6 @@ export type OptTrailing = [first: string, rest: ...string[]?]; // dots+question 
 export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disallowed
 
 export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike rest, disallowed
+
+export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
+export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above

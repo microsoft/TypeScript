@@ -23,3 +23,9 @@ export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disa
 export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike rest, disallowed
 >NonArrayRest : NonArrayRest
 
+export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
+>RecusiveRestUnlabeled : RecusiveRestUnlabeled
+
+export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
+>RecusiveRest : RecusiveRest
+
