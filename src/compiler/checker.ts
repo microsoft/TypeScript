@@ -4922,7 +4922,7 @@ namespace ts {
                     typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
                 }
 
-                const parameters = getExpandedParameters(signature).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor, privateSymbolVisitor, bundledImports));
+                const parameters = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0].map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor, privateSymbolVisitor, bundledImports));
                 if (signature.thisParameter) {
                     const thisParameter = symbolToParameterDeclaration(signature.thisParameter, context);
                     parameters.unshift(thisParameter);
@@ -9541,27 +9541,36 @@ namespace ts {
             return result;
         }
 
-        function getExpandedParameters(sig: Signature): readonly Symbol[] {
+        function getExpandedParameters(sig: Signature, skipUnionExpanding?: boolean): readonly (readonly Symbol[])[] {
             if (signatureHasRestParameter(sig)) {
                 const restIndex = sig.parameters.length - 1;
-                const restParameter = sig.parameters[restIndex];
-                const restType = getTypeOfSymbol(restParameter);
+                const restType = getTypeOfSymbol(sig.parameters[restIndex]);
                 if (isTupleType(restType)) {
-                    const elementTypes = getTypeArguments(restType);
-                    const minLength = restType.target.minLength;
-                    const tupleRestIndex = restType.target.hasRestElement ? elementTypes.length - 1 : -1;
-                    const restParams = map(elementTypes, (t, i) => {
-                        const name = getParameterNameAtPosition(sig, restIndex + i);
-                        const checkFlags = i === tupleRestIndex ? CheckFlags.RestParameter :
-                            i >= minLength ? CheckFlags.OptionalParameter : 0;
-                        const symbol = createSymbol(SymbolFlags.FunctionScopedVariable, name, checkFlags);
-                        symbol.type = i === tupleRestIndex ? createArrayType(t) : t;
-                        return symbol;
-                    });
-                    return concatenate(sig.parameters.slice(0, restIndex), restParams);
+                    return [expandSignatureParametersWithTupleMembers(restType, restIndex)];
+                }
+                else if (!skipUnionExpanding && restType.flags & TypeFlags.Union && every((restType as UnionType).types, isTupleType)) {
+                    return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex));
                 }
             }
-            return sig.parameters;
+            return [sig.parameters];
+
+            function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number) {
+                const elementTypes = getTypeArguments(restType);
+                const minLength = restType.target.minLength;
+                const tupleRestIndex = restType.target.hasRestElement ? elementTypes.length - 1 : -1;
+                const associatedNames = restType.target.labeledElementDeclarations;
+                const restParams = map(elementTypes, (t, i) => {
+                    // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
+                    const tupleLabelName = !!associatedNames && getTupleElementLabel(associatedNames[i]);
+                    const name = tupleLabelName || getParameterNameAtPosition(sig, restIndex + i);
+                    const checkFlags = i === tupleRestIndex ? CheckFlags.RestParameter :
+                        i >= minLength ? CheckFlags.OptionalParameter : 0;
+                    const symbol = createSymbol(SymbolFlags.FunctionScopedVariable, name, checkFlags);
+                    symbol.type = i === tupleRestIndex ? createArrayType(t) : t;
+                    return symbol;
+                });
+                return concatenate(sig.parameters.slice(0, restIndex), restParams);
+            }
         }
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {

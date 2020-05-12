@@ -3517,7 +3517,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
-        /* @internal */ getExpandedParameters(sig: Signature): readonly Symbol[];
+        /* @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
         /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
