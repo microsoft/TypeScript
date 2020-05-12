@@ -1014,6 +1014,9 @@
       <Item ItemId=";Add_a_return_statement_95111" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add a return statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[return-Anweisung hinzufügen]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1056,6 +1059,9 @@
       <Item ItemId=";Add_all_missing_return_statement_95114" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing return statement]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Alle fehlenden return-Anweisungen hinzufügen]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -1171,7 +1177,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["export {}" hinzufügen, um diese Datei zu einem Modul zu machen]]></Val>
+            <Val><![CDATA["export {}" hinzufügen, um diese Datei in ein Modul umzuwandeln]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1842,6 +1848,9 @@
       <Item ItemId=";An_index_signature_cannot_have_a_trailing_comma_1025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An index signature cannot have a trailing comma.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Eine Indexsignatur darf kein nachstehendes Komma aufweisen.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3181,7 +3190,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler reserves name '{0}' when emitting private identifier downlevel.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Der Compiler reserviert den Namen "{0}", wenn er einen älteren privaten Bezeichner ausgibt.]]></Val>
+            <Val><![CDATA[Der Compiler reserviert den Namen "{0}", wenn er einen privaten Bezeichner für Vorgängerversionen ausgibt.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3630,6 +3639,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Declaration_augments_declaration_in_another_file_This_cannot_be_serialized_6232" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Deklaration erweitert die Deklaration in einer anderen Datei. Dieser Vorgang kann nicht serialisiert werden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_9005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.]]></Val>
@@ -3693,6 +3711,12 @@
           <Prev Cat="Text">
             <Val><![CDATA[Declare method '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declare_private_method_0_90038" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare private method '{0}']]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4680,6 +4704,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Exponentiation_cannot_be_performed_on_bigint_values_unless_the_target_option_is_set_to_es2016_or_lat_2791" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Potenzierung kann für bigint-Werte nur durchgeführt werden, wenn die Option "target" auf "es2016" oder höher festgelegt ist.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or__1203" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.]]></Val>
@@ -5126,6 +5159,15 @@
           <Val><![CDATA[Fix all implicit-'this' errors]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Alle impliziten this-Fehler beheben]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Fix_all_incorrect_return_type_of_an_async_functions_90037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fix all incorrect return type of an async functions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Alle falschen Rückgabetypen einer asynchronen Funktionen korrigieren]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5629,7 +5671,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import default '{0}' from module "{1}"]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importstandard "{0}" aus Modul "{1}"]]></Val>
+            <Val><![CDATA[Standard "{0}" aus Modul "{1}" importieren]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5816,15 +5858,6 @@
           <Val><![CDATA[Initializer of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Der Initialisierer der Instanzmembervariablen "{0}" darf nicht auf den im Konstruktor deklarierten Bezeichner "{1}" verweisen.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Der Initialisierer des Parameters "{0}" darf nicht auf den anschließend deklarierten Bezeichner "{1}" verweisen.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7176,6 +7209,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Only_numeric_enums_can_have_computed_members_but_this_expression_has_type_0_If_you_do_not_need_exhau_18033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nur numerische Enumerationen können berechnete Member umfassen, aber dieser Ausdruck weist den Typ "{0}" auf. Wenn Sie keine Vollständigkeitsprüfung benötigen, erwägen Sie stattdessen die Verwendung eines Objektliterals.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword_2340" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only public and protected methods of the base class are accessible via the 'super' keyword.]]></Val>
@@ -7437,11 +7479,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Parameter_0_cannot_be_referenced_in_its_initializer_2372" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Parameter_0_cannot_reference_identifier_1_declared_after_it_2373" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Parameter '{0}' cannot be referenced in its initializer.]]></Val>
+          <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Auf den Parameter "{0}" darf in diesem Initialisierer nicht verwiesen werden.]]></Val>
+            <Val><![CDATA[Der Parameter "{0}" darf nicht auf den anschließend deklarierten Bezeichner "{1}" verweisen.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Parameter_0_cannot_reference_itself_2372" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der Parameter "{0}" kann nicht auf sich selbst verweisen.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8556,6 +8607,9 @@
       <Item ItemId=";Remove_all_incorrect_body_block_braces_95115" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove all incorrect body block braces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Alle falschen geschweiften Klammern aus Textblock entfernen]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8589,6 +8643,9 @@
       <Item ItemId=";Remove_block_body_braces_95112" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove block body braces]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geschweifte Klammern aus Blocktextkörper entfernen]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8678,6 +8735,15 @@
           <Val><![CDATA[Remove variable statement]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Variablenanweisung entfernen]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Replace_0_with_Promise_1_90036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Replace '{0}' with 'Promise<{1}>']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" durch "Promise<{1}>" ersetzen]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9963,12 +10029,18 @@
       <Item ItemId=";The_intersection_0_was_reduced_to_never_because_property_1_exists_in_multiple_constituents_and_is_pr_18032" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Schnittmenge "{0}" wurde auf "niemals" reduziert, weil die Eigenschaft "{1}" in mehreren Bestandteilen vorhanden und in einigen davon privat ist.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";The_intersection_0_was_reduced_to_never_because_property_1_has_conflicting_types_in_some_constituent_18031" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Schnittmenge "{0}" wurde auf "niemals" reduziert, weil die Eigenschaft "{1}" in einigen Bestandteilen widersprüchliche Typen aufweist.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10161,6 +10233,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_operand_of_a_delete_operator_must_be_optional_2790" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der Operand eines delete-Operators muss optional sein.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_operand_of_an_increment_or_decrement_operator_may_not_be_an_optional_property_access_2777" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The operand of an increment or decrement operator may not be an optional property access.]]></Val>
@@ -10233,11 +10314,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_1064" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_wri_1064" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The return type of an async function or method must be the global Promise<T> type.]]></Val>
+          <Val><![CDATA[The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{0}>'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Der Rückgabetyp einer asynchronen Funktion oder Methode muss der globale Typ "Promise<T>" sein.]]></Val>
+            <Val><![CDATA[Der Rückgabetyp einer asynchronen Funktion oder Methode muss der globale Typ "Promise<T>" sein. Wollten Sie eigentlich "Promise<{0}>" verwenden?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10285,7 +10366,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The shadowing declaration of '{0}' is defined here]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Die Shadowing-Deklaration von "{0}" ist hier definiert.]]></Val>
+            <Val><![CDATA[Die verbergende Deklaration von "{0}" ist hier definiert.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10505,6 +10586,15 @@
           <Val><![CDATA[This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Dieser Import wird nie als Wert verwendet und muss "import type" verwenden, weil "importsNotUsedAsValues" auf "error" festgelegt ist.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Dies ist die erweiterte Deklaration. Die erweiternde Deklaration sollte in dieselbe Datei verschoben werden.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10732,7 +10822,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Im Typ "{0}" fehlen die folgenden Eigenschaften von Typ "{1}": {2}]]></Val>
+            <Val><![CDATA[Im Typ "{0}" fehlen die folgenden Eigenschaften von Typ "{1}": "{2}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10741,7 +10831,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Im Typ "{0}" fehlen die folgenden Eigenschaften von Typ "{1}": {2} und {3} weitere.]]></Val>
+            <Val><![CDATA[Im Typ "{0}" fehlen die folgenden Eigenschaften von Typ "{1}": "{2}" und {3} weitere.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11080,7 +11170,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Der Typ stammt aus diesem Import. Ein Import im Namespacestil kann nicht aufgerufen oder erstellt werden und verursacht zur Laufzeit einen Fehler. Erwägen Sie hier stattdessen die Verwendung eines Standardimports oder die Verwendung von "import require".]]></Val>
+            <Val><![CDATA[Der Typ stammt aus diesem Import. Ein Import im Namespacestil kann nicht aufgerufen oder erstellt werden und verursacht zur Laufzeit einen Fehler. Erwägen Sie hier stattdessen die Verwendung eines Standardimports oder die den Import über "require".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11793,6 +11883,9 @@
       <Item ItemId=";Wrap_all_object_literal_with_parentheses_95116" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap all object literal with parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Gesamtes Objektliteral in Klammern einschließen]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -11808,6 +11901,9 @@
       <Item ItemId=";Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal_95113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Wrap the following body with parentheses which should be an object literal]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Schließen Sie den folgenden Text, der ein Objektliteral darstellt, in Klammern ein.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

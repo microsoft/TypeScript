@@ -1803,7 +1803,7 @@ namespace ts {
                 }
 
                 // Stop searching if the line is not empty and not a comment
-                const lineText = file.text.slice(lineStarts[line - 1], lineStarts[line]).trim();
+                const lineText = file.text.slice(lineStarts[line], lineStarts[line + 1]).trim();
                 if (lineText !== "" && !/^(\s*)\/\/(.*)$/.test(lineText)) {
                     return -1;
                 }
@@ -2145,7 +2145,7 @@ namespace ts {
                     }
                 }
                 else if (isModuleDeclaration(node)) {
-                    if (isAmbientModule(node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
+                    if (isAmbientModule(node) && (inAmbientModule || hasSyntacticModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
                         const nameText = getTextOfIdentifierOrLiteral(node.name);
                         // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                         // This will happen in two cases:

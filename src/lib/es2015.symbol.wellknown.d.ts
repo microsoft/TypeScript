@@ -254,7 +254,7 @@ interface Int8Array {
 }
 
 interface Uint8Array {
-    readonly [Symbol.toStringTag]: "UInt8Array";
+    readonly [Symbol.toStringTag]: "Uint8Array";
 }
 
 interface Uint8ClampedArray {

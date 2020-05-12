@@ -5,6 +5,38 @@ namespace ts {
         AsyncMethodsWithSuper = 1 << 0
     }
 
+    // Facts we track as we traverse the tree
+    const enum HierarchyFacts {
+        None = 0,
+
+        //
+        // Ancestor facts
+        //
+
+        HasLexicalThis = 1 << 0,
+        IterationContainer = 1 << 1,
+        // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
+
+        //
+        // Ancestor masks
+        //
+
+        AncestorFactsMask = (IterationContainer << 1) - 1,
+
+        SourceFileIncludes = HasLexicalThis,
+        SourceFileExcludes = IterationContainer,
+        StrictModeSourceFileIncludes = None,
+
+        ClassOrFunctionIncludes = HasLexicalThis,
+        ClassOrFunctionExcludes = IterationContainer,
+
+        ArrowFunctionIncludes = None,
+        ArrowFunctionExcludes = ClassOrFunctionExcludes,
+
+        IterationStatementIncludes = IterationContainer,
+        IterationStatementExcludes = None,
+    }
+
     export function transformES2018(context: TransformationContext) {
         const {
             resumeLexicalEnvironment,
@@ -26,7 +58,7 @@ namespace ts {
         let enabledSubstitutions: ESNextSubstitutionFlags;
         let enclosingFunctionFlags: FunctionFlags;
         let enclosingSuperContainerFlags: NodeCheckFlags = 0;
-        let hasLexicalThis: boolean;
+        let hierarchyFacts: HierarchyFacts = 0;
 
         let currentSourceFile: SourceFile;
         let taggedTemplateStringDeclarations: VariableDeclaration[];
@@ -39,6 +71,30 @@ namespace ts {
         const substitutedSuperAccessors: boolean[] = [];
 
         return chainBundle(transformSourceFile);
+
+        function affectsSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
+            return hierarchyFacts !== (hierarchyFacts & ~excludeFacts | includeFacts);
+        }
+
+        /**
+         * Sets the `HierarchyFacts` for this node prior to visiting this node's subtree, returning the facts set prior to modification.
+         * @param excludeFacts The existing `HierarchyFacts` to reset before visiting the subtree.
+         * @param includeFacts The new `HierarchyFacts` to set before visiting the subtree.
+         */
+        function enterSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
+            const ancestorFacts = hierarchyFacts;
+            hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.AncestorFactsMask;
+            return ancestorFacts;
+        }
+
+        /**
+         * Restores the `HierarchyFacts` for this node's ancestor after visiting this node's
+         * subtree.
+         * @param ancestorFacts The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
+         */
+        function exitSubtree(ancestorFacts: HierarchyFacts) {
+            hierarchyFacts = ancestorFacts;
+        }
 
         function recordTaggedTemplateString(temp: Identifier) {
             taggedTemplateStringDeclarations = append(
@@ -75,11 +131,11 @@ namespace ts {
             return node;
         }
 
-        function doWithLexicalThis<T, U>(cb: (value: T) => U, value: T) {
-            if (!hasLexicalThis) {
-                hasLexicalThis = true;
+        function doWithHierarchyFacts<T, U>(cb: (value: T) => U, value: T, excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
+            if (affectsSubtree(excludeFacts, includeFacts)) {
+                const ancestorFacts = enterSubtree(excludeFacts, includeFacts);
                 const result = cb(value);
-                hasLexicalThis = false;
+                exitSubtree(ancestorFacts);
                 return result;
             }
             return cb(value);
@@ -112,26 +168,66 @@ namespace ts {
                     return visitVariableStatement(node as VariableStatement);
                 case SyntaxKind.VariableDeclaration:
                     return visitVariableDeclaration(node as VariableDeclaration);
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                case SyntaxKind.ForInStatement:
+                    return doWithHierarchyFacts(
+                        visitDefault,
+                        node,
+                        HierarchyFacts.IterationStatementExcludes,
+                        HierarchyFacts.IterationStatementIncludes);
                 case SyntaxKind.ForOfStatement:
                     return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
                 case SyntaxKind.ForStatement:
-                    return visitForStatement(node as ForStatement);
+                    return doWithHierarchyFacts(
+                        visitForStatement,
+                        node as ForStatement,
+                        HierarchyFacts.IterationStatementExcludes,
+                        HierarchyFacts.IterationStatementIncludes);
                 case SyntaxKind.VoidExpression:
                     return visitVoidExpression(node as VoidExpression);
                 case SyntaxKind.Constructor:
-                    return doWithLexicalThis(visitConstructorDeclaration, node as ConstructorDeclaration);
+                    return doWithHierarchyFacts(
+                        visitConstructorDeclaration,
+                        node as ConstructorDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.MethodDeclaration:
-                    return doWithLexicalThis(visitMethodDeclaration, node as MethodDeclaration);
+                    return doWithHierarchyFacts(
+                        visitMethodDeclaration,
+                        node as MethodDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.GetAccessor:
-                    return doWithLexicalThis(visitGetAccessorDeclaration, node as GetAccessorDeclaration);
+                    return doWithHierarchyFacts(
+                        visitGetAccessorDeclaration,
+                        node as GetAccessorDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.SetAccessor:
-                    return doWithLexicalThis(visitSetAccessorDeclaration, node as SetAccessorDeclaration);
+                    return doWithHierarchyFacts(
+                        visitSetAccessorDeclaration,
+                        node as SetAccessorDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.FunctionDeclaration:
-                    return doWithLexicalThis(visitFunctionDeclaration, node as FunctionDeclaration);
+                    return doWithHierarchyFacts(
+                        visitFunctionDeclaration,
+                        node as FunctionDeclaration,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.FunctionExpression:
-                    return doWithLexicalThis(visitFunctionExpression, node as FunctionExpression);
+                    return doWithHierarchyFacts(
+                        visitFunctionExpression,
+                        node as FunctionExpression,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 case SyntaxKind.ArrowFunction:
-                    return visitArrowFunction(node as ArrowFunction);
+                    return doWithHierarchyFacts(
+                        visitArrowFunction,
+                        node as ArrowFunction,
+                        HierarchyFacts.ArrowFunctionExcludes,
+                        HierarchyFacts.ArrowFunctionIncludes);
                 case SyntaxKind.Parameter:
                     return visitParameter(node as ParameterDeclaration);
                 case SyntaxKind.ExpressionStatement:
@@ -152,7 +248,11 @@ namespace ts {
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-                    return doWithLexicalThis(visitDefault, node);
+                    return doWithHierarchyFacts(
+                        visitDefault,
+                        node,
+                        HierarchyFacts.ClassOrFunctionExcludes,
+                        HierarchyFacts.ClassOrFunctionIncludes);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -231,7 +331,7 @@ namespace ts {
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
-                return restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
+                return restoreEnclosingLabel(visitNode(statement, visitor, isStatement, liftToBlock), node);
             }
             return visitEachChild(node, visitor, context);
         }
@@ -311,14 +411,20 @@ namespace ts {
         }
 
         function visitSourceFile(node: SourceFile): SourceFile {
+            const ancestorFacts = enterSubtree(
+                HierarchyFacts.SourceFileExcludes,
+                isEffectiveStrictModeSourceFile(node, compilerOptions) ?
+                    HierarchyFacts.StrictModeSourceFileIncludes :
+                    HierarchyFacts.SourceFileIncludes);
             exportedVariableStatement = false;
-            hasLexicalThis = !isEffectiveStrictModeSourceFile(node, compilerOptions);
             const visited = visitEachChild(node, visitor, context);
             const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
                 createVariableStatement(/*modifiers*/ undefined,
                     createVariableDeclarationList(taggedTemplateStringDeclarations))
             ]);
-            return updateSourceFileNode(visited, setTextRange(createNodeArray(statement), node.statements));
+            const result = updateSourceFileNode(visited, setTextRange(createNodeArray(statement), node.statements));
+            exitSubtree(ancestorFacts);
+            return result;
         }
 
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
@@ -380,7 +486,7 @@ namespace ts {
         }
 
         function visitVariableStatement(node: VariableStatement): VisitResult<VariableStatement> {
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 const savedExportedVariableStatement = exportedVariableStatement;
                 exportedVariableStatement = true;
                 const visited = visitEachChild(node, visitor, context);
@@ -441,15 +547,15 @@ namespace ts {
          * @param node A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
+            const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
             if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 node = transformForOfStatementWithObjectRest(node);
             }
-            if (node.awaitModifier) {
-                return transformForAwaitOfStatement(node, outermostLabeledStatement);
-            }
-            else {
-                return restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
-            }
+            const result = node.awaitModifier ?
+                transformForAwaitOfStatement(node, outermostLabeledStatement, ancestorFacts) :
+                restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
+            exitSubtree(ancestorFacts);
+            return result;
         }
 
         function transformForOfStatementWithObjectRest(node: ForOfStatement) {
@@ -528,7 +634,7 @@ namespace ts {
                 : createAwait(expression);
         }
 
-        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined) {
+        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts) {
             const expression = visitNode(node.expression, visitor, isExpression);
             const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
             const result = isIdentifier(expression) ? getGeneratedNameForNode(iterator) : createTempVariable(/*recordTempVariable*/ undefined);
@@ -544,13 +650,18 @@ namespace ts {
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
 
+            // if we are enclosed in an outer loop ensure we reset 'errorRecord' per each iteration
+            const initializer = ancestorFacts & HierarchyFacts.IterationContainer ?
+                inlineExpressions([createAssignment(errorRecord, createVoidZero()), callValues]) :
+                callValues;
+
             const forStatement = setEmitFlags(
                 setTextRange(
                     createFor(
                         /*initializer*/ setEmitFlags(
                             setTextRange(
                                 createVariableDeclarationList([
-                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, callValues), node.expression),
+                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, initializer), node.expression),
                                     createVariableDeclaration(result)
                                 ]),
                                 node.expression
@@ -809,7 +920,7 @@ namespace ts {
                             visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                         )
                     ),
-                    hasLexicalThis
+                    !!(hierarchyFacts & HierarchyFacts.HasLexicalThis)
                 )
             );
 
@@ -1115,7 +1226,7 @@ namespace ts {
         context.requestEmitHelper(asyncGeneratorHelper);
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
         return createCall(
             getUnscopedHelperName("__asyncGenerator"),

@@ -1,0 +1,13 @@
+=== tests/cases/compiler/bigIntWithTargetES2016.ts ===
+BigInt(1) ** BigInt(1); // should not error
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+let num = BigInt(2);
+>num : Symbol(num, Decl(bigIntWithTargetES2016.ts, 2, 3))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+num **= BigInt(2); // should not error
+>num : Symbol(num, Decl(bigIntWithTargetES2016.ts, 2, 3))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+

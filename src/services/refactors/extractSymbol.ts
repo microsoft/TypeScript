@@ -309,7 +309,7 @@ namespace ts.refactor.extractSymbol {
             let current: Node = nodeToCheck;
             while (current !== containingClass) {
                 if (current.kind === SyntaxKind.PropertyDeclaration) {
-                    if (hasModifier(current, ModifierFlags.Static)) {
+                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                     break;
@@ -322,7 +322,7 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
                 else if (current.kind === SyntaxKind.MethodDeclaration) {
-                    if (hasModifier(current, ModifierFlags.Static)) {
+                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                 }
@@ -375,7 +375,7 @@ namespace ts.refactor.extractSymbol {
 
                 if (isDeclaration(node)) {
                     const declaringNode = (node.kind === SyntaxKind.VariableDeclaration) ? node.parent.parent : node;
-                    if (hasModifier(declaringNode, ModifierFlags.Export)) {
+                    if (hasSyntacticModifier(declaringNode, ModifierFlags.Export)) {
                         // TODO: GH#18217 Silly to use `errors ||` since it's definitely not defined (see top of `visit`)
                         // Also, if we're only pushing one error, just use `let error: Diagnostic | undefined`!
                         // Also TODO: GH#19956
@@ -405,24 +405,24 @@ namespace ts.refactor.extractSymbol {
                             rangeFacts |= RangeFacts.UsesThis;
                         }
                         break;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
+                            // You cannot extract global declarations
+                            (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
+                        }
+                        // falls through
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        // do not dive into functions (except arrow functions) or classes
+                        return false;
                 }
 
-                if (isFunctionLikeDeclaration(node) || isClassLike(node)) {
-                    switch (node.kind) {
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ClassDeclaration:
-                            if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
-                                // You cannot extract global declarations
-                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
-                            }
-                            break;
-                    }
-
-                    // do not dive into functions or classes
-                    return false;
-                }
                 const savedPermittedJumps = permittedJumps;
-
                 switch (node.kind) {
                     case SyntaxKind.IfStatement:
                         permittedJumps = PermittedJumps.None;
@@ -719,6 +719,8 @@ namespace ts.refactor.extractSymbol {
         context: RefactorContext): RefactorEditInfo {
 
         const checker = context.program.getTypeChecker();
+        const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
+        const importAdder = codefix.createImportAdder(context.file, context.program, context.preferences, context.host);
 
         // Make a unique name for the extracted function
         const file = scope.getSourceFile();
@@ -737,7 +739,7 @@ namespace ts.refactor.extractSymbol {
                 let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
                 // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
                 type = checker.getBaseTypeOfLiteralType(type);
-                typeNode = checker.typeToTypeNode(type, scope, NodeBuilderFlags.NoTruncation);
+                typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation);
             }
 
             const paramDecl = createParameter(
@@ -823,6 +825,7 @@ namespace ts.refactor.extractSymbol {
         else {
             changeTracker.insertNodeAtEndOfScope(context.file, scope, newFunction);
         }
+        importAdder.writeFixes(changeTracker);
 
         const newNodes: Node[] = [];
         // replace range with function call
@@ -1581,7 +1584,7 @@ namespace ts.refactor.extractSymbol {
                     hasWrite = true;
                     if (value.symbol.flags & SymbolFlags.ClassMember &&
                         value.symbol.valueDeclaration &&
-                        hasModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)) {
+                        hasEffectiveModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)) {
                         readonlyClassPropertyWrite = value.symbol.valueDeclaration;
                     }
                 }

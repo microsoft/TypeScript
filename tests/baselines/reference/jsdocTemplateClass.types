@@ -14,9 +14,9 @@ class Foo {
 
         this.a = x
 >this.a = x : T
->this.a : T
+>this.a : any
 >this : this
->a : T
+>a : any
 >x : T
     }
     /**

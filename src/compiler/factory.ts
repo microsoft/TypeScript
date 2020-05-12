@@ -4,11 +4,14 @@ namespace ts {
         enableEmitNotification: noop,
         enableSubstitution: noop,
         endLexicalEnvironment: returnUndefined,
-        getCompilerOptions: notImplemented,
+        getCompilerOptions: () => ({}),
         getEmitHost: notImplemented,
         getEmitResolver: notImplemented,
+        setLexicalEnvironmentFlags: noop,
+        getLexicalEnvironmentFlags: () => 0,
         hoistFunctionDeclaration: noop,
         hoistVariableDeclaration: noop,
+        addInitializationStatement: noop,
         isEmitNotificationEnabled: notImplemented,
         isSubstitutionEnabled: notImplemented,
         onEmitNode: noop,
@@ -748,7 +751,7 @@ namespace ts {
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
      */
     export function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression {
-        if (ns && hasModifier(node, ModifierFlags.Export)) {
+        if (ns && hasSyntacticModifier(node, ModifierFlags.Export)) {
             return getNamespaceMemberName(ns, getName(node), allowComments, allowSourceMaps);
         }
         return getExportName(node, allowComments, allowSourceMaps);
@@ -852,13 +855,13 @@ namespace ts {
      * This function needs to be called whenever we transform the statement
      * list of a source file, namespace, or function-like body.
      */
-    export function addCustomPrologue(target: Statement[], source: readonly Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node>): number;
-    export function addCustomPrologue(target: Statement[], source: readonly Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>): number | undefined;
-    export function addCustomPrologue(target: Statement[], source: readonly Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>): number | undefined {
+    export function addCustomPrologue(target: Statement[], source: readonly Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number;
+    export function addCustomPrologue(target: Statement[], source: readonly Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter?: (node: Node) => boolean): number | undefined;
+    export function addCustomPrologue(target: Statement[], source: readonly Statement[], statementOffset: number | undefined, visitor?: (node: Node) => VisitResult<Node>, filter: (node: Node) => boolean = returnTrue): number | undefined {
         const numStatements = source.length;
         while (statementOffset !== undefined && statementOffset < numStatements) {
             const statement = source[statementOffset];
-            if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
+            if (getEmitFlags(statement) & EmitFlags.CustomPrologue && filter(statement)) {
                 append(target, visitor ? visitNode(statement, visitor, isStatement) : statement);
             }
             else {

@@ -120,7 +120,7 @@ namespace ts.codefix {
         }
         else if (type.isClass()) {
             const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
-            if (!classDeclaration || hasModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
+            if (!classDeclaration || hasSyntacticModifier(classDeclaration, ModifierFlags.Abstract)) return undefined;
 
             const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
             if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;

@@ -15,9 +15,9 @@ module.exports = class Thing {
 
         this.t = 12 + p;
 >this.t = 12 + p : number
->this.t : number
+>this.t : any
 >this : this
->t : number
+>t : any
 >12 + p : number
 >12 : 12
 >p : number

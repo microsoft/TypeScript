@@ -43,9 +43,9 @@ class SomeBase {
     constructor() {
         this.p = 42;
 >this.p = 42 : 42
->this.p : number
+>this.p : any
 >this : this
->p : number
+>p : any
 >42 : 42
     }
 }
@@ -60,9 +60,9 @@ class SomeDerived extends SomeBase {
 
         this.x = 42;
 >this.x = 42 : 42
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >42 : 42
     }
 }
@@ -72,9 +72,9 @@ class SomeOther {
     constructor() {
         this.q = 42;
 >this.q = 42 : 42
->this.q : number
+>this.q : any
 >this : this
->q : number
+>q : any
 >42 : 42
     }
 }

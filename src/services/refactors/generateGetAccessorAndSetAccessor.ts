@@ -52,7 +52,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         let accessorModifiers: ModifiersArray | undefined;
         let fieldModifiers: ModifiersArray | undefined;
         if (isClassLike(container)) {
-            const modifierFlags = getModifierFlags(declaration);
+            const modifierFlags = getEffectiveModifierFlags(declaration);
             if (isSourceFileJS(file)) {
                 const modifiers = createModifiers(modifierFlags);
                 accessorModifiers = modifiers;
@@ -139,7 +139,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
         if (!declaration || !nodeOverlapsWithStartEnd(declaration.name, file, startPosition, endPosition!) // TODO: GH#18217
-            || !isConvertibleName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
+            || !isConvertibleName(declaration.name) || (getEffectiveModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
         const name = declaration.name.text;
         const startWithUnderscore = startsWithUnderscore(name);
@@ -147,7 +147,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
         return {
             isStatic: hasStaticModifier(declaration),
-            isReadonly: hasReadonlyModifier(declaration),
+            isReadonly: hasEffectiveReadonlyModifier(declaration),
             type: getTypeAnnotationNode(declaration),
             container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
             originalName: (<AcceptedNameType>declaration.name).text,

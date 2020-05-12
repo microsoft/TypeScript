@@ -1,0 +1,43 @@
+=== /test.js ===
+class Abcde {
+>Abcde : Symbol(Abcde, Decl(test.js, 0, 0))
+
+  /** @type {string} */
+  x;
+>x : Symbol(Abcde.x, Decl(test.js, 0, 13))
+}
+
+module.exports = {
+>module.exports : Symbol("/test", Decl(test.js, 0, 0))
+>module : Symbol("/test.js", Decl(test.js, 3, 1), Decl(index.ts, 0, 31))
+>exports : Symbol("/test.js", Decl(test.js, 3, 1), Decl(index.ts, 0, 31))
+
+  Abcde
+>Abcde : Symbol(Abcde, Decl(test.js, 5, 18))
+
+};
+
+=== /index.ts ===
+import { Abcde } from "./test";
+>Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
+
+declare module "./test" {
+>"./test" : Symbol("/test.js", Decl(test.js, 3, 1), Decl(index.ts, 0, 31))
+
+  interface Abcde { b: string }
+>Abcde : Symbol(Abcde, Decl(index.ts, 2, 25), Decl(test.js, 5, 18))
+>b : Symbol(Abcde.b, Decl(index.ts, 3, 19))
+}
+
+new Abcde().x;
+>new Abcde().x : Symbol(Abcde.x, Decl(test.js, 0, 13))
+>Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
+>x : Symbol(Abcde.x, Decl(test.js, 0, 13))
+
+// Bug: the type meaning from /test.js does not
+// propagate through the object literal export.
+const x: Abcde = { b: "" };
+>x : Symbol(x, Decl(index.ts, 10, 5))
+>Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
+>b : Symbol(b, Decl(index.ts, 10, 18))
+

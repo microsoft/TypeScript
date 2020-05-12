@@ -50,7 +50,7 @@ namespace ts {
             // 3. non-exported import declarations
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
-                if (!(hasModifier(node, ModifierFlags.Export))) {
+                if (!(hasSyntacticModifier(node, ModifierFlags.Export))) {
                     return ModuleInstanceState.NonInstantiated;
                 }
                 break;
@@ -320,16 +320,6 @@ namespace ts {
             }
         }
 
-        function setValueDeclaration(symbol: Symbol, node: Declaration): void {
-            const { valueDeclaration } = symbol;
-            if (!valueDeclaration ||
-                (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
-                (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
-                // other kinds of value declarations take precedence over modules and assignment declarations
-                symbol.valueDeclaration = node;
-            }
-        }
-
         // Should not be called on a declaration with a computed property name,
         // unless it is a well known Symbol.
         function getDeclarationName(node: Declaration): __String | undefined {
@@ -423,7 +413,7 @@ namespace ts {
         function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean): Symbol {
             Debug.assert(!hasDynamicName(node));
 
-            const isDefaultExport = hasModifier(node, ModifierFlags.Default);
+            const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
 
             // The exported symbol for an export default function/class node is always named "default"
             const name = isDefaultExport && parent ? InternalSymbolName.Default : getDeclarationName(node);
@@ -518,7 +508,7 @@ namespace ts {
                         }
 
                         const relatedInformation: DiagnosticRelatedInformation[] = [];
-                        if (isTypeAliasDeclaration(node) && nodeIsMissing(node.type) && hasModifier(node, ModifierFlags.Export) && symbol.flags & (SymbolFlags.Alias | SymbolFlags.Type | SymbolFlags.Namespace)) {
+                        if (isTypeAliasDeclaration(node) && nodeIsMissing(node.type) && hasSyntacticModifier(node, ModifierFlags.Export) && symbol.flags & (SymbolFlags.Alias | SymbolFlags.Type | SymbolFlags.Namespace)) {
                             // export type T; - may have meant export type { T }?
                             relatedInformation.push(createDiagnosticForNode(node, Diagnostics.Did_you_mean_0, `export type { ${unescapeLeadingUnderscores(node.name.escapedText)} }`));
                         }
@@ -582,7 +572,7 @@ namespace ts {
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (isJSDocTypeAlias(node)) Debug.assert(isInJSFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypeAlias(node)) {
-                    if (!container.locals || (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node))) {
+                    if (!container.locals || (hasSyntacticModifier(node, ModifierFlags.Default) && !getDeclarationName(node))) {
                         return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                     }
                     const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
@@ -647,7 +637,7 @@ namespace ts {
                 const saveExceptionTarget = currentExceptionTarget;
                 const saveActiveLabelList = activeLabelList;
                 const saveHasExplicitReturn = hasExplicitReturn;
-                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasModifier(node, ModifierFlags.Async) &&
+                const isIIFE = containerFlags & ContainerFlags.IsFunctionExpression && !hasSyntacticModifier(node, ModifierFlags.Async) &&
                     !(<FunctionLikeDeclaration>node).asteriskToken && !!getImmediatelyInvokedFunctionExpression(node);
                 // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
@@ -659,7 +649,7 @@ namespace ts {
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
                 // we use the return control flow graph in strict property initialization checks.
-                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor ? createBranchLabel() : undefined;
+                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || (isInJSFile && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
                 currentExceptionTarget = undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
@@ -680,8 +670,8 @@ namespace ts {
                 if (currentReturnTarget) {
                     addAntecedent(currentReturnTarget, currentFlow);
                     currentFlow = finishFlowLabel(currentReturnTarget);
-                    if (node.kind === SyntaxKind.Constructor) {
-                        (<ConstructorDeclaration>node).returnFlowNode = currentFlow;
+                    if (node.kind === SyntaxKind.Constructor || (isInJSFile && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
+                        (<FunctionLikeDeclaration>node).returnFlowNode = currentFlow;
                     }
                 }
                 if (!isIIFE) {
@@ -1916,7 +1906,7 @@ namespace ts {
         }
 
         function declareClassMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            return hasModifier(node, ModifierFlags.Static)
+            return hasSyntacticModifier(node, ModifierFlags.Static)
                 ? declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes)
                 : declareSymbol(container.symbol.members!, container.symbol, node, symbolFlags, symbolExcludes);
         }
@@ -1946,7 +1936,7 @@ namespace ts {
         function bindModuleDeclaration(node: ModuleDeclaration) {
             setExportContextFlag(node);
             if (isAmbientModule(node)) {
-                if (hasModifier(node, ModifierFlags.Export)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     errorOnFirstToken(node, Diagnostics.export_modifier_cannot_be_applied_to_ambient_modules_and_module_augmentations_since_they_are_always_visible);
                 }
                 if (isModuleAugmentationExternal(node)) {
@@ -2879,7 +2869,7 @@ namespace ts {
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
-                    const symbolTable = hasModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
+                    const symbolTable = hasSyntacticModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
                     if (hasDynamicName(node)) {
                         bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol);
                     }
@@ -2974,7 +2964,7 @@ namespace ts {
 
         function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
             // Class declarations in Typescript do not allow property declarations
-            const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression);
+            const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) || lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) ;
             if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
                 return;
             }
@@ -2987,15 +2977,13 @@ namespace ts {
                 //    util.property = function ...
                 bindExportsPropertyAssignment(node as BindableStaticPropertyAssignmentExpression);
             }
+            else if (hasDynamicName(node)) {
+                bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
+                const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototype*/ false, /*containerIsClass*/ false);
+                addLateBoundAssignmentDeclarationToSymbol(node, sym);
+            }
             else {
-                if (hasDynamicName(node)) {
-                    bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
-                    const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototype*/ false, /*containerIsClass*/ false);
-                    addLateBoundAssignmentDeclarationToSymbol(node, sym);
-                }
-                else {
-                    bindStaticPropertyAssignment(cast(node.left, isBindableStaticAccessExpression));
-                }
+                bindStaticPropertyAssignment(cast(node.left, isBindableStaticNameExpression));
             }
         }
 
@@ -3003,7 +2991,8 @@ namespace ts {
          * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function (or IIFE) or class or {}, or not declared.
          * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
          */
-        function bindStaticPropertyAssignment(node: BindableStaticAccessExpression) {
+        function bindStaticPropertyAssignment(node: BindableStaticNameExpression) {
+            Debug.assert(!isIdentifier(node));
             node.expression.parent = node;
             bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
         }
@@ -3083,7 +3072,7 @@ namespace ts {
         }
 
         function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
-            let namespaceSymbol = lookupSymbolForPropertyAccess(name);
+            let namespaceSymbol = lookupSymbolForPropertyAccess(name, container) || lookupSymbolForPropertyAccess(name, blockScopeContainer);
             const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
             namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
             bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
@@ -3413,7 +3402,7 @@ namespace ts {
             case SyntaxKind.ModuleDeclaration:
                 return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
             case SyntaxKind.EnumDeclaration:
-                return hasModifier(s, ModifierFlags.Const);
+                return hasSyntacticModifier(s, ModifierFlags.Const);
             default:
                 return false;
         }
@@ -3647,7 +3636,7 @@ namespace ts {
         }
 
         // If a parameter has an accessibility modifier, then it is TypeScript syntax.
-        if (hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+        if (hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
             transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsTypeScriptClassSyntax;
         }
 
@@ -3686,7 +3675,7 @@ namespace ts {
     function computeClassDeclaration(node: ClassDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags: TransformFlags;
 
-        if (hasModifier(node, ModifierFlags.Ambient)) {
+        if (hasSyntacticModifier(node, ModifierFlags.Ambient)) {
             // An ambient declaration is TypeScript syntax.
             transformFlags = TransformFlags.AssertTypeScript;
         }
@@ -3777,7 +3766,7 @@ namespace ts {
         let transformFlags = subtreeFlags;
 
         // TypeScript-specific modifiers and overloads are TypeScript syntax
-        if (hasModifier(node, ModifierFlags.TypeScriptModifier)
+        if (hasSyntacticModifier(node, ModifierFlags.TypeScriptModifier)
             || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -3798,7 +3787,7 @@ namespace ts {
         // Decorators, TypeScript-specific modifiers, type parameters, type annotations, and
         // overloads are TypeScript syntax.
         if (node.decorators
-            || hasModifier(node, ModifierFlags.TypeScriptModifier)
+            || hasSyntacticModifier(node, ModifierFlags.TypeScriptModifier)
             || node.typeParameters
             || node.type
             || !node.body
@@ -3812,7 +3801,7 @@ namespace ts {
         }
 
         // An async method declaration is ES2017 syntax.
-        if (hasModifier(node, ModifierFlags.Async)) {
+        if (hasSyntacticModifier(node, ModifierFlags.Async)) {
             transformFlags |= node.asteriskToken ? TransformFlags.AssertES2018 : TransformFlags.AssertES2017;
         }
 
@@ -3830,7 +3819,7 @@ namespace ts {
         // Decorators, TypeScript-specific modifiers, type annotations, and overloads are
         // TypeScript syntax.
         if (node.decorators
-            || hasModifier(node, ModifierFlags.TypeScriptModifier)
+            || hasSyntacticModifier(node, ModifierFlags.TypeScriptModifier)
             || node.type
             || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
@@ -3849,7 +3838,7 @@ namespace ts {
         let transformFlags = subtreeFlags | TransformFlags.ContainsClassFields;
 
         // Decorators, TypeScript-specific modifiers, and type annotations are TypeScript syntax.
-        if (some(node.decorators) || hasModifier(node, ModifierFlags.TypeScriptModifier) || node.type || node.questionToken || node.exclamationToken) {
+        if (some(node.decorators) || hasSyntacticModifier(node, ModifierFlags.TypeScriptModifier) || node.type || node.questionToken || node.exclamationToken) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
@@ -3864,7 +3853,7 @@ namespace ts {
 
     function computeFunctionDeclaration(node: FunctionDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags: TransformFlags;
-        const modifierFlags = getModifierFlags(node);
+        const modifierFlags = getSyntacticModifierFlags(node);
         const body = node.body;
 
         if (!body || (modifierFlags & ModifierFlags.Ambient)) {
@@ -3912,14 +3901,14 @@ namespace ts {
 
         // TypeScript-specific modifiers, type parameters, and type annotations are TypeScript
         // syntax.
-        if (hasModifier(node, ModifierFlags.TypeScriptModifier)
+        if (hasSyntacticModifier(node, ModifierFlags.TypeScriptModifier)
             || node.typeParameters
             || node.type) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
         // An async function expression is ES2017 syntax.
-        if (hasModifier(node, ModifierFlags.Async)) {
+        if (hasSyntacticModifier(node, ModifierFlags.Async)) {
             transformFlags |= node.asteriskToken ? TransformFlags.AssertES2018 : TransformFlags.AssertES2017;
         }
 
@@ -3945,14 +3934,14 @@ namespace ts {
 
         // TypeScript-specific modifiers, type parameters, and type annotations are TypeScript
         // syntax.
-        if (hasModifier(node, ModifierFlags.TypeScriptModifier)
+        if (hasSyntacticModifier(node, ModifierFlags.TypeScriptModifier)
             || node.typeParameters
             || node.type) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
         // An async arrow function is ES2017 syntax.
-        if (hasModifier(node, ModifierFlags.Async)) {
+        if (hasSyntacticModifier(node, ModifierFlags.Async)) {
             transformFlags |= TransformFlags.AssertES2017;
         }
 
@@ -4026,7 +4015,7 @@ namespace ts {
         const declarationListTransformFlags = node.declarationList.transformFlags;
 
         // An ambient declaration is TypeScript syntax.
-        if (hasModifier(node, ModifierFlags.Ambient)) {
+        if (hasSyntacticModifier(node, ModifierFlags.Ambient)) {
             transformFlags = TransformFlags.AssertTypeScript;
         }
         else {
@@ -4074,7 +4063,7 @@ namespace ts {
 
     function computeModuleDeclaration(node: ModuleDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = TransformFlags.AssertTypeScript;
-        const modifierFlags = getModifierFlags(node);
+        const modifierFlags = getSyntacticModifierFlags(node);
 
         if ((modifierFlags & ModifierFlags.Ambient) === 0) {
             transformFlags |= subtreeFlags;
