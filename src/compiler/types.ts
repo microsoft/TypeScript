@@ -1487,6 +1487,7 @@ namespace ts {
         kind: SyntaxKind.SyntheticExpression;
         isSpread: boolean;
         type: Type;
+        tupleNameSource?: ParameterDeclaration | NamedTupleMember;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression

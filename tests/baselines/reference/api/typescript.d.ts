@@ -954,6 +954,7 @@ declare namespace ts {
         kind: SyntaxKind.SyntheticExpression;
         isSpread: boolean;
         type: Type;
+        tupleNameSource?: ParameterDeclaration | NamedTupleMember;
     }
     export type ExponentiationOperator = SyntaxKind.AsteriskAsteriskToken;
     export type MultiplicativeOperator = SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken;

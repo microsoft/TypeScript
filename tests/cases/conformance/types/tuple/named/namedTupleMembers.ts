@@ -70,3 +70,10 @@ declare var y: RecusiveRest2;
 
 x = y;
 y = x;
+
+declare function f<T extends any[]>(...x: T): T;
+declare function g(elem: object, index: number): object;
+declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): Parameters<T>;
+
+export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
+export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread

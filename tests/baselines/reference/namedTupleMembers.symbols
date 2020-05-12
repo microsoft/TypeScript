@@ -166,3 +166,36 @@ y = x;
 >y : Symbol(y, Decl(namedTupleMembers.ts, 66, 11))
 >x : Symbol(x, Decl(namedTupleMembers.ts, 65, 11))
 
+declare function f<T extends any[]>(...x: T): T;
+>f : Symbol(f, Decl(namedTupleMembers.ts, 69, 6))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 71, 19))
+>x : Symbol(x, Decl(namedTupleMembers.ts, 71, 36))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 71, 19))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 71, 19))
+
+declare function g(elem: object, index: number): object;
+>g : Symbol(g, Decl(namedTupleMembers.ts, 71, 48))
+>elem : Symbol(elem, Decl(namedTupleMembers.ts, 72, 19))
+>index : Symbol(index, Decl(namedTupleMembers.ts, 72, 32))
+
+declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): Parameters<T>;
+>getArgsForInjection : Symbol(getArgsForInjection, Decl(namedTupleMembers.ts, 72, 56))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 73, 37))
+>args : Symbol(args, Decl(namedTupleMembers.ts, 73, 48))
+>x : Symbol(x, Decl(namedTupleMembers.ts, 73, 72))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 73, 37))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(namedTupleMembers.ts, 73, 37))
+
+export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
+>argumentsOfGAsFirstArgument : Symbol(argumentsOfGAsFirstArgument, Decl(namedTupleMembers.ts, 75, 12))
+>f : Symbol(f, Decl(namedTupleMembers.ts, 69, 6))
+>getArgsForInjection : Symbol(getArgsForInjection, Decl(namedTupleMembers.ts, 72, 56))
+>g : Symbol(g, Decl(namedTupleMembers.ts, 71, 48))
+
+export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread
+>argumentsOfG : Symbol(argumentsOfG, Decl(namedTupleMembers.ts, 76, 12))
+>f : Symbol(f, Decl(namedTupleMembers.ts, 69, 6))
+>getArgsForInjection : Symbol(getArgsForInjection, Decl(namedTupleMembers.ts, 72, 56))
+>g : Symbol(g, Decl(namedTupleMembers.ts, 71, 48))
+

@@ -25168,6 +25168,7 @@ namespace ts {
                 }
             }
             const types = [];
+            const names: (ParameterDeclaration | NamedTupleMember)[] = [];
             let spreadIndex = -1;
             for (let i = index; i < argCount; i++) {
                 const contextualType = getIndexedAccessType(restType, getLiteralType(i - index));
@@ -25175,12 +25176,15 @@ namespace ts {
                 if (spreadIndex < 0 && isSpreadArgument(args[i])) {
                     spreadIndex = i - index;
                 }
+                if (args[i].kind === SyntaxKind.SyntheticExpression && (args[i] as SyntheticExpression).tupleNameSource) {
+                    names.push((args[i] as SyntheticExpression).tupleNameSource!);
+                }
                 const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
             }
             return spreadIndex < 0 ?
-                createTupleType(types) :
-                createTupleType(append(types.slice(0, spreadIndex), getUnionType(types.slice(spreadIndex))), spreadIndex, /*hasRestElement*/ true);
+                createTupleType(types, /*minLength*/ undefined, /*hasRestElement*/ undefined, /*readonly*/ undefined, length(names) === length(types) ? names : undefined) :
+                createTupleType(append(types.slice(0, spreadIndex), getUnionType(types.slice(spreadIndex))), spreadIndex, /*hasRestElement*/ true, /*readonly*/ undefined);
         }
 
         function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
@@ -25431,11 +25435,12 @@ namespace ts {
             }
         }
 
-        function createSyntheticExpression(parent: Node, type: Type, isSpread?: boolean) {
+        function createSyntheticExpression(parent: Node, type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember) {
             const result = <SyntheticExpression>createNode(SyntaxKind.SyntheticExpression, parent.pos, parent.end);
             result.parent = parent;
             result.type = type;
             result.isSpread = isSpread || false;
+            result.tupleNameSource = tupleNameSource;
             return result;
         }
 
@@ -25470,7 +25475,7 @@ namespace ts {
                 if (isTupleType(type)) {
                     const typeArguments = getTypeArguments(<TypeReference>type);
                     const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
-                    const syntheticArgs = map(typeArguments, (t, i) => createSyntheticExpression(spreadArgument, t, /*isSpread*/ i === restIndex));
+                    const syntheticArgs = map(typeArguments, (t, i) => createSyntheticExpression(spreadArgument, t, /*isSpread*/ i === restIndex, type.target.labeledElementDeclarations?.[i]));
                     return concatenate(args.slice(0, length - 1), syntheticArgs);
                 }
             }

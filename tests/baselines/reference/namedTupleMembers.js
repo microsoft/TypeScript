@@ -70,11 +70,18 @@ declare var y: RecusiveRest2;
 x = y;
 y = x;
 
+declare function f<T extends any[]>(...x: T): T;
+declare function g(elem: object, index: number): object;
+declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): Parameters<T>;
+
+export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
+export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread
+
 
 //// [namedTupleMembers.js]
 "use strict";
 exports.__esModule = true;
-exports.val = exports.readSegment = exports.useState = exports.func = void 0;
+exports.argumentsOfG = exports.argumentsOfGAsFirstArgument = exports.val = exports.readSegment = exports.useState = exports.func = void 0;
 a = b;
 a = c;
 a = d;
@@ -102,6 +109,8 @@ q = r;
 r = q;
 x = y;
 y = x;
+exports.argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
+exports.argumentsOfG = f.apply(void 0, getArgsForInjection(g)); // captured arguments list re-spread
 
 
 //// [namedTupleMembers.d.ts]
@@ -127,3 +136,5 @@ export declare type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
 export declare type RecursiveTupleB = [first: string, ptr: RecursiveTupleB];
 export declare type RecusiveRest = [first: string, ...rest: RecusiveRest[]];
 export declare type RecusiveRest2 = [string, ...RecusiveRest2[]];
+export declare const argumentsOfGAsFirstArgument: [[elem: object, index: number]];
+export declare const argumentsOfG: [elem: object, index: number];
