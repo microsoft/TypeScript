@@ -200,6 +200,7 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.CaseBlock:
             case SyntaxKind.TypeLiteral:
+            case SyntaxKind.ObjectBindingPattern:
                 return spanForNode(n);
             case SyntaxKind.TupleType:
                 return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isTupleTypeNode(n.parent), SyntaxKind.OpenBracketToken);
