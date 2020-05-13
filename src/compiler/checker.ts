@@ -10202,7 +10202,7 @@ namespace ts {
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
-            type = getApparentType(getReducedType(type));
+            type = getReducedApparentType(type);
             return type.flags & TypeFlags.UnionOrIntersection ?
                 getPropertiesOfUnionOrIntersectionType(<UnionType>type) :
                 getPropertiesOfObjectType(type);
@@ -10558,6 +10558,14 @@ namespace ts {
                 t;
         }
 
+        function getReducedApparentType(type: Type): Type {
+            // Since getApparentType may return a non-reduced union or intersection type, we need to perform
+            // type reduction both before and after obtaining the apparent type. For example, given a type parameter
+            // 'T extends A | B', the type 'T & X' becomes 'A & X | B & X' after obtaining the apparent type, and
+            // that type may need futher reduction to remove empty intersections.
+            return getReducedType(getApparentType(getReducedType(type)));
+        }
+
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol | undefined {
             let singleProp: Symbol | undefined;
             let propSet: Map<Symbol> | undefined;
@@ -10779,7 +10787,7 @@ namespace ts {
          * @param name a name of property to look up in a given type
          */
         function getPropertyOfType(type: Type, name: __String): Symbol | undefined {
-            type = getApparentType(getReducedType(type));
+            type = getReducedApparentType(type);
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 const symbol = resolved.members.get(name);
@@ -10817,7 +10825,7 @@ namespace ts {
          * maps primitive types and type parameters are to their apparent types.
          */
         function getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[] {
-            return getSignaturesOfStructuredType(getApparentType(getReducedType(type)), kind);
+            return getSignaturesOfStructuredType(getReducedApparentType(type), kind);
         }
 
         function getIndexInfoOfStructuredType(type: Type, kind: IndexKind): IndexInfo | undefined {
@@ -10835,13 +10843,13 @@ namespace ts {
         // Return the indexing info of the given kind in the given type. Creates synthetic union index types when necessary and
         // maps primitive types and type parameters are to their apparent types.
         function getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined {
-            return getIndexInfoOfStructuredType(getApparentType(getReducedType(type)), kind);
+            return getIndexInfoOfStructuredType(getReducedApparentType(type), kind);
         }
 
         // Return the index type of the given kind in the given type. Creates synthetic union index types when necessary and
         // maps primitive types and type parameters are to their apparent types.
         function getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined {
-            return getIndexTypeOfStructuredType(getApparentType(getReducedType(type)), kind);
+            return getIndexTypeOfStructuredType(getReducedApparentType(type), kind);
         }
 
         function getImplicitIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined {
@@ -13215,7 +13223,7 @@ namespace ts {
             // In the following we resolve T[K] to the type of the property in T selected by K.
             // We treat boolean as different from other unions to improve errors;
             // skipping straight to getPropertyTypeForIndexType gives errors with 'boolean' instead of 'true'.
-            const apparentObjectType = getApparentType(getReducedType(objectType));
+            const apparentObjectType = getReducedApparentType(objectType);
             if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Boolean)) {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
