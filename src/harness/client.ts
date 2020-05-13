@@ -198,14 +198,14 @@ namespace ts.server {
                 isNewIdentifierLocation: false,
                 entries: response.body!.map<CompletionEntry>(entry => { // TODO: GH#18217
                     if (entry.replacementSpan !== undefined) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended, tags } = entry;
                         // TODO: GH#241
-                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, isRecommended };
+                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, isRecommended, isDeprecated: tags?.includes(protocol.SymbolTag.Deprecated) };
                         return res;
                     }
 
-                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
-                })
+                    const { name, kind, kindModifiers, sortText, tags } = entry;
+                    return { name, kind, kindModifiers, sortText, isDeprecated: tags?.includes(protocol.SymbolTag.Deprecated) }                })
             };
         }
 
@@ -750,7 +750,8 @@ namespace ts.server {
                 name: item.name,
                 kind: item.kind,
                 span: this.decodeSpan(item.span, item.file),
-                selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
+                selectionSpan: this.decodeSpan(item.selectionSpan, item.file),
+                isDeprecated: item.tags?.includes(protocol.SymbolTag.Deprecated)
             };
         }
 

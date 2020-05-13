@@ -248,7 +248,7 @@ namespace ts.CallHierarchy {
         const kind = getNodeKind(node);
         const span = createTextSpanFromBounds(skipTrivia(sourceFile.text, node.getFullStart(), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true), node.getEnd());
         const selectionSpan = createTextSpanFromBounds(name.pos, name.end);
-        return { file: sourceFile.fileName, kind, name: name.text, span, selectionSpan };
+        return { file: sourceFile.fileName, kind, name: name.text, span, selectionSpan, isDeprecated: !!getJSDocDeprecatedTag(node) };
     }
 
     function isDefined<T>(x: T): x is NonNullable<T> {

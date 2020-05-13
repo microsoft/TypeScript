@@ -31336,6 +31336,13 @@ namespace ts {
                 error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
             }
         }
+
+        function checkJSDocDeprecatedTag(node: JSDocDeprecatedTag): void {
+            const diag = Diagnostics._0_is_deprecated;
+            diag.reportsDeprecated = true;
+            errorOrSuggestion(/* isError */ false, node.parent, diag, "test")
+        }
+
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
             const classLike = getEffectiveJSDocHost(node);
             if (!classLike || !isClassDeclaration(classLike) && !isClassExpression(classLike)) {
@@ -34904,6 +34911,8 @@ namespace ts {
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocImplementsTag:
                     return checkJSDocImplementsTag(node as JSDocImplementsTag);
+                case SyntaxKind.JSDocDeprecatedTag:
+                    return checkJSDocDeprecatedTag(node as JSDocDeprecatedTag);
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:

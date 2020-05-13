@@ -2154,6 +2154,11 @@ namespace ts.server.protocol {
          * and therefore may not be accurate.
          */
         isFromUncheckedFile?: true;
+
+        /**
+         * Exist if the item has some symbol Tag.
+         */
+        tags?: SymbolTag[]
     }
 
     /**
@@ -3074,6 +3079,7 @@ namespace ts.server.protocol {
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        tags?: SymbolTag[]
     }
 
     export interface CallHierarchyIncomingCall {

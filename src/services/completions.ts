@@ -235,6 +235,7 @@ namespace ts.Completions {
                 kind: ScriptElementKind.classElement,
                 kindModifiers: undefined,
                 sortText: SortText.LocationPriority,
+                isDeprecated: undefined
             };
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, entries: [entry] };
         }
@@ -337,7 +338,8 @@ namespace ts.Completions {
                     kind: ScriptElementKind.warning,
                     kindModifiers: "",
                     sortText: SortText.JavascriptIdentifiers,
-                    isFromUncheckedFile: true
+                    isFromUncheckedFile: true,
+                    isDeprecated: undefined
                 });
             }
         });
@@ -349,7 +351,7 @@ namespace ts.Completions {
     }
 
     function createCompletionEntryForLiteral(literal: string | number | PseudoBigInt, preferences: UserPreferences): CompletionEntry {
-        return { name: completionNameForLiteral(literal, preferences), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: SortText.LocationPriority };
+        return { name: completionNameForLiteral(literal, preferences), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: SortText.LocationPriority, isDeprecated: undefined };
     }
 
     function createCompletionEntry(
@@ -437,6 +439,7 @@ namespace ts.Completions {
             isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
             replacementSpan,
+            isDeprecated: symbol.declarations.some(decl => getJSDocDeprecatedTag(decl))
         };
     }
 
@@ -558,7 +561,8 @@ namespace ts.Completions {
                         name,
                         kindModifiers: ScriptElementKindModifier.none,
                         kind: ScriptElementKind.label,
-                        sortText: SortText.LocationPriority
+                        sortText: SortText.LocationPriority,
+                        isDeprecated: undefined
                     });
                 }
             }
@@ -2517,7 +2521,8 @@ namespace ts.Completions {
                 name: tokenToString(i)!,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: ScriptElementKindModifier.none,
-                sortText: SortText.GlobalsOrKeywords
+                sortText: SortText.GlobalsOrKeywords,
+                isDeprecated: undefined
             });
         }
         return res;

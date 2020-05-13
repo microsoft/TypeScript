@@ -4590,6 +4590,10 @@
         "category": "Message",
         "code": 6384
     },
+    "'{0}' is deprecated": {
+        "category": "Suggestion",
+        "code": 6385
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

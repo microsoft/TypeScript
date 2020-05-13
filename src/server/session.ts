@@ -1661,10 +1661,10 @@ namespace ts.server {
             const prefix = args.prefix || "";
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
+                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended, isDeprecated } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
-                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
+                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended, tags: isDeprecated ? [protocol.SymbolTag.Deprecated] : undefined };
                 }
             }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
 
@@ -2224,7 +2224,8 @@ namespace ts.server {
                 kind: item.kind,
                 file: item.file,
                 span: toProtocolTextSpan(item.span, scriptInfo),
-                selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo)
+                selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo),
+                tags: item.isDeprecated ? [protocol.SymbolTag.Deprecated] : undefined
             };
         }
 

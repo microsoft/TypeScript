@@ -164,6 +164,7 @@ namespace ts.JsDoc {
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
                 sortText: "0",
+                isDeprecated: undefined
             };
         }));
     }
@@ -211,7 +212,7 @@ namespace ts.JsDoc {
                 return undefined;
             }
 
-            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
+            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0", isDeprecated: undefined };
         });
     }
 

@@ -615,6 +615,7 @@ namespace ts {
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        isDeprecated?: boolean
     }
 
     export interface CallHierarchyIncomingCall {
@@ -1072,6 +1073,7 @@ namespace ts {
         source?: string;
         isRecommended?: true;
         isFromUncheckedFile?: true;
+        isDeprecated?: boolean
     }
 
     export interface CompletionEntryDetails {
