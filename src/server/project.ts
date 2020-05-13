@@ -947,7 +947,7 @@ namespace ts.server {
 
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
-            if (this.languageServiceEnabled) {
+            if (this.languageServiceEnabled && !this.projectService.syntaxOnly) {
                 // 1. no changes in structure, no changes in unresolved imports - do nothing
                 // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
                 // (can reuse cached imports for files that were not changed)
@@ -1070,7 +1070,7 @@ namespace ts.server {
                 }
 
                 // Watch the type locations that would be added to program as part of automatic type resolutions
-                if (this.languageServiceEnabled) {
+                if (this.languageServiceEnabled && !this.projectService.syntaxOnly) {
                     this.resolutionCache.updateTypeRootsWatch();
                 }
             }
