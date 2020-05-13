@@ -662,7 +662,7 @@ namespace ts.server {
                 pluginProbeLocations: opts.pluginProbeLocations,
                 allowLocalPluginLoads: opts.allowLocalPluginLoads,
                 typesMapLocation: opts.typesMapLocation,
-                syntaxOnly: opts.syntaxOnly,
+                syntaxOnly: true // opts.syntaxOnly,
             };
             this.projectService = new ProjectService(settings);
             this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
