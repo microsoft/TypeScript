@@ -550,10 +550,8 @@ namespace ts.server.protocol {
         triggerReason?: RefactorTriggerReason;
     };
 
-    export type RefactorTriggerReason = RefactorInvokedReason;
-
-    export interface RefactorInvokedReason {
-        kind: "invoked";
+    export enum RefactorTriggerReason {
+        Invoked = "invoked"
     }
 
     /**

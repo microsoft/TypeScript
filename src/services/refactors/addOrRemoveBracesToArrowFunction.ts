@@ -17,7 +17,8 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, triggerReason } = context;
-        const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason);
+        const forImplicitRequest = triggerReason ? triggerReason === RefactorTriggerReason.Implicit : true;
+        const info = getConvertibleArrowFunctionAtPosition(file, startPosition, forImplicitRequest);
         if (!info) return emptyArray;
 
         return [{
@@ -38,7 +39,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
-        const info = getConvertibleArrowFunctionAtPosition(file, startPosition, /*triggerReason*/ { kind: "invoked" });
+        const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
         if (!info) return undefined;
 
         const { expression, returnStatement, func } = info;
@@ -70,12 +71,12 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, triggerReason?: RefactorTriggerReason): Info | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, forImplicitRequest = false): Info | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
         // Only offer a refactor in the function body on explicit refactor requests.
         if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node)
-            || (rangeContainsRange(func.body, node) && triggerReason?.kind !== "invoked"))) return undefined;
+            || (rangeContainsRange(func.body, node) && forImplicitRequest))) return undefined;
 
         if (isExpression(func.body)) {
             return {

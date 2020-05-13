@@ -741,10 +741,9 @@ namespace ts {
         commands?: CodeActionCommand[];
     }
 
-    export type RefactorTriggerReason = RefactorInvokedReason;
-
-    export interface RefactorInvokedReason {
-        kind: "invoked";
+    export enum RefactorTriggerReason {
+        Implicit = "implicit",
+        Invoked = "invoked",
     }
 
     export interface TextInsertion {

@@ -8,7 +8,8 @@ namespace ts.refactor.extractSymbol {
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason);
+        const forImplicitRequest = context.triggerReason ? context.triggerReason === RefactorTriggerReason.Implicit : true;
+        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), forImplicitRequest);
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
@@ -87,7 +88,7 @@ namespace ts.refactor.extractSymbol {
 
     /* Exported for tests */
     export function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), /* triggerReason*/ { kind: "invoked" });
+        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
         const targetRange = rangeToExtract.targetRange!; // TODO:GH#18217
 
         const parsedFunctionIndexMatch = /^function_scope_(\d+)$/.exec(actionName);
@@ -186,12 +187,12 @@ namespace ts.refactor.extractSymbol {
      * not shown to the user, but can be used by us diagnostically)
      */
     // exported only for tests
-    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, triggerReason?: RefactorTriggerReason): RangeToExtract {
+    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, forImplicitRequest = false): RangeToExtract {
         const { length } = span;
-        if (length === 0 && triggerReason?.kind !== "invoked") {
+        if (length === 0 && forImplicitRequest) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
         }
-        const explicitCursorRequest = length === 0 && triggerReason?.kind === "invoked";
+        const explicitCursorRequest = length === 0 && !forImplicitRequest;
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)

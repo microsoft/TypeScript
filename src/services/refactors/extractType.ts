@@ -6,7 +6,8 @@ namespace ts.refactor {
     const extractToTypeDef = "Extract to typedef";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const info = getRangeToExtract(context, context.triggerReason);
+            const forImplicitRequest = context.triggerReason ? context.triggerReason === RefactorTriggerReason.Implicit : true;
+            const info = getRangeToExtract(context, forImplicitRequest);
             if (!info) return emptyArray;
 
             return [{
@@ -23,7 +24,7 @@ namespace ts.refactor {
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             const { file, } = context;
-            const info = Debug.checkDefined(getRangeToExtract(context, /*triggerReason*/ { kind: "invoked" }), "Expected to find a range to extract");
+            const info = Debug.checkDefined(getRangeToExtract(context), "Expected to find a range to extract");
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => {
@@ -58,12 +59,12 @@ namespace ts.refactor {
 
     type Info = TypeAliasInfo | InterfaceInfo;
 
-    function getRangeToExtract(context: RefactorContext, triggerReason?: RefactorTriggerReason): Info | undefined {
+    function getRangeToExtract(context: RefactorContext, forImplicitRequest = false): Info | undefined {
         const { file, startPosition } = context;
         const isJS = isSourceFileJS(file);
         const current = getTokenAtPosition(file, startPosition);
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
-        const explicitCursorRequest = range.pos === range.end && triggerReason?.kind === "invoked";
+        const explicitCursorRequest = range.pos === range.end && !forImplicitRequest;
 
         const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
             (explicitCursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
