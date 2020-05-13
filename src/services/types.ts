@@ -607,6 +607,7 @@ namespace ts {
         nameSpan: TextSpan | undefined;
         /** Present if non-empty */
         childItems?: NavigationTree[];
+        isDeprecated: boolean
     }
 
     export interface CallHierarchyItem {

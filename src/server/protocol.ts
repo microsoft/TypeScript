@@ -2974,6 +2974,7 @@ namespace ts.server.protocol {
         spans: TextSpan[];
         nameSpan: TextSpan | undefined;
         childItems?: NavigationTree[];
+        tags?: SymbolTag[]
     }
 
     export type TelemetryEventName = "telemetry";

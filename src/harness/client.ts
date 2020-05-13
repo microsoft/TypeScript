@@ -491,7 +491,8 @@ namespace ts.server {
                 kindModifiers: tree.kindModifiers,
                 spans: tree.spans.map(span => this.decodeSpan(span, fileName, lineMap)),
                 nameSpan: tree.nameSpan && this.decodeSpan(tree.nameSpan, fileName, lineMap),
-                childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap))
+                childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap)),
+                isDeprecated: !!tree.tags?.includes(protocol.SymbolTag.Deprecated)
             };
         }
 

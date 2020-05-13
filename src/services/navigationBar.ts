@@ -793,7 +793,8 @@ namespace ts.NavigationBar {
             kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
             nameSpan: n.name && getNodeSpan(n.name),
-            childItems: map(n.children, convertToTree)
+            childItems: map(n.children, convertToTree),
+            isDeprecated: !!getJSDocDeprecatedTag(n.node)
         };
     }
 

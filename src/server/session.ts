@@ -1860,7 +1860,8 @@ namespace ts.server {
                 kindModifiers: tree.kindModifiers,
                 spans: tree.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
                 nameSpan: tree.nameSpan && toProtocolTextSpan(tree.nameSpan, scriptInfo),
-                childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo))
+                childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo)),
+                tags: tree.isDeprecated ? [protocol.SymbolTag.Deprecated] : undefined
             };
         }
 
