@@ -26,6 +26,13 @@ namespace ts.server {
             }
         }
 
+        public cancel(operationId: string) {
+            const pendingTimeout = this.pendingTimeouts.get(operationId);
+            if (!pendingTimeout) return false;
+            this.host.clearTimeout(pendingTimeout);
+            return this.pendingTimeouts.delete(operationId);
+        }
+
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
             perfLogger.logStartScheduledOperation(operationId);
             self.pendingTimeouts.delete(operationId);

@@ -9298,7 +9298,6 @@ declare namespace ts.server {
          *   In this case the exists property is always true
          */
         private readonly configFileExistenceInfoCache;
-        private readonly throttledOperations;
         private readonly hostConfiguration;
         private safelist;
         private readonly legacySafelist;
@@ -9328,7 +9327,6 @@ declare namespace ts.server {
         toPath(fileName: string): Path;
         private loadTypesMap;
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
-        private delayEnsureProjectForOpenFiles;
         private delayUpdateProjectGraph;
         private delayUpdateProjectGraphs;
         setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.ExternalProjectCompilerOptions, projectRootPath?: string): void;
