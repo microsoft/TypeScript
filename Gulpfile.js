@@ -470,7 +470,7 @@ task("runtests").flags = {
     "   --shardId": "1-based ID of this shard (default: 1)",
 };
 
-const runTestsParallel = () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
+const runTestsParallel =  async function () {};// () => runConsoleTests("built/local/run.js", "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
 task("runtests-parallel", series(preBuild, preTest, runTestsParallel, postTest));
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
