@@ -23,10 +23,10 @@ namespace ts {
         IsNamedExternalExport = 1 << 4,
         IsDefaultExternalExport = 1 << 5,
         IsDerivedClass = 1 << 6,
+        UseImmediatelyInvokedFunctionExpression = 1 << 7,
 
         HasAnyDecorators = HasConstructorDecorators | HasMemberDecorators,
         NeedsName = HasStaticInitializedProperties | HasMemberDecorators,
-        UseImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
         IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
     }
 
@@ -595,6 +595,11 @@ namespace ts {
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
             else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
+            if (facts & ClassFacts.HasAnyDecorators) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
+            if (facts & ClassFacts.HasStaticInitializedProperties) {
+                if (languageVersion < ScriptTarget.ESNext) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
+                else if (languageVersion === ScriptTarget.ESNext && !compilerOptions.useDefineForClassFields) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
+            }
             return facts;
         }
 
