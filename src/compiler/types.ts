@@ -474,6 +474,7 @@ namespace ts {
         JSDocAugmentsTag,
         JSDocImplementsTag,
         JSDocAuthorTag,
+        JSDocDeprecatedTag,
         JSDocClassTag,
         JSDocPublicTag,
         JSDocPrivateTag,
@@ -2686,6 +2687,10 @@ namespace ts {
 
     export interface JSDocAuthorTag extends JSDocTag {
         kind: SyntaxKind.JSDocAuthorTag;
+    }
+
+    export interface JSDocDeprecatedTag extends JSDocTag {
+        kind: SyntaxKind.JSDocDeprecatedTag;
     }
 
     export interface JSDocClassTag extends JSDocTag {

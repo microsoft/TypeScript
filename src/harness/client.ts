@@ -242,6 +242,7 @@ namespace ts.server {
                 isCaseSensitive: entry.isCaseSensitive,
                 fileName: entry.file,
                 textSpan: this.decodeSpan(entry),
+                isDeprecated: !!entry.tags?.includes(protocol.SymbolTag.Deprecated)
             }));
         }
 

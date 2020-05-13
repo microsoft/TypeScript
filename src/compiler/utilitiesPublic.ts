@@ -759,6 +759,11 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocTemplateTag);
     }
 
+    /** Gets the JSDoc deprecated tag for the node if present */
+    export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined {
+        return getFirstJSDocTag(node, isJSDocDeprecatedTag);
+    }
+
     /** Gets the JSDoc type tag for the node if present and valid */
     export function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined {
         // We should have already issued an error if there were multiple type jsdocs, so just use the first one.
@@ -1690,6 +1695,10 @@ namespace ts {
 
     export function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag {
         return node.kind === SyntaxKind.JSDocTemplateTag;
+    }
+
+    export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
+        return node.kind === SyntaxKind.JSDocDeprecatedTag;
     }
 
     export function isJSDocTypedefTag(node: Node): node is JSDocTypedefTag {

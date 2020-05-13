@@ -1545,6 +1545,7 @@ namespace FourSlashInterface {
         readonly range: FourSlash.Range;
         readonly containerName?: string;
         readonly containerKind?: ts.ScriptElementKind;
+        readonly isDeprecated?: boolean
     }
 
     export type ArrayOrSingle<T> = T | readonly T[];

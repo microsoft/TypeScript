@@ -296,6 +296,7 @@ namespace ts.projectSystem {
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export,declare",
+                    tags: undefined
                 },
                 {
                     ...protocolFileSpanFromSubstring({
@@ -307,6 +308,7 @@ namespace ts.projectSystem {
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
+                    tags: undefined
                 },
                 {
                     ...protocolFileSpanFromSubstring({
@@ -318,6 +320,7 @@ namespace ts.projectSystem {
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
+                    tags: undefined
                 },
             ]);
 
@@ -338,6 +341,7 @@ namespace ts.projectSystem {
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
+                    tags: undefined
                 },
                 {
                     ...protocolFileSpanFromSubstring({
@@ -349,6 +353,7 @@ namespace ts.projectSystem {
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
+                    tags: undefined
                 },
                 {
                     ...protocolFileSpanFromSubstring({
@@ -360,6 +365,7 @@ namespace ts.projectSystem {
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
+                    tags: undefined
                 }
             ]);
         });
@@ -378,6 +384,7 @@ namespace ts.projectSystem {
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: "export",
+                    tags: undefined
                 }
             ]);
         });

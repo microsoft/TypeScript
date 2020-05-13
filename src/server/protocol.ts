@@ -2818,6 +2818,10 @@ namespace ts.server.protocol {
         arguments: NavtoRequestArgs;
     }
 
+    export enum SymbolTag {
+        Deprecated = 1
+    }
+
     /**
      * An item found in a navto response.
      */
@@ -2857,6 +2861,11 @@ namespace ts.server.protocol {
          * Kind of symbol's container symbol (if any).
          */
         containerKind?: ScriptElementKind;
+
+        /**
+         * The symbol's tag.
+         */
+        tags?: SymbolTag[]
     }
 
     /**

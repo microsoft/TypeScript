@@ -1886,7 +1886,8 @@ namespace ts.server {
                     matchKind: navItem.matchKind,
                     file: navItem.fileName,
                     start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
-                    end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan))
+                    end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan)),
+                    tags: navItem.isDeprecated ? [protocol.SymbolTag.Deprecated] : undefined
                 };
                 if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
                     bakedItem.kindModifiers = navItem.kindModifiers;

@@ -807,6 +807,7 @@ namespace ts {
         textSpan: TextSpan;
         containerName: string;
         containerKind: ScriptElementKind;
+        isDeprecated: boolean
     }
 
     export enum IndentStyle {

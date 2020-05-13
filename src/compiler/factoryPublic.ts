@@ -2613,6 +2613,10 @@ namespace ts {
         return createJSDocTag(SyntaxKind.JSDocAuthorTag, "author", comment);
     }
 
+    export function createJSDocDeprecatedTag(comment?: string) {
+        return createJSDocTag(SyntaxKind.JSDocDeprecatedTag, "deprecated", comment);
+    }
+
     export function createJSDocPublicTag() {
         return createJSDocTag(SyntaxKind.JSDocPublicTag, "public");
     }

@@ -7094,6 +7094,9 @@ namespace ts {
                         case "readonly":
                             tag = parseSimpleTag(start, SyntaxKind.JSDocReadonlyTag, tagName);
                             break;
+                        case "deprecated":
+                            tag = parseSimpleTag(start, SyntaxKind.JSDocDeprecatedTag, tagName);
+                            break;
                         case "this":
                             tag = parseThisTag(start, tagName);
                             break;
