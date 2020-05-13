@@ -282,7 +282,10 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
-            this.languageServiceEnabled = !projectService.syntaxOnly;
+            this.languageServiceEnabled = true;
+            if (projectService.syntaxOnly) {
+                this.compilerOptions.noResolve = true;
+            }
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
@@ -296,7 +299,7 @@ namespace ts.server {
 
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory, /*logChangesWhenResolvingModule*/ true);
-            this.languageService = createLanguageService(this, this.documentRegistry, projectService.syntaxOnly);
+            this.languageService = createLanguageService(this, this.documentRegistry);
             if (lastFileExceededProgramSize) {
                 this.disableLanguageService(lastFileExceededProgramSize);
             }
@@ -618,7 +621,7 @@ namespace ts.server {
         }
 
         enableLanguageService() {
-            if (this.languageServiceEnabled || this.projectService.syntaxOnly) {
+            if (this.languageServiceEnabled) {
                 return;
             }
             this.languageServiceEnabled = true;
@@ -630,7 +633,6 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return;
             }
-            Debug.assert(!this.projectService.syntaxOnly);
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
