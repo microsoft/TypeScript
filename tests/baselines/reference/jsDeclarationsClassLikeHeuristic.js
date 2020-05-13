@@ -12,4 +12,7 @@ A.prototype.b = {};
 
 
 //// [index.d.ts]
-declare let A: any;
+declare class A {
+    private constructor();
+    b: {};
+}
