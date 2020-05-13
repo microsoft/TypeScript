@@ -5,13 +5,13 @@ interface BigIntToLocaleStringOptionsBase {
     /**
      * The locale matching algorithm to use.The default is "best fit". For information about this option, see the {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation Intl page}.
      */
-    localeMatcher?: "lookup" | "best fit";
+    localeMatcher?: "lookup" | "best fit" | string;
     /**
      * The formatting style to use , the default is "decimal".
      */
-    style?: "decimal" | "percent";
+    style?: "decimal" | "percent" | string;
 
-    numberingSystem?: "arab" | "arabext" | " bali" | "beng" | "deva" | "fullwide" | " gujr" | "guru" | "hanidec" | "khmr" | " knda" | "laoo" | "latn" | "limb" | "mlym" | " mong" | "mymr" | "orya" | "tamldec" | " telu" | "thai" | "tibt"
+    numberingSystem?: "arab" | "arabext" | " bali" | "beng" | "deva" | "fullwide" | " gujr" | "guru" | "hanidec" | "khmr" | " knda" | "laoo" | "latn" | "limb" | "mlym" | " mong" | "mymr" | "orya" | "tamldec" | " telu" | "thai" | "tibt" | string;
 
     /**
      * The unit to use in unit formatting, Possible values are core unit identifiers, defined in UTS #35, Part 2, Section 6. A subset of units from the full list was selected for use in ECMAScript. Pairs of simple units can be concatenated with "-per-" to make a compound unit. There is no default value; if the style is "unit", the unit property must be provided.
@@ -21,14 +21,14 @@ interface BigIntToLocaleStringOptionsBase {
     /**
      * The unit formatting style to use in unit formatting, the defaults is "short".
      */
-    unitDisplay?: "long" | "short" | "narrow";
+    unitDisplay?: "long" | "short" | "narrow" | string;
 
     /**
-     * The currency to use in currency formatting. Possible values are the ISO 4217 currency codes, such as "USD" for the US dollar, "EUR" for the euro, or "CNY" for the Chinese RMB — see the Current currency & funds code list. There is no default value; if the style is "currency", the currency property must be provided.
+     * The currency to use in currency formatting. Possible values are the ISO 4217 currency codes, such as "USD" for the US dollar, "EUR" for the euro, or "CNY" for the Chinese RMB — see the Current currency & funds code list. There is no default value; if the style is "currency", the currency property must be provided. It is only used when [[Style]] has the value "currency".
      */
     currency?: string;
     /**
-     * How to display the currency in currency formatting. The default is "symbol".
+     * How to display the currency in currency formatting. It is only used when [[Style]] has the value "currency". The default is "symbol".
      *
      * "symbol" to use a localized currency symbol such as €,
      *
@@ -36,7 +36,7 @@ interface BigIntToLocaleStringOptionsBase {
      *
      * "name" to use a localized currency name such as "dollar"
      */
-    currencyDisplay?: "symbol" | "code" | "name";
+    currencyDisplay?: "symbol" | "code" | "name" | string;
 
     /**
      * Whether to use grouping separators, such as thousands separators or thousand/lakh/crore separators. The default is true.
@@ -78,25 +78,25 @@ interface BigIntToLocaleStringOptionsBase {
      *
      *     "compact" string representing exponent, defaults is using the "short" form
      */
-    notation?: "standard" | "scientific" | "engineering" | "compact";
+    notation?: "standard" | "scientific" | "engineering" | "compact" | string;
 
     /**
      * used only when notation is "compact"
      */
-    compactDisplay?: "short" | "long";
+    compactDisplay?: "short" | "long" | string;
 }
 
-interface BigIntToLocaleStringOptionsStyleUnit extends Omit<BigIntToLocaleStringOptionsBase,"style">  {
+interface BigIntToLocaleStringOptionsStyleUnit extends Omit<BigIntToLocaleStringOptionsBase, "style"> {
     style: "unit";
     unit: string;
 }
 
-interface BigIntToLocaleStringOptionsStyleCurrency extends  Omit<BigIntToLocaleStringOptionsBase,"style"> {
+interface BigIntToLocaleStringOptionsStyleCurrency extends Omit<BigIntToLocaleStringOptionsBase, "style"> {
     style: "currency";
     currency: string;
 }
 
-type BigIntToLocaleStringOptions = BigIntToLocaleStringOptionsStyleUnit|BigIntToLocaleStringOptionsStyleCurrency|BigIntToLocaleStringOptionsBase;
+type BigIntToLocaleStringOptions = BigIntToLocaleStringOptionsStyleUnit | BigIntToLocaleStringOptionsStyleCurrency | BigIntToLocaleStringOptionsBase;
 
 interface BigInt {
     /**

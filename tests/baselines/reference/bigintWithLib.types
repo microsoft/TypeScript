@@ -66,9 +66,65 @@ stringVal = bigintVal.toLocaleString();
 >stringVal = bigintVal.toLocaleString() : string
 >stringVal : string
 >bigintVal.toLocaleString() : string
->bigintVal.toLocaleString : () => string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : () => string
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+
+stringVal = bigintVal.toLocaleString('de-DE');
+>stringVal = bigintVal.toLocaleString('de-DE') : string
+>stringVal : string
+>bigintVal.toLocaleString('de-DE') : string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal : bigint
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>'de-DE' : "de-DE"
+
+stringVal = bigintVal.toLocaleString('de-DE');
+>stringVal = bigintVal.toLocaleString('de-DE') : string
+>stringVal : string
+>bigintVal.toLocaleString('de-DE') : string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal : bigint
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>'de-DE' : "de-DE"
+
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should error
+>stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
+>stringVal : string
+>bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal : bigint
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>'de-DE' : "de-DE"
+>{ style: 'currency' } : { style: "currency"; }
+>style : "currency"
+>'currency' : "currency"
+
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'unit' }); // should error
+>stringVal = bigintVal.toLocaleString('de-DE', { style: 'unit' }) : string
+>stringVal : string
+>bigintVal.toLocaleString('de-DE', { style: 'unit' }) : string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal : bigint
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>'de-DE' : "de-DE"
+>{ style: 'unit' } : { style: "unit"; }
+>style : "unit"
+>'unit' : "unit"
+
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })
+>stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
+>stringVal : string
+>bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
+>bigintVal.toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>bigintVal : bigint
+>toLocaleString : (locales?: string, options?: BigIntToLocaleStringOptions) => string
+>'de-DE' : "de-DE"
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>style : "currency"
+>'currency' : "currency"
+>currency : string
+>'EUR' : "EUR"
 
 // Test BigInt64Array
 let bigIntArray: BigInt64Array = new BigInt64Array();
