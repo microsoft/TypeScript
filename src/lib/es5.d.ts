@@ -4277,20 +4277,34 @@ declare namespace Intl {
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
     };
 
+    type DateFormatNumericVerbosity = "numeric" | "2-digit";
+    type DateFormatNameVerbosity = "long" | "short" | "narrow";
+
     interface DateTimeFormatOptions {
-        localeMatcher?: string;
-        weekday?: string;
-        era?: string;
-        year?: string;
-        month?: string;
-        day?: string;
-        hour?: string;
-        minute?: string;
-        second?: string;
-        timeZoneName?: string;
-        formatMatcher?: string;
+        /** output examples – numeric: "2020", 2-digit: "20" */
+        year?: DateFormatNumericVerbosity;
+        /** output examples – numeric: "3", 2-digit: "03", long: "March", short: "Mar", narrow: "M" */
+        month?: DateFormatNumericVerbosity | DateFormatNameVerbosity;
+        /** output examples – numeric: "2", 2-digit: "02" */
+        day?: DateFormatNumericVerbosity;
+        /** output examples – numeric: "2", 2-digit: "02" */
+        hour?: DateFormatNumericVerbosity;
+        /** output examples – numeric: "2", 2-digit: "02" */
+        minute?: DateFormatNumericVerbosity;
+        /** output examples – numeric: "2", 2-digit: "02" */
+        second?: DateFormatNumericVerbosity;
+        /** output examples – long: "Thursday", short: "Thu", narrow: "T" */
+        weekday?: DateFormatNameVerbosity;
+        /** output examples – long: "Anno Domini", short: "AD", narrow "A" */
+        era?: DateFormatNameVerbosity;
+        /** set to `true` to force 12-hour am/pm "dayPeriod" values, or `false` to force 24-hour time without */
         hour12?: boolean;
+        /** output examples – long: "Pacific Daylight Time", short: "PDT" */
+        timeZoneName?: "long" | "short";
+        /** set to the timezone name you want to render date and time for, e g "UTC", "Europe/Rome" */
         timeZone?: string;
+        localeMatcher?: "best fit" | "lookup";
+        formatMatcher?: "best fit" | "basic";
     }
 
     interface ResolvedDateTimeFormatOptions {
