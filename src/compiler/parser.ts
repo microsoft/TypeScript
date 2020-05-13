@@ -4150,8 +4150,15 @@ namespace ts {
                     return true;
                 }
 
+                // This handles cases like `await (async () => {})()`
+                // One drawback of this implementation is that we cannot use this form in top-level
+                // if there is an "await" identifier as we cannot differentiate this two cases
+                const isCallLike = () => {
+                    return (nextToken() === SyntaxKind.OpenParenToken && !identifiers.has("await")) && !scanner.hasPrecedingLineBreak();
+                };
+
                 // here we are using similar heuristics as 'isYieldExpression'
-                return lookAhead(nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine);
+                return lookAhead(isCallLike) || lookAhead(nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine);
             }
 
             return false;

@@ -2,6 +2,7 @@
 export const x = 1;
 await x;
 
+await (async () => {})();
 
 //// [topLevelAwait.js]
 System.register([], function (exports_1, context_1) {
@@ -13,6 +14,7 @@ System.register([], function (exports_1, context_1) {
         execute: async function () {
             exports_1("x", x = 1);
             await x;
+            await (async () => { })();
         }
     };
 });

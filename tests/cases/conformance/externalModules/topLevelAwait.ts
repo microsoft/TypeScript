@@ -2,3 +2,5 @@
 // @module: esnext,system
 export const x = 1;
 await x;
+
+await (async () => {})();
