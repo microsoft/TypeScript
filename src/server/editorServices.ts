@@ -2064,6 +2064,7 @@ namespace ts.server {
                 return;
             }
 
+            const start = timestamp();
             const types = createMap<true>();
             if (packageJson.dependencies) {
                 packageJson.dependencies.forEach((_, dep) => {
@@ -2095,6 +2096,10 @@ namespace ts.server {
                     getCurrentDirectory: () => directory
                 }
             }));
+            this.logger.info(`createOrUpdatePackageJsonAutoImportProvider: ${timestamp() - start} ms`);
+            if (this.host.getMemoryUsage) {
+                this.logger.info(`Memory usage: ${this.host.getMemoryUsage()}, ${this.packageJsonAutoImportProviders.size} import providers`);
+            }
         }
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {
