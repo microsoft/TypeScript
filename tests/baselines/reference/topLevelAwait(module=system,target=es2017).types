@@ -7,3 +7,9 @@ await x;
 >await x : 1
 >x : 1
 
+await (async () => {})();
+>await (async () => {})() : void
+>(async () => {})() : Promise<void>
+>(async () => {}) : () => Promise<void>
+>async () => {} : () => Promise<void>
+

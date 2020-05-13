@@ -5,3 +5,4 @@ export const x = 1;
 await x;
 >x : Symbol(x, Decl(topLevelAwait.ts, 0, 12))
 
+await (async () => {})();
