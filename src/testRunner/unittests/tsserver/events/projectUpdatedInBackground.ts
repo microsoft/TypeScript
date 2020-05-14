@@ -172,7 +172,7 @@ namespace ts.projectSystem {
                     const additionalFiles = getAdditionalFileOrFolder ? getAdditionalFileOrFolder() : [];
                     const configFile = {
                         path: configFilePath,
-                        content: JSON.stringify(configObj || { compilerOptions: {} })
+                        content: String(JSON.stringify(configObj || { compilerOptions: {} }))
                     };
 
                     const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];

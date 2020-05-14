@@ -38,7 +38,7 @@ namespace ts {
         }
 
         function assertCompilerOptionsWithJsonNode(json: any, configFileName: string, expectedResult: ExpectedResultWithParsingSuccess) {
-            assertCompilerOptionsWithJsonText(JSON.stringify(json), configFileName, expectedResult);
+            assertCompilerOptionsWithJsonText(String(JSON.stringify(json)), configFileName, expectedResult);
         }
 
         function assertCompilerOptionsWithJsonText(fileText: string, configFileName: string, expectedResult: ExpectedResult) {

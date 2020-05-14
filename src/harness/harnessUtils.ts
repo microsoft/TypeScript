@@ -150,7 +150,7 @@ namespace Utils {
     }
 
     export function sourceFileToJSON(file: ts.Node): string {
-        return JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    ");
+        return String(JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    "));
 
         function getKindName(k: number | string): string {
             if (ts.isString(k)) {
