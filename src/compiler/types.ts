@@ -2600,6 +2600,7 @@ namespace ts {
         text: string;
         pos: -1;
         end: -1;
+        hasLeadingNewline?: boolean;
     }
 
     // represents a top level: { type } expression in a JSDoc comment.

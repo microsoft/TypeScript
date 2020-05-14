@@ -4980,7 +4980,7 @@ namespace ts {
         }
 
         function emitLeadingSynthesizedComment(comment: SynthesizedComment) {
-            if (comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+            if (comment.hasLeadingNewline || comment.kind === SyntaxKind.SingleLineCommentTrivia) {
                 writer.writeLine();
             }
             writeSynthesizedComment(comment);

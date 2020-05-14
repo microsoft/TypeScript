@@ -20,30 +20,30 @@ edit.applyRefactor({
     refactorName: "Convert overload list to single signature",
     actionName: "Convert overload list to single signature",
     actionDescription: ts.Diagnostics.Convert_overload_list_to_single_signature.message,
-// Aspirational:
-//    newContent: `declare function foo(...args: [] | [
-//    /**
-//     * a string param doc
-//     */
-//    a: string
-//] | [
-//    /**
-//     * a number param doc
-//     */
-//    a: number,
-//    /**
-//     * b number param doc
-//     */
-//    b: number
-//] | [
-//    /**
-//     * rest param doc
-//     */
-//    ...rest: symbol[]
-//]): void;`,
-// Actual:
-    newContent: `/**
+// we don't delete the param comment on the signature we update because deleting *part* of a comment is... hard
+// and we definitely don't want to delete the whole comment. This is probably a good argument for why jsdoc should
+// really be uniformly handled as AST nodes, and transformed as such :(
+newContent: `/**
  * @param rest rest param doc
  */
-declare function foo(...args: [] | [a: string] | [a: number, b: number] | [...rest: symbol[]]): void;`
+declare function foo(...args: [] | [
+    /**
+     * a string param doc
+     */
+    a: string
+] | [
+    /**
+     * a number param doc
+     */
+    a: number,
+    /**
+     * b number param doc
+     */
+    b: number
+] | [
+    /**
+     * rest param doc
+     */
+    ...rest: symbol[]
+]): void;`,
 });
