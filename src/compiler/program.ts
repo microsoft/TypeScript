@@ -2854,7 +2854,30 @@ namespace ts {
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);
                     }
-                    else if (shouldAddFile) {
+                  else if (shouldAddFile) {
+		    if (resolution.platformResolution) {
+		      const platforms = Object.keys(resolution.platformResolution)
+		      for (const platform of platforms) {
+			const fileName = resolution.platformResolution[platform];
+                        const path = toPath(fileName);
+                        const pos = skipTrivia(file.text, file.imports[i].pos);
+                        findSourceFile(
+                          fileName,
+                          path,
+                          /*isDefaultLib*/ false,
+                          /*ignoreNoDefaultLib*/ false,
+                          {
+                           kind: RefFileKind.Import,
+                           index: i,
+                           file,
+                           pos,
+                           end: file.imports[i].end
+                          },
+                          resolution.packageId);
+			
+		      }
+		      
+		    } else {
                         const path = toPath(resolvedFileName);
                         const pos = skipTrivia(file.text, file.imports[i].pos);
                         findSourceFile(
@@ -2871,6 +2894,7 @@ namespace ts {
                             },
                             resolution.packageId
                         );
+		    }
                     }
 
                     if (isFromNodeModulesSearch) {
