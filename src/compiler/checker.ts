@@ -21459,7 +21459,7 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
-            if (some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
+            if (symbol && some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
                 const diag = Diagnostics._0_is_deprecated
                 diag.reportsDeprecated = true
                 errorOrSuggestion(false, node, diag, node.escapedText as string)
@@ -30209,7 +30209,7 @@ namespace ts {
                     }
                 }
                 const symbol = getNodeLinks(node).resolvedSymbol!
-                if (some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
+                if (symbol && some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
                     const diag = Diagnostics._0_is_deprecated
                     diag.reportsDeprecated = true
                     errorOrSuggestion(false, node, diag, "foo")
