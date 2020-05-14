@@ -389,6 +389,7 @@ namespace ts.server {
                     category: Debug.checkDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
                     reportsUnnecessary: entry.reportsUnnecessary,
+                    reportsDeprecated: entry.reportsDeprecated
                 };
             });
         }

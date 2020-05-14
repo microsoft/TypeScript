@@ -5353,6 +5353,7 @@ namespace ts {
             category: message.category,
             code: message.code,
             reportsUnnecessary: message.reportsUnnecessary,
+            reportsDeprecated: message.reportsDeprecated
         };
     }
 
@@ -5384,6 +5385,7 @@ namespace ts {
             category: message.category,
             code: message.code,
             reportsUnnecessary: message.reportsUnnecessary,
+            reportsDeprecated: message.reportsDeprecated
         };
     }
 

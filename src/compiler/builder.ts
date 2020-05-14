@@ -268,6 +268,7 @@ namespace ts {
         return diagnostics.map(diagnostic => {
             const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
+            result.reportsDeprecated = diagnostic.reportDeprecated;
             result.source = diagnostic.source;
             const { relatedInformation } = diagnostic;
             result.relatedInformation = relatedInformation ?
@@ -802,6 +803,7 @@ namespace ts {
         return diagnostics.map(diagnostic => {
             const result: ReusableDiagnostic = convertToReusableDiagnosticRelatedInformation(diagnostic, relativeToBuildInfo);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
+            result.reportDeprecated = diagnostic.reportsDeprecated;
             result.source = diagnostic.source;
             const { relatedInformation } = diagnostic;
             result.relatedInformation = relatedInformation ?

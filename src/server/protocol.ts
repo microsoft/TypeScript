@@ -498,6 +498,8 @@ namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+
+        reportsDeprecated?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
     }
 
@@ -2535,6 +2537,8 @@ namespace ts.server.protocol {
         category: string;
 
         reportsUnnecessary?: {};
+
+        reportsDeprecated?: {};
 
         /**
          * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites

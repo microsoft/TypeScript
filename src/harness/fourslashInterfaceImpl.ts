@@ -1609,6 +1609,8 @@ namespace FourSlashInterface {
         range?: FourSlash.Range;
         code: number;
         reportsUnnecessary?: true;
+
+        reportsDeprecated?: true;
     }
 
     export interface GetEditsForFileRenameOptions {

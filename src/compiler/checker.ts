@@ -21453,6 +21453,11 @@ namespace ts {
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
+            if (getJSDocDeprecatedTag(declaration)) {
+                const diag = Diagnostics._0_is_deprecated
+                diag.reportsDeprecated = true
+                errorOrSuggestion(false, node, diag, node.escapedText as string)
+            }
 
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
@@ -31337,12 +31342,6 @@ namespace ts {
             }
         }
 
-        function checkJSDocDeprecatedTag(node: JSDocDeprecatedTag): void {
-            const diag = Diagnostics._0_is_deprecated;
-            diag.reportsDeprecated = true;
-            errorOrSuggestion(/* isError */ false, node.parent, diag, "test")
-        }
-
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
             const classLike = getEffectiveJSDocHost(node);
             if (!classLike || !isClassDeclaration(classLike) && !isClassExpression(classLike)) {
@@ -34911,8 +34910,6 @@ namespace ts {
                     return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
                 case SyntaxKind.JSDocImplementsTag:
                     return checkJSDocImplementsTag(node as JSDocImplementsTag);
-                case SyntaxKind.JSDocDeprecatedTag:
-                    return checkJSDocDeprecatedTag(node as JSDocDeprecatedTag);
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:
