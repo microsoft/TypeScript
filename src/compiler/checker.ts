@@ -12962,7 +12962,7 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (accessNode && prop.declarations.some(getJSDocDeprecatedTag)) {
+                    if (accessNode && some(prop.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
                         const diag = Diagnostics._0_is_deprecated
                         diag.reportsDeprecated = true
                         errorOrSuggestion(false, accessNode, diag, "fff")
@@ -21429,12 +21429,6 @@ namespace ts {
                 return errorType;
             }
 
-            if (symbol.declarations.some(getJSDocDeprecatedTag)) {
-                const diag = Diagnostics._0_is_deprecated
-                diag.reportsDeprecated = true
-                errorOrSuggestion(false, node, diag, node.escapedText as string)
-            }
-
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
             // Although in down-level emit of arrow function, we emit it using function expression which means that
             // arguments objects will be bound to the inner object; emitting arrow function natively in ES6, arguments objects
@@ -21465,6 +21459,12 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
+            if (some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
+                const diag = Diagnostics._0_is_deprecated
+                diag.reportsDeprecated = true
+                errorOrSuggestion(false, node, diag, node.escapedText as string)
+            }
+            
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
@@ -24432,7 +24432,7 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
-                if (prop.declarations.some(getJSDocDeprecatedTag)) {
+                if (some(prop.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
                     const diag = Diagnostics._0_is_deprecated
                     diag.reportsDeprecated = true
                     errorOrSuggestion(false, node, diag, "foo")
@@ -30209,7 +30209,7 @@ namespace ts {
                     }
                 }
                 const symbol = getNodeLinks(node).resolvedSymbol!
-                if (symbol.declarations.some(getJSDocDeprecatedTag)) {
+                if (some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
                     const diag = Diagnostics._0_is_deprecated
                     diag.reportsDeprecated = true
                     errorOrSuggestion(false, node, diag, "foo")
