@@ -283,7 +283,7 @@ namespace ts {
         /* @internal */
         useSourceOfProjectReferenceRedirect?(): boolean;
         /* @internal */
-        getAutoImportProviders?(importingFilePath: string): readonly Program[] | undefined;
+        getAutoImportProvider?(): Program | undefined;
     }
 
     /* @internal */

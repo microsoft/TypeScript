@@ -1543,12 +1543,8 @@ namespace ts.server {
             return this.importSuggestionsCache;
         }
 
-        getAutoImportProviders(importingFilePath: string) {
-            if (this.projectService.packageJsonAutoImportProviders) {
-                return mapDefined(this.getPackageJsonsVisibleToFile(importingFilePath), info => {
-                    return this.projectService.packageJsonAutoImportProviders!.get(info.fileName);
-                });
-            }
+        getAutoImportProvider() {
+            return this.projectService.packageJsonAutoImportProvider;
         }
     }
 

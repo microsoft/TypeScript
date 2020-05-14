@@ -794,9 +794,10 @@ namespace ts.codefix {
         cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program) => void,
     ) {
         forEachExternalModuleToImportFrom(program, host, from, filterByPackageJson, (module, file) => cb(module, file, program));
-        host.getAutoImportProviders?.(from.path)?.forEach(program => {
-            forEachExternalModuleToImportFrom(program, host, from, /*filterByPackageJson*/ false, (module, file) => cb(module, file, program));
-        });
+        const autoImportProvider = host.getAutoImportProvider?.();
+        if (autoImportProvider) {
+            forEachExternalModuleToImportFrom(program, host, from, /*filterByPackageJson*/ false, (module, file) => cb(module, file, autoImportProvider));
+        }
     }
 
     function forEachExternalModuleToImportFrom(
