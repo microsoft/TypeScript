@@ -5531,9 +5531,9 @@ declare namespace ts {
         renameLocation?: number;
         commands?: CodeActionCommand[];
     }
-    type RefactorTriggerReason = RefactorInvokedReason;
-    interface RefactorInvokedReason {
-        kind: "invoked";
+    enum RefactorTriggerReason {
+        Implicit = "implicit",
+        Invoked = "invoked"
     }
     interface TextInsertion {
         newText: string;
@@ -6636,9 +6636,8 @@ declare namespace ts.server.protocol {
     type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
         triggerReason?: RefactorTriggerReason;
     };
-    type RefactorTriggerReason = RefactorInvokedReason;
-    interface RefactorInvokedReason {
-        kind: "invoked";
+    enum RefactorTriggerReason {
+        Invoked = "invoked"
     }
     /**
      * Response is a list of available refactorings.

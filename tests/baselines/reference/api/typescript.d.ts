@@ -5531,9 +5531,9 @@ declare namespace ts {
         renameLocation?: number;
         commands?: CodeActionCommand[];
     }
-    type RefactorTriggerReason = RefactorInvokedReason;
-    interface RefactorInvokedReason {
-        kind: "invoked";
+    enum RefactorTriggerReason {
+        Implicit = "implicit",
+        Invoked = "invoked"
     }
     interface TextInsertion {
         newText: string;
