@@ -439,7 +439,7 @@ namespace ts.Completions {
             isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
             replacementSpan,
-            isDeprecated: symbol.declarations.some(decl => getJSDocDeprecatedTag(decl))
+            isDeprecated: some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))
         };
     }
 
