@@ -27046,7 +27046,7 @@ namespace ts {
         }
 
         function isValidDeclarationForTupleLabel(d: Declaration): d is NamedTupleMember | (ParameterDeclaration & { name: Identifier }) {
-            return d.kind === SyntaxKind.NamedTupleMember || (isParameter(d) && isIdentifier(d.name));
+            return d.kind === SyntaxKind.NamedTupleMember || (isParameter(d) && d.name && isIdentifier(d.name));
         }
 
         function getNameableDeclarationAtPosition(signature: Signature, pos: number) {
