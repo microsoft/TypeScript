@@ -12962,6 +12962,11 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
+                    if (accessNode && prop.declarations.some(getJSDocDeprecatedTag)) {
+                        const diag = Diagnostics._0_is_deprecated
+                        diag.reportsDeprecated = true
+                        errorOrSuggestion(false, accessNode, diag, "fff")
+                    }
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
                         if (isAssignmentToReadonlyEntity(accessExpression, prop, getAssignmentTargetKind(accessExpression))) {
@@ -21424,6 +21429,12 @@ namespace ts {
                 return errorType;
             }
 
+            if (symbol.declarations.some(getJSDocDeprecatedTag)) {
+                const diag = Diagnostics._0_is_deprecated
+                diag.reportsDeprecated = true
+                errorOrSuggestion(false, node, diag, node.escapedText as string)
+            }
+
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
             // Although in down-level emit of arrow function, we emit it using function expression which means that
             // arguments objects will be bound to the inner object; emitting arrow function natively in ES6, arguments objects
@@ -21453,11 +21464,6 @@ namespace ts {
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
-            if (getJSDocDeprecatedTag(declaration)) {
-                const diag = Diagnostics._0_is_deprecated
-                diag.reportsDeprecated = true
-                errorOrSuggestion(false, node, diag, node.escapedText as string)
-            }
 
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
@@ -24426,6 +24432,12 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
+                if (prop.declarations.some(getJSDocDeprecatedTag)) {
+                    const diag = Diagnostics._0_is_deprecated
+                    diag.reportsDeprecated = true
+                    errorOrSuggestion(false, node, diag, "foo")
+                }
+
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
                 getNodeLinks(node).resolvedSymbol = prop;
@@ -30196,7 +30208,13 @@ namespace ts {
                         checkTypeArgumentConstraints(node, typeParameters);
                     }
                 }
-                if (type.flags & TypeFlags.Enum && getNodeLinks(node).resolvedSymbol!.flags & SymbolFlags.EnumMember) {
+                const symbol = getNodeLinks(node).resolvedSymbol!
+                if (symbol.declarations.some(getJSDocDeprecatedTag)) {
+                    const diag = Diagnostics._0_is_deprecated
+                    diag.reportsDeprecated = true
+                    errorOrSuggestion(false, node, diag, "foo")
+                }
+                if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {
                     error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
                 }
             }
