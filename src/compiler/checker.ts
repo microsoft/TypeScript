@@ -2002,6 +2002,7 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.PlaceholderTypeDeclaration:
                 case SyntaxKind.ModuleDeclaration: // For `namespace N { N; }`
                     return true;
                 default:
@@ -3551,6 +3552,12 @@ namespace ts {
         function createTypeParameter(symbol?: Symbol) {
             const type = <TypeParameter>createType(TypeFlags.TypeParameter);
             if (symbol) type.symbol = symbol;
+            return type;
+        }
+
+        function createPlaceholderType(symbol: Symbol) {
+            const type = <TypeParameter>createType(TypeFlags.TypeVariable);
+            type.symbol = symbol;
             return type;
         }
 
@@ -8697,6 +8704,40 @@ namespace ts {
             return links.declaredType;
         }
 
+        function getDeclaredTypeOfPlaceholderType2(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.declaredType) {
+                // Note that we use the links object as the target here because the symbol object is used as the unique
+                // identity for resolution of the 'type' property in SymbolLinks.
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.DeclaredType)) {
+                    return errorType;
+                }
+
+                const declarations = filter(symbol.declarations, isPlaceholderDeclaration);
+                Debug.assert(declarations.length > 0, "Expected at least one placeholder type.");
+                const constraints = map(declarations, d => d.constraint ? getTypeFromTypeNode(d.constraint) : unknownType);
+                let effectiveConstraint = getIntersectionType(constraints);
+                
+                if (popTypeResolution()) {
+                    const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
+                    if (typeParameters) {
+                        // Initialize the instantiation cache for generic type aliases. The declared type corresponds to
+                        // an instantiation of the type alias with the type parameters supplied as type arguments.
+                        links.typeParameters = typeParameters;
+                        links.instantiations = createMap<Type>();
+                        links.instantiations.set(getTypeListId(typeParameters), effectiveConstraint);
+                    }
+                }
+                else {
+                    effectiveConstraint = errorType;
+                    const declaration = declarations[0];
+                    error(isNamedDeclaration(declaration) ? declaration.name : declaration || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                }
+                links.declaredType = effectiveConstraint;
+            }
+            return links.declaredType;
+        }
+
         function isStringConcatExpression(expr: Node): boolean {
             if (isStringLiteralLike(expr)) {
                 return true;
@@ -8802,6 +8843,11 @@ namespace ts {
             return links.declaredType || (links.declaredType = createTypeParameter(symbol));
         }
 
+        function getDeclaredTypeOfPlaceholderType(symbol: Symbol): PlaceholderType {
+            const links = getSymbolLinks(symbol);
+            return links.declaredType || (links.declaredType = createPlaceholderType(symbol));
+        }
+
         function getDeclaredTypeOfAlias(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             return links.declaredType || (links.declaredType = getDeclaredTypeOfSymbol(resolveAlias(symbol)));
@@ -8826,6 +8872,11 @@ namespace ts {
             }
             if (symbol.flags & SymbolFlags.EnumMember) {
                 return getDeclaredTypeOfEnumMember(symbol);
+            }
+            if (symbol.flags & SymbolFlags.PlaceholderType) {
+                // Note that placeholder types must yield to the above types,
+                // so order actually matters here.
+                return getDeclaredTypeOfPlaceholderType(symbol);
             }
             if (symbol.flags & SymbolFlags.Alias) {
                 return getDeclaredTypeOfAlias(symbol);
@@ -29193,6 +29244,17 @@ namespace ts {
             }
         }
 
+        function checkPlaceholderTypeDeclaration(node: PlaceholderTypeDeclaration) {
+            // Grammar checking
+            checkGrammarDecoratorsAndModifiers(node);
+
+            checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0); // todo obviously
+            checkExportsOnMergedDeclarations(node); // todo
+            checkTypeParameters(node.typeParameters);
+            checkSourceElement(node.constraint);
+            // registerForUnusedIdentifiersCheck(node);
+        }
+
         function checkParameter(node: ParameterDeclaration) {
             // Grammar checking
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
@@ -34566,6 +34628,8 @@ namespace ts {
                     return checkInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.TypeAliasDeclaration:
                     return checkTypeAliasDeclaration(<TypeAliasDeclaration>node);
+                case SyntaxKind.PlaceholderTypeDeclaration:
+                    return checkPlaceholderTypeDeclaration(<PlaceholderTypeDeclaration>node);
                 case SyntaxKind.EnumDeclaration:
                     return checkEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:

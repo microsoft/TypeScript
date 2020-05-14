@@ -40,6 +40,7 @@ namespace ts {
             // 1. interface declarations, type alias declarations
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.PlaceholderTypeDeclaration:
                 return ModuleInstanceState.NonInstantiated;
             // 2. const enum declarations
             case SyntaxKind.EnumDeclaration:
@@ -515,12 +516,6 @@ namespace ts {
                                     multipleDefaultExports = true;
                                 }
                             }
-                        }
-
-                        const relatedInformation: DiagnosticRelatedInformation[] = [];
-                        if (isTypeAliasDeclaration(node) && nodeIsMissing(node.type) && hasModifier(node, ModifierFlags.Export) && symbol.flags & (SymbolFlags.Alias | SymbolFlags.Type | SymbolFlags.Namespace)) {
-                            // export type T; - may have meant export type { T }?
-                            relatedInformation.push(createDiagnosticForNode(node, Diagnostics.Did_you_mean_0, `export type { ${unescapeLeadingUnderscores(node.name.escapedText)} }`));
                         }
 
                         const declarationName = getNameOfDeclaration(node) || node;
@@ -1783,6 +1778,7 @@ namespace ts {
 
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.PlaceholderTypeDeclaration:
                 case SyntaxKind.MappedType:
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
 
@@ -1904,6 +1900,7 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.PlaceholderTypeDeclaration:
                 case SyntaxKind.MappedType:
                     // All the children of these container types are never visible through another
                     // symbol (i.e. through another symbol's 'exports' or 'members').  Instead,
@@ -2624,6 +2621,8 @@ namespace ts {
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.TypeAliasDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                case SyntaxKind.PlaceholderTypeDeclaration:
+                    return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.PlaceholderType, SymbolFlags.PlaceholderTypeExcludes);
                 case SyntaxKind.EnumDeclaration:
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
@@ -3409,6 +3408,7 @@ namespace ts {
         switch (s.kind) {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.PlaceholderTypeDeclaration:
                 return true;
             case SyntaxKind.ModuleDeclaration:
                 return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
@@ -4235,6 +4235,7 @@ namespace ts {
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.PlaceholderTypeDeclaration:
             case SyntaxKind.ThisType:
             case SyntaxKind.TypeOperator:
             case SyntaxKind.IndexedAccessType:
@@ -4412,6 +4413,7 @@ namespace ts {
             case SyntaxKind.IndexSignature:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.PlaceholderTypeDeclaration:
                 return TransformFlags.TypeExcludes;
             case SyntaxKind.ObjectLiteralExpression:
                 return TransformFlags.ObjectLiteralExcludes;

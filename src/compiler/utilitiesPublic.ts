@@ -1353,6 +1353,10 @@ namespace ts {
         return node.kind === SyntaxKind.TypeAliasDeclaration;
     }
 
+    export function isPlaceholderDeclaration(node: Node): node is PlaceholderTypeDeclaration {
+        return node.kind === SyntaxKind.PlaceholderTypeDeclaration;
+    }
+
     export function isEnumDeclaration(node: Node): node is EnumDeclaration {
         return node.kind === SyntaxKind.EnumDeclaration;
     }

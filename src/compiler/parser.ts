@@ -5583,6 +5583,7 @@ namespace ts {
                     case SyntaxKind.AbstractKeyword:
                     case SyntaxKind.AsyncKeyword:
                     case SyntaxKind.DeclareKeyword:
+                    case SyntaxKind.ExistsKeyword:
                     case SyntaxKind.PrivateKeyword:
                     case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.PublicKeyword:
@@ -5751,6 +5752,7 @@ namespace ts {
                 case SyntaxKind.ModuleKeyword:
                 case SyntaxKind.NamespaceKeyword:
                 case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.ExistsKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.ExportKeyword:
@@ -5823,7 +5825,7 @@ namespace ts {
                 case SyntaxKind.InterfaceKeyword:
                     return parseInterfaceDeclaration(<InterfaceDeclaration>node);
                 case SyntaxKind.TypeKeyword:
-                    return parseTypeAliasDeclaration(<TypeAliasDeclaration>node);
+                    return parseTypeAliasOrPlaceholderTypeDeclaration(<TypeAliasDeclaration>node);
                 case SyntaxKind.EnumKeyword:
                     return parseEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.GlobalKeyword:
@@ -6366,13 +6368,19 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseTypeAliasDeclaration(node: TypeAliasDeclaration): TypeAliasDeclaration {
-            node.kind = SyntaxKind.TypeAliasDeclaration;
+        function parseTypeAliasOrPlaceholderTypeDeclaration(node: TypeAliasDeclaration | PlaceholderTypeDeclaration): TypeAliasDeclaration | PlaceholderTypeDeclaration {
             parseExpected(SyntaxKind.TypeKeyword);
             node.name = parseIdentifier();
             node.typeParameters = parseTypeParameters();
-            parseExpected(SyntaxKind.EqualsToken);
-            node.type = parseType();
+            if (parseOptional(SyntaxKind.EqualsToken)) {
+                // an '=' token has already been parsed at this point.
+                (node as TypeAliasDeclaration).type = parseType();
+            }
+            else {
+                if (parseOptional(SyntaxKind.ExtendsKeyword)) {
+                    (node as PlaceholderTypeDeclaration).constraint = parseType();
+                }
+            }
             parseSemicolon();
             return finishNode(node);
         }

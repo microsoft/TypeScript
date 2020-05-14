@@ -47,6 +47,7 @@ namespace ts {
         | SyntaxKind.ConstructorKeyword
         | SyntaxKind.DebuggerKeyword
         | SyntaxKind.DeclareKeyword
+        | SyntaxKind.ExistsKeyword
         | SyntaxKind.DefaultKeyword
         | SyntaxKind.DeleteKeyword
         | SyntaxKind.DoKeyword
@@ -264,6 +265,7 @@ namespace ts {
         BooleanKeyword,
         ConstructorKeyword,
         DeclareKeyword,
+        ExistsKeyword,
         GetKeyword,
         InferKeyword,
         IsKeyword,
@@ -285,10 +287,8 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         BigIntKeyword,
-        OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
-
+        OfKeyword,
         // Parse tree nodes
-
         // Names
         QualifiedName,
         ComputedPropertyName,
@@ -363,7 +363,6 @@ namespace ts {
         NonNullExpression,
         MetaProperty,
         SyntheticExpression,
-
         // Misc
         TemplateSpan,
         SemicolonClassElement,
@@ -393,6 +392,7 @@ namespace ts {
         ClassDeclaration,
         InterfaceDeclaration,
         TypeAliasDeclaration,
+        PlaceholderTypeDeclaration,
         EnumDeclaration,
         ModuleDeclaration,
         ModuleBlock,
@@ -410,10 +410,8 @@ namespace ts {
         NamespaceExport,
         ExportSpecifier,
         MissingDeclaration,
-
         // Module references
         ExternalModuleReference,
-
         // JSX
         JsxElement,
         JsxSelfClosingElement,
@@ -426,18 +424,15 @@ namespace ts {
         JsxAttributes,
         JsxSpreadAttribute,
         JsxExpression,
-
         // Clauses
         CaseClause,
         DefaultClause,
         HeritageClause,
         CatchClause,
-
         // Property assignments
         PropertyAssignment,
         ShorthandPropertyAssignment,
         SpreadAssignment,
-
         // Enum
         EnumMember,
         // Unparsed
@@ -446,13 +441,11 @@ namespace ts {
         UnparsedText,
         UnparsedInternalText,
         UnparsedSyntheticReference,
-
         // Top-level nodes
         SourceFile,
         Bundle,
         UnparsedSource,
         InputFiles,
-
         // JSDoc nodes
         JSDocTypeExpression,
         // The * type
@@ -487,10 +480,8 @@ namespace ts {
         JSDocTemplateTag,
         JSDocTypedefTag,
         JSDocPropertyTag,
-
         // Synthesized list
         SyntaxList,
-
         // Transformation nodes
         NotEmittedStatement,
         PartiallyEmittedExpression,
@@ -498,10 +489,8 @@ namespace ts {
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
         SyntheticReferenceExpression,
-
         // Enum value count
         Count,
-
         // Markers
         FirstAssignment = EqualsToken,
         LastAssignment = CaretEqualsToken,
@@ -690,6 +679,7 @@ namespace ts {
         | ClassLikeDeclaration
         | InterfaceDeclaration
         | TypeAliasDeclaration
+        | PlaceholderTypeDeclaration
         | EnumMember
         | EnumDeclaration
         | ModuleDeclaration
@@ -713,6 +703,7 @@ namespace ts {
         | MappedTypeNode
         | AssertionExpression
         | TypeAliasDeclaration
+        | PlaceholderTypeDeclaration
         | JSDocTypeExpression
         | JSDocNonNullableType
         | JSDocNullableType
@@ -2345,7 +2336,13 @@ namespace ts {
     export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
 
     export type DeclarationWithTypeParameters = DeclarationWithTypeParameterChildren | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
-    export type DeclarationWithTypeParameterChildren = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
+    export type DeclarationWithTypeParameterChildren =
+        | SignatureDeclaration
+        | ClassLikeDeclaration
+        | InterfaceDeclaration
+        | TypeAliasDeclaration
+        | PlaceholderTypeDeclaration
+        | JSDocTemplateTag;
 
     export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
@@ -2398,6 +2395,13 @@ namespace ts {
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         type: TypeNode;
+    }
+
+    export interface PlaceholderTypeDeclaration extends DeclarationStatement, JSDocContainer {
+        kind: SyntaxKind.PlaceholderTypeDeclaration;
+        name: Identifier;
+        typeParameters?: NodeArray<TypeParameterDeclaration>;
+        constraint?: TypeNode;
     }
 
     export interface EnumMember extends NamedDeclaration, JSDocContainer {
@@ -3895,6 +3899,7 @@ namespace ts {
         | FunctionDeclaration
         | ModuleDeclaration
         | TypeAliasDeclaration
+        | PlaceholderTypeDeclaration // todo: what is this?
         | InterfaceDeclaration
         | EnumDeclaration;
 
@@ -4037,15 +4042,17 @@ namespace ts {
         Transient               = 1 << 25,  // Transient symbol (created during type check)
         Assignment              = 1 << 26,  // Assignment treated as declaration (eg `this.prop = 1`)
         ModuleExports           = 1 << 27,  // Symbol for CommonJS `module` of `module.exports`
+        PlaceholderType         = 1 << 28,  // A way to declare the existence of a type for forward declarations or opaque handles
 
         /* @internal */
         All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
-            | ObjectLiteral | Method | Constructor | GetAccessor | SetAccessor | Signature | TypeParameter | TypeAlias | ExportValue | Alias | Prototype | ExportStar | Optional | Transient,
+            | ObjectLiteral | Method | Constructor | GetAccessor | SetAccessor | Signature | TypeParameter | TypeAlias | PlaceholderType | ExportValue | Alias | Prototype | ExportStar | Optional | Transient,
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
         Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
-        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias | PlaceholderType,
+        NonPlaceholderType = Type & ~PlaceholderType,
         Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
@@ -4060,19 +4067,20 @@ namespace ts {
 
         ParameterExcludes = Value,
         PropertyExcludes = None,
-        EnumMemberExcludes = Value | Type,
+        EnumMemberExcludes = Value | NonPlaceholderType,
         FunctionExcludes = Value & ~(Function | ValueModule | Class),
-        ClassExcludes = (Value | Type) & ~(ValueModule | Interface | Function), // class-interface mergability done in checker.ts
-        InterfaceExcludes = Type & ~(Interface | Class),
-        RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
-        ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
+        ClassExcludes = (Value | NonPlaceholderType) & ~(ValueModule | Interface | Function), // class-interface mergability done in checker.ts
+        InterfaceExcludes = NonPlaceholderType & ~(Interface | Class),
+        RegularEnumExcludes = (Value | NonPlaceholderType) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
+        ConstEnumExcludes = (Value | NonPlaceholderType) & ~ConstEnum, // const enums merge only with const enums
         ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
         NamespaceModuleExcludes = 0,
         MethodExcludes = Value & ~Method,
         GetAccessorExcludes = Value & ~SetAccessor,
         SetAccessorExcludes = Value & ~GetAccessor,
         TypeParameterExcludes = Type & ~TypeParameter,
-        TypeAliasExcludes = Type,
+        TypeAliasExcludes = NonPlaceholderType,
+        PlaceholderTypeExcludes = Alias | TypeParameter, // placeholder types are happy to merge with other types and placeholder types
         AliasExcludes = Alias,
 
         ModuleMember = Variable | Function | Class | Interface | Enum | Module | TypeAlias | Alias,
@@ -4353,6 +4361,7 @@ namespace ts {
         Conditional     = 1 << 24,  // T extends U ? X : Y
         Substitution    = 1 << 25,  // Type parameter substitution
         NonPrimitive    = 1 << 26,  // intrinsic object type
+        Placeholder     = 1 << 27,  // type T extends Constraint
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4766,6 +4775,12 @@ namespace ts {
         isThisType?: boolean;
         /* @internal */
         resolvedDefaultType?: Type;
+    }
+
+    // Placeholder Forward Declaration Types (TypeFlags.Placeholder)
+    export interface PlaceholderType extends InstantiableType {
+        // @internal
+        constraint?: Type;
     }
 
     // Indexed access types (TypeFlags.IndexedAccess)

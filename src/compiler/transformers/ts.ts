@@ -412,6 +412,10 @@ namespace ts {
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.
                     return undefined;
+                
+                case SyntaxKind.PlaceholderTypeDeclaration:
+                    // TypeScript type-only declarations are elided.
+                    return undefined;
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided. However their names are still visited, and can potentially be retained if they could have sideeffects
