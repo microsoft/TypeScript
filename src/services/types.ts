@@ -203,12 +203,15 @@ namespace ts {
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
 
+    export interface FormattingHost {
+        getNewLine?(): string;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
+    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, FormattingHost {
         getCompilationSettings(): CompilerOptions;
-        getNewLine?(): string;
         getProjectVersion?(): string;
         getScriptFileNames(): string[];
         getScriptKind?(fileName: string): ScriptKind;

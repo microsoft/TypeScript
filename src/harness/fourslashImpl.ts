@@ -515,6 +515,12 @@ namespace FourSlash {
             }
         }
 
+        public verifyOrganizeImports(newContent: string) {
+            const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file" }, this.formatCodeSettings, ts.emptyOptions);
+            this.applyChanges(changes);
+            this.verifyFileContent(this.activeFile.fileName, newContent);
+        }
+
         private raiseError(message: string): never {
             throw new Error(this.messageAtLastKnownMarker(message));
         }
