@@ -3105,15 +3105,38 @@ namespace ts {
             const currentSourceFile = getSourceFileOfNode(location);
             const resolvedModule = getResolvedModule(currentSourceFile, moduleReference)!; // TODO: GH#18217
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
+
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                         errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
                     }
-                    // merged symbol is module declaration symbol combined with all augmentations
-                    return getMergedSymbol(sourceFile.symbol);
+
+	                // Platform forking.
+                    if (Object.keys(resolvedModule.platformResolution).length > 1) {
+
+                        // Get all the source files for the forks
+                        const sourceFiles = Object.values(resolvedModule.platformResolution).map(host.getSourceFile)
+
+                        // Create a new exported symbol, which is a
+                        // union of the other platform forks
+                        const forkedSourceFileSymbol = cloneSymbol(sourceFile.symbol)
+                        forkedSourceFileSymbol.exports?.forEach((exportedSymbol, key) => {
+                            const union = createSymbol(exportedSymbol.flags, exportedSymbol.escapedName);
+                            union.valueDeclaration = exportedSymbol.valueDeclaration;
+                            union.declarations = exportedSymbol.declarations;
+                            const types = Object.entries(sourceFiles)
+                                .map(([_key, {symbol}]: any) => getTypeOfSymbol(symbol.exports.get(key)))
+                            union.type = getUnionType(types)
+                            forkedSourceFileSymbol.exports?.set(key, union);
+                        });
+                        return getMergedSymbol(forkedSourceFileSymbol);
+                    } else {
+                        return getMergedSymbol(sourceFile.symbol);
+                    }
                 }
+
                 if (moduleNotFoundError) {
                     // report errors only if it was requested
                     error(errorNode, Diagnostics.File_0_is_not_a_module, sourceFile.fileName);
