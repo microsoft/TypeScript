@@ -5634,6 +5634,11 @@ namespace ts {
          */
         extension: Extension;
         packageId?: PackageId;
+
+        /**
+	 * Resolution filename by Platform-specific extensions
+         */
+        platformResolution: {[platform: string]: string}
     }
 
     /**

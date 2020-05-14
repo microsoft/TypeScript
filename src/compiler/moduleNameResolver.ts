@@ -22,7 +22,7 @@ namespace ts {
                 };
             }
         }
-        return r && { path: r.path, extension: r.ext, packageId };
+        return r && { path: r.path, extension: r.ext, packageId, platformResolution: r.platformResolution };
     }
 
     function noPackageId(r: PathAndExtension | undefined): Resolved | undefined {
@@ -32,7 +32,7 @@ namespace ts {
     function removeIgnoredPackageId(r: Resolved | undefined): PathAndExtension | undefined {
         if (r) {
             Debug.assert(r.packageId === undefined);
-            return { path: r.path, ext: r.extension };
+            return { path: r.path, ext: r.extension, platformResolution: r.platformResolution };
         }
     }
 
@@ -50,6 +50,11 @@ namespace ts {
          *  - true if path is not a symbolic link - this indicates that the originalPath calculation is already done and needs to be skipped
          */
         originalPath?: string | true;
+
+        /**
+	 * Resolution filename by Platform-specific extensions
+         */
+        platformResolution: {[platform: string]: string}
     }
 
     /** Result of trying to resolve a module at a file. Needs to have 'packageId' added later. */
@@ -57,6 +62,11 @@ namespace ts {
         path: string;
         // (Use a different name than `extension` to make sure Resolved isn't assignable to PathAndExtension.)
         ext: Extension;
+
+        /**
+	 * Resolution filename by Platform-specific extensions
+         */
+        platformResolution: {[platform: string]: string}
     }
 
     /**
@@ -90,7 +100,7 @@ namespace ts {
             return resultFromCache;
         }
         return {
-            resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
+            resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId, platformResolution: resolved.platformResolution },
             failedLookupLocations
         };
     }
@@ -1103,28 +1113,60 @@ namespace ts {
         }
 
         function tryExtension(ext: Extension): PathAndExtension | undefined {
-            const path = tryFile(candidate + ext, onlyRecordFailures, state);
-            return path === undefined ? undefined : { path, ext };
+            const platformResolution = tryFile(candidate + ext, onlyRecordFailures, state);
+            return platformResolution === undefined ? undefined : { path: platformResolution.default, ext, platformResolution };
         }
     }
 
-    /** Return the file if it exists. */
-    function tryFile(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): string | undefined {
-        if (!onlyRecordFailures) {
-            if (state.host.fileExists(fileName)) {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.File_0_exist_use_it_as_a_name_resolution_result, fileName);
+    function tryFile(fileName: string, onlyRecordFailures: boolean, state: ModuleResolutionState): {[platform: string]: string} | undefined {
+
+      const platformResolution: {[platform: string]: string} = [
+	      "windows", "win32", "macos", "win", "ios", "android", "native"].reduce(
+  	  (acc: {[platform: string]: string}, platform: string)  => {
+	    const filename = tryFileForPlatform(fileName, platform)
+	    return Object.assign(
+	      acc,
+	      filename ? {[platform]: filename} : {})
+	    }, {});
+
+      const baseFile = tryFileForPlatform(fileName);
+      if (baseFile) {
+	platformResolution["default"] = baseFile
+      } else if (Object.keys(platformResolution)) {
+	platformResolution["default"] = platformResolution[Object.keys(platformResolution)[0]]
+      }
+
+      return Object.keys(platformResolution).length ? platformResolution : undefined
+
+        function tryFileForPlatform(fileName: string, platform?: string): string | undefined {
+            let resolvedFileName = fileName;
+            if (platform) {
+                const forkableExtensions = [".d.ts", ".tsx", ".ts", ".json", ".js"];
+                for (const extension of forkableExtensions) {
+                    if (fileName.endsWith(extension)) {
+                        resolvedFileName = fileName.slice(0, fileName.length - extension.length) + `.${platform}${extension}`;
+                        break;
+                    }
                 }
-                return fileName;
             }
-            else {
-                if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.File_0_does_not_exist, fileName);
+
+            if (!onlyRecordFailures) {
+                if (state.host.fileExists(resolvedFileName)) {
+                    if (state.traceEnabled) {
+                        trace(state.host, Diagnostics.File_0_exist_use_it_as_a_name_resolution_result, resolvedFileName);
+                    }
+                    return resolvedFileName;
+                }
+                else {
+                    if (state.traceEnabled) {
+                        trace(state.host, Diagnostics.File_0_does_not_exist, resolvedFileName);
+                    }
                 }
             }
+            state.failedLookupLocations.push(resolvedFileName);
+            return undefined;
+
         }
-        state.failedLookupLocations.push(fileName);
-        return undefined;
     }
 
     function loadNodeModuleFromDirectory(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, considerPackageJson = true) {
@@ -1226,10 +1268,11 @@ namespace ts {
     }
 
     /** Resolve from an arbitrarily specified file. Return `undefined` if it has an unsupported extension. */
-    function resolvedIfExtensionMatches(extensions: Extensions, path: string): PathAndExtension | undefined {
-        const ext = tryGetExtensionFromPath(path);
-        return ext !== undefined && extensionIsOk(extensions, ext) ? { path, ext } : undefined;
-    }
+  function resolvedIfExtensionMatches(extensions: Extensions, platformResolution: {[platform: string]: string}): PathAndExtension | undefined {
+      const path = platformResolution.default;
+      const ext = tryGetExtensionFromPath(path);
+      return ext !== undefined && extensionIsOk(extensions, ext) ? { path, ext, platformResolution } : undefined;
+  }
 
     /** True if `extension` is one of the supported `extensions`. */
     function extensionIsOk(extensions: Extensions, extension: Extension): boolean {
@@ -1375,9 +1418,9 @@ namespace ts {
                 // A path mapping may have an extension, in contrast to an import, which should omit it.
                 const extension = tryGetExtensionFromPath(candidate);
                 if (extension !== undefined) {
-                    const path = tryFile(candidate, onlyRecordFailures, state);
-                    if (path !== undefined) {
-                        return noPackageId({ path, ext: extension });
+                    const platformResolution = tryFile(candidate, onlyRecordFailures, state);
+                    if (platformResolution !== undefined) {
+                      return noPackageId({ path: platformResolution.default, ext: extension, platformResolution });
                     }
                 }
                 return loader(extensions, candidate, onlyRecordFailures || !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
@@ -1437,7 +1480,7 @@ namespace ts {
                 trace(state.host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
             state.resultFromCache = result;
-            return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
+          return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId, platformResolution: result.resolvedModule.platformResolution } };
         }
     }
 
