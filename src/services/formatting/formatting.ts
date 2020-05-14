@@ -3,7 +3,7 @@ namespace ts.formatting {
     export interface FormatContext {
         readonly options: FormatCodeSettings;
         readonly getRules: RulesMap;
-        readonly host?: FormattingHost;
+        readonly host: FormattingHost;
     }
 
     export interface TextRangeWithKind<T extends SyntaxKind = SyntaxKind> extends TextRange {
