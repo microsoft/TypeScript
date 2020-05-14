@@ -166,7 +166,7 @@ namespace ts {
 
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.FunctionDeclaration:
-                    if (hasModifier(node, ModifierFlags.Ambient)) {
+                    if (hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                         break;
                     }
 
@@ -178,7 +178,7 @@ namespace ts {
                         // These nodes should always have names unless they are default-exports;
                         // however, class declaration parsing allows for undefined names, so syntactically invalid
                         // programs may also have an undefined name.
-                        Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasModifier(node, ModifierFlags.Default));
+                        Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasSyntacticModifier(node, ModifierFlags.Default));
                     }
                     if (isClassDeclaration(node)) {
                         // XXX: should probably also cover interfaces and type aliases that can have type variables?
@@ -287,7 +287,7 @@ namespace ts {
                 // do not emit ES6 imports and exports since they are illegal inside a namespace
                 return undefined;
             }
-            else if (node.transformFlags & TransformFlags.ContainsTypeScript || hasModifier(node, ModifierFlags.Export)) {
+            else if (node.transformFlags & TransformFlags.ContainsTypeScript || hasSyntacticModifier(node, ModifierFlags.Export)) {
                 return visitTypeScript(node);
             }
 
@@ -349,7 +349,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitTypeScript(node: Node): VisitResult<Node> {
-            if (isStatement(node) && hasModifier(node, ModifierFlags.Ambient)) {
+            if (isStatement(node) && hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                 // TypeScript ambient declarations are elided, but some comments may be preserved.
                 // See the implementation of `getLeadingComments` in comments.ts for more details.
                 return createNotEmittedStatement(node);
@@ -610,7 +610,7 @@ namespace ts {
         }
 
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-            if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasModifier(node, ModifierFlags.Export))) {
+            if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasSyntacticModifier(node, ModifierFlags.Export))) {
                 return visitEachChild(node, visitor, context);
             }
 
@@ -966,7 +966,7 @@ namespace ts {
          */
         function isDecoratedClassElement(member: ClassElement, isStatic: boolean, parent: ClassLikeDeclaration) {
             return nodeOrChildIsDecorated(member, parent)
-                && isStatic === hasModifier(member, ModifierFlags.Static);
+                && isStatic === hasSyntacticModifier(member, ModifierFlags.Static);
         }
 
         /**
@@ -2045,7 +2045,7 @@ namespace ts {
          * @param node The declaration node.
          */
         function shouldEmitAccessorDeclaration(node: AccessorDeclaration) {
-            return !(nodeIsMissing(node.body) && hasModifier(node, ModifierFlags.Abstract));
+            return !(nodeIsMissing(node.body) && hasSyntacticModifier(node, ModifierFlags.Abstract));
         }
 
         function visitGetAccessor(node: GetAccessorDeclaration) {
@@ -2352,7 +2352,7 @@ namespace ts {
             const containerName = getNamespaceContainerName(node);
 
             // `exportName` is the expression used within this node's container for any exported references.
-            const exportName = hasModifier(node, ModifierFlags.Export)
+            const exportName = hasSyntacticModifier(node, ModifierFlags.Export)
                 ? getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
                 : getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
@@ -2653,7 +2653,7 @@ namespace ts {
             const containerName = getNamespaceContainerName(node);
 
             // `exportName` is the expression used within this node's container for any exported references.
-            const exportName = hasModifier(node, ModifierFlags.Export)
+            const exportName = hasSyntacticModifier(node, ModifierFlags.Export)
                 ? getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
                 : getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
@@ -3039,7 +3039,7 @@ namespace ts {
          * @param node The node to test.
          */
         function isExportOfNamespace(node: Node) {
-            return currentNamespace !== undefined && hasModifier(node, ModifierFlags.Export);
+            return currentNamespace !== undefined && hasSyntacticModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -3048,7 +3048,7 @@ namespace ts {
          * @param node The node to test.
          */
         function isExternalModuleExport(node: Node) {
-            return currentNamespace === undefined && hasModifier(node, ModifierFlags.Export);
+            return currentNamespace === undefined && hasSyntacticModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -3058,7 +3058,7 @@ namespace ts {
          */
         function isNamedExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && !hasModifier(node, ModifierFlags.Default);
+                && !hasSyntacticModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -3068,7 +3068,7 @@ namespace ts {
          */
         function isDefaultExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && hasModifier(node, ModifierFlags.Default);
+                && hasSyntacticModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -3147,7 +3147,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasModifier(member, ModifierFlags.Static)
+            return hasSyntacticModifier(member, ModifierFlags.Static)
                 ? getDeclarationName(node)
                 : getClassPrototype(node);
         }

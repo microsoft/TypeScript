@@ -770,7 +770,7 @@ namespace ts {
 
                     case SyntaxKind.Parameter:
                         // Only consider parameter properties
-                        if (!hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+                        if (!hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                             break;
                         }
                         // falls through

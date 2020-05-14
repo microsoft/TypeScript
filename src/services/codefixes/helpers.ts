@@ -40,7 +40,7 @@ namespace ts.codefix {
         const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
         const declaration = declarations[0];
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
-        const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
+        const visibilityModifier = createVisibilityModifier(getEffectiveModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);

@@ -751,7 +751,7 @@ namespace ts {
      * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
      */
     export function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression {
-        if (ns && hasModifier(node, ModifierFlags.Export)) {
+        if (ns && hasSyntacticModifier(node, ModifierFlags.Export)) {
             return getNamespaceMemberName(ns, getName(node), allowComments, allowSourceMaps);
         }
         return getExportName(node, allowComments, allowSourceMaps);

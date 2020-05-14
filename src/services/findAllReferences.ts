@@ -102,7 +102,7 @@ namespace ts.FindAllReferences {
             ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
                 && node.parent.propertyName === node) ||
             // Is default export
-            (node.kind === SyntaxKind.DefaultKeyword && hasModifier(node.parent, ModifierFlags.ExportDefault))) {
+            (node.kind === SyntaxKind.DefaultKeyword && hasSyntacticModifier(node.parent, ModifierFlags.ExportDefault))) {
             return getContextNode(node.parent);
         }
 
@@ -1146,7 +1146,7 @@ namespace ts.FindAllReferences {
 
             // If this is private property or method, the scope is the containing class
             if (flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-                const privateDeclaration = find(declarations, d => hasModifier(d, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(d));
+                const privateDeclaration = find(declarations, d => hasEffectiveModifier(d, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(d));
                 if (privateDeclaration) {
                     return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                 }
@@ -1561,7 +1561,7 @@ namespace ts.FindAllReferences {
             Debug.assert(classLike.name === referenceLocation);
             const addRef = state.referenceAdder(search.symbol);
             for (const member of classLike.members) {
-                if (!(isMethodOrAccessor(member) && hasModifier(member, ModifierFlags.Static))) {
+                if (!(isMethodOrAccessor(member) && hasSyntacticModifier(member, ModifierFlags.Static))) {
                     continue;
                 }
                 if (member.body) {
@@ -1776,7 +1776,7 @@ namespace ts.FindAllReferences {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    staticFlag &= getModifierFlags(searchSpaceNode);
+                    staticFlag &= getSyntacticModifierFlags(searchSpaceNode);
                     searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                     break;
                 default:
@@ -1794,7 +1794,7 @@ namespace ts.FindAllReferences {
                 // If we have a 'super' container, we must have an enclosing class.
                 // Now make sure the owning class is the same as the search-space
                 // and has the same static qualifier as the original 'super's owner.
-                return container && (ModifierFlags.Static & getModifierFlags(container)) === staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
+                return container && (ModifierFlags.Static & getSyntacticModifierFlags(container)) === staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
             });
 
             return [{ definition: { type: DefinitionKind.Symbol, symbol: searchSpaceNode.symbol }, references }];
@@ -1822,7 +1822,7 @@ namespace ts.FindAllReferences {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    staticFlag &= getModifierFlags(searchSpaceNode);
+                    staticFlag &= getSyntacticModifierFlags(searchSpaceNode);
                     searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                     break;
                 case SyntaxKind.SourceFile:
@@ -1857,7 +1857,7 @@ namespace ts.FindAllReferences {
                         case SyntaxKind.ClassDeclaration:
                             // Make sure the container belongs to the same class
                             // and has the appropriate static modifier from the original container.
-                            return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getModifierFlags(container) & ModifierFlags.Static) === staticFlag;
+                            return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getSyntacticModifierFlags(container) & ModifierFlags.Static) === staticFlag;
                         case SyntaxKind.SourceFile:
                             return container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container) && !isParameterName(node);
                     }
