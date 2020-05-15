@@ -1,43 +1,54 @@
 === tests/cases/compiler/json.stringify.ts ===
-var replacer = (k) => undefined;
->replacer : Symbol(replacer, Decl(json.stringify.ts, 0, 3))
->k : Symbol(k, Decl(json.stringify.ts, 0, 16))
+var anyReplacer = (k) => undefined;
+>anyReplacer : Symbol(anyReplacer, Decl(json.stringify.ts, 0, 3))
+>k : Symbol(k, Decl(json.stringify.ts, 0, 19))
 >undefined : Symbol(undefined)
 
+var failsafeReplacer = (k) => null;
+>failsafeReplacer : Symbol(failsafeReplacer, Decl(json.stringify.ts, 1, 3))
+>k : Symbol(k, Decl(json.stringify.ts, 1, 24))
+
 var value = null;
->value : Symbol(value, Decl(json.stringify.ts, 1, 3))
+>value : Symbol(value, Decl(json.stringify.ts, 2, 3))
 
 JSON.stringify(value, undefined, 2);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->value : Symbol(value, Decl(json.stringify.ts, 1, 3))
+>value : Symbol(value, Decl(json.stringify.ts, 2, 3))
 >undefined : Symbol(undefined)
 
 JSON.stringify(value, null, 2);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->value : Symbol(value, Decl(json.stringify.ts, 1, 3))
+>value : Symbol(value, Decl(json.stringify.ts, 2, 3))
 
 JSON.stringify(value, ["a", 1], 2);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->value : Symbol(value, Decl(json.stringify.ts, 1, 3))
+>value : Symbol(value, Decl(json.stringify.ts, 2, 3))
 
-JSON.stringify(value, replacer, 2);
+JSON.stringify(value, anyReplacer, 2);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->value : Symbol(value, Decl(json.stringify.ts, 1, 3))
->replacer : Symbol(replacer, Decl(json.stringify.ts, 0, 3))
+>value : Symbol(value, Decl(json.stringify.ts, 2, 3))
+>anyReplacer : Symbol(anyReplacer, Decl(json.stringify.ts, 0, 3))
+
+JSON.stringify(value, failsafeReplacer, 2);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(json.stringify.ts, 2, 3))
+>failsafeReplacer : Symbol(failsafeReplacer, Decl(json.stringify.ts, 1, 3))
 
 JSON.stringify(value, undefined, 2);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->value : Symbol(value, Decl(json.stringify.ts, 1, 3))
+>value : Symbol(value, Decl(json.stringify.ts, 2, 3))
 >undefined : Symbol(undefined)
 
 JSON.stringify(undefined);
@@ -46,34 +57,48 @@ JSON.stringify(undefined);
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >undefined : Symbol(undefined)
 
-JSON.stringify(undefined, replacer);
+JSON.stringify(undefined, anyReplacer);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >undefined : Symbol(undefined)
->replacer : Symbol(replacer, Decl(json.stringify.ts, 0, 3))
+>anyReplacer : Symbol(anyReplacer, Decl(json.stringify.ts, 0, 3))
 
-JSON.stringify(() => '');
+JSON.stringify(undefined, failsafeReplacer);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+>failsafeReplacer : Symbol(failsafeReplacer, Decl(json.stringify.ts, 1, 3))
 
-JSON.stringify(() => '', replacer);
+JSON.stringify(() => "", anyReplacer);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->replacer : Symbol(replacer, Decl(json.stringify.ts, 0, 3))
+>anyReplacer : Symbol(anyReplacer, Decl(json.stringify.ts, 0, 3))
+
+JSON.stringify(() => "", failsafeReplacer);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>failsafeReplacer : Symbol(failsafeReplacer, Decl(json.stringify.ts, 1, 3))
 
 JSON.stringify({});
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
-JSON.stringify({}, replacer);
+JSON.stringify({}, anyReplacer);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->replacer : Symbol(replacer, Decl(json.stringify.ts, 0, 3))
+>anyReplacer : Symbol(anyReplacer, Decl(json.stringify.ts, 0, 3))
+
+JSON.stringify({}, failsafeReplacer);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>failsafeReplacer : Symbol(failsafeReplacer, Decl(json.stringify.ts, 1, 3))
 
 JSON.stringify(new Object());
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -81,26 +106,40 @@ JSON.stringify(new Object());
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
-JSON.stringify(new Object(), replacer);
+JSON.stringify(new Object(), anyReplacer);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->replacer : Symbol(replacer, Decl(json.stringify.ts, 0, 3))
+>anyReplacer : Symbol(anyReplacer, Decl(json.stringify.ts, 0, 3))
+
+JSON.stringify(new Object(), failsafeReplacer);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>failsafeReplacer : Symbol(failsafeReplacer, Decl(json.stringify.ts, 1, 3))
 
 var anyValue: any;
->anyValue : Symbol(anyValue, Decl(json.stringify.ts, 15, 3))
+>anyValue : Symbol(anyValue, Decl(json.stringify.ts, 20, 3))
 
 JSON.stringify(anyValue);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->anyValue : Symbol(anyValue, Decl(json.stringify.ts, 15, 3))
+>anyValue : Symbol(anyValue, Decl(json.stringify.ts, 20, 3))
 
-JSON.stringify(anyValue, replacer);
+JSON.stringify(anyValue, anyReplacer);
 >JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->anyValue : Symbol(anyValue, Decl(json.stringify.ts, 15, 3))
->replacer : Symbol(replacer, Decl(json.stringify.ts, 0, 3))
+>anyValue : Symbol(anyValue, Decl(json.stringify.ts, 20, 3))
+>anyReplacer : Symbol(anyReplacer, Decl(json.stringify.ts, 0, 3))
+
+JSON.stringify(anyValue, failsafeReplacer);
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>anyValue : Symbol(anyValue, Decl(json.stringify.ts, 20, 3))
+>failsafeReplacer : Symbol(failsafeReplacer, Decl(json.stringify.ts, 1, 3))
 

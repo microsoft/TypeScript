@@ -1044,25 +1044,20 @@ interface JSON {
      * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
      */
     stringify(
-        value: number | string | boolean | null | unknown[],
+        value: number | string | boolean | null | object,
         replacer?: (number | string)[] | null,
         space?: string | number
     ): string;
     stringify(
-        value: undefined | Function | Symbol,
+        value: undefined | Symbol,
         replacer?: (number | string)[] | null,
         space?: any
     ): undefined;
     stringify(
-        value: object,
-        replacer?: (number | string)[] | null,
-        space?: string | number
-    ): string;
-    stringify(
         value: any,
         replacer?: (number | string)[] | null,
         space?: string | number
-    ): string | undefined;
+    ): any;
     /**
      * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
      * @param value A JavaScript value, usually an object or array, to be converted.
@@ -1071,9 +1066,14 @@ interface JSON {
      */
     stringify(
         value: any,
+        replacer: (this: any, key: string, value: any) => number | string | boolean | null | object,
+        space?: string | number
+    ): string;
+    stringify(
+        value: any,
         replacer?: (this: any, key: string, value: any) => any,
         space?: string | number
-    ): string | undefined;
+    ): any;
 }
 
 /**
