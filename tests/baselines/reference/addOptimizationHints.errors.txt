@@ -1,0 +1,23 @@
+tests/cases/compiler/addOptimizationHints.ts(13,2): error TS2304: Cannot find name 'decorate'.
+
+
+==== tests/cases/compiler/addOptimizationHints.ts (1 errors) ====
+    class HasNoStatics {
+      value: unknown;
+      method() {}
+    }
+    
+    class HasStatic {
+      static value = 0;
+      static someMethod() {}
+    
+      method() {}
+    }
+    
+    @decorate
+     ~~~~~~~~
+!!! error TS2304: Cannot find name 'decorate'.
+    class HasDecorator {
+      method() {}
+    }
+    

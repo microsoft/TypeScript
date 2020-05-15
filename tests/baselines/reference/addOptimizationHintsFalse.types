@@ -1,0 +1,35 @@
+=== tests/cases/compiler/addOptimizationHintsFalse.ts ===
+class HasNoStatics {
+>HasNoStatics : HasNoStatics
+
+  value: unknown;
+>value : unknown
+
+  method() {}
+>method : () => void
+}
+
+class HasStatic {
+>HasStatic : HasStatic
+
+  static value = 0;
+>value : number
+>0 : 0
+
+  static someMethod() {}
+>someMethod : () => void
+
+  method() {}
+>method : () => void
+}
+
+@decorate
+>decorate : any
+
+class HasDecorator {
+>HasDecorator : HasDecorator
+
+  method() {}
+>method : () => void
+}
+

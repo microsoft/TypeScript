@@ -585,6 +585,17 @@ namespace ts {
             return parameter.decorators !== undefined && parameter.decorators.length > 0;
         }
 
+        function shouldWrapClassWithIIFE(facts: ClassFacts) {
+          if (compilerOptions.addOptimizationHints === false) return false;
+          if (facts & ClassFacts.HasAnyDecorators) return true;
+          if (facts & ClassFacts.HasStaticInitializedProperties) {
+              if (languageVersion < ScriptTarget.ESNext) return true;
+              else if (languageVersion === ScriptTarget.ESNext && !compilerOptions.useDefineForClassFields) return true;
+          }
+
+          return false;
+        }
+
         function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
@@ -595,11 +606,7 @@ namespace ts {
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
             else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
-            if (facts & ClassFacts.HasAnyDecorators) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
-            if (facts & ClassFacts.HasStaticInitializedProperties) {
-                if (languageVersion < ScriptTarget.ESNext) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
-                else if (languageVersion === ScriptTarget.ESNext && !compilerOptions.useDefineForClassFields) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
-            }
+            if (shouldWrapClassWithIIFE(facts)) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
             return facts;
         }
 

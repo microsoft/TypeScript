@@ -4400,6 +4400,10 @@
         "category": "Error",
         "code": 6233
     },
+    "Emit code hints for optimizers and minifiers.": {
+      "category": "Message",
+      "code": 6234
+    },
 
     "Projects to reference": {
         "category": "Message",

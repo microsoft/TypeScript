@@ -1,0 +1,32 @@
+=== tests/cases/compiler/addOptimizationHintsFalse.ts ===
+class HasNoStatics {
+>HasNoStatics : Symbol(HasNoStatics, Decl(addOptimizationHintsFalse.ts, 0, 0))
+
+  value: unknown;
+>value : Symbol(HasNoStatics.value, Decl(addOptimizationHintsFalse.ts, 0, 20))
+
+  method() {}
+>method : Symbol(HasNoStatics.method, Decl(addOptimizationHintsFalse.ts, 1, 17))
+}
+
+class HasStatic {
+>HasStatic : Symbol(HasStatic, Decl(addOptimizationHintsFalse.ts, 3, 1))
+
+  static value = 0;
+>value : Symbol(HasStatic.value, Decl(addOptimizationHintsFalse.ts, 5, 17))
+
+  static someMethod() {}
+>someMethod : Symbol(HasStatic.someMethod, Decl(addOptimizationHintsFalse.ts, 6, 19))
+
+  method() {}
+>method : Symbol(HasStatic.method, Decl(addOptimizationHintsFalse.ts, 7, 24))
+}
+
+@decorate
+class HasDecorator {
+>HasDecorator : Symbol(HasDecorator, Decl(addOptimizationHintsFalse.ts, 10, 1))
+
+  method() {}
+>method : Symbol(HasDecorator.method, Decl(addOptimizationHintsFalse.ts, 13, 20))
+}
+

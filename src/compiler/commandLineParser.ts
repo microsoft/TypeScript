@@ -987,6 +987,13 @@ namespace ts {
             description: Diagnostics.Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols,
         },
         {
+          name: "addOptimizationHints",
+          type: "boolean",
+          affectsEmit: true,
+          category: Diagnostics.Advanced_Options,
+          description: Diagnostics.Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols,
+        },
+        {
             // A list of plugins to load in the language service
             name: "plugins",
             type: "list",

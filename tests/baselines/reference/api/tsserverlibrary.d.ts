@@ -2651,6 +2651,7 @@ declare namespace ts {
     }
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
     export interface CompilerOptions {
+        addOptimizationHints?: boolean;
         allowJs?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowUmdGlobalAccess?: boolean;
