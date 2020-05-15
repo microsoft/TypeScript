@@ -31,12 +31,13 @@ c.foo.bar().baz ??= result.foo.bar().baz
 //// [logicalAssignment2.js]
 "use strict";
 var _a, _b;
-a.baz && (a.baz = result.baz);
-b.baz || (b.baz = result.baz);
-(_a = c.baz) !== null && _a !== void 0 ? _a : (c.baz = result.baz);
-a.foo["baz"] && (a.foo["baz"] = result.foo.baz);
-b.foo["baz"] && (b.foo["baz"] = result.foo.baz);
-c.foo["baz"] && (c.foo["baz"] = result.foo.baz);
-a.foo.bar().baz && (a.foo.bar().baz = result.foo.bar().baz);
-b.foo.bar().baz || (b.foo.bar().baz = result.foo.bar().baz);
-(_b = c.foo.bar().baz) !== null && _b !== void 0 ? _b : (c.foo.bar().baz = result.foo.bar().baz);
+var _c, _d, _e, _f, _g, _h, _j, _k, _l;
+(_c = a).baz && (_c.baz = result.baz);
+(_d = b).baz || (_d.baz = result.baz);
+(_a = (_e = c).baz) !== null && _a !== void 0 ? _a : (_e.baz = result.baz);
+(_f = a.foo)["baz"] && (_f["baz"] = result.foo.baz);
+(_g = b.foo)["baz"] && (_g["baz"] = result.foo.baz);
+(_h = c.foo)["baz"] && (_h["baz"] = result.foo.baz);
+(_j = a.foo.bar()).baz && (_j.baz = result.foo.bar().baz);
+(_k = b.foo.bar()).baz || (_k.baz = result.foo.bar().baz);
+(_b = (_l = c.foo.bar()).baz) !== null && _b !== void 0 ? _b : (_l.baz = result.foo.bar().baz);

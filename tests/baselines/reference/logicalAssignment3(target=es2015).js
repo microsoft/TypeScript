@@ -17,6 +17,7 @@ declare const c: A;
 //// [logicalAssignment3.js]
 "use strict";
 var _a;
-(a.baz) && ((a.baz) = result.baz);
-(b.baz) || ((b.baz) = result.baz);
-(_a = (c.baz)) !== null && _a !== void 0 ? _a : ((c.baz) = result.baz);
+var _b, _c, _d;
+(_b = a).baz && (_b.baz = result.baz);
+(_c = b).baz || (_c.baz = result.baz);
+(_a = (_d = c).baz) !== null && _a !== void 0 ? _a : (_d.baz = result.baz);
