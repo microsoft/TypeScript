@@ -8,7 +8,7 @@ namespace ts {
     export function processTaggedTemplateExpression(
         context: TransformationContext,
         node: TaggedTemplateExpression,
-        visitor: ((node: Node) => VisitResult<Node>) | undefined,
+        visitor: Visitor,
         currentSourceFile: SourceFile,
         recordTaggedTemplateString: (temp: Identifier) => void,
         level: ProcessLevel) {
@@ -24,7 +24,9 @@ namespace ts {
         const rawStrings: Expression[] = [];
         const template = node.template;
 
-        if (level === ProcessLevel.LiftRestriction && !hasInvalidEscape(template)) return node;
+        if (level === ProcessLevel.LiftRestriction && !hasInvalidEscape(template)) {
+            return visitEachChild(node, visitor, context);
+        }
 
         if (isNoSubstitutionTemplateLiteral(template)) {
             cookedStrings.push(createTemplateCooked(template));
