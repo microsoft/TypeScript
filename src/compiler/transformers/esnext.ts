@@ -35,10 +35,10 @@ namespace ts {
             if (isCompoundAssignment(operator.kind) && isLogicalOrCoalescingAssignmentOperator(operator.kind)) {
                 const nonAssignmentOperator = getNonAssignmentOperatorForCompoundAssignment(operator.kind);
                 let left = skipParentheses(visitNode(binaryExpression.left, visitor, isLeftHandSideExpression));
-                let assignmentTarget = left
+                let assignmentTarget = left;
                 const right = skipParentheses(visitNode(binaryExpression.right, visitor, isExpression));
                 if (isPropertyAccessExpression(left) || isElementAccessExpression(left)) {
-                    const tempVariable = createTempVariable(hoistVariableDeclaration)
+                    const tempVariable = createTempVariable(hoistVariableDeclaration);
                     if (isPropertyAccessExpression(left)) {
                         assignmentTarget = createPropertyAccess(
                             tempVariable,
