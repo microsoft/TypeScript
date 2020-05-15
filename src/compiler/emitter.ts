@@ -4487,10 +4487,11 @@ namespace ts {
         function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode!;
-                if (isIdentifier(textSourceNode)) {
-                    return jsxAttributeEscape ? `"${escapeJsxAttributeString(getTextOfNode(textSourceNode))}"` :
-                        neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(getTextOfNode(textSourceNode))}"` :
-                        `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
+                if (isIdentifier(textSourceNode) || isNumericLiteral(textSourceNode)) {
+                    const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
+                    return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
+                        neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
+                        `"${escapeNonAsciiString(text)}"`;
                 }
                 else {
                     return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
