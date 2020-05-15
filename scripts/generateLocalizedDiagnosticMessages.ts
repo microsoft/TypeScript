@@ -83,7 +83,7 @@ function main(): void {
     }
 
     function xmlObjectToString(o: any) {
-        const out = {};
+        const out: any = {};
         for (const item of o.LCX.Item[0].Item[0].Item) {
             let ItemId = item.$.ItemId;
             let val = item.Str[0].Tgt ? item.Str[0].Tgt[0].Val[0] : item.Str[0].Val[0];

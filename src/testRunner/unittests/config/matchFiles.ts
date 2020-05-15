@@ -108,7 +108,7 @@ namespace ts {
 
     function validateMatches(expected: ParsedCommandLine, json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[]) {
         {
-            const jsonText = String(JSON.stringify(json));
+            const jsonText = JSON.stringify(json);
             const result = parseJsonText(caseInsensitiveTsconfigPath, jsonText);
             const actual = parseJsonSourceFileConfigFileContent(result, host, basePath, existingOptions, configFileName, resolutionStack);
             for (const error of expected.errors) {

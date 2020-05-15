@@ -36,7 +36,7 @@ namespace ts {
         }
 
         function assertTypeAcquisitionWithJsonNode(json: any, configFileName: string, expectedResult: ExpectedResult) {
-            const fileText = String(JSON.stringify(json));
+            const fileText = JSON.stringify(json);
             const result = parseJsonText(configFileName, fileText);
             assert(!result.parseDiagnostics.length);
             assert(!!result.endOfFileToken);

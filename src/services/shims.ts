@@ -469,7 +469,7 @@ namespace ts {
             return this.shimHost.getDefaultLibFileName(JSON.stringify(options));
         }
 
-        public readDirectory(path: string, extensions: readonly string[] = [], exclude?: string[], include?: string[], depth?: number): string[] {
+        public readDirectory(path: string, extensions?: readonly string[], exclude?: string[], include?: string[], depth?: number): string[] {
             const pattern = getFileMatcherPatterns(path, exclude, include,
                 this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
             return JSON.parse(this.shimHost.readDirectory(

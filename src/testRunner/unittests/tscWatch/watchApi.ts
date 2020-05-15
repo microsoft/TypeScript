@@ -10,11 +10,11 @@ namespace ts.tscWatch {
         };
         const config: File = {
             path: `${projectRoot}/tsconfig.json`,
-            content: String(JSON.stringify(configFileJson))
+            content: JSON.stringify(configFileJson)
         };
         const settingsJson: File = {
             path: `${projectRoot}/settings.json`,
-            content: String(JSON.stringify({ content: "Print this" }))
+            content: JSON.stringify({ content: "Print this" })
         };
 
         it("verify that module resolution with json extension works when returned without extension", () => {
@@ -47,7 +47,7 @@ namespace ts.tscWatch {
         };
         const config: File = {
             path: `${projectRoot}/tsconfig.json`,
-            content: String(JSON.stringify(configFileJson))
+            content: JSON.stringify(configFileJson)
         };
         const mainFile: File = {
             path: `${projectRoot}/index.ts`,

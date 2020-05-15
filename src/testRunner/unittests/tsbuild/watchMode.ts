@@ -960,7 +960,7 @@ export function gfoo() {
                                     const cTsConfigJson = JSON.parse(cTsconfig.content);
                                     host.ensureFileOrFolder(nrefs);
                                     cTsConfigJson.compilerOptions.paths = { "@ref/*": nrefsPath };
-                                    host.writeFile(cTsconfig.path, String(JSON.stringify(cTsConfigJson)));
+                                    host.writeFile(cTsconfig.path, JSON.stringify(cTsConfigJson));
                                 },
                                 expectedEditErrors: emptyArray,
                                 expectedProgramFiles: expectedProgramFiles.map(nrefReplacer),
@@ -996,7 +996,7 @@ export function gfoo() {
                                     const bTsConfigJson = JSON.parse(bTsconfig.content);
                                     host.ensureFileOrFolder(nrefs);
                                     bTsConfigJson.compilerOptions.paths = { "@ref/*": nrefsPath };
-                                    host.writeFile(bTsconfig.path, String(JSON.stringify(bTsConfigJson)));
+                                    host.writeFile(bTsconfig.path, JSON.stringify(bTsConfigJson));
                                 },
                                 expectedEditErrors: emptyArray,
                                 expectedProgramFiles,

@@ -129,7 +129,7 @@ namespace ts.tscWatch {
                     };
                     const configFile: File = {
                         path: configFilePath,
-                        content: String(JSON.stringify(configObj || {}))
+                        content: JSON.stringify(configObj || {})
                     };
                     const additionalFiles = getAdditionalFileOrFolder?.() || emptyArray;
                     const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];

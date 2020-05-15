@@ -31,7 +31,7 @@ namespace ts.tscWatch {
             const configFile = input.configFile?.() || config;
             const content = JSON.parse(configFile.content);
             content.compilerOptions = { ...content.compilerOptions, ...additionalOptions };
-            return { path: configFile.path, content: String(JSON.stringify(content)) };
+            return { path: configFile.path, content: JSON.stringify(content) };
         }
 
         interface VerifyEmitAndErrorUpdates {

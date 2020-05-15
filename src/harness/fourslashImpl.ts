@@ -4182,7 +4182,7 @@ namespace FourSlash {
     }
 
     function stringify(data: any, replacer?: (key: string, value: any) => any): string {
-        return String(JSON.stringify(data, replacer, 2));
+        return JSON.stringify(data, replacer, 2);
     }
 
     /** Collects an array of unique outputs. */
