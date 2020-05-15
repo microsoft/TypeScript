@@ -7548,10 +7548,10 @@ module Harness {
 >getHostSettings : () => string
 
             return JSON.stringify({ usePullLanguageService: usePull });
->JSON.stringify({ usePullLanguageService: usePull }) : string
->JSON.stringify : { (value: string | number | boolean | unknown[], replacer?: (string | number)[], space?: string | number): string; (value: Function | Symbol, replacer?: (string | number)[], space?: any): undefined; (value: object, replacer?: (string | number)[], space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; }
+>JSON.stringify({ usePullLanguageService: usePull }) : any
+>JSON.stringify : { (value: string | number | boolean | object, replacer?: (string | number)[], space?: string | number): string; (value: Symbol, replacer?: (string | number)[], space?: any): undefined; (value: any, replacer?: (string | number)[], space?: string | number): any; (value: any, replacer: (this: any, key: string, value: any) => string | number | boolean | object, space?: string | number): string; (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): any; }
 >JSON : JSON
->stringify : { (value: string | number | boolean | unknown[], replacer?: (string | number)[], space?: string | number): string; (value: Function | Symbol, replacer?: (string | number)[], space?: any): undefined; (value: object, replacer?: (string | number)[], space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; }
+>stringify : { (value: string | number | boolean | object, replacer?: (string | number)[], space?: string | number): string; (value: Symbol, replacer?: (string | number)[], space?: any): undefined; (value: any, replacer?: (string | number)[], space?: string | number): any; (value: any, replacer: (this: any, key: string, value: any) => string | number | boolean | object, space?: string | number): string; (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): any; }
 >{ usePullLanguageService: usePull } : { usePullLanguageService: boolean; }
 >usePullLanguageService : boolean
 >usePull : boolean
