@@ -8906,6 +8906,7 @@ declare namespace ts.server {
         svc: number;
         text: number;
     }
+    function isDynamicFileName(fileName: NormalizedPath): boolean;
     class ScriptInfo {
         private readonly host;
         readonly fileName: NormalizedPath;

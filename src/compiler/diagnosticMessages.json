@@ -4911,6 +4911,14 @@
         "category": "Error",
         "code": 8032
     },
+    "A JSDoc '@typedef' comment may not contain multiple '@type' tags.": {
+        "category": "Error",
+        "code": 8033
+    },
+    "The tag was first specified here.": {
+        "category": "Error",
+        "code": 8034
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -5649,7 +5657,7 @@
         "category": "Message",
         "code": 95111
     },
-    "Remove block body braces": {
+    "Remove braces from arrow function body": {
         "category": "Message",
         "code": 95112
     },
@@ -5661,7 +5669,7 @@
         "category": "Message",
         "code": 95114
     },
-    "Remove all incorrect body block braces": {
+    "Remove braces from all arrow function bodies with relevant issues": {
         "category": "Message",
         "code": 95115
     },
@@ -5669,7 +5677,7 @@
         "category": "Message",
         "code": 95116
     },
-    
+
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004

@@ -15,6 +15,13 @@ namespace ts.tscWatch {
         return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
     }
 
+    export function ensureErrorFreeBuild(host: WatchedSystem, rootNames: readonly string[]) {
+        // ts build should succeed
+        const solutionBuilder = createSolutionBuilder(host, rootNames, {});
+        solutionBuilder.build();
+        assert.equal(host.getOutput().length, 0, JSON.stringify(host.getOutput(), /*replacer*/ undefined, " "));
+    }
+
     type OutputFileStamp = [string, Date | undefined, boolean];
     function transformOutputToOutputFileStamp(f: string, host: TsBuildWatchSystem): OutputFileStamp {
         return [f, host.getModifiedTime(f), host.writtenFiles.has(host.toFullPath(f))] as OutputFileStamp;

@@ -1743,7 +1743,9 @@ namespace ts.server {
 
             return project?.isSolution() ?
                 project.getDefaultChildProjectFromSolution(info) :
-                project;
+                project && projectContainsInfoDirectly(project, info) ?
+                    project :
+                    undefined;
         }
 
         /**

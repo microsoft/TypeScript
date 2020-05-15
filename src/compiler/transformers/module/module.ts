@@ -1867,7 +1867,7 @@ namespace ts {
         text: `
             var __exportStar = (this && this.__exportStar) || function(m, exports) {
                 for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-            }`
+            };`
     };
 
     function createExportStarHelper(context: TransformationContext, module: Expression) {

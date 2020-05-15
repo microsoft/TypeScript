@@ -405,24 +405,24 @@ namespace ts.refactor.extractSymbol {
                             rangeFacts |= RangeFacts.UsesThis;
                         }
                         break;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
+                            // You cannot extract global declarations
+                            (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
+                        }
+                        // falls through
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        // do not dive into functions (except arrow functions) or classes
+                        return false;
                 }
 
-                if (isFunctionLikeDeclaration(node) || isClassLike(node)) {
-                    switch (node.kind) {
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ClassDeclaration:
-                            if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
-                                // You cannot extract global declarations
-                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
-                            }
-                            break;
-                    }
-
-                    // do not dive into functions or classes
-                    return false;
-                }
                 const savedPermittedJumps = permittedJumps;
-
                 switch (node.kind) {
                     case SyntaxKind.IfStatement:
                         permittedJumps = PermittedJumps.None;

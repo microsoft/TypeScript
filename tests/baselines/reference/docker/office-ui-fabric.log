@@ -1,5 +1,13 @@
 Exit Code: 1
 Standard output:
+@uifabric/tslint-rules: yarn run vX.X.X
+@uifabric/tslint-rules: $ just-scripts build
+@uifabric/tslint-rules: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/tslint-rules: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/tslint-rules/tsconfig.json
+@uifabric/tslint-rules: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/tslint-rules/tsconfig.json"
+@uifabric/tslint-rules: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/tslint-rules/tsconfig.json
+@uifabric/tslint-rules: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/tslint-rules/tsconfig.json"
+@uifabric/tslint-rules: Done in ?s.
 @fluentui/ability-attributes: yarn run vX.X.X
 @fluentui/ability-attributes: $ npm run schema && gulp bundle:package:no-umd
 @fluentui/ability-attributes: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
@@ -11,6 +19,37 @@ Standard output:
 
 Standard error:
 info cli using local version of lerna
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/tslint-rules: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/tslint-rules: (node:28) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/tslint-rules: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @fluentui/ability-attributes: internal/modules/cjs/loader.js:491
 @fluentui/ability-attributes:   throw new ERR_PACKAGE_PATH_NOT_EXPORTED(basePath, mappingKey);

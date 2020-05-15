@@ -2910,15 +2910,13 @@ namespace ts {
                 //    util.property = function ...
                 bindExportsPropertyAssignment(node as BindableStaticPropertyAssignmentExpression);
             }
+            else if (hasDynamicName(node)) {
+                bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
+                const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototype*/ false, /*containerIsClass*/ false);
+                addLateBoundAssignmentDeclarationToSymbol(node, sym);
+            }
             else {
-                if (hasDynamicName(node)) {
-                    bindAnonymousDeclaration(node, SymbolFlags.Property | SymbolFlags.Assignment, InternalSymbolName.Computed);
-                    const sym = bindPotentiallyMissingNamespaces(parentSymbol, node.left.expression, isTopLevelNamespaceAssignment(node.left), /*isPrototype*/ false, /*containerIsClass*/ false);
-                    addLateBoundAssignmentDeclarationToSymbol(node, sym);
-                }
-                else {
-                    bindStaticPropertyAssignment(cast(node.left, isBindableStaticAccessExpression));
-                }
+                bindStaticPropertyAssignment(cast(node.left, isBindableStaticNameExpression));
             }
         }
 
@@ -2926,7 +2924,8 @@ namespace ts {
          * For nodes like `x.y = z`, declare a member 'y' on 'x' if x is a function (or IIFE) or class or {}, or not declared.
          * Also works for expression statements preceded by JSDoc, like / ** @type number * / x.y;
          */
-        function bindStaticPropertyAssignment(node: BindableStaticAccessExpression) {
+        function bindStaticPropertyAssignment(node: BindableStaticNameExpression) {
+            Debug.assert(!isIdentifier(node));
             setParent(node.expression, node);
             bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false, /*containerIsClass*/ false);
         }

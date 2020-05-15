@@ -65,7 +65,7 @@ namespace ts {
     }
 
     function createTemplateCooked(template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {
-        return template.templateFlags ? factory.createIdentifier("undefined") : factory.createStringLiteral(template.text);
+        return template.templateFlags ? factory.createVoidZero() : factory.createStringLiteral(template.text);
     }
 
     /**

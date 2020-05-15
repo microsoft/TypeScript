@@ -307,7 +307,18 @@ namespace ts.NavigationBar {
                 addNodeWithRecursiveChild(node, getInteriorModule(<ModuleDeclaration>node).body);
                 break;
 
-            case SyntaxKind.ExportAssignment:
+            case SyntaxKind.ExportAssignment: {
+                const expression = (<ExportAssignment>node).expression;
+                if (isObjectLiteralExpression(expression)) {
+                    startNode(node);
+                    addChildrenRecursively(expression);
+                    endNode();
+                }
+                else {
+                    addLeafNode(node);
+                }
+                break;
+            }
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.IndexSignature:
