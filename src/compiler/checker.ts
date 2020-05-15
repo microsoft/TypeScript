@@ -5949,6 +5949,7 @@ namespace ts {
                     }
                 }
 
+
                 // Synthesize declarations for a symbol - might be an Interface, a Class, a Namespace, a Type, a Variable (const, let, or var), an Alias
                 // or a merge of some number of those.
                 // An interesting challenge is ensuring that when classes merge with namespaces and interfaces, is keeping
@@ -6317,7 +6318,10 @@ namespace ts {
                     const baseTypes = getBaseTypes(classType);
                     const implementsTypes = getImplementsTypes(classType);
                     const staticType = getTypeOfSymbol(symbol);
-                    const staticBaseType = getBaseConstructorTypeOfClass(staticType as InterfaceType);
+                    const isClass = !!staticType.symbol?.valueDeclaration && isClassLike(staticType.symbol.valueDeclaration);
+                    const staticBaseType = isClass
+                        ? getBaseConstructorTypeOfClass(staticType as InterfaceType)
+                        : anyType;
                     const heritageClauses = [
                         ...!length(baseTypes) ? [] : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))],
                         ...!length(implementsTypes) ? [] : [createHeritageClause(SyntaxKind.ImplementsKeyword, map(implementsTypes, b => serializeBaseType(b, staticBaseType, localName)))]
@@ -6353,7 +6357,17 @@ namespace ts {
                     const staticMembers = flatMap(
                         filter(getPropertiesOfType(staticType), p => !(p.flags & SymbolFlags.Prototype) && p.escapedName !== "prototype" && !isNamespaceMember(p)),
                         p => serializePropertySymbolForClass(p, /*isStatic*/ true, staticBaseType));
-                    const constructors = serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
+                    // When we encounter an `X.prototype.y` assignment in a JS file, we bind `X` as a class regardless as to whether
+                    // the value is ever initialized with a class or function-like value. For cases where `X` could never be
+                    // created via `new`, we will inject a `private constructor()` declaration to indicate it is not createable.
+                    const isNonConstructableClassLikeInJsFile =
+                        !isClass &&
+                        !!symbol.valueDeclaration &&
+                        isInJSFile(symbol.valueDeclaration) &&
+                        !some(getSignaturesOfType(staticType, SignatureKind.Construct));
+                    const constructors = isNonConstructableClassLikeInJsFile ?
+                        [createConstructor(/*decorators*/ undefined, createModifiersFromModifierFlags(ModifierFlags.Private), [], /*body*/ undefined)] :
+                        serializeSignatures(SignatureKind.Construct, staticType, baseTypes[0], SyntaxKind.Constructor) as ConstructorDeclaration[];
                     for (const c of constructors) {
                         // A constructor's return type and type parameters are supposed to be controlled by the enclosing class declaration
                         // `signatureToSignatureDeclarationHelper` appends them regardless, so for now we delete them here
