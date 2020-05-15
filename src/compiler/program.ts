@@ -2861,7 +2861,7 @@ namespace ts {
 			const fileName = resolution.platformResolution[platform];
                         const path = toPath(fileName);
                         const pos = skipTrivia(file.text, file.imports[i].pos);
-                        findSourceFile(
+                        const sourceFile = findSourceFile(
                           fileName,
                           path,
                           /*isDefaultLib*/ false,
@@ -2874,9 +2874,13 @@ namespace ts {
                            end: file.imports[i].end
                           },
                           resolution.packageId);
-			
+
+			      // This hack will mutate the stored sourcefile
+			      if (sourceFile) {
+			          sourceFile.platform = platform
+		          }
 		      }
-		      
+
 		    } else {
                         const path = toPath(resolvedFileName);
                         const pos = skipTrivia(file.text, file.imports[i].pos);

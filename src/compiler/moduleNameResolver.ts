@@ -1131,9 +1131,9 @@ namespace ts {
 
       const baseFile = tryFileForPlatform(fileName);
       if (baseFile) {
-	platformResolution["default"] = baseFile
+	      platformResolution["default"] = baseFile
       } else if (Object.keys(platformResolution)) {
-	platformResolution["default"] = platformResolution[Object.keys(platformResolution)[0]]
+	      platformResolution["default"] = platformResolution[Object.keys(platformResolution)[0]]
       }
 
       return Object.keys(platformResolution).length ? platformResolution : undefined

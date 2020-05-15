@@ -694,6 +694,8 @@ namespace ts {
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
         const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
 
+        const platformTypes = createMap<Type>()
+
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
         const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
@@ -3117,7 +3119,8 @@ namespace ts {
                     if (Object.keys(resolvedModule.platformResolution).length > 1) {
 
                         // Get all the source files for the forks
-                        const sourceFiles = Object.values(resolvedModule.platformResolution).map(host.getSourceFile)
+                        const sourceFiles = Object.entries(resolvedModule.platformResolution)
+                            .map(([key, value]) => [key, host.getSourceFile(value)])
 
                         // Create a new exported symbol, which is a
                         // union of the other platform forks
@@ -3126,8 +3129,13 @@ namespace ts {
                             const union = createSymbol(exportedSymbol.flags, exportedSymbol.escapedName);
                             union.valueDeclaration = exportedSymbol.valueDeclaration;
                             union.declarations = exportedSymbol.declarations;
-                            const types = Object.entries(sourceFiles)
-                                .map(([_key, {symbol}]: any) => getTypeOfSymbol(symbol.exports.get(key)))
+                            const types = sourceFiles
+                                .map(([platform, {symbol}]: any) => {
+                                    const t = getTypeOfSymbol(symbol.exports.get(key))
+                                    platformTypes.set(String(getTypeId(t)), platform);
+                                    return t
+                                })
+
                             union.type = getUnionType(types)
                             forkedSourceFileSymbol.exports?.set(key, union);
                         });
@@ -21454,9 +21462,33 @@ namespace ts {
                 node.parent.kind === SyntaxKind.NonNullExpression ||
                 declaration.kind === SyntaxKind.VariableDeclaration && (<VariableDeclaration>declaration).exclamationToken ||
                 declaration.flags & NodeFlags.Ambient;
-            const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
+            let initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
                 getOptionalType(type);
+
+
+            // Look for forked type
+            if ((initialType as any)?.types?.some((t: any) => platformTypes.has(String(t.id)))) {
+                const platformIf: any = findAncestor(
+                    node,
+                    (n: any) => n?.kind === SyntaxKind.IfStatement
+                          && n?.expression?.left?.name?.escapedText === "OS"
+                          && n?.expression?.left?.expression?.escapedText === "Platform"
+                          && n?.expression?.right?.text)
+
+                const filterPlatform = platformIf?.expression?.right?.text
+                if (filterPlatform && !everyType(initialType, (t) => platformTypes.get(String(t.id)) !== filterPlatform)) {
+                    initialType = filterType(initialType, (t) => platformTypes.get(String(t.id)) === filterPlatform)
+                }
+
+                const nodeSourceFile = getSourceFileOfNode(node)
+                if (nodeSourceFile.platform && !everyType(initialType, (t) => platformTypes.get(String(t.id)) !== nodeSourceFile.platform)) {
+                    initialType = filterType(initialType, (t) => platformTypes.get(String(t.id)) === nodeSourceFile.platform)
+                }
+
+
+            }
+
             const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the

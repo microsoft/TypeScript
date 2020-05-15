@@ -2915,6 +2915,7 @@ namespace ts {
 
         fileName: string;
         /* @internal */ path: Path;
+        /* @internal */ platform?: string;
         text: string;
         /** Resolved path can be different from path property,
          * when file is included through project reference is mapped to its output instead of source
