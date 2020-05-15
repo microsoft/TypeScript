@@ -287,9 +287,7 @@ namespace ts.textChanges {
         }
 
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
-            const startPosition = getAdjustedStartPosition(sourceFile, node, options);
-            const endPosition = getAdjustedEndPosition(sourceFile, node, options);
-            this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
+            this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
         }
 
         public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {

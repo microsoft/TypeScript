@@ -591,7 +591,7 @@ import "lib1";
                 },
                 { path: "/lib1.ts", content: "" },
                 { path: "/lib2.ts", content: "" });
-            
+
                 testOrganizeImports("SortComments",
                 {
                     path: "/test.ts",
