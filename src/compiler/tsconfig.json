@@ -33,6 +33,7 @@
         "factory/nodeTests.ts",
         "factory/utilities.ts",
         "factory/utilitiesPublic.ts",
+        "forEachChild.ts",
         "parser.ts",
         "commandLineParser.ts",
         "moduleNameResolver.ts",
