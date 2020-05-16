@@ -12963,9 +12963,7 @@ namespace ts {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
                     if (accessNode && some(prop.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
-                        const diag = Diagnostics._0_is_deprecated
-                        diag.reportsDeprecated = true
-                        errorOrSuggestion(false, accessNode, diag, "fff")
+                        errorOrSuggestion(false, accessNode, Diagnostics._0_is_deprecated, propName as string)
                     }
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
@@ -21460,9 +21458,7 @@ namespace ts {
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
             if (symbol && some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
-                const diag = Diagnostics._0_is_deprecated
-                diag.reportsDeprecated = true
-                errorOrSuggestion(false, node, diag, node.escapedText as string)
+                errorOrSuggestion(false, node, Diagnostics._0_is_deprecated, node.escapedText as string)
             }
             
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
@@ -24433,9 +24429,7 @@ namespace ts {
             }
             else {
                 if (some(prop.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
-                    const diag = Diagnostics._0_is_deprecated
-                    diag.reportsDeprecated = true
-                    errorOrSuggestion(false, node, diag, "foo")
+                    errorOrSuggestion(false, node, Diagnostics._0_is_deprecated, right.escapedText as string)
                 }
 
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
@@ -30210,9 +30204,7 @@ namespace ts {
                 }
                 const symbol = getNodeLinks(node).resolvedSymbol!
                 if (symbol && some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
-                    const diag = Diagnostics._0_is_deprecated
-                    diag.reportsDeprecated = true
-                    errorOrSuggestion(false, node, diag, "foo")
+                    errorOrSuggestion(false, node, Diagnostics._0_is_deprecated, symbol.escapedName as string)
                 }
                 if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {
                     error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
