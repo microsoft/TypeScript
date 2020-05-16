@@ -911,6 +911,7 @@ namespace ts {
         const sharedFlowNodes: FlowNode[] = [];
         const sharedFlowTypes: FlowType[] = [];
         const flowNodeReachable: (boolean | undefined)[] = [];
+        const flowNodePostSuper: (boolean | undefined)[] = [];
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const potentialWeakMapCollisions: Node[] = [];
@@ -20134,7 +20135,7 @@ namespace ts {
                     noCacheCheck = false;
                 }
                 if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation)) {
-                    flow = (<FlowAssignment | FlowCondition | FlowArrayMutation | PreFinallyFlow>flow).antecedent;
+                    flow = (<FlowAssignment | FlowCondition | FlowArrayMutation>flow).antecedent;
                 }
                 else if (flags & FlowFlags.Call) {
                     const signature = getEffectsSignature((<FlowCall>flow).node);
@@ -20180,6 +20181,51 @@ namespace ts {
                 }
                 else {
                     return !(flags & FlowFlags.Unreachable);
+                }
+            }
+        }
+
+        // Return true if the given flow node is preceded by a 'super(...)' call in every possible code path
+        // leading to the node.
+        function isPostSuperFlowNode(flow: FlowNode, noCacheCheck: boolean): boolean {
+            while (true) {
+                const flags = flow.flags;
+                if (flags & FlowFlags.Shared) {
+                    if (!noCacheCheck) {
+                        const id = getFlowNodeId(flow);
+                        const postSuper = flowNodePostSuper[id];
+                        return postSuper !== undefined ? postSuper : (flowNodePostSuper[id] = isPostSuperFlowNode(flow, /*noCacheCheck*/ true));
+                    }
+                    noCacheCheck = false;
+                }
+                if (flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.ArrayMutation | FlowFlags.SwitchClause)) {
+                    flow = (<FlowAssignment | FlowCondition | FlowArrayMutation | FlowSwitchClause>flow).antecedent;
+                }
+                else if (flags & FlowFlags.Call) {
+                    if ((<FlowCall>flow).node.expression.kind === SyntaxKind.SuperKeyword) {
+                        return true;
+                    }
+                    flow = (<FlowCall>flow).antecedent;
+                }
+                else if (flags & FlowFlags.BranchLabel) {
+                    // A branching point is post-super if every branch is post-super.
+                    return every((<FlowLabel>flow).antecedents, f => isPostSuperFlowNode(f, /*noCacheCheck*/ false));
+                }
+                else if (flags & FlowFlags.LoopLabel) {
+                    // A loop is post-super if the control flow path that leads to the top is post-super.
+                    flow = (<FlowLabel>flow).antecedents![0];
+                }
+                else if (flags & FlowFlags.ReduceLabel) {
+                    const target = (<FlowReduceLabel>flow).target;
+                    const saveAntecedents = target.antecedents;
+                    target.antecedents = (<FlowReduceLabel>flow).antecedents;
+                    const result = isPostSuperFlowNode((<FlowReduceLabel>flow).antecedent, /*noCacheCheck*/ false);
+                    target.antecedents = saveAntecedents;
+                    return result;
+                }
+                else {
+                    // Unreachable nodes are considered post-super to silence errors
+                    return !!(flags & FlowFlags.Unreachable);
                 }
             }
         }
@@ -21583,31 +21629,10 @@ namespace ts {
             }
         }
 
-        function findFirstSuperCall(n: Node): SuperCall | undefined {
-            if (isSuperCall(n)) {
-                return n;
-            }
-            else if (isFunctionLike(n)) {
-                return undefined;
-            }
-            return forEachChild(n, findFirstSuperCall);
-        }
-
-        /**
-         * Return a cached result if super-statement is already found.
-         * Otherwise, find a super statement in a given constructor function and cache the result in the node-links of the constructor
-         *
-         * @param constructor constructor-function to look for super statement
-         */
-        function getSuperCallInConstructor(constructor: ConstructorDeclaration): SuperCall | undefined {
-            const links = getNodeLinks(constructor);
-
-            // Only trying to find super-call if we haven't yet tried to find one.  Once we try, we will record the result
-            if (links.hasSuperCall === undefined) {
-                links.superCall = findFirstSuperCall(constructor.body!);
-                links.hasSuperCall = links.superCall ? true : false;
-            }
-            return links.superCall!;
+        function findFirstSuperCall(node: Node): SuperCall | undefined {
+            return isSuperCall(node) ? node :
+                isFunctionLike(node) ? undefined :
+                forEachChild(node, findFirstSuperCall);
         }
 
         /**
@@ -21630,17 +21655,7 @@ namespace ts {
             // If a containing class does not have extends clause or the class extends null
             // skip checking whether super statement is called before "this" accessing.
             if (baseTypeNode && !classDeclarationExtendsNull(containingClassDecl)) {
-                const superCall = getSuperCallInConstructor(<ConstructorDeclaration>container);
-
-                // We should give an error in the following cases:
-                //      - No super-call
-                //      - "this" is accessing before super-call.
-                //          i.e super(this)
-                //              this.x; super();
-                // We want to make sure that super-call is done before accessing "this" so that
-                // "this" is not accessed as a parameter of the super-call.
-                if (!superCall || superCall.end > node.pos) {
-                    // In ES6, super inside constructor of class-declaration has to precede "this" accessing
+                if (node.flowNode && !isPostSuperFlowNode(node.flowNode, /*noCacheCheck*/ false)) {
                     error(node, diagnosticMessage);
                 }
             }
@@ -21865,7 +21880,8 @@ namespace ts {
         function checkSuperExpression(node: Node): Type {
             const isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (<CallExpression>node.parent).expression === node;
 
-            let container = getSuperContainer(node, /*stopOnFunctions*/ true);
+            const immediateContainer = getSuperContainer(node, /*stopOnFunctions*/ true);
+            let container = immediateContainer;
             let needToCaptureLexicalThis = false;
 
             // adjust the container reference in case if super is used inside arrow functions with arbitrarily deep nesting
@@ -21901,7 +21917,7 @@ namespace ts {
                 return errorType;
             }
 
-            if (!isCallExpression && container.kind === SyntaxKind.Constructor) {
+            if (!isCallExpression && immediateContainer.kind === SyntaxKind.Constructor) {
                 checkThisBeforeSuper(node, container, Diagnostics.super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class);
             }
 
@@ -29898,7 +29914,7 @@ namespace ts {
             if (getClassExtendsHeritageElement(containingClassDecl)) {
                 captureLexicalThis(node.parent, containingClassDecl);
                 const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
-                const superCall = getSuperCallInConstructor(node);
+                const superCall = findFirstSuperCall(node.body!);
                 if (superCall) {
                     if (classExtendsNull) {
                         error(superCall, Diagnostics.A_constructor_cannot_contain_a_super_call_when_its_class_extends_null);
