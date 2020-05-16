@@ -196,14 +196,6 @@ namespace ts {
             );
         }
 
-        function shouldCaptureInTempVariable(expression: Expression): boolean {
-            // don't capture identifiers and `this` in a temporary variable
-            // `super` cannot be captured as it's no real variable
-            return !isIdentifier(expression) &&
-                expression.kind !== SyntaxKind.ThisKeyword &&
-                expression.kind !== SyntaxKind.SuperKeyword;
-        }
-
         function visitDeleteExpression(node: DeleteExpression) {
             return isOptionalChain(skipParentheses(node.expression))
                 ? setOriginalNode(visitNonOptionalExpression(node.expression, /*captureThisArg*/ false, /*isDelete*/ true), node)
