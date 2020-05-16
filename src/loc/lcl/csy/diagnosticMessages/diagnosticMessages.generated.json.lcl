@@ -57,6 +57,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_JSDoc_typedef_comment_may_not_contain_multiple_type_tags_8033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A JSDoc '@typedef' comment may not contain multiple '@type' tags.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_bigint_literal_cannot_use_exponential_notation_1352" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A bigint literal cannot use exponential notation.]]></Val>
@@ -3723,6 +3729,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Declare method '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declare_private_method_0_90038" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare private method '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklarovat privátní metodu {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8613,15 +8628,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_all_incorrect_body_block_braces_95115" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Remove all incorrect body block braces]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Odebrat všechny nesprávné závorky bloku kódu]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Remove_all_unnecessary_uses_of_await_95087" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove all unnecessary uses of 'await']]></Val>
@@ -8649,12 +8655,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_block_body_braces_95112" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Remove_braces_from_all_arrow_function_bodies_with_relevant_issues_95115" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Remove block body braces]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Odebrat všechny závorky bloku kódu]]></Val>
-          </Tgt>
+          <Val><![CDATA[Remove braces from all arrow function bodies with relevant issues]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8664,6 +8667,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Odebrat složené závorky z funkce šipky]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_braces_from_arrow_function_body_95112" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove braces from arrow function body]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10389,6 +10398,12 @@
           <Prev Cat="Text">
             <Val><![CDATA[The specified path does not exist: '{0}']]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_tag_was_first_specified_here_8034" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The tag was first specified here.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
