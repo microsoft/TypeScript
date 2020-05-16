@@ -103,3 +103,25 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
         let n: never = x;
     }
 }
+
+// Repro from #38608
+declare const error: Error;
+if ('extra' in error) {
+    error // Still Error
+} else {
+    error // Error
+}
+
+function narrowsToNever(x: { l: number } | { r: number }) {
+    let v: number;
+    if ("l" in x) {
+        v = x.l;
+    }
+    else if ("r" in x) {
+        v = x.r;
+    }
+    else {
+        v = x
+    }
+    return v;
+}

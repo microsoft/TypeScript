@@ -262,3 +262,55 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
     }
 }
 
+// Repro from #38608
+declare const error: Error;
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+if ('extra' in error) {
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+
+    error // Still Error
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+
+} else {
+    error // Error
+>error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
+}
+
+function narrowsToNever(x: { l: number } | { r: number }) {
+>narrowsToNever : Symbol(narrowsToNever, Decl(inKeywordTypeguard.ts, 112, 1))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+>l : Symbol(l, Decl(inKeywordTypeguard.ts, 114, 28))
+>r : Symbol(r, Decl(inKeywordTypeguard.ts, 114, 44))
+
+    let v: number;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+
+    if ("l" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+
+        v = x.l;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+>x.l : Symbol(l, Decl(inKeywordTypeguard.ts, 114, 28))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+>l : Symbol(l, Decl(inKeywordTypeguard.ts, 114, 28))
+    }
+    else if ("r" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+
+        v = x.r;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+>x.r : Symbol(r, Decl(inKeywordTypeguard.ts, 114, 44))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+>r : Symbol(r, Decl(inKeywordTypeguard.ts, 114, 44))
+    }
+    else {
+        v = x
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 114, 24))
+    }
+    return v;
+>v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
+}
+

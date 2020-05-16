@@ -322,3 +322,63 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
     }
 }
 
+// Repro from #38608
+declare const error: Error;
+>error : Error
+
+if ('extra' in error) {
+>'extra' in error : boolean
+>'extra' : "extra"
+>error : Error
+
+    error // Still Error
+>error : Error
+
+} else {
+    error // Error
+>error : Error
+}
+
+function narrowsToNever(x: { l: number } | { r: number }) {
+>narrowsToNever : (x: {    l: number;} | {    r: number;}) => number
+>x : { l: number; } | { r: number; }
+>l : number
+>r : number
+
+    let v: number;
+>v : number
+
+    if ("l" in x) {
+>"l" in x : boolean
+>"l" : "l"
+>x : { l: number; } | { r: number; }
+
+        v = x.l;
+>v = x.l : number
+>v : number
+>x.l : number
+>x : { l: number; }
+>l : number
+    }
+    else if ("r" in x) {
+>"r" in x : boolean
+>"r" : "r"
+>x : { r: number; }
+
+        v = x.r;
+>v = x.r : number
+>v : number
+>x.r : number
+>x : { r: number; }
+>r : number
+    }
+    else {
+        v = x
+>v = x : never
+>v : number
+>x : never
+    }
+    return v;
+>v : number
+}
+
