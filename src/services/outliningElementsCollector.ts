@@ -272,9 +272,7 @@ namespace ts.OutliningElementsCollector {
     }
 
     function functionSpan(node: FunctionLike, body: Block, sourceFile: SourceFile): OutliningSpan | undefined {
-        const openToken = isNodeArrayMultiLine(node.parameters, sourceFile)
-            ? findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile)
-            : findChildOfKind(body, SyntaxKind.OpenBraceToken, sourceFile);
+        const openToken = tryGetFunctionOpenToken(node, body, sourceFile);
         const closeToken = findChildOfKind(body, SyntaxKind.CloseBraceToken, sourceFile);
         return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ node.kind !== SyntaxKind.ArrowFunction);
     }
@@ -286,5 +284,15 @@ namespace ts.OutliningElementsCollector {
 
     function createOutliningSpan(textSpan: TextSpan, kind: OutliningSpanKind, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {
         return { textSpan, kind, hintSpan, bannerText, autoCollapse };
+    }
+
+    function tryGetFunctionOpenToken(node: FunctionLike, body: Block, sourceFile: SourceFile): Node | undefined {
+        if (isNodeArrayMultiLine(node.parameters, sourceFile)) {
+            const openParenToken = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
+            if (openParenToken) {
+                return openParenToken;
+            }
+        }
+        return findChildOfKind(body, SyntaxKind.OpenBraceToken, sourceFile);
     }
 }
