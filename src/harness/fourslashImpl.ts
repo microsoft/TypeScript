@@ -2988,8 +2988,7 @@ namespace FourSlash {
                     fileName: e.range.fileName,
                     textSpan: ts.createTextSpanFromRange(e.range),
                     containerName: e.containerName || "",
-                    containerKind: e.containerKind || ts.ScriptElementKind.unknown,
-                    isDeprecated: !!e.isDeprecated
+                    containerKind: e.containerKind || ts.ScriptElementKind.unknown
                 })));
             }
         }

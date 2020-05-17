@@ -163,8 +163,7 @@ namespace ts.JsDoc {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0",
-                isDeprecated: undefined
+                sortText: "0"
             };
         }));
     }
@@ -212,7 +211,7 @@ namespace ts.JsDoc {
                 return undefined;
             }
 
-            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0", isDeprecated: undefined };
+            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
         });
     }
 

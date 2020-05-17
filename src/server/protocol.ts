@@ -2156,11 +2156,6 @@ namespace ts.server.protocol {
          * and therefore may not be accurate.
          */
         isFromUncheckedFile?: true;
-
-        /**
-         * Exist if the item has some symbol Tag.
-         */
-        tags?: SymbolTag[]
     }
 
     /**
@@ -2827,10 +2822,6 @@ namespace ts.server.protocol {
         arguments: NavtoRequestArgs;
     }
 
-    export enum SymbolTag {
-        Deprecated = 1
-    }
-
     /**
      * An item found in a navto response.
      */
@@ -2870,11 +2861,6 @@ namespace ts.server.protocol {
          * Kind of symbol's container symbol (if any).
          */
         containerKind?: ScriptElementKind;
-
-        /**
-         * The symbol's tag.
-         */
-        tags?: SymbolTag[]
     }
 
     /**
@@ -2978,7 +2964,6 @@ namespace ts.server.protocol {
         spans: TextSpan[];
         nameSpan: TextSpan | undefined;
         childItems?: NavigationTree[];
-        tags?: SymbolTag[]
     }
 
     export type TelemetryEventName = "telemetry";
@@ -3081,10 +3066,10 @@ namespace ts.server.protocol {
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
-        tags?: SymbolTag[]
     }
 
     export interface CallHierarchyIncomingCall {

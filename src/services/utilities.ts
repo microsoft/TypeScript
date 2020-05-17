@@ -1506,6 +1506,7 @@ namespace ts {
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
         if (node.kind === SyntaxKind.ExportAssignment) result.push(ScriptElementKindModifier.exportedModifier);
+        if (getJSDocDeprecatedTag(node)) result.push(ScriptElementKindModifier.deprecatedModifier);
 
         return result.length > 0 ? result.join(",") : ScriptElementKindModifier.none;
     }

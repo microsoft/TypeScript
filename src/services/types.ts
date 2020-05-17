@@ -607,16 +607,15 @@ namespace ts {
         nameSpan: TextSpan | undefined;
         /** Present if non-empty */
         childItems?: NavigationTree[];
-        isDeprecated: boolean
     }
 
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
-        isDeprecated?: boolean
     }
 
     export interface CallHierarchyIncomingCall {
@@ -809,7 +808,6 @@ namespace ts {
         textSpan: TextSpan;
         containerName: string;
         containerKind: ScriptElementKind;
-        isDeprecated: boolean
     }
 
     export enum IndentStyle {
@@ -1074,7 +1072,6 @@ namespace ts {
         source?: string;
         isRecommended?: true;
         isFromUncheckedFile?: true;
-        isDeprecated?: boolean
     }
 
     export interface CompletionEntryDetails {
@@ -1298,6 +1295,8 @@ namespace ts {
         staticModifier = "static",
         abstractModifier = "abstract",
         optionalModifier = "optional",
+
+        deprecatedModifier = "deprecated",
 
         dtsModifier = ".d.ts",
         tsModifier = ".ts",

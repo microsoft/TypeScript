@@ -198,14 +198,15 @@ namespace ts.server {
                 isNewIdentifierLocation: false,
                 entries: response.body!.map<CompletionEntry>(entry => { // TODO: GH#18217
                     if (entry.replacementSpan !== undefined) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended, tags } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended } = entry;
                         // TODO: GH#241
-                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, isRecommended, isDeprecated: tags?.includes(protocol.SymbolTag.Deprecated) };
+                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, isRecommended };
                         return res;
                     }
 
-                    const { name, kind, kindModifiers, sortText, tags } = entry;
-                    return { name, kind, kindModifiers, sortText, isDeprecated: tags?.includes(protocol.SymbolTag.Deprecated) }                })
+                    const { name, kind, kindModifiers, sortText } = entry;
+                    return { name, kind, kindModifiers, sortText }
+                })
             };
         }
 
@@ -241,8 +242,7 @@ namespace ts.server {
                 matchKind: entry.matchKind as keyof typeof PatternMatchKind,
                 isCaseSensitive: entry.isCaseSensitive,
                 fileName: entry.file,
-                textSpan: this.decodeSpan(entry),
-                isDeprecated: !!entry.tags?.includes(protocol.SymbolTag.Deprecated)
+                textSpan: this.decodeSpan(entry)
             }));
         }
 
@@ -492,8 +492,7 @@ namespace ts.server {
                 kindModifiers: tree.kindModifiers,
                 spans: tree.spans.map(span => this.decodeSpan(span, fileName, lineMap)),
                 nameSpan: tree.nameSpan && this.decodeSpan(tree.nameSpan, fileName, lineMap),
-                childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap)),
-                isDeprecated: !!tree.tags?.includes(protocol.SymbolTag.Deprecated)
+                childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap))
             };
         }
 
@@ -751,9 +750,9 @@ namespace ts.server {
                 file: item.file,
                 name: item.name,
                 kind: item.kind,
+                kindModifiers: item.kindModifiers,
                 span: this.decodeSpan(item.span, item.file),
-                selectionSpan: this.decodeSpan(item.selectionSpan, item.file),
-                isDeprecated: item.tags?.includes(protocol.SymbolTag.Deprecated)
+                selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
             };
         }
 
