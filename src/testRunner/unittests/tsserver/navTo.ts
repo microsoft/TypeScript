@@ -90,7 +90,7 @@ export const ghijkl = a.abcdef;`
             const items = session.executeCommand(libTypeNavToRequest).response as protocol.NavtoItem[];
             const fooItem = findNavToItem(items, "foo", "function");
             assert.isNotNull(fooItem, `Cannot find function symbol "foo".`);
-            assert.isTrue(fooItem!.tags?.some(x => x === protocol.SymbolTag.Deprecated), "Cannot find deprecated tag");
+            assert.isTrue(fooItem?.kindModifiers?.includes("deprecated"))
         });
     });
 }

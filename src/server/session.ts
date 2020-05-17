@@ -1665,10 +1665,10 @@ namespace ts.server {
             const prefix = args.prefix || "";
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended, isDeprecated } = entry;
+                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
-                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended, tags: isDeprecated ? [protocol.SymbolTag.Deprecated] : undefined };
+                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
                 }
             }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
 
@@ -1865,7 +1865,6 @@ namespace ts.server {
                 spans: tree.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
                 nameSpan: tree.nameSpan && toProtocolTextSpan(tree.nameSpan, scriptInfo),
                 childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo)),
-                tags: tree.isDeprecated ? [protocol.SymbolTag.Deprecated] : undefined
             };
         }
 
@@ -1887,12 +1886,12 @@ namespace ts.server {
                 const bakedItem: protocol.NavtoItem = {
                     name: navItem.name,
                     kind: navItem.kind,
+                    kindModifiers: navItem.kindModifiers,
                     isCaseSensitive: navItem.isCaseSensitive,
                     matchKind: navItem.matchKind,
                     file: navItem.fileName,
                     start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
                     end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan)),
-                    tags: navItem.isDeprecated ? [protocol.SymbolTag.Deprecated] : undefined
                 };
                 if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
                     bakedItem.kindModifiers = navItem.kindModifiers;
@@ -2227,10 +2226,10 @@ namespace ts.server {
             return {
                 name: item.name,
                 kind: item.kind,
+                kindModifiers: item.kindModifiers,
                 file: item.file,
                 span: toProtocolTextSpan(item.span, scriptInfo),
                 selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo),
-                tags: item.isDeprecated ? [protocol.SymbolTag.Deprecated] : undefined
             };
         }
 
