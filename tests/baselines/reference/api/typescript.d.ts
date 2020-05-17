@@ -2580,6 +2580,7 @@ declare namespace ts {
         code: number;
         message: string;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
     }
     /**
      * A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -2596,6 +2597,7 @@ declare namespace ts {
     export interface Diagnostic extends DiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
@@ -5431,6 +5433,7 @@ declare namespace ts {
     interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
@@ -5595,7 +5598,6 @@ declare namespace ts {
         textSpan: TextSpan;
         containerName: string;
         containerKind: ScriptElementKind;
-        isDeprecated: boolean;
     }
     enum IndentStyle {
         None = 0,
@@ -5979,6 +5981,7 @@ declare namespace ts {
         staticModifier = "static",
         abstractModifier = "abstract",
         optionalModifier = "optional",
+        deprecatedModifier = "deprecated",
         dtsModifier = ".d.ts",
         tsModifier = ".ts",
         tsxModifier = ".tsx",
