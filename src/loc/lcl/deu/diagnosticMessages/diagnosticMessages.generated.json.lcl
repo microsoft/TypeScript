@@ -10389,6 +10389,9 @@
       <Item ItemId=";The_tag_was_first_specified_here_8034" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The tag was first specified here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Das Tag wurde zuerst hier angegeben.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
