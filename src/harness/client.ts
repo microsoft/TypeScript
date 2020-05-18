@@ -205,7 +205,7 @@ namespace ts.server {
                     }
 
                     const { name, kind, kindModifiers, sortText } = entry;
-                    return { name, kind, kindModifiers, sortText }
+                    return { name, kind, kindModifiers, sortText };
                 })
             };
         }

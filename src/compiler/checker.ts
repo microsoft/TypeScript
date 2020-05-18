@@ -12964,7 +12964,7 @@ namespace ts {
                 if (prop) {
                     if (accessNode && prop?.isDeprecated) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
-                        errorOrSuggestion(false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string)
+                        errorOrSuggestion(/* isError */false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                     }
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
@@ -21459,9 +21459,8 @@ namespace ts {
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
             if (symbol?.isDeprecated) {
-                errorOrSuggestion(false, node, Diagnostics._0_is_deprecated, node.escapedText as string)
-            }
-            
+                errorOrSuggestion(/* isError */false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
+            }            
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
@@ -24430,7 +24429,7 @@ namespace ts {
             }
             else {
                 if (prop?.isDeprecated) {
-                    errorOrSuggestion(false, right, Diagnostics._0_is_deprecated, right.escapedText as string)
+                    errorOrSuggestion(/* isError */false, right, Diagnostics._0_is_deprecated, right.escapedText as string);
                 }
 
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
@@ -30203,9 +30202,9 @@ namespace ts {
                         checkTypeArgumentConstraints(node, typeParameters);
                     }
                 }
-                const symbol = getNodeLinks(node).resolvedSymbol!
+                const symbol = getNodeLinks(node).resolvedSymbol!;
                 if (symbol?.isDeprecated) {
-                    errorOrSuggestion(false, node, Diagnostics._0_is_deprecated, symbol.escapedName as string)
+                    errorOrSuggestion(/* isError */false, node, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
                 if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {
                     error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));

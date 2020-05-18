@@ -534,7 +534,8 @@ declare module '@custom/plugin' {
                 messageText: formatStringFromArgs(d.message, didYouMean ? [prop, didYouMean] : [prop]),
                 category: d.category,
                 code: d.code,
-                reportsUnnecessary: undefined
+                reportsUnnecessary: undefined,
+                reportsDeprecated: undefined
             };
         }
 
@@ -549,7 +550,8 @@ declare module '@custom/plugin' {
                 messageText: formatStringFromArgs(d.message, [`${getDirectoryPath(configFile.path)}/${relativeFileName}`]),
                 category: d.category,
                 code: d.code,
-                reportsUnnecessary: undefined
+                reportsUnnecessary: undefined,
+                reportsDeprecated: undefined
             };
         }
 
@@ -908,6 +910,7 @@ declare module '@custom/plugin' {
                     code: Diagnostics.Unused_label.code,
                     relatedInformation: undefined,
                     reportsUnnecessary: true,
+                    reportsDeprecated: undefined,
                     source: undefined,
                 },
             ]);

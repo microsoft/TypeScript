@@ -199,6 +199,7 @@ namespace ts.tscWatch {
                         messageText: "Type '20' is not assignable to type 'string'.",
                         relatedInformation: undefined,
                         reportsUnnecessary: undefined,
+                        reportsDeprecated: undefined,
                         source: undefined
                     }]);
                 });
