@@ -163,7 +163,7 @@ namespace ts.JsDoc {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
-                sortText: "0"
+                sortText: "0",
             };
         }));
     }

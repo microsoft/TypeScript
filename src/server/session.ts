@@ -1864,7 +1864,7 @@ namespace ts.server {
                 kindModifiers: tree.kindModifiers,
                 spans: tree.spans.map(span => toProtocolTextSpan(span, scriptInfo)),
                 nameSpan: tree.nameSpan && toProtocolTextSpan(tree.nameSpan, scriptInfo),
-                childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo)),
+                childItems: map(tree.childItems, item => this.toLocationNavigationTree(item, scriptInfo))
             };
         }
 
@@ -1891,7 +1891,7 @@ namespace ts.server {
                     matchKind: navItem.matchKind,
                     file: navItem.fileName,
                     start: scriptInfo.positionToLineOffset(navItem.textSpan.start),
-                    end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan)),
+                    end: scriptInfo.positionToLineOffset(textSpanEnd(navItem.textSpan))
                 };
                 if (navItem.kindModifiers && (navItem.kindModifiers !== "")) {
                     bakedItem.kindModifiers = navItem.kindModifiers;
@@ -2229,7 +2229,7 @@ namespace ts.server {
                 kindModifiers: item.kindModifiers,
                 file: item.file,
                 span: toProtocolTextSpan(item.span, scriptInfo),
-                selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo),
+                selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo)
             };
         }
 

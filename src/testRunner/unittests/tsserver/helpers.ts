@@ -204,7 +204,6 @@ namespace ts.projectSystem {
         category: DiagnosticCategory;
         code: number;
         reportsUnnecessary?: {};
-
         reportsDeprecated?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];

@@ -3553,7 +3553,7 @@ declare namespace ts {
     /** Gets the JSDoc template tag for the node if present */
     function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined;
     /** Gets the JSDoc deprecated tag for the node if present */
-    function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined;
+    function getJSDocDeprecatedTag(node: Node, noCache?: boolean): JSDocDeprecatedTag | undefined;
     /** Gets the JSDoc type tag for the node if present and valid */
     function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined;
     /**

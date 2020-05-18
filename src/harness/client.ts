@@ -241,7 +241,7 @@ namespace ts.server {
                 matchKind: entry.matchKind as keyof typeof PatternMatchKind,
                 isCaseSensitive: entry.isCaseSensitive,
                 fileName: entry.file,
-                textSpan: this.decodeSpan(entry)
+                textSpan: this.decodeSpan(entry),
             }));
         }
 
@@ -388,7 +388,7 @@ namespace ts.server {
                     category: Debug.checkDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
                     reportsUnnecessary: entry.reportsUnnecessary,
-                    reportsDeprecated: entry.reportsDeprecated
+                    reportsDeprecated: entry.reportsDeprecated,
                 };
             });
         }

@@ -295,7 +295,7 @@ namespace ts.projectSystem {
                     matchKind: "prefix",
                     isCaseSensitive: true,
                     kind: ScriptElementKind.functionElement,
-                    kindModifiers: "export,declare"
+                    kindModifiers: "export,declare",
                 },
                 {
                     ...protocolFileSpanFromSubstring({

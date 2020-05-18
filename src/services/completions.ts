@@ -234,7 +234,7 @@ namespace ts.Completions {
                 name: tagName.getFullText(sourceFile) + (hasClosingAngleBracket ? "" : ">"),
                 kind: ScriptElementKind.classElement,
                 kindModifiers: undefined,
-                sortText: SortText.LocationPriority
+                sortText: SortText.LocationPriority,
             };
             return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false, entries: [entry] };
         }
@@ -436,7 +436,7 @@ namespace ts.Completions {
             hasAction: origin && originIsExport(origin) || undefined,
             isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
-            replacementSpan
+            replacementSpan,
         };
     }
 
