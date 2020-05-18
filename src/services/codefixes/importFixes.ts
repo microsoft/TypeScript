@@ -796,7 +796,7 @@ namespace ts.codefix {
         forEachExternalModuleToImportFrom(program, host, from, filterByPackageJson, (module, file) => cb(module, file, program));
         const autoImportProvider = host.getAutoImportProvider?.();
         if (autoImportProvider) {
-            forEachExternalModuleToImportFrom(program, host, from, /*filterByPackageJson*/ false, (module, file) => cb(module, file, autoImportProvider));
+            forEachExternalModuleToImportFrom(autoImportProvider, host, from, /*filterByPackageJson*/ false, (module, file) => cb(module, file, autoImportProvider));
         }
     }
 
