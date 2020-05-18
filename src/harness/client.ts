@@ -204,8 +204,7 @@ namespace ts.server {
                         return res;
                     }
 
-                    const { name, kind, kindModifiers, sortText } = entry;
-                    return { name, kind, kindModifiers, sortText };
+                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
                 })
             };
         }
