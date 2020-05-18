@@ -12962,8 +12962,9 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (accessNode && some(prop.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
-                        errorOrSuggestion(false, accessNode, Diagnostics._0_is_deprecated, propName as string)
+                    if (accessNode && prop?.isDeprecated) {
+                        const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
+                        errorOrSuggestion(false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string)
                     }
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
@@ -21457,7 +21458,7 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
-            if (symbol && some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
+            if (symbol?.isDeprecated) {
                 errorOrSuggestion(false, node, Diagnostics._0_is_deprecated, node.escapedText as string)
             }
             
@@ -24428,8 +24429,8 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
-                if (some(prop.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
-                    errorOrSuggestion(false, node, Diagnostics._0_is_deprecated, right.escapedText as string)
+                if (prop?.isDeprecated) {
+                    errorOrSuggestion(false, right, Diagnostics._0_is_deprecated, right.escapedText as string)
                 }
 
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
@@ -30203,7 +30204,7 @@ namespace ts {
                     }
                 }
                 const symbol = getNodeLinks(node).resolvedSymbol!
-                if (symbol && some(symbol.declarations, decl => !!getJSDocDeprecatedTag(decl))) {
+                if (symbol?.isDeprecated) {
                     errorOrSuggestion(false, node, Diagnostics._0_is_deprecated, symbol.escapedName as string)
                 }
                 if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {

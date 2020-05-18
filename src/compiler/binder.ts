@@ -414,6 +414,7 @@ namespace ts {
             Debug.assert(!hasDynamicName(node));
 
             const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
+            const isDeprecated = !!getJSDocDeprecatedTag(node);
 
             // The exported symbol for an export default function/class node is always named "default"
             const name = isDefaultExport && parent ? InternalSymbolName.Default : getDeclarationName(node);
@@ -533,6 +534,7 @@ namespace ts {
                 }
             }
 
+            symbol.isDeprecated = symbol.isDeprecated || isDeprecated;
             addDeclarationToSymbol(symbol, node, includes);
             if (symbol.parent) {
                 Debug.assert(symbol.parent === parent, "Existing symbol parent should match new one");
