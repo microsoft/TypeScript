@@ -60,6 +60,9 @@
       <Item ItemId=";A_JSDoc_typedef_comment_may_not_contain_multiple_type_tags_8033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A JSDoc '@typedef' comment may not contain multiple '@type' tags.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Komentář JSDoc @typedef nemůže obsahovat více než jednu značku @type.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7225,7 +7228,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Jenom pojmenované exporty mohou používat typ exportu.]]></Val>
+            <Val><![CDATA[Jen pojmenované exporty můžou používat export type.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8658,6 +8661,9 @@
       <Item ItemId=";Remove_braces_from_all_arrow_function_bodies_with_relevant_issues_95115" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove braces from all arrow function bodies with relevant issues]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Odeberte složené závorky ze všech těl funkcí šipek, u kterých dochází k problémům.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8673,6 +8679,9 @@
       <Item ItemId=";Remove_braces_from_arrow_function_body_95112" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove braces from arrow function body]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Odebrat složené závorky z těla funkce šipky]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10404,6 +10413,9 @@
       <Item ItemId=";The_tag_was_first_specified_here_8034" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The tag was first specified here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Značka se poprvé zadala tady.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
