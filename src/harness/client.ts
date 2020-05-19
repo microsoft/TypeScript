@@ -727,20 +727,28 @@ namespace ts.server {
             return notImplemented();
         }
 
+        /** @deprecated Use getEncodedSyntacticClassifications instead. */
         getSyntacticClassifications(_fileName: string, _span: TextSpan): ClassifiedSpan[] {
             return notImplemented();
         }
 
+        /** @deprecated Use getEncodedSemanticClassifications instead. */
         getSemanticClassifications(_fileName: string, _span: TextSpan): ClassifiedSpan[] {
-            return notImplemented();
+           return notImplemented();
         }
 
         getEncodedSyntacticClassifications(_fileName: string, _span: TextSpan): Classifications {
-            return notImplemented();
+            return {
+                spans: [],
+                endOfLineState: EndOfLineState.None
+            };
         }
 
-        getEncodedSemanticClassifications(_fileName: string, _span: TextSpan): Classifications {
-            return notImplemented();
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+            return {
+               spans: Semantic.getSemanticTokens(this, fileName, span),
+               endOfLineState: EndOfLineState.None
+           };
         }
 
         private convertCallHierarchyItem(item: protocol.CallHierarchyItem): CallHierarchyItem {
