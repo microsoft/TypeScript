@@ -201,6 +201,11 @@ namespace ts {
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
 
+    /** @internal */
+    export interface FormattingHost {
+        getNewLine?(): string;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
