@@ -13573,7 +13573,7 @@ namespace ts {
 
         function getAliasSymbolForTypeNode(node: Node) {
             let host = node.parent;
-            while (isParenthesizedTypeNode(host) || host.kind === SyntaxKind.NamedTupleMember || isTypeOperatorNode(host) && host.operator === SyntaxKind.ReadonlyKeyword) {
+            while (isParenthesizedTypeNode(host) || isTypeOperatorNode(host) && host.operator === SyntaxKind.ReadonlyKeyword) {
                 host = host.parent;
             }
             return isTypeAlias(host) ? getSymbolOfNode(host) : undefined;
@@ -30199,7 +30199,7 @@ namespace ts {
                     seenNamedElement = true;
                 }
                 else if (seenNamedElement) {
-                    grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_not_have_names);
+                    grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_all_not_have_names);
                     break;
                 }
                 if (isTupleRestElement(e)) {

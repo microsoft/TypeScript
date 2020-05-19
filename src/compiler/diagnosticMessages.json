@@ -3517,7 +3517,7 @@
         "category": "Error",
         "code": 5083
     },
-    "Tuple members must all have names or not have names.": {
+    "Tuple members must all have names or all not have names.": {
         "category": "Error",
         "code": 5084
     },
