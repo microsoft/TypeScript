@@ -141,23 +141,7 @@ namespace ts {
             createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0))
         };
 
-        const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters, baseNodeFactory, {
-            onSetChild(parent, child) {
-                if (setParentNodes) {
-                    setParent(child, parent);
-                }
-            },
-            onSetChildren(parent, children) {
-                if (setParentNodes) {
-                    setEachParent(children, parent);
-                }
-            },
-            onFinishNode(node) {
-                if (setParentNodes && hasJSDocNodes(node)) {
-                    setEachParent(node.jsDoc, node);
-                }
-            }
-        });
+        const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters, baseNodeFactory);
 
         let fileName: string;
         let sourceFlags: NodeFlags;
@@ -174,7 +158,6 @@ namespace ts {
         let identifiers: Map<string>;
         let privateIdentifiers: Map<string>;
         let identifierCount: number;
-        let setParentNodes: boolean;
 
         let parsingContext: ParsingContext;
 
@@ -271,9 +254,13 @@ namespace ts {
                 return result;
             }
 
-            initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind, setParentNodes);
+            initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind);
 
             const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind);
+
+            if (setParentNodes) {
+                fixupParentReferences(result);
+            }
 
             clearState();
 
@@ -282,7 +269,7 @@ namespace ts {
 
         export function parseIsolatedEntityName(content: string, languageVersion: ScriptTarget): EntityName | undefined {
             // Choice of `isDeclarationFile` should be arbitrary
-            initializeState("", content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS, /*setParentNodes*/ false);
+            initializeState("", content, languageVersion, /*syntaxCursor*/ undefined, ScriptKind.JS);
             // Prime the scanner.
             nextToken();
             const entityName = parseEntityName(/*allowReservedWords*/ true);
@@ -292,7 +279,7 @@ namespace ts {
         }
 
         export function parseJsonText(fileName: string, sourceText: string, languageVersion: ScriptTarget = ScriptTarget.ES2015, syntaxCursor?: IncrementalParser.SyntaxCursor, setParentNodes = false): JsonSourceFile {
-            initializeState(fileName, sourceText, languageVersion, syntaxCursor, ScriptKind.JSON, setParentNodes);
+            initializeState(fileName, sourceText, languageVersion, syntaxCursor, ScriptKind.JSON);
             sourceFlags = contextFlags;
 
             // Prime the scanner.
@@ -360,14 +347,12 @@ namespace ts {
             return result;
         }
 
-        function initializeState(_fileName: string, _sourceText: string, _languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, _scriptKind: ScriptKind, _setParentNodes: boolean) {
+        function initializeState(_fileName: string, _sourceText: string, _languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, _scriptKind: ScriptKind) {
             NodeConstructor = objectAllocator.getNodeConstructor();
             TokenConstructor = objectAllocator.getTokenConstructor();
             IdentifierConstructor = objectAllocator.getIdentifierConstructor();
             PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
-
-            setParentNodes = _setParentNodes;
 
             fileName = normalizePath(_fileName);
             sourceText = _sourceText;
@@ -412,7 +397,6 @@ namespace ts {
             scanner.setOnError(undefined);
 
             // Clear any data.  We don't want to accidentally hold onto it for too long.
-            setParentNodes = false;
             sourceText = undefined!;
             languageVersion = undefined!;
             syntaxCursor = undefined;
@@ -6334,7 +6318,7 @@ namespace ts {
 
         export namespace JSDocParser {
             export function parseJSDocTypeExpressionForTests(content: string, start: number | undefined, length: number | undefined): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
-                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS, /*setParentNodes*/ false);
+                initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 factory.setSkipTransformationFlags(/*value*/ true); // reset in 'clearState'
                 scanner.setText(content, start, length);
                 currentToken = scanner.scan();
@@ -6368,7 +6352,7 @@ namespace ts {
             }
 
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
-                initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS, /*setParentNodes*/ false);
+                initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 factory.setSkipTransformationFlags(/*value*/ true); // reset in 'clearState'
                 const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
 

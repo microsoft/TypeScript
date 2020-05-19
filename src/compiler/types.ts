@@ -6229,11 +6229,8 @@ namespace ts {
         ContainsHoistedDeclarationOrCompletion = 1 << 20,
         ContainsDynamicImport = 1 << 21,
         ContainsClassFields = 1 << 22,
-
-        // Please leave this as 1 << 29.
-        // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
-        // It is a good reminder of how much room we have left
-        HasComputedFlags = 1 << 29, // Transform flags have been computed.
+        // NOTE: Please do not add flags with a value higher than 1 << 29, as that is the maximum bit we can set 
+        // before we outgrow the size of a v8 small integer (SMI) on an x86 system.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
@@ -6252,7 +6249,7 @@ namespace ts {
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        OuterExpressionExcludes = HasComputedFlags,
+        OuterExpressionExcludes = None,
         PropertyAccessExcludes = OuterExpressionExcludes,
         NodeExcludes = PropertyAccessExcludes,
         ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsAwait | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,

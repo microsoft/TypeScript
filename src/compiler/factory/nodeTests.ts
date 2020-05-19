@@ -69,6 +69,18 @@ namespace ts {
         return node.kind === SyntaxKind.ImportKeyword;
     }
 
+    export function isCommaToken(node: Node): node is Token<SyntaxKind.CommaToken> {
+        return node.kind === SyntaxKind.CommaToken;
+    }
+
+    export function isQuestionToken(node: Node): node is Token<SyntaxKind.QuestionToken> {
+        return node.kind === SyntaxKind.QuestionToken;
+    }
+
+    export function isExclamationToken(node: Node): node is Token<SyntaxKind.ExclamationToken> {
+        return node.kind === SyntaxKind.ExclamationToken;
+    }
+
     // Signature elements
 
     export function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration {
