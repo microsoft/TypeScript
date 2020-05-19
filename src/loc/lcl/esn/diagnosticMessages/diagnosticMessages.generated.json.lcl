@@ -60,6 +60,9 @@
       <Item ItemId=";A_JSDoc_typedef_comment_may_not_contain_multiple_type_tags_8033" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A JSDoc '@typedef' comment may not contain multiple '@type' tags.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Un comentario "@typedef" de JSDoc no puede contener varias etiquetas "@type".]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8661,6 +8664,9 @@
       <Item ItemId=";Remove_braces_from_all_arrow_function_bodies_with_relevant_issues_95115" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove braces from all arrow function bodies with relevant issues]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Quitar las llaves de todos los cuerpos de función de flecha con problemas relevantes]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8676,6 +8682,9 @@
       <Item ItemId=";Remove_braces_from_arrow_function_body_95112" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove braces from arrow function body]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Quitar las llaves del cuerpo de función de flecha]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10407,6 +10416,9 @@
       <Item ItemId=";The_tag_was_first_specified_here_8034" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The tag was first specified here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La etiqueta se especificó aquí primero.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
