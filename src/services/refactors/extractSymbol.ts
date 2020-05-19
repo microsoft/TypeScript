@@ -1117,7 +1117,7 @@ namespace ts.refactor.extractSymbol {
         const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
         return { renameFilename, renameLocation, edits };
 
-        function isInJSXContent(node: Node): node is JsxOpeningLikeElement {
+        function isInJSXContent(node: Node) {
             if (!isJsxElement(node)) return false;
             if (isJsxElement(node.parent)) return true;
             return false;
