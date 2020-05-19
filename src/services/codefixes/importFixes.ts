@@ -798,7 +798,9 @@ namespace ts.codefix {
     ) {
         forEachExternalModuleToImportFrom(program, host, from, filterByPackageJson, (module, file) => cb(module, file, program));
         if (autoImportProvider) {
+            const start = timestamp();
             forEachExternalModuleToImportFrom(autoImportProvider, host, from, /*filterByPackageJson*/ false, (module, file) => cb(module, file, autoImportProvider));
+            host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
     }
 
@@ -833,9 +835,7 @@ namespace ts.codefix {
                 }
             }
         });
-        if (host.log) {
-            host.log(`forEachExternalModuleToImportFrom: filtered out ${filteredCount} modules by package.json contents`);
-        }
+        host.log?.(`forEachExternalModuleToImportFrom: filtered out ${filteredCount} modules by package.json contents`);
     }
 
     function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {

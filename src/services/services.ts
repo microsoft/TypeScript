@@ -1427,8 +1427,9 @@ namespace ts {
             if (!host.getPackageJsonsVisibleToFile || !host.resolveModuleNames) {
                 return;
             }
+            const start = timestamp();
             let dependencyNames: Map<true> | undefined;
-            const rootFileName = combinePaths(currentDirectory, "__inferred auto import dependencies__.ts");
+            const rootFileName = combinePaths(currentDirectory, inferredTypesContainingFile);
             const packageJsons = host.getPackageJsonsVisibleToFile(combinePaths(currentDirectory, rootFileName));
             for (const packageJson of packageJsons) {
                 packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
@@ -1460,7 +1461,7 @@ namespace ts {
                 }
             }
 
-            return rootNames && createProgram({
+            const newProgram = rootNames && createProgram({
                 rootNames,
                 options,
                 host: {
@@ -1469,6 +1470,12 @@ namespace ts {
                 },
                 oldProgram: autoImportProvider
             });
+
+            if (newProgram) {
+                host.log?.(`createPackageJsonAutoImportProvider: ${timestamp() - start}`);
+                host.log?.(`Memory usage: ${sys.getMemoryUsage?.()}`);
+            }
+            return newProgram;
 
             function addDependency(dependency: string) {
                 if (!startsWith(dependency, "@types")) {
