@@ -20691,7 +20691,7 @@ namespace ts {
             }
 
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
-                if (type.flags & TypeFlags.Union || type.flags & TypeFlags.Object && declaredType.flags & TypeFlags.Union || isThisTypeParameter(type)) {
+                if (type.flags & TypeFlags.Union || type.flags & TypeFlags.Object && declaredType !== type || isThisTypeParameter(type)) {
                     const propName = escapeLeadingUnderscores(literal.text);
                     return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }

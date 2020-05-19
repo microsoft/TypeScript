@@ -127,6 +127,22 @@ function narrowsToNever(x: { l: number } | { r: number }) {
     return v;
 }
 
+type AOrB = { aProp: number } | { bProp: number };
+declare function isAOrB(x: unknown): x is AOrB;
+
+declare var x: unknown;
+if (isAOrB(x)) {
+    if ("aProp" in x) {
+        x.aProp;
+    }
+    else if ("bProp" in x) {
+        x.bProp;
+    }
+    else if ("cProp" in x) {
+        const _never: never = x;
+    }
+}
+
 
 //// [inKeywordTypeguard.js]
 var A = /** @class */ (function () {
@@ -285,4 +301,15 @@ function narrowsToNever(x) {
         v = x;
     }
     return v;
+}
+if (isAOrB(x)) {
+    if ("aProp" in x) {
+        x.aProp;
+    }
+    else if ("bProp" in x) {
+        x.bProp;
+    }
+    else if ("cProp" in x) {
+        var _never = x;
+    }
 }

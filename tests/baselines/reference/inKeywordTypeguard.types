@@ -382,3 +382,51 @@ function narrowsToNever(x: { l: number } | { r: number }) {
 >v : number
 }
 
+type AOrB = { aProp: number } | { bProp: number };
+>AOrB : AOrB
+>aProp : number
+>bProp : number
+
+declare function isAOrB(x: unknown): x is AOrB;
+>isAOrB : (x: unknown) => x is AOrB
+>x : unknown
+
+declare var x: unknown;
+>x : unknown
+
+if (isAOrB(x)) {
+>isAOrB(x) : boolean
+>isAOrB : (x: unknown) => x is AOrB
+>x : unknown
+
+    if ("aProp" in x) {
+>"aProp" in x : boolean
+>"aProp" : "aProp"
+>x : AOrB
+
+        x.aProp;
+>x.aProp : number
+>x : { aProp: number; }
+>aProp : number
+    }
+    else if ("bProp" in x) {
+>"bProp" in x : boolean
+>"bProp" : "bProp"
+>x : { bProp: number; }
+
+        x.bProp;
+>x.bProp : number
+>x : { bProp: number; }
+>bProp : number
+    }
+    else if ("cProp" in x) {
+>"cProp" in x : boolean
+>"cProp" : "cProp"
+>x : never
+
+        const _never: never = x;
+>_never : never
+>x : never
+    }
+}
+

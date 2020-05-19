@@ -314,3 +314,46 @@ function narrowsToNever(x: { l: number } | { r: number }) {
 >v : Symbol(v, Decl(inKeywordTypeguard.ts, 115, 7))
 }
 
+type AOrB = { aProp: number } | { bProp: number };
+>AOrB : Symbol(AOrB, Decl(inKeywordTypeguard.ts, 126, 1))
+>aProp : Symbol(aProp, Decl(inKeywordTypeguard.ts, 128, 13))
+>bProp : Symbol(bProp, Decl(inKeywordTypeguard.ts, 128, 33))
+
+declare function isAOrB(x: unknown): x is AOrB;
+>isAOrB : Symbol(isAOrB, Decl(inKeywordTypeguard.ts, 128, 50))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 129, 24))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 129, 24))
+>AOrB : Symbol(AOrB, Decl(inKeywordTypeguard.ts, 126, 1))
+
+declare var x: unknown;
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+if (isAOrB(x)) {
+>isAOrB : Symbol(isAOrB, Decl(inKeywordTypeguard.ts, 128, 50))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+    if ("aProp" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+        x.aProp;
+>x.aProp : Symbol(aProp, Decl(inKeywordTypeguard.ts, 128, 13))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+>aProp : Symbol(aProp, Decl(inKeywordTypeguard.ts, 128, 13))
+    }
+    else if ("bProp" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+        x.bProp;
+>x.bProp : Symbol(bProp, Decl(inKeywordTypeguard.ts, 128, 33))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+>bProp : Symbol(bProp, Decl(inKeywordTypeguard.ts, 128, 33))
+    }
+    else if ("cProp" in x) {
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+
+        const _never: never = x;
+>_never : Symbol(_never, Decl(inKeywordTypeguard.ts, 140, 13))
+>x : Symbol(x, Decl(inKeywordTypeguard.ts, 131, 11))
+    }
+}
+
