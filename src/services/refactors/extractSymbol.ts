@@ -1104,7 +1104,7 @@ namespace ts.refactor.extractSymbol {
                     // When extract to a new variable in JSX content, need to wrap a {} out of the new variable
                     // or it will become a plain text
                     if (isInJSXContent(node)) {
-                        localReference = createJsxExpression(void 0, localReference);
+                        localReference = createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
                     }
                     changeTracker.replaceNode(context.file, node, localReference);
                 }
