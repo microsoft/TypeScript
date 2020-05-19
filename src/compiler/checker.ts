@@ -22469,6 +22469,10 @@ namespace ts {
             }
         }
 
+        function isCircularMappedProperty(symbol: Symbol) {
+            return !!(getCheckFlags(symbol) & CheckFlags.Mapped && !(<MappedSymbol>symbol).type && findResolutionCycleStartIndex(symbol, TypeSystemPropertyName.Type) >= 0);
+        }
+
         function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
             return mapType(type, t => {
                 if (isGenericMappedType(t)) {
@@ -22482,7 +22486,7 @@ namespace ts {
                 else if (t.flags & TypeFlags.StructuredType) {
                     const prop = getPropertyOfType(t, name);
                     if (prop) {
-                        return getTypeOfSymbol(prop);
+                        return isCircularMappedProperty(prop) ? undefined : getTypeOfSymbol(prop);
                     }
                     if (isTupleType(t)) {
                         const restType = getRestTypeOfTupleType(t);
