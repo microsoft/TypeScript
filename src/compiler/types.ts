@@ -6521,11 +6521,6 @@ namespace ts {
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
         /**
-         * This is used by the parser to skip transform flag aggregation in Declaration files or other contexts.
-         * @returns The previous value.
-         */
-        /* @internal */ setSkipTransformationFlags(value: boolean): boolean;
-        /**
          * Tracks setting an extraneous node on a parent. This is primarily used by the parser to add invalid nodes for grammar reporting purposes and is needed to
          * correctly update transform flags after a node has been created.
          */

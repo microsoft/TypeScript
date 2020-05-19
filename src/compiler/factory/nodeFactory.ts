@@ -19,11 +19,6 @@ namespace ts {
      */
     /* @internal */
     export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNodeFactory): NodeFactory {
-        // TODO(rbuckton): This exists to avoid collectiong transform flags when parsing a declaration file or JSDoc comment.
-        //                 This is so that we can avoid executing code for those cases to improve performance. We should measure
-        //                 this and determine if it worthwhile to keep this optimization.
-        let skipTransformationFlags = false;
-
         // Lazily load the parenthesizer, node converters, and some factory methods until they are used.
         const parenthesizerRules = memoize(() => flags & NodeFactoryFlags.NoParenthesizerRules ? nullParenthesizerRules : createParenthesizerRules(factory));
         const converters = memoize(() => flags & NodeFactoryFlags.NoNodeConverters ? nullNodeConverters : createNodeConverters(factory));
@@ -32,11 +27,6 @@ namespace ts {
         const factory: NodeFactory = {
             get parenthesizer() { return parenthesizerRules(); },
             get converters() { return converters(); },
-            setSkipTransformationFlags: value => {
-                const oldValue = skipTransformationFlags;
-                skipTransformationFlags = value;
-                return oldValue;
-            },
             trackExtraneousChildNode: setChild,
             trackExtraneousChildNodes: setChildren,
             createNodeArray,
@@ -495,11 +485,9 @@ namespace ts {
                 elements = [];
             }
             else if (isNodeArray(elements)) {
-                if (!skipTransformationFlags) {
-                    // Ensure the transform flags have been aggregated for this NodeArray
-                    if (elements.transformFlags === undefined) {
-                        aggregateChildrenFlags(elements);
-                    }
+                // Ensure the transform flags have been aggregated for this NodeArray
+                if (elements.transformFlags === undefined) {
+                    aggregateChildrenFlags(elements);
                 }
                 return elements;
             }
@@ -511,9 +499,7 @@ namespace ts {
             const array = <NodeArray<T>>(length >= 1 && length <= 4 ? elements.slice() : elements);
             setTextRangePosEnd(array, -1, -1);
             array.hasTrailingComma = hasTrailingComma;
-            if (!skipTransformationFlags) {
-                aggregateChildrenFlags(array);
-            }
+            aggregateChildrenFlags(array);
             return array;
         }
 
@@ -561,10 +547,8 @@ namespace ts {
                 name
             );
             setChildren(node, node.typeParameters = asNodeArray(typeParameters));
-            if (!skipTransformationFlags) {
-                if (typeParameters) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
+            if (typeParameters) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
             return node;
         }
@@ -587,9 +571,7 @@ namespace ts {
             );
             setChildren(node, node.parameters = createNodeArray(parameters));
             setChild(node, node.type = type);
-            if (!skipTransformationFlags) {
-                if (type) node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            if (type) node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -619,9 +601,7 @@ namespace ts {
                 type
             );
             setChild(node, node.body = body);
-            if (!skipTransformationFlags) {
-                if (!body) node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            if (!body) node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -705,9 +685,7 @@ namespace ts {
                 initializer
             );
             setChild(node, node.type = type);
-            if (!skipTransformationFlags) {
-                if (type) node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            if (type) node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -730,18 +708,14 @@ namespace ts {
         function createNumericLiteral(value: string | number, numericLiteralFlags: TokenFlags = TokenFlags.None): NumericLiteral {
             const node = createBaseLiteral<NumericLiteral>(SyntaxKind.NumericLiteral, typeof value === "number" ? value + "" : value);
             node.numericLiteralFlags = numericLiteralFlags;
-            if (!skipTransformationFlags) {
-                if (numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            if (numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
         // @api
         function createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral {
             const node = createBaseLiteral<BigIntLiteral>(SyntaxKind.BigIntLiteral, typeof value === "string" ? value : pseudoBigIntToString(value) + "n");
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsESNext;
-            }
+            node.transformFlags |= TransformFlags.ContainsESNext;
             return node;
         }
 
@@ -755,9 +729,7 @@ namespace ts {
         function createStringLiteral(text: string, isSingleQuote?: boolean, hasExtendedUnicodeEscape?: boolean): StringLiteral {
             const node = createBaseStringLiteral(text, isSingleQuote);
             node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
-            if (!skipTransformationFlags) {
-                if (hasExtendedUnicodeEscape) node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            if (hasExtendedUnicodeEscape) node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -868,9 +840,7 @@ namespace ts {
             if (!startsWith(text, "#")) Debug.fail("First character of private identifier must be #: " + text);
             const node = baseFactory.createBasePrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as Mutable<PrivateIdentifier>;
             node.escapedText = escapeLeadingUnderscores(text);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsClassFields;
-            }
+            node.transformFlags |= TransformFlags.ContainsClassFields;
             return node;
         }
 
@@ -900,43 +870,41 @@ namespace ts {
             Debug.assert(token <= SyntaxKind.FirstLiteralToken || token >= SyntaxKind.LastLiteralToken, "Invalid token. Use 'createLiteralLikeNode' to create literals.");
             Debug.assert(token !== SyntaxKind.Identifier, "Invalid token. Use 'createIdentifier' to create identifiers");
             const node = createBaseToken<Token<TKind>>(token);
-            if (!skipTransformationFlags) {
-                switch (token) {
-                    case SyntaxKind.AsyncKeyword:
-                        // 'async' modifier is ES2017 (async functions) or ES2018 (async generators)
-                        node.transformFlags |= TransformFlags.ContainsES2017;
-                        node.transformFlags |= TransformFlags.ContainsES2018;
-                        break;
+            switch (token) {
+                case SyntaxKind.AsyncKeyword:
+                    // 'async' modifier is ES2017 (async functions) or ES2018 (async generators)
+                    node.transformFlags |= TransformFlags.ContainsES2017;
+                    node.transformFlags |= TransformFlags.ContainsES2018;
+                    break;
 
-                    case SyntaxKind.PublicKeyword:
-                    case SyntaxKind.PrivateKeyword:
-                    case SyntaxKind.ProtectedKeyword:
-                    case SyntaxKind.ReadonlyKeyword:
-                    case SyntaxKind.AbstractKeyword:
-                    case SyntaxKind.DeclareKeyword:
-                    case SyntaxKind.ConstKeyword:
-                    case SyntaxKind.AnyKeyword:
-                    case SyntaxKind.NumberKeyword:
-                    case SyntaxKind.BigIntKeyword:
-                    case SyntaxKind.NeverKeyword:
-                    case SyntaxKind.ObjectKeyword:
-                    case SyntaxKind.StringKeyword:
-                    case SyntaxKind.BooleanKeyword:
-                    case SyntaxKind.SymbolKeyword:
-                    case SyntaxKind.VoidKeyword:
-                    case SyntaxKind.UnknownKeyword:
-                    case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
-                        node.transformFlags |= TransformFlags.ContainsTypeScript;
-                        break;
-                    case SyntaxKind.StaticKeyword:
-                    case SyntaxKind.SuperKeyword:
-                        node.transformFlags |= TransformFlags.ContainsES2015;
-                        break;
-                    case SyntaxKind.ThisKeyword:
-                        // 'this' indicates a lexical 'this'
-                        node.transformFlags |= TransformFlags.ContainsLexicalThis;
-                        break;
-                }
+                case SyntaxKind.PublicKeyword:
+                case SyntaxKind.PrivateKeyword:
+                case SyntaxKind.ProtectedKeyword:
+                case SyntaxKind.ReadonlyKeyword:
+                case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.DeclareKeyword:
+                case SyntaxKind.ConstKeyword:
+                case SyntaxKind.AnyKeyword:
+                case SyntaxKind.NumberKeyword:
+                case SyntaxKind.BigIntKeyword:
+                case SyntaxKind.NeverKeyword:
+                case SyntaxKind.ObjectKeyword:
+                case SyntaxKind.StringKeyword:
+                case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.SymbolKeyword:
+                case SyntaxKind.VoidKeyword:
+                case SyntaxKind.UnknownKeyword:
+                case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
+                    node.transformFlags |= TransformFlags.ContainsTypeScript;
+                    break;
+                case SyntaxKind.StaticKeyword:
+                case SyntaxKind.SuperKeyword:
+                    node.transformFlags |= TransformFlags.ContainsES2015;
+                    break;
+                case SyntaxKind.ThisKeyword:
+                    // 'this' indicates a lexical 'this'
+                    node.transformFlags |= TransformFlags.ContainsLexicalThis;
+                    break;
             }
             return node;
         }
@@ -1020,10 +988,7 @@ namespace ts {
         function createComputedPropertyName(expression: Expression) {
             const node = createBaseNode<ComputedPropertyName>(SyntaxKind.ComputedPropertyName);
             setChild(node, node.expression = parenthesizerRules().parenthesizeExpressionOfComputedPropertyName(expression));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-                node.transformFlags |= TransformFlags.ContainsComputedPropertyName;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2015 | TransformFlags.ContainsComputedPropertyName;
             return node;
         }
 
@@ -1048,9 +1013,7 @@ namespace ts {
             );
             setChild(node, node.constraint = constraint);
             setChild(node, node.default = defaultType);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1083,15 +1046,13 @@ namespace ts {
             );
             setChild(node, node.dotDotDotToken = dotDotDotToken);
             setChild(node, node.questionToken = questionToken);
-            if (!skipTransformationFlags) {
-                if (isThisIdentifier(node.name)) {
-                    node.transformFlags = TransformFlags.ContainsTypeScript;
-                }
-                else {
-                    if (questionToken) node.transformFlags |= TransformFlags.ContainsTypeScript;
-                    if (modifiersToFlags(node.modifiers) & ModifierFlags.ParameterPropertyModifier) node.transformFlags |= TransformFlags.ContainsTypeScriptClassSyntax;
-                    if (initializer || dotDotDotToken) node.transformFlags |= TransformFlags.ContainsES2015;
-                }
+            if (isThisIdentifier(node.name)) {
+                node.transformFlags = TransformFlags.ContainsTypeScript;
+            }
+            else {
+                if (questionToken) node.transformFlags |= TransformFlags.ContainsTypeScript;
+                if (modifiersToFlags(node.modifiers) & ModifierFlags.ParameterPropertyModifier) node.transformFlags |= TransformFlags.ContainsTypeScriptClassSyntax;
+                if (initializer || dotDotDotToken) node.transformFlags |= TransformFlags.ContainsES2015;
             }
             return node;
         }
@@ -1122,10 +1083,7 @@ namespace ts {
         function createDecorator(expression: Expression) {
             const node = createBaseNode<Decorator>(SyntaxKind.Decorator);
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsTypeScript;
-                node.transformFlags |= TransformFlags.ContainsTypeScriptClassSyntax;
-            }
+            node.transformFlags |= TransformFlags.ContainsTypeScript | TransformFlags.ContainsTypeScriptClassSyntax;
             return node;
         }
 
@@ -1155,9 +1113,7 @@ namespace ts {
             );
             setChild(node, node.type = type);
             setChild(node, node.questionToken = questionToken);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1196,14 +1152,12 @@ namespace ts {
             );
             setChild(node, node.questionToken = questionOrExclamationToken !== undefined && isQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined);
             setChild(node, node.exclamationToken = questionOrExclamationToken !== undefined && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined);
-            if (!skipTransformationFlags) {
-                if (isComputedPropertyName(node.name) || (hasStaticModifier(node) && node.initializer)) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScriptClassSyntax;
-                }
-                node.transformFlags |= TransformFlags.ContainsClassFields;
-                if (questionOrExclamationToken || modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
+            if (isComputedPropertyName(node.name) || (hasStaticModifier(node) && node.initializer)) {
+                node.transformFlags |= TransformFlags.ContainsTypeScriptClassSyntax;
+            }
+            node.transformFlags |= TransformFlags.ContainsClassFields;
+            if (questionOrExclamationToken || modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
             return node;
         }
@@ -1248,9 +1202,7 @@ namespace ts {
                 type
             );
             setChild(node, node.questionToken = questionToken);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1298,23 +1250,21 @@ namespace ts {
             );
             setChild(node, node.asteriskToken = asteriskToken);
             setChild(node, node.questionToken = questionToken);
-            if (!skipTransformationFlags) {
-                if (questionToken) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
-                if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
-                    if (asteriskToken) {
-                        node.transformFlags |= TransformFlags.ContainsES2018;
-                    }
-                    else {
-                        node.transformFlags |= TransformFlags.ContainsES2017;
-                    }
-                }
-                else if (asteriskToken) {
-                    node.transformFlags |= TransformFlags.ContainsGenerator;
-                }
-                node.transformFlags |= TransformFlags.ContainsES2015;
+            if (questionToken) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
+            if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
+                if (asteriskToken) {
+                    node.transformFlags |= TransformFlags.ContainsES2018;
+                }
+                else {
+                    node.transformFlags |= TransformFlags.ContainsES2017;
+                }
+            }
+            else if (asteriskToken) {
+                node.transformFlags |= TransformFlags.ContainsGenerator;
+            }
+            node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -1361,9 +1311,7 @@ namespace ts {
                 /*type*/ undefined,
                 body
             );
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -1479,9 +1427,7 @@ namespace ts {
                 parameters,
                 type
             );
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1514,9 +1460,7 @@ namespace ts {
                 parameters,
                 type
             );
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1550,9 +1494,7 @@ namespace ts {
                 parameters,
                 type
             );
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1587,9 +1529,7 @@ namespace ts {
             setChild(node, node.assertsModifier = assertsModifier);
             setChild(node, node.parameterName = asName(parameterName));
             setChild(node, node.type = type);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1607,9 +1547,7 @@ namespace ts {
             const node = createBaseNode<TypeReferenceNode>(SyntaxKind.TypeReference);
             setChild(node, node.typeName = asName(typeName));
             setChildren(node, node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(createNodeArray(typeArguments)));
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1636,9 +1574,7 @@ namespace ts {
                 parameters,
                 type
             );
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1671,9 +1607,7 @@ namespace ts {
                 parameters,
                 type
             );
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1695,9 +1629,7 @@ namespace ts {
         function createTypeQueryNode(exprName: EntityName) {
             const node = createBaseNode<TypeQueryNode>(SyntaxKind.TypeQuery);
             setChild(node, node.exprName = exprName);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1712,9 +1644,7 @@ namespace ts {
         function createTypeLiteralNode(members: readonly TypeElement[] | undefined) {
             const node = createBaseNode<TypeLiteralNode>(SyntaxKind.TypeLiteral);
             setChildren(node, node.members = createNodeArray(members));
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1729,9 +1659,7 @@ namespace ts {
         function createArrayTypeNode(elementType: TypeNode) {
             const node = createBaseNode<ArrayTypeNode>(SyntaxKind.ArrayType);
             setChild(node, node.elementType = parenthesizerRules().parenthesizeElementTypeOfArrayType(elementType));
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1746,9 +1674,7 @@ namespace ts {
         function createTupleTypeNode(elementTypes: readonly TypeNode[]) {
             const node = createBaseNode<TupleTypeNode>(SyntaxKind.TupleType);
             setChildren(node, node.elementTypes = createNodeArray(elementTypes));
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1763,9 +1689,7 @@ namespace ts {
         function createOptionalTypeNode(type: TypeNode) {
             const node = createBaseNode<OptionalTypeNode>(SyntaxKind.OptionalType);
             setChild(node, node.type = parenthesizerRules().parenthesizeElementTypeOfArrayType(type));
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1780,9 +1704,7 @@ namespace ts {
         function createRestTypeNode(type: TypeNode) {
             const node = createBaseNode<RestTypeNode>(SyntaxKind.RestType);
             setChild(node, node.type = type);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1796,9 +1718,7 @@ namespace ts {
         function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[]) {
             const node = createBaseNode<UnionTypeNode | IntersectionTypeNode>(kind);
             setChildren(node, node.types = parenthesizerRules().parenthesizeConstituentTypesOfUnionOrIntersectionType(createNodeArray(types)));
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1835,9 +1755,7 @@ namespace ts {
             setChild(node, node.extendsType = parenthesizerRules().parenthesizeMemberOfConditionalType(extendsType));
             setChild(node, node.trueType = trueType);
             setChild(node, node.falseType = falseType);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1855,9 +1773,7 @@ namespace ts {
         function createInferTypeNode(typeParameter: TypeParameterDeclaration) {
             const node = createBaseNode<InferTypeNode>(SyntaxKind.InferType);
             setChild(node, node.typeParameter = typeParameter);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1875,9 +1791,7 @@ namespace ts {
             setChild(node, node.qualifier = qualifier);
             setChildren(node, node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(createNodeArray(typeArguments)));
             node.isTypeOf = isTypeOf;
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1895,9 +1809,7 @@ namespace ts {
         function createParenthesizedType(type: TypeNode) {
             const node = createBaseNode<ParenthesizedTypeNode>(SyntaxKind.ParenthesizedType);
             setChild(node, node.type = type);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1911,9 +1823,7 @@ namespace ts {
         // @api
         function createThisTypeNode() {
             const node = createBaseNode<ThisTypeNode>(SyntaxKind.ThisType);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1922,9 +1832,7 @@ namespace ts {
             const node = createBaseNode<TypeOperatorNode>(SyntaxKind.TypeOperator);
             node.operator = operator;
             setChild(node, node.type = parenthesizerRules().parenthesizeMemberOfElementType(type));
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1940,9 +1848,7 @@ namespace ts {
             const node = createBaseNode<IndexedAccessTypeNode>(SyntaxKind.IndexedAccessType);
             setChild(node, node.objectType = parenthesizerRules().parenthesizeMemberOfElementType(objectType));
             setChild(node, node.indexType = indexType);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1961,9 +1867,7 @@ namespace ts {
             setChild(node, node.typeParameter = typeParameter);
             setChild(node, node.questionToken = questionToken);
             setChild(node, node.type = type);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -1981,9 +1885,7 @@ namespace ts {
         function createLiteralTypeNode(literal: LiteralTypeNode["literal"]) {
             const node = createBaseNode<LiteralTypeNode>(SyntaxKind.LiteralType);
             setChild(node, node.literal = literal);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -2002,13 +1904,11 @@ namespace ts {
         function createObjectBindingPattern(elements: readonly BindingElement[]) {
             const node = createBaseNode<ObjectBindingPattern>(SyntaxKind.ObjectBindingPattern);
             setChildren(node, node.elements = createNodeArray(elements));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-                node.transformFlags |= TransformFlags.ContainsBindingPattern;
-                if (node.transformFlags & TransformFlags.ContainsRestOrSpread) {
-                    node.transformFlags |= TransformFlags.ContainsES2018;
-                    node.transformFlags |= TransformFlags.ContainsObjectRestOrSpread;
-                }
+            node.transformFlags |= TransformFlags.ContainsES2015;
+            node.transformFlags |= TransformFlags.ContainsBindingPattern;
+            if (node.transformFlags & TransformFlags.ContainsRestOrSpread) {
+                node.transformFlags |= TransformFlags.ContainsES2018;
+                node.transformFlags |= TransformFlags.ContainsObjectRestOrSpread;
             }
             return node;
         }
@@ -2024,10 +1924,8 @@ namespace ts {
         function createArrayBindingPattern(elements: readonly ArrayBindingElement[]) {
             const node = createBaseNode<ArrayBindingPattern>(SyntaxKind.ArrayBindingPattern);
             setChildren(node, node.elements = createNodeArray(elements));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-                node.transformFlags |= TransformFlags.ContainsBindingPattern;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2015;
+            node.transformFlags |= TransformFlags.ContainsBindingPattern;
             return node;
         }
 
@@ -2049,10 +1947,8 @@ namespace ts {
             );
             setChild(node, node.propertyName = asName(propertyName));
             setChild(node, node.dotDotDotToken = dotDotDotToken);
-            if (!skipTransformationFlags) {
-                if (dotDotDotToken) node.transformFlags |= TransformFlags.ContainsRestOrSpread;
-                node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            if (dotDotDotToken) node.transformFlags |= TransformFlags.ContainsRestOrSpread;
+            node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -2105,13 +2001,11 @@ namespace ts {
             const node = createBaseNode<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
             setChild(node, node.name = asName(name));
-            if (!skipTransformationFlags) {
-                // super method calls require a lexical 'this'
-                // super method calls require 'super' hoisting in ES2017 and ES2018 async functions and async generators
-                if (isSuperKeyword(expression)) {
-                    node.transformFlags |= TransformFlags.ContainsES2017;
-                    node.transformFlags |= TransformFlags.ContainsES2018;
-                }
+            // super method calls require a lexical 'this'
+            // super method calls require 'super' hoisting in ES2017 and ES2018 async functions and async generators
+            if (isSuperKeyword(expression)) {
+                node.transformFlags |= TransformFlags.ContainsES2017;
+                node.transformFlags |= TransformFlags.ContainsES2018;
             }
             return node;
         }
@@ -2134,9 +2028,7 @@ namespace ts {
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
             setChild(node, node.questionDotToken = questionDotToken);
             setChild(node, node.name = asName(name));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2020;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2020;
             return node;
         }
 
@@ -2157,13 +2049,11 @@ namespace ts {
             const node = createBaseNode<ElementAccessExpression>(SyntaxKind.ElementAccessExpression);
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
             setChild(node, node.argumentExpression = asExpression(index));
-            if (!skipTransformationFlags) {
-                // super method calls require a lexical 'this'
-                // super method calls require 'super' hoisting in ES2017 and ES2018 async functions and async generators
-                if (isSuperKeyword(expression)) {
-                    node.transformFlags |= TransformFlags.ContainsES2017;
-                    node.transformFlags |= TransformFlags.ContainsES2018;
-                }
+            // super method calls require a lexical 'this'
+            // super method calls require 'super' hoisting in ES2017 and ES2018 async functions and async generators
+            if (isSuperKeyword(expression)) {
+                node.transformFlags |= TransformFlags.ContainsES2017;
+                node.transformFlags |= TransformFlags.ContainsES2018;
             }
             return node;
         }
@@ -2186,9 +2076,7 @@ namespace ts {
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
             setChild(node, node.questionDotToken = questionDotToken);
             setChild(node, node.argumentExpression = asExpression(index));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2020;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2020;
             return node;
         }
 
@@ -2210,16 +2098,14 @@ namespace ts {
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChildren(node, node.arguments = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)));
-            if (!skipTransformationFlags) {
-                if (typeArguments) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
-                if (isImportKeyword(expression)) {
-                    node.transformFlags |= TransformFlags.ContainsDynamicImport;
-                }
-                if (isSuperProperty(expression)) {
-                    node.transformFlags |= TransformFlags.ContainsLexicalThis;
-                }
+            if (typeArguments) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
+            }
+            if (isImportKeyword(expression)) {
+                node.transformFlags |= TransformFlags.ContainsDynamicImport;
+            }
+            if (isSuperProperty(expression)) {
+                node.transformFlags |= TransformFlags.ContainsLexicalThis;
             }
             return node;
         }
@@ -2244,14 +2130,12 @@ namespace ts {
             setChild(node, node.questionDotToken = questionDotToken);
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChildren(node, node.arguments = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2020;
-                if (typeArguments) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
-                if (isSuperProperty(expression)) {
-                    node.transformFlags |= TransformFlags.ContainsLexicalThis;
-                }
+            node.transformFlags |= TransformFlags.ContainsES2020;
+            if (typeArguments) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
+            }
+            if (isSuperProperty(expression)) {
+                node.transformFlags |= TransformFlags.ContainsLexicalThis;
             }
             return node;
         }
@@ -2273,10 +2157,8 @@ namespace ts {
             setChild(node, node.expression = parenthesizerRules().parenthesizeExpressionOfNew(expression));
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChildren(node, node.arguments = argumentsArray ? parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray)) : undefined);
-            if (!skipTransformationFlags) {
-                if (typeArguments) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
+            if (typeArguments) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
             return node;
         }
@@ -2296,14 +2178,12 @@ namespace ts {
             setChild(node, node.tag = parenthesizerRules().parenthesizeLeftSideOfAccess(tag));
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChild(node, node.template = template);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-                if (typeArguments) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
-                if (hasInvalidEscape(template)) {
-                    node.transformFlags |= TransformFlags.ContainsES2018;
-                }
+            node.transformFlags |= TransformFlags.ContainsES2015;
+            if (typeArguments) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
+            }
+            if (hasInvalidEscape(template)) {
+                node.transformFlags |= TransformFlags.ContainsES2018;
             }
             return node;
         }
@@ -2322,9 +2202,7 @@ namespace ts {
             const node = createBaseNode<TypeAssertion>(SyntaxKind.TypeAssertionExpression);
             setChild(node, node.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression));
             setChild(node, node.type = type);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -2371,21 +2249,19 @@ namespace ts {
                 body
             );
             setChild(node, node.asteriskToken = asteriskToken);
-            if (!skipTransformationFlags) {
-                if (typeParameters) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
+            if (typeParameters) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
+            }
+            if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
+                if (asteriskToken) {
+                    node.transformFlags |= TransformFlags.ContainsES2018;
                 }
-                if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
-                    if (asteriskToken) {
-                        node.transformFlags |= TransformFlags.ContainsES2018;
-                    }
-                    else {
-                        node.transformFlags |= TransformFlags.ContainsES2017;
-                    }
+                else {
+                    node.transformFlags |= TransformFlags.ContainsES2017;
                 }
-                else if (asteriskToken) {
-                    node.transformFlags |= TransformFlags.ContainsGenerator;
-                }
+            }
+            else if (asteriskToken) {
+                node.transformFlags |= TransformFlags.ContainsGenerator;
             }
             return node;
         }
@@ -2432,10 +2308,8 @@ namespace ts {
                 parenthesizerRules().parenthesizeConciseBodyOfArrowFunction(body)
             );
             setChild(node, node.equalsGreaterThanToken = equalsGreaterThanToken || createToken(SyntaxKind.EqualsGreaterThanToken));
-            if (!skipTransformationFlags) {
-                if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) node.transformFlags |= TransformFlags.ContainsES2017;
-                node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) node.transformFlags |= TransformFlags.ContainsES2017;
+            node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -2505,11 +2379,9 @@ namespace ts {
         function createAwaitExpression(expression: Expression) {
             const node = createBaseNode<AwaitExpression>(SyntaxKind.AwaitExpression);
             setChild(node, node.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2017;
-                node.transformFlags |= TransformFlags.ContainsES2018;
-                node.transformFlags |= TransformFlags.ContainsAwait;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2017;
+            node.transformFlags |= TransformFlags.ContainsES2018;
+            node.transformFlags |= TransformFlags.ContainsAwait;
             return node;
         }
 
@@ -2558,24 +2430,22 @@ namespace ts {
             setChild(node, node.left = parenthesizerRules().parenthesizeLeftSideOfBinary(operatorKind, left));
             setChild(node, node.operatorToken = operatorToken);
             setChild(node, node.right = parenthesizerRules().parenthesizeRightSideOfBinary(operatorKind, node.left, right));
-            if (!skipTransformationFlags) {
-                if (operatorKind === SyntaxKind.QuestionQuestionToken) {
-                    node.transformFlags |= TransformFlags.ContainsES2020;
+            if (operatorKind === SyntaxKind.QuestionQuestionToken) {
+                node.transformFlags |= TransformFlags.ContainsES2020;
+            }
+            else if (operatorKind === SyntaxKind.EqualsToken) {
+                if (isObjectLiteralExpression(node.left)) {
+                    node.transformFlags |= TransformFlags.ContainsES2015;
+                    node.transformFlags |= TransformFlags.ContainsES2018;
+                    node.transformFlags |= TransformFlags.ContainsDestructuringAssignment;
                 }
-                else if (operatorKind === SyntaxKind.EqualsToken) {
-                    if (isObjectLiteralExpression(node.left)) {
-                        node.transformFlags |= TransformFlags.ContainsES2015;
-                        node.transformFlags |= TransformFlags.ContainsES2018;
-                        node.transformFlags |= TransformFlags.ContainsDestructuringAssignment;
-                    }
-                    else if (isArrayLiteralExpression(node.left)) {
-                        node.transformFlags |= TransformFlags.ContainsES2015;
-                        node.transformFlags |= TransformFlags.ContainsDestructuringAssignment;
-                    }
+                else if (isArrayLiteralExpression(node.left)) {
+                    node.transformFlags |= TransformFlags.ContainsES2015;
+                    node.transformFlags |= TransformFlags.ContainsDestructuringAssignment;
                 }
-                else if (operatorKind === SyntaxKind.AsteriskAsteriskToken || operatorKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
-                    node.transformFlags |= TransformFlags.ContainsES2016;
-                }
+            }
+            else if (operatorKind === SyntaxKind.AsteriskAsteriskToken || operatorKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
+                node.transformFlags |= TransformFlags.ContainsES2016;
             }
             return node;
         }
@@ -2623,9 +2493,7 @@ namespace ts {
             const node = createBaseNode<TemplateExpression>(SyntaxKind.TemplateExpression);
             setChild(node, node.head = head);
             setChildren(node, node.templateSpans = createNodeArray(templateSpans));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -2666,11 +2534,9 @@ namespace ts {
             node.text = text;
             node.rawText = rawText;
             node.templateFlags = templateFlags! & TokenFlags.TemplateLiteralLikeFlags;
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-                if (templateFlags) {
-                    node.transformFlags |= TransformFlags.ContainsES2018;
-                }
+            node.transformFlags |= TransformFlags.ContainsES2015;
+            if (templateFlags) {
+                node.transformFlags |= TransformFlags.ContainsES2018;
             }
             return node;
         }
@@ -2701,11 +2567,9 @@ namespace ts {
             const node = createBaseNode<YieldExpression>(SyntaxKind.YieldExpression);
             setChild(node, node.expression = expression && parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression));
             setChild(node, node.asteriskToken = asteriskToken);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-                node.transformFlags |= TransformFlags.ContainsES2018;
-                node.transformFlags |= TransformFlags.ContainsYield;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2015;
+            node.transformFlags |= TransformFlags.ContainsES2018;
+            node.transformFlags |= TransformFlags.ContainsYield;
             return node;
         }
 
@@ -2721,10 +2585,8 @@ namespace ts {
         function createSpreadElement(expression: Expression) {
             const node = createBaseNode<SpreadElement>(SyntaxKind.SpreadElement);
             setChild(node, node.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-                node.transformFlags |= TransformFlags.ContainsRestOrSpread;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2015;
+            node.transformFlags |= TransformFlags.ContainsRestOrSpread;
             return node;
         }
 
@@ -2753,9 +2615,7 @@ namespace ts {
                 heritageClauses,
                 members
             );
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -2789,9 +2649,7 @@ namespace ts {
             const node = createBaseNode<ExpressionWithTypeArguments>(SyntaxKind.ExpressionWithTypeArguments);
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
             setChildren(node, node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -2808,9 +2666,7 @@ namespace ts {
             const node = createBaseNode<AsExpression>(SyntaxKind.AsExpression);
             setChild(node, node.expression = expression);
             setChild(node, node.type = type);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -2826,9 +2682,7 @@ namespace ts {
         function createNonNullExpression(expression: Expression) {
             const node = createBaseNode<NonNullExpression>(SyntaxKind.NonNullExpression);
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -2847,9 +2701,7 @@ namespace ts {
             const node = createBaseNode<NonNullChain>(SyntaxKind.NonNullExpression);
             node.flags |= NodeFlags.OptionalChain;
             setChild(node, node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -2866,17 +2718,15 @@ namespace ts {
             const node = createBaseNode<MetaProperty>(SyntaxKind.MetaProperty);
             node.keywordToken = keywordToken;
             setChild(node, node.name = name);
-            if (!skipTransformationFlags) {
-                switch (keywordToken) {
-                    case SyntaxKind.NewKeyword:
-                        node.transformFlags |= TransformFlags.ContainsES2015;
-                        break;
-                    case SyntaxKind.ImportKeyword:
-                        node.transformFlags |= TransformFlags.ContainsESNext;
-                        break;
-                    default:
-                        return Debug.assertNever(keywordToken);
-                }
+            switch (keywordToken) {
+                case SyntaxKind.NewKeyword:
+                    node.transformFlags |= TransformFlags.ContainsES2015;
+                    break;
+                case SyntaxKind.ImportKeyword:
+                    node.transformFlags |= TransformFlags.ContainsESNext;
+                    break;
+                default:
+                    return Debug.assertNever(keywordToken);
             }
             return node;
         }
@@ -2897,9 +2747,7 @@ namespace ts {
             const node = createBaseNode<TemplateSpan>(SyntaxKind.TemplateSpan);
             setChild(node, node.expression = expression);
             setChild(node, node.literal = literal);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -2941,10 +2789,8 @@ namespace ts {
         function createVariableStatement(modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]) {
             const node = createBaseDeclaration<VariableStatement>(SyntaxKind.VariableStatement, /*decorators*/ undefined, modifiers);
             setChild(node, node.declarationList = isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList);
-            if (!skipTransformationFlags) {
-                if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
-                    node.transformFlags = TransformFlags.ContainsTypeScript;
-                }
+            if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
+                node.transformFlags = TransformFlags.ContainsTypeScript;
             }
             return node;
         }
@@ -3071,10 +2917,8 @@ namespace ts {
             setChild(node, node.initializer = initializer);
             setChild(node, node.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression));
             setChild(node, node.statement = asEmbeddedStatement(statement));
-            if (!skipTransformationFlags) {
-                if (awaitModifier) node.transformFlags |= TransformFlags.ContainsES2018;
-                node.transformFlags |= TransformFlags.ContainsES2015;
-            }
+            if (awaitModifier) node.transformFlags |= TransformFlags.ContainsES2018;
+            node.transformFlags |= TransformFlags.ContainsES2015;
             return node;
         }
 
@@ -3092,9 +2936,7 @@ namespace ts {
         function createContinueStatement(label?: string | Identifier): ContinueStatement {
             const node = createBaseNode<ContinueStatement>(SyntaxKind.ContinueStatement);
             setChild(node, node.label = asName(label));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
-            }
+            node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
             return node;
         }
 
@@ -3109,9 +2951,7 @@ namespace ts {
         function createBreakStatement(label?: string | Identifier): BreakStatement {
             const node = createBaseNode<BreakStatement>(SyntaxKind.BreakStatement);
             setChild(node, node.label = asName(label));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
-            }
+            node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
             return node;
         }
 
@@ -3126,11 +2966,9 @@ namespace ts {
         function createReturnStatement(expression?: Expression): ReturnStatement {
             const node = createBaseNode<ReturnStatement>(SyntaxKind.ReturnStatement);
             setChild(node, node.expression = expression);
-            if (!skipTransformationFlags) {
-                // return in an ES2018 async generator must be awaited
-                node.transformFlags |= TransformFlags.ContainsES2018;
-                node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
-            }
+            // return in an ES2018 async generator must be awaited
+            node.transformFlags |= TransformFlags.ContainsES2018;
+            node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
             return node;
         }
 
@@ -3237,10 +3075,8 @@ namespace ts {
                 initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer)
             );
             setChild(node, node.exclamationToken = exclamationToken);
-            if (!skipTransformationFlags) {
-                if (exclamationToken) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
+            if (exclamationToken) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
             return node;
         }
@@ -3260,12 +3096,10 @@ namespace ts {
             const node = createBaseNode<VariableDeclarationList>(SyntaxKind.VariableDeclarationList);
             node.flags |= flags & NodeFlags.BlockScoped;
             setChildren(node, node.declarations = createNodeArray(declarations));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
-                if (flags & NodeFlags.BlockScoped) {
-                    node.transformFlags |= TransformFlags.ContainsES2015;
-                    node.transformFlags |= TransformFlags.ContainsBlockScopedBinding;
-                }
+            node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
+            if (flags & NodeFlags.BlockScoped) {
+                node.transformFlags |= TransformFlags.ContainsES2015;
+                node.transformFlags |= TransformFlags.ContainsBlockScopedBinding;
             }
             return node;
         }
@@ -3299,23 +3133,21 @@ namespace ts {
                 body
             );
             setChild(node, node.asteriskToken = asteriskToken);
-            if (!skipTransformationFlags) {
-                if (!body || modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
-                    node.transformFlags = TransformFlags.ContainsTypeScript;
+            if (!body || modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
+                node.transformFlags = TransformFlags.ContainsTypeScript;
+            }
+            else {
+                node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
+                if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
+                    if (asteriskToken) {
+                        node.transformFlags |= TransformFlags.ContainsES2018;
+                    }
+                    else {
+                        node.transformFlags |= TransformFlags.ContainsES2017;
+                    }
                 }
-                else {
-                    node.transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
-                    if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
-                        if (asteriskToken) {
-                            node.transformFlags |= TransformFlags.ContainsES2018;
-                        }
-                        else {
-                            node.transformFlags |= TransformFlags.ContainsES2017;
-                        }
-                    }
-                    else if (asteriskToken) {
-                        node.transformFlags |= TransformFlags.ContainsGenerator;
-                    }
+                else if (asteriskToken) {
+                    node.transformFlags |= TransformFlags.ContainsGenerator;
                 }
             }
             return node;
@@ -3363,15 +3195,13 @@ namespace ts {
                 heritageClauses,
                 members
             );
-            if (!skipTransformationFlags) {
-                if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
-                    node.transformFlags = TransformFlags.ContainsTypeScript;
-                }
-                else {
-                    node.transformFlags |= TransformFlags.ContainsES2015;
-                    if (node.transformFlags & TransformFlags.ContainsTypeScriptClassSyntax) {
-                        node.transformFlags |= TransformFlags.ContainsTypeScript;
-                    }
+            if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
+                node.transformFlags = TransformFlags.ContainsTypeScript;
+            }
+            else {
+                node.transformFlags |= TransformFlags.ContainsES2015;
+                if (node.transformFlags & TransformFlags.ContainsTypeScriptClassSyntax) {
+                    node.transformFlags |= TransformFlags.ContainsTypeScript;
                 }
             }
             return node;
@@ -3415,9 +3245,7 @@ namespace ts {
                 heritageClauses
             );
             setChildren(node, node.members = createNodeArray(members));
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -3457,9 +3285,7 @@ namespace ts {
                 typeParameters
             );
             setChild(node, node.type = type);
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -3495,9 +3321,7 @@ namespace ts {
                 name
             );
             setChildren(node, node.members = createNodeArray(members));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -3532,13 +3356,11 @@ namespace ts {
             node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
             setChild(node, node.name = name);
             setChild(node, node.body = body);
-            if (!skipTransformationFlags) {
-                if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
-                    node.transformFlags = TransformFlags.ContainsTypeScript;
-                }
-                else {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
+            if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
+                node.transformFlags = TransformFlags.ContainsTypeScript;
+            }
+            else {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
             return node;
         }
@@ -3591,9 +3413,7 @@ namespace ts {
         function createNamespaceExportDeclaration(name: string | Identifier) {
             const node = createBaseNode<NamespaceExportDeclaration>(SyntaxKind.NamespaceExportDeclaration);
             setChild(node, node.name = asName(name));
-            if (!skipTransformationFlags) {
-                node.transformFlags = TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -3618,9 +3438,7 @@ namespace ts {
                 name
             );
             setChild(node, node.moduleReference = moduleReference);
-            if (!skipTransformationFlags) {
-                if (!isExternalModuleReference(moduleReference)) node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            if (!isExternalModuleReference(moduleReference)) node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -3679,10 +3497,8 @@ namespace ts {
             node.isTypeOnly = isTypeOnly;
             setChild(node, node.name = name);
             setChild(node, node.namedBindings = namedBindings);
-            if (!skipTransformationFlags) {
-                if (isTypeOnly) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
+            if (isTypeOnly) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
             return node;
         }
@@ -3714,9 +3530,7 @@ namespace ts {
         function createNamespaceExport(name: Identifier): NamespaceExport {
             const node = createBaseNode<NamespaceExport>(SyntaxKind.NamespaceExport);
             setChild(node, node.name = name);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsESNext;
-            }
+            node.transformFlags |= TransformFlags.ContainsESNext;
             return node;
         }
 
@@ -4269,9 +4083,7 @@ namespace ts {
             setChild(node, node.openingElement = openingElement);
             setChildren(node, node.children = createNodeArray(children));
             setChild(node, node.closingElement = closingElement);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4290,12 +4102,10 @@ namespace ts {
             setChild(node, node.tagName = tagName);
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChild(node, node.attributes = attributes);
-            if (!skipTransformationFlags) {
-                if (typeArguments) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
-                node.transformFlags |= TransformFlags.ContainsJsx;
+            if (typeArguments) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4314,12 +4124,10 @@ namespace ts {
             setChild(node, node.tagName = tagName);
             setChildren(node, node.typeArguments = asNodeArray(typeArguments));
             setChild(node, node.attributes = attributes);
-            if (!skipTransformationFlags) {
-                if (typeArguments) {
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
-                }
-                node.transformFlags |= TransformFlags.ContainsJsx;
+            if (typeArguments) {
+                node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4336,9 +4144,7 @@ namespace ts {
         function createJsxClosingElement(tagName: JsxTagNameExpression) {
             const node = createBaseNode<JsxClosingElement>(SyntaxKind.JsxClosingElement);
             setChild(node, node.tagName = tagName);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4355,9 +4161,7 @@ namespace ts {
             setChild(node, node.openingFragment = openingFragment);
             setChildren(node, node.children = createNodeArray(children));
             setChild(node, node.closingFragment = closingFragment);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4375,9 +4179,7 @@ namespace ts {
             const node = createBaseNode<JsxText>(SyntaxKind.JsxText);
             node.text = text;
             node.containsOnlyTriviaWhiteSpaces = !!containsOnlyTriviaWhiteSpaces;
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4392,18 +4194,14 @@ namespace ts {
         // @api
         function createJsxOpeningFragment() {
             const node = createBaseNode<JsxOpeningFragment>(SyntaxKind.JsxOpeningFragment);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
         // @api
         function createJsxJsxClosingFragment() {
             const node = createBaseNode<JsxClosingFragment>(SyntaxKind.JsxClosingFragment);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4412,9 +4210,7 @@ namespace ts {
             const node = createBaseNode<JsxAttribute>(SyntaxKind.JsxAttribute);
             setChild(node, node.name = name);
             setChild(node, node.initializer = initializer);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4430,9 +4226,7 @@ namespace ts {
         function createJsxAttributes(properties: readonly JsxAttributeLike[]) {
             const node = createBaseNode<JsxAttributes>(SyntaxKind.JsxAttributes);
             setChildren(node, node.properties = createNodeArray(properties));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4447,9 +4241,7 @@ namespace ts {
         function createJsxSpreadAttribute(expression: Expression) {
             const node = createBaseNode<JsxSpreadAttribute>(SyntaxKind.JsxSpreadAttribute);
             setChild(node, node.expression = expression);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4465,9 +4257,7 @@ namespace ts {
             const node = createBaseNode<JsxExpression>(SyntaxKind.JsxExpression);
             setChild(node, node.dotDotDotToken = dotDotDotToken);
             setChild(node, node.expression = expression);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsJsx;
-            }
+            node.transformFlags |= TransformFlags.ContainsJsx;
             return node;
         }
 
@@ -4517,17 +4307,15 @@ namespace ts {
             const node = createBaseNode<HeritageClause>(SyntaxKind.HeritageClause);
             node.token = token;
             setChildren(node, node.types = createNodeArray(types));
-            if (!skipTransformationFlags) {
-                switch (token) {
-                    case SyntaxKind.ExtendsKeyword:
-                        node.transformFlags |= TransformFlags.ContainsES2015;
-                        break;
-                    case SyntaxKind.ImplementsKeyword:
-                        node.transformFlags |= TransformFlags.ContainsTypeScript;
-                        break;
-                    default:
-                        return Debug.assertNever(token);
-                }
+            switch (token) {
+                case SyntaxKind.ExtendsKeyword:
+                    node.transformFlags |= TransformFlags.ContainsES2015;
+                    break;
+                case SyntaxKind.ImplementsKeyword:
+                    node.transformFlags |= TransformFlags.ContainsTypeScript;
+                    break;
+                default:
+                    return Debug.assertNever(token);
             }
             return node;
         }
@@ -4550,9 +4338,7 @@ namespace ts {
             );
             setChild(node, node.variableDeclaration = variableDeclaration);
             setChild(node, node.block = block);
-            if (!skipTransformationFlags) {
-                if (!variableDeclaration) node.transformFlags |= TransformFlags.ContainsES2019;
-            }
+            if (!variableDeclaration) node.transformFlags |= TransformFlags.ContainsES2019;
             return node;
         }
 
@@ -4605,9 +4391,7 @@ namespace ts {
             setChild(node, node.objectAssignmentInitializer = objectAssignmentInitializer !== undefined
                 ? parenthesizerRules().parenthesizeExpressionForDisallowedComma(objectAssignmentInitializer)
                 : undefined);
-            if (!skipTransformationFlags) {
                 node.transformFlags |= TransformFlags.ContainsES2015;
-            }
             return node;
         }
 
@@ -4633,10 +4417,8 @@ namespace ts {
         function createSpreadAssignment(expression: Expression) {
             const node = createBaseNode<SpreadAssignment>(SyntaxKind.SpreadAssignment);
             setChild(node, node.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsES2018;
-                node.transformFlags |= TransformFlags.ContainsObjectRestOrSpread;
-            }
+            node.transformFlags |= TransformFlags.ContainsES2018;
+            node.transformFlags |= TransformFlags.ContainsObjectRestOrSpread;
             return node;
         }
 
@@ -4656,9 +4438,7 @@ namespace ts {
             const node = createBaseNode<EnumMember>(SyntaxKind.EnumMember);
             setChild(node, node.name = asName(name));
             setChild(node, node.initializer = initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer));
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -4874,9 +4654,7 @@ namespace ts {
             setChild(node, node.expression = expression);
             node.original = original;
             setTextRange(node, original);
-            if (!skipTransformationFlags) {
-                node.transformFlags |= TransformFlags.ContainsTypeScript;
-            }
+            node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
 
@@ -5014,13 +4792,13 @@ namespace ts {
         }
 
         function setChild(parent: Mutable<Node>, child: Node | undefined): void {
-            if (!skipTransformationFlags && child) {
+            if (child) {
                 parent.transformFlags |= propagateChildFlags(child);
             }
         }
 
         function setChildren(parent: Mutable<Node>, children: NodeArray<Node> | undefined): void {
-            if (!skipTransformationFlags && children) {
+            if (children) {
                 parent.transformFlags |= propagateChildrenFlags(children);
             }
         }

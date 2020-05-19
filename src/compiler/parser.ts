@@ -408,12 +408,10 @@ namespace ts {
             parsingContext = 0;
             identifiers = undefined!;
             notParenthesizedArrow = undefined!;
-            factory.setSkipTransformationFlags(/*inDeclarationFile*/ false);
         }
 
         function parseSourceFileWorker(languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind): SourceFile {
             const isDeclarationFile = isDeclarationFileName(fileName);
-            factory.setSkipTransformationFlags(isDeclarationFile);
             if (isDeclarationFile) {
                 contextFlags |= NodeFlags.Ambient;
             }
@@ -447,7 +445,6 @@ namespace ts {
                 fixupParentReferences(sourceFile);
             }
 
-            factory.setSkipTransformationFlags(/*inDeclarationFile*/ false);
             return sourceFile;
 
             function reportPragmaDiagnostic(pos: number, end: number, diagnostic: DiagnosticMessage) {
@@ -6319,7 +6316,6 @@ namespace ts {
         export namespace JSDocParser {
             export function parseJSDocTypeExpressionForTests(content: string, start: number | undefined, length: number | undefined): { jsDocTypeExpression: JSDocTypeExpression, diagnostics: Diagnostic[] } | undefined {
                 initializeState("file.js", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
-                factory.setSkipTransformationFlags(/*value*/ true); // reset in 'clearState'
                 scanner.setText(content, start, length);
                 currentToken = scanner.scan();
                 const jsDocTypeExpression = parseJSDocTypeExpression();
@@ -6338,7 +6334,6 @@ namespace ts {
             // Parses out a JSDoc type expression.
             export function parseJSDocTypeExpression(mayOmitBraces?: boolean): JSDocTypeExpression {
                 const pos = getNodePos();
-                const saveSkipTransformationFlags = factory.setSkipTransformationFlags(/*value*/ true);
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
                 const type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
                 if (!mayOmitBraces || hasBrace) {
@@ -6347,13 +6342,11 @@ namespace ts {
 
                 const result = factory.createJSDocTypeExpression(type);
                 fixupParentReferences(result);
-                factory.setSkipTransformationFlags(saveSkipTransformationFlags);
                 return finishNode(result, pos);
             }
 
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
-                factory.setSkipTransformationFlags(/*value*/ true); // reset in 'clearState'
                 const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
 
                 const sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content };
@@ -6364,7 +6357,6 @@ namespace ts {
             }
 
             export function parseJSDocComment(parent: HasJSDoc, start: number, length: number): JSDoc | undefined {
-                const saveSkipTransformationFlags = factory.setSkipTransformationFlags(true);
                 const saveToken = currentToken;
                 const saveParseDiagnosticsLength = parseDiagnostics.length;
                 const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
@@ -6381,7 +6373,6 @@ namespace ts {
                 currentToken = saveToken;
                 parseDiagnostics.length = saveParseDiagnosticsLength;
                 parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
-                factory.setSkipTransformationFlags(saveSkipTransformationFlags);
                 return comment;
             }
 
