@@ -394,6 +394,8 @@ declare namespace FourSlashInterface {
         noMoveToNewFile(): void;
 
         generateTypes(...options: GenerateTypesOptions[]): void;
+
+        organizeImports(newContent: string): void;
     }
     class edit {
         backspace(count?: number): void;
