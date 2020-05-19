@@ -152,10 +152,10 @@ You can specify which browser to use for debugging. Currently, Chrome and IE are
 gulp runtests-browser --tests=2dArrays --browser=chrome
 ```
 
-You can debug with VS Code or Node instead with `gulp runtests --inspect=true`:
+You can debug with VS Code or Node instead with `gulp runtests --inspect`:
 
 ```Shell
-gulp runtests --tests=2dArrays --inspect=true
+gulp runtests --tests=2dArrays --inspect
 ```
 
 You can also use the [provided VS Code launch configuration](./.vscode/launch.template.json) to launch a debug session for an open test file. Rename the file 'launch.json', open the test file of interest, and launch the debugger from the debug panel (or press F5).
