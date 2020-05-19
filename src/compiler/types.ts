@@ -328,6 +328,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        NamedTupleMember,
         ImportType,
         // Binding patterns
         ObjectBindingPattern,
@@ -700,6 +701,7 @@ namespace ts {
         | ConstructorTypeNode
         | JSDocFunctionType
         | ExportDeclaration
+        | NamedTupleMember
         | EndOfFileToken;
 
     export type HasType =
@@ -1274,7 +1276,15 @@ namespace ts {
 
     export interface TupleTypeNode extends TypeNode {
         kind: SyntaxKind.TupleType;
-        elementTypes: NodeArray<TypeNode>;
+        elements: NodeArray<TypeNode | NamedTupleMember>;
+    }
+
+    export interface NamedTupleMember extends TypeNode, JSDocContainer, Declaration {
+        kind: SyntaxKind.NamedTupleMember;
+        dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
+        name: Identifier;
+        questionToken?: Token<SyntaxKind.QuestionToken>;
+        type: TypeNode;
     }
 
     export interface OptionalTypeNode extends TypeNode {
@@ -1478,6 +1488,7 @@ namespace ts {
         kind: SyntaxKind.SyntheticExpression;
         isSpread: boolean;
         type: Type;
+        tupleNameSource?: ParameterDeclaration | NamedTupleMember;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -2590,6 +2601,7 @@ namespace ts {
         text: string;
         pos: -1;
         end: -1;
+        hasLeadingNewline?: boolean;
     }
 
     // represents a top level: { type } expression in a JSDoc comment.
@@ -3495,7 +3507,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
-        /* @internal */ getExpandedParameters(sig: Signature): readonly Symbol[];
+        /* @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
         /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
@@ -4148,6 +4160,7 @@ namespace ts {
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
         isConstructorDeclaredProperty?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
+        tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     }
 
     /* @internal */
@@ -4618,7 +4631,7 @@ namespace ts {
         minLength: number;
         hasRestElement: boolean;
         readonly: boolean;
-        associatedNames?: __String[];
+        labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
     }
 
     export interface TupleTypeReference extends TypeReference {
@@ -6559,7 +6572,8 @@ namespace ts {
         SingleLineTypeLiteralMembers = SingleLine | SpaceBetweenBraces | SpaceBetweenSiblings,
         MultiLineTypeLiteralMembers = MultiLine | Indented | OptionalIfEmpty,
 
-        TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        SingleLineTupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        MultiLineTupleTypeElements = CommaDelimited | Indented | SpaceBetweenSiblings | MultiLine,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
         ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,

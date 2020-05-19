@@ -145,6 +145,11 @@ namespace ts.refactor {
                     }
                 }
             }
+
+            if (file && isTupleTypeNode(node) && (getLineAndCharacterOfPosition(file, node.pos).line === getLineAndCharacterOfPosition(file, node.end).line)) {
+                setEmitFlags(node, EmitFlags.SingleLine);
+            }
+
             return forEachChild(node, visitor);
         }
     }
