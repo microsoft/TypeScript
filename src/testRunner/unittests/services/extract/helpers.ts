@@ -86,7 +86,7 @@ namespace ts {
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const program = makeProgram({ path, content: t.source }, includeLib);
+            const { program, autoImportProvider } = makeProgram({ path, content: t.source }, includeLib);
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -98,6 +98,7 @@ namespace ts {
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 program,
+                autoImportProvider,
                 file: sourceFile,
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
@@ -121,7 +122,7 @@ namespace ts {
                 const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
                 data.push(newTextWithRename);
 
-                const diagProgram = makeProgram({ path, content: newText }, includeLib);
+                const { program: diagProgram } = makeProgram({ path, content: newText }, includeLib);
                 assert.isFalse(hasSyntacticDiagnostics(diagProgram));
             }
             Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
@@ -132,7 +133,8 @@ namespace ts {
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
-            return program;
+            const autoImportProvider = projectService.inferredProjects[0].getLanguageService().getAutoImportProvider();
+            return { program, autoImportProvider };
         }
 
         function hasSyntacticDiagnostics(program: Program) {
@@ -156,10 +158,12 @@ namespace ts {
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
             const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
+            const autoImportProvider = projectService.inferredProjects[0].getLanguageService().getAutoImportProvider();
             const sourceFile = program.getSourceFile(f.path)!;
             const context: RefactorContext = {
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 program,
+                autoImportProvider,
                 file: sourceFile,
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,

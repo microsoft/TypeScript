@@ -25,6 +25,7 @@ namespace ts.codefix {
 
     export interface TypeConstructionContext {
         program: Program;
+        autoImportProvider: Program | undefined;
         host: LanguageServiceHost;
     }
 

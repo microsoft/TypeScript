@@ -283,7 +283,7 @@ namespace ts {
         /* @internal */
         useSourceOfProjectReferenceRedirect?(): boolean;
         /* @internal */
-        getAutoImportProvider?(): Program | undefined;
+        usePackageJsonAutoImportProvider?(): boolean;
     }
 
     /* @internal */
@@ -482,6 +482,7 @@ namespace ts {
         getProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
+        /* @internal */ getAutoImportProvider(): Program | undefined;
 
         dispose(): void;
     }
@@ -1369,6 +1370,7 @@ namespace ts {
     export interface CodeFixContextBase extends textChanges.TextChangesContext {
         sourceFile: SourceFile;
         program: Program;
+        autoImportProvider: Program | undefined;
         cancellationToken: CancellationToken;
         preferences: UserPreferences;
     }
@@ -1399,6 +1401,7 @@ namespace ts {
         startPosition: number;
         endPosition?: number;
         program: Program;
+        autoImportProvider: Program | undefined;
         cancellationToken?: CancellationToken;
         preferences: UserPreferences;
     }

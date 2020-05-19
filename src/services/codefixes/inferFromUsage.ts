@@ -49,21 +49,21 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { sourceFile, program, span: { start }, errorCode, cancellationToken, host, preferences } = context;
+            const { sourceFile, program, autoImportProvider, span: { start }, errorCode, cancellationToken, host, preferences } = context;
 
             const token = getTokenAtPosition(sourceFile, start);
             let declaration: Declaration | undefined;
-            const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeen*/ returnTrue, host, preferences); });
+            const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, autoImportProvider, cancellationToken, /*markSeen*/ returnTrue, host, preferences); });
             const name = declaration && getNameOfDeclaration(declaration);
             return !name || changes.length === 0 ? undefined
                 : [createCodeFixAction(fixId, changes, [getDiagnostic(errorCode, token), name.getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
-            const { sourceFile, program, cancellationToken, host, preferences } = context;
+            const { sourceFile, program, autoImportProvider, cancellationToken, host, preferences } = context;
             const markSeen = nodeSeenTracker();
             return codeFixAll(context, errorCodes, (changes, err) => {
-                doChange(changes, sourceFile, getTokenAtPosition(err.file, err.start), err.code, program, cancellationToken, markSeen, host, preferences);
+                doChange(changes, sourceFile, getTokenAtPosition(err.file, err.start), err.code, program, autoImportProvider, cancellationToken, markSeen, host, preferences);
             });
         },
     });
@@ -106,13 +106,13 @@ namespace ts.codefix {
         return errorCode;
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): Declaration | undefined {
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, autoImportProvider: Program | undefined, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): Declaration | undefined {
         if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken && token.kind !== SyntaxKind.ThisKeyword) {
             return undefined;
         }
 
         const { parent } = token;
-        const importAdder = createImportAdder(sourceFile, program, preferences, host);
+        const importAdder = createImportAdder(sourceFile, program, autoImportProvider, preferences, host);
         errorCode = mapSuggestionDiagnostic(errorCode);
         switch (errorCode) {
             // Variable and Property declarations

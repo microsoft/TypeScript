@@ -285,6 +285,7 @@ interface Array<T> {}`
             const path = "/a" + extension;
             const languageService = makeLanguageService({ path, content: t.source }, includeLib);
             const program = languageService.getProgram()!;
+            const autoImportProvider = languageService.getAutoImportProvider();
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -303,6 +304,7 @@ interface Array<T> {}`
                 span: { start: selectionRange.pos, length: selectionRange.end - selectionRange.pos },
                 sourceFile,
                 program,
+                autoImportProvider,
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 preferences: emptyOptions,
                 host: notImplementedHost,

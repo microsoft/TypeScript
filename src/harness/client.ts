@@ -789,7 +789,11 @@ namespace ts.server {
         }
 
         getProgram(): Program {
-            throw new Error("SourceFile objects are not serializable through the server protocol.");
+            throw new Error("Program objects are not serializable through the server protocol.");
+        }
+
+        getAutoImportProvider(): Program | undefined {
+            throw new Error("Program objects are not serializable through the server protocol.");
         }
 
         getNonBoundSourceFile(_fileName: string): SourceFile {

@@ -676,8 +676,6 @@ namespace ts.server {
 
         readonly usePackageJsonAutoImportProvider: boolean;
         /*@internal*/
-        packageJsonAutoImportProvider?: Program;
-        /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
         private packageJsonFilesMap: Map<FileWatcher> | undefined;
@@ -2051,58 +2049,6 @@ namespace ts.server {
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
-
-            if (this.usePackageJsonAutoImportProvider) {
-                this.packageJsonCache.searchDirectoryAndAncestors(this.toPath(project.getCurrentDirectory()));
-                this.createOrUpdatePackageJsonAutoImportProvider();
-            }
-        }
-
-        private createOrUpdatePackageJsonAutoImportProvider() {
-            if (!this.usePackageJsonAutoImportProvider) {
-                return;
-            }
-
-            const start = timestamp();
-            const rootNames: string[] = [];
-            const options = {
-                noLib: true,
-                skipLibCheck: true,
-                diagnostics: false
-            };
-
-            this.packageJsonCache.forEach(packageJson => {
-                if (packageJson.dependencies) {
-                    packageJson.dependencies.forEach((_, dep) => {
-                        if (!startsWith(dep, "@types/")) {
-                            const resolved = resolveTypeReferenceDirective(dep, packageJson.fileName, options, this.host);
-                            if (resolved.resolvedTypeReferenceDirective?.resolvedFileName) {
-                                rootNames.push(resolved.resolvedTypeReferenceDirective.resolvedFileName);
-                            }
-                        }
-                    });
-                }
-                if (packageJson.devDependencies) {
-                    packageJson.devDependencies.forEach((_, dep) => {
-                        if (!startsWith(dep, "@types/")) {
-                            const resolved = resolveTypeReferenceDirective(dep, packageJson.fileName, options, this.host);
-                            if (resolved.resolvedTypeReferenceDirective?.resolvedFileName) {
-                                rootNames.push(resolved.resolvedTypeReferenceDirective.resolvedFileName);
-                            }
-                        }
-                    });
-                }
-            });
-
-            this.packageJsonAutoImportProvider = createProgram({
-                options,
-                rootNames,
-                oldProgram: this.packageJsonAutoImportProvider
-            });
-            this.logger.info(`createOrUpdatePackageJsonAutoImportProvider: ${timestamp() - start} ms`);
-            if (this.host.getMemoryUsage) {
-                this.logger.info(`Memory usage: ${this.host.getMemoryUsage()}`);
-            }
         }
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {
@@ -3774,7 +3720,6 @@ namespace ts.server {
             const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
             if (!watchers.has(path)) {
                 const project = this.getDefaultProjectForFile(asNormalizedPath(path), /*ensureProject*/ false);
-                this.createOrUpdatePackageJsonAutoImportProvider();
                 watchers.set(path, this.watchFactory.watchFile(
                     this.host,
                     path,
@@ -3785,11 +3730,9 @@ namespace ts.server {
                                 return Debug.fail();
                             case FileWatcherEventKind.Changed:
                                 this.packageJsonCache.addOrUpdate(path);
-                                this.createOrUpdatePackageJsonAutoImportProvider();
                                 break;
                             case FileWatcherEventKind.Deleted:
                                 this.packageJsonCache.delete(path);
-                                this.createOrUpdatePackageJsonAutoImportProvider();
                                 watchers.get(path)!.close();
                                 watchers.delete(path);
                         }

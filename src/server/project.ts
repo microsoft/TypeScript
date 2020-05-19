@@ -1543,8 +1543,8 @@ namespace ts.server {
             return this.importSuggestionsCache;
         }
 
-        getAutoImportProvider() {
-            return this.projectService.packageJsonAutoImportProvider;
+        usePackageJsonAutoImportProvider() {
+            return this.projectService.usePackageJsonAutoImportProvider;
         }
     }
 

@@ -720,7 +720,7 @@ namespace ts.refactor.extractSymbol {
 
         const checker = context.program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
-        const importAdder = codefix.createImportAdder(context.file, context.program, context.preferences, context.host);
+        const importAdder = codefix.createImportAdder(context.file, context.program, context.autoImportProvider, context.preferences, context.host);
 
         // Make a unique name for the extracted function
         const file = scope.getSourceFile();

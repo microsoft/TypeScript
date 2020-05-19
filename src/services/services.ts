@@ -1171,6 +1171,7 @@ namespace ts {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let program: Program;
+        let autoImportProvider: Program | undefined;
         let lastProjectVersion: string;
         let lastTypesRootVersion = 0;
 
@@ -1311,6 +1312,10 @@ namespace ts {
             };
             program = createProgram(options);
 
+            if (host.usePackageJsonAutoImportProvider?.()) {
+                autoImportProvider = createPackageJsonAutoImportProvider(compilerHost, newSettings);
+            }
+
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
             hostCache = undefined;
@@ -1341,13 +1346,6 @@ namespace ts {
                     return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
                 }
                 return host.readFile && host.readFile(fileName);
-            }
-
-            // Release any files we have acquired in the old program but are
-            // not part of the new program.
-            function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
-                const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
-                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey);
             }
 
             function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -1409,6 +1407,76 @@ namespace ts {
             }
         }
 
+        // Release any files we have acquired in the old program but are
+        // not part of the new program.
+        function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
+            if (!autoImportProvider?.getSourceFileByPath(oldSourceFile.path)) {
+                const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
+                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey);
+            }
+        }
+
+        function onReleaseOldSourceFileFromAutoImportProvider(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
+            if (!program.getSourceFileByPath(oldSourceFile.path)) {
+                const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
+                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey);
+            }
+        }
+
+        function createPackageJsonAutoImportProvider(compilerHost: CompilerHost, compilerOptions: CompilerOptions): Program | undefined {
+            if (!host.getPackageJsonsVisibleToFile || !host.resolveModuleNames) {
+                return;
+            }
+            let dependencyNames: Map<true> | undefined;
+            const rootFileName = combinePaths(currentDirectory, "__inferred auto import dependencies__.ts");
+            const packageJsons = host.getPackageJsonsVisibleToFile(combinePaths(currentDirectory, rootFileName));
+            for (const packageJson of packageJsons) {
+                packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
+                packageJson.devDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
+            }
+            if (!dependencyNames) {
+                return;
+            }
+
+            const options: CompilerOptions = {
+                ...compilerOptions,
+                noLib: true,
+                diagnostics: false,
+                skipLibCheck: true,
+                types: emptyArray
+            };
+
+            const resolutions = host.resolveModuleNames(
+                arrayFrom(dependencyNames.keys()),
+                rootFileName,
+                /*reusedNames*/ undefined,
+                /*redirectedReference*/ undefined,
+                options);
+
+            let rootNames: string[] | undefined;
+            for (const resolution of resolutions) {
+                if (resolution && !program.getSourceFile(resolution.resolvedFileName)) {
+                    rootNames = append(rootNames, resolution.resolvedFileName);
+                }
+            }
+
+            return rootNames && createProgram({
+                rootNames,
+                options,
+                host: {
+                    ...compilerHost,
+                    onReleaseOldSourceFile: onReleaseOldSourceFileFromAutoImportProvider
+                },
+                oldProgram: autoImportProvider
+            });
+
+            function addDependency(dependency: string) {
+                if (!startsWith(dependency, "@types")) {
+                    (dependencyNames || (dependencyNames = createMap())).set(dependency, true);
+                }
+            }
+        }
+
         // TODO: GH#18217 frequently asserted as defined
         function getProgram(): Program | undefined {
             if (syntaxOnly) {
@@ -1419,6 +1487,11 @@ namespace ts {
             synchronizeHostData();
 
             return program;
+        }
+
+        function getAutoImportProvider(): Program | undefined {
+            synchronizeHostData();
+            return autoImportProvider;
         }
 
         function cleanupSemanticCache(): void {
@@ -1490,7 +1563,8 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 fullPreferences,
-                options.triggerCharacter);
+                options.triggerCharacter,
+                autoImportProvider);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions): CompletionEntryDetails | undefined {
@@ -1505,12 +1579,13 @@ namespace ts {
                 (formattingOptions && formatting.getFormatContext(formattingOptions))!, // TODO: GH#18217
                 preferences,
                 cancellationToken,
+                autoImportProvider,
             );
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, name: string, source?: string, preferences: UserPreferences = emptyOptions): Symbol | undefined {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
+            return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences, autoImportProvider);
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined {
@@ -1875,7 +1950,7 @@ namespace ts {
 
             return flatMap(deduplicate<number>(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
-                return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext, preferences });
+                return codefix.getFixes({ errorCode, sourceFile, span, program, autoImportProvider, host, cancellationToken, formatContext, preferences });
             });
         }
 
@@ -1885,7 +1960,7 @@ namespace ts {
             const sourceFile = getValidSourceFile(scope.fileName);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
+            return codefix.getAllFixes({ fixId, sourceFile, program, autoImportProvider, host, cancellationToken, formatContext, preferences });
         }
 
         function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
@@ -2140,6 +2215,7 @@ namespace ts {
                 startPosition,
                 endPosition,
                 program: getProgram()!,
+                autoImportProvider,
                 host,
                 formatContext: formatting.getFormatContext(formatOptions!), // TODO: GH#18217
                 cancellationToken,
@@ -2241,6 +2317,7 @@ namespace ts {
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram,
+            getAutoImportProvider,
             getApplicableRefactors,
             getEditsForRefactor,
             toLineColumnOffset: sourceMapper.toLineColumnOffset,
