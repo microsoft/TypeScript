@@ -42,6 +42,10 @@ namespace ts.OutliningElementsCollector {
                 addOutliningForLeadingCommentsForNode(n.parent.parent.parent, sourceFile, cancellationToken, out);
             }
 
+            if (isFunctionLike(n) && isBinaryExpression(n.parent) && isPropertyAccessExpression(n.parent.left)) {
+                addOutliningForLeadingCommentsForNode(n.parent.left, sourceFile, cancellationToken, out);
+            }
+
             const span = getOutliningSpanForNode(n, sourceFile);
             if (span) out.push(span);
 
@@ -200,6 +204,7 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.CaseBlock:
             case SyntaxKind.TypeLiteral:
+            case SyntaxKind.ObjectBindingPattern:
                 return spanForNode(n);
             case SyntaxKind.TupleType:
                 return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isTupleTypeNode(n.parent), SyntaxKind.OpenBracketToken);

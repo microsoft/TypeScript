@@ -407,7 +407,7 @@ namespace ts {
             case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.enumMemberElement;
-            case SyntaxKind.Parameter: return hasModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+            case SyntaxKind.Parameter: return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
@@ -2085,9 +2085,9 @@ namespace ts {
     /**
      * The default is CRLF.
      */
-    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost, formatSettings?: FormatCodeSettings) {
-        return (formatSettings && formatSettings.newLineCharacter) ||
-            (host.getNewLine && host.getNewLine()) ||
+    export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings?: FormatCodeSettings) {
+        return formatSettings?.newLineCharacter ||
+            host.getNewLine?.() ||
             carriageReturnLineFeed;
     }
 

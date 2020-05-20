@@ -486,7 +486,7 @@ namespace ts {
         }
 
         function visitVariableStatement(node: VariableStatement): VisitResult<VariableStatement> {
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 const savedExportedVariableStatement = exportedVariableStatement;
                 exportedVariableStatement = true;
                 const visited = visitEachChild(node, visitor, context);

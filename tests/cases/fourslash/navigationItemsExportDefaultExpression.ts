@@ -5,6 +5,13 @@
 //// export default () => ""
 //// export default abc;
 //// export default class AB {}
+//// export default {
+////     a: 1,
+////     b: 1,
+////     c: {
+////         d: 1
+////     }
+//// }
 
 verify.navigationTree({
   "text": '"navigationItemsExportDefaultExpression"',
@@ -19,6 +26,31 @@ verify.navigationTree({
       "text": "default",
       "kind": "function",
       "kindModifiers": "export"
+    },
+    {
+      "text": "default",
+      "kind": "const",
+      "kindModifiers": "export",
+      "childItems": [
+        {
+          "text": "a",
+          "kind": "property"
+        },
+        {
+          "text": "b",
+          "kind": "property"
+        },
+        {
+          "text": "c",
+          "kind": "property",
+          "childItems": [
+            {
+              "text": "d",
+              "kind": "property"
+            }
+          ]
+        }
+      ]
     },
     {
       "text": "AB",

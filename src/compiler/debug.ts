@@ -376,7 +376,7 @@ namespace ts {
                     Object.defineProperties(ctor.prototype, {
                         __debugKind: { get(this: Node) { return formatSyntaxKind(this.kind); } },
                         __debugNodeFlags: { get(this: Node) { return formatNodeFlags(this.flags); } },
-                        __debugModifierFlags: { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
+                        __debugModifierFlags: { get(this: Node) { return formatModifierFlags(getEffectiveModifierFlagsNoCache(this)); } },
                         __debugTransformFlags: { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
                         __debugIsParseTreeNode: { get(this: Node) { return isParseTreeNode(this); } },
                         __debugEmitFlags: { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },

@@ -1370,8 +1370,8 @@ namespace ts {
 
     export function isValidESSymbolDeclaration(node: Node): node is VariableDeclaration | PropertyDeclaration | SignatureDeclaration {
         return isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
-            isPropertyDeclaration(node) ? hasReadonlyModifier(node) && hasStaticModifier(node) :
-            isPropertySignature(node) && hasReadonlyModifier(node);
+            isPropertyDeclaration(node) ? hasEffectiveReadonlyModifier(node) && hasStaticModifier(node) :
+            isPropertySignature(node) && hasEffectiveReadonlyModifier(node);
     }
 
     export function introducesArgumentsExoticObject(node: Node) {
@@ -2471,7 +2471,7 @@ namespace ts {
             : undefined;
     }
 
-    export function getJSDocCommentsAndTags(hostNode: Node): readonly (JSDoc | JSDocTag)[] {
+    export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): readonly (JSDoc | JSDocTag)[] {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
         if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
@@ -2485,11 +2485,11 @@ namespace ts {
             }
 
             if (node.kind === SyntaxKind.Parameter) {
-                result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
+                result = addRange(result, (noCache ? getJSDocParameterTagsNoCache : getJSDocParameterTags)(node as ParameterDeclaration));
                 break;
             }
             if (node.kind === SyntaxKind.TypeParameter) {
-                result = addRange(result, getJSDocTypeParameterTags(node as TypeParameterDeclaration));
+                result = addRange(result, (noCache ? getJSDocTypeParameterTagsNoCache : getJSDocTypeParameterTags)(node as TypeParameterDeclaration));
                 break;
             }
             node = getNextJSDocCommentLocation(node);
@@ -3007,7 +3007,7 @@ namespace ts {
                 // falls through
 
             case SyntaxKind.ArrowFunction:
-                if (hasModifier(node, ModifierFlags.Async)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Async)) {
                     flags |= FunctionFlags.Async;
                 }
                 break;
@@ -3028,7 +3028,7 @@ namespace ts {
             case SyntaxKind.MethodDeclaration:
                 return (<FunctionLikeDeclaration>node).body !== undefined
                     && (<FunctionLikeDeclaration>node).asteriskToken === undefined
-                    && hasModifier(node, ModifierFlags.Async);
+                    && hasSyntacticModifier(node, ModifierFlags.Async);
         }
         return false;
     }
@@ -4017,7 +4017,7 @@ namespace ts {
         else {
             forEach(declarations, member => {
                 if (isAccessor(member)
-                    && hasModifier(member, ModifierFlags.Static) === hasModifier(accessor, ModifierFlags.Static)) {
+                    && hasSyntacticModifier(member, ModifierFlags.Static) === hasSyntacticModifier(accessor, ModifierFlags.Static)) {
                     const memberName = getPropertyNameForPropertyNameNode(member.name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
@@ -4312,61 +4312,112 @@ namespace ts {
         return currentLineIndent;
     }
 
-    export function hasModifiers(node: Node) {
-        return getModifierFlags(node) !== ModifierFlags.None;
+    export function hasEffectiveModifiers(node: Node) {
+        return getEffectiveModifierFlags(node) !== ModifierFlags.None;
     }
 
-    export function hasModifier(node: Node, flags: ModifierFlags): boolean {
-        return !!getSelectedModifierFlags(node, flags);
+    export function hasSyntacticModifiers(node: Node) {
+        return getSyntacticModifierFlags(node) !== ModifierFlags.None;
+    }
+
+    export function hasEffectiveModifier(node: Node, flags: ModifierFlags): boolean {
+        return !!getSelectedEffectiveModifierFlags(node, flags);
+    }
+
+    export function hasSyntacticModifier(node: Node, flags: ModifierFlags): boolean {
+        return !!getSelectedSyntacticModifierFlags(node, flags);
     }
 
     export function hasStaticModifier(node: Node): boolean {
-        return hasModifier(node, ModifierFlags.Static);
+        return hasSyntacticModifier(node, ModifierFlags.Static);
     }
 
-    export function hasReadonlyModifier(node: Node): boolean {
-        return hasModifier(node, ModifierFlags.Readonly);
+    export function hasEffectiveReadonlyModifier(node: Node): boolean {
+        return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
 
-    export function getSelectedModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
-        return getModifierFlags(node) & flags;
+    export function getSelectedEffectiveModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
+        return getEffectiveModifierFlags(node) & flags;
     }
 
-    export function getModifierFlags(node: Node): ModifierFlags {
+    export function getSelectedSyntacticModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
+        return getSyntacticModifierFlags(node) & flags;
+    }
+
+    function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {
         if (node.kind >= SyntaxKind.FirstToken && node.kind <= SyntaxKind.LastToken) {
             return ModifierFlags.None;
         }
-        if (node.modifierFlagsCache & ModifierFlags.HasComputedFlags) {
-            return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
+
+        if (!(node.modifierFlagsCache & ModifierFlags.HasComputedFlags)) {
+            node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
         }
 
-        const flags = getModifierFlagsNoCache(node);
-        node.modifierFlagsCache = flags | ModifierFlags.HasComputedFlags;
+        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && isInJSFile(node) && node.parent) {
+            node.modifierFlagsCache |= getJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
+        }
+
+        return node.modifierFlagsCache & ~(ModifierFlags.HasComputedFlags | ModifierFlags.HasComputedJSDocModifiers);
+    }
+
+    /**
+     * Gets the effective ModifierFlags for the provided node, including JSDoc modifiers. The modifiers will be cached on the node to improve performance.
+     *
+     * NOTE: This function may use `parent` pointers.
+     */
+    export function getEffectiveModifierFlags(node: Node): ModifierFlags {
+        return getModifierFlagsWorker(node, /*includeJSDoc*/ true);
+    }
+
+    /**
+     * Gets the ModifierFlags for syntactic modifiers on the provided node. The modifiers will be cached on the node to improve performance.
+     *
+     * NOTE: This function does not use `parent` pointers and will not include modifiers from JSDoc.
+     */
+    export function getSyntacticModifierFlags(node: Node): ModifierFlags {
+        return getModifierFlagsWorker(node, /*includeJSDoc*/ false);
+    }
+
+    function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
+        let flags = ModifierFlags.None;
+        if (isInJSFile(node) && !!node.parent && !isParameter(node)) {
+            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.Public;
+            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
+            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
+            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
+        }
         return flags;
     }
 
-    export function getModifierFlagsNoCache(node: Node): ModifierFlags {
-        let flags = ModifierFlags.None;
-        if (node.modifiers) {
-            for (const modifier of node.modifiers) {
-                flags |= modifierToFlag(modifier.kind);
-            }
-        }
+    /**
+     * Gets the effective ModifierFlags for the provided node, including JSDoc modifiers. The modifier flags cache on the node is ignored.
+     *
+     * NOTE: This function may use `parent` pointers.
+     */
+    export function getEffectiveModifierFlagsNoCache(node: Node): ModifierFlags {
+        return getSyntacticModifierFlagsNoCache(node) | getJSDocModifierFlagsNoCache(node);
+    }
 
-        if (isInJSFile(node) && !!node.parent) {
-            // getModifierFlagsNoCache should only be called when parent pointers are set,
-            // or when !(node.flags & NodeFlags.Synthesized) && node.kind !== SyntaxKind.SourceFile)
-            const tags = (getJSDocPublicTag(node) ? ModifierFlags.Public : ModifierFlags.None)
-                | (getJSDocPrivateTag(node) ? ModifierFlags.Private : ModifierFlags.None)
-                | (getJSDocProtectedTag(node) ? ModifierFlags.Protected : ModifierFlags.None)
-                | (getJSDocReadonlyTag(node) ? ModifierFlags.Readonly : ModifierFlags.None);
-            flags |= tags;
-        }
-
+    /**
+     * Gets the ModifierFlags for syntactic modifiers on the provided node. The modifier flags cache on the node is ignored.
+     *
+     * NOTE: This function does not use `parent` pointers and will not include modifiers from JSDoc.
+     */
+    export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
+        let flags = modifiersToFlags(node.modifiers);
         if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (<Identifier>node).isInJSDocNamespace)) {
             flags |= ModifierFlags.Export;
         }
+        return flags;
+    }
 
+    export function modifiersToFlags(modifiers: NodeArray<Modifier> | undefined) {
+        let flags = ModifierFlags.None;
+        if (modifiers) {
+            for (const modifier of modifiers) {
+                flags |= modifierToFlag(modifier.kind);
+            }
+        }
         return flags;
     }
 
@@ -4507,7 +4558,7 @@ namespace ts {
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
-        return symbol && length(symbol.declarations) > 0 && hasModifier(symbol.declarations[0], ModifierFlags.Default);
+        return symbol && length(symbol.declarations) > 0 && hasSyntacticModifier(symbol.declarations[0], ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
@@ -5055,7 +5106,7 @@ namespace ts {
     export function isAbstractConstructorSymbol(symbol: Symbol): boolean {
         if (symbol.flags & SymbolFlags.Class) {
             const declaration = getClassLikeDeclarationOfSymbol(symbol);
-            return !!declaration && hasModifier(declaration, ModifierFlags.Abstract);
+            return !!declaration && hasSyntacticModifier(declaration, ModifierFlags.Abstract);
         }
         return false;
     }
@@ -6365,7 +6416,7 @@ namespace ts {
         if (node.kind !== SyntaxKind.ComputedPropertyName) {
             return false;
         }
-        if (hasModifier(node.parent, ModifierFlags.Abstract)) {
+        if (hasSyntacticModifier(node.parent, ModifierFlags.Abstract)) {
             return true;
         }
         const containerKind = node.parent.parent.kind;

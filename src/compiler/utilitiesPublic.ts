@@ -255,7 +255,7 @@ namespace ts {
 
     export type ParameterPropertyDeclaration = ParameterDeclaration & { parent: ConstructorDeclaration, name: Identifier };
     export function isParameterPropertyDeclaration(node: Node, parent: Node): node is ParameterPropertyDeclaration {
-        return hasModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
+        return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) && parent.kind === SyntaxKind.Constructor;
     }
 
     export function isEmptyBindingPattern(node: BindingName): node is BindingPattern {
@@ -299,7 +299,7 @@ namespace ts {
     }
 
     export function getCombinedModifierFlags(node: Declaration): ModifierFlags {
-        return getCombinedFlags(node, getModifierFlags);
+        return getCombinedFlags(node, getEffectiveModifierFlags);
     }
 
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
@@ -609,6 +609,25 @@ namespace ts {
         }
     }
 
+    function getJSDocParameterTagsWorker(param: ParameterDeclaration, noCache?: boolean): readonly JSDocParameterTag[] {
+        if (param.name) {
+            if (isIdentifier(param.name)) {
+                const name = param.name.escapedText;
+                return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
+            }
+            else {
+                const i = param.parent.parameters.indexOf(param);
+                Debug.assert(i > -1, "Parameters should always be in their parents' parameter list");
+                const paramTags = getJSDocTagsWorker(param.parent, noCache).filter(isJSDocParameterTag);
+                if (i < paramTags.length) {
+                    return [paramTags[i]];
+                }
+            }
+        }
+        // return empty array for: out-of-order binding patterns and JSDoc function syntax, which has un-named parameters
+        return emptyArray;
+    }
+
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
@@ -622,22 +641,18 @@ namespace ts {
      * For binding patterns, parameter tags are matched by position.
      */
     export function getJSDocParameterTags(param: ParameterDeclaration): readonly JSDocParameterTag[] {
-        if (param.name) {
-            if (isIdentifier(param.name)) {
-                const name = param.name.escapedText;
-                return getJSDocTags(param.parent).filter((tag): tag is JSDocParameterTag => isJSDocParameterTag(tag) && isIdentifier(tag.name) && tag.name.escapedText === name);
-            }
-            else {
-                const i = param.parent.parameters.indexOf(param);
-                Debug.assert(i > -1, "Parameters should always be in their parents' parameter list");
-                const paramTags = getJSDocTags(param.parent).filter(isJSDocParameterTag);
-                if (i < paramTags.length) {
-                    return [paramTags[i]];
-                }
-            }
-        }
-        // return empty array for: out-of-order binding patterns and JSDoc function syntax, which has un-named parameters
-        return emptyArray;
+        return getJSDocParameterTagsWorker(param, /*noCache*/ false);
+    }
+
+    /* @internal */
+    export function getJSDocParameterTagsNoCache(param: ParameterDeclaration): readonly JSDocParameterTag[] {
+        return getJSDocParameterTagsWorker(param, /*noCache*/ true);
+    }
+
+    function getJSDocTypeParameterTagsWorker(param: TypeParameterDeclaration, noCache?: boolean): readonly JSDocTemplateTag[] {
+        const name = param.name.escapedText;
+        return getJSDocTagsWorker(param.parent, noCache).filter((tag): tag is JSDocTemplateTag =>
+            isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
     }
 
     /**
@@ -651,9 +666,12 @@ namespace ts {
      * tag on the containing function expression would be first.
      */
     export function getJSDocTypeParameterTags(param: TypeParameterDeclaration): readonly JSDocTemplateTag[] {
-        const name = param.name.escapedText;
-        return getJSDocTags(param.parent).filter((tag): tag is JSDocTemplateTag =>
-            isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
+        return getJSDocTypeParameterTagsWorker(param, /*noCache*/ false);
+    }
+
+    /* @internal */
+    export function getJSDocTypeParameterTagsNoCache(param: TypeParameterDeclaration): readonly JSDocTemplateTag[] {
+        return getJSDocTypeParameterTagsWorker(param, /*noCache*/ true);
     }
 
     /**
@@ -686,9 +704,19 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocPublicTag);
     }
 
+    /*@internal*/
+    export function getJSDocPublicTagNoCache(node: Node): JSDocPublicTag | undefined {
+        return getFirstJSDocTag(node, isJSDocPublicTag, /*noCache*/ true);
+    }
+
     /** Gets the JSDoc private tag for the node if present */
     export function getJSDocPrivateTag(node: Node): JSDocPrivateTag | undefined {
         return getFirstJSDocTag(node, isJSDocPrivateTag);
+    }
+
+    /*@internal*/
+    export function getJSDocPrivateTagNoCache(node: Node): JSDocPrivateTag | undefined {
+        return getFirstJSDocTag(node, isJSDocPrivateTag, /*noCache*/ true);
     }
 
     /** Gets the JSDoc protected tag for the node if present */
@@ -696,9 +724,19 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocProtectedTag);
     }
 
+    /*@internal*/
+    export function getJSDocProtectedTagNoCache(node: Node): JSDocProtectedTag | undefined {
+        return getFirstJSDocTag(node, isJSDocProtectedTag, /*noCache*/ true);
+    }
+
     /** Gets the JSDoc protected tag for the node if present */
     export function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined {
         return getFirstJSDocTag(node, isJSDocReadonlyTag);
+    }
+
+    /*@internal*/
+    export function getJSDocReadonlyTagNoCache(node: Node): JSDocReadonlyTag | undefined {
+        return getFirstJSDocTag(node, isJSDocReadonlyTag, /*noCache*/ true);
     }
 
     /** Gets the JSDoc enum tag for the node if present */
@@ -775,21 +813,33 @@ namespace ts {
         }
     }
 
-    /** Get all JSDoc tags related to a node, including those on parent nodes. */
-    export function getJSDocTags(node: Node): readonly JSDocTag[] {
+    function getJSDocTagsWorker(node: Node, noCache?: boolean): readonly JSDocTag[] {
         let tags = (node as JSDocContainer).jsDocCache;
         // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
-        if (tags === undefined) {
-            const comments = getJSDocCommentsAndTags(node);
+        if (tags === undefined || noCache) {
+            const comments = getJSDocCommentsAndTags(node, noCache);
             Debug.assert(comments.length < 2 || comments[0] !== comments[1]);
-            (node as JSDocContainer).jsDocCache = tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
+            tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
+            if (!noCache) {
+                (node as JSDocContainer).jsDocCache = tags;
+            }
         }
         return tags;
     }
 
+    /** Get all JSDoc tags related to a node, including those on parent nodes. */
+    export function getJSDocTags(node: Node): readonly JSDocTag[] {
+        return getJSDocTagsWorker(node, /*noCache*/ false);
+    }
+
+    /* @internal */
+    export function getJSDocTagsNoCache(node: Node): readonly JSDocTag[] {
+        return getJSDocTagsWorker(node, /*noCache*/ true);
+    }
+
     /** Get the first JSDoc tag of a specified kind, or undefined if not present. */
-    function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T): T | undefined {
-        return find(getJSDocTags(node), predicate);
+    function getFirstJSDocTag<T extends JSDocTag>(node: Node, predicate: (tag: JSDocTag) => tag is T, noCache?: boolean): T | undefined {
+        return find(getJSDocTagsWorker(node, noCache), predicate);
     }
 
     /** Gets all JSDoc tags that match a specified predicate */
@@ -2235,13 +2285,13 @@ namespace ts {
 
     /* @internal */
     export function needsScopeMarker(result: Statement) {
-        return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
+        return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasSyntacticModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
     }
 
     /* @internal */
     export function isExternalModuleIndicator(result: Statement) {
         // Exported top-level member indicates moduleness
-        return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
+        return isAnyImportOrReExport(result) || isExportAssignment(result) || hasSyntacticModifier(result, ModifierFlags.Export);
     }
 
     /* @internal */
