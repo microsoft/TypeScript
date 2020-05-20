@@ -102,7 +102,7 @@ namespace ts {
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatSettings),
+                formatContext: formatting.getFormatContext(testFormatSettings, notImplementedHost),
                 preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
@@ -164,7 +164,7 @@ namespace ts {
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatSettings),
+                formatContext: formatting.getFormatContext(testFormatSettings, notImplementedHost),
                 preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));

@@ -150,7 +150,7 @@ namespace ts {
      * returns a falsey value, then returns false.
      * If no such value is found, the callback is applied to each element of array and `true` is returned.
      */
-    export function every<T>(array: readonly T[], callback: (element: T, index: number) => boolean): boolean {
+    export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
         if (array) {
             for (let i = 0; i < array.length; i++) {
                 if (!callback(array[i], i)) {

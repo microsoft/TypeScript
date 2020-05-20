@@ -988,7 +988,7 @@ namespace ts {
             return initFlowNode({ flags: FlowFlags.SwitchClause, antecedent, switchStatement, clauseStart, clauseEnd });
         }
 
-        function createFlowMutation(flags: FlowFlags, antecedent: FlowNode, node: Node): FlowNode {
+        function createFlowMutation(flags: FlowFlags, antecedent: FlowNode, node: Expression | VariableDeclaration | ArrayBindingElement): FlowNode {
             setFlowNodeReferenced(antecedent);
             const result = initFlowNode({ flags, antecedent, node });
             if (currentExceptionTarget) {
@@ -1350,7 +1350,7 @@ namespace ts {
             // is potentially an assertion and is therefore included in the control flow.
             if (node.expression.kind === SyntaxKind.CallExpression) {
                 const call = <CallExpression>node.expression;
-                if (isDottedName(call.expression)) {
+                if (isDottedName(call.expression) && call.expression.kind !== SyntaxKind.SuperKeyword) {
                     currentFlow = createFlowCall(currentFlow, call);
                 }
             }
@@ -1767,6 +1767,9 @@ namespace ts {
                 }
                 else {
                     bindEachChild(node);
+                    if (node.expression.kind === SyntaxKind.SuperKeyword) {
+                        currentFlow = createFlowCall(currentFlow, node);
+                    }
                 }
             }
             if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
@@ -2484,6 +2487,9 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     return checkStrictModeIdentifier(<Identifier>node);
+                case SyntaxKind.SuperKeyword:
+                    node.flowNode = currentFlow;
+                    break;
                 case SyntaxKind.PrivateIdentifier:
                     return checkPrivateIdentifier(node as PrivateIdentifier);
                 case SyntaxKind.PropertyAccessExpression:

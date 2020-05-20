@@ -1018,6 +1018,10 @@ namespace ts {
                 }
             }
 
+            if (isTupleTypeNode(input) && (getLineAndCharacterOfPosition(currentSourceFile, input.pos).line === getLineAndCharacterOfPosition(currentSourceFile, input.end).line)) {
+                setEmitFlags(input, EmitFlags.SingleLine);
+            }
+
             return cleanup(visitEachChild(input, visitDeclarationSubtree, context));
 
             function cleanup<T extends Node>(returnValue: T | undefined): T | undefined {
