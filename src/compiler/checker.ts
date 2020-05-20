@@ -15367,7 +15367,9 @@ namespace ts {
         }
 
         function isEmptyAnonymousObjectType(type: Type) {
-            return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && isEmptyObjectType(type);
+            return !!(getObjectFlags(type) & ObjectFlags.Anonymous && (
+                (<ResolvedType>type).members && isEmptyResolvedType(<ResolvedType>type) ||
+                type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral && getMembersOfSymbol(type.symbol).size === 0));
         }
 
         function isStringIndexSignatureOnlyType(type: Type): boolean {
