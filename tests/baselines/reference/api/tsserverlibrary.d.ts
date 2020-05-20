@@ -4272,11 +4272,11 @@ declare namespace ts {
     function createJSDocParameterTag(typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string): JSDocParameterTag;
     function createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
     function createJSDocImplementsTag(classExpression: JSDocImplementsTag["class"], comment?: string): JSDocImplementsTag;
-    function createJSDocAuthorTag(comment?: string): JSDocTag;
-    function createJSDocPublicTag(): JSDocTag;
-    function createJSDocPrivateTag(): JSDocTag;
-    function createJSDocProtectedTag(): JSDocTag;
-    function createJSDocReadonlyTag(): JSDocTag;
+    function createJSDocAuthorTag(comment?: string): JSDocAuthorTag;
+    function createJSDocPublicTag(): JSDocPublicTag;
+    function createJSDocPrivateTag(): JSDocPrivateTag;
+    function createJSDocProtectedTag(): JSDocProtectedTag;
+    function createJSDocReadonlyTag(): JSDocReadonlyTag;
     function appendJSDocToContainer(node: JSDocContainer, jsdoc: JSDoc): JSDocContainer;
     function createJsxElement(openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement): JsxElement;
     function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement): JsxElement;
