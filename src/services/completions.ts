@@ -875,7 +875,7 @@ namespace ts.Completions {
                     //    *         |c|
                     //    */
                     const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                    if (!(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/))) {
+                    if (!/[^\*|\s(/)]/.test(sourceFile.text.substring(lineStart, position))) {
                         return { kind: CompletionDataKind.JsDocTag };
                     }
                 }
@@ -1990,7 +1990,7 @@ namespace ts.Completions {
             if (!isClassLike(decl)) return GlobalsSearch.Success;
 
             const classElement = contextToken.kind === SyntaxKind.SemicolonToken ? contextToken.parent.parent : contextToken.parent;
-            let classElementModifierFlags = isClassElement(classElement) ? getModifierFlags(classElement) : ModifierFlags.None;
+            let classElementModifierFlags = isClassElement(classElement) ? getEffectiveModifierFlags(classElement) : ModifierFlags.None;
             // If this is context token is not something we are editing now, consider if this would lead to be modifier
             if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
                 switch (contextToken.getText()) {
@@ -2409,12 +2409,12 @@ namespace ts.Completions {
                 }
 
                 // Dont filter member even if the name matches if it is declared private in the list
-                if (hasModifier(m, ModifierFlags.Private)) {
+                if (hasEffectiveModifier(m, ModifierFlags.Private)) {
                     continue;
                 }
 
                 // do not filter it out if the static presence doesnt match
-                if (hasModifier(m, ModifierFlags.Static) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
+                if (hasEffectiveModifier(m, ModifierFlags.Static) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
                     continue;
                 }
 

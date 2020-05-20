@@ -48,6 +48,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_JSDoc_typedef_comment_may_not_contain_multiple_type_tags_8033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A JSDoc '@typedef' comment may not contain multiple '@type' tags.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[JSDoc '@typedef' 註解不能包含多個 '@type' 標籤。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_bigint_literal_cannot_use_exponential_notation_1352" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A bigint literal cannot use exponential notation.]]></Val>
@@ -3646,7 +3655,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[宣告會增強另一個檔案中的宣告。無法將此情況序列化。]]></Val>
+            <Val><![CDATA[宣告會讓另一個檔案中的宣告增加。這無法序列化。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3714,6 +3723,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Declare method '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declare_private_method_0_90038" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare private method '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[宣告私人方法 '{0}']]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4701,6 +4719,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Exponentiation_cannot_be_performed_on_bigint_values_unless_the_target_option_is_set_to_es2016_or_lat_2791" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[除非 [目標]5D; 選項設定為 'es2016' 或更新版本，否則無法在 'bigint' 值上執行指數運算。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or__1203" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.]]></Val>
@@ -5147,6 +5174,15 @@
           <Val><![CDATA[Fix all implicit-'this' errors]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[修正所有隱含 'this' 的錯誤]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Fix_all_incorrect_return_type_of_an_async_functions_90037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Fix all incorrect return type of an async functions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[修正非同步函式所有不正確的傳回型別]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7183,7 +7219,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[只有具名的匯出可以使用「匯出類型」。]]></Val>
+            <Val><![CDATA[只有具名的匯出可以使用 'export type'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7462,7 +7498,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' cannot reference identifier '{1}' declared after it.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[參數 '{0}' 不得參考在其本身之後宣告的識別碼 '{1}'。]]></Val>
+            <Val><![CDATA[參數 '{0}' 不得參考在其之後宣告的識別碼 '{1}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7471,7 +7507,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Parameter '{0}' cannot reference itself.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[參數 '{0}' 不得參考自己本身。]]></Val>
+            <Val><![CDATA[參數 '{0}' 不得參考自身。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8586,15 +8622,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_all_incorrect_body_block_braces_95115" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Remove all incorrect body block braces]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[移除所有不正確的主體區塊大括弧]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Remove_all_unnecessary_uses_of_await_95087" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove all unnecessary uses of 'await']]></Val>
@@ -8622,11 +8649,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_block_body_braces_95112" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Remove_braces_from_all_arrow_function_bodies_with_relevant_issues_95115" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Remove block body braces]]></Val>
+          <Val><![CDATA[Remove braces from all arrow function bodies with relevant issues]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[移除區塊主體大括弧]]></Val>
+            <Val><![CDATA[從具有相關問題的所有箭號函式主體中移除大括號]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8636,6 +8663,15 @@
           <Val><![CDATA[Remove braces from arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[從箭號函式移除大括號]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_braces_from_arrow_function_body_95112" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove braces from arrow function body]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[從箭號函式主體中移除大括號]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8717,6 +8753,15 @@
           <Val><![CDATA[Remove variable statement]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[移除變數陳述式]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Replace_0_with_Promise_1_90036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Replace '{0}' with 'Promise<{1}>']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[將 '{0}' 取代為 'Promise<{1}>']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10210,7 +10255,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The operand of a 'delete' operator must be optional.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['delete' 運算子的運算元必須具有選擇性。]]></Val>
+            <Val><![CDATA['delete' 運算子的運算元必須是非必須。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10287,11 +10332,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_1064" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_wri_1064" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The return type of an async function or method must be the global Promise<T> type.]]></Val>
+          <Val><![CDATA[The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{0}>'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非同步函式或方法的傳回類型必須為全域 Promise<T> 類型。]]></Val>
+            <Val><![CDATA[非同步函式或方法的傳回型別，必須為全域 Promise<T> 類型。是否要寫入 'Promise<{0}>'?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10353,6 +10398,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[The specified path does not exist: '{0}']]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_tag_was_first_specified_here_8034" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The tag was first specified here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此標籤第一次指定於此處。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10567,7 +10621,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此為正在增強中的宣告。請考慮將正在增強的宣告移至相同檔案中。]]></Val>
+            <Val><![CDATA[此宣告正在增加中。請考慮將正在增加的宣告移至相同的檔案中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

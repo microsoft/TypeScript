@@ -74,7 +74,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
+};
 exports.__esModule = true;
 /** @jsx dom */
 var renderer_1 = require("./renderer");

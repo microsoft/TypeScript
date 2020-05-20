@@ -895,7 +895,7 @@ namespace ts {
 
             let statements: Statement[] | undefined;
             if (moduleKind !== ModuleKind.AMD) {
-                if (hasModifier(node, ModifierFlags.Export)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
                         setOriginalNode(
                             setTextRange(
@@ -934,7 +934,7 @@ namespace ts {
                 }
             }
             else {
-                if (hasModifier(node, ModifierFlags.Export)) {
+                if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
                         setOriginalNode(
                             setTextRange(
@@ -1095,7 +1095,7 @@ namespace ts {
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
             let statements: Statement[] | undefined;
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
                         setTextRange(
@@ -1138,7 +1138,7 @@ namespace ts {
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             let statements: Statement[] | undefined;
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements,
                     setOriginalNode(
                         setTextRange(
@@ -1182,7 +1182,7 @@ namespace ts {
             let variables: VariableDeclaration[] | undefined;
             let expressions: Expression[] | undefined;
 
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 let modifiers: NodeArray<Modifier> | undefined;
 
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
@@ -1442,8 +1442,8 @@ namespace ts {
                 return statements;
             }
 
-            if (hasModifier(decl, ModifierFlags.Export)) {
-                const exportName = hasModifier(decl, ModifierFlags.Default) ? createIdentifier("default") : getDeclarationName(decl);
+            if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
+                const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? createIdentifier("default") : getDeclarationName(decl);
                 statements = appendExportStatement(statements, exportName, getLocalName(decl), /*location*/ decl);
             }
 
@@ -1887,7 +1887,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
         text: `
             var __exportStar = (this && this.__exportStar) || function(m, exports) {
                 for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-            }`
+            };`
     };
 
     function createExportStarHelper(context: TransformationContext, module: Expression) {

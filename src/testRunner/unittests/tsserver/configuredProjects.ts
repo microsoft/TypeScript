@@ -1050,6 +1050,64 @@ declare var console: {
                 });
             });
         });
+
+        it("when default configured project does not contain the file", () => {
+            const barConfig: File = {
+                path: `${tscWatch.projectRoot}/bar/tsconfig.json`,
+                content: "{}"
+            };
+            const barIndex: File = {
+                path: `${tscWatch.projectRoot}/bar/index.ts`,
+                content: `import {foo} from "../foo/lib";
+foo();`
+            };
+            const fooBarConfig: File = {
+                path: `${tscWatch.projectRoot}/foobar/tsconfig.json`,
+                content: barConfig.path
+            };
+            const fooBarIndex: File = {
+                path: `${tscWatch.projectRoot}/foobar/index.ts`,
+                content: barIndex.content
+            };
+            const fooConfig: File = {
+                path: `${tscWatch.projectRoot}/foo/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["index.ts"],
+                    compilerOptions: {
+                        declaration: true,
+                        outDir: "lib"
+                    }
+                })
+            };
+            const fooIndex: File = {
+                path: `${tscWatch.projectRoot}/foo/index.ts`,
+                content: `export function foo() {}`
+            };
+            const host = createServerHost([barConfig, barIndex, fooBarConfig, fooBarIndex, fooConfig, fooIndex, libFile]);
+            tscWatch.ensureErrorFreeBuild(host, [fooConfig.path]);
+            const fooDts = `${tscWatch.projectRoot}/foo/lib/index.d.ts`;
+            assert.isTrue(host.fileExists(fooDts));
+            const session = createSession(host);
+            const service = session.getProjectService();
+            service.openClientFile(barIndex.path);
+            checkProjectActualFiles(service.configuredProjects.get(barConfig.path)!, [barIndex.path, fooDts, libFile.path, barConfig.path]);
+            service.openClientFile(fooBarIndex.path);
+            checkProjectActualFiles(service.configuredProjects.get(fooBarConfig.path)!, [fooBarIndex.path, fooDts, libFile.path, fooBarConfig.path]);
+            service.openClientFile(fooIndex.path);
+            checkProjectActualFiles(service.configuredProjects.get(fooConfig.path)!, [fooIndex.path, libFile.path, fooConfig.path]);
+            service.openClientFile(fooDts);
+            session.executeCommandSeq<protocol.GetApplicableRefactorsRequest>({
+                command: protocol.CommandTypes.GetApplicableRefactors,
+                arguments: {
+                    file: fooDts,
+                    startLine: 1,
+                    startOffset: 1,
+                    endLine: 1,
+                    endOffset: 1
+                }
+            });
+            assert.equal(service.tryGetDefaultProjectForFile(server.toNormalizedPath(fooDts)), service.configuredProjects.get(barConfig.path));
+        });
     });
 
     describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories listed in config file input array", () => {

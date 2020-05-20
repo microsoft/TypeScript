@@ -560,6 +560,10 @@ namespace FourSlashInterface {
         public noMoveToNewFile(): void {
             this.state.noMoveToNewFile();
         }
+
+        public organizeImports(newContent: string) {
+            this.state.verifyOrganizeImports(newContent);
+        }
     }
 
     export class Edit {
