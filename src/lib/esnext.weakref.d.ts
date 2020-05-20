@@ -51,7 +51,7 @@ interface FinalizationRegistry {
      * @param callback If given, the registry uses the given callback instead of the one it was
      * created with.
      */
-    cleanupSome(callback?: (heldValue: any) => void): void;
+    cleanupSome?(callback?: (heldValue: any) => void): void;
 }
 
 interface FinalizationRegistryConstructor {
