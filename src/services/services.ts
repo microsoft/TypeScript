@@ -1424,7 +1424,7 @@ namespace ts {
         }
 
         function createPackageJsonAutoImportProvider(compilerHost: CompilerHost, compilerOptions: CompilerOptions): Program | undefined {
-            if (!host.getPackageJsonsVisibleToFile || !host.resolveModuleNames) {
+            if (!host.getPackageJsonsVisibleToFile || !host.resolveTypeReferenceDirectives) {
                 return;
             }
             const start = timestamp();
@@ -1435,6 +1435,8 @@ namespace ts {
                 packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
                 packageJson.devDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
             }
+            const packageJsonProcessingEnd = timestamp();
+            host.log?.(`createPackageJsonAutoImportProvider: package.json processing: ${packageJsonProcessingEnd - start}`);
             if (!dependencyNames) {
                 return;
             }
@@ -1447,19 +1449,20 @@ namespace ts {
                 types: emptyArray
             };
 
-            const resolutions = host.resolveModuleNames(
-                arrayFrom(dependencyNames.keys()),
+            const resolutions = map(arrayFrom(dependencyNames.keys()), name => resolveTypeReferenceDirective(
+                name,
                 rootFileName,
-                /*reusedNames*/ undefined,
-                /*redirectedReference*/ undefined,
-                options);
+                options,
+                compilerHost));
 
             let rootNames: string[] | undefined;
             for (const resolution of resolutions) {
-                if (resolution && !program.getSourceFile(resolution.resolvedFileName)) {
-                    rootNames = append(rootNames, resolution.resolvedFileName);
+                if (resolution.resolvedTypeReferenceDirective?.resolvedFileName && !program.getSourceFile(resolution.resolvedTypeReferenceDirective.resolvedFileName)) {
+                    rootNames = append(rootNames, resolution.resolvedTypeReferenceDirective.resolvedFileName);
                 }
             }
+            host.log?.(`createPackageJsonAutoImportProvider: module resolution: ${timestamp() - packageJsonProcessingEnd}`);
+            host.log?.(JSON.stringify(rootNames, undefined, 2));
 
             const newProgram = rootNames && createProgram({
                 rootNames,
