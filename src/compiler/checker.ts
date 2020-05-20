@@ -3645,6 +3645,19 @@ namespace ts {
             return result || emptyArray;
         }
 
+        function getNamedOrIndexSignatureMembers(members: SymbolTable): Symbol[] {
+            const result = getNamedMembers(members);
+            const index = getIndexSymbolFromSymbolTable(members);
+            if (!index) {
+                return result;
+            }
+            if (!result.length) {
+                return [index];
+            }
+            result.push(index);
+            return result;
+        }
+
         function setStructuredTypeMembers(type: StructuredType, members: SymbolTable, callSignatures: readonly Signature[], constructSignatures: readonly Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): ResolvedType {
             (<ResolvedType>type).members = members;
             (<ResolvedType>type).properties = members === emptySymbols ? emptyArray : getNamedMembers(members);
@@ -9923,7 +9936,7 @@ namespace ts {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     const baseConstructorType = getBaseConstructorTypeOfClass(classType);
                     if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.TypeVariable)) {
-                        members = createSymbolTable(getNamedMembers(members));
+                        members = createSymbolTable(getNamedOrIndexSignatureMembers(members));
                         addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
                     }
                     else if (baseConstructorType === anyType) {

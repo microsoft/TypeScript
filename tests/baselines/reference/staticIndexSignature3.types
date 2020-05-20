@@ -49,38 +49,38 @@ const b =  B[42];
 >42 : 42
 
 const c = D["f"]
->c : any
->D["f"] : any
+>c : number
+>D["f"] : number
 >D : typeof D
 >"f" : "f"
 
 const d = D[42]
->d : any
->D[42] : any
+>d : number
+>D[42] : number
 >D : typeof D
 >42 : 42
 
 const e = ED["f"]
->e : any
->ED["f"] : any
+>e : boolean
+>ED["f"] : boolean
 >ED : typeof ED
 >"f" : "f"
 
 const f = ED[42]
->f : any
->ED[42] : any
+>f : 1
+>ED[42] : 1
 >ED : typeof ED
 >42 : 42
 
 const g = DD["f"]
->g : any
->DD["f"] : any
+>g : 421
+>DD["f"] : 421
 >DD : typeof DD
 >"f" : "f"
 
 const h = DD[42]
->h : any
->DD[42] : any
+>h : 421
+>DD[42] : 421
 >DD : typeof DD
 >42 : 42
 
