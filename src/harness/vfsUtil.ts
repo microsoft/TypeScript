@@ -663,7 +663,7 @@ namespace vfs {
             if (!isFile(node)) throw createIOError("EBADF");
 
             const buffer = this._getBuffer(node).slice();
-            return encoding ? buffer.toString(encoding) : buffer;
+            return encoding ? buffer.toString(encoding as any) : buffer;
         }
 
         /**

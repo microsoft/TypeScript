@@ -1,4 +1,4 @@
-=== tests/cases/compiler/staticIndexSignature2.ts ===
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature2.ts ===
 class C {
 >C : C
 

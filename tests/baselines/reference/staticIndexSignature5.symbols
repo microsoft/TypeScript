@@ -1,0 +1,61 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature5.ts ===
+class B {
+>B : Symbol(B, Decl(staticIndexSignature5.ts, 0, 0))
+
+    static readonly [s: string]: number;
+>s : Symbol(s, Decl(staticIndexSignature5.ts, 1, 21))
+
+    static readonly [s: number]: 42 | 233
+>s : Symbol(s, Decl(staticIndexSignature5.ts, 2, 21))
+}
+
+interface I {
+>I : Symbol(I, Decl(staticIndexSignature5.ts, 3, 1))
+
+    static readonly [s: string]: number;
+>s : Symbol(s, Decl(staticIndexSignature5.ts, 6, 21))
+
+    static readonly [s: number]: 42 | 233
+>s : Symbol(s, Decl(staticIndexSignature5.ts, 7, 21))
+}
+
+type TA = (typeof B)["foo"]
+>TA : Symbol(TA, Decl(staticIndexSignature5.ts, 8, 1))
+>B : Symbol(B, Decl(staticIndexSignature5.ts, 0, 0))
+
+type TB = (typeof B)[42]
+>TB : Symbol(TB, Decl(staticIndexSignature5.ts, 10, 27))
+>B : Symbol(B, Decl(staticIndexSignature5.ts, 0, 0))
+
+type TC = (typeof B)[string]
+>TC : Symbol(TC, Decl(staticIndexSignature5.ts, 11, 24))
+>B : Symbol(B, Decl(staticIndexSignature5.ts, 0, 0))
+
+type TD = (typeof B)[number]
+>TD : Symbol(TD, Decl(staticIndexSignature5.ts, 13, 28))
+>B : Symbol(B, Decl(staticIndexSignature5.ts, 0, 0))
+
+type TE = keyof typeof B;
+>TE : Symbol(TE, Decl(staticIndexSignature5.ts, 14, 28))
+>B : Symbol(B, Decl(staticIndexSignature5.ts, 0, 0))
+
+type TF = Pick<typeof B, number>
+>TF : Symbol(TF, Decl(staticIndexSignature5.ts, 16, 25))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(staticIndexSignature5.ts, 0, 0))
+
+type TFI = Pick<I, number>
+>TFI : Symbol(TFI, Decl(staticIndexSignature5.ts, 18, 32))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>I : Symbol(I, Decl(staticIndexSignature5.ts, 3, 1))
+
+type TG = Omit<typeof B, number>
+>TG : Symbol(TG, Decl(staticIndexSignature5.ts, 19, 26))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(staticIndexSignature5.ts, 0, 0))
+
+type TGI = Omit<I, number>
+>TGI : Symbol(TGI, Decl(staticIndexSignature5.ts, 20, 32))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>I : Symbol(I, Decl(staticIndexSignature5.ts, 3, 1))
+

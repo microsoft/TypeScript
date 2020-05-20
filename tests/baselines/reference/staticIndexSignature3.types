@@ -1,0 +1,86 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts ===
+class B {
+>B : B
+
+    static readonly [s: string]: number;
+>s : string
+
+    static readonly [s: number]: 42 | 233
+>s : number
+}
+
+class D extends B {
+>D : D
+>B : B
+
+    static readonly [s: string]: number
+>s : string
+}
+
+class ED extends D {
+>ED : ED
+>D : D
+
+    static readonly [s: string]: boolean
+>s : string
+
+    static readonly [s: number]: 1 
+>s : number
+}
+
+class DD extends D {
+>DD : DD
+>D : D
+
+    static readonly [s: string]: 421
+>s : string
+}
+
+const a = B["f"];
+>a : number
+>B["f"] : number
+>B : typeof B
+>"f" : "f"
+
+const b =  B[42];
+>b : 42 | 233
+>B[42] : 42 | 233
+>B : typeof B
+>42 : 42
+
+const c = D["f"]
+>c : any
+>D["f"] : any
+>D : typeof D
+>"f" : "f"
+
+const d = D[42]
+>d : any
+>D[42] : any
+>D : typeof D
+>42 : 42
+
+const e = ED["f"]
+>e : any
+>ED["f"] : any
+>ED : typeof ED
+>"f" : "f"
+
+const f = ED[42]
+>f : any
+>ED[42] : any
+>ED : typeof ED
+>42 : 42
+
+const g = DD["f"]
+>g : any
+>DD["f"] : any
+>DD : typeof DD
+>"f" : "f"
+
+const h = DD[42]
+>h : any
+>DD[42] : any
+>DD : typeof DD
+>42 : 42
+

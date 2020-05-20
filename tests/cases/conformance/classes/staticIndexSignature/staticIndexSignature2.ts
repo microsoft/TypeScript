@@ -1,4 +1,3 @@
-// @skipLibCheck: true
 class C {
     static readonly [s: string]: number;
     static readonly [s: number]: 42
