@@ -28,7 +28,7 @@ namespace ts.refactor.extractSymbol {
         const usedConstantNames: Map<boolean> = createMap();
 
         let i = 0;
-        for (const {functionExtraction, constantExtraction} of extractions) {
+        for (const { functionExtraction, constantExtraction } of extractions) {
             // Skip these since we don't have a way to report errors yet
             if (functionExtraction.errors.length === 0) {
                 // Don't issue refactorings with duplicated names.
@@ -1103,7 +1103,12 @@ namespace ts.refactor.extractSymbol {
                     changeTracker.delete(context.file, node.parent);
                 }
                 else {
-                    const localReference = createIdentifier(localNameText);
+                    let localReference: Expression = createIdentifier(localNameText);
+                    // When extract to a new variable in JSX content, need to wrap a {} out of the new variable
+                    // or it will become a plain text
+                    if (isInJSXContent(node)) {
+                        localReference = createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+                    }
                     changeTracker.replaceNode(context.file, node, localReference);
                 }
             }
@@ -1114,6 +1119,12 @@ namespace ts.refactor.extractSymbol {
         const renameFilename = node.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
         return { renameFilename, renameLocation, edits };
+
+        function isInJSXContent(node: Node) {
+            if (!isJsxElement(node)) return false;
+            if (isJsxElement(node.parent)) return true;
+            return false;
+        }
 
         function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
             // If no contextual type exists there is nothing to transfer to the function signature
@@ -1215,8 +1226,8 @@ namespace ts.refactor.extractSymbol {
     }
 
     function compareTypesByDeclarationOrder(
-        {type: type1, declaration: declaration1}: {type: Type, declaration?: Declaration},
-        {type: type2, declaration: declaration2}: {type: Type, declaration?: Declaration}) {
+        { type: type1, declaration: declaration1 }: { type: Type, declaration?: Declaration },
+        { type: type2, declaration: declaration2 }: { type: Type, declaration?: Declaration }) {
 
         return compareProperties(declaration1, declaration2, "pos", compareValues)
             || compareStringsCaseSensitive(
@@ -1621,7 +1632,7 @@ namespace ts.refactor.extractSymbol {
             // a lot of properties, each of which the walker will visit.  Unfortunately, the
             // solution isn't as trivial as filtering to user types because of (e.g.) Array.
             const symbolWalker = checker.getSymbolWalker(() => (cancellationToken.throwIfCancellationRequested(), true));
-            const {visitedTypes} = symbolWalker.walkType(type);
+            const { visitedTypes } = symbolWalker.walkType(type);
 
             for (const visitedType of visitedTypes) {
                 if (visitedType.isTypeParameter()) {
