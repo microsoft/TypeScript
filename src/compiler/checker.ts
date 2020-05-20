@@ -9974,7 +9974,7 @@ namespace ts {
             const declaration = getIndexDeclarationOfIndexSymbol(indexSymbol, indexKind);
             if (!declaration) return undefined;
             return createIndexInfo(declaration.type ? getTypeFromTypeNode(declaration.type) : anyType,
-                hasModifier(declaration, ModifierFlags.Readonly), declaration);
+                hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration);
         }
 
         function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
