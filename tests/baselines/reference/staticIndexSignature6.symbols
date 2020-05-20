@@ -1,0 +1,46 @@
+=== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature6.ts ===
+function foo () {
+>foo : Symbol(foo, Decl(staticIndexSignature6.ts, 0, 0))
+
+    return class<T> {
+>T : Symbol(T, Decl(staticIndexSignature6.ts, 1, 17))
+
+        static [s: string]: number
+>s : Symbol(s, Decl(staticIndexSignature6.ts, 2, 16))
+
+        static [s: number]: 42
+>s : Symbol(s, Decl(staticIndexSignature6.ts, 3, 16))
+
+        foo(v: T) { return v }
+>foo : Symbol((Anonymous class).foo, Decl(staticIndexSignature6.ts, 3, 30))
+>v : Symbol(v, Decl(staticIndexSignature6.ts, 5, 12))
+>T : Symbol(T, Decl(staticIndexSignature6.ts, 1, 17))
+>v : Symbol(v, Decl(staticIndexSignature6.ts, 5, 12))
+    }
+}
+
+const C = foo()
+>C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+>foo : Symbol(foo, Decl(staticIndexSignature6.ts, 0, 0))
+
+C.a;
+>C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+
+C.a = 1;
+>C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+
+C[2];
+>C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+
+C[2] = 42;
+>C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+
+const c = new C<number>();
+>c : Symbol(c, Decl(staticIndexSignature6.ts, 15, 5))
+>C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
+
+c.foo(1);
+>c.foo : Symbol((Anonymous class).foo, Decl(staticIndexSignature6.ts, 3, 30))
+>c : Symbol(c, Decl(staticIndexSignature6.ts, 15, 5))
+>foo : Symbol((Anonymous class).foo, Decl(staticIndexSignature6.ts, 3, 30))
+
