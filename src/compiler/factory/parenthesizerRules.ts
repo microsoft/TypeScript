@@ -313,9 +313,11 @@ namespace ts {
             return isUnaryExpression(operand) ? operand : setTextRange(factory.createParen(operand), operand);
         }
 
-        function parenthesizeExpressionsOfCommaDelimitedList(elements: NodeArray<Expression>): NodeArray<Expression> {
+        function parenthesizeExpressionsOfCommaDelimitedList(elements: readonly Expression[]): NodeArray<Expression> {
             const result = sameMap(elements, parenthesizeExpressionForDisallowedComma);
-            return setTextRange(factory.createNodeArray(result, elements.hasTrailingComma), elements);
+            return isNodeArray(elements) ?
+                setTextRange(factory.createNodeArray(result, elements.hasTrailingComma), elements) :
+                factory.createNodeArray(result);
         }
 
         function parenthesizeExpressionForDisallowedComma(expression: Expression): Expression {
@@ -387,7 +389,8 @@ namespace ts {
         }
 
         function parenthesizeConstituentTypesOfUnionOrIntersectionType(members: readonly TypeNode[]): NodeArray<TypeNode> {
-            return factory.createNodeArray(sameMap(members, parenthesizeMemberOfElementType));
+            const result = sameMap(members, parenthesizeMemberOfElementType);
+            return isNodeArray(members) ? setTextRange(factory.createNodeArray(result), members) : factory.createNodeArray(result);
 
         }
 
@@ -395,9 +398,12 @@ namespace ts {
             return i === 0 && isFunctionOrConstructorTypeNode(node) && node.typeParameters ? factory.createParenthesizedType(node) : node;
         }
 
-        function parenthesizeTypeArguments(typeArguments: NodeArray<TypeNode> | undefined): NodeArray<TypeNode> | undefined {
+        function parenthesizeTypeArguments(typeArguments: readonly TypeNode[] | undefined): NodeArray<TypeNode> | undefined {
             if (some(typeArguments)) {
-                return factory.createNodeArray(sameMap(typeArguments, parenthesizeOrdinalTypeArgument));
+                const result = sameMap(typeArguments, parenthesizeOrdinalTypeArgument);
+                return isNodeArray(typeArguments) ?
+                    setTextRange(factory.createNodeArray(result, typeArguments.hasTrailingComma), typeArguments) :
+                    factory.createNodeArray(result);
             }
         }
     }
