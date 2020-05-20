@@ -6229,7 +6229,7 @@ namespace ts {
         ContainsHoistedDeclarationOrCompletion = 1 << 20,
         ContainsDynamicImport = 1 << 21,
         ContainsClassFields = 1 << 22,
-        // NOTE: Please do not add flags with a value higher than 1 << 29, as that is the maximum bit we can set 
+        // NOTE: Please do not add flags with a value higher than 1 << 29, as that is the maximum bit we can set
         // before we outgrow the size of a v8 small integer (SMI) on an x86 system.
 
         // Assertions

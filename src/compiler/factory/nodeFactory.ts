@@ -2292,7 +2292,7 @@ namespace ts {
         function createParenthesizedExpression(expression: Expression) {
             const node = createBaseNode<ParenthesizedExpression>(SyntaxKind.ParenthesizedExpression);
             node.expression = expression;
-            node.transformFlags = propagateChildFlags(node.expression)
+            node.transformFlags = propagateChildFlags(node.expression);
             return node;
         }
 
@@ -4742,13 +4742,13 @@ namespace ts {
             }
             node.flags |= source.flags;
             node.statements = createNodeArray(statements);
-            node.endOfFileToken;
+            node.endOfFileToken = source.endOfFileToken;
             node.isDeclarationFile = isDeclarationFile;
             node.referencedFiles = referencedFiles;
             node.typeReferenceDirectives = typeReferences;
             node.hasNoDefaultLib = hasNoDefaultLib;
             node.libReferenceDirectives = libReferences;
-            node.transformFlags = 
+            node.transformFlags =
                 propagateChildrenFlags(node.statements) |
                 propagateChildFlags(node.endOfFileToken);
             return node;
@@ -5597,7 +5597,7 @@ namespace ts {
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
         function getExternalModuleOrNamespaceExportName(ns: Identifier | undefined, node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean): Identifier | PropertyAccessExpression {
-            if (ns && modifiersToFlags(node.modifiers) & ModifierFlags.Export) {
+            if (ns && hasSyntacticModifier(node, ModifierFlags.Export)) {
                 return getNamespaceMemberName(ns, getName(node), allowComments, allowSourceMaps);
             }
             return getExportName(node, allowComments, allowSourceMaps);

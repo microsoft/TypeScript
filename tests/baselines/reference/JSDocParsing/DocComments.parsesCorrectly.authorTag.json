@@ -40,6 +40,7 @@
         },
         "length": 2,
         "pos": 7,
-        "end": 110
+        "end": 110,
+        "transformFlags": 0
     }
 }

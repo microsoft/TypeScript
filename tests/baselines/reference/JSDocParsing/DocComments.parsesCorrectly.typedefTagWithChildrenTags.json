@@ -52,7 +52,7 @@
                                 "pos": 58,
                                 "end": 64,
                                 "modifierFlagsCache": 0,
-                                "transformFlags": 0
+                                "transformFlags": 1
                             }
                         },
                         "name": {
@@ -91,7 +91,7 @@
                                 "pos": 85,
                                 "end": 91,
                                 "modifierFlagsCache": 0,
-                                "transformFlags": 0
+                                "transformFlags": 1
                             }
                         },
                         "name": {
@@ -107,7 +107,8 @@
                     },
                     "length": 2,
                     "pos": -1,
-                    "end": -1
+                    "end": -1,
+                    "transformFlags": 0
                 },
                 "isArrayType": false
             },
@@ -130,6 +131,7 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 100
+        "end": 100,
+        "transformFlags": 0
     }
 }

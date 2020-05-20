@@ -24,6 +24,7 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 15
+        "end": 15,
+        "transformFlags": 0
     }
 }

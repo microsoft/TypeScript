@@ -6850,38 +6850,27 @@ namespace ts {
     export function setParentRecursive<T extends Node>(rootNode: T | undefined, incremental: boolean): T | undefined;
     export function setParentRecursive<T extends Node>(rootNode: T | undefined, incremental: boolean): T | undefined {
         if (!rootNode) return rootNode;
-
-        let parent: Node = rootNode;
-        forEachChild(rootNode, isJSDocNode(rootNode) ? visitNodeWithoutJSDoc : visitNodeWithJSDoc);
+        forEachChildRecursively(rootNode, isJSDocNode(rootNode) ? bindParentToChildIgnoringJSDoc : bindParentToChild);
         return rootNode;
 
-        function visitNodeWithJSDoc(child: Node) {
-            visitNode(child, visitChildrenWithJSDoc);
+        function bindParentToChildIgnoringJSDoc(child: Node, parent: Node): void | "skip" {
+            if (incremental && child.parent === parent) {
+                return "skip";
+            }
+            setParent(child, parent);
         }
 
-        function visitNodeWithoutJSDoc(child: Node) {
-            visitNode(child, visitChildrenWithoutJSDoc);
-        }
-
-        function visitChildrenWithJSDoc(node: Node) {
-            forEachChild(node, visitNodeWithJSDoc);
-            if (hasJSDocNodes(node)) {
-                forEach(node.jsDoc, visitNodeWithoutJSDoc);
+        function bindJSDoc(child: Node) {
+            if (hasJSDocNodes(child)) {
+                for (const doc of child.jsDoc!) {
+                    bindParentToChildIgnoringJSDoc(doc, child);
+                    forEachChildRecursively(doc, bindParentToChildIgnoringJSDoc);
+                }
             }
         }
 
-        function visitChildrenWithoutJSDoc(node: Node) {
-            forEachChild(node, visitNodeWithoutJSDoc);
-        }
-
-        function visitNode(n: Node, visitChildren: (node: Node) => void) {
-            if (!incremental || n.parent !== parent) {
-                setParent(n, parent);
-                const saveParent = parent;
-                parent = n;
-                visitChildren(n);
-                parent = saveParent;
-            }
+        function bindParentToChild(child: Node, parent: Node) {
+            return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
         }
     }
 }
