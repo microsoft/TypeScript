@@ -1370,6 +1370,8 @@ namespace ts {
                     case SyntaxKind.RestType:
                     case SyntaxKind.JSDocVariadicType:
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
+                    case SyntaxKind.NamedTupleMember:
+                        return emitNamedTupleMember(node as NamedTupleMember);
 
                     // Binding patterns
                     case SyntaxKind.ObjectBindingPattern:
@@ -2099,9 +2101,19 @@ namespace ts {
         }
 
         function emitTupleType(node: TupleTypeNode) {
-            writePunctuation("[");
-            emitList(node, node.elementTypes, ListFormat.TupleTypeElements);
-            writePunctuation("]");
+            emitTokenWithComment(SyntaxKind.OpenBracketToken, node.pos, writePunctuation, node);
+            const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTupleTypeElements : ListFormat.MultiLineTupleTypeElements;
+            emitList(node, node.elements, flags | ListFormat.NoSpaceIfEmpty);
+            emitTokenWithComment(SyntaxKind.CloseBracketToken, node.elements.end, writePunctuation, node);
+        }
+
+        function emitNamedTupleMember(node: NamedTupleMember) {
+            emit(node.dotDotDotToken);
+            emit(node.name);
+            emit(node.questionToken);
+            emitTokenWithComment(SyntaxKind.ColonToken, node.name.end, writePunctuation, node);
+            writeSpace();
+            emit(node.type);
         }
 
         function emitOptionalType(node: OptionalTypeNode) {
@@ -4487,10 +4499,11 @@ namespace ts {
         function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode!;
-                if (isIdentifier(textSourceNode)) {
-                    return jsxAttributeEscape ? `"${escapeJsxAttributeString(getTextOfNode(textSourceNode))}"` :
-                        neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(getTextOfNode(textSourceNode))}"` :
-                        `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
+                if (isIdentifier(textSourceNode) || isNumericLiteral(textSourceNode)) {
+                    const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
+                    return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
+                        neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
+                        `"${escapeNonAsciiString(text)}"`;
                 }
                 else {
                     return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
@@ -4968,7 +4981,7 @@ namespace ts {
         }
 
         function emitLeadingSynthesizedComment(comment: SynthesizedComment) {
-            if (comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+            if (comment.hasLeadingNewline || comment.kind === SyntaxKind.SingleLineCommentTrivia) {
                 writer.writeLine();
             }
             writeSynthesizedComment(comment);
