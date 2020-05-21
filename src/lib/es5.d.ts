@@ -4277,26 +4277,23 @@ declare namespace Intl {
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
     };
 
-    type DateFormatNumericVerbosity = "numeric" | "2-digit";
-    type DateFormatNameVerbosity = "long" | "short" | "narrow";
-
     interface DateTimeFormatOptions {
         /** output examples – numeric: "2020", 2-digit: "20" */
-        year?: DateFormatNumericVerbosity;
+        year?: "numeric" | "2-digit";
         /** output examples – numeric: "3", 2-digit: "03", long: "March", short: "Mar", narrow: "M" */
-        month?: DateFormatNumericVerbosity | DateFormatNameVerbosity;
+        month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
         /** output examples – numeric: "2", 2-digit: "02" */
-        day?: DateFormatNumericVerbosity;
+        day?: "numeric" | "2-digit";
         /** output examples – numeric: "2", 2-digit: "02" */
-        hour?: DateFormatNumericVerbosity;
+        hour?: "numeric" | "2-digit";
         /** output examples – numeric: "2", 2-digit: "02" */
-        minute?: DateFormatNumericVerbosity;
+        minute?: "numeric" | "2-digit";
         /** output examples – numeric: "2", 2-digit: "02" */
-        second?: DateFormatNumericVerbosity;
+        second?: "numeric" | "2-digit";
         /** output examples – long: "Thursday", short: "Thu", narrow: "T" */
-        weekday?: DateFormatNameVerbosity;
+        weekday?: "long" | "short" | "narrow";
         /** output examples – long: "Anno Domini", short: "AD", narrow "A" */
-        era?: DateFormatNameVerbosity;
+        era?: "long" | "short" | "narrow";
         /** set to `true` to force 12-hour am/pm "dayPeriod" values, or `false` to force 24-hour time without */
         hour12?: boolean;
         /** output examples – long: "Pacific Daylight Time", short: "PDT" */
