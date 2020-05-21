@@ -547,12 +547,10 @@ namespace ts.server.protocol {
         arguments: GetApplicableRefactorsRequestArgs;
     }
     export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
-        triggerReason?: RefactorTriggerReason;
+        triggerReason?: RefactorTriggerReason
     };
 
-    export enum RefactorTriggerReason {
-        Invoked = "invoked"
-    }
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     /**
      * Response is a list of available refactorings.

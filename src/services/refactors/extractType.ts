@@ -6,7 +6,7 @@ namespace ts.refactor {
     const extractToTypeDef = "Extract to typedef";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const forImplicitRequest = context.triggerReason ? context.triggerReason === RefactorTriggerReason.Implicit : true;
+            const forImplicitRequest = context.triggerReason ? context.triggerReason === "implicit" : true;
             const info = getRangeToExtract(context, forImplicitRequest);
             if (!info) return emptyArray;
 

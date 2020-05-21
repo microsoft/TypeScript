@@ -17,7 +17,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, triggerReason } = context;
-        const forImplicitRequest = triggerReason ? triggerReason === RefactorTriggerReason.Implicit : true;
+        const forImplicitRequest = triggerReason ? triggerReason === "implicit" : true;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition, forImplicitRequest);
         if (!info) return emptyArray;
 

@@ -8,7 +8,7 @@ namespace ts.refactor.extractSymbol {
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const forImplicitRequest = context.triggerReason ? context.triggerReason === RefactorTriggerReason.Implicit : true;
+        const forImplicitRequest = context.triggerReason ? context.triggerReason === "implicit" : true;
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), forImplicitRequest);
 
         const targetRange = rangeToExtract.targetRange;
