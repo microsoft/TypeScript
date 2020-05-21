@@ -1,0 +1,23 @@
+=== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJsErrors.js ===
+class C {
+>C : C
+
+    /**
+     * @type {unique symbol}
+     */
+    static readwriteStaticType;
+>readwriteStaticType : symbol
+
+    /**
+     * @type {unique symbol}
+     * @readonly
+     */
+    static readonlyType;
+>readonlyType : symbol
+
+    /**
+     * @type {unique symbol}
+     */
+    static readwriteType;
+>readwriteType : symbol
+}

@@ -810,15 +810,15 @@ namespace ts {
             : node;
     }
 
-    export function createTupleTypeNode(elementTypes: readonly TypeNode[]) {
+    export function createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]) {
         const node = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
-        node.elementTypes = createNodeArray(elementTypes);
+        node.elements = createNodeArray(elements);
         return node;
     }
 
-    export function updateTupleTypeNode(node: TupleTypeNode, elementTypes: readonly TypeNode[]) {
-        return node.elementTypes !== elementTypes
-            ? updateNode(createTupleTypeNode(elementTypes), node)
+    export function updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]) {
+        return node.elements !== elements
+            ? updateNode(createTupleTypeNode(elements), node)
             : node;
     }
 
@@ -931,6 +931,24 @@ namespace ts {
     export function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode) {
         return node.type !== type
             ? updateNode(createParenthesizedType(type), node)
+            : node;
+    }
+
+    export function createNamedTupleMember(dotDotDotToken: Token<SyntaxKind.DotDotDotToken> | undefined, name: Identifier, questionToken: Token<SyntaxKind.QuestionToken> | undefined, type: TypeNode) {
+        const node = <NamedTupleMember>createSynthesizedNode(SyntaxKind.NamedTupleMember);
+        node.dotDotDotToken = dotDotDotToken;
+        node.name = name;
+        node.questionToken = questionToken;
+        node.type = type;
+        return node;
+    }
+
+    export function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: Token<SyntaxKind.DotDotDotToken> | undefined, name: Identifier, questionToken: Token<SyntaxKind.QuestionToken> | undefined, type: TypeNode) {
+        return node.dotDotDotToken !== dotDotDotToken
+            || node.name !== name
+            || node.questionToken !== questionToken
+            || node.type !== type
+            ? updateNode(createNamedTupleMember(dotDotDotToken, name, questionToken, type), node)
             : node;
     }
 
@@ -1411,10 +1429,11 @@ namespace ts {
         return node;
     }
 
-    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken) {
+    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator: BinaryOperator | BinaryOperatorToken = node.operatorToken) {
         return node.left !== left
             || node.right !== right
-            ? updateNode(createBinary(left, operator || node.operatorToken, right), node)
+            || node.operatorToken !== operator
+            ? updateNode(createBinary(left, operator, right), node)
             : node;
     }
 
@@ -1555,9 +1574,11 @@ namespace ts {
     export function createYield(expression?: Expression): YieldExpression;
     export function createYield(asteriskToken: AsteriskToken | undefined, expression: Expression): YieldExpression;
     export function createYield(asteriskTokenOrExpression?: AsteriskToken | undefined | Expression, expression?: Expression) {
+        const asteriskToken = asteriskTokenOrExpression && asteriskTokenOrExpression.kind === SyntaxKind.AsteriskToken ? <AsteriskToken>asteriskTokenOrExpression : undefined;
+        expression = asteriskTokenOrExpression && asteriskTokenOrExpression.kind !== SyntaxKind.AsteriskToken ? asteriskTokenOrExpression : expression;
         const node = <YieldExpression>createSynthesizedNode(SyntaxKind.YieldExpression);
-        node.asteriskToken = asteriskTokenOrExpression && asteriskTokenOrExpression.kind === SyntaxKind.AsteriskToken ? <AsteriskToken>asteriskTokenOrExpression : undefined;
-        node.expression = asteriskTokenOrExpression && asteriskTokenOrExpression.kind !== SyntaxKind.AsteriskToken ? asteriskTokenOrExpression : expression;
+        node.asteriskToken = asteriskToken;
+        node.expression = expression && parenthesizeExpressionForList(expression);
         return node;
     }
 
@@ -2461,53 +2482,46 @@ namespace ts {
 
     // JSDoc
 
-    /* @internal */
     export function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
         const node = createSynthesizedNode(SyntaxKind.JSDocTypeExpression) as JSDocTypeExpression;
         node.type = type;
         return node;
     }
 
-    /* @internal */
     export function createJSDocTypeTag(typeExpression: JSDocTypeExpression, comment?: string): JSDocTypeTag {
-        const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type");
+        const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type", comment);
         tag.typeExpression = typeExpression;
-        tag.comment = comment;
         return tag;
     }
 
-    /* @internal */
     export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
-        const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns");
+        const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns", comment);
         tag.typeExpression = typeExpression;
-        tag.comment = comment;
         return tag;
     }
 
-    /** @internal */
     export function createJSDocThisTag(typeExpression?: JSDocTypeExpression): JSDocThisTag {
         const tag = createJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, "this");
         tag.typeExpression = typeExpression;
         return tag;
     }
 
-    /* @internal */
+    /**
+     * @deprecated Use `createJSDocParameterTag` to create jsDoc param tag.
+     */
     export function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
-        const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param");
+        const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param", comment);
         tag.typeExpression = typeExpression;
         tag.name = name;
         tag.isBracketed = isBracketed;
-        tag.comment = comment;
         return tag;
     }
 
-    /* @internal */
-    export function createJSDocClassTag(): JSDocClassTag {
-        return createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, "class");
+    export function createJSDocClassTag(comment?: string): JSDocClassTag {
+        return createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, "class", comment);
     }
 
 
-    /* @internal */
     export function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
         const node = createSynthesizedNode(SyntaxKind.JSDocComment) as JSDoc;
         node.comment = comment;
@@ -2515,11 +2529,124 @@ namespace ts {
         return node;
     }
 
-    /* @internal */
-    function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
+    export function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string, comment?: string): T {
         const node = createSynthesizedNode(kind) as T;
         node.tagName = createIdentifier(tagName);
+        node.comment = comment;
         return node;
+    }
+
+    export function createJSDocAugmentsTag(classExpression: JSDocAugmentsTag["class"], comment?: string) {
+        const tag = createJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, "augments", comment);
+        tag.class = classExpression;
+        return tag;
+    }
+
+    export function createJSDocEnumTag(typeExpression?: JSDocTypeExpression, comment?: string) {
+        const tag = createJSDocTag<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, "enum", comment);
+        tag.typeExpression = typeExpression;
+        return tag;
+    }
+
+    export function createJSDocTemplateTag(constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string) {
+        const tag = createJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, "template", comment);
+        tag.constraint = constraint;
+        tag.typeParameters = asNodeArray(typeParameters);
+        return tag;
+    }
+
+    export function createJSDocTypedefTag(fullName?: JSDocNamespaceDeclaration | Identifier, name?: Identifier, comment?: string, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral) {
+        const tag = createJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, "typedef", comment);
+        tag.fullName = fullName;
+        tag.name = name;
+        tag.typeExpression = typeExpression;
+        return tag;
+    }
+
+    export function createJSDocCallbackTag(fullName: JSDocNamespaceDeclaration | Identifier | undefined, name: Identifier | undefined, comment: string | undefined, typeExpression: JSDocSignature) {
+        const tag = createJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, "callback", comment);
+        tag.fullName = fullName;
+        tag.name = name;
+        tag.typeExpression = typeExpression;
+        return tag;
+    }
+
+    export function createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag) {
+        const tag = createSynthesizedNode(SyntaxKind.JSDocSignature) as JSDocSignature;
+        tag.typeParameters = typeParameters;
+        tag.parameters = parameters;
+        tag.type = type;
+        return tag;
+    }
+
+    function createJSDocPropertyLikeTag<T extends JSDocPropertyLikeTag>(kind: T["kind"], tagName: "arg" | "argument" | "param", typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string) {
+        const tag = createJSDocTag<T>(kind, tagName, comment);
+        tag.typeExpression = typeExpression;
+        tag.name = name;
+        tag.isNameFirst = isNameFirst;
+        tag.isBracketed = isBracketed;
+        return tag;
+    }
+
+    export function createJSDocPropertyTag(typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string) {
+        return createJSDocPropertyLikeTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, "param", typeExpression, name, isNameFirst, isBracketed, comment);
+    }
+
+    export function createJSDocParameterTag(typeExpression: JSDocTypeExpression | undefined, name: EntityName, isNameFirst: boolean, isBracketed: boolean, comment?: string) {
+        return createJSDocPropertyLikeTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param", typeExpression, name, isNameFirst, isBracketed, comment);
+    }
+
+    export function createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean) {
+        const tag = createSynthesizedNode(SyntaxKind.JSDocTypeLiteral) as JSDocTypeLiteral;
+        tag.jsDocPropertyTags = jsDocPropertyTags;
+        tag.isArrayType = isArrayType;
+        return tag;
+    }
+
+    export function createJSDocImplementsTag(classExpression: JSDocImplementsTag["class"], comment?: string) {
+        const tag = createJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, "implements", comment);
+        tag.class = classExpression;
+        return tag;
+    }
+
+    export function createJSDocAuthorTag(comment?: string) {
+        return createJSDocTag<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag, "author", comment);
+    }
+
+    export function createJSDocPublicTag() {
+        return createJSDocTag<JSDocPublicTag>(SyntaxKind.JSDocPublicTag, "public");
+    }
+
+    export function createJSDocPrivateTag() {
+        return createJSDocTag<JSDocPrivateTag>(SyntaxKind.JSDocPrivateTag, "private");
+    }
+
+    export function createJSDocProtectedTag() {
+        return createJSDocTag<JSDocProtectedTag>(SyntaxKind.JSDocProtectedTag, "protected");
+    }
+
+    export function createJSDocReadonlyTag() {
+        return createJSDocTag<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag, "readonly");
+    }
+
+    export function appendJSDocToContainer(node: JSDocContainer, jsdoc: JSDoc) {
+        node.jsDoc = append(node.jsDoc, jsdoc);
+        return node;
+    }
+
+
+    /* @internal */
+    export function createJSDocVariadicType(type: TypeNode): JSDocVariadicType {
+        const node = createSynthesizedNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
+        node.type = type;
+        return node;
+    }
+
+    /* @internal */
+    export function updateJSDocVariadicType(node: JSDocVariadicType, type: TypeNode): JSDocVariadicType {
+        return node.type !== type
+            ? updateNode(createJSDocVariadicType(type), node)
+            : node;
     }
 
     // JSX

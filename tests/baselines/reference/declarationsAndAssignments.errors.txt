@@ -17,7 +17,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): 
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,14): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,11): error TS2339: Property 'a' does not exist on type 'undefined[]'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,14): error TS2339: Property 'b' does not exist on type 'undefined[]'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,17): error TS2741: Property 'x' is missing in type '{ y: boolean; }' but required in type '{ x: any; y?: boolean; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,17): error TS2741: Property 'x' is missing in type '{ y: false; }' but required in type '{ x: any; y?: boolean; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,6): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assignable to type 'string'.
 
@@ -169,7 +169,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
     f14([2, ["abc", { x: 0 }]]);
     f14([2, ["abc", { y: false }]]);  // Error, no x
                     ~~~~~~~~~~~~
-!!! error TS2741: Property 'x' is missing in type '{ y: boolean; }' but required in type '{ x: any; y?: boolean; }'.
+!!! error TS2741: Property 'x' is missing in type '{ y: false; }' but required in type '{ x: any; y?: boolean; }'.
     
     module M {
         export var [a, b] = [1, 2];

@@ -270,7 +270,6 @@ namespace ts.server {
         }
     }
 
-    /*@internal*/
     export function isDynamicFileName(fileName: NormalizedPath) {
         return fileName[0] === "^" ||
             ((stringContains(fileName, "walkThroughSnippet:/") || stringContains(fileName, "untitled:/")) &&

@@ -38,12 +38,12 @@ verify.quickInfos({
     4: "(parameter) y1: string[]",
     5: "(parameter) y2: string",
 
-    t1: "(parameter) f1: [string, string]",
+    t1: "(parameter) f1: [a1: string, a2: string]",
 
-    t2: "(parameter) f1: [string, ...string[]]",
+    t2: "(parameter) f1: [a1: string, ...a2: string[]]",
 
     t31: "(parameter) f1: number",
-    t32: "(parameter) f2: [boolean, ...string[]]",
+    t32: "(parameter) f2: [a2: boolean, ...c: string[]]",
 
     t4: "(parameter) f1: string[]",
     t5: "(parameter) f1: string",

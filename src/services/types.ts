@@ -41,6 +41,8 @@ namespace ts {
         getName(): string;
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
+        /* @internal */
+        getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
         getJsDocTags(): JSDocTagInfo[];
     }
 
@@ -199,6 +201,11 @@ namespace ts {
         optionalDependencies?: Map<string>;
         get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
+    }
+
+    /** @internal */
+    export interface FormattingHost {
+        getNewLine?(): string;
     }
 
     //

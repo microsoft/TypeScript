@@ -89,17 +89,14 @@ namespace ts.JsDoc {
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const documentationComment: SymbolDisplayPart[] = [];
+        const documentationComment: string[] = [];
         forEachUnique(declarations, declaration => {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
-                if (documentationComment.length) {
-                    documentationComment.push(lineBreakPart());
-                }
-                documentationComment.push(textPart(comment));
+                pushIfUnique(documentationComment, comment);
             }
         });
-        return documentationComment;
+        return intersperse(map(documentationComment, textPart), lineBreakPart());
     }
 
     function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
@@ -363,6 +360,8 @@ namespace ts.JsDoc {
                 // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
                 return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
 
+            case SyntaxKind.ExpressionStatement:
+                return getCommentOwnerInfoWorker((commentOwner as ExpressionStatement).expression);
             case SyntaxKind.BinaryExpression: {
                 const be = commentOwner as BinaryExpression;
                 if (getAssignmentDeclarationKind(be) === AssignmentDeclarationKind.None) {

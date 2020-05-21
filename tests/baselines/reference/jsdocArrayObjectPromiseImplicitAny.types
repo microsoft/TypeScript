@@ -16,7 +16,7 @@ var numberArray = [5];
  * @return {Array}
  */
 function returnAnyArray(arr) {
->returnAnyArray : (arr: Array) => Array
+>returnAnyArray : (arr: any[]) => any[]
 >arr : any[]
 
   return arr;
@@ -46,7 +46,7 @@ var numberPromise = Promise.resolve(5);
  * @return {Promise}
  */
 function returnAnyPromise(pr) {
->returnAnyPromise : (pr: Promise) => Promise
+>returnAnyPromise : (pr: Promise<any>) => Promise<any>
 >pr : Promise<any>
 
   return pr;
@@ -72,7 +72,7 @@ var paramedObject = {valueOf: 1};
  * @return {Object}
  */
 function returnAnyObject(obj) {
->returnAnyObject : (obj: Object) => Object
+>returnAnyObject : (obj: any) => any
 >obj : any
 
   return obj;

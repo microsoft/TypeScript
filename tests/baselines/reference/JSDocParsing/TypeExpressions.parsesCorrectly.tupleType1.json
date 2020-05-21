@@ -5,7 +5,7 @@
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "elementTypes": {
+    "elements": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 2,

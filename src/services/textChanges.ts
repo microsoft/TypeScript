@@ -286,6 +286,10 @@ namespace ts.textChanges {
             this.deletedNodes.push({ sourceFile, node });
         }
 
+        public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
+            this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
+        }
+
         public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
             this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
         }
@@ -349,11 +353,25 @@ namespace ts.textChanges {
         }
 
         public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
+            this.insertAtTopOfFile(sourceFile, newNode, blankLineBetween);
+        }
+
+        public insertNodesAtTopOfFile(sourceFile: SourceFile, newNodes: readonly Statement[], blankLineBetween: boolean): void {
+            this.insertAtTopOfFile(sourceFile, newNodes, blankLineBetween);
+        }
+
+        private insertAtTopOfFile(sourceFile: SourceFile, insert: Statement | readonly Statement[], blankLineBetween: boolean): void {
             const pos = getInsertionPositionAtSourceFileTop(sourceFile);
-            this.insertNodeAt(sourceFile, pos, newNode, {
+            const options = {
                 prefix: pos === 0 ? undefined : this.newLineCharacter,
                 suffix: (isLineBreak(sourceFile.text.charCodeAt(pos)) ? "" : this.newLineCharacter) + (blankLineBetween ? this.newLineCharacter : ""),
-            });
+            };
+            if (isArray(insert)) {
+                this.insertNodesAt(sourceFile, pos, insert, options);
+            }
+            else {
+                this.insertNodeAt(sourceFile, pos, insert, options);
+            }
         }
 
         public insertFirstParameter(sourceFile: SourceFile, parameters: NodeArray<ParameterDeclaration>, newParam: ParameterDeclaration): void {
@@ -434,7 +452,7 @@ namespace ts.textChanges {
                 }
             }
             else {
-                endNode = node.kind !== SyntaxKind.VariableDeclaration && node.questionToken ? node.questionToken : node.name;
+                endNode = (node.kind === SyntaxKind.VariableDeclaration ? node.exclamationToken : node.questionToken) ?? node.name;
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
@@ -873,7 +891,7 @@ namespace ts.textChanges {
 
     namespace changesToText {
         export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
-            return group(changes, c => c.sourceFile.path).map(changesInFile => {
+            return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
                 // If the start position is the same, put the shorter range first, since an empty range (x, x) may precede (x, y) but not vice-versa.
@@ -883,9 +901,20 @@ namespace ts.textChanges {
                     Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos, "Changes overlap", () =>
                         `${JSON.stringify(normalized[i].range)} and ${JSON.stringify(normalized[i + 1].range)}`);
                 }
-                const textChanges = normalized.map(c =>
-                    createTextChange(createTextSpanFromRange(c.range), computeNewText(c, sourceFile, newLineCharacter, formatContext, validate)));
-                return { fileName: sourceFile.fileName, textChanges };
+
+                const textChanges = mapDefined(normalized, c => {
+                    const span = createTextSpanFromRange(c.range);
+                    const newText = computeNewText(c, sourceFile, newLineCharacter, formatContext, validate);
+
+                    // Filter out redundant changes.
+                    if (span.length === newText.length && stringContainsAt(sourceFile.text, newText, span.start)) {
+                        return undefined;
+                    }
+
+                    return createTextChange(span, newText);
+                });
+
+                return textChanges.length > 0 ? { fileName: sourceFile.fileName, textChanges } : undefined;
             });
         }
 

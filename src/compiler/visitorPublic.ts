@@ -149,11 +149,122 @@ namespace ts {
      * Starts a new lexical environment and visits a parameter list, suspending the lexical
      * environment upon completion.
      */
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration>, visitor: Visitor, context: TransformationContext, nodesVisitor?: <T extends Node>(nodes: NodeArray<T>, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) => NodeArray<T>): NodeArray<ParameterDeclaration>;
+    export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: <T extends Node>(nodes: NodeArray<T> | undefined, visitor: Visitor, test?: (node: Node) => boolean, start?: number, count?: number) => NodeArray<T> | undefined): NodeArray<ParameterDeclaration> | undefined;
     export function visitParameterList(nodes: NodeArray<ParameterDeclaration> | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes) {
+        let updated: NodeArray<ParameterDeclaration> | undefined;
         context.startLexicalEnvironment();
-        const updated = nodesVisitor(nodes, visitor, isParameterDeclaration);
+        if (nodes) {
+            context.setLexicalEnvironmentFlags(LexicalEnvironmentFlags.InParameters, true);
+            updated = nodesVisitor(nodes, visitor, isParameterDeclaration);
+
+            // As of ES2015, any runtime execution of that occurs in for a parameter (such as evaluating an
+            // initializer or a binding pattern), occurs in its own lexical scope. As a result, any expression
+            // that we might transform that introduces a temporary variable would fail as the temporary variable
+            // exists in a different lexical scope. To address this, we move any binding patterns and initializers
+            // in a parameter list to the body if we detect a variable being hoisted while visiting a parameter list
+            // when the emit target is greater than ES2015.
+            if (context.getLexicalEnvironmentFlags() & LexicalEnvironmentFlags.VariablesHoistedInParameters &&
+                getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
+                updated = addDefaultValueAssignmentsIfNeeded(updated, context);
+            }
+            context.setLexicalEnvironmentFlags(LexicalEnvironmentFlags.InParameters, false);
+        }
         context.suspendLexicalEnvironment();
         return updated;
+    }
+
+    function addDefaultValueAssignmentsIfNeeded(parameters: NodeArray<ParameterDeclaration>, context: TransformationContext) {
+        let result: ParameterDeclaration[] | undefined;
+        for (let i = 0; i < parameters.length; i++) {
+            const parameter = parameters[i];
+            const updated = addDefaultValueAssignmentIfNeeded(parameter, context);
+            if (result || updated !== parameter) {
+                if (!result) result = parameters.slice(0, i);
+                result[i] = updated;
+            }
+        }
+        if (result) {
+            return setTextRange(createNodeArray(result, parameters.hasTrailingComma), parameters);
+        }
+        return parameters;
+    }
+
+    function addDefaultValueAssignmentIfNeeded(parameter: ParameterDeclaration, context: TransformationContext) {
+        // A rest parameter cannot have a binding pattern or an initializer,
+        // so let's just ignore it.
+        return parameter.dotDotDotToken ? parameter :
+            isBindingPattern(parameter.name) ? addDefaultValueAssignmentForBindingPattern(parameter, context) :
+            parameter.initializer ? addDefaultValueAssignmentForInitializer(parameter, parameter.name, parameter.initializer, context) :
+            parameter;
+    }
+
+    function addDefaultValueAssignmentForBindingPattern(parameter: ParameterDeclaration, context: TransformationContext) {
+        context.addInitializationStatement(
+            createVariableStatement(
+                /*modifiers*/ undefined,
+                createVariableDeclarationList([
+                    createVariableDeclaration(
+                        parameter.name,
+                        parameter.type,
+                        parameter.initializer ?
+                            createConditional(
+                                createStrictEquality(
+                                    getGeneratedNameForNode(parameter),
+                                    createVoidZero()
+                                ),
+                                parameter.initializer,
+                                getGeneratedNameForNode(parameter)
+                            ) :
+                            getGeneratedNameForNode(parameter)
+                    ),
+                ])
+            )
+        );
+        return updateParameter(parameter,
+            parameter.decorators,
+            parameter.modifiers,
+            parameter.dotDotDotToken,
+            getGeneratedNameForNode(parameter),
+            parameter.questionToken,
+            parameter.type,
+            /*initializer*/ undefined);
+    }
+
+    function addDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration, name: Identifier, initializer: Expression, context: TransformationContext) {
+        context.addInitializationStatement(
+            createIf(
+                createTypeCheck(getSynthesizedClone(name), "undefined"),
+                setEmitFlags(
+                    setTextRange(
+                        createBlock([
+                            createExpressionStatement(
+                                setEmitFlags(
+                                    setTextRange(
+                                        createAssignment(
+                                            setEmitFlags(getMutableClone(name), EmitFlags.NoSourceMap),
+                                            setEmitFlags(initializer, EmitFlags.NoSourceMap | getEmitFlags(initializer) | EmitFlags.NoComments)
+                                        ),
+                                        parameter
+                                    ),
+                                    EmitFlags.NoComments
+                                )
+                            )
+                        ]),
+                        parameter
+                    ),
+                    EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments
+                )
+            )
+        );
+        return updateParameter(parameter,
+            parameter.decorators,
+            parameter.modifiers,
+            parameter.dotDotDotToken,
+            parameter.name,
+            parameter.questionToken,
+            parameter.type,
+            /*initializer*/ undefined);
     }
 
     /**
@@ -369,7 +480,7 @@ namespace ts {
 
             case SyntaxKind.TupleType:
                 return updateTupleTypeNode((<TupleTypeNode>node),
-                    nodesVisitor((<TupleTypeNode>node).elementTypes, visitor, isTypeNode));
+                    nodesVisitor((<TupleTypeNode>node).elements, visitor, isTypeNode));
 
             case SyntaxKind.OptionalType:
                 return updateOptionalTypeNode((<OptionalTypeNode>node),
@@ -404,6 +515,14 @@ namespace ts {
                     visitNode((<ImportTypeNode>node).qualifier, visitor, isEntityName),
                     visitNodes((<ImportTypeNode>node).typeArguments, visitor, isTypeNode),
                     (<ImportTypeNode>node).isTypeOf
+                );
+
+            case SyntaxKind.NamedTupleMember:
+                return updateNamedTupleMember(<NamedTupleMember>node,
+                    visitNode((<NamedTupleMember>node).dotDotDotToken, visitor, isToken),
+                    visitNode((<NamedTupleMember>node).name, visitor, isIdentifier),
+                    visitNode((<NamedTupleMember>node).questionToken, visitor, isToken),
+                    visitNode((<NamedTupleMember>node).type, visitor, isTypeNode),
                 );
 
             case SyntaxKind.ParenthesizedType:

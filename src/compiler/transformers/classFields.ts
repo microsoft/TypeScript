@@ -606,7 +606,7 @@ namespace ts {
                         createConstructor(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
-                            parameters,
+                            parameters ?? [],
                             body
                         ),
                         constructor || node

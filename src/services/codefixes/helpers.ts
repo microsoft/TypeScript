@@ -40,7 +40,7 @@ namespace ts.codefix {
         const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
         const declaration = declarations[0];
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
-        const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
+        const visibilityModifier = createVisibilityModifier(getEffectiveModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
@@ -214,27 +214,27 @@ namespace ts.codefix {
 
     export function createMethodFromCallExpression(
         context: CodeFixContextBase,
+        importAdder: ImportAdder,
         call: CallExpression,
         methodName: string,
-        inJs: boolean,
-        makeStatic: boolean,
-        preferences: UserPreferences,
+        modifierFlags: ModifierFlags,
         contextNode: Node,
+        inJs: boolean
     ): MethodDeclaration {
         const body = !isInterfaceDeclaration(contextNode);
         const { typeArguments, arguments: args, parent } = call;
+        const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
         const checker = context.program.getTypeChecker();
         const tracker = getNoopSymbolTrackerWithResolver(context);
         const types = map(args, arg =>
-            // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
-            checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, /*flags*/ undefined, tracker));
+            typeToAutoImportableTypeNode(checker, importAdder, checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, scriptTarget, /*flags*/ undefined, tracker));
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
         const returnType = (inJs || !contextualType) ? undefined : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
         return createMethod(
             /*decorators*/ undefined,
-            /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+            /*modifiers*/ modifierFlags ? createNodeArray(createModifiersFromModifierFlags(modifierFlags)) : undefined,
             /*asteriskToken*/ isYieldExpression(parent) ? createToken(SyntaxKind.AsteriskToken) : undefined,
             methodName,
             /*questionToken*/ undefined,
@@ -242,7 +242,19 @@ namespace ts.codefix {
                 createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
             /*type*/ returnType,
-            body ? createStubbedMethodBody(preferences) : undefined);
+            body ? createStubbedMethodBody(context.preferences) : undefined);
+    }
+
+    export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+        const typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
+        if (typeNode && isImportTypeNode(typeNode)) {
+            const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+            if (importableReference) {
+                importSymbols(importAdder, importableReference.symbols);
+                return importableReference.typeReference;
+            }
+        }
+        return typeNode;
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
@@ -446,7 +458,7 @@ namespace ts.codefix {
         return createQualifiedName(replaceFirstIdentifierOfEntityName(name.left, newIdentifier), name.right);
     }
 
-    function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
+    export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
         symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
     }
 }

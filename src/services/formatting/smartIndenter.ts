@@ -574,7 +574,7 @@ namespace ts.formatting {
                     return childKind !== SyntaxKind.JsxClosingFragment;
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.UnionType:
-                    if (childKind === SyntaxKind.TypeLiteral) {
+                    if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType) {
                         return false;
                     }
                     // falls through

@@ -1,0 +1,89 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+// these are recognized as TS concepts by the checker
+/** @type {String} */const a = "";
+>a : string
+>"" : ""
+
+/** @type {Number} */const b = 0;
+>b : number
+>0 : 0
+
+/** @type {Boolean} */const c = true;
+>c : boolean
+>true : true
+
+/** @type {Void} */const d = undefined;
+>d : void
+>undefined : undefined
+
+/** @type {Undefined} */const e = undefined;
+>e : undefined
+>undefined : undefined
+
+/** @type {Null} */const f = null;
+>f : null
+>null : null
+
+/** @type {Function} */const g = () => void 0;
+>g : Function
+>() => void 0 : () => undefined
+>void 0 : undefined
+>0 : 0
+
+/** @type {function} */const h = () => void 0;
+>h : Function
+>() => void 0 : () => undefined
+>void 0 : undefined
+>0 : 0
+
+/** @type {array} */const i = [];
+>i : any[]
+>[] : never[]
+
+/** @type {promise} */const j = Promise.resolve(0);
+>j : Promise<any>
+>Promise.resolve(0) : Promise<number>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>0 : 0
+
+/** @type {Object<string, string>} */const k = {x: "x"};
+>k : { [x: string]: string; }
+>{x: "x"} : { x: string; }
+>x : string
+>"x" : "x"
+
+
+// these are not recognized as anything and should just be lookup failures
+// ignore the errors to try to ensure they're emitted as `any` in declaration emit
+// @ts-ignore
+/** @type {class} */const l = true;
+>l : error
+>true : true
+
+// @ts-ignore
+/** @type {bool} */const m = true;
+>m : error
+>true : true
+
+// @ts-ignore
+/** @type {int} */const n = true;
+>n : error
+>true : true
+
+// @ts-ignore
+/** @type {float} */const o = true;
+>o : error
+>true : true
+
+// @ts-ignore
+/** @type {integer} */const p = true;
+>p : error
+>true : true
+
+// or, in the case of `event` likely erroneously refers to the type of the global Event object
+/** @type {event} */const q = undefined;
+>q : Event | undefined
+>undefined : undefined
+

@@ -223,7 +223,7 @@ namespace ts.Completions.StringCompletions {
     function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
         return type && {
             kind: StringLiteralCompletionKind.Properties,
-            symbols: type.getApparentProperties().filter(prop => !isPrivateIdentifierPropertyDeclaration(prop.valueDeclaration)),
+            symbols: filter(type.getApparentProperties(), prop => !(prop.valueDeclaration && isPrivateIdentifierPropertyDeclaration(prop.valueDeclaration))),
             hasIndexSignature: hasIndexSignature(type)
         };
     }

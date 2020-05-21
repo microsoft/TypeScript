@@ -1,0 +1,46 @@
+=== /test.js ===
+class Abcde {
+>Abcde : Abcde
+
+  /** @type {string} */
+  x;
+>x : string
+}
+
+module.exports = {
+>module.exports = {  Abcde} : { Abcde: typeof Abcde; }
+>module.exports : { Abcde: typeof Abcde; }
+>module : { "\"/test\"": { Abcde: typeof Abcde; }; }
+>exports : { Abcde: typeof Abcde; }
+>{  Abcde} : { Abcde: typeof Abcde; }
+
+  Abcde
+>Abcde : typeof Abcde
+
+};
+
+=== /index.ts ===
+import { Abcde } from "./test";
+>Abcde : typeof Abcde
+
+declare module "./test" {
+>"./test" : { Abcde: typeof Abcde; }
+
+  interface Abcde { b: string }
+>b : string
+}
+
+new Abcde().x;
+>new Abcde().x : string
+>new Abcde() : Abcde
+>Abcde : typeof Abcde
+>x : string
+
+// Bug: the type meaning from /test.js does not
+// propagate through the object literal export.
+const x: Abcde = { b: "" };
+>x : Abcde
+>{ b: "" } : { b: string; }
+>b : string
+>"" : ""
+

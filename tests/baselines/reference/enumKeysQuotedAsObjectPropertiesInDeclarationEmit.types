@@ -1,0 +1,70 @@
+=== tests/cases/compiler/enumKeysQuotedAsObjectPropertiesInDeclarationEmit.ts ===
+export enum MouseButton {
+>MouseButton : MouseButton
+
+	LEFT_BUTTON = 1,
+>LEFT_BUTTON : MouseButton.LEFT_BUTTON
+>1 : 1
+
+	RIGHT_BUTTON = 2,
+>RIGHT_BUTTON : MouseButton.RIGHT_BUTTON
+>2 : 2
+
+	MIDDLE_BUTTON = 4,
+>MIDDLE_BUTTON : MouseButton.MIDDLE_BUTTON
+>4 : 4
+
+	XBUTTON1_BUTTON = 5,
+>XBUTTON1_BUTTON : MouseButton.XBUTTON1_BUTTON
+>5 : 5
+
+	XBUTTON2_BUTTON = 6,
+>XBUTTON2_BUTTON : MouseButton.XBUTTON2_BUTTON
+>6 : 6
+
+	NO_BUTTON = 0,
+>NO_BUTTON : MouseButton.NO_BUTTON
+>0 : 0
+}
+
+export const DOMMouseButton = {
+>DOMMouseButton : { '-1': MouseButton; 0: MouseButton; 1: MouseButton; 2: MouseButton; 3: MouseButton; 4: MouseButton; }
+>{	'-1': MouseButton.NO_BUTTON,	"0": MouseButton.LEFT_BUTTON,	"1": MouseButton.MIDDLE_BUTTON,	"2": MouseButton.RIGHT_BUTTON,	"3": MouseButton.XBUTTON1_BUTTON,	"4": MouseButton.XBUTTON2_BUTTON,} : { '-1': MouseButton; 0: MouseButton; 1: MouseButton; 2: MouseButton; 3: MouseButton; 4: MouseButton; }
+
+	'-1': MouseButton.NO_BUTTON,
+>'-1' : MouseButton
+>MouseButton.NO_BUTTON : MouseButton.NO_BUTTON
+>MouseButton : typeof MouseButton
+>NO_BUTTON : MouseButton.NO_BUTTON
+
+	"0": MouseButton.LEFT_BUTTON,
+>"0" : MouseButton
+>MouseButton.LEFT_BUTTON : MouseButton.LEFT_BUTTON
+>MouseButton : typeof MouseButton
+>LEFT_BUTTON : MouseButton.LEFT_BUTTON
+
+	"1": MouseButton.MIDDLE_BUTTON,
+>"1" : MouseButton
+>MouseButton.MIDDLE_BUTTON : MouseButton.MIDDLE_BUTTON
+>MouseButton : typeof MouseButton
+>MIDDLE_BUTTON : MouseButton.MIDDLE_BUTTON
+
+	"2": MouseButton.RIGHT_BUTTON,
+>"2" : MouseButton
+>MouseButton.RIGHT_BUTTON : MouseButton.RIGHT_BUTTON
+>MouseButton : typeof MouseButton
+>RIGHT_BUTTON : MouseButton.RIGHT_BUTTON
+
+	"3": MouseButton.XBUTTON1_BUTTON,
+>"3" : MouseButton
+>MouseButton.XBUTTON1_BUTTON : MouseButton.XBUTTON1_BUTTON
+>MouseButton : typeof MouseButton
+>XBUTTON1_BUTTON : MouseButton.XBUTTON1_BUTTON
+
+	"4": MouseButton.XBUTTON2_BUTTON,
+>"4" : MouseButton
+>MouseButton.XBUTTON2_BUTTON : MouseButton.XBUTTON2_BUTTON
+>MouseButton : typeof MouseButton
+>XBUTTON2_BUTTON : MouseButton.XBUTTON2_BUTTON
+
+};

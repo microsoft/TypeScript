@@ -122,7 +122,8 @@ namespace ts.server.typingsInstaller {
                 // store error info to report it later when it is known that server is already listening to events from typings installer
                 this.delayedInitializationError = {
                     kind: "event::initializationFailed",
-                    message: (<Error>e).message
+                    message: (<Error>e).message,
+                    stack: (<Error>e).stack,
                 };
             }
 
@@ -246,7 +247,9 @@ namespace ts.server.typingsInstaller {
     const installer = new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
     installer.listen();
 
-    function indent(newline: string, str: string): string {
-        return `${newline}    ` + str.replace(/\r?\n/, `${newline}    `);
+    function indent(newline: string, str: string | undefined): string {
+        return str && str.length
+            ? `${newline}    ` + str.replace(/\r?\n/, `${newline}    `)
+            : "";
     }
 }

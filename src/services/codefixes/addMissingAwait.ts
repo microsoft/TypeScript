@@ -148,7 +148,7 @@ namespace ts.codefix {
                 declaration.type ||
                 !declaration.initializer ||
                 variableStatement.getSourceFile() !== sourceFile ||
-                hasModifier(variableStatement, ModifierFlags.Export) ||
+                hasSyntacticModifier(variableStatement, ModifierFlags.Export) ||
                 !variableName ||
                 !isInsideAwaitableBody(declaration.initializer)) {
                 isCompleteFix = false;
