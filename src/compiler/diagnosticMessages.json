@@ -2971,10 +2971,6 @@
         "category": "Error",
         "code": 2791
     },
-    "The type '{0}' references an inaccessible base type.": {
-        "category": "Error",
-        "code": 2792
-    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

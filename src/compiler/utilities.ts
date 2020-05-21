@@ -80,7 +80,6 @@ namespace ts {
             decreaseIndent: noop,
             clear: () => str = "",
             trackSymbol: noop,
-            reportInaccessibleBaseType: noop,
             reportInaccessibleThisError: noop,
             reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,

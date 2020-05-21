@@ -70,7 +70,6 @@ namespace ts {
         const host = context.getEmitHost();
         const symbolTracker: SymbolTracker = {
             trackSymbol,
-            reportInaccessibleBaseType,
             reportInaccessibleThisError,
             reportInaccessibleUniqueSymbolError,
             reportPrivateInBaseOfClassExpression,
@@ -173,13 +172,6 @@ namespace ts {
                 context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode),
                     "unique symbol"));
-            }
-        }
-
-        function reportInaccessibleBaseType() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_type_0_references_an_inaccessible_base_type,
-                    declarationNameToString(errorNameNode)));
             }
         }
 

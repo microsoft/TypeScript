@@ -3855,13 +3855,18 @@ namespace ts {
             return false;
         }
 
-        function isTypeSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node | undefined, allowModules: boolean): boolean {
-            const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false, allowModules);
+        function isTypeSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node | undefined): boolean {
+            const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false, /*allowModules*/ true);
             return access.accessibility === SymbolAccessibility.Accessible;
         }
 
         function isValueSymbolAccessible(typeSymbol: Symbol, enclosingDeclaration: Node | undefined): boolean {
             const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, SymbolFlags.Value, /*shouldComputeAliasesToMakeVisible*/ false, /*allowModules*/ true);
+            return access.accessibility === SymbolAccessibility.Accessible;
+        }
+
+        function isSymbolAccessibleByFlags(typeSymbol: Symbol, enclosingDeclaration: Node | undefined, flags: SymbolFlags): boolean {
+            const access = isSymbolAccessibleWorker(typeSymbol, enclosingDeclaration, flags, /*shouldComputeAliasesToMakeVisible*/ false, /*allowModules*/ false);
             return access.accessibility === SymbolAccessibility.Accessible;
         }
 
@@ -4335,7 +4340,7 @@ namespace ts {
                     return createThis();
                 }
 
-                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration, /*allowModules*/ true))) {
+                if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return createTypeReferenceNode(createIdentifier(""), typeArgumentNodes);
                     return symbolToTypeNode(type.aliasSymbol, context, SymbolFlags.Type, typeArgumentNodes);
@@ -4354,7 +4359,7 @@ namespace ts {
                     }
                     if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
                         type.flags & TypeFlags.TypeParameter &&
-                        !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration, /*allowModules*/ true)) {
+                        !isTypeSymbolAccessible(type.symbol, context.enclosingDeclaration)) {
                         const name = typeParameterToName(type, context);
                         context.approximateLength += idText(name).length;
                         return createTypeReferenceNode(createIdentifier(idText(name)), /*typeArguments*/ undefined);
@@ -4602,7 +4607,7 @@ namespace ts {
                     else if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral &&
                         type.symbol.valueDeclaration &&
                         isClassLike(type.symbol.valueDeclaration) &&
-                        !isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)
+                             !isValueSymbolAccessible(type.symbol, context.enclosingDeclaration)
                     ) {
                         return createAnonymousTypeNode(type);
                     }
@@ -6126,7 +6131,7 @@ namespace ts {
                     const constructSignatures = serializeSignatures(SignatureKind.Construct, interfaceType, baseType, SyntaxKind.ConstructSignature) as ConstructSignatureDeclaration[];
                     const indexSignatures = serializeIndexSignatures(interfaceType, baseType);
 
-                    const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, mapDefined(baseTypes, b => trySerializeAsTypeReference(b)))];
+                    const heritageClauses = !length(baseTypes) ? undefined : [createHeritageClause(SyntaxKind.ExtendsKeyword, mapDefined(baseTypes, b => trySerializeAsTypeReference(b, SymbolFlags.Value)))];
                     addResult(createInterfaceDeclaration(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
@@ -6833,7 +6838,7 @@ namespace ts {
                 }
 
                 function serializeBaseType(t: Type, staticType: Type, rootName: string) {
-                    const ref = trySerializeAsTypeReference(t);
+                    const ref = trySerializeAsTypeReference(t, SymbolFlags.Value);
                     if (ref) {
                         return ref;
                     }
@@ -6845,16 +6850,17 @@ namespace ts {
                     return createExpressionWithTypeArguments(/*typeArgs*/ undefined, createIdentifier(tempName));
                 }
 
-                function trySerializeAsTypeReference(t: Type) {
+                function trySerializeAsTypeReference(t: Type, flags: SymbolFlags) {
                     let typeArgs: TypeNode[] | undefined;
                     let reference: Expression | undefined;
+
                     // We don't use `isValueSymbolAccessible` below. since that considers alternative containers (like modules)
                     // which we can't write out in a syntactically valid way as an expression
-                    if ((t as TypeReference).target && getAccessibleSymbolChain((t as TypeReference).target.symbol, enclosingDeclaration, SymbolFlags.Value, /*useOnlyExternalAliasing*/ false)) {
+                    if ((t as TypeReference).target && isSymbolAccessibleByFlags((t as TypeReference).target.symbol, enclosingDeclaration, flags)) {
                         typeArgs = map(getTypeArguments(t as TypeReference), t => typeToTypeNodeHelper(t, context));
                         reference = symbolToExpression((t as TypeReference).target.symbol, context, SymbolFlags.Type);
                     }
-                    else if (t.symbol && getAccessibleSymbolChain(t.symbol, enclosingDeclaration, SymbolFlags.Value, /*useOnlyExternalAliasing*/ false)) {
+                    else if (t.symbol && isSymbolAccessibleByFlags(t.symbol, enclosingDeclaration, flags)) {
                         reference = symbolToExpression(t.symbol, context, SymbolFlags.Type);
                     }
                     if (reference) {
@@ -6863,25 +6869,11 @@ namespace ts {
                 }
 
                 function serializeImplementedType(t: Type) {
-                    let typeArgs: TypeNode[] | undefined;
-                    let reference: Expression | undefined;
-                    if ((t as TypeReference).target && isTypeSymbolAccessible((t as TypeReference).target.symbol, enclosingDeclaration, /*allowModules*/ false)) {
-                        typeArgs = map(getTypeArguments(t as TypeReference), t => typeToTypeNodeHelper(t, context));
-                        reference = symbolToExpression((t as TypeReference).target.symbol, context, SymbolFlags.Type);
+                    const ref = trySerializeAsTypeReference(t, SymbolFlags.Type);
+                    if (ref) {
+                        return ref;
                     }
-                    else if (t.symbol && isTypeSymbolAccessible(t.symbol, enclosingDeclaration, /*allowModules*/ false)) {
-                        reference = symbolToExpression(t.symbol, context, SymbolFlags.Type);
-                    }
-                    if (reference) {
-                        return createExpressionWithTypeArguments(typeArgs, reference);
-                    }
-                    else if (context.tracker.reportInaccessibleBaseType) {
-                        context.tracker.reportInaccessibleBaseType();
-                        return createExpressionWithTypeArguments(/*typeArgs*/ undefined, symbolToExpression(t.symbol, context, SymbolFlags.Type));
-                    }
-                    else {
-                        Debug.fail("context.tracker missing some error reporting methods");
-                    }
+                    return createExpressionWithTypeArguments(/*typeArgs*/ undefined, symbolToExpression(t.symbol, context, SymbolFlags.Type));
                 }
 
                 function getUnusedName(input: string, symbol?: Symbol): string {
