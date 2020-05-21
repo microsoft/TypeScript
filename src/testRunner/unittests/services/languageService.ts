@@ -29,7 +29,7 @@ export function Component(x: Config): any;`
                 getScriptVersion(_fileName) {
                     return "";
                 },
-                getScriptSnapshot(fileName) {
+                getScriptSnapshot(fileName: string) {
                     if (fileName === ".ts") {
                         return ScriptSnapshot.fromString("");
                     }
@@ -97,7 +97,7 @@ export function Component(x: Config): any;`
                     getProjectVersion: !useProjectVersion ? undefined : () => projectVersion,
                     getScriptFileNames: () => ["/project/root.ts"],
                     getScriptVersion: path => files.get(path)?.version || "",
-                    getScriptSnapshot: path => {
+                    getScriptSnapshot: (path: string) => {
                         const text = files.get(path)?.text;
                         return text ? ScriptSnapshot.fromString(text) : undefined;
                     },

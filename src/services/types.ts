@@ -214,6 +214,8 @@ namespace ts {
         getScriptKind?(fileName: string): ScriptKind;
         getScriptVersion(fileName: string): string;
         getScriptSnapshot(fileName: string): IScriptSnapshot | undefined;
+        /** @internal */
+        getScriptSnapshot(fileName: string, isAuxiliaryFile?: boolean): IScriptSnapshot | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         getProjectReferences?(): readonly ProjectReference[] | undefined;
         getLocalizedDiagnosticMessages?(): any;
         getCancellationToken?(): HostCancellationToken;

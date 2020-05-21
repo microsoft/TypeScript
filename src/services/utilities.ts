@@ -2128,15 +2128,10 @@ namespace ts {
         return !!location.parent && isImportOrExportSpecifier(location.parent) && location.parent.propertyName === location;
     }
 
-    export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
-        const scriptKind = getScriptKind(fileName, host);
-        return some(scriptKinds, k => k === scriptKind);
-    }
-
-    export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
+    export function getScriptKind(fileName: string, host: LanguageServiceHost): ScriptKind {
         // First check to see if the script kind was specified by the host. Chances are the host
         // may override the default script kind for the file extension.
-        return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
+        return ensureScriptKind(fileName, host.getScriptKind && host.getScriptKind(fileName));
     }
 
     export function getSymbolTarget(symbol: Symbol, checker: TypeChecker): Symbol {

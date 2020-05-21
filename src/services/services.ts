@@ -942,7 +942,7 @@ namespace ts {
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
             for (const fileName of rootFileNames) {
-                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName));
+                this.createEntry(fileName, toPath(fileName, this.currentDirectory, getCanonicalFileName), /*isAuxiliaryFile*/ false);
             }
 
             // store the compilation settings
@@ -957,9 +957,9 @@ namespace ts {
             return this.host.getProjectReferences && this.host.getProjectReferences();
         }
 
-        private createEntry(fileName: string, path: Path) {
+        private createEntry(fileName: string, path: Path, isAuxiliaryFile: boolean) {
             let entry: CachedHostFileInformation;
-            const scriptSnapshot = this.host.getScriptSnapshot(fileName);
+            const scriptSnapshot = this.host.getScriptSnapshot(fileName, isAuxiliaryFile);
             if (scriptSnapshot) {
                 entry = {
                     hostFileName: fileName,
@@ -985,8 +985,8 @@ namespace ts {
             return !isString(entry) ? entry : undefined;
         }
 
-        public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
-            const info = this.getEntryByPath(path) || this.createEntry(fileName, path);
+        public getOrCreateEntryByPath(fileName: string, path: Path, isAuxiliaryFile: boolean): HostFileInformation {
+            const info = this.getEntryByPath(path) || this.createEntry(fileName, path, isAuxiliaryFile);
             return isString(info) ? undefined! : info; // TODO: GH#18217
         }
 
@@ -1313,7 +1313,9 @@ namespace ts {
             program = createProgram(options);
 
             if (host.usePackageJsonAutoImportProvider?.()) {
-                autoImportProvider = createPackageJsonAutoImportProvider(compilerHost, newSettings);
+                autoImportProvider = createPackageJsonAutoImportProvider(
+                    createPackageJsonAutoImportProviderHost(compilerHost),
+                    newSettings);
             }
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
@@ -1348,16 +1350,16 @@ namespace ts {
                 return host.readFile && host.readFile(fileName);
             }
 
-            function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-                return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersion, onError, shouldCreateNewSourceFile);
+            function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean, isAuxiliaryFile?: boolean): SourceFile | undefined {
+                return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersion, onError, shouldCreateNewSourceFile, isAuxiliaryFile);
             }
 
-            function getOrCreateSourceFileByPath(fileName: string, path: Path, _languageVersion: ScriptTarget, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+            function getOrCreateSourceFileByPath(fileName: string, path: Path, _languageVersion: ScriptTarget, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean, isAuxiliaryFile?: boolean): SourceFile | undefined {
                 Debug.assert(hostCache !== undefined, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
-                const hostFileInformation = hostCache && hostCache.getOrCreateEntryByPath(fileName, path);
+                const hostFileInformation = hostCache && hostCache.getOrCreateEntryByPath(fileName, path, !!isAuxiliaryFile);
                 if (!hostFileInformation) {
                     return undefined;
                 }
@@ -1367,7 +1369,8 @@ namespace ts {
                 // can not be reused. we have to dump all syntax trees and create new ones.
                 if (!shouldCreateNewSourceFile) {
                     // Check if the old program had this file already
-                    const oldSourceFile = program && program.getSourceFileByPath(path);
+                    const containingProgram = isAuxiliaryFile ? autoImportProvider : program;
+                    const oldSourceFile = containingProgram && containingProgram.getSourceFileByPath(path);
                     if (oldSourceFile) {
                         // We already had a source file for this file name.  Go to the registry to
                         // ensure that we get the right up to date version of it.  We need this to
@@ -1404,6 +1407,23 @@ namespace ts {
 
                 // Could not find this file in the old program, create a new SourceFile for it.
                 return documentRegistry.acquireDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+            }
+
+            function createPackageJsonAutoImportProviderHost(compilerHost: CompilerHost): CompilerHost {
+                return {
+                    ...compilerHost,
+                    onReleaseOldSourceFile: onReleaseOldSourceFileFromAutoImportProvider,
+                    getSourceFile: getOrCreateSourceFileForAutoImportProvider,
+                    getSourceFileByPath: getOrCreateSourceFileByPathForAutoImportProvider
+                };
+            }
+
+            function getOrCreateSourceFileForAutoImportProvider(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+                return getOrCreateSourceFile(fileName, languageVersion, onError, shouldCreateNewSourceFile, /*isAuxiliaryFile*/ true);
+            }
+
+            function getOrCreateSourceFileByPathForAutoImportProvider(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+                return getOrCreateSourceFileByPath(fileName, path, languageVersion, onError, shouldCreateNewSourceFile, /*isAuxiliaryFile*/ true);
             }
         }
 
@@ -1467,10 +1487,7 @@ namespace ts {
             const newProgram = rootNames && createProgram({
                 rootNames,
                 options,
-                host: {
-                    ...compilerHost,
-                    onReleaseOldSourceFile: onReleaseOldSourceFileFromAutoImportProvider
-                },
+                host: compilerHost,
                 oldProgram: autoImportProvider
             });
 

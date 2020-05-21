@@ -360,7 +360,7 @@ namespace ts.server {
             return addRange(result, this.typingFiles) || ts.emptyArray;
         }
 
-        private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
+        private getOrCreateScriptInfoAndAttachToProject(fileName: string, isAuxiliaryFile?: boolean) {
             const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
@@ -369,7 +369,12 @@ namespace ts.server {
                     this.rootFiles.push(scriptInfo);
                     existingValue.info = scriptInfo;
                 }
-                scriptInfo.attachToProject(this);
+                if (isAuxiliaryFile) {
+                    scriptInfo.isAuxiliaryFile = true;
+                }
+                if (!scriptInfo.isAuxiliaryFile) {
+                    scriptInfo.attachToProject(this);
+                }
             }
             return scriptInfo;
         }
@@ -386,8 +391,8 @@ namespace ts.server {
             return (info && info.getLatestVersion())!; // TODO: GH#18217
         }
 
-        getScriptSnapshot(filename: string): IScriptSnapshot | undefined {
-            const scriptInfo = this.getOrCreateScriptInfoAndAttachToProject(filename);
+        getScriptSnapshot(filename: string, isAuxiliaryFile?: boolean): IScriptSnapshot | undefined {
+            const scriptInfo = this.getOrCreateScriptInfoAndAttachToProject(filename, isAuxiliaryFile);
             if (scriptInfo) {
                 return scriptInfo.getSnapshot();
             }

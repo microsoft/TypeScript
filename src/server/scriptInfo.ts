@@ -327,6 +327,8 @@ namespace ts.server {
         sourceInfos?: Map<true>;
         /*@internal*/
         documentPositionMapper?: DocumentPositionMapper | false;
+        /*@internal*/
+        isAuxiliaryFile = false;
 
         constructor(
             private readonly host: ServerHost,
