@@ -96,7 +96,7 @@
         "source-map-support": "latest",
         "through2": "latest",
         "travis-fold": "latest",
-        "typescript": "next",
+        "typescript": "^3.9.3",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.19"
