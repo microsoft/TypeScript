@@ -3093,6 +3093,12 @@ namespace ts {
                 else if (isStringOrNumericLiteralLike(nameExpression)) {
                     return escapeLeadingUnderscores(nameExpression.text);
                 }
+                else if (isSignedNumericLiteral(nameExpression)) {
+                    if (nameExpression.operator === SyntaxKind.MinusToken) {
+                        return tokenToString(nameExpression.operator) + nameExpression.operand.text as __String;
+                    }
+                    return nameExpression.operand.text as __String;
+                }
                 return undefined;
             default:
                 return Debug.assertNever(name);

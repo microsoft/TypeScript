@@ -328,7 +328,14 @@ namespace ts {
         getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
             if (!this.documentationComment) {
                 this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
-                this.documentationComment = getDocumentationComment(this.declarations, checker);
+
+                if (!this.declarations && (this as Symbol as TransientSymbol).target && ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
+                    const labelDecl = ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+                    this.documentationComment = getDocumentationComment([labelDecl], checker);
+                }
+                else {
+                    this.documentationComment = getDocumentationComment(this.declarations, checker);
+                }
             }
             return this.documentationComment;
         }

@@ -246,3 +246,17 @@ var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
 >choices : Symbol(choices, Decl(intersectionsAndEmptyObjects.ts, 51, 19))
 >IUnknownChoiceList : Symbol(IUnknownChoiceList, Decl(intersectionsAndEmptyObjects.ts, 64, 2))
 
+// Repro from #38672
+
+type Foo1 = { x: string } & { [x: number]: Foo1 };
+>Foo1 : Symbol(Foo1, Decl(intersectionsAndEmptyObjects.ts, 75, 61))
+>x : Symbol(x, Decl(intersectionsAndEmptyObjects.ts, 79, 13))
+>x : Symbol(x, Decl(intersectionsAndEmptyObjects.ts, 79, 31))
+>Foo1 : Symbol(Foo1, Decl(intersectionsAndEmptyObjects.ts, 75, 61))
+
+type Foo2 = { x: string } & { [K in number]: Foo2 };
+>Foo2 : Symbol(Foo2, Decl(intersectionsAndEmptyObjects.ts, 79, 50))
+>x : Symbol(x, Decl(intersectionsAndEmptyObjects.ts, 80, 13))
+>K : Symbol(K, Decl(intersectionsAndEmptyObjects.ts, 80, 31))
+>Foo2 : Symbol(Foo2, Decl(intersectionsAndEmptyObjects.ts, 79, 50))
+

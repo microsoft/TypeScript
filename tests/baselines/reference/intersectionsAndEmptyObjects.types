@@ -206,3 +206,14 @@ var unknownChoices: choices<IUnknownChoiceList>;
 var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
 >unknownChoicesAndEmpty : { shoes: boolean; food: boolean; }
 
+// Repro from #38672
+
+type Foo1 = { x: string } & { [x: number]: Foo1 };
+>Foo1 : Foo1
+>x : string
+>x : number
+
+type Foo2 = { x: string } & { [K in number]: Foo2 };
+>Foo2 : Foo2
+>x : string
+
