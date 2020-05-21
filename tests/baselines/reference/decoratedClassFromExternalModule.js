@@ -27,3 +27,4 @@ let Decorated = /** @class */ (() => {
 })();
 export default Decorated;
 //// [undecorated.js]
+export {};
