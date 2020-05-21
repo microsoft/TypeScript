@@ -22,7 +22,7 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                     const binaryExpression = <BinaryExpression>node;
                     if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
-                        return transformLogicalAssignmentOperator(binaryExpression);
+                        return transformLogicalAssignment(binaryExpression);
                     }
                     // falls through
                 default:
@@ -30,7 +30,7 @@ namespace ts {
             }
         }
 
-        function transformLogicalAssignmentOperator(binaryExpression: AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>>): VisitResult<Node> {
+        function transformLogicalAssignment(binaryExpression: AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>>): VisitResult<Node> {
             const operator = binaryExpression.operatorToken;
             const nonAssignmentOperator = getNonAssignmentOperatorForCompoundAssignment(operator.kind);
             let left = skipParentheses(visitNode(binaryExpression.left, visitor, isLeftHandSideExpression));
