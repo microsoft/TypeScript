@@ -949,11 +949,16 @@ namespace ts {
         ;
 
     /* @internal */
-    export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
+    export interface MutableNodeArray<T extends Node> extends Array<T>, TextRange {
+        hasTrailingComma: boolean;
+        /* @internal */ isMissingList: boolean;
+        /* @internal */ transformFlags: TransformFlags; // Flags for transforms, possibly undefined
+    }
 
     export interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
-        hasTrailingComma?: boolean;
-        /* @internal */ transformFlags: TransformFlags;   // Flags for transforms, possibly undefined
+        readonly hasTrailingComma: boolean;
+        /* @internal */ readonly isMissingList: boolean;
+        /* @internal */ readonly transformFlags: TransformFlags; // Flags for transforms, possibly undefined
     }
 
     // TODO(rbuckton): Constraint 'TKind' to 'TokenSyntaxKind'
@@ -1274,7 +1279,7 @@ namespace ts {
 
     /*@internal*/
     export interface PrivateIdentifierPropertyDeclaration extends PropertyDeclaration {
-        name: PrivateIdentifier;
+        readonly name: PrivateIdentifier;
     }
 
     /* @internal */
@@ -6519,17 +6524,6 @@ namespace ts {
         /* @internal */ readonly parenthesizer: ParenthesizerRules;
         /* @internal */ readonly converters: NodeConverters;
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
-
-        /**
-         * Tracks setting an extraneous node on a parent. This is primarily used by the parser to add invalid nodes for grammar reporting purposes and is needed to
-         * correctly update transform flags after a node has been created.
-         */
-        /* @internal */ trackExtraneousChildNode(parent: Node, child: Node | undefined): void;
-        /**
-         * Tracks setting an extraneous node array on a parent. This is primarily used by the parser to add invalid nodes for grammar reporting purposes and is needed to
-         * correctly update transform flags after a node has been created.
-         */
-        /* @internal */ trackExtraneousChildNodes(parent: Node, children: NodeArray<Node> | undefined): void;
 
         //
         // Literals

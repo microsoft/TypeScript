@@ -27,8 +27,6 @@ namespace ts {
         const factory: NodeFactory = {
             get parenthesizer() { return parenthesizerRules(); },
             get converters() { return converters(); },
-            trackExtraneousChildNode: setChild,
-            trackExtraneousChildNodes: setChildren,
             createNodeArray,
             createNumericLiteral,
             createBigIntLiteral,
@@ -482,12 +480,14 @@ namespace ts {
         // @api
         function createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T> {
             if (elements === undefined || elements === emptyArray) {
-                elements = [];
+                const freshArray: T[] = [undefined!];
+                freshArray.pop();
+                elements = freshArray;
             }
             else if (isNodeArray(elements)) {
                 // Ensure the transform flags have been aggregated for this NodeArray
                 if (elements.transformFlags === undefined) {
-                    aggregateChildrenFlags(elements);
+                    aggregateChildrenFlags(elements as MutableNodeArray<T>);
                 }
                 return elements;
             }
@@ -496,9 +496,10 @@ namespace ts {
             // repeatedly calling push(), the list may not have the optimal memory layout. We invoke slice() for
             // small arrays (1 to 4 elements) to give the VM a chance to allocate an optimal representation.
             const length = elements.length;
-            const array = <NodeArray<T>>(length >= 1 && length <= 4 ? elements.slice() : elements);
+            const array = <MutableNodeArray<T>>(length >= 1 && length <= 4 ? elements.slice() : elements);
             setTextRangePosEnd(array, -1, -1);
-            array.hasTrailingComma = hasTrailingComma;
+            array.hasTrailingComma = !!hasTrailingComma;
+            array.isMissingList = false;
             aggregateChildrenFlags(array);
             return array;
         }
@@ -518,6 +519,12 @@ namespace ts {
             node.transformFlags |=
                 propagateChildrenFlags(node.decorators) |
                 propagateChildrenFlags(node.modifiers);
+            // NOTE: The following properties are commonly set by the binder and are added here to
+            // ensure declarations have a stable shape.
+            node.symbol = undefined!; // initialized by binder
+            node.localSymbol = undefined!; // initialized by binder
+            node.locals = undefined!; // initialized by binder
+            node.nextContainer = undefined!; // initialized by binder
             return node;
         }
 
@@ -574,6 +581,7 @@ namespace ts {
             );
             node.parameters = createNodeArray(parameters);
             node.type = type;
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildrenFlags(node.parameters) |
                 propagateChildFlags(node.type);
@@ -635,6 +643,7 @@ namespace ts {
                 typeParameters
             );
             node.heritageClauses = asNodeArray(heritageClauses);
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |= propagateChildrenFlags(node.heritageClauses);
             return node;
         }
@@ -881,11 +890,13 @@ namespace ts {
             Debug.assert(token <= SyntaxKind.FirstLiteralToken || token >= SyntaxKind.LastLiteralToken, "Invalid token. Use 'createLiteralLikeNode' to create literals.");
             Debug.assert(token !== SyntaxKind.Identifier, "Invalid token. Use 'createIdentifier' to create identifiers");
             const node = createBaseToken<Token<TKind>>(token);
+            let transformFlags = TransformFlags.None;
             switch (token) {
                 case SyntaxKind.AsyncKeyword:
                     // 'async' modifier is ES2017 (async functions) or ES2018 (async generators)
-                    node.transformFlags |= TransformFlags.ContainsES2017;
-                    node.transformFlags |= TransformFlags.ContainsES2018;
+                    transformFlags =
+                        TransformFlags.ContainsES2017 |
+                        TransformFlags.ContainsES2018;
                     break;
 
                 case SyntaxKind.PublicKeyword:
@@ -906,16 +917,22 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
-                    node.transformFlags |= TransformFlags.ContainsTypeScript;
+                    transformFlags = TransformFlags.ContainsTypeScript;
                     break;
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.SuperKeyword:
-                    node.transformFlags |= TransformFlags.ContainsES2015;
+                    transformFlags = TransformFlags.ContainsES2015;
                     break;
                 case SyntaxKind.ThisKeyword:
                     // 'this' indicates a lexical 'this'
-                    node.transformFlags |= TransformFlags.ContainsLexicalThis;
+                    transformFlags = TransformFlags.ContainsLexicalThis;
                     break;
+                case SyntaxKind.EndOfFileToken:
+                    (node as EndOfFileToken).jsDoc = undefined; // extraneous node set by parser
+                    break;
+            }
+            if (transformFlags) {
+                node.transformFlags |= transformFlags;
             }
             return node;
         }
@@ -1031,6 +1048,7 @@ namespace ts {
             node.constraint = constraint;
             node.default = defaultType;
             node.transformFlags = TransformFlags.ContainsTypeScript;
+            node.expression = undefined; // extraneous node set by parser.
             return node;
         }
 
@@ -1063,6 +1081,7 @@ namespace ts {
             );
             node.dotDotDotToken = dotDotDotToken;
             node.questionToken = questionToken;
+            node.jsDoc = undefined; // extraneous node set by parser
             if (isThisIdentifier(node.name)) {
                 node.transformFlags = TransformFlags.ContainsTypeScript;
             }
@@ -1136,6 +1155,8 @@ namespace ts {
             );
             node.type = type;
             node.questionToken = questionToken;
+            node.initializer = undefined; // extraneous node set by parser.
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -1175,6 +1196,7 @@ namespace ts {
             );
             node.questionToken = questionOrExclamationToken && isQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
             node.exclamationToken = questionOrExclamationToken && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.questionToken) |
                 propagateChildFlags(node.exclamationToken) |
@@ -1276,6 +1298,7 @@ namespace ts {
             );
             node.asteriskToken = asteriskToken;
             node.questionToken = questionToken;
+            node.exclamationToken = undefined; // extraneous node set by parser.
             node.transformFlags |=
                 propagateChildFlags(node.asteriskToken) |
                 propagateChildFlags(node.questionToken) |
@@ -2001,9 +2024,18 @@ namespace ts {
         // Expression
         //
 
+        function createBaseExpression<T extends Expression>(kind: T["kind"]) {
+            const node = createBaseNode(kind);
+            // the following properties are commonly set by the checker/binder
+            node.contextualType = undefined;
+            node.inferenceContext = undefined;
+            node.flowNode = undefined;
+            return node;
+        }
+
         // @api
         function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
-            const node = createBaseNode<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
+            const node = createBaseExpression<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
             node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(elements));
             node.multiLine = multiLine;
             node.transformFlags |= propagateChildrenFlags(node.elements);
@@ -2019,7 +2051,7 @@ namespace ts {
 
         // @api
         function createObjectLiteralExpression(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean) {
-            const node = createBaseNode<ObjectLiteralExpression>(SyntaxKind.ObjectLiteralExpression);
+            const node = createBaseExpression<ObjectLiteralExpression>(SyntaxKind.ObjectLiteralExpression);
             node.properties = createNodeArray(properties);
             node.multiLine = multiLine;
             node.transformFlags |= propagateChildrenFlags(node.properties);
@@ -2035,7 +2067,7 @@ namespace ts {
 
         // @api
         function createPropertyAccessExpression(expression: Expression, name: string | Identifier | PrivateIdentifier) {
-            const node = createBaseNode<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
+            const node = createBaseExpression<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
             node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
             node.name = asName(name);
             node.transformFlags =
@@ -2064,7 +2096,7 @@ namespace ts {
 
         // @api
         function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier) {
-            const node = createBaseNode<PropertyAccessChain>(SyntaxKind.PropertyAccessExpression);
+            const node = createBaseExpression<PropertyAccessChain>(SyntaxKind.PropertyAccessExpression);
             node.flags |= NodeFlags.OptionalChain;
             node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
             node.questionDotToken = questionDotToken;
@@ -2091,7 +2123,7 @@ namespace ts {
 
         // @api
         function createElementAccessExpression(expression: Expression, index: number | Expression) {
-            const node = createBaseNode<ElementAccessExpression>(SyntaxKind.ElementAccessExpression);
+            const node = createBaseExpression<ElementAccessExpression>(SyntaxKind.ElementAccessExpression);
             node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
             node.argumentExpression = asExpression(index);
             node.transformFlags |=
@@ -2120,7 +2152,7 @@ namespace ts {
 
         // @api
         function createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression) {
-            const node = createBaseNode<ElementAccessChain>(SyntaxKind.ElementAccessExpression);
+            const node = createBaseExpression<ElementAccessChain>(SyntaxKind.ElementAccessExpression);
             node.flags |= NodeFlags.OptionalChain;
             node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
             node.questionDotToken = questionDotToken;
@@ -2147,7 +2179,7 @@ namespace ts {
 
         // @api
         function createCallExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
-            const node = createBaseNode<CallExpression>(SyntaxKind.CallExpression);
+            const node = createBaseExpression<CallExpression>(SyntaxKind.CallExpression);
             node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
             node.typeArguments = asNodeArray(typeArguments);
             node.arguments = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray));
@@ -2181,7 +2213,7 @@ namespace ts {
 
         // @api
         function createCallChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
-            const node = createBaseNode<CallChain>(SyntaxKind.CallExpression);
+            const node = createBaseExpression<CallChain>(SyntaxKind.CallExpression);
             node.flags |= NodeFlags.OptionalChain;
             node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
             node.questionDotToken = questionDotToken;
@@ -2215,7 +2247,7 @@ namespace ts {
 
         // @api
         function createNewExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
-            const node = createBaseNode<NewExpression>(SyntaxKind.NewExpression);
+            const node = createBaseExpression<NewExpression>(SyntaxKind.NewExpression);
             node.expression = parenthesizerRules().parenthesizeExpressionOfNew(expression);
             node.typeArguments = asNodeArray(typeArguments);
             node.arguments = argumentsArray ? parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(argumentsArray) : undefined;
@@ -2241,8 +2273,9 @@ namespace ts {
 
         // @api
         function createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral) {
-            const node = createBaseNode<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression);
+            const node = createBaseExpression<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression);
             node.tag = parenthesizerRules().parenthesizeLeftSideOfAccess(tag);
+            node.questionDotToken = undefined; // extraneous node set by parser.
             node.typeArguments = asNodeArray(typeArguments);
             node.template = template;
             node.transformFlags |=
@@ -2270,7 +2303,7 @@ namespace ts {
 
         // @api
         function createTypeAssertion(type: TypeNode, expression: Expression) {
-            const node = createBaseNode<TypeAssertion>(SyntaxKind.TypeAssertionExpression);
+            const node = createBaseExpression<TypeAssertion>(SyntaxKind.TypeAssertionExpression);
             node.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
             node.type = type;
             node.transformFlags |=
@@ -2290,9 +2323,10 @@ namespace ts {
 
         // @api
         function createParenthesizedExpression(expression: Expression) {
-            const node = createBaseNode<ParenthesizedExpression>(SyntaxKind.ParenthesizedExpression);
+            const node = createBaseExpression<ParenthesizedExpression>(SyntaxKind.ParenthesizedExpression);
             node.expression = expression;
             node.transformFlags = propagateChildFlags(node.expression);
+            node.jsDoc = undefined; // extraneous node set by parser
             return node;
         }
 
@@ -2415,7 +2449,7 @@ namespace ts {
 
         // @api
         function createDeleteExpression(expression: Expression) {
-            const node = createBaseNode<DeleteExpression>(SyntaxKind.DeleteExpression);
+            const node = createBaseExpression<DeleteExpression>(SyntaxKind.DeleteExpression);
             node.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
             node.transformFlags |= propagateChildFlags(node.expression);
             return node;
@@ -2430,7 +2464,7 @@ namespace ts {
 
         // @api
         function createTypeOfExpression(expression: Expression) {
-            const node = createBaseNode<TypeOfExpression>(SyntaxKind.TypeOfExpression);
+            const node = createBaseExpression<TypeOfExpression>(SyntaxKind.TypeOfExpression);
             node.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
             node.transformFlags |= propagateChildFlags(node.expression);
             return node;
@@ -2445,7 +2479,7 @@ namespace ts {
 
         // @api
         function createVoidExpression(expression: Expression) {
-            const node = createBaseNode<VoidExpression>(SyntaxKind.VoidExpression);
+            const node = createBaseExpression<VoidExpression>(SyntaxKind.VoidExpression);
             node.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
             node.transformFlags |= propagateChildFlags(node.expression);
             return node;
@@ -2460,7 +2494,7 @@ namespace ts {
 
         // @api
         function createAwaitExpression(expression: Expression) {
-            const node = createBaseNode<AwaitExpression>(SyntaxKind.AwaitExpression);
+            const node = createBaseExpression<AwaitExpression>(SyntaxKind.AwaitExpression);
             node.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
@@ -2479,7 +2513,7 @@ namespace ts {
 
         // @api
         function createPrefixUnaryExpression(operator: PrefixUnaryOperator, operand: Expression) {
-            const node = createBaseNode<PrefixUnaryExpression>(SyntaxKind.PrefixUnaryExpression);
+            const node = createBaseExpression<PrefixUnaryExpression>(SyntaxKind.PrefixUnaryExpression);
             node.operator = operator;
             node.operand = parenthesizerRules().parenthesizeOperandOfPrefixUnary(operand);
             node.transformFlags |= propagateChildFlags(node.operand);
@@ -2495,7 +2529,7 @@ namespace ts {
 
         // @api
         function createPostfixUnaryExpression(operand: Expression, operator: PostfixUnaryOperator) {
-            const node = createBaseNode<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression);
+            const node = createBaseExpression<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression);
             node.operator = operator;
             node.operand = parenthesizerRules().parenthesizeOperandOfPostfixUnary(operand);
             node.transformFlags = propagateChildFlags(node.operand);
@@ -2511,7 +2545,7 @@ namespace ts {
 
         // @api
         function createBinaryExpression(left: Expression, operator: BinaryOperator | BinaryOperatorToken, right: Expression) {
-            const node = createBaseNode<BinaryExpression>(SyntaxKind.BinaryExpression);
+            const node = createBaseExpression<BinaryExpression>(SyntaxKind.BinaryExpression);
             const operatorToken = asToken(operator);
             const operatorKind = operatorToken.kind;
             node.left = parenthesizerRules().parenthesizeLeftSideOfBinary(operatorKind, left);
@@ -2554,7 +2588,7 @@ namespace ts {
 
         // @api
         function createConditionalExpression(condition: Expression, questionToken: QuestionToken | undefined, whenTrue: Expression, colonToken: ColonToken | undefined, whenFalse: Expression) {
-            const node = createBaseNode<ConditionalExpression>(SyntaxKind.ConditionalExpression);
+            const node = createBaseExpression<ConditionalExpression>(SyntaxKind.ConditionalExpression);
             node.condition = parenthesizerRules().parenthesizeConditionOfConditionalExpression(condition);
             node.questionToken = questionToken ?? createToken(SyntaxKind.QuestionToken);
             node.whenTrue = parenthesizerRules().parenthesizeBranchOfConditionalExpression(whenTrue);
@@ -2589,7 +2623,7 @@ namespace ts {
 
         // @api
         function createTemplateExpression(head: TemplateHead, templateSpans: readonly TemplateSpan[]) {
-            const node = createBaseNode<TemplateExpression>(SyntaxKind.TemplateExpression);
+            const node = createBaseExpression<TemplateExpression>(SyntaxKind.TemplateExpression);
             node.head = head;
             node.templateSpans = createNodeArray(templateSpans);
             node.transformFlags |=
@@ -2666,7 +2700,7 @@ namespace ts {
         // @api
         function createYieldExpression(asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression {
             Debug.assert(!asteriskToken || !!expression, "A `YieldExpression` with an asteriskToken must have an expression.");
-            const node = createBaseNode<YieldExpression>(SyntaxKind.YieldExpression);
+            const node = createBaseExpression<YieldExpression>(SyntaxKind.YieldExpression);
             node.expression = expression && parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
             node.asteriskToken = asteriskToken;
             node.transformFlags |=
@@ -2688,7 +2722,7 @@ namespace ts {
 
         // @api
         function createSpreadElement(expression: Expression) {
-            const node = createBaseNode<SpreadElement>(SyntaxKind.SpreadElement);
+            const node = createBaseExpression<SpreadElement>(SyntaxKind.SpreadElement);
             node.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
@@ -2748,7 +2782,7 @@ namespace ts {
 
         // @api
         function createOmittedExpression() {
-            return createBaseNode<OmittedExpression>(SyntaxKind.OmittedExpression);
+            return createBaseExpression<OmittedExpression>(SyntaxKind.OmittedExpression);
         }
 
         // @api
@@ -2773,7 +2807,7 @@ namespace ts {
 
         // @api
         function createAsExpression(expression: Expression, type: TypeNode) {
-            const node = createBaseNode<AsExpression>(SyntaxKind.AsExpression);
+            const node = createBaseExpression<AsExpression>(SyntaxKind.AsExpression);
             node.expression = expression;
             node.type = type;
             node.transformFlags |=
@@ -2793,7 +2827,7 @@ namespace ts {
 
         // @api
         function createNonNullExpression(expression: Expression) {
-            const node = createBaseNode<NonNullExpression>(SyntaxKind.NonNullExpression);
+            const node = createBaseExpression<NonNullExpression>(SyntaxKind.NonNullExpression);
             node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
@@ -2813,7 +2847,7 @@ namespace ts {
 
         // @api
         function createNonNullChain(expression: Expression) {
-            const node = createBaseNode<NonNullChain>(SyntaxKind.NonNullExpression);
+            const node = createBaseExpression<NonNullChain>(SyntaxKind.NonNullExpression);
             node.flags |= NodeFlags.OptionalChain;
             node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
             node.transformFlags |=
@@ -2832,7 +2866,7 @@ namespace ts {
 
         // @api
         function createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier) {
-            const node = createBaseNode<MetaProperty>(SyntaxKind.MetaProperty);
+            const node = createBaseExpression<MetaProperty>(SyntaxKind.MetaProperty);
             node.keywordToken = keywordToken;
             node.name = name;
             node.transformFlags |= propagateChildFlags(node.name);
@@ -2911,6 +2945,7 @@ namespace ts {
         function createVariableStatement(modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]) {
             const node = createBaseDeclaration<VariableStatement>(SyntaxKind.VariableStatement, /*decorators*/ undefined, modifiers);
             node.declarationList = isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList;
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.declarationList);
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
@@ -2936,6 +2971,7 @@ namespace ts {
         function createExpressionStatement(expression: Expression): ExpressionStatement {
             const node = createBaseNode<ExpressionStatement>(SyntaxKind.ExpressionStatement);
             node.expression = parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression);
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |= propagateChildFlags(node.expression);
             return node;
         }
@@ -3177,6 +3213,7 @@ namespace ts {
             const node = createBaseNode<LabeledStatement>(SyntaxKind.LabeledStatement);
             node.label = asName(label);
             node.statement = asEmbeddedStatement(statement);
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.label) |
                 propagateChildFlags(node.statement);
@@ -3460,6 +3497,7 @@ namespace ts {
                 typeParameters
             );
             node.type = type;
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -3496,6 +3534,7 @@ namespace ts {
                 name
             );
             node.members = createNodeArray(members);
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildrenFlags(node.members) |
                 TransformFlags.ContainsTypeScript;
@@ -3533,6 +3572,7 @@ namespace ts {
             node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
             node.name = name;
             node.body = body;
+            node.jsDoc = undefined; // extraneous node set by parser
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
                 node.transformFlags = TransformFlags.ContainsTypeScript;
             }
@@ -3593,8 +3633,13 @@ namespace ts {
 
         // @api
         function createNamespaceExportDeclaration(name: string | Identifier) {
-            const node = createBaseNode<NamespaceExportDeclaration>(SyntaxKind.NamespaceExportDeclaration);
-            node.name = asName(name);
+            const node = createBaseNamedDeclaration<NamespaceExportDeclaration>(
+                SyntaxKind.NamespaceExportDeclaration,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                name
+            );
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -3620,6 +3665,7 @@ namespace ts {
                 name
             );
             node.moduleReference = moduleReference;
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |= propagateChildFlags(node.moduleReference);
             if (!isExternalModuleReference(node.moduleReference)) node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
@@ -3655,6 +3701,7 @@ namespace ts {
             );
             node.importClause = importClause;
             node.moduleSpecifier = moduleSpecifier;
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.importClause) |
                 propagateChildFlags(node.moduleSpecifier);
@@ -3783,6 +3830,7 @@ namespace ts {
             node.expression = isExportEquals
                 ? parenthesizerRules().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
                 : parenthesizerRules().parenthesizeExpressionOfExportDefault(expression);
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |= propagateChildFlags(node.expression);
             return node;
         }
@@ -3817,6 +3865,7 @@ namespace ts {
             node.isTypeOnly = isTypeOnly;
             node.exportClause = exportClause;
             node.moduleSpecifier = moduleSpecifier;
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.exportClause) |
                 propagateChildFlags(node.moduleSpecifier);
@@ -4597,10 +4646,16 @@ namespace ts {
 
         // @api
         function createPropertyAssignment(name: string | PropertyName, initializer: Expression) {
-            const node = createBaseNode<PropertyAssignment>(SyntaxKind.PropertyAssignment);
-            node.name = asName(name);
-            node.questionToken = undefined;
+            const node = createBaseNamedDeclaration<PropertyAssignment>(
+                SyntaxKind.PropertyAssignment,
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                name
+            );
+            node.questionToken = undefined; // extraneous node set by parser.
+            node.exclamationToken = undefined; // extraneous node set by parser.
             node.initializer = parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer);
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.name) |
                 propagateChildFlags(node.initializer);
@@ -4632,7 +4687,11 @@ namespace ts {
                 /*modifiers*/ undefined,
                 name
             );
+            node.equalsToken = undefined; // extraneous node set by parser.
             node.objectAssignmentInitializer = objectAssignmentInitializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(objectAssignmentInitializer);
+            node.questionToken = undefined; // extraneous node set by parser.
+            node.exclamationToken = undefined; // extraneous node set by parser.
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.objectAssignmentInitializer) |
                 TransformFlags.ContainsES2015;
@@ -4661,6 +4720,7 @@ namespace ts {
         function createSpreadAssignment(expression: Expression) {
             const node = createBaseNode<SpreadAssignment>(SyntaxKind.SpreadAssignment);
             node.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
+            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
                 TransformFlags.ContainsES2018 |
@@ -4720,6 +4780,8 @@ namespace ts {
             node.scriptKind = 0;
             node.isDeclarationFile = false;
             node.hasNoDefaultLib = false;
+            node.externalModuleIndicator = undefined;
+            node.commonJsModuleIndicator = undefined;
             node.transformFlags |=
                 propagateChildrenFlags(node.statements) |
                 propagateChildFlags(node.endOfFileToken);
@@ -5050,18 +5112,6 @@ namespace ts {
         function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
         function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
             return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
-        }
-
-        function setChild(parent: Mutable<Node>, child: Node | undefined): void {
-            if (child) {
-                parent.transformFlags |= propagateChildFlags(child);
-            }
-        }
-
-        function setChildren(parent: Mutable<Node>, children: NodeArray<Node> | undefined): void {
-            if (children) {
-                parent.transformFlags |= propagateChildrenFlags(children);
-            }
         }
     }
 
@@ -5948,7 +5998,7 @@ namespace ts {
         return children ? children.transformFlags : TransformFlags.None;
     }
 
-    function aggregateChildrenFlags(children: NodeArray<Node>) {
+    function aggregateChildrenFlags(children: MutableNodeArray<Node>) {
         let subtreeFlags = TransformFlags.None;
         for (const child of children) {
             subtreeFlags |= propagateChildFlags(child);

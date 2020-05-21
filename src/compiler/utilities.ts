@@ -5496,6 +5496,7 @@ namespace ts {
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
         this.original = undefined;
+        this.emitNode = undefined;
     }
 
     function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
@@ -5506,6 +5507,7 @@ namespace ts {
         this.flags = NodeFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
+        this.emitNode = undefined;
     }
 
     function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
@@ -5517,6 +5519,7 @@ namespace ts {
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
         this.original = undefined;
+        this.emitNode = undefined;
         this.flowNode = undefined;
     }
 
