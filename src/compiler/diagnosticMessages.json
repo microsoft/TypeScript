@@ -4416,6 +4416,10 @@
         "category": "Error",
         "code": 6233
     },
+    "This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?": {
+        "category": "Error",
+        "code": 6234
+    },
 
     "Projects to reference": {
         "category": "Message",
