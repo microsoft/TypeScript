@@ -19,8 +19,8 @@ b.baz ||= result.baz
 c.baz ??= result.baz
 
 a.foo["baz"] &&= result.foo.baz
-b.foo["baz"] &&= result.foo.baz
-c.foo["baz"] &&= result.foo.baz
+b.foo["baz"] ||= result.foo.baz
+c.foo["baz"] ??= result.foo.baz
 
 a.foo.bar().baz &&= result.foo.bar().baz
 b.foo.bar().baz ||= result.foo.bar().baz
@@ -35,8 +35,8 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 (_b = b).baz || (_b.baz = result.baz);
 (_c = c).baz ?? (_c.baz = result.baz);
 (_d = a.foo)["baz"] && (_d["baz"] = result.foo.baz);
-(_e = b.foo)["baz"] && (_e["baz"] = result.foo.baz);
-(_f = c.foo)["baz"] && (_f["baz"] = result.foo.baz);
+(_e = b.foo)["baz"] || (_e["baz"] = result.foo.baz);
+(_f = c.foo)["baz"] ?? (_f["baz"] = result.foo.baz);
 (_g = a.foo.bar()).baz && (_g.baz = result.foo.bar().baz);
 (_h = b.foo.bar()).baz || (_h.baz = result.foo.bar().baz);
 (_j = c.foo.bar()).baz ?? (_j.baz = result.foo.bar().baz);

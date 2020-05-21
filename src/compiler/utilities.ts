@@ -4450,10 +4450,14 @@ namespace ts {
             || token === SyntaxKind.ExclamationToken;
     }
 
-    export function isLogicalOrCoalescingAssignmentOperator(token: SyntaxKind): boolean {
+    export function isLogicalOrCoalescingAssignmentOperator(token: SyntaxKind): token is LogicalOrCoalescingAssignmentOperator {
         return token === SyntaxKind.BarBarEqualsToken
             || token === SyntaxKind.AmpersandAmpersandEqualsToken
             || token === SyntaxKind.QuestionQuestionEqualsToken;
+    }
+
+    export function isLogicalOrCoalescingAssignmentExpression(expr: BinaryExpression): expr is AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>> {
+        return isLogicalOrCoalescingAssignmentOperator(expr.operatorToken.kind);
     }
 
     export function isAssignmentOperator(token: SyntaxKind): boolean {

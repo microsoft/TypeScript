@@ -68,8 +68,8 @@ a.foo["baz"] &&= result.foo.baz
 >foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >baz : "" | 0 | 1 | 42 | undefined
 
-b.foo["baz"] &&= result.foo.baz
->b.foo["baz"] &&= result.foo.baz : "" | 0 | 1 | 42 | undefined
+b.foo["baz"] ||= result.foo.baz
+>b.foo["baz"] ||= result.foo.baz : "" | 0 | 1 | 42 | undefined
 >b.foo["baz"] : "" | 0 | 1 | 42 | undefined
 >b.foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >b : A
@@ -81,8 +81,8 @@ b.foo["baz"] &&= result.foo.baz
 >foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >baz : "" | 0 | 1 | 42 | undefined
 
-c.foo["baz"] &&= result.foo.baz
->c.foo["baz"] &&= result.foo.baz : "" | 0 | 1 | 42 | undefined
+c.foo["baz"] ??= result.foo.baz
+>c.foo["baz"] ??= result.foo.baz : "" | 0 | 1 | 42 | undefined
 >c.foo["baz"] : "" | 0 | 1 | 42 | undefined
 >c.foo : { bar(): { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 >c : A

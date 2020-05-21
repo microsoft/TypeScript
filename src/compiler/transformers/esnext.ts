@@ -21,8 +21,8 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.BinaryExpression:
                     const binaryExpression = <BinaryExpression>node;
-                    if (isLogicalOrCoalescingAssignmentOperator(binaryExpression.operatorToken.kind)) {
-                        return transformLogicalAssignmentOperators(binaryExpression);
+                    if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
+                        return transformLogicalAssignmentOperator(binaryExpression);
                     }
                     // falls through
                 default:
@@ -30,56 +30,52 @@ namespace ts {
             }
         }
 
-        function transformLogicalAssignmentOperators(binaryExpression: BinaryExpression): VisitResult<Node> {
+        function transformLogicalAssignmentOperator(binaryExpression: AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>>): VisitResult<Node> {
             const operator = binaryExpression.operatorToken;
-            if (isCompoundAssignment(operator.kind) && isLogicalOrCoalescingAssignmentOperator(operator.kind)) {
-                const nonAssignmentOperator = getNonAssignmentOperatorForCompoundAssignment(operator.kind);
-                let left = skipParentheses(visitNode(binaryExpression.left, visitor, isLeftHandSideExpression));
-                let assignmentTarget = left;
-                const right = skipParentheses(visitNode(binaryExpression.right, visitor, isExpression));
-                if (isPropertyAccessExpression(left) || isElementAccessExpression(left)) {
-                    const tempVariable = createTempVariable(hoistVariableDeclaration);
-                    if (isPropertyAccessExpression(left)) {
-                        assignmentTarget = createPropertyAccess(
-                            tempVariable,
-                            left.name
-                        );
-                        left = createPropertyAccess(
-                            createAssignment(
-                               tempVariable,
-                               left.expression
-                            ),
-                            left.name
-                        );
-                    }
-                    else {
-                        assignmentTarget = createElementAccess(
-                            tempVariable,
-                            left.argumentExpression
-                        );
-                        left = createElementAccess(
-                            createAssignment(
-                               tempVariable,
-                               left.expression
-                            ),
-                            left.argumentExpression
-                        );
-                    }
-                }
-
-                return createBinary(
-                    left,
-                    nonAssignmentOperator,
-                    createParen(
+            const nonAssignmentOperator = getNonAssignmentOperatorForCompoundAssignment(operator.kind);
+            let left = skipParentheses(visitNode(binaryExpression.left, visitor, isLeftHandSideExpression));
+            let assignmentTarget = left;
+            const right = skipParentheses(visitNode(binaryExpression.right, visitor, isExpression));
+            if (isAccessExpression(left)) {
+                const tempVariable = createTempVariable(hoistVariableDeclaration);
+                if (isPropertyAccessExpression(left)) {
+                    assignmentTarget = createPropertyAccess(
+                        tempVariable,
+                        left.name
+                    );
+                    left = createPropertyAccess(
                         createAssignment(
-                            assignmentTarget,
-                            right
-                        )
-                    )
-                );
-
+                            tempVariable,
+                            left.expression
+                        ),
+                        left.name
+                    );
+                }
+                else {
+                    assignmentTarget = createElementAccess(
+                        tempVariable,
+                        left.argumentExpression
+                    );
+                    left = createElementAccess(
+                        createAssignment(
+                            tempVariable,
+                            left.expression
+                        ),
+                        left.argumentExpression
+                    );
+                }
             }
-            Debug.fail("unexpected operator: " + operator.kind);
+
+            return createBinary(
+                left,
+                nonAssignmentOperator,
+                createParen(
+                    createAssignment(
+                        assignmentTarget,
+                        right
+                    )
+                )
+            );
         }
     }
 }

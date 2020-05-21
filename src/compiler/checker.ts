@@ -20813,7 +20813,6 @@ namespace ts {
                     case SyntaxKind.AmpersandAmpersandEqualsToken:
                     case SyntaxKind.QuestionQuestionEqualsToken:
                         return narrowTypeByTruthiness(narrowType(type, expr.right, assumeTrue), expr.left, assumeTrue);
-
                     case SyntaxKind.EqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
                     case SyntaxKind.EqualsEqualsEqualsToken:
@@ -22437,6 +22436,9 @@ namespace ts {
             const { left, operatorToken, right } = binaryExpression;
             switch (operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
+                case SyntaxKind.AmpersandAmpersandEqualsToken:
+                case SyntaxKind.BarBarEqualsToken:
+                case SyntaxKind.QuestionQuestionEqualsToken:
                     if (node !== right) {
                         return undefined;
                     }
@@ -22447,8 +22449,6 @@ namespace ts {
                     return contextSensitive === true ? getTypeOfExpression(left) : contextSensitive;
                 case SyntaxKind.BarBarToken:
                 case SyntaxKind.QuestionQuestionToken:
-                case SyntaxKind.BarBarEqualsToken:
-                case SyntaxKind.QuestionQuestionEqualsToken:
                     // When an || expression has a contextual type, the operands are contextually typed by that type, except
                     // when that type originates in a binding pattern, the right operand is contextually typed by the type of
                     // the left operand. When an || expression has no contextual type, the right operand is contextually typed

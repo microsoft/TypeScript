@@ -69,7 +69,7 @@ a.foo["baz"] &&= result.foo.baz
 >foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
 >baz : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
 
-b.foo["baz"] &&= result.foo.baz
+b.foo["baz"] ||= result.foo.baz
 >b.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
 >b : Symbol(b, Decl(logicalAssignment2.ts, 12, 13))
 >foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
@@ -80,7 +80,7 @@ b.foo["baz"] &&= result.foo.baz
 >foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
 >baz : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
 
-c.foo["baz"] &&= result.foo.baz
+c.foo["baz"] ??= result.foo.baz
 >c.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
 >c : Symbol(c, Decl(logicalAssignment2.ts, 13, 13))
 >foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))

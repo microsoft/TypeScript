@@ -1635,6 +1635,12 @@ namespace ts {
         | SyntaxKind.CommaToken
         ;
 
+    export type LogicalOrCoalescingAssignmentOperator
+        = SyntaxKind.AmpersandAmpersandEqualsToken
+        | SyntaxKind.BarBarEqualsToken
+        | SyntaxKind.QuestionQuestionEqualsToken
+        ;
+
     export type BinaryOperatorToken = Token<BinaryOperator>;
 
     export interface BinaryExpression extends Expression, Declaration {
