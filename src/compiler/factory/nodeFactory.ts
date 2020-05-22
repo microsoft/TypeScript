@@ -581,7 +581,6 @@ namespace ts {
             );
             node.parameters = createNodeArray(parameters);
             node.type = type;
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildrenFlags(node.parameters) |
                 propagateChildFlags(node.type);
@@ -643,7 +642,6 @@ namespace ts {
                 typeParameters
             );
             node.heritageClauses = asNodeArray(heritageClauses);
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |= propagateChildrenFlags(node.heritageClauses);
             return node;
         }
@@ -719,8 +717,6 @@ namespace ts {
         ) {
             const node = createBaseToken(kind);
             node.text = text;
-            node.hasExtendedUnicodeEscape = undefined;
-            node.isUnterminated = undefined;
             return node;
         }
 
@@ -927,9 +923,6 @@ namespace ts {
                     // 'this' indicates a lexical 'this'
                     transformFlags = TransformFlags.ContainsLexicalThis;
                     break;
-                case SyntaxKind.EndOfFileToken:
-                    (node as EndOfFileToken).jsDoc = undefined; // extraneous node set by parser
-                    break;
             }
             if (transformFlags) {
                 node.transformFlags |= transformFlags;
@@ -1048,7 +1041,6 @@ namespace ts {
             node.constraint = constraint;
             node.default = defaultType;
             node.transformFlags = TransformFlags.ContainsTypeScript;
-            node.expression = undefined; // extraneous node set by parser.
             return node;
         }
 
@@ -1081,7 +1073,6 @@ namespace ts {
             );
             node.dotDotDotToken = dotDotDotToken;
             node.questionToken = questionToken;
-            node.jsDoc = undefined; // extraneous node set by parser
             if (isThisIdentifier(node.name)) {
                 node.transformFlags = TransformFlags.ContainsTypeScript;
             }
@@ -1155,8 +1146,6 @@ namespace ts {
             );
             node.type = type;
             node.questionToken = questionToken;
-            node.initializer = undefined; // extraneous node set by parser.
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -1196,7 +1185,6 @@ namespace ts {
             );
             node.questionToken = questionOrExclamationToken && isQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
             node.exclamationToken = questionOrExclamationToken && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined;
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.questionToken) |
                 propagateChildFlags(node.exclamationToken) |
@@ -1298,7 +1286,6 @@ namespace ts {
             );
             node.asteriskToken = asteriskToken;
             node.questionToken = questionToken;
-            node.exclamationToken = undefined; // extraneous node set by parser.
             node.transformFlags |=
                 propagateChildFlags(node.asteriskToken) |
                 propagateChildFlags(node.questionToken) |
@@ -2027,9 +2014,6 @@ namespace ts {
         function createBaseExpression<T extends Expression>(kind: T["kind"]) {
             const node = createBaseNode(kind);
             // the following properties are commonly set by the checker/binder
-            node.contextualType = undefined;
-            node.inferenceContext = undefined;
-            node.flowNode = undefined;
             return node;
         }
 
@@ -2275,7 +2259,6 @@ namespace ts {
         function createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral) {
             const node = createBaseExpression<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression);
             node.tag = parenthesizerRules().parenthesizeLeftSideOfAccess(tag);
-            node.questionDotToken = undefined; // extraneous node set by parser.
             node.typeArguments = asNodeArray(typeArguments);
             node.template = template;
             node.transformFlags |=
@@ -2326,7 +2309,6 @@ namespace ts {
             const node = createBaseExpression<ParenthesizedExpression>(SyntaxKind.ParenthesizedExpression);
             node.expression = expression;
             node.transformFlags = propagateChildFlags(node.expression);
-            node.jsDoc = undefined; // extraneous node set by parser
             return node;
         }
 
@@ -2945,7 +2927,6 @@ namespace ts {
         function createVariableStatement(modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]) {
             const node = createBaseDeclaration<VariableStatement>(SyntaxKind.VariableStatement, /*decorators*/ undefined, modifiers);
             node.declarationList = isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList;
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.declarationList);
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
@@ -2971,7 +2952,6 @@ namespace ts {
         function createExpressionStatement(expression: Expression): ExpressionStatement {
             const node = createBaseNode<ExpressionStatement>(SyntaxKind.ExpressionStatement);
             node.expression = parenthesizerRules().parenthesizeExpressionOfExpressionStatement(expression);
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |= propagateChildFlags(node.expression);
             return node;
         }
@@ -3213,7 +3193,6 @@ namespace ts {
             const node = createBaseNode<LabeledStatement>(SyntaxKind.LabeledStatement);
             node.label = asName(label);
             node.statement = asEmbeddedStatement(statement);
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.label) |
                 propagateChildFlags(node.statement);
@@ -3497,7 +3476,6 @@ namespace ts {
                 typeParameters
             );
             node.type = type;
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -3534,7 +3512,6 @@ namespace ts {
                 name
             );
             node.members = createNodeArray(members);
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildrenFlags(node.members) |
                 TransformFlags.ContainsTypeScript;
@@ -3572,7 +3549,6 @@ namespace ts {
             node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
             node.name = name;
             node.body = body;
-            node.jsDoc = undefined; // extraneous node set by parser
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
                 node.transformFlags = TransformFlags.ContainsTypeScript;
             }
@@ -3639,7 +3615,6 @@ namespace ts {
                 /*modifiers*/ undefined,
                 name
             );
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -3665,7 +3640,6 @@ namespace ts {
                 name
             );
             node.moduleReference = moduleReference;
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |= propagateChildFlags(node.moduleReference);
             if (!isExternalModuleReference(node.moduleReference)) node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
@@ -3701,7 +3675,6 @@ namespace ts {
             );
             node.importClause = importClause;
             node.moduleSpecifier = moduleSpecifier;
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.importClause) |
                 propagateChildFlags(node.moduleSpecifier);
@@ -3830,7 +3803,6 @@ namespace ts {
             node.expression = isExportEquals
                 ? parenthesizerRules().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
                 : parenthesizerRules().parenthesizeExpressionOfExportDefault(expression);
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |= propagateChildFlags(node.expression);
             return node;
         }
@@ -3865,7 +3837,6 @@ namespace ts {
             node.isTypeOnly = isTypeOnly;
             node.exportClause = exportClause;
             node.moduleSpecifier = moduleSpecifier;
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.exportClause) |
                 propagateChildFlags(node.moduleSpecifier);
@@ -4652,10 +4623,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 name
             );
-            node.questionToken = undefined; // extraneous node set by parser.
-            node.exclamationToken = undefined; // extraneous node set by parser.
             node.initializer = parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer);
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.name) |
                 propagateChildFlags(node.initializer);
@@ -4687,11 +4655,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 name
             );
-            node.equalsToken = undefined; // extraneous node set by parser.
             node.objectAssignmentInitializer = objectAssignmentInitializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(objectAssignmentInitializer);
-            node.questionToken = undefined; // extraneous node set by parser.
-            node.exclamationToken = undefined; // extraneous node set by parser.
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.objectAssignmentInitializer) |
                 TransformFlags.ContainsES2015;
@@ -4720,7 +4684,6 @@ namespace ts {
         function createSpreadAssignment(expression: Expression) {
             const node = createBaseNode<SpreadAssignment>(SyntaxKind.SpreadAssignment);
             node.expression = parenthesizerRules().parenthesizeExpressionForDisallowedComma(expression);
-            node.jsDoc = undefined; // extraneous node set by parser
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
                 TransformFlags.ContainsES2018 |
@@ -4780,8 +4743,6 @@ namespace ts {
             node.scriptKind = 0;
             node.isDeclarationFile = false;
             node.hasNoDefaultLib = false;
-            node.externalModuleIndicator = undefined;
-            node.commonJsModuleIndicator = undefined;
             node.transformFlags |=
                 propagateChildrenFlags(node.statements) |
                 propagateChildFlags(node.endOfFileToken);
@@ -4860,15 +4821,8 @@ namespace ts {
             node.texts = texts;
             node.fileName = "";
             node.text = "";
-            node.helpers = undefined;
             node.referencedFiles = emptyArray;
-            node.typeReferenceDirectives = undefined;
             node.libReferenceDirectives = emptyArray;
-            node.hasNoDefaultLib = undefined;
-            node.sourceMapPath = undefined;
-            node.sourceMapText = undefined;
-            node.oldFileOfCurrentEmit = undefined;
-            node.parsedSourceMap = undefined;
             node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
             return node;
         }
@@ -4907,17 +4861,8 @@ namespace ts {
         // @api
         function createInputFiles(): InputFiles {
             const node = createBaseNode<InputFiles>(SyntaxKind.InputFiles);
-            node.javascriptPath = undefined;
             node.javascriptText = "";
-            node.javascriptMapPath = undefined;
-            node.javascriptMapText = undefined;
-            node.declarationPath = undefined;
             node.declarationText = "";
-            node.declarationMapPath = undefined;
-            node.declarationMapText = undefined;
-            node.buildInfoPath = undefined;
-            node.buildInfo = undefined;
-            node.oldFileOfCurrentEmit = undefined;
             return node;
         }
 

@@ -17,6 +17,731 @@ namespace ts {
         }
     }
 
+    function forEachChildOfQualifiedName<T>(node: QualifiedName, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.left) ||
+            visitNode(cbNode, node.right);
+    }
+
+    function forEachChildOfTypeParameter<T>(node: TypeParameterDeclaration, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.constraint) ||
+            visitNode(cbNode, node.default) ||
+            visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfShorthandPropertyAssignment<T>(node: ShorthandPropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.exclamationToken) ||
+            visitNode(cbNode, node.equalsToken) ||
+            visitNode(cbNode, node.objectAssignmentInitializer);
+    }
+
+    function forEachChildOfSpreadAssignment<T>(node: SpreadAssignment, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfParameter<T>(node: ParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.dotDotDotToken) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.initializer);
+    }
+
+    function forEachChildOfPropertyDeclaration<T>(node: PropertyDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.exclamationToken) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.initializer);
+    }
+
+    function forEachChildOfPropertySignature<T>(node: PropertySignature, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.initializer);
+    }
+
+    function forEachChildOfPropertyAssignment<T>(node: PropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.initializer);
+    }
+
+    function forEachChildOfVariableDeclaration<T>(node: VariableDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.exclamationToken) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.initializer);
+    }
+
+    function forEachChildOfBindingElement<T>(node: BindingElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.dotDotDotToken) ||
+            visitNode(cbNode, node.propertyName) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.initializer);
+    }
+
+    function forEachChildOfFunctionOrConstructorTypeOrCallConstructOrIndexSignature<T>(node: FunctionTypeNode | ConstructorTypeNode | CallSignatureDeclaration | ConstructSignatureDeclaration | IndexSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfMethodDeclaration<T>(node: MethodDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.asteriskToken) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.exclamationToken) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.body);
+    }
+
+    function forEachChildOfMethodSignature<T>(node: MethodSignature, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfConstructor<T>(node: ConstructorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.body);
+    }
+
+    function forEachChildOfGetAccessor<T>(node: GetAccessorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.exclamationToken) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.body);
+    }
+
+    function forEachChildOfSetAccessor<T>(node: SetAccessorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.exclamationToken) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.body);
+    }
+
+    function forEachChildOfFunctionExpression<T>(node: FunctionExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.asteriskToken) ||
+            visitNode(cbNode, node.name) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.body);
+    }
+
+    function forEachChildOfFunctionDeclaration<T>(node: FunctionDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.asteriskToken) ||
+            visitNode(cbNode, node.name) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.body);
+    }
+
+    function forEachChildOfArrowFunction<T>(node: ArrowFunction, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.equalsGreaterThanToken) ||
+            visitNode(cbNode, node.body);
+    }
+
+    function forEachChildOfTypeReference<T>(node: TypeReferenceNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.typeName) ||
+            visitNodes(cbNode, cbNodes, node.typeArguments);
+    }
+
+    function forEachChildOfTypePredicate<T>(node: TypePredicateNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.assertsModifier) ||
+            visitNode(cbNode, node.parameterName) ||
+            visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfTypeQuery<T>(node: TypeQueryNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.exprName);
+    }
+
+    function forEachChildOfTypeLiteral<T>(node: TypeLiteralNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.members);
+    }
+
+    function forEachChildOfArrayType<T>(node: ArrayTypeNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.elementType);
+    }
+
+    function forEachChildOfTupleType<T>(node: TupleTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.elementTypes);
+    }
+
+    function forEachChildOfUnionOrIntersectionType<T>(node: UnionTypeNode | IntersectionTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.types);
+    }
+
+    function forEachChildOfConditionalType<T>(node: ConditionalTypeNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.checkType) ||
+            visitNode(cbNode, node.extendsType) ||
+            visitNode(cbNode, node.trueType) ||
+            visitNode(cbNode, node.falseType);
+    }
+
+    function forEachChildOfInferType<T>(node: InferTypeNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.typeParameter);
+    }
+
+    function forEachChildOfImportType<T>(node: ImportTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.argument) ||
+            visitNode(cbNode, node.qualifier) ||
+            visitNodes(cbNode, cbNodes, node.typeArguments);
+    }
+
+    function forEachChildOfParenthesizedTypeOrTypeOperator<T>(node: ParenthesizedTypeNode | TypeOperatorNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfIndexedAccessType<T>(node: IndexedAccessTypeNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.objectType) ||
+            visitNode(cbNode, node.indexType);
+    }
+
+    function forEachChildOfMappedType<T>(node: MappedTypeNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.readonlyToken) ||
+            visitNode(cbNode, node.typeParameter) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfLiteralType<T>(node: LiteralTypeNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.literal);
+    }
+
+    function forEachChildOfObjectOrArrayBindingPattern<T>(node: ObjectBindingPattern | ArrayBindingPattern, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.elements);
+    }
+
+    function forEachChildOfArrayLiteralExpression<T>(node: ArrayLiteralExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.elements);
+    }
+
+    function forEachChildOfObjectLiteralExpression<T>(node: ObjectLiteralExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.properties);
+    }
+
+    function forEachChildOfPropertyAccessExpression<T>(node: PropertyAccessExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.questionDotToken) ||
+            visitNode(cbNode, node.name);
+    }
+
+    function forEachChildOfElementAccessExpression<T>(node: ElementAccessExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.questionDotToken) ||
+            visitNode(cbNode, node.argumentExpression);
+    }
+
+    function forEachChildOfCallExpression<T>(node: CallExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.questionDotToken) ||
+            visitNodes(cbNode, cbNodes, node.typeArguments) ||
+            visitNodes(cbNode, cbNodes, node.arguments);
+    }
+
+    function forEachChildOfNewExpression<T>(node: NewExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNodes(cbNode, cbNodes, node.typeArguments) ||
+            visitNodes(cbNode, cbNodes, node.arguments);
+    }
+
+    function forEachChildOfTaggedTemplateExpression<T>(node: TaggedTemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tag) ||
+            visitNode(cbNode, node.questionDotToken) ||
+            visitNodes(cbNode, cbNodes, node.typeArguments) ||
+            visitNode(cbNode, node.template);
+    }
+
+    function forEachChildOfTypeAssertion<T>(node: TypeAssertion, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.type) ||
+            visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfParenthesizedExpression<T>(node: ParenthesizedExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfDeleteExpression<T>(node: DeleteExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfTypeOfExpression<T>(node: TypeOfExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfVoidExpression<T>(node: VoidExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfPrefixUnaryExpression<T>(node: PrefixUnaryExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.operand);
+    }
+
+    function forEachChildOfYieldExpression<T>(node: YieldExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.asteriskToken) ||
+            visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfAwaitExpression<T>(node: AwaitExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfPostfixUnaryExpression<T>(node: PostfixUnaryExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.operand);
+    }
+
+    function forEachChildOfBinaryExpression<T>(node: BinaryExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.left) ||
+            visitNode(cbNode, node.operatorToken) ||
+            visitNode(cbNode, node.right);
+    }
+
+    function forEachChildOfAsExpression<T>(node: AsExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfNonNullExpression<T>(node: NonNullExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfMetaProperty<T>(node: MetaProperty, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name);
+    }
+
+    function forEachChildOfConditionalExpression<T>(node: ConditionalExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.condition) ||
+            visitNode(cbNode, node.questionToken) ||
+            visitNode(cbNode, node.whenTrue) ||
+            visitNode(cbNode, node.colonToken) ||
+            visitNode(cbNode, node.whenFalse);
+    }
+
+    function forEachChildOfSpreadElement<T>(node: SpreadElement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfBlockOrModuleBlock<T>(node: Block | ModuleBlock, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.statements);
+    }
+
+    function forEachChildOfSourceFile<T>(node: SourceFile, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.statements) ||
+            visitNode(cbNode, node.endOfFileToken);
+    }
+
+    function forEachChildOfVariableStatement<T>(node: VariableStatement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.declarationList);
+    }
+
+    function forEachChildOfVariableDeclarationList<T>(node: VariableDeclarationList, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.declarations);
+    }
+
+    function forEachChildOfExpressionStatement<T>(node: ExpressionStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfIfStatement<T>(node: IfStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.thenStatement) ||
+            visitNode(cbNode, node.elseStatement);
+    }
+
+    function forEachChildOfDoStatement<T>(node: DoStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.statement) ||
+            visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfWhileStatement<T>(node: WhileStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.statement);
+    }
+
+    function forEachChildOfForStatement<T>(node: ForStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.initializer) ||
+            visitNode(cbNode, node.condition) ||
+            visitNode(cbNode, node.incrementor) ||
+            visitNode(cbNode, node.statement);
+    }
+
+    function forEachChildOfForInStatement<T>(node: ForInStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.initializer) ||
+            visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.statement);
+    }
+
+    function forEachChildOfForOfStatement<T>(node: ForOfStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.awaitModifier) ||
+            visitNode(cbNode, node.initializer) ||
+            visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.statement);
+    }
+
+    function forEachChildOfContinueOrBreakStatement<T>(node: ContinueStatement | BreakStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.label);
+    }
+
+    function forEachChildOfReturnStatement<T>(node: ReturnStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfWithStatement<T>(node: WithStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.statement);
+    }
+
+    function forEachChildOfSwitchStatement<T>(node: SwitchStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNode(cbNode, node.caseBlock);
+    }
+
+    function forEachChildOfCaseBlock<T>(node: CaseBlock, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.clauses);
+    }
+
+    function forEachChildOfCaseClause<T>(node: CaseClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNodes(cbNode, cbNodes, node.statements);
+    }
+
+    function forEachChildOfDefaultClause<T>(node: DefaultClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.statements);
+    }
+
+    function forEachChildOfLabeledStatement<T>(node: LabeledStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.label) ||
+            visitNode(cbNode, node.statement);
+    }
+
+    function forEachChildOfThrowStatement<T>(node: ThrowStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfTryStatement<T>(node: TryStatement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tryBlock) ||
+            visitNode(cbNode, node.catchClause) ||
+            visitNode(cbNode, node.finallyBlock);
+    }
+
+    function forEachChildOfCatchClause<T>(node: CatchClause, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.variableDeclaration) ||
+            visitNode(cbNode, node.block);
+    }
+
+    function forEachChildOfDecorator<T>(node: Decorator, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfClassDeclarationOrExpression<T>(node: ClassDeclaration | ClassExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.heritageClauses) ||
+            visitNodes(cbNode, cbNodes, node.members);
+    }
+
+    function forEachChildOfInterfaceDeclaration<T>(node: InterfaceDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNodes(cbNode, cbNodes, node.heritageClauses) ||
+            visitNodes(cbNode, cbNodes, node.members);
+    }
+
+    function forEachChildOfTypeAliasDeclaration<T>(node: TypeAliasDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters) ||
+            visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfEnumDeclaration<T>(node: EnumDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNodes(cbNode, cbNodes, node.members);
+    }
+
+    function forEachChildOfEnumMember<T>(node: EnumMember, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.initializer);
+    }
+
+    function forEachChildOfModuleDeclaration<T>(node: ModuleDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.body);
+    }
+
+    function forEachChildOfImportEqualsDeclaration<T>(node: ImportEqualsDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.moduleReference);
+    }
+
+    function forEachChildOfImportDeclaration<T>(node: ImportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.importClause) ||
+            visitNode(cbNode, node.moduleSpecifier);
+    }
+
+    function forEachChildOfImportClause<T>(node: ImportClause, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.namedBindings);
+    }
+
+    function forEachChildOfNamespaceExportDeclaration<T>(node: NamespaceExportDeclaration, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name);
+
+    }
+
+    function forEachChildOfNamespaceImport<T>(node: NamespaceImport, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name);
+    }
+
+    function forEachChildOfNamespaceExport<T>(node: NamespaceExport, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name);
+    }
+
+    function forEachChildOfNamedImportsOrExports<T>(node: NamedImports | NamedExports, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.elements);
+    }
+
+    function forEachChildOfExportDeclaration<T>(node: ExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.exportClause) ||
+            visitNode(cbNode, node.moduleSpecifier);
+    }
+
+    function forEachChildOfImportOrExportSpecifier<T>(node: ImportSpecifier | ExportSpecifier, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.propertyName) ||
+            visitNode(cbNode, node.name);
+    }
+
+    function forEachChildOfExportAssignment<T>(node: ExportAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators) ||
+            visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfTemplateExpression<T>(node: TemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.head) || visitNodes(cbNode, cbNodes, node.templateSpans);
+    }
+
+    function forEachChildOfTemplateSpan<T>(node: TemplateSpan, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) || visitNode(cbNode, node.literal);
+    }
+
+    function forEachChildOfComputedPropertyName<T>(node: ComputedPropertyName, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfHeritageClause<T>(node: HeritageClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.types);
+    }
+
+    function forEachChildOfExpressionWithTypeArguments<T>(node: ExpressionWithTypeArguments, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression) ||
+            visitNodes(cbNode, cbNodes, node.typeArguments);
+    }
+
+    function forEachChildOfExternalModuleReference<T>(node: ExternalModuleReference, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfMissingDeclaration<T>(node: MissingDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.decorators);
+    }
+
+    function forEachChildOfCommaListExpression<T>(node: CommaListExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.elements);
+    }
+
+    function forEachChildOfJsxElement<T>(node: JsxElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.openingElement) ||
+            visitNodes(cbNode, cbNodes, node.children) ||
+            visitNode(cbNode, node.closingElement);
+    }
+
+    function forEachChildOfJsxFragment<T>(node: JsxFragment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.openingFragment) ||
+            visitNodes(cbNode, cbNodes, node.children) ||
+            visitNode(cbNode, node.closingFragment);
+    }
+
+    function forEachChildOfJsxOpeningOrSelfClosingElement<T>(node: JsxOpeningElement | JsxSelfClosingElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName) ||
+            visitNodes(cbNode, cbNodes, node.typeArguments) ||
+            visitNode(cbNode, node.attributes);
+    }
+
+    function forEachChildOfJsxAttributes<T>(node: JsxAttributes, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.properties);
+    }
+
+    function forEachChildOfJsxAttribute<T>(node: JsxAttribute, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.name) ||
+            visitNode(cbNode, node.initializer);
+    }
+
+    function forEachChildOfJsxSpreadAttribute<T>(node: JsxSpreadAttribute, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfJsxExpression<T>(node: JsxExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.dotDotDotToken) ||
+            visitNode(cbNode, node.expression);
+    }
+
+    function forEachChildOfJsxClosingElement<T>(node: JsxClosingElement, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName);
+    }
+
+    function forEachChildOfOptionalOrRestOrJSDocTypeLike<T>(node: OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocTypeReferencingNode, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfJSDocFunctionType<T>(node: JSDocFunctionType, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.parameters) ||
+            visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfJSDocComment<T>(node: JSDoc, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNodes(cbNode, cbNodes, node.tags);
+    }
+
+    function forEachChildOfJSDocPropertyOrParameterTag<T>(node: JSDocPropertyTag | JSDocParameterTag, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName) ||
+            (node.isNameFirst
+                ? visitNode(cbNode, node.name) ||
+                    visitNode(cbNode, node.typeExpression)
+                : visitNode(cbNode, node.typeExpression) ||
+                    visitNode(cbNode, node.name));
+    }
+
+    function forEachChildOfJSDocAuthorTag<T>(node: JSDocAuthorTag, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName);
+    }
+
+    function forEachChildOfJSDocImplementsTag<T>(node: JSDocImplementsTag, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName) ||
+            visitNode(cbNode, node.class);
+    }
+
+    function forEachChildOfJSDocAugmentsTag<T>(node: JSDocAugmentsTag, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName) ||
+            visitNode(cbNode, node.class);
+    }
+
+    function forEachChildOfJSDocTemplateTag<T>(node: JSDocTemplateTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName) ||
+            visitNode(cbNode, node.constraint) ||
+            visitNodes(cbNode, cbNodes, node.typeParameters);
+    }
+
+    function forEachChildOfJSDocTypedefTag<T>(node: JSDocTypedefTag, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName) ||
+            (node.typeExpression?.kind === SyntaxKind.JSDocTypeExpression
+                ? visitNode(cbNode, node.typeExpression) ||
+                    visitNode(cbNode, node.fullName)
+                : visitNode(cbNode, node.fullName) ||
+                    visitNode(cbNode, node.typeExpression));
+    }
+
+    function forEachChildOfJSDocCallbackTag<T>(node: JSDocCallbackTag, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName) ||
+            visitNode(cbNode, node.fullName) ||
+            visitNode(cbNode, node.typeExpression);
+    }
+
+    function forEachChildOfJSDocReturnOrTypeOrThisOrEnumTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName) ||
+            visitNode(cbNode, node.typeExpression);
+    }
+
+    function forEachChildOfJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined): T | undefined {
+        return forEach(node.typeParameters, cbNode) ||
+            forEach(node.parameters, cbNode) ||
+            visitNode(cbNode, node.type);
+    }
+
+    function forEachChildOfJSDocTypeLiteral<T>(node: JSDocTypeLiteral, cbNode: (node: Node) => T | undefined): T | undefined {
+        return forEach(node.jsDocPropertyTags, cbNode);
+    }
+
+    function forEachChildOfJSDocUnknownOrClassOrPublicOrPrivateOrProtectedOrReadonlyTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName);
+    }
+
+    function forEachChildOfPartiallyEmittedExpression<T>(node: PartiallyEmittedExpression, cbNode: (node: Node) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.expression);
+    }
+    
     /**
      * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
      * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -36,386 +761,240 @@ namespace ts {
         }
         switch (node.kind) {
             case SyntaxKind.QualifiedName:
-                return visitNode(cbNode, (<QualifiedName>node).left) ||
-                    visitNode(cbNode, (<QualifiedName>node).right);
+                return forEachChildOfQualifiedName(node as QualifiedName, cbNode);
             case SyntaxKind.TypeParameter:
-                return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
-                    visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
-                    visitNode(cbNode, (<TypeParameterDeclaration>node).default) ||
-                    visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
+                return forEachChildOfTypeParameter(node as TypeParameterDeclaration, cbNode);
             case SyntaxKind.ShorthandPropertyAssignment:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).name) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).exclamationToken) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
+                return forEachChildOfShorthandPropertyAssignment(node as ShorthandPropertyAssignment, cbNode, cbNodes);
             case SyntaxKind.SpreadAssignment:
-                return visitNode(cbNode, (<SpreadAssignment>node).expression);
+                return forEachChildOfSpreadAssignment(node as SpreadAssignment, cbNode);
             case SyntaxKind.Parameter:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).name) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).questionToken) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).type) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).initializer);
+                return forEachChildOfParameter(node as ParameterDeclaration, cbNode, cbNodes);
             case SyntaxKind.PropertyDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).name) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).questionToken) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).exclamationToken) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).type) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).initializer);
+                return forEachChildOfPropertyDeclaration(node as PropertyDeclaration, cbNode, cbNodes);
             case SyntaxKind.PropertySignature:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<PropertySignature>node).name) ||
-                    visitNode(cbNode, (<PropertySignature>node).questionToken) ||
-                    visitNode(cbNode, (<PropertySignature>node).type) ||
-                    visitNode(cbNode, (<PropertySignature>node).initializer);
+                return forEachChildOfPropertySignature(node as PropertySignature, cbNode, cbNodes);
             case SyntaxKind.PropertyAssignment:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<PropertyAssignment>node).name) ||
-                    visitNode(cbNode, (<PropertyAssignment>node).questionToken) ||
-                    visitNode(cbNode, (<PropertyAssignment>node).initializer);
+                return forEachChildOfPropertyAssignment(node as PropertyAssignment, cbNode, cbNodes);
             case SyntaxKind.VariableDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<VariableDeclaration>node).name) ||
-                    visitNode(cbNode, (<VariableDeclaration>node).exclamationToken) ||
-                    visitNode(cbNode, (<VariableDeclaration>node).type) ||
-                    visitNode(cbNode, (<VariableDeclaration>node).initializer);
+                return forEachChildOfVariableDeclaration(node as VariableDeclaration, cbNode, cbNodes);
             case SyntaxKind.BindingElement:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<BindingElement>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<BindingElement>node).propertyName) ||
-                    visitNode(cbNode, (<BindingElement>node).name) ||
-                    visitNode(cbNode, (<BindingElement>node).initializer);
+                return forEachChildOfBindingElement(node as BindingElement, cbNode, cbNodes);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).parameters) ||
-                    visitNode(cbNode, (<SignatureDeclaration>node).type);
+                return forEachChildOfFunctionOrConstructorTypeOrCallConstructOrIndexSignature(node as FunctionTypeNode | ConstructorTypeNode | CallSignatureDeclaration | ConstructSignatureDeclaration | IndexSignatureDeclaration, cbNode, cbNodes);
             case SyntaxKind.MethodDeclaration:
+                return forEachChildOfMethodDeclaration(node as MethodDeclaration, cbNode, cbNodes);
             case SyntaxKind.MethodSignature:
+                return forEachChildOfMethodSignature(node as MethodSignature, cbNode, cbNodes);
             case SyntaxKind.Constructor:
+                return forEachChildOfConstructor(node as ConstructorDeclaration, cbNode, cbNodes);
             case SyntaxKind.GetAccessor:
+                return forEachChildOfGetAccessor(node as GetAccessorDeclaration, cbNode, cbNodes);
             case SyntaxKind.SetAccessor:
+                return forEachChildOfSetAccessor(node as SetAccessorDeclaration, cbNode, cbNodes);
             case SyntaxKind.FunctionExpression:
+                return forEachChildOfFunctionExpression(node as FunctionExpression, cbNode, cbNodes);
             case SyntaxKind.FunctionDeclaration:
+                return forEachChildOfFunctionDeclaration(node as FunctionDeclaration, cbNode, cbNodes);
             case SyntaxKind.ArrowFunction:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).asteriskToken) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).name) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).questionToken) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).exclamationToken) ||
-                    visitNodes(cbNode, cbNodes, (<FunctionLikeDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<FunctionLikeDeclaration>node).parameters) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
-                    visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
+                return forEachChildOfArrowFunction(node as ArrowFunction, cbNode, cbNodes);
             case SyntaxKind.TypeReference:
-                return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
-                    visitNodes(cbNode, cbNodes, (<TypeReferenceNode>node).typeArguments);
+                return forEachChildOfTypeReference(node as TypeReferenceNode, cbNode, cbNodes);
             case SyntaxKind.TypePredicate:
-                return visitNode(cbNode, (<TypePredicateNode>node).assertsModifier) ||
-                    visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
-                    visitNode(cbNode, (<TypePredicateNode>node).type);
+                return forEachChildOfTypePredicate(node as TypePredicateNode, cbNode);
             case SyntaxKind.TypeQuery:
-                return visitNode(cbNode, (<TypeQueryNode>node).exprName);
+                return forEachChildOfTypeQuery(node as TypeQueryNode, cbNode);
             case SyntaxKind.TypeLiteral:
-                return visitNodes(cbNode, cbNodes, (<TypeLiteralNode>node).members);
+                return forEachChildOfTypeLiteral(node as TypeLiteralNode, cbNode, cbNodes);
             case SyntaxKind.ArrayType:
-                return visitNode(cbNode, (<ArrayTypeNode>node).elementType);
+                return forEachChildOfArrayType(node as ArrayTypeNode, cbNode);
             case SyntaxKind.TupleType:
-                return visitNodes(cbNode, cbNodes, (<TupleTypeNode>node).elementTypes);
+                return forEachChildOfTupleType(node as TupleTypeNode, cbNode, cbNodes);
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
-                return visitNodes(cbNode, cbNodes, (<UnionOrIntersectionTypeNode>node).types);
+                return forEachChildOfUnionOrIntersectionType(node as IntersectionTypeNode, cbNode, cbNodes);
             case SyntaxKind.ConditionalType:
-                return visitNode(cbNode, (<ConditionalTypeNode>node).checkType) ||
-                    visitNode(cbNode, (<ConditionalTypeNode>node).extendsType) ||
-                    visitNode(cbNode, (<ConditionalTypeNode>node).trueType) ||
-                    visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
+                return forEachChildOfConditionalType(node as ConditionalTypeNode, cbNode);
             case SyntaxKind.InferType:
-                return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
+                return forEachChildOfInferType(node as InferTypeNode, cbNode);
             case SyntaxKind.ImportType:
-                return visitNode(cbNode, (<ImportTypeNode>node).argument) ||
-                    visitNode(cbNode, (<ImportTypeNode>node).qualifier) ||
-                    visitNodes(cbNode, cbNodes, (<ImportTypeNode>node).typeArguments);
+                return forEachChildOfImportType(node as ImportTypeNode, cbNode, cbNodes);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
-                return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+                return forEachChildOfParenthesizedTypeOrTypeOperator(node as TypeOperatorNode, cbNode);
             case SyntaxKind.IndexedAccessType:
-                return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
-                    visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
+                return forEachChildOfIndexedAccessType(node as IndexedAccessTypeNode, cbNode);
             case SyntaxKind.MappedType:
-                return visitNode(cbNode, (<MappedTypeNode>node).readonlyToken) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).type);
+                return forEachChildOfMappedType(node as MappedTypeNode, cbNode);
             case SyntaxKind.LiteralType:
-                return visitNode(cbNode, (<LiteralTypeNode>node).literal);
+                return forEachChildOfLiteralType(node as LiteralTypeNode, cbNode);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-                return visitNodes(cbNode, cbNodes, (<BindingPattern>node).elements);
+                return forEachChildOfObjectOrArrayBindingPattern(node as ArrayBindingPattern, cbNode, cbNodes);
             case SyntaxKind.ArrayLiteralExpression:
-                return visitNodes(cbNode, cbNodes, (<ArrayLiteralExpression>node).elements);
+                return forEachChildOfArrayLiteralExpression(node as ArrayLiteralExpression, cbNode, cbNodes);
             case SyntaxKind.ObjectLiteralExpression:
-                return visitNodes(cbNode, cbNodes, (<ObjectLiteralExpression>node).properties);
+                return forEachChildOfObjectLiteralExpression(node as ObjectLiteralExpression, cbNode, cbNodes);
             case SyntaxKind.PropertyAccessExpression:
-                return visitNode(cbNode, (<PropertyAccessExpression>node).expression) ||
-                    visitNode(cbNode, (<PropertyAccessExpression>node).questionDotToken) ||
-                    visitNode(cbNode, (<PropertyAccessExpression>node).name);
+                return forEachChildOfPropertyAccessExpression(node as PropertyAccessExpression, cbNode, cbNodes);
             case SyntaxKind.ElementAccessExpression:
-                return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
-                    visitNode(cbNode, (<ElementAccessExpression>node).questionDotToken) ||
-                    visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
+                return forEachChildOfElementAccessExpression(node as ElementAccessExpression, cbNode);
             case SyntaxKind.CallExpression:
+                return forEachChildOfCallExpression(node as CallExpression, cbNode, cbNodes);
             case SyntaxKind.NewExpression:
-                return visitNode(cbNode, (<CallExpression>node).expression) ||
-                    visitNode(cbNode, (<CallExpression>node).questionDotToken) ||
-                    visitNodes(cbNode, cbNodes, (<CallExpression>node).typeArguments) ||
-                    visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments);
+                return forEachChildOfNewExpression(node as NewExpression, cbNode, cbNodes);
             case SyntaxKind.TaggedTemplateExpression:
-                return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
-                    visitNode(cbNode, (<TaggedTemplateExpression>node).questionDotToken) ||
-                    visitNodes(cbNode, cbNodes, (<TaggedTemplateExpression>node).typeArguments) ||
-                    visitNode(cbNode, (<TaggedTemplateExpression>node).template);
+                return forEachChildOfTaggedTemplateExpression(node as TaggedTemplateExpression, cbNode, cbNodes);
             case SyntaxKind.TypeAssertionExpression:
-                return visitNode(cbNode, (<TypeAssertion>node).type) ||
-                    visitNode(cbNode, (<TypeAssertion>node).expression);
+                return forEachChildOfTypeAssertion(node as TypeAssertion, cbNode);
             case SyntaxKind.ParenthesizedExpression:
-                return visitNode(cbNode, (<ParenthesizedExpression>node).expression);
+                return forEachChildOfParenthesizedExpression(node as ParenthesizedExpression, cbNode);
             case SyntaxKind.DeleteExpression:
-                return visitNode(cbNode, (<DeleteExpression>node).expression);
+                return forEachChildOfDeleteExpression(node as DeleteExpression, cbNode);
             case SyntaxKind.TypeOfExpression:
-                return visitNode(cbNode, (<TypeOfExpression>node).expression);
+                return forEachChildOfTypeOfExpression(node as TypeOfExpression, cbNode);
             case SyntaxKind.VoidExpression:
-                return visitNode(cbNode, (<VoidExpression>node).expression);
+                return forEachChildOfVoidExpression(node as VoidExpression, cbNode);
             case SyntaxKind.PrefixUnaryExpression:
-                return visitNode(cbNode, (<PrefixUnaryExpression>node).operand);
+                return forEachChildOfPrefixUnaryExpression(node as PrefixUnaryExpression, cbNode);
             case SyntaxKind.YieldExpression:
-                return visitNode(cbNode, (<YieldExpression>node).asteriskToken) ||
-                    visitNode(cbNode, (<YieldExpression>node).expression);
+                return forEachChildOfYieldExpression(node as YieldExpression, cbNode);
             case SyntaxKind.AwaitExpression:
-                return visitNode(cbNode, (<AwaitExpression>node).expression);
+                return forEachChildOfAwaitExpression(node as AwaitExpression, cbNode);
             case SyntaxKind.PostfixUnaryExpression:
-                return visitNode(cbNode, (<PostfixUnaryExpression>node).operand);
+                return forEachChildOfPostfixUnaryExpression(node as PostfixUnaryExpression, cbNode);
             case SyntaxKind.BinaryExpression:
-                return visitNode(cbNode, (<BinaryExpression>node).left) ||
-                    visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
-                    visitNode(cbNode, (<BinaryExpression>node).right);
+                return forEachChildOfBinaryExpression(node as BinaryExpression, cbNode);
             case SyntaxKind.AsExpression:
-                return visitNode(cbNode, (<AsExpression>node).expression) ||
-                    visitNode(cbNode, (<AsExpression>node).type);
+                return forEachChildOfAsExpression(node as AsExpression, cbNode);
             case SyntaxKind.NonNullExpression:
-                return visitNode(cbNode, (<NonNullExpression>node).expression);
+                return forEachChildOfNonNullExpression(node as NonNullExpression, cbNode);
             case SyntaxKind.MetaProperty:
-                return visitNode(cbNode, (<MetaProperty>node).name);
+                return forEachChildOfMetaProperty(node as MetaProperty, cbNode);
             case SyntaxKind.ConditionalExpression:
-                return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
+                return forEachChildOfConditionalExpression(node as ConditionalExpression, cbNode);
             case SyntaxKind.SpreadElement:
-                return visitNode(cbNode, (<SpreadElement>node).expression);
+                return forEachChildOfSpreadElement(node as SpreadElement, cbNode);
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
-                return visitNodes(cbNode, cbNodes, (<Block>node).statements);
+                return forEachChildOfBlockOrModuleBlock(node as ModuleBlock, cbNode, cbNodes);
             case SyntaxKind.SourceFile:
-                return visitNodes(cbNode, cbNodes, (<SourceFile>node).statements) ||
-                    visitNode(cbNode, (<SourceFile>node).endOfFileToken);
+                return forEachChildOfSourceFile(node as SourceFile, cbNode, cbNodes);
             case SyntaxKind.VariableStatement:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<VariableStatement>node).declarationList);
+                return forEachChildOfVariableStatement(node as VariableStatement, cbNode, cbNodes);
             case SyntaxKind.VariableDeclarationList:
-                return visitNodes(cbNode, cbNodes, (<VariableDeclarationList>node).declarations);
+                return forEachChildOfVariableDeclarationList(node as VariableDeclarationList, cbNode, cbNodes);
             case SyntaxKind.ExpressionStatement:
-                return visitNode(cbNode, (<ExpressionStatement>node).expression);
+                return forEachChildOfExpressionStatement(node as ExpressionStatement, cbNode);
             case SyntaxKind.IfStatement:
-                return visitNode(cbNode, (<IfStatement>node).expression) ||
-                    visitNode(cbNode, (<IfStatement>node).thenStatement) ||
-                    visitNode(cbNode, (<IfStatement>node).elseStatement);
+                return forEachChildOfIfStatement(node as IfStatement, cbNode);
             case SyntaxKind.DoStatement:
-                return visitNode(cbNode, (<DoStatement>node).statement) ||
-                    visitNode(cbNode, (<DoStatement>node).expression);
+                return forEachChildOfDoStatement(node as DoStatement, cbNode);
             case SyntaxKind.WhileStatement:
-                return visitNode(cbNode, (<WhileStatement>node).expression) ||
-                    visitNode(cbNode, (<WhileStatement>node).statement);
+                return forEachChildOfWhileStatement(node as WhileStatement, cbNode);
             case SyntaxKind.ForStatement:
-                return visitNode(cbNode, (<ForStatement>node).initializer) ||
-                    visitNode(cbNode, (<ForStatement>node).condition) ||
-                    visitNode(cbNode, (<ForStatement>node).incrementor) ||
-                    visitNode(cbNode, (<ForStatement>node).statement);
+                return forEachChildOfForStatement(node as ForStatement, cbNode);
             case SyntaxKind.ForInStatement:
-                return visitNode(cbNode, (<ForInStatement>node).initializer) ||
-                    visitNode(cbNode, (<ForInStatement>node).expression) ||
-                    visitNode(cbNode, (<ForInStatement>node).statement);
+                return forEachChildOfForInStatement(node as ForInStatement, cbNode);
             case SyntaxKind.ForOfStatement:
-                return visitNode(cbNode, (<ForOfStatement>node).awaitModifier) ||
-                    visitNode(cbNode, (<ForOfStatement>node).initializer) ||
-                    visitNode(cbNode, (<ForOfStatement>node).expression) ||
-                    visitNode(cbNode, (<ForOfStatement>node).statement);
+                return forEachChildOfForOfStatement(node as ForOfStatement, cbNode);
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
-                return visitNode(cbNode, (<BreakOrContinueStatement>node).label);
+                return forEachChildOfContinueOrBreakStatement(node as BreakStatement, cbNode);
             case SyntaxKind.ReturnStatement:
-                return visitNode(cbNode, (<ReturnStatement>node).expression);
+                return forEachChildOfReturnStatement(node as ReturnStatement, cbNode);
             case SyntaxKind.WithStatement:
-                return visitNode(cbNode, (<WithStatement>node).expression) ||
-                    visitNode(cbNode, (<WithStatement>node).statement);
+                return forEachChildOfWithStatement(node as WithStatement, cbNode);
             case SyntaxKind.SwitchStatement:
-                return visitNode(cbNode, (<SwitchStatement>node).expression) ||
-                    visitNode(cbNode, (<SwitchStatement>node).caseBlock);
+                return forEachChildOfSwitchStatement(node as SwitchStatement, cbNode);
             case SyntaxKind.CaseBlock:
-                return visitNodes(cbNode, cbNodes, (<CaseBlock>node).clauses);
+                return forEachChildOfCaseBlock(node as CaseBlock, cbNode, cbNodes);
             case SyntaxKind.CaseClause:
-                return visitNode(cbNode, (<CaseClause>node).expression) ||
-                    visitNodes(cbNode, cbNodes, (<CaseClause>node).statements);
+                return forEachChildOfCaseClause(node as CaseClause, cbNode, cbNodes);
             case SyntaxKind.DefaultClause:
-                return visitNodes(cbNode, cbNodes, (<DefaultClause>node).statements);
+                return forEachChildOfDefaultClause(node as DefaultClause, cbNode, cbNodes);
             case SyntaxKind.LabeledStatement:
-                return visitNode(cbNode, (<LabeledStatement>node).label) ||
-                    visitNode(cbNode, (<LabeledStatement>node).statement);
+                return forEachChildOfLabeledStatement(node as LabeledStatement, cbNode);
             case SyntaxKind.ThrowStatement:
-                return visitNode(cbNode, (<ThrowStatement>node).expression);
+                return forEachChildOfThrowStatement(node as ThrowStatement, cbNode);
             case SyntaxKind.TryStatement:
-                return visitNode(cbNode, (<TryStatement>node).tryBlock) ||
-                    visitNode(cbNode, (<TryStatement>node).catchClause) ||
-                    visitNode(cbNode, (<TryStatement>node).finallyBlock);
+                return forEachChildOfTryStatement(node as TryStatement, cbNode);
             case SyntaxKind.CatchClause:
-                return visitNode(cbNode, (<CatchClause>node).variableDeclaration) ||
-                    visitNode(cbNode, (<CatchClause>node).block);
+                return forEachChildOfCatchClause(node as CatchClause, cbNode);
             case SyntaxKind.Decorator:
-                return visitNode(cbNode, (<Decorator>node).expression);
+                return forEachChildOfDecorator(node as Decorator, cbNode);
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ClassLikeDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<ClassLikeDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<ClassLikeDeclaration>node).heritageClauses) ||
-                    visitNodes(cbNode, cbNodes, (<ClassLikeDeclaration>node).members);
+                return forEachChildOfClassDeclarationOrExpression(node as ClassExpression, cbNode, cbNodes);
             case SyntaxKind.InterfaceDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<InterfaceDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<InterfaceDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<ClassDeclaration>node).heritageClauses) ||
-                    visitNodes(cbNode, cbNodes, (<InterfaceDeclaration>node).members);
+                return forEachChildOfInterfaceDeclaration(node as InterfaceDeclaration, cbNode, cbNodes);
             case SyntaxKind.TypeAliasDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<TypeAliasDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<TypeAliasDeclaration>node).typeParameters) ||
-                    visitNode(cbNode, (<TypeAliasDeclaration>node).type);
+                return forEachChildOfTypeAliasDeclaration(node as TypeAliasDeclaration, cbNode, cbNodes);
             case SyntaxKind.EnumDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<EnumDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<EnumDeclaration>node).members);
+                return forEachChildOfEnumDeclaration(node as EnumDeclaration, cbNode, cbNodes);
             case SyntaxKind.EnumMember:
-                return visitNode(cbNode, (<EnumMember>node).name) ||
-                    visitNode(cbNode, (<EnumMember>node).initializer);
+                return forEachChildOfEnumMember(node as EnumMember, cbNode);
             case SyntaxKind.ModuleDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ModuleDeclaration>node).name) ||
-                    visitNode(cbNode, (<ModuleDeclaration>node).body);
+                return forEachChildOfModuleDeclaration(node as ModuleDeclaration, cbNode, cbNodes);
             case SyntaxKind.ImportEqualsDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ImportEqualsDeclaration>node).name) ||
-                    visitNode(cbNode, (<ImportEqualsDeclaration>node).moduleReference);
+                return forEachChildOfImportEqualsDeclaration(node as ImportEqualsDeclaration, cbNode, cbNodes);
             case SyntaxKind.ImportDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).importClause) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).moduleSpecifier);
+                return forEachChildOfImportDeclaration(node as ImportDeclaration, cbNode, cbNodes);
             case SyntaxKind.ImportClause:
-                return visitNode(cbNode, (<ImportClause>node).name) ||
-                    visitNode(cbNode, (<ImportClause>node).namedBindings);
+                return forEachChildOfImportClause(node as ImportClause, cbNode);
             case SyntaxKind.NamespaceExportDeclaration:
-                return visitNode(cbNode, (<NamespaceExportDeclaration>node).name);
-
+                return forEachChildOfNamespaceExportDeclaration(node as NamespaceExportDeclaration, cbNode);
             case SyntaxKind.NamespaceImport:
-                return visitNode(cbNode, (<NamespaceImport>node).name);
+                return forEachChildOfNamespaceImport(node as NamespaceImport, cbNode);
             case SyntaxKind.NamespaceExport:
-                return visitNode(cbNode, (<NamespaceExport>node).name);
+                return forEachChildOfNamespaceExport(node as NamespaceExport, cbNode);
             case SyntaxKind.NamedImports:
             case SyntaxKind.NamedExports:
-                return visitNodes(cbNode, cbNodes, (<NamedImportsOrExports>node).elements);
+                return forEachChildOfNamedImportsOrExports(node as NamedImports | NamedExports, cbNode, cbNodes);
             case SyntaxKind.ExportDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportDeclaration>node).exportClause) ||
-                    visitNode(cbNode, (<ExportDeclaration>node).moduleSpecifier);
+                return forEachChildOfExportDeclaration(node as ExportDeclaration, cbNode, cbNodes);
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return visitNode(cbNode, (<ImportOrExportSpecifier>node).propertyName) ||
-                    visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
+                return forEachChildOfImportOrExportSpecifier(node as ExportSpecifier, cbNode);
             case SyntaxKind.ExportAssignment:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).expression);
+                return forEachChildOfExportAssignment(node as ExportAssignment, cbNode, cbNodes);
             case SyntaxKind.TemplateExpression:
-                return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNode, cbNodes, (<TemplateExpression>node).templateSpans);
+                return forEachChildOfTemplateExpression(node as TemplateExpression, cbNode, cbNodes);
             case SyntaxKind.TemplateSpan:
-                return visitNode(cbNode, (<TemplateSpan>node).expression) || visitNode(cbNode, (<TemplateSpan>node).literal);
+                return forEachChildOfTemplateSpan(node as TemplateSpan, cbNode);
             case SyntaxKind.ComputedPropertyName:
-                return visitNode(cbNode, (<ComputedPropertyName>node).expression);
+                return forEachChildOfComputedPropertyName(node as ComputedPropertyName, cbNode);
             case SyntaxKind.HeritageClause:
-                return visitNodes(cbNode, cbNodes, (<HeritageClause>node).types);
+                return forEachChildOfHeritageClause(node as HeritageClause, cbNode, cbNodes);
             case SyntaxKind.ExpressionWithTypeArguments:
-                return visitNode(cbNode, (<ExpressionWithTypeArguments>node).expression) ||
-                    visitNodes(cbNode, cbNodes, (<ExpressionWithTypeArguments>node).typeArguments);
+                return forEachChildOfExpressionWithTypeArguments(node as ExpressionWithTypeArguments, cbNode, cbNodes);
             case SyntaxKind.ExternalModuleReference:
-                return visitNode(cbNode, (<ExternalModuleReference>node).expression);
+                return forEachChildOfExternalModuleReference(node as ExternalModuleReference, cbNode);
             case SyntaxKind.MissingDeclaration:
-                return visitNodes(cbNode, cbNodes, node.decorators);
+                return forEachChildOfMissingDeclaration(node as MissingDeclaration, cbNode, cbNodes);
             case SyntaxKind.CommaListExpression:
-                return visitNodes(cbNode, cbNodes, (<CommaListExpression>node).elements);
-
+                return forEachChildOfCommaListExpression(node as CommaListExpression, cbNode, cbNodes);
             case SyntaxKind.JsxElement:
-                return visitNode(cbNode, (<JsxElement>node).openingElement) ||
-                    visitNodes(cbNode, cbNodes, (<JsxElement>node).children) ||
-                    visitNode(cbNode, (<JsxElement>node).closingElement);
+                return forEachChildOfJsxElement(node as JsxElement, cbNode, cbNodes);
             case SyntaxKind.JsxFragment:
-                return visitNode(cbNode, (<JsxFragment>node).openingFragment) ||
-                    visitNodes(cbNode, cbNodes, (<JsxFragment>node).children) ||
-                    visitNode(cbNode, (<JsxFragment>node).closingFragment);
+                return forEachChildOfJsxFragment(node as JsxFragment, cbNode, cbNodes);
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
-                return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
-                    visitNodes(cbNode, cbNodes, (<JsxOpeningLikeElement>node).typeArguments) ||
-                    visitNode(cbNode, (<JsxOpeningLikeElement>node).attributes);
+                return forEachChildOfJsxOpeningOrSelfClosingElement(node as JsxOpeningElement, cbNode, cbNodes);
             case SyntaxKind.JsxAttributes:
-                return visitNodes(cbNode, cbNodes, (<JsxAttributes>node).properties);
+                return forEachChildOfJsxAttributes(node as JsxAttributes, cbNode, cbNodes);
             case SyntaxKind.JsxAttribute:
-                return visitNode(cbNode, (<JsxAttribute>node).name) ||
-                    visitNode(cbNode, (<JsxAttribute>node).initializer);
+                return forEachChildOfJsxAttribute(node as JsxAttribute, cbNode);
             case SyntaxKind.JsxSpreadAttribute:
-                return visitNode(cbNode, (<JsxSpreadAttribute>node).expression);
+                return forEachChildOfJsxSpreadAttribute(node as JsxSpreadAttribute, cbNode);
             case SyntaxKind.JsxExpression:
-                return visitNode(cbNode, (node as JsxExpression).dotDotDotToken) ||
-                    visitNode(cbNode, (node as JsxExpression).expression);
+                return forEachChildOfJsxExpression(node as JsxExpression, cbNode);
             case SyntaxKind.JsxClosingElement:
-                return visitNode(cbNode, (<JsxClosingElement>node).tagName);
-
+                return forEachChildOfJsxClosingElement(node as JsxClosingElement, cbNode);
             case SyntaxKind.OptionalType:
             case SyntaxKind.RestType:
             case SyntaxKind.JSDocTypeExpression:
@@ -423,68 +1002,47 @@ namespace ts {
             case SyntaxKind.JSDocNullableType:
             case SyntaxKind.JSDocOptionalType:
             case SyntaxKind.JSDocVariadicType:
-                return visitNode(cbNode, (<OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocTypeReferencingNode>node).type);
+                return forEachChildOfOptionalOrRestOrJSDocTypeLike(node as JSDocVariadicType, cbNode);
             case SyntaxKind.JSDocFunctionType:
-                return visitNodes(cbNode, cbNodes, (<JSDocFunctionType>node).parameters) ||
-                    visitNode(cbNode, (<JSDocFunctionType>node).type);
+                return forEachChildOfJSDocFunctionType(node as JSDocFunctionType, cbNode, cbNodes);
             case SyntaxKind.JSDocComment:
-                return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
+                return forEachChildOfJSDocComment(node as JSDoc, cbNode, cbNodes);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    ((node as JSDocPropertyLikeTag).isNameFirst
-                        ? visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
-                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression)
-                        : visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
+                return forEachChildOfJSDocPropertyOrParameterTag(node as JSDocPropertyTag, cbNode);
             case SyntaxKind.JSDocAuthorTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName);
+                return forEachChildOfJSDocAuthorTag(node as JSDocAuthorTag, cbNode);
             case SyntaxKind.JSDocImplementsTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocImplementsTag>node).class);
+                return forEachChildOfJSDocImplementsTag(node as JSDocImplementsTag, cbNode);
             case SyntaxKind.JSDocAugmentsTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocAugmentsTag>node).class);
+                return forEachChildOfJSDocAugmentsTag(node as JSDocAugmentsTag, cbNode);
             case SyntaxKind.JSDocTemplateTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocTemplateTag>node).constraint) ||
-                    visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
+                return forEachChildOfJSDocTemplateTag(node as JSDocTemplateTag, cbNode, cbNodes);
             case SyntaxKind.JSDocTypedefTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    ((node as JSDocTypedefTag).typeExpression &&
-                        (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression
-                        ? visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
-                            visitNode(cbNode, (<JSDocTypedefTag>node).fullName)
-                        : visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                            visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression));
+                return forEachChildOfJSDocTypedefTag(node as JSDocTypedefTag, cbNode);
             case SyntaxKind.JSDocCallbackTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
-                    visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
+                return forEachChildOfJSDocCallbackTag(node as JSDocCallbackTag, cbNode);
             case SyntaxKind.JSDocReturnTag:
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocThisTag:
             case SyntaxKind.JSDocEnumTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression);
+                return forEachChildOfJSDocReturnOrTypeOrThisOrEnumTag(node as JSDocEnumTag, cbNode);
             case SyntaxKind.JSDocSignature:
-                return forEach((<JSDocSignature>node).typeParameters, cbNode) ||
-                    forEach((<JSDocSignature>node).parameters, cbNode) ||
-                    visitNode(cbNode, (<JSDocSignature>node).type);
+                return forEachChildOfJSDocSignature(node as JSDocSignature, cbNode);
             case SyntaxKind.JSDocTypeLiteral:
-                return forEach((node as JSDocTypeLiteral).jsDocPropertyTags, cbNode);
+                return forEachChildOfJSDocTypeLiteral(node as JSDocTypeLiteral, cbNode);
             case SyntaxKind.JSDocTag:
             case SyntaxKind.JSDocClassTag:
             case SyntaxKind.JSDocPublicTag:
             case SyntaxKind.JSDocPrivateTag:
             case SyntaxKind.JSDocProtectedTag:
             case SyntaxKind.JSDocReadonlyTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName);
+                return forEachChildOfJSDocUnknownOrClassOrPublicOrPrivateOrProtectedOrReadonlyTag(node as JSDocReadonlyTag, cbNode);
             case SyntaxKind.PartiallyEmittedExpression:
-                return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
+                return forEachChildOfPartiallyEmittedExpression(node as PartiallyEmittedExpression, cbNode);
         }
     }
-
+    
     /** @internal */
     /**
      * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes

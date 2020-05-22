@@ -5486,7 +5486,31 @@ namespace ts {
         }
     }
 
-    function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    interface MutableNode extends Mutable<Node> {
+        _seldomUsedFields?: Mutable<Partial<Node>> & {
+            endFlowNode?: FlowNode;
+            returnFlowNode?: FlowNode;
+        };
+    };
+
+    function defineSeldomUsedField<T extends { _seldomUsedFields?: Mutable<Partial<T>> }, K extends keyof NonNullable<T["_seldomUsedFields"]>>(node: T, key: K, defaultValue?: NonNullable<T["_seldomUsedFields"]>[K]) {
+        Object.defineProperty(node, key, {
+            enumerable: true,
+            configurable: true,
+            get(this: T & { _seldomUsedFields?: NonNullable<T["_seldomUsedFields"]> }) {
+                return this._seldomUsedFields?.[key] ?? defaultValue;
+            },
+            set(this: T & { _seldomUsedFields?: NonNullable<T["_seldomUsedFields"]> }, value: NonNullable<T["_seldomUsedFields"]>[K]) {
+                if (!this._seldomUsedFields) {
+                    if (value === undefined) return;
+                    this._seldomUsedFields = {} as NonNullable<T["_seldomUsedFields"]>;
+                }
+                this._seldomUsedFields[key] = value;
+            },
+        })
+    }
+
+    function Node(this: MutableNode, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
         this.end = end;
         this.kind = kind;
@@ -5495,11 +5519,23 @@ namespace ts {
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
+        this.original = undefined!;
+        this._seldomUsedFields = undefined;
     }
 
-    function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    // Move these seldom used fields to an internal object to reduce polymorphism
+    defineSeldomUsedField(Node.prototype as MutableNode, "emitNode");
+    defineSeldomUsedField(Node.prototype as MutableNode, "flowNode");
+    defineSeldomUsedField(Node.prototype as MutableNode, "endFlowNode");
+    defineSeldomUsedField(Node.prototype as MutableNode, "returnFlowNode");
+    defineSeldomUsedField(Node.prototype as MutableNode, "symbol");
+    defineSeldomUsedField(Node.prototype as MutableNode, "locals");
+    defineSeldomUsedField(Node.prototype as MutableNode, "nextContainer");
+    defineSeldomUsedField(Node.prototype as MutableNode, "localSymbol");
+    defineSeldomUsedField(Node.prototype as MutableNode, "contextualType");
+    defineSeldomUsedField(Node.prototype as MutableNode, "inferenceContext");
+
+    function Token(this: MutableNode, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
         this.end = end;
         this.kind = kind;
@@ -5507,10 +5543,16 @@ namespace ts {
         this.flags = NodeFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
-        this.emitNode = undefined;
+        this._seldomUsedFields = undefined;
     }
 
-    function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
+    // Move these seldom used fields to an internal object to reduce polymorphism
+    defineSeldomUsedField(Token.prototype as MutableNode, "emitNode");
+    defineSeldomUsedField(Token.prototype as MutableNode, "flowNode");
+    defineSeldomUsedField(Token.prototype as MutableNode, "contextualType");
+    defineSeldomUsedField(Token.prototype as MutableNode, "inferenceContext");
+
+    function Identifier(this: MutableNode, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
         this.end = end;
         this.kind = kind;
@@ -5518,10 +5560,15 @@ namespace ts {
         this.flags = NodeFlags.None;
         this.transformFlags = TransformFlags.None;
         this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
-        this.flowNode = undefined;
+        this._seldomUsedFields = undefined;
     }
+
+    // Move these seldom used fields to an internal object to reduce polymorphism
+    defineSeldomUsedField(Identifier.prototype as MutableNode, "emitNode");
+    defineSeldomUsedField(Identifier.prototype as MutableNode, "flowNode");
+    defineSeldomUsedField(Identifier.prototype as MutableNode, "symbol");
+    defineSeldomUsedField(Identifier.prototype as MutableNode, "contextualType");
+    defineSeldomUsedField(Identifier.prototype as MutableNode, "inferenceContext");
 
     function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
         this.fileName = fileName;
