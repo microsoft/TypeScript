@@ -346,7 +346,7 @@ namespace ts.codefix {
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
             const name = getSynthesizedClone(param.name);
             setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-            return typeNode && createJSDocParamTag(name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
+            return typeNode && createJSDocParameterTag(createJSDocTypeExpression(typeNode), name, /* isNameFirst */ false, !!inference.isOptional, "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
@@ -382,7 +382,7 @@ namespace ts.codefix {
                 const oldParam = oldTag as JSDocParameterTag;
                 const newParam = newTag as JSDocParameterTag;
                 return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                    ? createJSDocParamTag(newParam.name, newParam.isBracketed, newParam.typeExpression, oldParam.comment)
+                    ? createJSDocParameterTag(newParam.typeExpression, newParam.name, newParam.isNameFirst, newParam.isBracketed, oldParam.comment)
                     : undefined;
             }
             case SyntaxKind.JSDocReturnTag:
@@ -603,7 +603,7 @@ namespace ts.codefix {
 
             switch (node.parent.kind) {
                 case SyntaxKind.ExpressionStatement:
-                    addCandidateType(usage, checker.getVoidType());
+                    inferTypeFromExpressionStatement(node, usage);
                     break;
                 case SyntaxKind.PostfixUnaryExpression:
                     usage.isNumber = true;
@@ -659,6 +659,10 @@ namespace ts.codefix {
             if (isExpressionNode(node)) {
                 addCandidateType(usage, checker.getContextualType(node));
             }
+        }
+
+        function inferTypeFromExpressionStatement(node: Expression, usage: Usage): void {
+            addCandidateType(usage, isCallExpression(node) ? checker.getVoidType() : checker.getAnyType());
         }
 
         function inferTypeFromPrefixUnaryExpression(node: PrefixUnaryExpression, usage: Usage): void {
@@ -960,10 +964,7 @@ namespace ts.codefix {
             if (usage.numberIndex) {
                 types.push(checker.createArrayType(combineFromUsage(usage.numberIndex)));
             }
-            if (usage.properties && usage.properties.size
-                || usage.calls && usage.calls.length
-                || usage.constructs && usage.constructs.length
-                || usage.stringIndex) {
+            if (usage.properties?.size || usage.calls?.length || usage.constructs?.length || usage.stringIndex) {
                 types.push(inferStructuralType(usage));
             }
 

@@ -1,0 +1,42 @@
+=== tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts ===
+type Selector<S, R> = (state: S) => R;
+>Selector : Symbol(Selector, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 0))
+>S : Symbol(S, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 14))
+>R : Symbol(R, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 16))
+>state : Symbol(state, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 23))
+>S : Symbol(S, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 14))
+>R : Symbol(R, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 16))
+
+declare function createStructuredSelector<S, T>(
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 38))
+>S : Symbol(S, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 2, 42))
+>T : Symbol(T, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 2, 44))
+
+  selectors: {[K in keyof T]: Selector<S, T[K]>},
+>selectors : Symbol(selectors, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 2, 48))
+>K : Symbol(K, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 3, 15))
+>T : Symbol(T, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 2, 44))
+>Selector : Symbol(Selector, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 0))
+>S : Symbol(S, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 2, 42))
+>T : Symbol(T, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 2, 44))
+>K : Symbol(K, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 3, 15))
+
+): Selector<S, T>;
+>Selector : Symbol(Selector, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 0))
+>S : Symbol(S, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 2, 42))
+>T : Symbol(T, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 2, 44))
+
+const editable = () => ({});
+>editable : Symbol(editable, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 6, 5))
+
+const mapStateToProps = createStructuredSelector({
+>mapStateToProps : Symbol(mapStateToProps, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 8, 5))
+>createStructuredSelector : Symbol(createStructuredSelector, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 38))
+
+  editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error
+>editable : Symbol(editable, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 8, 50))
+>state : Symbol(state, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 9, 13))
+>props : Symbol(props, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 9, 24))
+>editable : Symbol(editable, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 6, 5))
+
+});

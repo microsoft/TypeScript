@@ -681,8 +681,8 @@ namespace ts {
             statements.push(statement);
 
             // Add an `export default` statement for default exports (for `--target es5 --module es6`)
-            if (hasModifier(node, ModifierFlags.Export)) {
-                const exportStatement = hasModifier(node, ModifierFlags.Default)
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                const exportStatement = hasSyntacticModifier(node, ModifierFlags.Default)
                     ? createExportDefault(getLocalName(node))
                     : createExternalModuleExport(getLocalName(node));
 
@@ -1804,7 +1804,7 @@ namespace ts {
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const ancestorFacts = container && isClassLike(container) && !hasModifier(node, ModifierFlags.Static)
+            const ancestorFacts = container && isClassLike(container) && !hasSyntacticModifier(node, ModifierFlags.Static)
                 ? enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes | HierarchyFacts.NonStaticClassElement)
                 : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
@@ -1853,6 +1853,8 @@ namespace ts {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
                 statementOffset = addStandardPrologue(prologue, body.statements, /*ensureUseStrict*/ false);
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor, isHoistedFunction);
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor, isHoistedVariableStatement);
             }
 
             multiLine = addDefaultValueAssignmentsIfNeeded(statements, node) || multiLine;
@@ -2009,7 +2011,7 @@ namespace ts {
         }
 
         function visitVariableStatement(node: VariableStatement): Statement | undefined {
-            const ancestorFacts = enterSubtree(HierarchyFacts.None, hasModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
+            const ancestorFacts = enterSubtree(HierarchyFacts.None, hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
             let updated: Statement | undefined;
             if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
                 // we are inside a converted loop - hoist variable declarations
@@ -2581,7 +2583,7 @@ namespace ts {
                     && i < numInitialPropertiesWithoutYield) {
                     numInitialPropertiesWithoutYield = i;
                 }
-                if (property.name!.kind === SyntaxKind.ComputedPropertyName) {
+                if (Debug.checkDefined(property.name).kind === SyntaxKind.ComputedPropertyName) {
                     numInitialProperties = i;
                     break;
                 }
@@ -4255,7 +4257,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasModifier(member, ModifierFlags.Static)
+            return hasSyntacticModifier(member, ModifierFlags.Static)
                 ? getInternalName(node)
                 : createPropertyAccess(getInternalName(node), "prototype");
         }

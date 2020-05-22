@@ -1,7 +1,7 @@
 tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts(56,7): error TS2345: Argument of type '(a: number, b: T[0], ...x: T[number][]) => void' is not assignable to parameter of type '(x: number, ...args: T) => void'.
   Types of parameters 'b' and 'args' are incompatible.
-    Type 'T' is not assignable to type '[T[0], ...T[number][]]'.
-      Property '0' is missing in type 'any[]' but required in type '[T[0], ...T[number][]]'.
+    Type 'T' is not assignable to type '[b: T[0], ...x: T[number][]]'.
+      Property '0' is missing in type 'any[]' but required in type '[b: T[0], ...x: T[number][]]'.
 
 
 ==== tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts (1 errors) ====
@@ -64,8 +64,8 @@ tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts(56,7): error
           ~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(a: number, b: T[0], ...x: T[number][]) => void' is not assignable to parameter of type '(x: number, ...args: T) => void'.
 !!! error TS2345:   Types of parameters 'b' and 'args' are incompatible.
-!!! error TS2345:     Type 'T' is not assignable to type '[T[0], ...T[number][]]'.
-!!! error TS2345:       Property '0' is missing in type 'any[]' but required in type '[T[0], ...T[number][]]'.
+!!! error TS2345:     Type 'T' is not assignable to type '[b: T[0], ...x: T[number][]]'.
+!!! error TS2345:       Property '0' is missing in type 'any[]' but required in type '[b: T[0], ...x: T[number][]]'.
     }
     
     declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;

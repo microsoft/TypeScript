@@ -23,7 +23,7 @@ normal(12);
  * @param {string} [opts1.w="hi"] doc5
  */
 function foo1(opts1) {
->foo1 : (opts1:  * @param {string} opts1.x doc2 * @param {string=} opts1.y doc3 * @param {string} [opts1.z] doc4 * @param {string} [opts1.w] doc5) => void
+>foo1 : (opts1: {    x: string;    y?: string | undefined;    z: string;    w: string;}) => void
 >opts1 : { x: string; y?: string | undefined; z?: string; w?: string; }
 
     opts1.x;
@@ -45,7 +45,7 @@ foo1({x: 'abc'});
  * @param {string=} opts2[].anotherY
  */
 function foo2(/** @param opts2 bad idea theatre! */opts2) {
->foo2 : (opts2:  * @param {string} opts2.anotherX * @param {string=} opts2.anotherY) => void
+>foo2 : (opts2: {    anotherX: string;    anotherY?: string | undefined;}) => void
 >opts2 : { anotherX: string; anotherY?: string | undefined; }[]
 
     opts2[0].anotherX;
@@ -69,7 +69,7 @@ foo2([{anotherX: "world"}]);
  * @param {string} opts3.x
  */
 function foo3(opts3) {
->foo3 : (opts3:  * @param {string} opts3.x) => void
+>foo3 : (opts3: {    x: string;}) => void
 >opts3 : { x: string; }
 
     opts3.x;
@@ -92,7 +92,7 @@ foo3({x: 'abc'});
  * @param {string} [opts4[].w="hi"]
  */
 function foo4(opts4) {
->foo4 : (opts4:  * @param {string} opts4.x * @param {string=} opts4.y * @param {string} [opts4.z] * @param {string} [opts4.w]) => void
+>foo4 : (opts4: {    x: string;    y?: string | undefined;    z: string;    w: string;}) => void
 >opts4 : { x: string; y?: string | undefined; z?: string; w?: string; }[]
 
     opts4[0].x;
@@ -122,7 +122,7 @@ foo4([{ x: 'hi' }]);
  * @param {number} opts5[].unnest - Here we are almost all the way back at the beginning.
  */
 function foo5(opts5) {
->foo5 : (opts5:  * @param {string} opts5.help - (This one is just normal) * @param { * @param {string} opts5.what.a - (Another normal one) * @param { * @param {string} opts5.what.bad.idea - I don't think you can get back out of this level... * @param {boolean} opts5.what.bad.oh - Oh ... that's how you do it.} opts5.what.bad - Now we're nesting inside a nested type} opts5.what - Look at us go! Here's the first nest! * @param {number} opts5.unnest - Here we are almost all the way back at the beginning.) => void
+>foo5 : (opts5: {    help: string;    what: {        a: string;        bad: {            idea: string;            oh: boolean;        };    };    unnest: number;}) => void
 >opts5 : { help: string; what: { a: string; bad: { idea: string; oh: boolean; }[]; }; unnest: number; }[]
 
     opts5[0].what.bad[0].idea;

@@ -2117,7 +2117,7 @@ declare namespace ts.server.protocol {
     /**
      * Arguments for navto request message.
      */
-    interface NavtoRequestArgs extends FileRequestArgs {
+    interface NavtoRequestArgs {
         /**
          * Search term to navigate to from current location; term can
          * be '.*' or an identifier prefix.
@@ -2127,6 +2127,10 @@ declare namespace ts.server.protocol {
          *  Optional limit on the number of items to return.
          */
         maxResultCount?: number;
+        /**
+         * The file for the request (absolute pathname required).
+         */
+        file?: string;
         /**
          * Optional flag to indicate we want results for just the current file
          * or the entire project.
@@ -2140,7 +2144,7 @@ declare namespace ts.server.protocol {
      * match the search term given in argument 'searchTerm'.  The
      * context for the search is given by the named file.
      */
-    interface NavtoRequest extends FileRequest {
+    interface NavtoRequest extends Request {
         command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }

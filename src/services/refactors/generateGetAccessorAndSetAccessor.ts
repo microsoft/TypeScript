@@ -41,7 +41,6 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const fieldInfo = getConvertibleFieldAtPosition(context);
         if (!fieldInfo) return undefined;
 
-        const isJS = isSourceFileJS(file);
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration, renameAccessor } = fieldInfo;
 
@@ -50,15 +49,20 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         suppressLeadingAndTrailingTrivia(declaration);
         suppressLeadingAndTrailingTrivia(container);
 
-        const isInClassLike = isClassLike(container);
-        // avoid Readonly modifier because it will convert to get accessor
-        const modifierFlags = getModifierFlags(declaration) & ~ModifierFlags.Readonly;
-        const accessorModifiers = isInClassLike
-            ? !modifierFlags || modifierFlags & ModifierFlags.Private
-                ? getModifiers(isJS, isStatic, SyntaxKind.PublicKeyword)
-                : createNodeArray(createModifiersFromModifierFlags(modifierFlags))
-            : undefined;
-        const fieldModifiers = isInClassLike ? getModifiers(isJS, isStatic, SyntaxKind.PrivateKeyword) : undefined;
+        let accessorModifiers: ModifiersArray | undefined;
+        let fieldModifiers: ModifiersArray | undefined;
+        if (isClassLike(container)) {
+            const modifierFlags = getEffectiveModifierFlags(declaration);
+            if (isSourceFileJS(file)) {
+                const modifiers = createModifiers(modifierFlags);
+                accessorModifiers = modifiers;
+                fieldModifiers = modifiers;
+            }
+            else {
+                accessorModifiers = createModifiers(prepareModifierFlagsForAccessor(modifierFlags));
+                fieldModifiers = createModifiers(prepareModifierFlagsForField(modifierFlags));
+            }
+        }
 
         updateFieldDeclaration(changeTracker, file, declaration, fieldName, fieldModifiers);
 
@@ -105,12 +109,26 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return isIdentifier(fieldName) ? createPropertyAccess(leftHead, fieldName) : createElementAccess(leftHead, createLiteral(fieldName));
     }
 
-    function getModifiers(isJS: boolean, isStatic: boolean, accessModifier: SyntaxKind.PublicKeyword | SyntaxKind.PrivateKeyword): NodeArray<Modifier> | undefined {
-        const modifiers = append<Modifier>(
-            !isJS ? [createToken(accessModifier) as Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword>] : undefined,
-            isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined
-        );
-        return modifiers && createNodeArray(modifiers);
+    function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
+        return modifierFlags ? createNodeArray(createModifiersFromModifierFlags(modifierFlags)) : undefined;
+    }
+
+    function prepareModifierFlagsForAccessor(modifierFlags: ModifierFlags): ModifierFlags {
+        modifierFlags &= ~ModifierFlags.Readonly; // avoid Readonly modifier because it will convert to get accessor
+        modifierFlags &= ~ModifierFlags.Private;
+
+        if (!(modifierFlags & ModifierFlags.Protected)) {
+            modifierFlags |= ModifierFlags.Public;
+        }
+
+        return modifierFlags;
+    }
+
+    function prepareModifierFlagsForField(modifierFlags: ModifierFlags): ModifierFlags {
+        modifierFlags &= ~ModifierFlags.Public;
+        modifierFlags &= ~ModifierFlags.Protected;
+        modifierFlags |= ModifierFlags.Private;
+        return modifierFlags;
     }
 
     function getConvertibleFieldAtPosition(context: RefactorContext): Info | undefined {
@@ -121,7 +139,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
         if (!declaration || !nodeOverlapsWithStartEnd(declaration.name, file, startPosition, endPosition!) // TODO: GH#18217
-            || !isConvertibleName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
+            || !isConvertibleName(declaration.name) || (getEffectiveModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
         const name = declaration.name.text;
         const startWithUnderscore = startsWithUnderscore(name);
@@ -129,7 +147,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
         return {
             isStatic: hasStaticModifier(declaration),
-            isReadonly: hasReadonlyModifier(declaration),
+            isReadonly: hasEffectiveReadonlyModifier(declaration),
             type: getTypeAnnotationNode(declaration),
             container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
             originalName: (<AcceptedNameType>declaration.name).text,
