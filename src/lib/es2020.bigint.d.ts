@@ -1,6 +1,3 @@
-type From1To21 = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
-type From0To20 = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
-
 interface BigIntToLocaleStringOptionsBase {
     /**
      * The locale matching algorithm to use.The default is "best fit". For information about this option, see the {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_negotiation Intl page}.
@@ -11,8 +8,7 @@ interface BigIntToLocaleStringOptionsBase {
      */
     style?: "decimal" | "percent" | string;
 
-    numberingSystem?: "arab" | "arabext" | " bali" | "beng" | "deva" | "fullwide" | " gujr" | "guru" | "hanidec" | "khmr" | " knda" | "laoo" | "latn" | "limb" | "mlym" | " mong" | "mymr" | "orya" | "tamldec" | " telu" | "thai" | "tibt" | string;
-
+    numberingSystem?: "arab" | "arabext" | "bali" | "beng" | "deva" | "fullwide" | "gujr" | "guru" | "hanidec" | "khmr" | "knda" | "laoo" | "latn" | "limb" | "mlym" | "mong" | "mymr" | "orya" | "tamldec" | "telu" | "thai" | "tibt" | string;
     /**
      * The unit to use in unit formatting, Possible values are core unit identifiers, defined in UTS #35, Part 2, Section 6. A subset of units from the full list was selected for use in ECMAScript. Pairs of simple units can be concatenated with "-per-" to make a compound unit. There is no default value; if the style is "unit", the unit property must be provided.
      */
@@ -46,26 +42,26 @@ interface BigIntToLocaleStringOptionsBase {
     /**
      * The minimum number of integer digits to use. Possible values are from 1 to 21; the default is 1.
      */
-    minimumIntegerDigits?: From1To21;
+    minimumIntegerDigits?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
 
     /**
      * The minimum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number and percent formatting is 0; the default for currency formatting is the number of minor unit digits provided by the {@link http://www.currency-iso.org/en/home/tables/table-a1.html ISO 4217 currency codes list} (2 if the list doesn't provide that information).
      */
-    minimumFractionDigits?: From0To20;
+    minimumFractionDigits?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
 
     /**
      * The maximum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number formatting is the larger of minimumFractionDigits and 3; the default for currency formatting is the larger of minimumFractionDigits and the number of minor unit digits provided by the {@link http://www.currency-iso.org/en/home/tables/table-a1.html ISO 4217 currency codes list} (2 if the list doesn't provide that information); the default for percent formatting is the larger of minimumFractionDigits and 0.
      */
-    maximumFractionDigits?: From0To20;
+    maximumFractionDigits?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
 
     /**
      * The minimum number of significant digits to use. Possible values are from 1 to 21; the default is 1.
      */
-    minimumSignificantDigits?: From1To21;
+    minimumSignificantDigits?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
     /**
      * The maximum number of significant digits to use. Possible values are from 1 to 21; the default is 21.
      */
-    maximumSignificantDigits?: From1To21;
+    maximumSignificantDigits?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21;
 
     /**
      * The formatting that should be displayed for the number, the defaults is "standard"
@@ -712,4 +708,11 @@ interface DataView {
      * otherwise a little-endian value should be written.
      */
     setBigUint64(byteOffset: number, value: bigint, littleEndian?: boolean): void;
+}
+
+declare namespace Intl{
+    interface NumberFormat {
+        format(value: number | bigint): string;
+        resolvedOptions(): ResolvedNumberFormatOptions;
+    }
 }

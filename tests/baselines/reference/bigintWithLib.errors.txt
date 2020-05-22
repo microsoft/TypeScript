@@ -119,3 +119,5 @@ tests/cases/compiler/bigintWithLib.ts(48,26): error TS2345: Argument of type '12
     const y: 12n = 12n; // should emit type 12n
     let z = 12n; // should emit type bigint in declaration file
     
+    // Test added Intl methods
+    new Intl.NumberFormat("fr").format(3000n);

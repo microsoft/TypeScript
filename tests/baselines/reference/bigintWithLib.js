@@ -58,6 +58,8 @@ const x = -12n; // should emit as const x = -12n
 const y: 12n = 12n; // should emit type 12n
 let z = 12n; // should emit type bigint in declaration file
 
+// Test added Intl methods
+new Intl.NumberFormat("fr").format(3000n);
 
 //// [bigintWithLib.js]
 // Test BigInt functions
@@ -114,6 +116,8 @@ const w = 12n; // should emit as const w = 12n
 const x = -12n; // should emit as const x = -12n
 const y = 12n; // should emit type 12n
 let z = 12n; // should emit type bigint in declaration file
+// Test added Intl methods
+new Intl.NumberFormat("fr").format(3000n);
 
 
 //// [bigintWithLib.d.ts]
