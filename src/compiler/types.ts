@@ -3692,6 +3692,8 @@ namespace ts {
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
         AllowQualifiedNameInPlaceOfIdentifier    = 1 << 16,
+        /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
+        AllowQualifedNameInPlaceOfIdentifier    = 1 << 16,
         AllowAnonymousIdentifier                = 1 << 17,
         AllowEmptyUnionOrIntersection           = 1 << 18,
         AllowEmptyTuple                         = 1 << 19,
@@ -3702,7 +3704,7 @@ namespace ts {
         AllowNodeModulesRelativePaths           = 1 << 26,
         /* @internal */ DoNotIncludeSymbolChain = 1 << 27,    // Skip looking up and printing an accessible symbol chain
 
-        IgnoreErrors = AllowThisInObjectLiteral | AllowQualifiedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple | AllowEmptyIndexInfoType | AllowNodeModulesRelativePaths,
+        IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowQualifiedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple | AllowEmptyIndexInfoType | AllowNodeModulesRelativePaths,
 
         // State
         InObjectTypeLiteral                     = 1 << 22,
