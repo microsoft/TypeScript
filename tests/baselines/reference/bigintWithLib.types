@@ -406,7 +406,7 @@ let z = 12n; // should emit type bigint in declaration file
 >z : bigint
 >12n : 12n
 
-// Test added Intl methods
+// Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
 >new Intl.NumberFormat("fr").format(3000n) : string
 >new Intl.NumberFormat("fr").format : { (value: number): string; (value: number | bigint): string; }

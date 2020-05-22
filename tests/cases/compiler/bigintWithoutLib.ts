@@ -55,5 +55,5 @@ bigintVal = dataView.getBigInt64(1, true);
 bigintVal = dataView.getBigUint64(2);
 bigintVal = dataView.getBigUint64(2, true);
 
-// Test added Intl methods
+// Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);

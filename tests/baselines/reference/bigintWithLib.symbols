@@ -251,7 +251,7 @@ const y: 12n = 12n; // should emit type 12n
 let z = 12n; // should emit type bigint in declaration file
 >z : Symbol(z, Decl(bigintWithLib.ts, 57, 3))
 
-// Test added Intl methods
+// Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
 >new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))

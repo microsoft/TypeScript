@@ -212,9 +212,10 @@ tests/cases/compiler/bigintWithoutLib.ts(57,36): error TS2737: BigInt literals a
                          ~~~~~~~~~~~~
 !!! error TS2339: Property 'getBigUint64' does not exist on type 'DataView'.
     
-    // Test added Intl methods
+    // Test Intl methods with new parameter type
     new Intl.NumberFormat("fr").format(3000n);
                                        ~~~~~
 !!! error TS2345: Argument of type '3000n' is not assignable to parameter of type 'number'.
                                        ~~~~~
 !!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+    
