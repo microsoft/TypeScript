@@ -15764,21 +15764,11 @@ namespace ts {
                     }
                 }
 
-                if (isLiteralType(source) && !typeCouldHaveNoTopLevelSingletonTypes(target)) {
+                if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
                     generalizedSourceType = getTypeNameForErrorDisplay(getBaseTypeOfLiteralType(source));
                 }
 
                 reportError(message, generalizedSourceType, targetType);
-            }
-
-            function typeCouldHaveNoTopLevelSingletonTypes(type: Type) {
-                return forEachType(type, typeCouldHaveNoTopLevelSingletonTypesWorker);
-            }
-
-            function typeCouldHaveNoTopLevelSingletonTypesWorker(type: Type): boolean {
-                return (type.flags & TypeFlags.Intersection)
-                    ? !!forEach((type as IntersectionType).types, typeCouldHaveNoTopLevelSingletonTypesWorker)
-                    : isUnitType(type) || !!(type.flags & TypeFlags.Instantiable);
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
@@ -17373,6 +17363,21 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function typeCouldHaveTopLevelSingletonTypes(type: Type): boolean {
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                return !!forEach((type as IntersectionType).types, typeCouldHaveTopLevelSingletonTypes);
+            }
+
+            if (type.flags & TypeFlags.Instantiable) {
+                const constraint = getConstraintOfType(type);
+                if (constraint) {
+                    return typeCouldHaveTopLevelSingletonTypes(constraint);
+                }
+            }
+
+            return isUnitType(type);
         }
 
         function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
