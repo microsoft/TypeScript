@@ -1521,7 +1521,7 @@ namespace ts.FindAllReferences {
         }
 
         function addReference(referenceLocation: Node, relatedSymbol: Symbol | RelatedSymbol, state: State): void {
-            const { kind, symbol } = "kind" in relatedSymbol ? relatedSymbol : { kind: undefined, symbol: relatedSymbol }; // eslint-disable-line no-in-operator
+            const { kind, symbol } = "kind" in relatedSymbol ? relatedSymbol : { kind: undefined, symbol: relatedSymbol };
             const addRef = state.referenceAdder(symbol);
             if (state.options.implementations) {
                 addImplementationReferences(referenceLocation, addRef, state);
@@ -1888,14 +1888,30 @@ namespace ts.FindAllReferences {
         // This is not needed when searching for re-exports.
         function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRename: boolean, providePrefixAndSuffixText: boolean, implementations: boolean): Symbol[] {
             const result: Symbol[] = [];
+            const isSymbolStatic  = isStatic(symbol);
             forEachRelatedSymbol<void>(symbol, location, checker, isForRename, !(isForRename && providePrefixAndSuffixText),
-                (sym, root, base) => { result.push(base || root || sym); },
-                /*allowBaseTypes*/ () => !implementations);
+                (sym, root, base) => {
+                    // static method/property and instance method/property might have the same name. Only include static or only include instance.
+                    if(base){
+                        if((isSymbolStatic && !isStatic(base))||(!isSymbolStatic && isStatic(base))){
+                            base = undefined;
+                        }
+                    }
+                    result.push(base || root || sym);
+                 },
+                // when try to find implementation, implementations is true, and not allowed to find base class
+                /*allowBaseTypes*/() => !implementations);
             return result;
         }
 
+        /**
+         * @param allowBaseTypes return true means it would try to find in base class or interface.
+         */
         function forEachRelatedSymbol<T>(
             symbol: Symbol, location: Node, checker: TypeChecker, isForRenamePopulateSearchSymbolSet: boolean, onlyIncludeBindingElementAtReferenceLocation: boolean,
+            /**
+             * @param baseSymbol This symbol means one property/mehtod from base class or interface when it is not null or undefined,
+             */
             cbSymbol: (symbol: Symbol, rootSymbol?: Symbol, baseSymbol?: Symbol, kind?: NodeEntryKind) => T | undefined,
             allowBaseTypes: (rootSymbol: Symbol) => boolean,
         ): T | undefined {
@@ -2014,16 +2030,40 @@ namespace ts.FindAllReferences {
             readonly symbol: Symbol;
             readonly kind: NodeEntryKind | undefined;
         }
+
+        function isStatic(symbol: Symbol): boolean{
+            if(!symbol?.valueDeclaration) {return false;}
+            if(symbol.valueDeclaration?.modifierFlagsCache) {return !!((symbol.valueDeclaration.modifierFlagsCache & ModifierFlags.Static));}
+            else {return !!(symbol.valueDeclaration.modifiers?.some((modifier)=>modifier.kind & ModifierFlags.Static));};
+        }
+
         function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
             const { checker } = state;
+            const isReferenceSymbolStatic  = isStatic(referenceSymbol);
+            const cbSymbol = function (sym: Symbol, rootSymbol: Symbol, baseSymbol: Symbol|undefined, kind: NodeEntryKind): RelatedSymbol | undefined {
+                // check whether the symbol used to search itself is just the searched one.
+                if(baseSymbol){
+                    // static method/property and instance method/property might have the same name. Only check static or only check instance.
+                    if((isReferenceSymbolStatic && !isStatic(baseSymbol)) || (!isReferenceSymbolStatic && isStatic(baseSymbol))){
+                        baseSymbol = undefined;
+                    }
+                }
+
+                return search.includes(baseSymbol || rootSymbol || sym)
+                    // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
+                    ? {
+                        symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym,
+                        kind
+                    }
+                    : undefined;
+            };
+            const allowBaseTypes = (rootSymbol: Symbol) =>
+                !(search.parents?.every(parent => !explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker)));
+
             return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
                 /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
-                (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => search.includes(baseSymbol || rootSymbol || sym)
-                    // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
-                    ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }
-                    : undefined,
-                /*allowBaseTypes*/ rootSymbol =>
-                    !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))));
+                cbSymbol,
+                /*allowBaseTypes*/allowBaseTypes);
         }
 
         /**
