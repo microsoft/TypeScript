@@ -92,7 +92,6 @@ namespace ts.codefix {
             changes.replaceNode(sourceFile, namedExportDeclaration, exportDeclaration);
             return;
         }
-           
         exportDeclaration = createExportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
