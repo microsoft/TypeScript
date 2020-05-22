@@ -69,10 +69,10 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(114,5): error
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
   Type 'T' is not assignable to type 'U'.
     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(122,5): error TS2322: Type '42' is not assignable to type 'keyof T'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(123,5): error TS2322: Type '"hello"' is not assignable to type 'keyof T'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(140,5): error TS2322: Type '42' is not assignable to type 'T[K]'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(141,5): error TS2322: Type '"hello"' is not assignable to type 'T[K]'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(122,5): error TS2322: Type 'number' is not assignable to type 'keyof T'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(123,5): error TS2322: Type 'string' is not assignable to type 'keyof T'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(140,5): error TS2322: Type 'number' is not assignable to type 'T[K]'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(141,5): error TS2322: Type 'string' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
 
 
@@ -306,10 +306,10 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
     function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
         k = 42; // error
         ~
-!!! error TS2322: Type '42' is not assignable to type 'keyof T'.
+!!! error TS2322: Type 'number' is not assignable to type 'keyof T'.
         k = "hello"; // error
         ~
-!!! error TS2322: Type '"hello"' is not assignable to type 'keyof T'.
+!!! error TS2322: Type 'string' is not assignable to type 'keyof T'.
     }
     
     // Repro from #27470
@@ -328,10 +328,10 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
     function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
         t[k] = 42;  // Error
         ~~~~
-!!! error TS2322: Type '42' is not assignable to type 'T[K]'.
+!!! error TS2322: Type 'number' is not assignable to type 'T[K]'.
         t[k] = "hello";  // Error
         ~~~~
-!!! error TS2322: Type '"hello"' is not assignable to type 'T[K]'.
+!!! error TS2322: Type 'string' is not assignable to type 'T[K]'.
         t[k] = [10, 20];  // Error
         ~~~~
 !!! error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
