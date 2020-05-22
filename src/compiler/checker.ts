@@ -15730,16 +15730,12 @@ namespace ts {
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
                 if (incompatibleStack.length) reportIncompatibleStack();
                 const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
-                let generalizedSource: Type;
-                let generalizedSourceType: string;
+                let generalizedSource = source;
+                let generalizedSourceType = sourceType;
 
                 if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
                     generalizedSource = getBaseTypeOfLiteralType(source);
                     generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
-                }
-                else {
-                    generalizedSource = source;
-                    generalizedSourceType = sourceType;
                 }
 
                 if (target.flags & TypeFlags.TypeParameter) {
