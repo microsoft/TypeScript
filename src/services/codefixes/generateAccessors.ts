@@ -229,8 +229,11 @@ namespace ts.codefix {
         while (decl) {
             const superElement = getClassExtendsHeritageElement(decl);
             const superSymbol = superElement && checker.getSymbolAtLocation(superElement.expression);
-            const superDecl = superSymbol && find(superSymbol.declarations, isClassLike);
-            if (superDecl) { res.push(superDecl); }
+            if (!superSymbol) break;
+            const symbol = superSymbol.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(superSymbol) : superSymbol;
+            const superDecl = find(symbol.declarations, isClassLike);
+            if (!superDecl) break;
+            res.push(superDecl);
             decl = superDecl;
         }
         return res;

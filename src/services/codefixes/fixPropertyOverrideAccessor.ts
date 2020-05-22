@@ -47,6 +47,7 @@ namespace ts.codefix {
 
             startPosition = baseProp.valueDeclaration.pos;
             endPosition = baseProp.valueDeclaration.end;
+            file = getSourceFileOfNode(baseProp.valueDeclaration);
         }
         else {
             Debug.fail("fixPropertyOverrideAccessor codefix got unexpected error code " + code);
