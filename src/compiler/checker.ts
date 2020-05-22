@@ -15730,24 +15730,34 @@ namespace ts {
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
                 if (incompatibleStack.length) reportIncompatibleStack();
                 const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
-                let generalizedSourceType = sourceType;
+                let generalizedSource: Type;
+                let generalizedSourceType: string;
+
+                if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
+                    generalizedSource = getBaseTypeOfLiteralType(source);
+                    generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
+                }
+                else {
+                    generalizedSource = source;
+                    generalizedSourceType = sourceType;
+                }
 
                 if (target.flags & TypeFlags.TypeParameter) {
                     const constraint = getBaseConstraintOfType(target);
-                    const constraintElab = constraint && isTypeAssignableTo(source, constraint);
-                    if (constraintElab) {
+                    let needsOriginalSource;
+                    if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
                         reportError(
                             Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
-                            sourceType,
+                            needsOriginalSource ? sourceType : generalizedSourceType,
                             targetType,
-                            typeToString(constraint!),
+                            typeToString(constraint),
                         );
                     }
                     else {
                         reportError(
                             Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
                             targetType,
-                            sourceType
+                            generalizedSourceType
                         );
                     }
                 }
@@ -15762,10 +15772,6 @@ namespace ts {
                     else {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
                     }
-                }
-
-                if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
-                    generalizedSourceType = getTypeNameForErrorDisplay(getBaseTypeOfLiteralType(source));
                 }
 
                 reportError(message, generalizedSourceType, targetType);
