@@ -7,14 +7,10 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            let token = getTokenAtPosition(context.sourceFile, context.span.start);
-            while (token && !isCallExpression(token)) {
-                token = token.parent;
-            }
-            if (!token) {
+            const callExpression = findAncestor(getTokenAtPosition(context.sourceFile, context.span.start), isCallExpression);
+            if (!callExpression) {
                 return undefined;
             }
-            const callExpression = token;
             const changes = textChanges.ChangeTracker.with(context, t => {
                 t.deleteNodeRange(context.sourceFile, callExpression.openParenToken, callExpression.closeParenToken);
             });
