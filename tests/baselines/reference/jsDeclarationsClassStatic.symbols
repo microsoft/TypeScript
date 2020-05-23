@@ -34,7 +34,7 @@ module.exports = Handler;
 >Handler : Symbol(Handler, Decl(source.js, 0, 0), Decl(source.js, 7, 1))
 
 module.exports.Strings = Strings
->module.exports.Strings : Symbol(Strings)
+>module.exports.Strings : Symbol(Strings, Decl(source.js, 14, 25))
 >module.exports : Symbol(Strings, Decl(source.js, 14, 25))
 >module : Symbol(module, Decl(source.js, 12, 1))
 >exports : Symbol("tests/cases/conformance/jsdoc/declarations/source", Decl(source.js, 0, 0))

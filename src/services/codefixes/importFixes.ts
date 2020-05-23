@@ -45,7 +45,6 @@ namespace ts.codefix {
         // Keys are import clause node IDs.
         const addToExisting = createMap<{ readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern, defaultImport: string | undefined; readonly namedImports: string[], canUseTypeOnlyImport: boolean }>();
         const newImports = createMap<Mutable<ImportsCollection & { useRequire: boolean }>>();
-        let lastModuleSpecifier: string | undefined;
         return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes };
 
         function addImportFromDiagnostic(diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) {
@@ -97,7 +96,6 @@ namespace ts.codefix {
                     let entry = newImports.get(moduleSpecifier);
                     if (!entry) {
                         newImports.set(moduleSpecifier, entry = { namedImports: [], namespaceLikeImport: undefined, typeOnly, useRequire });
-                        lastModuleSpecifier = moduleSpecifier;
                     }
                     else {
                         // An import clause can only be type-only if every import fix contributing to it can be type-only.
@@ -135,10 +133,15 @@ namespace ts.codefix {
             addToExisting.forEach(({ importClauseOrBindingPattern, defaultImport, namedImports, canUseTypeOnlyImport }) => {
                 doAddExistingFix(changeTracker, sourceFile, importClauseOrBindingPattern, defaultImport, namedImports, canUseTypeOnlyImport);
             });
+
+            let newDeclarations: Statement | readonly Statement[] | undefined;
             newImports.forEach(({ useRequire, ...imports }, moduleSpecifier) => {
-                const addDeclarations = useRequire ? addNewRequires : addNewImports;
-                addDeclarations(changeTracker, sourceFile, moduleSpecifier, quotePreference, imports, /*blankLineBetween*/ lastModuleSpecifier === moduleSpecifier);
+                const getDeclarations = useRequire ? getNewRequires : getNewImports;
+                newDeclarations = combine(newDeclarations, getDeclarations(moduleSpecifier, quotePreference, imports));
             });
+            if (newDeclarations) {
+                insertImports(changeTracker, sourceFile, newDeclarations, /*blankLineBetween*/ true);
+            }
         }
     }
 
@@ -631,11 +634,11 @@ namespace ts.codefix {
             }
             case ImportFixKind.AddNew: {
                 const { importKind, moduleSpecifier, typeOnly, useRequire } = fix;
-                const addDeclarations = useRequire ? addNewRequires : addNewImports;
+                const getDeclarations = useRequire ? getNewRequires : getNewImports;
                 const importsCollection = importKind === ImportKind.Default ? { defaultImport: symbolName, typeOnly } :
                     importKind === ImportKind.Named ? { namedImports: [symbolName], typeOnly } :
                     { namespaceLikeImport: { importKind, name: symbolName }, typeOnly };
-                addDeclarations(changes, sourceFile, moduleSpecifier, quotePreference, importsCollection, /*blankLineBetween*/ true);
+                insertImports(changes, sourceFile, getDeclarations(moduleSpecifier, quotePreference, importsCollection), /*blankLineBetween*/ true);
                 return [importKind === ImportKind.Default ? Diagnostics.Import_default_0_from_module_1 : Diagnostics.Import_0_from_module_1, symbolName, moduleSpecifier];
             }
             default:
@@ -717,13 +720,13 @@ namespace ts.codefix {
             readonly name: string;
         };
     }
-    function addNewImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection, blankLineBetween: boolean): void {
+    function getNewImports(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): Statement | readonly Statement[] {
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
+        let statements: Statement | readonly Statement[] | undefined;
         if (imports.defaultImport !== undefined || imports.namedImports?.length) {
-            insertImport(changes, sourceFile,
-                makeImport(
-                    imports.defaultImport === undefined ? undefined : createIdentifier(imports.defaultImport),
-                    imports.namedImports?.map(n => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(n))), moduleSpecifier, quotePreference, imports.typeOnly), /*blankLineBetween*/ blankLineBetween);
+            statements = combine(statements, makeImport(
+                imports.defaultImport === undefined ? undefined : createIdentifier(imports.defaultImport),
+                imports.namedImports?.map(n => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(n))), moduleSpecifier, quotePreference, imports.typeOnly));
         }
         const { namespaceLikeImport, typeOnly } = imports;
         if (namespaceLikeImport) {
@@ -741,12 +744,14 @@ namespace ts.codefix {
                         createNamespaceImport(createIdentifier(namespaceLikeImport.name)),
                         typeOnly),
                     quotedModuleSpecifier);
-            insertImport(changes, sourceFile, declaration, /*blankLineBetween*/ blankLineBetween);
+            statements = combine(statements, declaration);
         }
+        return Debug.checkDefined(statements);
     }
 
-    function addNewRequires(changes: textChanges.ChangeTracker, sourceFile: SourceFile, moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection, blankLineBetween: boolean) {
+    function getNewRequires(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): Statement | readonly Statement[] {
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
+        let statements: Statement | readonly Statement[] | undefined;
         // const { default: foo, bar, etc } = require('./mod');
         if (imports.defaultImport || imports.namedImports?.length) {
             const bindingElements = imports.namedImports?.map(name => createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) || [];
@@ -754,13 +759,14 @@ namespace ts.codefix {
                 bindingElements.unshift(createBindingElement(/*dotDotDotToken*/ undefined, "default", imports.defaultImport));
             }
             const declaration = createConstEqualsRequireDeclaration(createObjectBindingPattern(bindingElements), quotedModuleSpecifier);
-            insertImport(changes, sourceFile, declaration, blankLineBetween);
+            statements = combine(statements, declaration);
         }
         // const foo = require('./mod');
         if (imports.namespaceLikeImport) {
             const declaration = createConstEqualsRequireDeclaration(imports.namespaceLikeImport.name, quotedModuleSpecifier);
-            insertImport(changes, sourceFile, declaration, blankLineBetween);
+            statements = combine(statements, declaration);
         }
+        return Debug.checkDefined(statements);
     }
 
     function createConstEqualsRequireDeclaration(name: string | ObjectBindingPattern, quotedModuleSpecifier: StringLiteral): VariableStatement {

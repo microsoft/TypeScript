@@ -215,7 +215,7 @@
         "category": "Error",
         "code": 1063
     },
-    "The return type of an async function or method must be the global Promise<T> type.": {
+    "The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{0}>'?": {
         "category": "Error",
         "code": 1064
     },
@@ -1477,11 +1477,11 @@
         "category": "Error",
         "code": 2371
     },
-    "Parameter '{0}' cannot be referenced in its initializer.": {
+    "Parameter '{0}' cannot reference itself.": {
         "category": "Error",
         "code": 2372
     },
-    "Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
+    "Parameter '{0}' cannot reference identifier '{1}' declared after it.": {
         "category": "Error",
         "code": 2373
     },
@@ -2963,6 +2963,14 @@
         "category": "Error",
         "code": 2789
     },
+    "The operand of a 'delete' operator must be optional.": {
+        "category": "Error",
+        "code": 2790
+    },
+    "Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.": {
+        "category": "Error",
+        "code": 2791
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3508,6 +3516,22 @@
     "Cannot read file '{0}'.": {
         "category": "Error",
         "code": 5083
+    },
+    "Tuple members must all have names or all not have names.": {
+        "category": "Error",
+        "code": 5084
+    },
+    "A tuple member cannot be both optional and rest.": {
+        "category": "Error",
+        "code": 5085
+    },
+    "A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.": {
+        "category": "Error",
+        "code": 5086
+    },
+    "A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.": {
+        "category": "Error",
+        "code": 5087
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4384,9 +4408,17 @@
         "category": "Error",
         "code": 6231
     },
-    "This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?": {
-        "category": "Message",
+    "Declaration augments declaration in another file. This cannot be serialized.": {
+        "category": "Error",
         "code": 6232
+    },
+    "This is the declaration being augmented. Consider moving the augmenting declaration into the same file.": {
+        "category": "Error",
+        "code": 6233
+    },
+    "This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?": {
+        "category": "Error",
+        "code": 6234
     },
 
     "Projects to reference": {
@@ -4899,6 +4931,14 @@
         "category": "Error",
         "code": 8032
     },
+    "A JSDoc '@typedef' comment may not contain multiple '@type' tags.": {
+        "category": "Error",
+        "code": 8033
+    },
+    "The tag was first specified here.": {
+        "category": "Error",
+        "code": 8034
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -5184,6 +5224,18 @@
     "Declare private property '{0}'": {
         "category": "Message",
         "code": 90035
+    },
+    "Replace '{0}' with 'Promise<{1}>'": {
+        "category": "Message",
+        "code": 90036
+    },
+    "Fix all incorrect return type of an async functions": {
+        "category": "Message",
+        "code": 90037
+    },
+    "Declare private method '{0}'": {
+        "category": "Message",
+        "code": 90038
     },
     "Declare a private field named '{0}'.": {
         "category": "Message",
@@ -5625,7 +5677,7 @@
         "category": "Message",
         "code": 95111
     },
-    "Remove block body braces": {
+    "Remove braces from arrow function body": {
         "category": "Message",
         "code": 95112
     },
@@ -5637,7 +5689,7 @@
         "category": "Message",
         "code": 95114
     },
-    "Remove all incorrect body block braces": {
+    "Remove braces from all arrow function bodies with relevant issues": {
         "category": "Message",
         "code": 95115
     },
@@ -5645,9 +5697,17 @@
         "category": "Message",
         "code": 95116
     },
-    "Remove parentheses": {
+    "Move labeled tuple element modifiers to labels": {
         "category": "Message",
         "code": 95117
+    },
+    "Convert overload list to single signature": {
+        "category": "Message",
+        "code": 95118
+    },
+    "Remove parentheses": {
+        "category": "Message",
+        "code": 95119
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
@@ -5745,5 +5805,9 @@
     "The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.": {
         "category": "Error",
         "code": 18032
+    },
+    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+        "category": "Error",
+        "code": 18033
     }
 }

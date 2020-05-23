@@ -373,3 +373,87 @@ const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)):
 >Container : Symbol(Container, Decl(intersectionReduction.ts, 99, 44))
 >t : Symbol(t, Decl(intersectionReduction.ts, 107, 12))
 
+// Repro from #38549
+
+interface A2 {
+>A2 : Symbol(A2, Decl(intersectionReduction.ts, 107, 93))
+
+    kind: "A";
+>kind : Symbol(A2.kind, Decl(intersectionReduction.ts, 111, 14))
+
+    a: number;
+>a : Symbol(A2.a, Decl(intersectionReduction.ts, 112, 14))
+}
+
+interface B2 {
+>B2 : Symbol(B2, Decl(intersectionReduction.ts, 114, 1))
+
+    kind: "B";
+>kind : Symbol(B2.kind, Decl(intersectionReduction.ts, 116, 14))
+
+    b: number;
+>b : Symbol(B2.b, Decl(intersectionReduction.ts, 117, 14))
+}
+
+declare const shouldBeB: (A2 | B2) & B2;
+>shouldBeB : Symbol(shouldBeB, Decl(intersectionReduction.ts, 121, 13))
+>A2 : Symbol(A2, Decl(intersectionReduction.ts, 107, 93))
+>B2 : Symbol(B2, Decl(intersectionReduction.ts, 114, 1))
+>B2 : Symbol(B2, Decl(intersectionReduction.ts, 114, 1))
+
+const b: B2 = shouldBeB; // works
+>b : Symbol(b, Decl(intersectionReduction.ts, 122, 5))
+>B2 : Symbol(B2, Decl(intersectionReduction.ts, 114, 1))
+>shouldBeB : Symbol(shouldBeB, Decl(intersectionReduction.ts, 121, 13))
+
+function inGeneric<T extends A2 | B2>(alsoShouldBeB: T & B2) {
+>inGeneric : Symbol(inGeneric, Decl(intersectionReduction.ts, 122, 24))
+>T : Symbol(T, Decl(intersectionReduction.ts, 124, 19))
+>A2 : Symbol(A2, Decl(intersectionReduction.ts, 107, 93))
+>B2 : Symbol(B2, Decl(intersectionReduction.ts, 114, 1))
+>alsoShouldBeB : Symbol(alsoShouldBeB, Decl(intersectionReduction.ts, 124, 38))
+>T : Symbol(T, Decl(intersectionReduction.ts, 124, 19))
+>B2 : Symbol(B2, Decl(intersectionReduction.ts, 114, 1))
+
+    const b: B2 = alsoShouldBeB;
+>b : Symbol(b, Decl(intersectionReduction.ts, 125, 9))
+>B2 : Symbol(B2, Decl(intersectionReduction.ts, 114, 1))
+>alsoShouldBeB : Symbol(alsoShouldBeB, Decl(intersectionReduction.ts, 124, 38))
+}
+
+// Repro from #38542
+
+interface ABI {
+>ABI : Symbol(ABI, Decl(intersectionReduction.ts, 126, 1))
+
+    kind: 'a' | 'b';
+>kind : Symbol(ABI.kind, Decl(intersectionReduction.ts, 130, 15))
+}
+
+declare class CA { kind: 'a'; a: string; x: number };
+>CA : Symbol(CA, Decl(intersectionReduction.ts, 132, 1))
+>kind : Symbol(CA.kind, Decl(intersectionReduction.ts, 134, 18))
+>a : Symbol(CA.a, Decl(intersectionReduction.ts, 134, 29))
+>x : Symbol(CA.x, Decl(intersectionReduction.ts, 134, 40))
+
+declare class CB { kind: 'b'; b: string; y: number };
+>CB : Symbol(CB, Decl(intersectionReduction.ts, 134, 53))
+>kind : Symbol(CB.kind, Decl(intersectionReduction.ts, 135, 18))
+>b : Symbol(CB.b, Decl(intersectionReduction.ts, 135, 29))
+>y : Symbol(CB.y, Decl(intersectionReduction.ts, 135, 40))
+
+function bar<T extends CA | CB>(x: T & CA) {
+>bar : Symbol(bar, Decl(intersectionReduction.ts, 135, 53))
+>T : Symbol(T, Decl(intersectionReduction.ts, 137, 13))
+>CA : Symbol(CA, Decl(intersectionReduction.ts, 132, 1))
+>CB : Symbol(CB, Decl(intersectionReduction.ts, 134, 53))
+>x : Symbol(x, Decl(intersectionReduction.ts, 137, 32))
+>T : Symbol(T, Decl(intersectionReduction.ts, 137, 13))
+>CA : Symbol(CA, Decl(intersectionReduction.ts, 132, 1))
+
+    let ab: ABI = x;
+>ab : Symbol(ab, Decl(intersectionReduction.ts, 138, 7))
+>ABI : Symbol(ABI, Decl(intersectionReduction.ts, 126, 1))
+>x : Symbol(x, Decl(intersectionReduction.ts, 137, 32))
+}
+

@@ -1,5 +1,7 @@
 /* @internal */
 namespace ts.SymbolDisplay {
+    const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
+
     // TODO(drosen): use contextual SemanticMeaning.
     export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
         const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
@@ -387,7 +389,7 @@ namespace ts.SymbolDisplay {
                     if (declarationName) {
                         const isExternalModuleDeclaration =
                             isModuleWithStringLiteralName(resolvedNode) &&
-                            hasModifier(resolvedNode, ModifierFlags.Ambient);
+                            hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
                         const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
                         const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
                             typeChecker,
@@ -471,13 +473,21 @@ namespace ts.SymbolDisplay {
                         // If the type is type parameter, format it specially
                         if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                             const typeParameterParts = mapToDisplayParts(writer => {
-                                const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration)!;
+                                const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
                                 getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                             });
                             addRange(displayParts, typeParameterParts);
                         }
                         else {
                             addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
+                        }
+                        if ((symbol as TransientSymbol).target && ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
+                            const labelDecl = ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+                            Debug.assertNode(labelDecl.name, isIdentifier);
+                            displayParts.push(spacePart());
+                            displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                            displayParts.push(textPart(idText(labelDecl.name)));
+                            displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                     }
                     else if (symbolFlags & SymbolFlags.Function ||
@@ -500,7 +510,7 @@ namespace ts.SymbolDisplay {
         }
 
         if (documentation.length === 0 && !hasMultipleSignatures) {
-            documentation = symbol.getDocumentationComment(typeChecker);
+            documentation = symbol.getContextualDocumentationComment(enclosingDeclaration, typeChecker);
         }
 
         if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {
@@ -631,7 +641,7 @@ namespace ts.SymbolDisplay {
 
         function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined) {
             const typeParameterParts = mapToDisplayParts(writer => {
-                const params = typeChecker.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration);
+                const params = typeChecker.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration, symbolDisplayNodeBuilderFlags);
                 getPrinter().writeList(ListFormat.TypeParameters, params, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
             });
             addRange(displayParts, typeParameterParts);

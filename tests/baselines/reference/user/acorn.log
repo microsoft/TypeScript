@@ -275,6 +275,9 @@ node_modules/acorn/dist/acorn.js(5299,5): error TS2339: Property 'nextToken' doe
 node_modules/acorn/dist/acorn.js(5300,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
 node_modules/acorn/dist/acorn.js(5307,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/acorn/dist/acorn_loose.es.js(45,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/dist/acorn_loose.es.js(64,7): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(64,23): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(66,7): error TS2532: Object is possibly 'undefined'.
 node_modules/acorn/dist/acorn_loose.es.js(73,9): error TS2339: Property 'name' does not exist on type 'Node'.
 node_modules/acorn/dist/acorn_loose.es.js(79,9): error TS2339: Property 'value' does not exist on type 'Node'.
 node_modules/acorn/dist/acorn_loose.es.js(79,23): error TS2339: Property 'raw' does not exist on type 'Node'.

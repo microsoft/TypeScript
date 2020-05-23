@@ -110,6 +110,26 @@
 //// const sum2 = (y, z) =>[| {
 ////     return y + z;
 //// }|];
+////
+////function Foo()[| {
+////   [|/**
+////     * Description
+////     *
+////     * @param {string} param
+////     * @returns
+////     */|]
+////    this.method = function (param)[| {
+////    }|]
+////
+////   [|/**
+////     * Description
+////     *
+////     * @param {string} param
+////     * @returns
+////     */|]
+////    function method(param)[| {
+////    }|]
+////}|]
 
 verify.outliningSpansInCurrentFile(test.ranges());
 
