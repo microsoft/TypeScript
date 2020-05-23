@@ -2201,68 +2201,36 @@ namespace ts.server {
             });
         }
 
-        private toggleLineComment(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+        private toggleLineComment(args: protocol.FileRangeRequestArgs): TextChange[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
             const textRange = this.getRange(args, scriptInfo);
 
-            const textChanges = project.getLanguageService().toggleLineComment(file, textRange);
-
-            if (simplifiedResult) {
-                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-
-                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
-            }
-
-            return textChanges;
+            return project.getLanguageService().toggleLineComment(file, textRange);
         }
 
-        private toggleMultilineComment(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+        private toggleMultilineComment(args: protocol.FileRangeRequestArgs): TextChange[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
             const textRange = this.getRange(args, scriptInfo);
 
-            const textChanges = project.getLanguageService().toggleMultilineComment(file, textRange);
-
-            if (simplifiedResult) {
-                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-
-                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
-            }
-
-            return textChanges;
+            return project.getLanguageService().toggleMultilineComment(file, textRange);
         }
 
-        private commentSelection(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+        private commentSelection(args: protocol.FileRangeRequestArgs): TextChange[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
             const textRange = this.getRange(args, scriptInfo);
 
-            const textChanges = project.getLanguageService().commentSelection(file, textRange);
-
-            if (simplifiedResult) {
-                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-
-                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
-            }
-
-            return textChanges;
+            return project.getLanguageService().commentSelection(file, textRange);
         }
 
-        private uncommentSelection(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+        private uncommentSelection(args: protocol.FileRangeRequestArgs): TextChange[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
             const textRange = this.getRange(args, scriptInfo);
 
-            const textChanges = project.getLanguageService().uncommentSelection(file, textRange);
-
-            if (simplifiedResult) {
-                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-
-                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
-            }
-
-            return textChanges;
+            return project.getLanguageService().uncommentSelection(file, textRange);
         }
 
         private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
@@ -2710,29 +2678,17 @@ namespace ts.server {
             [CommandNames.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
                 return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
             },
-            [CommandNames.ToggleLineComment]: (request: protocol.ToggleLineCommentRequest) => {
-                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/ true));
+            [CommandNames.ToggleLineCommentFull]: (request: protocol.CommentSelectionRequest) => {
+                return this.requiredResponse(this.toggleLineComment(request.arguments));
             },
-            [CommandNames.ToggleLineCommentFull]: (request: protocol.ToggleLineCommentRequest) => {
-                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/ false));
-            },
-            [CommandNames.ToggleMultilineComment]: (request: protocol.ToggleMultilineCommentRequest) => {
-                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/ true));
-            },
-            [CommandNames.ToggleMultilineCommentFull]: (request: protocol.ToggleMultilineCommentRequest) => {
-                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/ false));
-            },
-            [CommandNames.CommentSelection]: (request: protocol.CommentSelectionRequest) => {
-                return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/ true));
+            [CommandNames.ToggleMultilineCommentFull]: (request: protocol.CommentSelectionRequest) => {
+                return this.requiredResponse(this.toggleMultilineComment(request.arguments));
             },
             [CommandNames.CommentSelectionFull]: (request: protocol.CommentSelectionRequest) => {
-                return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/ false));
+                return this.requiredResponse(this.commentSelection(request.arguments));
             },
-            [CommandNames.UncommentSelection]: (request: protocol.UncommentSelectionRequest) => {
-                return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ true));
-            },
-            [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
-                return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
+            [CommandNames.UncommentSelectionFull]: (request: protocol.CommentSelectionRequest) => {
+                return this.requiredResponse(this.uncommentSelection(request.arguments));
             },
         });
 

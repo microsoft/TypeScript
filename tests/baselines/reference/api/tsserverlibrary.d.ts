@@ -6304,10 +6304,6 @@ declare namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         ConfigurePlugin = "configurePlugin",
         SelectionRange = "selectionRange",
-        ToggleLineComment = "toggleLineComment",
-        ToggleMultilineComment = "toggleMultilineComment",
-        CommentSelection = "commentSelection",
-        UncommentSelection = "uncommentSelection",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
@@ -7332,20 +7328,7 @@ declare namespace ts.server.protocol {
         textSpan: TextSpan;
         parent?: SelectionRange;
     }
-    interface ToggleLineCommentRequest extends FileRequest {
-        command: CommandTypes.ToggleLineComment;
-        arguments: FileRangeRequestArgs;
-    }
-    interface ToggleMultilineCommentRequest extends FileRequest {
-        command: CommandTypes.ToggleMultilineComment;
-        arguments: FileRangeRequestArgs;
-    }
     interface CommentSelectionRequest extends FileRequest {
-        command: CommandTypes.CommentSelection;
-        arguments: FileRangeRequestArgs;
-    }
-    interface UncommentSelectionRequest extends FileRequest {
-        command: CommandTypes.UncommentSelection;
         arguments: FileRangeRequestArgs;
     }
     /**
