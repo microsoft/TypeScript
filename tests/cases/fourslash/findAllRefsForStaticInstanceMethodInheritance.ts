@@ -9,7 +9,7 @@
 ////}
 ////
 ////class Z extends Y{
-////	[|static [|{| "isDefinition": true, "contextRangeIndex": 2, "isWriteAccess": true |}foo|](): void{}|]
+////	[|static [|{| "isDefinition": true, "contextRangeIndex": 4, "isWriteAccess": true |}foo|](): void{}|]
 ////	[|[|{| "isDefinition": true, "contextRangeIndex": 6, "isWriteAccess": true |}foo|](): void{}|]
 ////}
 ////
