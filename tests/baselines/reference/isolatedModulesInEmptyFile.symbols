@@ -1,0 +1,5 @@
+=== tests/cases/compiler/file.ts ===
+// this is an empty file
+No type information for this code.// therefore it's safe and helpful to suppress the ts1208 error
+No type information for this code.
+No type information for this code.

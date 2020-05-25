@@ -1,0 +1,12 @@
+tests/cases/compiler/file2.ts(2,1): error TS1208: All files must be modules when the '--isolatedModules' flag is provided.
+
+
+==== tests/cases/compiler/file.ts (0 errors) ====
+    // Should not error in this file
+    
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    // but this file
+    var a = 1
+    ~~~
+!!! error TS1208: All files must be modules when the '--isolatedModules' flag is provided.
+    

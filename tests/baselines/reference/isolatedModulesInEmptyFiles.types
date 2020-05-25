@@ -1,0 +1,9 @@
+=== tests/cases/compiler/file.ts ===
+// Should not error in this file
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/file2.ts ===
+// but this file
+var a = 1
+>a : number
+>1 : 1
+
