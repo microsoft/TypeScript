@@ -13,7 +13,7 @@ namespace ts.codefix {
             const node = findNodeToFix(sourceFile, span.start);
             if (!node) return undefined;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node));
-            return [createCodeFixAction(fixID, changes, Diagnostics.Wrap_elements_in_JSX_fragment, fixID, Diagnostics.Wrap_all_elements_in_JSX_fragment)];
+            return [createCodeFixAction(fixID, changes, Diagnostics.Wrap_all_JSX_in_JSX_Fragment, fixID, Diagnostics.Wrap_all_JSX_in_JSX_Fragment)];
         },
         fixIds: [fixID],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
