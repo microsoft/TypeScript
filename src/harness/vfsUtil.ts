@@ -597,7 +597,6 @@ namespace vfs {
                     if (!isDirectory(existingNode)) throw createIOError("ENOTDIR");
                     // if both old and new arguments point to the same directory, just pass. So we could rename /src/a/1 to /src/A/1 in Win.
                     // if not and the directory pointed by the new path is not empty, throw an error.
-                    // However, in the link in the description, it says: If the old argument points to the pathname of a file that is not a directory, the new argument shall not point to the pathname of a directory. If the link named by the new argument exists, it shall be removed and old renamed to new. In this case, a link named new shall remain visible to other threads throughout the renaming operation and refer either to the file referred to by new or old before the operation began. Write access permission is required for both the directory containing old and the directory containing new.
                     if (this.stringComparer(oldpath, newpath) !== 0 && this._getLinks(existingNode).size > 0) throw createIOError("ENOTEMPTY");
                 }
                 else {
