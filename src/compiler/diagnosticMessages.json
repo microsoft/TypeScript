@@ -3517,6 +3517,22 @@
         "category": "Error",
         "code": 5083
     },
+    "Tuple members must all have names or all not have names.": {
+        "category": "Error",
+        "code": 5084
+    },
+    "A tuple member cannot be both optional and rest.": {
+        "category": "Error",
+        "code": 5085
+    },
+    "A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.": {
+        "category": "Error",
+        "code": 5086
+    },
+    "A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.": {
+        "category": "Error",
+        "code": 5087
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -4399,6 +4415,10 @@
     "This is the declaration being augmented. Consider moving the augmenting declaration into the same file.": {
         "category": "Error",
         "code": 6233
+    },
+    "This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?": {
+        "category": "Error",
+        "code": 6234
     },
 
     "Projects to reference": {
@@ -5676,6 +5696,14 @@
     "Wrap all object literal with parentheses": {
         "category": "Message",
         "code": 95116
+    },
+    "Move labeled tuple element modifiers to labels": {
+        "category": "Message",
+        "code": 95117
+    },
+    "Convert overload list to single signature": {
+        "category": "Message",
+        "code": 95118
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

@@ -13,4 +13,6 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
+export {};
 //// [b.js]
+export {};

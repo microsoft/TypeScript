@@ -24,3 +24,4 @@ const Foo = (<h1></h1>);
 
 //// [foo.jsx]
 var Foo = (<h1></h1>);
+export {};

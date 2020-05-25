@@ -16,7 +16,7 @@ type MyFunctionType = (foo: number, bar: string) => boolean;
 
 type Explicit = (...args: Tail<Parameters<MyFunctionType>>) => ReturnType<MyFunctionType>; // (bar: string) => boolean
 >Explicit : Explicit
->args : [string]
+>args : [bar: string]
 
 type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parameters<T>>) => ReturnType<T>;
 >Bind1 : Bind1<T>
