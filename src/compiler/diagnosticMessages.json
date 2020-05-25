@@ -5705,6 +5705,14 @@
         "category": "Message",
         "code": 95118
     },
+    "Wrap JSX in JSX Fragment": {
+        "category": "Message",
+        "code": 95119
+    },
+    "Wrap all JSX in JSX Fragment": {
+        "category": "Message",
+        "code": 95120
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

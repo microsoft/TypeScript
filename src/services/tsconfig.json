@@ -95,6 +95,7 @@
         "codefixes/useDefaultImport.ts",
         "codefixes/useBigintLiteral.ts",
         "codefixes/fixAddModuleReferTypeMissingTypeof.ts",
+        "codefixes/wrapJsxInFragment.ts",
         "codefixes/convertToMappedObjectType.ts",
         "codefixes/removeUnnecessaryAwait.ts",
         "codefixes/splitTypeOnlyImport.ts",
