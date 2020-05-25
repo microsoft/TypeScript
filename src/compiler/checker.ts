@@ -17288,9 +17288,10 @@ namespace ts {
                     return Ternary.True;
                 }
                 if (isGenericMappedType(source)) {
-                    // A generic mapped type { [P in K]: T } is related to an index signature { [x: string]: U }
-                    // if T is related to U.
-                    return kind === IndexKind.String ? isRelatedTo(getTemplateTypeFromMappedType(source), targetType, reportErrors) : Ternary.False;
+                    // A generic mapped type { [P in K]: T } is related to a type with an index signature
+                    // { [x: string]: U }, and optionally with an index signature { [x: number]: V },
+                    // if T is related to U and V.
+                    return getIndexTypeOfType(target, IndexKind.String) ? isRelatedTo(getTemplateTypeFromMappedType(source), targetType, reportErrors) : Ternary.False;
                 }
                 const indexType = getIndexTypeOfType(source, kind) || kind === IndexKind.Number && getIndexTypeOfType(source, IndexKind.String);
                 if (indexType) {
