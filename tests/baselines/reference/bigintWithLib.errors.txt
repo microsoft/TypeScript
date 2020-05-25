@@ -121,4 +121,5 @@ tests/cases/compiler/bigintWithLib.ts(48,26): error TS2345: Argument of type '12
     
     // Test Intl methods with new parameter type
     new Intl.NumberFormat("fr").format(3000n);
+    new Intl.NumberFormat("fr").format(bigintVal);
     

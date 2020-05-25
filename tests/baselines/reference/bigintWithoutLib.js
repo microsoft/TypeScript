@@ -56,6 +56,7 @@ bigintVal = dataView.getBigUint64(2, true);
 
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
+new Intl.NumberFormat("fr").format(bigintVal);
 
 
 //// [bigintWithoutLib.js]
@@ -111,3 +112,4 @@ bigintVal = dataView.getBigUint64(2);
 bigintVal = dataView.getBigUint64(2, true);
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
+new Intl.NumberFormat("fr").format(bigintVal);

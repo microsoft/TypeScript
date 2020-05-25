@@ -50,9 +50,10 @@ tests/cases/compiler/bigintWithoutLib.ts(53,22): error TS2339: Property 'getBigU
 tests/cases/compiler/bigintWithoutLib.ts(54,22): error TS2339: Property 'getBigUint64' does not exist on type 'DataView'.
 tests/cases/compiler/bigintWithoutLib.ts(57,36): error TS2345: Argument of type '3000n' is not assignable to parameter of type 'number'.
 tests/cases/compiler/bigintWithoutLib.ts(57,36): error TS2737: BigInt literals are not available when targeting lower than ES2020.
+tests/cases/compiler/bigintWithoutLib.ts(58,36): error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
 
 
-==== tests/cases/compiler/bigintWithoutLib.ts (52 errors) ====
+==== tests/cases/compiler/bigintWithoutLib.ts (53 errors) ====
     // Every line should error because these builtins are not declared
     
     // Test BigInt functions
@@ -218,4 +219,7 @@ tests/cases/compiler/bigintWithoutLib.ts(57,36): error TS2737: BigInt literals a
 !!! error TS2345: Argument of type '3000n' is not assignable to parameter of type 'number'.
                                        ~~~~~
 !!! error TS2737: BigInt literals are not available when targeting lower than ES2020.
+    new Intl.NumberFormat("fr").format(bigintVal);
+                                       ~~~~~~~~~
+!!! error TS2345: Argument of type 'bigint' is not assignable to parameter of type 'number'.
     

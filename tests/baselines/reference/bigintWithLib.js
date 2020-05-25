@@ -60,6 +60,7 @@ let z = 12n; // should emit type bigint in declaration file
 
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
+new Intl.NumberFormat("fr").format(bigintVal);
 
 
 //// [bigintWithLib.js]
@@ -119,6 +120,7 @@ const y = 12n; // should emit type 12n
 let z = 12n; // should emit type bigint in declaration file
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
+new Intl.NumberFormat("fr").format(bigintVal);
 
 
 //// [bigintWithLib.d.ts]
