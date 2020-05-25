@@ -462,6 +462,9 @@
       <Item ItemId=";A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type_5087" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[레이블이 지정된 튜플 요소는 형식 앞이 아니라 이름 앞에 '...'을 사용하여 rest로 선언됩니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3688,7 +3691,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[선언이 다른 파일의 선언을 확대합니다. 직렬화할 수 없습니다.]]></Val>
+            <Val><![CDATA[선언이 다른 파일의 선언을 확대합니다. 이 작업은 직렬화할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4756,7 +4759,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['target' 옵션이 'es2016' 이상으로 설정되어 있지 않으면 'bigint' 값에 대해 지수화를 수행할 수 없습니다.]]></Val>
+            <Val><![CDATA['target' 옵션이 'es2016' 이상으로 설정되어 있지 않으면 'bigint' 값에 지수화를 수행할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6097,7 +6100,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its instance type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[인스턴스 형식 '{0}'은(는) 유효한 JSX 요소가 아닙니다.]]></Val>
+            <Val><![CDATA[해당 인스턴스 형식 '{0}'은(는) 유효한 JSX 요소가 아닙니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6106,7 +6109,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its return type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[반환 형식 '{0}'은(는) 유효한 JSX 요소가 아닙니다.]]></Val>
+            <Val><![CDATA[해당 반환 형식 '{0}'은(는) 유효한 JSX 요소가 아닙니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
