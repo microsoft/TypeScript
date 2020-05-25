@@ -1521,7 +1521,7 @@ namespace ts.FindAllReferences {
         }
 
         function addReference(referenceLocation: Node, relatedSymbol: Symbol | RelatedSymbol, state: State): void {
-            const { kind, symbol } = "kind" in relatedSymbol ? relatedSymbol : { kind: undefined, symbol: relatedSymbol };
+            const { kind, symbol } = "kind" in relatedSymbol ? relatedSymbol : { kind: undefined, symbol: relatedSymbol }; // eslint-disable-line no-in-operator
             const addRef = state.referenceAdder(symbol);
             if (state.options.implementations) {
                 addImplementationReferences(referenceLocation, addRef, state);
@@ -2040,7 +2040,7 @@ namespace ts.FindAllReferences {
         function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
             const { checker } = state;
             const isReferenceSymbolStatic  = isStatic(referenceSymbol);
-            const cbSymbol = function (sym: Symbol, rootSymbol: Symbol, baseSymbol: Symbol|undefined, kind: NodeEntryKind): RelatedSymbol | undefined {
+            const cbSymbol = (sym: Symbol, rootSymbol: Symbol, baseSymbol: Symbol | undefined, kind: NodeEntryKind): RelatedSymbol | undefined => {
                 // check whether the symbol used to search itself is just the searched one.
                 if(baseSymbol){
                     // static method/property and instance method/property might have the same name. Only check static or only check instance.
