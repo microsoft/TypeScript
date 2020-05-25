@@ -179,7 +179,7 @@ namespace ts {
             case SyntaxKind.ArrayType:
                 return visitNode(cbNode, (<ArrayTypeNode>node).elementType);
             case SyntaxKind.TupleType:
-                return visitNodes(cbNode, cbNodes, (<TupleTypeNode>node).elementTypes);
+                return visitNodes(cbNode, cbNodes, (<TupleTypeNode>node).elements);
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNode, cbNodes, (<UnionOrIntersectionTypeNode>node).types);
@@ -207,6 +207,11 @@ namespace ts {
                     visitNode(cbNode, (<MappedTypeNode>node).type);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
+            case SyntaxKind.NamedTupleMember:
+                return visitNode(cbNode, (<NamedTupleMember>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<NamedTupleMember>node).name) ||
+                    visitNode(cbNode, (<NamedTupleMember>node).questionToken) ||
+                    visitNode(cbNode, (<NamedTupleMember>node).type);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 return visitNodes(cbNode, cbNodes, (<BindingPattern>node).elements);
@@ -3056,9 +3061,33 @@ namespace ts {
             return type;
         }
 
+        function isNextTokenColonOrQuestionColon() {
+            return nextToken() === SyntaxKind.ColonToken || (token() === SyntaxKind.QuestionToken && nextToken() === SyntaxKind.ColonToken);
+        }
+
+        function isTupleElementName() {
+            if (token() === SyntaxKind.DotDotDotToken) {
+                return tokenIsIdentifierOrKeyword(nextToken()) && isNextTokenColonOrQuestionColon();
+            }
+            return tokenIsIdentifierOrKeyword(token()) && isNextTokenColonOrQuestionColon();
+        }
+
+        function parseTupleElementNameOrTupleElementType() {
+            if (lookAhead(isTupleElementName)) {
+                const node = <NamedTupleMember>createNode(SyntaxKind.NamedTupleMember);
+                node.dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+                node.name = parseIdentifierName();
+                node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+                parseExpected(SyntaxKind.ColonToken);
+                node.type = parseTupleElementType();
+                return addJSDocComment(finishNode(node));
+            }
+            return parseTupleElementType();
+        }
+
         function parseTupleType(): TupleTypeNode {
             const node = <TupleTypeNode>createNode(SyntaxKind.TupleType);
-            node.elementTypes = parseBracketedList(ParsingContext.TupleElementTypes, parseTupleElementType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
+            node.elements = parseBracketedList(ParsingContext.TupleElementTypes, parseTupleElementNameOrTupleElementType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             return finishNode(node);
         }
 

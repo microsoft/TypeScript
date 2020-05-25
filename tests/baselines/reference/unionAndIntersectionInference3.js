@@ -105,3 +105,4 @@ let x2 = foo2(sa); // unknown
 let y2 = foo2(sx); // { extra: number }
 withRouter(MyComponent);
 let z = foo(ab); // [AB<string>, string]
+export {};

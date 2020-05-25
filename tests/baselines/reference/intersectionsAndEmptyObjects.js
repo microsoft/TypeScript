@@ -76,6 +76,11 @@ var myChoicesAndEmpty: choices<IMyChoiceList & {}>;
 var unknownChoices: choices<IUnknownChoiceList>;
 var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
 
+// Repro from #38672
+
+type Foo1 = { x: string } & { [x: number]: Foo1 };
+type Foo2 = { x: string } & { [K in number]: Foo2 };
+
 
 //// [intersectionsAndEmptyObjects.js]
 // Empty object type literals are removed from intersections types
