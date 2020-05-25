@@ -5117,10 +5117,6 @@
         "category": "Message",
         "code": 90008
     },
-    "Remove destructuring": {
-        "category": "Message",
-        "code": 90009
-    },
     "Remove variable statement": {
         "category": "Message",
         "code": 90010
@@ -5236,6 +5232,14 @@
     "Declare private method '{0}'": {
         "category": "Message",
         "code": 90038
+    },
+    "Remove unused destructuring declaration": {
+        "category": "Message",
+        "code": 90039
+    },
+    "Remove unused declarations for: '{0}'": {
+        "category": "Message",
+        "code": 90041
     },
     "Declare a private field named '{0}'.": {
         "category": "Message",
