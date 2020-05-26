@@ -2287,7 +2287,7 @@ namespace ts {
                 else {
                     Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
                     if (compilerOptions.preserveConstEnums) {
-                        diagnosticMessage = error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationName);
+                        diagnosticMessage = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
                     }
                 }
 
