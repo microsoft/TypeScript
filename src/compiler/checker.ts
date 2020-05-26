@@ -25051,13 +25051,12 @@ namespace ts {
                 effectiveParameterCount = args.length === 0 ? effectiveParameterCount : 1; // class may have argumentless ctor functions - still resolve ctor and compare vs props member type
                 effectiveMinimumArguments = Math.min(effectiveMinimumArguments, 1); // sfc may specify context argument - handled by framework and not typechecked
             }
+            else if (!node.arguments) {
+                // This only happens when we have something of the form: 'new C'
+                Debug.assert(node.kind === SyntaxKind.NewExpression);
+                return getMinArgumentCount(signature) === 0;
+            }
             else {
-                if (!node.arguments) {
-                    // This only happens when we have something of the form: 'new C'
-                    Debug.assert(node.kind === SyntaxKind.NewExpression);
-                    return getMinArgumentCount(signature) === 0;
-                }
-
                 argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
 
                 // If we are missing the close parenthesis, the call is incomplete.
@@ -25067,14 +25066,25 @@ namespace ts {
                 const firstSpreadArgIndex = getSpreadArgumentIndex(args);
                 if (firstSpreadArgIndex >= 0) {
                     if (firstSpreadArgIndex === args.length - 1) {
+                        // Special case, handles the munged arguments that we receive in case of a spread in the end (breaks the arg.expression below)
+                        //   (see below for code that starts with "const spreadArgument")
                         return firstSpreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || firstSpreadArgIndex < getParameterCount(signature));
                     }
 
-                    let totalCount = countSpreadArgumentLength(<SpreadElement>args[firstSpreadArgIndex]);
+                    let totalCount = firstSpreadArgIndex; // count previous arguments
                     for (let i = firstSpreadArgIndex; i < args.length; i++) {
-                        totalCount += isSpreadArgument(args[i]) ? countSpreadArgumentLength(<SpreadElement>args[i]) : 1;
+                        const arg = args[i];
+                        if (!isSpreadArgument(arg)) {
+                            totalCount += 1;
+                        }
+                        else {
+                            const argType = flowLoopCount ? checkExpression((<SpreadElement>arg).expression) : checkExpressionCached((<SpreadElement>arg).expression);
+                            totalCount += isTupleType(argType) ? getTypeArguments(argType).length
+                                : isArrayType(argType) ? 0
+                                : 1;
+                        }
                     }
-                    return totalCount >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || totalCount < getParameterCount(signature));
+                    return totalCount >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || totalCount <= getParameterCount(signature));
                 }
             }
 
@@ -25095,11 +25105,6 @@ namespace ts {
                 }
             }
             return true;
-        }
-
-        function countSpreadArgumentLength(argment: SpreadElement): number {
-            const type = flowLoopCount ? checkExpression(argment.expression) : checkExpressionCached(argment.expression);
-            return isTupleType(type) ? getTypeArguments(type).length : 1;
         }
 
         function hasCorrectTypeArgumentArity(signature: Signature, typeArguments: NodeArray<TypeNode> | undefined) {
