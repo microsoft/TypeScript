@@ -369,8 +369,8 @@ namespace ts.server {
                     this.rootFiles.push(scriptInfo);
                     existingValue.info = scriptInfo;
                 }
-                if (isAuxiliaryFile) {
-                    scriptInfo.isAuxiliaryFile = true;
+                if (isAuxiliaryFile !== undefined) {
+                    scriptInfo.isAuxiliaryFile = isAuxiliaryFile;
                 }
                 if (!scriptInfo.isAuxiliaryFile) {
                     scriptInfo.attachToProject(this);

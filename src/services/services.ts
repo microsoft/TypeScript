@@ -868,6 +868,7 @@ namespace ts {
         version: string;
         scriptSnapshot: IScriptSnapshot;
         scriptKind: ScriptKind;
+        isAuxiliaryFile: boolean;
     }
 
     /* @internal */
@@ -965,7 +966,8 @@ namespace ts {
                     hostFileName: fileName,
                     version: this.host.getScriptVersion(fileName),
                     scriptSnapshot,
-                    scriptKind: getScriptKind(fileName, this.host)
+                    scriptKind: getScriptKind(fileName, this.host),
+                    isAuxiliaryFile
                 };
             }
             else {
@@ -986,8 +988,12 @@ namespace ts {
         }
 
         public getOrCreateEntryByPath(fileName: string, path: Path, isAuxiliaryFile: boolean): HostFileInformation {
-            const info = this.getEntryByPath(path) || this.createEntry(fileName, path, isAuxiliaryFile);
-            return isString(info) ? undefined! : info; // TODO: GH#18217
+            let info = this.getEntryByPath(path) || this.createEntry(fileName, path, isAuxiliaryFile);
+            if (isString(info)) return undefined!; // TODO: GH#18217
+            if (isAuxiliaryFile !== info.isAuxiliaryFile) {
+                info = this.createEntry(fileName, path, isAuxiliaryFile);
+            }
+            return info as HostFileInformation;
         }
 
         public getRootFileNames(): string[] {
