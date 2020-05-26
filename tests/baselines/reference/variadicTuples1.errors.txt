@@ -1,6 +1,6 @@
 tests/cases/conformance/types/tuple/variadicTuples1.ts(6,48): error TS1256: A rest element must be last in a tuple type.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(52,5): error TS2555: Expected at least 3 arguments, but got 2.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(53,17): error TS2345: Argument of type '45' is not assignable to parameter of type 'boolean'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(53,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(131,9): error TS2344: Type 'V' does not satisfy the constraint 'unknown[]'.
   The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'unknown[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(149,5): error TS2322: Type '[string, ...unknown[]]' is not assignable to type '[string, ...T]'.
@@ -104,7 +104,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(342,19): error TS2322: Ty
 !!! related TS6210 tests/cases/conformance/types/tuple/variadicTuples1.ts:45:45: An argument for 'c' was not provided.
         foo1(...t1, 45);  // Error
                     ~~
-!!! error TS2345: Argument of type '45' is not assignable to parameter of type 'boolean'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
     }
     
     declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): T;
