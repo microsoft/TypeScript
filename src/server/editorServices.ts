@@ -736,8 +736,8 @@ namespace ts.server {
             this.watchFactory = getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
 
             this.packageJsonCache = createPackageJsonCache({
-                fileExists: this.host.fileExists,
-                readFile: this.host.readFile,
+                fileExists: fileName => this.host.fileExists(fileName),
+                readFile: fileName => this.host.readFile(fileName),
                 toPath: this.toPath.bind(this),
             });
         }

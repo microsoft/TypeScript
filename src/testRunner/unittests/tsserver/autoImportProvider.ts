@@ -1,73 +1,90 @@
 namespace ts.projectSystem {
+    const angularFormsDts: File = {
+        path: "/node_modules/@angular/forms/forms.d.ts",
+        content: "export declare class PatternValidator {}",
+    };
+    const angularFormsPackageJson: File = {
+        path: "/node_modules/@angular/forms/package.json",
+        content: `{ "name": "@angular/forms", "typings": "./forms.d.ts" }`,
+    };
+    const tsconfig: File = {
+        path: "/tsconfig.json",
+        content: "{}",
+    };
+    const packageJson: File = {
+        path: "/package.json",
+        content: `{ "dependencies": { "@angular/forms": "*" } }`
+    };
+    const indexTs: File = {
+        path: "/index.ts",
+        content: ""
+    };
+
     describe("unittests:: tsserver:: autoImportProvider", () => {
-        it("Auto-importable file is in inferred project until imported", () => {
-            const { projectService, session, file, updateFile } = setup();
-            checkNumberOfInferredProjects(projectService, 0);
-            openFilesForSession([file.angularFormsDts], session);
-            checkNumberOfInferredProjects(projectService, 1);
-            assert.equal(
-                projectService.getDefaultProjectForFile(file.angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)?.projectKind,
-                server.ProjectKind.Inferred);
+        it("Auto import provider program is not created without dependencies listed in package.json", () => {
+            const { projectService } = setup([
+                angularFormsDts,
+                angularFormsPackageJson,
+                tsconfig,
+                { path: packageJson.path, content: `{ "dependencies": {} }` },
+                indexTs
+            ]);
 
-            updateFile(file.indexTs.path, "import '@angular/forms'");
             assert.equal(
-                projectService.getDefaultProjectForFile(file.angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)?.projectKind,
-                server.ProjectKind.Configured);
+                projectService.getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!.getLanguageService().getAutoImportProvider(),
+                undefined);
         });
-    });
 
-    function setup() {
-        const angularFormsDts: File = {
-            path: "/node_modules/@angular/forms/forms.d.ts",
-            content: "export declare class PatternValidator {}",
-        };
-        const angularFormsPackageJson: File = {
-            path: "/node_modules/@angular/forms/package.json",
-            content: `{ "name": "@angular/forms", "typings": "./forms.d.ts" }`,
-        };
-        const tsconfig: File = {
-            path: "/tsconfig.json",
-            content: "{}",
-        };
-        const packageJson: File = {
-            path: "/package.json",
-            content: `{ "dependencies": { "@angular/forms": "*" } }`
-        };
-        const indexTs: File = {
-            path: "/index.ts",
-            content: ""
-        };
-
-        const host = createServerHost([tsconfig, indexTs, packageJson, angularFormsPackageJson, angularFormsDts]);
-        const session = createSession(host);
-        openFilesForSession([indexTs], session);
-        const projectService = session.getProjectService();
-        const files = [angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs];
-        return {
-            host,
-            projectService,
-            session,
-            updateFile,
-            files,
-            file: {
+        it("Auto import provider program is not created if dependencies are already in main program", () => {
+            const { projectService } = setup([
                 angularFormsDts,
                 angularFormsPackageJson,
                 tsconfig,
                 packageJson,
-                indexTs
-            }
+                { path: indexTs.path, content: "import '@angular/forms';" }
+            ]);
+
+            assert.equal(
+                projectService.getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!.getLanguageService().getAutoImportProvider(),
+                undefined);
+        });
+
+        it("Auto-importable file is in inferred project until imported", () => {
+            const { projectService, session, updateFile } = setup([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs]);
+            checkNumberOfInferredProjects(projectService, 0);
+            openFilesForSession([angularFormsDts], session);
+            checkNumberOfInferredProjects(projectService, 1);
+            assert.equal(
+                projectService.getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)?.projectKind,
+                server.ProjectKind.Inferred);
+
+            updateFile(indexTs.path, "import '@angular/forms'");
+            assert.equal(
+                projectService.getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)?.projectKind,
+                server.ProjectKind.Configured);
+        });
+    });
+
+    function setup(files: File[]) {
+        const host = createServerHost(files);
+        const session = createSession(host);
+        openFilesForSession([indexTs], session);
+        const projectService = session.getProjectService();
+        return {
+            host,
+            projectService,
+            session,
+            updateFile
         };
 
         function updateFile(path: string, newText: string) {
             const file = Debug.checkDefined(files.find(f => f.path === path));
-            file.content = newText;
-
             session.executeCommandSeq<protocol.ApplyChangedToOpenFilesRequest>({
                 command: protocol.CommandTypes.ApplyChangedToOpenFiles,
                 arguments: {
                     openFiles: [{
                         fileName: file.path,
-                        content: file.content
+                        content: newText
                     }]
                 }
             });
