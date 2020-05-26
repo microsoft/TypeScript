@@ -22,30 +22,48 @@ namespace ts.projectSystem {
 
     describe("unittests:: tsserver:: autoImportProvider", () => {
         it("Auto import provider program is not created without dependencies listed in package.json", () => {
-            const { projectService } = setup([
+            const { projectService, session } = setup([
                 angularFormsDts,
                 angularFormsPackageJson,
                 tsconfig,
                 { path: packageJson.path, content: `{ "dependencies": {} }` },
                 indexTs
             ]);
-
+            openFilesForSession([indexTs], session);
             assert.equal(
                 projectService.getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!.getLanguageService().getAutoImportProvider(),
                 undefined);
         });
 
         it("Auto import provider program is not created if dependencies are already in main program", () => {
-            const { projectService } = setup([
+            const { projectService, session } = setup([
                 angularFormsDts,
                 angularFormsPackageJson,
                 tsconfig,
                 packageJson,
                 { path: indexTs.path, content: "import '@angular/forms';" }
             ]);
-
+            openFilesForSession([indexTs], session);
             assert.equal(
                 projectService.getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!.getLanguageService().getAutoImportProvider(),
+                undefined);
+        });
+
+        it("Auto-import program is not created for projects already inside node_modules", () => {
+            // Simulate browsing typings files inside node_modules: no point creating auto import program
+            // for the InferredProject that gets created in there.
+            const { projectService, session } = setup([
+                angularFormsDts,
+                { path: angularFormsPackageJson.path, content: `{ "dependencies": { "@angular/core": "*" } }` },
+                { path: "/node_modules/@angular/core/package.json", content: `{ "typings": "./core.d.ts" }` },
+                { path: "/node_modules/@angular/core/core.d.ts", content: `export namespace angular {};` },
+            ]);
+
+            openFilesForSession([angularFormsDts], session);
+            checkNumberOfInferredProjects(projectService, 1);
+            checkNumberOfConfiguredProjects(projectService, 0);
+            assert.equal(
+                projectService.getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)!.getLanguageService().getAutoImportProvider(),
                 undefined);
         });
 
@@ -68,7 +86,6 @@ namespace ts.projectSystem {
     function setup(files: File[]) {
         const host = createServerHost(files);
         const session = createSession(host);
-        openFilesForSession([indexTs], session);
         const projectService = session.getProjectService();
         return {
             host,

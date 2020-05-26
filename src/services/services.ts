@@ -1450,7 +1450,7 @@ namespace ts {
         }
 
         function createPackageJsonAutoImportProvider(compilerHost: CompilerHost, compilerOptions: CompilerOptions): Program | undefined {
-            if (!host.getPackageJsonsVisibleToFile || !host.resolveTypeReferenceDirectives) {
+            if (!host.getPackageJsonsVisibleToFile || !host.resolveTypeReferenceDirectives || isInsideNodeModules(currentDirectory)) {
                 return;
             }
             const start = timestamp();
