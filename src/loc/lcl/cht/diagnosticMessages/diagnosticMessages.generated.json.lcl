@@ -450,6 +450,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_c_5086" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[標記的元組元素已宣告為選用，並在名稱之後、冒號之前加上問號，而非加在類型之後。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type_5087" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[標記的元組元素已宣告為待用，並在名稱之前加上「…」，而非加在類型之前。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_memb_2651" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
@@ -863,6 +881,15 @@
           <Val><![CDATA[A 'tsconfig.json' file is already defined at: '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['tsconfig.json' 檔案已定義於: '{0}'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_tuple_member_cannot_be_both_optional_and_rest_5085" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A tuple member cannot be both optional and rest.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[元組成員不能同時為選用及待用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3518,6 +3545,15 @@
           <Val><![CDATA[Convert namespace import to named imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[將命名空間匯入轉換為具名匯入]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_overload_list_to_single_signature_95118" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert overload list to single signature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[將多載清單轉換成單一特徵標記]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6804,6 +6840,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Module resolution using 'rootDirs' has failed]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Move_labeled_tuple_element_modifiers_to_labels_95117" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Move labeled tuple element modifiers to labels]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[將標記的元組元素修飾元移至標籤]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10599,6 +10644,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without_6234" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[因為此運算式為 'get' 存取子，所以無法呼叫。要在沒有 '()' 的情況下，使用該運算式嗎?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_expression_is_not_constructable_2351" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This expression is not constructable.]]></Val>
@@ -10760,6 +10814,15 @@
           <Val><![CDATA[Trying substitution '{0}', candidate module location: '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[正在嘗試替代 '{0}'，候選模組位置: '{1}'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Tuple_members_must_all_have_names_or_all_not_have_names_5084" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tuple members must all have names or all not have names.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[元組成員必須全數有名稱或都沒有名稱。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

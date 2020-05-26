@@ -449,6 +449,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_c_5086" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Элемент маркированного кортежа объявлен как необязательный с вопросительным знаком между именем и двоеточием, а не после типа.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type_5087" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Элемент маркированного кортежа объявлен как rest с многоточием перед именем, а не перед типом.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_memb_2651" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
@@ -862,6 +880,15 @@
           <Val><![CDATA[A 'tsconfig.json' file is already defined at: '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Файл tsconfig.json уже определен в "{0}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_tuple_member_cannot_be_both_optional_and_rest_5085" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A tuple member cannot be both optional and rest.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Элемент кортежа не может быть одновременно элементом rest и необязательным элементом.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3521,6 +3548,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_overload_list_to_single_signature_95118" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert overload list to single signature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Преобразовать список перегрузок в одиночную сигнатуру]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_parameters_to_destructured_object_95075" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert parameters to destructured object]]></Val>
@@ -4722,7 +4758,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Невозможно выполнить возведение в степень для значений "bigint", если для параметра "target" задана версия "es2016" или более поздняя версия.]]></Val>
+            <Val><![CDATA[Невозможно выполнить возведение в степень для значений "bigint", если для параметра "target" не задана версия "es2016" или более поздняя версия.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6803,6 +6839,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Module resolution using 'rootDirs' has failed]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Move_labeled_tuple_element_modifiers_to_labels_95117" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Move labeled tuple element modifiers to labels]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Переместить модификаторы элементов маркированного кортежа в метки]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10598,6 +10643,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without_6234" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Это выражение не может быть вызвано, так как оно является методом доступа get. Вы хотели использовать его без "()"?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_expression_is_not_constructable_2351" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This expression is not constructable.]]></Val>
@@ -10759,6 +10813,15 @@
           <Val><![CDATA[Trying substitution '{0}', candidate module location: '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Выполняется попытка замены "{0}", расположение модуля кандидата: "{1}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Tuple_members_must_all_have_names_or_all_not_have_names_5084" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tuple members must all have names or all not have names.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Имена должны быть заданы для всех членов кортежа или не должны быть заданы ни для одного из членов кортежа.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12684,7 +12747,7 @@
         <Str Cat="Text">
           <Val><![CDATA['export *' does not re-export a default.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["export *" не выполняет повторный экспорт элемента по умолчанию.]]></Val>
+            <Val><![CDATA[При использовании "export *" повторный экспорт по умолчанию не выполняется.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
