@@ -2610,7 +2610,7 @@ namespace ts {
     }
 
     export function createJSDocAuthorTag(comment?: string) {
-        return createJSDocTag(SyntaxKind.JSDocAuthorTag, "author", comment);
+        return createJSDocTag<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag, "author", comment);
     }
 
     export function createJSDocDeprecatedTag(comment?: string) {
@@ -2618,19 +2618,19 @@ namespace ts {
     }
 
     export function createJSDocPublicTag() {
-        return createJSDocTag(SyntaxKind.JSDocPublicTag, "public");
+        return createJSDocTag<JSDocPublicTag>(SyntaxKind.JSDocPublicTag, "public");
     }
 
     export function createJSDocPrivateTag() {
-        return createJSDocTag(SyntaxKind.JSDocPrivateTag, "private");
+        return createJSDocTag<JSDocPrivateTag>(SyntaxKind.JSDocPrivateTag, "private");
     }
 
     export function createJSDocProtectedTag() {
-        return createJSDocTag(SyntaxKind.JSDocProtectedTag, "protected");
+        return createJSDocTag<JSDocProtectedTag>(SyntaxKind.JSDocProtectedTag, "protected");
     }
 
     export function createJSDocReadonlyTag() {
-        return createJSDocTag(SyntaxKind.JSDocReadonlyTag, "readonly");
+        return createJSDocTag<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag, "readonly");
     }
 
     export function appendJSDocToContainer(node: JSDocContainer, jsdoc: JSDoc) {

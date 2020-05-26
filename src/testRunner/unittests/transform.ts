@@ -135,7 +135,8 @@ namespace ts {
                     before: [createTaggedTemplateLiteral],
                 },
                 compilerOptions: {
-                    target: ScriptTarget.ES5
+                    target: ScriptTarget.ES5,
+                    newLine: NewLineKind.CarriageReturnLineFeed
                 }
             }).outputText;
         });

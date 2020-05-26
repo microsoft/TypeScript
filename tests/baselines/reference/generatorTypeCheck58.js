@@ -7,11 +7,8 @@ function* g() {
 
 //// [generatorTypeCheck58.js]
 function* g() {
-    let C = /** @class */ (() => {
-        class C {
-        }
-        C.x = yield 0;
-        return C;
-    })();
+    class C {
+    }
+    C.x = yield 0;
     ;
 }

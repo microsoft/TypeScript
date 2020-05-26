@@ -23,10 +23,11 @@ namespace ts {
         IsNamedExternalExport = 1 << 4,
         IsDefaultExternalExport = 1 << 5,
         IsDerivedClass = 1 << 6,
+        UseImmediatelyInvokedFunctionExpression = 1 << 7,
 
         HasAnyDecorators = HasConstructorDecorators | HasMemberDecorators,
         NeedsName = HasStaticInitializedProperties | HasMemberDecorators,
-        UseImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
+        MayNeedImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
         IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
     }
 
@@ -595,6 +596,7 @@ namespace ts {
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
             else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
+            if (languageVersion <= ScriptTarget.ES5 && (facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression)) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
             return facts;
         }
 
@@ -665,12 +667,6 @@ namespace ts {
                 const iife = createImmediatelyInvokedArrowFunction(statements);
                 setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
 
-                // Class comment is already added by the ES2015 transform when targeting ES5 or below.
-                // Only add if targetting ES2015+ to prevent duplicates
-                if (languageVersion > ScriptTarget.ES5) {
-                    addSyntheticLeadingComment(iife, SyntaxKind.MultiLineCommentTrivia, "* @class ");
-                }
-
                 const varStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
@@ -679,7 +675,7 @@ namespace ts {
                             /*type*/ undefined,
                             iife
                         )
-                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Let : undefined)
+                    ])
                 );
 
                 setOriginalNode(varStatement, node);
