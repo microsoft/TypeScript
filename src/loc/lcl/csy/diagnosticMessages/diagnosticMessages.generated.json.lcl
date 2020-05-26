@@ -459,6 +459,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_c_5086" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element popsané řazené kolekce členů se deklaroval jako nepovinný pomocí otazníku za názvem a před dvojtečkou, nikoli za typem.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type_5087" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element popsané řazené kolekce členů se deklaroval jako zbytek s třemi tečkami (...) před názvem, nikoli před typem.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_memb_2651" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
@@ -872,6 +890,15 @@
           <Val><![CDATA[A 'tsconfig.json' file is already defined at: '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Soubor tsconfig.json je už v {0} definovaný.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_tuple_member_cannot_be_both_optional_and_rest_5085" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A tuple member cannot be both optional and rest.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Člen řazené kolekce členů nemůže být volitelný a zbytek.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3531,6 +3558,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_overload_list_to_single_signature_95118" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert overload list to single signature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Převést seznam přetížení na jednu signaturu]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_parameters_to_destructured_object_95075" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert parameters to destructured object]]></Val>
@@ -4732,7 +4768,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud možnost target není nastavená na es2016 nebo novější, nedají se hodnoty bigint umocnit.]]></Val>
+            <Val><![CDATA[Pokud není možnost target nastavená na es2016 nebo novější, nedají se hodnoty bigint umocnit.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6064,7 +6100,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its element type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Jeho typ prvku {0} není platný prvek JSX.]]></Val>
+            <Val><![CDATA[Typ prvku {0} není platný prvek JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6073,7 +6109,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its instance type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Jeho typ instance {0} není platný prvek JSX.]]></Val>
+            <Val><![CDATA[Typ instance {0} není platný prvek JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6082,7 +6118,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its return type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Jeho návratový typ {0} není platný prvek JSX.]]></Val>
+            <Val><![CDATA[Návratový typ {0} není platný prvek JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6813,6 +6849,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Module resolution using 'rootDirs' has failed]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Move_labeled_tuple_element_modifiers_to_labels_95117" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Move labeled tuple element modifiers to labels]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přesunout modifikátory elementu popsané řazené kolekce členů na popisky]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10608,6 +10653,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without_6234" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tento výraz se nedá volat, protože je to přístupový objekt get. Nechtěli jste ho použít bez ()?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_expression_is_not_constructable_2351" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This expression is not constructable.]]></Val>
@@ -10769,6 +10823,15 @@
           <Val><![CDATA[Trying substitution '{0}', candidate module location: '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Zkouší se nahrazení {0}, umístění modulu kandidáta: {1}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Tuple_members_must_all_have_names_or_all_not_have_names_5084" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tuple members must all have names or all not have names.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Název musí mít buď všechny členy řazené kolekce členů, nebo ho nesmí mít žádný člen.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
