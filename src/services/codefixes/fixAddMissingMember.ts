@@ -78,19 +78,6 @@ namespace ts.codefix {
         },
     });
 
-    function getAllSupers(decl: ClassOrInterface | undefined, checker: TypeChecker): readonly ClassOrInterface[] {
-        const res: ClassLikeDeclaration[] = [];
-        while (decl) {
-            const superElement = getClassExtendsHeritageElement(decl);
-            const superSymbol = superElement && checker.getSymbolAtLocation(superElement.expression);
-            const superDecl = superSymbol && find(superSymbol.declarations, isClassLike);
-            if (superDecl) { res.push(superDecl); }
-            decl = superDecl;
-        }
-        return res;
-    }
-
-    type ClassOrInterface = ClassLikeDeclaration | InterfaceDeclaration;
     const enum InfoKind { Enum, ClassOrInterface }
     interface EnumInfo {
         readonly kind: InfoKind.Enum;
