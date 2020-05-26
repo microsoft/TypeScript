@@ -81,7 +81,7 @@ Output::
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
 
-[96ma.ts[0m:[93m2[0m:[93m6[0m - [91merror[0m[90m TS2345: [0mArgument of type '4' is not assignable to parameter of type 'string'.
+[96ma.ts[0m:[93m2[0m:[93m6[0m - [91merror[0m[90m TS2345: [0mArgument of type 'number' is not assignable to parameter of type 'string'.
 
 [7m2[0m test(4, 5);
 [7m [0m [91m     ~[0m
@@ -185,7 +185,7 @@ Output::
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 
-[96ma.ts[0m:[93m2[0m:[93m9[0m - [91merror[0m[90m TS2345: [0mArgument of type '5' is not assignable to parameter of type 'string'.
+[96ma.ts[0m:[93m2[0m:[93m9[0m - [91merror[0m[90m TS2345: [0mArgument of type 'number' is not assignable to parameter of type 'string'.
 
 [7m2[0m test(4, 5);
 [7m [0m [91m        ~[0m

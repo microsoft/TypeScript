@@ -4139,10 +4139,14 @@ namespace ts {
             let leftStr = symbolValueDeclarationIsContextSensitive(left.symbol) ? typeToString(left, left.symbol.valueDeclaration) : typeToString(left);
             let rightStr = symbolValueDeclarationIsContextSensitive(right.symbol) ? typeToString(right, right.symbol.valueDeclaration) : typeToString(right);
             if (leftStr === rightStr) {
-                leftStr = typeToString(left, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                rightStr = typeToString(right, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                leftStr = getTypeNameForErrorDisplay(left);
+                rightStr = getTypeNameForErrorDisplay(right);
             }
             return [leftStr, rightStr];
+        }
+
+        function getTypeNameForErrorDisplay(type: Type) {
+            return typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
         }
 
         function symbolValueDeclarationIsContextSensitive(symbol: Symbol): boolean {
@@ -15726,23 +15730,30 @@ namespace ts {
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
                 if (incompatibleStack.length) reportIncompatibleStack();
                 const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
+                let generalizedSource = source;
+                let generalizedSourceType = sourceType;
+
+                if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
+                    generalizedSource = getBaseTypeOfLiteralType(source);
+                    generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
+                }
 
                 if (target.flags & TypeFlags.TypeParameter) {
                     const constraint = getBaseConstraintOfType(target);
-                    const constraintElab = constraint && isTypeAssignableTo(source, constraint);
-                    if (constraintElab) {
+                    let needsOriginalSource;
+                    if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
                         reportError(
                             Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
-                            sourceType,
+                            needsOriginalSource ? sourceType : generalizedSourceType,
                             targetType,
-                            typeToString(constraint!),
+                            typeToString(constraint),
                         );
                     }
                     else {
                         reportError(
                             Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
                             targetType,
-                            sourceType
+                            generalizedSourceType
                         );
                     }
                 }
@@ -15759,7 +15770,7 @@ namespace ts {
                     }
                 }
 
-                reportError(message, sourceType, targetType);
+                reportError(message, generalizedSourceType, targetType);
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
@@ -17355,6 +17366,21 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function typeCouldHaveTopLevelSingletonTypes(type: Type): boolean {
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                return !!forEach((type as IntersectionType).types, typeCouldHaveTopLevelSingletonTypes);
+            }
+
+            if (type.flags & TypeFlags.Instantiable) {
+                const constraint = getConstraintOfType(type);
+                if (constraint) {
+                    return typeCouldHaveTopLevelSingletonTypes(constraint);
+                }
+            }
+
+            return isUnitType(type);
         }
 
         function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
