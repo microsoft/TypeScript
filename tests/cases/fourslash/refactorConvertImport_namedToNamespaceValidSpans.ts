@@ -5,5 +5,5 @@
 // verify that the refactor is offered for full, partial, and empty spans.
 for (const m of ["1", "2", "3"]) {
     goTo.select("a" + m, "b" + m);
-    verify.refactorAvailable("Convert import", "Convert named imports to namespace import");
+    verify.refactorAvailableForTriggerReason("invoked", "Convert import", "Convert named imports to namespace import");
 }
