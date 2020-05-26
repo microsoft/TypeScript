@@ -214,6 +214,10 @@ namespace FourSlashInterface {
         public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
             this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
         }
+
+        public refactorNotAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
+            this.state.verifyRefactorAvailable(!this.negative, triggerReason, name, actionName);
+        }
     }
 
     export class Verify extends VerifyNegatable {
