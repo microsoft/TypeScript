@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts' />
 
-/////*a1*/im/*a2*/port * as /*a3*//*b3*/m from "m/*b2*/";/*b1*/
+/////*1a*/im/*2a*/port * as /*3a*//*3b*/m from "m/*2b*/";/*1b*/
 
 // verify that the refactor is offered for full, partial, and empty spans.
 for (const m of ["1", "2", "3"]) {
-    goTo.select("a" + m, "b" + m);
+    goTo.select(m + "a", m + "b");
     verify.refactorAvailableForTriggerReason("invoked","Convert import", "Convert namespace import to named imports");
 }
