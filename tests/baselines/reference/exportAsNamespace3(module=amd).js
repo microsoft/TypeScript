@@ -30,6 +30,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./0"], function (require, exports, ns) {
     "use strict";
     exports.__esModule = true;
+    exports.ns = void 0;
     exports.ns = ns;
     ns.a;
     ns.b;
