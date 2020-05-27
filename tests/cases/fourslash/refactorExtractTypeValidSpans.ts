@@ -2,7 +2,7 @@
 
 //// var x: /*1a*/{ a?:/*2a*/ number, b?: string/*2b*//*3a*//*3b*/ }/*1b*/ = { };
 
-// Only offer refactor for cursor position if explicitly requested
+// Only offer refactor for empty span if explicity requested
 goTo.select("3a", "3b");
 verify.refactorNotAvailableForTriggerReason("implicit", "Extract type");
 
