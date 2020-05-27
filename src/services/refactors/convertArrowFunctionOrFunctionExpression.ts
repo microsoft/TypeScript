@@ -25,7 +25,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         readonly name: Identifier;
     }
 
-    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
+    function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, program } = context;
         const info = getFunctionInfo(file, startPosition, program);
 
@@ -200,7 +200,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         if (canBeConvertedToExpression(func.body, head)) {
             body = head.expression!;
             suppressLeadingAndTrailingTrivia(body);
-            copyComments(head, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyComments(head, body);
         }
         else {
             body = func.body;
