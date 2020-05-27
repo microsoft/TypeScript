@@ -240,7 +240,7 @@ interface Symbol {
         sys: System & { writtenFiles: Map<any>; },
         originalReadCall?: System["readFile"]
     ) {
-        const out = options.outFile || options.out;
+        const out = outFile(options);
         if (!out) return;
         const { buildInfoPath, jsFilePath, declarationFilePath } = getOutputPathsForBundle(options, /*forceDts*/ false);
         if (!buildInfoPath || !sys.writtenFiles.has(buildInfoPath)) return;

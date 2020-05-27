@@ -1799,7 +1799,7 @@ namespace ts {
         }
 
         // If options have --outFile or --out, check if its that
-        const out = configFile.options.outFile || configFile.options.out;
+        const out = outFile(configFile.options);
         if (out && (isSameFile(state, fileName, out) || isSameFile(state, fileName, removeFileExtension(out) + Extension.Dts))) {
             return true;
         }

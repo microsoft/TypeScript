@@ -56,7 +56,7 @@ namespace ts {
             if (node.isDeclarationFile ||
                 !(isEffectiveExternalModule(node, compilerOptions) ||
                     node.transformFlags & TransformFlags.ContainsDynamicImport ||
-                    (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && (compilerOptions.out || compilerOptions.outFile)))) {
+                    (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && outFile(compilerOptions)))) {
                 return node;
             }
 
