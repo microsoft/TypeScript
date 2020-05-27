@@ -126,7 +126,7 @@ namespace ts {
     ): void {
         const allFiles = program.getSourceFiles();
         for (const sourceFile of allFiles) {
-            const newFromOld = oldToNew(sourceFile.path);
+            const newFromOld = oldToNew(sourceFile.fileName);
             const newImportFromPath = newFromOld ?? sourceFile.fileName;
             const newImportFromDirectory = getDirectoryPath(newImportFromPath);
 
