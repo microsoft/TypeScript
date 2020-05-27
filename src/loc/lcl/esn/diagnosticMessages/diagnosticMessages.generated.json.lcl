@@ -3703,7 +3703,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La declaración aumenta la declaración en otro archivo. Esto no se puede serializar.]]></Val>
+            <Val><![CDATA[La declaración aumenta una declaración en otro archivo. Esta operación no se puede serializar.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12760,7 +12760,7 @@
         <Str Cat="Text">
           <Val><![CDATA['export *' does not re-export a default.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["export *" no vuelve a exportar un valor predeterminado.]]></Val>
+            <Val><![CDATA["export *" no vuelve a exportar una exportación predeterminada.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

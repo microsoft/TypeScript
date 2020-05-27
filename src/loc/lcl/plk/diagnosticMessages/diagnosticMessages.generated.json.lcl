@@ -6081,7 +6081,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its element type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ elementu „{0}” nie jest prawidłowym elementem JSX.]]></Val>
+            <Val><![CDATA[Jego typ elementu „{0}” nie jest prawidłowym elementem JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6090,7 +6090,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its instance type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Typ wystąpienia „{0}” nie jest prawidłowym elementem JSX.]]></Val>
+            <Val><![CDATA[Jego typ wystąpienia „{0}” nie jest prawidłowym elementem JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6099,7 +6099,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its return type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Zwracany typ „{0}” nie jest prawidłowym elementem JSX.]]></Val>
+            <Val><![CDATA[Jego zwracany typ „{0}” nie jest prawidłowym elementem JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12735,7 +12735,7 @@
         <Str Cat="Text">
           <Val><![CDATA['export *' does not re-export a default.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Wyrażenie „export *” nie eksportuje ponownie wartości domyślnej.]]></Val>
+            <Val><![CDATA[Wyrażenie „export *” nie eksportuje ponownie eksportów domyślnych.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
