@@ -2202,35 +2202,35 @@ namespace ts.server {
         }
 
         private toggleLineComment(args: protocol.FileRangeRequestArgs): TextChange[] {
-            const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfo(file)!;
             const textRange = this.getRange(args, scriptInfo);
 
-            return project.getLanguageService().toggleLineComment(file, textRange);
+            return languageService.toggleLineComment(file, textRange);
         }
 
         private toggleMultilineComment(args: protocol.FileRangeRequestArgs): TextChange[] {
-            const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const textRange = this.getRange(args, scriptInfo);
 
-            return project.getLanguageService().toggleMultilineComment(file, textRange);
+            return languageService.toggleMultilineComment(file, textRange);
         }
 
         private commentSelection(args: protocol.FileRangeRequestArgs): TextChange[] {
-            const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const textRange = this.getRange(args, scriptInfo);
 
-            return project.getLanguageService().commentSelection(file, textRange);
+            return languageService.commentSelection(file, textRange);
         }
 
         private uncommentSelection(args: protocol.FileRangeRequestArgs): TextChange[] {
-            const { file, project } = this.getFileAndProject(args);
-            const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const textRange = this.getRange(args, scriptInfo);
 
-            return project.getLanguageService().uncommentSelection(file, textRange);
+            return languageService.uncommentSelection(file, textRange);
         }
 
         private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
