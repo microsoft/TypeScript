@@ -103,7 +103,7 @@ namespace ts.FindAllReferences {
                             break; // TODO: GH#23879
 
                         case SyntaxKind.ImportEqualsDeclaration:
-                            handleNamespaceImport(direct, direct.name, hasModifier(direct, ModifierFlags.Export), /*alreadyAddedDirect*/ false);
+                            handleNamespaceImport(direct, direct.name, hasSyntacticModifier(direct, ModifierFlags.Export), /*alreadyAddedDirect*/ false);
                             break;
 
                         case SyntaxKind.ImportDeclaration:
@@ -463,7 +463,7 @@ namespace ts.FindAllReferences {
             }
             else {
                 const exportNode = getExportNode(parent, node);
-                if (exportNode && hasModifier(exportNode, ModifierFlags.Export)) {
+                if (exportNode && hasSyntacticModifier(exportNode, ModifierFlags.Export)) {
                     if (isImportEqualsDeclaration(exportNode) && exportNode.moduleReference === node) {
                         // We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
                         if (comingFromExport) {
@@ -553,7 +553,7 @@ namespace ts.FindAllReferences {
 
         // Not meant for use with export specifiers or export assignment.
         function getExportKindForDeclaration(node: Node): ExportKind {
-            return hasModifier(node, ModifierFlags.Default) ? ExportKind.Default : ExportKind.Named;
+            return hasSyntacticModifier(node, ModifierFlags.Default) ? ExportKind.Default : ExportKind.Named;
         }
     }
 

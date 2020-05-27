@@ -28,7 +28,7 @@ namespace ts.refactor.extractSymbol {
         const usedConstantNames: Map<boolean> = createMap();
 
         let i = 0;
-        for (const {functionExtraction, constantExtraction} of extractions) {
+        for (const { functionExtraction, constantExtraction } of extractions) {
             // Skip these since we don't have a way to report errors yet
             if (functionExtraction.errors.length === 0) {
                 // Don't issue refactorings with duplicated names.
@@ -309,7 +309,7 @@ namespace ts.refactor.extractSymbol {
             let current: Node = nodeToCheck;
             while (current !== containingClass) {
                 if (current.kind === SyntaxKind.PropertyDeclaration) {
-                    if (hasModifier(current, ModifierFlags.Static)) {
+                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                     break;
@@ -322,7 +322,7 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
                 else if (current.kind === SyntaxKind.MethodDeclaration) {
-                    if (hasModifier(current, ModifierFlags.Static)) {
+                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                 }
@@ -375,7 +375,7 @@ namespace ts.refactor.extractSymbol {
 
                 if (isDeclaration(node)) {
                     const declaringNode = (node.kind === SyntaxKind.VariableDeclaration) ? node.parent.parent : node;
-                    if (hasModifier(declaringNode, ModifierFlags.Export)) {
+                    if (hasSyntacticModifier(declaringNode, ModifierFlags.Export)) {
                         // TODO: GH#18217 Silly to use `errors ||` since it's definitely not defined (see top of `visit`)
                         // Also, if we're only pushing one error, just use `let error: Diagnostic | undefined`!
                         // Also TODO: GH#19956
@@ -405,24 +405,24 @@ namespace ts.refactor.extractSymbol {
                             rangeFacts |= RangeFacts.UsesThis;
                         }
                         break;
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.FunctionDeclaration:
+                        if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
+                            // You cannot extract global declarations
+                            (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
+                        }
+                        // falls through
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.Constructor:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        // do not dive into functions (except arrow functions) or classes
+                        return false;
                 }
 
-                if (isFunctionLikeDeclaration(node) || isClassLike(node)) {
-                    switch (node.kind) {
-                        case SyntaxKind.FunctionDeclaration:
-                        case SyntaxKind.ClassDeclaration:
-                            if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
-                                // You cannot extract global declarations
-                                (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
-                            }
-                            break;
-                    }
-
-                    // do not dive into functions or classes
-                    return false;
-                }
                 const savedPermittedJumps = permittedJumps;
-
                 switch (node.kind) {
                     case SyntaxKind.IfStatement:
                         permittedJumps = PermittedJumps.None;
@@ -1103,7 +1103,12 @@ namespace ts.refactor.extractSymbol {
                     changeTracker.delete(context.file, node.parent);
                 }
                 else {
-                    const localReference = createIdentifier(localNameText);
+                    let localReference: Expression = createIdentifier(localNameText);
+                    // When extract to a new variable in JSX content, need to wrap a {} out of the new variable
+                    // or it will become a plain text
+                    if (isInJSXContent(node)) {
+                        localReference = createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+                    }
                     changeTracker.replaceNode(context.file, node, localReference);
                 }
             }
@@ -1114,6 +1119,12 @@ namespace ts.refactor.extractSymbol {
         const renameFilename = node.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
         return { renameFilename, renameLocation, edits };
+
+        function isInJSXContent(node: Node) {
+            if (!isJsxElement(node)) return false;
+            if (isJsxElement(node.parent)) return true;
+            return false;
+        }
 
         function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
             // If no contextual type exists there is nothing to transfer to the function signature
@@ -1215,8 +1226,8 @@ namespace ts.refactor.extractSymbol {
     }
 
     function compareTypesByDeclarationOrder(
-        {type: type1, declaration: declaration1}: {type: Type, declaration?: Declaration},
-        {type: type2, declaration: declaration2}: {type: Type, declaration?: Declaration}) {
+        { type: type1, declaration: declaration1 }: { type: Type, declaration?: Declaration },
+        { type: type2, declaration: declaration2 }: { type: Type, declaration?: Declaration }) {
 
         return compareProperties(declaration1, declaration2, "pos", compareValues)
             || compareStringsCaseSensitive(
@@ -1584,7 +1595,7 @@ namespace ts.refactor.extractSymbol {
                     hasWrite = true;
                     if (value.symbol.flags & SymbolFlags.ClassMember &&
                         value.symbol.valueDeclaration &&
-                        hasModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)) {
+                        hasEffectiveModifier(value.symbol.valueDeclaration, ModifierFlags.Readonly)) {
                         readonlyClassPropertyWrite = value.symbol.valueDeclaration;
                     }
                 }
@@ -1621,7 +1632,7 @@ namespace ts.refactor.extractSymbol {
             // a lot of properties, each of which the walker will visit.  Unfortunately, the
             // solution isn't as trivial as filtering to user types because of (e.g.) Array.
             const symbolWalker = checker.getSymbolWalker(() => (cancellationToken.throwIfCancellationRequested(), true));
-            const {visitedTypes} = symbolWalker.walkType(type);
+            const { visitedTypes } = symbolWalker.walkType(type);
 
             for (const visitedType of visitedTypes) {
                 if (visitedType.isTypeParameter()) {

@@ -315,3 +315,65 @@ const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)):
 >dataB : boolean
 >t : number
 
+// Repro from #38549
+
+interface A2 {
+    kind: "A";
+>kind : "A"
+
+    a: number;
+>a : number
+}
+
+interface B2 {
+    kind: "B";
+>kind : "B"
+
+    b: number;
+>b : number
+}
+
+declare const shouldBeB: (A2 | B2) & B2;
+>shouldBeB : B2
+
+const b: B2 = shouldBeB; // works
+>b : B2
+>shouldBeB : B2
+
+function inGeneric<T extends A2 | B2>(alsoShouldBeB: T & B2) {
+>inGeneric : <T extends A2 | B2>(alsoShouldBeB: T & B2) => void
+>alsoShouldBeB : T & B2
+
+    const b: B2 = alsoShouldBeB;
+>b : B2
+>alsoShouldBeB : T & B2
+}
+
+// Repro from #38542
+
+interface ABI {
+    kind: 'a' | 'b';
+>kind : "a" | "b"
+}
+
+declare class CA { kind: 'a'; a: string; x: number };
+>CA : CA
+>kind : "a"
+>a : string
+>x : number
+
+declare class CB { kind: 'b'; b: string; y: number };
+>CB : CB
+>kind : "b"
+>b : string
+>y : number
+
+function bar<T extends CA | CB>(x: T & CA) {
+>bar : <T extends CA | CB>(x: T & CA) => void
+>x : T & CA
+
+    let ab: ABI = x;
+>ab : ABI
+>x : T & CA
+}
+

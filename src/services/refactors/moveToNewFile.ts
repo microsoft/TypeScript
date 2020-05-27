@@ -84,7 +84,7 @@ namespace ts.refactor {
             case SyntaxKind.ImportDeclaration:
                 return true;
             case SyntaxKind.ImportEqualsDeclaration:
-                return !hasModifier(node, ModifierFlags.Export);
+                return !hasSyntacticModifier(node, ModifierFlags.Export);
             case SyntaxKind.VariableStatement:
                 return (node as VariableStatement).declarationList.declarations.every(d => !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true));
             default:
@@ -420,7 +420,7 @@ namespace ts.refactor {
                 if (markSeenTop(top)) {
                     addExportToChanges(oldFile, top, changes, useEs6ModuleSyntax);
                 }
-                if (hasModifier(decl, ModifierFlags.Default)) {
+                if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
                     oldFileDefault = name;
                 }
                 else {
@@ -737,7 +737,7 @@ namespace ts.refactor {
 
     function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean): boolean {
         if (useEs6Exports) {
-            return !isExpressionStatement(decl) && hasModifier(decl, ModifierFlags.Export);
+            return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export);
         }
         else {
             return getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));

@@ -389,7 +389,7 @@ namespace ts.SymbolDisplay {
                     if (declarationName) {
                         const isExternalModuleDeclaration =
                             isModuleWithStringLiteralName(resolvedNode) &&
-                            hasModifier(resolvedNode, ModifierFlags.Ambient);
+                            hasSyntacticModifier(resolvedNode, ModifierFlags.Ambient);
                         const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
                         const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
                             typeChecker,
@@ -480,6 +480,14 @@ namespace ts.SymbolDisplay {
                         }
                         else {
                             addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
+                        }
+                        if ((symbol as TransientSymbol).target && ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
+                            const labelDecl = ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+                            Debug.assertNode(labelDecl.name, isIdentifier);
+                            displayParts.push(spacePart());
+                            displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                            displayParts.push(textPart(idText(labelDecl.name)));
+                            displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                     }
                     else if (symbolFlags & SymbolFlags.Function ||

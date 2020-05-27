@@ -480,7 +480,7 @@ namespace ts {
 
             case SyntaxKind.TupleType:
                 return updateTupleTypeNode((<TupleTypeNode>node),
-                    nodesVisitor((<TupleTypeNode>node).elementTypes, visitor, isTypeNode));
+                    nodesVisitor((<TupleTypeNode>node).elements, visitor, isTypeNode));
 
             case SyntaxKind.OptionalType:
                 return updateOptionalTypeNode((<OptionalTypeNode>node),
@@ -515,6 +515,14 @@ namespace ts {
                     visitNode((<ImportTypeNode>node).qualifier, visitor, isEntityName),
                     visitNodes((<ImportTypeNode>node).typeArguments, visitor, isTypeNode),
                     (<ImportTypeNode>node).isTypeOf
+                );
+
+            case SyntaxKind.NamedTupleMember:
+                return updateNamedTupleMember(<NamedTupleMember>node,
+                    visitNode((<NamedTupleMember>node).dotDotDotToken, visitor, isToken),
+                    visitNode((<NamedTupleMember>node).name, visitor, isIdentifier),
+                    visitNode((<NamedTupleMember>node).questionToken, visitor, isToken),
+                    visitNode((<NamedTupleMember>node).type, visitor, isTypeNode),
                 );
 
             case SyntaxKind.ParenthesizedType:

@@ -1,0 +1,204 @@
+=== tests/cases/conformance/types/tuple/named/namedTupleMembers.ts ===
+export type Segment = [length: number, count: number];
+>Segment : Segment
+
+export type SegmentAnnotated = [
+>SegmentAnnotated : SegmentAnnotated
+
+    /** 
+     * Size of message buffer segment handles
+     */
+    length: number,
+    /**
+     * Number of segments handled at once
+     */
+    count: number
+];
+
+declare var a: Segment;
+>a : Segment
+
+declare var b: SegmentAnnotated;
+>b : SegmentAnnotated
+
+declare var c: [number, number];
+>c : [number, number]
+
+declare var d: [a: number, b: number];
+>d : [a: number, b: number]
+
+a = b;
+>a = b : SegmentAnnotated
+>a : Segment
+>b : SegmentAnnotated
+
+a = c;
+>a = c : [number, number]
+>a : Segment
+>c : [number, number]
+
+a = d;
+>a = d : [a: number, b: number]
+>a : Segment
+>d : [a: number, b: number]
+
+b = a;
+>b = a : Segment
+>b : SegmentAnnotated
+>a : Segment
+
+b = c;
+>b = c : [number, number]
+>b : SegmentAnnotated
+>c : [number, number]
+
+b = d;
+>b = d : [a: number, b: number]
+>b : SegmentAnnotated
+>d : [a: number, b: number]
+
+c = a;
+>c = a : Segment
+>c : [number, number]
+>a : Segment
+
+c = b;
+>c = b : SegmentAnnotated
+>c : [number, number]
+>b : SegmentAnnotated
+
+c = d;
+>c = d : [a: number, b: number]
+>c : [number, number]
+>d : [a: number, b: number]
+
+d = a;
+>d = a : Segment
+>d : [a: number, b: number]
+>a : Segment
+
+d = b;
+>d = b : SegmentAnnotated
+>d : [a: number, b: number]
+>b : SegmentAnnotated
+
+d = c;
+>d = c : [number, number]
+>d : [a: number, b: number]
+>c : [number, number]
+
+export type WithOptAndRest = [first: number, second?: number, ...rest: string[]];
+>WithOptAndRest : WithOptAndRest
+
+export type Func<T extends any[]> = (...x: T) => void;
+>Func : Func<T>
+>x : T
+
+export const func = null as any as Func<SegmentAnnotated>;
+>func : Func<SegmentAnnotated>
+>null as any as Func<SegmentAnnotated> : Func<SegmentAnnotated>
+>null as any : any
+>null : null
+
+export function useState<T>(initial: T): [value: T, setter: (T) => void] {
+>useState : <T>(initial: T) => [value: T, setter: (T: any) => void]
+>initial : T
+>T : any
+
+    return null as any;
+>null as any : any
+>null : null
+}
+
+
+export type Iter = Func<[step: number, iterations: number]>;
+>Iter : Func<[step: number, iterations: number]>
+
+export function readSegment([length, count]: [number, number]) {}
+>readSegment : ([length, count]: [number, number]) => void
+>length : number
+>count : number
+
+// documenting binding pattern behavior (currently does _not_ generate tuple names)
+export const val = null as any as Parameters<typeof readSegment>[0];
+>val : [number, number]
+>null as any as Parameters<typeof readSegment>[0] : [number, number]
+>null as any : any
+>null : null
+>readSegment : ([length, count]: [number, number]) => void
+
+export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
+>RecursiveTupleA : RecursiveTupleA
+
+export type RecursiveTupleB = [first: string, ptr: RecursiveTupleB];
+>RecursiveTupleB : RecursiveTupleB
+
+declare var q: RecursiveTupleA;
+>q : RecursiveTupleA
+
+declare var r: RecursiveTupleB;
+>r : RecursiveTupleB
+
+q = r;
+>q = r : RecursiveTupleB
+>q : RecursiveTupleA
+>r : RecursiveTupleB
+
+r = q;
+>r = q : RecursiveTupleA
+>r : RecursiveTupleB
+>q : RecursiveTupleA
+
+export type RecusiveRest = [first: string, ...rest: RecusiveRest[]];
+>RecusiveRest : RecusiveRest
+
+export type RecusiveRest2 = [string, ...RecusiveRest2[]];
+>RecusiveRest2 : RecusiveRest2
+
+declare var x: RecusiveRest;
+>x : RecusiveRest
+
+declare var y: RecusiveRest2;
+>y : RecusiveRest2
+
+x = y;
+>x = y : RecusiveRest2
+>x : RecusiveRest
+>y : RecusiveRest2
+
+y = x;
+>y = x : RecusiveRest
+>y : RecusiveRest2
+>x : RecusiveRest
+
+declare function f<T extends any[]>(...x: T): T;
+>f : <T extends any[]>(...x: T) => T
+>x : T
+
+declare function g(elem: object, index: number): object;
+>g : (elem: object, index: number) => object
+>elem : object
+>index : number
+
+declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): Parameters<T>;
+>getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
+>args : any[]
+>x : T
+
+export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
+>argumentsOfGAsFirstArgument : [[elem: object, index: number]]
+>f(getArgsForInjection(g)) : [[elem: object, index: number]]
+>f : <T extends any[]>(...x: T) => T
+>getArgsForInjection(g) : [elem: object, index: number]
+>getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
+>g : (elem: object, index: number) => object
+
+export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread
+>argumentsOfG : [elem: object, index: number]
+>f(...getArgsForInjection(g)) : [elem: object, index: number]
+>f : <T extends any[]>(...x: T) => T
+>...getArgsForInjection(g) : number | object
+>getArgsForInjection(g) : [elem: object, index: number]
+>getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
+>g : (elem: object, index: number) => object
+
