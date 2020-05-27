@@ -1888,17 +1888,17 @@ namespace ts.FindAllReferences {
         // This is not needed when searching for re-exports.
         function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRename: boolean, providePrefixAndSuffixText: boolean, implementations: boolean): Symbol[] {
             const result: Symbol[] = [];
-            const isSymbolStatic  = isStatic(symbol);
+            const isSymbolStatic = isStatic(symbol);
             forEachRelatedSymbol<void>(symbol, location, checker, isForRename, !(isForRename && providePrefixAndSuffixText),
                 (sym, root, base) => {
                     // static method/property and instance method/property might have the same name. Only include static or only include instance.
-                    if(base){
-                        if((isSymbolStatic && !isStatic(base))||(!isSymbolStatic && isStatic(base))){
+                    if (base) {
+                        if ((isSymbolStatic && !isStatic(base)) || (!isSymbolStatic && isStatic(base))) {
                             base = undefined;
                         }
                     }
                     result.push(base || root || sym);
-                 },
+                },
                 // when try to find implementation, implementations is true, and not allowed to find base class
                 /*allowBaseTypes*/() => !implementations);
             return result;
@@ -2031,20 +2031,20 @@ namespace ts.FindAllReferences {
             readonly kind: NodeEntryKind | undefined;
         }
 
-        function isStatic(symbol: Symbol): boolean{
-            if(!symbol?.valueDeclaration) {return false;}
-            if(symbol.valueDeclaration?.modifierFlagsCache) {return !!((symbol.valueDeclaration.modifierFlagsCache & ModifierFlags.Static));}
-            else {return !!(symbol.valueDeclaration.modifiers?.some((modifier)=>modifier.kind & ModifierFlags.Static));};
+        function isStatic(symbol: Symbol): boolean {
+            if (!symbol?.valueDeclaration) { return false; }
+            if (symbol.valueDeclaration?.modifierFlagsCache) { return !!((symbol.valueDeclaration.modifierFlagsCache & ModifierFlags.Static)); }
+            else { return !!(symbol.valueDeclaration.modifiers?.some((modifier) => modifier.kind & ModifierFlags.Static)); };
         }
 
         function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
             const { checker } = state;
-            const isReferenceSymbolStatic  = isStatic(referenceSymbol);
+            const isReferenceSymbolStatic = isStatic(referenceSymbol);
             const cbSymbol = (sym: Symbol, rootSymbol: Symbol, baseSymbol: Symbol | undefined, kind: NodeEntryKind): RelatedSymbol | undefined => {
                 // check whether the symbol used to search itself is just the searched one.
-                if(baseSymbol){
+                if (baseSymbol) {
                     // static method/property and instance method/property might have the same name. Only check static or only check instance.
-                    if((isReferenceSymbolStatic && !isStatic(baseSymbol)) || (!isReferenceSymbolStatic && isStatic(baseSymbol))){
+                    if ((isReferenceSymbolStatic && !isStatic(baseSymbol)) || (!isReferenceSymbolStatic && isStatic(baseSymbol))) {
                         baseSymbol = undefined;
                     }
                 }
