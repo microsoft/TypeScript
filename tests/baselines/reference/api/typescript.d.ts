@@ -5531,10 +5531,7 @@ declare namespace ts {
         renameLocation?: number;
         commands?: CodeActionCommand[];
     }
-    enum RefactorTriggerReason {
-        Implicit = "implicit",
-        Invoked = "invoked"
-    }
+    type RefactorTriggerReason = "implicit" | "invoked";
     interface TextInsertion {
         newText: string;
         /** The position in newText the caret should point to after the insertion. */

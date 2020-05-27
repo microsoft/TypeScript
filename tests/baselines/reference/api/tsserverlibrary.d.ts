@@ -5531,10 +5531,7 @@ declare namespace ts {
         renameLocation?: number;
         commands?: CodeActionCommand[];
     }
-    enum RefactorTriggerReason {
-        Implicit = "implicit",
-        Invoked = "invoked"
-    }
+    type RefactorTriggerReason = "implicit" | "invoked";
     interface TextInsertion {
         newText: string;
         /** The position in newText the caret should point to after the insertion. */
@@ -6636,9 +6633,7 @@ declare namespace ts.server.protocol {
     type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
         triggerReason?: RefactorTriggerReason;
     };
-    enum RefactorTriggerReason {
-        Invoked = "invoked"
-    }
+    type RefactorTriggerReason = "implicit" | "invoked";
     /**
      * Response is a list of available refactorings.
      * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
