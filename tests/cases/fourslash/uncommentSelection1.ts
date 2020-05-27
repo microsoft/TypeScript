@@ -13,6 +13,10 @@
 //// let var8/* = 1;
 //// let var9 [||]= 2;
 //// let var10 */= 3;
+////
+//// let var11[||]/* = 1;
+//// let var12 = 2;
+//// let var13 */= 3;
 
 verify.uncommentSelection(
     `let var1 = 1;
@@ -27,4 +31,8 @@ let var7 = 7;
 
 let var8 = 1;
 let var9 = 2;
-let var10 = 3;`);
+let var10 = 3;
+
+let var11 = 1;
+let var12 = 2;
+let var13 = 3;`);

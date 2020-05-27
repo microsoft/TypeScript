@@ -11,6 +11,10 @@
 ////         SomeText
 ////     {/*</div>|]*/}
 //// </div>;
+//// 
+//// const c = <MyContainer>
+////     [||]{/*<MyFirstComponent />*/}
+//// </MyContainer>;
 
 
 verify.uncommentSelection(
@@ -23,4 +27,8 @@ const b = <div>
     <div>
         SomeText
     </div>
-</div>;`);
+</div>;
+
+const c = <MyContainer>
+    <MyFirstComponent />
+</MyContainer>;`);

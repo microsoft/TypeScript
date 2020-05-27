@@ -1,4 +1,4 @@
-// If at least one line is uncomment then comment all lines again.
+// If at least one line is not commented then comment all lines again.
 // TODO: Not sure about this one. The default behavior for line comment is to add en extra
 // layer of comments (see toggleLineComment4 test). For jsx this doesn't work right as it's actually
 // multiline comment. Figure out what to do.

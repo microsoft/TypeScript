@@ -2054,7 +2054,7 @@ namespace ts {
             let isCommenting = insertComment || false;
             const positions = [] as number[] as SortedArray<number>;
 
-            let pos = textRange.pos;
+            let { pos } = textRange;
             const isJsx = isInsideJsx !== undefined ? isInsideJsx : isInsideJsxElement(sourceFile, pos);
 
             const openMultiline = isJsx ? "{/*" : "/*";
@@ -2170,8 +2170,16 @@ namespace ts {
         function uncommentSelection(fileName: string, textRange: TextRange): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const textChanges: TextChange[] = [];
+            const { pos } = textRange;
+            let { end } = textRange;
 
-            for (let i = textRange.pos; i <= textRange.end; i++) {
+            // If cursor is not a selection we need to increase the end position
+            // to include the start of the comment.
+            if (pos === end) {
+                end += isInsideJsxElement(sourceFile, pos) ? 2 : 1;
+            }
+
+            for (let i = pos; i <= end; i++) {
                 const commentRange = isInComment(sourceFile, i);
                 if (commentRange) {
                     switch (commentRange.kind) {

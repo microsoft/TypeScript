@@ -1,4 +1,4 @@
-// If at least one line is uncomment then comment all lines again.
+// If at least one line is not commented then comment all lines again.
 
 ////  //const a[| = 1;
 //// const b = 2

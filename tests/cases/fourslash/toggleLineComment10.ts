@@ -1,4 +1,4 @@
-// Close and open multiline comments if the line already contains more.
+// Close and open multiline comments if the line already contains more comments.
 
 //@Filename: file.tsx
 //// const a = <div>
