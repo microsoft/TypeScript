@@ -8,8 +8,7 @@ namespace ts.refactor.extractSymbol {
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const forImplicitRequest = context.triggerReason ? context.triggerReason === "implicit" : true;
-        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), forImplicitRequest);
+        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
@@ -187,20 +186,20 @@ namespace ts.refactor.extractSymbol {
      * not shown to the user, but can be used by us diagnostically)
      */
     // exported only for tests
-    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, forImplicitRequest = false): RangeToExtract {
+    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, userRequested = true): RangeToExtract {
         const { length } = span;
-        if (length === 0 && forImplicitRequest) {
+        if (length === 0 && !userRequested) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
         }
-        const explicitCursorRequest = length === 0 && !forImplicitRequest;
+        const cursorRequest = length === 0 && userRequested;
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
         const startToken = getTokenAtPosition(sourceFile, span.start);
-        const start = explicitCursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, span);
+        const start = cursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, span);
         // Do the same for the ending position
         const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
-        const end = explicitCursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, span);
+        const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, span);
 
         const declarations: Symbol[] = [];
 

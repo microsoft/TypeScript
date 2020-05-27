@@ -6,8 +6,7 @@ namespace ts.refactor {
     const extractToTypeDef = "Extract to typedef";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const forImplicitRequest = context.triggerReason ? context.triggerReason === "implicit" : true;
-            const info = getRangeToExtract(context, forImplicitRequest);
+            const info = getRangeToExtract(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
             return [{
@@ -59,15 +58,15 @@ namespace ts.refactor {
 
     type Info = TypeAliasInfo | InterfaceInfo;
 
-    function getRangeToExtract(context: RefactorContext, forImplicitRequest = false): Info | undefined {
+    function getRangeToExtract(context: RefactorContext, userRequested = true): Info | undefined {
         const { file, startPosition } = context;
         const isJS = isSourceFileJS(file);
         const current = getTokenAtPosition(file, startPosition);
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
-        const explicitCursorRequest = range.pos === range.end && !forImplicitRequest;
+        const cursorRequest = range.pos === range.end && userRequested;
 
         const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
-            (explicitCursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
+            (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
         if (!selection || !isTypeNode(selection)) return undefined;
 
         const checker = context.program.getTypeChecker();

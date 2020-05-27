@@ -17,8 +17,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, triggerReason } = context;
-        const forImplicitRequest = triggerReason ? triggerReason === "implicit" : true;
-        const info = getConvertibleArrowFunctionAtPosition(file, startPosition, forImplicitRequest);
+        const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason === "invoked");
         if (!info) return emptyArray;
 
         return [{
@@ -71,12 +70,12 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, forImplicitRequest = false): Info | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, userRequested = true): Info | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
         // Only offer a refactor in the function body on explicit refactor requests.
         if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node)
-            || (rangeContainsRange(func.body, node) && forImplicitRequest))) return undefined;
+            || (rangeContainsRange(func.body, node) && !userRequested))) return undefined;
 
         if (isExpression(func.body)) {
             return {
