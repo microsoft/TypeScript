@@ -69,7 +69,7 @@ function C3() {
 >!(this instanceof C3) : boolean
 >(this instanceof C3) : boolean
 >this instanceof C3 : boolean
->this : C3
+>this : this
 >C3 : typeof C3
 >new C3() : C3
 >C3 : typeof C3
@@ -95,7 +95,7 @@ var C4 = function () {
 >!(this instanceof C4) : boolean
 >(this instanceof C4) : boolean
 >this instanceof C4 : boolean
->this : C4
+>this : this
 >C4 : typeof C4
 >new C4() : C4
 >C4 : typeof C4
@@ -143,9 +143,9 @@ function C6() {
 
   this.functions = [x => x, x => x + 1, x => x - 1]
 >this.functions = [x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
->this.functions : ((x: any) => any)[]
->this : C6
->functions : ((x: any) => any)[]
+>this.functions : any
+>this : this
+>functions : any
 >[x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
 >x => x : (x: any) => any
 >x : any
@@ -178,7 +178,7 @@ function C7(num) {}
 >num : number
 
 var c7_v1 = new C7();
->c7_v1 : any
->new C7() : any
+>c7_v1 : C7
+>new C7() : C7
 >C7 : typeof C7
 

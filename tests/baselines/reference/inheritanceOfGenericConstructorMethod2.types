@@ -46,8 +46,8 @@ var n2 = new N.D2<number>(); // error
 >D2 : typeof N.D2
 
 var n3 = new N.D2(); // no error, D2<any>
->n3 : N.D2<{}>
->new N.D2() : N.D2<{}>
+>n3 : N.D2<unknown>
+>new N.D2() : N.D2<unknown>
 >N.D2 : typeof N.D2
 >N : typeof N
 >D2 : typeof N.D2

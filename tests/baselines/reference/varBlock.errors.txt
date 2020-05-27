@@ -98,5 +98,6 @@ tests/cases/compiler/varBlock.ts(39,17): error TS1039: Initializers are not allo
     declare var c = 10;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'any', but here has type 'number'.
+!!! related TS6203 tests/cases/compiler/varBlock.ts:38:13: 'c' was also declared here.
                     ~~
 !!! error TS1039: Initializers are not allowed in ambient contexts.

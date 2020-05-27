@@ -1,0 +1,121 @@
+=== tests/cases/compiler/aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts ===
+// the type printback for every `test` below should be "y"
+
+type ExtendedMapper<HandledInputT, OutputT, ArgsT extends any[]> = (name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT;
+>ExtendedMapper : Symbol(ExtendedMapper, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 0, 0))
+>HandledInputT : Symbol(HandledInputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 20))
+>OutputT : Symbol(OutputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 34))
+>ArgsT : Symbol(ArgsT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 43))
+>name : Symbol(name, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 68))
+>mixed : Symbol(mixed, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 82))
+>HandledInputT : Symbol(HandledInputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 20))
+>args : Symbol(args, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 105))
+>ArgsT : Symbol(ArgsT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 43))
+>OutputT : Symbol(OutputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 34))
+
+type a = ExtendedMapper<any, any, [any]>;
+>a : Symbol(a, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 134))
+>ExtendedMapper : Symbol(ExtendedMapper, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 0, 0))
+
+type b = ExtendedMapper<any, any, any[]>;
+>b : Symbol(b, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 3, 41))
+>ExtendedMapper : Symbol(ExtendedMapper, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 0, 0))
+
+type test = a extends b ? "y" : "n"
+>test : Symbol(test, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 4, 41))
+>a : Symbol(a, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 2, 134))
+>b : Symbol(b, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 3, 41))
+
+let check: test = "y";
+>check : Symbol(check, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 6, 3))
+>test : Symbol(test, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 4, 41))
+
+
+type ExtendedMapper1<HandledInputT, OutputT, ArgsT extends any[]> = (
+>ExtendedMapper1 : Symbol(ExtendedMapper1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 6, 22))
+>HandledInputT : Symbol(HandledInputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 9, 21))
+>OutputT : Symbol(OutputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 9, 35))
+>ArgsT : Symbol(ArgsT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 9, 44))
+
+    (name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT
+>name : Symbol(name, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 10, 5))
+>mixed : Symbol(mixed, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 10, 19))
+>HandledInputT : Symbol(HandledInputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 9, 21))
+>args : Symbol(args, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 10, 42))
+>ArgsT : Symbol(ArgsT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 9, 44))
+>OutputT : Symbol(OutputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 9, 35))
+
+);
+
+type a1 = ExtendedMapper1<any, any, [any]>;
+>a1 : Symbol(a1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 11, 2))
+>ExtendedMapper1 : Symbol(ExtendedMapper1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 6, 22))
+
+type b1 = ExtendedMapper1<any, any, any[]>;
+>b1 : Symbol(b1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 13, 43))
+>ExtendedMapper1 : Symbol(ExtendedMapper1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 6, 22))
+
+type test1 = a1 extends b1 ? "y" : "n"
+>test1 : Symbol(test1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 14, 43))
+>a1 : Symbol(a1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 11, 2))
+>b1 : Symbol(b1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 13, 43))
+
+let check1: test1 = "y";
+>check1 : Symbol(check1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 16, 3))
+>test1 : Symbol(test1, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 14, 43))
+
+type ExtendedMapper2<HandledInputT, OutputT, ArgsT extends any[]> = (
+>ExtendedMapper2 : Symbol(ExtendedMapper2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 16, 24))
+>HandledInputT : Symbol(HandledInputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 18, 21))
+>OutputT : Symbol(OutputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 18, 35))
+>ArgsT : Symbol(ArgsT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 18, 44))
+
+    {x:(name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT}["x"]
+>x : Symbol(x, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 19, 5))
+>name : Symbol(name, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 19, 8))
+>mixed : Symbol(mixed, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 19, 22))
+>HandledInputT : Symbol(HandledInputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 18, 21))
+>args : Symbol(args, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 19, 45))
+>ArgsT : Symbol(ArgsT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 18, 44))
+>OutputT : Symbol(OutputT, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 18, 35))
+
+);
+
+type a2 = ExtendedMapper2<any, any, [any]>;
+>a2 : Symbol(a2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 20, 2))
+>ExtendedMapper2 : Symbol(ExtendedMapper2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 16, 24))
+
+type b2 = ExtendedMapper2<any, any, any[]>;
+>b2 : Symbol(b2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 22, 43))
+>ExtendedMapper2 : Symbol(ExtendedMapper2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 16, 24))
+
+type test2 = a2 extends b2 ? "y" : "n"
+>test2 : Symbol(test2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 23, 43))
+>a2 : Symbol(a2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 20, 2))
+>b2 : Symbol(b2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 22, 43))
+
+let check2: test2 = "y";
+>check2 : Symbol(check2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 25, 3))
+>test2 : Symbol(test2, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 23, 43))
+
+type a3 = (name: string, mixed: any, args_0: any) => any
+>a3 : Symbol(a3, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 25, 24))
+>name : Symbol(name, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 27, 11))
+>mixed : Symbol(mixed, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 27, 24))
+>args_0 : Symbol(args_0, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 27, 36))
+
+type b3 = (name: string, mixed: any, ...args: any[]) => any
+>b3 : Symbol(b3, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 27, 56))
+>name : Symbol(name, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 28, 11))
+>mixed : Symbol(mixed, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 28, 24))
+>args : Symbol(args, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 28, 36))
+
+type test3 = a3 extends b3 ? "y" : "n"
+>test3 : Symbol(test3, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 28, 59))
+>a3 : Symbol(a3, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 25, 24))
+>b3 : Symbol(b3, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 27, 56))
+
+let check3: test3 = "y";
+>check3 : Symbol(check3, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 31, 3))
+>test3 : Symbol(test3, Decl(aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.ts, 28, 59))
+

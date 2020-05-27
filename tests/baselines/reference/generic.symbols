@@ -1,0 +1,37 @@
+=== /a.ts ===
+export class A<T> { a!: T }
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>T : Symbol(T, Decl(a.ts, 0, 15))
+>a : Symbol(A.a, Decl(a.ts, 0, 19))
+>T : Symbol(T, Decl(a.ts, 0, 15))
+
+export type { A as B };
+>A : Symbol(A, Decl(a.ts, 0, 0))
+>B : Symbol(B, Decl(a.ts, 1, 13))
+
+=== /b.ts ===
+import type { A } from './a';
+>A : Symbol(A, Decl(b.ts, 0, 13))
+
+import { B } from './a';
+>B : Symbol(B, Decl(b.ts, 1, 8))
+
+let a: A<string> = { a: "" };
+>a : Symbol(a, Decl(b.ts, 2, 3))
+>A : Symbol(A, Decl(b.ts, 0, 13))
+>a : Symbol(a, Decl(b.ts, 2, 20))
+
+let b: B<number> = { a: 3 };
+>b : Symbol(b, Decl(b.ts, 3, 3))
+>B : Symbol(B, Decl(b.ts, 1, 8))
+>a : Symbol(a, Decl(b.ts, 3, 20))
+
+let c: A<boolean> = {};
+>c : Symbol(c, Decl(b.ts, 4, 3))
+>A : Symbol(A, Decl(b.ts, 0, 13))
+
+let d: B = { a: "" };
+>d : Symbol(d, Decl(b.ts, 5, 3))
+>B : Symbol(B, Decl(b.ts, 1, 8))
+>a : Symbol(a, Decl(b.ts, 5, 12))
+

@@ -1,10 +1,10 @@
 === tests/cases/conformance/salsa/bug24703.js ===
 var Common = {};
->Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16))
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16), Decl(bug24703.js, 5, 1))
 
 Common.I = class {
 >Common.I : Symbol(Common.I, Decl(bug24703.js, 0, 16))
->Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16))
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16), Decl(bug24703.js, 5, 1))
 >I : Symbol(Common.I, Decl(bug24703.js, 0, 16))
 
     constructor() {
@@ -16,10 +16,10 @@ Common.I = class {
 }
 Common.O = class extends Common.I {
 >Common.O : Symbol(Common.O, Decl(bug24703.js, 5, 1))
->Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16))
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16), Decl(bug24703.js, 5, 1))
 >O : Symbol(Common.O, Decl(bug24703.js, 5, 1))
 >Common.I : Symbol(Common.I, Decl(bug24703.js, 0, 16))
->Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16))
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16), Decl(bug24703.js, 5, 1))
 >I : Symbol(Common.I, Decl(bug24703.js, 0, 16))
 
     constructor() {
@@ -35,13 +35,13 @@ Common.O = class extends Common.I {
 var o = new Common.O()
 >o : Symbol(o, Decl(bug24703.js, 12, 3))
 >Common.O : Symbol(Common.O, Decl(bug24703.js, 5, 1))
->Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16))
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16), Decl(bug24703.js, 5, 1))
 >O : Symbol(Common.O, Decl(bug24703.js, 5, 1))
 
 var i = new Common.I()
 >i : Symbol(i, Decl(bug24703.js, 13, 3))
 >Common.I : Symbol(Common.I, Decl(bug24703.js, 0, 16))
->Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16))
+>Common : Symbol(Common, Decl(bug24703.js, 0, 3), Decl(bug24703.js, 0, 16), Decl(bug24703.js, 5, 1))
 >I : Symbol(Common.I, Decl(bug24703.js, 0, 16))
 
 o.i

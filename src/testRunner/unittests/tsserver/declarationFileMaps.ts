@@ -1,39 +1,34 @@
 namespace ts.projectSystem {
-    function protocolFileSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileSpan {
-        return { file: file.path, ...protocolTextSpanFromSubstring(file.content, substring, options) };
-    }
-
-    function documentSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): DocumentSpan {
-        return { fileName: file.path, textSpan: textSpanFromSubstring(file.content, substring, options) };
-    }
-
-    function renameLocation(file: File, substring: string, options?: SpanFromSubstringOptions): RenameLocation {
-        return documentSpanFromSubstring(file, substring, options);
-    }
-
-    function makeReferenceItem(file: File, isDefinition: boolean, text: string, lineText: string, options?: SpanFromSubstringOptions): protocol.ReferencesResponseItem {
+    function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: DocumentSpanFromSubstring): DocumentSpan {
+        const contextSpan = contextText !== undefined ? documentSpanFromSubstring({ file, text: contextText, options: contextOptions }) : undefined;
         return {
-            ...protocolFileSpanFromSubstring(file, text, options),
-            isDefinition,
-            isWriteAccess: isDefinition,
-            lineText,
+            fileName: file.path,
+            textSpan: textSpanFromSubstring(file.content, text, options),
+            ...contextSpan && { contextSpan: contextSpan.textSpan }
         };
     }
 
-    function makeReferenceEntry(file: File, isDefinition: boolean, text: string, options?: SpanFromSubstringOptions): ReferenceEntry {
+    function renameLocation(input: DocumentSpanFromSubstring): RenameLocation {
+        return documentSpanFromSubstring(input);
+    }
+
+    interface MakeReferenceEntry extends DocumentSpanFromSubstring {
+        isDefinition: boolean;
+    }
+    function makeReferenceEntry({ isDefinition, ...rest }: MakeReferenceEntry): ReferenceEntry {
         return {
-            ...documentSpanFromSubstring(file, text, options),
+            ...documentSpanFromSubstring(rest),
             isDefinition,
             isWriteAccess: isDefinition,
             isInString: undefined,
         };
     }
 
-    function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: ReadonlyArray<File>): void {
+    function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: readonly File[]): void {
         openFilesForSession([file], session);
-        const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
+        const project = Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
         const program = project.getCurrentProgram()!;
-        const output = getFileEmitOutput(program, Debug.assertDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
+        const output = getFileEmitOutput(program, Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
         closeFilesForSession([file], session);
 
         Debug.assert(!output.emitSkipped);
@@ -68,7 +63,7 @@ namespace ts.projectSystem {
         };
         const aDts: File = {
             path: "/a/bin/a.d.ts",
-            // Need to mangle the sourceMappingURL part or it breaks the build
+            // ${""} is needed to mangle the sourceMappingURL part or it breaks the build
             content: `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
         };
 
@@ -91,7 +86,7 @@ namespace ts.projectSystem {
             content: JSON.stringify(bDtsMapContent),
         };
         const bDts: File = {
-            // Need to mangle the sourceMappingURL part or it breaks the build
+            // ${""} is need to mangle the sourceMappingURL part so it doesn't break the build
             path: "/b/bin/b.d.ts",
             content: `export declare function fnB(): void;\n//# source${""}MappingURL=b.d.ts.map`,
         };
@@ -119,7 +114,7 @@ namespace ts.projectSystem {
             })
         };
 
-        function makeSampleProjects(addUserTsConfig?: boolean) {
+        function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
             const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
             const session = createSession(host);
 
@@ -127,11 +122,14 @@ namespace ts.projectSystem {
             checkDeclarationFiles(bTs, session, [bDtsMap, bDts]);
 
             // Testing what happens if we delete the original sources.
-            host.deleteFile(bTs.path);
+            if (!keepAllFiles) {
+                host.deleteFile(bTs.path);
+            }
 
             openFilesForSession([userTs], session);
             const service = session.getProjectService();
-            checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 1 } : { inferredProjects: 1 });
+            // If config file then userConfig project and bConfig project since it is referenced
+            checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 2 } : { inferredProjects: 1 });
             return session;
         }
 
@@ -184,13 +182,19 @@ namespace ts.projectSystem {
         }
 
         function verifyUserTsConfigProject(session: TestSession) {
-            checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aDts.path, userTsconfig.path]);
+            checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aTs.path, userTsconfig.path]);
         }
 
         it("goToDefinition", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
-            assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+            assert.deepEqual(response, [
+                protocolFileSpanWithContextFromSubstring({
+                    file: aTs,
+                    text: "fnA",
+                    contextText: "export function fnA() {}"
+                })
+            ]);
             verifySingleInferredProject(session);
         });
 
@@ -199,7 +203,13 @@ namespace ts.projectSystem {
             const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual(response, {
                 textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
-                definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
+                definitions: [
+                    protocolFileSpanWithContextFromSubstring({
+                        file: aTs,
+                        text: "fnA",
+                        contextText: "export function fnA() {}"
+                    })
+                ],
             });
             verifySingleInferredProject(session);
         });
@@ -209,9 +219,15 @@ namespace ts.projectSystem {
             const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual(response, {
                 textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
-                definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
+                definitions: [
+                    protocolFileSpanWithContextFromSubstring({
+                        file: aTs,
+                        text: "fnA",
+                        contextText: "export function fnA() {}"
+                    })
+                ],
             });
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
             verifyUserTsConfigProject(session);
 
             // Navigate to the definition
@@ -219,7 +235,7 @@ namespace ts.projectSystem {
             openFilesForSession([aTs], session);
 
             // UserTs configured project should be alive
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 3 });
             verifyUserTsConfigProject(session);
             verifyATsConfigProject(session);
 
@@ -230,14 +246,25 @@ namespace ts.projectSystem {
         it("goToType", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.TypeDefinitionRequest, protocol.TypeDefinitionResponse>(session, protocol.CommandTypes.TypeDefinition, protocolFileLocationFromSubstring(userTs, "instanceA"));
-            assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "IfaceA")]);
+            assert.deepEqual(response, [
+                protocolFileSpanWithContextFromSubstring({
+                    file: aTs,
+                    text: "IfaceA",
+                    contextText: "export interface IfaceA {}"
+                })
+            ]);
             verifySingleInferredProject(session);
         });
 
         it("goToImplementation", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.ImplementationRequest, protocol.ImplementationResponse>(session, protocol.CommandTypes.Implementation, protocolFileLocationFromSubstring(userTs, "fnA()"));
-            assert.deepEqual(response, [protocolFileSpanFromSubstring(aTs, "fnA")]);
+            assert.deepEqual(response, [
+                protocolFileSpanWithContextFromSubstring({
+                    file: aTs,
+                    text: "fnA",
+                    contextText: "export function fnA() {}"
+                })]);
             verifySingleInferredProject(session);
         });
 
@@ -245,16 +272,25 @@ namespace ts.projectSystem {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
             // bTs does not exist, so stick with bDts
-            assert.deepEqual(response, [protocolFileSpanFromSubstring(bDts, "fnB")]);
+            assert.deepEqual(response, [
+                protocolFileSpanWithContextFromSubstring({
+                    file: bDts,
+                    text: "fnB",
+                    contextText: "export declare function fnB(): void;"
+                })
+            ]);
             verifySingleInferredProject(session);
         });
 
         it("navigateTo", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
-            assert.deepEqual<ReadonlyArray<protocol.NavtoItem> | undefined>(response, [
+            assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
                 {
-                    ...protocolFileSpanFromSubstring(bDts, "export declare function fnB(): void;"),
+                    ...protocolFileSpanFromSubstring({
+                        file: bDts,
+                        text: "export declare function fnB(): void;"
+                    }),
                     name: "fnB",
                     matchKind: "prefix",
                     isCaseSensitive: true,
@@ -262,7 +298,10 @@ namespace ts.projectSystem {
                     kindModifiers: "export,declare",
                 },
                 {
-                    ...protocolFileSpanFromSubstring(userTs, "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"),
+                    ...protocolFileSpanFromSubstring({
+                        file: userTs,
+                        text: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
+                    }),
                     name: "fnUser",
                     matchKind: "prefix",
                     isCaseSensitive: true,
@@ -270,7 +309,10 @@ namespace ts.projectSystem {
                     kindModifiers: "export",
                 },
                 {
-                    ...protocolFileSpanFromSubstring(aTs, "export function fnA() {}"),
+                    ...protocolFileSpanFromSubstring({
+                        file: aTs,
+                        text: "export function fnA() {}"
+                    }),
                     name: "fnA",
                     matchKind: "prefix",
                     isCaseSensitive: true,
@@ -282,9 +324,78 @@ namespace ts.projectSystem {
             verifyATsConfigOriginalProject(session);
         });
 
-        const referenceATs = (aTs: File): protocol.ReferencesResponseItem => makeReferenceItem(aTs, /*isDefinition*/ true, "fnA", "export function fnA() {}");
-        const referencesUserTs = (userTs: File): ReadonlyArray<protocol.ReferencesResponseItem> => [
-            makeReferenceItem(userTs, /*isDefinition*/ false, "fnA", "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"),
+        it("navigateToAll -- when neither file nor project is specified", () => {
+            const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
+            const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: undefined, searchValue: "fn" });
+            assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: bTs,
+                        text: "export function fnB() {}"
+                    }),
+                    name: "fnB",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                },
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: aTs,
+                        text: "export function fnA() {}"
+                    }),
+                    name: "fnA",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                },
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: userTs,
+                        text: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
+                    }),
+                    name: "fnUser",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                }
+            ]);
+        });
+
+        it("navigateToAll -- when file is not specified but project is", () => {
+            const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
+            const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" });
+            assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: bTs,
+                        text: "export function fnB() {}"
+                    }),
+                    name: "fnB",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                }
+            ]);
+        });
+
+        const referenceATs = (aTs: File): protocol.ReferencesResponseItem => makeReferenceItem({
+            file: aTs,
+            isDefinition: true,
+            text: "fnA",
+            contextText: "export function fnA() {}",
+            lineText: "export function fnA() {}"
+        });
+        const referencesUserTs = (userTs: File): readonly protocol.ReferencesResponseItem[] => [
+            makeReferenceItem({
+                file: userTs,
+                isDefinition: false,
+                text: "fnA",
+                lineText: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
+            }),
         ];
 
         it("findAllReferences", () => {
@@ -315,17 +426,21 @@ namespace ts.projectSystem {
         });
 
         interface ReferencesFullRequest extends protocol.FileLocationRequest { readonly command: protocol.CommandTypes.ReferencesFull; }
-        interface ReferencesFullResponse extends protocol.Response { readonly body: ReadonlyArray<ReferencedSymbol>; }
+        interface ReferencesFullResponse extends protocol.Response { readonly body: readonly ReferencedSymbol[]; }
 
         it("findAllReferencesFull", () => {
             const session = makeSampleProjects();
 
             const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
 
-            assert.deepEqual<ReadonlyArray<ReferencedSymbol>>(responseFull, [
+            assert.deepEqual<readonly ReferencedSymbol[]>(responseFull, [
                 {
                     definition: {
-                        ...documentSpanFromSubstring(aTs, "fnA"),
+                        ...documentSpanFromSubstring({
+                            file: aTs,
+                            text: "fnA",
+                            contextText: "export function fnA() {}"
+                        }),
                         kind: ScriptElementKind.functionElement,
                         name: "function fnA(): void",
                         containerKind: ScriptElementKind.unknown,
@@ -342,8 +457,8 @@ namespace ts.projectSystem {
                         ],
                     },
                     references: [
-                        makeReferenceEntry(userTs, /*isDefinition*/ false, "fnA"),
-                        makeReferenceEntry(aTs, /*isDefinition*/ true, "fnA"),
+                        makeReferenceEntry({ file: userTs, /*isDefinition*/ isDefinition: false, text: "fnA" }),
+                        makeReferenceEntry({ file: aTs, /*isDefinition*/ isDefinition: true, text: "fnA", contextText: "export function fnA() {}" }),
                     ],
                 },
             ]);
@@ -367,13 +482,19 @@ namespace ts.projectSystem {
             const session = createSession(createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]));
             checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
             openFilesForSession([bTs], session);
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 }); // configured project of b is alive since a references b
 
             const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(bTs, "f()"));
 
-            assert.deepEqual<ReadonlyArray<ReferencedSymbol>>(responseFull, [
+            assert.deepEqual<readonly ReferencedSymbol[]>(responseFull, [
                 {
                     definition: {
+                        ...documentSpanFromSubstring({
+                            file: aTs,
+                            text: "f",
+                            options: { index: 1 },
+                            contextText: "function f() {}"
+                        }),
                         containerKind: ScriptElementKind.unknown,
                         containerName: "",
                         displayParts: [
@@ -386,25 +507,23 @@ namespace ts.projectSystem {
                             spacePart(),
                             keywordPart(SyntaxKind.VoidKeyword),
                         ],
-                        fileName: aTs.path,
                         kind: ScriptElementKind.functionElement,
                         name: "function f(): void",
-                        textSpan: { start: 9, length: 1 },
                     },
                     references: [
+                        makeReferenceEntry({
+                            file: aTs,
+                            text: "f",
+                            options: { index: 1 },
+                            contextText: "function f() {}",
+                            isDefinition: true
+                        }),
                         {
                             fileName: bTs.path,
                             isDefinition: false,
                             isInString: undefined,
                             isWriteAccess: false,
                             textSpan: { start: 0, length: 1 },
-                        },
-                        {
-                            fileName: aTs.path,
-                            isDefinition: true,
-                            isInString: undefined,
-                            isWriteAccess: true,
-                            textSpan: { start: 9, length: 1 },
                         },
                     ],
                 }
@@ -417,8 +536,19 @@ namespace ts.projectSystem {
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnB()"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
                 refs: [
-                    makeReferenceItem(bDts, /*isDefinition*/ true, "fnB", "export declare function fnB(): void;"),
-                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnB", "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"),
+                    makeReferenceItem({
+                        file: bDts,
+                        isDefinition: true,
+                        text: "fnB",
+                        contextText: "export declare function fnB(): void;",
+                        lineText: "export declare function fnB(): void;"
+                    }),
+                    makeReferenceItem({
+                        file: userTs,
+                        isDefinition: false,
+                        text: "fnB",
+                        lineText: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
+                    }),
                 ],
                 symbolName: "fnB",
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnB()").offset,
@@ -429,11 +559,22 @@ namespace ts.projectSystem {
 
         const renameATs = (aTs: File): protocol.SpanGroup => ({
             file: aTs.path,
-            locs: [protocolRenameSpanFromSubstring(aTs.content, "fnA")],
+            locs: [
+                protocolRenameSpanFromSubstring({
+                    fileText: aTs.content,
+                    text: "fnA",
+                    contextText: "export function fnA() {}"
+                })
+            ],
         });
         const renameUserTs = (userTs: File): protocol.SpanGroup => ({
             file: userTs.path,
-            locs: [protocolRenameSpanFromSubstring(userTs.content, "fnA")],
+            locs: [
+                protocolRenameSpanFromSubstring({
+                    fileText: userTs.content,
+                    text: "fnA"
+                })
+            ],
         });
 
         it("renameLocations", () => {
@@ -476,9 +617,9 @@ namespace ts.projectSystem {
         it("renameLocationsFull", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.RenameFullRequest, protocol.RenameFullResponse>(session, protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
-            assert.deepEqual<ReadonlyArray<RenameLocation>>(response, [
-                renameLocation(userTs, "fnA"),
-                renameLocation(aTs, "fnA"),
+            assert.deepEqual<readonly RenameLocation[]>(response, [
+                renameLocation({ file: userTs, text: "fnA" }),
+                renameLocation({ file: aTs, text: "fnA", contextText: "export function fnA() {}" }),
             ]);
             verifyATsConfigOriginalProject(session);
         });
@@ -499,11 +640,22 @@ namespace ts.projectSystem {
                 locs: [
                     {
                         file: bDts.path,
-                        locs: [protocolRenameSpanFromSubstring(bDts.content, "fnB")],
+                        locs: [
+                            protocolRenameSpanFromSubstring({
+                                fileText: bDts.content,
+                                text: "fnB",
+                                contextText: "export declare function fnB(): void;"
+                            })
+                        ],
                     },
                     {
                         file: userTs.path,
-                        locs: [protocolRenameSpanFromSubstring(userTs.content, "fnB")],
+                        locs: [
+                            protocolRenameSpanFromSubstring({
+                                fileText: userTs.content,
+                                text: "fnB"
+                            })
+                        ],
                     },
                 ],
             });
@@ -516,7 +668,7 @@ namespace ts.projectSystem {
                 oldFilePath: aTs.path,
                 newFilePath: "/a/aNew.ts",
             });
-            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, [
+            assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, [
                 {
                     fileName: userTs.path,
                     textChanges: [
@@ -560,7 +712,65 @@ namespace ts.projectSystem {
                 oldFilePath: aTs.path,
                 newFilePath: "/a/src/a1.ts",
             });
-            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, []); // Should not change anything
+            assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, []); // Should not change anything
+        });
+
+        it("does not jump to source if inlined sources", () => {
+            const aDtsInlinedSources: RawSourceMap = {
+                ...aDtsMapContent,
+                sourcesContent: [aTs.content]
+            };
+            const aDtsMapInlinedSources: File = {
+                path: aDtsMap.path,
+                content: JSON.stringify(aDtsInlinedSources)
+            };
+            const host = createServerHost([aTs, aDtsMapInlinedSources, aDts, bTs, bDtsMap, bDts, userTs, dummyFile]);
+            const session = createSession(host);
+
+            openFilesForSession([userTs], session);
+            const service = session.getProjectService();
+            // If config file then userConfig project and bConfig project since it is referenced
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+
+            // Inlined so does not jump to aTs
+            assert.deepEqual(
+                executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(
+                    session,
+                    protocol.CommandTypes.DefinitionAndBoundSpan,
+                    protocolFileLocationFromSubstring(userTs, "fnA()")
+                ),
+                {
+                    textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
+                    definitions: [
+                        protocolFileSpanWithContextFromSubstring({
+                            file: aDts,
+                            text: "fnA",
+                            contextText: "export declare function fnA(): void;"
+                        })
+                    ],
+                }
+            );
+
+            // Not inlined, jumps to bTs
+            assert.deepEqual(
+                executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(
+                    session,
+                    protocol.CommandTypes.DefinitionAndBoundSpan,
+                    protocolFileLocationFromSubstring(userTs, "fnB()")
+                ),
+                {
+                    textSpan: protocolTextSpanFromSubstring(userTs.content, "fnB"),
+                    definitions: [
+                        protocolFileSpanWithContextFromSubstring({
+                            file: bTs,
+                            text: "fnB",
+                            contextText: "export function fnB() {}"
+                        })
+                    ],
+                }
+            );
+
+            verifySingleInferredProject(session);
         });
     });
 }

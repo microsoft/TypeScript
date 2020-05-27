@@ -155,3 +155,15 @@ interface S {
 >u : Symbol(u, Decl(indexerConstraints2.ts, 73, 5))
 >A : Symbol(A, Decl(indexerConstraints2.ts, 0, 0))
 }
+
+type Key = string;
+>Key : Symbol(Key, Decl(indexerConstraints2.ts, 74, 1))
+
+interface T {
+>T : Symbol(T, Decl(indexerConstraints2.ts, 76, 18))
+
+    [key: Key]
+>key : Symbol(key, Decl(indexerConstraints2.ts, 78, 5))
+>Key : Symbol(Key, Decl(indexerConstraints2.ts, 74, 1))
+}
+

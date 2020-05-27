@@ -1,9 +1,8 @@
-tests/cases/conformance/jsx/file.tsx(11,36): error TS1005: '}' expected.
-tests/cases/conformance/jsx/file.tsx(11,44): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/file.tsx(11,46): error TS1161: Unterminated regular expression literal.
+tests/cases/conformance/jsx/file.tsx(11,30): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/file.tsx(11,30): error TS18007: JSX expressions may not use the comma operator. Did you mean to write an array?
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -15,10 +14,8 @@ tests/cases/conformance/jsx/file.tsx(11,46): error TS1161: Unterminated regular 
     const class1 = "foo";
     const class2 = "bar";
     const elem = <div className={class1, class2}/>;
-                                       ~
-!!! error TS1005: '}' expected.
-                                               ~
-!!! error TS1003: Identifier expected.
-                                                 
-!!! error TS1161: Unterminated regular expression literal.
+                                 ~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                                 ~~~~~~~~~~~~~~
+!!! error TS18007: JSX expressions may not use the comma operator. Did you mean to write an array?
     

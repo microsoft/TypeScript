@@ -83,11 +83,20 @@ namespace ts.projectSystem {
 
         it("add and then remove a config file in a folder with loose files", () => {
             const configFile: File = {
-                path: "/a/b/tsconfig.json",
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: `{
                     "files": ["commonFile1.ts"]
                 }`
             };
+            const commonFile1: File = {
+                path: `${tscWatch.projectRoot}/commonFile1.ts`,
+                content: "let x = 1"
+            };
+            const commonFile2: File = {
+                path: `${tscWatch.projectRoot}/commonFile2.ts`,
+                content: "let y = 1"
+            };
+
             const filesWithoutConfig = [libFile, commonFile1, commonFile2];
             const host = createServerHost(filesWithoutConfig);
 
@@ -100,8 +109,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [commonFile1.path, libFile.path]);
             checkProjectActualFiles(projectService.inferredProjects[1], [commonFile2.path, libFile.path]);
 
-            const configFileLocations = ["/", "/a/", "/a/b/"];
-            const watchedFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]).concat(libFile.path);
+            const watchedFiles = getConfigFilesToWatch(tscWatch.projectRoot).concat(libFile.path);
             checkWatchedFiles(host, watchedFiles);
 
             // Add a tsconfig file
@@ -432,19 +440,19 @@ namespace ts.projectSystem {
 
         it("open file become a part of configured project if it is referenced from root file", () => {
             const file1 = {
-                path: "/a/b/f1.ts",
+                path: `${tscWatch.projectRoot}/a/b/f1.ts`,
                 content: "export let x = 5"
             };
             const file2 = {
-                path: "/a/c/f2.ts",
+                path: `${tscWatch.projectRoot}/a/c/f2.ts`,
                 content: `import {x} from "../b/f1"`
             };
             const file3 = {
-                path: "/a/c/f3.ts",
+                path: `${tscWatch.projectRoot}/a/c/f3.ts`,
                 content: "export let y = 1"
             };
             const configFile = {
-                path: "/a/c/tsconfig.json",
+                path: `${tscWatch.projectRoot}/a/c/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] })
             };
 
@@ -836,6 +844,270 @@ namespace ts.projectSystem {
             const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
             assert.deepEqual(edits, [{ span: createTextSpan(/*start*/ 7, /*length*/ 3), newText: " " }]);
         });
+
+        it("when multiple projects are open, detects correct default project", () => {
+            const barConfig: File = {
+                path: `${tscWatch.projectRoot}/bar/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["index.ts"],
+                    compilerOptions: {
+                        lib: ["dom", "es2017"]
+                    }
+                })
+            };
+            const barIndex: File = {
+                path: `${tscWatch.projectRoot}/bar/index.ts`,
+                content: `
+export function bar() {
+  console.log("hello world");
+}`
+            };
+            const fooConfig: File = {
+                path: `${tscWatch.projectRoot}/foo/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["index.ts"],
+                    compilerOptions: {
+                        lib: ["es2017"]
+                    }
+                })
+            };
+            const fooIndex: File = {
+                path: `${tscWatch.projectRoot}/foo/index.ts`,
+                content: `
+import { bar } from "bar";
+bar();`
+            };
+            const barSymLink: SymLink = {
+                path: `${tscWatch.projectRoot}/foo/node_modules/bar`,
+                symLink: `${tscWatch.projectRoot}/bar`
+            };
+
+            const lib2017: File = {
+                path: `${getDirectoryPath(libFile.path)}/lib.es2017.d.ts`,
+                content: libFile.content
+            };
+            const libDom: File = {
+                path: `${getDirectoryPath(libFile.path)}/lib.dom.d.ts`,
+                content: `
+declare var console: {
+    log(...args: any[]): void;
+};`
+            };
+            const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, lib2017, libDom]);
+            const session = createSession(host, { canUseEvents: true, });
+            openFilesForSession([fooIndex, barIndex], session);
+            verifyGetErrRequestNoErrors({ session, host, files: [barIndex, fooIndex] });
+        });
+
+        it("when file name starts with ^", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/file.ts`,
+                content: "const x = 10;"
+            };
+            const app: File = {
+                path: `${tscWatch.projectRoot}/^app.ts`,
+                content: "const y = 10;"
+            };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const host = createServerHost([file, app, tsconfig, libFile]);
+            const service = createProjectService(host);
+            service.openClientFile(file.path);
+        });
+
+        describe("when creating new file", () => {
+            const foo: File = {
+                path: `${tscWatch.projectRoot}/src/foo.ts`,
+                content: "export function foo() { }"
+            };
+            const bar: File = {
+                path: `${tscWatch.projectRoot}/src/bar.ts`,
+                content: "export function bar() { }"
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["./src"]
+                })
+            };
+            const fooBar: File = {
+                path: `${tscWatch.projectRoot}/src/sub/fooBar.ts`,
+                content: "export function fooBar() { }"
+            };
+            function verifySessionWorker({ withExclude, openFileBeforeCreating, checkProjectBeforeError, checkProjectAfterError, }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
+                const host = createServerHost([
+                    foo, bar, libFile, { path: `${tscWatch.projectRoot}/src/sub` },
+                    withExclude ?
+                        {
+                            path: config.path,
+                            content: JSON.stringify({
+                                include: ["./src"],
+                                exclude: ["./src/sub"]
+                            })
+                        } :
+                        config
+                ]);
+                const session = createSession(host, {
+                    canUseEvents: true
+                });
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
+                    arguments: {
+                        file: foo.path,
+                        fileContent: foo.content,
+                        projectRootPath: tscWatch.projectRoot
+                    }
+                });
+                if (!openFileBeforeCreating) {
+                    host.writeFile(fooBar.path, fooBar.content);
+                }
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
+                    arguments: {
+                        file: fooBar.path,
+                        fileContent: fooBar.content,
+                        projectRootPath: tscWatch.projectRoot
+                    }
+                });
+                if (openFileBeforeCreating) {
+                    host.writeFile(fooBar.path, fooBar.content);
+                }
+                const service = session.getProjectService();
+                checkProjectBeforeError(service);
+                verifyGetErrRequestNoErrors({
+                    session,
+                    host,
+                    files: errorOnNewFileBeforeOldFile ?
+                        [fooBar, foo] :
+                        [foo, fooBar],
+                    existingTimeouts: 2
+                });
+                checkProjectAfterError(service);
+            }
+            interface VerifySession {
+                withExclude?: boolean;
+                openFileBeforeCreating: boolean;
+                checkProjectBeforeError: (service: server.ProjectService) => void;
+                checkProjectAfterError: (service: server.ProjectService) => void;
+            }
+            function verifySession(input: VerifySession) {
+                it("when error on new file are asked before old one", () => {
+                    verifySessionWorker(input, /*errorOnNewFileBeforeOldFile*/ true);
+                });
+
+                it("when error on new file are asked after old one", () => {
+                    verifySessionWorker(input, /*errorOnNewFileBeforeOldFile*/ false);
+                });
+            }
+            function checkFooBarInInferredProject(service: server.ProjectService) {
+                checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
+                checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, libFile.path, config.path]);
+                checkProjectActualFiles(service.inferredProjects[0], [fooBar.path, libFile.path]);
+            }
+            function checkFooBarInConfiguredProject(service: server.ProjectService) {
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
+            }
+            describe("when new file creation directory watcher is invoked before file is opened in editor", () => {
+                verifySession({
+                    openFileBeforeCreating: false,
+                    checkProjectBeforeError: checkFooBarInConfiguredProject,
+                    checkProjectAfterError: checkFooBarInConfiguredProject
+                });
+                describe("when new file is excluded from config", () => {
+                    verifySession({
+                        withExclude: true,
+                        openFileBeforeCreating: false,
+                        checkProjectBeforeError: checkFooBarInInferredProject,
+                        checkProjectAfterError: checkFooBarInInferredProject
+                    });
+                });
+            });
+
+            describe("when new file creation directory watcher is invoked after file is opened in editor", () => {
+                verifySession({
+                    openFileBeforeCreating: true,
+                    checkProjectBeforeError: checkFooBarInInferredProject,
+                    checkProjectAfterError: service => {
+                        // Both projects exist but fooBar is in configured project after the update
+                        // Inferred project is yet to be updated so still has fooBar
+                        checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
+                        checkProjectActualFiles(service.configuredProjects.get(config.path)!, [foo.path, bar.path, fooBar.path, libFile.path, config.path]);
+                        checkProjectActualFiles(service.inferredProjects[0], [fooBar.path, libFile.path]);
+                        assert.isTrue(service.inferredProjects[0].dirty);
+                        assert.equal(service.inferredProjects[0].getRootFilesMap().size, 0);
+                    }
+                });
+                describe("when new file is excluded from config", () => {
+                    verifySession({
+                        withExclude: true,
+                        openFileBeforeCreating: true,
+                        checkProjectBeforeError: checkFooBarInInferredProject,
+                        checkProjectAfterError: checkFooBarInInferredProject
+                    });
+                });
+            });
+        });
+
+        it("when default configured project does not contain the file", () => {
+            const barConfig: File = {
+                path: `${tscWatch.projectRoot}/bar/tsconfig.json`,
+                content: "{}"
+            };
+            const barIndex: File = {
+                path: `${tscWatch.projectRoot}/bar/index.ts`,
+                content: `import {foo} from "../foo/lib";
+foo();`
+            };
+            const fooBarConfig: File = {
+                path: `${tscWatch.projectRoot}/foobar/tsconfig.json`,
+                content: barConfig.path
+            };
+            const fooBarIndex: File = {
+                path: `${tscWatch.projectRoot}/foobar/index.ts`,
+                content: barIndex.content
+            };
+            const fooConfig: File = {
+                path: `${tscWatch.projectRoot}/foo/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["index.ts"],
+                    compilerOptions: {
+                        declaration: true,
+                        outDir: "lib"
+                    }
+                })
+            };
+            const fooIndex: File = {
+                path: `${tscWatch.projectRoot}/foo/index.ts`,
+                content: `export function foo() {}`
+            };
+            const host = createServerHost([barConfig, barIndex, fooBarConfig, fooBarIndex, fooConfig, fooIndex, libFile]);
+            tscWatch.ensureErrorFreeBuild(host, [fooConfig.path]);
+            const fooDts = `${tscWatch.projectRoot}/foo/lib/index.d.ts`;
+            assert.isTrue(host.fileExists(fooDts));
+            const session = createSession(host);
+            const service = session.getProjectService();
+            service.openClientFile(barIndex.path);
+            checkProjectActualFiles(service.configuredProjects.get(barConfig.path)!, [barIndex.path, fooDts, libFile.path, barConfig.path]);
+            service.openClientFile(fooBarIndex.path);
+            checkProjectActualFiles(service.configuredProjects.get(fooBarConfig.path)!, [fooBarIndex.path, fooDts, libFile.path, fooBarConfig.path]);
+            service.openClientFile(fooIndex.path);
+            checkProjectActualFiles(service.configuredProjects.get(fooConfig.path)!, [fooIndex.path, libFile.path, fooConfig.path]);
+            service.openClientFile(fooDts);
+            session.executeCommandSeq<protocol.GetApplicableRefactorsRequest>({
+                command: protocol.CommandTypes.GetApplicableRefactors,
+                arguments: {
+                    file: fooDts,
+                    startLine: 1,
+                    startOffset: 1,
+                    endLine: 1,
+                    endOffset: 1
+                }
+            });
+            assert.equal(service.tryGetDefaultProjectForFile(server.toNormalizedPath(fooDts)), service.configuredProjects.get(barConfig.path));
+        });
     });
 
     describe("unittests:: tsserver:: ConfiguredProjects:: non-existing directories listed in config file input array", () => {
@@ -856,12 +1128,12 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(file1.path);
             host.runQueuedTimeoutCallbacks();
-            // Since there is no file open from configFile it would be closed
-            checkNumberOfConfiguredProjects(projectService, 0);
-            checkNumberOfInferredProjects(projectService, 1);
 
+            // Since file1 refers to config file as the default project, it needs to be kept alive
+            checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
+            assert.isFalse(projectService.configuredProjects.get(configFile.path)!.containsFile(<server.NormalizedPath>file1.path));
         });
 
         it("should be able to handle @types if input file list is empty", () => {
@@ -888,18 +1160,17 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
 
             projectService.openClientFile(f.path);
-            // Since no file from the configured project is open, it would be closed immediately
-            projectService.checkNumberOfProjects({ configuredProjects: 0, inferredProjects: 1 });
+            // Since f refers to config file as the default project, it needs to be kept alive
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
         });
 
         it("should tolerate invalid include files that start in subDirectory", () => {
-            const projectFolder = "/user/username/projects/myproject";
             const f = {
-                path: `${projectFolder}/src/server/index.ts`,
+                path: `${tscWatch.projectRoot}/src/server/index.ts`,
                 content: "let x = 1"
             };
             const config = {
-                path: `${projectFolder}/src/server/tsconfig.json`,
+                path: `${tscWatch.projectRoot}/src/server/tsconfig.json`,
                 content: JSON.stringify({
                     compiler: {
                         module: "commonjs",
@@ -914,8 +1185,8 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
 
             projectService.openClientFile(f.path);
-            // Since no file from the configured project is open, it would be closed immediately
-            projectService.checkNumberOfProjects({ configuredProjects: 0, inferredProjects: 1 });
+            // Since f refers to config file as the default project, it needs to be kept alive
+            projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
         });
 
         it("Changed module resolution reflected when specifying files list", () => {
@@ -1005,6 +1276,40 @@ namespace ts.projectSystem {
             const watchedRecursiveDirectories = getTypeRootsFromLocation(root + "/a/b/src");
             watchedRecursiveDirectories.push(`${root}/a/b/src/node_modules`, `${root}/a/b/node_modules`);
             checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+        });
+    });
+
+    describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file fails", () => {
+        it("should be tolerated without crashing the server", () => {
+            const configFile = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: ""
+            };
+            const file1 = {
+                path: `${tscWatch.projectRoot}/file1.ts`,
+                content: "let t = 10;"
+            };
+
+            const host = createServerHost([file1, libFile, configFile]);
+            const { session, events } = createSessionWithEventTracking<server.ConfigFileDiagEvent>(host, server.ConfigFileDiagEvent);
+            const originalReadFile = host.readFile;
+            host.readFile = f => {
+                return f === configFile.path ?
+                    undefined :
+                    originalReadFile.call(host, f);
+            };
+            openFilesForSession([file1], session);
+
+            assert.deepEqual(events, [{
+                eventName: server.ConfigFileDiagEvent,
+                data: {
+                    triggerFile: file1.path,
+                    configFileName: configFile.path,
+                    diagnostics: [
+                        createCompilerDiagnostic(Diagnostics.Cannot_read_file_0, configFile.path)
+                    ]
+                }
+            }]);
         });
     });
 }

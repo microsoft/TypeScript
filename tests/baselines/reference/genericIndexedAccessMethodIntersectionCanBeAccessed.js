@@ -23,6 +23,7 @@ export const createService = <T>(
 //// [genericIndexedAccessMethodIntersectionCanBeAccessed.js]
 "use strict";
 exports.__esModule = true;
+exports.createService = void 0;
 exports.createService = function (ServiceCtr) {
     Object.keys(ServiceCtr).forEach(function (key) {
         var method = (ServiceCtr)[key];

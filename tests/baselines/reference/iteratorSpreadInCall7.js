@@ -13,7 +13,7 @@ class SymbolIterator {
     }
 }
 
-class StringIterator {
+class _StringIterator {
     next() {
         return {
             value: "",
@@ -26,7 +26,7 @@ class StringIterator {
     }
 }
 
-foo(...new SymbolIterator, ...new StringIterator);
+foo(...new SymbolIterator, ...new _StringIterator);
 
 //// [iteratorSpreadInCall7.js]
 function foo(...s) { return s[0]; }
@@ -41,7 +41,7 @@ class SymbolIterator {
         return this;
     }
 }
-class StringIterator {
+class _StringIterator {
     next() {
         return {
             value: "",
@@ -52,4 +52,4 @@ class StringIterator {
         return this;
     }
 }
-foo(...new SymbolIterator, ...new StringIterator);
+foo(...new SymbolIterator, ...new _StringIterator);

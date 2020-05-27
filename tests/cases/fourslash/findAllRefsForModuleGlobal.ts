@@ -5,8 +5,8 @@
 
 // @Filename: /b.ts
 /////// <reference types="[|foo|]" />
-////import { x } from "[|foo|]";
-////declare module "[|{| "isWriteAccess": true, "isDefinition": true |}foo|]" {}
+////[|import { x } from "[|{| "contextRangeIndex": 1 |}foo|]";|]
+////[|declare module "[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}foo|]" {}|]
 
 verify.noErrors();
-verify.singleReferenceGroup('module "/node_modules/foo/index"');
+verify.singleReferenceGroup('module "/node_modules/foo/index"', "foo");

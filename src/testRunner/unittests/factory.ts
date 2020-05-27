@@ -1,7 +1,7 @@
 namespace ts {
     describe("unittests:: FactoryAPI", () => {
         function assertSyntaxKind(node: Node, expected: SyntaxKind) {
-            assert.strictEqual(node.kind, expected, `Actual: ${Debug.showSyntaxKind(node)} Expected: ${(ts as any).SyntaxKind[expected]}`);
+            assert.strictEqual(node.kind, expected, `Actual: ${Debug.formatSyntaxKind(node.kind)} Expected: ${Debug.formatSyntaxKind(expected)}`);
         }
         describe("createExportAssignment", () => {
             it("parenthesizes default export if necessary", () => {
@@ -75,6 +75,7 @@ namespace ts {
                 checkRhs(SyntaxKind.PlusEqualsToken, /*expectParens*/ false);
                 checkRhs(SyntaxKind.BarBarToken, /*expectParens*/ true);
                 checkRhs(SyntaxKind.AmpersandAmpersandToken, /*expectParens*/ true);
+                checkRhs(SyntaxKind.QuestionQuestionToken, /*expectParens*/ true);
                 checkRhs(SyntaxKind.EqualsEqualsToken, /*expectParens*/ true);
             });
         });

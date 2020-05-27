@@ -15,19 +15,25 @@
 ////     className?: string;
 //// }
 //// interface ButtonProps extends ClickableProps {
-////     [|onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;
+////     [|[|{| "contextRangeIndex": 0 |}onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;|]
 //// }
 //// interface LinkProps extends ClickableProps {
-////     [|goTo|]: string;
+////     [|[|{| "contextRangeIndex": 2 |}goTo|]: string;|]
 //// }
-//// declare function [|MainButton|](buttonProps: ButtonProps): JSX.Element;
-//// declare function [|MainButton|](linkProps: LinkProps): JSX.Element;
-//// declare function [|MainButton|](props: ButtonProps | LinkProps): JSX.Element;
-//// let opt = <[|MainButton|] />;
-//// let opt = <[|MainButton|] children="chidlren" />;
-//// let opt = <[|MainButton|] [|onClick|]={()=>{}} />;
-//// let opt = <[|MainButton|] [|onClick|]={()=>{}} [|ignore-prop|] />;
-//// let opt = <[|MainButton|] [|goTo|]="goTo" />;
-//// let opt = <[|MainButton|] [|wrong|] />;
+//// [|declare function [|{| "contextRangeIndex": 4 |}MainButton|](buttonProps: ButtonProps): JSX.Element;|]
+//// [|declare function [|{| "contextRangeIndex": 6 |}MainButton|](linkProps: LinkProps): JSX.Element;|]
+//// [|declare function [|{| "contextRangeIndex": 8 |}MainButton|](props: ButtonProps | LinkProps): JSX.Element;|]
+//// let opt = [|<[|{| "contextRangeIndex": 10 |}MainButton|] />|];
+//// let opt = [|<[|{| "contextRangeIndex": 12 |}MainButton|] children="chidlren" />|];
+//// let opt = [|<[|{| "contextRangeIndex": 14 |}MainButton|] [|[|{| "contextRangeIndex": 16 |}onClick|]={()=>{}}|] />|];
+//// let opt = [|<[|{| "contextRangeIndex": 18 |}MainButton|] [|[|{| "contextRangeIndex": 20 |}onClick|]={()=>{}}|] [|ignore-prop|] />|];
+//// let opt = [|<[|{| "contextRangeIndex": 23 |}MainButton|] [|[|{| "contextRangeIndex": 25 |}goTo|]="goTo"|] />|];
+//// let opt = [|<[|{| "contextRangeIndex": 27 |}MainButton|] [|wrong|] />|];
 
-verify.rangesWithSameTextAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations(
+    "onClick",
+    "goTo",
+    "MainButton",
+    "ignore-prop",
+    "wrong"
+);

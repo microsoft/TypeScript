@@ -122,3 +122,16 @@ function f4() {
 >x : Symbol(x, Decl(destructuringControlFlow.ts, 29, 7))
 }
 
+// Repro from #31770
+
+type KeyValue = [string, string?];
+>KeyValue : Symbol(KeyValue, Decl(destructuringControlFlow.ts, 33, 1))
+
+let [key, value]: KeyValue = ["foo"];
+>key : Symbol(key, Decl(destructuringControlFlow.ts, 38, 5))
+>value : Symbol(value, Decl(destructuringControlFlow.ts, 38, 9))
+>KeyValue : Symbol(KeyValue, Decl(destructuringControlFlow.ts, 33, 1))
+
+value.toUpperCase();  // Error
+>value : Symbol(value, Decl(destructuringControlFlow.ts, 38, 9))
+

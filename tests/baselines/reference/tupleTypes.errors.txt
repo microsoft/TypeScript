@@ -39,6 +39,7 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     var t2: number|string;
         ~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type 'undefined', but here has type 'string | number'.
+!!! related TS6203 tests/cases/compiler/tupleTypes.ts:11:5: 't2' was also declared here.
     
     t = [];               // Error
     ~
@@ -79,6 +80,7 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     var tt2: number | string;
         ~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'tt2' must be of type 'undefined', but here has type 'string | number'.
+!!! related TS6203 tests/cases/compiler/tupleTypes.ts:35:5: 'tt2' was also declared here.
     
     tt = tuple2(1, undefined);
     tt = [1, undefined];

@@ -1,9 +1,9 @@
-tests/cases/compiler/isolatedModulesPlainFile-UMD.ts(1,1): error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.
+tests/cases/compiler/isolatedModulesPlainFile-UMD.ts(1,1): error TS1208: All files must be modules when the '--isolatedModules' flag is provided.
 
 
 ==== tests/cases/compiler/isolatedModulesPlainFile-UMD.ts (1 errors) ====
     declare function run(a: number): void;
     ~~~~~~~
-!!! error TS1208: Cannot compile namespaces when the '--isolatedModules' flag is provided.
+!!! error TS1208: All files must be modules when the '--isolatedModules' flag is provided.
     run(1);
     

@@ -28,7 +28,7 @@ type T17 = Shape[void];  // Error
 type T18 = Shape[undefined];  // Error
 type T19 = Shape[{ x: string }];  // Error
 type T20 = Shape[string | number];  // Error
-type T21 = Shape[string & number];  // Error
+type T21 = Shape[string & number];
 type T22 = Shape[string | boolean];  // Error
 
 type T30 = string[]["length"];

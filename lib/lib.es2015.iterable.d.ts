@@ -1,14 +1,14 @@
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved. 
+Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0  
- 
+License at http://www.apache.org/licenses/LICENSE-2.0
+
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
-MERCHANTABLITY OR NON-INFRINGEMENT. 
- 
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
@@ -28,15 +28,23 @@ interface SymbolConstructor {
     readonly iterator: symbol;
 }
 
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
+interface IteratorYieldResult<TYield> {
+    done?: false;
+    value: TYield;
 }
 
-interface Iterator<T> {
-    next(value?: any): IteratorResult<T>;
-    return?(value?: any): IteratorResult<T>;
-    throw?(e?: any): IteratorResult<T>;
+interface IteratorReturnResult<TReturn> {
+    done: true;
+    value: TReturn;
+}
+
+type IteratorResult<T, TReturn = any> = IteratorYieldResult<T> | IteratorReturnResult<TReturn>;
+
+interface Iterator<T, TReturn = any, TNext = undefined> {
+    // NOTE: 'next' is defined using a tuple to ensure we report the correct assignability errors in all places.
+    next(...args: [] | [TNext]): IteratorResult<T, TReturn>;
+    return?(value?: TReturn): IteratorResult<T, TReturn>;
+    throw?(e?: any): IteratorResult<T, TReturn>;
 }
 
 interface Iterable<T> {
@@ -149,7 +157,7 @@ interface ReadonlyMap<K, V> {
 }
 
 interface MapConstructor {
-    new <K, V>(iterable: Iterable<[K, V]>): Map<K, V>;
+    new <K, V>(iterable: Iterable<readonly [K, V]>): Map<K, V>;
 }
 
 interface WeakMap<K extends object, V> { }
@@ -197,7 +205,7 @@ interface ReadonlySet<T> {
 }
 
 interface SetConstructor {
-    new <T>(iterable: Iterable<T>): Set<T>;
+    new <T>(iterable?: Iterable<T> | null): Set<T>;
 }
 
 interface WeakSet<T extends object> { }
@@ -212,15 +220,23 @@ interface PromiseConstructor {
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
      * resolve, or rejected when any Promise is rejected.
-     * @param values An array of Promises.
+     * @param values An iterable of Promises.
      * @returns A new Promise.
      */
-    all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>;
+    all<T>(values: Iterable<T | PromiseLike<T>>): Promise<T[]>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
      * or rejected.
-     * @param values An array of Promises.
+     * @param values An iterable of Promises.
+     * @returns A new Promise.
+     */
+    race<T>(values: Iterable<T>): Promise<T extends PromiseLike<infer U> ? U : T>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An iterable of Promises.
      * @returns A new Promise.
      */
     race<T>(values: Iterable<T | PromiseLike<T>>): Promise<T>;

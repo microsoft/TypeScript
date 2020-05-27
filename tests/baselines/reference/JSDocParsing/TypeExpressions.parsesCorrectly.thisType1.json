@@ -3,17 +3,23 @@
     "pos": 1,
     "end": 19,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "parameters": {
         "0": {
             "kind": "Parameter",
             "pos": 10,
             "end": 18,
             "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "name": {
                 "kind": "Identifier",
                 "pos": 10,
                 "end": 14,
                 "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "originalKeywordKind": "ThisKeyword",
                 "escapedText": "this"
             },
@@ -22,16 +28,22 @@
                 "pos": 15,
                 "end": 18,
                 "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "typeName": {
                     "kind": "FirstNode",
                     "pos": 15,
                     "end": 18,
                     "flags": "JSDoc",
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "left": {
                         "kind": "Identifier",
                         "pos": 15,
                         "end": 16,
                         "flags": "JSDoc",
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
                         "escapedText": "a"
                     },
                     "right": {
@@ -39,6 +51,8 @@
                         "pos": 17,
                         "end": 18,
                         "flags": "JSDoc",
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
                         "escapedText": "b"
                     }
                 }

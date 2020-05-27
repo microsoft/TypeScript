@@ -43,7 +43,7 @@ module m1 {
     }
 
     export function f2(arg1: { x?: C1, y: number }) {
->f2 : (arg1: { x?: C1; y: number; }) => void
+>f2 : (arg1: {    x?: C1;    y: number;}) => void
 >arg1 : { x?: C1; y: number; }
 >x : C1
 >y : number
@@ -61,7 +61,7 @@ module m1 {
     }
 
     export function f4(arg1: 
->f4 : (arg1: {}) => void
+>f4 : (arg1: {    [number]: C1;}) => void
 >arg1 : {}
     {
     [number]: C1; // Used to be indexer, now it is a computed property

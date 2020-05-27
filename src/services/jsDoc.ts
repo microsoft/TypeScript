@@ -82,27 +82,24 @@ namespace ts.JsDoc {
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
-    export function getJsDocCommentsFromDeclarations(declarations: ReadonlyArray<Declaration>): SymbolDisplayPart[] {
+    export function getJsDocCommentsFromDeclarations(declarations: readonly Declaration[]): SymbolDisplayPart[] {
         // Only collect doc comments from duplicate declarations once:
         // In case of a union property there might be same declaration multiple times
         // which only varies in type parameter
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const documentationComment: SymbolDisplayPart[] = [];
+        const documentationComment: string[] = [];
         forEachUnique(declarations, declaration => {
             for (const { comment } of getCommentHavingNodes(declaration)) {
                 if (comment === undefined) continue;
-                if (documentationComment.length) {
-                    documentationComment.push(lineBreakPart());
-                }
-                documentationComment.push(textPart(comment));
+                pushIfUnique(documentationComment, comment);
             }
         });
-        return documentationComment;
+        return intersperse(map(documentationComment, textPart), lineBreakPart());
     }
 
-    function getCommentHavingNodes(declaration: Declaration): ReadonlyArray<JSDoc | JSDocTag> {
+    function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDocTag)[] {
         switch (declaration.kind) {
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
@@ -129,12 +126,14 @@ namespace ts.JsDoc {
     function getCommentText(tag: JSDocTag): string | undefined {
         const { comment } = tag;
         switch (tag.kind) {
+            case SyntaxKind.JSDocImplementsTag:
+                return withNode((tag as JSDocImplementsTag).class);
             case SyntaxKind.JSDocAugmentsTag:
                 return withNode((tag as JSDocAugmentsTag).class);
             case SyntaxKind.JSDocTemplateTag:
                 return withList((tag as JSDocTemplateTag).typeParameters);
             case SyntaxKind.JSDocTypeTag:
-                return withNode((tag as JSDocTypeTag).typeExpression!);
+                return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
@@ -156,25 +155,6 @@ namespace ts.JsDoc {
         function addComment(s: string) {
             return comment === undefined ? s : `${s} ${comment}`;
         }
-    }
-
-    /**
-     * Iterates through 'array' by index and performs the callback on each element of array until the callback
-     * returns a truthy value, then returns that value.
-     * If no such value is found, the callback is applied to each element of array and undefined is returned.
-     */
-    function forEachUnique<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U): U | undefined {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (array.indexOf(array[i]) === i) {
-                    const result = callback(array[i], i);
-                    if (result) {
-                        return result;
-                    }
-                }
-            }
-        }
-        return undefined;
     }
 
     export function getJSDocTagNameCompletions(): CompletionEntry[] {
@@ -270,7 +250,6 @@ namespace ts.JsDoc {
      * @param position The (character-indexed) position in the file where the check should
      * be performed.
      */
-
     export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number): TextInsertion | undefined {
         const tokenAtPos = getTokenAtPosition(sourceFile, position);
         const existingDocComment = findAncestor(tokenAtPos, isJSDoc);
@@ -327,7 +306,7 @@ namespace ts.JsDoc {
         return text.slice(lineStart, pos);
     }
 
-    function parameterDocComments(parameters: ReadonlyArray<ParameterDeclaration>, isJavaScriptFile: boolean, indentationStr: string, newLine: string): string {
+    function parameterDocComments(parameters: readonly ParameterDeclaration[], isJavaScriptFile: boolean, indentationStr: string, newLine: string): string {
         return parameters.map(({ name, dotDotDotToken }, i) => {
             const paramName = name.kind === SyntaxKind.Identifier ? name.text : "param" + i;
             const type = isJavaScriptFile ? (dotDotDotToken ? "{...any} " : "{any} ") : "";
@@ -337,7 +316,7 @@ namespace ts.JsDoc {
 
     interface CommentOwnerInfo {
         readonly commentOwner: Node;
-        readonly parameters?: ReadonlyArray<ParameterDeclaration>;
+        readonly parameters?: readonly ParameterDeclaration[];
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
         return forEachAncestor(tokenAtPos, getCommentOwnerInfoWorker);
@@ -381,6 +360,8 @@ namespace ts.JsDoc {
                 // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
                 return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
 
+            case SyntaxKind.ExpressionStatement:
+                return getCommentOwnerInfoWorker((commentOwner as ExpressionStatement).expression);
             case SyntaxKind.BinaryExpression: {
                 const be = commentOwner as BinaryExpression;
                 if (getAssignmentDeclarationKind(be) === AssignmentDeclarationKind.None) {
@@ -389,6 +370,11 @@ namespace ts.JsDoc {
                 const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
                 return { commentOwner, parameters };
             }
+            case SyntaxKind.PropertyDeclaration:
+                const init = (commentOwner as PropertyDeclaration).initializer;
+                if (init && (isFunctionExpression(init) || isArrowFunction(init))) {
+                    return { commentOwner, parameters: init.parameters };
+                }
         }
     }
 
@@ -400,7 +386,7 @@ namespace ts.JsDoc {
      * @param rightHandSide the expression which may contain an appropriate set of parameters
      * @returns the parameters of a signature found on the RHS if one exists; otherwise 'emptyArray'.
      */
-    function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): ReadonlyArray<ParameterDeclaration> {
+    function getParametersFromRightHandSideOfAssignment(rightHandSide: Expression): readonly ParameterDeclaration[] {
         while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
             rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
         }

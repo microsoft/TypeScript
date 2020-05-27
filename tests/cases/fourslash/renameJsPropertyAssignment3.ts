@@ -4,7 +4,7 @@
 // @Filename: a.js
 ////var C = class  {
 ////}
-////C.[|staticProperty|] = "string";
+////[|C.[|{| "contextRangeIndex": 0 |}staticProperty|] = "string";|]
 ////console.log(C.[|staticProperty|]);
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("staticProperty");

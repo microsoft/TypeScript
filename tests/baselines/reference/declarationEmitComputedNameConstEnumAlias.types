@@ -15,7 +15,7 @@ import EnumExample from './EnumExample';
 >EnumExample : typeof EnumExample
 
 export default {
->{    [EnumExample.TEST]: {},} : { [EnumExample.TEST]: {}; }
+>{    [EnumExample.TEST]: {},} : { TEST: {}; }
 
     [EnumExample.TEST]: {},
 >[EnumExample.TEST] : {}

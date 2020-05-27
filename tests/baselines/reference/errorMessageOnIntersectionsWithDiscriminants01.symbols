@@ -1,0 +1,28 @@
+=== tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts ===
+export type Common = { test: true } | { test: false };
+>Common : Symbol(Common, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 0, 0))
+>test : Symbol(test, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 0, 22))
+>test : Symbol(test, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 0, 39))
+
+export type A = Common & { foo: 1 };
+>A : Symbol(A, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 0, 54))
+>Common : Symbol(Common, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 0, 0))
+>foo : Symbol(foo, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 1, 26))
+
+export type B = Common & { bar: 1 };
+>B : Symbol(B, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 1, 36))
+>Common : Symbol(Common, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 0, 0))
+>bar : Symbol(bar, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 2, 26))
+
+declare const a: A;
+>a : Symbol(a, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 4, 13))
+>A : Symbol(A, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 0, 54))
+
+declare let b: B;
+>b : Symbol(b, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 5, 11))
+>B : Symbol(B, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 1, 36))
+
+b = a;
+>b : Symbol(b, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 5, 11))
+>a : Symbol(a, Decl(errorMessageOnIntersectionsWithDiscriminants01.ts, 4, 13))
+

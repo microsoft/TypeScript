@@ -1,22 +1,22 @@
-tests/cases/compiler/anonymousModules.ts(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/compiler/anonymousModules.ts(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
 tests/cases/compiler/anonymousModules.ts(1,8): error TS1005: ';' expected.
-tests/cases/compiler/anonymousModules.ts(4,2): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/compiler/anonymousModules.ts(4,2): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
 tests/cases/compiler/anonymousModules.ts(4,9): error TS1005: ';' expected.
-tests/cases/compiler/anonymousModules.ts(10,2): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/compiler/anonymousModules.ts(10,2): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
 tests/cases/compiler/anonymousModules.ts(10,9): error TS1005: ';' expected.
 
 
 ==== tests/cases/compiler/anonymousModules.ts (6 errors) ====
     module {
     ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
            ~
 !!! error TS1005: ';' expected.
     	export var foo = 1;
     
     	module {
     	~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
     	       ~
 !!! error TS1005: ';' expected.
     		export var bar = 1;
@@ -26,7 +26,7 @@ tests/cases/compiler/anonymousModules.ts(10,9): error TS1005: ';' expected.
     
     	module {
     	~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
     	       ~
 !!! error TS1005: ';' expected.
     		var x = bar;

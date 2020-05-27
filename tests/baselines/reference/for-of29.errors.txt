@@ -1,5 +1,4 @@
-tests/cases/conformance/es6/for-ofStatements/for-of29.ts(5,15): error TS2322: Type '{ [Symbol.iterator]?(): Iterator<string>; }' is not assignable to type 'Iterable<string>'.
-  Property '[Symbol.iterator]' is optional in type '{ [Symbol.iterator]?(): Iterator<string>; }' but required in type 'Iterable<string>'.
+tests/cases/conformance/es6/for-ofStatements/for-of29.ts(5,15): error TS2488: Type '{ [Symbol.iterator]?(): Iterator<string, any, undefined>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of29.ts (1 errors) ====
@@ -9,6 +8,5 @@ tests/cases/conformance/es6/for-ofStatements/for-of29.ts(5,15): error TS2322: Ty
     
     for (var v of iterableWithOptionalIterator) { }
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ [Symbol.iterator]?(): Iterator<string>; }' is not assignable to type 'Iterable<string>'.
-!!! error TS2322:   Property '[Symbol.iterator]' is optional in type '{ [Symbol.iterator]?(): Iterator<string>; }' but required in type 'Iterable<string>'.
+!!! error TS2488: Type '{ [Symbol.iterator]?(): Iterator<string, any, undefined>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
     

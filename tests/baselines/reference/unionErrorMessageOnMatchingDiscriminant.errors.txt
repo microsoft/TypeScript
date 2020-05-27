@@ -1,0 +1,28 @@
+tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts(21,5): error TS2322: Type 'null' is not assignable to type '{ a: string; }'.
+
+
+==== tests/cases/compiler/unionErrorMessageOnMatchingDiscriminant.ts (1 errors) ====
+    type A = {
+        type: 'a',
+        data: { a: string }
+    };
+    
+    type B = {
+        type: 'b',
+        data: null
+    };
+    
+    type C = {
+        type: 'c',
+        payload: string
+    };
+    
+    type Union = A | B | C;
+    
+    // error
+    const foo: Union = {
+        type: 'a',
+        data: null
+        ~~~~
+!!! error TS2322: Type 'null' is not assignable to type '{ a: string; }'.
+    };

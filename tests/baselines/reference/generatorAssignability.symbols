@@ -1,0 +1,157 @@
+=== tests/cases/conformance/generators/generatorAssignability.ts ===
+declare let _: any;
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+
+declare const g1: Generator<number, void, string>;
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+declare const g2: Generator<number, void, undefined>;
+>g2 : Symbol(g2, Decl(generatorAssignability.ts, 2, 13))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+declare const g3: Generator<number, void, boolean>;
+>g3 : Symbol(g3, Decl(generatorAssignability.ts, 3, 13))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+declare const g4: AsyncGenerator<number, void, string>;
+>g4 : Symbol(g4, Decl(generatorAssignability.ts, 4, 13))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+declare const g5: AsyncGenerator<number, void, undefined>;
+>g5 : Symbol(g5, Decl(generatorAssignability.ts, 5, 13))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+declare const g6: AsyncGenerator<number, void, boolean>;
+>g6 : Symbol(g6, Decl(generatorAssignability.ts, 6, 13))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+// spread iterable
+[...g1]; // error
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+
+[...g2]; // ok
+>g2 : Symbol(g2, Decl(generatorAssignability.ts, 2, 13))
+
+// binding pattern over iterable
+let [x1] = g1; // error
+>x1 : Symbol(x1, Decl(generatorAssignability.ts, 13, 5))
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+
+let [x2] = g2; // ok
+>x2 : Symbol(x2, Decl(generatorAssignability.ts, 14, 5))
+>g2 : Symbol(g2, Decl(generatorAssignability.ts, 2, 13))
+
+// binding rest pattern over iterable
+let [...y1] = g1; // error
+>y1 : Symbol(y1, Decl(generatorAssignability.ts, 17, 5))
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+
+let [...y2] = g2; // ok
+>y2 : Symbol(y2, Decl(generatorAssignability.ts, 18, 5))
+>g2 : Symbol(g2, Decl(generatorAssignability.ts, 2, 13))
+
+// assignment pattern over iterable
+[_] = g1; // error
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+
+[_] = g2; // ok
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g2 : Symbol(g2, Decl(generatorAssignability.ts, 2, 13))
+
+// assignment rest pattern over iterable
+[..._] = g1; // error
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+
+[..._] = g2; // ok
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g2 : Symbol(g2, Decl(generatorAssignability.ts, 2, 13))
+
+// for-of over iterable
+for (_ of g1); // error
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+
+for (_ of g2); // ok
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g2 : Symbol(g2, Decl(generatorAssignability.ts, 2, 13))
+
+async function asyncfn() {
+>asyncfn : Symbol(asyncfn, Decl(generatorAssignability.ts, 30, 14))
+
+    // for-await-of over iterable
+    for await (_ of g1); // error
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+
+    for await (_ of g2); // ok
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g2 : Symbol(g2, Decl(generatorAssignability.ts, 2, 13))
+
+    // for-await-of over asynciterable
+    for await (_ of g4); // error
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g4 : Symbol(g4, Decl(generatorAssignability.ts, 4, 13))
+
+    for await (_ of g5); // ok
+>_ : Symbol(_, Decl(generatorAssignability.ts, 0, 11))
+>g5 : Symbol(g5, Decl(generatorAssignability.ts, 5, 13))
+}
+
+function* f1(): Generator<number, void, boolean> {
+>f1 : Symbol(f1, Decl(generatorAssignability.ts, 40, 1))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+    // yield* over iterable
+    yield* g1; // error
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+
+    yield* g3; // ok
+>g3 : Symbol(g3, Decl(generatorAssignability.ts, 3, 13))
+}
+
+async function* f2(): AsyncGenerator<number, void, boolean> {
+>f2 : Symbol(f2, Decl(generatorAssignability.ts, 46, 1))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+    // yield* over iterable
+    yield* g1; // error
+>g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
+
+    yield* g3; // ok
+>g3 : Symbol(g3, Decl(generatorAssignability.ts, 3, 13))
+
+    // yield* over asynciterable
+    yield* g4; // error
+>g4 : Symbol(g4, Decl(generatorAssignability.ts, 4, 13))
+
+    yield* g6; // ok
+>g6 : Symbol(g6, Decl(generatorAssignability.ts, 6, 13))
+}
+
+async function f3() {
+>f3 : Symbol(f3, Decl(generatorAssignability.ts, 56, 1))
+
+    const syncGenerator = function*() {
+>syncGenerator : Symbol(syncGenerator, Decl(generatorAssignability.ts, 59, 9))
+
+        yield 1;
+        yield 2;
+    };
+
+    const o = {[Symbol.asyncIterator]: syncGenerator};
+>o : Symbol(o, Decl(generatorAssignability.ts, 64, 9))
+>[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(generatorAssignability.ts, 64, 15))
+>Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>syncGenerator : Symbol(syncGenerator, Decl(generatorAssignability.ts, 59, 9))
+
+    for await (const x of o) {
+>x : Symbol(x, Decl(generatorAssignability.ts, 66, 20))
+>o : Symbol(o, Decl(generatorAssignability.ts, 64, 9))
+    }
+}
+

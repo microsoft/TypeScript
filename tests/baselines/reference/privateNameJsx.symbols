@@ -1,0 +1,16 @@
+=== tests/cases/compiler/privateNameJsx.tsx ===
+class Test {
+>Test : Symbol(Test, Decl(privateNameJsx.tsx, 0, 0))
+
+    #prop = () => <div />;
+>#prop : Symbol(Test.#prop, Decl(privateNameJsx.tsx, 0, 12))
+
+    render() {
+>render : Symbol(Test.render, Decl(privateNameJsx.tsx, 1, 26))
+
+        return <this.#prop />;
+>this : Symbol(Test, Decl(privateNameJsx.tsx, 0, 0))
+    }
+}
+
+

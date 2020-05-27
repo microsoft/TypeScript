@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts'/>
 
 //// class Foo {
-////     constructor(protected [ [|protectedParam|] ]) {
+////     constructor([|protected [ [|{| "contextRangeIndex": 0 |}protectedParam|] ]|]) {
 ////         let myProtectedParam = [|protectedParam|];
 ////     }
 //// }
 
-verify.rangesAreRenameLocations();
+verify.rangesWithSameTextAreRenameLocations("protectedParam");

@@ -20,6 +20,7 @@ function check(x: Foo.ConstFooEnum): void {
 //// [foo.js]
 "use strict";
 exports.__esModule = true;
+exports.fooFunc = void 0;
 ;
 function fooFunc() { }
 exports.fooFunc = fooFunc;

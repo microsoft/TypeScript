@@ -1,0 +1,26 @@
+tests/cases/compiler/tsconfig.json(6,11): error TS5061: Pattern '@interface/**/*' can have at most one '*' character.
+tests/cases/compiler/tsconfig.json(7,11): error TS5061: Pattern '@service/**/*' can have at most one '*' character.
+tests/cases/compiler/tsconfig.json(7,29): error TS5062: Substitution './src/service/**/*' in pattern '@service/**/*' can have at most one '*' character.
+
+
+==== tests/cases/compiler/tsconfig.json (3 errors) ====
+    {
+        "compilerOptions": {
+            "traceResolution": true,
+            "baseUrl": "./src",
+            "paths": {
+              "@interface/**/*" : ["./src/interface/*"],
+              ~~~~~~~~~~~~~~~~~
+!!! error TS5061: Pattern '@interface/**/*' can have at most one '*' character.
+              "@service/**/*": ["./src/service/**/*"],
+              ~~~~~~~~~~~~~~~
+!!! error TS5061: Pattern '@service/**/*' can have at most one '*' character.
+                                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS5062: Substitution './src/service/**/*' in pattern '@service/**/*' can have at most one '*' character.
+              "@controller/*": ["controller/*"],
+            }
+        }
+    }
+    
+==== tests/cases/compiler/src/main.ts (0 errors) ====
+    import 'someModule';

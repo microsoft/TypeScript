@@ -12,7 +12,7 @@ module.exports = class C {}
 >C : Symbol(C, Decl(bug24024.js, 2, 16))
 
 module.exports.D = class D { }
->module.exports.D : Symbol(D)
+>module.exports.D : Symbol(D, Decl(bug24024.js, 2, 27))
 >module.exports : Symbol(D, Decl(bug24024.js, 2, 27))
 >module : Symbol(module, Decl(bug24024.js, 1, 31))
 >exports : Symbol("tests/cases/conformance/salsa/bug24024", Decl(bug24024.js, 0, 0))

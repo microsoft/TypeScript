@@ -462,8 +462,8 @@ let x22 = call(f15, "hello", 42);  // string | number
 >42 : 42
 
 let x23 = call(f16, "hello", 42);  // unknown
->x23 : unknown
->call(f16, "hello", 42) : unknown
+>x23 : string | number
+>call(f16, "hello", 42) : string | number
 >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
 >f16 : <A, B>(a: A, b: B) => A | B
 >"hello" : "hello"
@@ -665,7 +665,7 @@ const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: nu
 >1 : 1
 
 type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
->T01 : [number, string, boolean]
+>T01 : [x: number, y: string, z: boolean]
 >x : number
 >y : string
 >z : boolean
@@ -675,7 +675,7 @@ type T02 = Parameters<(...args: [number, string, boolean]) => void>;
 >args : [number, string, boolean]
 
 type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
->T03 : [number, string, boolean]
+>T03 : [x: number, y: string, z: boolean]
 >x : number
 >y : string
 >z : boolean

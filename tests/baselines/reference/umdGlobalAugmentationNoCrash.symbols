@@ -3,7 +3,7 @@ declare global {
 >global : Symbol(global, Decl(global.d.ts, 0, 0))
 
     const React: typeof import("./module");
->React : Symbol("tests/cases/compiler/module", Decl(module.d.ts, 0, 0), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(module.d.ts, 0, 0), Decl(global.d.ts, 1, 9))
 }
 export {};
 
@@ -18,7 +18,7 @@ export function foo(): string;
 export {}
 React.foo;
 >React.foo : Symbol(foo, Decl(module.d.ts, 0, 26))
->React : Symbol("tests/cases/compiler/module", Decl(module.d.ts, 0, 0), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(module.d.ts, 0, 0), Decl(global.d.ts, 1, 9))
 >foo : Symbol(foo, Decl(module.d.ts, 0, 26))
 
 === tests/cases/compiler/emits.ts ===
@@ -29,6 +29,6 @@ console.log("hello");
 
 React.foo;
 >React.foo : Symbol(foo, Decl(module.d.ts, 0, 26))
->React : Symbol("tests/cases/compiler/module", Decl(module.d.ts, 0, 0), Decl(global.d.ts, 1, 9))
+>React : Symbol(React, Decl(module.d.ts, 0, 0), Decl(global.d.ts, 1, 9))
 >foo : Symbol(foo, Decl(module.d.ts, 0, 26))
 

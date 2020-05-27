@@ -20,8 +20,8 @@ class C {
 >y : Y
 
         public x = fn(y, (y, x) => y.x = x) // expected to work, but actually doesn't
->x : {}
->fn(y, (y, x) => y.x = x) : {}
+>x : unknown
+>fn(y, (y, x) => y.x = x) : unknown
 >fn : <a>(y: Y, set: (y: Y, x: number) => void) => a
 >y : Y
 >(y, x) => y.x = x : (y: Y, x: number) => number

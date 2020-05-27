@@ -1,0 +1,117 @@
+=== tests/cases/compiler/numericEnumMappedType.ts ===
+// Repro from #31771
+
+enum E1 { ONE, TWO, THREE }
+>E1 : E1
+>ONE : E1.ONE
+>TWO : E1.TWO
+>THREE : E1.THREE
+
+declare enum E2 { ONE, TWO, THREE }
+>E2 : E2
+>ONE : E2
+>TWO : E2
+>THREE : E2
+
+type Bins1 = { [k in E1]?: string; }
+>Bins1 : Bins1
+
+type Bins2 = { [k in E2]?: string; }
+>Bins2 : Bins2
+
+const b1: Bins1 = {};
+>b1 : Bins1
+>{} : {}
+
+const b2: Bins2 = {};
+>b2 : Bins2
+>{} : {}
+
+const e1: E1 = E1.ONE;
+>e1 : E1
+>E1.ONE : E1.ONE
+>E1 : typeof E1
+>ONE : E1.ONE
+
+const e2: E2 = E2.ONE;
+>e2 : E2
+>E2.ONE : E2
+>E2 : typeof E2
+>ONE : E2
+
+b1[1] = "a";
+>b1[1] = "a" : "a"
+>b1[1] : string | undefined
+>b1 : Bins1
+>1 : 1
+>"a" : "a"
+
+b1[e1] = "b";
+>b1[e1] = "b" : "b"
+>b1[e1] : string | undefined
+>b1 : Bins1
+>e1 : E1.ONE
+>"b" : "b"
+
+b2[1] = "a";
+>b2[1] = "a" : "a"
+>b2[1] : string | undefined
+>b2 : Bins2
+>1 : 1
+>"a" : "a"
+
+b2[e2] = "b";
+>b2[e2] = "b" : "b"
+>b2[e2] : string | undefined
+>b2 : Bins2
+>e2 : E2
+>"b" : "b"
+
+// Multiple numeric enum types accrue to the same numeric index signature in a mapped type
+
+declare function val(): number;
+>val : () => number
+
+enum N1 { A = val(), B = val() }
+>N1 : N1
+>A : N1
+>val() : number
+>val : () => number
+>B : N1
+>val() : number
+>val : () => number
+
+enum N2 { C = val(), D = val() }
+>N2 : N2
+>C : N2
+>val() : number
+>val : () => number
+>D : N2
+>val() : number
+>val : () => number
+
+type T1 = { [K in N1 | N2]: K };
+>T1 : T1
+
+// Enum types with string valued members are always literal enum types and therefore
+// ONE and TWO below are not computed members but rather just numerically valued members
+// with auto-incremented values.
+
+declare enum E { ONE, TWO, THREE = 'x' }
+>E : E
+>ONE : E.ONE
+>TWO : E.TWO
+>THREE : E.THREE
+>'x' : "x"
+
+const e: E = E.ONE;
+>e : E
+>E.ONE : E.ONE
+>E : typeof E
+>ONE : E.ONE
+
+const x: E.ONE = e;
+>x : E.ONE
+>E : any
+>e : E.ONE
+

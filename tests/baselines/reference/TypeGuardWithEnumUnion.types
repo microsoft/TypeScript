@@ -6,7 +6,7 @@ enum Color { R, G, B }
 >B : Color.B
 
 function f1(x: Color | string) {
->f1 : (x: string | Color) => void
+>f1 : (x: Color | string) => void
 >x : string | Color
 
     if (typeof x === "number") {
@@ -33,7 +33,7 @@ function f1(x: Color | string) {
 }
 
 function f2(x: Color | string | string[]) {
->f2 : (x: string | Color | string[]) => void
+>f2 : (x: Color | string | string[]) => void
 >x : string | Color | string[]
 
     if (typeof x === "object") {

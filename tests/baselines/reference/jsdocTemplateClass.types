@@ -14,9 +14,9 @@ class Foo {
 
         this.a = x
 >this.a = x : T
->this.a : T
+>this.a : any
 >this : this
->a : T
+>a : any
 >x : T
     }
     /**
@@ -27,7 +27,7 @@ class Foo {
      * @return {T}
      */
     foo(x, y, alpha) {
->foo : (x: T, y: (t: T) => T, alpha: (t: T) => T) => T
+>foo : (x: T, y: Id<T>, alpha: (t: T) => T) => T
 >x : T
 >y : (t: T) => T
 >alpha : (t: T) => T

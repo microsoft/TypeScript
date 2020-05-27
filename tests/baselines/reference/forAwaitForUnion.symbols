@@ -5,7 +5,7 @@ async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 >source : Symbol(source, Decl(forAwaitForUnion.ts, 0, 20))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(forAwaitForUnion.ts, 0, 17))
->AsyncIterable : Symbol(AsyncIterable, Decl(lib.esnext.asynciterable.d.ts, --, --))
+>AsyncIterable : Symbol(AsyncIterable, Decl(lib.es2018.asynciterable.d.ts, --, --))
 >T : Symbol(T, Decl(forAwaitForUnion.ts, 0, 17))
 
     for await (const x of source) {
@@ -13,3 +13,4 @@ async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 >source : Symbol(source, Decl(forAwaitForUnion.ts, 0, 20))
     }
 }
+

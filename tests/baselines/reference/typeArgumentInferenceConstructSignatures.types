@@ -259,15 +259,15 @@ var someGenerics6: someGenerics6;
 new someGenerics6(n => n, n => n, n => n);
 >new someGenerics6(n => n, n => n, n => n) : any
 >someGenerics6 : someGenerics6
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 new someGenerics6<number>(n => n, n => n, n => n);
 >new someGenerics6<number>(n => n, n => n, n => n) : any
@@ -324,15 +324,15 @@ var someGenerics7: someGenerics7;
 new someGenerics7(n => n, n => n, n => n);
 >new someGenerics7(n => n, n => n, n => n) : any
 >someGenerics7 : someGenerics7
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 new someGenerics7<number, string, number>(n => n, n => n, n => n);
 >new someGenerics7<number, string, number>(n => n, n => n, n => n) : any
@@ -392,15 +392,15 @@ var someGenerics9: someGenerics9;
 >someGenerics9 : someGenerics9
 
 var a9a = new someGenerics9('', 0, []);
->a9a : any
->new someGenerics9('', 0, []) : any
+>a9a : string
+>new someGenerics9('', 0, []) : ""
 >someGenerics9 : someGenerics9
 >'' : ""
 >0 : 0
 >[] : undefined[]
 
 var a9a: {};
->a9a : any
+>a9a : string
 
 var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >a9b : { a?: number; b?: string; }
@@ -437,15 +437,15 @@ interface A92 {
 >z : Window
 }
 var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
->new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 : someGenerics9
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: Window; }
+>{ x: 6, z: window } : { x: number; z: Window & typeof globalThis; }
 >x : number
 >6 : 6
->z : Window
->window : Window
+>z : Window & typeof globalThis
+>window : Window & typeof globalThis
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6
@@ -453,18 +453,18 @@ var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >'' : ""
 
 var a9e: {};
->a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9f : any
->new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : any
+>a9f : A92
+>new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : A92
 >someGenerics9 : someGenerics9
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: Window; }
+>{ x: 6, z: window } : { x: number; z: Window & typeof globalThis; }
 >x : number
 >6 : 6
->z : Window
->window : Window
+>z : Window & typeof globalThis
+>window : Window & typeof globalThis
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6
@@ -472,7 +472,7 @@ var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }
 >'' : ""
 
 var a9f: A92;
->a9f : any
+>a9f : A92
 
 // Generic call with multiple parameters of generic type passed arguments with a single best common type
 var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });

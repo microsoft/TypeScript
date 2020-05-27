@@ -23,6 +23,7 @@ import {MyClass} from './file1';
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.MyClass = void 0;
     var MyClass = /** @class */ (function () {
         function MyClass() {
         }

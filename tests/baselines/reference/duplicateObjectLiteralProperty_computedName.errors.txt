@@ -1,0 +1,56 @@
+tests/cases/compiler/duplicateObjectLiteralProperty_computedName.ts(3,5): error TS2300: Duplicate identifier '[1]'.
+tests/cases/compiler/duplicateObjectLiteralProperty_computedName.ts(8,5): error TS2300: Duplicate identifier '[+1]'.
+tests/cases/compiler/duplicateObjectLiteralProperty_computedName.ts(13,5): error TS2300: Duplicate identifier '[+1]'.
+tests/cases/compiler/duplicateObjectLiteralProperty_computedName.ts(23,5): error TS2300: Duplicate identifier '["+1"]'.
+tests/cases/compiler/duplicateObjectLiteralProperty_computedName.ts(28,5): error TS2300: Duplicate identifier '[-1]'.
+tests/cases/compiler/duplicateObjectLiteralProperty_computedName.ts(33,5): error TS2300: Duplicate identifier '["-1"]'.
+
+
+==== tests/cases/compiler/duplicateObjectLiteralProperty_computedName.ts (6 errors) ====
+    const t1 = {
+        1: 1,
+        [1]: 0 // duplicate
+        ~~~
+!!! error TS2300: Duplicate identifier '[1]'.
+    }
+    
+    const t2 = {
+        1: 1,
+        [+1]: 0 // duplicate
+        ~~~~
+!!! error TS2300: Duplicate identifier '[+1]'.
+    }
+    
+    const t3 = {
+        "1": 1,
+        [+1]: 0 // duplicate
+        ~~~~
+!!! error TS2300: Duplicate identifier '[+1]'.
+    }
+    
+    const t4 = {
+        "+1": 1,
+        [+1]: 0 // two different keys, "+1", "1"
+    }
+    
+    const t5 = {
+        "+1": 1,
+        ["+1"]: 0 // duplicate
+        ~~~~~~
+!!! error TS2300: Duplicate identifier '["+1"]'.
+    }
+    
+    const t6 = {
+        "-1": 1,
+        [-1]: 0 // duplicate
+        ~~~~
+!!! error TS2300: Duplicate identifier '[-1]'.
+    }
+    
+    const t7 = {
+        "-1": 1,
+        ["-1"]: 0 // duplicate
+        ~~~~~~
+!!! error TS2300: Duplicate identifier '["-1"]'.
+    }
+    

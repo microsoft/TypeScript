@@ -12,9 +12,9 @@ class Derived {
 
         this.x = 10;
 >this.x = 10 : 10
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >10 : 10
 
         var that = this;

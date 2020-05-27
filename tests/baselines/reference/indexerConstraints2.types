@@ -118,3 +118,12 @@ interface S {
     [u: "foo" | "bar"]: A;
 >u : IndexableUnion
 }
+
+type Key = string;
+>Key : string
+
+interface T {
+    [key: Key]
+>key : string
+}
+

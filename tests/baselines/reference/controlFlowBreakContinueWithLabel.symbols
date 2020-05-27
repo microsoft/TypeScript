@@ -1,0 +1,40 @@
+=== tests/cases/compiler/controlFlowBreakContinueWithLabel.ts ===
+enum User { A, B }
+>User : Symbol(User, Decl(controlFlowBreakContinueWithLabel.ts, 0, 0))
+>A : Symbol(User.A, Decl(controlFlowBreakContinueWithLabel.ts, 0, 11))
+>B : Symbol(User.B, Decl(controlFlowBreakContinueWithLabel.ts, 0, 14))
+
+let user: User = User.A
+>user : Symbol(user, Decl(controlFlowBreakContinueWithLabel.ts, 2, 3))
+>User : Symbol(User, Decl(controlFlowBreakContinueWithLabel.ts, 0, 0))
+>User.A : Symbol(User.A, Decl(controlFlowBreakContinueWithLabel.ts, 0, 11))
+>User : Symbol(User, Decl(controlFlowBreakContinueWithLabel.ts, 0, 0))
+>A : Symbol(User.A, Decl(controlFlowBreakContinueWithLabel.ts, 0, 11))
+
+label: while (true) {
+    switch (user) {
+>user : Symbol(user, Decl(controlFlowBreakContinueWithLabel.ts, 2, 3))
+
+        case User.A:
+>User.A : Symbol(User.A, Decl(controlFlowBreakContinueWithLabel.ts, 0, 11))
+>User : Symbol(User, Decl(controlFlowBreakContinueWithLabel.ts, 0, 0))
+>A : Symbol(User.A, Decl(controlFlowBreakContinueWithLabel.ts, 0, 11))
+
+            user = User.B;
+>user : Symbol(user, Decl(controlFlowBreakContinueWithLabel.ts, 2, 3))
+>User.B : Symbol(User.B, Decl(controlFlowBreakContinueWithLabel.ts, 0, 14))
+>User : Symbol(User, Decl(controlFlowBreakContinueWithLabel.ts, 0, 0))
+>B : Symbol(User.B, Decl(controlFlowBreakContinueWithLabel.ts, 0, 14))
+
+            continue label;
+        case User.B:
+>User.B : Symbol(User.B, Decl(controlFlowBreakContinueWithLabel.ts, 0, 14))
+>User : Symbol(User, Decl(controlFlowBreakContinueWithLabel.ts, 0, 0))
+>B : Symbol(User.B, Decl(controlFlowBreakContinueWithLabel.ts, 0, 14))
+
+            break label;
+    }
+}
+user;
+>user : Symbol(user, Decl(controlFlowBreakContinueWithLabel.ts, 2, 3))
+

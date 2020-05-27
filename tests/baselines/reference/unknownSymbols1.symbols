@@ -54,6 +54,7 @@ class C4 extends C3 {
 
 var x2 = this.asdf; // no error, this is any
 >x2 : Symbol(x2, Decl(unknownSymbols1.ts, 25, 3))
+>this : Symbol(globalThis)
 
 class C5 {
 >C5 : Symbol(C5, Decl(unknownSymbols1.ts, 25, 19))

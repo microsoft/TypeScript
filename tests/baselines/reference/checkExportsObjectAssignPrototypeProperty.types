@@ -105,9 +105,9 @@ function Person(name) {
 
     this.name = name;
 >this.name = name : string
->this.name : string
->this : Person
->name : string
+>this.name : any
+>this : this
+>name : any
 >name : string
 }
 Person.prototype.describe = function () {
@@ -123,7 +123,7 @@ Person.prototype.describe = function () {
 >"Person called " + this.name : string
 >"Person called " : "Person called "
 >this.name : string
->this : Person
+>this : this
 >name : string
 
 };
@@ -204,7 +204,7 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
         this.rwAccessors = Number(str)
 >this.rwAccessors = Number(str) : number
 >this.rwAccessors : number
->this : Person
+>this : this
 >rwAccessors : number
 >Number(str) : number
 >Number : NumberConstructor
@@ -214,7 +214,7 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
 module.exports = Person;
 >module.exports = Person : typeof Person
 >module.exports : typeof Person
->module : { "tests/cases/conformance/jsdoc/mod1": typeof Person; }
+>module : { "\"tests/cases/conformance/jsdoc/mod1\"": typeof Person; }
 >exports : typeof Person
 >Person : typeof Person
 

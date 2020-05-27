@@ -1,0 +1,127 @@
+=== tests/cases/compiler/identicalTypesNoDifferByCheckOrder.ts ===
+interface SomeProps {
+>SomeProps : Symbol(SomeProps, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 0))
+
+    x?: string;
+>x : Symbol(SomeProps.x, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 21))
+
+    y?: number;
+>y : Symbol(SomeProps.y, Decl(identicalTypesNoDifferByCheckOrder.ts, 1, 15))
+
+    renderAs?: FunctionComponent1<SomeProps>
+>renderAs : Symbol(SomeProps.renderAs, Decl(identicalTypesNoDifferByCheckOrder.ts, 2, 15))
+>FunctionComponent1 : Symbol(FunctionComponent1, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 120))
+>SomeProps : Symbol(SomeProps, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 0))
+}
+
+type SomePropsX = Required<Pick<SomeProps, "x">> & Omit<SomeProps, "x">;
+>SomePropsX : Symbol(SomePropsX, Decl(identicalTypesNoDifferByCheckOrder.ts, 4, 1))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>SomeProps : Symbol(SomeProps, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 0))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>SomeProps : Symbol(SomeProps, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 0))
+
+interface SomePropsClone {
+>SomePropsClone : Symbol(SomePropsClone, Decl(identicalTypesNoDifferByCheckOrder.ts, 6, 72))
+
+    x?: string;
+>x : Symbol(SomePropsClone.x, Decl(identicalTypesNoDifferByCheckOrder.ts, 8, 26))
+
+    y?: number;
+>y : Symbol(SomePropsClone.y, Decl(identicalTypesNoDifferByCheckOrder.ts, 9, 15))
+
+    renderAs?: FunctionComponent2<SomeProps>
+>renderAs : Symbol(SomePropsClone.renderAs, Decl(identicalTypesNoDifferByCheckOrder.ts, 10, 15))
+>FunctionComponent2 : Symbol(FunctionComponent2, Decl(identicalTypesNoDifferByCheckOrder.ts, 22, 1))
+>SomeProps : Symbol(SomeProps, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 0))
+}
+
+type SomePropsCloneX = Required<Pick<SomePropsClone, "x">> & Omit<SomePropsClone, "x">;
+>SomePropsCloneX : Symbol(SomePropsCloneX, Decl(identicalTypesNoDifferByCheckOrder.ts, 12, 1))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>SomePropsClone : Symbol(SomePropsClone, Decl(identicalTypesNoDifferByCheckOrder.ts, 6, 72))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>SomePropsClone : Symbol(SomePropsClone, Decl(identicalTypesNoDifferByCheckOrder.ts, 6, 72))
+
+type Validator<T> = {(): boolean, opt?: T};
+>Validator : Symbol(Validator, Decl(identicalTypesNoDifferByCheckOrder.ts, 14, 87))
+>T : Symbol(T, Decl(identicalTypesNoDifferByCheckOrder.ts, 16, 15))
+>opt : Symbol(opt, Decl(identicalTypesNoDifferByCheckOrder.ts, 16, 33))
+>T : Symbol(T, Decl(identicalTypesNoDifferByCheckOrder.ts, 16, 15))
+
+type WeakValidationMap<T> = {[K in keyof T]?: null extends T[K] ? Validator<T[K] | null | undefined> : Validator<T[K]>};
+>WeakValidationMap : Symbol(WeakValidationMap, Decl(identicalTypesNoDifferByCheckOrder.ts, 16, 43))
+>T : Symbol(T, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 23))
+>K : Symbol(K, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 30))
+>T : Symbol(T, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 23))
+>T : Symbol(T, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 23))
+>K : Symbol(K, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 30))
+>Validator : Symbol(Validator, Decl(identicalTypesNoDifferByCheckOrder.ts, 14, 87))
+>T : Symbol(T, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 23))
+>K : Symbol(K, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 30))
+>Validator : Symbol(Validator, Decl(identicalTypesNoDifferByCheckOrder.ts, 14, 87))
+>T : Symbol(T, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 23))
+>K : Symbol(K, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 30))
+
+interface FunctionComponent1<P> {
+>FunctionComponent1 : Symbol(FunctionComponent1, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 120))
+>P : Symbol(P, Decl(identicalTypesNoDifferByCheckOrder.ts, 19, 29))
+
+    (props: P & { children?: unknown }): void;
+>props : Symbol(props, Decl(identicalTypesNoDifferByCheckOrder.ts, 20, 5))
+>P : Symbol(P, Decl(identicalTypesNoDifferByCheckOrder.ts, 19, 29))
+>children : Symbol(children, Decl(identicalTypesNoDifferByCheckOrder.ts, 20, 17))
+
+    propTypes?: WeakValidationMap<P>;
+>propTypes : Symbol(FunctionComponent1.propTypes, Decl(identicalTypesNoDifferByCheckOrder.ts, 20, 46))
+>WeakValidationMap : Symbol(WeakValidationMap, Decl(identicalTypesNoDifferByCheckOrder.ts, 16, 43))
+>P : Symbol(P, Decl(identicalTypesNoDifferByCheckOrder.ts, 19, 29))
+}
+
+interface FunctionComponent2<P> {
+>FunctionComponent2 : Symbol(FunctionComponent2, Decl(identicalTypesNoDifferByCheckOrder.ts, 22, 1))
+>P : Symbol(P, Decl(identicalTypesNoDifferByCheckOrder.ts, 24, 29))
+
+    (props: P & { children?: unknown }): void;
+>props : Symbol(props, Decl(identicalTypesNoDifferByCheckOrder.ts, 25, 5))
+>P : Symbol(P, Decl(identicalTypesNoDifferByCheckOrder.ts, 24, 29))
+>children : Symbol(children, Decl(identicalTypesNoDifferByCheckOrder.ts, 25, 17))
+
+    propTypes?: WeakValidationMap<P>;
+>propTypes : Symbol(FunctionComponent2.propTypes, Decl(identicalTypesNoDifferByCheckOrder.ts, 25, 46))
+>WeakValidationMap : Symbol(WeakValidationMap, Decl(identicalTypesNoDifferByCheckOrder.ts, 16, 43))
+>P : Symbol(P, Decl(identicalTypesNoDifferByCheckOrder.ts, 24, 29))
+}
+
+function needsComponentOfSomeProps3(...x: SomePropsClone[]): void {}
+>needsComponentOfSomeProps3 : Symbol(needsComponentOfSomeProps3, Decl(identicalTypesNoDifferByCheckOrder.ts, 27, 1))
+>x : Symbol(x, Decl(identicalTypesNoDifferByCheckOrder.ts, 29, 36))
+>SomePropsClone : Symbol(SomePropsClone, Decl(identicalTypesNoDifferByCheckOrder.ts, 6, 72))
+
+const comp3: FunctionComponent2<SomePropsCloneX> = null as any;
+>comp3 : Symbol(comp3, Decl(identicalTypesNoDifferByCheckOrder.ts, 30, 5))
+>FunctionComponent2 : Symbol(FunctionComponent2, Decl(identicalTypesNoDifferByCheckOrder.ts, 22, 1))
+>SomePropsCloneX : Symbol(SomePropsCloneX, Decl(identicalTypesNoDifferByCheckOrder.ts, 12, 1))
+
+needsComponentOfSomeProps3({ renderAs: comp3 });
+>needsComponentOfSomeProps3 : Symbol(needsComponentOfSomeProps3, Decl(identicalTypesNoDifferByCheckOrder.ts, 27, 1))
+>renderAs : Symbol(renderAs, Decl(identicalTypesNoDifferByCheckOrder.ts, 31, 28))
+>comp3 : Symbol(comp3, Decl(identicalTypesNoDifferByCheckOrder.ts, 30, 5))
+
+function needsComponentOfSomeProps2(...x: SomeProps[]): void {}
+>needsComponentOfSomeProps2 : Symbol(needsComponentOfSomeProps2, Decl(identicalTypesNoDifferByCheckOrder.ts, 31, 48))
+>x : Symbol(x, Decl(identicalTypesNoDifferByCheckOrder.ts, 33, 36))
+>SomeProps : Symbol(SomeProps, Decl(identicalTypesNoDifferByCheckOrder.ts, 0, 0))
+
+const comp2: FunctionComponent1<SomePropsX> = null as any;
+>comp2 : Symbol(comp2, Decl(identicalTypesNoDifferByCheckOrder.ts, 34, 5))
+>FunctionComponent1 : Symbol(FunctionComponent1, Decl(identicalTypesNoDifferByCheckOrder.ts, 17, 120))
+>SomePropsX : Symbol(SomePropsX, Decl(identicalTypesNoDifferByCheckOrder.ts, 4, 1))
+
+needsComponentOfSomeProps2({ renderAs: comp2 });
+>needsComponentOfSomeProps2 : Symbol(needsComponentOfSomeProps2, Decl(identicalTypesNoDifferByCheckOrder.ts, 31, 48))
+>renderAs : Symbol(renderAs, Decl(identicalTypesNoDifferByCheckOrder.ts, 35, 28))
+>comp2 : Symbol(comp2, Decl(identicalTypesNoDifferByCheckOrder.ts, 34, 5))
+

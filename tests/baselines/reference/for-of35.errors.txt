@@ -12,7 +12,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of35.ts(14,10): error TS7022: '
                 value: v
             }
         }
-        
+    
         [Symbol.iterator]() {
             return this;
         }

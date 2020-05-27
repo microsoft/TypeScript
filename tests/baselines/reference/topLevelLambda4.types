@@ -3,6 +3,6 @@ export var x = () => this.window;
 >x : () => any
 >() => this.window : () => any
 >this.window : any
->this : any
+>this : undefined
 >window : any
 

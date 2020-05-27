@@ -16,7 +16,9 @@
 verify.completions(
     {
         marker: ["1", "2"],
-        includes: ["async", "await"],
+        includes: ["async", "await"].map(
+            name => ({ name, sortText: completion.SortText.GlobalsOrKeywords })
+        ),
         excludes: ["public", "private", "protected", "constructor", "readonly", "static", "abstract", "get", "set"],
     },
     { marker: ["3", "4"], exact: completion.classElementKeywords, isNewIdentifierLocation: true },

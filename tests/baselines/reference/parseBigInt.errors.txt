@@ -1,5 +1,5 @@
-tests/cases/compiler/parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type '123n'.
-tests/cases/compiler/parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type '291n'.
+tests/cases/compiler/parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.
+tests/cases/compiler/parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type 'bigint'.
 tests/cases/compiler/parseBigInt.ts(56,25): error TS1005: ',' expected.
 tests/cases/compiler/parseBigInt.ts(57,22): error TS1352: A bigint literal cannot use exponential notation.
 tests/cases/compiler/parseBigInt.ts(58,19): error TS1353: A bigint literal must be an integer.
@@ -70,10 +70,10 @@ tests/cases/compiler/parseBigInt.ts(70,72): error TS2345: Argument of type '3' i
     // Plus not allowed on literals
     const unaryPlus = +123n;
                        ~~~~
-!!! error TS2736: Operator '+' cannot be applied to type '123n'.
+!!! error TS2736: Operator '+' cannot be applied to type 'bigint'.
     const unaryPlusHex = +0x123n;
                           ~~~~~~
-!!! error TS2736: Operator '+' cannot be applied to type '291n'.
+!!! error TS2736: Operator '+' cannot be applied to type 'bigint'.
     
     // Parsing errors
     // In separate blocks because they each declare an "n" variable

@@ -23,7 +23,7 @@ const tist = TestEnum.ADD
 === tests/cases/conformance/jsdoc/mod1.js ===
 /** @enum {string} */
 export const TestEnum = {
->TestEnum : Symbol(TestEnum, Decl(mod1.js, 1, 12))
+>TestEnum : Symbol(TestEnum, Decl(mod1.js, 1, 12), Decl(mod1.js, 0, 4))
 
     ADD: 'add',
 >ADD : Symbol(ADD, Decl(mod1.js, 1, 25))

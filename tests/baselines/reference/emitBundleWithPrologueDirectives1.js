@@ -23,6 +23,7 @@ var __extends = (this && this.__extends) || (function () {
 define("test", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Doo = void 0;
     // Class Doo Comment
     var Doo = /** @class */ (function () {
         function Doo() {

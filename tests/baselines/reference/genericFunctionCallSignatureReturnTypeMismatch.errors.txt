@@ -1,5 +1,6 @@
 tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts(6,1): error TS2322: Type '<S>() => S[]' is not assignable to type '<T>(x: T) => T'.
-  Type '{}[]' is not assignable to type 'T'.
+  Type 'unknown[]' is not assignable to type 'T'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown[]'.
 
 
 ==== tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts (1 errors) ====
@@ -11,7 +12,8 @@ tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts(6,1): err
     f = g;
     ~
 !!! error TS2322: Type '<S>() => S[]' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2322:   Type '{}[]' is not assignable to type 'T'.
+!!! error TS2322:   Type 'unknown[]' is not assignable to type 'T'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown[]'.
     
     var s = f("str").toUpperCase();
     

@@ -13,7 +13,7 @@ export = React;
 >React : typeof React
 
 export as namespace React;
->React : typeof React
+>React : typeof import("tests/cases/compiler/module")
 
 declare namespace React {
 >React : typeof React
@@ -32,9 +32,9 @@ React.createRef;
 === tests/cases/compiler/emits.ts ===
 console.log("hello");
 >console.log("hello") : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >"hello" : "hello"
 
 React.createRef;

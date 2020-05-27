@@ -11,62 +11,87 @@ namespace ts {
 
         describe("printFile", () => {
             const printsCorrectly = makePrintsCorrectly("printsFileCorrectly");
-            // Avoid eagerly creating the sourceFile so that `createSourceFile` doesn't run unless one of these tests is run.
-            let sourceFile: SourceFile;
-            before(() => {
-                sourceFile = createSourceFile("source.ts", `
-                    interface A<T> {
-                        // comment1
-                        readonly prop?: T;
+            describe("comment handling", () => {
+                // Avoid eagerly creating the sourceFile so that `createSourceFile` doesn't run unless one of these tests is run.
+                let sourceFile: SourceFile;
+                before(() => {
+                    sourceFile = createSourceFile("source.ts", `
+                        interface A<T> {
+                            // comment1
+                            readonly prop?: T;
 
-                        // comment2
-                        method(): void;
+                            // comment2
+                            method(): void;
 
-                        // comment3
-                        new <T>(): A<T>;
+                            // comment3
+                            new <T>(): A<T>;
 
-                        // comment4
-                        <T>(): A<T>;
-                    }
+                            // comment4
+                            <T>(): A<T>;
+                        }
 
-                    // comment5
-                    type B = number | string | object;
-                    type C = A<number> & { x: string; }; // comment6
+                        // comment5
+                        type B = number | string | object;
+                        type C = A<number> & { x: string; }; // comment6
 
-                    // comment7
-                    enum E1 {
-                        // comment8
-                        first
-                    }
+                        // comment7
+                        enum E1 {
+                            // comment8
+                            first
+                        }
 
-                    const enum E2 {
-                        second
-                    }
+                        const enum E2 {
+                            second
+                        }
 
-                    // comment9
-                    console.log(1 + 2);
+                        // comment9
+                        console.log(1 + 2);
 
-                    // comment10
-                    function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
-                `, ScriptTarget.ES2015);
+                        // comment10
+                        function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
+                    `, ScriptTarget.ES2015);
+                });
+                printsCorrectly("default", {}, printer => printer.printFile(sourceFile));
+                printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
             });
-            printsCorrectly("default", {}, printer => printer.printFile(sourceFile));
-            printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
 
-            // github #14948
-            // tslint:disable-next-line no-invalid-template-strings
+            // https://github.com/microsoft/TypeScript/issues/14948
+            // eslint-disable-next-line no-template-curly-in-string
             printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
 
-            // github #18071
+            // https://github.com/microsoft/TypeScript/issues/18071
             printsCorrectly("regularExpressionLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let regex = /abc/;", ScriptTarget.ES2017)));
 
-            // github #22239
+            // https://github.com/microsoft/TypeScript/issues/22239
             printsCorrectly("importStatementRemoveComments", { removeComments: true }, printer => printer.printFile(createSourceFile("source.ts", "import {foo} from 'foo';", ScriptTarget.ESNext)));
             printsCorrectly("classHeritageClauses", {}, printer => printer.printFile(createSourceFile(
                 "source.ts",
                 `class A extends B implements C implements D {}`,
                 ScriptTarget.ES2017
             )));
+
+            // https://github.com/microsoft/TypeScript/issues/35093
+            printsCorrectly("definiteAssignmentAssertions", {}, printer => printer.printFile(createSourceFile(
+                "source.ts",
+                `class A {
+                    prop!: string;
+                }
+
+                let x!: string;`,
+                ScriptTarget.ES2017
+            )));
+
+            // https://github.com/microsoft/TypeScript/issues/35054
+            printsCorrectly("jsx attribute escaping", {}, printer => {
+                debugger;
+                return printer.printFile(createSourceFile(
+                    "source.ts",
+                    String.raw`<a x='\\"'/>`,
+                    ScriptTarget.ESNext,
+                    /*setParentNodes*/ undefined,
+                    ScriptKind.TSX
+                ));
+            });
         });
 
         describe("printBundle", () => {
@@ -124,9 +149,8 @@ namespace ts {
                 EmitHint.Unspecified,
                 createNew(
                     createPropertyAccess(
-                        createCall(
-                            createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
-                            "x"),
+                        createCall(createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                        "x"),
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ undefined
                 ),
@@ -205,7 +229,7 @@ namespace ts {
             // https://github.com/Microsoft/TypeScript/issues/15651
             printsCorrectly("functionTypes", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createTupleTypeNode([
+                setEmitFlags(createTupleTypeNode([
                     createFunctionTypeNode(
                         /*typeArguments*/ undefined,
                         [createParameter(
@@ -269,7 +293,7 @@ namespace ts {
                         )],
                         createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),
-                ]),
+                ]), EmitFlags.SingleLine),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
         });

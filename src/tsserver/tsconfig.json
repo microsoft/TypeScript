@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig-base",
+    "extends": "../tsconfig-noncomposite-base",
  
     "compilerOptions": {
         "outFile": "../../built/local/tsserver.js",

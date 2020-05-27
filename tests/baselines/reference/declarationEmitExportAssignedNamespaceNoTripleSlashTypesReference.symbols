@@ -1,0 +1,71 @@
+=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+export = React;
+>React : Symbol(React, Decl(index.d.ts, 0, 15), Decl(index.d.ts, 3, 10))
+
+declare namespace React {
+>React : Symbol(React, Decl(index.d.ts, 0, 15), Decl(index.d.ts, 3, 10))
+
+    export type Component<T = any, U = {}, V = {}> = { x: T, y: U, z: V };
+>Component : Symbol(Component, Decl(index.d.ts, 2, 25))
+>T : Symbol(T, Decl(index.d.ts, 3, 26))
+>U : Symbol(U, Decl(index.d.ts, 3, 34))
+>V : Symbol(V, Decl(index.d.ts, 3, 42))
+>x : Symbol(x, Decl(index.d.ts, 3, 54))
+>T : Symbol(T, Decl(index.d.ts, 3, 26))
+>y : Symbol(y, Decl(index.d.ts, 3, 60))
+>U : Symbol(U, Decl(index.d.ts, 3, 34))
+>z : Symbol(z, Decl(index.d.ts, 3, 66))
+>V : Symbol(V, Decl(index.d.ts, 3, 42))
+
+    export interface DOMAttributes<T> { }
+>DOMAttributes : Symbol(DOMAttributes, Decl(index.d.ts, 3, 74), Decl(index.d.ts, 5, 24))
+>T : Symbol(T, Decl(index.d.ts, 4, 35), Decl(index.d.ts, 6, 28))
+}
+=== tests/cases/compiler/node_modules/@emotion/core/index.d.ts ===
+import {
+    Component
+>Component : Symbol(Component, Decl(index.d.ts, 0, 8))
+
+} from 'react'
+export {};
+
+declare module 'react' {
+>'react' : Symbol(React, Decl(index.d.ts, 0, 15), Decl(index.d.ts, 3, 10))
+
+    interface DOMAttributes<T> {
+>DOMAttributes : Symbol(DOMAttributes, Decl(index.d.ts, 3, 74), Decl(index.d.ts, 5, 24))
+>T : Symbol(T, Decl(index.d.ts, 4, 35), Decl(index.d.ts, 6, 28))
+
+        css?: any
+>css : Symbol(DOMAttributes.css, Decl(index.d.ts, 6, 32))
+    }
+}
+
+=== tests/cases/compiler/src/get-comp.ts ===
+import {Component} from 'react';
+>Component : Symbol(Component, Decl(get-comp.ts, 0, 8))
+
+export function getComp(): Component {
+>getComp : Symbol(getComp, Decl(get-comp.ts, 0, 32))
+>Component : Symbol(Component, Decl(get-comp.ts, 0, 8))
+
+    return {} as any as Component
+>Component : Symbol(Component, Decl(get-comp.ts, 0, 8))
+}
+=== tests/cases/compiler/src/inferred-comp-export.ts ===
+import { getComp } from "./get-comp";
+>getComp : Symbol(getComp, Decl(inferred-comp-export.ts, 0, 8))
+
+// this shouldn't need any triple-slash references - it should have a direct import to `react` and that's it
+// This issue (#35343) _only_ reproduces in the test harness when the file in question is in a subfolder
+export const obj = {
+>obj : Symbol(obj, Decl(inferred-comp-export.ts, 4, 12))
+
+    comp: getComp()
+>comp : Symbol(comp, Decl(inferred-comp-export.ts, 4, 20))
+>getComp : Symbol(getComp, Decl(inferred-comp-export.ts, 0, 8))
+}
+=== tests/cases/compiler/src/some-other-file.ts ===
+export * from '@emotion/core';
+No type information for this code.
+No type information for this code.

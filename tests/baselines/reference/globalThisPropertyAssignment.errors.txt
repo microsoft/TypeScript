@@ -1,0 +1,13 @@
+tests/cases/conformance/es2019/globalThisPropertyAssignment.js(4,8): error TS2339: Property 'z' does not exist on type 'Window & typeof globalThis'.
+
+
+==== tests/cases/conformance/es2019/globalThisPropertyAssignment.js (1 errors) ====
+    this.x = 1
+    var y = 2
+    // should work in JS
+    window.z = 3
+           ~
+!!! error TS2339: Property 'z' does not exist on type 'Window & typeof globalThis'.
+    // should work in JS (even though it's a secondary declaration)
+    globalThis.alpha = 4
+    

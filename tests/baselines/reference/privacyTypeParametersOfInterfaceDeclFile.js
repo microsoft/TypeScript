@@ -193,6 +193,7 @@ module privateModule {
 //// [privacyTypeParametersOfInterfaceDeclFile.js]
 "use strict";
 exports.__esModule = true;
+exports.publicModule = exports.publicClassT = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {
     }
@@ -301,13 +302,13 @@ export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T exte
 export declare module publicModule {
     class privateClassInPublicModule {
     }
-    class publicClassInPublicModule {
+    export class publicClassInPublicModule {
     }
     class privateClassInPublicModuleT<T> {
     }
-    class publicClassInPublicModuleT<T> {
+    export class publicClassInPublicModuleT<T> {
     }
-    interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> {
+    export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> {
         myMethod(val: T): T;
         myMethod0(): publicClassInPublicModuleT<T>;
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
@@ -315,7 +316,7 @@ export declare module publicModule {
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
     }
-    interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPublicModule> {
+    export interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPublicModule> {
         myMethod(val: T): T;
         myMethod0(): publicClassInPublicModuleT<T>;
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
@@ -323,23 +324,24 @@ export declare module publicModule {
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
     }
-    interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
+    export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
         myMethod(val: T): T;
         myMethod0(): publicClassInPublicModuleT<T>;
     }
-    interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
+    export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> {
     }
+    export {};
 }
 declare module privateModule {
     class privateClassInPrivateModule {
     }
-    class publicClassInPrivateModule {
+    export class publicClassInPrivateModule {
     }
     class privateClassInPrivateModuleT<T> {
     }
-    class publicClassInPrivateModuleT<T> {
+    export class publicClassInPrivateModuleT<T> {
     }
-    interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
+    export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
         myMethod(val: T): T;
         myMethod0(): publicClassInPrivateModuleT<T>;
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
@@ -347,7 +349,7 @@ declare module privateModule {
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
     }
-    interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPrivateModule> {
+    export interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPrivateModule> {
         myMethod(val: T): T;
         myMethod0(): publicClassInPrivateModuleT<T>;
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
@@ -355,9 +357,10 @@ declare module privateModule {
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
     }
-    interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
+    export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
         myMethod(val: T): T;
         myMethod0(): publicClassInPrivateModuleT<T>;
     }
+    export {};
 }
 export {};

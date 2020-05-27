@@ -1,0 +1,20 @@
+tests/cases/conformance/es6/arrowFunction/emitArrowFunctionThisCapturingES6.ts(6,10): error TS2339: Property 'name' does not exist on type 'typeof globalThis'.
+
+
+==== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionThisCapturingES6.ts (1 errors) ====
+    var f1 = () => {
+        this.age = 10
+    };
+    
+    var f2 = (x: string) => {
+        this.name = x
+             ~~~~
+!!! error TS2339: Property 'name' does not exist on type 'typeof globalThis'.
+    }
+    
+    function foo(func: () => boolean){ }
+    foo(() => {
+        this.age = 100;
+        return true;
+    });
+    

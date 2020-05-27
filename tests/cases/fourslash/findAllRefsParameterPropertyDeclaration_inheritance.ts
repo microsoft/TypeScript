@@ -1,17 +1,17 @@
 /// <reference path='fourslash.ts'/>
 
 ////class C {
-////	constructor(public [|{| "isWriteAccess": true, "isDefinition": true |}x|]: string) {
+////	constructor([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}x|]: string|]) {
 ////		[|x|];
 ////	}
 ////}
 ////class D extends C {
-////	constructor(public [|{| "isWriteAccess": true, "isDefinition": true |}x|]: string) {
+////	constructor([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}x|]: string|]) {
 ////		super([|x|]);
 ////	}
 ////}
 
-const [r0, r1, r2, r3] = test.ranges();
+const [r0Def, r0, r1, r2Def, r2, r3] = test.ranges();
 verify.referenceGroups(r0, [
     { definition: "(property) C.x: string", ranges: [r0] },
     { definition: "(parameter) x: string", ranges: [r1] },

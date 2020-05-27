@@ -25,10 +25,9 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterInd
 tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts(16,47): error TS2313: Type parameter 'V' has a circular constraint.
 tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts(18,32): error TS2313: Type parameter 'T' has a circular constraint.
 tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts(18,45): error TS2313: Type parameter 'V' has a circular constraint.
-tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts(23,24): error TS2313: Type parameter 'S' has a circular constraint.
 
 
-==== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts (28 errors) ====
+==== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterIndirectlyConstrainedToItself.ts (27 errors) ====
     class C<U extends T, T extends U> { }
                       ~
 !!! error TS2313: Type parameter 'U' has a circular constraint.
@@ -106,6 +105,4 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterInd
     
     type Foo<T> = [T] extends [number] ? {} : {};
     function foo<S extends Foo<S>>() {}
-                           ~~~~~~
-!!! error TS2313: Type parameter 'S' has a circular constraint.
     

@@ -27,7 +27,45 @@
 //// /*5*/
 
 verify.completions(
-    { marker: "1", includes: ["x", "a", "b"], excludes: "y" },
-    { marker: "2", includes: ["y", "a", "b"], excludes: "x" },
-    { marker: ["3", "4", "5"], includes: ["a", "b"], excludes: ["x", "y"] },
+    {
+        marker: "1",
+        includes: [
+            "x",
+            { name: "a", sortText: completion.SortText.GlobalsOrKeywords },
+            { name: "b", sortText: completion.SortText.GlobalsOrKeywords }
+        ], excludes: "y"
+    },
+    {
+        marker: "2",
+        includes: [
+            "y",
+            { name: "a", sortText: completion.SortText.GlobalsOrKeywords },
+            { name: "b", sortText: completion.SortText.GlobalsOrKeywords }
+        ],
+        excludes: "x"
+    },
+    {
+        marker: "3",
+        includes: [
+            "a",
+            { name: "b", sortText: completion.SortText.GlobalsOrKeywords }
+        ],
+        excludes: ["x", "y"]
+    },
+    {
+        marker: "4",
+        includes: [
+            { name: "a", sortText: completion.SortText.GlobalsOrKeywords },
+            "b"
+        ],
+        excludes: ["x", "y"]
+    },
+    {
+        marker: ["5"],
+        includes: [
+            { name: "a", sortText: completion.SortText.GlobalsOrKeywords },
+            { name: "b", sortText: completion.SortText.GlobalsOrKeywords }
+        ],
+        excludes: ["x", "y"]
+    },
 );

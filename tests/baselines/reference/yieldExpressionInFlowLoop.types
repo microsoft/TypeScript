@@ -1,6 +1,6 @@
 === tests/cases/compiler/yieldExpressionInFlowLoop.ts ===
 function* f() {
->f : () => IterableIterator<any>
+>f : () => Generator<any, void, any>
 
     let result;
 >result : any

@@ -68,7 +68,7 @@ var r3: string = a().toString();
 >r3 : string
 >a().toString() : string
 >a().toString : () => string
->a() : {}
+>a() : unknown
 >a : <T>() => T
 >toString : () => string
 
@@ -76,7 +76,7 @@ var r3b: string = a()['toString']();
 >r3b : string
 >a()['toString']() : string
 >a()['toString'] : () => string
->a() : {}
+>a() : unknown
 >a : <T>() => T
 >'toString' : "toString"
 

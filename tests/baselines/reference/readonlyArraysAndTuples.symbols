@@ -1,0 +1,118 @@
+=== tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts ===
+type T10 = string[];
+>T10 : Symbol(T10, Decl(readonlyArraysAndTuples.ts, 0, 0))
+
+type T11 = Array<string>;
+>T11 : Symbol(T11, Decl(readonlyArraysAndTuples.ts, 0, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type T12 = readonly string[];
+>T12 : Symbol(T12, Decl(readonlyArraysAndTuples.ts, 1, 25))
+
+type T13 = ReadonlyArray<string>;
+>T13 : Symbol(T13, Decl(readonlyArraysAndTuples.ts, 2, 29))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+
+type T20 = [number, number];
+>T20 : Symbol(T20, Decl(readonlyArraysAndTuples.ts, 3, 33))
+
+type T21 = readonly [number, number];
+>T21 : Symbol(T21, Decl(readonlyArraysAndTuples.ts, 5, 28))
+
+type T30 = readonly string;  // Error
+>T30 : Symbol(T30, Decl(readonlyArraysAndTuples.ts, 6, 37))
+
+type T31<T> = readonly T;  // Error
+>T31 : Symbol(T31, Decl(readonlyArraysAndTuples.ts, 8, 27))
+>T : Symbol(T, Decl(readonlyArraysAndTuples.ts, 9, 9))
+>T : Symbol(T, Decl(readonlyArraysAndTuples.ts, 9, 9))
+
+type T32 = readonly readonly string[];  // Error
+>T32 : Symbol(T32, Decl(readonlyArraysAndTuples.ts, 9, 25))
+
+type T33 = readonly Array<string>;  // Error
+>T33 : Symbol(T33, Decl(readonlyArraysAndTuples.ts, 10, 38))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
+>f1 : Symbol(f1, Decl(readonlyArraysAndTuples.ts, 11, 34))
+>ma : Symbol(ma, Decl(readonlyArraysAndTuples.ts, 13, 12))
+>ra : Symbol(ra, Decl(readonlyArraysAndTuples.ts, 13, 25))
+>mt : Symbol(mt, Decl(readonlyArraysAndTuples.ts, 13, 48))
+>rt : Symbol(rt, Decl(readonlyArraysAndTuples.ts, 13, 70))
+
+    ma = ra;  // Error
+>ma : Symbol(ma, Decl(readonlyArraysAndTuples.ts, 13, 12))
+>ra : Symbol(ra, Decl(readonlyArraysAndTuples.ts, 13, 25))
+
+    ma = mt;
+>ma : Symbol(ma, Decl(readonlyArraysAndTuples.ts, 13, 12))
+>mt : Symbol(mt, Decl(readonlyArraysAndTuples.ts, 13, 48))
+
+    ma = rt;  // Error
+>ma : Symbol(ma, Decl(readonlyArraysAndTuples.ts, 13, 12))
+>rt : Symbol(rt, Decl(readonlyArraysAndTuples.ts, 13, 70))
+
+    ra = ma;
+>ra : Symbol(ra, Decl(readonlyArraysAndTuples.ts, 13, 25))
+>ma : Symbol(ma, Decl(readonlyArraysAndTuples.ts, 13, 12))
+
+    ra = mt;
+>ra : Symbol(ra, Decl(readonlyArraysAndTuples.ts, 13, 25))
+>mt : Symbol(mt, Decl(readonlyArraysAndTuples.ts, 13, 48))
+
+    ra = rt;
+>ra : Symbol(ra, Decl(readonlyArraysAndTuples.ts, 13, 25))
+>rt : Symbol(rt, Decl(readonlyArraysAndTuples.ts, 13, 70))
+
+    mt = ma;  // Error
+>mt : Symbol(mt, Decl(readonlyArraysAndTuples.ts, 13, 48))
+>ma : Symbol(ma, Decl(readonlyArraysAndTuples.ts, 13, 12))
+
+    mt = ra;  // Error
+>mt : Symbol(mt, Decl(readonlyArraysAndTuples.ts, 13, 48))
+>ra : Symbol(ra, Decl(readonlyArraysAndTuples.ts, 13, 25))
+
+    mt = rt;  // Error
+>mt : Symbol(mt, Decl(readonlyArraysAndTuples.ts, 13, 48))
+>rt : Symbol(rt, Decl(readonlyArraysAndTuples.ts, 13, 70))
+
+    rt = ma;  // Error
+>rt : Symbol(rt, Decl(readonlyArraysAndTuples.ts, 13, 70))
+>ma : Symbol(ma, Decl(readonlyArraysAndTuples.ts, 13, 12))
+
+    rt = ra;  // Error
+>rt : Symbol(rt, Decl(readonlyArraysAndTuples.ts, 13, 70))
+>ra : Symbol(ra, Decl(readonlyArraysAndTuples.ts, 13, 25))
+
+    rt = mt;
+>rt : Symbol(rt, Decl(readonlyArraysAndTuples.ts, 13, 70))
+>mt : Symbol(mt, Decl(readonlyArraysAndTuples.ts, 13, 48))
+}
+
+declare var v: readonly[number, number, ...number[]];
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+v[0] = 1;        // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+>0 : Symbol(0)
+
+v[1] = 1;        // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+>1 : Symbol(1)
+
+v[2] = 1;        // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+delete v[2];     // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+v[0 + 1] = 1;    // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+v[0 + 2] = 1;    // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+
+delete v[0 + 1]; // Error
+>v : Symbol(v, Decl(readonlyArraysAndTuples.ts, 28, 11))
+

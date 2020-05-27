@@ -1,12 +1,14 @@
-tests/cases/compiler/genericArrayAssignmentCompatErrors.ts(2,15): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/genericArrayAssignmentCompatErrors.ts(2,19): error TS2351: This expression is not constructable.
+  Type 'undefined[]' has no construct signatures.
 tests/cases/compiler/genericArrayAssignmentCompatErrors.ts(4,14): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
 
 
 ==== tests/cases/compiler/genericArrayAssignmentCompatErrors.ts (2 errors) ====
     var myCars=new Array(); 
     var myCars2 = new [];
-                  ~~~~~~
-!!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+                      ~~
+!!! error TS2351: This expression is not constructable.
+!!! error TS2351:   Type 'undefined[]' has no construct signatures.
     var myCars3 = new Array({});
     var myCars4: Array; // error
                  ~~~~~

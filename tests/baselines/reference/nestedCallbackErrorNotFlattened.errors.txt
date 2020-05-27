@@ -1,0 +1,20 @@
+tests/cases/compiler/nestedCallbackErrorNotFlattened.ts(6,1): error TS2322: Type '() => () => () => () => number' is not assignable to type '() => () => () => () => string'.
+  Call signature return types '() => () => () => number' and '() => () => () => string' are incompatible.
+    Call signature return types '() => () => number' and '() => () => string' are incompatible.
+      Call signature return types '() => number' and '() => string' are incompatible.
+        Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/nestedCallbackErrorNotFlattened.ts (1 errors) ====
+    type Cb<T> = {noAlias: () => T}["noAlias"]; // `"noAlias"` here prevents an alias symbol from being made
+    // which means the comparison will definitely be structural, rather than by variance
+    
+    declare const x: Cb<Cb<Cb<Cb<number>>>>; // one more layer of `Cb` adn we'd get a `true` from the deeply-nested symbol check
+    declare let y: Cb<Cb<Cb<Cb<string>>>>;
+    y = x;
+    ~
+!!! error TS2322: Type '() => () => () => () => number' is not assignable to type '() => () => () => () => string'.
+!!! error TS2322:   Call signature return types '() => () => () => number' and '() => () => () => string' are incompatible.
+!!! error TS2322:     Call signature return types '() => () => number' and '() => () => string' are incompatible.
+!!! error TS2322:       Call signature return types '() => number' and '() => string' are incompatible.
+!!! error TS2322:         Type 'number' is not assignable to type 'string'.

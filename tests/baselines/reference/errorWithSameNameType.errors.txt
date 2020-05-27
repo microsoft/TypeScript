@@ -1,0 +1,32 @@
+tests/cases/compiler/c.ts(7,5): error TS2367: This condition will always return 'false' since the types 'import("tests/cases/compiler/a").F' and 'import("tests/cases/compiler/b").F' have no overlap.
+tests/cases/compiler/c.ts(11,1): error TS2741: Property 'foo1' is missing in type 'import("tests/cases/compiler/b").F' but required in type 'import("tests/cases/compiler/a").F'.
+
+
+==== tests/cases/compiler/a.ts (0 errors) ====
+    export interface F {
+        foo1: number
+    }
+    
+==== tests/cases/compiler/b.ts (0 errors) ====
+    export interface F {
+        foo2: number
+    }
+    
+==== tests/cases/compiler/c.ts (2 errors) ====
+    import * as A from './a'
+    import * as B from './b'
+    
+    let a: A.F
+    let b: B.F
+    
+    if (a === b) {
+        ~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'import("tests/cases/compiler/a").F' and 'import("tests/cases/compiler/b").F' have no overlap.
+    
+    }
+    
+    a = b
+    ~
+!!! error TS2741: Property 'foo1' is missing in type 'import("tests/cases/compiler/b").F' but required in type 'import("tests/cases/compiler/a").F'.
+!!! related TS2728 tests/cases/compiler/a.ts:2:5: 'foo1' is declared here.
+    

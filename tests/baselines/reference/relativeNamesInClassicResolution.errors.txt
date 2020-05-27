@@ -1,10 +1,10 @@
-tests/cases/compiler/somefolder/a.ts(1,17): error TS2307: Cannot find module './b'.
+tests/cases/compiler/somefolder/a.ts(1,17): error TS2307: Cannot find module './b' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/somefolder/a.ts (1 errors) ====
     import {x} from "./b"
                     ~~~~~
-!!! error TS2307: Cannot find module './b'.
+!!! error TS2307: Cannot find module './b' or its corresponding type declarations.
     
 ==== tests/cases/compiler/b.ts (0 errors) ====
     export let x = 1;

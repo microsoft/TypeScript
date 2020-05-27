@@ -1,5 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'string' is not assignable to type 'number & string'.
-  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'string' is not assignable to type 'never'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -36,8 +35,7 @@ tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type 'string' is not 
     // OK
     let a = <RCComp x="Hi" />;
                     ~
-!!! error TS2322: Type 'string' is not assignable to type 'number & string'.
-!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'never'.
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1 | RC2> & { x: number; } & { children?: ReactNode; } & { x: string; } & { children?: ReactNode; }'
     let a1 = <EmptyRCComp />;
     let a2 = <EmptyRCComp data-prop="hello" />;

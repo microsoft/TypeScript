@@ -1,0 +1,31 @@
+=== tests/cases/conformance/types/union/unionTypeCallSignatures5.ts ===
+// #31485
+interface A {
+>A : Symbol(A, Decl(unionTypeCallSignatures5.ts, 0, 0))
+
+  (this: void, b?: number): void;
+>this : Symbol(this, Decl(unionTypeCallSignatures5.ts, 2, 3))
+>b : Symbol(b, Decl(unionTypeCallSignatures5.ts, 2, 14))
+}
+interface B {
+>B : Symbol(B, Decl(unionTypeCallSignatures5.ts, 3, 1))
+
+  (this: number, b?: number): void;
+>this : Symbol(this, Decl(unionTypeCallSignatures5.ts, 5, 3))
+>b : Symbol(b, Decl(unionTypeCallSignatures5.ts, 5, 16))
+}
+interface C {
+>C : Symbol(C, Decl(unionTypeCallSignatures5.ts, 6, 1))
+
+  (i: number): void;
+>i : Symbol(i, Decl(unionTypeCallSignatures5.ts, 8, 3))
+}
+declare const fn: A | B | C;
+>fn : Symbol(fn, Decl(unionTypeCallSignatures5.ts, 10, 13))
+>A : Symbol(A, Decl(unionTypeCallSignatures5.ts, 0, 0))
+>B : Symbol(B, Decl(unionTypeCallSignatures5.ts, 3, 1))
+>C : Symbol(C, Decl(unionTypeCallSignatures5.ts, 6, 1))
+
+fn(0);
+>fn : Symbol(fn, Decl(unionTypeCallSignatures5.ts, 10, 13))
+

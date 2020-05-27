@@ -2,7 +2,7 @@
 
 // @Filename: a.ts
 ////interface A {
-////    [|{| "isDefinition": true |}foo|]: string;
+////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}foo|]: string;|]
 ////}
 
 // @Filename: b.ts
@@ -12,9 +12,9 @@
 ////    x.[|foo|]
 ////}
 
-verify.singleReferenceGroup("(property) A.foo: string");
+verify.singleReferenceGroup("(property) A.foo: string", "foo");
 
 goTo.marker("");
 edit.insert("\n");
 
-verify.singleReferenceGroup("(property) A.foo: string");
+verify.singleReferenceGroup("(property) A.foo: string", "foo");

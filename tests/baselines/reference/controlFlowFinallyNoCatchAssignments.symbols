@@ -1,0 +1,38 @@
+=== tests/cases/compiler/controlFlowFinallyNoCatchAssignments.ts ===
+let x: number;
+>x : Symbol(x, Decl(controlFlowFinallyNoCatchAssignments.ts, 0, 3))
+
+x = Math.random();
+>x : Symbol(x, Decl(controlFlowFinallyNoCatchAssignments.ts, 0, 3))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+let a: number;
+>a : Symbol(a, Decl(controlFlowFinallyNoCatchAssignments.ts, 2, 3))
+
+try {
+    if (x) {
+>x : Symbol(x, Decl(controlFlowFinallyNoCatchAssignments.ts, 0, 3))
+
+        a = 1;
+>a : Symbol(a, Decl(controlFlowFinallyNoCatchAssignments.ts, 2, 3))
+
+    } else {
+        a = 2;
+>a : Symbol(a, Decl(controlFlowFinallyNoCatchAssignments.ts, 2, 3))
+    }
+} finally {
+    console.log(x);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(controlFlowFinallyNoCatchAssignments.ts, 0, 3))
+}
+
+console.log(a); // <- error here
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowFinallyNoCatchAssignments.ts, 2, 3))
+

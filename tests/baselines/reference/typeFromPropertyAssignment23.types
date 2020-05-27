@@ -5,9 +5,9 @@ class B {
     constructor () {
         this.n = 1
 >this.n = 1 : 1
->this.n : number
+>this.n : any
 >this : this
->n : number
+>n : any
 >1 : 1
     }
     foo() {
@@ -46,7 +46,7 @@ D.prototype.foo = () =>  {
     this.n = 'not checked, so no error'
 >this.n = 'not checked, so no error' : "not checked, so no error"
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 >'not checked, so no error' : "not checked, so no error"
 }

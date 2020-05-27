@@ -1,0 +1,29 @@
+=== tests/cases/compiler/uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts ===
+const FOO_SYMBOL = Symbol('Foo');
+>FOO_SYMBOL : Symbol(FOO_SYMBOL, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare global {
+>global : Symbol(global, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 0, 33))
+
+    interface Promise<T> {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 2, 16))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 3, 22))
+
+        [FOO_SYMBOL]?: number;
+>[FOO_SYMBOL] : Symbol(Promise[FOO_SYMBOL], Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 3, 26))
+>FOO_SYMBOL : Symbol(FOO_SYMBOL, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 0, 5))
+    }
+}
+
+export function foo<T>(p: Promise<T>) {
+>foo : Symbol(foo, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 6, 1))
+>T : Symbol(T, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 8, 20))
+>p : Symbol(p, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 8, 23))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 2, 16))
+>T : Symbol(T, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 8, 20))
+
+    p[FOO_SYMBOL] = 3;
+>p : Symbol(p, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 8, 23))
+>FOO_SYMBOL : Symbol(FOO_SYMBOL, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 0, 5))
+}

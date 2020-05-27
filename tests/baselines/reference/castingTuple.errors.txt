@@ -71,6 +71,7 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     var array1 = <number[]>numStrTuple;
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
+!!! related TS6203 tests/cases/conformance/types/tuple/castingTuple.ts:23:5: 'array1' was also declared here.
     t4[2] = 10;
     ~~
 !!! error TS2304: Cannot find name 't4'.

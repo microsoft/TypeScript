@@ -25,5 +25,5 @@ const elem = <div className={class1, class2}/>;
 >div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 >className : Symbol(className, Decl(file.tsx, 10, 17))
 >class1 : Symbol(class1, Decl(file.tsx, 8, 5))
->class2 : Symbol(class2, Decl(file.tsx, 10, 36))
+>class2 : Symbol(class2, Decl(file.tsx, 9, 5))
 
