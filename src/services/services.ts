@@ -1248,8 +1248,7 @@ namespace ts {
             // Get a fresh cache of the host information
             let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
-
-            const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
             const projectReferences = hostCache.getProjectReferences();
 
             // If the program is already up-to-date, we can reuse it
@@ -1264,7 +1263,61 @@ namespace ts {
             // incremental parsing.
 
             const newSettings = hostCache.compilationSettings();
+            const compilerHost = createCompilerHost(hostCache);
 
+            host.setCompilerHost?.(compilerHost);
+
+            const options: CreateProgramOptions = {
+                rootNames: rootFileNames,
+                options: newSettings,
+                host: compilerHost,
+                oldProgram: program,
+                projectReferences
+            };
+            program = createProgram(options);
+
+            if (host.usePackageJsonAutoImportProvider?.()) {
+                autoImportProvider = createPackageJsonAutoImportProvider(
+                    createPackageJsonAutoImportProviderHost(compilerHost),
+                    newSettings);
+            }
+
+            // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
+            // It needs to be cleared to allow all collected snapshots to be released
+            hostCache = undefined;
+
+            // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
+            // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
+            // the course of whatever called `synchronizeHostData`
+            sourceMapper.clearCache();
+
+            // Make sure all the nodes in the program are both bound, and have their parent
+            // pointers set property.
+            program.getTypeChecker();
+            return;
+
+            function createPackageJsonAutoImportProviderHost(compilerHost: CompilerHost): CompilerHost {
+                return {
+                    ...compilerHost,
+                    onReleaseOldSourceFile: onReleaseOldSourceFileFromAutoImportProvider,
+                    getSourceFile: getOrCreateSourceFileForAutoImportProvider,
+                    getSourceFileByPath: getOrCreateSourceFileByPathForAutoImportProvider
+                };
+
+                function getOrCreateSourceFileForAutoImportProvider(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+                    return compilerHost.getOrCreateSourceFile(fileName, languageVersion, onError, shouldCreateNewSourceFile, /*isAuxiliaryFile*/ true);
+                }
+
+                function getOrCreateSourceFileByPathForAutoImportProvider(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+                    return compilerHost.getOrCreateSourceFileByPath(fileName, path, languageVersion, onError, shouldCreateNewSourceFile, /*isAuxiliaryFile*/ true);
+                }
+            }
+        }
+
+        function createCompilerHost(hostCache: HostCache) {
+            const newSettings = hostCache.compilationSettings();
+            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
+            const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
             // Now create a new compiler
             const compilerHost: CompilerHost = {
                 getSourceFile: getOrCreateSourceFile,
@@ -1306,37 +1359,8 @@ namespace ts {
             if (host.useSourceOfProjectReferenceRedirect) {
                 compilerHost.useSourceOfProjectReferenceRedirect = () => host.useSourceOfProjectReferenceRedirect!();
             }
-            host.setCompilerHost?.(compilerHost);
 
-            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
-            const options: CreateProgramOptions = {
-                rootNames: rootFileNames,
-                options: newSettings,
-                host: compilerHost,
-                oldProgram: program,
-                projectReferences
-            };
-            program = createProgram(options);
-
-            if (host.usePackageJsonAutoImportProvider?.()) {
-                autoImportProvider = createPackageJsonAutoImportProvider(
-                    createPackageJsonAutoImportProviderHost(compilerHost),
-                    newSettings);
-            }
-
-            // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
-            // It needs to be cleared to allow all collected snapshots to be released
-            hostCache = undefined;
-
-            // We reset this cache on structure invalidation so we don't hold on to outdated files for long; however we can't use the `compilerHost` above,
-            // Because it only functions until `hostCache` is cleared, while we'll potentially need the functionality to lazily read sourcemap files during
-            // the course of whatever called `synchronizeHostData`
-            sourceMapper.clearCache();
-
-            // Make sure all the nodes in the program are both bound, and have their parent
-            // pointers set property.
-            program.getTypeChecker();
-            return;
+            return compilerHost;
 
             function fileExists(fileName: string): boolean {
                 const path = toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -1414,23 +1438,6 @@ namespace ts {
                 // Could not find this file in the old program, create a new SourceFile for it.
                 return documentRegistry.acquireDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
             }
-
-            function createPackageJsonAutoImportProviderHost(compilerHost: CompilerHost): CompilerHost {
-                return {
-                    ...compilerHost,
-                    onReleaseOldSourceFile: onReleaseOldSourceFileFromAutoImportProvider,
-                    getSourceFile: getOrCreateSourceFileForAutoImportProvider,
-                    getSourceFileByPath: getOrCreateSourceFileByPathForAutoImportProvider
-                };
-            }
-
-            function getOrCreateSourceFileForAutoImportProvider(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-                return getOrCreateSourceFile(fileName, languageVersion, onError, shouldCreateNewSourceFile, /*isAuxiliaryFile*/ true);
-            }
-
-            function getOrCreateSourceFileByPathForAutoImportProvider(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-                return getOrCreateSourceFileByPath(fileName, path, languageVersion, onError, shouldCreateNewSourceFile, /*isAuxiliaryFile*/ true);
-            }
         }
 
         // Release any files we have acquired in the old program but are
@@ -1504,7 +1511,7 @@ namespace ts {
             return newProgram;
 
             function addDependency(dependency: string) {
-                if (!startsWith(dependency, "@types")) {
+                if (!startsWith(dependency, "@types/")) {
                     (dependencyNames || (dependencyNames = createMap())).set(dependency, true);
                 }
             }

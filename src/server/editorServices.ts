@@ -1169,6 +1169,7 @@ namespace ts.server {
          */
         /*@internal*/
         watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject) {
+            const watchOptions = this.getWatchOptions(project);
             return this.watchFactory.watchDirectory(
                 this.host,
                 directory,
@@ -1199,7 +1200,7 @@ namespace ts.server {
                         (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
                     ) {
                         this.logger.info(`Project: ${configFilename} Detected new package.json: ${fileOrDirectory}`);
-                        this.onAddPackageJson(fileOrDirectoryPath);
+                        this.onAddPackageJson(fileOrDirectoryPath, watchOptions);
                     }
 
                     // If the the added or created file or directory is not supported file name, ignore the file
@@ -1216,7 +1217,7 @@ namespace ts.server {
                     }
                 },
                 flags,
-                this.getWatchOptions(project),
+                watchOptions,
                 WatchType.WildcardDirectory,
                 project
             );
@@ -3688,7 +3689,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir: string | undefined): readonly PackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
             const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
             const toPath = this.toPath.bind(this);
@@ -3716,10 +3717,9 @@ namespace ts.server {
             return result;
         }
 
-        private watchPackageJsonFile(path: Path) {
+        private watchPackageJsonFile(path: Path, watchOptions: WatchOptions | undefined) {
             const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
             if (!watchers.has(path)) {
-                const project = this.getDefaultProjectForFile(asNormalizedPath(path), /*ensureProject*/ false);
                 watchers.set(path, this.watchFactory.watchFile(
                     this.host,
                     path,
@@ -3738,16 +3738,25 @@ namespace ts.server {
                         }
                     },
                     PollingInterval.Low,
-                    project ? this.getWatchOptions(project) : undefined,
+                    watchOptions,
                     WatchType.PackageJsonFile,
                 ));
             }
         }
 
         /*@internal*/
-        onAddPackageJson(path: Path) {
+        private onAddPackageJson(path: Path, watchOptions: WatchOptions | undefined) {
             this.packageJsonCache.addOrUpdate(path);
-            this.watchPackageJsonFile(path);
+            this.watchPackageJsonFile(path, watchOptions);
+        }
+
+        /*@internal*/
+        private updateAutoImportProvidersWithPackageJson(packageJsonPath: Path) {
+            if (this.usePackageJsonAutoImportProvider) {
+                this.configuredProjects.forEach(project => {
+
+                });
+            }
         }
     }
 

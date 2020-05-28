@@ -203,6 +203,9 @@ namespace ts.server {
         originalConfiguredProjects: Map<true> | undefined;
 
         /*@internal*/
+        packageJsonsForAutoImport: Map<true> | undefined;
+
+        /*@internal*/
         getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
             return undefined;
         }
@@ -1541,6 +1544,13 @@ namespace ts.server {
         /*@internal*/
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
             return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
+        }
+
+        /*@internal*/
+        getPackageJsonsForAutoImport(rootDir?: string): readonly PackageJsonInfo[] {
+            const packageJsons = this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
+            this.packageJsonsForAutoImport = arrayToSet(packageJsons.map(p => p.fileName));
+            return packageJsons;
         }
 
         /*@internal*/
