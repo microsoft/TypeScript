@@ -4759,7 +4759,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[除非 [目標]5D; 選項設定為 'es2016' 或更新版本，否則無法在 'bigint' 值上執行指數運算。]]></Val>
+            <Val><![CDATA['target' 選項必須設定為 'es2016' 或更新版本，才可以對 'bigint' 值執行乘冪運算。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5373,6 +5373,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[產生 'get' 與 'set' 存取子]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Generate_get_and_set_accessors_for_all_overriding_properties_95119" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generate 'get' and 'set' accessors for all overriding properties]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12748,7 +12754,7 @@
         <Str Cat="Text">
           <Val><![CDATA['export *' does not re-export a default.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['export *' 不會重新匯出預設值。]]></Val>
+            <Val><![CDATA['export *' 不會重新匯出預設匯出。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
