@@ -3651,7 +3651,7 @@ namespace ts {
             if (!index) {
                 return result;
             }
-            if (!result.length) {
+            if (result === emptyArray) {
                 return [index];
             }
             result.push(index);
