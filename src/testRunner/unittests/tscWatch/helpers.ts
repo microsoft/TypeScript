@@ -419,11 +419,23 @@ namespace ts.tscWatch {
         baseline.push("");
     }
 
-    export function verifyTscWatch(input: TscWatchCompile) {
+    export interface VerifyTscWatch extends TscWatchCompile {
+        baselineIncremental?: boolean;
+    }
+    export function verifyTscWatch(input: VerifyTscWatch) {
         describe(input.scenario, () => {
             describe(input.subScenario, () => {
                 tscWatchCompile(input);
             });
+            if (input.baselineIncremental) {
+                describe(`${input.subScenario} with incremental`, () => {
+                    tscWatchCompile({
+                        ...input,
+                        subScenario: `${input.subScenario} with incremental`,
+                        commandLineArgs: [...input.commandLineArgs, "--incremental"],
+                    });
+                });
+            }
         });
     }
 

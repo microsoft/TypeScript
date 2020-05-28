@@ -1273,17 +1273,34 @@ ${coreFiles[1].content}`);
                 { currentDirectory: `${projectsLocation}/noEmitOnError` }
             ),
             changes: [
-                sys => {
-                    sys.writeFile(`${projectsLocation}/noEmitOnError/src/main.ts`, `import { A } from "../shared/types/db";
+                noChange,
+                sys => change(sys, "Fix Syntax error", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`);
-                    sys.checkTimeoutQueueLengthAndRun(1); // build project
-                    sys.checkTimeoutQueueLength(0);
-                    return "Fix error";
-                }
-            ]
+};`),
+                sys => change(sys, "Semantic Error", `import { A } from "../shared/types/db";
+const a: string = 10;`),
+                noChange,
+                sys => change(sys, "Fix Semantic Error", `import { A } from "../shared/types/db";
+const a: string = "hello";`),
+                noChange,
+            ],
+            baselineIncremental: true
         });
+
+        function change(sys: WatchedSystem, caption: string, content: string) {
+            sys.writeFile(`${projectsLocation}/noEmitOnError/src/main.ts`, content);
+            sys.checkTimeoutQueueLengthAndRun(1); // build project
+            sys.checkTimeoutQueueLength(0);
+            return caption;
+        }
+
+        function noChange(sys: WatchedSystem) {
+            sys.writeFile(`${projectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${projectsLocation}/noEmitOnError/src/main.ts`)!);
+            sys.checkTimeoutQueueLengthAndRun(1); // build project
+            sys.checkTimeoutQueueLength(0);
+            return "No change";
+        }
     });
 
     describe("unittests:: tsbuild:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {

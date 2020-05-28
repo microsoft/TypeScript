@@ -73,21 +73,49 @@ namespace ts {
             incrementalScenarios: [noChangeRun]
         });
 
-        verifyTscIncrementalEdits({
-            scenario: "incremental",
-            subScenario: "with noEmitOnError",
-            fs: () => loadProjectFromDisk("tests/projects/noEmitOnError"),
-            commandLineArgs: ["--incremental", "-p", "src"],
-            incrementalScenarios: [
-                {
-                    buildKind: BuildKind.IncrementalDtsUnchanged,
-                    modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+        describe("with noEmitOnError", () => {
+            let projFs: vfs.FileSystem;
+            before(() => {
+                projFs = loadProjectFromDisk("tests/projects/noEmitOnError");
+            });
+            after(() => {
+                projFs = undefined!;
+            });
+            verifyTscIncrementalEdits({
+                scenario: "incremental",
+                subScenario: "with noEmitOnError syntax errors",
+                fs: () => projFs,
+                commandLineArgs: ["--incremental", "-p", "src"],
+                incrementalScenarios: [
+                    {
+                        buildKind: BuildKind.IncrementalDtsUnchanged,
+                        modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };`, "utf-8")
-                }
-            ],
-            baselinePrograms: true
+                    },
+                    noChangeRun,
+                ],
+                baselinePrograms: true
+            });
+
+            verifyTscIncrementalEdits({
+                scenario: "incremental",
+                subScenario: "with noEmitOnError semantic errors",
+                fs: () => projFs,
+                commandLineArgs: ["--incremental", "-p", "src"],
+                modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = 10;`, "utf-8"),
+                incrementalScenarios: [
+                    {
+                        buildKind: BuildKind.IncrementalDtsUnchanged,
+                        modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = "hello";`, "utf-8")
+                    },
+                    noChangeRun,
+                ],
+                baselinePrograms: true
+            });
         });
     });
 }

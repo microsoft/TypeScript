@@ -14,6 +14,7 @@ namespace ts.tscWatch {
             lib,
             configFile,
             changes,
+            baselineIncremental
         }: VerifyEmitAndErrorUpdatesWorker) {
             verifyTscWatch({
                 scenario: "emitAndErrorUpdates",
@@ -23,7 +24,8 @@ namespace ts.tscWatch {
                     [...files(), configFile(), lib?.() || libFile],
                     { currentDirectory: currentDirectory || projectRoot }
                 ),
-                changes
+                changes,
+                baselineIncremental
             });
         }
 
@@ -41,6 +43,7 @@ namespace ts.tscWatch {
             lib?: () => File;
             changes: TscWatchCompileChange[];
             configFile?: () => File;
+            baselineIncremental?: boolean
         }
         function verifyEmitAndErrorUpdates(input: VerifyEmitAndErrorUpdates) {
             verifyEmitAndErrorUpdatesWorker({
@@ -299,23 +302,39 @@ export class Data2 {
             });
         });
 
-        verifyEmitAndErrorUpdates({
-            subScenario: "with noEmitOnError",
-            currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError`,
-            files: () => ["shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
-            lib: () => ({ path: libFile.path, content: libContent }),
-            configFile: () => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", "tsconfig.json"),
-            changes: [
-                sys => {
-                    sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, `import { A } from "../shared/types/db";
+        describe("with noEmitOnError", () => {
+            verifyEmitAndErrorUpdates({
+                subScenario: "with noEmitOnError",
+                currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError`,
+                files: () => ["shared/types/db.ts", "src/main.ts", "src/other.ts"]
+                    .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
+                lib: () => ({ path: libFile.path, content: libContent }),
+                configFile: () => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", "tsconfig.json"),
+                changes: [
+                    noChange,
+                    sys => change(sys, "Fix Syntax error", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`);
-                    sys.checkTimeoutQueueLengthAndRun(1); // build project
-                    return "Fix the error";
-                }
-            ]
+};`),
+                    sys => change(sys, "Semantic Error", `import { A } from "../shared/types/db";
+const a: string = 10;`),
+                    noChange,
+                    sys => change(sys, "Fix Semantic Error", `import { A } from "../shared/types/db";
+const a: string = "hello";`),
+                    noChange,
+                ],
+                baselineIncremental: true
+            });
+            function change(sys: WatchedSystem, caption: string, content: string) {
+                sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content);
+                sys.checkTimeoutQueueLengthAndRun(1); // build project
+                return caption;
+            }
+            function noChange(sys: WatchedSystem) {
+                sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!);
+                sys.checkTimeoutQueueLengthAndRun(1); // build project
+                return "No change";
+            }
         });
     });
 }

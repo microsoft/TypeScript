@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w
+/a/lib/tsc.js --w --incremental
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
     name: string;
@@ -15,7 +15,7 @@ console.log("hi");
 export { }
 
 //// [/user/username/projects/noEmitOnError/tsconfig.json]
-{"compilerOptions":{"outDir":"./dev-build","noEmitOnError":true,"declaration":true}}
+{"compilerOptions":{"outDir":"./dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -54,7 +54,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -114,7 +114,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -158,12 +158,6 @@ const a = {
 exports.__esModule = true;
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.d.ts]
-export interface A {
-    name: string;
-}
-
-
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 exports.__esModule = true;
@@ -172,19 +166,60 @@ var a = {
 };
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts]
-export {};
-
-
 //// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
 "use strict";
 exports.__esModule = true;
 console.log("hi");
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.d.ts]
-export {};
-
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../shared/types/db.ts": {
+        "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "affectsGlobalScope": false
+      },
+      "../src/main.ts": {
+        "version": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
+        "signature": "-3531856636-export {};\n",
+        "affectsGlobalScope": false
+      },
+      "../src/other.ts": {
+        "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+        "signature": "-3531856636-export {};\n",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "outDir": "./",
+      "noEmitOnError": true,
+      "assumeChangesOnlyAffectDirectDependencies": true,
+      "watch": true,
+      "incremental": true,
+      "configFilePath": "../tsconfig.json"
+    },
+    "referencedMap": {
+      "../src/main.ts": [
+        "../shared/types/db.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../a/lib/lib.d.ts",
+      "../shared/types/db.ts",
+      "../src/main.ts",
+      "../src/other.ts"
+    ]
+  },
+  "version": "FakeTSVersion"
+}
 
 
 Output::
@@ -192,12 +227,12 @@ Output::
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 
-[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -238,7 +273,7 @@ const a: string = 10;
 
 Output::
 >> Screen clear
-[[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:04 AM[0m] File change detected. Starting incremental compilation...
 
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
@@ -247,12 +282,12 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-[[90m12:01:09 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -290,7 +325,7 @@ Change:: No change
 
 Output::
 >> Screen clear
-[[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
 
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
@@ -299,12 +334,12 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-[[90m12:01:14 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:10 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -347,19 +382,67 @@ exports.__esModule = true;
 var a = "hello";
 
 
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../shared/types/db.ts": {
+        "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "affectsGlobalScope": false
+      },
+      "../src/main.ts": {
+        "version": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
+        "signature": "-3531856636-export {};\n",
+        "affectsGlobalScope": false
+      },
+      "../src/other.ts": {
+        "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+        "signature": "-3531856636-export {};\n",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "outDir": "./",
+      "noEmitOnError": true,
+      "assumeChangesOnlyAffectDirectDependencies": true,
+      "watch": true,
+      "incremental": true,
+      "configFilePath": "../tsconfig.json"
+    },
+    "referencedMap": {
+      "../src/main.ts": [
+        "../shared/types/db.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../a/lib/lib.d.ts",
+      "../shared/types/db.ts",
+      "../src/main.ts",
+      "../src/other.ts"
+    ]
+  },
+  "version": "FakeTSVersion"
+}
+
 
 Output::
 >> Screen clear
-[[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
 
 
-[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
@@ -397,15 +480,15 @@ Change:: No change
 
 Output::
 >> Screen clear
-[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:25 AM[0m] File change detected. Starting incremental compilation...
 
 
-[[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts

@@ -267,20 +267,34 @@ interface Symbol {
         commandLineArgs?: readonly string[];
     }
 
-    export interface VerifyTsBuildInput extends TscCompile {
-        incrementalScenarios: TscIncremental[];
+    export interface VerifyTsBuildInput extends VerifyTsBuildInputWorker {
+        baselineIncremental?: boolean;
     }
 
-    export function verifyTscIncrementalEdits({
+    export function verifyTscIncrementalEdits(input: VerifyTsBuildInput) {
+        verifyTscIncrementalEditsWorker(input);
+        if (input.baselineIncremental) {
+            verifyTscIncrementalEditsWorker({
+                ...input,
+                subScenario: `${input.subScenario} with incremental`,
+                commandLineArgs: [...input.commandLineArgs, "--incremental"],
+            });
+        }
+    }
+
+    export interface VerifyTsBuildInputWorker extends TscCompile {
+        incrementalScenarios: TscIncremental[];
+    }
+    function verifyTscIncrementalEditsWorker({
         subScenario, fs, scenario, commandLineArgs,
         baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
         incrementalScenarios
-    }: VerifyTsBuildInput) {
+    }: VerifyTsBuildInputWorker) {
         describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
             let tick: () => void;
             let sys: TscCompileSystem;
+            let baseFs: vfs.FileSystem;
             before(() => {
-                let baseFs: vfs.FileSystem;
                 ({ fs: baseFs, tick } = getFsWithTime(fs()));
                 sys = tscCompile({
                     scenario,
@@ -298,6 +312,7 @@ interface Symbol {
                 Debug.assert(!!incrementalScenarios.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
             });
             after(() => {
+                baseFs = undefined!;
                 sys = undefined!;
                 tick = undefined!;
             });
@@ -307,7 +322,7 @@ interface Symbol {
 
             for (const {
                 buildKind,
-                modifyFs,
+                modifyFs: incrementalModifyFs,
                 subScenario: incrementalSubScenario,
                 commandLineArgs: incrementalCommandLineArgs
             } of incrementalScenarios) {
@@ -324,7 +339,7 @@ interface Symbol {
                             commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
                             modifyFs: fs => {
                                 tick();
-                                modifyFs(fs);
+                                incrementalModifyFs(fs);
                                 tick();
                             },
                             baselineSourceMap,
@@ -340,14 +355,12 @@ interface Symbol {
                         const sys = tscCompile({
                             scenario,
                             subScenario,
-                            fs: () => newSys.vfs,
+                            fs: () => baseFs.makeReadonly(),
                             commandLineArgs,
                             modifyFs: fs => {
                                 tick();
-                                // Delete output files
-                                const host = fakes.SolutionBuilderHost.create(fs);
-                                const builder = createSolutionBuilder(host, commandLineArgs, { clean: true });
-                                builder.clean();
+                                if (modifyFs) modifyFs(fs);
+                                incrementalModifyFs(fs);
                             },
                         });
 
