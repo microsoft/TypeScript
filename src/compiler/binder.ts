@@ -414,7 +414,7 @@ namespace ts {
             Debug.assert(!hasDynamicName(node));
 
             const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
-            const isDeprecated = !!getJSDocDeprecatedTag(node, /* noCache */ true);
+            const isDeprecated = hasJSDocNodes(node) && !!getJSDocDeprecatedTag(node);
 
             // The exported symbol for an export default function/class node is always named "default"
             const name = isDefaultExport && parent ? InternalSymbolName.Default : getDeclarationName(node);
