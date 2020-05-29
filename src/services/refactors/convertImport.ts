@@ -5,7 +5,7 @@ namespace ts.refactor {
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const i = getImportToConvert(context);
+            const i = getImportToConvert(context, context.triggerReason === "invoked");
             if (!i) return emptyArray;
             const description = i.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
             const actionName = i.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
@@ -19,11 +19,12 @@ namespace ts.refactor {
     });
 
     // Can convert imports of the form `import * as m from "m";` or `import d, { x, y } from "m";`.
-    function getImportToConvert(context: RefactorContext): NamedImportBindings | undefined {
+    function getImportToConvert(context: RefactorContext, userRequested = true): NamedImportBindings | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        const importDecl = findAncestor(token, isImportDeclaration);
+        const cursorRequest = userRequested && span.length === 0;
+        const importDecl = cursorRequest ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
         if (!importDecl || !isImportDeclaration(importDecl) || (importDecl.getEnd() < span.start + span.length)) return undefined;
         const { importClause } = importDecl;
         return importClause && importClause.namedBindings;
