@@ -32,7 +32,7 @@ namespace ts.refactor {
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
         const cursorRequest = userRequested && span;
-        const exportNode = !!(getModifierFlags(token.parent) & ModifierFlags.Export) && cursorRequest ? token.parent : getParentNodeInSpan(token, file, span);
+        const exportNode = !!(getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && cursorRequest ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
             return undefined;
         }
