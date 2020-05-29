@@ -2287,7 +2287,7 @@ namespace ts {
                 else {
                     Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
                     if (compilerOptions.preserveConstEnums) {
-                        diagnosticMessage = error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationName);
+                        diagnosticMessage = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
                     }
                 }
 
@@ -4139,10 +4139,14 @@ namespace ts {
             let leftStr = symbolValueDeclarationIsContextSensitive(left.symbol) ? typeToString(left, left.symbol.valueDeclaration) : typeToString(left);
             let rightStr = symbolValueDeclarationIsContextSensitive(right.symbol) ? typeToString(right, right.symbol.valueDeclaration) : typeToString(right);
             if (leftStr === rightStr) {
-                leftStr = typeToString(left, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                rightStr = typeToString(right, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                leftStr = getTypeNameForErrorDisplay(left);
+                rightStr = getTypeNameForErrorDisplay(right);
             }
             return [leftStr, rightStr];
+        }
+
+        function getTypeNameForErrorDisplay(type: Type) {
+            return typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
         }
 
         function symbolValueDeclarationIsContextSensitive(symbol: Symbol): boolean {
@@ -15726,23 +15730,30 @@ namespace ts {
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
                 if (incompatibleStack.length) reportIncompatibleStack();
                 const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
+                let generalizedSource = source;
+                let generalizedSourceType = sourceType;
+
+                if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
+                    generalizedSource = getBaseTypeOfLiteralType(source);
+                    generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
+                }
 
                 if (target.flags & TypeFlags.TypeParameter) {
                     const constraint = getBaseConstraintOfType(target);
-                    const constraintElab = constraint && isTypeAssignableTo(source, constraint);
-                    if (constraintElab) {
+                    let needsOriginalSource;
+                    if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
                         reportError(
                             Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
-                            sourceType,
+                            needsOriginalSource ? sourceType : generalizedSourceType,
                             targetType,
-                            typeToString(constraint!),
+                            typeToString(constraint),
                         );
                     }
                     else {
                         reportError(
                             Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
                             targetType,
-                            sourceType
+                            generalizedSourceType
                         );
                     }
                 }
@@ -15759,7 +15770,7 @@ namespace ts {
                     }
                 }
 
-                reportError(message, sourceType, targetType);
+                reportError(message, generalizedSourceType, targetType);
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
@@ -17288,9 +17299,10 @@ namespace ts {
                     return Ternary.True;
                 }
                 if (isGenericMappedType(source)) {
-                    // A generic mapped type { [P in K]: T } is related to an index signature { [x: string]: U }
-                    // if T is related to U.
-                    return kind === IndexKind.String ? isRelatedTo(getTemplateTypeFromMappedType(source), targetType, reportErrors) : Ternary.False;
+                    // A generic mapped type { [P in K]: T } is related to a type with an index signature
+                    // { [x: string]: U }, and optionally with an index signature { [x: number]: V },
+                    // if T is related to U and V.
+                    return getIndexTypeOfType(target, IndexKind.String) ? isRelatedTo(getTemplateTypeFromMappedType(source), targetType, reportErrors) : Ternary.False;
                 }
                 const indexType = getIndexTypeOfType(source, kind) || kind === IndexKind.Number && getIndexTypeOfType(source, IndexKind.String);
                 if (indexType) {
@@ -17354,6 +17366,21 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function typeCouldHaveTopLevelSingletonTypes(type: Type): boolean {
+            if (type.flags & TypeFlags.UnionOrIntersection) {
+                return !!forEach((type as IntersectionType).types, typeCouldHaveTopLevelSingletonTypes);
+            }
+
+            if (type.flags & TypeFlags.Instantiable) {
+                const constraint = getConstraintOfType(type);
+                if (constraint) {
+                    return typeCouldHaveTopLevelSingletonTypes(constraint);
+                }
+            }
+
+            return isUnitType(type);
         }
 
         function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
@@ -33823,8 +33850,7 @@ namespace ts {
                     const derivedPropertyFlags = derived.flags & SymbolFlags.PropertyOrAccessor;
                     if (basePropertyFlags && derivedPropertyFlags) {
                         // property/accessor is overridden with property/accessor
-                        if (!compilerOptions.useDefineForClassFields
-                            || baseDeclarationFlags & ModifierFlags.Abstract && !(base.valueDeclaration && isPropertyDeclaration(base.valueDeclaration) && base.valueDeclaration.initializer)
+                        if (baseDeclarationFlags & ModifierFlags.Abstract && !(base.valueDeclaration && isPropertyDeclaration(base.valueDeclaration) && base.valueDeclaration.initializer)
                             || base.valueDeclaration && base.valueDeclaration.parent.kind === SyntaxKind.InterfaceDeclaration
                             || derived.valueDeclaration && isBinaryExpression(derived.valueDeclaration)) {
                             // when the base property is abstract or from an interface, base/derived flags don't need to match
@@ -33840,7 +33866,7 @@ namespace ts {
                                 Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor;
                             error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType), typeToString(type));
                         }
-                        else {
+                        else if (compilerOptions.useDefineForClassFields) {
                             const uninitialized = find(derived.declarations, d => d.kind === SyntaxKind.PropertyDeclaration && !(d as PropertyDeclaration).initializer);
                             if (uninitialized
                                 && !(derived.flags & SymbolFlags.Transient)

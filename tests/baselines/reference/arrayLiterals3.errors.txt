@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(10,5): error TS2739: Type '[]' is missing the following properties from type '[any, any, any]': 0, 1, 2
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,38): error TS2322: Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,48): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,51): error TS2322: Type 'true' is not assignable to type 'number'.
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,51): error TS2322: Type 'boolean' is not assignable to type 'number'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error TS2322: Type '[number, number, string, boolean]' is not assignable to type '[number, number]'.
   Types of property 'length' are incompatible.
     Type '4' is not assignable to type '2'.
@@ -31,7 +31,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
                                                    ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
                                                       ~~~~
-!!! error TS2322: Type 'true' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     
     // The resulting type an array literal expression is determined as follows:
     //     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
