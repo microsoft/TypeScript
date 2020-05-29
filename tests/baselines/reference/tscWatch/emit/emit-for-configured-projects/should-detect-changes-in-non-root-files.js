@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
 
@@ -30,23 +30,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
 
-
-//// [/a/b/file1Consumer1.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = 10;
-
-
-
+/a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -86,21 +71,29 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
-
-//// [/a/b/moduleFile1.ts]
-export var T: number;export function Foo() { };
-
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.Foo = exports.T = void 0;
+exports.Foo = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;
 
 
-//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+exports.y = void 0;
+exports.y = 10;
+
+
+
+Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+
+Input::
+//// [/a/b/moduleFile1.ts]
+export var T: number;export function Foo() { };
+
 
 Output::
 >> Screen clear
@@ -140,11 +133,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: change file1 internal, and verify only file1 is affected
-
-//// [/a/b/moduleFile1.ts]
-export var T: number;export function Foo() { };var T1: number;
-
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
@@ -152,8 +140,15 @@ exports.Foo = exports.T = void 0;
 function Foo() { }
 exports.Foo = Foo;
 ;
-var T1;
 
+
+//// [/a/b/file1Consumer1.js] file written with same contents
+
+Change:: change file1 internal, and verify only file1 is affected
+
+Input::
+//// [/a/b/moduleFile1.ts]
+export var T: number;export function Foo() { };var T1: number;
 
 
 Output::
@@ -192,3 +187,14 @@ FsWatchesRecursive::
   {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+var T1;
+
+

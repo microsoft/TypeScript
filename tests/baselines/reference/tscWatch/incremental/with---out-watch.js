@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,43 +21,8 @@ const y = 20;
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"outFile":"out.js"}}
 
-//// [/users/username/projects/project/out.js]
-var x = 10;
-var y = 20;
 
-
-//// [/users/username/projects/project/out.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file1.ts",
-      "./file2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 24,
-          "kind": "text"
-        }
-      ]
-    }
-  },
-  "version": "FakeTSVersion"
-}
-
-//// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /users/username/projects/project/out.js
-----------------------------------------------------------------------
-text: (0-24)
-var x = 10;
-var y = 20;
-
-======================================================================
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -95,3 +60,40 @@ FsWatchesRecursive::
   {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/users/username/projects/project/out.js]
+var x = 10;
+var y = 20;
+
+
+//// [/users/username/projects/project/out.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "./",
+    "sourceFiles": [
+      "./file1.ts",
+      "./file2.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 24,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "FakeTSVersion"
+}
+
+//// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /users/username/projects/project/out.js
+----------------------------------------------------------------------
+text: (0-24)
+var x = 10;
+var y = 20;
+
+======================================================================
+

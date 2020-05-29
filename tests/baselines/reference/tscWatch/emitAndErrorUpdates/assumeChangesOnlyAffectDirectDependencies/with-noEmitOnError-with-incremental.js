@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w --incremental
+Input::
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
     name: string;
@@ -33,6 +33,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
+/a/lib/tsc.js --w --incremental
 Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
@@ -89,8 +90,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: No change
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
@@ -145,13 +148,58 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Fix Syntax error
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };
+
+
+Output::
+>> Screen clear
+[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
+
+
+[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/noEmitOnError/src/main.ts
+
+WatchedFiles::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/src/main.ts:
+  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/src/other.ts:
+  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/noemitonerror/node_modules/@types:
+  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/noemitonerror:
+  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
 "use strict";
@@ -222,50 +270,9 @@ console.log("hi");
 }
 
 
-Output::
->> Screen clear
-[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
-
-
-[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/noEmitOnError/src/main.ts
-
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
 Change:: Semantic Error
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
 const a: string = 10;
@@ -319,8 +326,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: No change
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
@@ -370,11 +379,56 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Fix Semantic Error
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
 const a: string = "hello";
+
+
+Output::
+>> Screen clear
+[[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
+
+
+[[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
+Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/noEmitOnError/shared/types/db.ts
+/user/username/projects/noEmitOnError/src/main.ts
+/user/username/projects/noEmitOnError/src/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/noEmitOnError/src/main.ts
+
+WatchedFiles::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/src/main.ts:
+  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/src/other.ts:
+  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/noemitonerror/node_modules/@types:
+  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/noemitonerror:
+  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
@@ -432,50 +486,9 @@ var a = "hello";
 }
 
 
-Output::
->> Screen clear
-[[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
-
-
-[[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/noEmitOnError/shared/types/db.ts","/user/username/projects/noEmitOnError/src/main.ts","/user/username/projects/noEmitOnError/src/other.ts"]
-Program options: {"outDir":"/user/username/projects/noEmitOnError/dev-build","noEmitOnError":true,"assumeChangesOnlyAffectDirectDependencies":true,"watch":true,"incremental":true,"configFilePath":"/user/username/projects/noEmitOnError/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/noEmitOnError/shared/types/db.ts
-/user/username/projects/noEmitOnError/src/main.ts
-/user/username/projects/noEmitOnError/src/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/noEmitOnError/src/main.ts
-
-WatchedFiles::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/noemitonerror/node_modules/@types:
-  {"directoryName":"/user/username/projects/noEmitOnError/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
 Change:: No change
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
@@ -518,3 +531,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

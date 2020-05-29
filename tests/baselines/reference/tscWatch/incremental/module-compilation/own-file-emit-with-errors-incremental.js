@@ -1,4 +1,4 @@
-/a/lib/tsc.js -i
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -20,6 +20,40 @@ export const y: string = 20;
 
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"module":"amd"}}
+
+
+/a/lib/tsc.js -i
+Output::
+[96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
+
+[7m1[0m export const y: string = 20;
+[7m [0m [91m             ~[0m
+
+
+
+Found 1 error.
+
+
+
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
+Program options: {"incremental":true,"module":2,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+WatchedFiles::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
@@ -88,6 +122,13 @@ define(["require", "exports"], function (require, exports) {
 }
 
 
+Change::
+
+Input::
+//// [/users/username/projects/project/file1.ts]
+export const z = 10;
+
+
 Output::
 [96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
@@ -108,9 +149,7 @@ Program files::
 /users/username/projects/project/file2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
 /users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
 
 WatchedFiles::
 
@@ -119,11 +158,6 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-Change::
-
-//// [/users/username/projects/project/file1.ts]
-export const z = 10;
 
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
@@ -182,33 +216,3 @@ define(["require", "exports"], function (require, exports) {
   "version": "FakeTSVersion"
 }
 
-
-Output::
-[96mfile2.ts[0m:[93m1[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m1[0m export const y: string = 20;
-[7m [0m [91m             ~[0m
-
-
-
-Found 1 error.
-
-
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"module":2,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/file1.ts
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

@@ -185,26 +185,28 @@ namespace ts.tscWatch {
                 content: `import * as fs from "fs";`
             }, libFile], { currentDirectory: "/a/b" }),
             changes: [
-                sys => {
-                    sys.ensureFileOrFolder({
-                        path: "/a/b/node_modules/@types/node/package.json",
-                        content: `
+                {
+                    caption: "npm install node types",
+                    change: sys => {
+                        sys.ensureFileOrFolder({
+                            path: "/a/b/node_modules/@types/node/package.json",
+                            content: `
 {
   "main": ""
 }
 `
-                    });
-                    sys.ensureFileOrFolder({
-                        path: "/a/b/node_modules/@types/node/index.d.ts",
-                        content: `
+                        });
+                        sys.ensureFileOrFolder({
+                            path: "/a/b/node_modules/@types/node/index.d.ts",
+                            content: `
 declare module "fs" {
     export interface Stats {
         isFile(): boolean;
     }
 }`
-                    });
-                    sys.runQueuedTimeoutCallbacks();
-                    return "npm install node types";
+                        });
+                    },
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -235,16 +237,16 @@ declare module "url" {
                 return createWatchedSystem([root, file, libFile], { currentDirectory: "/a/b" });
             },
             changes: [
-                sys => {
-                    sys.appendFile("/a/b/bar.d.ts", `
+                {
+                    caption: "Add fs definition",
+                    change: sys => sys.appendFile("/a/b/bar.d.ts", `
 declare module "fs" {
     export interface Stats {
         isFile(): boolean;
     }
 }
-`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Add fs definition";
+`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -282,10 +284,10 @@ declare module "fs" {
                 return createWatchedSystem([file1, file2, module1, libFile, configFile], { currentDirectory: "/a/b/projects/myProject/" });
             },
             changes: [
-                sys => {
-                    sys.appendFile("/a/b/projects/myProject/src/file1.ts", "\n;");
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Add new line to file1";
+                {
+                    caption: "Add new line to file1",
+                    change: sys => sys.appendFile("/a/b/projects/myProject/src/file1.ts", "\n;"),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -306,10 +308,10 @@ declare module "fs" {
                 return createWatchedSystem([file, libFile, module], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
-                    sys.renameFolder(`${projectRoot}/node_modules2`, `${projectRoot}/node_modules`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "npm install";
+                {
+                    caption: "npm install",
+                    change: sys => sys.renameFolder(`${projectRoot}/node_modules2`, `${projectRoot}/node_modules`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -336,14 +338,13 @@ declare module "fs" {
                         return createWatchedSystem([libFile, file1, file2, config]);
                     },
                     changes: [
-                        sys => {
-                            const npmCacheFile: File = {
+                        {
+                            caption: "npm install file and folder that start with '.'",
+                            change: sys => sys.ensureFileOrFolder({
                                 path: `${projectRoot}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
                                 content: JSON.stringify({ something: 10 })
-                            };
-                            sys.ensureFileOrFolder(npmCacheFile);
-                            sys.checkTimeoutQueueLength(0);
-                            return "npm install file and folder that start with '.'";
+                            }),
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
                         }
                     ]
                 });
@@ -373,30 +374,35 @@ declare module "fs" {
                 return createWatchedSystem([app, tsconfig, libFile]);
             },
             changes: [
-                sys => {
-                    sys.ensureFileOrFolder({
-                        path: `${projectRoot}/node_modules/@myapp/ts-types/package.json`,
-                        content: JSON.stringify({
-                            version: "1.65.1",
-                            types: "types/somefile.define.d.ts"
-                        })
-                    });
-                    sys.ensureFileOrFolder({
-                        path: `${projectRoot}/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
-                        content: `
+                {
+                    caption: "npm install ts-types",
+                    change: sys => {
+                        sys.ensureFileOrFolder({
+                            path: `${projectRoot}/node_modules/@myapp/ts-types/package.json`,
+                            content: JSON.stringify({
+                                version: "1.65.1",
+                                types: "types/somefile.define.d.ts"
+                            })
+                        });
+                        sys.ensureFileOrFolder({
+                            path: `${projectRoot}/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
+                            content: `
 declare namespace myapp {
     function component(str: string): number;
 }`
-                    });
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "npm install ts-types";
+                        });
+                    },
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
-                (sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
-                    sys.checkTimeoutQueueLength(0);
-                    const newProgram = (watchorSolution as Watch).getProgram();
-                    assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
-                    assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");
-                    return "No change, just check program";
+                {
+                    caption: "No change, just check program",
+                    change: noop,
+                    timeouts: (sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
+                        sys.checkTimeoutQueueLength(0);
+                        const newProgram = (watchorSolution as Watch).getProgram();
+                        assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
+                        assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");
+                    }
                 }
             ]
         });

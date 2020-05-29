@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /user/username/projects/myproject/tsconfig.json
+Input::
 //// [/user/username/projects/myproject/file1.ts]
 export const c = 30;
 
@@ -90,22 +90,8 @@ interface Array<T> { length: number; [n: number]: T; }
 }
 
 
-//// [/user/username/projects/myproject/build/outFile.js]
-define("file1", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.c = void 0;
-    exports.c = 30;
-});
-define("src/file2", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.d = void 0;
-    exports.d = 30;
-});
 
-
-
+/a/lib/tsc.js -w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
@@ -145,3 +131,19 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/build/outFile.js]
+define("file1", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.c = void 0;
+    exports.c = 30;
+});
+define("src/file2", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.d = void 0;
+    exports.d = 30;
+});
+
+

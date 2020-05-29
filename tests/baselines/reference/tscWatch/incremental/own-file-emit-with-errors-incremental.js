@@ -1,4 +1,4 @@
-/a/lib/tsc.js -i
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -20,6 +20,40 @@ const x = 10;
 
 //// [/users/username/projects/project/file2.ts]
 const y: string = 20;
+
+
+/a/lib/tsc.js -i
+Output::
+[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
+
+[7m1[0m const y: string = 20;
+[7m [0m [91m      ~[0m
+
+
+
+Found 1 error.
+
+
+
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
+Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+WatchedFiles::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/users/username/projects/project/file1.js]
 var x = 10;
@@ -77,6 +111,13 @@ var y = 20;
 }
 
 
+Change::
+
+Input::
+//// [/users/username/projects/project/file1.ts]
+const z = 10;
+
+
 Output::
 [96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
@@ -108,11 +149,6 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-Change::
-
-//// [/users/username/projects/project/file1.ts]
-const z = 10;
 
 //// [/users/username/projects/project/file1.js]
 var z = 10;
@@ -166,35 +202,3 @@ var z = 10;
   "version": "FakeTSVersion"
 }
 
-
-Output::
-[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m1[0m const y: string = 20;
-[7m [0m [91m      ~[0m
-
-
-
-Found 1 error.
-
-
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

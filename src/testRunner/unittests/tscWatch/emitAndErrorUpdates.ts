@@ -97,10 +97,10 @@ console.log(b.c.d);`
                     subScenario: `deepImportChanges/${subScenario}`,
                     files: () => [aFile, bFile, cFile],
                     changes: [
-                        sys => {
-                            sys.writeFile(cFile.path, cFile.content.replace("d", "d2"));
-                            sys.runQueuedTimeoutCallbacks();
-                            return "Rename property d to d2 of class C";
+                        {
+                            caption: "Rename property d to d2 of class C",
+                            change: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
+                            timeouts: runQueuedTimeoutCallbacks,
                         }
                     ],
                 });
@@ -197,10 +197,10 @@ getPoint().c.x;`
                 subScenario: "file not exporting a deep multilevel import that changes",
                 files: () => [aFile, bFile, cFile, dFile, eFile],
                 changes: [
-                    sys => {
-                        sys.writeFile(aFile.path, aFile.content.replace("x2", "x"));
-                        sys.runQueuedTimeoutCallbacks();
-                        return "Rename property x2 to x of interface Coords";
+                    {
+                        caption: "Rename property x2 to x of interface Coords",
+                        change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
+                        timeouts: runQueuedTimeoutCallbacks,
                     }
                 ]
             });
@@ -260,10 +260,10 @@ export class Data {
                     files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files],
                     configFile: () => config,
                     changes: [
-                        sys => {
-                            sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
-                            sys.runQueuedTimeoutCallbacks();
-                            return "Rename property title to title2 of interface ITest";
+                        {
+                            caption: "Rename property title to title2 of interface ITest",
+                            change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                            timeouts: runQueuedTimeoutCallbacks,
                         }
                     ]
                 });
@@ -303,6 +303,20 @@ export class Data2 {
         });
 
         describe("with noEmitOnError", () => {
+            function change(caption: string, content: string): TscWatchCompileChange {
+                return {
+                    caption,
+                    change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content),
+                    // build project
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                };
+            }
+            const noChange: TscWatchCompileChange = {
+                caption: "No change",
+                change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!),
+                // build project
+                timeouts: checkSingleTimeoutQueueLengthAndRun,
+            };
             verifyEmitAndErrorUpdates({
                 subScenario: "with noEmitOnError",
                 currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError`,
@@ -312,29 +326,19 @@ export class Data2 {
                 configFile: () => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", "tsconfig.json"),
                 changes: [
                     noChange,
-                    sys => change(sys, "Fix Syntax error", `import { A } from "../shared/types/db";
+                    change("Fix Syntax error", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };`),
-                    sys => change(sys, "Semantic Error", `import { A } from "../shared/types/db";
+                    change("Semantic Error", `import { A } from "../shared/types/db";
 const a: string = 10;`),
                     noChange,
-                    sys => change(sys, "Fix Semantic Error", `import { A } from "../shared/types/db";
+                    change("Fix Semantic Error", `import { A } from "../shared/types/db";
 const a: string = "hello";`),
                     noChange,
                 ],
                 baselineIncremental: true
             });
-            function change(sys: WatchedSystem, caption: string, content: string) {
-                sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content);
-                sys.checkTimeoutQueueLengthAndRun(1); // build project
-                return caption;
-            }
-            function noChange(sys: WatchedSystem) {
-                sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!);
-                sys.checkTimeoutQueueLengthAndRun(1); // build project
-                return "No change";
-            }
         });
     });
 }

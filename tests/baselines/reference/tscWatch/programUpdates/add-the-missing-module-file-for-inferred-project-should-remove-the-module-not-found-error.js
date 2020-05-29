@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/file1.ts
+Input::
 //// [/a/b/file1.ts]
 import * as T from "./moduleFile"; T.bar();
 
@@ -15,14 +15,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/file1.js]
-"use strict";
-exports.__esModule = true;
-var T = require("./moduleFile");
-T.bar();
 
-
-
+/a/lib/tsc.js -w /a/b/file1.ts
 Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
@@ -62,19 +56,19 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Create module file
-
-//// [/a/b/file1.js] file written with same contents
-//// [/a/b/moduleFile.ts]
-export function bar() { }
-
-//// [/a/b/moduleFile.js]
+//// [/a/b/file1.js]
 "use strict";
 exports.__esModule = true;
-exports.bar = void 0;
-function bar() { }
-exports.bar = bar;
+var T = require("./moduleFile");
+T.bar();
 
+
+
+Change:: Create module file
+
+Input::
+//// [/a/b/moduleFile.ts]
+export function bar() { }
 
 
 Output::
@@ -110,3 +104,13 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/file1.js] file written with same contents
+//// [/a/b/moduleFile.js]
+"use strict";
+exports.__esModule = true;
+exports.bar = void 0;
+function bar() { }
+exports.bar = bar;
+
+

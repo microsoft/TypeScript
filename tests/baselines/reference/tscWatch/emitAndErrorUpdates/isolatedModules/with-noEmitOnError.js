@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w
+Input::
 //// [/user/username/projects/noEmitOnError/shared/types/db.ts]
 export interface A {
     name: string;
@@ -33,6 +33,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
+/a/lib/tsc.js --w
 Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
@@ -89,8 +90,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: No change
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
@@ -145,32 +148,15 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Fix Syntax error
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };
-
-//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
-"use strict";
-exports.__esModule = true;
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
-"use strict";
-exports.__esModule = true;
-var a = {
-    lastName: 'sdsd'
-};
-
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
-"use strict";
-exports.__esModule = true;
-console.log("hi");
-
 
 
 Output::
@@ -215,8 +201,29 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/noEmitOnError/dev-build/shared/types/db.js]
+"use strict";
+exports.__esModule = true;
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
+"use strict";
+exports.__esModule = true;
+var a = {
+    lastName: 'sdsd'
+};
+
+
+//// [/user/username/projects/noEmitOnError/dev-build/src/other.js]
+"use strict";
+exports.__esModule = true;
+console.log("hi");
+
+
+
 Change:: Semantic Error
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
 const a: string = 10;
@@ -270,8 +277,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: No change
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
@@ -321,17 +330,13 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Fix Semantic Error
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts]
 import { A } from "../shared/types/db";
 const a: string = "hello";
-
-//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
-"use strict";
-exports.__esModule = true;
-var a = "hello";
-
 
 
 Output::
@@ -376,8 +381,16 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
+"use strict";
+exports.__esModule = true;
+var a = "hello";
+
+
+
 Change:: No change
 
+Input::
 //// [/user/username/projects/noEmitOnError/src/main.ts] file written with same contents
 
 Output::
@@ -420,3 +433,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/noemitonerror","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
