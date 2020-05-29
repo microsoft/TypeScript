@@ -5,7 +5,7 @@ namespace ts.refactor {
     const actionNameNamedToDefault = "Convert named export to default export";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const info = getInfo(context);
+            const info = getInfo(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
             const description = info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
             const actionName = info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
@@ -27,12 +27,12 @@ namespace ts.refactor {
         readonly exportingModuleSymbol: Symbol;
     }
 
-    function getInfo(context: RefactorContext): Info | undefined {
+    function getInfo(context: RefactorContext, userRequested = true): Info | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        // If the span is entirely contained in an export node, check that node.
-        const exportNode = !!(getModifierFlags(token.parent) & ModifierFlags.Export) ? token.parent : getParentNodeInSpan(token, file, span);
+        const cursorRequest = userRequested && span;
+        const exportNode = !!(getModifierFlags(token.parent) & ModifierFlags.Export) && cursorRequest ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
             return undefined;
         }
