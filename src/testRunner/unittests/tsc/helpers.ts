@@ -1,7 +1,7 @@
 namespace ts {
     export type TscCompileSystem = fakes.System & {
         writtenFiles: Map<true>;
-        baseLine(): void;
+        baseLine(): { file: string; text: string; };
     };
 
     export enum BuildKind {
@@ -128,20 +128,24 @@ namespace ts {
                 inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true }) :
                 inputFs.diff(initialFs, { includeChangedFileWithSameContent: true });
             const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
-            Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`, `Input::
+            return {
+                file: `${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`,
+                text: `Input::
 ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 
 Output::
 ${sys.output.join("")}
 
-${patch ? vfs.formatPatch(patch) : ""}`);
+${patch ? vfs.formatPatch(patch) : ""}`
+            };
         };
         return sys;
     }
 
-    export function verifyTscBaseline(sys: () => TscCompileSystem) {
+    export function verifyTscBaseline(sys: () => { baseLine: TscCompileSystem["baseLine"]; }) {
         it(`Generates files matching the baseline`, () => {
-            sys().baseLine();
+            const { file, text } = sys().baseLine();
+            Harness.Baseline.runBaseline(file, text);
         });
     }
 

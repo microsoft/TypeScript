@@ -260,6 +260,42 @@ interface Symbol {
         sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
     }
 
+    interface VerifyIncrementalCorrectness {
+        scenario: TscCompile["scenario"];
+        subScenario: TscCompile["subScenario"];
+        commandLineArgs: TscCompile["commandLineArgs"];
+        modifyFs: TscCompile["modifyFs"];
+        incrementalModifyFs: TscIncremental["modifyFs"];
+        tick: () => void;
+        baseFs: vfs.FileSystem;
+        newSys: TscCompileSystem;
+    }
+    function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness) {
+        it(`Verify emit output file text is same when built clean`, () => {
+            const {
+                scenario, subScenario, commandLineArgs,
+                modifyFs, incrementalModifyFs,
+                tick, baseFs, newSys
+            } = input();
+            const sys = tscCompile({
+                scenario,
+                subScenario,
+                fs: () => baseFs.makeReadonly(),
+                commandLineArgs,
+                modifyFs: fs => {
+                    tick();
+                    if (modifyFs) modifyFs(fs);
+                    incrementalModifyFs(fs);
+                },
+            });
+            for (const outputFile of arrayFrom(sys.writtenFiles.keys())) {
+                const expectedText = sys.readFile(outputFile);
+                const actualText = newSys.readFile(outputFile);
+                assert.equal(actualText, expectedText, `File: ${outputFile}`);
+            }
+        });
+    }
+
     export interface TscIncremental {
         buildKind: BuildKind;
         modifyFs: (fs: vfs.FileSystem) => void;
@@ -351,27 +387,117 @@ interface Symbol {
                         newSys = undefined!;
                     });
                     verifyTscBaseline(() => newSys);
-                    it(`Verify emit output file text is same when built clean`, () => {
-                        const sys = tscCompile({
-                            scenario,
-                            subScenario,
-                            fs: () => baseFs.makeReadonly(),
-                            commandLineArgs,
-                            modifyFs: fs => {
-                                tick();
-                                if (modifyFs) modifyFs(fs);
-                                incrementalModifyFs(fs);
-                            },
-                        });
-
-                        for (const outputFile of arrayFrom(sys.writtenFiles.keys())) {
-                            const expectedText = sys.readFile(outputFile);
-                            const actualText = newSys.readFile(outputFile);
-                            assert.equal(actualText, expectedText, `File: ${outputFile}`);
-                        }
-                    });
+                    verifyIncrementalCorrectness(() => ({
+                        scenario,
+                        subScenario,
+                        baseFs,
+                        newSys,
+                        commandLineArgs,
+                        incrementalModifyFs,
+                        modifyFs,
+                        tick
+                    }));
                 });
             }
+        });
+    }
+
+    export function verifyTscSerializedIncrementalEdits(input: VerifyTsBuildInput) {
+        verifyTscSerializedIncrementalEditsWorker(input);
+        if (input.baselineIncremental) {
+            verifyTscSerializedIncrementalEditsWorker({
+                ...input,
+                subScenario: `${input.subScenario} with incremental`,
+                commandLineArgs: [...input.commandLineArgs, "--incremental"],
+            });
+        }
+    }
+    function verifyTscSerializedIncrementalEditsWorker({
+        subScenario, fs, scenario, commandLineArgs,
+        baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
+        incrementalScenarios
+    }: VerifyTsBuildInputWorker) {
+        describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario} serializedEdits`, () => {
+            Debug.assert(!!incrementalScenarios.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
+            let tick: () => void;
+            let sys: TscCompileSystem;
+            let baseFs: vfs.FileSystem;
+            let incrementalSys: TscCompileSystem[];
+            before(() => {
+                ({ fs: baseFs, tick } = getFsWithTime(fs()));
+                sys = tscCompile({
+                    scenario,
+                    subScenario,
+                    fs: () => baseFs.makeReadonly(),
+                    commandLineArgs,
+                    modifyFs: fs => {
+                        if (modifyFs) modifyFs(fs);
+                        tick();
+                    },
+                    baselineSourceMap,
+                    baselineReadFileCalls,
+                    baselinePrograms
+                });
+                incrementalScenarios.forEach((
+                    { buildKind, modifyFs, subScenario: incrementalSubScenario, commandLineArgs: incrementalCommandLineArgs },
+                    index
+                ) => {
+                    Debug.assert(buildKind !== BuildKind.Initial, "Incremental edit cannot be initial compilation");
+                    tick();
+                    (incrementalSys || (incrementalSys = [])).push(tscCompile({
+                        scenario,
+                        subScenario: incrementalSubScenario || subScenario,
+                        buildKind,
+                        fs: () => index === 0 ? sys.vfs : incrementalSys[index - 1].vfs,
+                        commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
+                        modifyFs: fs => {
+                            tick();
+                            modifyFs(fs);
+                            tick();
+                        },
+                        baselineSourceMap,
+                        baselineReadFileCalls,
+                        baselinePrograms
+                    }));
+                });
+            });
+            after(() => {
+                baseFs = undefined!;
+                sys = undefined!;
+                tick = undefined!;
+                incrementalSys = undefined!;
+            });
+            describe("serializedBuilde", () => {
+                verifyTscBaseline(() => ({
+                    baseLine: () => {
+                        const { file, text } = sys.baseLine();
+                        const texts: string[] = [text];
+                        incrementalSys.forEach((sys, index) => {
+                            const incrementalScenario = incrementalScenarios[index];
+                            texts.push("");
+                            texts.push(`Change:: ${incrementalScenario.subScenario || incrementalScenario.buildKind}`);
+                            texts.push(sys.baseLine().text);
+                        });
+                        return { file, text: texts.join("\r\n") };
+                    }
+                }));
+            });
+            describe("incremental correctness", () => {
+                incrementalScenarios.forEach((_, index) => verifyIncrementalCorrectness(() => ({
+                    scenario,
+                    subScenario,
+                    baseFs,
+                    newSys: incrementalSys[index],
+                    commandLineArgs,
+                    incrementalModifyFs: fs => {
+                        for (let i = 0; i <= index; i++) {
+                            incrementalScenarios[i].modifyFs(fs);
+                        }
+                    },
+                    modifyFs,
+                    tick
+                })));
+            });
         });
     }
 

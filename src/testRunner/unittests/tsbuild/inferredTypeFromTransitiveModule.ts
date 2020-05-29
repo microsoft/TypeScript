@@ -8,7 +8,7 @@ namespace ts {
             projFs = undefined!;
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "inferredTypeFromTransitiveModule",
             subScenario: "inferred type from transitive module",
             fs: () => projFs,
@@ -19,7 +19,7 @@ namespace ts {
             }],
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             subScenario: "inferred type from transitive module with isolatedModules",
             fs: () => projFs,
             scenario: "inferredTypeFromTransitiveModule",
@@ -31,7 +31,7 @@ namespace ts {
             }]
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "inferredTypeFromTransitiveModule",
             subScenario: "reports errors in files affected by change in signature with isolatedModules",
             fs: () => projFs,

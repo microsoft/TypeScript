@@ -71,3 +71,14 @@ exports.x = 10;
   "version": "FakeTSVersion"
 }
 
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --p src/project --rootDir src/project/src
+exitCode:: ExitStatus.Success
+
+

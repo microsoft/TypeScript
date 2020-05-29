@@ -169,7 +169,7 @@ namespace ts {
             return fs;
         }
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "outFile",
             subScenario: "clean projects",
             fs: getOutFileFsAfterBuild,

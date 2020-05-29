@@ -1,6 +1,6 @@
 namespace ts {
     describe("unittests:: tsc:: incremental::", () => {
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "incremental",
             subScenario: "when passing filename for buildinfo on commandline",
             fs: () => loadProjectFromFiles({
@@ -20,7 +20,7 @@ namespace ts {
             incrementalScenarios: noChangeOnlyRuns
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "incremental",
             subScenario: "when passing rootDir from commandline",
             fs: () => loadProjectFromFiles({
@@ -37,7 +37,7 @@ namespace ts {
             incrementalScenarios: noChangeOnlyRuns
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "incremental",
             subScenario: "with only dts files",
             fs: () => loadProjectFromFiles({
@@ -55,7 +55,7 @@ namespace ts {
             ]
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "incremental",
             subScenario: "when passing rootDir is in the tsconfig",
             fs: () => loadProjectFromFiles({
@@ -81,41 +81,40 @@ namespace ts {
             after(() => {
                 projFs = undefined!;
             });
-            verifyTscIncrementalEdits({
-                scenario: "incremental",
-                subScenario: "with noEmitOnError syntax errors",
-                fs: () => projFs,
-                commandLineArgs: ["--incremental", "-p", "src"],
-                incrementalScenarios: [
-                    {
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
-                        modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+
+            function verifyNoEmitOnError(subScenario: string, fixModifyFs: TscIncremental["modifyFs"], modifyFs?: TscIncremental["modifyFs"]) {
+                verifyTscSerializedIncrementalEdits({
+                    scenario: "incremental",
+                    subScenario,
+                    fs: () => projFs,
+                    commandLineArgs: ["--incremental", "-p", "src"],
+                    modifyFs,
+                    incrementalScenarios: [
+                        noChangeRun,
+                        {
+                            buildKind: BuildKind.IncrementalDtsUnchanged,
+                            modifyFs: fixModifyFs
+                        },
+                        noChangeRun,
+                    ],
+                    baselinePrograms: true
+                });
+            }
+            verifyNoEmitOnError(
+                "with noEmitOnError syntax errors",
+                fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };`, "utf-8")
-                    },
-                    noChangeRun,
-                ],
-                baselinePrograms: true
-            });
+            );
 
-            verifyTscIncrementalEdits({
-                scenario: "incremental",
-                subScenario: "with noEmitOnError semantic errors",
-                fs: () => projFs,
-                commandLineArgs: ["--incremental", "-p", "src"],
-                modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+            verifyNoEmitOnError(
+                "with noEmitOnError semantic errors",
+                fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = "hello";`, "utf-8"),
+                fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
 const a: string = 10;`, "utf-8"),
-                incrementalScenarios: [
-                    {
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
-                        modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = "hello";`, "utf-8")
-                    },
-                    noChangeRun,
-                ],
-                baselinePrograms: true
-            });
+            );
         });
     });
 }

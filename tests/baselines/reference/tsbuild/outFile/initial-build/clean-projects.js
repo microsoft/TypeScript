@@ -150,3 +150,14 @@ exitCode:: ExitStatus.Success
 //// [/src/third/thirdjs/output/third-output.js] unlink
 //// [/src/third/thirdjs/output/third-output.js.map] unlink
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo] unlink
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b /src/third --clean
+exitCode:: ExitStatus.Success
+
+

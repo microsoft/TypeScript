@@ -126,3 +126,14 @@ exitCode:: ExitStatus.Success
 //// [/src/tests/index.d.ts] unlink
 //// [/src/tests/index.js] unlink
 //// [/src/tests/tsconfig.tsbuildinfo] unlink
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b /src/tests --clean
+exitCode:: ExitStatus.Success
+
+

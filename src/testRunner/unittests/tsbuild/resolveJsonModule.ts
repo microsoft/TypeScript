@@ -51,7 +51,7 @@ export default hello.hello`);
             commandLineArgs: ["--b", "/src/tsconfig_withIncludeAndFiles.json"],
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "resolveJsonModule",
             subScenario: "sourcemap",
             fs: () => projFs,
@@ -60,7 +60,7 @@ export default hello.hello`);
             incrementalScenarios: noChangeOnlyRuns
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "resolveJsonModule",
             subScenario: "without outDir",
             fs: () => projFs,
@@ -71,7 +71,7 @@ export default hello.hello`);
     });
 
     describe("unittests:: tsbuild:: with resolveJsonModule option on project importJsonFromProjectReference", () => {
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "resolveJsonModule",
             subScenario: "importing json module from project reference",
             fs: () => loadProjectFromDisk("tests/projects/importJsonFromProjectReference"),

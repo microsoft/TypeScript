@@ -8,15 +8,20 @@ namespace ts {
             projFs = undefined!;
         });
 
-        function verifyNoEmitOnError(subScenario: string, incrementalScenario: TscIncremental, modifyFs?: TscIncremental["modifyFs"]) {
-            verifyTscIncrementalEdits({
+        function verifyNoEmitOnError(subScenario: string, fixModifyFs: TscIncremental["modifyFs"], modifyFs?: TscIncremental["modifyFs"]) {
+            verifyTscSerializedIncrementalEdits({
                 scenario: "noEmitOnError",
                 subScenario,
                 fs: () => projFs,
                 modifyFs,
                 commandLineArgs: ["--b", "/src/tsconfig.json"],
                 incrementalScenarios: [
-                    incrementalScenario,
+                    noChangeRun,
+                    {
+                        subScenario: "Fix error",
+                        buildKind: BuildKind.IncrementalDtsChange,
+                        modifyFs: fixModifyFs,
+                    },
                     noChangeRun,
                 ],
                 baselinePrograms: true,
@@ -24,19 +29,20 @@ namespace ts {
             });
         }
 
-        verifyNoEmitOnError("syntax errors", {
-            buildKind: BuildKind.IncrementalDtsUnchanged,
-            modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+        verifyNoEmitOnError(
+            "syntax errors",
+            fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
 };`, "utf-8")
-        });
+        );
 
-        verifyNoEmitOnError("semantic errors", {
-            buildKind: BuildKind.IncrementalDtsUnchanged,
-            modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = "hello";`, "utf-8")
-        }, fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = 10;`, "utf-8"));
+        verifyNoEmitOnError(
+            "semantic errors",
+            fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = "hello";`, "utf-8"),
+            fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = 10;`, "utf-8")
+        );
     });
 }

@@ -75,3 +75,14 @@ exports.x = void 0;
 exports.x = 10;
 
 
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo
+exitCode:: ExitStatus.Success
+
+
