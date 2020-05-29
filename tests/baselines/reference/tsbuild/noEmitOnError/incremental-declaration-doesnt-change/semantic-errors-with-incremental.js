@@ -1,4 +1,11 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/src/main.ts]
+import { A } from "../shared/types/db";
+const a: string = "hello";
+
+
+
+Output::
 /lib/tsc --b /src/tsconfig.json --incremental
 exitCode:: ExitStatus.Success
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
@@ -79,8 +86,4 @@ console.log("hi");
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/src/main.ts]
-import { A } from "../shared/types/db";
-const a: string = "hello";
 

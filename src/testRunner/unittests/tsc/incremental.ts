@@ -17,7 +17,7 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo"],
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
 
         verifyTscIncrementalEdits({
@@ -34,7 +34,7 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
 
         verifyTscIncrementalEdits({
@@ -70,7 +70,7 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--p", "src/project"],
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
 
         describe("with noEmitOnError", () => {

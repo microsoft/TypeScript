@@ -1,4 +1,15 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/core/tsconfig.json]
+{
+    "compilerOptions": {
+        "incremental": true,
+        "module": "amd"
+    }
+}
+
+
+
+Output::
 /lib/tsc --b /src/core --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -31,14 +42,6 @@ define(["require", "exports"], function (require, exports) {
     exports.multiply = multiply;
 });
 
-
-//// [/src/core/tsconfig.json]
-{
-    "compilerOptions": {
-        "incremental": true,
-        "module": "amd"
-    }
-}
 
 //// [/src/core/tsconfig.tsbuildinfo]
 {

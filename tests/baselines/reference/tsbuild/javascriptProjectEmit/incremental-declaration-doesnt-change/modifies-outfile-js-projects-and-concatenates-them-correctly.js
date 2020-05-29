@@ -1,13 +1,16 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
-/lib/tsc -b /src
-exitCode:: ExitStatus.Success
-
-
+Input::
 //// [/src/sub-project/index.js]
 /**
  * @typedef {Nominal<string, 'MyNominal'>} MyNominal
  */
 const c = /** @type {*} */(undefined);
+
+
+
+
+Output::
+/lib/tsc -b /src
+exitCode:: ExitStatus.Success
 
 
 //// [/src/sub-project/sub-project.d.ts] file written with same contents

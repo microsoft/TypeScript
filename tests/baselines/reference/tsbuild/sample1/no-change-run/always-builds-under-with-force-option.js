@@ -1,4 +1,7 @@
-//// [/lib/no-change-runOutput.txt]
+Input::
+
+
+Output::
 /lib/tsc --b /src/tests --force
 exitCode:: ExitStatus.Success
 

@@ -1,4 +1,17 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/core/tsconfig.json]
+{
+    "compilerOptions": {
+        "incremental": true,
+"listFiles": true,
+"listEmittedFiles": true,
+        "target": "es5",
+    }
+}
+
+
+
+Output::
 /lib/tsc --b /src/core --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -35,16 +48,6 @@ exports.leftPad = leftPad;
 function multiply(a, b) { return a * b; }
 exports.multiply = multiply;
 
-
-//// [/src/core/tsconfig.json]
-{
-    "compilerOptions": {
-        "incremental": true,
-"listFiles": true,
-"listEmittedFiles": true,
-        "target": "es5",
-    }
-}
 
 //// [/src/core/tsconfig.tsbuildinfo]
 {

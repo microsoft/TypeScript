@@ -1,4 +1,16 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/src/a.ts]
+export class B { prop = "hello"; }
+
+class C { }
+export interface A {
+  b: B;
+}
+
+
+
+
+Output::
 /lib/tsc --b /src --verbose
 [[90m12:08:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
@@ -15,15 +27,6 @@ exitCode:: ExitStatus.Success
 //// [/src/lib/a.d.ts] file written with same contents
 //// [/src/lib/a.d.ts.map]
 {"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../src/a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IAAG,IAAI,SAAW;CAAE;AAGlC,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;CACN"}
-
-//// [/src/src/a.ts]
-export class B { prop = "hello"; }
-
-class C { }
-export interface A {
-  b: B;
-}
-
 
 //// [/src/tsconfig.tsbuildinfo]
 {

@@ -1,4 +1,7 @@
-//// [/lib/no-change-runOutput.txt]
+Input::
+
+
+Output::
 /lib/tsc --p src/project
 exitCode:: ExitStatus.Success
 

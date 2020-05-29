@@ -1,4 +1,15 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/core/tsconfig.json]
+{
+    "compilerOptions": {
+        "incremental": true, "declaration": true,
+        "skipDefaultLibCheck": true
+    }
+}
+
+
+
+Output::
 /lib/tsc --b /src/core --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -22,14 +33,6 @@ export declare function multiply(a: number, b: number): number;
 
 
 //// [/src/core/index.js] file written with same contents
-//// [/src/core/tsconfig.json]
-{
-    "compilerOptions": {
-        "incremental": true, "declaration": true,
-        "skipDefaultLibCheck": true
-    }
-}
-
 //// [/src/core/tsconfig.tsbuildinfo]
 {
   "program": {

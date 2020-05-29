@@ -174,7 +174,7 @@ namespace ts {
             subScenario: "clean projects",
             fs: getOutFileFsAfterBuild,
             commandLineArgs: ["--b", "/src/third", "--clean"],
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
 
         verifyTsc({

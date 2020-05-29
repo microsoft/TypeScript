@@ -1,4 +1,11 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/src/main.ts]
+import { A } from "../shared/types/db";
+const a: string = "hello";
+
+
+
+Output::
 /lib/tsc --b /src/tsconfig.json
 exitCode:: ExitStatus.Success
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
@@ -32,8 +39,4 @@ var a = "hello";
 exports.__esModule = true;
 console.log("hi");
 
-
-//// [/src/src/main.ts]
-import { A } from "../shared/types/db";
-const a: string = "hello";
 

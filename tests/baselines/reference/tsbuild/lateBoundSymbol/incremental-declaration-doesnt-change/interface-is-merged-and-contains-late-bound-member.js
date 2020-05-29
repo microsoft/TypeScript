@@ -1,4 +1,20 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/src/main.ts]
+import { HKT } from "./hkt";
+
+const sym = Symbol();
+
+declare module "./hkt" {
+  interface HKT<T> {
+    [sym]: { a: T }
+  }
+}
+
+type A = HKT<number>[typeof sym];
+
+
+
+Output::
 /lib/tsc --b /src/tsconfig.json --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
@@ -17,19 +33,6 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 var sym = Symbol();
 
-
-//// [/src/src/main.ts]
-import { HKT } from "./hkt";
-
-const sym = Symbol();
-
-declare module "./hkt" {
-  interface HKT<T> {
-    [sym]: { a: T }
-  }
-}
-
-type A = HKT<number>[typeof sym];
 
 //// [/src/tsconfig.tsbuildinfo]
 {

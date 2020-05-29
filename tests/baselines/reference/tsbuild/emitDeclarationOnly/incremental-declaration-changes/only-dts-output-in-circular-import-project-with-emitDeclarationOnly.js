@@ -1,4 +1,15 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/src/a.ts]
+import { B } from "./b";
+
+export interface A {
+  b: B; foo: any;
+}
+
+
+
+
+Output::
 /lib/tsc --b /src --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
@@ -21,14 +32,6 @@ export interface A {
 //// [/src/lib/b.d.ts] file written with same contents
 //// [/src/lib/c.d.ts] file written with same contents
 //// [/src/lib/index.d.ts] file written with same contents
-//// [/src/src/a.ts]
-import { B } from "./b";
-
-export interface A {
-  b: B; foo: any;
-}
-
-
 //// [/src/tsconfig.tsbuildinfo]
 {
   "program": {

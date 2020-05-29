@@ -1,4 +1,75 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/main/index.ts]
+import { foo } from '../strings/foo.json';
+
+console.log(foo);
+
+//// [/src/main/tsconfig.json]
+{
+    "extends": "../tsconfig.json",
+    "include": [
+        "./**/*.ts"
+    ],
+    "references": [
+        {
+            "path": "../strings/tsconfig.json"
+        }
+    ]
+}
+
+//// [/src/strings/foo.json]
+{
+    "foo": "bar baz"
+}
+
+//// [/src/strings/tsconfig.json]
+{
+    "extends": "../tsconfig.json",
+    "include": [ "foo.json" ],
+    "references": []
+}
+
+//// [/src/tsconfig.json]
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "rootDir": "./",
+        "composite": true,
+        "resolveJsonModule": true,
+        "strict": true,
+        "esModuleInterop": true
+    },
+    "references": [
+        {
+            "path": "./strings/tsconfig.json"
+        },
+        {
+            "path": "./main/tsconfig.json"
+        }
+    ],
+    "files": []
+}
+
+
+
+
+Output::
 /lib/tsc --b src/tsconfig.json --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/strings/tsconfig.json

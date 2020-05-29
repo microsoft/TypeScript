@@ -1,4 +1,23 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/tests/tsconfig.json]
+{
+    "references": [
+        { "path": "../core" },
+        { "path": "../logic" }
+    ],
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true,
+        "esModuleInterop": true
+    }
+}
+
+
+
+Output::
 /lib/tsc --b /src/tests --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -47,22 +66,6 @@ logic.getSecondsInDay();
 var mod = __importStar(require("../core/anotherModule"));
 exports.m = mod;
 
-
-//// [/src/tests/tsconfig.json]
-{
-    "references": [
-        { "path": "../core" },
-        { "path": "../logic" }
-    ],
-    "files": ["index.ts"],
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true,
-        "esModuleInterop": true
-    }
-}
 
 //// [/src/tests/tsconfig.tsbuildinfo]
 {

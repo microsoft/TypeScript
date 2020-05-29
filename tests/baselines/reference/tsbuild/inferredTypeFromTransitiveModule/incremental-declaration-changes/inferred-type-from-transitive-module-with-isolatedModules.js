@@ -1,4 +1,18 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/bar.ts]
+interface RawAction {
+    (...args: any[]): Promise<any> | void;
+}
+interface ActionFactory {
+    <T extends RawAction>(target: T): T;
+}
+declare function foo<U extends any[] = any[]>(): ActionFactory;
+export default foo()(function foobar(): void {
+});
+
+
+
+Output::
 /lib/tsc --b /src --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
@@ -11,17 +25,6 @@
 
 exitCode:: ExitStatus.Success
 
-
-//// [/src/bar.ts]
-interface RawAction {
-    (...args: any[]): Promise<any> | void;
-}
-interface ActionFactory {
-    <T extends RawAction>(target: T): T;
-}
-declare function foo<U extends any[] = any[]>(): ActionFactory;
-export default foo()(function foobar(): void {
-});
 
 //// [/src/obj/bar.d.ts]
 declare const _default: () => void;

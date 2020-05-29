@@ -1,4 +1,23 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/logic/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "declarationDir": "decls",
+        "sourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../core" }
+    ]
+}
+
+
+
+
+Output::
 /lib/tsc --b /src/tests --verbose
 [[90m12:12:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -40,22 +59,6 @@ export declare const m: typeof mod;
 //// [/src/logic/index.js] file written with same contents
 //// [/src/logic/index.js.map] file written with same contents
 //// [/src/logic/index.js.map.baseline.txt] file written with same contents
-//// [/src/logic/tsconfig.json]
-{
-    "compilerOptions": {
-        "composite": true,
-        "declaration": true,
-        "declarationDir": "decls",
-        "sourceMap": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true
-    },
-    "references": [
-        { "path": "../core" }
-    ]
-}
-
-
 //// [/src/logic/tsconfig.tsbuildinfo]
 {
   "program": {

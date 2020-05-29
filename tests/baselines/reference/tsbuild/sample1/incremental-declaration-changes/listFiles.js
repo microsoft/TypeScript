@@ -1,4 +1,14 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/core/index.ts]
+export const someString: string = "HELLO WORLD";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
+
+export class someClass { }
+
+
+
+Output::
 /lib/tsc --b /src/tests --listFiles
 /lib/lib.d.ts
 /src/core/anotherModule.ts
@@ -43,13 +53,6 @@ var someClass = /** @class */ (function () {
 }());
 exports.someClass = someClass;
 
-
-//// [/src/core/index.ts]
-export const someString: string = "HELLO WORLD";
-export function leftPad(s: string, n: number) { return s + n; }
-export function multiply(a: number, b: number) { return a * b; }
-
-export class someClass { }
 
 //// [/src/core/tsconfig.tsbuildinfo]
 {

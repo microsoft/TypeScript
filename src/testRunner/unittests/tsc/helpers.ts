@@ -16,6 +16,7 @@ namespace ts {
         buildKind: BuildKind.NoChangeRun,
         modifyFs: noop
     };
+    export const noChangeOnlyRuns = [noChangeRun];
 
     export interface TscCompile {
         scenario: string;
@@ -70,14 +71,16 @@ namespace ts {
     }
 
     export function tscCompile(input: TscCompile) {
-        const baseFs = input.fs();
-        const fs = baseFs.shadow();
+        const initialFs = input.fs();
+        const inputFs = initialFs.shadow();
         const {
             scenario, subScenario, buildKind,
             commandLineArgs, modifyFs,
             baselineSourceMap, baselineReadFileCalls, baselinePrograms
         } = input;
-        if (modifyFs) modifyFs(fs);
+        if (modifyFs) modifyFs(inputFs);
+        inputFs.makeReadonly();
+        const fs = inputFs.shadow();
 
         // Create system
         const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
@@ -118,14 +121,20 @@ namespace ts {
         }
         if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
 
-        // Baseline the errors
-        fs.writeFileSync(`/lib/${buildKind || BuildKind.Initial}Output.txt`, sys.output.join(""));
         fs.makeReadonly();
 
         sys.baseLine = () => {
-            const patch = fs.diff(baseFs, { includeChangedFileWithSameContent: true });
-            // eslint-disable-next-line no-null/no-null
-            Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
+            const baseFsPatch = !buildKind || buildKind === BuildKind.Initial ?
+                inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true }) :
+                inputFs.diff(initialFs, { includeChangedFileWithSameContent: true });
+            const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
+            Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`, `Input::
+${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
+
+Output::
+${sys.output.join("")}
+
+${patch ? vfs.formatPatch(patch) : ""}`);
         };
         return sys;
     }
@@ -137,19 +146,21 @@ namespace ts {
     }
 
     export function verifyTsc(input: TscCompile) {
-        describe(input.scenario, () => {
-            describe(input.subScenario, () => {
-                let sys: TscCompileSystem;
-                before(() => {
-                    sys = tscCompile({
-                        ...input,
-                        fs: () => getFsWithTime(input.fs()).fs.makeReadonly()
+        describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
+            describe(input.scenario, () => {
+                describe(input.subScenario, () => {
+                    let sys: TscCompileSystem;
+                    before(() => {
+                        sys = tscCompile({
+                            ...input,
+                            fs: () => getFsWithTime(input.fs()).fs.makeReadonly()
+                        });
                     });
+                    after(() => {
+                        sys = undefined!;
+                    });
+                    verifyTscBaseline(() => sys);
                 });
-                after(() => {
-                    sys = undefined!;
-                });
-                verifyTscBaseline(() => sys);
             });
         });
     }

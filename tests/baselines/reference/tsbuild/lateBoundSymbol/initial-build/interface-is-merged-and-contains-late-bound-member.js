@@ -1,4 +1,52 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/src/globals.d.ts]
+interface SymbolConstructor {
+    (description?: string | number): symbol;
+}
+declare var Symbol: SymbolConstructor;
+
+//// [/src/src/hkt.ts]
+export interface HKT<T> { }
+
+//// [/src/src/main.ts]
+import { HKT } from "./hkt";
+
+const sym = Symbol();
+
+declare module "./hkt" {
+  interface HKT<T> {
+    [sym]: { a: T }
+  }
+}
+const x = 10;
+type A = HKT<number>[typeof sym];
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "incremental": true
+  }
+}
+
+
+
+Output::
 /lib/tsc --b /src/tsconfig.json --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/tsconfig.json

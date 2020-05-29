@@ -1,4 +1,82 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/src/folder/index.ts]
+export const x = 10;
+
+//// [/src/src/folder/tsconfig.json]
+{
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true
+    }
+}
+
+//// [/src/src/folder2/index.ts]
+export const x = 10;
+
+//// [/src/src/folder2/tsconfig.json]
+{
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true
+    }
+}
+
+//// [/src/src/tsconfig.json]
+{
+    "files": [],
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [ 
+        { "path": "./folder" },
+        { "path": "./folder2"}
+    ]
+  }
+
+//// [/src/tests/index.ts]
+export const x = 10;
+
+//// [/src/tests/tsconfig.json]
+{
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../src" }
+    ]
+}
+
+//// [/src/tsconfig.json]
+{
+  "files": [],
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [ 
+      { "path": "./src" },
+      { "path": "./tests"}
+  ]
+}
+
+
+
+Output::
 /lib/tsc --b /src --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/src/folder/tsconfig.json

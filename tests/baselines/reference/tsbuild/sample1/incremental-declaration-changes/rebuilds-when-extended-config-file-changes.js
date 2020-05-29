@@ -1,4 +1,10 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/tests/tsconfig.base.json]
+{"compilerOptions":{}}
+
+
+
+Output::
 /lib/tsc --b /src/tests --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -18,9 +24,6 @@ exitCode:: ExitStatus.Success
 
 //// [/src/tests/index.d.ts] file written with same contents
 //// [/src/tests/index.js] file written with same contents
-//// [/src/tests/tsconfig.base.json]
-{"compilerOptions":{}}
-
 //// [/src/tests/tsconfig.tsbuildinfo]
 {
   "program": {

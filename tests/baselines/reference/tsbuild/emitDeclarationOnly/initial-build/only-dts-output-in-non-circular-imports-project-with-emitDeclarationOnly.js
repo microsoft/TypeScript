@@ -1,4 +1,68 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/src/a.ts]
+export class B { prop = "hello"; }
+
+export interface A {
+  b: B;
+}
+
+
+//// [/src/src/b.ts]
+import { C } from "./c";
+
+export interface B {
+  b: C;
+}
+
+
+//// [/src/src/c.ts]
+import { A } from "./a";
+
+export interface C {
+  a: A;
+}
+
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "incremental": true,                   /* Enable incremental compilation */
+    "target": "es5",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
+    "module": "commonjs",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+    "declaration": true,                   /* Generates corresponding '.d.ts' file. */
+    "declarationMap": true,                /* Generates a sourcemap for each corresponding '.d.ts' file. */
+    "sourceMap": true,                     /* Generates corresponding '.map' file. */
+    "outDir": "./lib",                        /* Redirect output structure to the directory. */
+    "composite": true,                     /* Enable project compilation */
+    "strict": true,                           /* Enable all strict type-checking options. */
+
+    "esModuleInterop": true,                   /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+    
+    "alwaysStrict": true,
+    "rootDir": "src",
+    "emitDeclarationOnly": true
+  } 
+}
+
+
+
+
+Output::
 /lib/tsc --b /src --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
@@ -41,15 +105,6 @@ export interface C {
 
 //// [/src/lib/c.d.ts.map]
 {"version":3,"file":"c.d.ts","sourceRoot":"","sources":["../src/c.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AAExB,MAAM,WAAW,CAAC;IAChB,CAAC,EAAE,CAAC,CAAC;CACN"}
-
-//// [/src/src/index.ts] unlink
-//// [/src/src/a.ts]
-export class B { prop = "hello"; }
-
-export interface A {
-  b: B;
-}
-
 
 //// [/src/tsconfig.tsbuildinfo]
 {

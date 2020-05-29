@@ -1,10 +1,13 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/project/src/main.d.ts]
+export const x = 10;export const xy = 100;
+
+
+
+Output::
 /lib/tsc --incremental --p src/project
 exitCode:: ExitStatus.Success
 
-
-//// [/src/project/src/main.d.ts]
-export const x = 10;export const xy = 100;
 
 //// [/src/project/tsconfig.tsbuildinfo]
 {

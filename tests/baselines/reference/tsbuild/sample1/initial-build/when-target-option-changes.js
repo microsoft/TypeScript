@@ -1,23 +1,4 @@
-//// [/lib/initial-buildOutput.txt]
-/lib/tsc --b /src/core --verbose
-[[90m12:01:00 AM[0m] Projects in this build: 
-    * src/core/tsconfig.json
-
-[[90m12:01:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
-
-[[90m12:01:00 AM[0m] Building project '/src/core/tsconfig.json'...
-
-TSFILE: /src/core/anotherModule.js
-TSFILE: /src/core/index.js
-TSFILE: /src/core/tsconfig.tsbuildinfo
-/lib/lib.esnext.d.ts
-/lib/lib.esnext.full.d.ts
-/src/core/anotherModule.ts
-/src/core/index.ts
-/src/core/some_decl.d.ts
-exitCode:: ExitStatus.Success
-
-
+Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
@@ -41,14 +22,18 @@ declare const console: { log(msg: any): void; };
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 
-//// [/src/core/anotherModule.js]
+//// [/src/core/anotherModule.ts]
 export const World = "hello";
 
 
-//// [/src/core/index.js]
-export const someString = "HELLO WORLD";
-export function leftPad(s, n) { return s + n; }
-export function multiply(a, b) { return a * b; }
+//// [/src/core/index.ts]
+export const someString: string = "HELLO WORLD";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
+
+
+//// [/src/core/some_decl.d.ts]
+declare const dts: any;
 
 
 //// [/src/core/tsconfig.json]
@@ -60,6 +45,56 @@ export function multiply(a, b) { return a * b; }
         "target": "esnext",
     }
 }
+
+//// [/src/logic/index.ts]
+
+
+//// [/src/logic/tsconfig.json]
+
+
+//// [/src/tests/index.ts]
+
+
+//// [/src/tests/tsconfig.json]
+
+
+//// [/src/ui/index.ts]
+
+
+//// [/src/ui/tsconfig.json]
+
+
+
+
+Output::
+/lib/tsc --b /src/core --verbose
+[[90m12:01:00 AM[0m] Projects in this build: 
+    * src/core/tsconfig.json
+
+[[90m12:01:00 AM[0m] Project 'src/core/tsconfig.json' is out of date because output file 'src/core/anotherModule.js' does not exist
+
+[[90m12:01:00 AM[0m] Building project '/src/core/tsconfig.json'...
+
+TSFILE: /src/core/anotherModule.js
+TSFILE: /src/core/index.js
+TSFILE: /src/core/tsconfig.tsbuildinfo
+/lib/lib.esnext.d.ts
+/lib/lib.esnext.full.d.ts
+/src/core/anotherModule.ts
+/src/core/index.ts
+/src/core/some_decl.d.ts
+exitCode:: ExitStatus.Success
+
+
+//// [/src/core/anotherModule.js]
+export const World = "hello";
+
+
+//// [/src/core/index.js]
+export const someString = "HELLO WORLD";
+export function leftPad(s, n) { return s + n; }
+export function multiply(a, b) { return a * b; }
+
 
 //// [/src/core/tsconfig.tsbuildinfo]
 {

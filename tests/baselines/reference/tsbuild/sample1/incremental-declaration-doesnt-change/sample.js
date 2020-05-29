@@ -1,4 +1,14 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/core/index.ts]
+export const someString: string = "HELLO WORLD";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
+
+class someClass { }
+
+
+
+Output::
 /lib/tsc --b /src/tests --verbose
 [[90m12:08:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -51,13 +61,6 @@ var someClass = /** @class */ (function () {
     return someClass;
 }());
 
-
-//// [/src/core/index.ts]
-export const someString: string = "HELLO WORLD";
-export function leftPad(s: string, n: number) { return s + n; }
-export function multiply(a: number, b: number) { return a * b; }
-
-class someClass { }
 
 //// [/src/core/tsconfig.tsbuildinfo]
 {

@@ -70,7 +70,7 @@ namespace ts {
                 subScenario: "removes all files it built",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--clean"],
-                incrementalScenarios: [noChangeRun]
+                incrementalScenarios: noChangeOnlyRuns
             });
 
             it("cleans till project specified", () => {
@@ -103,7 +103,7 @@ namespace ts {
                 subScenario: "always builds under with force option",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--force"],
-                incrementalScenarios: [noChangeRun]
+                incrementalScenarios: noChangeOnlyRuns
             });
         });
 

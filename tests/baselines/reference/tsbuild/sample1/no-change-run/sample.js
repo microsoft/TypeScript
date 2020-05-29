@@ -1,4 +1,7 @@
-//// [/lib/no-change-runOutput.txt]
+Input::
+
+
+Output::
 /lib/tsc --b /src/tests --verbose
 [[90m12:16:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json

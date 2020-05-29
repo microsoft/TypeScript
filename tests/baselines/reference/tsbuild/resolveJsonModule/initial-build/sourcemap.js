@@ -1,4 +1,58 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/src/hello.json]
+{
+  "hello": "world"
+}
+
+//// [/src/src/index.ts]
+import hello from "./hello.json"
+
+export default hello.hello
+
+//// [/src/tsconfig_withFiles.json]
+{
+  "compilerOptions": {
+    "composite": true, "sourceMap": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "files": [
+    "src/index.ts", "src/hello.json"
+  ]
+}
+
+//// [/src/tsconfig_withInclude.json]
+
+
+//// [/src/tsconfig_withIncludeAndFiles.json]
+
+
+//// [/src/tsconfig_withIncludeOfJson.json]
+
+
+
+
+Output::
 /lib/tsc --b src/tsconfig_withFiles.json --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/tsconfig_withFiles.json
@@ -79,22 +133,5 @@ exports["default"] = hello_json_1["default"].hello;
     ]
   },
   "version": "FakeTSVersion"
-}
-
-//// [/src/tsconfig_withFiles.json]
-{
-  "compilerOptions": {
-    "composite": true, "sourceMap": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "skipDefaultLibCheck": true
-  },
-  "files": [
-    "src/index.ts", "src/hello.json"
-  ]
 }
 

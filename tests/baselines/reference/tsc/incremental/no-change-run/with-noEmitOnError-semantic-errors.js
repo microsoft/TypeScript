@@ -1,4 +1,7 @@
-//// [/lib/no-change-runOutput.txt]
+Input::
+
+
+Output::
 /lib/tsc --incremental -p src
 [96msrc/src/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
