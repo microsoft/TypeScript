@@ -3689,7 +3689,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: string, rootDir: string | undefined): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
             const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
             const toPath = this.toPath.bind(this);
@@ -3751,13 +3751,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        private updateAutoImportProvidersWithPackageJson(packageJsonPath: Path) {
-            if (this.usePackageJsonAutoImportProvider) {
-                this.configuredProjects.forEach(project => {
+        // private updateAutoImportProvidersWithPackageJson(packageJsonPath: Path) {
+        //     if (this.usePackageJsonAutoImportProvider) {
+        //         this.configuredProjects.forEach(project => {
 
-                });
-            }
-        }
+        //         });
+        //     }
+        // }
     }
 
     /* @internal */

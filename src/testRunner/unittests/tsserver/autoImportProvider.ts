@@ -81,6 +81,37 @@ namespace ts.projectSystem {
                 projectService.getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)?.projectKind,
                 server.ProjectKind.Configured);
         });
+
+        it("Responds to package.json changes", () => {
+            const { projectService, session, host } = setup([
+                angularFormsDts,
+                angularFormsPackageJson,
+                tsconfig,
+                { path: "/package.json", content: "{}" },
+                indexTs
+            ]);
+
+            openFilesForSession([indexTs], session);
+            assert.equal(
+                projectService
+                    .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
+                    .getLanguageService()
+                    .getAutoImportProvider(),
+                undefined);
+
+            host.reloadFS([
+                angularFormsDts,
+                angularFormsPackageJson,
+                tsconfig,
+                packageJson,
+                indexTs
+            ]);
+
+            assert.ok(projectService
+                .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
+                .getLanguageService()
+                .getAutoImportProvider());
+        });
     });
 
     function setup(files: File[]) {
