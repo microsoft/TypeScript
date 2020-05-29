@@ -3,4 +3,4 @@
 ////import /*a*/d/*b*/, * as n from "m";
 
 goTo.select("a", "b");
-verify.refactorAvailable("Convert import");
+verify.not.refactorAvailable("Convert import");
