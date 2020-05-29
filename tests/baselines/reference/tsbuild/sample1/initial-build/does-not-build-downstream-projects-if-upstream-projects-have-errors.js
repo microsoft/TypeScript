@@ -196,3 +196,83 @@ exports.multiply = multiply;
   "version": "FakeTSVersion"
 }
 
+//// [/src/logic/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../core/index.d.ts": {
+        "version": "-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map",
+        "signature": "-13851440507-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n//# sourceMappingURL=index.d.ts.map",
+        "affectsGlobalScope": false
+      },
+      "../core/anothermodule.d.ts": {
+        "version": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",
+        "signature": "7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map",
+        "affectsGlobalScope": false
+      },
+      "./index.ts": {
+        "version": "-6409874073-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.muitply();\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n",
+        "signature": "-4761685354-export declare function getSecondsInDay(): any;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "composite": true,
+      "declaration": true,
+      "sourceMap": true,
+      "forceConsistentCasingInFileNames": true,
+      "skipDefaultLibCheck": true,
+      "configFilePath": "./tsconfig.json"
+    },
+    "referencedMap": {
+      "./index.ts": [
+        "../core/anothermodule.d.ts",
+        "../core/index.d.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "./index.ts": [
+        "../core/anothermodule.d.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.d.ts",
+      "../core/anothermodule.d.ts",
+      "../core/index.d.ts",
+      [
+        "./index.ts",
+        [
+          {
+            "file": "./index.ts",
+            "start": 87,
+            "length": 7,
+            "code": 2339,
+            "category": 1,
+            "messageText": "Property 'muitply' does not exist on type 'typeof import(\"/src/core/index\")'."
+          }
+        ]
+      ]
+    ],
+    "affectedFilesPendingEmit": [
+      [
+        "../core/index.d.ts",
+        1
+      ],
+      [
+        "../core/anothermodule.d.ts",
+        1
+      ],
+      [
+        "./index.ts",
+        1
+      ]
+    ]
+  },
+  "version": "FakeTSVersion"
+}
+

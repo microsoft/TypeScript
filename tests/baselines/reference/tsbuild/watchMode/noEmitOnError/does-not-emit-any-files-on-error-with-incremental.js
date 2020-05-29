@@ -309,7 +309,7 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-[[90m12:01:14 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:17 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -342,6 +342,72 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../../../../a/lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../shared/types/db.ts": {
+        "version": "-9621097780-export interface A {\r\n    name: string;\r\n}",
+        "signature": "-5014788164-export interface A {\n    name: string;\n}\n",
+        "affectsGlobalScope": false
+      },
+      "../src/main.ts": {
+        "version": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
+        "signature": "-3531856636-export {};\n",
+        "affectsGlobalScope": false
+      },
+      "../src/other.ts": {
+        "version": "11373096570-console.log(\"hi\");\r\nexport { }",
+        "signature": "-3531856636-export {};\n",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "outDir": "./",
+      "noEmitOnError": true,
+      "watch": true,
+      "incremental": true,
+      "configFilePath": "../tsconfig.json"
+    },
+    "referencedMap": {
+      "../src/main.ts": [
+        "../shared/types/db.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../../../../a/lib/lib.d.ts",
+      "../shared/types/db.ts",
+      [
+        "../src/main.ts",
+        [
+          {
+            "file": "../src/main.ts",
+            "start": 46,
+            "length": 1,
+            "code": 2322,
+            "category": 1,
+            "messageText": "Type 'number' is not assignable to type 'string'."
+          }
+        ]
+      ],
+      "../src/other.ts"
+    ],
+    "affectedFilesPendingEmit": [
+      [
+        "../src/main.ts",
+        1
+      ]
+    ]
+  },
+  "version": "FakeTSVersion"
+}
+
 
 Change:: No change
 
@@ -350,13 +416,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:21 AM[0m] File change detected. Starting incremental compilation...
 
 
-[[90m12:01:19 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:22 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
 
 
-[[90m12:01:20 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:23 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 
 [96msrc/main.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
@@ -365,7 +431,7 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-[[90m12:01:21 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:24 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -408,19 +474,19 @@ const a: string = "hello";
 
 Output::
 >> Screen clear
-[[90m12:01:25 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
 
 
-[[90m12:01:26 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:29 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
 
 
-[[90m12:01:27 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:30 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 
-[[90m12:01:35 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:38 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 
-[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:39 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -517,19 +583,19 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:43 AM[0m] File change detected. Starting incremental compilation...
 
 
-[[90m12:01:41 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
+[[90m12:01:44 AM[0m] Project 'tsconfig.json' is out of date because oldest output 'dev-build/shared/types/db.js' is older than newest input 'src/main.ts'
 
 
-[[90m12:01:42 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:45 AM[0m] Building project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 
-[[90m12:01:44 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
+[[90m12:01:47 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/noEmitOnError/tsconfig.json'...
 
 
-[[90m12:01:45 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -42,10 +42,17 @@ namespace ts {
 import { default as bar } from './bar';
 bar("hello");`);
             },
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsChange,
-                modifyFs: changeBarParam
-            }]
+            incrementalScenarios: [
+                {
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: changeBarParam
+                },
+                {
+                    subScenario: "Fix Error",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
+                },
+            ]
         });
     });
 

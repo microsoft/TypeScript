@@ -270,8 +270,8 @@ interface Symbol {
         baseFs: vfs.FileSystem;
         newSys: TscCompileSystem;
     }
-    function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness) {
-        it(`Verify emit output file text is same when built clean`, () => {
+    function verifyIncrementalCorrectness(input: () => VerifyIncrementalCorrectness, index: number) {
+        it(`Verify emit output file text is same when built clean for incremental scenario at:: ${index}`, () => {
             const {
                 scenario, subScenario, commandLineArgs,
                 modifyFs, incrementalModifyFs,
@@ -291,9 +291,37 @@ interface Symbol {
             for (const outputFile of arrayFrom(sys.writtenFiles.keys())) {
                 const expectedText = sys.readFile(outputFile);
                 const actualText = newSys.readFile(outputFile);
-                assert.equal(actualText, expectedText, `File: ${outputFile}`);
+                if (!isBuildInfoFile(outputFile)) {
+                    assert.equal(actualText, expectedText, `File: ${outputFile}`);
+                }
+                else if (actualText !== expectedText) {
+                    // Verify build info without affectedFilesPendingEmit
+                    const { text: actualBuildInfoText, affectedFilesPendingEmit: actualAffectedFilesPendingEmit } = getBuildInfoWithoutAffectedFilesPendingEmit(actualText);
+                    const { text: expectedBuildInfoText, affectedFilesPendingEmit: expectedAffectedFilesPendingEmit } = getBuildInfoWithoutAffectedFilesPendingEmit(expectedText);
+                    assert.equal(actualBuildInfoText, expectedBuildInfoText, `TsBuild info text without affectedFilesPendingEmit: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                    // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
+                    if (actualAffectedFilesPendingEmit) {
+                        assert.isDefined(expectedAffectedFilesPendingEmit, `Incremental build contains affectedFilesPendingEmit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                        for (const actual of actualAffectedFilesPendingEmit) {
+                            assert.isTrue(contains(expectedAffectedFilesPendingEmit, actual, ([file1], [file2]) => file1 === file2), `Incremental build contains ${actual[0]} file as pending emit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                        }
+                    }
+                }
             }
         });
+    }
+
+    function getBuildInfoWithoutAffectedFilesPendingEmit(text: string | undefined): { text: string | undefined; affectedFilesPendingEmit?: ProgramBuildInfo["affectedFilesPendingEmit"]; } {
+        const buildInfo = text ? getBuildInfo(text) : undefined;
+        if (!buildInfo?.program?.affectedFilesPendingEmit) return { text };
+        const { program: { affectedFilesPendingEmit, ...programRest }, ...rest } = buildInfo;
+        return {
+            text: getBuildInfoText({
+                ...rest,
+                program: programRest
+            }),
+            affectedFilesPendingEmit
+        };
     }
 
     export interface TscIncremental {
@@ -356,12 +384,12 @@ interface Symbol {
                 verifyTscBaseline(() => sys);
             });
 
-            for (const {
+            incrementalScenarios.forEach(({
                 buildKind,
                 modifyFs: incrementalModifyFs,
                 subScenario: incrementalSubScenario,
                 commandLineArgs: incrementalCommandLineArgs
-            } of incrementalScenarios) {
+            }, index) => {
                 describe(incrementalSubScenario || buildKind, () => {
                     let newSys: TscCompileSystem;
                     before(() => {
@@ -396,9 +424,9 @@ interface Symbol {
                         incrementalModifyFs,
                         modifyFs,
                         tick
-                    }));
+                    }), index);
                 });
-            }
+            });
         });
     }
 
@@ -497,7 +525,7 @@ interface Symbol {
                     },
                     modifyFs,
                     tick
-                })));
+                }), index));
             });
         });
     }
