@@ -757,10 +757,10 @@ namespace ts {
         if (state.affectedFilesPendingEmit) {
             const affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] = [];
             const seenFiles = createMap<true>();
-            for (let i = state.affectedFilesPendingEmitIndex!; i < state.affectedFilesPendingEmit.length; i++) {
-                const path = state.affectedFilesPendingEmit[i];
-                if (!addToSeen(seenFiles, path)) continue;
-                affectedFilesPendingEmit.push([relativeToBuildInfo(path), state.affectedFilesPendingEmitKind!.get(path)!]);
+            for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
+                if (addToSeen(seenFiles, path)) {
+                    affectedFilesPendingEmit.push([relativeToBuildInfo(path), state.affectedFilesPendingEmitKind!.get(path)!]);
+                }
             }
             result.affectedFilesPendingEmit = affectedFilesPendingEmit;
         }

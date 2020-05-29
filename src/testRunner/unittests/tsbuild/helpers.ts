@@ -302,9 +302,12 @@ interface Symbol {
                     // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
                     if (actualAffectedFilesPendingEmit) {
                         assert.isDefined(expectedAffectedFilesPendingEmit, `Incremental build contains affectedFilesPendingEmit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
-                        for (const actual of actualAffectedFilesPendingEmit) {
-                            assert.isTrue(contains(expectedAffectedFilesPendingEmit, actual, ([file1], [file2]) => file1 === file2), `Incremental build contains ${actual[0]} file as pending emit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
-                        }
+                        let expectedIndex = 0;
+                        actualAffectedFilesPendingEmit.forEach(([actualFile]) => {
+                            expectedIndex = findIndex(expectedAffectedFilesPendingEmit!, ([expectedFile]) => actualFile === expectedFile, expectedIndex);
+                            assert.notEqual(expectedIndex, -1, `Incremental build contains ${actualFile} file as pending emit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                            expectedIndex++;
+                        });
                     }
                 }
             }

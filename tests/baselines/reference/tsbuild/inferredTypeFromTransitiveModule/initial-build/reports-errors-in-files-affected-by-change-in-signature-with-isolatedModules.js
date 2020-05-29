@@ -347,16 +347,16 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     ],
     "affectedFilesPendingEmit": [
       [
-        "../lazyindex.ts",
-        0
+        "../bar.ts",
+        1
       ],
       [
         "../index.ts",
         0
       ],
       [
-        "../bar.ts",
-        1
+        "../lazyindex.ts",
+        0
       ]
     ]
   },

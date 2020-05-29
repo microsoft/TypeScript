@@ -260,11 +260,11 @@ exports.multiply = multiply;
     ],
     "affectedFilesPendingEmit": [
       [
-        "../core/index.d.ts",
+        "../core/anothermodule.d.ts",
         1
       ],
       [
-        "../core/anothermodule.d.ts",
+        "../core/index.d.ts",
         1
       ],
       [
