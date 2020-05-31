@@ -14,13 +14,13 @@ Find others who are using TypeScript at [our community page](https://www.typescr
 
 For the latest stable version:
 
-```bash
+```sh
 npm install -g typescript
 ```
 
 For our nightly builds:
 
-```bash
+```sh
 npm install -g typescript@next
 ```
 
@@ -53,19 +53,19 @@ In order to build the TypeScript compiler, ensure that you have [Git](https://gi
 
 Clone a copy of the repo:
 
-```bash
+```sh
 git clone https://github.com/microsoft/TypeScript.git
 ```
 
 Change to the TypeScript directory:
 
-```bash
+```sh
 cd TypeScript
 ```
 
 Install [Gulp](https://gulpjs.com/) tools and dev dependencies:
 
-```bash
+```sh
 npm install -g gulp
 npm install
 ```
@@ -97,7 +97,7 @@ gulp help              # List the above commands.
 
 ## Usage
 
-```bash
+```sh
 node built/local/tsc.js hello.ts
 ```
 
