@@ -12,7 +12,7 @@ namespace ts.codefix {
                 return undefined;
             }
             const changes = textChanges.ChangeTracker.with(context, t => {
-                t.deleteNodeRange(context.sourceFile, callExpression.openParenToken, callExpression.closeParenToken);
+                t.deleteRange(context.sourceFile, { pos: callExpression.expression.end, end: callExpression.end });
             });
             return [createCodeFixActionWithoutFixAll(fixId, changes, Diagnostics.Remove_parentheses)];
         },
