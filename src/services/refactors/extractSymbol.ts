@@ -405,6 +405,20 @@ namespace ts.refactor.extractSymbol {
                             rangeFacts |= RangeFacts.UsesThis;
                         }
                         break;
+                    case SyntaxKind.ArrowFunction:
+                        // check if arrow function uses this
+                        forEachChild(node, function check(n) {
+                            if (isThis(n)) {
+                                rangeFacts |= RangeFacts.UsesThis;
+                            }
+                            else if (isClassLike(n) || (isFunctionLike(n) && !isArrowFunction(n))) {
+                                return false;
+                            }
+                            else {
+                                forEachChild(n, check);
+                            }
+                        });
+                        // falls through
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                         if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
@@ -418,7 +432,7 @@ namespace ts.refactor.extractSymbol {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        // do not dive into functions (except arrow functions) or classes
+                        // do not dive into functions or classes
                         return false;
                 }
 
