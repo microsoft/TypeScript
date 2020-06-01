@@ -1180,18 +1180,35 @@ namespace ts {
                         fakespace.parent = enclosingDeclaration as SourceFile | NamespaceDeclaration;
                         fakespace.locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
-                        const declarations = mapDefined(props, p => {
+                        const declarations = flatMap(props, p => {
                             if (!isPropertyAccessExpression(p.valueDeclaration)) {
                                 return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
                             }
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
                             const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                             getSymbolAccessibilityDiagnostic = oldDiag;
-                            const varDecl = createVariableDeclaration(unescapeLeadingUnderscores(p.escapedName), type, /*initializer*/ undefined);
-                            return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([varDecl]));
+                            const propName = unescapeLeadingUnderscores(p.escapedName);
+                            if (isIdentifier(p.valueDeclaration.name) &&
+                                p.valueDeclaration.name.originalKeywordKind &&
+                                isKeyword(p.valueDeclaration.name.originalKeywordKind)) {
+                                const name = createUniqueName(propName);
+                                return [
+                                    transformProperty(name, type),
+                                    createExportDeclaration(
+                                        /*decorators*/ undefined,
+                                        /*modifiers*/ undefined,
+                                        createNamedExports([createExportSpecifier(name, propName)]))
+                                ];
+                            }
+                            return transformProperty(propName, type);
+
+                            function transformProperty(name: string | Identifier, type: TypeNode | undefined) {
+                                return createVariableStatement(
+                                    /*modifiers*/ undefined,
+                                    createVariableDeclarationList([createVariableDeclaration(name, type, /*initializer*/ undefined)]));
+                            }
                         });
                         const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
-
                         if (!hasEffectiveModifier(clean, ModifierFlags.Default)) {
                             return [clean, namespaceDecl];
                         }
