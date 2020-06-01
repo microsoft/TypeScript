@@ -5709,11 +5709,11 @@
         "category": "Message",
         "code": 95119
     },
-    "Wrap JSX in JSX Fragment": {
+    "Wrap in JSX fragment": {
         "category": "Message",
         "code": 95120
     },
-    "Wrap all JSX in JSX Fragment": {
+    "Wrap all unparented JSX in JSX fragment": {
         "category": "Message",
         "code": 95121
     },
