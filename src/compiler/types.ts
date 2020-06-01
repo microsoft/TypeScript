@@ -4627,9 +4627,20 @@ namespace ts {
         variances?: VarianceFlags[];  // Variance of each type parameter
     }
 
+    export const enum ElementFlags {
+        Required  = 1 << 0,  // T
+        Optional  = 1 << 1,  // T?
+        Rest      = 1 << 2,  // ...T[]
+        Variadic  = 1 << 3,  // ...T
+        Variable  = Rest | Variadic,
+    }
+
     export interface TupleType extends GenericType {
+        elementFlags: readonly ElementFlags[];
         minLength: number;
+        fixedLength: number;
         hasRestElement: boolean;
+        hasVariadicElement: boolean;
         readonly: boolean;
         labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
     }

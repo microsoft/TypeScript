@@ -843,7 +843,7 @@
         "category": "Error",
         "code": 1255
     },
-    "A rest element must be last in a tuple type.": {
+    "A required, optional, or rest element cannot follow a rest element.": {
         "category": "Error",
         "code": 1256
     },
