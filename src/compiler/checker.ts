@@ -36071,15 +36071,16 @@ namespace ts {
         // Emitter support
 
         function isArgumentsLocalBinding(nodeIn: Identifier): boolean {
-            if (!isGeneratedIdentifier(nodeIn)) {
-                const node = getParseTreeNode(nodeIn, isIdentifier);
-                if (node) {
-                    const isPropertyName = node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
-                    return !isPropertyName && getReferencedValueSymbol(node) === argumentsSymbol;
-                }
-            }
-
-            return false;
+            // Note: does not handle isShorthandPropertyAssignment (and probably a few more)
+            if (isGeneratedIdentifier(nodeIn)) return false;
+            const node = getParseTreeNode(nodeIn, isIdentifier);
+            if (!node) return false;
+            const parent = node.parent;
+            if (!parent) return false;
+            const isPropertyName = ((isPropertyAccessExpression(parent)
+                                     || isPropertyAssignment(parent))
+                                    && parent.name === node);
+            return !isPropertyName && getReferencedValueSymbol(node) === argumentsSymbol;
         }
 
         function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
