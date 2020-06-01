@@ -2472,9 +2472,19 @@ declare namespace ts {
     }
     export interface GenericType extends InterfaceType, TypeReference {
     }
+    export enum ElementFlags {
+        Required = 1,
+        Optional = 2,
+        Rest = 4,
+        Variadic = 8,
+        Variable = 12
+    }
     export interface TupleType extends GenericType {
+        elementFlags: readonly ElementFlags[];
         minLength: number;
+        fixedLength: number;
         hasRestElement: boolean;
+        hasVariadicElement: boolean;
         readonly: boolean;
         labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
     }
