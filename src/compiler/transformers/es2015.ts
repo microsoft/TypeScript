@@ -2566,62 +2566,54 @@ namespace ts {
          * @param node An ObjectLiteralExpression node.
          */
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
-            // We are here because a ComputedPropertyName was used somewhere in the expression.
             const properties = node.properties;
-            const numProperties = properties.length;
 
             // Find the first computed property.
             // Everything until that point can be emitted as part of the initial object literal.
-            let numInitialProperties = numProperties;
-            let numInitialPropertiesWithoutYield = numProperties;
-            for (let i = 0; i < numProperties; i++) {
+            let numInitialProperties = -1, hasComputed = false;
+            for (let i = 0; i < properties.length; i++) {
                 const property = properties[i];
-                if ((property.transformFlags & TransformFlags.ContainsYield && hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
-                    && i < numInitialPropertiesWithoutYield) {
-                    numInitialPropertiesWithoutYield = i;
-                }
-                if (Debug.checkDefined(property.name).kind === SyntaxKind.ComputedPropertyName) {
+                if ((property.transformFlags & TransformFlags.ContainsYield &&
+                     hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
+                    || (hasComputed = Debug.checkDefined(property.name).kind === SyntaxKind.ComputedPropertyName)) {
                     numInitialProperties = i;
                     break;
                 }
             }
 
-            if (numInitialProperties !== numProperties) {
-                if (numInitialPropertiesWithoutYield < numInitialProperties) {
-                    numInitialProperties = numInitialPropertiesWithoutYield;
-                }
-
-                // For computed properties, we need to create a unique handle to the object
-                // literal so we can modify it without risking internal assignments tainting the object.
-                const temp = createTempVariable(hoistVariableDeclaration);
-
-                // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
-                const expressions: Expression[] = [];
-                const assignment = createAssignment(
-                    temp,
-                    setEmitFlags(
-                        createObjectLiteral(
-                            visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
-                            node.multiLine
-                        ),
-                        EmitFlags.Indented
-                    )
-                );
-
-                if (node.multiLine) {
-                    startOnNewLine(assignment);
-                }
-
-                expressions.push(assignment);
-
-                addObjectLiteralMembers(expressions, node, temp, numInitialProperties);
-
-                // We need to clone the temporary identifier so that we can write it on a
-                // new line
-                expressions.push(node.multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
-                return inlineExpressions(expressions);
+            if (numInitialProperties < 0) {
+                return visitEachChild(node, visitor, context);
             }
-            return visitEachChild(node, visitor, context);
+
+            // For computed properties, we need to create a unique handle to the object
+            // literal so we can modify it without risking internal assignments tainting the object.
+            const temp = createTempVariable(hoistVariableDeclaration);
+
+            // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
+            const expressions: Expression[] = [];
+            const assignment = createAssignment(
+                temp,
+                setEmitFlags(
+                    createObjectLiteral(
+                        visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
+                        node.multiLine
+                    ),
+                    hasComputed ? EmitFlags.Indented : 0
+                )
+            );
+
+            if (node.multiLine) {
+                startOnNewLine(assignment);
+            }
+
+            expressions.push(assignment);
+
+            addObjectLiteralMembers(expressions, node, temp, numInitialProperties);
+
+            // We need to clone the temporary identifier so that we can write it on a
+            // new line
+            expressions.push(node.multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
+            return inlineExpressions(expressions);
         }
 
         interface ForStatementWithConvertibleInitializer extends ForStatement {
