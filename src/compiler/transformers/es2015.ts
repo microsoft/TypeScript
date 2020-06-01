@@ -583,13 +583,10 @@ namespace ts {
             if (!convertedLoopState) {
                 return node;
             }
-            if (isGeneratedIdentifier(node)) {
-                return node;
+            if (resolver.isArgumentsLocalBinding(node)) {
+                return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
             }
-            if (node.escapedText !== "arguments" || !resolver.isArgumentsLocalBinding(node)) {
-                return node;
-            }
-            return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
+            return node;
         }
 
         function visitBreakOrContinueStatement(node: BreakOrContinueStatement): Statement {
@@ -3517,7 +3514,7 @@ namespace ts {
             return setTextRange(
                 createPropertyAssignment(
                     node.name,
-                    getSynthesizedClone(node.name)
+                    visitIdentifier(getSynthesizedClone(node.name))
                 ),
                 /*location*/ node
             );
