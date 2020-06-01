@@ -188,6 +188,8 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
+        private autoImportProgramVersion = 0;
+
         protected isInitialLoadPending: () => boolean = returnFalse;
 
         /*@internal*/
@@ -341,6 +343,10 @@ namespace ts.server {
 
         getProjectVersion() {
             return this.projectStateVersion.toString();
+        }
+
+        getPackageJsonAutoImportProviderVersion() {
+            return this.autoImportProgramVersion.toString();
         }
 
         getProjectReferences(): readonly ProjectReference[] | undefined {
@@ -916,6 +922,10 @@ namespace ts.server {
             }
         }
 
+        markAutoImportProviderAsDirty() {
+            this.autoImportProgramVersion++;
+        }
+
         /* @internal */
         onFileAddedOrRemoved() {
             this.hasAddedorRemovedFiles = true;
@@ -961,6 +971,7 @@ namespace ts.server {
 
             if (hasNewProgram) {
                 this.projectProgramVersion++;
+                this.autoImportProgramVersion++;
             }
             perfLogger.logStopUpdateGraph();
             return !hasNewProgram;

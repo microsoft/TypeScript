@@ -1179,6 +1179,7 @@ namespace ts {
         let program: Program;
         let autoImportProvider: Program | undefined;
         let lastProjectVersion: string;
+        let lastAutoImportProviderVersion: string | undefined;
         let lastTypesRootVersion = 0;
 
         const cancellationToken = new CancellationTokenObject(host.getCancellationToken && host.getCancellationToken());
@@ -1223,11 +1224,20 @@ namespace ts {
             return sourceFile;
         }
 
-        function synchronizeAutoImportProvider() {
+        function synchronizeAutoImportProvider(hostCache?: HostCache) {
             Debug.assert(!syntaxOnly);
-            const hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
+            if (!hostCache) {
+                hostCache = new HostCache(host, getCanonicalFileName);
+            }
+
             const compilerOptions = hostCache.compilationSettings();
             if (host.usePackageJsonAutoImportProvider?.()) {
+                const version = host.getPackageJsonAutoImportProviderVersion?.();
+                if (version && version === lastAutoImportProviderVersion) {
+                    return;
+                }
+
+                lastAutoImportProviderVersion = version;
                 autoImportProvider = createPackageJsonAutoImportProvider(
                     createCompilerHost(hostCache, /*forAutoImportProvider*/ true),
                     compilerOptions);
@@ -1287,20 +1297,17 @@ namespace ts {
 
             host.setCompilerHost?.(compilerHost);
 
+            const oldProgram = program;
             const options: CreateProgramOptions = {
                 rootNames: rootFileNames,
                 options: newSettings,
                 host: compilerHost,
-                oldProgram: program,
+                oldProgram,
                 projectReferences
             };
             program = createProgram(options);
 
-            if (host.usePackageJsonAutoImportProvider?.()) {
-                autoImportProvider = createPackageJsonAutoImportProvider(
-                    createCompilerHost(hostCache, /*forAutoImportProvider*/ true),
-                    newSettings);
-            }
+            synchronizeAutoImportProvider(hostCache);
 
             // hostCache is captured in the closure for 'getOrCreateSourceFile' but it should not be used past this point.
             // It needs to be cleared to allow all collected snapshots to be released
@@ -1460,13 +1467,13 @@ namespace ts {
         }
 
         function createPackageJsonAutoImportProvider(compilerHost: CompilerHost, compilerOptions: CompilerOptions): Program | undefined {
-            if (!host.getPackageJsonsVisibleToFile || !host.resolveTypeReferenceDirectives || isInsideNodeModules(currentDirectory)) {
+            if (!host.getPackageJsonsForAutoImport || !host.resolveTypeReferenceDirectives || isInsideNodeModules(currentDirectory)) {
                 return;
             }
             const start = timestamp();
             let dependencyNames: Map<true> | undefined;
             const rootFileName = combinePaths(currentDirectory, inferredTypesContainingFile);
-            const packageJsons = host.getPackageJsonsVisibleToFile(combinePaths(currentDirectory, rootFileName));
+            const packageJsons = host.getPackageJsonsForAutoImport(combinePaths(currentDirectory, rootFileName));
             for (const packageJson of packageJsons) {
                 packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
                 packageJson.devDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));

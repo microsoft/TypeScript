@@ -288,6 +288,8 @@ namespace ts {
         useSourceOfProjectReferenceRedirect?(): boolean;
         /* @internal */
         usePackageJsonAutoImportProvider?(): boolean;
+        /* @internal */
+        getPackageJsonAutoImportProviderVersion?(): string;
     }
 
     /* @internal */

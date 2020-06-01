@@ -107,10 +107,37 @@ namespace ts.projectSystem {
                 indexTs
             ]);
 
+            host.runQueuedImmediateCallbacks();
+            host.runQueuedTimeoutCallbacks();
+
             assert.ok(projectService
                 .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
                 .getLanguageService()
                 .getAutoImportProvider());
+        });
+
+        it("Reuses autoImportProvider when program structure is unchanged", () => {
+            const { projectService, session, updateFile } = setup([
+                angularFormsDts,
+                angularFormsPackageJson,
+                tsconfig,
+                packageJson,
+                indexTs
+            ]);
+
+            openFilesForSession([indexTs], session);
+            const autoImportProvider = projectService
+                .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
+                .getLanguageService()
+                .getAutoImportProvider();
+
+            updateFile(indexTs.path, "console.log(0)");
+            assert.strictEqual(
+                projectService
+                    .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
+                    .getLanguageService()
+                    .getAutoImportProvider(),
+                autoImportProvider);
         });
     });
 
