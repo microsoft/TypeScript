@@ -159,10 +159,35 @@ namespace ts {
                 setOriginalNode(rightExpression, segment);
             }
 
-            const target = isDelete
-                ? createConditional(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), createTrue(), createDelete(rightExpression))
-                : createConditional(createNotNullCondition(leftExpression, capturedLeft, /*invert*/ true), createVoidZero(), rightExpression);
+            let target;
+            const _isExpressionStatementDescendent = isExpressionStatementDescendent(node);
+            const notNull = createNotNullCondition(leftExpression, capturedLeft, /*invert*/ !_isExpressionStatementDescendent);
+            if (_isExpressionStatementDescendent) {
+                target = isDelete
+                    ? createLogicalAnd(notNull, createDelete(rightExpression))
+                    : createLogicalAnd(notNull, rightExpression);
+            }
+            else {
+                target = isDelete
+                    ? createConditional(notNull, createTrue(), createDelete(rightExpression))
+                    : createConditional(notNull, createVoidZero(), rightExpression);
+            }
+
             return thisArg ? createSyntheticReferenceExpression(target, thisArg) : target;
+        }
+
+        function isExpressionStatementDescendent(node: Node): boolean {
+            if (!node) return false;
+            switch(node.kind) {
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.CallExpression:
+                    return isExpressionStatementDescendent(node.parent);
+                case SyntaxKind.ExpressionStatement:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         function createNotNullCondition(left: Expression, right: Expression, invert?: boolean) {

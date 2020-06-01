@@ -1,0 +1,84 @@
+=== tests/cases/compiler/optionalChainingStatementExpression.ts ===
+type MaybeClosable = {
+>MaybeClosable : MaybeClosable
+
+  close?: () => {};
+>close : (() => {}) | undefined
+
+};
+type PerhapsMaybe = {
+>PerhapsMaybe : PerhapsMaybe
+
+  maybe?: MaybeClosable;
+>maybe : MaybeClosable | undefined
+}
+type PossiblyPerhapsMaybe = {
+>PossiblyPerhapsMaybe : PossiblyPerhapsMaybe
+
+  possibly?: PerhapsMaybe;
+>possibly : PerhapsMaybe | undefined
+}
+
+declare const maybe: MaybeClosable;
+>maybe : MaybeClosable
+
+maybe.close?.()
+>maybe.close?.() : {} | undefined
+>maybe.close : (() => {}) | undefined
+>maybe : MaybeClosable
+>close : (() => {}) | undefined
+
+const a = maybe.close?.()
+>a : {} | undefined
+>maybe.close?.() : {} | undefined
+>maybe.close : (() => {}) | undefined
+>maybe : MaybeClosable
+>close : (() => {}) | undefined
+
+declare const perhaps: PerhapsMaybe;
+>perhaps : PerhapsMaybe
+
+perhaps.maybe?.close?.();
+>perhaps.maybe?.close?.() : {} | undefined
+>perhaps.maybe?.close : (() => {}) | undefined
+>perhaps.maybe : MaybeClosable | undefined
+>perhaps : PerhapsMaybe
+>maybe : MaybeClosable | undefined
+>close : (() => {}) | undefined
+
+const b = perhaps.maybe?.close?.();
+>b : {} | undefined
+>perhaps.maybe?.close?.() : {} | undefined
+>perhaps.maybe?.close : (() => {}) | undefined
+>perhaps.maybe : MaybeClosable | undefined
+>perhaps : PerhapsMaybe
+>maybe : MaybeClosable | undefined
+>close : (() => {}) | undefined
+
+declare const poss: PossiblyPerhapsMaybe;
+>poss : PossiblyPerhapsMaybe
+
+function closeIfYouWant() {
+>closeIfYouWant : () => {} | undefined
+
+  poss.possibly?.maybe?.close?.();
+>poss.possibly?.maybe?.close?.() : {} | undefined
+>poss.possibly?.maybe?.close : (() => {}) | undefined
+>poss.possibly?.maybe : MaybeClosable | undefined
+>poss.possibly : PerhapsMaybe | undefined
+>poss : PossiblyPerhapsMaybe
+>possibly : PerhapsMaybe | undefined
+>maybe : MaybeClosable | undefined
+>close : (() => {}) | undefined
+
+  return poss.possibly?.maybe?.close?.();
+>poss.possibly?.maybe?.close?.() : {} | undefined
+>poss.possibly?.maybe?.close : (() => {}) | undefined
+>poss.possibly?.maybe : MaybeClosable | undefined
+>poss.possibly : PerhapsMaybe | undefined
+>poss : PossiblyPerhapsMaybe
+>possibly : PerhapsMaybe | undefined
+>maybe : MaybeClosable | undefined
+>close : (() => {}) | undefined
+}
+

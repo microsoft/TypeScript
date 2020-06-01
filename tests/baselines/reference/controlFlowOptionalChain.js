@@ -594,16 +594,16 @@ while (arr[i]?.tag === "left") {
 "use strict";
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
 var a;
-o === null || o === void 0 ? void 0 : o[a = 1];
+o !== null && o !== void 0 && o[a = 1];
 a.toString();
 var b;
-o === null || o === void 0 ? void 0 : o.x[b = 1];
+o !== null && o !== void 0 && o.x[b = 1];
 b.toString();
 var c;
-o === null || o === void 0 ? void 0 : o(c = 1);
+o !== null && o !== void 0 && o(c = 1);
 c.toString();
 var d;
-o === null || o === void 0 ? void 0 : o.x(d = 1);
+o !== null && o !== void 0 && o.x(d = 1);
 d.toString();
 if (f === null || f === void 0 ? void 0 : f(x)) {
     x; // number
@@ -621,66 +621,66 @@ f(x);
 if (o2 === null || o2 === void 0 ? void 0 : o2.f(x)) {
     x; // number
     o2.f; // (x: any) => x is number
-    o2 === null || o2 === void 0 ? void 0 : o2.f;
-    o2 === null || o2 === void 0 ? void 0 : o2.f(x);
+    o2 !== null && o2 !== void 0 && o2.f;
+    o2 !== null && o2 !== void 0 && o2.f(x);
 }
 else {
     x;
     o2;
-    o2 === null || o2 === void 0 ? void 0 : o2.f;
+    o2 !== null && o2 !== void 0 && o2.f;
     o2.f;
 }
 x;
 o2;
-o2 === null || o2 === void 0 ? void 0 : o2.f;
+o2 !== null && o2 !== void 0 && o2.f;
 o2.f;
 if ((o3 === null || o3 === void 0 ? void 0 : o3.x) === 1) {
     o3;
     o3.x;
-    o3 === null || o3 === void 0 ? void 0 : o3.x;
+    o3 !== null && o3 !== void 0 && o3.x;
 }
 else {
     o3;
-    o3 === null || o3 === void 0 ? void 0 : o3.x;
+    o3 !== null && o3 !== void 0 && o3.x;
     o3.x;
 }
 o3;
-o3 === null || o3 === void 0 ? void 0 : o3.x;
+o3 !== null && o3 !== void 0 && o3.x;
 o3.x;
 if ((_a = o4.x) === null || _a === void 0 ? void 0 : _a.y) {
     o4.x; // { y: boolean }
     o4.x.y; // true
-    (_b = o4.x) === null || _b === void 0 ? void 0 : _b.y; // true
+    (_b = o4.x) !== null && _b !== void 0 && _b.y; // true
 }
 else {
     o4.x;
-    (_c = o4.x) === null || _c === void 0 ? void 0 : _c.y;
+    (_c = o4.x) !== null && _c !== void 0 && _c.y;
     o4.x.y;
 }
 o4.x;
-(_d = o4.x) === null || _d === void 0 ? void 0 : _d.y;
+(_d = o4.x) !== null && _d !== void 0 && _d.y;
 o4.x.y;
 if ((_f = (_e = o5.x) === null || _e === void 0 ? void 0 : _e.y.z) === null || _f === void 0 ? void 0 : _f.w) {
     o5.x;
     o5.x.y;
     o5.x.y.z;
     o5.x.y.z.w; // true
-    (_g = o5.x.y.z) === null || _g === void 0 ? void 0 : _g.w; // true
-    (_h = o5.x) === null || _h === void 0 ? void 0 : _h.y.z.w; // true
-    (_k = (_j = o5.x) === null || _j === void 0 ? void 0 : _j.y.z) === null || _k === void 0 ? void 0 : _k.w; // true
+    (_g = o5.x.y.z) !== null && _g !== void 0 && _g.w; // true
+    (_h = o5.x) !== null && _h !== void 0 && _h.y.z.w; // true
+    (_k = (_j = o5.x) !== null && _j !== void 0 && _j.y.z) !== null && _k !== void 0 && _k.w; // true
 }
 else {
     o5.x;
-    (_l = o5.x) === null || _l === void 0 ? void 0 : _l.y;
-    (_m = o5.x) === null || _m === void 0 ? void 0 : _m.y.z;
-    (_p = (_o = o5.x) === null || _o === void 0 ? void 0 : _o.y.z) === null || _p === void 0 ? void 0 : _p.w;
+    (_l = o5.x) !== null && _l !== void 0 && _l.y;
+    (_m = o5.x) !== null && _m !== void 0 && _m.y.z;
+    (_p = (_o = o5.x) !== null && _o !== void 0 && _o.y.z) !== null && _p !== void 0 && _p.w;
     o5.x.y;
     o5.x.y.z.w;
 }
 o5.x;
-(_q = o5.x) === null || _q === void 0 ? void 0 : _q.y;
-(_r = o5.x) === null || _r === void 0 ? void 0 : _r.y.z;
-(_t = (_s = o5.x) === null || _s === void 0 ? void 0 : _s.y.z) === null || _t === void 0 ? void 0 : _t.w;
+(_q = o5.x) !== null && _q !== void 0 && _q.y;
+(_r = o5.x) !== null && _r !== void 0 && _r.y.z;
+(_t = (_s = o5.x) !== null && _s !== void 0 && _s.y.z) !== null && _t !== void 0 && _t.w;
 o5.x.y;
 o5.x.y.z.w;
 if (o6 === null || o6 === void 0 ? void 0 : o6.f()) {
@@ -689,28 +689,28 @@ if (o6 === null || o6 === void 0 ? void 0 : o6.f()) {
 }
 else {
     o6;
-    o6 === null || o6 === void 0 ? void 0 : o6.f;
+    o6 !== null && o6 !== void 0 && o6.f;
     o6.f;
 }
 o6;
-o6 === null || o6 === void 0 ? void 0 : o6.f;
+o6 !== null && o6 !== void 0 && o6.f;
 o6.f;
 function f01(x) {
     if (!!true) {
-        isString === null || isString === void 0 ? void 0 : isString(x);
+        isString !== null && isString !== void 0 && isString(x);
         x;
     }
     if (!!true) {
-        maybeIsString === null || maybeIsString === void 0 ? void 0 : maybeIsString(x);
+        maybeIsString !== null && maybeIsString !== void 0 && maybeIsString(x);
         x;
     }
     if (!!true) {
         isDefined(maybeIsString);
-        maybeIsString === null || maybeIsString === void 0 ? void 0 : maybeIsString(x);
+        maybeIsString !== null && maybeIsString !== void 0 && maybeIsString(x);
         x;
     }
     if (!!true) {
-        maybeNever === null || maybeNever === void 0 ? void 0 : maybeNever();
+        maybeNever !== null && maybeNever !== void 0 && maybeNever();
         x;
     }
 }
@@ -1005,7 +1005,7 @@ function f23(o) {
 }
 function f30(o) {
     if (!!true) {
-        assert(o === null || o === void 0 ? void 0 : o.foo);
+        assert(o !== null && o !== void 0 && o.foo);
         o.foo;
     }
     if (!!true) {
@@ -1017,7 +1017,7 @@ function f30(o) {
         o.foo;
     }
     if (!!true) {
-        assertNonNull(o === null || o === void 0 ? void 0 : o.foo);
+        assertNonNull(o !== null && o !== void 0 && o.foo);
         o.foo;
     }
 }

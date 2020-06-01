@@ -1,0 +1,83 @@
+=== tests/cases/compiler/optionalChainingStatementExpression.ts ===
+type MaybeClosable = {
+>MaybeClosable : Symbol(MaybeClosable, Decl(optionalChainingStatementExpression.ts, 0, 0))
+
+  close?: () => {};
+>close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+
+};
+type PerhapsMaybe = {
+>PerhapsMaybe : Symbol(PerhapsMaybe, Decl(optionalChainingStatementExpression.ts, 2, 2))
+
+  maybe?: MaybeClosable;
+>maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 3, 21))
+>MaybeClosable : Symbol(MaybeClosable, Decl(optionalChainingStatementExpression.ts, 0, 0))
+}
+type PossiblyPerhapsMaybe = {
+>PossiblyPerhapsMaybe : Symbol(PossiblyPerhapsMaybe, Decl(optionalChainingStatementExpression.ts, 5, 1))
+
+  possibly?: PerhapsMaybe;
+>possibly : Symbol(possibly, Decl(optionalChainingStatementExpression.ts, 6, 29))
+>PerhapsMaybe : Symbol(PerhapsMaybe, Decl(optionalChainingStatementExpression.ts, 2, 2))
+}
+
+declare const maybe: MaybeClosable;
+>maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 10, 13))
+>MaybeClosable : Symbol(MaybeClosable, Decl(optionalChainingStatementExpression.ts, 0, 0))
+
+maybe.close?.()
+>maybe.close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+>maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 10, 13))
+>close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+
+const a = maybe.close?.()
+>a : Symbol(a, Decl(optionalChainingStatementExpression.ts, 12, 5))
+>maybe.close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+>maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 10, 13))
+>close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+
+declare const perhaps: PerhapsMaybe;
+>perhaps : Symbol(perhaps, Decl(optionalChainingStatementExpression.ts, 14, 13))
+>PerhapsMaybe : Symbol(PerhapsMaybe, Decl(optionalChainingStatementExpression.ts, 2, 2))
+
+perhaps.maybe?.close?.();
+>perhaps.maybe?.close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+>perhaps.maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 3, 21))
+>perhaps : Symbol(perhaps, Decl(optionalChainingStatementExpression.ts, 14, 13))
+>maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 3, 21))
+>close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+
+const b = perhaps.maybe?.close?.();
+>b : Symbol(b, Decl(optionalChainingStatementExpression.ts, 16, 5))
+>perhaps.maybe?.close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+>perhaps.maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 3, 21))
+>perhaps : Symbol(perhaps, Decl(optionalChainingStatementExpression.ts, 14, 13))
+>maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 3, 21))
+>close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+
+declare const poss: PossiblyPerhapsMaybe;
+>poss : Symbol(poss, Decl(optionalChainingStatementExpression.ts, 18, 13))
+>PossiblyPerhapsMaybe : Symbol(PossiblyPerhapsMaybe, Decl(optionalChainingStatementExpression.ts, 5, 1))
+
+function closeIfYouWant() {
+>closeIfYouWant : Symbol(closeIfYouWant, Decl(optionalChainingStatementExpression.ts, 18, 41))
+
+  poss.possibly?.maybe?.close?.();
+>poss.possibly?.maybe?.close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+>poss.possibly?.maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 3, 21))
+>poss.possibly : Symbol(possibly, Decl(optionalChainingStatementExpression.ts, 6, 29))
+>poss : Symbol(poss, Decl(optionalChainingStatementExpression.ts, 18, 13))
+>possibly : Symbol(possibly, Decl(optionalChainingStatementExpression.ts, 6, 29))
+>maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 3, 21))
+>close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+
+  return poss.possibly?.maybe?.close?.();
+>poss.possibly?.maybe?.close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+>poss.possibly?.maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 3, 21))
+>poss.possibly : Symbol(possibly, Decl(optionalChainingStatementExpression.ts, 6, 29))
+>poss : Symbol(poss, Decl(optionalChainingStatementExpression.ts, 18, 13))
+>possibly : Symbol(possibly, Decl(optionalChainingStatementExpression.ts, 6, 29))
+>maybe : Symbol(maybe, Decl(optionalChainingStatementExpression.ts, 3, 21))
+>close : Symbol(close, Decl(optionalChainingStatementExpression.ts, 0, 22))
+}
+
