@@ -113,6 +113,7 @@
         "refactors/addOrRemoveBracesToArrowFunction.ts",
         "refactors/convertParamsToDestructuredObject.ts",
         "refactors/convertStringOrTemplateLiteral.ts",
+        "refactors/convertArrowFunctionOrFunctionExpression.ts",
         "services.ts",
         "breakpoints.ts",
         "transform.ts",
