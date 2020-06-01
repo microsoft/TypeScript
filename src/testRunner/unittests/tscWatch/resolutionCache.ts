@@ -37,7 +37,7 @@ namespace ts.tscWatch {
                 // ensure file has correct number of errors after edit
                 checkOutputErrorsIncremental(host, [
                     f1IsNotModule,
-                    getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), root.path, newContent.indexOf("var x") + "var ".length, "x".length, Diagnostics.Type_0_is_not_assignable_to_type_1, 1, "string"),
+                    getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), root.path, newContent.indexOf("var x") + "var ".length, "x".length, Diagnostics.Type_0_is_not_assignable_to_type_1, "number", "string"),
                     cannotFindFoo
                 ]);
             }

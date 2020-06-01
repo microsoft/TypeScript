@@ -196,7 +196,7 @@ namespace ts.tscWatch {
                         length: 1,
                         code: Diagnostics.Type_0_is_not_assignable_to_type_1.code,
                         category: Diagnostics.Type_0_is_not_assignable_to_type_1.category,
-                        messageText: "Type '20' is not assignable to type 'string'.",
+                        messageText: "Type 'number' is not assignable to type 'string'.",
                         relatedInformation: undefined,
                         reportsUnnecessary: undefined,
                         source: undefined

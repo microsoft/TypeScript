@@ -67,7 +67,7 @@ var y = 20;
             "length": 1,
             "code": 2322,
             "category": 1,
-            "messageText": "Type '20' is not assignable to type 'string'."
+            "messageText": "Type 'number' is not assignable to type 'string'."
           }
         ]
       ]
@@ -78,7 +78,7 @@ var y = 20;
 
 
 Output::
-[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '20' is not assignable to type 'string'.
+[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m1[0m const y: string = 20;
 [7m [0m [91m      ~[0m
@@ -157,7 +157,7 @@ var z = 10;
             "length": 1,
             "code": 2322,
             "category": 1,
-            "messageText": "Type '20' is not assignable to type 'string'."
+            "messageText": "Type 'number' is not assignable to type 'string'."
           }
         ]
       ]
@@ -168,7 +168,7 @@ var z = 10;
 
 
 Output::
-[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '20' is not assignable to type 'string'.
+[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m1[0m const y: string = 20;
 [7m [0m [91m      ~[0m

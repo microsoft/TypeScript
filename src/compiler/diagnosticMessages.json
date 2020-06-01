@@ -5705,13 +5705,17 @@
         "category": "Message",
         "code": 95118
     },
-    "Wrap JSX in JSX Fragment": {
+    "Generate 'get' and 'set' accessors for all overriding properties": {
         "category": "Message",
         "code": 95119
     },
-    "Wrap all JSX in JSX Fragment": {
+    "Wrap JSX in JSX Fragment": {
         "category": "Message",
         "code": 95120
+    },
+    "Wrap all JSX in JSX Fragment": {
+        "category": "Message",
+        "code": 95121
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
