@@ -7,9 +7,9 @@
 
 var c = classification;
 cancellation.setCancelled(1);
-verifyOperationIsCancelled(() => verify.semanticClassificationsAre());
+verifyOperationIsCancelled(() => verify.semanticClassificationsAre("original", ));
 cancellation.resetCancelled();
 
-verify.semanticClassificationsAre(
+verify.semanticClassificationsAre("original", 
     c.moduleName("M"),
     c.moduleName("N"));

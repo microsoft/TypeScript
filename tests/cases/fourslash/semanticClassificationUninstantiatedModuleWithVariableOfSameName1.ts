@@ -9,6 +9,6 @@
 ////var M = { I: 10 };
 
 var c = classification;
-verify.semanticClassificationsAre(
+verify.semanticClassificationsAre("original", 
     c.moduleName("M", test.marker("0").position),
     c.interfaceName("I", test.marker("1").position));

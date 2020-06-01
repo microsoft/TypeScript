@@ -19,7 +19,7 @@
 ////var x = /*6*/M;
 
 var c = classification;
-verify.semanticClassificationsAre(
+verify.semanticClassificationsAre("original", 
     c.moduleName("M", test.marker("0").position),
     c.interfaceName("I", test.marker("1").position),
     c.moduleName("M", test.marker("2").position),

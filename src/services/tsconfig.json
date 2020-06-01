@@ -12,6 +12,7 @@
         "types.ts",
         "utilities.ts",
         "classifier.ts",
+        "classifierVscode.ts",
         "stringCompletions.ts",
         "completions.ts",
         "documentHighlights.ts",

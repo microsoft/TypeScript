@@ -4,7 +4,7 @@
 //// class /*1*/C {}
 //// class /*2*/D extends class /*3*/B{} { }
 var c = classification;
-verify.semanticClassificationsAre(
+verify.semanticClassificationsAre("original", 
     c.className("C", test.marker("0").position),
     c.className("C", test.marker("1").position),
     c.className("D", test.marker("2").position),

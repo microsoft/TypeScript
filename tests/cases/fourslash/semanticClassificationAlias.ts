@@ -12,7 +12,7 @@ goTo.file("/b.ts");
 
 const [m0, m1, m2, m3] = test.markers();
 const c = classification;
-verify.semanticClassificationsAre(
+verify.semanticClassificationsAre("original", 
     c.typeAliasName("x", m0.position),
     c.className("y", m1.position),
     c.typeAliasName("x", m2.position),

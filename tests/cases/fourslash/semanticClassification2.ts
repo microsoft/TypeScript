@@ -8,4 +8,4 @@
 //// Thing.toExponential();
 
 var c = classification;
-verify.semanticClassificationsAre(c.interfaceName("Thing", test.marker("0").position));
+verify.semanticClassificationsAre("original", c.interfaceName("Thing", test.marker("0").position));

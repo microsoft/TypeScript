@@ -6,7 +6,7 @@
 ////function f(x: /*3*/Alias): /*4*/Alias { return undefined; }
 
 var c = classification;
-verify.semanticClassificationsAre(
+verify.semanticClassificationsAre("original", 
     c.typeAliasName("Alias", test.marker("0").position),
     c.typeAliasName("Alias", test.marker("1").position),
     c.typeAliasName("Alias", test.marker("2").position),
