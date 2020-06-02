@@ -114,3 +114,52 @@ exports.A = A;
   "version": "FakeTSVersion"
 }
 
+//// [/src/tsconfig.b.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./b.ts": {
+        "version": "-17186364832-import {A} from 'a';\nexport const b = new A();",
+        "signature": "-6598996556-export declare const b: any;\r\n",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "composite": true,
+      "moduleResolution": 2,
+      "listFiles": true,
+      "configFilePath": "./tsconfig.b.json"
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../lib/lib.d.ts",
+      [
+        "./b.ts",
+        [
+          {
+            "file": "./b.ts",
+            "start": 16,
+            "length": 3,
+            "messageText": "Cannot find module 'a' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ]
+    ],
+    "affectedFilesPendingEmit": [
+      [
+        "./b.ts",
+        1
+      ]
+    ]
+  },
+  "version": "FakeTSVersion"
+}
+

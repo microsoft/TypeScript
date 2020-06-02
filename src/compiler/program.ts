@@ -1585,7 +1585,7 @@ namespace ts {
 
         function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
             if (!forceDtsEmit) {
-                const result = handleNoEmitOptions(program, sourceFile, cancellationToken);
+                const result = handleNoEmitOptions(program, sourceFile, writeFileCallback, cancellationToken);
                 if (result) return result;
             }
 
@@ -3638,11 +3638,17 @@ namespace ts {
     }
 
     /*@internal*/
-    export function handleNoEmitOptions(program: ProgramToEmitFilesAndReportErrors, sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): EmitResult | undefined {
+    export const emitSkippedWithNoDiagnostics: EmitResult = { diagnostics: emptyArray, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
+
+    /*@internal*/
+    export function handleNoEmitOptions(
+        program: ProgramToEmitFilesAndReportErrors,
+        sourceFile: SourceFile | undefined,
+        writeFile: WriteFileCallback | undefined,
+        cancellationToken: CancellationToken | undefined
+    ): EmitResult | undefined {
         const options = program.getCompilerOptions();
-        if (options.noEmit) {
-            return { diagnostics: emptyArray, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
-        }
+        if (options.noEmit) return emitSkippedWithNoDiagnostics;
 
         // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
         // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
@@ -3659,9 +3665,14 @@ namespace ts {
             diagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
         }
 
-        return diagnostics.length > 0 ?
-            { diagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true } :
-            undefined;
+        if (!diagnostics.length) return undefined;
+        let emittedFiles: string[] | undefined;
+        if (!sourceFile && !outFile(options)) {
+            const emitResult = program.emitBuildInfo(writeFile, cancellationToken);
+            if (emitResult.diagnostics) diagnostics = [...diagnostics, ...emitResult.diagnostics];
+            emittedFiles = emitResult.emittedFiles;
+        }
+        return { diagnostics, sourceMaps: undefined, emittedFiles, emitSkipped: true };
     }
 
     /*@internal*/
