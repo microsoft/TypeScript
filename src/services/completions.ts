@@ -956,12 +956,13 @@ namespace ts.Completions {
                     case SyntaxKind.PropertyAccessExpression:
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
-                        if (node.end === contextToken.pos &&
-                            isCallExpression(node) &&
+                        if ((isCallExpression(node) || isFunctionLike(node)) &&
+                            node.end === contextToken.pos &&
                             node.getChildCount(sourceFile) &&
                             last(node.getChildren(sourceFile)).kind !== SyntaxKind.CloseParenToken) {
-                            // This is likely dot from incorrectly parsed call expression and user is starting to write spread
+                            // This is likely dot from incorrectly parsed expression and user is starting to write spread
                             // eg: Math.min(./**/)
+                            // const x = function (./**/) {}
                             return undefined;
                         }
                         break;
