@@ -7,13 +7,21 @@ namespace ts.projectSystem {
         path: "/node_modules/@angular/forms/package.json",
         content: `{ "name": "@angular/forms", "typings": "./forms.d.ts" }`,
     };
+    const angularCoreDts: File = {
+        path: "/node_modules/@angular/core/core.d.ts",
+        content: "",
+    };
+    const angularCorePackageJson: File = {
+        path: "/node_modules/@angular/core/package.json",
+        content: `{ "name": "@angular/core", "typings": "./core.d.ts" }`,
+    };
     const tsconfig: File = {
         path: "/tsconfig.json",
         content: "{}",
     };
     const packageJson: File = {
         path: "/package.json",
-        content: `{ "dependencies": { "@angular/forms": "*" } }`
+        content: `{ "dependencies": { "@angular/forms": "*", "@angular/core": "*" } }`
     };
     const indexTs: File = {
         path: "/index.ts",
@@ -99,17 +107,7 @@ namespace ts.projectSystem {
                     .getAutoImportProvider(),
                 undefined);
 
-            host.reloadFS([
-                angularFormsDts,
-                angularFormsPackageJson,
-                tsconfig,
-                packageJson,
-                indexTs
-            ]);
-
-            host.runQueuedImmediateCallbacks();
-            host.runQueuedTimeoutCallbacks();
-
+            host.writeFile(packageJson.path, packageJson.content);
             assert.ok(projectService
                 .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
                 .getLanguageService()
@@ -138,6 +136,36 @@ namespace ts.projectSystem {
                     .getLanguageService()
                     .getAutoImportProvider(),
                 autoImportProvider);
+        });
+
+        it("Responds to changes in node_modules", () => {
+            const { projectService, session, host } = setup([
+                angularFormsDts,
+                angularFormsPackageJson,
+                angularCoreDts,
+                angularCorePackageJson,
+                tsconfig,
+                packageJson,
+                indexTs
+            ]);
+
+            openFilesForSession([indexTs], session);
+            projectService
+                .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
+                .getLanguageService()
+                .getAutoImportProvider();
+
+            // Directory watchers only fire for add/remove, not change.
+            // This is ok since a real `npm install` will always trigger add/remove events.
+            host.deleteFile(angularFormsDts.path);
+            host.writeFile(angularFormsDts.path, "");
+
+            const autoImportProvider = projectService
+                .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
+                .getLanguageService()
+                .getAutoImportProvider();
+
+            assert.equal(autoImportProvider!.getSourceFile(angularFormsDts.path)!.getText(), "");
         });
     });
 

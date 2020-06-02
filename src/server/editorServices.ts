@@ -1091,6 +1091,7 @@ namespace ts.server {
                 this.logger.msg(`Error: got watch notification for unknown file: ${fileName}`);
             }
             else {
+                info.containedAsAuxiliaryFile?.forEach(p => p.markAutoImportProviderAsDirty());
                 if (info.containingProjects) {
                     info.containingProjects.forEach(project => project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(info.path));
                 }
@@ -1152,6 +1153,7 @@ namespace ts.server {
 
                 // update projects to make sure that set of referenced files is correct
                 this.delayUpdateProjectGraphs(containingProjects, /*clearSourceMapperCache*/ false);
+                // TODO: update autoImportProviderVersion of projects containing info as auxiliary file
                 this.handleSourceMapProjects(info);
                 info.closeSourceMapFileWatcher();
                 // need to recalculate source map from declaration file
@@ -3209,7 +3211,7 @@ namespace ts.server {
             const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
-                if (!info.isScriptOpen() && info.isOrphan()) {
+                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedAsAuxiliaryFile()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
                     let sourceInfos: Map<true> | undefined;

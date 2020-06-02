@@ -1539,8 +1539,10 @@ namespace ts {
             return program;
         }
 
-        function getAutoImportProvider(): Program | undefined {
-            synchronizeAutoImportProvider();
+        function getAutoImportProvider(ensureSynchronized = true): Program | undefined {
+            if (ensureSynchronized) {
+                synchronizeAutoImportProvider();
+            }
             return autoImportProvider;
         }
 

@@ -378,10 +378,10 @@ namespace ts.server {
                     this.rootFiles.push(scriptInfo);
                     existingValue.info = scriptInfo;
                 }
-                if (isAuxiliaryFile !== undefined) {
-                    scriptInfo.isAuxiliaryFile = isAuxiliaryFile;
+                if (isAuxiliaryFile) {
+                    scriptInfo.attachToProjectAsAuxiliaryFile(this);
                 }
-                if (!scriptInfo.isAuxiliaryFile) {
+                else if (isAuxiliaryFile === false || !scriptInfo.isAttachedAsAuxiliaryFile(this)) {
                     scriptInfo.attachToProject(this);
                 }
             }
@@ -702,6 +702,14 @@ namespace ts.server {
                     }
                 });
             }
+
+            const autoImportProvider = this.languageService.getAutoImportProvider(/*ensureSynchronized*/ false);
+            if (autoImportProvider) {
+                for (const f of autoImportProvider.getSourceFiles()) {
+                    this.getScriptInfo(f.fileName)?.detachFromProjectAsAuxiliaryFile(this);
+                }
+            }
+
             // Release external files
             forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
             // Always remove root files from the project

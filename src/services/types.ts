@@ -488,7 +488,7 @@ namespace ts {
         getProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
-        /* @internal */ getAutoImportProvider(): Program | undefined;
+        /* @internal */ getAutoImportProvider(ensureSynchronized?: boolean): Program | undefined;
 
         dispose(): void;
     }
