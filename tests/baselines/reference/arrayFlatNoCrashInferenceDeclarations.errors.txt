@@ -1,0 +1,9 @@
+tests/cases/compiler/arrayFlatNoCrashInferenceDeclarations.ts(1,10): error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+
+
+==== tests/cases/compiler/arrayFlatNoCrashInferenceDeclarations.ts (1 errors) ====
+    function foo<T>(arr: T[], depth: number) {
+             ~~~
+!!! error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
+        return arr.flat(depth);
+    }

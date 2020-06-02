@@ -4404,8 +4404,8 @@ namespace ts {
                     context.inferTypeParameters = (<ConditionalType>type).root.inferTypeParameters;
                     const extendsTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
                     context.inferTypeParameters = saveInferTypeParameters;
-                    const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context);
-                    const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
+                    const trueTypeNode = typeToTypeNodeOrCircularityEllision(getTrueTypeFromConditionalType(<ConditionalType>type));
+                    const falseTypeNode = typeToTypeNodeOrCircularityEllision(getFalseTypeFromConditionalType(<ConditionalType>type));
                     context.approximateLength += 15;
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
@@ -4414,6 +4414,21 @@ namespace ts {
                 }
 
                 return Debug.fail("Should be unreachable.");
+
+
+                function typeToTypeNodeOrCircularityEllision(type: Type) {
+                    if (type.flags & TypeFlags.Union) {
+                        if (context.visitedTypes && context.visitedTypes.has("" + getTypeId(type))) {
+                            if (!(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
+                                context.encounteredError = true;
+                                context.tracker?.reportCyclicStructureError?.();
+                            }
+                            return createElidedInformationPlaceholder(context);
+                        }
+                        return visitAndTransformType(type, type => typeToTypeNodeHelper(type, context));
+                    }
+                    return typeToTypeNodeHelper(type, context);
+                }
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
