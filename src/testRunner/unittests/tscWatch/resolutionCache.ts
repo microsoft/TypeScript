@@ -26,7 +26,7 @@ namespace ts.tscWatch {
                 const newContent = `import {x} from "f1"
                 var x: string = 1;`;
                 root.content = newContent;
-                host.reloadFS(files);
+                host.writeFile(root.path, root.content);
 
                 // patch fileExists to make sure that disk is not touched
                 host.fileExists = notImplemented;
@@ -53,7 +53,7 @@ namespace ts.tscWatch {
                 };
 
                 root.content = `import {x} from "f2"`;
-                host.reloadFS(files);
+                host.writeFile(root.path, root.content);
 
                 // trigger synchronization to make sure that system will try to find 'f2' module on disk
                 host.runQueuedTimeoutCallbacks();
@@ -79,7 +79,7 @@ namespace ts.tscWatch {
                 const newContent = `import {x} from "f1"`;
                 root.content = newContent;
 
-                host.reloadFS(files);
+                host.writeFile(root.path, root.content);
                 host.runQueuedTimeoutCallbacks();
 
                 checkOutputErrorsIncremental(host, [f1IsNotModule, cannotFindFoo]);
@@ -123,7 +123,8 @@ namespace ts.tscWatch {
 
             fileExistsCalledForBar = false;
             root.content = `import {y} from "bar"`;
-            host.reloadFS(files.concat(imported));
+            host.writeFile(root.path, root.content);
+            host.writeFile(imported.path, imported.content);
 
             host.runQueuedTimeoutCallbacks();
             checkOutputErrorsIncremental(host, emptyArray);
@@ -141,9 +142,7 @@ namespace ts.tscWatch {
                 content: `export const y = 1;export const x = 10;`
             };
 
-            const files = [root, libFile];
-            const filesWithImported = files.concat(imported);
-            const host = createWatchedSystem(filesWithImported);
+            const host = createWatchedSystem([root, libFile, imported]);
             const originalFileExists = host.fileExists;
             let fileExistsCalledForBar = false;
             host.fileExists = fileName => {
@@ -162,7 +161,7 @@ namespace ts.tscWatch {
             checkOutputErrorsInitial(host, emptyArray);
 
             fileExistsCalledForBar = false;
-            host.reloadFS(files);
+            host.deleteFile(imported.path);
             host.runQueuedTimeoutCallbacks();
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
             checkOutputErrorsIncremental(host, [
@@ -170,7 +169,7 @@ namespace ts.tscWatch {
             ]);
 
             fileExistsCalledForBar = false;
-            host.reloadFS(filesWithImported);
+            host.writeFile(imported.path, imported.content);
             host.checkTimeoutQueueLengthAndRun(1);
             checkOutputErrorsIncremental(host, emptyArray);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");

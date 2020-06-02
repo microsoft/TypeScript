@@ -182,8 +182,6 @@ new C();`
             function verifyModuleResolution(withPathMapping: boolean) {
                 describe(withPathMapping ? "when tsconfig file contains path mapping" : "when tsconfig does not contain path mapping", () => {
                     const filesWithSources = [libFile, recognizersDateTimeSrcFile, withPathMapping ? recognizerDateTimeTsconfigWithPathMapping : recognizerDateTimeTsconfigWithoutPathMapping, recognizerTextSrcFile, recongnizerTextPackageJson];
-                    const filesWithNodeModulesSetup = [...filesWithSources, nodeModulesRecorgnizersText];
-                    const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
 
                     const watchedDirectoriesWithResolvedModule = arrayToMap(getTypeRootsFromLocation(recognizersDateTime), k => k, () => 1);
                     watchedDirectoriesWithResolvedModule.set(`${recognizersDateTime}/src`, withPathMapping ? 1 : 2); // wild card + failed lookups
@@ -221,18 +219,19 @@ new C();`
                         const session = createSessionAndOpenFile(host);
                         verifyProjectWithUnresolvedModule(session);
 
-                        host.reloadFS(filesAfterCompilation);
+                        host.ensureFileOrFolder(nodeModulesRecorgnizersText);
+                        host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
                         host.runQueuedTimeoutCallbacks();
 
                         verifyProjectWithResolvedModule(session);
                     });
 
                     it("when project has node_modules setup but doesnt have modules in typings folder and then recompiles", () => {
-                        const host = createServerHost(filesWithNodeModulesSetup);
+                        const host = createServerHost([...filesWithSources, nodeModulesRecorgnizersText]);
                         const session = createSessionAndOpenFile(host);
                         verifyProjectWithUnresolvedModule(session);
 
-                        host.reloadFS(filesAfterCompilation);
+                        host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
                         host.runQueuedTimeoutCallbacks();
 
                         if (withPathMapping) {
@@ -245,7 +244,7 @@ new C();`
                     });
 
                     it("when project recompiles after deleting generated folders", () => {
-                        const host = createServerHost(filesAfterCompilation);
+                        const host = createServerHost([...filesWithSources, nodeModulesRecorgnizersText, recongnizerTextDistTypingFile]);
                         const session = createSessionAndOpenFile(host);
 
                         verifyProjectWithResolvedModule(session);
