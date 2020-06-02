@@ -1,4 +1,56 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/a.ts]
+export class A {}
+
+
+//// [/src/b.ts]
+import {A} from 'a';
+export const b = new A();
+
+//// [/src/c.ts]
+
+
+//// [/src/refs/a.d.ts]
+
+
+//// [/src/tsconfig.a.json]
+{"compilerOptions": {"composite": true}, "files": ["a.ts"]}
+
+
+//// [/src/tsconfig.b.json]
+{"compilerOptions":{"composite":true,"moduleResolution":"node"},"files":["b.ts"],"references":[{"path":"tsconfig.a.json"}]}
+
+//// [/src/tsconfig.c.json]
+{
+    "files": [ "c.ts" ],
+    "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "@ref/*": [ "./refs/*" ]
+        }
+    },
+    "references": [ { "path": "tsconfig.b.json" } ]
+}
+
+
+
+
+Output::
 /lib/tsc --b /src/tsconfig.c.json --listFiles
 /lib/lib.d.ts
 /src/a.ts
@@ -32,10 +84,6 @@ var A = /** @class */ (function () {
 exports.A = A;
 
 
-//// [/src/b.ts]
-import {A} from 'a';
-export const b = new A();
-
 //// [/src/tsconfig.a.tsbuildinfo]
 {
   "program": {
@@ -65,7 +113,4 @@ export const b = new A();
   },
   "version": "FakeTSVersion"
 }
-
-//// [/src/tsconfig.b.json]
-{"compilerOptions":{"composite":true,"moduleResolution":"node"},"files":["b.ts"],"references":[{"path":"tsconfig.a.json"}]}
 

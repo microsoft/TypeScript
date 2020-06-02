@@ -1,4 +1,119 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+interface SymbolConstructor {
+    readonly species: symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}
+
+
+//// [/src/common/index.ts]
+import x = require("./obj.json");
+export = x;
+
+
+//// [/src/common/obj.json]
+{
+    "val": 42
+}
+
+//// [/src/common/tsconfig.json]
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "outDir": null,
+        "composite": true
+    },
+    "include": ["index.ts", "obj.json"]
+}
+
+//// [/src/sub-project/index.js]
+import mod from '../common';
+
+export const m = mod;
+
+
+//// [/src/sub-project/tsconfig.json]
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../common" }
+    ],
+    "include": ["./index.js"]
+}
+
+//// [/src/sub-project-2/index.js]
+import { m } from '../sub-project/index';
+
+const variable = {
+    key: m,
+};
+
+export function getVar() {
+    return variable;
+}
+
+
+//// [/src/sub-project-2/tsconfig.json]
+{
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../sub-project" }
+    ],
+    "include": ["./index.js"]
+}
+
+//// [/src/tsconfig.base.json]
+{
+    "compilerOptions": {
+        "skipLibCheck": true,
+        "rootDir": "./",
+        "outDir": "../out",
+        "allowJs": true,
+        "checkJs": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "declaration": true
+    }
+}
+
+//// [/src/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "./sub-project" },
+        { "path": "./sub-project-2" }
+    ],
+    "include": []
+}
+
+
+
+Output::
 /lib/tsc -b /src
 exitCode:: ExitStatus.Success
 

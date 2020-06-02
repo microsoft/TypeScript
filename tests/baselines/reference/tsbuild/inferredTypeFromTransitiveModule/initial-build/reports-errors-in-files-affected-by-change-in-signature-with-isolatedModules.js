@@ -1,4 +1,78 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/bar.ts]
+interface RawAction {
+    (...args: any[]): Promise<any> | void;
+}
+interface ActionFactory {
+    <T extends RawAction>(target: T): T;
+}
+declare function foo<U extends any[] = any[]>(): ActionFactory;
+export default foo()(function foobar(param: string): void {
+});
+
+//// [/src/bundling.ts]
+export class LazyModule<TModule> {
+    constructor(private importCallback: () => Promise<TModule>) {}
+}
+
+export class LazyAction<
+    TAction extends (...args: any[]) => any,
+    TModule
+>  {
+    constructor(_lazyModule: LazyModule<TModule>, _getter: (module: TModule) => TAction) {
+    }
+}
+
+
+//// [/src/global.d.ts]
+interface PromiseConstructor {
+    new <T>(): Promise<T>;
+}
+declare var Promise: PromiseConstructor;
+interface Promise<T> {
+}
+
+//// [/src/index.ts]
+import { LazyAction, LazyModule } from './bundling';
+const lazyModule = new LazyModule(() =>
+    import('./lazyIndex')
+);
+export const lazyBar = new LazyAction(lazyModule, m => m.bar);
+
+//// [/src/lazyIndex.ts]
+export { default as bar } from './bar';
+
+import { default as bar } from './bar';
+bar("hello");
+
+//// [/src/tsconfig.json]
+{
+  "compilerOptions": {
+    "target": "es5",
+    "declaration": true,
+    "outDir": "obj",
+    "incremental": true, "isolatedModules": true
+  }
+}
+
+
+
+Output::
 /lib/tsc --b /src --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/tsconfig.json
@@ -9,12 +83,6 @@
 
 exitCode:: ExitStatus.Success
 
-
-//// [/src/lazyIndex.ts]
-export { default as bar } from './bar';
-
-import { default as bar } from './bar';
-bar("hello");
 
 //// [/src/obj/bar.d.ts]
 declare const _default: (param: string) => void;
@@ -159,13 +227,40 @@ bar_2.default("hello");
   "version": "FakeTSVersion"
 }
 
-//// [/src/tsconfig.json]
-{
-  "compilerOptions": {
-    "target": "es5",
-    "declaration": true,
-    "outDir": "obj",
-    "incremental": true, "isolatedModules": true
-  }
+
+
+Change:: incremental-declaration-changes
+Input::
+//// [/src/bar.ts]
+interface RawAction {
+    (...args: any[]): Promise<any> | void;
 }
+interface ActionFactory {
+    <T extends RawAction>(target: T): T;
+}
+declare function foo<U extends any[] = any[]>(): ActionFactory;
+export default foo()(function foobar(): void {
+});
+
+
+
+Output::
+/lib/tsc --b /src --verbose
+[[90m12:04:00 AM[0m] Projects in this build: 
+    * src/tsconfig.json
+
+[[90m12:04:00 AM[0m] Project 'src/tsconfig.json' is out of date because oldest output 'src/obj/bar.js' is older than newest input 'src/bar.ts'
+
+[[90m12:04:00 AM[0m] Building project '/src/tsconfig.json'...
+
+[96msrc/lazyIndex.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2554: [0mExpected 0 arguments, but got 1.
+
+[7m4[0m bar("hello");
+[7m [0m [91m    ~~~~~~~[0m
+
+
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 

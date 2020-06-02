@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w -verbose
+Input::
 //// [/user/username/projects/demo/core/tsconfig.json]
 {
   "extends": "../tsconfig-base.json",
@@ -143,6 +143,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
+/a/lib/tsc.js -b -w -verbose
 Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] Starting compilation in watch mode...
@@ -267,8 +268,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Prepend a line
 
+Input::
 //// [/user/username/projects/demo/core/utilities.ts]
 
 import * as A from '../animals';
@@ -385,3 +388,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/demo/zoo","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

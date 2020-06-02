@@ -173,7 +173,7 @@ namespace ts {
         const compilerOptions = newProgram.getCompilerOptions();
         state.compilerOptions = compilerOptions;
         // With --out or --outFile, any change affects all semantic diagnostics so no need to cache them
-        if (!compilerOptions.outFile && !compilerOptions.out) {
+        if (!outFile(compilerOptions)) {
             state.semanticDiagnosticsPerFile = createMap<readonly Diagnostic[]>();
         }
         state.changedFilesSet = createMap<true>();
@@ -197,7 +197,7 @@ namespace ts {
             if (changedFilesSet) {
                 copyEntries(changedFilesSet, state.changedFilesSet);
             }
-            if (!compilerOptions.outFile && !compilerOptions.out && oldState!.affectedFilesPendingEmit) {
+            if (!outFile(compilerOptions) && oldState!.affectedFilesPendingEmit) {
                 state.affectedFilesPendingEmit = oldState!.affectedFilesPendingEmit.slice();
                 state.affectedFilesPendingEmitKind = cloneMapOrUndefined(oldState!.affectedFilesPendingEmitKind);
                 state.affectedFilesPendingEmitIndex = oldState!.affectedFilesPendingEmitIndex;
@@ -374,7 +374,7 @@ namespace ts {
             // so operations are performed directly on program, return program
             const program = Debug.checkDefined(state.program);
             const compilerOptions = program.getCompilerOptions();
-            if (compilerOptions.outFile || compilerOptions.out) {
+            if (outFile(compilerOptions)) {
                 Debug.assert(!state.semanticDiagnosticsPerFile);
                 return program;
             }
@@ -700,7 +700,7 @@ namespace ts {
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
     function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
-        if (state.compilerOptions.outFile || state.compilerOptions.out) return undefined;
+        if (outFile(state.compilerOptions)) return undefined;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         const fileInfos: MapLike<BuilderState.FileInfo> = {};
@@ -933,7 +933,7 @@ namespace ts {
             let emitKind = BuilderFileEmit.Full;
             let isPendingEmitFile = false;
             if (!affected) {
-                if (!state.compilerOptions.out && !state.compilerOptions.outFile) {
+                if (!outFile(state.compilerOptions)) {
                     const pendingAffectedFile = getNextAffectedFilePendingEmit(state);
                     if (!pendingAffectedFile) {
                         if (state.emittedBuildInfo) {
@@ -1071,7 +1071,7 @@ namespace ts {
         function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
             assertSourceFileOkWithoutNextAffectedCall(state, sourceFile);
             const compilerOptions = Debug.checkDefined(state.program).getCompilerOptions();
-            if (compilerOptions.outFile || compilerOptions.out) {
+            if (outFile(compilerOptions)) {
                 Debug.assert(!state.semanticDiagnosticsPerFile);
                 // We dont need to cache the diagnostics just return them from program
                 return Debug.checkDefined(state.program).getSemanticDiagnostics(sourceFile, cancellationToken);

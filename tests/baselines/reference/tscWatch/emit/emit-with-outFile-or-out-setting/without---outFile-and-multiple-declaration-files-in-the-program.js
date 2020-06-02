@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/project/tsconfig.json
+Input::
 //// [/a/b/output/AnotherDependency/file1.d.ts]
 declare namespace Common.SomeComponent.DynamicMenu { enum Z { Full = 0,  Min = 1, Average = 2, } }
 
@@ -27,26 +27,8 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/project/tsconfig.json]
 {"compilerOptions":{"outDir":"../output","target":"es5"},"files":["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]}
 
-//// [/a/b/output/main.js]
-var Main;
-(function (Main) {
-    function fooBar() { }
-    Main.fooBar = fooBar;
-})(Main || (Main = {}));
 
-
-//// [/a/b/output/main2.js]
-var main;
-(function (main) {
-    var file4;
-    (function (file4) {
-        function foo(a) { }
-        file4.foo = foo;
-    })(file4 = main.file4 || (main.file4 = {}));
-})(main || (main = {}));
-
-
-
+/a/lib/tsc.js --w -p /a/b/project/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] Starting compilation in watch mode...
@@ -99,3 +81,23 @@ FsWatchesRecursive::
   {"directoryName":"/a/b/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/output/main.js]
+var Main;
+(function (Main) {
+    function fooBar() { }
+    Main.fooBar = fooBar;
+})(Main || (Main = {}));
+
+
+//// [/a/b/output/main2.js]
+var main;
+(function (main) {
+    var file4;
+    (function (file4) {
+        function foo(a) { }
+        file4.foo = foo;
+    })(file4 = main.file4 || (main.file4 = {}));
+})(main || (main = {}));
+
+
