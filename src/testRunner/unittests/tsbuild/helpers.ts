@@ -467,7 +467,8 @@ interface Symbol {
                 tick = undefined!;
                 incrementalSys = undefined!;
             });
-            describe("serializedBuilde", () => {
+            describe("serializedBuild", () => {
+
                 verifyTscBaseline(() => ({
                     baseLine: () => {
                         const { file, text } = sys.baseLine();
