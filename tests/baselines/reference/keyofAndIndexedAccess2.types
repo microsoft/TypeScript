@@ -344,11 +344,11 @@ export interface Entity {
 }
 
 export type IdOf<E extends Entity> = E['id'];
->IdOf : E["id"]
+>IdOf : IdOf<E>
 
 export interface EntityState<E extends Entity> {
     ids: IdOf<E>[];
->ids : E["id"][]
+>ids : IdOf<E>[]
 
     entities: { [key: string]: E, [key: number]: E };
 >entities : { [key: string]: E; [key: number]: E; }
@@ -362,48 +362,48 @@ export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 >state : EntityState<E>
 
     const { ids, entities } = state;
->ids : E["id"][]
+>ids : IdOf<E>[]
 >entities : { [key: string]: E; [key: number]: E; }
 >state : EntityState<E>
 
     return ids.map(id => entities[id]);
->ids.map(id => entities[id]) : { [key: string]: E; [key: number]: E; }[E["id"]][]
->ids.map : <U>(callbackfn: (value: E["id"], index: number, array: E["id"][]) => U, thisArg?: any) => U[]
->ids : E["id"][]
->map : <U>(callbackfn: (value: E["id"], index: number, array: E["id"][]) => U, thisArg?: any) => U[]
->id => entities[id] : (id: E["id"]) => { [key: string]: E; [key: number]: E; }[E["id"]]
->id : E["id"]
->entities[id] : { [key: string]: E; [key: number]: E; }[E["id"]]
+>ids.map(id => entities[id]) : { [key: string]: E; [key: number]: E; }[IdOf<E>][]
+>ids.map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
+>ids : IdOf<E>[]
+>map : <U>(callbackfn: (value: IdOf<E>, index: number, array: IdOf<E>[]) => U, thisArg?: any) => U[]
+>id => entities[id] : (id: IdOf<E>) => { [key: string]: E; [key: number]: E; }[IdOf<E>]
+>id : IdOf<E>
+>entities[id] : { [key: string]: E; [key: number]: E; }[IdOf<E>]
 >entities : { [key: string]: E; [key: number]: E; }
->id : E["id"]
+>id : IdOf<E>
 }
 
 export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>): E | undefined {
 >getEntity : <E extends Entity>(id: IdOf<E>, state: EntityState<E>) => E | undefined
->id : E["id"]
+>id : IdOf<E>
 >state : EntityState<E>
 
     const { ids, entities } = state;
->ids : E["id"][]
+>ids : IdOf<E>[]
 >entities : { [key: string]: E; [key: number]: E; }
 >state : EntityState<E>
 
     if (!ids.includes(id)) {
 >!ids.includes(id) : boolean
 >ids.includes(id) : boolean
->ids.includes : (searchElement: E["id"], fromIndex?: number | undefined) => boolean
->ids : E["id"][]
->includes : (searchElement: E["id"], fromIndex?: number | undefined) => boolean
->id : E["id"]
+>ids.includes : (searchElement: IdOf<E>, fromIndex?: number | undefined) => boolean
+>ids : IdOf<E>[]
+>includes : (searchElement: IdOf<E>, fromIndex?: number | undefined) => boolean
+>id : IdOf<E>
 
         return undefined;
 >undefined : undefined
     }
 
     return entities[id];
->entities[id] : { [key: string]: E; [key: number]: E; }[E["id"]]
+>entities[id] : { [key: string]: E; [key: number]: E; }[IdOf<E>]
 >entities : { [key: string]: E; [key: number]: E; }
->id : E["id"]
+>id : IdOf<E>
 }
 
 // Repro from #30603
