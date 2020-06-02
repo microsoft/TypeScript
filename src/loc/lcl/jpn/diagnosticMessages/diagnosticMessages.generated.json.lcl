@@ -3691,7 +3691,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Declaration augments declaration in another file. This cannot be serialized.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[宣言は別のファイル内の宣言を拡張します。これをシリアル化できません。]]></Val>
+            <Val><![CDATA[この宣言は別のファイル内の宣言を拡張します。この操作はシリアル化できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5372,6 +5372,15 @@
           <Val><![CDATA[Generate 'get' and 'set' accessors]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['get' および 'set' アクセサーの生成]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Generate_get_and_set_accessors_for_all_overriding_properties_95119" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generate 'get' and 'set' accessors for all overriding properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべてのオーバーライドするプロパティに対して 'get' および 'set' アクセサーを生成します]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12091,7 +12100,7 @@
         <Str Cat="Text">
           <Val><![CDATA['{0}' can only be imported by using 'import {1} = require({2})' or a default import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' をインポートするには、'import {1} = require ({2})' または既定のインポートを使用する必要があります。]]></Val>
+            <Val><![CDATA['{0}' をインポートするには、'import {1} = require({2})' または既定のインポートを使用する必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12748,7 +12757,7 @@
         <Str Cat="Text">
           <Val><![CDATA['export *' does not re-export a default.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['export *' では既定値が再エクスポートされません。]]></Val>
+            <Val><![CDATA['export *' では既定のものは再エクスポートされません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
