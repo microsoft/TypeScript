@@ -310,9 +310,11 @@ namespace ts.NavigationBar {
 
             case SyntaxKind.ExportAssignment: {
                 const expression = (<ExportAssignment>node).expression;
-                if (isObjectLiteralExpression(expression)) {
+                const child = isObjectLiteralExpression(expression) ? expression :
+                    isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
+                if (child) {
                     startNode(node);
-                    addChildrenRecursively(expression);
+                    addChildrenRecursively(child);
                     endNode();
                 }
                 else {
