@@ -4404,8 +4404,8 @@ namespace ts {
                     context.inferTypeParameters = (<ConditionalType>type).root.inferTypeParameters;
                     const extendsTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
                     context.inferTypeParameters = saveInferTypeParameters;
-                    const trueTypeNode = typeToTypeNodeOrCircularityEllision(getTrueTypeFromConditionalType(<ConditionalType>type));
-                    const falseTypeNode = typeToTypeNodeOrCircularityEllision(getFalseTypeFromConditionalType(<ConditionalType>type));
+                    const trueTypeNode = typeToTypeNodeOrCircularityElision(getTrueTypeFromConditionalType(<ConditionalType>type));
+                    const falseTypeNode = typeToTypeNodeOrCircularityElision(getFalseTypeFromConditionalType(<ConditionalType>type));
                     context.approximateLength += 15;
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
@@ -4416,7 +4416,7 @@ namespace ts {
                 return Debug.fail("Should be unreachable.");
 
 
-                function typeToTypeNodeOrCircularityEllision(type: Type) {
+                function typeToTypeNodeOrCircularityElision(type: Type) {
                     if (type.flags & TypeFlags.Union) {
                         if (context.visitedTypes && context.visitedTypes.has("" + getTypeId(type))) {
                             if (!(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
