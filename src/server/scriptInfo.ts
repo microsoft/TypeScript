@@ -298,7 +298,7 @@ namespace ts.server {
          * @internal
          * Projects whose auto-import providers include this file
          */
-        containedAsAuxiliaryFile: Project[] | undefined;
+        private auxiliaryFileContainingProjects: Project[] | undefined;
         private formatSettings: FormatCodeSettings | undefined;
         private preferences: protocol.UserPreferences | undefined;
 
@@ -439,7 +439,7 @@ namespace ts.server {
         attachToProjectAsAuxiliaryFile(project: Project) {
             const isNew = !this.isAttachedAsAuxiliaryFile(project);
             if (isNew) {
-                this.containedAsAuxiliaryFile = append(this.containedAsAuxiliaryFile, project);
+                this.auxiliaryFileContainingProjects = append(this.auxiliaryFileContainingProjects, project);
             }
             return isNew;
         }
@@ -450,8 +450,8 @@ namespace ts.server {
 
         /*@internal*/
         isAttachedAsAuxiliaryFile(project: Project): boolean {
-            return !!this.containedAsAuxiliaryFile
-                && this.isContainedBy(project, this.containedAsAuxiliaryFile);
+            return !!this.auxiliaryFileContainingProjects
+                && this.isContainedBy(project, this.auxiliaryFileContainingProjects);
         }
 
         /*@internal*/
@@ -471,8 +471,8 @@ namespace ts.server {
 
         /*@internal*/
         detachFromProjectAsAuxiliaryFile(project: Project) {
-            if (this.containedAsAuxiliaryFile) {
-                this.removeFromContainingProject(project, this.containedAsAuxiliaryFile, /*invokeProjectCallback*/ false);
+            if (this.auxiliaryFileContainingProjects) {
+                this.removeFromContainingProject(project, this.auxiliaryFileContainingProjects, /*invokeProjectCallback*/ false);
             }
         }
 
@@ -529,7 +529,7 @@ namespace ts.server {
                 }
             }
             clear(this.containingProjects);
-            this.containedAsAuxiliaryFile = undefined;
+            this.auxiliaryFileContainingProjects = undefined;
         }
 
         getDefaultProject() {
@@ -574,6 +574,14 @@ namespace ts.server {
                         firstExternalProject ||
                         this.containingProjects[0];
             }
+        }
+
+        /**
+         * @internal
+         * Gets projects whose auto-import providers include this file
+         */
+        getAuxiliaryFileContainingProjects() {
+            return this.auxiliaryFileContainingProjects;
         }
 
         registerFileUpdate(): void {
@@ -653,8 +661,9 @@ namespace ts.server {
             return !forEach(this.containingProjects, p => !p.isOrphan());
         }
 
+        /*@internal*/
         isContainedAsAuxiliaryFile() {
-            return !!this.containedAsAuxiliaryFile?.length;
+            return !!this.auxiliaryFileContainingProjects?.length;
         }
 
         /**

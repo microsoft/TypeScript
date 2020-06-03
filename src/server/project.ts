@@ -188,6 +188,7 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
+        /*@internal*/
         private autoImportProgramVersion = 0;
 
         protected isInitialLoadPending: () => boolean = returnFalse;
@@ -345,6 +346,7 @@ namespace ts.server {
             return this.projectStateVersion.toString();
         }
 
+        /*@internal*/
         getPackageJsonAutoImportProviderVersion() {
             return this.autoImportProgramVersion.toString();
         }
@@ -930,6 +932,7 @@ namespace ts.server {
             }
         }
 
+        /*@internal*/
         markAutoImportProviderAsDirty() {
             this.autoImportProgramVersion++;
         }
@@ -1577,6 +1580,7 @@ namespace ts.server {
             return this.importSuggestionsCache;
         }
 
+        /*@internal*/
         usePackageJsonAutoImportProvider() {
             return this.projectService.usePackageJsonAutoImportProvider && this.isDefaultProjectForOpenFiles();
         }
@@ -1585,7 +1589,10 @@ namespace ts.server {
         private isDefaultProjectForOpenFiles(): boolean {
             return someIterator(
                 this.projectService.openFiles.keys(),
-                fileName => this.getScriptInfo(fileName)?.getDefaultProject() === this);
+                fileName => {
+                    const info = this.getScriptInfo(fileName);
+                    return !!info?.containingProjects.length && info.getDefaultProject() === this;
+                });
         }
     }
 

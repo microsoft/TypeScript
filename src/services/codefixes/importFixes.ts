@@ -227,9 +227,9 @@ namespace ts.codefix {
 
     function getAllReExportingModules(importingFile: SourceFile, exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, host: LanguageServiceHost, program: Program, autoImportProvider: Program | undefined): readonly SymbolExportInfo[] {
         const result: SymbolExportInfo[] = [];
-        const checker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
-        forEachExternalModuleFromEachAutoImportProvider(program, autoImportProvider, host, importingFile, /*filterByPackageJson*/ false, (moduleSymbol, moduleFile) => {
+        forEachExternalModuleToImportFrom(program, autoImportProvider, host, importingFile, /*filterByPackageJson*/ false, (moduleSymbol, moduleFile, program) => {
+            const checker = program.getTypeChecker();
             // Don't import from a re-export when looking "up" like to `./index` or `../index`.
             if (moduleFile && moduleSymbol !== exportingModuleSymbol && startsWith(importingFile.fileName, getDirectoryPath(moduleFile.fileName))) {
                 return;
@@ -523,7 +523,7 @@ namespace ts.codefix {
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
             originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
         }
-        forEachExternalModuleFromEachAutoImportProvider(program, autoImportProvider, host, sourceFile, /*filterByPackageJson*/ true, moduleSymbol => {
+        forEachExternalModuleToImportFrom(program, autoImportProvider, host, sourceFile, /*filterByPackageJson*/ true, moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
 
             const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, program.getCompilerOptions());
@@ -788,7 +788,7 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModuleFromEachAutoImportProvider(
+    export function forEachExternalModuleToImportFrom(
         program: Program,
         autoImportProvider: Program | undefined,
         host: LanguageServiceHost,
@@ -796,15 +796,15 @@ namespace ts.codefix {
         filterByPackageJson: boolean,
         cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program) => void,
     ) {
-        forEachExternalModuleToImportFrom(program, host, from, filterByPackageJson, (module, file) => cb(module, file, program));
+        forEachExternalModuleToImportFromInProgram(program, host, from, filterByPackageJson, (module, file) => cb(module, file, program));
         if (autoImportProvider) {
             const start = timestamp();
-            forEachExternalModuleToImportFrom(autoImportProvider, host, from, filterByPackageJson, (module, file) => cb(module, file, autoImportProvider));
+            forEachExternalModuleToImportFromInProgram(autoImportProvider, host, from, filterByPackageJson, (module, file) => cb(module, file, autoImportProvider));
             host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
     }
 
-    function forEachExternalModuleToImportFrom(
+    function forEachExternalModuleToImportFromInProgram(
         program: Program,
         host: LanguageServiceHost,
         from: SourceFile,

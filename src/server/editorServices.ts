@@ -674,6 +674,7 @@ namespace ts.server {
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
+        /*@internal*/
         readonly usePackageJsonAutoImportProvider: boolean;
         /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
@@ -1091,7 +1092,7 @@ namespace ts.server {
                 this.logger.msg(`Error: got watch notification for unknown file: ${fileName}`);
             }
             else {
-                info.containedAsAuxiliaryFile?.forEach(p => p.markAutoImportProviderAsDirty());
+                info.getAuxiliaryFileContainingProjects()?.forEach(p => p.markAutoImportProviderAsDirty());
                 if (info.containingProjects) {
                     info.containingProjects.forEach(project => project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(info.path));
                 }
@@ -3718,6 +3719,7 @@ namespace ts.server {
             return result;
         }
 
+        /*@internal*/
         private watchPackageJsonFile(path: Path, watchOptions: WatchOptions | undefined) {
             const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
             if (!watchers.has(path)) {

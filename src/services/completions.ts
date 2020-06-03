@@ -1620,12 +1620,13 @@ namespace ts.Completions {
             /** Ids present in `results` for faster lookup */
             const resultSymbolIds = createMap<true>();
 
-            codefix.forEachExternalModuleFromEachAutoImportProvider(program, autoImportProvider, host, sourceFile, !detailsEntryId, moduleSymbol => {
+            codefix.forEachExternalModuleToImportFrom(program, autoImportProvider, host, sourceFile, !detailsEntryId, (moduleSymbol, _, program) => {
                 // Perf -- ignore other modules if this is a request for details
                 if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
                     return;
                 }
 
+                const typeChecker = program.getTypeChecker();
                 const resolvedModuleSymbol = typeChecker.resolveExternalModuleSymbol(moduleSymbol);
                 // resolvedModuleSymbol may be a namespace. A namespace may be `export =` by multiple module declarations, but only keep the first one.
                 if (!addToSeen(seenResolvedModules, getSymbolId(resolvedModuleSymbol))) {

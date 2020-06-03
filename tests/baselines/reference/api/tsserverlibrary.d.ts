@@ -8944,7 +8944,7 @@ declare namespace ts.server {
         private getOrCreateScriptInfoAndAttachToProject;
         getScriptKind(fileName: string): ScriptKind;
         getScriptVersion(filename: string): string;
-        getScriptSnapshot(filename: string): IScriptSnapshot | undefined;
+        getScriptSnapshot(filename: string, isAuxiliaryFile?: boolean): IScriptSnapshot | undefined;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(): string;
@@ -9020,7 +9020,6 @@ declare namespace ts.server {
         private enableProxy;
         /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
         refreshDiagnostics(): void;
-        private watchPackageJsonFile;
     }
     /**
      * If a file is opened and no tsconfig (or jsconfig) is found,
@@ -9248,6 +9247,7 @@ declare namespace ts.server {
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
         syntaxOnly?: boolean;
+        usePackageJsonAutoImportProvider?: boolean;
     }
     export class ProjectService {
         private readonly scriptInfoInNodeModulesWatchers;
