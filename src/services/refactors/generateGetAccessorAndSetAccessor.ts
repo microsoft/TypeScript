@@ -19,7 +19,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         },
         getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
             if (!context.endPosition) return emptyArray;
-            if (!codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.startPosition, context.endPosition)) return emptyArray;
+            if (!codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.startPosition, context.endPosition, context.triggerReason === "invoked")) return emptyArray;
 
             return [{
                 name: actionName,

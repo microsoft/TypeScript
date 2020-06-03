@@ -8,7 +8,7 @@ namespace ts.refactor.extractSymbol {
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
+        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
@@ -186,18 +186,20 @@ namespace ts.refactor.extractSymbol {
      * not shown to the user, but can be used by us diagnostically)
      */
     // exported only for tests
-    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
+    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, considerEmptySpans = true): RangeToExtract {
         const { length } = span;
-
-        if (length === 0) {
+        if (length === 0 && !considerEmptySpans) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
         }
+        const cursorRequest = length === 0 && considerEmptySpans;
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
-        const start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start), sourceFile, span);
+        const startToken = getTokenAtPosition(sourceFile, span.start);
+        const start = cursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, span);
         // Do the same for the ending position
-        const end = getParentNodeInSpan(findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span)), sourceFile, span);
+        const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
+        const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, span);
 
         const declarations: Symbol[] = [];
 
@@ -1844,6 +1846,10 @@ namespace ts.refactor.extractSymbol {
                 ? createQualifiedName(<EntityName>prefix, createIdentifier(symbol.name))
                 : createPropertyAccess(<Expression>prefix, symbol.name);
         }
+    }
+
+    function getExtractableParent(node: Node | undefined): Node | undefined {
+        return findAncestor(node, node => node.parent && isExtractableExpression(node) && !isBinaryExpression(node.parent));
     }
 
     /**
