@@ -186,12 +186,12 @@ namespace ts.refactor.extractSymbol {
      * not shown to the user, but can be used by us diagnostically)
      */
     // exported only for tests
-    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, userRequested = true): RangeToExtract {
+    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, considerEmptySpans = true): RangeToExtract {
         const { length } = span;
-        if (length === 0 && !userRequested) {
+        if (length === 0 && !considerEmptySpans) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
         }
-        const cursorRequest = length === 0 && userRequested;
+        const cursorRequest = length === 0 && considerEmptySpans;
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)

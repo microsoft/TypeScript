@@ -27,12 +27,11 @@ namespace ts.refactor {
         readonly exportingModuleSymbol: Symbol;
     }
 
-    function getInfo(context: RefactorContext, userRequested = true): Info | undefined {
+    function getInfo(context: RefactorContext, considerPartialSpans = true): Info | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        const cursorRequest = userRequested && span;
-        const exportNode = !!(getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && cursorRequest ? token.parent : getParentNodeInSpan(token, file, span);
+        const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
             return undefined;
         }

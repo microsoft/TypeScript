@@ -58,12 +58,12 @@ namespace ts.refactor {
 
     type Info = TypeAliasInfo | InterfaceInfo;
 
-    function getRangeToExtract(context: RefactorContext, userRequested = true): Info | undefined {
+    function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): Info | undefined {
         const { file, startPosition } = context;
         const isJS = isSourceFileJS(file);
         const current = getTokenAtPosition(file, startPosition);
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
-        const cursorRequest = range.pos === range.end && userRequested;
+        const cursorRequest = range.pos === range.end && considerEmptySpans;
 
         const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
             (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));

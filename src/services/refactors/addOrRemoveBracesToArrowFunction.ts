@@ -70,12 +70,12 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, userRequested = true): Info | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true): Info | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
         // Only offer a refactor in the function body on explicit refactor requests.
         if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node)
-            || (rangeContainsRange(func.body, node) && !userRequested))) return undefined;
+            || (rangeContainsRange(func.body, node) && !considerFunctionBodies))) return undefined;
 
         if (isExpression(func.body)) {
             return {

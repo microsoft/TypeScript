@@ -19,12 +19,11 @@ namespace ts.refactor {
     });
 
     // Can convert imports of the form `import * as m from "m";` or `import d, { x, y } from "m";`.
-    function getImportToConvert(context: RefactorContext, userRequested = true): NamedImportBindings | undefined {
+    function getImportToConvert(context: RefactorContext, considerPartialSpans = true): NamedImportBindings | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        const cursorRequest = userRequested && span.length === 0;
-        const importDecl = cursorRequest ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
+        const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
         if (!importDecl || !isImportDeclaration(importDecl) || (importDecl.getEnd() < span.start + span.length)) return undefined;
         const { importClause } = importDecl;
         return importClause && importClause.namedBindings;
