@@ -1,6 +1,6 @@
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(14,17): error TS1047: A rest parameter cannot be optional.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(15,16): error TS1048: A rest parameter cannot have an initializer.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(20,19): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string | number'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(20,19): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(21,7): error TS2552: Cannot find name 'array2'. Did you mean 'Array'?
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(22,11): error TS2322: Type 'string' is not assignable to type '[[any]]'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(23,4): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]]]'.
@@ -37,7 +37,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(
     
     a1(1, 2, "hello", true);  // Error, parameter type is (number|string)[]
                       ~~~~
-!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string | number'.
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | number'.
     a1(...array2);            // Error parameter type is (number|string)[]
           ~~~~~~
 !!! error TS2552: Cannot find name 'array2'. Did you mean 'Array'?

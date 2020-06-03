@@ -1,11 +1,64 @@
-Exit Code: 0
+Exit Code: 1
 Standard output:
 yarn run vX.X.X
 $ gulp compile --max_old_space_size=4095
 [XX:XX:XX] Node flags detected: --max_old_space_size=4095
 [XX:XX:XX] Using gulpfile /vscode/gulpfile.js
-Done in ?s.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/services/configurationResolver/test/electron-browser/configurationResolverService.test.ts(30,6): 'activeTextEditorControl' is defined as a property in class 'TestEditorService', but is overridden here in 'TestEditorServiceWithActiveEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/services/configurationResolver/test/electron-browser/configurationResolverService.test.ts(40,6): 'activeEditor' is defined as a property in class 'TestEditorService', but is overridden here in 'TestEditorServiceWithActiveEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/files/browser/views/explorerView.ts(198,6): 'title' is defined as a property in class 'ViewPane', but is overridden here in 'ExplorerView' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/extensions/test/electron-browser/extensionsViews.test.ts(106,8): 'localExtensionManagementServer' is defined as a property in class 'ExtensionManagementServerService', but is overridden here in '(Anonymous class)' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/extensions/test/electron-browser/extensionsActions.test.ts(106,7): 'localExtensionManagementServer' is defined as a property in class 'ExtensionManagementServerService', but is overridden here in '(Anonymous class)' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/remote/browser/explorerViewItems.ts(30,2): 'actionRunner' is defined as an accessor in class 'SelectActionViewItem', but is overridden here in 'SwitchRemoteViewItem' as an instance property.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(202,6): 'minimumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'SettingsEditor2' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(203,6): 'maximumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'SettingsEditor2' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesEditor.ts(76,6): 'minimumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'PreferencesEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesEditor.ts(77,6): 'maximumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'PreferencesEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/output/browser/outputView.ts(169,16): 'instantiationService' is defined as a property in class 'AbstractTextResourceEditor', but is overridden here in 'OutputEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/notebook/browser/notebookEditor.ts(63,6): 'minimumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'NotebookEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/notebook/browser/notebookEditor.ts(64,6): 'maximumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'NotebookEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/sideBySideEditor.ts(38,6): 'minimumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'SideBySideEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/sideBySideEditor.ts(39,6): 'maximumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'SideBySideEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/sideBySideEditor.ts(40,6): 'minimumHeight' is defined as a property in class 'BaseEditor', but is overridden here in 'SideBySideEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/sideBySideEditor.ts(41,6): 'maximumHeight' is defined as a property in class 'BaseEditor', but is overridden here in 'SideBySideEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/tree/asyncDataTree.ts(161,6): 'context' is defined as a property in class 'ElementsDragAndDropData<T, TContext>', but is overridden here in 'AsyncDataTreeElementsDragAndDropData<TInput, T, TContext>' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/tree/abstractTree.ts(33,6): 'context' is defined as a property in class 'ElementsDragAndDropData<T, TContext>', but is overridden here in 'TreeElementsDragAndDropData<T, TFilterData, TContext>' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/test/electron-browser/workbenchTestServices.ts(142,16): 'encodingOverrides' is defined as a property in class 'EncodingOracle', but is overridden here in 'TestEncodingOracle' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/services/configurationResolver/test/electron-browser/configurationResolverService.test.ts(30,6): 'activeTextEditorControl' is defined as a property in class 'TestEditorService', but is overridden here in 'TestEditorServiceWithActiveEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/services/configurationResolver/test/electron-browser/configurationResolverService.test.ts(40,6): 'activeEditor' is defined as a property in class 'TestEditorService', but is overridden here in 'TestEditorServiceWithActiveEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/files/browser/views/explorerView.ts(198,6): 'title' is defined as a property in class 'ViewPane', but is overridden here in 'ExplorerView' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/extensions/test/electron-browser/extensionsViews.test.ts(106,8): 'localExtensionManagementServer' is defined as a property in class 'ExtensionManagementServerService', but is overridden here in '(Anonymous class)' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/extensions/test/electron-browser/extensionsActions.test.ts(106,7): 'localExtensionManagementServer' is defined as a property in class 'ExtensionManagementServerService', but is overridden here in '(Anonymous class)' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/remote/browser/explorerViewItems.ts(30,2): 'actionRunner' is defined as an accessor in class 'SelectActionViewItem', but is overridden here in 'SwitchRemoteViewItem' as an instance property.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(202,6): 'minimumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'SettingsEditor2' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/settingsEditor2.ts(203,6): 'maximumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'SettingsEditor2' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesEditor.ts(76,6): 'minimumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'PreferencesEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/preferences/browser/preferencesEditor.ts(77,6): 'maximumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'PreferencesEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/output/browser/outputView.ts(169,16): 'instantiationService' is defined as a property in class 'AbstractTextResourceEditor', but is overridden here in 'OutputEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/notebook/browser/notebookEditor.ts(63,6): 'minimumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'NotebookEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/contrib/notebook/browser/notebookEditor.ts(64,6): 'maximumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'NotebookEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/sideBySideEditor.ts(38,6): 'minimumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'SideBySideEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/sideBySideEditor.ts(39,6): 'maximumWidth' is defined as a property in class 'BaseEditor', but is overridden here in 'SideBySideEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/sideBySideEditor.ts(40,6): 'minimumHeight' is defined as a property in class 'BaseEditor', but is overridden here in 'SideBySideEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/browser/parts/editor/sideBySideEditor.ts(41,6): 'maximumHeight' is defined as a property in class 'BaseEditor', but is overridden here in 'SideBySideEditor' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/tree/asyncDataTree.ts(161,6): 'context' is defined as a property in class 'ElementsDragAndDropData<T, TContext>', but is overridden here in 'AsyncDataTreeElementsDragAndDropData<TInput, T, TContext>' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/base/browser/ui/tree/abstractTree.ts(33,6): 'context' is defined as a property in class 'ElementsDragAndDropData<T, TContext>', but is overridden here in 'TreeElementsDragAndDropData<T, TFilterData, TContext>' as an accessor.
+[XX:XX:XX] Error: /vscode/src/vs/workbench/test/electron-browser/workbenchTestServices.ts(142,16): 'encodingOverrides' is defined as a property in class 'EncodingOracle', but is overridden here in 'TestEncodingOracle' as an accessor.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 
 
 Standard error:
+[XX:XX:XX] 'compile' errored after 
+[XX:XX:XX] Error: Found 20 errors
+    at Stream.<anonymous> (/vscode/build/lib/reporter.js:75:29)
+    at _end (/vscode/node_modules/through/index.js:65:9)
+    at Stream.stream.end (/vscode/node_modules/through/index.js:74:5)
+    at Stream.onend (internal/streams/legacy.js:42:10)
+    at Stream.emit (events.js:203:15)
+    at Stream.EventEmitter.emit (domain.js:466:23)
+    at drain (/vscode/node_modules/through/index.js:34:23)
+    at Stream.stream.resume (/vscode/node_modules/through/index.js:99:5)
+    at Stream.ondrain (internal/streams/legacy.js:24:14)
+    at Stream.emit (events.js:198:13)
+error Command failed with exit code 1.

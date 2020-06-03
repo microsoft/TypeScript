@@ -1,7 +1,7 @@
 tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(4,16): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(5,17): error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
 tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS2322: Type '"hello"' is not assignable to type 'IArguments'.
+tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts(6,9): error TS2322: Type 'string' is not assignable to type 'IArguments'.
 
 
 ==== tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts (4 errors) ====
@@ -18,6 +18,6 @@ tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeBy
             ~~~~~~~~~
 !!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
             ~~~~~~~~~
-!!! error TS2322: Type '"hello"' is not assignable to type 'IArguments'.
+!!! error TS2322: Type 'string' is not assignable to type 'IArguments'.
         }
     }

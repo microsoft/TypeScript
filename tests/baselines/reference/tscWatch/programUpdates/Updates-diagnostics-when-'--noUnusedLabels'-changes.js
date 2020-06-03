@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /tsconfig.json
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -18,11 +18,8 @@ label: while (1) {}
 //// [/tsconfig.json]
 {"compilerOptions":{"allowUnusedLabels":true}}
 
-//// [/a.js]
-label: while (1) { }
 
-
-
+/a/lib/tsc.js -w -p /tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
@@ -58,8 +55,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a.js]
+label: while (1) { }
+
+
+
 Change:: Disable  allowUnsusedLabels
 
+Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"allowUnusedLabels":false}}
 
@@ -105,8 +108,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Enable  allowUnsusedLabels
 
+Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"allowUnusedLabels":true}}
 
@@ -145,3 +150,4 @@ FsWatchesRecursive::
   {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

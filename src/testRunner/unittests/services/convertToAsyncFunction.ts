@@ -308,7 +308,7 @@ interface Array<T> {}`
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 preferences: emptyOptions,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatSettings)
+                formatContext: formatting.getFormatContext(testFormatSettings, notImplementedHost)
             };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);

@@ -39,7 +39,7 @@ node_modules/debug/dist/debug.js(733,82): error TS2339: Property 'type' does not
 node_modules/debug/dist/debug.js(733,120): error TS2339: Property '__nwjs' does not exist on type 'Process'.
 node_modules/debug/dist/debug.js(744,146): error TS2551: Property 'WebkitAppearance' does not exist on type 'CSSStyleDeclaration'. Did you mean 'webkitAppearance'?
 node_modules/debug/dist/debug.js(745,78): error TS2339: Property 'firebug' does not exist on type 'Console'.
-node_modules/debug/dist/debug.js(799,156): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, ...any[]]'.
+node_modules/debug/dist/debug.js(799,156): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[message?: any, ...optionalParams: any[]]'.
 node_modules/debug/dist/debug.js(851,21): error TS2304: Cannot find name 'LocalStorage'.
 node_modules/debug/src/browser.js(3,100): error TS2539: Cannot assign to '_typeof' because it is not a variable.
 node_modules/debug/src/browser.js(3,165): error TS2539: Cannot assign to '_typeof' because it is not a variable.
@@ -47,7 +47,7 @@ node_modules/debug/src/browser.js(34,74): error TS2339: Property 'type' does not
 node_modules/debug/src/browser.js(34,112): error TS2339: Property '__nwjs' does not exist on type 'Process'.
 node_modules/debug/src/browser.js(45,138): error TS2551: Property 'WebkitAppearance' does not exist on type 'CSSStyleDeclaration'. Did you mean 'webkitAppearance'?
 node_modules/debug/src/browser.js(46,70): error TS2339: Property 'firebug' does not exist on type 'Console'.
-node_modules/debug/src/browser.js(100,148): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, ...any[]]'.
+node_modules/debug/src/browser.js(100,148): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[message?: any, ...optionalParams: any[]]'.
 node_modules/debug/src/browser.js(152,13): error TS2304: Cannot find name 'LocalStorage'.
 node_modules/debug/src/common.js(51,24): error TS2339: Property 'colors' does not exist on type '{ (namespace: string): Function; debug: ...; default: ...; coerce: (val: any) => any; disable: () => void; enable: (namespaces: string) => void; enabled: (name: string) => boolean; humanize: { ...; }; ... 4 more ...; selectColor: (namespace: string) => string | number; }'.
 node_modules/debug/src/common.js(51,60): error TS2339: Property 'colors' does not exist on type '{ (namespace: string): Function; debug: ...; default: ...; coerce: (val: any) => any; disable: () => void; enable: (namespaces: string) => void; enabled: (name: string) => boolean; humanize: { ...; }; ... 4 more ...; selectColor: (namespace: string) => string | number; }'.
@@ -77,7 +77,7 @@ node_modules/debug/src/node.js(56,5): error TS2322: Type 'false' is not assignab
 node_modules/debug/src/node.js(58,5): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
 node_modules/debug/src/node.js(60,5): error TS2322: Type 'number' is not assignable to type 'string | undefined'.
 node_modules/debug/src/node.js(71,108): error TS2339: Property 'fd' does not exist on type 'WriteStream'.
-node_modules/debug/src/node.js(108,55): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any, ...any[]]'.
+node_modules/debug/src/node.js(108,55): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[format: any, ...param: any[]]'.
 node_modules/debug/src/node.js(136,3): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
 

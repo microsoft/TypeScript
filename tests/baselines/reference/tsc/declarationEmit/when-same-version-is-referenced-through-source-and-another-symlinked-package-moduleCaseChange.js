@@ -1,4 +1,4 @@
-/a/lib/tsc.js -p plugin-one --listFiles
+Input::
 //// [/user/username/projects/myProject/plugin-two/index.d.ts]
 declare const _default: {
     features: {
@@ -84,34 +84,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/plugin-one/action.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.actions = void 0;
-var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
-var action = typescript_fsa_1.actionCreatorFactory("somekey");
-var featureOne = action("feature-one");
-exports.actions = { featureOne: featureOne };
 
-
-//// [/user/username/projects/myproject/plugin-one/action.d.ts]
-export declare const actions: {
-    featureOne: import("typescript-fsa").ActionCreator<{
-        route: string;
-    }>;
-};
-
-
-//// [/user/username/projects/myproject/plugin-one/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/user/username/projects/myproject/plugin-one/index.d.ts]
-export {};
-
-
-
+/a/lib/tsc.js -p plugin-one --listFiles
 Output::
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-one/action.ts'. ========
 
@@ -232,3 +206,31 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.Success
+
+//// [/user/username/projects/myproject/plugin-one/action.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.actions = void 0;
+var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
+var action = typescript_fsa_1.actionCreatorFactory("somekey");
+var featureOne = action("feature-one");
+exports.actions = { featureOne: featureOne };
+
+
+//// [/user/username/projects/myproject/plugin-one/action.d.ts]
+export declare const actions: {
+    featureOne: import("typescript-fsa").ActionCreator<{
+        route: string;
+    }>;
+};
+
+
+//// [/user/username/projects/myproject/plugin-one/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/user/username/projects/myproject/plugin-one/index.d.ts]
+export {};
+
+

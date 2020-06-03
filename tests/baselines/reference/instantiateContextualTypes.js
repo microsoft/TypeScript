@@ -236,3 +236,4 @@ let obj = {
     foo(bar) { }
 };
 assignPartial(obj, { foo(...args) { } }); // args has type [string]
+export {};

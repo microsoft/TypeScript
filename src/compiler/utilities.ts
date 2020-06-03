@@ -3092,6 +3092,12 @@ namespace ts {
                 else if (isStringOrNumericLiteralLike(nameExpression)) {
                     return escapeLeadingUnderscores(nameExpression.text);
                 }
+                else if (isSignedNumericLiteral(nameExpression)) {
+                    if (nameExpression.operator === SyntaxKind.MinusToken) {
+                        return tokenToString(nameExpression.operator) + nameExpression.operand.text as __String;
+                    }
+                    return nameExpression.operand.text as __String;
+                }
                 return undefined;
             default:
                 return Debug.assertNever(name);
@@ -3852,6 +3858,10 @@ namespace ts {
         return removeFileExtension(path) + Extension.Dts;
     }
 
+    export function outFile(options: CompilerOptions) {
+        return options.outFile || options.out;
+    }
+
     export interface EmitFileNames {
         jsFilePath?: string | undefined;
         sourceMapFilePath?: string | undefined;
@@ -3871,7 +3881,7 @@ namespace ts {
      */
     export function getSourceFilesToEmit(host: EmitHost, targetSourceFile?: SourceFile, forceDtsEmit?: boolean): readonly SourceFile[] {
         const options = host.getCompilerOptions();
-        if (options.outFile || options.out) {
+        if (outFile(options)) {
             const moduleKind = getEmitModuleKind(options);
             const moduleEmitEnabled = options.emitDeclarationOnly || moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
             // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified

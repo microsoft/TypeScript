@@ -18,23 +18,34 @@ namespace ts {
             }
 
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(node, compilerOptions);
-                if (externalHelpersImportDeclaration) {
-                    const statements: Statement[] = [];
-                    const statementOffset = addPrologue(statements, node.statements);
-                    append(statements, externalHelpersImportDeclaration);
-
-                    addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
-                    return updateSourceFileNode(
-                        node,
-                        setTextRange(createNodeArray(statements), node.statements));
+                const result = updateExternalModule(node);
+                if (!isExternalModule(node) || some(result.statements, isExternalModuleIndicator)) {
+                    return result;
                 }
-                else {
-                    return visitEachChild(node, visitor, context);
-                }
+                return updateSourceFileNode(
+                    result,
+                    setTextRange(createNodeArray([...result.statements, createEmptyExports()]), result.statements),
+                );
             }
 
             return node;
+        }
+
+        function updateExternalModule(node: SourceFile) {
+            const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(node, compilerOptions);
+            if (externalHelpersImportDeclaration) {
+                const statements: Statement[] = [];
+                const statementOffset = addPrologue(statements, node.statements);
+                append(statements, externalHelpersImportDeclaration);
+
+                addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+                return updateSourceFileNode(
+                    node,
+                    setTextRange(createNodeArray(statements), node.statements));
+            }
+            else {
+                return visitEachChild(node, visitor, context);
+            }
         }
 
         function visitor(node: Node): VisitResult<Node> {
