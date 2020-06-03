@@ -619,6 +619,18 @@ namespace ts {
         return false;
     }
 
+    export function someIterator<T>(iterator: Iterator<T>, predicate: (value: T) => boolean) {
+        while (true) {
+            const iterResult = iterator.next();
+            if (iterResult.done) {
+                return false;
+            }
+            if (predicate(iterResult.value)) {
+                return true;
+            }
+        }
+    }
+
     /** Calls the callback with (start, afterEnd) index pairs for each range where 'pred' is true. */
     export function getRangesWhere<T>(arr: readonly T[], pred: (t: T) => boolean, cb: (start: number, afterEnd: number) => void): void {
         let start: number | undefined;

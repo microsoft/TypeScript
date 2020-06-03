@@ -1578,7 +1578,14 @@ namespace ts.server {
         }
 
         usePackageJsonAutoImportProvider() {
-            return this.projectService.usePackageJsonAutoImportProvider;
+            return this.projectService.usePackageJsonAutoImportProvider && this.isDefaultProjectForOpenFiles();
+        }
+
+        /*@internal*/
+        private isDefaultProjectForOpenFiles(): boolean {
+            return someIterator(
+                this.projectService.openFiles.keys(),
+                fileName => this.getScriptInfo(fileName)?.getDefaultProject() === this);
         }
     }
 

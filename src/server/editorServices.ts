@@ -1153,7 +1153,6 @@ namespace ts.server {
 
                 // update projects to make sure that set of referenced files is correct
                 this.delayUpdateProjectGraphs(containingProjects, /*clearSourceMapperCache*/ false);
-                // TODO: update autoImportProviderVersion of projects containing info as auxiliary file
                 this.handleSourceMapProjects(info);
                 info.closeSourceMapFileWatcher();
                 // need to recalculate source map from declaration file

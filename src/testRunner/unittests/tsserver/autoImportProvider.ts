@@ -38,9 +38,7 @@ namespace ts.projectSystem {
                 indexTs
             ]);
             openFilesForSession([indexTs], session);
-            assert.equal(
-                projectService.getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!.getLanguageService().getAutoImportProvider(),
-                undefined);
+            assert.isUndefined(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         });
 
         it("Auto import provider program is not created if dependencies are already in main program", () => {
@@ -52,9 +50,7 @@ namespace ts.projectSystem {
                 { path: indexTs.path, content: "import '@angular/forms';" }
             ]);
             openFilesForSession([indexTs], session);
-            assert.equal(
-                projectService.getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!.getLanguageService().getAutoImportProvider(),
-                undefined);
+            assert.isUndefined(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         });
 
         it("Auto-import program is not created for projects already inside node_modules", () => {
@@ -70,9 +66,10 @@ namespace ts.projectSystem {
             openFilesForSession([angularFormsDts], session);
             checkNumberOfInferredProjects(projectService, 1);
             checkNumberOfConfiguredProjects(projectService, 0);
-            assert.equal(
-                projectService.getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)!.getLanguageService().getAutoImportProvider(),
-                undefined);
+            assert.isUndefined(projectService
+                .getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)!
+                .getLanguageService()
+                .getAutoImportProvider());
         });
 
         it("Auto-importable file is in inferred project until imported", () => {
@@ -88,6 +85,8 @@ namespace ts.projectSystem {
             assert.equal(
                 projectService.getDefaultProjectForFile(angularFormsDts.path as server.NormalizedPath, /*ensureProject*/ true)?.projectKind,
                 server.ProjectKind.Configured);
+
+            assert.isUndefined(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         });
 
         it("Responds to package.json changes", () => {
@@ -100,18 +99,10 @@ namespace ts.projectSystem {
             ]);
 
             openFilesForSession([indexTs], session);
-            assert.equal(
-                projectService
-                    .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
-                    .getLanguageService()
-                    .getAutoImportProvider(),
-                undefined);
+            assert.isUndefined(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
 
             host.writeFile(packageJson.path, packageJson.content);
-            assert.ok(projectService
-                .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
-                .getLanguageService()
-                .getAutoImportProvider());
+            assert.ok(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         });
 
         it("Reuses autoImportProvider when program structure is unchanged", () => {
@@ -124,17 +115,11 @@ namespace ts.projectSystem {
             ]);
 
             openFilesForSession([indexTs], session);
-            const autoImportProvider = projectService
-                .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
-                .getLanguageService()
-                .getAutoImportProvider();
+            const autoImportProvider = projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider();
 
             updateFile(indexTs.path, "console.log(0)");
             assert.strictEqual(
-                projectService
-                    .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
-                    .getLanguageService()
-                    .getAutoImportProvider(),
+                projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider(),
                 autoImportProvider);
         });
 
@@ -150,22 +135,49 @@ namespace ts.projectSystem {
             ]);
 
             openFilesForSession([indexTs], session);
-            projectService
-                .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
-                .getLanguageService()
-                .getAutoImportProvider();
+            projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider();
 
             // Directory watchers only fire for add/remove, not change.
             // This is ok since a real `npm install` will always trigger add/remove events.
             host.deleteFile(angularFormsDts.path);
             host.writeFile(angularFormsDts.path, "");
 
-            const autoImportProvider = projectService
-                .getDefaultProjectForFile(indexTs.path as server.NormalizedPath, /*ensureProject*/ true)!
-                .getLanguageService()
-                .getAutoImportProvider();
-
+            const autoImportProvider = projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider();
             assert.equal(autoImportProvider!.getSourceFile(angularFormsDts.path)!.getText(), "");
+        });
+    });
+
+    describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
+        it("Does not create auto import providers upon opening projects for find-all-references", () => {
+            const files = [
+                // node_modules
+                angularFormsDts,
+                angularFormsPackageJson,
+
+                // root
+                { path: tsconfig.path, content: `{ "references": [{ "path": "packages/a" }, { "path": "packages/b" }] }` },
+                { path: packageJson.path, content: `{ "private": true }` },
+
+                // packages/a
+                { path: "/packages/a/package.json", content: packageJson.content },
+                { path: "/packages/a/tsconfig.json", content: `{ "compilerOptions": { "composite": true }, "references": [{ "path": "../b" }] }` },
+                { path: "/packages/a/index.ts", content: "import { B } from '../b';" },
+
+                // packages/b
+                { path: "/packages/b/package.json", content: packageJson.content },
+                { path: "/packages/b/tsconfig.json", content: `{ "compilerOptions": { "composite": true } }` },
+                { path: "/packages/b/index.ts", content: `export class B {}` }
+            ];
+
+            const { projectService, session, findAllReferences } = setup(files);
+
+            openFilesForSession([files.find(f => f.path === "/packages/b/index.ts")!], session);
+            checkNumberOfConfiguredProjects(projectService, 2); // Solution (no files), B
+            findAllReferences("/packages/b/index.ts", 1, "export class B".length - 1);
+            checkNumberOfConfiguredProjects(projectService, 3); // Solution (no files), A, B
+
+            // Project for A is created - ensure it doesn't have an autoImportProvider
+            assert.isUndefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getLanguageService().getAutoImportProvider());
         });
     });
 
@@ -177,18 +189,31 @@ namespace ts.projectSystem {
             host,
             projectService,
             session,
-            updateFile
+            updateFile,
+            findAllReferences
         };
 
         function updateFile(path: string, newText: string) {
-            const file = Debug.checkDefined(files.find(f => f.path === path));
+            Debug.assertDefined(files.find(f => f.path === path));
             session.executeCommandSeq<protocol.ApplyChangedToOpenFilesRequest>({
                 command: protocol.CommandTypes.ApplyChangedToOpenFiles,
                 arguments: {
                     openFiles: [{
-                        fileName: file.path,
+                        fileName: path,
                         content: newText
                     }]
+                }
+            });
+        }
+
+        function findAllReferences(file: string, line: number, offset: number) {
+            Debug.assertDefined(files.find(f => f.path === file));
+            session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: {
+                    file,
+                    line,
+                    offset
                 }
             });
         }
