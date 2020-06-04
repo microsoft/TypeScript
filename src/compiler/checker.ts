@@ -19330,10 +19330,18 @@ namespace ts {
                         if (isTupleType(target)) {
                             const sourceArity = isTupleType(source) ? getTypeReferenceArity(source) : 0;
                             const targetArity = getTypeReferenceArity(target);
-                            const fixedLength = isTupleType(source) ? Math.min(getLengthOfTupleType(source), getLengthOfTupleType(target)) : 0;
-                            const endFixedLength = isTupleType(source) && target.target.hasVariadicElement ? Math.min(getEndLengthOfTupleType(source), getEndLengthOfTupleType(target)) : 0;
                             const elementTypes = getTypeArguments(target);
                             const elementFlags = target.target.elementFlags;
+                            // When source and target are tuple types with the same structure (fixed, variadic, and rest are matched
+                            // to the same kind in each position), simply infer between the element types.
+                            if (isTupleType(source) && sourceArity === targetArity && every(elementFlags, (f, i) => (f & ElementFlags.Variable) === (source.target.elementFlags[i] & ElementFlags.Variable))) {
+                                for (let i = 0; i < targetArity; i++) {
+                                    inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
+                                }
+                                return;
+                            }
+                            const fixedLength = isTupleType(source) ? Math.min(getLengthOfTupleType(source), getLengthOfTupleType(target)) : 0;
+                            const endFixedLength = isTupleType(source) && target.target.hasVariadicElement ? Math.min(getEndLengthOfTupleType(source), getEndLengthOfTupleType(target)) : 0;
                             // Infer between starting fixed elements.
                             for (let i = 0; i < fixedLength; i++) {
                                 inferFromTypes(getTypeArguments(<TypeReference>source)[i], elementTypes[i]);
