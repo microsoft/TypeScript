@@ -7870,7 +7870,7 @@ namespace ts {
                 (resolvedSymbol || symbol).exports!.forEach((s, name) => {
                     const exportedMember = members.get(name)!;
                     if (exportedMember && exportedMember !== s) {
-                        if (s.flags & SymbolFlags.Value) {
+                        if (s.flags & SymbolFlags.Value && exportedMember.flags & SymbolFlags.Value) {
                             // If the member has an additional value-like declaration, union the types from the two declarations,
                             // but issue an error if they occurred in two different files. The purpose is to support a JS file with
                             // a pattern like:
