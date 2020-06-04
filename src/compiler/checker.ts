@@ -30444,7 +30444,6 @@ namespace ts {
         function checkTupleType(node: TupleTypeNode) {
             const elementTypes = node.elements;
             let seenOptionalElement = false;
-            let seenRestElement = false;
             let seenNamedElement = false;
             for (let i = 0; i < elementTypes.length; i++) {
                 const e = elementTypes[i];
@@ -30456,29 +30455,24 @@ namespace ts {
                     break;
                 }
                 const flags = getTupleElementFlags(e);
-                if (flags & ElementFlags.Required && seenOptionalElement) {
-                    grammarErrorOnNode(e, Diagnostics.A_required_element_cannot_follow_an_optional_element);
-                    break;
-                }
-                if (flags & (ElementFlags.Required | ElementFlags.Optional | ElementFlags.Rest) && seenRestElement) {
-                    grammarErrorOnNode(e, Diagnostics.A_required_optional_or_rest_element_cannot_follow_a_rest_element);
-                    break;
-                }
-                if (flags & ElementFlags.Optional) {
-                    seenOptionalElement = true;
-                }
-                else if (flags & ElementFlags.Rest) {
-                    seenRestElement = true;
-                    if (!isArrayType(getTypeFromTypeNode((<RestTypeNode | NamedTupleMember>e).type))) {
-                        error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
-                        break;
-                    }
-                }
-                else if (flags & ElementFlags.Variadic) {
+                if (flags & ElementFlags.Variadic) {
                     if (!isArrayLikeType(getTypeFromTypeNode((<RestTypeNode | NamedTupleMember>e).type))) {
                         error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
                         break;
                     }
+                }
+                else if (flags & ElementFlags.Rest) {
+                    if (i !== elementTypes.length - 1) {
+                        grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
+                        break;
+                    }
+                }
+                else if (flags & ElementFlags.Optional) {
+                    seenOptionalElement = true;
+                }
+                else if (seenOptionalElement) {
+                    grammarErrorOnNode(e, Diagnostics.A_required_element_cannot_follow_an_optional_element);
+                    break;
                 }
             }
             forEach(node.elements, checkSourceElement);

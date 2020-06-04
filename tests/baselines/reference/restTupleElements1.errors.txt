@@ -1,5 +1,5 @@
 tests/cases/conformance/types/tuple/restTupleElements1.ts(3,22): error TS1257: A required element cannot follow an optional element.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(8,26): error TS1256: A required, optional, or rest element cannot follow a rest element.
+tests/cases/conformance/types/tuple/restTupleElements1.ts(8,13): error TS1256: A rest element must be last in a tuple type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(9,13): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(10,13): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(10,16): error TS8020: JSDoc types can only be used inside documentation comments.
@@ -37,8 +37,8 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
     type T05 = [...[...[...string[]]]];
     type T06 = [string, ...string[]];
     type T07 = [...string[], string];  // Error
-                             ~~~~~~
-!!! error TS1256: A required, optional, or rest element cannot follow a rest element.
+                ~~~~~~~~~~~
+!!! error TS1256: A rest element must be last in a tuple type.
     type T08 = [...string];  // Error
                 ~~~~~~~~~
 !!! error TS2574: A rest element type must be an array type.
