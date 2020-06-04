@@ -1202,7 +1202,7 @@ namespace ts {
     }
 
     export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
-        let result = new Array(count);
+        const result = new Array(count);
         for (let i = 0; i < count; i++) {
             result[i] = f(i);
         }

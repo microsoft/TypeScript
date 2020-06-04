@@ -11512,9 +11512,11 @@ namespace ts {
                                 }
                             }
                         }
-                        // When an 'infer T' declaration is immediately contained in a rest parameter
-                        // declaration, we infer an 'unknown[]' constraint.
-                        else if (grandParent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>grandParent).dotDotDotToken) {
+                        // When an 'infer T' declaration is immediately contained in a rest parameter declaration,
+                        // a rest type, or a named rest tuple element, we infer a 'readonly unknown[]' constraint.
+                        else if (grandParent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>grandParent).dotDotDotToken ||
+                            grandParent.kind === SyntaxKind.RestType ||
+                            grandParent.kind === SyntaxKind.NamedTupleMember && (<NamedTupleMember>grandParent).dotDotDotToken) {
                             inferences = append(inferences, createArrayType(unknownType));
                         }
                     }
@@ -12243,7 +12245,7 @@ namespace ts {
                 if (target === emptyGenericType) {
                     links.resolvedType = emptyObjectType;
                 }
-                else if (!(node.kind === SyntaxKind.TupleType && some((node as TupleTypeNode).elements, e => !!(getTupleElementFlags(e) & ElementFlags.Variadic))) && isDeferredTypeReferenceNode(node)) {
+                else if (!(node.kind === SyntaxKind.TupleType && some(node.elements, e => !!(getTupleElementFlags(e) & ElementFlags.Variadic))) && isDeferredTypeReferenceNode(node)) {
                     links.resolvedType = node.kind === SyntaxKind.TupleType && node.elements.length === 0 ? target :
                         createDeferredTypeReference(target, node, /*mapper*/ undefined);
                 }
@@ -12360,73 +12362,81 @@ namespace ts {
         }
 
         function createNormalizedTupleType(target: TupleType, elementTypes: readonly Type[]): Type {
+            // Transform [A, ...(X | Y | Z)] into [A, ...X] | [A, ...Y] | [A, ...Z]
             const unionIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic && t.flags & (TypeFlags.Never | TypeFlags.Union)));
             if (unionIndex >= 0) {
-                // Transform [A, ...(X | Y | Z)] into [A, ...X] | [A, ...Y] | [A, ...Z]
                 return mapType(elementTypes[unionIndex], t => createNormalizedTupleType(target, replaceElement(elementTypes, unionIndex, t)));
             }
-            const spreadIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic) && !isGenericObjectType(t));
+            // If there are no variadic elements with non-generic types, just create a type reference with the same target type.
+            const spreadIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic) && !(t.flags & TypeFlags.InstantiableNonPrimitive) && !isGenericMappedType(t));
             if (spreadIndex < 0) {
                 return createTypeReference(target, elementTypes);
             }
+            // We have non-generic variadic elements that need normalization.
             const expandedTypes: Type[] = [];
             const expandedFlags: ElementFlags[] = [];
             let expandedDeclarations: (NamedTupleMember | ParameterDeclaration)[] | undefined = [];
-            let restIndex = 0;
             let restTypes: Type[] | undefined;
             for (let i = 0; i < elementTypes.length; i++) {
                 const type = elementTypes[i];
                 const flags = target.elementFlags[i];
                 if (flags & ElementFlags.Variadic) {
-                    if (isGenericObjectType(type)) {
-                        addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
+                    if (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type)) {
+                        // Generic variadic elements stay as they are (except following a rest element).
+                        addElementOrRest(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                     }
                     else if (isTupleType(type)) {
+                        // Spread variadic elements with tuple types into the resulting tuple.
                         forEach(getTypeArguments(type), (t, n) => addElementOrRest(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
                     }
                     else {
+                        // Treat everything else as an array type and create a rest element.
                         addElementOrRest(isArrayLikeType(type) && getIndexTypeOfType(type, IndexKind.Number) || errorType, ElementFlags.Rest, target.labeledElementDeclarations?.[i]);
                     }
                 }
                 else {
+                    // Copy other element kinds with no change.
                     addElementOrRest(type, flags, target.labeledElementDeclarations?.[i]);
                 }
             }
             if (restTypes) {
-                expandedTypes[restIndex] = getUnionType(restTypes);
+                // Create a union of the collected rest element types.
+                expandedTypes[expandedTypes.length - 1] = getUnionType(restTypes);
             }
             return createTupleTypeEx(expandedTypes, expandedFlags, target.readonly, expandedDeclarations);
 
             function addElementOrRest(type: Type, flags: ElementFlags, declaration: NamedTupleMember | ParameterDeclaration | undefined) {
                 if (restTypes) {
-                    restTypes.push(type);
+                    // A rest element was previously added, so simply collect the type of this element.
+                    restTypes.push(flags & ElementFlags.Variadic ? getIndexedAccessType(type, numberType) : type);
                 }
                 else {
                     if (flags & ElementFlags.Rest) {
-                        restIndex = expandedTypes.length;
+                        // Start collecting element types when a rest element is added.
                         restTypes = [type];
                     }
-                    addElement(type, flags, declaration);
-                }
-            }
-
-            function addElement(type: Type, flags: ElementFlags, declaration: NamedTupleMember | ParameterDeclaration | undefined) {
-                expandedTypes.push(type);
-                expandedFlags.push(flags);
-                if (expandedDeclarations && declaration) {
-                    expandedDeclarations.push(declaration);
-                }
-                else {
-                    expandedDeclarations = undefined;
+                    expandedTypes.push(type);
+                    expandedFlags.push(flags);
+                    if (expandedDeclarations && declaration) {
+                        expandedDeclarations.push(declaration);
+                    }
+                    else {
+                        expandedDeclarations = undefined;
+                    }
                 }
             }
         }
 
-        function sliceTupleType(type: TupleTypeReference, index: number) {
+        function sliceTupleType(type: TupleTypeReference, index: number, endSkipCount = 0) {
             const target = type.target;
-            return index > target.fixedLength ? getRestArrayTypeOfTupleType(type) || createTupleType(emptyArray) :
-                createTupleTypeEx(getTypeArguments(type).slice(index), target.elementFlags.slice(index),
-                    target.readonly, target.labeledElementDeclarations && target.labeledElementDeclarations.slice(index));
+            const endIndex = getTypeReferenceArity(type) - endSkipCount;
+            return index > target.fixedLength ? getRestArrayTypeOfTupleType(type) || getEmptyTupleType(target.readonly) :
+                createTupleTypeEx(getTypeArguments(type).slice(index, endIndex), target.elementFlags.slice(index, endIndex),
+                    target.readonly, target.labeledElementDeclarations && target.labeledElementDeclarations.slice(index, endIndex));
+        }
+
+        function getEmptyTupleType(readonly = false) {
+            return createTupleTypeEx(emptyArray, emptyArray, readonly);
         }
 
         function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
@@ -14030,8 +14040,8 @@ namespace ts {
             const links = getNodeLinks(node);
             return links.resolvedType || (links.resolvedType =
                     node.dotDotDotToken ? getTypeFromRestTypeNode(node) :
-                    node.questionToken && strictNullChecks ? getOptionalType(getTypeFromTypeNode((node as NamedTupleMember).type)) :
-                    getTypeFromTypeNode((node as NamedTupleMember).type));
+                    node.questionToken && strictNullChecks ? getOptionalType(getTypeFromTypeNode(node.type)) :
+                    getTypeFromTypeNode(node.type));
         }
 
         function getTypeFromTypeNode(node: TypeNode): Type {
@@ -18082,18 +18092,7 @@ namespace ts {
         }
 
         function getRestTypeOfTupleType(type: TupleTypeReference) {
-            const target = type.target;
-            if (target.hasRestElement) {
-                const typeArguments = getTypeArguments(type);
-                const length = target.typeParameters!.length;
-                const restTypes: Type[] = [];
-                for (let i = target.fixedLength; i < length; i++) {
-                    const t = typeArguments[i];
-                    restTypes.push(target.elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessType(t, numberType) : t);
-                }
-                return getUnionType(restTypes);
-            }
-            return undefined;
+            return getElementTypeOfTupleType(type, type.target.fixedLength);
         }
 
         function getRestArrayTypeOfTupleType(type: TupleTypeReference) {
@@ -18103,6 +18102,24 @@ namespace ts {
 
         function getLengthOfTupleType(type: TupleTypeReference) {
             return type.target.fixedLength;
+        }
+
+        function getEndLengthOfTupleType(type: TupleTypeReference) {
+            return getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !!(f & ElementFlags.Variable)) - 1;
+        }
+
+        function getElementTypeOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0) {
+            const length = getTypeReferenceArity(type) - endSkipCount;
+            if (index < length) {
+                const typeArguments = getTypeArguments(type);
+                const elementTypes: Type[] = [];
+                for (let i = index; i < length; i++) {
+                    const t = typeArguments[i];
+                    elementTypes.push(type.target.elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessType(t, numberType) : t);
+                }
+                return getUnionType(elementTypes);
+            }
+            return undefined;
         }
 
         function isZeroBigInt({value}: BigIntLiteralType) {
@@ -18807,14 +18824,14 @@ namespace ts {
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
-            return target.target.minLength > source.target.minLength ||
-                !getRestTypeOfTupleType(target) && (!!getRestTypeOfTupleType(source) || getLengthOfTupleType(target) < getLengthOfTupleType(source));
+            return !target.target.hasVariadicElement && target.target.minLength > source.target.minLength ||
+                !target.target.hasRestElement && (source.target.hasRestElement || getLengthOfTupleType(target) < getLengthOfTupleType(source));
         }
 
         function typesDefinitelyUnrelated(source: Type, target: Type) {
             // Two tuple types with incompatible arities are definitely unrelated.
             // Two object types that each have a property that is unmatched in the other are definitely unrelated.
-            return isTupleType(source) && isTupleType(target) && tupleTypesDefinitelyUnrelated(source, target) ||
+            return isTupleType(source) && isTupleType(target) ? tupleTypesDefinitelyUnrelated(source, target) :
                 !!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ true) &&
                 !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ true);
         }
@@ -19311,22 +19328,43 @@ namespace ts {
                 if (!typesDefinitelyUnrelated(source, target)) {
                     if (isArrayType(source) || isTupleType(source)) {
                         if (isTupleType(target)) {
-                            const sourceLength = isTupleType(source) ? getLengthOfTupleType(source) : 0;
-                            const targetLength = getLengthOfTupleType(target);
-                            const sourceRestType = isTupleType(source) ? getRestTypeOfTupleType(source) : getElementTypeOfArrayType(source);
-                            const targetRestType = getRestTypeOfTupleType(target);
-                            const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
+                            const sourceArity = isTupleType(source) ? getTypeReferenceArity(source) : 0;
+                            const targetArity = getTypeReferenceArity(target);
+                            const fixedLength = isTupleType(source) ? Math.min(getLengthOfTupleType(source), getLengthOfTupleType(target)) : 0;
+                            const endFixedLength = isTupleType(source) && target.target.hasVariadicElement ? Math.min(getEndLengthOfTupleType(source), getEndLengthOfTupleType(target)) : 0;
+                            const elementTypes = getTypeArguments(target);
+                            const elementFlags = target.target.elementFlags;
+                            // Infer between starting fixed elements.
                             for (let i = 0; i < fixedLength; i++) {
-                                inferFromTypes(i < sourceLength ? getTypeArguments(<TypeReference>source)[i] : sourceRestType!, getTypeArguments(target)[i]);
+                                inferFromTypes(getTypeArguments(<TypeReference>source)[i], elementTypes[i]);
                             }
-                            if (targetRestType) {
-                                const types = fixedLength < sourceLength ? getTypeArguments(<TypeReference>source).slice(fixedLength, sourceLength) : [];
-                                if (sourceRestType) {
-                                    types.push(sourceRestType);
+                            if (fixedLength < targetArity - endFixedLength) {
+                                // Process elements that remain between the starting and ending fixed parts.
+                                const sourceReadonly = isTupleType(source) ? source.target.readonly : isReadonlyArrayType(source);
+                                let targetExcessIndex = fixedLength;
+                                let sourceExcessIndex = fixedLength;
+                                if (elementFlags[fixedLength] & ElementFlags.Variadic) {
+                                    // When first non-fixed element in target is variadic, infer the slice between the fixed parts in the source.
+                                    inferFromTypes(isTupleType(source) ? sliceTupleType(source, fixedLength, endFixedLength) : source, elementTypes[fixedLength]);
+                                    const sourceHasRest = sourceArity > 0 && (<TupleTypeReference>source).target.elementFlags[sourceArity - 1] & ElementFlags.Rest;
+                                    targetExcessIndex = fixedLength + 1;
+                                    sourceExcessIndex = sourceArity - endFixedLength - (sourceHasRest ? 1 : 0);
                                 }
-                                if (types.length) {
-                                    inferFromTypes(getUnionType(types), targetRestType);
+                                // If source has a rest element of type R, infer R[] for remaining variadic elements and R for other remaining elements.
+                                // If source has no rest element, infer [] for remaining variadic elements and nothing for other remaining elements.
+                                const sourceRestType = isTupleType(source) ? getElementTypeOfTupleType(source, sourceExcessIndex, endFixedLength) : getElementTypeOfArrayType(source);
+                                for (let i = targetExcessIndex; i < targetArity - endFixedLength; i++) {
+                                    if (elementFlags[i] & ElementFlags.Variadic) {
+                                        inferFromTypes(sourceRestType ? createArrayType(sourceRestType) : getEmptyTupleType(sourceReadonly), elementTypes[i]);
+                                    }
+                                    else if (sourceRestType) {
+                                        inferFromTypes(sourceRestType, elementTypes[i]);
+                                    }
                                 }
+                            }
+                            // Infer between ending fixed elements
+                            for (let i = 0; i < endFixedLength; i++) {
+                                inferFromTypes(getTypeArguments(<TypeReference>source)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
                             }
                             return;
                         }
