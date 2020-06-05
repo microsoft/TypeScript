@@ -5,37 +5,32 @@ namespace ts {
     }
 
     function countLines(program: Program): Map<number> {
-        let counts = createMap<number>();
-        counts.set("Library", 0);
-        counts.set("Definitions", 0);
-        counts.set("TypeScript", 0);
-        counts.set("JavaScript", 0);
-        counts.set("JSON", 0);
-        counts.set("Other", 0);
-
+        const counts = getCountsMap();
         forEach(program.getSourceFiles(), file => {
             const key = getCountKey(program, file);
             const lineCount = getLineStarts(file).length;
             counts.set(key, counts.get(key)! + lineCount);
         });
-
         return counts;
     }
 
     function countNodes(program: Program): Map<number> {
-        let counts = createMap<number>();
+        const counts = getCountsMap();
+        forEach(program.getSourceFiles(), file => {
+            const key = getCountKey(program, file);
+            counts.set(key, counts.get(key)! + file.nodeCount);
+        });
+        return counts;
+    }
+
+    function getCountsMap() {
+        const counts = createMap<number>();
         counts.set("Library", 0);
         counts.set("Definitions", 0);
         counts.set("TypeScript", 0);
         counts.set("JavaScript", 0);
         counts.set("JSON", 0);
         counts.set("Other", 0);
-
-        forEach(program.getSourceFiles(), file => {
-            const key = getCountKey(program, file);
-            counts.set(key, counts.get(key)! + file.nodeCount);
-        });
-
         return counts;
     }
 
