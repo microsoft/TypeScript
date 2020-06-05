@@ -6,6 +6,7 @@ namespace ts {
 
     function countLines(program: Program): Map<number> {
         let counts = createMap<number>();
+        counts.set("Library", 0);
         counts.set("Definitions", 0);
         counts.set("TypeScript", 0);
         counts.set("JavaScript", 0);
@@ -13,14 +14,19 @@ namespace ts {
         counts.set("Other", 0);
 
         forEach(program.getSourceFiles(), file => {
-            const key = getCountKey(file.path);
+            const key = getCountKey(file);
             const lineCount = getLineStarts(file).length;
             counts.set(key, counts.get(key)! + lineCount);
         });
 
         return counts;
 
-        function getCountKey(path: string) {
+        function getCountKey(file: SourceFile) {
+            if (program.isSourceFileDefaultLibrary(file)) {
+                return "Library";
+            }
+
+            const path = file.path;
             if (fileExtensionIs(path, Extension.Dts)) {
                 return "Definitions";
             }
