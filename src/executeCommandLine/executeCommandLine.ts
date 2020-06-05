@@ -14,34 +14,51 @@ namespace ts {
         counts.set("Other", 0);
 
         forEach(program.getSourceFiles(), file => {
-            const key = getCountKey(file);
+            const key = getCountKey(program, file);
             const lineCount = getLineStarts(file).length;
             counts.set(key, counts.get(key)! + lineCount);
         });
 
         return counts;
+    }
 
-        function getCountKey(file: SourceFile) {
-            if (program.isSourceFileDefaultLibrary(file)) {
-                return "Library";
-            }
+    function countNodes(program: Program): Map<number> {
+        let counts = createMap<number>();
+        counts.set("Library", 0);
+        counts.set("Definitions", 0);
+        counts.set("TypeScript", 0);
+        counts.set("JavaScript", 0);
+        counts.set("JSON", 0);
+        counts.set("Other", 0);
 
-            const path = file.path;
-            if (fileExtensionIs(path, Extension.Dts)) {
-                return "Definitions";
-            }
-            else if (fileExtensionIsOneOf(path, supportedTSExtensions)) {
-                return "TypeScript";
-            }
-            else if (fileExtensionIsOneOf(path, supportedJSExtensions)) {
-                return "JavaScript";
-            }
-            else if (fileExtensionIs(path, Extension.Json)) {
-                return "JSON";
-            }
-            else {
-                return "Other";
-            }
+        forEach(program.getSourceFiles(), file => {
+            const key = getCountKey(program, file);
+            counts.set(key, counts.get(key)! + file.nodeCount);
+        });
+
+        return counts;
+    }
+
+    function getCountKey(program: Program, file: SourceFile) {
+        if (program.isSourceFileDefaultLibrary(file)) {
+            return "Library";
+        }
+
+        const path = file.path;
+        if (fileExtensionIs(path, Extension.Dts)) {
+            return "Definitions";
+        }
+        else if (fileExtensionIsOneOf(path, supportedTSExtensions)) {
+            return "TypeScript";
+        }
+        else if (fileExtensionIsOneOf(path, supportedJSExtensions)) {
+            return "JavaScript";
+        }
+        else if (fileExtensionIs(path, Extension.Json)) {
+            return "JSON";
+        }
+        else {
+            return "Other";
         }
     }
 
@@ -666,7 +683,11 @@ namespace ts {
                 reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
             }
 
-            reportCountStatistic("Nodes", program.getNodeCount()); // TODO (acasey)
+            const nodeCounts = countNodes(program);
+            for (const key of arrayFrom(nodeCounts.keys())) {
+                reportCountStatistic("Nodes of " + key, nodeCounts.get(key)!);
+            }
+
             reportCountStatistic("Identifiers", program.getIdentifierCount());
             reportCountStatistic("Symbols", program.getSymbolCount());
             reportCountStatistic("Types", program.getTypeCount());
