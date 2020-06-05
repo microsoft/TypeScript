@@ -97,10 +97,8 @@ namespace ts.projectSystem {
                 content: "let y = 1"
             };
 
-            const filesWithoutConfig = [libFile, commonFile1, commonFile2];
-            const host = createServerHost(filesWithoutConfig);
+            const host = createServerHost([libFile, commonFile1, commonFile2]);
 
-            const filesWithConfig = [libFile, commonFile1, commonFile2, configFile];
             const projectService = createProjectService(host);
             projectService.openClientFile(commonFile1.path);
             projectService.openClientFile(commonFile2.path);
@@ -113,7 +111,7 @@ namespace ts.projectSystem {
             checkWatchedFiles(host, watchedFiles);
 
             // Add a tsconfig file
-            host.reloadFS(filesWithConfig);
+            host.writeFile(configFile.path, configFile.content);
             host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
 
             projectService.checkNumberOfProjects({ inferredProjects: 2, configuredProjects: 1 });
@@ -124,7 +122,7 @@ namespace ts.projectSystem {
             checkWatchedFiles(host, watchedFiles);
 
             // remove the tsconfig file
-            host.reloadFS(filesWithoutConfig);
+            host.deleteFile(configFile.path);
 
             projectService.checkNumberOfProjects({ inferredProjects: 2 });
             assert.isTrue(projectService.inferredProjects[0].isOrphan());
@@ -154,7 +152,7 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [commonFile1.path]);
 
             // add a new ts file
-            host.reloadFS([commonFile1, commonFile2, libFile, configFile]);
+            host.writeFile(commonFile2.path, commonFile2.content);
             host.checkTimeoutQueueLengthAndRun(2);
             // project service waits for 250ms to update the project structure, therefore the assertion needs to wait longer.
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
@@ -196,12 +194,12 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
 
             // delete commonFile2
-            host.reloadFS([commonFile1, configFile]);
+            host.deleteFile(commonFile2.path);
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectRootFiles(project, [commonFile1.path]);
 
             // re-add commonFile2
-            host.reloadFS([commonFile1, commonFile2, configFile]);
+            host.writeFile(commonFile2.path, commonFile2.content);
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
         });
@@ -269,13 +267,12 @@ namespace ts.projectSystem {
             checkProjectActualFiles(project, [file1.path, nodeModuleFile.path, configFile.path]);
             checkProjectActualFiles(projectService.inferredProjects[0], [classicModuleFile.path]);
 
-            configFile.content = `{
+            host.writeFile(configFile.path, `{
                 "compilerOptions": {
                     "moduleResolution": "classic"
                 },
                 "files": ["${file1.path}"]
-            }`;
-            host.reloadFS(files);
+            }`);
             host.checkTimeoutQueueLengthAndRun(2);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 2 }); // will not remove project 1
@@ -468,7 +465,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
             checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
 
-            host.reloadFS([file1, file2, file3, configFile]);
+            host.writeFile(configFile.path, configFile.content);
             host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
             checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 2 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, file3.path, configFile.path]);
@@ -497,7 +494,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, configFile.path]);
 
-            host.reloadFS([file1, file2, configFile]);
+            host.writeFile(file2.path, file2.content);
 
             host.checkTimeoutQueueLengthAndRun(2);
 
@@ -526,12 +523,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, configFile.path]);
 
-            const modifiedConfigFile = {
-                path: configFile.path,
-                content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })
-            };
-
-            host.reloadFS([file1, file2, modifiedConfigFile]);
+            host.writeFile(configFile.path, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }));
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
@@ -559,12 +551,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, configFile.path]);
 
-            const modifiedConfigFile = {
-                path: configFile.path,
-                content: JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })
-            };
-
-            host.reloadFS([file1, file2, modifiedConfigFile]);
+            host.writeFile(configFile.path, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }));
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectRootFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path]);
@@ -612,8 +599,7 @@ namespace ts.projectSystem {
             const inferredProject2 = projectService.inferredProjects[1];
             checkProjectActualFiles(inferredProject2, [file4.path]);
 
-            configFile.content = "{}";
-            host.reloadFS(files.concat(configFile));
+            host.writeFile(configFile.path, "{}");
             host.runQueuedTimeoutCallbacks();
 
             verifyScriptInfos();
@@ -653,7 +639,7 @@ namespace ts.projectSystem {
                 path: "/file5.ts",
                 content: "let zz = 1;"
             };
-            host.reloadFS(files.concat(configFile, file5));
+            host.writeFile(file5.path, file5.content);
             projectService.openClientFile(file5.path);
             verifyScriptInfosAreUndefined([file1, file2, file3]);
             assert.strictEqual(projectService.getScriptInfoForPath(file4.path as Path), find(infos, info => info.path === file4.path));
@@ -724,8 +710,7 @@ namespace ts.projectSystem {
             projectService.closeClientFile(file3.path);
             assert.isFalse(configuredProject.hasOpenRef()); // No files
 
-            configFile.content = "{}";
-            host.reloadFS(files.concat(configFile));
+            host.writeFile(configFile.path, "{}");
             // Time out is not yet run so there is project update pending
             assert.isTrue(configuredProject.hasOpenRef()); // Pending update and file2 might get into the project
 
@@ -795,7 +780,7 @@ namespace ts.projectSystem {
                 path: "/aa.js",
                 content: "var x = 1"
             };
-            host.reloadFS([f1, f2, f3, config, f4]);
+            host.writeFile(f4.path, f4.content);
             projectService.openClientFile(f4.path);
             projectService.checkNumberOfProjects({ inferredProjects: 1 });
             assert.isFalse(project.hasOpenRef()); // No files
@@ -1219,7 +1204,7 @@ foo();`
             checkWatchedDirectoriesDetailed(host, ["/a/b/node_modules/@types"], 1, /*recursive*/ true);
 
             files.push(file2);
-            host.reloadFS(files);
+            host.writeFile(file2.path, file2.content);
             host.runQueuedTimeoutCallbacks();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
