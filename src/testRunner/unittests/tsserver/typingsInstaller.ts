@@ -935,7 +935,7 @@ namespace ts.projectSystem {
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
-            host.reloadFS([f, fixedPackageJson]);
+            host.writeFile(fixedPackageJson.path, fixedPackageJson.content);
             host.checkTimeoutQueueLengthAndRun(2); // To refresh the project and refresh inferred projects
             // expected install request
             installer.installAll(/*expectedCount*/ 1);

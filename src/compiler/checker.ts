@@ -7870,7 +7870,7 @@ namespace ts {
                 (resolvedSymbol || symbol).exports!.forEach((s, name) => {
                     const exportedMember = members.get(name)!;
                     if (exportedMember && exportedMember !== s) {
-                        if (s.flags & SymbolFlags.Value) {
+                        if (s.flags & SymbolFlags.Value && exportedMember.flags & SymbolFlags.Value) {
                             // If the member has an additional value-like declaration, union the types from the two declarations,
                             // but issue an error if they occurred in two different files. The purpose is to support a JS file with
                             // a pattern like:
@@ -25051,22 +25051,40 @@ namespace ts {
                 effectiveParameterCount = args.length === 0 ? effectiveParameterCount : 1; // class may have argumentless ctor functions - still resolve ctor and compare vs props member type
                 effectiveMinimumArguments = Math.min(effectiveMinimumArguments, 1); // sfc may specify context argument - handled by framework and not typechecked
             }
+            else if (!node.arguments) {
+                // This only happens when we have something of the form: 'new C'
+                Debug.assert(node.kind === SyntaxKind.NewExpression);
+                return getMinArgumentCount(signature) === 0;
+            }
             else {
-                if (!node.arguments) {
-                    // This only happens when we have something of the form: 'new C'
-                    Debug.assert(node.kind === SyntaxKind.NewExpression);
-                    return getMinArgumentCount(signature) === 0;
-                }
-
                 argCount = signatureHelpTrailingComma ? args.length + 1 : args.length;
 
                 // If we are missing the close parenthesis, the call is incomplete.
                 callIsIncomplete = node.arguments.end === node.end;
 
-                // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
-                const spreadArgIndex = getSpreadArgumentIndex(args);
-                if (spreadArgIndex >= 0) {
-                    return spreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || spreadArgIndex < getParameterCount(signature));
+                // If one or more spread arguments are present, check that they correspond to a rest parameter or at least that they are in the valid range.
+                const firstSpreadArgIndex = getSpreadArgumentIndex(args);
+                if (firstSpreadArgIndex >= 0) {
+                    if (firstSpreadArgIndex === args.length - 1) {
+                        // Special case, handles the munged arguments that we receive in case of a spread in the end (breaks the arg.expression below)
+                        //   (see below for code that starts with "const spreadArgument")
+                        return firstSpreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || firstSpreadArgIndex < getParameterCount(signature));
+                    }
+
+                    let totalCount = firstSpreadArgIndex; // count previous arguments
+                    for (let i = firstSpreadArgIndex; i < args.length; i++) {
+                        const arg = args[i];
+                        if (!isSpreadArgument(arg)) {
+                            totalCount += 1;
+                        }
+                        else {
+                            const argType = flowLoopCount ? checkExpression((<SpreadElement>arg).expression) : checkExpressionCached((<SpreadElement>arg).expression);
+                            totalCount += isTupleType(argType) ? getTypeArguments(argType).length
+                                : isArrayType(argType) ? 0
+                                : 1;
+                        }
+                    }
+                    return totalCount >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || totalCount <= getParameterCount(signature));
                 }
             }
 
@@ -25544,7 +25562,7 @@ namespace ts {
                 const spreadArgument = <SpreadElement>args[length - 1];
                 const type = flowLoopCount ? checkExpression(spreadArgument.expression) : checkExpressionCached(spreadArgument.expression);
                 if (isTupleType(type)) {
-                    const typeArguments = getTypeArguments(<TypeReference>type);
+                    const typeArguments = getTypeArguments(type);
                     const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
                     const syntheticArgs = map(typeArguments, (t, i) => createSyntheticExpression(spreadArgument, t, /*isSpread*/ i === restIndex, type.target.labeledElementDeclarations?.[i]));
                     return concatenate(args.slice(0, length - 1), syntheticArgs);

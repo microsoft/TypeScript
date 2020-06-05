@@ -94,7 +94,7 @@ namespace ts.projectSystem {
                 content: `export {}; declare module "./a" {  export const y: number; }`
             };
             files.push(bFile);
-            host.reloadFS(files);
+            host.writeFile(bFile.path, bFile.content);
             service.openClientFile(bFile.path, /*fileContent*/ undefined, ScriptKind.TS, projectFolder);
             verifyProject();
 
