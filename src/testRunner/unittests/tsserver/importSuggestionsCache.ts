@@ -1,4 +1,8 @@
 namespace ts.projectSystem {
+    const packageJson: File = {
+        path: "/package.json",
+        content: `{ "dependencies": { "mobx": "*" } }`
+    };
     const aTs: File = {
         path: "/a.ts",
         content: "export const foo = 0;",
@@ -14,6 +18,10 @@ namespace ts.projectSystem {
     const ambientDeclaration: File = {
         path: "/ambient.d.ts",
         content: "declare module 'ambient' {}"
+    };
+    const mobxDts: File = {
+        path: "/node_modules/mobx/index.d.ts",
+        content: "export declare function observable(): unknown;"
     };
 
     describe("unittests:: tsserver:: importSuggestionsCache", () => {
@@ -36,10 +44,17 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks();
             assert.isUndefined(importSuggestionsCache.get(bTs.path, checker));
         });
+
+        it("invalidates the cache when package.json is changed", () => {
+            const { host, importSuggestionsCache, checker } = setup();
+            host.writeFile("/package.json", "{}");
+            host.runQueuedTimeoutCallbacks();
+            assert.isUndefined(importSuggestionsCache.get(bTs.path, checker));
+        });
     });
 
     function setup() {
-        const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig]);
+        const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxDts]);
         const session = createSession(host);
         openFilesForSession([aTs, bTs], session);
         const projectService = session.getProjectService();

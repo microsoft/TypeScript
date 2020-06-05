@@ -3723,7 +3723,7 @@ namespace ts.server {
         private watchPackageJsonFile(path: Path, watchOptions: WatchOptions | undefined) {
             const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
             if (!watchers.has(path)) {
-                this.updateAutoImportProvidersWithPackageJson(path);
+                this.invalidateProjectAutoImports(path);
                 watchers.set(path, this.watchFactory.watchFile(
                     this.host,
                     path,
@@ -3734,11 +3734,11 @@ namespace ts.server {
                                 return Debug.fail();
                             case FileWatcherEventKind.Changed:
                                 this.packageJsonCache.addOrUpdate(path);
-                                this.updateAutoImportProvidersWithPackageJson(path);
+                                this.invalidateProjectAutoImports(path);
                                 break;
                             case FileWatcherEventKind.Deleted:
                                 this.packageJsonCache.delete(path);
-                                this.updateAutoImportProvidersWithPackageJson(path);
+                                this.invalidateProjectAutoImports(path);
                                 watchers.get(path)!.close();
                                 watchers.delete(path);
                         }
@@ -3757,13 +3757,17 @@ namespace ts.server {
         }
 
         /*@internal*/
-        private updateAutoImportProvidersWithPackageJson(packageJsonPath: Path) {
+        private invalidateProjectAutoImports(packageJsonPath: Path) {
             if (this.usePackageJsonAutoImportProvider) {
-                this.configuredProjects.forEach(project => {
-                    if (project.packageJsonsForAutoImport?.has(packageJsonPath)) {
-                        project.markAutoImportProviderAsDirty();
-                    }
-                });
+                this.configuredProjects.forEach(invalidate);
+                this.inferredProjects.forEach(invalidate);
+                this.externalProjects.forEach(invalidate);
+            }
+            function invalidate(project: Project) {
+                if (project.packageJsonsForAutoImport?.has(packageJsonPath)) {
+                    project.getImportSuggestionsCache().clear();
+                    project.markAutoImportProviderAsDirty();
+                }
             }
         }
     }
