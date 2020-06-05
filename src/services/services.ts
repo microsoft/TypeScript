@@ -1496,7 +1496,9 @@ namespace ts {
                 noLib: true,
                 diagnostics: false,
                 skipLibCheck: true,
-                types: emptyArray
+                types: emptyArray,
+                lib: emptyArray,
+                sourceMap: false
             };
 
             const resolutions = map(arrayFrom(dependencyNames.keys()), name => resolveTypeReferenceDirective(

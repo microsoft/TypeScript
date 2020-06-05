@@ -43,4 +43,4 @@ verify.completions({
   preferences: {
     includeCompletionsForModuleExports: true
   }
-})
+});
