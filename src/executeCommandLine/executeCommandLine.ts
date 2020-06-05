@@ -678,11 +678,15 @@ namespace ts {
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
 
+            // TODO (acasey): if we keep this, we should report the total here and
+            // the details in extended diagnostics.
             const lineCounts = countLines(program);
             for (const key of arrayFrom(lineCounts.keys())) {
                 reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
             }
 
+            // TODO (acasey): if we keep this, we should report the total here and
+            // the details in extended diagnostics.
             const nodeCounts = countNodes(program);
             for (const key of arrayFrom(nodeCounts.keys())) {
                 reportCountStatistic("Nodes of " + key, nodeCounts.get(key)!);
