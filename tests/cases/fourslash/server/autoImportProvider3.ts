@@ -13,7 +13,7 @@
 //// export declare class PackageDependency
 
 // @Filename: /package.json
-//// { "private": true, "devDependencies": { "common-dependency": "*" } }
+//// { "private": true, "dependencies": { "common-dependency": "*" } }
 
 // @Filename: /tsconfig.json
 //// { "files": [], "references": [{ "path": "packages/a" }] }
@@ -22,7 +22,7 @@
 //// { "compilerOptions": { "target": "esnext", "composite": true } }
 
 // @Filename: /packages/a/package.json
-//// { "dependencies": { "package-dependency": "*" } }
+//// { "peerDependencies": { "package-dependency": "*" } }
 
 // @Filename: /packages/a/index.ts
 //// /**/

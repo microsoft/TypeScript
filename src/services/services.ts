@@ -1483,7 +1483,7 @@ namespace ts {
             const packageJsons = host.getPackageJsonsForAutoImport(combinePaths(currentDirectory, rootFileName));
             for (const packageJson of packageJsons) {
                 packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
-                packageJson.devDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
+                packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
             }
             const packageJsonProcessingEnd = timestamp();
             host.log?.(`createPackageJsonAutoImportProvider: package.json processing: ${packageJsonProcessingEnd - start}`);
