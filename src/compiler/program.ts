@@ -892,7 +892,14 @@ namespace ts {
             }
 
             missingFilePaths = arrayFrom(mapDefinedIterator(filesByName.entries(), ([path, file]) => file === undefined ? path as Path : undefined));
-            files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
+
+            const dtsFiles: SourceFile[] = [];
+            const otherFiles: SourceFile[] = [];
+            for (const file of processingOtherFiles) {
+                (fileExtensionIs(file.path, Extension.Dts) ? dtsFiles : otherFiles).push(file);
+            }
+
+            files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(dtsFiles).concat(otherFiles);
             processingDefaultLibFiles = undefined;
             processingOtherFiles = undefined;
         }
