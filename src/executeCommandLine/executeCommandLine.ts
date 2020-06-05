@@ -4,12 +4,39 @@ namespace ts {
         value: string;
     }
 
-    function countLines(program: Program): number {
-        let count = 0;
+    function countLines(program: Program): Map<number> {
+        let counts = createMap<number>();
+        counts.set("Definitions", 0);
+        counts.set("TypeScript", 0);
+        counts.set("JavaScript", 0);
+        counts.set("JSON", 0);
+        counts.set("Other", 0);
+
         forEach(program.getSourceFiles(), file => {
-            count += getLineStarts(file).length;
+            const key = getCountKey(file.path);
+            const lineCount = getLineStarts(file).length;
+            counts.set(key, counts.get(key)! + lineCount);
         });
-        return count;
+
+        return counts;
+
+        function getCountKey(path: string) {
+            if (fileExtensionIs(path, Extension.Dts)) {
+                return "Definitions";
+            }
+            else if (fileExtensionIsOneOf(path, supportedTSExtensions)) {
+                return "TypeScript";
+            }
+            else if (fileExtensionIsOneOf(path, supportedJSExtensions)) {
+                return "JavaScript";
+            }
+            else if (fileExtensionIs(path, Extension.Json)) {
+                return "JSON";
+            }
+            else {
+                return "Other";
+            }
+        }
     }
 
     function updateReportDiagnostic(
@@ -627,8 +654,13 @@ namespace ts {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
             reportCountStatistic("Files", program.getSourceFiles().length);
-            reportCountStatistic("Lines", countLines(program));
-            reportCountStatistic("Nodes", program.getNodeCount());
+
+            const lineCounts = countLines(program);
+            for (const key of arrayFrom(lineCounts.keys())) {
+                reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+            }
+
+            reportCountStatistic("Nodes", program.getNodeCount()); // TODO (acasey)
             reportCountStatistic("Identifiers", program.getIdentifierCount());
             reportCountStatistic("Symbols", program.getSymbolCount());
             reportCountStatistic("Types", program.getTypeCount());
