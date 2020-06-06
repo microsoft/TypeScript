@@ -1,3 +1,5 @@
+(Error as any).stackTraceLimit = 0;
+
 namespace ts {} // empty ts module so the module migration script knows this file depends on the `ts` project namespace
 // This file actually uses arguments passed on commandline and executes it
 if (ts.Debug.isDebugging) {
