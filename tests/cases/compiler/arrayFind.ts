@@ -10,3 +10,10 @@ const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(is
 
 const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean>;
 const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
+
+// test for #38959
+interface Foo { kind: "foo"; foo: string; }
+interface Bar { kind: "bar"; bar: string; }
+type FooBar = Foo | Bar;
+const fooBar: FooBar[] = [];
+const foundBar: Bar | undefined = fooBar.find<Bar>((t) => t.kind === "bar" && t.bar === "value");
