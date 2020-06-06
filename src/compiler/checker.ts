@@ -8158,7 +8158,11 @@ namespace ts {
             // Handle catch clause variables
             const declaration = symbol.valueDeclaration;
             if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
-                return anyType;
+                const decl = declaration as VariableDeclaration;
+                if (!decl.type) return anyType;
+                const type = getTypeOfNode(decl.type);
+                // an errorType will make `checkTryStatement` issue an error
+                return isTypeAny(type) || type === unknownType ? type : errorType;
             }
             // Handle export default expressions
             if (isSourceFile(declaration) && isJsonSourceFile(declaration)) {
@@ -33403,8 +33407,9 @@ namespace ts {
             if (catchClause) {
                 // Grammar checking
                 if (catchClause.variableDeclaration) {
-                    if (catchClause.variableDeclaration.type) {
-                        grammarErrorOnFirstToken(catchClause.variableDeclaration.type, Diagnostics.Catch_clause_variable_cannot_have_a_type_annotation);
+                    if (catchClause.variableDeclaration.type && getTypeOfNode(catchClause.variableDeclaration) === errorType) {
+                        grammarErrorOnFirstToken(catchClause.variableDeclaration.type,
+                                                 Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
                     }
                     else if (catchClause.variableDeclaration.initializer) {
                         grammarErrorOnFirstToken(catchClause.variableDeclaration.initializer, Diagnostics.Catch_clause_variable_cannot_have_an_initializer);
