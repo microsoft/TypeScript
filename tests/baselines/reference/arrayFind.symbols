@@ -31,3 +31,38 @@ const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAnd
 >find : Symbol(ReadonlyArray.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >isNumber : Symbol(isNumber, Decl(arrayFind.ts, 0, 0))
 
+// test for #38959
+interface Foo { kind: "foo"; foo: string; }
+>Foo : Symbol(Foo, Decl(arrayFind.ts, 9, 104))
+>kind : Symbol(Foo.kind, Decl(arrayFind.ts, 12, 15))
+>foo : Symbol(Foo.foo, Decl(arrayFind.ts, 12, 28))
+
+interface Bar { kind: "bar"; bar: string; }
+>Bar : Symbol(Bar, Decl(arrayFind.ts, 12, 43))
+>kind : Symbol(Bar.kind, Decl(arrayFind.ts, 13, 15))
+>bar : Symbol(Bar.bar, Decl(arrayFind.ts, 13, 28))
+
+type FooBar = Foo | Bar;
+>FooBar : Symbol(FooBar, Decl(arrayFind.ts, 13, 43))
+>Foo : Symbol(Foo, Decl(arrayFind.ts, 9, 104))
+>Bar : Symbol(Bar, Decl(arrayFind.ts, 12, 43))
+
+const fooBar: FooBar[] = [];
+>fooBar : Symbol(fooBar, Decl(arrayFind.ts, 15, 5))
+>FooBar : Symbol(FooBar, Decl(arrayFind.ts, 13, 43))
+
+const foundBar: Bar | undefined = fooBar.find<Bar>((t) => t.kind === "bar" && t.bar === "value");
+>foundBar : Symbol(foundBar, Decl(arrayFind.ts, 16, 5))
+>Bar : Symbol(Bar, Decl(arrayFind.ts, 12, 43))
+>fooBar.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>fooBar : Symbol(fooBar, Decl(arrayFind.ts, 15, 5))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Bar : Symbol(Bar, Decl(arrayFind.ts, 12, 43))
+>t : Symbol(t, Decl(arrayFind.ts, 16, 52))
+>t.kind : Symbol(kind, Decl(arrayFind.ts, 12, 15), Decl(arrayFind.ts, 13, 15))
+>t : Symbol(t, Decl(arrayFind.ts, 16, 52))
+>kind : Symbol(kind, Decl(arrayFind.ts, 12, 15), Decl(arrayFind.ts, 13, 15))
+>t.bar : Symbol(Bar.bar, Decl(arrayFind.ts, 13, 28))
+>t : Symbol(t, Decl(arrayFind.ts, 16, 52))
+>bar : Symbol(Bar.bar, Decl(arrayFind.ts, 13, 28))
+

@@ -42,3 +42,39 @@ const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAnd
 >find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: readonly (string | number | boolean)[]) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: readonly (string | number | boolean)[]) => unknown, thisArg?: any): string | number | boolean; }
 >isNumber : (x: any) => x is number
 
+// test for #38959
+interface Foo { kind: "foo"; foo: string; }
+>kind : "foo"
+>foo : string
+
+interface Bar { kind: "bar"; bar: string; }
+>kind : "bar"
+>bar : string
+
+type FooBar = Foo | Bar;
+>FooBar : FooBar
+
+const fooBar: FooBar[] = [];
+>fooBar : FooBar[]
+>[] : undefined[]
+
+const foundBar: Bar | undefined = fooBar.find<Bar>((t) => t.kind === "bar" && t.bar === "value");
+>foundBar : Bar
+>fooBar.find<Bar>((t) => t.kind === "bar" && t.bar === "value") : Bar
+>fooBar.find : { <S extends FooBar>(predicate: (this: void, value: FooBar, index: number, obj: FooBar[]) => unknown, thisArg?: any): S; (predicate: (value: FooBar, index: number, obj: FooBar[]) => unknown, thisArg?: any): FooBar; }
+>fooBar : FooBar[]
+>find : { <S extends FooBar>(predicate: (this: void, value: FooBar, index: number, obj: FooBar[]) => unknown, thisArg?: any): S; (predicate: (value: FooBar, index: number, obj: FooBar[]) => unknown, thisArg?: any): FooBar; }
+>(t) => t.kind === "bar" && t.bar === "value" : (this: void, t: FooBar) => boolean
+>t : FooBar
+>t.kind === "bar" && t.bar === "value" : boolean
+>t.kind === "bar" : boolean
+>t.kind : "foo" | "bar"
+>t : FooBar
+>kind : "foo" | "bar"
+>"bar" : "bar"
+>t.bar === "value" : boolean
+>t.bar : string
+>t : Bar
+>bar : string
+>"value" : "value"
+
