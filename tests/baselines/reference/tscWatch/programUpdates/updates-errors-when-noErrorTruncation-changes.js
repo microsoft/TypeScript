@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 declare var v: {
     reallyLongPropertyName1: string | number | boolean | object | symbol | bigint;
@@ -27,11 +27,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/a.js]
-v === 'foo';
 
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
@@ -75,8 +72,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js]
+v === 'foo';
+
+
+
 Change:: Enable noErrorTruncation
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"noErrorTruncation":true}}
 
@@ -123,3 +126,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

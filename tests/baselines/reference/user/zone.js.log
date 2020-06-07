@@ -1,0 +1,7 @@
+Exit Code: 1
+Standard output:
+../../../../node_modules/@types/node/ts3.5/globals.global.d.ts(1,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'global' must be of type 'Global', but here has type 'Global & typeof globalThis'.
+
+
+
+Standard error:

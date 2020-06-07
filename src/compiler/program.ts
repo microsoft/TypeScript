@@ -834,7 +834,7 @@ namespace ts {
                 if (rootNames.length) {
                     for (const parsedRef of resolvedProjectReferences) {
                         if (!parsedRef) continue;
-                        const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
+                        const out = outFile(parsedRef.commandLine.options);
                         if (useSourceOfProjectReferenceRedirect) {
                             if (out || getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
                                 for (const fileName of parsedRef.commandLine.fileNames) {
@@ -1503,7 +1503,7 @@ namespace ts {
         }
 
         function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
-            Debug.assert(!options.out && !options.outFile);
+            Debug.assert(!outFile(options));
             performance.mark("beforeEmit");
             const emitResult = emitFiles(
                 notImplementedResolver,
@@ -1585,7 +1585,7 @@ namespace ts {
 
         function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult {
             if (!forceDtsEmit) {
-                const result = handleNoEmitOptions(program, sourceFile, cancellationToken);
+                const result = handleNoEmitOptions(program, sourceFile, writeFileCallback, cancellationToken);
                 if (result) return result;
             }
 
@@ -1597,7 +1597,7 @@ namespace ts {
             // This is because in the -out scenario all files need to be emitted, and therefore all
             // files need to be type checked. And the way to specify that all files need to be type
             // checked is to not pass the file to getEmitResolver.
-            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver((options.outFile || options.out) ? undefined : sourceFile, cancellationToken);
+            const emitResolver = getDiagnosticsProducingTypeChecker().getEmitResolver(outFile(options) ? undefined : sourceFile, cancellationToken);
 
             performance.mark("beforeEmit");
 
@@ -1674,7 +1674,7 @@ namespace ts {
         function getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
             const options = program.getCompilerOptions();
             // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
-            if (!sourceFile || options.out || options.outFile) {
+            if (!sourceFile || outFile(options)) {
                 return getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
             }
             else {
@@ -2403,7 +2403,7 @@ namespace ts {
             if (refFile && !useSourceOfProjectReferenceRedirect) {
                 const redirectProject = getProjectReferenceRedirectProject(fileName);
                 if (redirectProject) {
-                    if (redirectProject.commandLine.options.outFile || redirectProject.commandLine.options.out) {
+                    if (outFile(redirectProject.commandLine.options)) {
                         // Shouldnt create many to 1 mapping file in --out scenario
                         return undefined;
                     }
@@ -2535,7 +2535,7 @@ namespace ts {
 
 
         function getProjectReferenceOutputName(referencedProject: ResolvedProjectReference, fileName: string) {
-            const out = referencedProject.commandLine.options.outFile || referencedProject.commandLine.options.out;
+            const out = outFile(referencedProject.commandLine.options);
             return out ?
                 changeExtension(out, Extension.Dts) :
                 getOutputDeclarationFileName(fileName, referencedProject.commandLine, !host.useCaseSensitiveFileNames());
@@ -2577,7 +2577,7 @@ namespace ts {
                 mapFromToProjectReferenceRedirectSource = createMap();
                 forEachResolvedProjectReference(resolvedRef => {
                     if (resolvedRef) {
-                        const out = resolvedRef.commandLine.options.outFile || resolvedRef.commandLine.options.out;
+                        const out = outFile(resolvedRef.commandLine.options);
                         if (out) {
                             // Dont know which source file it means so return true?
                             const outputDts = changeExtension(out, Extension.Dts);
@@ -3001,12 +3001,13 @@ namespace ts {
                 }
             }
 
+            const outputFile = outFile(options);
             if (options.tsBuildInfoFile) {
                 if (!isIncrementalCompilation(options)) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "tsBuildInfoFile", "incremental", "composite");
                 }
             }
-            else if (options.incremental && !options.outFile && !options.out && !options.configFilePath) {
+            else if (options.incremental && !outputFile && !options.configFilePath) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
             }
 
@@ -3087,7 +3088,7 @@ namespace ts {
                 if (!getEmitDeclarations(options)) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "declarationDir", "declaration", "composite");
                 }
-                if (options.out || options.outFile) {
+                if (outputFile) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile");
                 }
             }
@@ -3105,7 +3106,6 @@ namespace ts {
             }
 
             const languageVersion = options.target || ScriptTarget.ES3;
-            const outFile = options.outFile || options.out;
 
             const firstNonAmbientExternalModuleSourceFile = find(files, f => isExternalModule(f) && !f.isDeclarationFile);
             if (options.isolatedModules) {
@@ -3126,7 +3126,7 @@ namespace ts {
             }
 
             // Cannot specify module gen that isn't amd or system with --out
-            if (outFile && !options.emitDeclarationOnly) {
+            if (outputFile && !options.emitDeclarationOnly) {
                 if (options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
                     createDiagnosticForOptionName(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile", "module");
                 }
@@ -3286,7 +3286,7 @@ namespace ts {
                     }
                 }
                 if (ref.prepend) {
-                    const out = options.outFile || options.out;
+                    const out = outFile(options);
                     if (out) {
                         if (!host.fileExists(out)) {
                             createDiagnosticForReference(parentFile, index, Diagnostics.Output_file_0_from_project_1_does_not_exist, out, ref.path);
@@ -3421,7 +3421,7 @@ namespace ts {
             }
 
             // If options have --outFile or --out just check that
-            const out = options.outFile || options.out;
+            const out = outFile(options);
             if (out) {
                 return isSameFile(filePath, out) || isSameFile(filePath, removeFileExtension(out) + Extension.Dts);
             }
@@ -3504,7 +3504,7 @@ namespace ts {
                     mapOfDeclarationDirectories = createMap();
                     host.forEachResolvedProjectReference(ref => {
                         if (!ref) return;
-                        const out = ref.commandLine.options.outFile || ref.commandLine.options.out;
+                        const out = outFile(ref.commandLine.options);
                         if (out) {
                             mapOfDeclarationDirectories!.set(getDirectoryPath(host.toPath(out)), true);
                         }
@@ -3638,11 +3638,17 @@ namespace ts {
     }
 
     /*@internal*/
-    export function handleNoEmitOptions(program: ProgramToEmitFilesAndReportErrors, sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): EmitResult | undefined {
+    export const emitSkippedWithNoDiagnostics: EmitResult = { diagnostics: emptyArray, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
+
+    /*@internal*/
+    export function handleNoEmitOptions(
+        program: ProgramToEmitFilesAndReportErrors,
+        sourceFile: SourceFile | undefined,
+        writeFile: WriteFileCallback | undefined,
+        cancellationToken: CancellationToken | undefined
+    ): EmitResult | undefined {
         const options = program.getCompilerOptions();
-        if (options.noEmit) {
-            return { diagnostics: emptyArray, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
-        }
+        if (options.noEmit) return emitSkippedWithNoDiagnostics;
 
         // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
         // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
@@ -3659,9 +3665,14 @@ namespace ts {
             diagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
         }
 
-        return diagnostics.length > 0 ?
-            { diagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true } :
-            undefined;
+        if (!diagnostics.length) return undefined;
+        let emittedFiles: string[] | undefined;
+        if (!sourceFile && !outFile(options)) {
+            const emitResult = program.emitBuildInfo(writeFile, cancellationToken);
+            if (emitResult.diagnostics) diagnostics = [...diagnostics, ...emitResult.diagnostics];
+            emittedFiles = emitResult.emittedFiles;
+        }
+        return { diagnostics, sourceMaps: undefined, emittedFiles, emitSkipped: true };
     }
 
     /*@internal*/
@@ -3704,7 +3715,7 @@ namespace ts {
             const ref = projectReferences[i];
             const resolvedRefOpts = getCommandLine(ref, i);
             if (ref.prepend && resolvedRefOpts && resolvedRefOpts.options) {
-                const out = resolvedRefOpts.options.outFile || resolvedRefOpts.options.out;
+                const out = outFile(resolvedRefOpts.options);
                 // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
                 if (!out) continue;
 

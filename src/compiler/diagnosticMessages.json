@@ -5709,9 +5709,33 @@
         "category": "Message",
         "code": 95119
     },
-    "Remove parentheses": {
+    "Wrap in JSX fragment": {
         "category": "Message",
         "code": 95120
+    },
+    "Wrap all unparented JSX in JSX fragment": {
+        "category": "Message",
+        "code": 95121
+    },
+    "Convert arrow function or function expression": {
+        "category": "Message",
+        "code": 95122
+    },
+    "Convert to anonymous function": {
+        "category": "Message",
+        "code": 95123
+    },
+    "Convert to named function": {
+        "category": "Message",
+        "code": 95124
+    },
+    "Convert to arrow function": {
+        "category": "Message",
+        "code": 95125
+    },
+    "Remove parentheses": {
+        "category": "Message",
+        "code": 95126
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

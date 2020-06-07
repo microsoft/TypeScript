@@ -1035,7 +1035,7 @@ namespace ts.server {
                 );
 
                 if (this.generatedFilesMap) {
-                    const outPath = this.compilerOptions.outFile && this.compilerOptions.out;
+                    const outPath = outFile(this.compilerOptions);
                     if (isGeneratedFileWatcher(this.generatedFilesMap)) {
                         // --out
                         if (!outPath || !this.isValidGeneratedFileWatcher(
@@ -1209,7 +1209,7 @@ namespace ts.server {
 
         /* @internal */
         addGeneratedFileWatch(generatedFile: string, sourceFile: string) {
-            if (this.compilerOptions.outFile || this.compilerOptions.out) {
+            if (outFile(this.compilerOptions)) {
                 // Single watcher
                 if (!this.generatedFilesMap) {
                     this.generatedFilesMap = this.createGeneratedFileWatcher(generatedFile);
