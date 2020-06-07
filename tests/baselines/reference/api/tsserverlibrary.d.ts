@@ -2484,7 +2484,7 @@ declare namespace ts {
         minLength: number;
         fixedLength: number;
         hasRestElement: boolean;
-        hasVariadicElement: boolean;
+        combinedFlags: ElementFlags;
         readonly: boolean;
         labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
     }
