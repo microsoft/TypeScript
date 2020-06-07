@@ -12299,7 +12299,7 @@ namespace ts {
         // is true for each of the synthesized type parameters.
         function createTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration)[] | undefined): TupleType {
             const arity = elementFlags.length;
-            const minLength = findLastIndex(elementFlags, f => !!(f & ElementFlags.Required)) + 1;
+            const minLength = findLastIndex(elementFlags, f => !!(f & (ElementFlags.Required | ElementFlags.Variadic))) + 1;
             let typeParameters: TypeParameter[] | undefined;
             const properties: Symbol[] = [];
             let combinedFlags: ElementFlags = 0;
@@ -12349,14 +12349,14 @@ namespace ts {
             type.minLength = minLength;
             type.fixedLength = fixedLength;
             type.hasRestElement = !!(combinedFlags & ElementFlags.Variable);
-            type.hasVariadicElement = !!(combinedFlags & ElementFlags.Variadic);
+            type.combinedFlags = combinedFlags;
             type.readonly = readonly;
             type.labeledElementDeclarations = namedMemberDeclarations;
             return type;
         }
 
         function createNormalizedTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined) {
-            return target.objectFlags & ObjectFlags.Tuple && (<TupleType>target).hasVariadicElement ?
+            return target.objectFlags & ObjectFlags.Tuple && (<TupleType>target).combinedFlags & ElementFlags.Variadic ?
                 createNormalizedTupleType(target as TupleType, typeArguments!) :
                 createTypeReference(target, typeArguments);
         }
@@ -17163,6 +17163,80 @@ namespace ts {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target, excludedProperties);
                 }
+                let result = Ternary.True;
+                if (isTupleType(target)) {
+                    if (isArrayType(source) || isTupleType(source)) {
+                        if (!target.target.readonly && (isReadonlyArrayType(source) || isTupleType(source) && source.target.readonly)) {
+                            return Ternary.False;
+                        }
+                        const sourceArity = getTypeReferenceArity(source);
+                        const targetArity = getTypeReferenceArity(target);
+                        const sourceRestFlag = isTupleType(source) ? source.target.combinedFlags & ElementFlags.Rest : ElementFlags.Rest;
+                        const targetRestFlag = target.target.combinedFlags & ElementFlags.Rest;
+                        const sourceMinLength = isTupleType(source) ? source.target.minLength : 0;
+                        const targetMinLength = target.target.minLength;
+                        if (!sourceRestFlag && sourceArity < targetMinLength) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Source_has_0_element_s_but_target_requires_1, sourceArity, targetMinLength);
+                            }
+                            return Ternary.False;
+                        }
+                        if (!targetRestFlag && targetArity < sourceMinLength) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Source_has_0_element_s_but_target_allows_only_1, sourceMinLength, targetArity);
+                            }
+                            return Ternary.False;
+                        }
+                        if (!targetRestFlag && sourceRestFlag) {
+                            if (reportErrors) {
+                                if (sourceMinLength < targetMinLength) {
+                                    reportError(Diagnostics.Target_requires_0_element_s_but_source_may_have_fewer, targetMinLength);
+                                }
+                                else {
+                                    reportError(Diagnostics.Target_allows_only_0_element_s_but_source_may_have_more, targetArity);
+                                }
+                            }
+                            return Ternary.False;
+                        }
+                        const maxArity = Math.max(sourceArity, targetArity);
+                        for (let i = 0; i < maxArity; i++) {
+                            const targetFlags = i < targetArity ? target.target.elementFlags[i] : targetRestFlag;
+                            const sourceFlags = isTupleType(source) && i < sourceArity ? source.target.elementFlags[i] : sourceRestFlag;
+                            if (sourceFlags && targetFlags) {
+                                if (targetFlags & ElementFlags.Variadic && !(sourceFlags & ElementFlags.Variadic) ||
+                                   (sourceFlags & ElementFlags.Variadic && !(targetFlags & ElementFlags.Variable))) {
+                                    if (reportErrors) {
+                                        reportError(Diagnostics.Element_at_index_0_is_variadic_in_one_type_but_not_in_the_other, i);
+                                    }
+                                    return Ternary.False;
+                                }
+                                if (targetFlags & ElementFlags.Required) {
+                                    if (!(sourceFlags & ElementFlags.Required)) {
+                                        if (reportErrors) {
+                                            reportError(Diagnostics.Property_0_is_optional_in_type_1_but_required_in_type_2, i, typeToString(source), typeToString(target));
+                                        }
+                                        return Ternary.False;
+                                    }
+                                }
+                                const sourceType = getTypeArguments(source)[Math.min(i, sourceArity - 1)];
+                                const targetType = getTypeArguments(target)[Math.min(i, targetArity - 1)];
+                                const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) : targetType;
+                                const related = isRelatedTo(sourceType, targetCheckType, reportErrors, /*headMessage*/ undefined, intersectionState);
+                                if (!related) {
+                                    if (reportErrors) {
+                                        reportIncompatibleError(Diagnostics.Types_of_property_0_are_incompatible, i);
+                                    }
+                                    return Ternary.False;
+                                }
+                                result &= related;
+                            }
+                        }
+                        return result;
+                    }
+                    if (target.target.combinedFlags & ElementFlags.Variable) {
+                        return Ternary.False;
+                    }
+                }
                 const requireOptionalProperties = (relation === subtypeRelation || relation === strictSubtypeRelation) && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source) && !isTupleType(source);
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false);
                 if (unmatchedProperty) {
@@ -17181,35 +17255,6 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
-                        }
-                    }
-                }
-                let result = Ternary.True;
-                if (isTupleType(target)) {
-                    const targetRestType = getRestTypeOfTupleType(target);
-                    if (targetRestType) {
-                        if (!isTupleType(source)) {
-                            return Ternary.False;
-                        }
-                        const sourceRestType = getRestTypeOfTupleType(source);
-                        if (sourceRestType && !isRelatedTo(sourceRestType, targetRestType, reportErrors)) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Rest_signatures_are_incompatible);
-                            }
-                            return Ternary.False;
-                        }
-                        const targetCount = getTypeReferenceArity(target) - 1;
-                        const sourceCount = getTypeReferenceArity(source) - (sourceRestType ? 1 : 0);
-                        const sourceTypeArguments = getTypeArguments(<TypeReference>source);
-                        for (let i = targetCount; i < sourceCount; i++) {
-                            const related = isRelatedTo(sourceTypeArguments[i], targetRestType, reportErrors);
-                            if (!related) {
-                                if (reportErrors) {
-                                    reportError(Diagnostics.Property_0_is_incompatible_with_rest_element_type, "" + i);
-                                }
-                                return Ternary.False;
-                            }
-                            result &= related;
                         }
                     }
                 }
@@ -17967,7 +18012,7 @@ namespace ts {
             return reduceLeft(types, (s, t) => isTypeSubtypeOf(t, s) ? t : s)!;
         }
 
-        function isArrayType(type: Type): boolean {
+        function isArrayType(type: Type): type is TypeReference {
             return !!(getObjectFlags(type) & ObjectFlags.Reference) && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType);
         }
 
@@ -18088,7 +18133,7 @@ namespace ts {
         }
 
         function isGenericTupleType(type: Type) {
-            return isTupleType(type) && type.target.hasVariadicElement;
+            return isTupleType(type) && !!(type.target.combinedFlags & ElementFlags.Variadic);
         }
 
         function getRestTypeOfTupleType(type: TupleTypeReference) {
@@ -18120,6 +18165,11 @@ namespace ts {
                 return getUnionType(elementTypes);
             }
             return undefined;
+        }
+
+        function isMatchingTupleTypes(t1: TupleTypeReference, t2: TupleTypeReference) {
+            return getTypeReferenceArity(t1) === getTypeReferenceArity(t2) &&
+                every(t1.target.elementFlags, (f, i) => (f & ElementFlags.Variable) === (t2.target.elementFlags[i] & ElementFlags.Variable));
         }
 
         function isZeroBigInt({value}: BigIntLiteralType) {
@@ -18824,7 +18874,7 @@ namespace ts {
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
-            return !target.target.hasVariadicElement && target.target.minLength > source.target.minLength ||
+            return !(target.target.combinedFlags & ElementFlags.Variadic) && target.target.minLength > source.target.minLength ||
                 !target.target.hasRestElement && (source.target.hasRestElement || getLengthOfTupleType(target) < getLengthOfTupleType(source));
         }
 
@@ -19334,14 +19384,14 @@ namespace ts {
                             const elementFlags = target.target.elementFlags;
                             // When source and target are tuple types with the same structure (fixed, variadic, and rest are matched
                             // to the same kind in each position), simply infer between the element types.
-                            if (isTupleType(source) && sourceArity === targetArity && every(elementFlags, (f, i) => (f & ElementFlags.Variable) === (source.target.elementFlags[i] & ElementFlags.Variable))) {
+                            if (isTupleType(source) && isMatchingTupleTypes(source, target)) {
                                 for (let i = 0; i < targetArity; i++) {
                                     inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
                                 }
                                 return;
                             }
                             const fixedLength = isTupleType(source) ? Math.min(getLengthOfTupleType(source), getLengthOfTupleType(target)) : 0;
-                            const endFixedLength = isTupleType(source) && target.target.hasVariadicElement ? Math.min(getEndLengthOfTupleType(source), getEndLengthOfTupleType(target)) : 0;
+                            const endFixedLength = isTupleType(source) && target.target.combinedFlags & ElementFlags.Variadic ? Math.min(getEndLengthOfTupleType(source), getEndLengthOfTupleType(target)) : 0;
                             // Infer between starting fixed elements.
                             for (let i = 0; i < fixedLength; i++) {
                                 inferFromTypes(getTypeArguments(<TypeReference>source)[i], elementTypes[i]);
