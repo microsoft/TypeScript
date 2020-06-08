@@ -5987,7 +5987,7 @@ namespace ts {
                 function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
                     const symbolName = unescapeLeadingUnderscores(symbol.escapedName);
                     const isDefault = symbol.escapedName === InternalSymbolName.Default;
-                    if (!(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier) && isStringANonContextualKeyword(symbolName) && !isDefault) {
+                    if (isPrivate && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier) && isStringANonContextualKeyword(symbolName) && !isDefault) {
                         // Oh no. We cannot use this symbol's name as it's name... It's likely some jsdoc had an invalid name like `export` or `default` :(
                         context.encounteredError = true;
                         // TODO: Issue error via symbol tracker?
@@ -5997,7 +5997,9 @@ namespace ts {
                            symbol.flags & SymbolFlags.ExportDoesNotSupportDefaultModifier
                         || (symbol.flags & SymbolFlags.Function && length(getPropertiesOfType(getTypeOfSymbol(symbol))))
                     ) && !(symbol.flags & SymbolFlags.Alias); // An alias symbol should preclude needing to make an alias ourselves
-                    if (needsPostExportDefault) {
+                    let needsExportDeclaration = !needsPostExportDefault && !isPrivate && isStringANonContextualKeyword(symbolName) && !isDefault;
+                    // `serializeVariableOrProperty` will handle adding the export declaration if it is run (since `getInternalSymbolName` will create the name mapping), so we need to ensuer we unset `needsExportDeclaration` if it is
+                    if (needsPostExportDefault || needsExportDeclaration) {
                         isPrivate = true;
                     }
                     const modifierFlags = (!isPrivate ? ModifierFlags.Export : 0) | (isDefault && !needsPostExportDefault ? ModifierFlags.Default : 0);
@@ -6019,6 +6021,7 @@ namespace ts {
                         && !(symbol.flags & SymbolFlags.Class)
                         && !isConstMergedWithNSPrintableAsSignatureMerge) {
                         serializeVariableOrProperty(symbol, symbolName, isPrivate, needsPostExportDefault, propertyAsAlias, modifierFlags);
+                        needsExportDeclaration = false;
                     }
                     if (symbol.flags & SymbolFlags.Enum) {
                         serializeEnum(symbol, symbolName, modifierFlags);
@@ -6057,6 +6060,13 @@ namespace ts {
                     }
                     if (needsPostExportDefault) {
                         addResult(createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportAssignment*/ false, createIdentifier(getInternalSymbolName(symbol, symbolName))), ModifierFlags.None);
+                    }
+                    else if (needsExportDeclaration) {
+                        addResult(createExportDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            createNamedExports([createExportSpecifier(getInternalSymbolName(symbol, symbolName), symbolName)])
+                        ), ModifierFlags.None);
                     }
                 }
 
@@ -6635,7 +6645,7 @@ namespace ts {
                     !(typeToSerialize.symbol && some(typeToSerialize.symbol.declarations, d => getSourceFileOfNode(d) !== ctxSrc)) &&
                     !some(getPropertiesOfType(typeToSerialize), p => isLateBoundName(p.escapedName)) &&
                     !some(getPropertiesOfType(typeToSerialize), p => some(p.declarations, d => getSourceFileOfNode(d) !== ctxSrc)) &&
-                    every(getPropertiesOfType(typeToSerialize), p => isIdentifierText(symbolName(p), languageVersion) && !isStringAKeyword(symbolName(p)));
+                    every(getPropertiesOfType(typeToSerialize), p => isIdentifierText(symbolName(p), languageVersion));
                 }
 
                 function makeSerializePropertySymbol<T extends Node>(createProperty: (
