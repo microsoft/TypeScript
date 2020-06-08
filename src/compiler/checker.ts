@@ -18030,7 +18030,7 @@ namespace ts {
         }
 
         function getElementTypeOfArrayType(type: Type): Type | undefined {
-            return isArrayType(type) ? getTypeArguments(type as TypeReference)[0] : undefined;
+            return isArrayType(type) ? getTypeArguments(type)[0] : undefined;
         }
 
         function isArrayLikeType(type: Type): boolean {
@@ -18040,7 +18040,7 @@ namespace ts {
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
-            const elementType = isArrayType(type) ? getTypeArguments(<TypeReference>type)[0] : undefined;
+            const elementType = isArrayType(type) ? getTypeArguments(type)[0] : undefined;
             return elementType === undefinedWideningType || elementType === implicitNeverType;
         }
 
@@ -18477,7 +18477,7 @@ namespace ts {
                     result = getIntersectionType(sameMap((<IntersectionType>type).types, getWidenedType));
                 }
                 else if (isArrayType(type) || isTupleType(type)) {
-                    result = createTypeReference((<TypeReference>type).target, sameMap(getTypeArguments(<TypeReference>type), getWidenedType));
+                    result = createTypeReference(type.target, sameMap(getTypeArguments(type), getWidenedType));
                 }
                 if (result && context === undefined) {
                     type.widened = result;
@@ -18514,7 +18514,7 @@ namespace ts {
                     }
                 }
                 if (isArrayType(type) || isTupleType(type)) {
-                    for (const t of getTypeArguments(<TypeReference>type)) {
+                    for (const t of getTypeArguments(type)) {
                         if (reportWideningErrorsInType(t)) {
                             errorReported = true;
                         }
@@ -18819,7 +18819,7 @@ namespace ts {
             // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
             // applied to the element type(s).
             if (isArrayType(source)) {
-                return createArrayType(inferReverseMappedType(getTypeArguments(<TypeReference>source)[0], target, constraint), isReadonlyArrayType(source));
+                return createArrayType(inferReverseMappedType(getTypeArguments(source)[0], target, constraint), isReadonlyArrayType(source));
             }
             if (isTupleType(source)) {
                 const elementTypes = map(getTypeArguments(source), t => inferReverseMappedType(t, target, constraint));
@@ -19399,7 +19399,7 @@ namespace ts {
                             const endFixedLength = isTupleType(source) && target.target.combinedFlags & ElementFlags.Variadic ? Math.min(getEndLengthOfTupleType(source), getEndLengthOfTupleType(target)) : 0;
                             // Infer between starting fixed elements.
                             for (let i = 0; i < fixedLength; i++) {
-                                inferFromTypes(getTypeArguments(<TypeReference>source)[i], elementTypes[i]);
+                                inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
                             }
                             if (fixedLength < targetArity - endFixedLength) {
                                 // Process elements that remain between the starting and ending fixed parts.
@@ -19427,7 +19427,7 @@ namespace ts {
                             }
                             // Infer between ending fixed elements
                             for (let i = 0; i < endFixedLength; i++) {
-                                inferFromTypes(getTypeArguments(<TypeReference>source)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
+                                inferFromTypes(getTypeArguments(source)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
                             }
                             return;
                         }
@@ -23404,7 +23404,7 @@ namespace ts {
                 let tupleResult;
                 if (inDestructuringPattern && minLength > 0) {
                     const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes, minLength, hasEndingSpreadElement));
-                    type.pattern = node;
+                    //type.pattern = node;
                     return type;
                 }
                 else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasEndingSpreadElement, elementTypes.length, inConstContext)) {
