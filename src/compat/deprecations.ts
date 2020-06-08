@@ -1479,7 +1479,7 @@ namespace ts {
         initializer?: Expression
     ): PropertySignature {
         const node = factory.createPropertySignature(modifiers, name, questionToken, type);
-        factory.trackExtraneousChildNode(node, node.initializer = initializer);
+        node.initializer = initializer;
         return node;
     }
 
@@ -1499,7 +1499,7 @@ namespace ts {
             if (updated === node) {
                 updated = factory.cloneNode(node);
             }
-            factory.trackExtraneousChildNode(updated, updated.initializer = initializer);
+            updated.initializer = initializer;
         }
         return updated;
     }

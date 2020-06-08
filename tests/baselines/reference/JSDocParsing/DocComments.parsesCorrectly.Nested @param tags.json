@@ -60,7 +60,7 @@
                                     "pos": 42,
                                     "end": 48,
                                     "modifierFlagsCache": 0,
-                                    "transformFlags": 0
+                                    "transformFlags": 1
                                 }
                             },
                             "name": {
@@ -91,7 +91,9 @@
                         },
                         "length": 1,
                         "pos": -1,
-                        "end": -1
+                        "end": -1,
+                        "hasTrailingComma": false,
+                        "transformFlags": 0
                     },
                     "isArrayType": false
                 }
@@ -109,6 +111,8 @@
         },
         "length": 1,
         "pos": 6,
-        "end": 64
+        "end": 64,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }

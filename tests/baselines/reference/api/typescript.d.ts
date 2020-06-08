@@ -4138,7 +4138,6 @@ declare namespace ts {
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
     function isStringLiteralLike(node: Node): node is StringLiteralLike;
 }
-declare let nextAutoGenerateId: number;
 declare namespace ts {
     const factory: NodeFactory;
     function createUnparsedSourceFile(text: string): UnparsedSource;

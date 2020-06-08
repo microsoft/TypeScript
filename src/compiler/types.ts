@@ -6522,22 +6522,6 @@ namespace ts {
         /* @internal */ readonly converters: NodeConverters;
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
-        /**
-         * This is used by the parser to skip transform flag aggregation in Declaration files or other contexts.
-         * @returns The previous value.
-         */
-        /* @internal */ setSkipTransformationFlags(value: boolean): boolean;
-        /**
-         * Tracks setting an extraneous node on a parent. This is primarily used by the parser to add invalid nodes for grammar reporting purposes and is needed to
-         * correctly update transform flags after a node has been created.
-         */
-        /* @internal */ trackExtraneousChildNode(parent: Node, child: Node | undefined): void;
-        /**
-         * Tracks setting an extraneous node array on a parent. This is primarily used by the parser to add invalid nodes for grammar reporting purposes and is needed to
-         * correctly update transform flags after a node has been created.
-         */
-        /* @internal */ trackExtraneousChildNodes(parent: Node, children: NodeArray<Node> | undefined): void;
-
         //
         // Literals
         //

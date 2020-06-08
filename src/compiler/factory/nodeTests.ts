@@ -59,6 +59,33 @@ namespace ts {
         return node.kind === SyntaxKind.PrivateIdentifier;
     }
 
+    // Tokens
+
+    /*@internal*/
+    export function isSuperKeyword(node: Node): node is Token<SyntaxKind.SuperKeyword> {
+        return node.kind === SyntaxKind.SuperKeyword;
+    }
+
+    /*@internal*/
+    export function isImportKeyword(node: Node): node is Token<SyntaxKind.ImportKeyword> {
+        return node.kind === SyntaxKind.ImportKeyword;
+    }
+
+    /*@internal*/
+    export function isCommaToken(node: Node): node is Token<SyntaxKind.CommaToken> {
+        return node.kind === SyntaxKind.CommaToken;
+    }
+
+    /*@internal*/
+    export function isQuestionToken(node: Node): node is Token<SyntaxKind.QuestionToken> {
+        return node.kind === SyntaxKind.QuestionToken;
+    }
+
+    /*@internal*/
+    export function isExclamationToken(node: Node): node is Token<SyntaxKind.ExclamationToken> {
+        return node.kind === SyntaxKind.ExclamationToken;
+    }
+
     // Signature elements
 
     export function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration {

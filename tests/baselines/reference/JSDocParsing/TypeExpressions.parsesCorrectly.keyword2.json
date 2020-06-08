@@ -4,7 +4,7 @@
     "end": 5,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
-    "transformFlags": 0,
+    "transformFlags": 1,
     "literal": {
         "kind": "NullKeyword",
         "pos": 1,
