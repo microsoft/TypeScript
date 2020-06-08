@@ -23361,24 +23361,22 @@ namespace ts {
             const elements = node.elements;
             const elementCount = elements.length;
             const elementTypes: Type[] = [];
-            let hasEndingSpreadElement = false;
-            let hasNonEndingSpreadElement = false;
+            const elementFlags: ElementFlags[] = [];
             const contextualType = getApparentTypeOfContextualType(node);
             const inDestructuringPattern = isAssignmentTarget(node);
             const inConstContext = isConstContext(node);
             for (let i = 0; i < elementCount; i++) {
                 const e = elements[i];
-                const spread = e.kind === SyntaxKind.SpreadElement && (<SpreadElement>e).expression;
-                const spreadType = spread && checkExpression(spread, checkMode, forceTuple);
-                if (spreadType && isTupleType(spreadType)) {
-                    elementTypes.push(...getTypeArguments(spreadType));
-                    if (spreadType.target.hasRestElement) {
-                        if (i === elementCount - 1) hasEndingSpreadElement = true;
-                        else hasNonEndingSpreadElement = true;
+                if (e.kind === SyntaxKind.SpreadElement) {
+                    if (languageVersion < ScriptTarget.ES2015) {
+                        checkExternalEmitHelpers(e, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArrays);
                     }
-                }
-                else {
-                    if (inDestructuringPattern && spreadType) {
+                    const spreadType = checkExpression((<SpreadElement>e).expression, checkMode, forceTuple);
+                    if (isArrayLikeType(spreadType)) {
+                        elementTypes.push(spreadType);
+                        elementFlags.push(ElementFlags.Variadic);
+                    }
+                    else if (inDestructuringPattern) {
                         // Given the following situation:
                         //    var c: {};
                         //    [...c] = ["", 0];
@@ -23392,41 +23390,31 @@ namespace ts {
                         // getContextualTypeForElementExpression, which will crucially not error
                         // if there is no index type / iterated type.
                         const restElementType = getIndexTypeOfType(spreadType, IndexKind.Number) ||
-                            getIteratedTypeOrElementType(IterationUse.Destructuring, spreadType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false);
-                        if (restElementType) {
-                            elementTypes.push(restElementType);
-                        }
+                            getIteratedTypeOrElementType(IterationUse.Destructuring, spreadType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false) ||
+                            unknownType;
+                        elementTypes.push(restElementType);
+                        elementFlags.push(ElementFlags.Rest);
                     }
                     else {
-                        const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
-                        const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
-                        elementTypes.push(type);
+                        elementTypes.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, (<SpreadElement>e).expression));
+                        elementFlags.push(ElementFlags.Rest);
                     }
-                    if (spread) { // tuples are done above, so these are only arrays
-                        if (i === elementCount - 1) hasEndingSpreadElement = true;
-                        else hasNonEndingSpreadElement = true;
-                    }
+                }
+                else {
+                    const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
+                    const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
+                    elementTypes.push(type);
+                    elementFlags.push(ElementFlags.Required);
                 }
             }
-            if (!hasNonEndingSpreadElement) {
-                const minLength = elementTypes.length - (hasEndingSpreadElement ? 1 : 0);
-                // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
-                // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
-                let tupleResult;
-                if (inDestructuringPattern && minLength > 0) {
-                    const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes, minLength, hasEndingSpreadElement));
-                    //type.pattern = node;
-                    return type;
-                }
-                else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasEndingSpreadElement, elementTypes.length, inConstContext)) {
-                    return createArrayLiteralType(tupleResult);
-                }
-                else if (forceTuple) {
-                    return createArrayLiteralType(createTupleType(elementTypes, minLength, hasEndingSpreadElement));
-                }
+            if (inDestructuringPattern) {
+                return createTupleTypeEx(elementTypes, elementFlags);
+            }
+            if (forceTuple || inConstContext || contextualType && forEachType(contextualType, isTupleLikeType)) {
+                return createArrayLiteralType(createTupleTypeEx(elementTypes, elementFlags, /*readonly*/ inConstContext));
             }
             return createArrayLiteralType(createArrayType(elementTypes.length ?
-                getUnionType(elementTypes, UnionReduction.Subtype) :
+                getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), UnionReduction.Subtype) :
                 strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
         }
 
