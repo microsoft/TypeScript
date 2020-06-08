@@ -546,9 +546,9 @@ namespace ts.server.protocol {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
+    export interface GetApplicableRefactorsRequestArgs extends FileLocationOrRangeRequestArgs {
         triggerReason?: RefactorTriggerReason
-    };
+    }
 
     export type RefactorTriggerReason = "implicit" | "invoked";
 
