@@ -1,4 +1,4 @@
-/a/lib/tsc.js -p pkg3 --listFiles
+Input::
 //// [/user/username/projects/myproject/pkg1/dist/index.d.ts]
 export * from './types';
 
@@ -54,35 +54,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/pkg3/dist/keys.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ADMIN = void 0;
-var pkg2_1 = require("@raymondfeng/pkg2");
-exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
 
-
-//// [/user/username/projects/myproject/pkg3/dist/index.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./keys"), exports);
-
-
-//// [/user/username/projects/myproject/pkg3/dist/index.d.ts]
-export * from './keys';
-
-
-
+/a/lib/tsc.js -p pkg3 --listFiles
 Output::
 [96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 
@@ -127,3 +100,32 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+//// [/user/username/projects/myproject/pkg3/dist/keys.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ADMIN = void 0;
+var pkg2_1 = require("@raymondfeng/pkg2");
+exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
+
+
+//// [/user/username/projects/myproject/pkg3/dist/index.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./keys"), exports);
+
+
+//// [/user/username/projects/myproject/pkg3/dist/index.d.ts]
+export * from './keys';
+
+

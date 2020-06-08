@@ -2607,7 +2607,7 @@ namespace ts {
                     && i < numInitialPropertiesWithoutYield) {
                     numInitialPropertiesWithoutYield = i;
                 }
-                if (property.name!.kind === SyntaxKind.ComputedPropertyName) {
+                if (Debug.checkDefined(property.name).kind === SyntaxKind.ComputedPropertyName) {
                     numInitialProperties = i;
                     break;
                 }

@@ -176,7 +176,7 @@ namespace ts {
             case SyntaxKind.ArrayType:
                 return visitNode(cbNode, (<ArrayTypeNode>node).elementType);
             case SyntaxKind.TupleType:
-                return visitNodes(cbNode, cbNodes, (<TupleTypeNode>node).elementTypes);
+                return visitNodes(cbNode, cbNodes, (<TupleTypeNode>node).elements);
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
                 return visitNodes(cbNode, cbNodes, (<UnionOrIntersectionTypeNode>node).types);
@@ -204,6 +204,11 @@ namespace ts {
                     visitNode(cbNode, (<MappedTypeNode>node).type);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
+            case SyntaxKind.NamedTupleMember:
+                return visitNode(cbNode, (<NamedTupleMember>node).dotDotDotToken) ||
+                    visitNode(cbNode, (<NamedTupleMember>node).name) ||
+                    visitNode(cbNode, (<NamedTupleMember>node).questionToken) ||
+                    visitNode(cbNode, (<NamedTupleMember>node).type);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 return visitNodes(cbNode, cbNodes, (<BindingPattern>node).elements);
@@ -3145,11 +3150,37 @@ namespace ts {
             return type;
         }
 
+        function isNextTokenColonOrQuestionColon() {
+            return nextToken() === SyntaxKind.ColonToken || (token() === SyntaxKind.QuestionToken && nextToken() === SyntaxKind.ColonToken);
+        }
+
+        function isTupleElementName() {
+            if (token() === SyntaxKind.DotDotDotToken) {
+                return tokenIsIdentifierOrKeyword(nextToken()) && isNextTokenColonOrQuestionColon();
+            }
+            return tokenIsIdentifierOrKeyword(token()) && isNextTokenColonOrQuestionColon();
+        }
+
+        function parseTupleElementNameOrTupleElementType() {
+            if (lookAhead(isTupleElementName)) {
+                const pos = getNodePos();
+                const hasJSDoc = hasPrecedingJSDocComment();
+                const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
+                const name = parseIdentifierName();
+                const questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+                parseExpected(SyntaxKind.ColonToken);
+                const type = parseTupleElementType();
+                const node = factory.createNamedTupleMember(dotDotDotToken, name, questionToken, type);
+                return withJSDoc(finishNode(node, pos), hasJSDoc);
+            }
+            return parseTupleElementType();
+        }
+
         function parseTupleType(): TupleTypeNode {
             const pos = getNodePos();
             return finishNode(
                 factory.createTupleTypeNode(
-                    parseBracketedList(ParsingContext.TupleElementTypes, parseTupleElementType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken)
+                    parseBracketedList(ParsingContext.TupleElementTypes, parseTupleElementNameOrTupleElementType, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken)
                 ),
                 pos
             );
@@ -4547,7 +4578,7 @@ namespace ts {
             return finishNode(factory.createPropertyAccess(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
         }
 
-        function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean): JsxElement | JsxSelfClosingElement | JsxFragment {
+        function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number): JsxElement | JsxSelfClosingElement | JsxFragment {
             const pos = getNodePos();
             const opening = parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContext);
             let result: JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -4578,11 +4609,12 @@ namespace ts {
             // Since JSX elements are invalid < operands anyway, this lookahead parse will only occur in error scenarios
             // of one sort or another.
             if (inExpressionContext && token() === SyntaxKind.LessThanToken) {
-                const invalidElement = tryParse(() => parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true));
+                const topBadPos = typeof topInvalidNodePosition === "undefined" ? result.pos : topInvalidNodePosition;
+                const invalidElement = tryParse(() => parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ true, topBadPos));
                 if (invalidElement) {
-                    parseErrorAtCurrentToken(Diagnostics.JSX_expressions_must_have_one_parent_element);
                     const operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false);
                     setTextRangePosWidth(operatorToken, invalidElement.pos, 0);
+                    parseErrorAt(skipTrivia(sourceText, topBadPos), invalidElement.end, Diagnostics.JSX_expressions_must_have_one_parent_element);
                     return <JsxElement><Node>finishNode(factory.createBinary(result, operatorToken as Token<SyntaxKind.CommaToken>, invalidElement), pos);
                 }
             }

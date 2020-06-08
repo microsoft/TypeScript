@@ -98,7 +98,7 @@ f1(ns[0], ns[1], true);
 >1 : 1
 >true : true
 
-f1(...ns, true);  // Error, tuple spread only expanded when last
+f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 >f1(...ns, true) : void
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >...ns : string | number
@@ -166,7 +166,7 @@ f2(ns[0], ns[1], true);
 >1 : 1
 >true : true
 
-f2(...ns, true);  // Error, tuple spread only expanded when last
+f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 >f2(...ns, true) : void
 >f2 : (x0: number, x1: string, x2: boolean) => void
 >...ns : string | number
@@ -665,7 +665,7 @@ const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: nu
 >1 : 1
 
 type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
->T01 : [number, string, boolean]
+>T01 : [x: number, y: string, z: boolean]
 >x : number
 >y : string
 >z : boolean
@@ -675,7 +675,7 @@ type T02 = Parameters<(...args: [number, string, boolean]) => void>;
 >args : [number, string, boolean]
 
 type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
->T03 : [number, string, boolean]
+>T03 : [x: number, y: string, z: boolean]
 >x : number
 >y : string
 >z : boolean

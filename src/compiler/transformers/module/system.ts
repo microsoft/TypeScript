@@ -120,7 +120,7 @@ namespace ts {
                     )
                 ), EmitFlags.NoTrailingComments);
 
-            if (!(compilerOptions.outFile || compilerOptions.out)) {
+            if (!outFile(compilerOptions)) {
                 moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
             }
 

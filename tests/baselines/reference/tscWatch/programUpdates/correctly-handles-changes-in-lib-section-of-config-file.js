@@ -1,4 +1,4 @@
-/compiler/tsc.js -w -p /src/tsconfig.json
+Input::
 //// [/compiler/lib.es5.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -22,11 +22,8 @@ var x: Promise<string>;
 //// [/src/tsconfig.json]
 {"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5"]}}
 
-//// [/src/app.js]
-var x;
 
-
-
+/compiler/tsc.js -w -p /src/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
@@ -70,12 +67,17 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/src/app.js]
+var x;
+
+
+
 Change:: Change the lib in config
 
+Input::
 //// [/src/tsconfig.json]
 {"compilerOptions":{"module":"commonjs","target":"es5","noImplicitAny":true,"sourceMap":false,"lib":["es5","es2015.promise"]}}
 
-//// [/src/app.js] file written with same contents
 
 Output::
 >> Screen clear
@@ -117,3 +119,5 @@ FsWatchesRecursive::
   {"directoryName":"/src/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/src/app.js] file written with same contents

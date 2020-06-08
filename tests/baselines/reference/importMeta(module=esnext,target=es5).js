@@ -95,6 +95,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         }
     });
 }); })();
+export {};
 //// [moduleLookingFile01.js]
 export var x = import.meta;
 export var y = import.metal;
@@ -103,6 +104,7 @@ export var z = import.import.import.malkovich;
 var globalA = import.meta;
 var globalB = import.metal;
 var globalC = import.import.import.malkovich;
+export {};
 //// [assignmentTargets.js]
 export var foo = import.meta.blah = import.meta.blue = import.meta;
 import.meta = foo;

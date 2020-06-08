@@ -229,7 +229,7 @@ namespace ts {
             // https://github.com/Microsoft/TypeScript/issues/15651
             printsCorrectly("functionTypes", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                factory.createTupleTypeNode([
+                setEmitFlags(factory.createTupleTypeNode([
                     factory.createFunctionTypeNode(
                         /*typeArguments*/ undefined,
                         [factory.createParameterDeclaration(
@@ -293,7 +293,7 @@ namespace ts {
                         )],
                         factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),
-                ]),
+                ]), EmitFlags.SingleLine),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
         });

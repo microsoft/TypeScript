@@ -226,6 +226,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        NamedTupleMember,
         ImportType,
         // Binding patterns
         ObjectBindingPattern,
@@ -639,6 +640,7 @@ namespace ts {
         | SyntaxKind.TypeLiteral
         | SyntaxKind.ArrayType
         | SyntaxKind.TupleType
+        | SyntaxKind.NamedTupleMember
         | SyntaxKind.OptionalType
         | SyntaxKind.RestType
         | SyntaxKind.UnionType
@@ -873,6 +875,7 @@ namespace ts {
         | ConstructorTypeNode
         | JSDocFunctionType
         | ExportDeclaration
+        | NamedTupleMember
         | EndOfFileToken
         ;
 
@@ -1535,7 +1538,15 @@ namespace ts {
 
     export interface TupleTypeNode extends TypeNode {
         readonly kind: SyntaxKind.TupleType;
-        readonly elementTypes: NodeArray<TypeNode>;
+        readonly elements: NodeArray<TypeNode | NamedTupleMember>;
+    }
+
+    export interface NamedTupleMember extends TypeNode, JSDocContainer, Declaration {
+        readonly kind: SyntaxKind.NamedTupleMember;
+        readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
+        readonly name: Identifier;
+        readonly questionToken?: Token<SyntaxKind.QuestionToken>;
+        readonly type: TypeNode;
     }
 
     export interface OptionalTypeNode extends TypeNode {
@@ -1746,6 +1757,7 @@ namespace ts {
         readonly kind: SyntaxKind.SyntheticExpression;
         readonly isSpread: boolean;
         readonly type: Type;
+        readonly tupleNameSource?: ParameterDeclaration | NamedTupleMember;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -3015,6 +3027,7 @@ namespace ts {
         text: string;
         pos: -1;
         end: -1;
+        hasLeadingNewline?: boolean;
     }
 
     // represents a top level: { type } expression in a JSDoc comment.
@@ -3221,32 +3234,19 @@ namespace ts {
     }
 
     export type FlowNode =
-        | AfterFinallyFlow
-        | PreFinallyFlow
         | FlowStart
         | FlowLabel
         | FlowAssignment
         | FlowCall
         | FlowCondition
         | FlowSwitchClause
-        | FlowArrayMutation;
+        | FlowArrayMutation
+        | FlowCall
+        | FlowReduceLabel;
 
     export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;     // Node id used by flow type cache in checker
-    }
-
-    export interface FlowLock {
-        locked?: boolean;
-    }
-
-    export interface AfterFinallyFlow extends FlowNodeBase, FlowLock {
-        antecedent: FlowNode;
-    }
-
-    export interface PreFinallyFlow extends FlowNodeBase {
-        antecedent: FlowNode;
-        lock: FlowLock;
     }
 
     // FlowStart represents the start of a control flow. For a function expression or arrow
@@ -3956,7 +3956,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
-        /* @internal */ getExpandedParameters(sig: Signature): readonly Symbol[];
+        /* @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
         /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
@@ -4609,6 +4609,7 @@ namespace ts {
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
         isConstructorDeclaredProperty?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
+        tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     }
 
     /* @internal */
@@ -4764,8 +4765,6 @@ namespace ts {
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         resolvedJSDocType?: Type;                   // Resolved type of a JSDoc type reference
-        hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
@@ -5081,7 +5080,7 @@ namespace ts {
         minLength: number;
         hasRestElement: boolean;
         readonly: boolean;
-        associatedNames?: __String[];
+        labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
     }
 
     export interface TupleTypeReference extends TypeReference {
@@ -6672,8 +6671,10 @@ namespace ts {
         updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>): TypeLiteralNode;
         createArrayTypeNode(elementType: TypeNode): ArrayTypeNode;
         updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode;
-        createTupleTypeNode(elementTypes: readonly TypeNode[]): TupleTypeNode;
-        updateTupleTypeNode(node: TupleTypeNode, elementTypes: readonly TypeNode[]): TupleTypeNode;
+        createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]): TupleTypeNode;
+        updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]): TupleTypeNode;
+        createNamedTupleMember(dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember;
+        updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode): NamedTupleMember;
         createOptionalTypeNode(type: TypeNode): OptionalTypeNode;
         updateOptionalTypeNode(node: OptionalTypeNode, type: TypeNode): OptionalTypeNode;
         createRestTypeNode(type: TypeNode): RestTypeNode;
@@ -7030,7 +7031,7 @@ namespace ts {
         //
         // Synthetic Nodes
         //
-        /* @internal */ createSyntheticExpression(type: Type, isSpread?: boolean): SyntheticExpression;
+        /* @internal */ createSyntheticExpression(type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember): SyntheticExpression;
         /* @internal */ createSyntaxList(children: Node[]): SyntaxList;
 
         //
@@ -7822,7 +7823,8 @@ namespace ts {
         SingleLineTypeLiteralMembers = SingleLine | SpaceBetweenBraces | SpaceBetweenSiblings,
         MultiLineTypeLiteralMembers = MultiLine | Indented | OptionalIfEmpty,
 
-        TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        SingleLineTupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        MultiLineTupleTypeElements = CommaDelimited | Indented | SpaceBetweenSiblings | MultiLine,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
         ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,

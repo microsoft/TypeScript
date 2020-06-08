@@ -50,6 +50,16 @@ namespace ts {
             return (node: SourceFile) => visitNode(node, visitor);
         }
 
+        function createTaggedTemplateLiteral(): Transformer<SourceFile> {
+            return sourceFile => factory.updateSourceFile(sourceFile, [
+                factory.createExpressionStatement(
+                    factory.createTaggedTemplate(
+                        factory.createIdentifier("$tpl"),
+                        /*typeArguments*/ undefined,
+                        factory.createNoSubstitutionTemplateLiteral("foo", "foo")))
+            ]);
+        }
+
         function transformSourceFile(sourceText: string, transformers: TransformerFactory<SourceFile>[]) {
             const transformed = transform(createSourceFile("source.ts", sourceText, ScriptTarget.ES2015), transformers);
             const printer = createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed }, {
@@ -115,6 +125,18 @@ namespace ts {
                     after: [replaceIdentifiersNamedOldNameWithNewName]
                 },
                 compilerOptions: {
+                    newLine: NewLineKind.CarriageReturnLineFeed
+                }
+            }).outputText;
+        });
+
+        testBaseline("transformTaggedTemplateLiteral", () => {
+            return transpileModule("", {
+                transformers: {
+                    before: [createTaggedTemplateLiteral],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES5,
                     newLine: NewLineKind.CarriageReturnLineFeed
                 }
             }).outputText;

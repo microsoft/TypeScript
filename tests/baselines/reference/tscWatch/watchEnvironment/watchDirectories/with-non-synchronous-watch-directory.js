@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,12 +21,8 @@ export const x = 10;
 //// [/user/username/projects/myproject/tsconfig.json]
 {}
 
-//// [/user/username/projects/myproject/src/file1.js]
-"use strict";
-exports.__esModule = true;
 
-
-
+/a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
@@ -74,8 +70,15 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/src/file1.js]
+"use strict";
+exports.__esModule = true;
+
+
+
 Change:: Pending updates because of file1.js creation
 
+Input::
 
 Output::
 >> Screen clear
@@ -121,9 +124,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Remove directory node_modules
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents
+Input::
 //// [/user/username/projects/myproject/node_modules/file2/index.d.ts] deleted
 
 Output::
@@ -172,8 +176,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents
+
 Change:: Pending directory watchers and program update
 
+Input::
 
 Output::
 >> Screen clear
@@ -220,8 +227,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Start npm install
 
+Input::
 
 Output::
 
@@ -246,9 +255,11 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
 
 Change:: npm install folder creation of file2
 
+Input::
 
 Output::
 
@@ -274,8 +285,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: npm install index file in file2
 
+Input::
 //// [/user/username/projects/myproject/node_modules/file2/index.d.ts]
 export const x = 10;
 
@@ -304,8 +317,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Updates the program
 
+Input::
 
 Output::
 
@@ -333,9 +348,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Pending updates
 
-//// [/user/username/projects/myproject/src/file1.js] file written with same contents
+Input::
 
 Output::
 >> Screen clear
@@ -382,3 +398,5 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/src/file1.js] file written with same contents

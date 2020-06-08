@@ -163,6 +163,7 @@ namespace ts.NavigationBar {
         // Save the old parent
         parentsStack.push(parent);
         trackedEs5ClassesStack.push(trackedEs5Classes);
+        trackedEs5Classes = undefined;
         parent = navNode;
     }
 

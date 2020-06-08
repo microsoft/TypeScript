@@ -1,4 +1,4 @@
-maxDepthExceeded/root.ts(3,1): error TS2322: Type '"10"' is not assignable to type 'number'.
+maxDepthExceeded/root.ts(3,1): error TS2322: Type 'string' is not assignable to type 'number'.
 maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it is a read-only property.
 
 
@@ -33,7 +33,7 @@ maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it i
     m1.f1("test");
     m1.f2.a = "10"; // Error: Should be number
     ~~~~~~~
-!!! error TS2322: Type '"10"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     m1.rel = 42; // Error: Should be boolean
        ~~~
 !!! error TS2540: Cannot assign to 'rel' because it is a read-only property.

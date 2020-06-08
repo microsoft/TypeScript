@@ -19,7 +19,7 @@ namespace ts {
         const newLineCharacter = getNewLineCharacter(printerOptions);
 
         function getRuleProvider(placeOpenBraceOnNewLineForFunctions: boolean): formatting.FormatContext {
-            return formatting.getFormatContext(placeOpenBraceOnNewLineForFunctions ? { ...testFormatSettings, placeOpenBraceOnNewLineForFunctions: true } : testFormatSettings);
+            return formatting.getFormatContext(placeOpenBraceOnNewLineForFunctions ? { ...testFormatSettings, placeOpenBraceOnNewLineForFunctions: true } : testFormatSettings, notImplementedHost);
         }
 
         // validate that positions that were recovered from the printed text actually match positions that will be created if the same text is parsed.

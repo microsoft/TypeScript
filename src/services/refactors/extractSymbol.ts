@@ -8,7 +8,7 @@ namespace ts.refactor.extractSymbol {
      * Exported for tests.
      */
     export function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
+        const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context), context.triggerReason === "invoked");
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
@@ -28,7 +28,7 @@ namespace ts.refactor.extractSymbol {
         const usedConstantNames: Map<boolean> = createMap();
 
         let i = 0;
-        for (const {functionExtraction, constantExtraction} of extractions) {
+        for (const { functionExtraction, constantExtraction } of extractions) {
             // Skip these since we don't have a way to report errors yet
             if (functionExtraction.errors.length === 0) {
                 // Don't issue refactorings with duplicated names.
@@ -186,18 +186,20 @@ namespace ts.refactor.extractSymbol {
      * not shown to the user, but can be used by us diagnostically)
      */
     // exported only for tests
-    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
+    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, considerEmptySpans = true): RangeToExtract {
         const { length } = span;
-
-        if (length === 0) {
+        if (length === 0 && !considerEmptySpans) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
         }
+        const cursorRequest = length === 0 && considerEmptySpans;
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
-        const start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start), sourceFile, span);
+        const startToken = getTokenAtPosition(sourceFile, span.start);
+        const start = cursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, span);
         // Do the same for the ending position
-        const end = getParentNodeInSpan(findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span)), sourceFile, span);
+        const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
+        const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, span);
 
         const declarations: Symbol[] = [];
 
@@ -405,6 +407,20 @@ namespace ts.refactor.extractSymbol {
                             rangeFacts |= RangeFacts.UsesThis;
                         }
                         break;
+                    case SyntaxKind.ArrowFunction:
+                        // check if arrow function uses this
+                        forEachChild(node, function check(n) {
+                            if (isThis(n)) {
+                                rangeFacts |= RangeFacts.UsesThis;
+                            }
+                            else if (isClassLike(n) || (isFunctionLike(n) && !isArrowFunction(n))) {
+                                return false;
+                            }
+                            else {
+                                forEachChild(n, check);
+                            }
+                        });
+                        // falls through
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.FunctionDeclaration:
                         if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
@@ -418,7 +434,7 @@ namespace ts.refactor.extractSymbol {
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        // do not dive into functions (except arrow functions) or classes
+                        // do not dive into functions or classes
                         return false;
                 }
 
@@ -1103,7 +1119,12 @@ namespace ts.refactor.extractSymbol {
                     changeTracker.delete(context.file, node.parent);
                 }
                 else {
-                    const localReference = factory.createIdentifier(localNameText);
+                    let localReference: Expression = factory.createIdentifier(localNameText);
+                    // When extract to a new variable in JSX content, need to wrap a {} out of the new variable
+                    // or it will become a plain text
+                    if (isInJSXContent(node)) {
+                        localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+                    }
                     changeTracker.replaceNode(context.file, node, localReference);
                 }
             }
@@ -1114,6 +1135,12 @@ namespace ts.refactor.extractSymbol {
         const renameFilename = node.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
         return { renameFilename, renameLocation, edits };
+
+        function isInJSXContent(node: Node) {
+            if (!isJsxElement(node)) return false;
+            if (isJsxElement(node.parent)) return true;
+            return false;
+        }
 
         function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
             // If no contextual type exists there is nothing to transfer to the function signature
@@ -1215,8 +1242,8 @@ namespace ts.refactor.extractSymbol {
     }
 
     function compareTypesByDeclarationOrder(
-        {type: type1, declaration: declaration1}: {type: Type, declaration?: Declaration},
-        {type: type2, declaration: declaration2}: {type: Type, declaration?: Declaration}) {
+        { type: type1, declaration: declaration1 }: { type: Type, declaration?: Declaration },
+        { type: type2, declaration: declaration2 }: { type: Type, declaration?: Declaration }) {
 
         return compareProperties(declaration1, declaration2, "pos", compareValues)
             || compareStringsCaseSensitive(
@@ -1621,7 +1648,7 @@ namespace ts.refactor.extractSymbol {
             // a lot of properties, each of which the walker will visit.  Unfortunately, the
             // solution isn't as trivial as filtering to user types because of (e.g.) Array.
             const symbolWalker = checker.getSymbolWalker(() => (cancellationToken.throwIfCancellationRequested(), true));
-            const {visitedTypes} = symbolWalker.walkType(type);
+            const { visitedTypes } = symbolWalker.walkType(type);
 
             for (const visitedType of visitedTypes) {
                 if (visitedType.isTypeParameter()) {
@@ -1819,6 +1846,10 @@ namespace ts.refactor.extractSymbol {
                 ? factory.createQualifiedName(<EntityName>prefix, factory.createIdentifier(symbol.name))
                 : factory.createPropertyAccess(<Expression>prefix, symbol.name);
         }
+    }
+
+    function getExtractableParent(node: Node | undefined): Node | undefined {
+        return findAncestor(node, node => node.parent && isExtractableExpression(node) && !isBinaryExpression(node.parent));
     }
 
     /**

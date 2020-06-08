@@ -5,7 +5,7 @@
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "elementTypes": {
+    "elements": {
         "length": 0,
         "pos": 2,
         "end": 2

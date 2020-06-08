@@ -12,7 +12,3 @@ verify.codeFixAvailable([
     { description: ts.Diagnostics.Remove_braces_from_arrow_function_body.message },
     { description: ts.Diagnostics.Remove_unused_label.message }
 ]);
-
-interface A {
-    bar: string
-}

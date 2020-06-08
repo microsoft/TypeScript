@@ -93,14 +93,16 @@ namespace ts.tscWatch {
             return result;
         }
 
-        function changeFile(sys: WatchedSystem, fileName: string, content: string, caption: string) {
-            sys.writeFile(fileName, content);
-            sys.checkTimeoutQueueLengthAndRun(1); // Builds core
-            return caption;
+        function changeFile(fileName: string | (() => string), content: string | (() => string), caption: string): TscWatchCompileChange {
+            return {
+                caption,
+                change: sys => sys.writeFile(isString(fileName) ? fileName : fileName(), isString(content) ? content : content()),
+                timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds core
+            };
         }
 
-        function changeCore(sys: WatchedSystem, content: string, caption: string) {
-            return changeFile(sys, core[1].path, content, caption);
+        function changeCore(content: () => string, caption: string) {
+            return changeFile(() => core[1].path, content, caption);
         }
 
         let core: SubProjectFiles;
@@ -161,6 +163,13 @@ namespace ts.tscWatch {
             return system;
         });
 
+        const buildTests: TscWatchCompileChange = {
+            caption: "Build Tests",
+            change: noop,
+            // Build tests
+            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+        };
+
         describe("validates the changes and watched files", () => {
             const newFileWithoutExtension = "newFile";
             const newFile: File = {
@@ -169,16 +178,12 @@ namespace ts.tscWatch {
             };
 
             function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly File[]) {
-                function buildLogicOrUpdateTimeStamps(sys: WatchedSystem) {
-                    sys.checkTimeoutQueueLengthAndRun(1); // Builds logic or updates timestamps
-                    return "Build logic or update time stamps";
-                }
+                const buildLogicOrUpdateTimeStamps: TscWatchCompileChange = {
+                    caption: "Build logic or update time stamps",
+                    change: noop,
+                    timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds logic or updates timestamps
+                };
 
-                function buildTests(sys: WatchedSystem) {
-                    sys.checkTimeoutQueueLengthAndRun(1); // Build tests
-                    sys.checkTimeoutQueueLength(0);
-                    return "Build Tests";
-                }
                 verifyTscWatch({
                     scenario,
                     subScenario: `${subScenario}/change builds changes and reports found errors message`,
@@ -188,24 +193,26 @@ namespace ts.tscWatch {
                         { currentDirectory: projectsLocation }
                     ),
                     changes: [
-                        sys => changeCore(sys, `${core[1].content}
+                        changeCore(() => `${core[1].content}
 export class someClass { }`, "Make change to core"),
                         buildLogicOrUpdateTimeStamps,
                         buildTests,
                         // Another change requeues and builds it
-                        sys => changeCore(sys, core[1].content, "Revert core file"),
+                        changeCore(() => core[1].content, "Revert core file"),
                         buildLogicOrUpdateTimeStamps,
                         buildTests,
-                        sys => {
-                            const change1 = `${core[1].content}
+                        {
+                            caption: "Make two changes",
+                            change: sys => {
+                                const change1 = `${core[1].content}
 export class someClass { }`;
-                            sys.writeFile(core[1].path, change1);
-                            assert.equal(sys.writtenFiles.size, 1);
-                            sys.writtenFiles.clear();
-                            sys.writeFile(core[1].path, `${change1}
+                                sys.writeFile(core[1].path, change1);
+                                assert.equal(sys.writtenFiles.size, 1);
+                                sys.writtenFiles.clear();
+                                sys.writeFile(core[1].path, `${change1}
 export class someClass2 { }`);
-                            sys.checkTimeoutQueueLengthAndRun(1); // Builds core
-                            return "Make two changes";
+                            },
+                            timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds core
                         },
                         buildLogicOrUpdateTimeStamps,
                         buildTests,
@@ -221,15 +228,15 @@ export class someClass2 { }`);
                         { currentDirectory: projectsLocation }
                     ),
                     changes: [
-                        sys => changeCore(sys, `${core[1].content}
+                        changeCore(() => `${core[1].content}
 function foo() { }`, "Make local change to core"),
                         buildLogicOrUpdateTimeStamps,
                         buildTests
                     ]
                 });
 
-                function changeNewFile(sys: WatchedSystem, newFileContent: string) {
-                    return changeFile(sys, newFile.path, newFileContent, "Change to new File and build core");
+                function changeNewFile(newFileContent: string) {
+                    return changeFile(newFile.path, newFileContent, "Change to new File and build core");
                 }
                 verifyTscWatch({
                     scenario,
@@ -240,10 +247,10 @@ function foo() { }`, "Make local change to core"),
                         { currentDirectory: projectsLocation }
                     ),
                     changes: [
-                        sys => changeNewFile(sys, newFile.content),
+                        changeNewFile(newFile.content),
                         buildLogicOrUpdateTimeStamps,
                         buildTests,
-                        sys => changeNewFile(sys, `${newFile.content}
+                        changeNewFile(`${newFile.content}
 export class someClass2 { }`),
                         buildLogicOrUpdateTimeStamps,
                         buildTests
@@ -285,16 +292,12 @@ export class someClass2 { }`),
                 { currentDirectory: projectsLocation }
             ),
             changes: [
-                sys => {
-                    sys.writeFile(logic[0].path, logic[0].content);
-                    sys.checkTimeoutQueueLengthAndRun(1); // Builds logic
-                    return "Write logic tsconfig and build logic";
+                {
+                    caption: "Write logic tsconfig and build logic",
+                    change: sys => sys.writeFile(logic[0].path, logic[0].content),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun, // Builds logic
                 },
-                sys => {
-                    sys.checkTimeoutQueueLengthAndRun(1); // Builds tests
-                    sys.checkTimeoutQueueLength(0);
-                    return "Build tests";
-                }
+                buildTests
             ]
         });
 
@@ -309,11 +312,12 @@ export class someClass2 { }`),
             after(() => {
                 coreIndex = undefined!;
             });
-            function buildLogic(sys: WatchedSystem) {
-                sys.checkTimeoutQueueLengthAndRun(1); // Builds logic
-                sys.checkTimeoutQueueLength(0);
-                return "Build logic";
-            }
+            const buildLogic: TscWatchCompileChange = {
+                caption: "Build logic",
+                change: noop,
+                // Builds logic
+                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+            };
             verifyTscWatch({
                 scenario,
                 subScenario: "when referenced using prepend builds referencing project even for non local change",
@@ -339,10 +343,10 @@ export class someClass2 { }`),
                     return createWatchedSystem([libFile, coreTsConfig, coreIndex, logicTsConfig, logicIndex], { currentDirectory: projectsLocation });
                 },
                 changes: [
-                    sys => changeCore(sys, `${coreIndex.content}
+                    changeCore(() => `${coreIndex.content}
 function myFunc() { return 10; }`, "Make non local change and build core"),
                     buildLogic,
-                    sys => changeCore(sys, `${coreIndex.content}
+                    changeCore(() => `${coreIndex.content}
 function myFunc() { return 100; }`, "Make local change and build core"),
                     buildLogic,
                 ]
@@ -390,19 +394,23 @@ createSomeObject().message;`
                     return createWatchedSystem(files, { currentDirectory: `${projectsLocation}/${project}` });
                 },
                 changes: [
-                    sys => {
+                    {
+                        caption: "Introduce error",
                         // Change message in library to message2
-                        sys.writeFile(libraryTs.path, libraryTs.content.replace(/message/g, "message2"));
-                        sys.checkTimeoutQueueLengthAndRun(1); // Build library
-                        sys.checkTimeoutQueueLengthAndRun(1); // Build App
-                        return "Introduce error";
+                        change: sys => sys.writeFile(libraryTs.path, libraryTs.content.replace(/message/g, "message2")),
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLengthAndRun(1); // Build library
+                            sys.checkTimeoutQueueLengthAndRun(1); // Build App
+                        },
                     },
-                    sys => {
+                    {
+                        caption: "Fix error",
                         // Revert library changes
-                        sys.writeFile(libraryTs.path, libraryTs.content);
-                        sys.checkTimeoutQueueLengthAndRun(1); // Build library
-                        sys.checkTimeoutQueueLengthAndRun(1); // Build App
-                        return "Fix error";
+                        change: sys => sys.writeFile(libraryTs.path, libraryTs.content),
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLengthAndRun(1); // Build library
+                            sys.checkTimeoutQueueLengthAndRun(1); // Build App
+                        },
                     },
                 ]
             });
@@ -417,21 +425,19 @@ createSomeObject().message;`
                     commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`, ...buildOptions],
                     sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
                     changes: [
-                        sys => {
-                            sys.writeFile(logic[1].path, `${logic[1].content}
-let y: string = 10;`);
-
-                            sys.checkTimeoutQueueLengthAndRun(1); // Builds logic
-                            sys.checkTimeoutQueueLength(0);
-                            return "change logic";
+                        {
+                            caption: "change logic",
+                            change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
+let y: string = 10;`),
+                            // Builds logic
+                            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
                         },
-                        sys => {
-                            sys.writeFile(core[1].path, `${core[1].content}
-let x: string = 10;`);
-
-                            sys.checkTimeoutQueueLengthAndRun(1); // Builds core
-                            sys.checkTimeoutQueueLength(0);
-                            return "change core";
+                        {
+                            caption: "change core",
+                            change: sys => sys.writeFile(core[1].path, `${core[1].content}
+let x: string = 10;`),
+                            // Builds core
+                            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
                         }
                     ]
                 });
@@ -468,18 +474,18 @@ let x: string = 10;`);
                     sys.checkTimeoutQueueLength(0);
                 }
 
-                function fixError(sys: WatchedSystem) {
+                const fixError: TscWatchCompileChange = {
+                    caption: "Fix error in fileWithError",
                     // Fix error
-                    sys.writeFile(fileWithError.path, fileWithFixedError.content);
-                    incrementalBuild(sys);
-                    return "Fix error in fileWithError";
-                }
+                    change: sys => sys.writeFile(fileWithError.path, fileWithFixedError.content),
+                    timeouts: incrementalBuild
+                };
 
-                function changeFileWithoutError(sys: WatchedSystem) {
-                    sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
-                    incrementalBuild(sys);
-                    return "Change fileWithoutError";
-                }
+                const changeFileWithoutError: TscWatchCompileChange = {
+                    caption: "Change fileWithoutError",
+                    change: sys => sys.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2")),
+                    timeouts: incrementalBuild
+                };
 
                 verifyTscWatch({
                     scenario,
@@ -508,11 +514,11 @@ let x: string = 10;`);
                 });
 
                 describe("when reporting errors on introducing error", () => {
-                    function introduceError(sys: WatchedSystem) {
-                        sys.writeFile(fileWithError.path, fileWithError.content);
-                        incrementalBuild(sys);
-                        return "Introduce error";
-                    }
+                    const introduceError: TscWatchCompileChange = {
+                        caption: "Introduce error",
+                        change: sys => sys.writeFile(fileWithError.path, fileWithError.content),
+                        timeouts: incrementalBuild,
+                    };
 
                     verifyTscWatch({
                         scenario,
@@ -1122,19 +1128,23 @@ export function gfoo() {
             commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`, "-verbose"],
             sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
             changes: [
-                sys => {
-                    sys.writeFile(logic[1].path, `${logic[1].content}
-function someFn() { }`);
-                    sys.checkTimeoutQueueLengthAndRun(1); // build logic
-                    sys.checkTimeoutQueueLengthAndRun(1); // build tests
-                    return "Make non dts change";
+                {
+                    caption: "Make non dts change",
+                    change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
+function someFn() { }`),
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(1); // build logic
+                        sys.checkTimeoutQueueLengthAndRun(1); // build tests
+                    },
                 },
-                sys => {
-                    sys.writeFile(logic[1].path, `${logic[1].content}
-export function someFn() { }`);
-                    sys.checkTimeoutQueueLengthAndRun(1); // build logic
-                    sys.checkTimeoutQueueLengthAndRun(1); // build tests
-                    return "Make dts change";
+                {
+                    caption: "Make dts change",
+                    change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
+export function someFn() { }`),
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(1); // build logic
+                        sys.checkTimeoutQueueLengthAndRun(1); // build tests
+                    },
                 }
             ],
         });
@@ -1159,14 +1169,14 @@ export function someFn() { }`);
                 return createWatchedSystem([index, configFile, libFile], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({
+                {
+                    caption: "Change tsconfig to set noUnusedParameters to false",
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({
                         compilerOptions: {
                             noUnusedParameters: false
                         }
-                    }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Change tsconfig to set noUnusedParameters to false";
+                    })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });
@@ -1216,14 +1226,16 @@ export function someFn() { }`);
                 return sys;
             },
             changes: [
-                sys => {
-                    sys.writeFile(coreFiles[0].path, coreFiles[0].content);
-                    sys.checkTimeoutQueueLengthAndRun(1); // build core
-                    sys.checkTimeoutQueueLengthAndRun(1); // build animals
-                    sys.checkTimeoutQueueLengthAndRun(1); // build zoo
-                    sys.checkTimeoutQueueLengthAndRun(1); // build solution
-                    sys.checkTimeoutQueueLength(0);
-                    return "Fix error";
+                {
+                    caption: "Fix error",
+                    change: sys => sys.writeFile(coreFiles[0].path, coreFiles[0].content),
+                    timeouts: sys => {
+                        sys.checkTimeoutQueueLengthAndRun(1); // build core
+                        sys.checkTimeoutQueueLengthAndRun(1); // build animals
+                        sys.checkTimeoutQueueLengthAndRun(1); // build zoo
+                        sys.checkTimeoutQueueLengthAndRun(1); // build solution
+                        sys.checkTimeoutQueueLength(0);
+                    },
                 }
             ]
         });
@@ -1239,13 +1251,13 @@ ${coreFiles[1].content}`);
                 return sys;
             },
             changes: [
-                sys => {
-                    sys.writeFile(coreFiles[1].path, `
+                {
+                    caption: "Prepend a line",
+                    change: sys => sys.writeFile(coreFiles[1].path, `
 import * as A from '../animals';
-${coreFiles[1].content}`);
-                    sys.checkTimeoutQueueLengthAndRun(1); // build core
-                    sys.checkTimeoutQueueLength(0);
-                    return "Prepend a line";
+${coreFiles[1].content}`),
+                    // build core
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
                 }
             ]
         });
@@ -1260,6 +1272,21 @@ ${coreFiles[1].content}`);
     });
 
     describe("unittests:: tsbuild:: watchMode:: with noEmitOnError", () => {
+        function change(caption: string, content: string): TscWatchCompileChange {
+            return {
+                caption,
+                change: sys => sys.writeFile(`${projectsLocation}/noEmitOnError/src/main.ts`, content),
+                // build project
+                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+            };
+        }
+
+        const noChange: TscWatchCompileChange = {
+            caption: "No change",
+            change: sys => sys.writeFile(`${projectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${projectsLocation}/noEmitOnError/src/main.ts`)!),
+            // build project
+            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+        };
         verifyTscWatch({
             scenario: "noEmitOnError",
             subScenario: "does not emit any files on error",
@@ -1273,20 +1300,29 @@ ${coreFiles[1].content}`);
                 { currentDirectory: `${projectsLocation}/noEmitOnError` }
             ),
             changes: [
-                sys => {
-                    sys.writeFile(`${projectsLocation}/noEmitOnError/src/main.ts`, `import { A } from "../shared/types/db";
+                noChange,
+                change("Fix Syntax error", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`);
-                    sys.checkTimeoutQueueLengthAndRun(1); // build project
-                    sys.checkTimeoutQueueLength(0);
-                    return "Fix error";
-                }
-            ]
+};`),
+                change("Semantic Error", `import { A } from "../shared/types/db";
+const a: string = 10;`),
+                noChange,
+                change("Fix Semantic Error", `import { A } from "../shared/types/db";
+const a: string = "hello";`),
+                noChange,
+            ],
+            baselineIncremental: true
         });
     });
 
     describe("unittests:: tsbuild:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {
+        function build(sys: WatchedSystem) {
+            sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
+            sys.checkTimeoutQueueLengthAndRun(1); // build src/main
+            sys.checkTimeoutQueueLengthAndRun(1); // build src
+            sys.checkTimeoutQueueLength(0);
+        }
         verifyTscWatch({
             scenario: "reexport",
             subScenario: "Reports errors correctly",
@@ -1304,27 +1340,25 @@ const a = {
                 { currentDirectory: `${projectsLocation}/reexport` }
             ),
             changes: [
-                sys => {
-                    replaceFileText(sys, `${projectsLocation}/reexport/src/pure/session.ts`, "// ", "");
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/main
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src
-                    sys.checkTimeoutQueueLength(0);
-                    return "Introduce error";
+                {
+                    caption: "Introduce error",
+                    change: sys => replaceFileText(sys, `${projectsLocation}/reexport/src/pure/session.ts`, "// ", ""),
+                    timeouts: build,
                 },
-                sys => {
-                    replaceFileText(sys, `${projectsLocation}/reexport/src/pure/session.ts`, "bar: ", "// bar: ");
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src/main
-                    sys.checkTimeoutQueueLengthAndRun(1); // build src
-                    sys.checkTimeoutQueueLength(0);
-                    return "Fix error";
+                {
+                    caption: "Fix error",
+                    change: sys => replaceFileText(sys, `${projectsLocation}/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
+                    timeouts: build
                 }
             ]
         });
     });
 
     describe("unittests:: tsbuild:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
+        function build(sys: WatchedSystem) {
+            sys.checkTimeoutQueueLengthAndRun(1); // build the project
+            sys.checkTimeoutQueueLength(0);
+        }
         verifyTscWatch({
             scenario: "configFileErrors",
             subScenario: "reports syntax errors in config file",
@@ -1351,33 +1385,29 @@ const a = {
             ),
             commandLineArgs: ["--b", "-w"],
             changes: [
-                sys => {
-                    replaceFileText(sys, `${projectRoot}/tsconfig.json`, ",", `,
-        "declaration": true,`);
-                    sys.checkTimeoutQueueLengthAndRun(1); // build the project
-                    sys.checkTimeoutQueueLength(0);
-                    return "reports syntax errors after change to config file";
+                {
+                    caption: "reports syntax errors after change to config file",
+                    change: sys => replaceFileText(sys, `${projectRoot}/tsconfig.json`, ",", `,
+        "declaration": true,`),
+                    timeouts: build,
                 },
-                sys => {
-                    replaceFileText(sys, `${projectRoot}/a.ts`, "foo", "fooBar");
-                    sys.checkTimeoutQueueLengthAndRun(1); // build the project
-                    sys.checkTimeoutQueueLength(0);
-                    return "reports syntax errors after change to ts file";
+                {
+                    caption: "reports syntax errors after change to ts file",
+                    change: sys => replaceFileText(sys, `${projectRoot}/a.ts`, "foo", "fooBar"),
+                    timeouts: build,
                 },
-                sys => {
-                    replaceFileText(sys, `${projectRoot}/tsconfig.json`, "", "");
-                    sys.checkTimeoutQueueLengthAndRun(1); // build the project
-                    sys.checkTimeoutQueueLength(0);
-                    return "reports error when there is no change to tsconfig file";
+                {
+                    caption: "reports error when there is no change to tsconfig file",
+                    change: sys => replaceFileText(sys, `${projectRoot}/tsconfig.json`, "", ""),
+                    timeouts: build,
                 },
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({
+                {
+                    caption: "builds after fixing config file errors",
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({
                         compilerOptions: { composite: true, declaration: true },
                         files: ["a.ts", "b.ts"]
-                    }));
-                    sys.checkTimeoutQueueLengthAndRun(1); // build the project
-                    sys.checkTimeoutQueueLength(0);
-                    return "builds after fixing config file errors";
+                    })),
+                    timeouts: build,
                 }
             ]
         });

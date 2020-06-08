@@ -183,7 +183,7 @@ namespace ts {
             fs: () => projFs,
             commandLineArgs: ["-b", "/src"]
         });
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "javascriptProjectEmit",
             subScenario: `modifies outfile js projects and concatenates them correctly`,
             fs: () => projFs,

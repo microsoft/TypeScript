@@ -203,6 +203,11 @@ namespace ts {
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
 
+    /** @internal */
+    export interface FormattingHost {
+        getNewLine?(): string;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
@@ -470,7 +475,7 @@ namespace ts {
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
 
-        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
@@ -735,6 +740,8 @@ namespace ts {
         renameLocation?: number;
         commands?: CodeActionCommand[];
     }
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     export interface TextInsertion {
         newText: string;
@@ -1399,5 +1406,6 @@ namespace ts {
         program: Program;
         cancellationToken?: CancellationToken;
         preferences: UserPreferences;
+        triggerReason?: RefactorTriggerReason;
     }
 }

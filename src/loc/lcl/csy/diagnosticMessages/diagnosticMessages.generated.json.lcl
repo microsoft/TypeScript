@@ -57,6 +57,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_JSDoc_typedef_comment_may_not_contain_multiple_type_tags_8033" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A JSDoc '@typedef' comment may not contain multiple '@type' tags.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Komentář JSDoc @typedef nemůže obsahovat více než jednu značku @type.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_bigint_literal_cannot_use_exponential_notation_1352" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A bigint literal cannot use exponential notation.]]></Val>
@@ -446,6 +455,24 @@
           <Val><![CDATA['A label is not allowed here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Popisek se tady nepovoluje.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_c_5086" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element popsané řazené kolekce členů se deklaroval jako nepovinný pomocí otazníku za názvem a před dvojtečkou, nikoli za typem.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type_5087" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Element popsané řazené kolekce členů se deklaroval jako zbytek s třemi tečkami (...) před názvem, nikoli před typem.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -863,6 +890,15 @@
           <Val><![CDATA[A 'tsconfig.json' file is already defined at: '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Soubor tsconfig.json je už v {0} definovaný.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_tuple_member_cannot_be_both_optional_and_rest_5085" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A tuple member cannot be both optional and rest.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Člen řazené kolekce členů nemůže být volitelný a zbytek.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3432,6 +3468,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_arrow_function_or_function_expression_95122" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert arrow function or function expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Převést funkci šipky nebo výraz funkce]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_const_to_let_95093" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert 'const' to 'let']]></Val>
@@ -3522,6 +3567,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_overload_list_to_single_signature_95118" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert overload list to single signature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Převést seznam přetížení na jednu signaturu]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_parameters_to_destructured_object_95075" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert parameters to destructured object]]></Val>
@@ -3558,6 +3612,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_to_anonymous_function_95123" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to anonymous function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Převést na anonymní funkci]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_to_arrow_function_95125" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Převést na funkci šipky]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_to_async_function_95065" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert to async function]]></Val>
@@ -3572,6 +3644,15 @@
           <Val><![CDATA[Convert to default import]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Převést na výchozí import]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_to_named_function_95124" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to named function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Převést na pojmenovanou funkci]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3723,6 +3804,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Declare method '{0}'.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Declare_private_method_0_90038" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Declare private method '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deklarovat privátní metodu {0}]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4714,7 +4804,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Pokud možnost target není nastavená na es2016 nebo novější, nedají se hodnoty bigint umocnit.]]></Val>
+            <Val><![CDATA[Pokud není možnost target nastavená na es2016 nebo novější, nedají se hodnoty bigint umocnit.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5327,6 +5417,15 @@
           <Val><![CDATA[Generate 'get' and 'set' accessors]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Generovat přístupové objekty get a set]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Generate_get_and_set_accessors_for_all_overriding_properties_95119" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generate 'get' and 'set' accessors for all overriding properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Generovat přístupové objekty get a set pro všechny přepisující vlastnosti]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6046,7 +6145,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its element type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Jeho typ prvku {0} není platný prvek JSX.]]></Val>
+            <Val><![CDATA[Typ prvku {0} není platný prvek JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6055,7 +6154,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its instance type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Jeho typ instance {0} není platný prvek JSX.]]></Val>
+            <Val><![CDATA[Typ instance {0} není platný prvek JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6064,7 +6163,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its return type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Jeho návratový typ {0} není platný prvek JSX.]]></Val>
+            <Val><![CDATA[Návratový typ {0} není platný prvek JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6798,6 +6897,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Move_labeled_tuple_element_modifiers_to_labels_95117" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Move labeled tuple element modifiers to labels]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Přesunout modifikátory elementu popsané řazené kolekce členů na popisky]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Move_to_a_new_file_95049" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Move to a new file]]></Val>
@@ -7210,7 +7318,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Jenom pojmenované exporty mohou používat typ exportu.]]></Val>
+            <Val><![CDATA[Jen pojmenované exporty můžou používat export type.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8613,15 +8721,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_all_incorrect_body_block_braces_95115" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Remove all incorrect body block braces]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Odebrat všechny nesprávné závorky bloku kódu]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Remove_all_unnecessary_uses_of_await_95087" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove all unnecessary uses of 'await']]></Val>
@@ -8649,11 +8748,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_block_body_braces_95112" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Remove_braces_from_all_arrow_function_bodies_with_relevant_issues_95115" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Remove block body braces]]></Val>
+          <Val><![CDATA[Remove braces from all arrow function bodies with relevant issues]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Odebrat všechny závorky bloku kódu]]></Val>
+            <Val><![CDATA[Odeberte složené závorky ze všech těl funkcí šipek, u kterých dochází k problémům.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8663,6 +8762,15 @@
           <Val><![CDATA[Remove braces from arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Odebrat složené závorky z funkce šipky]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_braces_from_arrow_function_body_95112" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove braces from arrow function body]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Odebrat složené závorky z těla funkce šipky]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10392,6 +10500,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_tag_was_first_specified_here_8034" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The tag was first specified here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Značka se poprvé zadala tady.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_target_of_an_assignment_must_be_a_variable_or_a_property_access_2541" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The target of an assignment must be a variable or a property access.]]></Val>
@@ -10581,6 +10698,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without_6234" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Tento výraz se nedá volat, protože je to přístupový objekt get. Nechtěli jste ho použít bez ()?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_expression_is_not_constructable_2351" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This expression is not constructable.]]></Val>
@@ -10742,6 +10868,15 @@
           <Val><![CDATA[Trying substitution '{0}', candidate module location: '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Zkouší se nahrazení {0}, umístění modulu kandidáta: {1}.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Tuple_members_must_all_have_names_or_all_not_have_names_5084" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tuple members must all have names or all not have names.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Název musí mít buď všechny členy řazené kolekce členů, nebo ho nesmí mít žádný člen.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11894,6 +12029,24 @@
           <Val><![CDATA[Wrap all object literal with parentheses]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Uzavřít všechny literály objektů do závorek]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_all_unparented_JSX_in_JSX_fragment_95121" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap all unparented JSX in JSX fragment]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Zabalit všechny JSX bez nadřazených položek ve fragmentu JSX]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_in_JSX_fragment_95120" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap in JSX fragment]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Zabalit ve fragmentu JSX]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

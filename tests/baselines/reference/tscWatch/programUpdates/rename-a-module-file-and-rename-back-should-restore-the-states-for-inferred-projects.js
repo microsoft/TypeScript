@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/file1.ts
+Input::
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -18,23 +18,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/moduleFile.js]
-"use strict";
-exports.__esModule = true;
-exports.bar = void 0;
-function bar() { }
-exports.bar = bar;
-;
 
-
-//// [/a/b/file1.js]
-"use strict";
-exports.__esModule = true;
-var T = require("./moduleFile");
-T.bar();
-
-
-
+/a/lib/tsc.js -w /a/b/file1.ts
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
@@ -70,9 +55,26 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/moduleFile.js]
+"use strict";
+exports.__esModule = true;
+exports.bar = void 0;
+function bar() { }
+exports.bar = bar;
+;
+
+
+//// [/a/b/file1.js]
+"use strict";
+exports.__esModule = true;
+var T = require("./moduleFile");
+T.bar();
+
+
+
 Change:: Rename moduleFile to moduleFile1
 
-//// [/a/b/file1.js] file written with same contents
+Input::
 //// [/a/b/moduleFile1.ts]
 export function bar() { };
 
@@ -117,20 +119,13 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/file1.js] file written with same contents
+
 Change:: Rename moduleFile1 back to moduleFile
 
-//// [/a/b/file1.js] file written with same contents
+Input::
 //// [/a/b/moduleFile.ts]
 export function bar() { };
-
-//// [/a/b/moduleFile.js]
-"use strict";
-exports.__esModule = true;
-exports.bar = void 0;
-function bar() { }
-exports.bar = bar;
-;
-
 
 //// [/a/b/moduleFile1.ts] deleted
 
@@ -167,3 +162,14 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/file1.js] file written with same contents
+//// [/a/b/moduleFile.js]
+"use strict";
+exports.__esModule = true;
+exports.bar = void 0;
+function bar() { }
+exports.bar = bar;
+;
+
+

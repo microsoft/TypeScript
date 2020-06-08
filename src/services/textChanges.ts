@@ -286,6 +286,10 @@ namespace ts.textChanges {
             this.deletedNodes.push({ sourceFile, node });
         }
 
+        public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
+            this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
+        }
+
         public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
             this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
         }

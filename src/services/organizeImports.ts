@@ -76,7 +76,7 @@ namespace ts.OrganizeImports {
 
             // Delete any subsequent imports.
             for (let i = 1; i < oldImportDecls.length; i++) {
-                changeTracker.delete(sourceFile, oldImportDecls[i]);
+                changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
             }
         }
     }

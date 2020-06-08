@@ -164,6 +164,8 @@ namespace ts {
             updateArrayTypeNode,
             createTupleTypeNode,
             updateTupleTypeNode,
+            createNamedTupleMember,
+            updateNamedTupleMember,
             createOptionalTypeNode,
             updateOptionalTypeNode,
             createRestTypeNode,
@@ -1804,9 +1806,9 @@ namespace ts {
         }
 
         // @api
-        function createTupleTypeNode(elementTypes: readonly TypeNode[]) {
+        function createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]) {
             const node = createBaseNode<TupleTypeNode>(SyntaxKind.TupleType);
-            setChildren(node, node.elementTypes = createNodeArray(elementTypes));
+            setChildren(node, node.elements = createNodeArray(elements));
             if (!skipTransformationFlags) {
                 markTypeScriptOnly(node);
             }
@@ -1814,9 +1816,29 @@ namespace ts {
         }
 
         // @api
-        function updateTupleTypeNode(node: TupleTypeNode, elementTypes: readonly TypeNode[]) {
-            return node.elementTypes !== elementTypes
-                ? update(createTupleTypeNode(elementTypes), node)
+        function updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]) {
+            return node.elements !== elements
+                ? update(createTupleTypeNode(elements), node)
+                : reuse(node);
+        }
+
+        // @api
+        function createNamedTupleMember(dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode) {
+            const node = createBaseNode<NamedTupleMember>(SyntaxKind.NamedTupleMember);
+            node.dotDotDotToken = dotDotDotToken;
+            node.name = name;
+            node.questionToken = questionToken;
+            node.type = type;
+            return node;
+        }
+
+        // @api
+        function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: DotDotDotToken | undefined, name: Identifier, questionToken: QuestionToken | undefined, type: TypeNode) {
+            return node.dotDotDotToken !== dotDotDotToken
+                || node.name !== name
+                || node.questionToken !== questionToken
+                || node.type !== type
+                ? update(createNamedTupleMember(dotDotDotToken, name, questionToken, type), node)
                 : reuse(node);
         }
 
@@ -4890,10 +4912,11 @@ namespace ts {
         //
 
         // @api
-        function createSyntheticExpression(type: Type, isSpread = false) {
+        function createSyntheticExpression(type: Type, isSpread = false, tupleNameSource?: ParameterDeclaration | NamedTupleMember) {
             const node = createBaseNode<SyntheticExpression>(SyntaxKind.SyntheticExpression);
             node.type = type;
             node.isSpread = isSpread;
+            node.tupleNameSource = tupleNameSource;
             return node;
         }
 

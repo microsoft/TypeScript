@@ -22,23 +22,34 @@ namespace ts {
             }
 
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(factory, emitHelpers(), node, compilerOptions);
-                if (externalHelpersImportDeclaration) {
-                    const statements: Statement[] = [];
-                    const statementOffset = factory.copyPrologue(node.statements, statements);
-                    append(statements, externalHelpersImportDeclaration);
-
-                    addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
-                    return factory.updateSourceFile(
-                        node,
-                        setTextRange(factory.createNodeArray(statements), node.statements));
+                const result = updateExternalModule(node);
+                if (!isExternalModule(node) || some(result.statements, isExternalModuleIndicator)) {
+                    return result;
                 }
-                else {
-                    return visitEachChild(node, visitor, context);
-                }
+                return factory.updateSourceFile(
+                    result,
+                    setTextRange(factory.createNodeArray([...result.statements, createEmptyExports(factory)]), result.statements),
+                );
             }
 
             return node;
+        }
+
+        function updateExternalModule(node: SourceFile) {
+            const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(factory, emitHelpers(), node, compilerOptions);
+            if (externalHelpersImportDeclaration) {
+                const statements: Statement[] = [];
+                const statementOffset = factory.copyPrologue(node.statements, statements);
+                append(statements, externalHelpersImportDeclaration);
+
+                addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+                return factory.updateSourceFile(
+                    node,
+                    setTextRange(factory.createNodeArray(statements), node.statements));
+            }
+            else {
+                return visitEachChild(node, visitor, context);
+            }
         }
 
         function visitor(node: Node): VisitResult<Node> {

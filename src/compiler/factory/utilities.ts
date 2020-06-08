@@ -541,7 +541,7 @@ namespace ts {
         if (file.moduleName) {
             return factory.createStringLiteral(file.moduleName);
         }
-        if (!file.isDeclarationFile && (options.out || options.outFile)) {
+        if (!file.isDeclarationFile && outFile(options)) {
             return factory.createStringLiteral(getExternalModuleNameFromPath(host, file.fileName));
         }
         return undefined;
