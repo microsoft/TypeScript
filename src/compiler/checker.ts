@@ -11512,12 +11512,17 @@ namespace ts {
                                 }
                             }
                         }
-                        // When an 'infer T' declaration is immediately contained in a rest parameter declaration,
-                        // a rest type, or a named rest tuple element, we infer a 'readonly unknown[]' constraint.
-                        else if (grandParent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>grandParent).dotDotDotToken ||
-                            grandParent.kind === SyntaxKind.RestType ||
-                            grandParent.kind === SyntaxKind.NamedTupleMember && (<NamedTupleMember>grandParent).dotDotDotToken) {
+                        // When an 'infer T' declaration is immediately contained in a rest parameter declaration
+                        // we infer an 'unknown[]' constraint.
+                        else if (grandParent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>grandParent).dotDotDotToken) {
                             inferences = append(inferences, createArrayType(unknownType));
+                        }
+                        // When an 'infer T' declaration is immediately contained in a rest type or a named rest tuple element
+                        // we infer an 'unknown[]' or 'readonly unknown[]' constraint.
+                        else if (grandParent.kind === SyntaxKind.RestType || grandParent.kind === SyntaxKind.NamedTupleMember && (<NamedTupleMember>grandParent).dotDotDotToken) {
+                            const tupleParent = grandParent.parent.parent;
+                            const readonly = tupleParent.kind === SyntaxKind.TypeOperator && (<TypeOperatorNode>tupleParent).operator === SyntaxKind.ReadonlyKeyword;
+                            inferences = append(inferences, createArrayType(unknownType, readonly));
                         }
                     }
                 }
