@@ -23,6 +23,6 @@ module.exports = {
 export var x: number;
 declare const _extends: string;
 export declare namespace more {
-    export const others: string[];
+    const others: string[];
 }
 export { _extends as extends };
