@@ -517,43 +517,7 @@ namespace ts {
             } as F;
         }
 
-        function wrapAccessor(deprecation: () => void, desc: PropertyDescriptor) {
-            if (desc.configurable) {
-                const newDesc: PropertyDescriptor = { ...desc, enumerable: false };
-                if (desc.get) newDesc.get = wrapFunction(deprecation, desc.get);
-                if (desc.set) newDesc.set = wrapFunction(deprecation, desc.set);
-                return newDesc;
-            }
-        }
-
-        function wrapValue(deprecation: () => void, desc: PropertyDescriptor) {
-            if (typeof desc.value === "function" && (desc.configurable || desc.writable)) {
-                const newDesc: PropertyDescriptor = { ...desc };
-                if (desc.configurable) {
-                    desc.enumerable = false;
-                }
-                newDesc.value = wrapFunction(deprecation, newDesc.value);
-                return newDesc;
-            }
-        }
-
-        export function deprecateExport<T, K extends Extract<MatchingKeys<T, (...args: any[]) => any>, string>>(ns: T, key: K, options?: DeprecationOptions) {
-            const desc = Object.getOwnPropertyDescriptor(ns, key);
-            if (!desc) return;
-            const deprecation = createDeprecation(key, options);
-            const newDesc = desc.get || desc.set ? wrapAccessor(deprecation, desc) : wrapValue(deprecation, desc);
-            if (newDesc) {
-                Object.defineProperty(ns, key, newDesc);
-            }
-        }
-
-        export function deprecateExports<T, K extends Extract<MatchingKeys<T, (...args: any[]) => any>, string>>(object: T, keys: readonly K[], options?: DeprecationOptions) {
-            for (const key of keys) {
-                deprecateExport(object, key, options);
-            }
-        }
-
-        export function deprecateFunction<F extends (...args: any[]) => any>(func: F, options?: DeprecationOptions): F {
+        export function deprecate<F extends (...args: any[]) => any>(func: F, options?: DeprecationOptions): F {
             const deprecation = createDeprecation(getFunctionName(func), options);
             return wrapFunction(deprecation, func);
         }
