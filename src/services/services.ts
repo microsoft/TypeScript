@@ -1233,12 +1233,13 @@ namespace ts {
 
         function synchronizeAutoImportProvider(hostCache?: HostCache) {
             Debug.assert(!syntaxOnly);
-            if (!hostCache) {
-                hostCache = new HostCache(host, getCanonicalFileName);
-            }
 
-            const compilerOptions = hostCache.compilationSettings();
-            if (host.usePackageJsonAutoImportProvider?.()) {
+            const dependencySelection = host.includePackageJsonAutoImports?.();
+            if (dependencySelection) {
+                if (!hostCache) {
+                    hostCache = new HostCache(host, getCanonicalFileName);
+                }
+                const compilerOptions = hostCache.compilationSettings();
                 const version = host.getPackageJsonAutoImportProviderVersion?.();
                 if (version && version === lastAutoImportProviderVersion) {
                     return;
@@ -1246,8 +1247,12 @@ namespace ts {
 
                 lastAutoImportProviderVersion = version;
                 autoImportProvider = createPackageJsonAutoImportProvider(
+                    dependencySelection,
                     createCompilerHost(hostCache, /*forAutoImportProvider*/ true),
                     compilerOptions);
+            }
+            else {
+                autoImportProvider = undefined;
             }
         }
 
@@ -1473,7 +1478,8 @@ namespace ts {
             }
         }
 
-        function createPackageJsonAutoImportProvider(compilerHost: CompilerHost, compilerOptions: CompilerOptions): Program | undefined {
+        function createPackageJsonAutoImportProvider(dependencySelection: PackageJsonAutoImportPreference, compilerHost: CompilerHost, compilerOptions: CompilerOptions): Program | undefined {
+            Debug.assert(dependencySelection);
             if (!host.getPackageJsonsForAutoImport || !host.resolveTypeReferenceDirectives || isInsideNodeModules(currentDirectory)) {
                 return;
             }
@@ -1484,6 +1490,9 @@ namespace ts {
             for (const packageJson of packageJsons) {
                 packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
                 packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
+                if (dependencySelection === PackageJsonAutoImportPreference.All) {
+                    packageJson.devDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
+                }
             }
             const packageJsonProcessingEnd = timestamp();
             host.log?.(`createPackageJsonAutoImportProvider: package.json processing: ${packageJsonProcessingEnd - start}`);

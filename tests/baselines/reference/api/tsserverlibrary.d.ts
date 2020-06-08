@@ -3279,6 +3279,7 @@ declare namespace ts {
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -8677,6 +8678,7 @@ declare namespace ts.server.protocol {
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
+        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -9247,7 +9249,6 @@ declare namespace ts.server {
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
         syntaxOnly?: boolean;
-        usePackageJsonAutoImportProvider?: boolean;
     }
     export class ProjectService {
         private readonly scriptInfoInNodeModulesWatchers;

@@ -403,7 +403,6 @@ namespace ts.server {
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
         syntaxOnly?: boolean;
-        usePackageJsonAutoImportProvider?: boolean;
     }
 
     interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
@@ -675,8 +674,6 @@ namespace ts.server {
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
         /*@internal*/
-        readonly usePackageJsonAutoImportProvider: boolean;
-        /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
         private packageJsonFilesMap: Map<FileWatcher> | undefined;
@@ -699,7 +696,6 @@ namespace ts.server {
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
             this.syntaxOnly = opts.syntaxOnly;
-            this.usePackageJsonAutoImportProvider = opts.usePackageJsonAutoImportProvider || false;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
             if (this.host.realpath) {
@@ -3757,8 +3753,17 @@ namespace ts.server {
         }
 
         /*@internal*/
+        get includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
+            switch (this.hostConfiguration.preferences.includePackageJsonAutoImports) {
+                case "none": return PackageJsonAutoImportPreference.None;
+                case "all": return PackageJsonAutoImportPreference.All;
+                default: return PackageJsonAutoImportPreference.ExcludeDevDependencies;
+            }
+        }
+
+        /*@internal*/
         private invalidateProjectAutoImports(packageJsonPath: Path) {
-            if (this.usePackageJsonAutoImportProvider) {
+            if (this.includePackageJsonAutoImports) {
                 this.configuredProjects.forEach(invalidate);
                 this.inferredProjects.forEach(invalidate);
                 this.externalProjects.forEach(invalidate);

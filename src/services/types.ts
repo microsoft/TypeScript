@@ -203,9 +203,16 @@ namespace ts {
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
 
-    /** @internal */
+    /* @internal */
     export interface FormattingHost {
         getNewLine?(): string;
+    }
+
+    /* @internal */
+    export const enum PackageJsonAutoImportPreference {
+        None,
+        ExcludeDevDependencies,
+        All
     }
 
     //
@@ -292,7 +299,7 @@ namespace ts {
         /* @internal */
         useSourceOfProjectReferenceRedirect?(): boolean;
         /* @internal */
-        usePackageJsonAutoImportProvider?(): boolean;
+        includePackageJsonAutoImports?(): PackageJsonAutoImportPreference;
         /* @internal */
         getPackageJsonAutoImportProviderVersion?(): string;
     }

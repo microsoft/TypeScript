@@ -348,7 +348,8 @@ namespace ts.server {
 
         /*@internal*/
         getPackageJsonAutoImportProviderVersion() {
-            return this.autoImportProgramVersion.toString();
+            // Include the preference in the version string to ensure a reconfiguration triggers an update
+            return `${this.projectService.includePackageJsonAutoImports}.${this.autoImportProgramVersion}`;
         }
 
         getProjectReferences(): readonly ProjectReference[] | undefined {
@@ -1581,8 +1582,12 @@ namespace ts.server {
         }
 
         /*@internal*/
-        usePackageJsonAutoImportProvider() {
-            return this.projectService.usePackageJsonAutoImportProvider && this.isDefaultProjectForOpenFiles();
+        includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
+            if (this.projectService.includePackageJsonAutoImports === PackageJsonAutoImportPreference.None ||
+                !this.isDefaultProjectForOpenFiles()) {
+                return PackageJsonAutoImportPreference.None;
+            }
+            return this.projectService.includePackageJsonAutoImports;
         }
 
         /*@internal*/

@@ -654,7 +654,6 @@ namespace ts.server {
                 cancellationToken: this.cancellationToken,
                 useSingleInferredProject: opts.useSingleInferredProject,
                 useInferredProjectPerProjectRoot: opts.useInferredProjectPerProjectRoot,
-                usePackageJsonAutoImportProvider: true,
                 typingsInstaller: this.typingsInstaller,
                 throttleWaitMilliseconds,
                 eventHandler: this.eventHandler,
