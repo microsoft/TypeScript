@@ -12276,15 +12276,15 @@ namespace ts {
         }
 
         function createTupleTypeEx(elementTypes: readonly Type[], elementFlags: readonly ElementFlags[], readonly = false, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]) {
-            if (elementFlags.length === 1 && elementFlags[0] & ElementFlags.Rest) {
-                // [...X[]] is equivalent to just X[]
-                return createArrayType(elementTypes[0], readonly);
-            }
             const tupleTarget = getTupleTargetType(elementFlags, readonly, namedMemberDeclarations);
-            return elementFlags.length ? createTypeReference(tupleTarget, elementTypes) : tupleTarget;
+            return elementFlags.length ? createNormalizedTypeReference(tupleTarget, elementTypes) : tupleTarget;
         }
 
         function getTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]): GenericType {
+            if (elementFlags.length === 1 && elementFlags[0] & ElementFlags.Rest) {
+                // [...X[]] is equivalent to just X[]
+                return readonly ? globalReadonlyArrayType : globalArrayType;
+            }
             const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join() +
                 (readonly ? "R" : "") +
                 (namedMemberDeclarations && namedMemberDeclarations.length ? "," + map(namedMemberDeclarations, getNodeId).join(",") : "");
@@ -12408,7 +12408,8 @@ namespace ts {
                 // Create a union of the collected rest element types.
                 expandedTypes[expandedTypes.length - 1] = getUnionType(restTypes);
             }
-            return createTupleTypeEx(expandedTypes, expandedFlags, target.readonly, expandedDeclarations);
+            const tupleTarget = getTupleTargetType(expandedFlags, target.readonly, expandedDeclarations);
+            return expandedFlags.length ? createTypeReference(tupleTarget, expandedTypes) : tupleTarget;
 
             function addElementOrRest(type: Type, flags: ElementFlags, declaration: NamedTupleMember | ParameterDeclaration | undefined) {
                 if (restTypes) {
@@ -16563,6 +16564,7 @@ namespace ts {
                     }
                 }
 
+                // For a generic type T, [...T] is assignable to T and T is assignable to readonly [...T].
                 if (isSingleElementGenericTupleType(source) && !source.target.readonly && getTypeArguments(source)[0] === target ||
                     isSingleElementGenericTupleType(target) && target.target.readonly && getTypeArguments(target)[0] === source) {
                     return Ternary.True;
