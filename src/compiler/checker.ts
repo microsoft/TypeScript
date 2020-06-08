@@ -12276,9 +12276,9 @@ namespace ts {
         }
 
         function createTupleTypeEx(elementTypes: readonly Type[], elementFlags: readonly ElementFlags[], readonly = false, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]) {
-            if (elementFlags.length === 1 && elementFlags[0] & ElementFlags.Variable) {
-                // [...X] is equivalent to just X
-                return elementFlags[0] & ElementFlags.Rest ? createArrayType(elementTypes[0], readonly) : elementTypes[0];
+            if (elementFlags.length === 1 && elementFlags[0] & ElementFlags.Rest) {
+                // [...X[]] is equivalent to just X[]
+                return createArrayType(elementTypes[0], readonly);
             }
             const tupleTarget = getTupleTargetType(elementFlags, readonly, namedMemberDeclarations);
             return elementFlags.length ? createTypeReference(tupleTarget, elementTypes) : tupleTarget;
@@ -16563,6 +16563,11 @@ namespace ts {
                     }
                 }
 
+                if (isSingleElementGenericTupleType(source) && !source.target.readonly && getTypeArguments(source)[0] === target ||
+                    isSingleElementGenericTupleType(target) && target.target.readonly && getTypeArguments(target)[0] === source) {
+                    return Ternary.True;
+                }
+
                 if (target.flags & TypeFlags.TypeParameter) {
                     // A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
                     if (getObjectFlags(source) & ObjectFlags.Mapped && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(<MappedType>source))) {
@@ -18137,8 +18142,12 @@ namespace ts {
             return !!(getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target.objectFlags & ObjectFlags.Tuple);
         }
 
-        function isGenericTupleType(type: Type) {
+        function isGenericTupleType(type: Type): type is TupleTypeReference {
             return isTupleType(type) && !!(type.target.combinedFlags & ElementFlags.Variadic);
+        }
+
+        function isSingleElementGenericTupleType(type: Type): type is TupleTypeReference {
+            return isGenericTupleType(type) && type.target.elementFlags.length === 1;
         }
 
         function getRestTypeOfTupleType(type: TupleTypeReference) {
