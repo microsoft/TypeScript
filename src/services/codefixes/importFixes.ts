@@ -918,15 +918,13 @@ namespace ts.codefix {
 
     function createAutoImportFilter(fromFile: SourceFile, program: Program, host: LanguageServiceHost, moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host)) {
         const packageJsons = host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName) || getPackageJsonsVisibleToFile(fromFile.fileName, host);
-        const dependencyGroups = PackageJsonDependencyGroup.Dependencies | PackageJsonDependencyGroup.DevDependencies | PackageJsonDependencyGroup.OptionalDependencies;
-
         let usesNodeCoreModules: boolean | undefined;
         return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier, moduleSpecifierResolutionHost };
 
         function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
             const packageName = getNodeModuleRootSpecifier(specifier);
             for (const packageJson of packageJsons) {
-                if (packageJson.has(packageName, dependencyGroups) || packageJson.has(getTypesPackageName(packageName), dependencyGroups)) {
+                if (packageJson.has(packageName) || packageJson.has(getTypesPackageName(packageName))) {
                     return true;
                 }
             }
