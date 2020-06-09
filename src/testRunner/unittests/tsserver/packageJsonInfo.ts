@@ -71,7 +71,7 @@ namespace ts.projectSystem {
             const { projectService, host } = setup([tsConfig, { path: packageJson.path, content: packageJsonContent }]);
             projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
             const packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as Path)!;
-            assert.isUndefined(packageJsonInfo);
+            assert.isFalse(packageJsonInfo.parseable);
 
             host.writeFile(packageJson.path, packageJson.content);
             projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
