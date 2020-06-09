@@ -273,4 +273,80 @@ declare namespace Intl {
         unit?: string;
         unitDisplay?: string;
     }
+
+    // https://github.com/unicode-org/cldr/blob/latest/common/bcp47/calendar.xml
+    type LDMLCalendarKey = "buddhist" | "chinese" | "coptic" | "dangi" | "ethioaa" | "ethiopic" | "gregory" | "hebrew" | "indian" | "islamic" | "islamic-umalqura" | "islamic-tbla" | "islamic-civil" | "islamic-rgsa" | "iso8601" | "japanese" | "persian" | "roc";
+    type LDMLHourCycleKey = "h12" | "h23" | "h11" | "h24";
+    // https://github.com/unicode-org/cldr/blob/master/common/bcp47/collation.xml
+    type LDMLCollationKey = "big5han" | "compat" | "dict" | "direct" | "ducet" | "emoji" | "eor" | "gb2312" | "phonebk" | "phonetic" | "pinyin" | "reformed" | "search" | "searchjl" | "standard" | "stroke" | "trad" | "unihan" | "zhuyin";
+    type LDMLCollationCaseFirst = "upper" | "lower" | "false";
+    // https://github.com/unicode-org/cldr/blob/latest/common/bcp47/number.xml
+    type LDMLNumberingSystemKey = "adlm" | "ahom" | "arab" | "arabext" | "armn" | "armnlow" | "bali" | "beng" | "bhks" | "brah" | "cakm" | "cham" | "cyrl" | "deva" | "diak" | "ethi" | "finance" | "fullwide" | "geor" | "gong" | "gonm" | "grek" | "greklow" | "gujr" | "guru" | "hanidays" | "hanidec" | "hans" | "hansfin" | "hant" | "hantfin" | "hebr" | "hmng" | "hmnp" | "java" | "jpan" | "jpanfin" | "jpanyear" | "kali" | "khmr" | "knda" | "lana" | "lanatham" | "laoo" | "latn" | "lepc" | "limb" | "mathbold" | "mathdbl" | "mathmono" | "mathsanb" | "mathsans" | "mlym" | "modi" | "mong" | "mroo" | "mtei" | "mymr" | "mymrshan" | "mymrtlng" | "native" | "newa" | "nkoo" | "olck" | "orya" | "osma" | "rohg" | "roman" | "romanlow" | "saur" | "shrd" | "sind" | "sinh" | "sora" | "sund" | "takr" | "talu" | "taml" | "tamldec" | "telu" | "thai" | "tirh" | "tibt" | "traditio" | "vaii" | "wara" | "wcho";
+    // https://www.unicode.org/iso15924/iso15924-codes.html
+    type ScriptCode = "Adlm" | "Afak" | "Aghb" | "Ahom" | "Arab" | "Aran" | "Armi" | "Armn" | "Avst" | "Bali" | "Bamu" | "Bass" | "Batk" | "Beng" | "Bhks" | "Blis" | "Bopo" | "Brah" | "Brai" | "Bugi" | "Buhd" | "Cakm" | "Cans" | "Cari" | "Cham" | "Cher" | "Chrs" | "Cirt" | "Copt" | "Cpmn" | "Cprt" | "Cyrl" | "Cyrs" | "Deva" | "Diak" | "Dogr" | "Dsrt" | "Dupl" | "Egyd" | "Egyh" | "Egyp" | "Elba" | "Elym" | "Ethi" | "Geok" | "Geor" | "Glag" | "Gong" | "Gonm" | "Goth" | "Gran" | "Grek" | "Gujr" | "Guru" | "Hanb" | "Hang" | "Hani" | "Hano" | "Hans" | "Hant" | "Hatr" | "Hebr" | "Hira" | "Hluw" | "Hmng" | "Hmnp" | "Hrkt" | "Hung" | "Inds" | "Ital" | "Jamo" | "Java" | "Jpan" | "Jurc" | "Kali" | "Kana" | "Khar" | "Khmr" | "Khoj" | "Kitl" | "Kits" | "Knda" | "Kore" | "Kpel" | "Kthi" | "Lana" | "Laoo" | "Latf" | "Latg" | "Latn" | "Leke" | "Lepc" | "Limb" | "Lina" | "Linb" | "Lisu" | "Loma" | "Lyci" | "Lydi" | "Mahj" | "Maka" | "Mand" | "Mani" | "Marc" | "Maya" | "Medf" | "Mend" | "Merc" | "Mero" | "Mlym" | "Modi" | "Mong" | "Moon" | "Mroo" | "Mtei" | "Mult" | "Mymr" | "Nand" | "Narb" | "Nbat" | "Newa" | "Nkdb" | "Nkgb" | "Nkoo" | "Nshu" | "Ogam" | "Olck" | "Orkh" | "Orya" | "Osge" | "Osma" | "Palm" | "Pauc" | "Perm" | "Phag" | "Phli" | "Phlp" | "Phlv" | "Phnx" | "Plrd" | "Piqd" | "Prti" | "Qaaa" | "Qabx" | "Rjng" | "Rohg" | "Roro" | "Runr" | "Samr" | "Sara" | "Sarb" | "Saur" | "Sgnw" | "Shaw" | "Shrd" | "Shui" | "Sidd" | "Sind" | "Sinh" | "Sogd" | "Sogo" | "Sora" | "Soyo" | "Sund" | "Sylo" | "Syrc" | "Syre" | "Syrj" | "Syrn" | "Tagb" | "Takr" | "Tale" | "Talu" | "Taml" | "Tang" | "Tavt" | "Telu" | "Teng" | "Tfng" | "Tglg" | "Thaa" | "Thai" | "Tibt" | "Tirh" | "Toto" | "Ugar" | "Vaii" | "Visp" | "Wara" | "Wcho" | "Wole" | "Xpeo" | "Xsux" | "Yezi" | "Yiii" | "Zanb" | "Zinh" | "Zmth" | "Zsye" | "Zsym" | "Zxxx" | "Zyyy" | "Zzzz";
+
+    interface LocaleOptions {
+        baseName?: string;
+        calendar?: LDMLCalendarKey;
+        caseFirst?: LDMLCollationCaseFirst;
+        collation?: LDMLCollationKey;
+        hourCycle?: LDMLHourCycleKey;
+        language?: string;
+        numberingSystem?: LDMLNumberingSystemKey;
+        numeric?: boolean;
+        region?: string;
+        script?: ScriptCode;
+    }
+
+    interface Locale extends LocaleOptions {
+        /** Gets the most likely values for the language, script, and region of the locale based on existing values. */
+        maximize(): Locale;
+        /** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. */
+        minimize(): Locale;
+        /** Returns the locale's full locale identifier string. */
+        toString(): BCP47LanguageTag;
+    }
+
+    /**
+     * Constructor creates [Intl.Locale](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale)
+     * objects
+     *
+     * @param tag - A string with a [BCP 47 language tag](http://tools.ietf.org/html/rfc5646).
+     *  For the general form and interpretation of the locales argument,
+     *  see the [`Intl` page](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation).
+     *
+     * @param options - An [object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/Locale#Parameters)
+     *  with some or all of options of the locale.
+     *  An object with some or all of the following properties:
+     *  - `baseName` - A string containing the language, and the script and region if available.
+     *    Possible values are valid BCP47 language tags
+     *  - `calendar` - The part of the Locale that indicates the locale's calendar era.
+     *    Possible values are valid BCP47 calendar keys
+     *  - `caseFirst` - Flag that defines whether case is taken into account for the locale's collation rules.
+     *    Possible values are valid BCP47 collation case levels
+     *  - `collation` - The collation type used for sorting
+     *    Possible values are valid BCP47 collation keys
+     *  - `hourCycle` - The time keeping format convention used by the locale.
+     *    Possible values are valid BCP47 hour cycle keys
+     *  - `language` - The primary language subtag associated with the locale.
+     *    Possible values are valid BCP47 primary language subtags
+     *  - `numberingSystem` - The numeral system used by the locale.
+     *    Possible values are valid BCP47 numbering system keys
+     *  - `numeric` - Flag that defines whether the locale has special collation handling for numeric characters.
+     *    Possible values are booleans
+     *  - `region` - The region of the world (usually a country) associated with the locale.
+     *    Possible values are region codes as defined by ISO 3166-1
+     *  - `script` - The script used for writing the particular language used in the locale.
+     *    Possible values are script codes as defined by ISO 15924
+     *
+     * @returns [Intl.Locale](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale) object.
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale).
+     *
+     * [Specification](https://tc39.es/ecma402/#sec-intl-locale-constructor).
+     */
+    const Locale: {
+        new (tag?: BCP47LanguageTag, options?: LocaleOptions): Locale;
+    };
+
 }
