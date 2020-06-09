@@ -35,7 +35,7 @@ interface BigInt {
 }
 
 interface BigIntConstructor {
-    (value?: any): bigint;
+    (value: bigint | boolean | number | object | string): bigint;
     readonly prototype: BigInt;
 
     /**
