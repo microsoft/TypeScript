@@ -17,17 +17,11 @@ namespace ts.server {
     }
 
     export function createPackageJsonCache(host: PackageJsonCacheHost): PackageJsonCache {
-        const packageJsons = createMap<PackageJsonInfo | false>();
+        const packageJsons = createMap<PackageJsonInfo>();
         const directoriesWithoutPackageJson = createMap<true>();
         return {
             addOrUpdate,
-            forEach: action => {
-                packageJsons.forEach((info, fileName) => {
-                    if (info !== false) {
-                        action(info, fileName as Path);
-                    }
-                });
-            },
+            forEach: packageJsons.forEach.bind(packageJsons),
             get: packageJsons.get.bind(packageJsons),
             delete: fileName => {
                 packageJsons.delete(fileName);

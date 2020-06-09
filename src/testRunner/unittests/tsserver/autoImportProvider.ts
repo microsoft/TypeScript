@@ -145,6 +145,22 @@ namespace ts.projectSystem {
             const autoImportProvider = projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider();
             assert.equal(autoImportProvider!.getSourceFile(angularFormsDts.path)!.getText(), "");
         });
+
+        it("Recovers from an unparseable package.json", () => {
+            const { projectService, session, host } = setup([
+                angularFormsDts,
+                angularFormsPackageJson,
+                tsconfig,
+                { path: packageJson.path, content: "{" },
+                indexTs
+            ]);
+
+            openFilesForSession([indexTs], session);
+            assert.isUndefined(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
+
+            host.writeFile(packageJson.path, packageJson.content);
+            assert.ok(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
+        });
     });
 
     describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {

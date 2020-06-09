@@ -2680,7 +2680,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): PackageJsonInfo | false | undefined {
+    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): PackageJsonInfo | undefined {
         if (!host.readFile) {
             return undefined;
         }
@@ -2690,19 +2690,20 @@ namespace ts {
         const stringContent = host.readFile(fileName);
         if (!stringContent) return undefined;
 
-        const content = tryParseJson(stringContent) as PackageJsonRaw;
-        if (!content) return false;
+        const content = tryParseJson(stringContent) as PackageJsonRaw | undefined;
         const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
-        for (const key of dependencyKeys) {
-            const dependencies = content[key];
-            if (!dependencies) {
-                continue;
+        if (content) {
+            for (const key of dependencyKeys) {
+                const dependencies = content[key];
+                if (!dependencies) {
+                    continue;
+                }
+                const dependencyMap = createMap<string>();
+                for (const packageName in dependencies) {
+                    dependencyMap.set(packageName, dependencies[packageName]);
+                }
+                info[key] = dependencyMap;
             }
-            const dependencyMap = createMap<string>();
-            for (const packageName in dependencies) {
-                dependencyMap.set(packageName, dependencies[packageName]);
-            }
-            info[key] = dependencyMap;
         }
 
         const dependencyGroups = [
@@ -2714,6 +2715,7 @@ namespace ts {
 
         return {
             ...info,
+            parseable: !!content,
             fileName,
             get,
             has(dependencyName, inGroups) {

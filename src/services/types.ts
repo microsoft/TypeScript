@@ -195,6 +195,7 @@ namespace ts {
     /* @internal */
     export interface PackageJsonInfo {
         fileName: string;
+        parseable: boolean;
         dependencies?: Map<string>;
         devDependencies?: Map<string>;
         peerDependencies?: Map<string>;
