@@ -23410,7 +23410,7 @@ namespace ts {
             if (inDestructuringPattern) {
                 return createTupleTypeEx(elementTypes, elementFlags);
             }
-            if (forceTuple || inConstContext || contextualType && forEachType(contextualType, isTupleLikeType)) {
+            if (forceTuple || inConstContext || contextualType && (isReadonlyArrayType(contextualType) || forEachType(contextualType, isTupleLikeType))) {
                 return createArrayLiteralType(createTupleTypeEx(elementTypes, elementFlags, /*readonly*/ inConstContext));
             }
             return createArrayLiteralType(createArrayType(elementTypes.length ?
