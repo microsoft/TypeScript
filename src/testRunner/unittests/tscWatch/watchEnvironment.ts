@@ -189,7 +189,8 @@ namespace ts.tscWatch {
                         change: noop,
                         timeouts: sys => {
                             sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for file1.js output
-                            sys.checkTimeoutQueueLengthAndRun(1); // Update program again
+                            sys.checkTimeoutQueueLengthAndRun(2); // Update program again and Failed lookup update
+                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
                             sys.checkTimeoutQueueLength(0);
                         },
                     },
@@ -198,7 +199,7 @@ namespace ts.tscWatch {
                         // Remove directory node_modules
                         change: sys => sys.deleteFolder(`${projectRoot}/node_modules`, /*recursive*/ true),
                         timeouts: sys => {
-                            sys.checkTimeoutQueueLength(2); // 1. For updating program and 2. for updating child watches
+                            sys.checkTimeoutQueueLength(3); // 1. Failed lookup invalidation 2. For updating program and 3. for updating child watches
                             sys.runQueuedTimeoutCallbacks(sys.getNextTimeoutId() - 2); // Update program
                         },
                     },
@@ -207,7 +208,8 @@ namespace ts.tscWatch {
                         change: noop,
                         timeouts: sys => {
                             sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
-                            sys.checkTimeoutQueueLengthAndRun(1); // To Update program
+                            sys.checkTimeoutQueueLengthAndRun(2); // To Update program and failed lookup update
+                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
                             sys.checkTimeoutQueueLength(0);
                         },
                     },
@@ -232,7 +234,15 @@ namespace ts.tscWatch {
                         change: noop,
                         timeouts: sys => {
                             sys.runQueuedTimeoutCallbacks();
-                            sys.checkTimeoutQueueLength(1); // To Update the program
+                            sys.checkTimeoutQueueLength(2); // To Update program and failed lookup update
+                        },
+                    },
+                    {
+                        caption: "Invalidates module resolution cache",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks();
+                            sys.checkTimeoutQueueLength(1); // To Update program
                         },
                     },
                     {

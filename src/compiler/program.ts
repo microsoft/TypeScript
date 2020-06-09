@@ -554,11 +554,11 @@ namespace ts {
         getSourceVersion: (path: Path, fileName: string) => string | undefined,
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
-        hasChangedAutomaticTypeDirectiveNames: boolean,
+        hasChangedAutomaticTypeDirectiveNames: HasChangedAutomaticTypeDirectiveNames | undefined,
         projectReferences: readonly ProjectReference[] | undefined
     ): boolean {
         // If we haven't created a program yet or have changed automatic type directives, then it is not up-to-date
-        if (!program || hasChangedAutomaticTypeDirectiveNames) {
+        if (!program || hasChangedAutomaticTypeDirectiveNames?.()) {
             return false;
         }
 
@@ -1424,7 +1424,7 @@ namespace ts {
                 return oldProgram.structureIsReused;
             }
 
-            if (host.hasChangedAutomaticTypeDirectiveNames) {
+            if (host.hasChangedAutomaticTypeDirectiveNames?.()) {
                 return oldProgram.structureIsReused = StructureIsReused.SafeModules;
             }
 

@@ -483,7 +483,8 @@ namespace ts.projectSystem {
                 };
                 files.push(debugTypesFile);
                 host.writeFile(debugTypesFile.path, debugTypesFile.content);
-                host.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                host.runQueuedTimeoutCallbacks(); // Actual update
                 checkProjectActualFiles(project, files.map(f => f.path));
                 assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), []);
                 assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), []);
@@ -636,10 +637,17 @@ namespace ts.projectSystem {
                 function verifyAfterPartialOrCompleteNpmInstall(timeoutQueueLengthWhenRunningTimeouts: number) {
                     filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
                     if (npmInstallComplete || timeoutDuringPartialInstallation) {
-                        host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts);
+                        if (timeoutQueueLengthWhenRunningTimeouts) {
+                            // Expected project update
+                            host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts + 1); // Scheduled invalidation of resolutions
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        }
+                        else {
+                            host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts);
+                        }
                     }
                     else {
-                        host.checkTimeoutQueueLength(2);
+                        host.checkTimeoutQueueLength(3);
                     }
                     verifyProject();
                 }
