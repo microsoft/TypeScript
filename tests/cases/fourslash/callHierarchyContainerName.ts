@@ -32,7 +32,7 @@
 ////  }
 ////}
 ////
-////module Bar {
+////module Foo.Bar {
 ////  const sameName = () => new Foo.C();
 ////}
 
