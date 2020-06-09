@@ -63,7 +63,7 @@ namespace ts.codefix {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
         }
 
-        const importAdder = createImportAdder(sourceFile, context.program, context.autoImportProvider, preferences, context.host);
+        const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
         createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, context, preferences, importAdder, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member));
         importAdder.writeFixes(changeTracker);
 

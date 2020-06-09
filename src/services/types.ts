@@ -1422,7 +1422,6 @@ namespace ts {
         startPosition: number;
         endPosition?: number;
         program: Program;
-        autoImportProvider: Program | undefined;
         cancellationToken?: CancellationToken;
         preferences: UserPreferences;
         triggerReason?: RefactorTriggerReason;

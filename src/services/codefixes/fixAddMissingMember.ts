@@ -315,7 +315,7 @@ namespace ts.codefix {
         sourceFile: SourceFile,
         isJSFile: boolean
     ): void {
-        const importAdder = createImportAdder(sourceFile, context.program, context.autoImportProvider, context.preferences, context.host);
+        const importAdder = createImportAdder(sourceFile, context.program, context.preferences, context.host);
         const methodDeclaration = createMethodFromCallExpression(context, importAdder, callExpression, methodName, modifierFlags, parentDeclaration, isJSFile);
         const containingMethodDeclaration = findAncestor(callExpression, n => isMethodDeclaration(n) || isConstructorDeclaration(n));
         if (containingMethodDeclaration && containingMethodDeclaration.parent === parentDeclaration) {

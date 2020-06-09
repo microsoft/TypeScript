@@ -2288,7 +2288,6 @@ namespace ts {
                 startPosition,
                 endPosition,
                 program: getProgram()!,
-                autoImportProvider: getAutoImportProvider(),
                 host,
                 formatContext: formatting.getFormatContext(formatOptions!, host), // TODO: GH#18217
                 cancellationToken,

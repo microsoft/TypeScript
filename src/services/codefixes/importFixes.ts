@@ -25,7 +25,7 @@ namespace ts.codefix {
         fixIds: [importFixId],
         getAllCodeActions: context => {
             const { sourceFile, program, autoImportProvider, preferences, host } = context;
-            const importAdder = createImportAdder(sourceFile, program, autoImportProvider, preferences, host);
+            const importAdder = createImportAdderWorker(sourceFile, program, autoImportProvider, preferences, host);
             eachDiagnostic(context, errorCodes, diag => importAdder.addImportFromDiagnostic(diag, context));
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, importAdder.writeFixes));
         },
@@ -37,7 +37,11 @@ namespace ts.codefix {
         writeFixes: (changeTracker: textChanges.ChangeTracker) => void;
     }
 
-    export function createImportAdder(sourceFile: SourceFile, program: Program, autoImportProvider: Program | undefined, preferences: UserPreferences, host: LanguageServiceHost): ImportAdder {
+    export function createImportAdder(sourceFile: SourceFile, program: Program, preferences: UserPreferences, host: LanguageServiceHost): ImportAdder {
+        return createImportAdderWorker(sourceFile, program, /*autoImportProvider*/ undefined, preferences, host);
+    }
+
+    function createImportAdderWorker(sourceFile: SourceFile, program: Program, autoImportProvider: Program | undefined, preferences: UserPreferences, host: LanguageServiceHost): ImportAdder {
         const compilerOptions = program.getCompilerOptions();
         // Namespace fixes don't conflict, so just build a list.
         const addToNamespace: FixUseNamespaceImport[] = [];
