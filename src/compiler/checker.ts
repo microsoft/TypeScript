@@ -12381,6 +12381,7 @@ namespace ts {
             const expandedTypes: Type[] = [];
             const expandedFlags: ElementFlags[] = [];
             let expandedDeclarations: (NamedTupleMember | ParameterDeclaration)[] | undefined = [];
+            let optionalIndex = -1;
             let restTypes: Type[] | undefined;
             for (let i = 0; i < elementTypes.length; i++) {
                 const type = elementTypes[i];
@@ -12417,7 +12418,17 @@ namespace ts {
                     restTypes.push(flags & ElementFlags.Variadic ? getIndexedAccessType(type, numberType) : type);
                 }
                 else {
-                    if (flags & ElementFlags.Rest) {
+                    if (flags & ElementFlags.Required && optionalIndex >= 0) {
+                        // Turn preceding optional elements into required elements
+                        for (let i = optionalIndex; i < expandedFlags.length; i++) {
+                            if (expandedFlags[i] & ElementFlags.Optional) expandedFlags[i] = ElementFlags.Required;
+                        }
+                        optionalIndex = -1;
+                    }
+                    else if (flags & ElementFlags.Optional && optionalIndex < 0) {
+                        optionalIndex = expandedFlags.length;
+                    }
+                    else if (flags & ElementFlags.Rest) {
                         // Start collecting element types when a rest element is added.
                         restTypes = [type];
                     }
