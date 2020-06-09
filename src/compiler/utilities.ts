@@ -2105,7 +2105,7 @@ namespace ts {
      */
     function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
-            return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(name);
+            return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(initializer);
         }
         if (isIdentifier(name) && isLiteralLikeAccess(initializer) &&
             (initializer.expression.kind === SyntaxKind.ThisKeyword ||
