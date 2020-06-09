@@ -5,7 +5,7 @@ const array: number[] = [];
 
 const readonlyArray: ReadonlyArray<number> = [];
 >readonlyArray : readonly number[]
->[] : undefined[]
+>[] : []
 
 array.flatMap((): ReadonlyArray<number> => []); // ok
 >array.flatMap((): ReadonlyArray<number> => []) : number[]
@@ -13,7 +13,7 @@ array.flatMap((): ReadonlyArray<number> => []); // ok
 >array : number[]
 >flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
 >(): ReadonlyArray<number> => [] : () => ReadonlyArray<number>
->[] : undefined[]
+>[] : []
 
 readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 >readonlyArray.flatMap((): ReadonlyArray<number> => []) : number[]
@@ -21,5 +21,5 @@ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 >readonlyArray : readonly number[]
 >flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
 >(): ReadonlyArray<number> => [] : () => ReadonlyArray<number>
->[] : undefined[]
+>[] : []
 

@@ -218,7 +218,7 @@ declare function foo2(...args: string[] | number[]): void;
 
 let x2: ReadonlyArray<string> = ["hello"];
 >x2 : readonly string[]
->["hello"] : string[]
+>["hello"] : [string]
 >"hello" : "hello"
 
 foo2(...x2);
