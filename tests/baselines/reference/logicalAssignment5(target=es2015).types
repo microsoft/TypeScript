@@ -1,0 +1,133 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment5.ts ===
+function foo1 (f?: (a: number) => void) {
+>foo1 : (f?: ((a: number) => void) | undefined) => void
+>f : ((a: number) => void) | undefined
+>a : number
+
+    f ??= (a => a)
+>f ??= (a => a) : (a: number) => void
+>f : ((a: number) => void) | undefined
+>(a => a) : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
+
+    f(42)
+>f(42) : void
+>f : (a: number) => void
+>42 : 42
+}
+
+function foo2 (f?: (a: number) => void) {
+>foo2 : (f?: ((a: number) => void) | undefined) => void
+>f : ((a: number) => void) | undefined
+>a : number
+
+    f ||= (a => a)
+>f ||= (a => a) : (a: number) => void
+>f : ((a: number) => void) | undefined
+>(a => a) : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
+
+    f(42)
+>f(42) : void
+>f : (a: number) => void
+>42 : 42
+}
+
+function foo3 (f?: (a: number) => void) {
+>foo3 : (f?: ((a: number) => void) | undefined) => void
+>f : ((a: number) => void) | undefined
+>a : number
+
+    f &&= (a => a)
+>f &&= (a => a) : ((a: number) => number) | undefined
+>f : ((a: number) => void) | undefined
+>(a => a) : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
+
+    f(42)
+>f(42) : void
+>f : ((a: number) => void) | undefined
+>42 : 42
+}
+
+function bar1 (f?: (a: number) => void) {
+>bar1 : (f?: ((a: number) => void) | undefined) => void
+>f : ((a: number) => void) | undefined
+>a : number
+
+    f ??= (f.toString(), (a => a))
+>f ??= (f.toString(), (a => a)) : (a: number) => void
+>f : ((a: number) => void) | undefined
+>(f.toString(), (a => a)) : (a: number) => number
+>f.toString(), (a => a) : (a: number) => number
+>f.toString() : any
+>f.toString : any
+>f : undefined
+>toString : any
+>(a => a) : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
+
+    f(42)
+>f(42) : void
+>f : (a: number) => void
+>42 : 42
+}
+
+function bar2 (f?: (a: number) => void) {
+>bar2 : (f?: ((a: number) => void) | undefined) => void
+>f : ((a: number) => void) | undefined
+>a : number
+
+    f ||= (f.toString(), (a => a))
+>f ||= (f.toString(), (a => a)) : (a: number) => void
+>f : ((a: number) => void) | undefined
+>(f.toString(), (a => a)) : (a: number) => number
+>f.toString(), (a => a) : (a: number) => number
+>f.toString() : any
+>f.toString : any
+>f : undefined
+>toString : any
+>(a => a) : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
+
+    f(42)
+>f(42) : void
+>f : (a: number) => void
+>42 : 42
+}
+
+function bar3 (f?: (a: number) => void) {
+>bar3 : (f?: ((a: number) => void) | undefined) => void
+>f : ((a: number) => void) | undefined
+>a : number
+
+    f &&= (f.toString(), (a => a))
+>f &&= (f.toString(), (a => a)) : ((a: number) => number) | undefined
+>f : ((a: number) => void) | undefined
+>(f.toString(), (a => a)) : (a: number) => number
+>f.toString(), (a => a) : (a: number) => number
+>f.toString() : string
+>f.toString : () => string
+>f : (a: number) => void
+>toString : () => string
+>(a => a) : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
+
+    f(42)
+>f(42) : void
+>f : ((a: number) => void) | undefined
+>42 : 42
+}
+

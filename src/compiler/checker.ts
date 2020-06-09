@@ -19864,6 +19864,9 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                     switch ((<BinaryExpression>node).operatorToken.kind) {
                         case SyntaxKind.EqualsToken:
+                        case SyntaxKind.BarBarEqualsToken:
+                        case SyntaxKind.AmpersandAmpersandEqualsToken:
+                        case SyntaxKind.QuestionQuestionEqualsToken:
                             return getReferenceCandidate((<BinaryExpression>node).left);
                         case SyntaxKind.CommaToken:
                             return getReferenceCandidate((<BinaryExpression>node).right);
@@ -20838,6 +20841,9 @@ namespace ts {
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 switch (expr.operatorToken.kind) {
                     case SyntaxKind.EqualsToken:
+                    case SyntaxKind.BarBarEqualsToken:
+                    case SyntaxKind.AmpersandAmpersandEqualsToken:
+                    case SyntaxKind.QuestionQuestionEqualsToken:
                         return narrowTypeByTruthiness(narrowType(type, expr.right, assumeTrue), expr.left, assumeTrue);
                     case SyntaxKind.EqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
@@ -22462,6 +22468,9 @@ namespace ts {
             const { left, operatorToken, right } = binaryExpression;
             switch (operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
+                case SyntaxKind.AmpersandAmpersandEqualsToken:
+                case SyntaxKind.BarBarEqualsToken:
+                case SyntaxKind.QuestionQuestionEqualsToken:
                     if (node !== right) {
                         return undefined;
                     }
@@ -28758,17 +28767,35 @@ namespace ts {
                 case SyntaxKind.InKeyword:
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
-                    return getTypeFacts(leftType) & TypeFacts.Truthy ?
+                case SyntaxKind.AmpersandAmpersandEqualsToken: {
+                    const resultType = getTypeFacts(leftType) & TypeFacts.Truthy ?
                         getUnionType([extractDefinitelyFalsyTypes(strictNullChecks ? leftType : getBaseTypeOfLiteralType(rightType)), rightType]) :
                         leftType;
+                    if (operator === SyntaxKind.AmpersandAmpersandEqualsToken) {
+                        checkAssignmentOperator(rightType);
+                    }
+                    return resultType;
+                }
                 case SyntaxKind.BarBarToken:
-                    return getTypeFacts(leftType) & TypeFacts.Falsy ?
+                case SyntaxKind.BarBarEqualsToken: {
+                    const resultType = getTypeFacts(leftType) & TypeFacts.Falsy ?
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
+                    if (operator === SyntaxKind.BarBarEqualsToken) {
+                        checkAssignmentOperator(rightType);
+                    }
+                    return resultType;
+                }
                 case SyntaxKind.QuestionQuestionToken:
-                    return getTypeFacts(leftType) & TypeFacts.EQUndefinedOrNull ?
+                case SyntaxKind.QuestionQuestionEqualsToken: {
+                    const resultType = getTypeFacts(leftType) & TypeFacts.EQUndefinedOrNull ?
                         getUnionType([getNonNullableType(leftType), rightType], UnionReduction.Subtype) :
                         leftType;
+                    if (operator === SyntaxKind.QuestionQuestionEqualsToken) {
+                        checkAssignmentOperator(rightType);
+                    }
+                    return resultType;
+                }
                 case SyntaxKind.EqualsToken:
                     const declKind = isBinaryExpression(left.parent) ? getAssignmentDeclarationKind(left.parent) : AssignmentDeclarationKind.None;
                     checkAssignmentDeclaration(declKind, rightType);
