@@ -5688,6 +5688,8 @@ namespace ts {
 
     /* @internal */
     export type HasInvalidatedResolution = (sourceFile: Path) => boolean;
+    /* @internal */
+    export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -5717,7 +5719,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
-        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;

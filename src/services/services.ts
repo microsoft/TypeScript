@@ -1263,7 +1263,7 @@ namespace ts {
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
                 if (hostProjectVersion) {
-                    if (lastProjectVersion === hostProjectVersion && !host.hasChangedAutomaticTypeDirectiveNames) {
+                    if (lastProjectVersion === hostProjectVersion && !host.hasChangedAutomaticTypeDirectiveNames?.()) {
                         return;
                     }
 
@@ -1282,6 +1282,7 @@ namespace ts {
             let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
             const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
             const projectReferences = hostCache.getProjectReferences();
 
             // If the program is already up-to-date, we can reuse it
@@ -1292,7 +1293,7 @@ namespace ts {
                 (_path, fileName) => host.getScriptVersion(fileName),
                 fileName => fileExists(fileName, hostCache),
                 hasInvalidatedResolution,
-                !!host.hasChangedAutomaticTypeDirectiveNames,
+                hasChangedAutomaticTypeDirectiveNames,
                 projectReferences
             )) {
                 return;
@@ -1340,6 +1341,7 @@ namespace ts {
             const newSettings = hostCache.compilationSettings();
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
             // Now create a new compiler
             const compilerHost: CompilerHost = {
                 getSourceFile: getOrCreateSourceFile,
@@ -1366,7 +1368,7 @@ namespace ts {
                 },
                 onReleaseOldSourceFile: forAutoImportProvider ? onReleaseOldSourceFileFromAutoImportProvider : onReleaseOldSourceFile,
                 hasInvalidatedResolution,
-                hasChangedAutomaticTypeDirectiveNames: host.hasChangedAutomaticTypeDirectiveNames
+                hasChangedAutomaticTypeDirectiveNames
             };
             if (host.trace) {
                 compilerHost.trace = message => host.trace!(message);

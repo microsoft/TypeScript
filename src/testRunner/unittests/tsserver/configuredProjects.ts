@@ -1205,7 +1205,8 @@ foo();`
 
             files.push(file2);
             host.writeFile(file2.path, file2.content);
-            host.runQueuedTimeoutCallbacks();
+            host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual update
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
             checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));

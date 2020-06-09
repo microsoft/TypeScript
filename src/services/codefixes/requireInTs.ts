@@ -5,25 +5,68 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program));
+            const info = getInfo(context.sourceFile, context.program, context.span.start);
+            if (!info) {
+                return undefined;
+            }
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
             return [createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, context.program)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, context.program, diag.start);
+            if (info) {
+                doChange(changes, context.sourceFile, info);
+            }
+        }),
     });
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program) {
-        const { statement, name, required } = getInfo(sourceFile, pos);
-        changes.replaceNode(sourceFile, statement, getAllowSyntheticDefaultImports(program.getCompilerOptions())
-            ? createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClause(name, /*namedBindings*/ undefined), required)
-            : createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, name, createExternalModuleReference(required)));
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info) {
+        const { allowSyntheticDefaults, defaultImportName, namedImports, statement, required } = info;
+        changes.replaceNode(sourceFile, statement, defaultImportName && !allowSyntheticDefaults
+            ? createImportEqualsDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, defaultImportName, createExternalModuleReference(required))
+            : createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, createImportClause(defaultImportName, namedImports), required));
     }
 
-    interface Info { readonly statement: VariableStatement; readonly name: Identifier; readonly required: StringLiteralLike; }
-    function getInfo(sourceFile: SourceFile, pos: number): Info {
+    interface Info {
+        readonly allowSyntheticDefaults: boolean;
+        readonly defaultImportName: Identifier | undefined;
+        readonly namedImports: NamedImports | undefined;
+        readonly statement: VariableStatement;
+        readonly required: StringLiteralLike;
+    }
+
+    function getInfo(sourceFile: SourceFile, program: Program, pos: number): Info | undefined {
         const { parent } = getTokenAtPosition(sourceFile, pos);
-        if (!isRequireCall(parent, /*checkArgumentIsStringLiteralLike*/ true)) throw Debug.failBadSyntaxKind(parent);
+        if (!isRequireCall(parent, /*checkArgumentIsStringLiteralLike*/ true)) {
+            throw Debug.failBadSyntaxKind(parent);
+        }
+
         const decl = cast(parent.parent, isVariableDeclaration);
-        return { statement: cast(decl.parent.parent, isVariableStatement), name: cast(decl.name, isIdentifier), required: parent.arguments[0] };
+        const defaultImportName = tryCast(decl.name, isIdentifier);
+        const namedImports = isObjectBindingPattern(decl.name) ? tryCreateNamedImportsFromObjectBindingPattern(decl.name) : undefined;
+        if (defaultImportName || namedImports) {
+            return {
+                allowSyntheticDefaults: getAllowSyntheticDefaultImports(program.getCompilerOptions()),
+                defaultImportName,
+                namedImports,
+                statement: cast(decl.parent.parent, isVariableStatement),
+                required: first(parent.arguments)
+            };
+        }
+    }
+
+    function tryCreateNamedImportsFromObjectBindingPattern(node: ObjectBindingPattern): NamedImports | undefined {
+        const importSpecifiers: ImportSpecifier[] = [];
+        for (const element of node.elements) {
+            if (!isIdentifier(element.name) || element.initializer) {
+                return undefined;
+            }
+            importSpecifiers.push(createImportSpecifier(tryCast(element.propertyName, isIdentifier), element.name));
+        }
+
+        if (importSpecifiers.length) {
+            return createNamedImports(importSpecifiers);
+        }
     }
 }

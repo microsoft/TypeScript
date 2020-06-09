@@ -875,6 +875,7 @@ export function gfoo() {
 
                         interface VerifyScenario {
                             edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void;
+                            schedulesFailedWatchUpdate?: boolean;
                             expectedEditErrors: readonly string[];
                             expectedProgramFiles: readonly string[];
                             expectedProjectFiles: readonly string[];
@@ -886,20 +887,20 @@ export function gfoo() {
                             orphanInfosAfterEdit?: readonly string[];
                             orphanInfosAfterRevert?: readonly string[];
                         }
-                        function verifyScenario({ edit, expectedEditErrors, expectedProgramFiles, expectedProjectFiles, expectedWatchedFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies, revert, orphanInfosAfterEdit, orphanInfosAfterRevert }: VerifyScenario) {
+                        function verifyScenario({ edit, schedulesFailedWatchUpdate, expectedEditErrors, expectedProgramFiles, expectedProjectFiles, expectedWatchedFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies, revert, orphanInfosAfterEdit, orphanInfosAfterRevert }: VerifyScenario) {
                             it("with tsc-watch", () => {
                                 const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
 
                                 edit(host, solutionBuilder);
 
-                                host.checkTimeoutQueueLengthAndRun(1);
+                                host.checkTimeoutQueueLengthAndRun(schedulesFailedWatchUpdate ? 2 : 1);
                                 checkOutputErrorsIncremental(host, expectedEditErrors);
                                 verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies, expectedWatchedDirectories);
 
                                 if (revert) {
                                     revert(host);
 
-                                    host.checkTimeoutQueueLengthAndRun(1);
+                                    host.checkTimeoutQueueLengthAndRun(schedulesFailedWatchUpdate ? 2 : 1);
                                     checkOutputErrorsIncremental(host, emptyArray);
                                     verifyProgram(host, watch);
                                 }
@@ -912,13 +913,13 @@ export function gfoo() {
 
                                 edit(host, solutionBuilder);
 
-                                host.checkTimeoutQueueLengthAndRun(2);
+                                host.checkTimeoutQueueLengthAndRun(schedulesFailedWatchUpdate ? 3 : 2);
                                 verifyServerState({ host, service, expectedProjectFiles, expectedProjectWatchedFiles, expectedWatchedDirectoriesRecursive, orphanInfos: orphanInfosAfterEdit });
 
                                 if (revert) {
                                     revert(host);
 
-                                    host.checkTimeoutQueueLengthAndRun(2);
+                                    host.checkTimeoutQueueLengthAndRun(schedulesFailedWatchUpdate ? 3 : 2);
                                     verifyProject(host, service, orphanInfosAfterRevert);
                                 }
                             });
@@ -1033,6 +1034,7 @@ export function gfoo() {
                             // Should map to b.ts instead with options from our own config
                             verifyScenario({
                                 edit: host => host.deleteFile(bTsconfig.path),
+                                schedulesFailedWatchUpdate: multiFolder,
                                 expectedEditErrors: [
                                     `${multiFolder ? "c/tsconfig.json" : "tsconfig.c.json"}(9,21): error TS6053: File '/user/username/projects/transitiveReferences/${multiFolder ? "b" : "tsconfig.b.json"}' not found.\n`
                                 ],
@@ -1056,6 +1058,7 @@ export function gfoo() {
                         describe("deleting transitively referenced config file", () => {
                             verifyScenario({
                                 edit: host => host.deleteFile(aTsconfig.path),
+                                schedulesFailedWatchUpdate: multiFolder,
                                 expectedEditErrors: [
                                     `${multiFolder ? "b/tsconfig.json" : "tsconfig.b.json"}(10,21): error TS6053: File '/user/username/projects/transitiveReferences/${multiFolder ? "a" : "tsconfig.a.json"}' not found.\n`
                                 ],

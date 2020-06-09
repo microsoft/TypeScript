@@ -185,6 +185,7 @@ namespace ts.projectSystem {
 
                     // Since this is first event, it will have all the files
                     filesToReload.forEach(f => host.ensureFileOrFolder(f));
+                    if (!firstReloadFileList) host.runQueuedTimeoutCallbacks(); // Invalidated module resolutions to schedule project update
                     verifyProjectsUpdatedInBackgroundEvent();
 
                     return {
@@ -463,7 +464,8 @@ namespace ts.projectSystem {
 
                     projectFiles.push(file2);
                     host.writeFile(file2.path, file2.content);
-                    host.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks(); // For invalidation
+                    host.runQueuedTimeoutCallbacks(); // For actual update
                     if (useSlashRootAsSomeNotRootFolderInUserDirectory) {
                         watchedRecursiveDirectories.length = 3;
                     }

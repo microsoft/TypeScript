@@ -168,7 +168,8 @@ namespace ts.projectSystem {
                 content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
             };
             host.ensureFileOrFolder(padIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
-            host.runQueuedTimeoutCallbacks();
+            host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual update
             checkProjectUpdatedInBackgroundEvent(session, [file1.path]);
             session.clearMessages();
 

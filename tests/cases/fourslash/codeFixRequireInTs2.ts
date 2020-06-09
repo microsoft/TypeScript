@@ -1,10 +1,9 @@
 /// <reference path='fourslash.ts' />
 
-// @allowSyntheticDefaultImports: true
 // @Filename: /a.ts
-////const a = [|require("a")|];
+////const { a, b, c } = [|require("a")|];
 
 verify.codeFix({
     description: ts.Diagnostics.Convert_require_to_import.message,
-    newFileContent: 'import a from "a";',
+    newFileContent: 'import { a, b, c } from "a";',
 });
