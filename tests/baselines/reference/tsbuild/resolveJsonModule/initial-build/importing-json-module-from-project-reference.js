@@ -153,7 +153,7 @@ console.log(foo_json_1.foo);
       },
       "./foo.json": {
         "version": "4395333385-{\n    \"foo\": \"bar baz\"\n}",
-        "signature": "-1457151099-export declare const foo: string;\r\n",
+        "signature": "-13565045515-export const foo: string;\r\n",
         "affectsGlobalScope": true
       }
     },
