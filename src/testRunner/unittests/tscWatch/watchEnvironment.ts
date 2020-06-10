@@ -253,6 +253,47 @@ namespace ts.tscWatch {
                     },
                 ],
             });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchDirectories/with non synchronous watch directory with outDir and declaration enabled",
+                commandLineArgs: ["--w", "-p", `${projectRoot}/tsconfig.json`],
+                sys: () => {
+                    const configFile: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ compilerOptions: { outDir: "dist", declaration: true } })
+                    };
+                    const file1: File = {
+                        path: `${projectRoot}/src/file1.ts`,
+                        content: `import { x } from "file2";`
+                    };
+                    const file2: File = {
+                        path: `${projectRoot}/node_modules/file2/index.d.ts`,
+                        content: `export const x = 10;`
+                    };
+                    const files = [libFile, file1, file2, configFile];
+                    return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                },
+                changes: [
+                    noopChange,
+                    {
+                        caption: "Add new file, should schedule and run timeout to update directory watcher",
+                        change: sys => sys.writeFile(`${projectRoot}/src/file3.ts`, `export const y = 10;`),
+                        timeouts: checkSingleTimeoutQueueLengthAndRun, // Update the child watch
+                    },
+                    {
+                        caption: "Actual program update to include new file",
+                        change: noop,
+                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2), // Scheduling failed lookup update and program update
+                    },
+                    {
+                        caption: "After program emit with new file, should schedule and run timeout to update directory watcher",
+                        change: noop,
+                        timeouts: checkSingleTimeoutQueueLengthAndRun, // Update the child watch
+                    },
+                    noopChange,
+                ],
+            });
         });
 
         describe("handles watch compiler options", () => {
