@@ -1,0 +1,29 @@
+=== tests/cases/conformance/controlFlow/controlFlowTypeofFunctionElseNarrowing.ts ===
+// regression for https://github.com/microsoft/TypeScript/issues/32928
+// Callable
+type F = (...args: any[]) => any;
+>F : Symbol(F, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 0, 0))
+>args : Symbol(args, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 2, 10))
+
+// Callable but intersected
+type F2 = F & { inject?: string[] }
+>F2 : Symbol(F2, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 2, 33))
+>F : Symbol(F, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 0, 0))
+>inject : Symbol(inject, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 4, 15))
+
+declare const a: string | F2
+>a : Symbol(a, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 6, 13))
+>F2 : Symbol(F2, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 2, 33))
+
+if (typeof a == 'function') {
+>a : Symbol(a, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 6, 13))
+
+    // only F2
+    a
+>a : Symbol(a, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 6, 13))
+
+} else {
+    // Should be only a string
+    a
+>a : Symbol(a, Decl(controlFlowTypeofFunctionElseNarrowing.ts, 6, 13))
+}
