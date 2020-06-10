@@ -185,12 +185,10 @@ namespace ts.tscWatch {
                 },
                 changes: [
                     {
-                        caption: "Pending updates because of file1.js creation",
+                        caption: "Directory watch updates because of file1.js creation",
                         change: noop,
                         timeouts: sys => {
                             sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for file1.js output
-                            sys.checkTimeoutQueueLengthAndRun(2); // Update program again and Failed lookup update
-                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
                             sys.checkTimeoutQueueLength(0);
                         },
                     },
