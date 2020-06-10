@@ -249,11 +249,12 @@ namespace ts {
         let missingFilesMap: Map<FileWatcher>;                              // Map of file watchers for the missing files
         let watchedWildcardDirectories: Map<WildcardDirectoryWatcher>;      // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
+        let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
+
 
         const sourceFilesCache = createMap<HostFileInfo>();                 // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
-        let hasChangedAutomaticTypeDirectiveNames = false;                  // True if the automatic type directives have changed
 
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const currentDirectory = host.getCurrentDirectory();
@@ -307,11 +308,9 @@ namespace ts {
         compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
         compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, watchOptions, WatchType.TypeRoots);
         compilerHost.getCachedDirectoryStructureHost = () => cachedDirectoryStructureHost;
+        compilerHost.scheduleInvalidateResolutionsOfFailedLookupLocations = scheduleInvalidateResolutionsOfFailedLookupLocations;
         compilerHost.onInvalidatedResolution = scheduleProgramUpdate;
-        compilerHost.onChangedAutomaticTypeDirectiveNames = () => {
-            hasChangedAutomaticTypeDirectiveNames = true;
-            scheduleProgramUpdate();
-        };
+        compilerHost.onChangedAutomaticTypeDirectiveNames = scheduleProgramUpdate;
         compilerHost.fileIsOpen = returnFalse;
         compilerHost.getCurrentProgram = getCurrentProgram;
         compilerHost.writeLog = writeLog;
@@ -343,6 +342,7 @@ namespace ts {
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close };
 
         function close() {
+            clearInvalidateResolutionsOfFailedLookupLocations();
             resolutionCache.clear();
             clearMap(sourceFilesCache, value => {
                 if (value && value.fileWatcher) {
@@ -374,6 +374,7 @@ namespace ts {
 
         function synchronizeProgram() {
             writeLog(`Synchronizing program`);
+            clearInvalidateResolutionsOfFailedLookupLocations();
 
             const program = getCurrentBuilderProgram();
             if (hasChangedCompilerOptions) {
@@ -414,7 +415,6 @@ namespace ts {
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
-            hasChangedAutomaticTypeDirectiveNames = false;
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
             resolutionCache.finishCachingPerDirectoryResolution();
 
@@ -557,6 +557,33 @@ namespace ts {
         function reportWatchDiagnostic(message: DiagnosticMessage) {
             if (host.onWatchStatusChange) {
                 host.onWatchStatusChange(createCompilerDiagnostic(message), newLine, compilerOptions || optionsToExtendForConfigFile);
+            }
+        }
+
+        function hasChangedAutomaticTypeDirectiveNames() {
+            return resolutionCache.hasChangedAutomaticTypeDirectiveNames();
+        }
+
+        function clearInvalidateResolutionsOfFailedLookupLocations() {
+            if (!timerToInvalidateFailedLookupResolutions) return false;
+            host.clearTimeout!(timerToInvalidateFailedLookupResolutions);
+            timerToInvalidateFailedLookupResolutions = undefined;
+            return true;
+        }
+
+        function scheduleInvalidateResolutionsOfFailedLookupLocations() {
+            if (!host.setTimeout || !host.clearTimeout) {
+                return resolutionCache.invalidateResolutionsOfFailedLookupLocations();
+            }
+            const pending = clearInvalidateResolutionsOfFailedLookupLocations();
+            writeLog(`Scheduling invalidateFailedLookup${pending ? ", Cancelled earlier one" : ""}`);
+            timerToInvalidateFailedLookupResolutions = host.setTimeout(invalidateResolutionsOfFailedLookup, 250);
+        }
+
+        function invalidateResolutionsOfFailedLookup() {
+            timerToInvalidateFailedLookupResolutions = undefined;
+            if (resolutionCache.invalidateResolutionsOfFailedLookupLocations()) {
+                scheduleProgramUpdate();
             }
         }
 

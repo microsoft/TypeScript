@@ -707,18 +707,23 @@ declare const eval: any`
             changes: emptyArray
         });
 
+        function runQueuedTimeoutCallbacksTwice(sys: WatchedSystem) {
+            sys.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+            sys.runQueuedTimeoutCallbacks(); // Actual update
+        }
+
         const changeModuleFileToModuleFile1: TscWatchCompileChange = {
             caption: "Rename moduleFile to moduleFile1",
             change: sys => {
                 sys.renameFile("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
                 sys.deleteFile("/a/b/moduleFile.js");
             },
-            timeouts: runQueuedTimeoutCallbacks
+            timeouts: runQueuedTimeoutCallbacksTwice
         };
         const changeModuleFile1ToModuleFile: TscWatchCompileChange = {
             caption: "Rename moduleFile1 back to moduleFile",
             change: sys => sys.renameFile("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts"),
-            timeouts: runQueuedTimeoutCallbacks,
+            timeouts: runQueuedTimeoutCallbacksTwice,
         };
 
         verifyTscWatch({
@@ -803,7 +808,7 @@ declare const eval: any`
                 {
                     caption: "Create module file",
                     change: sys => sys.writeFile("/a/b/moduleFile.ts", "export function bar() { }"),
-                    timeouts: runQueuedTimeoutCallbacks,
+                    timeouts: runQueuedTimeoutCallbacksTwice,
                 }
             ]
         });

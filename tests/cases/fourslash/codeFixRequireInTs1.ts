@@ -9,7 +9,6 @@ verify.getSuggestionDiagnostics([{
 }]);
 
 verify.codeFix({
-    description: "Convert 'require' to 'import'",
-    newFileContent:
-`import a = require("a");`,
+    description: ts.Diagnostics.Convert_require_to_import.message,
+    newFileContent: 'import a = require("a");',
 });

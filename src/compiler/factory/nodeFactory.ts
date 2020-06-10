@@ -2576,6 +2576,9 @@ namespace ts {
             else if (operatorKind === SyntaxKind.AsteriskAsteriskToken || operatorKind === SyntaxKind.AsteriskAsteriskEqualsToken) {
                 node.transformFlags |= TransformFlags.ContainsES2016;
             }
+            else if (isLogicalOrCoalescingAssignmentOperator(operatorKind)) {
+                node.transformFlags |= TransformFlags.ContainsESNext;
+            }
             return node;
         }
 

@@ -349,6 +349,37 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 
+Change:: Invalidates module resolution cache
+
+Input::
+
+Output::
+
+WatchedFiles::
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/src/file1.ts:
+  {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules:
+  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject:
+  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/myproject/node_modules/file2:
+  {"directoryName":"/user/username/projects/myproject/node_modules/file2","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.undefined
+
+
 Change:: Pending updates
 
 Input::

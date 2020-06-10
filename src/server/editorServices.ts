@@ -540,6 +540,7 @@ namespace ts.server {
 
     /*@internal*/
     export function updateProjectIfDirty(project: Project) {
+        project.invalidateResolutionsOfFailedLookupLocations();
         return project.dirty && project.updateGraph();
     }
 
@@ -634,7 +635,7 @@ namespace ts.server {
          *   In this case the exists property is always true
          */
         private readonly configFileExistenceInfoCache = createMap<ConfigFileExistenceInfo>();
-        private readonly throttledOperations: ThrottledOperations;
+        /*@internal*/ readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
@@ -823,7 +824,8 @@ namespace ts.server {
             this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
         }
 
-        private delayEnsureProjectForOpenFiles() {
+        /*@internal*/
+        delayEnsureProjectForOpenFiles() {
             this.pendingEnsureProjectForOpenFiles = true;
             this.throttledOperations.schedule("*ensureProjectForOpenFiles*", /*delay*/ 2500, () => {
                 if (this.pendingProjectUpdates.size !== 0) {

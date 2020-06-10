@@ -2106,7 +2106,7 @@ namespace ts {
      */
     function isSameEntityName(name: Expression, initializer: Expression): boolean {
         if (isPropertyNameLiteral(name) && isPropertyNameLiteral(initializer)) {
-            return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(name);
+            return getTextOfIdentifierOrLiteral(name) === getTextOfIdentifierOrLiteral(initializer);
         }
         if (isIdentifier(name) && isLiteralLikeAccess(initializer) &&
             (initializer.expression.kind === SyntaxKind.ThisKeyword ||
@@ -2595,7 +2595,7 @@ namespace ts {
             switch (parent.kind) {
                 case SyntaxKind.BinaryExpression:
                     const binaryOperator = (<BinaryExpression>parent).operatorToken.kind;
-                    return isAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
+                    return isAssignmentOperator(binaryOperator) && !isLogicalOrCoalescingAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
                         binaryOperator === SyntaxKind.EqualsToken ? AssignmentKind.Definite : AssignmentKind.Compound :
                         AssignmentKind.None;
                 case SyntaxKind.PrefixUnaryExpression:
@@ -3226,6 +3226,9 @@ namespace ts {
                     case SyntaxKind.AmpersandEqualsToken:
                     case SyntaxKind.CaretEqualsToken:
                     case SyntaxKind.BarEqualsToken:
+                    case SyntaxKind.BarBarEqualsToken:
+                    case SyntaxKind.AmpersandAmpersandEqualsToken:
+                    case SyntaxKind.QuestionQuestionEqualsToken:
                         return Associativity.Right;
                 }
         }
@@ -3475,6 +3478,9 @@ namespace ts {
                     case SyntaxKind.AmpersandEqualsToken:
                     case SyntaxKind.CaretEqualsToken:
                     case SyntaxKind.BarEqualsToken:
+                    case SyntaxKind.BarBarEqualsToken:
+                    case SyntaxKind.AmpersandAmpersandEqualsToken:
+                    case SyntaxKind.QuestionQuestionEqualsToken:
                         return OperatorPrecedence.Assignment;
 
                     default:
@@ -4647,6 +4653,16 @@ namespace ts {
         return token === SyntaxKind.BarBarToken
             || token === SyntaxKind.AmpersandAmpersandToken
             || token === SyntaxKind.ExclamationToken;
+    }
+
+    export function isLogicalOrCoalescingAssignmentOperator(token: SyntaxKind): token is LogicalOrCoalescingAssignmentOperator {
+        return token === SyntaxKind.BarBarEqualsToken
+            || token === SyntaxKind.AmpersandAmpersandEqualsToken
+            || token === SyntaxKind.QuestionQuestionEqualsToken;
+    }
+
+    export function isLogicalOrCoalescingAssignmentExpression(expr: BinaryExpression): expr is AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>> {
+        return isLogicalOrCoalescingAssignmentOperator(expr.operatorToken.kind);
     }
 
     export function isAssignmentOperator(token: SyntaxKind): boolean {

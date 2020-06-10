@@ -74,7 +74,7 @@ namespace ts {
 
             let thisArg: Expression | undefined;
             if (captureThisArg) {
-                if (shouldCaptureInTempVariable(expression)) {
+                if (!isSimpleCopiableExpression(expression)) {
                     thisArg = factory.createTempVariable(hoistVariableDeclaration);
                     expression = factory.createAssignment(thisArg, expression);
                     // if (inParameterInitializer) tempVariableInParameter = true;
@@ -114,7 +114,7 @@ namespace ts {
             const leftThisArg = isSyntheticReference(left) ? left.thisArg : undefined;
             let leftExpression = isSyntheticReference(left) ? left.expression : left;
             let capturedLeft: Expression = leftExpression;
-            if (shouldCaptureInTempVariable(leftExpression)) {
+            if (!isSimpleCopiableExpression(leftExpression)) {
                 capturedLeft = factory.createTempVariable(hoistVariableDeclaration);
                 leftExpression = factory.createAssignment(capturedLeft, leftExpression);
                 // if (inParameterInitializer) tempVariableInParameter = true;
@@ -127,7 +127,7 @@ namespace ts {
                     case SyntaxKind.PropertyAccessExpression:
                     case SyntaxKind.ElementAccessExpression:
                         if (i === chain.length - 1 && captureThisArg) {
-                            if (shouldCaptureInTempVariable(rightExpression)) {
+                            if (!isSimpleCopiableExpression(rightExpression)) {
                                 thisArg = factory.createTempVariable(hoistVariableDeclaration);
                                 rightExpression = factory.createAssignment(thisArg, rightExpression);
                                 // if (inParameterInitializer) tempVariableInParameter = true;
@@ -185,7 +185,7 @@ namespace ts {
         function transformNullishCoalescingExpression(node: BinaryExpression) {
             let left = visitNode(node.left, visitor, isExpression);
             let right = left;
-            if (shouldCaptureInTempVariable(left)) {
+            if (!isSimpleCopiableExpression(left)) {
                 right = factory.createTempVariable(hoistVariableDeclaration);
                 left = factory.createAssignment(right, left);
                 // if (inParameterInitializer) tempVariableInParameter = true;
@@ -197,14 +197,6 @@ namespace ts {
                 /*colonToken*/ undefined,
                 visitNode(node.right, visitor, isExpression),
             );
-        }
-
-        function shouldCaptureInTempVariable(expression: Expression): boolean {
-            // don't capture identifiers and `this` in a temporary variable
-            // `super` cannot be captured as it's no real variable
-            return !isIdentifier(expression) &&
-                expression.kind !== SyntaxKind.ThisKeyword &&
-                expression.kind !== SyntaxKind.SuperKeyword;
         }
 
         function visitDeleteExpression(node: DeleteExpression) {
