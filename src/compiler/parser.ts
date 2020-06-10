@@ -1903,7 +1903,7 @@ namespace ts {
             return createNodeArray(list, listPos);
         }
 
-        function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
+        function parseListElement<T extends Node | undefined>(parsingContext: ParsingContext, parseElement: () => T): T {
             const node = currentNode(parsingContext);
             if (node) {
                 return <T>consumeNode(node);
@@ -2239,7 +2239,9 @@ namespace ts {
         }
 
         // Parses a comma-delimited list of elements
-        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T> {
+        function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T>;
+        function parseDelimitedList<T extends Node | undefined>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<NonNullable<T>> | undefined;
+        function parseDelimitedList<T extends Node | undefined>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<NonNullable<T>> | undefined {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
             const list = [];
@@ -2249,7 +2251,11 @@ namespace ts {
             while (true) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
                     const startPos = scanner.getStartPos();
-                    list.push(parseListElement(kind, parseElement));
+                    const result = parseListElement(kind, parseElement);
+                    if (!result) {
+                        return undefined;
+                    }
+                    list.push(result as NonNullable<T>);
                     commaStart = scanner.getTokenPos();
 
                     if (parseOptional(SyntaxKind.CommaToken)) {
@@ -2701,7 +2707,17 @@ namespace ts {
                 isStartOfType(/*inStartOfParameter*/ !isJSDocParameter);
         }
 
-        function parseParameter(): ParameterDeclaration {
+        function isParameterNameStart() {
+            return isIdentifier() || token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.OpenBraceToken;
+        }
+
+        function parseParameterForSpeculation() {
+            return parseParameter(/*allowAmbiguity*/ false);
+        }
+
+        function parseParameter(): ParameterDeclaration;
+        function parseParameter(allowAmbiguity: false): ParameterDeclaration | undefined;
+        function parseParameter(allowAmbiguity = true): ParameterDeclaration | undefined {
             const node = <ParameterDeclaration>createNodeWithJSDoc(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
                 node.name = createIdentifier(/*isIdentifier*/ true);
@@ -2715,6 +2731,9 @@ namespace ts {
 
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
+            if (!allowAmbiguity && !isParameterNameStart()) {
+                return undefined;
+            }
             node.name = parseIdentifierOrPattern(Diagnostics.Private_identifiers_cannot_be_used_as_parameters);
             if (getFullWidth(node.name) === 0 && !node.modifiers && isModifierKind(token())) {
                 // in cases like
@@ -2742,11 +2761,12 @@ namespace ts {
         function fillSignature(
             returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken,
             flags: SignatureFlags,
-            signature: SignatureDeclaration): boolean {
+            signature: SignatureDeclaration,
+            allowAmbiguity = true): boolean {
             if (!(flags & SignatureFlags.JSDoc)) {
                 signature.typeParameters = parseTypeParameters();
             }
-            const parametersParsedSuccessfully = parseParameterList(signature, flags);
+            const parametersParsedSuccessfully = parseParameterList(signature, flags, allowAmbiguity);
             if (shouldParseReturnType(returnToken, !!(flags & SignatureFlags.Type))) {
                 signature.type = parseTypeOrTypePredicate();
                 if (typeHasArrowFunctionBlockingParseError(signature.type)) return false;
@@ -2772,7 +2792,7 @@ namespace ts {
         }
 
         // Returns true on success.
-        function parseParameterList(signature: SignatureDeclaration, flags: SignatureFlags): boolean {
+        function parseParameterList(signature: SignatureDeclaration, flags: SignatureFlags, allowAmbiguityInParameters = true): boolean {
             // FormalParameters [Yield,Await]: (modified)
             //      [empty]
             //      FormalParameterList[?Yield,Await]
@@ -2797,13 +2817,18 @@ namespace ts {
             setYieldContext(!!(flags & SignatureFlags.Yield));
             setAwaitContext(!!(flags & SignatureFlags.Await));
 
-            signature.parameters = flags & SignatureFlags.JSDoc ?
+            const parameters = flags & SignatureFlags.JSDoc ?
                 parseDelimitedList(ParsingContext.JSDocParameters, parseJSDocParameter) :
-                parseDelimitedList(ParsingContext.Parameters, parseParameter);
+                parseDelimitedList(ParsingContext.Parameters, allowAmbiguityInParameters ? parseParameter : parseParameterForSpeculation);
 
             setYieldContext(savedYieldContext);
             setAwaitContext(savedAwaitContext);
 
+            if (!parameters) {
+                return false;
+            }
+
+            signature.parameters = parameters;
             return parseExpected(SyntaxKind.CloseParenToken);
         }
 
@@ -2889,7 +2914,7 @@ namespace ts {
 
         function parseIndexSignatureDeclaration(node: IndexSignatureDeclaration): IndexSignatureDeclaration {
             node.kind = SyntaxKind.IndexSignature;
-            node.parameters = parseBracketedList(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
+            node.parameters = parseBracketedList<ParameterDeclaration>(ParsingContext.Parameters, parseParameter, SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken);
             node.type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
             return finishNode(node);
@@ -3974,7 +3999,7 @@ namespace ts {
             // a => (b => c)
             // And think that "(b =>" was actually a parenthesized arrow function with a missing
             // close paren.
-            if (!fillSignature(SyntaxKind.ColonToken, isAsync, node) && !allowAmbiguity) {
+            if (!fillSignature(SyntaxKind.ColonToken, isAsync, node, allowAmbiguity) && !allowAmbiguity) {
                 return undefined;
             }
 
