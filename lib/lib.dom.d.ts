@@ -6707,7 +6707,7 @@ interface HTMLFormControlsCollection extends HTMLCollectionBase {
      * 
      * If there are multiple matching items, then a RadioNodeList object containing all those elements is returned.
      */
-    namedItem(name: string): RadioNodeList | Element | null;
+    namedItem(name: string): RadioNodeList | HTMLButtonElement | HTMLFieldSetElement | HTMLInputElement | HTMLObjectElement | HTMLOutputElement | HTMLSelectElement | HTMLTextAreaElement | null;
 }
 
 declare var HTMLFormControlsCollection: {
@@ -12403,7 +12403,7 @@ declare var RTCTrackEvent: {
     new(type: string, eventInitDict: RTCTrackEventInit): RTCTrackEvent;
 };
 
-interface RadioNodeList extends NodeList {
+interface RadioNodeList extends NodeListOf<HTMLButtonElement | HTMLFieldSetElement | HTMLInputElement | HTMLObjectElement | HTMLOutputElement | HTMLSelectElement | HTMLTextAreaElement> {
     value: string;
 }
 
