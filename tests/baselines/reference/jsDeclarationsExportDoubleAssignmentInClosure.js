@@ -20,6 +20,6 @@ function foo() {
 //// [index.d.ts]
 declare function _exports(o: any): any;
 declare namespace _exports {
-    export const methods: any;
+    const methods: any;
 }
 export = _exports;

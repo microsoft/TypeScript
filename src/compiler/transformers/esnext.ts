@@ -3,7 +3,7 @@ namespace ts {
     export function transformESNext(context: TransformationContext) {
         const {
             hoistVariableDeclaration,
-	    factory
+            factory
         } = context;
         return chainBundle(context, transformSourceFile);
 

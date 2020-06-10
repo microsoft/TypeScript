@@ -285,7 +285,7 @@ module.exports = x;
       },
       "./obj.json": {
         "version": "2151907832-{\n    \"val\": 42\n}",
-        "signature": "-6323167306-export declare const val: number;\r\n",
+        "signature": "-5546159834-export const val: number;\r\n",
         "affectsGlobalScope": true
       },
       "./index.ts": {

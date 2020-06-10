@@ -42,11 +42,11 @@ main().catch(console.error);
 
 async function main() {
     const gh = new Octokit({ auth: options.token });
-    const response = await gh.pulls.createReviewRequest({
+    const response = await gh.pulls.requestReviewers({
         owner: options.owner,
         repo: options.repo,
         pull_number,
-        reviewers,
+        reviewers
     });
     if (response.status === 201) {
         console.log(`Added ${reviewers.join(", ")} to ${response.data.url}`);

@@ -1179,18 +1179,37 @@ namespace ts {
                         setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
                         fakespace.locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
-                        const declarations = mapDefined(props, p => {
+                        const exportMappings: [Identifier, string][] = [];
+                        let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
                             if (!isPropertyAccessExpression(p.valueDeclaration)) {
                                 return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
                             }
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
                             const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                             getSymbolAccessibilityDiagnostic = oldDiag;
-                            const varDecl = factory.createVariableDeclaration(unescapeLeadingUnderscores(p.escapedName), /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
-                            return factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([varDecl]));
+                            const nameStr = unescapeLeadingUnderscores(p.escapedName);
+                            const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
+                            const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
+                            if (isNonContextualKeywordName) {
+                                exportMappings.push([name, nameStr]);
+                            }
+                            const varDecl = factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, type, /*initializer*/ undefined);
+                            return factory.createVariableStatement(isNonContextualKeywordName ? undefined : [factory.createToken(SyntaxKind.ExportKeyword)], factory.createVariableDeclarationList([varDecl]));
                         });
+                        if (!exportMappings.length) {
+                            declarations = mapDefined(declarations, declaration => factory.updateModifiers(declaration, ModifierFlags.None));
+                        }
+                        else {
+                            declarations.push(factory.createExportDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                /*isTypeOnly*/ false,
+                                factory.createNamedExports(map(exportMappings, ([gen, exp]) => {
+                                    return factory.createExportSpecifier(gen, exp);
+                                }))
+                            ));
+                        }
                         const namespaceDecl = factory.createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name!, factory.createModuleBlock(declarations), NodeFlags.Namespace);
-
                         if (!hasEffectiveModifier(clean, ModifierFlags.Default)) {
                             return [clean, namespaceDecl];
                         }
