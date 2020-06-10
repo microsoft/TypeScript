@@ -5652,7 +5652,7 @@ namespace ts {
                                     visitNode(p.type, visitExistingNodeTreeSymbols),
                                     /*initializer*/ undefined
                                 )),
-                                visitNode(newTypeNode || node.type, visitExistingNodeTreeSymbols)
+                                visitNode(newTypeNode || node.type, visitExistingNodeTreeSymbols) || createKeywordTypeNode(SyntaxKind.AnyKeyword)
                             );
                         }
                         else {
@@ -5667,11 +5667,11 @@ namespace ts {
                                     visitNode(p.type, visitExistingNodeTreeSymbols),
                                     /*initializer*/ undefined
                                 )),
-                                visitNode(node.type, visitExistingNodeTreeSymbols)
+                                visitNode(node.type, visitExistingNodeTreeSymbols) || createKeywordTypeNode(SyntaxKind.AnyKeyword)
                             );
                         }
                     }
-                    if (isTypeReferenceNode(node) && isInJSDoc(node) && (getIntendedTypeFromJSDocTypeReference(node) || unknownSymbol === resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type, /*ignoreErrors*/ true))) {
+                    if (isTypeReferenceNode(node) && isInJSDoc(node) && (!existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(node, getTypeFromTypeNode(node)) || getIntendedTypeFromJSDocTypeReference(node) || unknownSymbol === resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type, /*ignoreErrors*/ true))) {
                         return setOriginalNode(typeToTypeNodeHelper(getTypeFromTypeNode(node), context), node);
                     }
                     if (isLiteralImportTypeNode(node)) {
