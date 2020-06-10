@@ -589,7 +589,8 @@ namespace ts {
             (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
     }
 
-    function getAssignedName(node: Node): DeclarationName | undefined {
+    /*@internal*/
+    export function getAssignedName(node: Node): DeclarationName | undefined {
         if (!node.parent) {
             return undefined;
         }
