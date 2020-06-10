@@ -7100,7 +7100,6 @@ namespace ts {
         createExportDefault(expression: Expression): ExportAssignment;
         createExternalModuleExport(exportName: Identifier): ExportDeclaration;
 
-        /* @internal */ createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): T;
         /* @internal */ createTypeCheck(value: Expression, tag: TypeOfTag): Expression;
         /* @internal */ createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]): CallExpression;
         /* @internal */ createGlobalMethodCall(globalObjectName: string, globalMethodName: string, argumentsList: readonly Expression[]): CallExpression;
@@ -7226,8 +7225,6 @@ namespace ts {
          */
         /* @internal */ cloneNode<T extends Node | undefined>(node: T): T;
         /* @internal */ updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags): T;
-        /* @internal */ updateBody<T extends FunctionLikeDeclaration>(node: T, body: T["body"]): T;
-        /* @internal */ updateType<T extends Exclude<HasType, SetAccessorDeclaration | ConstructorDeclaration>>(node: T, type: T["type"]): T;
     }
 
     /* @internal */

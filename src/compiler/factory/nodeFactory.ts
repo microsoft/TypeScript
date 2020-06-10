@@ -22,7 +22,18 @@ namespace ts {
         // Lazily load the parenthesizer, node converters, and some factory methods until they are used.
         const parenthesizerRules = memoize(() => flags & NodeFactoryFlags.NoParenthesizerRules ? nullParenthesizerRules : createParenthesizerRules(factory));
         const converters = memoize(() => flags & NodeFactoryFlags.NoNodeConverters ? nullNodeConverters : createNodeConverters(factory));
-        const lazyFactory = memoize(() => createLazyFactoryMembers(factory, asExpression));
+
+        // lazy initializaton of common operator factories
+        const getBinaryCreateFunction = memoizeOne((operator: BinaryOperator) => (left: Expression, right: Expression) => createBinaryExpression(left, operator, right));
+        const getPrefixUnaryCreateFunction = memoizeOne((operator: PrefixUnaryOperator) => (operand: Expression) => createPrefixUnaryExpression(operator, operand));
+        const getPostfixUnaryCreateFunction = memoizeOne((operator: PostfixUnaryOperator) => (operand: Expression) => createPostfixUnaryExpression(operand, operator));
+        const getJSDocPrimaryTypeCreateFunction = memoizeOne(<T extends JSDocType>(kind: T["kind"]) => () => createJSDocPrimaryTypeWorker(kind));
+        const getJSDocUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (type: T["type"]) => createJSDocUnaryTypeWorker<T>(kind, type));
+        const getJSDocUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocUnaryTypeWorker<T>(kind, node, type));
+        const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: string) => createJSDocSimpleTagWorker(kind, tagName, comment));
+        const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: string) => updateJSDocSimpleTagWorker(kind, node, tagName, comment));
+        const getJSDocTypeLikeTagCreateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) => createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment));
+        const getJSDocTypeLikeTagUpdateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) => updateJSDocTypeLikeTagWorker(kind, node, tagName, typeExpression, comment));
 
         const factory: NodeFactory = {
             get parenthesizer() { return parenthesizerRules(); },
@@ -287,18 +298,19 @@ namespace ts {
             createMissingDeclaration,
             createExternalModuleReference,
             updateExternalModuleReference,
-            createJSDocAllType: createCreateJSDocPrimaryType(SyntaxKind.JSDocAllType),
-            createJSDocUnknownType: createCreateJSDocPrimaryType(SyntaxKind.JSDocUnknownType),
-            createJSDocNonNullableType: createCreateJSDocUnaryType(SyntaxKind.JSDocNonNullableType),
-            updateJSDocNonNullableType: createUpdateJSDocUnaryType(SyntaxKind.JSDocNonNullableType),
-            createJSDocNullableType: createCreateJSDocUnaryType(SyntaxKind.JSDocNullableType),
-            updateJSDocNullableType: createUpdateJSDocUnaryType(SyntaxKind.JSDocNullableType),
-            createJSDocOptionalType: createCreateJSDocUnaryType(SyntaxKind.JSDocOptionalType),
-            updateJSDocOptionalType: createUpdateJSDocUnaryType(SyntaxKind.JSDocOptionalType),
-            createJSDocVariadicType: createCreateJSDocUnaryType(SyntaxKind.JSDocVariadicType),
-            updateJSDocVariadicType: createUpdateJSDocUnaryType(SyntaxKind.JSDocVariadicType),
-            createJSDocNamepathType: createCreateJSDocUnaryType(SyntaxKind.JSDocNamepathType),
-            updateJSDocNamepathType: createUpdateJSDocUnaryType(SyntaxKind.JSDocNamepathType),
+            // lazily load factory members for JSDoc types with similar structure
+            get createJSDocAllType() { return getJSDocPrimaryTypeCreateFunction<JSDocAllType>(SyntaxKind.JSDocAllType); },
+            get createJSDocUnknownType() { return getJSDocPrimaryTypeCreateFunction<JSDocUnknownType>(SyntaxKind.JSDocUnknownType); },
+            get createJSDocNonNullableType() { return getJSDocUnaryTypeCreateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
+            get updateJSDocNonNullableType() { return getJSDocUnaryTypeUpdateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
+            get createJSDocNullableType() { return getJSDocUnaryTypeCreateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
+            get updateJSDocNullableType() { return getJSDocUnaryTypeUpdateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
+            get createJSDocOptionalType() { return getJSDocUnaryTypeCreateFunction<JSDocOptionalType>(SyntaxKind.JSDocOptionalType); },
+            get updateJSDocOptionalType() { return getJSDocUnaryTypeUpdateFunction<JSDocOptionalType>(SyntaxKind.JSDocOptionalType); },
+            get createJSDocVariadicType() { return getJSDocUnaryTypeCreateFunction<JSDocVariadicType>(SyntaxKind.JSDocVariadicType); },
+            get updateJSDocVariadicType() { return getJSDocUnaryTypeUpdateFunction<JSDocVariadicType>(SyntaxKind.JSDocVariadicType); },
+            get createJSDocNamepathType() { return getJSDocUnaryTypeCreateFunction<JSDocNamepathType>(SyntaxKind.JSDocNamepathType); },
+            get updateJSDocNamepathType() { return getJSDocUnaryTypeUpdateFunction<JSDocNamepathType>(SyntaxKind.JSDocNamepathType); },
             createJSDocFunctionType,
             updateJSDocFunctionType,
             createJSDocTypeLiteral,
@@ -321,26 +333,27 @@ namespace ts {
             updateJSDocAugmentsTag,
             createJSDocImplementsTag,
             updateJSDocImplementsTag,
-            createJSDocTypeTag: createCreateJSDocTypeLikeTag(SyntaxKind.JSDocTypeTag, "type"),
-            updateJSDocTypeTag: createUpdateJSDocTypeLikeTag(SyntaxKind.JSDocTypeTag, "type"),
-            createJSDocReturnTag: createCreateJSDocTypeLikeTag(SyntaxKind.JSDocReturnTag, "returns"),
-            updateJSDocReturnTag: createUpdateJSDocTypeLikeTag(SyntaxKind.JSDocReturnTag, "returns"),
-            createJSDocThisTag: createCreateJSDocTypeLikeTag(SyntaxKind.JSDocThisTag, "this"),
-            updateJSDocThisTag: createUpdateJSDocTypeLikeTag(SyntaxKind.JSDocThisTag, "this"),
-            createJSDocEnumTag: createCreateJSDocTypeLikeTag(SyntaxKind.JSDocEnumTag, "enum"),
-            updateJSDocEnumTag: createUpdateJSDocTypeLikeTag(SyntaxKind.JSDocEnumTag, "enum"),
-            createJSDocAuthorTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocAuthorTag, "author"),
-            updateJSDocAuthorTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocAuthorTag, "author"),
-            createJSDocClassTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocClassTag, "class"),
-            updateJSDocClassTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocClassTag, "class"),
-            createJSDocPublicTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocPublicTag, "public"),
-            updateJSDocPublicTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocPublicTag, "public"),
-            createJSDocPrivateTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocPrivateTag, "private"),
-            updateJSDocPrivateTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocPrivateTag, "private"),
-            createJSDocProtectedTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocProtectedTag, "protected"),
-            updateJSDocProtectedTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocProtectedTag, "protected"),
-            createJSDocReadonlyTag: createCreateJSDocSimpleTag(SyntaxKind.JSDocReadonlyTag, "readonly"),
-            updateJSDocReadonlyTag: createUpdateJSDocSimpleTag(SyntaxKind.JSDocReadonlyTag, "readonly"),
+            // lazily load factory members for JSDoc tags with similar structure
+            get createJSDocTypeTag() { return getJSDocTypeLikeTagCreateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
+            get updateJSDocTypeTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
+            get createJSDocReturnTag() { return getJSDocTypeLikeTagCreateFunction<JSDocReturnTag>(SyntaxKind.JSDocReturnTag); },
+            get updateJSDocReturnTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocReturnTag>(SyntaxKind.JSDocReturnTag); },
+            get createJSDocThisTag() { return getJSDocTypeLikeTagCreateFunction<JSDocThisTag>(SyntaxKind.JSDocThisTag); },
+            get updateJSDocThisTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocThisTag>(SyntaxKind.JSDocThisTag); },
+            get createJSDocEnumTag() { return getJSDocTypeLikeTagCreateFunction<JSDocEnumTag>(SyntaxKind.JSDocEnumTag); },
+            get updateJSDocEnumTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocEnumTag>(SyntaxKind.JSDocEnumTag); },
+            get createJSDocAuthorTag() { return getJSDocSimpleTagCreateFunction<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag); },
+            get updateJSDocAuthorTag() { return getJSDocSimpleTagUpdateFunction<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag); },
+            get createJSDocClassTag() { return getJSDocSimpleTagCreateFunction<JSDocClassTag>(SyntaxKind.JSDocClassTag); },
+            get updateJSDocClassTag() { return getJSDocSimpleTagUpdateFunction<JSDocClassTag>(SyntaxKind.JSDocClassTag); },
+            get createJSDocPublicTag() { return getJSDocSimpleTagCreateFunction<JSDocPublicTag>(SyntaxKind.JSDocPublicTag); },
+            get updateJSDocPublicTag() { return getJSDocSimpleTagUpdateFunction<JSDocPublicTag>(SyntaxKind.JSDocPublicTag); },
+            get createJSDocPrivateTag() { return getJSDocSimpleTagCreateFunction<JSDocPrivateTag>(SyntaxKind.JSDocPrivateTag); },
+            get updateJSDocPrivateTag() { return getJSDocSimpleTagUpdateFunction<JSDocPrivateTag>(SyntaxKind.JSDocPrivateTag); },
+            get createJSDocProtectedTag() { return getJSDocSimpleTagCreateFunction<JSDocProtectedTag>(SyntaxKind.JSDocProtectedTag); },
+            get updateJSDocProtectedTag() { return getJSDocSimpleTagUpdateFunction<JSDocProtectedTag>(SyntaxKind.JSDocProtectedTag); },
+            get createJSDocReadonlyTag() { return getJSDocSimpleTagCreateFunction<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag); },
+            get updateJSDocReadonlyTag() { return getJSDocSimpleTagUpdateFunction<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag); },
             createJSDocUnknownTag,
             updateJSDocUnknownTag,
             createJSDocComment,
@@ -405,76 +418,76 @@ namespace ts {
             createSyntheticReferenceExpression,
             updateSyntheticReferenceExpression,
             cloneNode,
-
             // Lazily load factory methods for common operator factories and utilities
-            get createSignatureDeclaration() { return lazyFactory().createSignatureDeclaration; },
-            get createComma() { return lazyFactory().createComma; },
-            get createAssignment() { return lazyFactory().createAssignment; },
-            get createLogicalOr() { return lazyFactory().createLogicalOr; },
-            get createLogicalAnd() { return lazyFactory().createLogicalAnd; },
-            get createBitwiseOr() { return lazyFactory().createBitwiseOr; },
-            get createBitwiseXor() { return lazyFactory().createBitwiseXor; },
-            get createBitwiseAnd() { return lazyFactory().createBitwiseAnd; },
-            get createStrictEquality() { return lazyFactory().createStrictEquality; },
-            get createStrictInequality() { return lazyFactory().createStrictInequality; },
-            get createEquality() { return lazyFactory().createEquality; },
-            get createInequality() { return lazyFactory().createInequality; },
-            get createLessThan() { return lazyFactory().createLessThan; },
-            get createLessThanEquals() { return lazyFactory().createLessThanEquals; },
-            get createGreaterThan() { return lazyFactory().createGreaterThan; },
-            get createGreaterThanEquals() { return lazyFactory().createGreaterThanEquals; },
-            get createLeftShift() { return lazyFactory().createLeftShift; },
-            get createRightShift() { return lazyFactory().createRightShift; },
-            get createUnsignedRightShift() { return lazyFactory().createUnsignedRightShift; },
-            get createAdd() { return lazyFactory().createAdd; },
-            get createSubtract() { return lazyFactory().createSubtract; },
-            get createMultiply() { return lazyFactory().createMultiply; },
-            get createDivide() { return lazyFactory().createDivide; },
-            get createModulo() { return lazyFactory().createModulo; },
-            get createExponent() { return lazyFactory().createExponent; },
-            get createPrefixPlus() { return lazyFactory().createPrefixPlus; },
-            get createPrefixMinus() { return lazyFactory().createPrefixMinus; },
-            get createPrefixIncrement() { return lazyFactory().createPrefixIncrement; },
-            get createPrefixDecrement() { return lazyFactory().createPrefixDecrement; },
-            get createBitwiseNot() { return lazyFactory().createBitwiseNot; },
-            get createLogicalNot() { return lazyFactory().createLogicalNot; },
-            get createPostfixIncrement() { return lazyFactory().createPostfixIncrement; },
-            get createPostfixDecrement() { return lazyFactory().createPostfixDecrement; },
-            get createImmediatelyInvokedFunctionExpression() { return lazyFactory().createImmediatelyInvokedFunctionExpression; },
-            get createImmediatelyInvokedArrowFunction() { return lazyFactory().createImmediatelyInvokedArrowFunction; },
-            get createVoidZero() { return lazyFactory().createVoidZero; },
-            get createExportDefault() { return lazyFactory().createExportDefault; },
-            get createExternalModuleExport() { return lazyFactory().createExternalModuleExport; },
-            get createTypeCheck() { return lazyFactory().createTypeCheck; },
-            get createMethodCall() { return lazyFactory().createMethodCall; },
-            get createGlobalMethodCall() { return lazyFactory().createGlobalMethodCall; },
-            get createFunctionBindCall() { return lazyFactory().createFunctionBindCall; },
-            get createFunctionCallCall() { return lazyFactory().createFunctionCallCall; },
-            get createFunctionApplyCall() { return lazyFactory().createFunctionApplyCall; },
-            get createArraySliceCall() { return lazyFactory().createArraySliceCall; },
-            get createArrayConcatCall() { return lazyFactory().createArrayConcatCall; },
-            get createObjectDefinePropertyCall() { return lazyFactory().createObjectDefinePropertyCall; },
-            get createPropertyDescriptor() { return lazyFactory().createPropertyDescriptor; },
-            get createCallBinding() { return lazyFactory().createCallBinding; },
-            get inlineExpressions() { return lazyFactory().inlineExpressions; },
-            get getInternalName() { return lazyFactory().getInternalName; },
-            get getLocalName() { return lazyFactory().getLocalName; },
-            get getExportName() { return lazyFactory().getExportName; },
-            get getDeclarationName() { return lazyFactory().getDeclarationName; },
-            get getNamespaceMemberName() { return lazyFactory().getNamespaceMemberName; },
-            get getExternalModuleOrNamespaceExportName() { return lazyFactory().getExternalModuleOrNamespaceExportName; },
-            get restoreOuterExpressions() { return lazyFactory().recreateOuterExpressions; },
-            get restoreEnclosingLabel() { return lazyFactory().restoreEnclosingLabel; },
-            get createUseStrictPrologue() { return lazyFactory().createUseStrictPrologue; },
-            get copyPrologue() { return lazyFactory().copyPrologue; },
-            get copyStandardPrologue() { return lazyFactory().copyStandardPrologue; },
-            get copyCustomPrologue() { return lazyFactory().copyCustomPrologue; },
-            get ensureUseStrict() { return lazyFactory().ensureUseStrict; },
-            get liftToBlock() { return lazyFactory().liftToBlock; },
-            get mergeLexicalEnvironment() { return lazyFactory().mergeLexicalEnvironment; },
-            get updateModifiers() { return lazyFactory().updateModifiers; },
-            get updateBody() { return lazyFactory().updateBody; },
-            get updateType() { return lazyFactory().updateType; },
+            get createComma() { return getBinaryCreateFunction(SyntaxKind.CommaToken); },
+            get createAssignment() { return getBinaryCreateFunction(SyntaxKind.EqualsToken) as NodeFactory["createAssignment"]; },
+            get createLogicalOr() { return getBinaryCreateFunction(SyntaxKind.BarBarToken); },
+            get createLogicalAnd() { return getBinaryCreateFunction(SyntaxKind.AmpersandAmpersandToken); },
+            get createBitwiseOr() { return getBinaryCreateFunction(SyntaxKind.BarToken); },
+            get createBitwiseXor() { return getBinaryCreateFunction(SyntaxKind.CaretToken); },
+            get createBitwiseAnd() { return getBinaryCreateFunction(SyntaxKind.AmpersandToken); },
+            get createStrictEquality() { return getBinaryCreateFunction(SyntaxKind.EqualsEqualsEqualsToken); },
+            get createStrictInequality() { return getBinaryCreateFunction(SyntaxKind.ExclamationEqualsEqualsToken); },
+            get createEquality() { return getBinaryCreateFunction(SyntaxKind.EqualsEqualsToken); },
+            get createInequality() { return getBinaryCreateFunction(SyntaxKind.ExclamationEqualsToken); },
+            get createLessThan() { return getBinaryCreateFunction(SyntaxKind.LessThanToken); },
+            get createLessThanEquals() { return getBinaryCreateFunction(SyntaxKind.LessThanEqualsToken); },
+            get createGreaterThan() { return getBinaryCreateFunction(SyntaxKind.GreaterThanToken); },
+            get createGreaterThanEquals() { return getBinaryCreateFunction(SyntaxKind.GreaterThanEqualsToken); },
+            get createLeftShift() { return getBinaryCreateFunction(SyntaxKind.LessThanLessThanToken); },
+            get createRightShift() { return getBinaryCreateFunction(SyntaxKind.GreaterThanGreaterThanToken); },
+            get createUnsignedRightShift() { return getBinaryCreateFunction(SyntaxKind.GreaterThanGreaterThanGreaterThanToken); },
+            get createAdd() { return getBinaryCreateFunction(SyntaxKind.PlusToken); },
+            get createSubtract() { return getBinaryCreateFunction(SyntaxKind.MinusToken); },
+            get createMultiply() { return getBinaryCreateFunction(SyntaxKind.AsteriskToken); },
+            get createDivide() { return getBinaryCreateFunction(SyntaxKind.SlashToken); },
+            get createModulo() { return getBinaryCreateFunction(SyntaxKind.PercentToken); },
+            get createExponent() { return getBinaryCreateFunction(SyntaxKind.AsteriskAsteriskToken); },
+            get createPrefixPlus() { return getPrefixUnaryCreateFunction(SyntaxKind.PlusToken); },
+            get createPrefixMinus() { return getPrefixUnaryCreateFunction(SyntaxKind.MinusToken); },
+            get createPrefixIncrement() { return getPrefixUnaryCreateFunction(SyntaxKind.PlusPlusToken); },
+            get createPrefixDecrement() { return getPrefixUnaryCreateFunction(SyntaxKind.MinusMinusToken); },
+            get createBitwiseNot() { return getPrefixUnaryCreateFunction(SyntaxKind.TildeToken); },
+            get createLogicalNot() { return getPrefixUnaryCreateFunction(SyntaxKind.ExclamationToken); },
+            get createPostfixIncrement() { return getPostfixUnaryCreateFunction(SyntaxKind.PlusPlusToken); },
+            get createPostfixDecrement() { return getPostfixUnaryCreateFunction(SyntaxKind.MinusMinusToken); },
+
+            // Compound nodes
+            createImmediatelyInvokedFunctionExpression,
+            createImmediatelyInvokedArrowFunction,
+            createVoidZero,
+            createExportDefault,
+            createExternalModuleExport,
+            createTypeCheck,
+            createMethodCall,
+            createGlobalMethodCall,
+            createFunctionBindCall,
+            createFunctionCallCall,
+            createFunctionApplyCall,
+            createArraySliceCall,
+            createArrayConcatCall,
+            createObjectDefinePropertyCall,
+            createPropertyDescriptor,
+            createCallBinding,
+
+            // Utilities
+            inlineExpressions,
+            getInternalName,
+            getLocalName,
+            getExportName,
+            getDeclarationName,
+            getNamespaceMemberName,
+            getExternalModuleOrNamespaceExportName,
+            restoreOuterExpressions,
+            restoreEnclosingLabel,
+            createUseStrictPrologue,
+            copyPrologue,
+            copyStandardPrologue,
+            copyCustomPrologue,
+            ensureUseStrict,
+            liftToBlock,
+            mergeLexicalEnvironment,
+            updateModifiers,
         };
 
         return factory;
@@ -3951,24 +3964,11 @@ namespace ts {
         // JSDoc
         //
 
-        function createJSDocPrimaryTypeWorker<T extends JSDocType>(kind: T["kind"]) {
-            const node = createBaseNode<T>(kind);
-            return node;
-        }
-
         // @api
         // createJSDocAllType
         // createJSDocUnknownType
-        function createCreateJSDocPrimaryType<T extends JSDocType>(kind: T["kind"]) {
-            return function createJSDocPrimaryType(): T {
-                return createJSDocPrimaryTypeWorker(kind);
-            };
-        }
-
-        function createJSDocUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"], type: T["type"]): T {
-            const node = createBaseNode<T>(kind);
-            node.type = type;
-            return node;
+        function createJSDocPrimaryTypeWorker<T extends JSDocType>(kind: T["kind"]) {
+            return createBaseNode(kind);
         }
 
         // @api
@@ -3977,16 +3977,11 @@ namespace ts {
         // createJSDocOptionalType
         // createJSDocVariadicType
         // createJSDocNamepathType
-        function createCreateJSDocUnaryType<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) {
-            return function createJSDocUnaryType(type: T["type"]): T {
-                return createJSDocUnaryTypeWorker<T>(kind, type);
-            };
-        }
 
-        function updateJSDocUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"], node: T, type: T["type"]): T {
-            return node.type !== type
-                ? update(createJSDocUnaryTypeWorker(kind, type), node)
-                : node;
+        function createJSDocUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"], type: T["type"]): T {
+            const node = createBaseNode<T>(kind);
+            node.type = type;
+            return node;
         }
 
         // @api
@@ -3995,10 +3990,10 @@ namespace ts {
         // updateJSDocOptionalType
         // updateJSDocVariadicType
         // updateJSDocNamepathType
-        function createUpdateJSDocUnaryType<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) {
-            return function updateJSDocUnaryType(node: T, type: T["type"]): T {
-                return updateJSDocUnaryTypeWorker(kind, node, type);
-            };
+        function updateJSDocUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"], node: T, type: T["type"]): T {
+            return node.type !== type
+                ? update(createJSDocUnaryTypeWorker(kind, type), node)
+                : node;
         }
 
         // @api
@@ -4071,7 +4066,8 @@ namespace ts {
                 : node;
         }
 
-        function getDefaultTagName(node: JSDocTag, defaultTagName: string) {
+        function getDefaultTagName(node: JSDocTag) {
+            const defaultTagName = getDefaultTagNameForKind(node.kind);
             return node.tagName.escapedText === escapeLeadingUnderscores(defaultTagName)
                 ? node.tagName
                 : createIdentifier(defaultTagName);
@@ -4094,7 +4090,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier = getDefaultTagName(node, "template"), constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | undefined): JSDocTemplateTag {
+        function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier = getDefaultTagName(node), constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | undefined): JSDocTemplateTag {
             return node.tagName !== tagName
                 || node.constraint !== constraint
                 || node.typeParameters !== typeParameters
@@ -4113,7 +4109,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier = getDefaultTagName(node, "typedef"), typeExpression: JSDocTypeExpression | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocTypedefTag {
+        function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocTypedefTag {
             return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.fullName !== fullName
@@ -4133,7 +4129,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node, "param"), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocParameterTag {
+        function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocParameterTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed
@@ -4155,7 +4151,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node, "prop"), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag {
+        function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed
@@ -4176,7 +4172,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier = getDefaultTagName(node, "callback"), typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag {
+        function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag {
             return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.fullName !== fullName
@@ -4193,7 +4189,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier = getDefaultTagName(node, "augments"), className: JSDocAugmentsTag["class"], comment: string | undefined): JSDocAugmentsTag {
+        function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocAugmentsTag["class"], comment: string | undefined): JSDocAugmentsTag {
             return node.tagName !== tagName
                 || node.class !== className
                 || node.comment !== comment
@@ -4209,17 +4205,12 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier = getDefaultTagName(node, "implements"), className: JSDocImplementsTag["class"], comment: string | undefined): JSDocImplementsTag {
+        function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocImplementsTag["class"], comment: string | undefined): JSDocImplementsTag {
             return node.tagName !== tagName
                 || node.class !== className
                 || node.comment !== comment
                 ? update(createJSDocImplementsTag(tagName, className, comment), node)
                 : node;
-        }
-
-        function createJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], defaultTagName: string, tagName: Identifier | undefined, comment?: string) {
-            const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(defaultTagName), comment);
-            return node;
         }
 
         // @api
@@ -4229,17 +4220,9 @@ namespace ts {
         // createJSDocPrivateTag
         // createJSDocProtectedTag
         // createJSDocReadonlyTag
-        function createCreateJSDocSimpleTag<T extends JSDocTag>(kind: T["kind"], defaultTagName: string) {
-            return function createJSDocSimpleTag(tagName: Identifier | undefined, comment?: string) {
-                return createJSDocSimpleTagWorker(kind, defaultTagName, tagName, comment);
-            };
-        }
-
-        function updateJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], defaultTagName: string, node: T, tagName: Identifier = getDefaultTagName(node, defaultTagName), comment: string | undefined) {
-            return node.tagName !== tagName
-                || node.comment !== comment
-                ? update(createJSDocSimpleTagWorker(kind, defaultTagName, tagName, comment), node) :
-                node;
+        function createJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], tagName: Identifier | undefined, comment?: string) {
+            const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
+            return node;
         }
 
         // @api
@@ -4249,16 +4232,11 @@ namespace ts {
         // updateJSDocPrivateTag
         // updateJSDocProtectedTag
         // updateJSDocReadonlyTag
-        function createUpdateJSDocSimpleTag<T extends JSDocTag>(kind: T["kind"], defaultTagName: string) {
-            return function updateJSDocSimpleTag(node: T, tagName: Identifier | undefined, comment: string | undefined) {
-                return updateJSDocSimpleTagWorker(kind, defaultTagName, node, tagName, comment);
-            };
-        }
-
-        function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], defaultTagName: string, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) {
-            const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(defaultTagName), comment);
-            node.typeExpression = typeExpression;
-            return node;
+        function updateJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), comment: string | undefined) {
+            return node.tagName !== tagName
+                || node.comment !== comment
+                ? update(createJSDocSimpleTagWorker(kind, tagName, comment), node) :
+                node;
         }
 
         // @api
@@ -4266,18 +4244,10 @@ namespace ts {
         // createJSDocReturnTag
         // createJSDocThisTag
         // createJSDocEnumTag
-        function createCreateJSDocTypeLikeTag<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], defaultTagName: string) {
-            return function createJSDocTypeLikeTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) {
-                return createJSDocTypeLikeTagWorker(kind, defaultTagName, tagName, typeExpression, comment);
-            };
-        }
-
-        function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], defaultTagName: string, node: T, tagName: Identifier = getDefaultTagName(node, defaultTagName), typeExpression: JSDocTypeExpression | undefined, comment: string | undefined) {
-            return node.tagName !== tagName
-                || node.typeExpression !== typeExpression
-                || node.comment !== comment
-                ? update(createJSDocTypeLikeTagWorker(kind, defaultTagName, tagName, typeExpression, comment), node)
-                : node;
+        function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) {
+            const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
+            node.typeExpression = typeExpression;
+            return node;
         }
 
         // @api
@@ -4285,10 +4255,12 @@ namespace ts {
         // updateJSDocReturnTag
         // updateJSDocThisTag
         // updateJSDocEnumTag
-        function createUpdateJSDocTypeLikeTag<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], defaultTagName: string) {
-            return function updateJSDocTypeLikeTag(node: T, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined) {
-                return updateJSDocTypeLikeTagWorker(kind, defaultTagName, node, tagName, typeExpression, comment);
-            };
+        function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, comment: string | undefined) {
+            return node.tagName !== tagName
+                || node.typeExpression !== typeExpression
+                || node.comment !== comment
+                ? update(createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment), node)
+                : node;
         }
 
         // @api
@@ -5055,194 +5027,19 @@ namespace ts {
             return clone;
         }
 
-        function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;
-        function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined;
-        function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined {
-            return array ? createNodeArray(array) : undefined;
-        }
-
-        function asName<T extends DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode | undefined>(name: string | T): T | Identifier {
-            return typeof name === "string" ? createIdentifier(name) :
-                name;
-        }
-
-        function asExpression<T extends Expression | undefined>(value: string | number | boolean | T): T | StringLiteral | NumericLiteral | BooleanLiteral {
-            return typeof value === "string" ? createStringLiteral(value) :
-                typeof value === "number" ? createNumericLiteral(value) :
-                typeof value === "boolean" ? value ? createTrue() : createFalse() :
-                value;
-        }
-
-        function asToken<TKind extends SyntaxKind>(value: TKind | Token<TKind>): Token<TKind> {
-            return typeof value === "number" ? createToken(value) : value;
-        }
-
-        function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
-        function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
-        function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
-            return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
-        }
-    }
-
-    function update<T extends Node>(updated: T, original: T): T {
-        if (updated !== original) {
-            setOriginalNode(updated, original);
-            setTextRange(updated, original);
-        }
-        return updated;
-    }
-
-    function createLazyFactoryMembers(
-        factory: NodeFactory,
-        asExpression: <T extends Expression | undefined>(value: string | number | boolean | T) => T | StringLiteral | NumericLiteral | BooleanLiteral,
-    ) {
-        // lazy initializaton of common operator factories
-        let lazyBinaryFactories: ((left: Expression, right: Expression) => BinaryExpression)[] | undefined;
-        let lazyPrefixUnaryFactories: ((operand: Expression) => PrefixUnaryExpression)[] | undefined;
-        let lazyPostfixUnaryFactories: ((operand: Expression) => PostfixUnaryExpression)[] | undefined;
-
-        return {
-            get createComma() { return getBinaryFactory(SyntaxKind.CommaToken); },
-            get createAssignment() { return getBinaryFactory(SyntaxKind.EqualsToken) as NodeFactory["createAssignment"]; },
-            get createLogicalOr() { return getBinaryFactory(SyntaxKind.BarBarToken); },
-            get createLogicalAnd() { return getBinaryFactory(SyntaxKind.AmpersandAmpersandToken); },
-            get createBitwiseOr() { return getBinaryFactory(SyntaxKind.BarToken); },
-            get createBitwiseXor() { return getBinaryFactory(SyntaxKind.CaretToken); },
-            get createBitwiseAnd() { return getBinaryFactory(SyntaxKind.AmpersandToken); },
-            get createStrictEquality() { return getBinaryFactory(SyntaxKind.EqualsEqualsEqualsToken); },
-            get createStrictInequality() { return getBinaryFactory(SyntaxKind.ExclamationEqualsEqualsToken); },
-            get createEquality() { return getBinaryFactory(SyntaxKind.EqualsEqualsToken); },
-            get createInequality() { return getBinaryFactory(SyntaxKind.ExclamationEqualsToken); },
-            get createLessThan() { return getBinaryFactory(SyntaxKind.LessThanToken); },
-            get createLessThanEquals() { return getBinaryFactory(SyntaxKind.LessThanEqualsToken); },
-            get createGreaterThan() { return getBinaryFactory(SyntaxKind.GreaterThanToken); },
-            get createGreaterThanEquals() { return getBinaryFactory(SyntaxKind.GreaterThanEqualsToken); },
-            get createLeftShift() { return getBinaryFactory(SyntaxKind.LessThanLessThanToken); },
-            get createRightShift() { return getBinaryFactory(SyntaxKind.GreaterThanGreaterThanToken); },
-            get createUnsignedRightShift() { return getBinaryFactory(SyntaxKind.GreaterThanGreaterThanGreaterThanToken); },
-            get createAdd() { return getBinaryFactory(SyntaxKind.PlusToken); },
-            get createSubtract() { return getBinaryFactory(SyntaxKind.MinusToken); },
-            get createMultiply() { return getBinaryFactory(SyntaxKind.AsteriskToken); },
-            get createDivide() { return getBinaryFactory(SyntaxKind.SlashToken); },
-            get createModulo() { return getBinaryFactory(SyntaxKind.PercentToken); },
-            get createExponent() { return getBinaryFactory(SyntaxKind.AsteriskAsteriskToken); },
-            get createPrefixPlus() { return getPrefixUnaryFactory(SyntaxKind.PlusToken); },
-            get createPrefixMinus() { return getPrefixUnaryFactory(SyntaxKind.MinusToken); },
-            get createPrefixIncrement() { return getPrefixUnaryFactory(SyntaxKind.PlusPlusToken); },
-            get createPrefixDecrement() { return getPrefixUnaryFactory(SyntaxKind.MinusMinusToken); },
-            get createBitwiseNot() { return getPrefixUnaryFactory(SyntaxKind.TildeToken); },
-            get createLogicalNot() { return getPrefixUnaryFactory(SyntaxKind.ExclamationToken); },
-            get createPostfixIncrement() { return getPostfixUnaryFactory(SyntaxKind.PlusPlusToken); },
-            get createPostfixDecrement() { return getPostfixUnaryFactory(SyntaxKind.MinusMinusToken); },
-
-            createSignatureDeclaration,
-            createImmediatelyInvokedFunctionExpression,
-            createImmediatelyInvokedArrowFunction,
-            createVoidZero,
-            createExportDefault,
-            createExternalModuleExport,
-            createTypeCheck,
-            createMethodCall,
-            createGlobalMethodCall,
-            createFunctionBindCall,
-            createFunctionCallCall,
-            createFunctionApplyCall,
-            createArraySliceCall,
-            createArrayConcatCall,
-            createObjectDefinePropertyCall,
-            createPropertyDescriptor,
-            createCallBinding,
-            inlineExpressions,
-            getInternalName,
-            getLocalName,
-            getExportName,
-            getDeclarationName,
-            getNamespaceMemberName,
-            getExternalModuleOrNamespaceExportName,
-            recreateOuterExpressions,
-            restoreEnclosingLabel,
-            createUseStrictPrologue,
-            copyPrologue,
-            copyStandardPrologue,
-            copyCustomPrologue,
-            ensureUseStrict,
-            liftToBlock,
-            mergeLexicalEnvironment,
-            updateModifiers,
-            updateBody,
-            updateType,
-        };
-
-        function getBinaryFactory(operator: BinaryOperator) {
-            const factories = lazyBinaryFactories || [];
-            return factories[operator] || (factories[operator] = (left, right) => factory.createBinary(left, operator, right));
-        }
-
-        function getPrefixUnaryFactory(operator: PrefixUnaryOperator) {
-            const factories = lazyPrefixUnaryFactories || [];
-            return factories[operator] || (factories[operator] = operand => factory.createPrefix(operator, operand));
-        }
-
-        function getPostfixUnaryFactory(operator: PostfixUnaryOperator) {
-            const factories = lazyPostfixUnaryFactories || [];
-            return factories[operator] || (factories[operator] = operand => factory.createPostfix(operand, operator));
-        }
-
-        // Route signature creation to the appropriate factory method. Used by the NodeBuilder in the checker.
-        function createSignatureDeclaration<T extends SignatureDeclaration>(kind: T["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): T;
-        function createSignatureDeclaration(kind: SignatureDeclaration["kind"], typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): SignatureDeclaration {
-            switch (kind) {
-                case SyntaxKind.CallSignature:
-                    return factory.createCallSignature(typeParameters, parameters, type);
-                case SyntaxKind.ConstructSignature:
-                    return factory.createConstructSignature(typeParameters, parameters, type);
-                case SyntaxKind.MethodSignature:
-                    // NOTE: This creates an *invalid* method signature since `name` is `undefined`, but this is preserved to support existing behavior.
-                    return factory.createMethodSignature(/*modifiers*/ undefined, /*name*/ undefined!, /*questionToken*/ undefined, typeParameters, parameters, type);
-                case SyntaxKind.MethodDeclaration:
-                    // NOTE: This creates an *invalid* method declaration since `name` is `undefined`, but this is preserved to support existing behavior.
-                    return factory.createMethodDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined!, /*questionToken*/ undefined, typeParameters, parameters, type, /*body*/ undefined);
-                case SyntaxKind.Constructor:
-                    return factory.createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, parameters, /*body*/ undefined);
-                case SyntaxKind.GetAccessor:
-                    // NOTE: This creates an *invalid* get accessor since `name` is `undefined`, but this is preserved to support existing behavior.
-                    return factory.createGetAccessorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*name*/ undefined!, parameters, type, /*body*/ undefined);
-                case SyntaxKind.SetAccessor:
-                    // NOTE: This creates an *invalid* set accessor since `name` is `undefined`, but this is preserved to support existing behavior.
-                    return factory.createSetAccessorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*name*/ undefined!, parameters, /*body*/ undefined);
-                case SyntaxKind.IndexSignature:
-                    return factory.createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, parameters, type);
-                case SyntaxKind.JSDocFunctionType:
-                    return factory.createJSDocFunctionType(parameters, type);
-                case SyntaxKind.FunctionType:
-                    return factory.createFunctionTypeNode(typeParameters, parameters, Debug.assertDefined(type));
-                case SyntaxKind.ConstructorType:
-                    return factory.createConstructorTypeNode(typeParameters, parameters, Debug.assertDefined(type));
-                case SyntaxKind.FunctionDeclaration:
-                    return factory.createFunctionDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined, typeParameters, parameters, type, /*body*/ undefined);
-                case SyntaxKind.FunctionExpression:
-                    // NOTE: This creates an *invalid* function expression since `body` is `undefined`, but this is preserved to support existing behavior.
-                    return factory.createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, /*name*/ undefined, typeParameters, parameters, type, /*body*/ undefined!);
-                case SyntaxKind.ArrowFunction:
-                    // NOTE: This creates an *invalid* arrow function since `body` is `undefined`, but this is preserved to support existing behavior.
-                    return factory.createArrowFunction(/*modifiers*/ undefined, typeParameters, parameters, type, /*equalsGreaterThanToken*/ undefined, /*body*/ undefined!);
-                default:
-                    return Debug.assertNever(kind);
-            }
-        }
-
+        // compound nodes
         function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
         function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
         function createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
-            return factory.createCall(
-                factory.createFunctionExpression(
+            return createCallExpression(
+                createFunctionExpression(
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
                     /*parameters*/ param ? [param] : [],
                     /*type*/ undefined,
-                    factory.createBlock(statements, /*multiLine*/ true)
+                    createBlock(statements, /*multiLine*/ true)
                 ),
                 /*typeArguments*/ undefined,
                 /*argumentsArray*/ paramValue ? [paramValue] : []
@@ -5252,14 +5049,14 @@ namespace ts {
         function createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
         function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
         function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
-            return factory.createCall(
-                factory.createArrowFunction(
+            return createCallExpression(
+                createArrowFunction(
                     /*modifiers*/ undefined,
                     /*typeParameters*/ undefined,
                     /*parameters*/ param ? [param] : [],
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ undefined,
-                    factory.createBlock(statements, /*multiLine*/ true)
+                    createBlock(statements, /*multiLine*/ true)
                 ),
                 /*typeArguments*/ undefined,
                 /*argumentsArray*/ paramValue ? [paramValue] : []
@@ -5267,11 +5064,11 @@ namespace ts {
         }
 
         function createVoidZero() {
-            return factory.createVoid(factory.createNumericLiteral("0"));
+            return createVoidExpression(createNumericLiteral("0"));
         }
 
         function createExportDefault(expression: Expression) {
-            return factory.createExportAssignment(
+            return createExportAssignment(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isExportEquals*/ false,
@@ -5279,12 +5076,12 @@ namespace ts {
         }
 
         function createExternalModuleExport(exportName: Identifier) {
-            return factory.createExportDeclaration(
+            return createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
-                factory.createNamedExports([
-                    factory.createExportSpecifier(/*propertyName*/ undefined, exportName)
+                createNamedExports([
+                    createExportSpecifier(/*propertyName*/ undefined, exportName)
                 ])
             );
         }
@@ -5296,12 +5093,12 @@ namespace ts {
         function createTypeCheck(value: Expression, tag: TypeOfTag) {
             return tag === "undefined"
                 ? factory.createStrictEquality(value, createVoidZero())
-                : factory.createStrictEquality(factory.createTypeOf(value), factory.createStringLiteral(tag));
+                : factory.createStrictEquality(createTypeOfExpression(value), createStringLiteral(tag));
         }
 
         function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
-            return factory.createCall(
-                factory.createPropertyAccess(object, methodName),
+            return createCallExpression(
+                createPropertyAccessExpression(object, methodName),
                 /*typeArguments*/ undefined,
                 argumentsList
             );
@@ -5320,7 +5117,7 @@ namespace ts {
         }
 
         function createGlobalMethodCall(globalObjectName: string, methodName: string, argumentsList: readonly Expression[]) {
-            return createMethodCall(factory.createIdentifier(globalObjectName), methodName, argumentsList);
+            return createMethodCall(createIdentifier(globalObjectName), methodName, argumentsList);
         }
 
         function createArraySliceCall(array: Expression, start?: number | Expression) {
@@ -5337,7 +5134,7 @@ namespace ts {
 
         function tryAddPropertyAssignment(properties: Push<PropertyAssignment>, propertyName: string, expression: Expression | undefined) {
             if (expression) {
-                properties.push(factory.createPropertyAssignment(propertyName, expression));
+                properties.push(createPropertyAssignment(propertyName, expression));
                 return true;
             }
             return false;
@@ -5355,16 +5152,16 @@ namespace ts {
             isAccessor = tryAddPropertyAssignment(properties, "set", attributes.set) || isAccessor;
 
             Debug.assert(!(isData && isAccessor), "A PropertyDescriptor may not be both an accessor descriptor and a data descriptor.");
-            return factory.createObjectLiteral(properties, !singleLine);
+            return createObjectLiteralExpression(properties, !singleLine);
         }
 
         function updateOuterExpression(outerExpression: OuterExpression, expression: Expression) {
             switch (outerExpression.kind) {
-                case SyntaxKind.ParenthesizedExpression: return factory.updateParen(outerExpression, expression);
-                case SyntaxKind.TypeAssertionExpression: return factory.updateTypeAssertion(outerExpression, outerExpression.type, expression);
-                case SyntaxKind.AsExpression: return factory.updateAsExpression(outerExpression, expression, outerExpression.type);
-                case SyntaxKind.NonNullExpression: return factory.updateNonNullExpression(outerExpression, expression);
-                case SyntaxKind.PartiallyEmittedExpression: return factory.updatePartiallyEmittedExpression(outerExpression, expression);
+                case SyntaxKind.ParenthesizedExpression: return updateParenthesizedExpression(outerExpression, expression);
+                case SyntaxKind.TypeAssertionExpression: return updateTypeAssertion(outerExpression, outerExpression.type, expression);
+                case SyntaxKind.AsExpression: return updateAsExpression(outerExpression, expression, outerExpression.type);
+                case SyntaxKind.NonNullExpression: return updateNonNullExpression(outerExpression, expression);
+                case SyntaxKind.PartiallyEmittedExpression: return updatePartiallyEmittedExpression(outerExpression, expression);
             }
         }
 
@@ -5391,11 +5188,11 @@ namespace ts {
                 && !some(getSyntheticTrailingComments(node));
         }
 
-        function recreateOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds = OuterExpressionKinds.All): Expression {
+        function restoreOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds = OuterExpressionKinds.All): Expression {
             if (outerExpression && isOuterExpression(outerExpression, kinds) && !isIgnorableParen(outerExpression)) {
                 return updateOuterExpression(
                     outerExpression,
-                    recreateOuterExpressions(outerExpression.expression, innerExpression)
+                    restoreOuterExpressions(outerExpression.expression, innerExpression)
                 );
             }
             return innerExpression;
@@ -5405,7 +5202,7 @@ namespace ts {
             if (!outermostLabeledStatement) {
                 return node;
             }
-            const updated = factory.updateLabel(
+            const updated = updateLabeledStatement(
                 outermostLabeledStatement,
                 outermostLabeledStatement.label,
                 isLabeledStatement(outermostLabeledStatement.statement)
@@ -5446,24 +5243,24 @@ namespace ts {
             let thisArg: Expression;
             let target: LeftHandSideExpression;
             if (isSuperProperty(callee)) {
-                thisArg = factory.createThis();
+                thisArg = createThis();
                 target = callee;
             }
             else if (isSuperKeyword(callee)) {
-                thisArg = factory.createThis();
+                thisArg = createThis();
                 target = languageVersion !== undefined && languageVersion < ScriptTarget.ES2015
-                    ? setTextRange(factory.createIdentifier("_super"), callee)
+                    ? setTextRange(createIdentifier("_super"), callee)
                     : <PrimaryExpression>callee;
             }
             else if (getEmitFlags(callee) & EmitFlags.HelperName) {
                 thisArg = createVoidZero();
-                target = factory.parenthesizer.parenthesizeLeftSideOfAccess(callee);
+                target = parenthesizerRules().parenthesizeLeftSideOfAccess(callee);
             }
             else if (isPropertyAccessExpression(callee)) {
                 if (shouldBeCapturedInTempVariable(callee.expression, cacheIdentifiers)) {
                     // for `a.b()` target is `(_a = a).b` and thisArg is `_a`
-                    thisArg = factory.createTempVariable(recordTempVariable);
-                    target = factory.createPropertyAccess(
+                    thisArg = createTempVariable(recordTempVariable);
+                    target = createPropertyAccessExpression(
                         setTextRange(
                             factory.createAssignment(
                                 thisArg,
@@ -5483,8 +5280,8 @@ namespace ts {
             else if (isElementAccessExpression(callee)) {
                 if (shouldBeCapturedInTempVariable(callee.expression, cacheIdentifiers)) {
                     // for `a[b]()` target is `(_a = a)[b]` and thisArg is `_a`
-                    thisArg = factory.createTempVariable(recordTempVariable);
-                    target = factory.createElementAccess(
+                    thisArg = createTempVariable(recordTempVariable);
+                    target = createElementAccessExpression(
                         setTextRange(
                             factory.createAssignment(
                                 thisArg,
@@ -5504,7 +5301,7 @@ namespace ts {
             else {
                 // for `a()` target is `a` and thisArg is `void 0`
                 thisArg = createVoidZero();
-                target = factory.parenthesizer.parenthesizeLeftSideOfAccess(expression);
+                target = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
             }
 
             return { target, thisArg };
@@ -5514,7 +5311,7 @@ namespace ts {
             // Avoid deeply nested comma expressions as traversing them during emit can result in "Maximum call
             // stack size exceeded" errors.
             return expressions.length > 10
-                ? factory.createCommaList(expressions)
+                ? createCommaListExpression(expressions)
                 : reduceLeft(expressions, factory.createComma)!;
         }
 
@@ -5522,14 +5319,14 @@ namespace ts {
             const nodeName = getNameOfDeclaration(node);
             if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
                 // TODO(rbuckton): Does this need to be parented?
-                const name = setParent(setTextRange(factory.cloneNode(nodeName), nodeName), nodeName.parent);
+                const name = setParent(setTextRange(cloneNode(nodeName), nodeName), nodeName.parent);
                 emitFlags |= getEmitFlags(nodeName);
                 if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
                 if (!allowComments) emitFlags |= EmitFlags.NoComments;
                 if (emitFlags) setEmitFlags(name, emitFlags);
                 return name;
             }
-            return factory.getGeneratedNameForNode(node);
+            return getGeneratedNameForNode(node);
         }
 
         /**
@@ -5595,7 +5392,7 @@ namespace ts {
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
         function getNamespaceMemberName(ns: Identifier, name: Identifier, allowComments?: boolean, allowSourceMaps?: boolean): PropertyAccessExpression {
-            const qualifiedName = factory.createPropertyAccess(ns, nodeIsSynthesized(name) ? name : factory.cloneNode(name));
+            const qualifiedName = createPropertyAccessExpression(ns, nodeIsSynthesized(name) ? name : cloneNode(name));
             setTextRange(qualifiedName, name);
             let emitFlags: EmitFlags = 0;
             if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
@@ -5639,7 +5436,7 @@ namespace ts {
         }
 
         function createUseStrictPrologue() {
-            return startOnNewLine(factory.createExpressionStatement(factory.createStringLiteral("use strict"))) as PrologueDirective;
+            return startOnNewLine(createExpressionStatement(createStringLiteral("use strict"))) as PrologueDirective;
         }
 
         /**
@@ -5705,7 +5502,7 @@ namespace ts {
             const foundUseStrict = findUseStrictPrologue(statements);
 
             if (!foundUseStrict) {
-                return setTextRange(factory.createNodeArray<Statement>([createUseStrictPrologue(), ...statements]), statements);
+                return setTextRange(createNodeArray<Statement>([createUseStrictPrologue(), ...statements]), statements);
             }
 
             return statements;
@@ -5718,7 +5515,7 @@ namespace ts {
          */
         function liftToBlock(nodes: readonly Node[]): Statement {
             Debug.assert(every(nodes, isStatementOrBlock), "Cannot lift nodes to a Block.");
-            return <Statement>singleOrUndefined(nodes) || factory.createBlock(<readonly Statement[]>nodes);
+            return <Statement>singleOrUndefined(nodes) || createBlock(<readonly Statement[]>nodes);
         }
 
         function findSpanEnd<T>(array: readonly T[], test: (value: T) => boolean, start: number) {
@@ -5817,7 +5614,7 @@ namespace ts {
             }
 
             if (isNodeArray(statements)) {
-                return setTextRange(factory.createNodeArray(left, statements.hasTrailingComma), statements);
+                return setTextRange(createNodeArray(left, statements.hasTrailingComma), statements);
             }
 
             return statements;
@@ -5826,77 +5623,92 @@ namespace ts {
         function updateModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags): T;
         function updateModifiers(node: HasModifiers, modifiers: readonly Modifier[] | ModifierFlags) {
             if (typeof modifiers === "number") {
-                modifiers = factory.createModifiersFromModifierFlags(modifiers);
+                modifiers = createModifiersFromModifierFlags(modifiers);
             }
-            return isParameter(node) ? factory.updateParameterDeclaration(node, node.decorators, modifiers, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
-                isPropertySignature(node) ? factory.updatePropertySignature(node, modifiers, node.name, node.questionToken, node.type) :
-                isPropertyDeclaration(node) ? factory.updatePropertyDeclaration(node, node.decorators, modifiers, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
-                isMethodSignature(node) ? factory.updateMethodSignature(node, modifiers, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
-                isMethodDeclaration(node) ? factory.updateMethodDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
-                isConstructorDeclaration(node) ? factory.updateConstructorDeclaration(node, node.decorators, modifiers, node.parameters, node.body) :
-                isGetAccessorDeclaration(node) ? factory.updateGetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.type, node.body) :
-                isSetAccessorDeclaration(node) ? factory.updateSetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.body) :
-                isIndexSignatureDeclaration(node) ? factory.updateIndexSignature(node, node.decorators, modifiers, node.parameters, node.type) :
-                isFunctionExpression(node) ? factory.updateFunctionExpression(node, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
-                isArrowFunction(node) ? factory.updateArrowFunction(node, modifiers, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
-                isClassExpression(node) ? factory.updateClassExpression(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isVariableStatement(node) ? factory.updateVariableStatement(node, modifiers, node.declarationList) :
-                isFunctionDeclaration(node) ? factory.updateFunctionDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
-                isClassDeclaration(node) ? factory.updateClassDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isInterfaceDeclaration(node) ? factory.updateInterfaceDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isTypeAliasDeclaration(node) ? factory.updateTypeAliasDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.type) :
-                isEnumDeclaration(node) ? factory.updateEnumDeclaration(node, node.decorators, modifiers, node.name, node.members) :
-                isModuleDeclaration(node) ? factory.updateModuleDeclaration(node, node.decorators, modifiers, node.name, node.body) :
-                isImportEqualsDeclaration(node) ? factory.updateImportEqualsDeclaration(node, node.decorators, modifiers, node.name, node.moduleReference) :
-                isImportDeclaration(node) ? factory.updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier) :
-                isExportAssignment(node) ? factory.updateExportAssignment(node, node.decorators, modifiers, node.expression) :
-                isExportDeclaration(node) ? factory.updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier) :
+            return isParameter(node) ? updateParameterDeclaration(node, node.decorators, modifiers, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
+                isPropertySignature(node) ? updatePropertySignature(node, modifiers, node.name, node.questionToken, node.type) :
+                isPropertyDeclaration(node) ? updatePropertyDeclaration(node, node.decorators, modifiers, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+                isMethodSignature(node) ? updateMethodSignature(node, modifiers, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
+                isMethodDeclaration(node) ? updateMethodDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+                isConstructorDeclaration(node) ? updateConstructorDeclaration(node, node.decorators, modifiers, node.parameters, node.body) :
+                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.type, node.body) :
+                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, node.decorators, modifiers, node.name, node.parameters, node.body) :
+                isIndexSignatureDeclaration(node) ? updateIndexSignature(node, node.decorators, modifiers, node.parameters, node.type) :
+                isFunctionExpression(node) ? updateFunctionExpression(node, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                isArrowFunction(node) ? updateArrowFunction(node, modifiers, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
+                isClassExpression(node) ? updateClassExpression(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isVariableStatement(node) ? updateVariableStatement(node, modifiers, node.declarationList) :
+                isFunctionDeclaration(node) ? updateFunctionDeclaration(node, node.decorators, modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                isClassDeclaration(node) ? updateClassDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, node.decorators, modifiers, node.name, node.typeParameters, node.type) :
+                isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifiers, node.name, node.members) :
+                isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifiers, node.name, node.body) :
+                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifiers, node.name, node.moduleReference) :
+                isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifiers, node.importClause, node.moduleSpecifier) :
+                isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifiers, node.expression) :
+                isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifiers, node.isTypeOnly, node.exportClause, node.moduleSpecifier) :
                 Debug.assertNever(node);
         }
 
-        function updateBody<T extends FunctionLikeDeclaration>(node: T, body: T["body"]): T;
-        function updateBody(node: FunctionLikeDeclaration, body: FunctionLikeDeclaration["body"]) {
-            return isFunctionDeclaration(node) ? factory.updateFunctionDeclaration(node, node.decorators, node.modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, body && cast(body, isBlock)) :
-                isMethodDeclaration(node) ? factory.updateMethodDeclaration(node, node.decorators, node.modifiers, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, body && cast(body, isBlock)) :
-                isGetAccessorDeclaration(node) ? factory.updateGetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, node.parameters, node.type, body && cast(body, isBlock)) :
-                isSetAccessorDeclaration(node) ? factory.updateSetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, node.parameters, body && cast(body, isBlock)) :
-                isConstructorDeclaration(node) ? factory.updateConstructorDeclaration(node, node.decorators, node.modifiers, node.parameters, body && cast(body, isBlock)) :
-                isFunctionExpression(node) ? factory.updateFunctionExpression(node, node.modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, cast(body ?? Debug.fail("Argument expected: body"), isBlock)) :
-                isArrowFunction(node) ? factory.updateArrowFunction(node, node.modifiers, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, cast(body ?? Debug.fail("Argument expected: body"), isConciseBody)) :
-                Debug.assertNever(node);
+        function asNodeArray<T extends Node>(array: readonly T[]): NodeArray<T>;
+        function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined;
+        function asNodeArray<T extends Node>(array: readonly T[] | undefined): NodeArray<T> | undefined {
+            return array ? createNodeArray(array) : undefined;
         }
 
-        function updateType<T extends Exclude<HasType, SetAccessorDeclaration | ConstructorDeclaration>>(node: T, type: T["type"]): T;
-        function updateType(node: Exclude<HasType, SetAccessorDeclaration | ConstructorDeclaration>, type: Exclude<HasType, SetAccessorDeclaration | ConstructorDeclaration>["type"]) {
-            return isCallSignatureDeclaration(node) ? factory.updateCallSignature(node, node.typeParameters, node.parameters, type) :
-                isConstructSignatureDeclaration(node) ? factory.updateConstructSignature(node, node.typeParameters, node.parameters, type) :
-                isMethodSignature(node) ? factory.updateMethodSignature(node, node.modifiers, node.name, node.questionToken, node.typeParameters, node.parameters, type) :
-                isIndexSignatureDeclaration(node) ? factory.updateIndexSignature(node, node.decorators, node.modifiers, node.parameters, type ?? Debug.fail("Argument expected: type")) :
-                isFunctionTypeNode(node) ? factory.updateFunctionTypeNode(node, node.typeParameters, node.parameters, type ?? Debug.fail("Argument expected: type")) :
-                isConstructorTypeNode(node) ? factory.updateConstructorTypeNode(node, node.typeParameters, node.parameters, type ?? Debug.fail("Argument expected: type")) :
-                isFunctionDeclaration(node) ? factory.updateFunctionDeclaration(node, node.decorators, node.modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, type, node.body) :
-                isMethodDeclaration(node) ? factory.updateMethodDeclaration(node, node.decorators, node.modifiers, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, type, node.body) :
-                isGetAccessorDeclaration(node) ? factory.updateGetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, node.parameters, type, node.body) :
-                isFunctionExpression(node) ? factory.updateFunctionExpression(node, node.modifiers, node.asteriskToken, node.name, node.typeParameters, node.parameters, type, node.body) :
-                isArrowFunction(node) ? factory.updateArrowFunction(node, node.modifiers, node.typeParameters, node.parameters, type, node.equalsGreaterThanToken, node.body) :
-                isVariableDeclaration(node) ? factory.updateVariableDeclaration(node, node.name, node.exclamationToken, type, node.initializer) :
-                isParameter(node) ? factory.updateParameterDeclaration(node, node.decorators, node.modifiers, node.dotDotDotToken, node.name, node.questionToken, type, node.initializer) :
-                isPropertySignature(node) ? factory.updatePropertySignature(node, node.modifiers, node.name, node.questionToken, type) :
-                isPropertyDeclaration(node) ? factory.updatePropertyDeclaration(node, node.decorators, node.modifiers, node.name, node.questionToken ?? node.exclamationToken, type, node.initializer) :
-                isTypePredicateNode(node) ? factory.updateTypePredicateNode(node, node.assertsModifier, node.parameterName, type) :
-                isParenthesizedTypeNode(node) ? factory.updateParenthesizedType(node, type ?? Debug.fail("Argument expected: type")) :
-                isTypeOperatorNode(node) ? factory.updateTypeOperatorNode(node, type ?? Debug.fail("Argument expected: type")) :
-                isMappedTypeNode(node) ? factory.updateMappedTypeNode(node, node.readonlyToken, node.typeParameter, node.questionToken, type) :
-                isAsExpression(node) ? factory.updateAsExpression(node, node.expression, type ?? Debug.fail("Argument expected: type")) :
-                isTypeAssertionExpression(node) ? factory.updateTypeAssertion(node, type ?? Debug.fail("Argument expected: type"), node.expression) :
-                isTypeAliasDeclaration(node) ? factory.updateTypeAliasDeclaration(node, node.decorators, node.modifiers, node.name, node.typeParameters, type ?? Debug.fail("Argument expected: type")) :
-                isJSDocFunctionType(node) ? factory.updateJSDocFunctionType(node, node.parameters, type) :
-                isJSDocTypeExpression(node) ? factory.updateJSDocTypeExpression(node, type ?? Debug.fail("Argument expected: type")) :
-                isJSDocNonNullableType(node) ? factory.updateJSDocNonNullableType(node, type ?? Debug.fail("Argument expected: type")) :
-                isJSDocNullableType(node) ? factory.updateJSDocNullableType(node, type ?? Debug.fail("Argument expected: type")) :
-                isJSDocOptionalType(node) ? factory.updateJSDocOptionalType(node, type ?? Debug.fail("Argument expected: type")) :
-                isJSDocVariadicType(node) ? factory.updateJSDocVariadicType(node, type ?? Debug.fail("Argument expected: type")) :
-                Debug.assertNever(node);
+        function asName<T extends DeclarationName | Identifier | BindingName | PropertyName | NoSubstitutionTemplateLiteral | EntityName | ThisTypeNode | undefined>(name: string | T): T | Identifier {
+            return typeof name === "string" ? createIdentifier(name) :
+                name;
+        }
+
+        function asExpression<T extends Expression | undefined>(value: string | number | boolean | T): T | StringLiteral | NumericLiteral | BooleanLiteral {
+            return typeof value === "string" ? createStringLiteral(value) :
+                typeof value === "number" ? createNumericLiteral(value) :
+                typeof value === "boolean" ? value ? createTrue() : createFalse() :
+                value;
+        }
+
+        function asToken<TKind extends SyntaxKind>(value: TKind | Token<TKind>): Token<TKind> {
+            return typeof value === "number" ? createToken(value) : value;
+        }
+
+        function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
+        function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
+        function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
+            return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
+        }
+    }
+
+    function update<T extends Node>(updated: T, original: T): T {
+        if (updated !== original) {
+            setOriginalNode(updated, original);
+            setTextRange(updated, original);
+        }
+        return updated;
+    }
+
+    function getDefaultTagNameForKind(kind: JSDocTag["kind"]): string {
+        switch (kind) {
+            case SyntaxKind.JSDocTypeTag: return "type";
+            case SyntaxKind.JSDocReturnTag: return "returns";
+            case SyntaxKind.JSDocThisTag: return "this";
+            case SyntaxKind.JSDocEnumTag: return "enum";
+            case SyntaxKind.JSDocAuthorTag: return "author";
+            case SyntaxKind.JSDocClassTag: return "class";
+            case SyntaxKind.JSDocPublicTag: return "public";
+            case SyntaxKind.JSDocPrivateTag: return "private";
+            case SyntaxKind.JSDocProtectedTag: return "protected";
+            case SyntaxKind.JSDocReadonlyTag: return "readonly";
+            case SyntaxKind.JSDocTemplateTag: return "template";
+            case SyntaxKind.JSDocTypedefTag: return "typedef";
+            case SyntaxKind.JSDocParameterTag: return "param";
+            case SyntaxKind.JSDocPropertyTag: return "prop";
+            case SyntaxKind.JSDocCallbackTag: return "callback";
+            case SyntaxKind.JSDocAugmentsTag: return "augments";
+            case SyntaxKind.JSDocImplementsTag: return "implements";
+            default:
+                return Debug.fail(`Unsupported kind: ${Debug.formatSyntaxKind(kind)}`);
         }
     }
 

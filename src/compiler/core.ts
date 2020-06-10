@@ -1516,6 +1516,20 @@ namespace ts {
         };
     }
 
+    /** A version of `memoize` that supports a single primitive argument */
+    export function memoizeOne<A extends string | number | boolean | undefined, T>(callback: (arg: A) => T): (arg: A) => T {
+        const map = createMap<T>();
+        return (arg: A) => {
+            const key = `${typeof arg}:${arg}`;
+            let value = map.get(key);
+            if (value === undefined && !map.has(key)) {
+                value = callback(arg);
+                map.set(key, value);
+            }
+            return value!;
+        };
+    }
+
     /**
      * High-order function, composes functions. Note that functions are composed inside-out;
      * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
