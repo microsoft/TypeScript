@@ -5141,6 +5141,10 @@ declare namespace ts {
         fileName: Path;
         packageName: string;
     }
+    interface PerformanceEvent {
+        kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
+        durationMs: number;
+    }
     interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
@@ -5798,6 +5802,7 @@ declare namespace ts {
         source?: string;
         isRecommended?: true;
         isFromUncheckedFile?: true;
+        isPackageJsonImport?: true;
     }
     interface CompletionEntryDetails {
         name: string;
@@ -6393,6 +6398,10 @@ declare namespace ts.server.protocol {
          * Time spent updating the program graph, in milliseconds.
          */
         updateGraphDurationMs?: number;
+        /**
+         * The time spent creating or updating the auto-import program, in milliseconds.
+         */
+        createAutoImportProviderProgramDurationMs?: number;
     }
     /**
      * Arguments for FileRequest messages.
@@ -7833,6 +7842,11 @@ declare namespace ts.server.protocol {
          * and therefore may not be accurate.
          */
         isFromUncheckedFile?: true;
+        /**
+         * If true, this completion was for an auto-import of a module not yet in the program, but listed
+         * in the project package.json.
+         */
+        isPackageJsonImport?: true;
     }
     /**
      * Additional completion entry details, available on demand
@@ -9550,7 +9564,7 @@ declare namespace ts.server {
         private readonly gcTimer;
         protected projectService: ProjectService;
         private changeSeq;
-        private updateGraphDurationMs;
+        private performanceData;
         private currentRequestId;
         private errorCheck;
         protected host: ServerHost;
@@ -9565,6 +9579,7 @@ declare namespace ts.server {
         private readonly noGetErrOnBackgroundUpdate?;
         constructor(opts: SessionOptions);
         private sendRequestCompletedEvent;
+        private addPerformanceData;
         private performanceEventHandler;
         private defaultEventHandler;
         private projectsUpdatedInBackgroundEvent;

@@ -5141,6 +5141,10 @@ declare namespace ts {
         fileName: Path;
         packageName: string;
     }
+    interface PerformanceEvent {
+        kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
+        durationMs: number;
+    }
     interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
@@ -5798,6 +5802,7 @@ declare namespace ts {
         source?: string;
         isRecommended?: true;
         isFromUncheckedFile?: true;
+        isPackageJsonImport?: true;
     }
     interface CompletionEntryDetails {
         name: string;

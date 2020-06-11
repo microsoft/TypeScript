@@ -443,7 +443,7 @@ namespace ts.Completions {
             isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
             replacementSpan,
-            isPackageJsonImport: originIsPackageJsonImport(origin) ? true : undefined,
+            isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         };
     }
 
@@ -1642,7 +1642,7 @@ namespace ts.Completions {
                 // Don't add another completion for `export =` of a symbol that's already global.
                 // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
                 if (resolvedModuleSymbol !== moduleSymbol && every(resolvedModuleSymbol.declarations, isNonGlobalDeclaration)) {
-                    pushSymbol(resolvedModuleSymbol, moduleSymbol, /*isFromPackageJson*/ isFromPackageJson, /*skipFilter*/ true);
+                    pushSymbol(resolvedModuleSymbol, moduleSymbol, isFromPackageJson, /*skipFilter*/ true);
                 }
 
                 for (const symbol of typeChecker.getExportsAndPropertiesOfModule(moduleSymbol)) {
