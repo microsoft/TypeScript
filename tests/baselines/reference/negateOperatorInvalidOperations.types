@@ -11,26 +11,26 @@ var NUMBER1 = var NUMBER-;  //expect error
 
 // invalid expressions
 var NUMBER2 = -(null - undefined);
->NUMBER2 : number
->-(null - undefined) : number
->(null - undefined) : number
->null - undefined : number
+>NUMBER2 : number | bigint
+>-(null - undefined) : number | bigint
+>(null - undefined) : number | bigint
+>null - undefined : number | bigint
 >null : null
 >undefined : undefined
 
 var NUMBER3 = -(null - null);
->NUMBER3 : number
->-(null - null) : number
->(null - null) : number
->null - null : number
+>NUMBER3 : number | bigint
+>-(null - null) : number | bigint
+>(null - null) : number | bigint
+>null - null : number | bigint
 >null : null
 >null : null
 
 var NUMBER4 = -(undefined - undefined);
->NUMBER4 : number
->-(undefined - undefined) : number
->(undefined - undefined) : number
->undefined - undefined : number
+>NUMBER4 : number | bigint
+>-(undefined - undefined) : number | bigint
+>(undefined - undefined) : number | bigint
+>undefined - undefined : number | bigint
 >undefined : undefined
 >undefined : undefined
 

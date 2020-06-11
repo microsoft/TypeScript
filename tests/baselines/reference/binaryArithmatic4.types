@@ -1,7 +1,7 @@
 === tests/cases/compiler/binaryArithmatic4.ts ===
 var v = null | null;
->v : number
->null | null : number
+>v : number | bigint
+>null | null : number | bigint
 >null : null
 >null : null
 

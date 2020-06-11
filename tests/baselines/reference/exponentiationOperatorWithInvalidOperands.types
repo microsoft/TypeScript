@@ -29,8 +29,8 @@ var f: Number;
 // All of the below should be an error unless otherwise noted
 // operator **
 var r1a1 = a ** a; //ok
->r1a1 : number
->a ** a : number
+>r1a1 : number | bigint
+>a ** a : number | bigint
 >a : any
 >a : any
 

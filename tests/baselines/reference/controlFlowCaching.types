@@ -554,7 +554,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >titlePos : any
 >y : any
 >offsets.t - titleOffset + (titleRotation ? 0 : tsize) : any
->offsets.t - titleOffset : number
+>offsets.t - titleOffset : number | bigint
 >offsets.t : any
 >offsets : any
 >t : any
@@ -590,7 +590,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >"middle" : "middle"
 
             labelOffset.y -= size;
->labelOffset.y -= size : number
+>labelOffset.y -= size : number | bigint
 >labelOffset.y : any
 >labelOffset : any
 >y : any

@@ -648,12 +648,12 @@ anyValue + anyValue; // should infer any
 >anyValue : any
 
 anyValue >>> anyValue; // should infer number
->anyValue >>> anyValue : number
+>anyValue >>> anyValue : number | bigint
 >anyValue : any
 >anyValue : any
 
 anyValue ^ anyValue; // should infer number
->anyValue ^ anyValue : number
+>anyValue ^ anyValue : number | bigint
 >anyValue : any
 >anyValue : any
 

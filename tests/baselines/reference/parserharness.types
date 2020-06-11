@@ -7389,13 +7389,13 @@ module Harness {
 >mapEdits : (edits: any[]) => { edit: any; index: number; }[]
 >edits : any[]
 >sort : (compareFn?: (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number) => { edit: any; index: number; }[]
->function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number
+>function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number | bigint
 >a : { edit: any; index: number; }
 >b : { edit: any; index: number; }
 
                 var result = a.edit.minChar - b.edit.minChar;
->result : number
->a.edit.minChar - b.edit.minChar : number
+>result : number | bigint
+>a.edit.minChar - b.edit.minChar : number | bigint
 >a.edit.minChar : any
 >a.edit : any
 >a : { edit: any; index: number; }
@@ -7409,12 +7409,12 @@ module Harness {
 
                 if (result == 0)
 >result == 0 : boolean
->result : number
+>result : number | bigint
 >0 : 0
 
                     result = a.index - b.index;
 >result = a.index - b.index : number
->result : number
+>result : number | bigint
 >a.index - b.index : number
 >a.index : number
 >a : { edit: any; index: number; }
@@ -7424,7 +7424,7 @@ module Harness {
 >index : number
 
                 return result;
->result : number
+>result : number | bigint
 
             });
 
@@ -7481,8 +7481,8 @@ module Harness {
 >edit : any
 
                 var gap = nextEdit.minChar - currentEdit.limChar;
->gap : number
->nextEdit.minChar - currentEdit.limChar : number
+>gap : number | bigint
+>nextEdit.minChar - currentEdit.limChar : number | bigint
 >nextEdit.minChar : any
 >nextEdit : any
 >minChar : any
@@ -7493,7 +7493,7 @@ module Harness {
                 // non-overlapping edits
                 if (gap >= 0) {
 >gap >= 0 : boolean
->gap : number
+>gap : number | bigint
 >0 : 0
 
                     result.push(currentEdit);

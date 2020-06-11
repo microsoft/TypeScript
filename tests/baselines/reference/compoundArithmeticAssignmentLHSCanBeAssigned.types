@@ -18,7 +18,7 @@ var x1: any;
 >x1 : any
 
 x1 *= a;
->x1 *= a : number
+>x1 *= a : number | bigint
 >x1 : any
 >a : any
 
@@ -33,12 +33,12 @@ x1 *= c;
 >c : E
 
 x1 *= null;
->x1 *= null : number
+>x1 *= null : number | bigint
 >x1 : any
 >null : null
 
 x1 *= undefined;
->x1 *= undefined : number
+>x1 *= undefined : number | bigint
 >x1 : any
 >undefined : undefined
 

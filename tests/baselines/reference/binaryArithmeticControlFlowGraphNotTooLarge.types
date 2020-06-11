@@ -182,10 +182,10 @@ const foo = function (this: any) {
 >a += ((b & c) | (~b & d)) + blocks[0] : any
 >a : any
 >((b & c) | (~b & d)) + blocks[0] : any
->((b & c) | (~b & d)) : number
->(b & c) | (~b & d) : number
->(b & c) : number
->b & c : number
+>((b & c) | (~b & d)) : any
+>(b & c) | (~b & d) : any
+>(b & c) : number | bigint
+>b & c : number | bigint
 >b : any
 >c : any
 >(~b & d) : number

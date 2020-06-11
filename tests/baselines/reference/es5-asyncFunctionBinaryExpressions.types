@@ -353,14 +353,14 @@ async function binaryExponentiation() {
 >binaryExponentiation : () => Promise<void>
 
     (await x) ** y;
->(await x) ** y : number
+>(await x) ** y : number | bigint
 >(await x) : any
 >await x : any
 >x : any
 >y : any
 
     x ** await y;
->x ** await y : number
+>x ** await y : number | bigint
 >x : any
 >await y : any
 >y : any

@@ -107,10 +107,13 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1784,61): 
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1785,25): error TS2503: Cannot find namespace 'Services'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1787,38): error TS2503: Cannot find namespace 'Services'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1787,68): error TS2503: Cannot find namespace 'Services'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1795,45): error TS2345: Argument of type '(a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number | bigint' is not assignable to parameter of type '(a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number'.
+  Type 'number | bigint' is not assignable to type 'number'.
+    Type 'bigint' is not assignable to type 'number'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts (110 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts (111 errors) ====
     //﻿
     // Copyright (c) Microsoft Corporation.  All rights reserved.
     // 
@@ -2124,6 +2127,10 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
                 }
     
                 var temp = mapEdits(edits).sort(function (a, b) {
+                                                ~~~~~~~~
+!!! error TS2345: Argument of type '(a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number | bigint' is not assignable to parameter of type '(a: { edit: any; index: number; }, b: { edit: any; index: number; }) => number'.
+!!! error TS2345:   Type 'number | bigint' is not assignable to type 'number'.
+!!! error TS2345:     Type 'bigint' is not assignable to type 'number'.
                     var result = a.edit.minChar - b.edit.minChar;
                     if (result == 0)
                         result = a.index - b.index;

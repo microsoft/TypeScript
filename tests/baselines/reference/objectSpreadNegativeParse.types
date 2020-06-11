@@ -10,7 +10,7 @@ let o7 = { ...o? };
 let o8 = { ...*o };
 >o8 : any
 >{ ...*o } : any
->*o : number
+>*o : number | bigint
 > : any
 >o : any
 

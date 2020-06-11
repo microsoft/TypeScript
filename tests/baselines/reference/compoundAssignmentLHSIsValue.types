@@ -50,7 +50,7 @@ function foo() {
 >foo : () => void
 
     this *= value;
->this *= value : number
+>this *= value : number | bigint
 >this : any
 >value : any
 
@@ -76,7 +76,7 @@ module M { export var a; }
 >a : any
 
 M *= value;
->M *= value : number
+>M *= value : number | bigint
 >M : any
 >value : any
 
@@ -86,7 +86,7 @@ M += value;
 >value : any
 
 C *= value;
->C *= value : number
+>C *= value : number | bigint
 >C : any
 >value : any
 
@@ -99,7 +99,7 @@ enum E { }
 >E : E
 
 E *= value;
->E *= value : number
+>E *= value : number | bigint
 >E : any
 >value : any
 
@@ -109,7 +109,7 @@ E += value;
 >value : any
 
 foo *= value;
->foo *= value : number
+>foo *= value : number | bigint
 >foo : any
 >value : any
 
@@ -120,7 +120,7 @@ foo += value;
 
 // literals
 null *= value;
->null *= value : number
+>null *= value : number | bigint
 >null : null
 >value : any
 
@@ -216,7 +216,7 @@ class Derived extends C {
 >super : typeof C
 
         super *= value;
->super *= value : number
+>super *= value : number | bigint
 >super : any
 >super : C
 > : any
@@ -234,7 +234,7 @@ class Derived extends C {
 >foo : () => void
 
         super *= value;
->super *= value : number
+>super *= value : number | bigint
 >super : any
 >super : C
 > : any
@@ -252,7 +252,7 @@ class Derived extends C {
 >sfoo : () => void
 
         super *= value;
->super *= value : number
+>super *= value : number | bigint
 >super : any
 >super : typeof C
 > : any
@@ -311,7 +311,7 @@ foo() += value;
 >value : any
 
 (M) *= value;
->(M) *= value : number
+>(M) *= value : number | bigint
 >(M) : any
 >M : any
 >value : any
@@ -323,7 +323,7 @@ foo() += value;
 >value : any
 
 (C) *= value;
->(C) *= value : number
+>(C) *= value : number | bigint
 >(C) : any
 >C : any
 >value : any
@@ -335,7 +335,7 @@ foo() += value;
 >value : any
 
 (E) *= value;
->(E) *= value : number
+>(E) *= value : number | bigint
 >(E) : any
 >E : any
 >value : any
@@ -347,7 +347,7 @@ foo() += value;
 >value : any
 
 (foo) *= value;
->(foo) *= value : number
+>(foo) *= value : number | bigint
 >(foo) : any
 >foo : any
 >value : any
@@ -359,7 +359,7 @@ foo() += value;
 >value : any
 
 (null) *= value;
->(null) *= value : number
+>(null) *= value : number | bigint
 >(null) : null
 >null : null
 >value : any

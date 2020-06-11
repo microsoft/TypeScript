@@ -34,7 +34,7 @@ var y = x:number => x*x;
 >y : any
 >x : any
 >number : any
->x*x : number
+>x*x : number | bigint
 >x : any
 >x : any
 

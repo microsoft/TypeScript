@@ -1,8 +1,8 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/LeftShifts/parserErrorRecovery_LeftShift1.ts ===
 retValue = bfs.VARIABLES >> );
->retValue = bfs.VARIABLES >> : number
+>retValue = bfs.VARIABLES >> : number | bigint
 >retValue : any
->bfs.VARIABLES >> : number
+>bfs.VARIABLES >> : number | bigint
 >bfs.VARIABLES : any
 >bfs : any
 >VARIABLES : any

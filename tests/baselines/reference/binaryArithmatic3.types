@@ -1,7 +1,7 @@
 === tests/cases/compiler/binaryArithmatic3.ts ===
 var v = undefined | undefined;
->v : number
->undefined | undefined : number
+>v : number | bigint
+>undefined | undefined : number | bigint
 >undefined : undefined
 >undefined : undefined
 

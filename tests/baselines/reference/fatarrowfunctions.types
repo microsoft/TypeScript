@@ -163,17 +163,17 @@ foo(((x) => x));
 foo(x => x*x);
 >foo(x => x*x) : any
 >foo : (x: any) => any
->x => x*x : (x: any) => number
+>x => x*x : (x: any) => number | bigint
 >x : any
->x*x : number
+>x*x : number | bigint
 >x : any
 >x : any
 
 var y = x => x*x;
->y : (x: any) => number
->x => x*x : (x: any) => number
+>y : (x: any) => number | bigint
+>x => x*x : (x: any) => number | bigint
 >x : any
->x*x : number
+>x*x : number | bigint
 >x : any
 >x : any
 

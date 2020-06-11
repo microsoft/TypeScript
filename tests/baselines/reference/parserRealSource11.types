@@ -4491,7 +4491,7 @@ module TypeScript {
 
         public setHasSelfReference() { this.fncFlags |= FncFlags.HasSelfReference; }
 >setHasSelfReference : () => void
->this.fncFlags |= FncFlags.HasSelfReference : number
+>this.fncFlags |= FncFlags.HasSelfReference : number | bigint
 >this.fncFlags : any
 >this : this
 >fncFlags : any
@@ -4771,8 +4771,8 @@ module TypeScript {
 
             return (this.fncFlags & FncFlags.Method) != FncFlags.None;
 >(this.fncFlags & FncFlags.Method) != FncFlags.None : boolean
->(this.fncFlags & FncFlags.Method) : number
->this.fncFlags & FncFlags.Method : number
+>(this.fncFlags & FncFlags.Method) : number | bigint
+>this.fncFlags & FncFlags.Method : number | bigint
 >this.fncFlags : any
 >this : this
 >fncFlags : any
@@ -4980,8 +4980,8 @@ module TypeScript {
         public isSignature() { return (this.fncFlags & FncFlags.Signature) != FncFlags.None; }
 >isSignature : () => boolean
 >(this.fncFlags & FncFlags.Signature) != FncFlags.None : boolean
->(this.fncFlags & FncFlags.Signature) : number
->this.fncFlags & FncFlags.Signature : number
+>(this.fncFlags & FncFlags.Signature) : number | bigint
+>this.fncFlags & FncFlags.Signature : number | bigint
 >this.fncFlags : any
 >this : this
 >fncFlags : any
@@ -5214,7 +5214,7 @@ module TypeScript {
 ><ModuleDeclaration>stmt : ModuleDeclaration
 >stmt : AST
 >modFlags : any
->ModuleFlags.ShouldEmitModuleDecl | ModuleFlags.Ambient : number
+>ModuleFlags.ShouldEmitModuleDecl | ModuleFlags.Ambient : number | bigint
 >ModuleFlags.ShouldEmitModuleDecl : any
 >ModuleFlags : any
 >ShouldEmitModuleDecl : any
@@ -5806,7 +5806,7 @@ module TypeScript {
 >nodeType : any
 
             this.flags |= ASTFlags.IsStatement;
->this.flags |= ASTFlags.IsStatement : number
+>this.flags |= ASTFlags.IsStatement : number | bigint
 >this.flags : any
 >this : this
 >flags : any
@@ -7691,7 +7691,7 @@ module TypeScript {
 >VarDecl : any
 
                 (<BoundDecl>this.lval).varFlags |= VarFlags.AutoInit;
->(<BoundDecl>this.lval).varFlags |= VarFlags.AutoInit : number
+>(<BoundDecl>this.lval).varFlags |= VarFlags.AutoInit : number | bigint
 >(<BoundDecl>this.lval).varFlags : any
 >(<BoundDecl>this.lval) : BoundDecl
 ><BoundDecl>this.lval : BoundDecl
@@ -10457,7 +10457,7 @@ module TypeScript {
 >param : VarDecl
 
                 this.param.varFlags |= VarFlags.AutoInit;
->this.param.varFlags |= VarFlags.AutoInit : number
+>this.param.varFlags |= VarFlags.AutoInit : number | bigint
 >this.param.varFlags : any
 >this.param : VarDecl
 >this : this

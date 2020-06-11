@@ -18,15 +18,15 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >v : any
 
     r[0] = (v = a0*a0) & 0xFFFF;
->r[0] = (v = a0*a0) & 0xFFFF : number
+>r[0] = (v = a0*a0) & 0xFFFF : any
 >r[0] : any
 >r : any[]
 >0 : 0
->(v = a0*a0) & 0xFFFF : number
->(v = a0*a0) : number
->v = a0*a0 : number
+>(v = a0*a0) & 0xFFFF : any
+>(v = a0*a0) : number | bigint
+>v = a0*a0 : number | bigint
 >v : any
->a0*a0 : number
+>a0*a0 : number | bigint
 >a0 : any
 >a0 : any
 >0xFFFF : 65535
@@ -61,10 +61,10 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >r : any[]
 >2 : 2
 >(v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1) & 0xFFFF : number
->(v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1) : number
->v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1 : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1) : any
+>v = ((v / 0x10000) | 0) + 2*a0*a2 + a1*a1 : any
 >v : any
->((v / 0x10000) | 0) + 2*a0*a2 + a1*a1 : number
+>((v / 0x10000) | 0) + 2*a0*a2 + a1*a1 : any
 >((v / 0x10000) | 0) + 2*a0*a2 : number
 >((v / 0x10000) | 0) : number
 >(v / 0x10000) | 0 : number
@@ -78,7 +78,7 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >2 : 2
 >a0 : any
 >a2 : any
->a1*a1 : number
+>a1*a1 : number | bigint
 >a1 : any
 >a1 : any
 >0xFFFF : 65535
@@ -119,10 +119,10 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >r : any[]
 >4 : 4
 >(v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2) & 0xFFFF : number
->(v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2) : number
->v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2 : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2) : any
+>v = ((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2 : any
 >v : any
->((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2 : number
+>((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 + a2*a2 : any
 >((v / 0x10000) | 0) + 2*a0*a4 + 2*a1*a3 : number
 >((v / 0x10000) | 0) + 2*a0*a4 : number
 >((v / 0x10000) | 0) : number
@@ -142,7 +142,7 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >2 : 2
 >a1 : any
 >a3 : any
->a2*a2 : number
+>a2*a2 : number | bigint
 >a2 : any
 >a2 : any
 >0xFFFF : 65535
@@ -189,10 +189,10 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >r : any[]
 >6 : 6
 >(v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3) & 0xFFFF : number
->(v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3) : number
->v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3 : number
+>(v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3) : any
+>v = ((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3 : any
 >v : any
->((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3 : number
+>((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 + a3*a3 : any
 >((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 + 2*a2*a4 : number
 >((v / 0x10000) | 0) + 2*a0*a6 + 2*a1*a5 : number
 >((v / 0x10000) | 0) + 2*a0*a6 : number
@@ -218,7 +218,7 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >2 : 2
 >a2 : any
 >a4 : any
->a3*a3 : number
+>a3*a3 : number | bigint
 >a3 : any
 >a3 : any
 >0xFFFF : 65535
@@ -271,10 +271,10 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >r : any[]
 >8 : 8
 >(v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4) & 0xFFFF : number
->(v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4) : number
->v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4 : number
+>(v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4) : any
+>v = ((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4 : any
 >v : any
->((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4 : number
+>((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 + a4*a4 : any
 >((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 + 2*a3*a5 : number
 >((v / 0x10000) | 0) + 2*a1*a7 + 2*a2*a6 : number
 >((v / 0x10000) | 0) + 2*a1*a7 : number
@@ -300,7 +300,7 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >2 : 2
 >a3 : any
 >a5 : any
->a4*a4 : number
+>a4*a4 : number | bigint
 >a4 : any
 >a4 : any
 >0xFFFF : 65535
@@ -347,10 +347,10 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >r : any[]
 >10 : 10
 >(v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5) & 0xFFFF : number
->(v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5) : number
->v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5 : number
+>(v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5) : any
+>v = ((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5 : any
 >v : any
->((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5 : number
+>((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 + a5*a5 : any
 >((v / 0x10000) | 0) + 2*a3*a7 + 2*a4*a6 : number
 >((v / 0x10000) | 0) + 2*a3*a7 : number
 >((v / 0x10000) | 0) : number
@@ -370,7 +370,7 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >2 : 2
 >a4 : any
 >a6 : any
->a5*a5 : number
+>a5*a5 : number | bigint
 >a5 : any
 >a5 : any
 >0xFFFF : 65535
@@ -411,10 +411,10 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >r : any[]
 >12 : 12
 >(v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6) & 0xFFFF : number
->(v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6) : number
->v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6 : number
+>(v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6) : any
+>v = ((v / 0x10000) | 0) + 2*a5*a7 + a6*a6 : any
 >v : any
->((v / 0x10000) | 0) + 2*a5*a7 + a6*a6 : number
+>((v / 0x10000) | 0) + 2*a5*a7 + a6*a6 : any
 >((v / 0x10000) | 0) + 2*a5*a7 : number
 >((v / 0x10000) | 0) : number
 >(v / 0x10000) | 0 : number
@@ -428,7 +428,7 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >2 : 2
 >a5 : any
 >a7 : any
->a6*a6 : number
+>a6*a6 : number | bigint
 >a6 : any
 >a6 : any
 >0xFFFF : 65535
@@ -463,10 +463,10 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >r : any[]
 >14 : 14
 >(v = ((v / 0x10000) | 0) + a7*a7) & 0xFFFF : number
->(v = ((v / 0x10000) | 0) + a7*a7) : number
->v = ((v / 0x10000) | 0) + a7*a7 : number
+>(v = ((v / 0x10000) | 0) + a7*a7) : any
+>v = ((v / 0x10000) | 0) + a7*a7 : any
 >v : any
->((v / 0x10000) | 0) + a7*a7 : number
+>((v / 0x10000) | 0) + a7*a7 : any
 >((v / 0x10000) | 0) : number
 >(v / 0x10000) | 0 : number
 >(v / 0x10000) : number
@@ -474,7 +474,7 @@ function c255lsqr8h(a7, a6, a5, a4, a3, a2, a1, a0) {
 >v : any
 >0x10000 : 65536
 >0 : 0
->a7*a7 : number
+>a7*a7 : number | bigint
 >a7 : any
 >a7 : any
 >0xFFFF : 65535

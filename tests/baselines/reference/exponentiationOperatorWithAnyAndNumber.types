@@ -7,8 +7,8 @@ var b: number;
 
 // operator **
 var r1 = a ** a;
->r1 : number
->a ** a : number
+>r1 : number | bigint
+>a ** a : number | bigint
 >a : any
 >a : any
 

@@ -46,15 +46,15 @@ x = {
 
 };
 y = {
->y = {    s: t => t * t, // Should error} : { s: (t: any) => number; }
+>y = {    s: t => t * t, // Should error} : { s: (t: any) => number | bigint; }
 >y : J
->{    s: t => t * t, // Should error} : { s: (t: any) => number; }
+>{    s: t => t * t, // Should error} : { s: (t: any) => number | bigint; }
 
     s: t => t * t, // Should error
->s : (t: any) => number
->t => t * t : (t: any) => number
+>s : (t: any) => number | bigint
+>t => t * t : (t: any) => number | bigint
 >t : any
->t * t : number
+>t * t : number | bigint
 >t : any
 >t : any
 

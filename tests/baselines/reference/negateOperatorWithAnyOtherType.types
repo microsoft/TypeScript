@@ -153,10 +153,10 @@ var ResultIsNumber14 = -A.foo();
 >foo : () => any
 
 var ResultIsNumber15 = -(ANY - ANY1);
->ResultIsNumber15 : number
->-(ANY - ANY1) : number
->(ANY - ANY1) : number
->ANY - ANY1 : number
+>ResultIsNumber15 : number | bigint
+>-(ANY - ANY1) : number | bigint
+>(ANY - ANY1) : number | bigint
+>ANY - ANY1 : number | bigint
 >ANY : any
 >ANY1 : any
 

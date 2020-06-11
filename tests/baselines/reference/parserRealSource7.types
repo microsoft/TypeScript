@@ -191,12 +191,12 @@ module TypeScript {
 >field : any
 
         fieldSymbol.flags |= (SymbolFlags.Property | SymbolFlags.BuiltIn);
->fieldSymbol.flags |= (SymbolFlags.Property | SymbolFlags.BuiltIn) : number
+>fieldSymbol.flags |= (SymbolFlags.Property | SymbolFlags.BuiltIn) : any
 >fieldSymbol.flags : any
 >fieldSymbol : any
 >flags : any
->(SymbolFlags.Property | SymbolFlags.BuiltIn) : number
->SymbolFlags.Property | SymbolFlags.BuiltIn : number
+>(SymbolFlags.Property | SymbolFlags.BuiltIn) : number | bigint
+>SymbolFlags.Property | SymbolFlags.BuiltIn : number | bigint
 >SymbolFlags.Property : any
 >SymbolFlags : any
 >Property : any
@@ -1022,7 +1022,7 @@ module TypeScript {
 >isEnum : any
 
                     modType.typeFlags |= TypeFlags.IsEnum;
->modType.typeFlags |= TypeFlags.IsEnum : number
+>modType.typeFlags |= TypeFlags.IsEnum : number | bigint
 >modType.typeFlags : any
 >modType : any
 >typeFlags : any
@@ -1355,7 +1355,7 @@ module TypeScript {
 >isEnum : any
 
                 modType.typeFlags |= TypeFlags.IsEnum;
->modType.typeFlags |= TypeFlags.IsEnum : number
+>modType.typeFlags |= TypeFlags.IsEnum : number | bigint
 >modType.typeFlags : any
 >modType : any
 >typeFlags : any
@@ -1432,7 +1432,7 @@ module TypeScript {
 >isExported : any
 
             typeSymbol.flags |= SymbolFlags.Exported;
->typeSymbol.flags |= SymbolFlags.Exported : number
+>typeSymbol.flags |= SymbolFlags.Exported : number | bigint
 >typeSymbol.flags : any
 >typeSymbol : any
 >flags : any
@@ -1464,7 +1464,7 @@ module TypeScript {
 >gloMod : any
 
             typeSymbol.flags |= SymbolFlags.ModuleMember;
->typeSymbol.flags |= SymbolFlags.ModuleMember : number
+>typeSymbol.flags |= SymbolFlags.ModuleMember : number | bigint
 >typeSymbol.flags : any
 >typeSymbol : any
 >flags : any
@@ -1687,7 +1687,7 @@ module TypeScript {
 >isExported : any
 
                     typeSymbol.flags |= SymbolFlags.Exported;
->typeSymbol.flags |= SymbolFlags.Exported : number
+>typeSymbol.flags |= SymbolFlags.Exported : number | bigint
 >typeSymbol.flags : any
 >typeSymbol : any
 >flags : any
@@ -1700,7 +1700,7 @@ module TypeScript {
 >isAmbient : any
 
                     typeSymbol.flags |= SymbolFlags.Ambient;
->typeSymbol.flags |= SymbolFlags.Ambient : number
+>typeSymbol.flags |= SymbolFlags.Ambient : number | bigint
 >typeSymbol.flags : any
 >typeSymbol : any
 >flags : any
@@ -1948,7 +1948,7 @@ module TypeScript {
 >moduleDecl : any
 
                 typeSymbol.flags |= SymbolFlags.ModuleMember;
->typeSymbol.flags |= SymbolFlags.ModuleMember : number
+>typeSymbol.flags |= SymbolFlags.ModuleMember : number | bigint
 >typeSymbol.flags : any
 >typeSymbol : any
 >flags : any
@@ -1961,7 +1961,7 @@ module TypeScript {
 >isExported : any
 
                 typeSymbol.flags |= SymbolFlags.Exported;
->typeSymbol.flags |= SymbolFlags.Exported : number
+>typeSymbol.flags |= SymbolFlags.Exported : number | bigint
 >typeSymbol.flags : any
 >typeSymbol : any
 >flags : any
@@ -1974,7 +1974,7 @@ module TypeScript {
 >isAmbient : any
 
                 typeSymbol.flags |= SymbolFlags.Ambient;
->typeSymbol.flags |= SymbolFlags.Ambient : number
+>typeSymbol.flags |= SymbolFlags.Ambient : number | bigint
 >typeSymbol.flags : any
 >typeSymbol : any
 >flags : any
@@ -2222,7 +2222,7 @@ module TypeScript {
         }
 
         classType.typeFlags |= TypeFlags.IsClass;
->classType.typeFlags |= TypeFlags.IsClass : number
+>classType.typeFlags |= TypeFlags.IsClass : number | bigint
 >classType.typeFlags : any
 >classType : any
 >typeFlags : any
@@ -2231,7 +2231,7 @@ module TypeScript {
 >IsClass : any
 
         instanceType.typeFlags |= TypeFlags.IsClass;
->instanceType.typeFlags |= TypeFlags.IsClass : number
+>instanceType.typeFlags |= TypeFlags.IsClass : number | bigint
 >instanceType.typeFlags : any
 >instanceType : any
 >typeFlags : any
@@ -2485,7 +2485,7 @@ module TypeScript {
 >isExported : any
 
             interfaceSymbol.flags |= SymbolFlags.Exported;
->interfaceSymbol.flags |= SymbolFlags.Exported : number
+>interfaceSymbol.flags |= SymbolFlags.Exported : number | bigint
 >interfaceSymbol.flags : any
 >interfaceSymbol : any
 >flags : any
@@ -2502,7 +2502,7 @@ module TypeScript {
 >moduleDecl : any
 
             interfaceSymbol.flags |= SymbolFlags.ModuleMember;
->interfaceSymbol.flags |= SymbolFlags.ModuleMember : number
+>interfaceSymbol.flags |= SymbolFlags.ModuleMember : number | bigint
 >interfaceSymbol.flags : any
 >interfaceSymbol : any
 >flags : any
@@ -2590,7 +2590,7 @@ module TypeScript {
 >argDecl.varFlags : any
 >argDecl : any
 >varFlags : any
->VarFlags.Public | VarFlags.Private : number
+>VarFlags.Public | VarFlags.Private : number | bigint
 >VarFlags.Public : any
 >VarFlags : any
 >Public : any
@@ -2978,8 +2978,8 @@ module TypeScript {
 
                                 (varDecl.varFlags & VarFlags.Readonly) == VarFlags.None,
 >(varDecl.varFlags & VarFlags.Readonly) == VarFlags.None : boolean
->(varDecl.varFlags & VarFlags.Readonly) : number
->varDecl.varFlags & VarFlags.Readonly : number
+>(varDecl.varFlags & VarFlags.Readonly) : number | bigint
+>varDecl.varFlags & VarFlags.Readonly : number | bigint
 >varDecl.varFlags : any
 >varDecl : any
 >varFlags : any
@@ -3006,7 +3006,7 @@ module TypeScript {
 >isOptional : any
 
                 fieldSymbol.flags |= SymbolFlags.Optional;
->fieldSymbol.flags |= SymbolFlags.Optional : number
+>fieldSymbol.flags |= SymbolFlags.Optional : number | bigint
 >fieldSymbol.flags : any
 >fieldSymbol : any
 >flags : any
@@ -3052,7 +3052,7 @@ module TypeScript {
 >gloMod : any
 
                 fieldSymbol.flags |= SymbolFlags.ModuleMember;
->fieldSymbol.flags |= SymbolFlags.ModuleMember : number
+>fieldSymbol.flags |= SymbolFlags.ModuleMember : number | bigint
 >fieldSymbol.flags : any
 >fieldSymbol : any
 >flags : any
@@ -3199,7 +3199,7 @@ module TypeScript {
 >Exported : any
 
                 fieldSymbol.flags |= SymbolFlags.Exported;
->fieldSymbol.flags |= SymbolFlags.Exported : number
+>fieldSymbol.flags |= SymbolFlags.Exported : number | bigint
 >fieldSymbol.flags : any
 >fieldSymbol : any
 >flags : any
@@ -3294,7 +3294,7 @@ module TypeScript {
 >funcDecl.fncFlags : any
 >funcDecl : any
 >fncFlags : any
->FncFlags.Exported | FncFlags.ClassPropertyMethodExported : number
+>FncFlags.Exported | FncFlags.ClassPropertyMethodExported : number | bigint
 >FncFlags.Exported : any
 >FncFlags : any
 >Exported : any
@@ -4208,7 +4208,7 @@ module TypeScript {
 >call : any
 
                 funcDecl.type.symbol.flags |= SymbolFlags.Exported;
->funcDecl.type.symbol.flags |= SymbolFlags.Exported : number
+>funcDecl.type.symbol.flags |= SymbolFlags.Exported : number | bigint
 >funcDecl.type.symbol.flags : any
 >funcDecl.type.symbol : any
 >funcDecl.type : any
@@ -4247,7 +4247,7 @@ module TypeScript {
 >call : any
 
                 fgSym.flags |= SymbolFlags.Exported;
->fgSym.flags |= SymbolFlags.Exported : number
+>fgSym.flags |= SymbolFlags.Exported : number | bigint
 >fgSym.flags : any
 >fgSym : any
 >flags : any
@@ -4270,7 +4270,7 @@ module TypeScript {
 >isSpecialFn : any
 
             funcDecl.type.symbol.flags |= SymbolFlags.ModuleMember;
->funcDecl.type.symbol.flags |= SymbolFlags.ModuleMember : number
+>funcDecl.type.symbol.flags |= SymbolFlags.ModuleMember : number | bigint
 >funcDecl.type.symbol.flags : any
 >funcDecl.type.symbol : any
 >funcDecl.type : any
@@ -4304,7 +4304,7 @@ module TypeScript {
 >isOptional : any
 
             fgSym.flags |= SymbolFlags.Optional;
->fgSym.flags |= SymbolFlags.Optional : number
+>fgSym.flags |= SymbolFlags.Optional : number | bigint
 >fgSym.flags : any
 >fgSym : any
 >flags : any

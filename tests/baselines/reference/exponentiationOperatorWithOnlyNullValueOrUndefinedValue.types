@@ -1,26 +1,26 @@
 === tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithOnlyNullValueOrUndefinedValue.ts ===
 // operator **
 var r1 = null ** null;
->r1 : number
->null ** null : number
+>r1 : number | bigint
+>null ** null : number | bigint
 >null : null
 >null : null
 
 var r2 = null ** undefined;
->r2 : number
->null ** undefined : number
+>r2 : number | bigint
+>null ** undefined : number | bigint
 >null : null
 >undefined : undefined
 
 var r3 = undefined ** null;
->r3 : number
->undefined ** null : number
+>r3 : number | bigint
+>undefined ** null : number | bigint
 >undefined : undefined
 >null : null
 
 var r4 = undefined ** undefined;
->r4 : number
->undefined ** undefined : number
+>r4 : number | bigint
+>undefined ** undefined : number | bigint
 >undefined : undefined
 >undefined : undefined
 

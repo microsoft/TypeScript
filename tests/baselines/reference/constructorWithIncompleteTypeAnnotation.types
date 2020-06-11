@@ -84,7 +84,7 @@ module TypeScriptAllInOne {
 >1 : 1
 
                  ^ 
->^                 retValue : number
+>^                 retValue : number | bigint
 > : any
 
 
@@ -920,7 +920,7 @@ module TypeScriptAllInOne {
 >string[] : any
 >string : any
 > : any
->&         public : number
+>&         public : number | bigint
 > : any
 
         public DefaultValue(value?: string = "Hello") { }

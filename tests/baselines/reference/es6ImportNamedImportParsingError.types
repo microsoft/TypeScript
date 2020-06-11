@@ -13,7 +13,7 @@ export var m = a;
 
 === tests/cases/compiler/es6ImportNamedImportParsingError_1.ts ===
 import { * } from "es6ImportNamedImportParsingError_0";
->* : number
+>* : number | bigint
 > : any
 > : any
 >from : any

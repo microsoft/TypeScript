@@ -930,8 +930,8 @@ module TypeScript {
             if (!(instType.typeFlags & TypeFlags.IsClass) && !hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
 >!(instType.typeFlags & TypeFlags.IsClass) && !hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : boolean
 >!(instType.typeFlags & TypeFlags.IsClass) : boolean
->(instType.typeFlags & TypeFlags.IsClass) : number
->instType.typeFlags & TypeFlags.IsClass : number
+>(instType.typeFlags & TypeFlags.IsClass) : number | bigint
+>instType.typeFlags & TypeFlags.IsClass : number | bigint
 >instType.typeFlags : any
 >instType : any
 >typeFlags : any
@@ -1392,15 +1392,15 @@ module TypeScript {
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) ||                     (fgSym && fgSym.isAccessor()) : any
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) : any
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : Symbol
->!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number | bigint
 >!funcDecl.accessorSymbol : boolean
 >funcDecl.accessorSymbol : any
 >funcDecl : any
 >accessorSymbol : any
 
                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&
->(funcDecl.fncFlags & FncFlags.ClassMethod) : number
->funcDecl.fncFlags & FncFlags.ClassMethod : number
+>(funcDecl.fncFlags & FncFlags.ClassMethod) : number | bigint
+>funcDecl.fncFlags & FncFlags.ClassMethod : number | bigint
 >funcDecl.fncFlags : any
 >funcDecl : any
 >fncFlags : any
@@ -1473,7 +1473,7 @@ module TypeScript {
             }
 
             funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment;
->funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment : number
+>funcDecl.type.symbol.flags |= SymbolFlags.TypeSetDuringScopeAssignment : number | bigint
 >funcDecl.type.symbol.flags : any
 >funcDecl.type.symbol : any
 >funcDecl.type : any
@@ -1767,8 +1767,8 @@ module TypeScript {
 >((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) && funcDecl.vars : any
 >((funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None) : boolean
 >(funcDecl.fncFlags & FncFlags.Signature) == FncFlags.None : boolean
->(funcDecl.fncFlags & FncFlags.Signature) : number
->funcDecl.fncFlags & FncFlags.Signature : number
+>(funcDecl.fncFlags & FncFlags.Signature) : number | bigint
+>funcDecl.fncFlags & FncFlags.Signature : number | bigint
 >funcDecl.fncFlags : any
 >funcDecl : any
 >fncFlags : any

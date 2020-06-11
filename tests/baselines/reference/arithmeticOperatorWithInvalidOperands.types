@@ -29,8 +29,8 @@ var f: Number;
 // All of the below should be an error unless otherwise noted
 // operator *
 var r1a1 = a * a; //ok
->r1a1 : number
->a * a : number
+>r1a1 : number | bigint
+>a * a : number | bigint
 >a : any
 >a : any
 
@@ -342,8 +342,8 @@ var r1h6 = f * E.b;
 
 // operator /
 var r2a1 = a / a; //ok
->r2a1 : number
->a / a : number
+>r2a1 : number | bigint
+>a / a : number | bigint
 >a : any
 >a : any
 
@@ -655,8 +655,8 @@ var r2h6 = f / E.b;
 
 // operator %
 var r3a1 = a % a; //ok
->r3a1 : number
->a % a : number
+>r3a1 : number | bigint
+>a % a : number | bigint
 >a : any
 >a : any
 
@@ -968,8 +968,8 @@ var r3h6 = f % E.b;
 
 // operator -
 var r4a1 = a - a; //ok
->r4a1 : number
->a - a : number
+>r4a1 : number | bigint
+>a - a : number | bigint
 >a : any
 >a : any
 
@@ -1281,8 +1281,8 @@ var r4h6 = f - E.b;
 
 // operator <<
 var r5a1 = a << a; //ok
->r5a1 : number
->a << a : number
+>r5a1 : number | bigint
+>a << a : number | bigint
 >a : any
 >a : any
 
@@ -1594,8 +1594,8 @@ var r5h6 = f << E.b;
 
 // operator >>
 var r6a1 = a >> a; //ok
->r6a1 : number
->a >> a : number
+>r6a1 : number | bigint
+>a >> a : number | bigint
 >a : any
 >a : any
 
@@ -1907,8 +1907,8 @@ var r6h6 = f >> E.b;
 
 // operator >>>
 var r7a1 = a >>> a; //ok
->r7a1 : number
->a >>> a : number
+>r7a1 : number | bigint
+>a >>> a : number | bigint
 >a : any
 >a : any
 
@@ -2220,8 +2220,8 @@ var r7h6 = f >>> E.b;
 
 // operator &
 var r8a1 = a & a; //ok
->r8a1 : number
->a & a : number
+>r8a1 : number | bigint
+>a & a : number | bigint
 >a : any
 >a : any
 
@@ -2533,8 +2533,8 @@ var r8h6 = f & E.b;
 
 // operator ^
 var r9a1 = a ^ a; //ok
->r9a1 : number
->a ^ a : number
+>r9a1 : number | bigint
+>a ^ a : number | bigint
 >a : any
 >a : any
 
@@ -2846,8 +2846,8 @@ var r9h6 = f ^ E.b;
 
 // operator |
 var r10a1 = a | a; //ok
->r10a1 : number
->a | a : number
+>r10a1 : number | bigint
+>a | a : number | bigint
 >a : any
 >a : any
 

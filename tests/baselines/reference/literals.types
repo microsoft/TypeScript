@@ -7,14 +7,14 @@
 //typeof regex literal is Regex
 
 var nu = null / null;
->nu : number
->null / null : number
+>nu : number | bigint
+>null / null : number | bigint
 >null : null
 >null : null
 
 var u = undefined / undefined;
->u : number
->undefined / undefined : number
+>u : number | bigint
+>undefined / undefined : number | bigint
 >undefined : undefined
 >undefined : undefined
 

@@ -2842,8 +2842,8 @@ module Formatting {
 >startPosition : any
 
                 var lineIndentLength = indent.Position - lineStartPosition;
->lineIndentLength : number
->indent.Position - lineStartPosition : number
+>lineIndentLength : number | bigint
+>indent.Position - lineStartPosition : number | bigint
 >indent.Position : any
 >indent : any
 >Position : any
@@ -2863,7 +2863,7 @@ module Formatting {
 >indent : any
 >ReplaceWith : any
 >lineStartPosition : any
->lineIndentLength : number
+>lineIndentLength : number | bigint
             }
             else {
                 indentationInfo = new IndentationEditInfo(indent);

@@ -9,7 +9,7 @@ class C {
     if (a) ¬ * bar;
 >a : any
 > : any
->* bar : number
+>* bar : number | bigint
 > : any
 >bar : any
 

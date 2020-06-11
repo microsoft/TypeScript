@@ -777,7 +777,7 @@ function f() {
 >i : I
 
     a^a;
->a^a : number
+>a^a : number | bigint
 >a : any
 >a : any
 
@@ -927,7 +927,7 @@ function f() {
 >i : I
 
     a-a;
->a-a : number
+>a-a : number | bigint
 >a : any
 >a : any
 

@@ -111,7 +111,7 @@ baz
 >right=<b>monkeys /> gorillas</b> /> : boolean
 >right : any
 ><b>monkeys /> gorillas</b> /> : boolean
-><b>monkeys /> gorillas</b> / : number
+><b>monkeys /> gorillas</b> / : number | bigint
 ><b>monkeys /> gorillas</b> : any
 >b : any
 >b : any

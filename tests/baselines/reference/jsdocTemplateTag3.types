@@ -31,7 +31,7 @@ function f(t, u, v, w, x) {
 >t : T
 >b : string
 >length : number
->u.a - u.b.length : number
+>u.a - u.b.length : number | bigint
 >u.a : any
 >u : U
 >a : any

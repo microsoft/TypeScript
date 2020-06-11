@@ -866,7 +866,7 @@ module TypeScript {
 >Type : any
 
                         if (symbol.flags & SymbolFlags.Bound) {
->symbol.flags & SymbolFlags.Bound : number
+>symbol.flags & SymbolFlags.Bound : number | bigint
 >symbol.flags : any
 >symbol : Symbol
 >flags : any
@@ -883,7 +883,7 @@ module TypeScript {
 >symbol : Symbol
 
                         typeSymbol.flags |= SymbolFlags.Bound;
->typeSymbol.flags |= SymbolFlags.Bound : number
+>typeSymbol.flags |= SymbolFlags.Bound : number | bigint
 >typeSymbol.flags : any
 >typeSymbol : any
 >flags : any

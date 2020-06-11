@@ -12,6 +12,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(34,68): error TS
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(35,25): error TS2304: Cannot find name 'ValueLocation'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(36,30): error TS2304: Cannot find name 'TypeLink'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(41,17): error TS2304: Cannot find name 'FieldSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(43,9): error TS2365: Operator '|=' cannot be applied to types 'any' and 'number | bigint'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(43,31): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(43,54): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(49,58): error TS2304: Cannot find name 'Type'.
@@ -303,7 +304,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(827,34): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error TS2304: Cannot find name 'popTypeCollectionScope'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts (303 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts (304 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -377,6 +378,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
 !!! error TS2304: Cannot find name 'FieldSymbol'.
                                 context.checker.locationInfo.unitIndex, true, field);
             fieldSymbol.flags |= (SymbolFlags.Property | SymbolFlags.BuiltIn);
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '|=' cannot be applied to types 'any' and 'number | bigint'.
                                   ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolFlags'.
                                                          ~~~~~~~~~~~

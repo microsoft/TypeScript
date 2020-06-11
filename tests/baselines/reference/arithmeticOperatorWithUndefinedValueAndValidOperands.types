@@ -20,8 +20,8 @@ var b: number;
 
 // operator *
 var ra1 = undefined * a;
->ra1 : number
->undefined * a : number
+>ra1 : number | bigint
+>undefined * a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -46,8 +46,8 @@ var ra4 = undefined * E.a;
 >a : E.a
 
 var ra5 = a * undefined;
->ra5 : number
->a * undefined : number
+>ra5 : number | bigint
+>a * undefined : number | bigint
 >a : any
 >undefined : undefined
 
@@ -73,8 +73,8 @@ var ra8 = E.b * undefined;
 
 // operator /
 var rb1 = undefined / a;
->rb1 : number
->undefined / a : number
+>rb1 : number | bigint
+>undefined / a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -99,8 +99,8 @@ var rb4 = undefined / E.a;
 >a : E.a
 
 var rb5 = a / undefined;
->rb5 : number
->a / undefined : number
+>rb5 : number | bigint
+>a / undefined : number | bigint
 >a : any
 >undefined : undefined
 
@@ -126,8 +126,8 @@ var rb8 = E.b / undefined;
 
 // operator %
 var rc1 = undefined % a;
->rc1 : number
->undefined % a : number
+>rc1 : number | bigint
+>undefined % a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -152,8 +152,8 @@ var rc4 = undefined % E.a;
 >a : E.a
 
 var rc5 = a % undefined;
->rc5 : number
->a % undefined : number
+>rc5 : number | bigint
+>a % undefined : number | bigint
 >a : any
 >undefined : undefined
 
@@ -179,8 +179,8 @@ var rc8 = E.b % undefined;
 
 // operator -
 var rd1 = undefined - a;
->rd1 : number
->undefined - a : number
+>rd1 : number | bigint
+>undefined - a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -205,8 +205,8 @@ var rd4 = undefined - E.a;
 >a : E.a
 
 var rd5 = a - undefined;
->rd5 : number
->a - undefined : number
+>rd5 : number | bigint
+>a - undefined : number | bigint
 >a : any
 >undefined : undefined
 
@@ -232,8 +232,8 @@ var rd8 = E.b - undefined;
 
 // operator <<
 var re1 = undefined << a;
->re1 : number
->undefined << a : number
+>re1 : number | bigint
+>undefined << a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -258,8 +258,8 @@ var re4 = undefined << E.a;
 >a : E.a
 
 var re5 = a << undefined;
->re5 : number
->a << undefined : number
+>re5 : number | bigint
+>a << undefined : number | bigint
 >a : any
 >undefined : undefined
 
@@ -285,8 +285,8 @@ var re8 = E.b << undefined;
 
 // operator >>
 var rf1 = undefined >> a;
->rf1 : number
->undefined >> a : number
+>rf1 : number | bigint
+>undefined >> a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -311,8 +311,8 @@ var rf4 = undefined >> E.a;
 >a : E.a
 
 var rf5 = a >> undefined;
->rf5 : number
->a >> undefined : number
+>rf5 : number | bigint
+>a >> undefined : number | bigint
 >a : any
 >undefined : undefined
 
@@ -338,8 +338,8 @@ var rf8 = E.b >> undefined;
 
 // operator >>>
 var rg1 = undefined >>> a;
->rg1 : number
->undefined >>> a : number
+>rg1 : number | bigint
+>undefined >>> a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -364,8 +364,8 @@ var rg4 = undefined >>> E.a;
 >a : E.a
 
 var rg5 = a >>> undefined;
->rg5 : number
->a >>> undefined : number
+>rg5 : number | bigint
+>a >>> undefined : number | bigint
 >a : any
 >undefined : undefined
 
@@ -391,8 +391,8 @@ var rg8 = E.b >>> undefined;
 
 // operator &
 var rh1 = undefined & a;
->rh1 : number
->undefined & a : number
+>rh1 : number | bigint
+>undefined & a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -417,8 +417,8 @@ var rh4 = undefined & E.a;
 >a : E.a
 
 var rh5 = a & undefined;
->rh5 : number
->a & undefined : number
+>rh5 : number | bigint
+>a & undefined : number | bigint
 >a : any
 >undefined : undefined
 
@@ -444,8 +444,8 @@ var rh8 = E.b & undefined;
 
 // operator ^
 var ri1 = undefined ^ a;
->ri1 : number
->undefined ^ a : number
+>ri1 : number | bigint
+>undefined ^ a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -470,8 +470,8 @@ var ri4 = undefined ^ E.a;
 >a : E.a
 
 var ri5 = a ^ undefined;
->ri5 : number
->a ^ undefined : number
+>ri5 : number | bigint
+>a ^ undefined : number | bigint
 >a : any
 >undefined : undefined
 
@@ -497,8 +497,8 @@ var ri8 = E.b ^ undefined;
 
 // operator |
 var rj1 = undefined | a;
->rj1 : number
->undefined | a : number
+>rj1 : number | bigint
+>undefined | a : number | bigint
 >undefined : undefined
 >a : any
 
@@ -523,8 +523,8 @@ var rj4 = undefined | E.a;
 >a : E.a
 
 var rj5 = a | undefined;
->rj5 : number
->a | undefined : number
+>rj5 : number | bigint
+>a | undefined : number | bigint
 >a : any
 >undefined : undefined
 

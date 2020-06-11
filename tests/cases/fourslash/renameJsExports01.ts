@@ -8,5 +8,5 @@
 ////var mod = require('./a');
 ////var t = mod./**/[|area|](10);
 
-verify.singleReferenceGroup("(property) area: (r: any) => number", "area");
+verify.singleReferenceGroup("(property) area: (r: any) => number | bigint", "area");
 verify.rangesWithSameTextAreRenameLocations("area");

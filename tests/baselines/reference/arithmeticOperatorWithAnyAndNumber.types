@@ -7,8 +7,8 @@ var b: number;
 
 // operator *
 var ra1 = a * a;
->ra1 : number
->a * a : number
+>ra1 : number | bigint
+>a * a : number | bigint
 >a : any
 >a : any
 
@@ -56,8 +56,8 @@ var ra8 = b * b;
 
 // operator /
 var rb1 = a / a;
->rb1 : number
->a / a : number
+>rb1 : number | bigint
+>a / a : number | bigint
 >a : any
 >a : any
 
@@ -105,8 +105,8 @@ var rb8 = b / b;
 
 // operator %
 var rc1 = a % a;
->rc1 : number
->a % a : number
+>rc1 : number | bigint
+>a % a : number | bigint
 >a : any
 >a : any
 
@@ -154,8 +154,8 @@ var rc8 = b % b;
 
 // operator -
 var rd1 = a - a;
->rd1 : number
->a - a : number
+>rd1 : number | bigint
+>a - a : number | bigint
 >a : any
 >a : any
 
@@ -203,8 +203,8 @@ var rd8 = b - b;
 
 // operator <<
 var re1 = a << a;
->re1 : number
->a << a : number
+>re1 : number | bigint
+>a << a : number | bigint
 >a : any
 >a : any
 
@@ -252,8 +252,8 @@ var re8 = b << b;
 
 // operator >>
 var rf1 = a >> a;
->rf1 : number
->a >> a : number
+>rf1 : number | bigint
+>a >> a : number | bigint
 >a : any
 >a : any
 
@@ -301,8 +301,8 @@ var rf8 = b >> b;
 
 // operator >>>
 var rg1 = a >>> a;
->rg1 : number
->a >>> a : number
+>rg1 : number | bigint
+>a >>> a : number | bigint
 >a : any
 >a : any
 
@@ -350,8 +350,8 @@ var rg8 = b >>> b;
 
 // operator &
 var rh1 = a & a;
->rh1 : number
->a & a : number
+>rh1 : number | bigint
+>a & a : number | bigint
 >a : any
 >a : any
 
@@ -399,8 +399,8 @@ var rh8 = b & b;
 
 // operator ^
 var ri1 = a ^ a;
->ri1 : number
->a ^ a : number
+>ri1 : number | bigint
+>a ^ a : number | bigint
 >a : any
 >a : any
 
@@ -448,8 +448,8 @@ var ri8 = b ^ b;
 
 // operator |
 var rj1 = a | a;
->rj1 : number
->a | a : number
+>rj1 : number | bigint
+>a | a : number | bigint
 >a : any
 >a : any
 
