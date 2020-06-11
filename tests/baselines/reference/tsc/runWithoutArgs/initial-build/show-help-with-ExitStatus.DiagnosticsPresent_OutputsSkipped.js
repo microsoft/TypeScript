@@ -1,4 +1,10 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+
+
+
+
+Output::
 /lib/tsc 
 Version FakeTSVersion
 Syntax:   tsc [options] [file...]

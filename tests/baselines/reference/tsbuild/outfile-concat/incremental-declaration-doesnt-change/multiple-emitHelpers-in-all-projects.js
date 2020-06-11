@@ -1,4 +1,23 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/first/first_PART1.ts]
+interface TheFirst {
+    none: any;
+}
+
+const s = "Hello, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
+function forfirstfirst_PART1Rest() {
+const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+}console.log(s);
+
+
+
+Output::
 /lib/tsc --b /src/third --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
@@ -608,22 +627,6 @@ declare function f(): string;
 declare function firstfirst_part3Spread(...b: number[]): void;
 
 ======================================================================
-
-//// [/src/first/first_PART1.ts]
-interface TheFirst {
-    none: any;
-}
-
-const s = "Hello, world";
-
-interface NoJsForHereEither {
-    none: any;
-}
-
-console.log(s);
-function forfirstfirst_PART1Rest() {
-const { b, ...rest } = { a: 10, b: 30, yy: 30 };
-}console.log(s);
 
 //// [/src/third/thirdjs/output/third-output.js]
 var __rest = (this && this.__rest) || function (s, e) {

@@ -203,6 +203,9 @@ namespace ts {
         GreaterThanGreaterThanGreaterThanEqualsToken,
         AmpersandEqualsToken,
         BarEqualsToken,
+        BarBarEqualsToken,
+        AmpersandAmpersandEqualsToken,
+        QuestionQuestionEqualsToken,
         CaretEqualsToken,
         // Identifiers and PrivateIdentifiers
         Identifier,
@@ -1608,6 +1611,9 @@ namespace ts {
         | SyntaxKind.LessThanLessThanEqualsToken
         | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
         | SyntaxKind.GreaterThanGreaterThanEqualsToken
+        | SyntaxKind.BarBarEqualsToken
+        | SyntaxKind.AmpersandAmpersandEqualsToken
+        | SyntaxKind.QuestionQuestionEqualsToken
         ;
 
     // see: https://tc39.github.io/ecma262/#prod-AssignmentExpression
@@ -1627,6 +1633,12 @@ namespace ts {
     export type BinaryOperator
         = AssignmentOperatorOrHigher
         | SyntaxKind.CommaToken
+        ;
+
+    export type LogicalOrCoalescingAssignmentOperator
+        = SyntaxKind.AmpersandAmpersandEqualsToken
+        | SyntaxKind.BarBarEqualsToken
+        | SyntaxKind.QuestionQuestionEqualsToken
         ;
 
     export type BinaryOperatorToken = Token<BinaryOperator>;
@@ -5688,6 +5700,8 @@ namespace ts {
 
     /* @internal */
     export type HasInvalidatedResolution = (sourceFile: Path) => boolean;
+    /* @internal */
+    export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -5717,7 +5731,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
-        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;

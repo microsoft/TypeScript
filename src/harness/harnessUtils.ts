@@ -218,7 +218,7 @@ namespace Utils {
                     case "symbolCount":
                     case "identifierCount":
                     case "scriptSnapshot":
-                        // Blacklist of items we never put in the baseline file.
+                        // Blocklist of items we never put in the baseline file.
                         break;
 
                     case "originalKeywordKind":

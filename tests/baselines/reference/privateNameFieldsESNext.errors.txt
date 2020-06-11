@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(8,9): error TS2322: Type '"hello"' is not assignable to type 'number'.
+tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(8,9): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(11,5): error TS18019: 'static' modifier cannot be used with a private identifier
 tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(12,5): error TS18019: 'static' modifier cannot be used with a private identifier
 
@@ -13,7 +13,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameFieldsESNext.ts(
             console.log(this.#a);
             this.#a = "hello";
             ~~~~~~~
-!!! error TS2322: Type '"hello"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
             console.log(this.#b);
         }
         static #m = "test";

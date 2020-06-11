@@ -619,7 +619,7 @@
         "category": "Error",
         "code": 1195
     },
-    "Catch clause variable cannot have a type annotation.": {
+    "Catch clause variable type annotation must be 'any' or 'unknown' if specified.": {
         "category": "Error",
         "code": 1196
     },
@@ -5704,6 +5704,34 @@
     "Convert overload list to single signature": {
         "category": "Message",
         "code": 95118
+    },
+    "Generate 'get' and 'set' accessors for all overriding properties": {
+        "category": "Message",
+        "code": 95119
+    },
+    "Wrap in JSX fragment": {
+        "category": "Message",
+        "code": 95120
+    },
+    "Wrap all unparented JSX in JSX fragment": {
+        "category": "Message",
+        "code": 95121
+    },
+    "Convert arrow function or function expression": {
+        "category": "Message",
+        "code": 95122
+    },
+    "Convert to anonymous function": {
+        "category": "Message",
+        "code": 95123
+    },
+    "Convert to named function": {
+        "category": "Message",
+        "code": 95124
+    },
+    "Convert to arrow function": {
+        "category": "Message",
+        "code": 95125
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

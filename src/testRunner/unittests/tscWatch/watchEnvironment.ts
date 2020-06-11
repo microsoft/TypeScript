@@ -17,43 +17,51 @@ namespace ts.tscWatch {
                 return createWatchedSystem([file1, libFile], { environmentVariables });
             },
             changes: [
-                (sys, programs) => {
-                    const initialProgram = programs[0][0];
-                    const mediumPollingIntervalThreshold = unchangedPollThresholds[PollingInterval.Medium];
-                    for (let index = 0; index < mediumPollingIntervalThreshold; index++) {
-                        // Transition libFile and file1 to low priority queue
-                        sys.checkTimeoutQueueLengthAndRun(1);
-                        assert.deepEqual(programs[0][0], initialProgram);
-                    }
-                    return "Time spent to Transition libFile and file1 to low priority queue";
+                {
+                    caption: "Time spent to Transition libFile and file1 to low priority queue",
+                    change: noop,
+                    timeouts: (sys, programs) => {
+                        const initialProgram = programs[0][0];
+                        const mediumPollingIntervalThreshold = unchangedPollThresholds[PollingInterval.Medium];
+                        for (let index = 0; index < mediumPollingIntervalThreshold; index++) {
+                            // Transition libFile and file1 to low priority queue
+                            sys.checkTimeoutQueueLengthAndRun(1);
+                            assert.deepEqual(programs[0][0], initialProgram);
+                        }
+                        return;
+                    },
                 },
-                sys => {
+                {
+                    caption: "Make change to file",
                     // Make a change to file
-                    sys.writeFile("/a/username/project/typescript.ts", "var zz30 = 100;");
-
+                    change: sys => sys.writeFile("/a/username/project/typescript.ts", "var zz30 = 100;"),
                     // During this timeout the file would be detected as unchanged
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Make change to file";
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
-                sys => {
+                {
+                    caption: "Callbacks: medium priority + high priority queue and scheduled program update",
+                    change: noop,
                     // Callbacks: medium priority + high priority queue and scheduled program update
-                    sys.checkTimeoutQueueLengthAndRun(3);
                     // This should detect change in the file
-                    return "Callbacks: medium priority + high priority queue and scheduled program update";
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(3),
                 },
-                (sys, programs) => {
-                    const initialProgram = programs[0][0];
-                    const mediumPollingIntervalThreshold = unchangedPollThresholds[PollingInterval.Medium];
-                    const newThreshold = unchangedPollThresholds[PollingInterval.Low] + mediumPollingIntervalThreshold;
-                    for (let fileUnchangeDetected = 1; fileUnchangeDetected < newThreshold; fileUnchangeDetected++) {
-                        // For high + Medium/low polling interval
-                        sys.checkTimeoutQueueLengthAndRun(2);
-                        assert.deepEqual(programs[0][0], initialProgram);
-                    }
+                {
+                    caption: "Polling queues polled and everything is in the high polling queue",
+                    change: noop,
+                    timeouts: (sys, programs) => {
+                        const initialProgram = programs[0][0];
+                        const mediumPollingIntervalThreshold = unchangedPollThresholds[PollingInterval.Medium];
+                        const newThreshold = unchangedPollThresholds[PollingInterval.Low] + mediumPollingIntervalThreshold;
+                        for (let fileUnchangeDetected = 1; fileUnchangeDetected < newThreshold; fileUnchangeDetected++) {
+                            // For high + Medium/low polling interval
+                            sys.checkTimeoutQueueLengthAndRun(2);
+                            assert.deepEqual(programs[0][0], initialProgram);
+                        }
 
-                    // Everything goes in high polling interval queue
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Polling queues polled and everything is in the high polling queue";
+                        // Everything goes in high polling interval queue
+                        sys.checkTimeoutQueueLengthAndRun(1);
+                        return;
+                    },
                 }
             ]
         });
@@ -85,16 +93,19 @@ namespace ts.tscWatch {
                         return createWatchedSystem(files, { environmentVariables });
                     },
                     changes: [
-                        sys => {
+                        {
+                            caption: "Rename file1 to file2",
                             // Rename the file:
-                            sys.renameFile(file.path, file.path.replace("file1.ts", "file2.ts"));
-                            if (tscWatchDirectory === Tsc_WatchDirectory.DynamicPolling) {
-                                // With dynamic polling the fs change would be detected only by running timeouts
+                            change: sys => sys.renameFile(file.path, file.path.replace("file1.ts", "file2.ts")),
+                            timeouts: sys => {
+                                if (tscWatchDirectory === Tsc_WatchDirectory.DynamicPolling) {
+                                    // With dynamic polling the fs change would be detected only by running timeouts
+                                    sys.runQueuedTimeoutCallbacks();
+                                }
+                                // Delayed update program
                                 sys.runQueuedTimeoutCallbacks();
-                            }
-                            // Delayed update program
-                            sys.runQueuedTimeoutCallbacks();
-                            return "Rename file1 to file2";
+                                return;
+                            },
                         },
                     ],
                 });
@@ -173,51 +184,75 @@ namespace ts.tscWatch {
                     return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
                 },
                 changes: [
-                    sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for file1.js output
-                        sys.checkTimeoutQueueLengthAndRun(1); // Update program again
-                        sys.checkTimeoutQueueLength(0);
-                        return "Pending updates because of file1.js creation";
+                    {
+                        caption: "Pending updates because of file1.js creation",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for file1.js output
+                            sys.checkTimeoutQueueLengthAndRun(2); // Update program again and Failed lookup update
+                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
+                            sys.checkTimeoutQueueLength(0);
+                        },
                     },
-                    sys => {
+                    {
+                        caption: "Remove directory node_modules",
                         // Remove directory node_modules
-                        sys.deleteFolder(`${projectRoot}/node_modules`, /*recursive*/ true);
-                        sys.checkTimeoutQueueLength(2); // 1. For updating program and 2. for updating child watches
-                        sys.runQueuedTimeoutCallbacks(sys.getNextTimeoutId() - 2); // Update program
-                        return "Remove directory node_modules";
+                        change: sys => sys.deleteFolder(`${projectRoot}/node_modules`, /*recursive*/ true),
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLength(3); // 1. Failed lookup invalidation 2. For updating program and 3. for updating child watches
+                            sys.runQueuedTimeoutCallbacks(sys.getNextTimeoutId() - 2); // Update program
+                        },
                     },
-                    sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
-                        sys.checkTimeoutQueueLengthAndRun(1); // To Update program
-                        sys.checkTimeoutQueueLength(0);
-                        return "Pending directory watchers and program update";
+                    {
+                        caption: "Pending directory watchers and program update",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
+                            sys.checkTimeoutQueueLengthAndRun(2); // To Update program and failed lookup update
+                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
+                            sys.checkTimeoutQueueLength(0);
+                        },
                     },
-                    sys => {
+                    {
+                        caption: "Start npm install",
                         // npm install
-                        sys.createDirectory(`${projectRoot}/node_modules`);
-                        sys.checkTimeoutQueueLength(1); // To update folder structure
-                        return "Start npm install";
+                        change: sys => sys.createDirectory(`${projectRoot}/node_modules`),
+                        timeouts: sys => sys.checkTimeoutQueueLength(1), // To update folder structure
                     },
-                    sys => {
-                        sys.createDirectory(`${projectRoot}/node_modules/file2`);
-                        sys.checkTimeoutQueueLength(1); // To update folder structure
-                        return "npm install folder creation of file2";
+                    {
+                        caption: "npm install folder creation of file2",
+                        change: sys => sys.createDirectory(`${projectRoot}/node_modules/file2`),
+                        timeouts: sys => sys.checkTimeoutQueueLength(1), // To update folder structure
                     },
-                    sys => {
-                        sys.writeFile(`${projectRoot}/node_modules/file2/index.d.ts`, `export const x = 10;`);
-                        sys.checkTimeoutQueueLength(1); // To update folder structure
-                        return "npm install index file in file2";
+                    {
+                        caption: "npm install index file in file2",
+                        change: sys => sys.writeFile(`${projectRoot}/node_modules/file2/index.d.ts`, `export const x = 10;`),
+                        timeouts: sys => sys.checkTimeoutQueueLength(1), // To update folder structure
                     },
-                    sys => {
-                        sys.runQueuedTimeoutCallbacks();
-                        sys.checkTimeoutQueueLength(1); // To Update the program
-                        return "Updates the program";
+                    {
+                        caption: "Updates the program",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks();
+                            sys.checkTimeoutQueueLength(2); // To Update program and failed lookup update
+                        },
                     },
-                    sys => {
-                        sys.runQueuedTimeoutCallbacks();
-                        sys.checkTimeoutQueueLength(0);
-                        return "Pending updates";
-                    }
+                    {
+                        caption: "Invalidates module resolution cache",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks();
+                            sys.checkTimeoutQueueLength(1); // To Update program
+                        },
+                    },
+                    {
+                        caption: "Pending updates",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks();
+                            sys.checkTimeoutQueueLength(0);
+                        },
+                    },
                 ],
             });
         });
