@@ -10648,7 +10648,12 @@ interface Navigator extends MSFileSaver, MSNavigatorDoNotTrack, NavigatorAutomat
     readonly msPointerEnabled: boolean;
     readonly permissions: Permissions;
     readonly pointerEnabled: boolean;
-    readonly serviceWorker: ServiceWorkerContainer;
+		readonly serviceWorker: ServiceWorkerContainer;
+    getInstalledRelatedApps(): Promise<{
+      platform: string
+      id: string
+      url: string
+    }[]>;
     getGamepads(): (Gamepad | null)[];
     getUserMedia(constraints: MediaStreamConstraints, successCallback: NavigatorUserMediaSuccessCallback, errorCallback: NavigatorUserMediaErrorCallback): void;
     getVRDisplays(): Promise<VRDisplay[]>;
