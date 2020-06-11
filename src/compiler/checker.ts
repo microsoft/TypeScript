@@ -28697,12 +28697,13 @@ namespace ts {
                         const leftOk = checkArithmeticOperandType(left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*isAwaitValid*/ true);
                         const rightOk = checkArithmeticOperandType(right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type, /*isAwaitValid*/ true);
                         let resultType: Type;
-                        // If both are any or unknown, allow operation; assume it will resolve to number
-                        if ((isTypeAssignableToKind(leftType, TypeFlags.AnyOrUnknown) && isTypeAssignableToKind(rightType, TypeFlags.AnyOrUnknown)) ||
+                        // If both are any or unknown, allow operation; assume it will resolve to `number | bigint`
+                        if ((isTypeAssignableToKind(leftType, TypeFlags.AnyOrUnknown) && isTypeAssignableToKind(rightType, TypeFlags.AnyOrUnknown))) {
+                            resultType = getUnionType([numberType, bigintType]);
+                        }
+                        else if (!(maybeTypeOfKind(leftType, TypeFlags.BigIntLike) || maybeTypeOfKind(rightType, TypeFlags.BigIntLike))) {
                             // Or, if neither could be bigint, implicit coercion results in a number result
-                            !(maybeTypeOfKind(leftType, TypeFlags.BigIntLike) || maybeTypeOfKind(rightType, TypeFlags.BigIntLike))
-                        ) {
-                            resultType = numberType;
+                            resultType = numberType
                         }
                         // At least one is assignable to bigint, so check that both are
                         else if (bothAreBigIntLike(leftType, rightType)) {
