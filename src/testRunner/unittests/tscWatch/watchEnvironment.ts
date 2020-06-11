@@ -294,6 +294,49 @@ namespace ts.tscWatch {
                     noopChange,
                 ],
             });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchDirectories/with non synchronous watch directory renaming a file",
+                commandLineArgs: ["--w", "-p", `${projectRoot}/tsconfig.json`],
+                sys: () => {
+                    const configFile: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ compilerOptions: { outDir: "dist" } })
+                    };
+                    const file1: File = {
+                        path: `${projectRoot}/src/file1.ts`,
+                        content: `import { x } from "./file2";`
+                    };
+                    const file2: File = {
+                        path: `${projectRoot}/src/file2.ts`,
+                        content: `export const x = 10;`
+                    };
+                    const files = [libFile, file1, file2, configFile];
+                    return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                },
+                changes: [
+                    noopChange,
+                    {
+                        caption: "rename the file",
+                        change: sys => sys.renameFile(`${projectRoot}/src/file2.ts`, `${projectRoot}/src/renamed.ts`),
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLength(2); // 1. For updating program and 2. for updating child watches
+                            sys.runQueuedTimeoutCallbacks(1); // Update program
+                        },
+                    },
+                    {
+                        caption: "Pending directory watchers and program update",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
+                            sys.checkTimeoutQueueLengthAndRun(2); // To Update program and failed lookup update
+                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
+                            sys.checkTimeoutQueueLength(0);
+                        },
+                    },
+                ],
+            });
         });
 
         describe("handles watch compiler options", () => {
