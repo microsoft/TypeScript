@@ -3069,6 +3069,7 @@ namespace ts.server.protocol {
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        containerName?: string;
     }
 
     export interface CallHierarchyIncomingCall {

@@ -619,7 +619,7 @@
         "category": "Error",
         "code": 1195
     },
-    "Catch clause variable cannot have a type annotation.": {
+    "Catch clause variable type annotation must be 'any' or 'unknown' if specified.": {
         "category": "Error",
         "code": 1196
     },

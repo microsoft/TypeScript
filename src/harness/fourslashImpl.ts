@@ -3440,6 +3440,9 @@ namespace FourSlash {
             let text = "";
             text += `${prefix}╭ name: ${callHierarchyItem.name}\n`;
             text += `${prefix}├ kind: ${callHierarchyItem.kind}\n`;
+            if (callHierarchyItem.containerName) {
+                text += `${prefix}├ containerName: ${callHierarchyItem.containerName}\n`;
+            }
             text += `${prefix}├ file: ${callHierarchyItem.file}\n`;
             text += `${prefix}├ span:\n`;
             text += this.formatCallHierarchyItemSpan(file, callHierarchyItem.span, `${prefix}│ `);
