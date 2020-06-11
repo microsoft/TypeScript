@@ -1535,8 +1535,9 @@ namespace ts {
             });
 
             if (newProgram) {
-                host.log?.(`createPackageJsonAutoImportProvider: ${timestamp() - start}`);
-                host.log?.(`Memory usage: ${sys.getMemoryUsage?.()}`);
+                const duration = timestamp() - start;
+                host.log?.(`createPackageJsonAutoImportProvider: ${duration}`);
+                host.sendPerformanceEvent?.("CreatePackageJsonAutoImportProvider", duration);
             }
             return newProgram;
 

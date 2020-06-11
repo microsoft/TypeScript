@@ -216,6 +216,11 @@ namespace ts {
         All
     }
 
+    export interface PerformanceEvent {
+        kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
+        durationMs: number;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
@@ -303,6 +308,8 @@ namespace ts {
         includePackageJsonAutoImports?(): PackageJsonAutoImportPreference;
         /* @internal */
         getPackageJsonAutoImportProviderVersion?(): string;
+        /* @internal */
+        sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     }
 
     /* @internal */
@@ -1090,6 +1097,7 @@ namespace ts {
         source?: string;
         isRecommended?: true;
         isFromUncheckedFile?: true;
+        isPackageJsonImport?: true;
     }
 
     export interface CompletionEntryDetails {

@@ -46,6 +46,7 @@ namespace ts.Completions {
         kind: SymbolOriginInfoKind;
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
+        isFromPackageJson?: boolean;
     }
 
     function originIsThisType(origin: SymbolOriginInfo): boolean {
@@ -58,6 +59,10 @@ namespace ts.Completions {
 
     function originIsExport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport {
         return !!(origin && origin.kind & SymbolOriginInfoKind.Export);
+    }
+
+    function originIsPackageJsonImport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport {
+        return originIsExport(origin) && !!origin.isFromPackageJson;
     }
 
     function originIsPromise(origin: SymbolOriginInfo): boolean {
@@ -438,6 +443,7 @@ namespace ts.Completions {
             isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
             replacementSpan,
+            isPackageJsonImport: originIsPackageJsonImport(origin) ? true : undefined,
         };
     }
 
@@ -1614,13 +1620,13 @@ namespace ts.Completions {
             /** Bucket B */
             const aliasesToAlreadyIncludedSymbols = createMap<true>();
             /** Bucket C */
-            const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol }>();
+            const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol, isFromPackageJson: boolean }>();
             /** Bucket A */
             const results: AutoImportSuggestion[] = [];
             /** Ids present in `results` for faster lookup */
             const resultSymbolIds = createMap<true>();
 
-            codefix.forEachExternalModuleToImportFrom(program, autoImportProvider, host, sourceFile, !detailsEntryId, (moduleSymbol, _, program) => {
+            codefix.forEachExternalModuleToImportFrom(program, autoImportProvider, host, sourceFile, !detailsEntryId, (moduleSymbol, _, program, isFromPackageJson) => {
                 // Perf -- ignore other modules if this is a request for details
                 if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
                     return;
@@ -1661,7 +1667,7 @@ namespace ts.Completions {
                         const nearestExportSymbolId = getSymbolId(nearestExportSymbol).toString();
                         const symbolHasBeenSeen = resultSymbolIds.has(nearestExportSymbolId) || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId);
                         if (!symbolHasBeenSeen) {
-                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId, { alias: symbol, moduleSymbol });
+                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId, { alias: symbol, moduleSymbol, isFromPackageJson });
                             aliasesToAlreadyIncludedSymbols.set(symbolId, true);
                         }
                         else {
@@ -1673,18 +1679,18 @@ namespace ts.Completions {
                     else {
                         // This is not a re-export, so see if we have any aliases pending and remove them (step 3 in diagrammed example)
                         aliasesToReturnIfOriginalsAreMissing.delete(symbolId);
-                        pushSymbol(symbol, moduleSymbol);
+                        pushSymbol(symbol, moduleSymbol, isFromPackageJson);
                     }
                 }
             });
 
             // By this point, any potential duplicates that were actually duplicates have been
             // removed, so the rest need to be added. (Step 4 in diagrammed example)
-            aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => pushSymbol(alias, moduleSymbol));
+            aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol, isFromPackageJson }) => pushSymbol(alias, moduleSymbol, isFromPackageJson));
             log(`getSymbolsFromOtherSourceFileExports: ${timestamp() - startTime}`);
             return results;
 
-            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, skipFilter = false) {
+            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, isFromPackageJson: boolean, skipFilter = false) {
                 const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
                 if (isDefaultExport) {
                     symbol = getLocalSymbolForExportDefault(symbol) || symbol;
@@ -1693,7 +1699,7 @@ namespace ts.Completions {
                     return;
                 }
                 addToSeen(resultSymbolIds, getSymbolId(symbol));
-                const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
+                const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport, isFromPackageJson };
                 results.push({
                     symbol,
                     symbolName: getNameForExportedSymbol(symbol, target),

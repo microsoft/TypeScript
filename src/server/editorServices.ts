@@ -151,12 +151,6 @@ namespace ts.server {
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
     /*@internal*/
-    export interface PerformanceEvent {
-        kind: "UpdateGraph";
-        durationMs: number;
-    }
-
-    /*@internal*/
     export type PerformanceEventHandler = (event: PerformanceEvent) => void;
 
     export interface SafeList {
@@ -927,9 +921,9 @@ namespace ts.server {
         }
 
         /* @internal */
-        sendUpdateGraphPerformanceEvent(durationMs: number) {
+        sendPerformanceEvent(kind: PerformanceEvent["kind"], durationMs: number) {
             if (this.performanceEventHandler) {
-                this.performanceEventHandler({ kind: "UpdateGraph", durationMs });
+                this.performanceEventHandler({ kind, durationMs });
             }
         }
 

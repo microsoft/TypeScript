@@ -606,7 +606,7 @@ namespace ts.server {
         protected projectService: ProjectService;
         private changeSeq = 0;
 
-        private updateGraphDurationMs: number | undefined;
+        private performanceData: protocol.PerformanceData | undefined;
 
         private currentRequestId!: number;
         private errorCheck: MultistepOperation;
@@ -673,12 +673,21 @@ namespace ts.server {
             this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
         }
 
+        private addPerformanceData(key: keyof protocol.PerformanceData, value: number) {
+            if (!this.performanceData) {
+                this.performanceData = {};
+            }
+            this.performanceData[key] = (this.performanceData[key] ?? 0) + value;
+        }
+
         private performanceEventHandler(event: PerformanceEvent) {
             switch (event.kind) {
-                case "UpdateGraph": {
-                    this.updateGraphDurationMs = (this.updateGraphDurationMs || 0) + event.durationMs;
+                case "UpdateGraph":
+                    this.addPerformanceData("updateGraphDurationMs", event.durationMs);
                     break;
-                }
+                case "CreatePackageJsonAutoImportProvider":
+                    this.addPerformanceData("createAutoImportProviderProgramDurationMs", event.durationMs);
+                    break;
             }
         }
 
@@ -820,11 +829,7 @@ namespace ts.server {
                 command: cmdName,
                 request_seq: reqSeq,
                 success,
-                performanceData: !this.updateGraphDurationMs
-                    ? undefined
-                    : {
-                        updateGraphDurationMs: this.updateGraphDurationMs,
-                    },
+                performanceData: this.performanceData
             };
 
             if (success) {
@@ -2687,7 +2692,7 @@ namespace ts.server {
         public onMessage(message: string) {
             this.gcTimer.scheduleCollect();
 
-            this.updateGraphDurationMs = undefined;
+            this.performanceData = undefined;
 
             let start: number[] | undefined;
             if (this.logger.hasLevel(LogLevel.requestTime)) {

@@ -798,12 +798,12 @@ namespace ts.codefix {
         host: LanguageServiceHost,
         from: SourceFile,
         filterByPackageJson: boolean,
-        cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program) => void,
+        cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
     ) {
-        forEachExternalModuleToImportFromInProgram(program, host, from, filterByPackageJson, (module, file) => cb(module, file, program));
+        forEachExternalModuleToImportFromInProgram(program, host, from, filterByPackageJson, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
         if (autoImportProvider) {
             const start = timestamp();
-            forEachExternalModuleToImportFromInProgram(autoImportProvider, host, from, filterByPackageJson, (module, file) => cb(module, file, autoImportProvider));
+            forEachExternalModuleToImportFromInProgram(autoImportProvider, host, from, filterByPackageJson, (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
             host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
     }
