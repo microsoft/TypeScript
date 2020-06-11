@@ -6380,7 +6380,7 @@ namespace ts {
                     const typeParamDecls = map(localParams, p => typeParameterToDeclaration(p, context));
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
                     const baseTypes = getBaseTypes(classType);
-                    const implementsTypes = getImplementsTypes(classType);
+                    const implementsExpressions = mapDefined(getImplementsTypes(classType), serializeImplementedType);
                     const staticType = getTypeOfSymbol(symbol);
                     const isClass = !!staticType.symbol?.valueDeclaration && isClassLike(staticType.symbol.valueDeclaration);
                     const staticBaseType = isClass
@@ -6388,7 +6388,7 @@ namespace ts {
                         : anyType;
                     const heritageClauses = [
                         ...!length(baseTypes) ? [] : [createHeritageClause(SyntaxKind.ExtendsKeyword, map(baseTypes, b => serializeBaseType(b, staticBaseType, localName)))],
-                        ...!length(implementsTypes) ? [] : [createHeritageClause(SyntaxKind.ImplementsKeyword, map(implementsTypes, b => serializeImplementedType(b)))]
+                        ...!length(implementsExpressions) ? [] : [createHeritageClause(SyntaxKind.ImplementsKeyword, implementsExpressions)]
                     ];
                     const symbolProps = getNonInterhitedProperties(classType, baseTypes, getPropertiesOfType(classType));
                     const publicSymbolProps = filter(symbolProps, s => {
@@ -6914,7 +6914,9 @@ namespace ts {
                     if (ref) {
                         return ref;
                     }
-                    return createExpressionWithTypeArguments(/*typeArgs*/ undefined, symbolToExpression(t.symbol, context, SymbolFlags.Type));
+                    if (t.symbol) {
+                        return createExpressionWithTypeArguments(/*typeArgs*/ undefined, symbolToExpression(t.symbol, context, SymbolFlags.Type));
+                    }
                 }
 
                 function getUnusedName(input: string, symbol?: Symbol): string {
