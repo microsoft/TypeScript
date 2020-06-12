@@ -21554,7 +21554,8 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
-            if (symbol?.isDeprecated) {
+            const target = (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+            if (target.isDeprecated) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
             }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
@@ -34662,33 +34663,39 @@ namespace ts {
             let symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
-            const shouldSkipWithJSExpandoTargets = symbol.flags & SymbolFlags.Assignment;
-            if (!shouldSkipWithJSExpandoTargets && target !== unknownSymbol) {
-                // For external modules symbol represents local symbol for an alias.
-                // This local symbol will merge any other local declarations (excluding other aliases)
-                // and symbol.flags will contains combined representation for all merged declaration.
-                // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
-                // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
-                // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
-                symbol = getMergedSymbol(symbol.exportSymbol || symbol);
-                const excludedMeanings =
-                    (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
-                    (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
-                    (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
-                if (target.flags & excludedMeanings) {
-                    const message = node.kind === SyntaxKind.ExportSpecifier ?
-                        Diagnostics.Export_declaration_conflicts_with_exported_declaration_of_0 :
-                        Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
-                    error(node, message, symbolToString(symbol));
+            if (target !== unknownSymbol) {
+                const shouldSkipWithJSExpandoTargets = symbol.flags & SymbolFlags.Assignment;
+                if (!shouldSkipWithJSExpandoTargets) {
+                    // For external modules symbol represents local symbol for an alias.
+                    // This local symbol will merge any other local declarations (excluding other aliases)
+                    // and symbol.flags will contains combined representation for all merged declaration.
+                    // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
+                    // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
+                    // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
+                    symbol = getMergedSymbol(symbol.exportSymbol || symbol);
+                    const excludedMeanings =
+                        (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
+                        (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
+                        (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
+                    if (target.flags & excludedMeanings) {
+                        const message = node.kind === SyntaxKind.ExportSpecifier ?
+                            Diagnostics.Export_declaration_conflicts_with_exported_declaration_of_0 :
+                            Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
+                        error(node, message, symbolToString(symbol));
+                    }
+
+                    // Don't allow to re-export something with no value side when `--isolatedModules` is set.
+                    if (compilerOptions.isolatedModules
+                        && node.kind === SyntaxKind.ExportSpecifier
+                        && !node.parent.parent.isTypeOnly
+                        && !(target.flags & SymbolFlags.Value)
+                        && !(node.flags & NodeFlags.Ambient)) {
+                        error(node, Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type);
+                    }
                 }
 
-                // Don't allow to re-export something with no value side when `--isolatedModules` is set.
-                if (compilerOptions.isolatedModules
-                    && node.kind === SyntaxKind.ExportSpecifier
-                    && !node.parent.parent.isTypeOnly
-                    && !(target.flags & SymbolFlags.Value)
-                    && !(node.flags & NodeFlags.Ambient)) {
-                    error(node, Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type);
+                if (isImportSpecifier(node) && target.isDeprecated) {
+                    errorOrSuggestion(/* isError */ false, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
             }
         }

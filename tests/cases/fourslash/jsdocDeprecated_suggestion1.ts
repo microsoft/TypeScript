@@ -1,3 +1,4 @@
+// @noUnusedLocals: false
 // @Filename: a.ts
 //// export namespace foo {
 ////     /** @deprecated */
@@ -25,14 +26,14 @@
 
 // @Filename: b.ts
 //// import * as f from './a';
-//// import { bar, QW } from './a';
+//// import { [|bar|], [|QW|] } from './a';
 //// f.[|bar|]();
 //// f.foo.[|faff|]();
-//// bar();
+//// [|bar|]();
 //// type Z = [|QW|];
 //// type A = f.[|Foo|];
 //// type B = f.[|QW|];
-//// type C = f.[|WQ|];
+//// type C = f.WQ;
 //// type [|O|] = Z | A | B | C;
 
 goTo.file('a.ts')
@@ -116,33 +117,51 @@ verify.getSuggestionDiagnostics([
         reportsDeprecated: true,
     },
     {
-        message: "'faff' is deprecated",
+        message: "'QW' is deprecated",
         code: 6385,
         range: ranges[12],
         reportsDeprecated: true,
     },
     {
-        message: "'QW' is deprecated",
+        message: "'bar' is deprecated",
         code: 6385,
         range: ranges[13],
         reportsDeprecated: true,
     },
     {
-        message: "'Foo' is deprecated",
+        message: "'faff' is deprecated",
         code: 6385,
         range: ranges[14],
         reportsDeprecated: true,
     },
     {
-        message: "'QW' is deprecated",
+        message: "'bar' is deprecated",
         code: 6385,
         range: ranges[15],
         reportsDeprecated: true,
     },
     {
+        message: "'QW' is deprecated",
+        code: 6385,
+        range: ranges[16],
+        reportsDeprecated: true,
+    },
+    {
+        message: "'Foo' is deprecated",
+        code: 6385,
+        range: ranges[17],
+        reportsDeprecated: true,
+    },
+    {
+        message: "'QW' is deprecated",
+        code: 6385,
+        range: ranges[18],
+        reportsDeprecated: true,
+    },
+    {
         message: "'O' is declared but never used.",
         code: 6196,
-        range: ranges[17],
+        range: ranges[19],
         reportsUnnecessary: true
     }
 ])
