@@ -30,9 +30,9 @@
 //// f.foo.[|faff|]();
 //// bar();
 //// type Z = [|QW|];
-//// type A = [|f.Foo|];
-//// type B = [|f.QW|];
-//// type C = [|f.WQ|];
+//// type A = f.[|Foo|];
+//// type B = f.[|QW|];
+//// type C = f.[|WQ|];
 //// type [|O|] = Z | A | B | C;
 
 goTo.file('a.ts')

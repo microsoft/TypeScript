@@ -30354,7 +30354,8 @@ namespace ts {
                 }
                 const symbol = getNodeLinks(node).resolvedSymbol!;
                 if (symbol?.isDeprecated) {
-                    errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, symbol.escapedName as string);
+                    const diagLocation = isTypeReferenceNode(node) && isQualifiedName(node.typeName) ? node.typeName.right : node;
+                    errorOrSuggestion(/* isError */ false, diagLocation, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
                 if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {
                     error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
