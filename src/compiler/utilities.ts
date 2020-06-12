@@ -3062,7 +3062,7 @@ namespace ts {
         if (!(name.kind === SyntaxKind.ComputedPropertyName || name.kind === SyntaxKind.ElementAccessExpression)) {
             return false;
         }
-        const expr = isElementAccessExpression(name) ? name.argumentExpression : name.expression;
+        const expr = isElementAccessExpression(name) ? skipParentheses(name.argumentExpression) : name.expression;
         return !isStringOrNumericLiteralLike(expr) &&
             !isSignedNumericLiteral(expr) &&
             !isWellKnownSymbolSyntactically(expr);
