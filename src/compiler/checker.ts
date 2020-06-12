@@ -20291,14 +20291,14 @@ namespace ts {
         function getTypeFactsOfTypes(types: Type[], isUnion: boolean): TypeFacts {
             let result: TypeFacts = TypeFacts.None;
             for (const t of types) {
-                const facts = getTypeFacts(t);
-                result |= facts;
+                result |= getTypeFacts(t);
             }
             if (!isUnion) {
-                // Get the set of postive facts for the intersection by masking with the negative set shifted left, then shift those present positive facts into the negative fact
-                // value range, and unset any of those bits (by negating that mask and then intersecting it with the original value)
-                const positiveFacts = result & (TypeFacts.NegativeTypeofFacts << 7);
-                result &= ~(positiveFacts >> 7);
+                // Get the set of positive facts for the intersection by masking with the negative set shifted left,
+                // then shift those present positive facts into the negative fact value range, and unset any of those
+                // bits (by negating that mask and then intersecting it with the original value)
+                const positiveFacts = result & (TypeFacts.NegativeTypeofFacts >> 8);
+                result &= ~(positiveFacts << 8);
             }
             return result;
         }
