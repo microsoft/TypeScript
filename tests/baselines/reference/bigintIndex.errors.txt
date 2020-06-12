@@ -1,6 +1,6 @@
 tests/cases/compiler/a.ts(2,6): error TS1023: An index signature parameter type must be either 'string' or 'number'.
 tests/cases/compiler/a.ts(8,11): error TS2538: Type '1n' cannot be used as an index type.
-tests/cases/compiler/a.ts(14,1): error TS2322: Type '123n' is not assignable to type 'string | number | symbol'.
+tests/cases/compiler/a.ts(14,1): error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
 tests/cases/compiler/a.ts(19,12): error TS2538: Type 'bigint' cannot be used as an index type.
 tests/cases/compiler/b.ts(2,12): error TS1136: Property assignment expected.
 tests/cases/compiler/b.ts(2,14): error TS1005: ';' expected.
@@ -29,7 +29,7 @@ tests/cases/compiler/b.ts(4,12): error TS2464: A computed property name must be 
     key = Symbol();
     key = 123n; // should error
     ~~~
-!!! error TS2322: Type '123n' is not assignable to type 'string | number | symbol'.
+!!! error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
     
     // Show correct usage of bigint index: explicitly convert to string
     const bigNum: bigint = 0n;

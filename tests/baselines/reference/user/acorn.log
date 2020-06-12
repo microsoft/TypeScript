@@ -118,10 +118,10 @@ node_modules/acorn/acorn/dist/bin.js(58,23): error TS2769: No overload matches t
   Overload 1 of 3, '(path: string | number | Buffer | URL, options?: { encoding?: null | undefined; flag?: string | undefined; } | null | undefined): Buffer', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
       Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
-  Overload 2 of 3, '(path: string | number | Buffer | URL, options: string | { encoding: string; flag?: string | undefined; }): string', gave the following error.
+  Overload 2 of 3, '(path: string | number | Buffer | URL, options: { encoding: BufferEncoding; flag?: string | undefined; } | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | ... 4 more ... | "hex"): string', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
       Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
-  Overload 3 of 3, '(path: string | number | Buffer | URL, options?: string | { encoding?: string | null | undefined; flag?: string | undefined; } | null | undefined): string | Buffer', gave the following error.
+  Overload 3 of 3, '(path: string | number | Buffer | URL, options?: "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" | (BaseEncodingOptions & { ...; }) | null | undefined): string | Buffer', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
       Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
 node_modules/acorn/bin/_acorn.js(51,30): error TS2339: Property 'getToken' does not exist on type 'Parser'.
@@ -135,10 +135,10 @@ node_modules/acorn/bin/_acorn.js(63,23): error TS2769: No overload matches this 
   Overload 1 of 3, '(path: string | number | Buffer | URL, options?: { encoding?: null | undefined; flag?: string | undefined; } | null | undefined): Buffer', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
       Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
-  Overload 2 of 3, '(path: string | number | Buffer | URL, options: string | { encoding: string; flag?: string | undefined; }): string', gave the following error.
+  Overload 2 of 3, '(path: string | number | Buffer | URL, options: { encoding: BufferEncoding; flag?: string | undefined; } | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | ... 4 more ... | "hex"): string', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
       Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
-  Overload 3 of 3, '(path: string | number | Buffer | URL, options?: string | { encoding?: string | null | undefined; flag?: string | undefined; } | null | undefined): string | Buffer', gave the following error.
+  Overload 3 of 3, '(path: string | number | Buffer | URL, options?: "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" | (BaseEncodingOptions & { ...; }) | null | undefined): string | Buffer', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
       Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
 node_modules/acorn/bin/run_test262.js(3,21): error TS2307: Cannot find module 'test262-parser-runner' or its corresponding type declarations.

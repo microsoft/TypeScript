@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 import test from './b';
 test(4, 5);
@@ -26,6 +26,7 @@ interface Array<T> { length: number; [n: number]: T; }
 {"compilerOptions":{"module":"commonjs","noEmit":true,"strict":true}}
 
 
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -67,8 +68,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Changed x type to string
 
+Input::
 //// [/user/username/projects/myproject/b.ts]
 function test(x: string, y: number) {
     return x + y / 5;
@@ -81,7 +84,7 @@ Output::
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
 
-[96ma.ts[0m:[93m2[0m:[93m6[0m - [91merror[0m[90m TS2345: [0mArgument of type '4' is not assignable to parameter of type 'string'.
+[96ma.ts[0m:[93m2[0m:[93m6[0m - [91merror[0m[90m TS2345: [0mArgument of type 'number' is not assignable to parameter of type 'string'.
 
 [7m2[0m test(4, 5);
 [7m [0m [91m     ~[0m
@@ -122,8 +125,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Changed x type to number
 
+Input::
 //// [/user/username/projects/myproject/b.ts]
 function test(x: number, y: number) {
     return x + y / 5;
@@ -171,8 +176,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Changed y type to string
 
+Input::
 //// [/user/username/projects/myproject/b.ts]
 function test(x: number, y: string) {
     return x + y / 5;
@@ -185,7 +192,7 @@ Output::
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
 
-[96ma.ts[0m:[93m2[0m:[93m9[0m - [91merror[0m[90m TS2345: [0mArgument of type '5' is not assignable to parameter of type 'string'.
+[96ma.ts[0m:[93m2[0m:[93m9[0m - [91merror[0m[90m TS2345: [0mArgument of type 'number' is not assignable to parameter of type 'string'.
 
 [7m2[0m test(4, 5);
 [7m [0m [91m        ~[0m
@@ -232,8 +239,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Changed y type to number
 
+Input::
 //// [/user/username/projects/myproject/b.ts]
 function test(x: number, y: number) {
     return x + y / 5;
@@ -280,3 +289,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

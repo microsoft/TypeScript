@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 import {B} from './b';
 declare var console: any;
@@ -34,42 +34,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/c.js]
-"use strict";
-exports.__esModule = true;
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-        this.d = 1;
-    }
-    return C;
-}());
-exports.C = C;
 
-
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-exports.__esModule = true;
-exports.B = void 0;
-var c_1 = require("./c");
-var B = /** @class */ (function () {
-    function B() {
-        this.c = new c_1.C();
-    }
-    return B;
-}());
-exports.B = B;
-
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-exports.__esModule = true;
-var b_1 = require("./b");
-var b = new b_1.B();
-console.log(b.c.d);
-
-
-
+/a/lib/tsc.js --w
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
@@ -115,28 +81,51 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Rename property d to d2 of class C
-
-//// [/user/username/projects/myproject/c.ts]
-export class C
-{
-    d2 = 1;
-}
-
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 exports.__esModule = true;
 exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
-        this.d2 = 1;
+        this.d = 1;
     }
     return C;
 }());
 exports.C = C;
 
 
-//// [/user/username/projects/myproject/b.js] file written with same contents
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+exports.__esModule = true;
+exports.B = void 0;
+var c_1 = require("./c");
+var B = /** @class */ (function () {
+    function B() {
+        this.c = new c_1.C();
+    }
+    return B;
+}());
+exports.B = B;
+
+
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+exports.__esModule = true;
+var b_1 = require("./b");
+var b = new b_1.B();
+console.log(b.c.d);
+
+
+
+Change:: Rename property d to d2 of class C
+
+Input::
+//// [/user/username/projects/myproject/c.ts]
+export class C
+{
+    d2 = 1;
+}
+
 
 Output::
 >> Screen clear
@@ -187,3 +176,18 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/c.js]
+"use strict";
+exports.__esModule = true;
+exports.C = void 0;
+var C = /** @class */ (function () {
+    function C() {
+        this.d2 = 1;
+    }
+    return C;
+}());
+exports.C = C;
+
+
+//// [/user/username/projects/myproject/b.js] file written with same contents

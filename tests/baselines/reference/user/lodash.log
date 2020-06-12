@@ -154,8 +154,8 @@ node_modules/lodash/_createWrap.js(96,26): error TS2345: Argument of type 'Timer
 node_modules/lodash/_createWrap.js(97,100): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_createWrap.js(98,28): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
-node_modules/lodash/_createWrap.js(100,44): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[TimerHandler, number, any?, (any[] | undefined)?, (any[] | undefined)?, (any[] | undefined)?, (any[] | undefined)?, (any[] | undefined)?, (number | undefined)?, (number | undefined)?]'.
-  Type 'any[]' is missing the following properties from type '[TimerHandler, number, any?, (any[] | undefined)?, (any[] | undefined)?, (any[] | undefined)?, (any[] | undefined)?, (any[] | undefined)?, (number | undefined)?, (number | undefined)?]': 0, 1
+node_modules/lodash/_createWrap.js(100,44): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[func: TimerHandler, bitmask: number, thisArg?: any, partials?: any[] | undefined, holders?: any[] | undefined, partialsRight?: any[] | undefined, holdersRight?: any[] | undefined, argPos?: any[] | undefined, ary?: number | undefined, arity?: number | undefined]'.
+  Type 'any[]' is missing the following properties from type '[func: TimerHandler, bitmask: number, thisArg?: any, partials?: any[] | undefined, holders?: any[] | undefined, partialsRight?: any[] | undefined, holdersRight?: any[] | undefined, argPos?: any[] | undefined, ary?: number | undefined, arity?: number | undefined]': 0, 1
 node_modules/lodash/_createWrap.js(103,51): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
 node_modules/lodash/_customDefaultsMerge.js(22,35): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
@@ -179,7 +179,7 @@ node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' doe
 node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
 node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
 node_modules/lodash/_nodeUtil.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "\"../../../tests/cases/user/lodash/node_modules/lodash/_nodeUtil\"": any; }'.
-node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'false | Global'.
+node_modules/lodash/_nodeUtil.js(13,47): error TS2339: Property 'process' does not exist on type 'false | (Global & typeof globalThis)'.
   Property 'process' does not exist on type 'false'.
 node_modules/lodash/_overRest.js(15,32): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/_overRest.js(20,42): error TS2532: Object is possibly 'undefined'.

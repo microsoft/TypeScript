@@ -192,8 +192,7 @@ namespace ts.projectSystem {
                 // Send an initial compileOnSave request
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
 
-                file1Consumer1.content = `let y = 10;`;
-                host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
+                host.writeFile(file1Consumer1.path, `let y = 10;`);
 
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
@@ -209,7 +208,7 @@ namespace ts.projectSystem {
 
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 // Delete file1Consumer2
-                host.reloadFS([moduleFile1, file1Consumer1, configFile, libFile]);
+                host.deleteFile(file1Consumer2.path);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
             });
 
@@ -225,7 +224,7 @@ namespace ts.projectSystem {
                     path: "/a/b/file1Consumer3.ts",
                     content: `import {Foo} from "./moduleFile1"; let y = Foo();`
                 };
-                host.reloadFS([moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3, globalFile3, configFile, libFile]);
+                host.writeFile(file1Consumer3.path, file1Consumer3.content);
                 host.runQueuedTimeoutCallbacks();
                 session.executeCommand(changeModuleFile1ShapeRequest1);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3] }]);
@@ -475,7 +474,7 @@ namespace ts.projectSystem {
                 const session = createSession(host);
 
                 openFilesForSession([referenceFile1], session);
-                host.reloadFS([referenceFile1, configFile]);
+                host.deleteFile(moduleFile1.path);
 
                 const request = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
                 sendAffectedFileRequestAndCheckResult(session, request, [

@@ -907,6 +907,9 @@ namespace ts {
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
             switch (expr.operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
+                case SyntaxKind.BarBarEqualsToken:
+                case SyntaxKind.AmpersandAmpersandEqualsToken:
+                case SyntaxKind.QuestionQuestionEqualsToken:
                     return containsNarrowableReference(expr.left);
                 case SyntaxKind.EqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsToken:
@@ -1043,12 +1046,18 @@ namespace ts {
             }
         }
 
+        function isLogicalAssignmentExpression(node: Node) {
+            node = skipParentheses(node);
+            return isBinaryExpression(node) && isLogicalOrCoalescingAssignmentOperator(node.operatorToken.kind);
+        }
+
         function isTopLevelLogicalExpression(node: Node): boolean {
             while (isParenthesizedExpression(node.parent) ||
                 isPrefixUnaryExpression(node.parent) && node.parent.operator === SyntaxKind.ExclamationToken) {
                 node = node.parent;
             }
             return !isStatementCondition(node) &&
+                !isLogicalAssignmentExpression(node.parent) &&
                 !isLogicalExpression(node.parent) &&
                 !(isOptionalChain(node.parent) && node.parent.expression === node);
         }
@@ -1065,7 +1074,7 @@ namespace ts {
 
         function bindCondition(node: Expression | undefined, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             doWithConditionalBranches(bind, node, trueTarget, falseTarget);
-            if (!node || !isLogicalExpression(node) && !(isOptionalChain(node) && isOutermostOptionalChain(node))) {
+            if (!node || !isLogicalAssignmentExpression(node) && !isLogicalExpression(node) && !(isOptionalChain(node) && isOutermostOptionalChain(node))) {
                 addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
                 addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
             }
@@ -1406,9 +1415,9 @@ namespace ts {
             }
         }
 
-        function bindLogicalExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
+        function bindLogicalLikeExpression(node: BinaryExpression, trueTarget: FlowLabel, falseTarget: FlowLabel) {
             const preRightLabel = createBranchLabel();
-            if (node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+            if (node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || node.operatorToken.kind === SyntaxKind.AmpersandAmpersandEqualsToken) {
                 bindCondition(node.left, preRightLabel, falseTarget);
             }
             else {
@@ -1416,7 +1425,17 @@ namespace ts {
             }
             currentFlow = finishFlowLabel(preRightLabel);
             bind(node.operatorToken);
-            bindCondition(node.right, trueTarget, falseTarget);
+
+            if (isLogicalOrCoalescingAssignmentOperator(node.operatorToken.kind)) {
+                doWithConditionalBranches(bind, node.right, trueTarget, falseTarget);
+                bindAssignmentTargetFlow(node.left);
+
+                addAntecedent(trueTarget, createFlowCondition(FlowFlags.TrueCondition, currentFlow, node));
+                addAntecedent(falseTarget, createFlowCondition(FlowFlags.FalseCondition, currentFlow, node));
+            }
+            else {
+                bindCondition(node.right, trueTarget, falseTarget);
+            }
         }
 
         function bindPrefixUnaryExpressionFlow(node: PrefixUnaryExpression) {
@@ -1502,14 +1521,15 @@ namespace ts {
                         // TODO: bindLogicalExpression is recursive - if we want to handle deeply nested `&&` expressions
                         // we'll need to handle the `bindLogicalExpression` scenarios in this state machine, too
                         // For now, though, since the common cases are chained `+`, leaving it recursive is fine
-                        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+                        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken ||
+                            isLogicalOrCoalescingAssignmentOperator(operator)) {
                             if (isTopLevelLogicalExpression(node)) {
                                 const postExpressionLabel = createBranchLabel();
-                                bindLogicalExpression(node, postExpressionLabel, postExpressionLabel);
+                                bindLogicalLikeExpression(node, postExpressionLabel, postExpressionLabel);
                                 currentFlow = finishFlowLabel(postExpressionLabel);
                             }
                             else {
-                                bindLogicalExpression(node, currentTrueTarget!, currentFalseTarget!);
+                                bindLogicalLikeExpression(node, currentTrueTarget!, currentFalseTarget!);
                             }
                             completeNode();
                         }
@@ -3608,6 +3628,9 @@ namespace ts {
 
         if (operatorTokenKind === SyntaxKind.QuestionQuestionToken) {
             transformFlags |= TransformFlags.AssertES2020;
+        }
+        else if (isLogicalOrCoalescingAssignmentOperator(operatorTokenKind)) {
+            transformFlags |= TransformFlags.AssertESNext;
         }
         else if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ObjectLiteralExpression) {
             // Destructuring object assignments with are ES2015 syntax

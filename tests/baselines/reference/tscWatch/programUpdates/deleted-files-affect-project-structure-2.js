@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/f1.ts /a/c/f3.ts --noImplicitAny
+Input::
 //// [/a/b/f1.ts]
 export * from "./f2"
 
@@ -20,6 +20,47 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+
+
+/a/lib/tsc.js -w /a/b/f1.ts /a/c/f3.ts --noImplicitAny
+Output::
+>> Screen clear
+[[90m12:00:19 AM[0m] Starting compilation in watch mode...
+
+
+[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/a/b/f1.ts","/a/c/f3.ts"]
+Program options: {"watch":true,"noImplicitAny":true}
+Program files::
+/a/lib/lib.d.ts
+/a/c/f3.ts
+/a/b/f2.ts
+/a/b/f1.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/c/f3.ts
+/a/b/f2.ts
+/a/b/f1.ts
+
+WatchedFiles::
+/a/b/f1.ts:
+  {"fileName":"/a/b/f1.ts","pollingInterval":250}
+/a/b/f2.ts:
+  {"fileName":"/a/b/f2.ts","pollingInterval":250}
+/a/c/f3.ts:
+  {"fileName":"/a/c/f3.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.undefined
 
 //// [/a/c/f3.js]
 "use strict";
@@ -61,48 +102,9 @@ __exportStar(require("./f2"), exports);
 
 
 
-Output::
->> Screen clear
-[[90m12:00:19 AM[0m] Starting compilation in watch mode...
-
-
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/a/b/f1.ts","/a/c/f3.ts"]
-Program options: {"watch":true,"noImplicitAny":true}
-Program files::
-/a/lib/lib.d.ts
-/a/c/f3.ts
-/a/b/f2.ts
-/a/b/f1.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/c/f3.ts
-/a/b/f2.ts
-/a/b/f1.ts
-
-WatchedFiles::
-/a/b/f1.ts:
-  {"fileName":"/a/b/f1.ts","pollingInterval":250}
-/a/b/f2.ts:
-  {"fileName":"/a/b/f2.ts","pollingInterval":250}
-/a/c/f3.ts:
-  {"fileName":"/a/c/f3.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.undefined
-
 Change:: Delete f2
 
-//// [/a/b/f1.js] file written with same contents
+Input::
 //// [/a/b/f2.ts] deleted
 
 Output::
@@ -145,3 +147,5 @@ FsWatchesRecursive::
   {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/f1.js] file written with same contents

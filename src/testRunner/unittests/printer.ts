@@ -83,7 +83,6 @@ namespace ts {
 
             // https://github.com/microsoft/TypeScript/issues/35054
             printsCorrectly("jsx attribute escaping", {}, printer => {
-                debugger;
                 return printer.printFile(createSourceFile(
                     "source.ts",
                     String.raw`<a x='\\"'/>`,
