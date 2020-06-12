@@ -574,7 +574,8 @@ interface ANGLE_instanced_arrays {
 }
 
 /** A controller object that allows you to abort one or more DOM requests as and when desired. */
-interface AbortController {
+declare class AbortController {
+    constructor();
     /**
      * Returns the AbortSignal object associated with this object.
      */
@@ -585,17 +586,12 @@ interface AbortController {
     abort(): void;
 }
 
-declare var AbortController: {
-    prototype: AbortController;
-    new(): AbortController;
-};
-
 interface AbortSignalEventMap {
     "abort": Event;
 }
 
 /** A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object. */
-interface AbortSignal extends EventTarget {
+declare class AbortSignal extends EventTarget {
     /**
      * Returns true if this AbortSignal's AbortController has signaled to abort, and false otherwise.
      */
@@ -606,11 +602,6 @@ interface AbortSignal extends EventTarget {
     removeEventListener<K extends keyof AbortSignalEventMap>(type: K, listener: (this: AbortSignal, ev: AbortSignalEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
-
-declare var AbortSignal: {
-    prototype: AbortSignal;
-    new(): AbortSignal;
-};
 
 interface AbstractWorkerEventMap {
     "error": ErrorEvent;
@@ -638,7 +629,8 @@ interface AnimationFrameProvider {
 }
 
 /** A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system. */
-interface Blob {
+declare class Blob {
+    constructor(blobParts?: BlobPart[], options?: BlobPropertyBag);
     readonly size: number;
     readonly type: string;
     arrayBuffer(): Promise<ArrayBuffer>;
@@ -646,11 +638,6 @@ interface Blob {
     stream(): ReadableStream;
     text(): Promise<string>;
 }
-
-declare var Blob: {
-    prototype: Blob;
-    new(blobParts?: BlobPart[], options?: BlobPropertyBag): Blob;
-};
 
 interface Body {
     readonly body: ReadableStream<Uint8Array> | null;
@@ -667,7 +654,8 @@ interface BroadcastChannelEventMap {
     "messageerror": MessageEvent;
 }
 
-interface BroadcastChannel extends EventTarget {
+declare class BroadcastChannel extends EventTarget {
+    constructor(name: string);
     /**
      * Returns the channel name (as passed to the constructor).
      */
@@ -688,24 +676,16 @@ interface BroadcastChannel extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var BroadcastChannel: {
-    prototype: BroadcastChannel;
-    new(name: string): BroadcastChannel;
-};
-
 /** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
-interface ByteLengthQueuingStrategy extends QueuingStrategy<ArrayBufferView> {
+interface ByteLengthQueuingStrategy extends QueuingStrategy<ArrayBufferView> {}
+declare class ByteLengthQueuingStrategy {
+    constructor(options: { highWaterMark: number });
     highWaterMark: number;
     size(chunk: ArrayBufferView): number;
 }
 
-declare var ByteLengthQueuingStrategy: {
-    prototype: ByteLengthQueuingStrategy;
-    new(options: { highWaterMark: number }): ByteLengthQueuingStrategy;
-};
-
 /** Provides a storage mechanism for Request / Response object pairs that are cached, for example as part of the ServiceWorker life cycle. Note that the Cache interface is exposed to windowed scopes as well as workers. You don't have to use it in conjunction with service workers, even though it is defined in the service worker spec. */
-interface Cache {
+declare class Cache {
     add(request: RequestInfo): Promise<void>;
     addAll(requests: RequestInfo[]): Promise<void>;
     delete(request: RequestInfo, options?: CacheQueryOptions): Promise<boolean>;
@@ -715,24 +695,14 @@ interface Cache {
     put(request: RequestInfo, response: Response): Promise<void>;
 }
 
-declare var Cache: {
-    prototype: Cache;
-    new(): Cache;
-};
-
 /** The storage for Cache objects. */
-interface CacheStorage {
+declare class CacheStorage {
     delete(cacheName: string): Promise<boolean>;
     has(cacheName: string): Promise<boolean>;
     keys(): Promise<string[]>;
     match(request: RequestInfo, options?: MultiCacheQueryOptions): Promise<Response | undefined>;
     open(cacheName: string): Promise<Cache>;
 }
-
-declare var CacheStorage: {
-    prototype: CacheStorage;
-    new(): CacheStorage;
-};
 
 interface CanvasCompositing {
     globalAlpha: number;
@@ -772,7 +742,7 @@ interface CanvasFilters {
 }
 
 /** An opaque object describing a gradient. It is returned by the methods CanvasRenderingContext2D.createLinearGradient() or CanvasRenderingContext2D.createRadialGradient(). */
-interface CanvasGradient {
+declare class CanvasGradient {
     /**
      * Adds a color stop with the given color to the gradient at the given offset. 0.0 is the offset at one end of the gradient, 1.0 is the offset at the other end.
      * 
@@ -780,11 +750,6 @@ interface CanvasGradient {
      */
     addColorStop(offset: number, color: string): void;
 }
-
-declare var CanvasGradient: {
-    prototype: CanvasGradient;
-    new(): CanvasGradient;
-};
 
 interface CanvasImageData {
     createImageData(sw: number, sh: number): ImageData;
@@ -822,17 +787,12 @@ interface CanvasPathDrawingStyles {
 }
 
 /** An opaque object describing a pattern, based on an image, a canvas, or a video, created by the CanvasRenderingContext2D.createPattern() method. */
-interface CanvasPattern {
+declare class CanvasPattern {
     /**
      * Sets the transformation matrix that will be used when rendering the pattern during a fill or stroke painting operation.
      */
     setTransform(transform?: DOMMatrix2DInit): void;
 }
-
-declare var CanvasPattern: {
-    prototype: CanvasPattern;
-    new(): CanvasPattern;
-};
 
 interface CanvasRect {
     clearRect(x: number, y: number, w: number, h: number): void;
@@ -877,7 +837,7 @@ interface CanvasTransform {
 }
 
 /** The Client interface represents an executable context such as a Worker, or a SharedWorker. Window clients are represented by the more-specific WindowClient. You can get Client/WindowClient objects from methods such as Clients.matchAll() and Clients.get(). */
-interface Client {
+declare class Client {
     readonly frameType: FrameType;
     readonly id: string;
     readonly type: ClientTypes;
@@ -885,26 +845,17 @@ interface Client {
     postMessage(message: any, transfer?: Transferable[]): void;
 }
 
-declare var Client: {
-    prototype: Client;
-    new(): Client;
-};
-
 /** Provides access to Client objects. Access it via self.clients within a service worker. */
-interface Clients {
+declare class Clients {
     claim(): Promise<void>;
     get(id: string): Promise<any>;
     matchAll(options?: ClientQueryOptions): Promise<ReadonlyArray<Client>>;
     openWindow(url: string): Promise<WindowClient | null>;
 }
 
-declare var Clients: {
-    prototype: Clients;
-    new(): Clients;
-};
-
 /** A CloseEvent is sent to clients using WebSockets when the connection is closed. This is delivered to the listener indicated by the WebSocket object's onclose attribute. */
-interface CloseEvent extends Event {
+declare class CloseEvent extends Event {
+    constructor(type: string, eventInitDict?: CloseEventInit);
     /**
      * Returns the WebSocket connection close code provided by the server.
      */
@@ -919,11 +870,6 @@ interface CloseEvent extends Event {
     readonly wasClean: boolean;
 }
 
-declare var CloseEvent: {
-    prototype: CloseEvent;
-    new(type: string, eventInitDict?: CloseEventInit): CloseEvent;
-};
-
 interface ConcatParams extends Algorithm {
     algorithmId: Uint8Array;
     hash?: string | Algorithm;
@@ -934,41 +880,29 @@ interface ConcatParams extends Algorithm {
 }
 
 /** This Streams API interface provides a built-in byte length queuing strategy that can be used when constructing streams. */
-interface CountQueuingStrategy extends QueuingStrategy {
+interface CountQueuingStrategy extends QueuingStrategy {}
+declare class CountQueuingStrategy {
+    constructor(options: { highWaterMark: number });
     highWaterMark: number;
     size(chunk: any): 1;
 }
 
-declare var CountQueuingStrategy: {
-    prototype: CountQueuingStrategy;
-    new(options: { highWaterMark: number }): CountQueuingStrategy;
-};
-
 /** Basic cryptography features available in the current context. It allows access to a cryptographically strong random number generator and to cryptographic primitives. */
-interface Crypto {
+declare class Crypto {
     readonly subtle: SubtleCrypto;
     getRandomValues<T extends Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | null>(array: T): T;
 }
 
-declare var Crypto: {
-    prototype: Crypto;
-    new(): Crypto;
-};
-
 /** The CryptoKey dictionary of the Web Crypto API represents a cryptographic key. */
-interface CryptoKey {
+declare class CryptoKey {
     readonly algorithm: KeyAlgorithm;
     readonly extractable: boolean;
     readonly type: KeyType;
     readonly usages: KeyUsage[];
 }
 
-declare var CryptoKey: {
-    prototype: CryptoKey;
-    new(): CryptoKey;
-};
-
-interface CustomEvent<T = any> extends Event {
+declare class CustomEvent<T = any> extends Event {
+    constructor(typeArg: string, eventInitDict?: CustomEventInit<T>);
     /**
      * Returns any custom data event was created with. Typically used for synthetic events.
      */
@@ -976,13 +910,9 @@ interface CustomEvent<T = any> extends Event {
     initCustomEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: T): void;
 }
 
-declare var CustomEvent: {
-    prototype: CustomEvent;
-    new<T>(typeArg: string, eventInitDict?: CustomEventInit<T>): CustomEvent<T>;
-};
-
 /** An abnormal event (called an exception) which occurs as a result of calling a method or accessing a property of a web API. */
-interface DOMException {
+declare class DOMException {
+    constructor(message?: string, name?: string);
     readonly code: number;
     readonly message: string;
     readonly name: string;
@@ -1011,39 +941,35 @@ interface DOMException {
     readonly URL_MISMATCH_ERR: number;
     readonly VALIDATION_ERR: number;
     readonly WRONG_DOCUMENT_ERR: number;
+    static readonly ABORT_ERR: number;
+    static readonly DATA_CLONE_ERR: number;
+    static readonly DOMSTRING_SIZE_ERR: number;
+    static readonly HIERARCHY_REQUEST_ERR: number;
+    static readonly INDEX_SIZE_ERR: number;
+    static readonly INUSE_ATTRIBUTE_ERR: number;
+    static readonly INVALID_ACCESS_ERR: number;
+    static readonly INVALID_CHARACTER_ERR: number;
+    static readonly INVALID_MODIFICATION_ERR: number;
+    static readonly INVALID_NODE_TYPE_ERR: number;
+    static readonly INVALID_STATE_ERR: number;
+    static readonly NAMESPACE_ERR: number;
+    static readonly NETWORK_ERR: number;
+    static readonly NOT_FOUND_ERR: number;
+    static readonly NOT_SUPPORTED_ERR: number;
+    static readonly NO_DATA_ALLOWED_ERR: number;
+    static readonly NO_MODIFICATION_ALLOWED_ERR: number;
+    static readonly QUOTA_EXCEEDED_ERR: number;
+    static readonly SECURITY_ERR: number;
+    static readonly SYNTAX_ERR: number;
+    static readonly TIMEOUT_ERR: number;
+    static readonly TYPE_MISMATCH_ERR: number;
+    static readonly URL_MISMATCH_ERR: number;
+    static readonly VALIDATION_ERR: number;
+    static readonly WRONG_DOCUMENT_ERR: number;
 }
 
-declare var DOMException: {
-    prototype: DOMException;
-    new(message?: string, name?: string): DOMException;
-    readonly ABORT_ERR: number;
-    readonly DATA_CLONE_ERR: number;
-    readonly DOMSTRING_SIZE_ERR: number;
-    readonly HIERARCHY_REQUEST_ERR: number;
-    readonly INDEX_SIZE_ERR: number;
-    readonly INUSE_ATTRIBUTE_ERR: number;
-    readonly INVALID_ACCESS_ERR: number;
-    readonly INVALID_CHARACTER_ERR: number;
-    readonly INVALID_MODIFICATION_ERR: number;
-    readonly INVALID_NODE_TYPE_ERR: number;
-    readonly INVALID_STATE_ERR: number;
-    readonly NAMESPACE_ERR: number;
-    readonly NETWORK_ERR: number;
-    readonly NOT_FOUND_ERR: number;
-    readonly NOT_SUPPORTED_ERR: number;
-    readonly NO_DATA_ALLOWED_ERR: number;
-    readonly NO_MODIFICATION_ALLOWED_ERR: number;
-    readonly QUOTA_EXCEEDED_ERR: number;
-    readonly SECURITY_ERR: number;
-    readonly SYNTAX_ERR: number;
-    readonly TIMEOUT_ERR: number;
-    readonly TYPE_MISMATCH_ERR: number;
-    readonly URL_MISMATCH_ERR: number;
-    readonly VALIDATION_ERR: number;
-    readonly WRONG_DOCUMENT_ERR: number;
-};
-
-interface DOMMatrix extends DOMMatrixReadOnly {
+declare class DOMMatrix extends DOMMatrixReadOnly {
+    constructor(init?: string | number[]);
     a: number;
     b: number;
     c: number;
@@ -1077,17 +1003,13 @@ interface DOMMatrix extends DOMMatrixReadOnly {
     skewXSelf(sx?: number): DOMMatrix;
     skewYSelf(sy?: number): DOMMatrix;
     translateSelf(tx?: number, ty?: number, tz?: number): DOMMatrix;
+    static fromFloat32Array(array32: Float32Array): DOMMatrix;
+    static fromFloat64Array(array64: Float64Array): DOMMatrix;
+    static fromMatrix(other?: DOMMatrixInit): DOMMatrix;
 }
 
-declare var DOMMatrix: {
-    prototype: DOMMatrix;
-    new(init?: string | number[]): DOMMatrix;
-    fromFloat32Array(array32: Float32Array): DOMMatrix;
-    fromFloat64Array(array64: Float64Array): DOMMatrix;
-    fromMatrix(other?: DOMMatrixInit): DOMMatrix;
-};
-
-interface DOMMatrixReadOnly {
+declare class DOMMatrixReadOnly {
+    constructor(init?: string | number[]);
     readonly a: number;
     readonly b: number;
     readonly c: number;
@@ -1130,74 +1052,54 @@ interface DOMMatrixReadOnly {
     toJSON(): any;
     transformPoint(point?: DOMPointInit): DOMPoint;
     translate(tx?: number, ty?: number, tz?: number): DOMMatrix;
+    static fromFloat32Array(array32: Float32Array): DOMMatrixReadOnly;
+    static fromFloat64Array(array64: Float64Array): DOMMatrixReadOnly;
+    static fromMatrix(other?: DOMMatrixInit): DOMMatrixReadOnly;
 }
 
-declare var DOMMatrixReadOnly: {
-    prototype: DOMMatrixReadOnly;
-    new(init?: string | number[]): DOMMatrixReadOnly;
-    fromFloat32Array(array32: Float32Array): DOMMatrixReadOnly;
-    fromFloat64Array(array64: Float64Array): DOMMatrixReadOnly;
-    fromMatrix(other?: DOMMatrixInit): DOMMatrixReadOnly;
-};
-
-interface DOMPoint extends DOMPointReadOnly {
+declare class DOMPoint extends DOMPointReadOnly {
+    constructor(x?: number, y?: number, z?: number, w?: number);
     w: number;
     x: number;
     y: number;
     z: number;
+    static fromPoint(other?: DOMPointInit): DOMPoint;
 }
 
-declare var DOMPoint: {
-    prototype: DOMPoint;
-    new(x?: number, y?: number, z?: number, w?: number): DOMPoint;
-    fromPoint(other?: DOMPointInit): DOMPoint;
-};
-
-interface DOMPointReadOnly {
+declare class DOMPointReadOnly {
+    constructor(x?: number, y?: number, z?: number, w?: number);
     readonly w: number;
     readonly x: number;
     readonly y: number;
     readonly z: number;
     matrixTransform(matrix?: DOMMatrixInit): DOMPoint;
     toJSON(): any;
+    static fromPoint(other?: DOMPointInit): DOMPointReadOnly;
 }
 
-declare var DOMPointReadOnly: {
-    prototype: DOMPointReadOnly;
-    new(x?: number, y?: number, z?: number, w?: number): DOMPointReadOnly;
-    fromPoint(other?: DOMPointInit): DOMPointReadOnly;
-};
-
-interface DOMQuad {
+declare class DOMQuad {
+    constructor(p1?: DOMPointInit, p2?: DOMPointInit, p3?: DOMPointInit, p4?: DOMPointInit);
     readonly p1: DOMPoint;
     readonly p2: DOMPoint;
     readonly p3: DOMPoint;
     readonly p4: DOMPoint;
     getBounds(): DOMRect;
     toJSON(): any;
+    static fromQuad(other?: DOMQuadInit): DOMQuad;
+    static fromRect(other?: DOMRectInit): DOMQuad;
 }
 
-declare var DOMQuad: {
-    prototype: DOMQuad;
-    new(p1?: DOMPointInit, p2?: DOMPointInit, p3?: DOMPointInit, p4?: DOMPointInit): DOMQuad;
-    fromQuad(other?: DOMQuadInit): DOMQuad;
-    fromRect(other?: DOMRectInit): DOMQuad;
-};
-
-interface DOMRect extends DOMRectReadOnly {
+declare class DOMRect extends DOMRectReadOnly {
+    constructor(x?: number, y?: number, width?: number, height?: number);
     height: number;
     width: number;
     x: number;
     y: number;
+    static fromRect(other?: DOMRectInit): DOMRect;
 }
 
-declare var DOMRect: {
-    prototype: DOMRect;
-    new(x?: number, y?: number, width?: number, height?: number): DOMRect;
-    fromRect(other?: DOMRectInit): DOMRect;
-};
-
-interface DOMRectReadOnly {
+declare class DOMRectReadOnly {
+    constructor(x?: number, y?: number, width?: number, height?: number);
     readonly bottom: number;
     readonly height: number;
     readonly left: number;
@@ -1207,16 +1109,11 @@ interface DOMRectReadOnly {
     readonly x: number;
     readonly y: number;
     toJSON(): any;
+    static fromRect(other?: DOMRectInit): DOMRectReadOnly;
 }
 
-declare var DOMRectReadOnly: {
-    prototype: DOMRectReadOnly;
-    new(x?: number, y?: number, width?: number, height?: number): DOMRectReadOnly;
-    fromRect(other?: DOMRectInit): DOMRectReadOnly;
-};
-
 /** A type returned by some APIs which contains a list of DOMString (strings). */
-interface DOMStringList {
+declare class DOMStringList {
     /**
      * Returns the number of strings in strings.
      */
@@ -1232,18 +1129,14 @@ interface DOMStringList {
     [index: number]: string;
 }
 
-declare var DOMStringList: {
-    prototype: DOMStringList;
-    new(): DOMStringList;
-};
-
 interface DedicatedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
     "message": MessageEvent;
     "messageerror": MessageEvent;
 }
 
 /** (the Worker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See also: Functions available to workers. */
-interface DedicatedWorkerGlobalScope extends WorkerGlobalScope, AnimationFrameProvider {
+interface DedicatedWorkerGlobalScope extends AnimationFrameProvider {}
+declare class DedicatedWorkerGlobalScope extends WorkerGlobalScope {
     /**
      * Returns dedicatedWorkerGlobal's name, i.e. the value given to the Worker constructor. Primarily useful for debugging.
      */
@@ -1264,11 +1157,6 @@ interface DedicatedWorkerGlobalScope extends WorkerGlobalScope, AnimationFramePr
     removeEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
-
-declare var DedicatedWorkerGlobalScope: {
-    prototype: DedicatedWorkerGlobalScope;
-    new(): DedicatedWorkerGlobalScope;
-};
 
 interface DhImportKeyParams extends Algorithm {
     generator: Uint8Array;
@@ -1315,7 +1203,8 @@ interface EXT_texture_filter_anisotropic {
 }
 
 /** Events providing information related to errors in scripts or in files. */
-interface ErrorEvent extends Event {
+declare class ErrorEvent extends Event {
+    constructor(type: string, eventInitDict?: ErrorEventInit);
     readonly colno: number;
     readonly error: any;
     readonly filename: string;
@@ -1323,13 +1212,9 @@ interface ErrorEvent extends Event {
     readonly message: string;
 }
 
-declare var ErrorEvent: {
-    prototype: ErrorEvent;
-    new(type: string, eventInitDict?: ErrorEventInit): ErrorEvent;
-};
-
 /** An event which takes place in the DOM. */
-interface Event {
+declare class Event {
+    constructor(type: string, eventInitDict?: EventInit);
     /**
      * Returns true or false depending on how event was initialized. True if event goes through its target's ancestors in reverse tree order, and false otherwise.
      */
@@ -1395,16 +1280,11 @@ interface Event {
     readonly BUBBLING_PHASE: number;
     readonly CAPTURING_PHASE: number;
     readonly NONE: number;
+    static readonly AT_TARGET: number;
+    static readonly BUBBLING_PHASE: number;
+    static readonly CAPTURING_PHASE: number;
+    static readonly NONE: number;
 }
-
-declare var Event: {
-    prototype: Event;
-    new(type: string, eventInitDict?: EventInit): Event;
-    readonly AT_TARGET: number;
-    readonly BUBBLING_PHASE: number;
-    readonly CAPTURING_PHASE: number;
-    readonly NONE: number;
-};
 
 interface EventListenerObject {
     handleEvent(evt: Event): void;
@@ -1416,7 +1296,8 @@ interface EventSourceEventMap {
     "open": Event;
 }
 
-interface EventSource extends EventTarget {
+declare class EventSource extends EventTarget {
+    constructor(url: string, eventSourceInitDict?: EventSourceInit);
     onerror: ((this: EventSource, ev: Event) => any) | null;
     onmessage: ((this: EventSource, ev: MessageEvent) => any) | null;
     onopen: ((this: EventSource, ev: Event) => any) | null;
@@ -1443,18 +1324,14 @@ interface EventSource extends EventTarget {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof EventSourceEventMap>(type: K, listener: (this: EventSource, ev: EventSourceEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    static readonly CLOSED: number;
+    static readonly CONNECTING: number;
+    static readonly OPEN: number;
 }
 
-declare var EventSource: {
-    prototype: EventSource;
-    new(url: string, eventSourceInitDict?: EventSourceInit): EventSource;
-    readonly CLOSED: number;
-    readonly CONNECTING: number;
-    readonly OPEN: number;
-};
-
 /** EventTarget is a DOM interface implemented by objects that can receive events and may have listeners for them. */
-interface EventTarget {
+declare class EventTarget {
+    constructor();
     /**
      * Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
      * 
@@ -1479,23 +1356,15 @@ interface EventTarget {
     removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
 }
 
-declare var EventTarget: {
-    prototype: EventTarget;
-    new(): EventTarget;
-};
-
 /** Extends the lifetime of the install and activate events dispatched on the global scope as part of the service worker lifecycle. This ensures that any functional events (like FetchEvent) are not dispatched until it upgrades database schemas and deletes the outdated cache entries. */
-interface ExtendableEvent extends Event {
+declare class ExtendableEvent extends Event {
+    constructor(type: string, eventInitDict?: ExtendableEventInit);
     waitUntil(f: any): void;
 }
 
-declare var ExtendableEvent: {
-    prototype: ExtendableEvent;
-    new(type: string, eventInitDict?: ExtendableEventInit): ExtendableEvent;
-};
-
 /** This ServiceWorker API interface represents the event object of a message event fired on a service worker (when a channel message is received on the ServiceWorkerGlobalScope from another context) — extends the lifetime of such events. */
-interface ExtendableMessageEvent extends ExtendableEvent {
+declare class ExtendableMessageEvent extends ExtendableEvent {
+    constructor(type: string, eventInitDict?: ExtendableMessageEventInit);
     readonly data: any;
     readonly lastEventId: string;
     readonly origin: string;
@@ -1503,13 +1372,9 @@ interface ExtendableMessageEvent extends ExtendableEvent {
     readonly source: Client | ServiceWorker | MessagePort | null;
 }
 
-declare var ExtendableMessageEvent: {
-    prototype: ExtendableMessageEvent;
-    new(type: string, eventInitDict?: ExtendableMessageEventInit): ExtendableMessageEvent;
-};
-
 /** This is the event type for fetch events dispatched on the service worker global scope. It contains information about the fetch, including the request and how the receiver will treat the response. It provides the event.respondWith() method, which allows us to provide a response to this fetch. */
-interface FetchEvent extends ExtendableEvent {
+declare class FetchEvent extends ExtendableEvent {
+    constructor(type: string, eventInitDict: FetchEventInit);
     readonly clientId: string;
     readonly preloadResponse: Promise<any>;
     readonly replacesClientId: string;
@@ -1518,33 +1383,19 @@ interface FetchEvent extends ExtendableEvent {
     respondWith(r: Response | Promise<Response>): void;
 }
 
-declare var FetchEvent: {
-    prototype: FetchEvent;
-    new(type: string, eventInitDict: FetchEventInit): FetchEvent;
-};
-
 /** Provides information about files and allows JavaScript in a web page to access their content. */
-interface File extends Blob {
+declare class File extends Blob {
+    constructor(fileBits: BlobPart[], fileName: string, options?: FilePropertyBag);
     readonly lastModified: number;
     readonly name: string;
 }
 
-declare var File: {
-    prototype: File;
-    new(fileBits: BlobPart[], fileName: string, options?: FilePropertyBag): File;
-};
-
 /** An object of this type is returned by the files property of the HTML <input> element; this lets you access the list of files selected with the <input type="file"> element. It's also used for a list of files dropped into web content when using the drag and drop API; see the DataTransfer object for details on this usage. */
-interface FileList {
+declare class FileList {
     readonly length: number;
     item(index: number): File | null;
     [index: number]: File;
 }
-
-declare var FileList: {
-    prototype: FileList;
-    new(): FileList;
-};
 
 interface FileReaderEventMap {
     "abort": ProgressEvent<FileReader>;
@@ -1556,7 +1407,8 @@ interface FileReaderEventMap {
 }
 
 /** Lets web applications asynchronously read the contents of files (or raw data buffers) stored on the user's computer, using File or Blob objects to specify the file or data to read. */
-interface FileReader extends EventTarget {
+declare class FileReader extends EventTarget {
+    constructor();
     readonly error: DOMException | null;
     onabort: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
     onerror: ((this: FileReader, ev: ProgressEvent<FileReader>) => any) | null;
@@ -1578,31 +1430,23 @@ interface FileReader extends EventTarget {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof FileReaderEventMap>(type: K, listener: (this: FileReader, ev: FileReaderEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    static readonly DONE: number;
+    static readonly EMPTY: number;
+    static readonly LOADING: number;
 }
 
-declare var FileReader: {
-    prototype: FileReader;
-    new(): FileReader;
-    readonly DONE: number;
-    readonly EMPTY: number;
-    readonly LOADING: number;
-};
-
 /** Allows to read File or Blob objects in a synchronous way. */
-interface FileReaderSync {
+declare class FileReaderSync {
+    constructor();
     readAsArrayBuffer(blob: Blob): ArrayBuffer;
     readAsBinaryString(blob: Blob): string;
     readAsDataURL(blob: Blob): string;
     readAsText(blob: Blob, encoding?: string): string;
 }
 
-declare var FileReaderSync: {
-    prototype: FileReaderSync;
-    new(): FileReaderSync;
-};
-
 /** Provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to "multipart/form-data". */
-interface FormData {
+declare class FormData {
+    constructor();
     append(name: string, value: string | Blob, fileName?: string): void;
     delete(name: string): void;
     get(name: string): FormDataEntryValue | null;
@@ -1611,11 +1455,6 @@ interface FormData {
     set(name: string, value: string | Blob, fileName?: string): void;
     forEach(callbackfn: (value: FormDataEntryValue, key: string, parent: FormData) => void, thisArg?: any): void;
 }
-
-declare var FormData: {
-    prototype: FormData;
-    new(): FormData;
-};
 
 interface GenericTransformStream {
     /**
@@ -1640,7 +1479,8 @@ interface GenericTransformStream {
 }
 
 /** This Fetch API interface allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists of zero or more name and value pairs.  You can add to this using methods like append() (see Examples.) In all methods of this interface, header names are matched by case-insensitive byte sequence. */
-interface Headers {
+declare class Headers {
+    constructor(init?: HeadersInit);
     append(name: string, value: string): void;
     delete(name: string): void;
     get(name: string): string | null;
@@ -1648,11 +1488,6 @@ interface Headers {
     set(name: string, value: string): void;
     forEach(callbackfn: (value: string, key: string, parent: Headers) => void, thisArg?: any): void;
 }
-
-declare var Headers: {
-    prototype: Headers;
-    new(init?: HeadersInit): Headers;
-};
 
 interface HkdfCtrParams extends Algorithm {
     context: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
@@ -1664,7 +1499,7 @@ interface IDBArrayKey extends Array<IDBValidKey> {
 }
 
 /** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. */
-interface IDBCursor {
+declare class IDBCursor {
     /**
      * Returns the direction ("next", "nextunique", "prev" or "prevunique") of the cursor.
      */
@@ -1709,23 +1544,13 @@ interface IDBCursor {
     update(value: any): IDBRequest<IDBValidKey>;
 }
 
-declare var IDBCursor: {
-    prototype: IDBCursor;
-    new(): IDBCursor;
-};
-
 /** This IndexedDB API interface represents a cursor for traversing or iterating over multiple records in a database. It is the same as the IDBCursor, except that it includes the value property. */
-interface IDBCursorWithValue extends IDBCursor {
+declare class IDBCursorWithValue extends IDBCursor {
     /**
      * Returns the cursor's current value.
      */
     readonly value: any;
 }
-
-declare var IDBCursorWithValue: {
-    prototype: IDBCursorWithValue;
-    new(): IDBCursorWithValue;
-};
 
 interface IDBDatabaseEventMap {
     "abort": Event;
@@ -1735,7 +1560,7 @@ interface IDBDatabaseEventMap {
 }
 
 /** This IndexedDB API interface provides a connection to a database; you can use an IDBDatabase object to open a transaction on your database then create, manipulate, and delete objects (data) in that database. The interface provides the only way to get and manage versions of the database. */
-interface IDBDatabase extends EventTarget {
+declare class IDBDatabase extends EventTarget {
     /**
      * Returns the name of the database.
      */
@@ -1778,13 +1603,8 @@ interface IDBDatabase extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var IDBDatabase: {
-    prototype: IDBDatabase;
-    new(): IDBDatabase;
-};
-
 /** In the following code snippet, we make a request to open a database, and include handlers for the success and error cases. For a full working example, see our To-do Notifications app (view example live.) */
-interface IDBFactory {
+declare class IDBFactory {
     /**
      * Compares two values as keys. Returns -1 if key1 precedes key2, 1 if key2 precedes key1, and 0 if the keys are equal.
      * 
@@ -1801,13 +1621,8 @@ interface IDBFactory {
     open(name: string, version?: number): IDBOpenDBRequest;
 }
 
-declare var IDBFactory: {
-    prototype: IDBFactory;
-    new(): IDBFactory;
-};
-
 /** IDBIndex interface of the IndexedDB API provides asynchronous access to an index in a database. An index is a kind of object store for looking up records in another object store, called the referenced object store. You use this interface to retrieve data. */
-interface IDBIndex {
+declare class IDBIndex {
     readonly keyPath: string | string[];
     readonly multiEntry: boolean;
     /**
@@ -1863,13 +1678,8 @@ interface IDBIndex {
     openKeyCursor(query?: IDBValidKey | IDBKeyRange | null, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
 }
 
-declare var IDBIndex: {
-    prototype: IDBIndex;
-    new(): IDBIndex;
-};
-
 /** A key range can be a single value or a range with upper and lower bounds or endpoints. If the key range has both upper and lower bounds, then it is bounded; if it has no bounds, it is unbounded. A bounded key range can either be open (the endpoints are excluded) or closed (the endpoints are included). To retrieve all keys within a certain range, you can use the following code constructs: */
-interface IDBKeyRange {
+declare class IDBKeyRange {
     /**
      * Returns lower bound, or undefined if none.
      */
@@ -1890,31 +1700,26 @@ interface IDBKeyRange {
      * Returns true if key is included in the range, and false otherwise.
      */
     includes(key: any): boolean;
-}
-
-declare var IDBKeyRange: {
-    prototype: IDBKeyRange;
-    new(): IDBKeyRange;
     /**
      * Returns a new IDBKeyRange spanning from lower to upper. If lowerOpen is true, lower is not included in the range. If upperOpen is true, upper is not included in the range.
      */
-    bound(lower: any, upper: any, lowerOpen?: boolean, upperOpen?: boolean): IDBKeyRange;
+    static bound(lower: any, upper: any, lowerOpen?: boolean, upperOpen?: boolean): IDBKeyRange;
     /**
      * Returns a new IDBKeyRange starting at key with no upper bound. If open is true, key is not included in the range.
      */
-    lowerBound(lower: any, open?: boolean): IDBKeyRange;
+    static lowerBound(lower: any, open?: boolean): IDBKeyRange;
     /**
      * Returns a new IDBKeyRange spanning only key.
      */
-    only(value: any): IDBKeyRange;
+    static only(value: any): IDBKeyRange;
     /**
      * Returns a new IDBKeyRange with no lower bound and ending at key. If open is true, key is not included in the range.
      */
-    upperBound(upper: any, open?: boolean): IDBKeyRange;
-};
+    static upperBound(upper: any, open?: boolean): IDBKeyRange;
+}
 
 /** This example shows a variety of different uses of object stores, from updating the data structure with IDBObjectStore.createIndex inside an onupgradeneeded function, to adding a new item to our object store with IDBObjectStore.add. For a full working example, see our To-do Notifications app (view example live.) */
-interface IDBObjectStore {
+declare class IDBObjectStore {
     /**
      * Returns true if the store has a key generator, and false otherwise.
      */
@@ -2024,18 +1829,14 @@ interface IDBObjectStore {
     put(value: any, key?: IDBValidKey): IDBRequest<IDBValidKey>;
 }
 
-declare var IDBObjectStore: {
-    prototype: IDBObjectStore;
-    new(): IDBObjectStore;
-};
-
 interface IDBOpenDBRequestEventMap extends IDBRequestEventMap {
     "blocked": Event;
     "upgradeneeded": IDBVersionChangeEvent;
 }
 
 /** Also inherits methods from its parents IDBRequest and EventTarget. */
-interface IDBOpenDBRequest extends IDBRequest<IDBDatabase> {
+interface IDBOpenDBRequest extends IDBRequest<IDBDatabase> {}
+declare class IDBOpenDBRequest {
     onblocked: ((this: IDBOpenDBRequest, ev: Event) => any) | null;
     onupgradeneeded: ((this: IDBOpenDBRequest, ev: IDBVersionChangeEvent) => any) | null;
     addEventListener<K extends keyof IDBOpenDBRequestEventMap>(type: K, listener: (this: IDBOpenDBRequest, ev: IDBOpenDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2044,18 +1845,13 @@ interface IDBOpenDBRequest extends IDBRequest<IDBDatabase> {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var IDBOpenDBRequest: {
-    prototype: IDBOpenDBRequest;
-    new(): IDBOpenDBRequest;
-};
-
 interface IDBRequestEventMap {
     "error": Event;
     "success": Event;
 }
 
 /** The request object does not initially contain any information about the result of the operation, but once information becomes available, an event is fired on the request, and the information becomes available through the properties of the IDBRequest instance. */
-interface IDBRequest<T = any> extends EventTarget {
+declare class IDBRequest<T = any> extends EventTarget {
     /**
      * When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws a "InvalidStateError" DOMException if the request is still pending.
      */
@@ -2084,18 +1880,13 @@ interface IDBRequest<T = any> extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var IDBRequest: {
-    prototype: IDBRequest;
-    new(): IDBRequest;
-};
-
 interface IDBTransactionEventMap {
     "abort": Event;
     "complete": Event;
     "error": Event;
 }
 
-interface IDBTransaction extends EventTarget {
+declare class IDBTransaction extends EventTarget {
     /**
      * Returns the transaction's connection.
      */
@@ -2129,23 +1920,14 @@ interface IDBTransaction extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var IDBTransaction: {
-    prototype: IDBTransaction;
-    new(): IDBTransaction;
-};
-
 /** This IndexedDB API interface indicates that the version of the database has changed, as the result of an IDBOpenDBRequest.onupgradeneeded event handler function. */
-interface IDBVersionChangeEvent extends Event {
+declare class IDBVersionChangeEvent extends Event {
+    constructor(type: string, eventInitDict?: IDBVersionChangeEventInit);
     readonly newVersion: number | null;
     readonly oldVersion: number;
 }
 
-declare var IDBVersionChangeEvent: {
-    prototype: IDBVersionChangeEvent;
-    new(type: string, eventInitDict?: IDBVersionChangeEventInit): IDBVersionChangeEvent;
-};
-
-interface ImageBitmap {
+declare class ImageBitmap {
     /**
      * Returns the intrinsic height of the image, in CSS pixels.
      */
@@ -2160,12 +1942,7 @@ interface ImageBitmap {
     close(): void;
 }
 
-declare var ImageBitmap: {
-    prototype: ImageBitmap;
-    new(): ImageBitmap;
-};
-
-interface ImageBitmapRenderingContext {
+declare class ImageBitmapRenderingContext {
     /**
      * Returns the canvas element that the context is bound to.
      */
@@ -2176,13 +1953,10 @@ interface ImageBitmapRenderingContext {
     transferFromImageBitmap(bitmap: ImageBitmap | null): void;
 }
 
-declare var ImageBitmapRenderingContext: {
-    prototype: ImageBitmapRenderingContext;
-    new(): ImageBitmapRenderingContext;
-};
-
 /** The underlying pixel data of an area of a <canvas> element. It is created using the ImageData() constructor or creator methods on the CanvasRenderingContext2D object associated with a canvas: createImageData() and getImageData(). It can also be used to set a part of the canvas by using putImageData(). */
-interface ImageData {
+declare class ImageData {
+    constructor(width: number, height: number);
+    constructor(array: Uint8ClampedArray, width: number, height?: number);
     /**
      * Returns the one-dimensional array containing the data in RGBA order, as integers in the range 0 to 255.
      */
@@ -2197,14 +1971,9 @@ interface ImageData {
     readonly width: number;
 }
 
-declare var ImageData: {
-    prototype: ImageData;
-    new(width: number, height: number): ImageData;
-    new(array: Uint8ClampedArray, width: number, height?: number): ImageData;
-};
-
 /** This Channel Messaging API interface allows us to create a new message channel and send data through it via its two MessagePort properties. */
-interface MessageChannel {
+declare class MessageChannel {
+    constructor();
     /**
      * Returns the first MessagePort object.
      */
@@ -2215,13 +1984,9 @@ interface MessageChannel {
     readonly port2: MessagePort;
 }
 
-declare var MessageChannel: {
-    prototype: MessageChannel;
-    new(): MessageChannel;
-};
-
 /** A message received by a target object. */
-interface MessageEvent extends Event {
+declare class MessageEvent extends Event {
+    constructor(type: string, eventInitDict?: MessageEventInit);
     /**
      * Returns the data of the message.
      */
@@ -2244,18 +2009,13 @@ interface MessageEvent extends Event {
     readonly source: MessageEventSource | null;
 }
 
-declare var MessageEvent: {
-    prototype: MessageEvent;
-    new(type: string, eventInitDict?: MessageEventInit): MessageEvent;
-};
-
 interface MessagePortEventMap {
     "message": MessageEvent;
     "messageerror": MessageEvent;
 }
 
 /** This Channel Messaging API interface represents one of the two ports of a MessageChannel, allowing messages to be sent from one port and listening out for them arriving at the other. */
-interface MessagePort extends EventTarget {
+declare class MessagePort extends EventTarget {
     onmessage: ((this: MessagePort, ev: MessageEvent) => any) | null;
     onmessageerror: ((this: MessagePort, ev: MessageEvent) => any) | null;
     /**
@@ -2279,22 +2039,12 @@ interface MessagePort extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var MessagePort: {
-    prototype: MessagePort;
-    new(): MessagePort;
-};
-
-interface NavigationPreloadManager {
+declare class NavigationPreloadManager {
     disable(): Promise<void>;
     enable(): Promise<void>;
     getState(): Promise<NavigationPreloadState>;
     setHeaderValue(value: string): Promise<void>;
 }
-
-declare var NavigationPreloadManager: {
-    prototype: NavigationPreloadManager;
-    new(): NavigationPreloadManager;
-};
 
 interface NavigatorConcurrentHardware {
     readonly hardwareConcurrency: number;
@@ -2330,7 +2080,8 @@ interface NotificationEventMap {
 }
 
 /** This Notifications API interface is used to configure and display desktop notifications to the user. */
-interface Notification extends EventTarget {
+declare class Notification extends EventTarget {
+    constructor(title: string, options?: NotificationOptions);
     readonly actions: ReadonlyArray<NotificationAction>;
     readonly badge: string;
     readonly body: string;
@@ -2355,25 +2106,16 @@ interface Notification extends EventTarget {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof NotificationEventMap>(type: K, listener: (this: Notification, ev: NotificationEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    static readonly maxActions: number;
+    static readonly permission: NotificationPermission;
 }
 
-declare var Notification: {
-    prototype: Notification;
-    new(title: string, options?: NotificationOptions): Notification;
-    readonly maxActions: number;
-    readonly permission: NotificationPermission;
-};
-
 /** The parameter passed into the onnotificationclick handler, the NotificationEvent interface represents a notification click event that is dispatched on the ServiceWorkerGlobalScope of a ServiceWorker. */
-interface NotificationEvent extends ExtendableEvent {
+declare class NotificationEvent extends ExtendableEvent {
+    constructor(type: string, eventInitDict: NotificationEventInit);
     readonly action: string;
     readonly notification: Notification;
 }
-
-declare var NotificationEvent: {
-    prototype: NotificationEvent;
-    new(type: string, eventInitDict: NotificationEventInit): NotificationEvent;
-};
 
 /** The OES_element_index_uint extension is part of the WebGL API and adds support for gl.UNSIGNED_INT types to WebGLRenderingContext.drawElements(). */
 interface OES_element_index_uint {
@@ -2409,7 +2151,8 @@ interface OES_vertex_array_object {
     readonly VERTEX_ARRAY_BINDING_OES: GLenum;
 }
 
-interface OffscreenCanvas extends EventTarget {
+declare class OffscreenCanvas extends EventTarget {
+    constructor(width: number, height: number);
     /**
      * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
      * 
@@ -2446,40 +2189,28 @@ interface OffscreenCanvas extends EventTarget {
     transferToImageBitmap(): ImageBitmap;
 }
 
-declare var OffscreenCanvas: {
-    prototype: OffscreenCanvas;
-    new(width: number, height: number): OffscreenCanvas;
-};
-
-interface OffscreenCanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform {
+interface OffscreenCanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform {}
+declare class OffscreenCanvasRenderingContext2D {
     readonly canvas: OffscreenCanvas;
     commit(): void;
 }
 
-declare var OffscreenCanvasRenderingContext2D: {
-    prototype: OffscreenCanvasRenderingContext2D;
-    new(): OffscreenCanvasRenderingContext2D;
-};
-
 /** This Canvas 2D API interface is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired. */
-interface Path2D extends CanvasPath {
+interface Path2D extends CanvasPath {}
+declare class Path2D {
+    constructor(path?: Path2D | string);
     /**
      * Adds to the path the path given by the argument.
      */
     addPath(path: Path2D, transform?: DOMMatrix2DInit): void;
 }
 
-declare var Path2D: {
-    prototype: Path2D;
-    new(path?: Path2D | string): Path2D;
-};
-
 interface PerformanceEventMap {
     "resourcetimingbufferfull": Event;
 }
 
 /** Provides access to performance-related information for the current page. It's part of the High Resolution Time API, but is enhanced by the Performance Timeline API, the Navigation Timing API, the User Timing API, and the Resource Timing API. */
-interface Performance extends EventTarget {
+declare class Performance extends EventTarget {
     onresourcetimingbufferfull: ((this: Performance, ev: Event) => any) | null;
     readonly timeOrigin: number;
     clearMarks(markName?: string): void;
@@ -2499,13 +2230,8 @@ interface Performance extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var Performance: {
-    prototype: Performance;
-    new(): Performance;
-};
-
 /** Encapsulates a single performance metric that is part of the performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries are also created in indirect ways such as loading a resource (such as an image). */
-interface PerformanceEntry {
+declare class PerformanceEntry {
     readonly duration: number;
     readonly entryType: string;
     readonly name: string;
@@ -2513,54 +2239,30 @@ interface PerformanceEntry {
     toJSON(): any;
 }
 
-declare var PerformanceEntry: {
-    prototype: PerformanceEntry;
-    new(): PerformanceEntry;
-};
-
 /** PerformanceMark is an abstract interface for PerformanceEntry objects with an entryType of "mark". Entries of this type are created by calling performance.mark() to add a named DOMHighResTimeStamp (the mark) to the browser's performance timeline. */
-interface PerformanceMark extends PerformanceEntry {
+declare class PerformanceMark extends PerformanceEntry {
 }
-
-declare var PerformanceMark: {
-    prototype: PerformanceMark;
-    new(): PerformanceMark;
-};
 
 /** PerformanceMeasure is an abstract interface for PerformanceEntry objects with an entryType of "measure". Entries of this type are created by calling performance.measure() to add a named DOMHighResTimeStamp (the measure) between two marks to the browser's performance timeline. */
-interface PerformanceMeasure extends PerformanceEntry {
+declare class PerformanceMeasure extends PerformanceEntry {
 }
 
-declare var PerformanceMeasure: {
-    prototype: PerformanceMeasure;
-    new(): PerformanceMeasure;
-};
-
-interface PerformanceObserver {
+declare class PerformanceObserver {
+    constructor(callback: PerformanceObserverCallback);
     disconnect(): void;
     observe(options?: PerformanceObserverInit): void;
     takeRecords(): PerformanceEntryList;
+    static readonly supportedEntryTypes: ReadonlyArray<string>;
 }
 
-declare var PerformanceObserver: {
-    prototype: PerformanceObserver;
-    new(callback: PerformanceObserverCallback): PerformanceObserver;
-    readonly supportedEntryTypes: ReadonlyArray<string>;
-};
-
-interface PerformanceObserverEntryList {
+declare class PerformanceObserverEntryList {
     getEntries(): PerformanceEntryList;
     getEntriesByName(name: string, type?: string): PerformanceEntryList;
     getEntriesByType(type: string): PerformanceEntryList;
 }
 
-declare var PerformanceObserverEntryList: {
-    prototype: PerformanceObserverEntryList;
-    new(): PerformanceObserverEntryList;
-};
-
 /** Enables retrieval and analysis of detailed network timing data regarding the loading of an application's resources. An application can use the timing metrics to determine, for example, the length of time it takes to fetch a specific resource, such as an XMLHttpRequest, <SVG>, image, or script. */
-interface PerformanceResourceTiming extends PerformanceEntry {
+declare class PerformanceResourceTiming extends PerformanceEntry {
     readonly connectEnd: number;
     readonly connectStart: number;
     readonly decodedBodySize: number;
@@ -2581,16 +2283,11 @@ interface PerformanceResourceTiming extends PerformanceEntry {
     toJSON(): any;
 }
 
-declare var PerformanceResourceTiming: {
-    prototype: PerformanceResourceTiming;
-    new(): PerformanceResourceTiming;
-};
-
 interface PermissionStatusEventMap {
     "change": Event;
 }
 
-interface PermissionStatus extends EventTarget {
+declare class PermissionStatus extends EventTarget {
     onchange: ((this: PermissionStatus, ev: Event) => any) | null;
     readonly state: PermissionState;
     addEventListener<K extends keyof PermissionStatusEventMap>(type: K, listener: (this: PermissionStatus, ev: PermissionStatusEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2599,81 +2296,49 @@ interface PermissionStatus extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var PermissionStatus: {
-    prototype: PermissionStatus;
-    new(): PermissionStatus;
-};
-
-interface Permissions {
+declare class Permissions {
     query(permissionDesc: PermissionDescriptor | DevicePermissionDescriptor | MidiPermissionDescriptor | PushPermissionDescriptor): Promise<PermissionStatus>;
 }
 
-declare var Permissions: {
-    prototype: Permissions;
-    new(): Permissions;
-};
-
 /** Events measuring progress of an underlying process, like an HTTP request (for an XMLHttpRequest, or the loading of the underlying resource of an <img>, <audio>, <video>, <style> or <link>). */
-interface ProgressEvent<T extends EventTarget = EventTarget> extends Event {
+declare class ProgressEvent<T extends EventTarget = EventTarget> extends Event {
+    constructor(type: string, eventInitDict?: ProgressEventInit);
     readonly lengthComputable: boolean;
     readonly loaded: number;
     readonly target: T | null;
     readonly total: number;
 }
 
-declare var ProgressEvent: {
-    prototype: ProgressEvent;
-    new(type: string, eventInitDict?: ProgressEventInit): ProgressEvent;
-};
-
-interface PromiseRejectionEvent extends Event {
+declare class PromiseRejectionEvent extends Event {
+    constructor(type: string, eventInitDict: PromiseRejectionEventInit);
     readonly promise: Promise<any>;
     readonly reason: any;
 }
 
-declare var PromiseRejectionEvent: {
-    prototype: PromiseRejectionEvent;
-    new(type: string, eventInitDict: PromiseRejectionEventInit): PromiseRejectionEvent;
-};
-
 /** This Push API interface represents a push message that has been received. This event is sent to the global scope of a ServiceWorker. It contains the information sent from an application server to a PushSubscription. */
-interface PushEvent extends ExtendableEvent {
+declare class PushEvent extends ExtendableEvent {
+    constructor(type: string, eventInitDict?: PushEventInit);
     readonly data: PushMessageData | null;
 }
 
-declare var PushEvent: {
-    prototype: PushEvent;
-    new(type: string, eventInitDict?: PushEventInit): PushEvent;
-};
-
 /** This Push API interface provides a way to receive notifications from third-party servers as well as request URLs for push notifications. */
-interface PushManager {
+declare class PushManager {
     getSubscription(): Promise<PushSubscription | null>;
     permissionState(options?: PushSubscriptionOptionsInit): Promise<PushPermissionState>;
     subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
+    static readonly supportedContentEncodings: ReadonlyArray<string>;
 }
 
-declare var PushManager: {
-    prototype: PushManager;
-    new(): PushManager;
-    readonly supportedContentEncodings: ReadonlyArray<string>;
-};
-
 /** This Push API interface provides methods which let you retrieve the push data sent by a server in various formats. */
-interface PushMessageData {
+declare class PushMessageData {
     arrayBuffer(): ArrayBuffer;
     blob(): Blob;
     json(): any;
     text(): string;
 }
 
-declare var PushMessageData: {
-    prototype: PushMessageData;
-    new(): PushMessageData;
-};
-
 /** This Push API interface provides a subcription's URL endpoint and allows unsubscription from a push service. */
-interface PushSubscription {
+declare class PushSubscription {
     readonly endpoint: string;
     readonly expirationTime: number | null;
     readonly options: PushSubscriptionOptions;
@@ -2682,30 +2347,16 @@ interface PushSubscription {
     unsubscribe(): Promise<boolean>;
 }
 
-declare var PushSubscription: {
-    prototype: PushSubscription;
-    new(): PushSubscription;
-};
-
-interface PushSubscriptionChangeEvent extends ExtendableEvent {
+declare class PushSubscriptionChangeEvent extends ExtendableEvent {
+    constructor(type: string, eventInitDict?: PushSubscriptionChangeEventInit);
     readonly newSubscription: PushSubscription | null;
     readonly oldSubscription: PushSubscription | null;
 }
 
-declare var PushSubscriptionChangeEvent: {
-    prototype: PushSubscriptionChangeEvent;
-    new(type: string, eventInitDict?: PushSubscriptionChangeEventInit): PushSubscriptionChangeEvent;
-};
-
-interface PushSubscriptionOptions {
+declare class PushSubscriptionOptions {
     readonly applicationServerKey: ArrayBuffer | null;
     readonly userVisibleOnly: boolean;
 }
-
-declare var PushSubscriptionOptions: {
-    prototype: PushSubscriptionOptions;
-    new(): PushSubscriptionOptions;
-};
 
 interface ReadableByteStreamController {
     readonly byobRequest: ReadableStreamBYOBRequest | undefined;
@@ -2716,7 +2367,9 @@ interface ReadableByteStreamController {
 }
 
 /** This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a ReadableStream through the body property of a Response object. */
-interface ReadableStream<R = any> {
+declare class ReadableStream<R = any> {
+    constructor(underlyingSource: UnderlyingByteSource, strategy?: { highWaterMark?: number, size?: undefined });
+    constructor(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>);
     readonly locked: boolean;
     cancel(reason?: any): Promise<void>;
     getReader(options: { mode: "byob" }): ReadableStreamBYOBReader;
@@ -2725,12 +2378,6 @@ interface ReadableStream<R = any> {
     pipeTo(dest: WritableStream<R>, options?: PipeOptions): Promise<void>;
     tee(): [ReadableStream<R>, ReadableStream<R>];
 }
-
-declare var ReadableStream: {
-    prototype: ReadableStream;
-    new(underlyingSource: UnderlyingByteSource, strategy?: { highWaterMark?: number, size?: undefined }): ReadableStream<Uint8Array>;
-    new<R = any>(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
-};
 
 interface ReadableStreamBYOBReader {
     readonly closed: Promise<void>;
@@ -2759,19 +2406,16 @@ interface ReadableStreamDefaultReader<R = any> {
     releaseLock(): void;
 }
 
-interface ReadableStreamReader<R = any> {
+declare class ReadableStreamReader<R = any> {
     cancel(): Promise<void>;
     read(): Promise<ReadableStreamReadResult<R>>;
     releaseLock(): void;
 }
 
-declare var ReadableStreamReader: {
-    prototype: ReadableStreamReader;
-    new(): ReadableStreamReader;
-};
-
 /** This Fetch API interface represents a resource request. */
-interface Request extends Body {
+interface Request extends Body {}
+declare class Request {
+    constructor(input: RequestInfo, init?: RequestInit);
     /**
      * Returns the cache mode associated with request, which is a string indicating how the request will interact with the browser's cache when fetching.
      */
@@ -2835,13 +2479,10 @@ interface Request extends Body {
     clone(): Request;
 }
 
-declare var Request: {
-    prototype: Request;
-    new(input: RequestInfo, init?: RequestInit): Request;
-};
-
 /** This Fetch API interface represents the response to a request. */
-interface Response extends Body {
+interface Response extends Body {}
+declare class Response {
+    constructor(body?: BodyInit | null, init?: ResponseInit);
     readonly headers: Headers;
     readonly ok: boolean;
     readonly redirected: boolean;
@@ -2851,21 +2492,17 @@ interface Response extends Body {
     readonly type: ResponseType;
     readonly url: string;
     clone(): Response;
+    static error(): Response;
+    static redirect(url: string, status?: number): Response;
 }
-
-declare var Response: {
-    prototype: Response;
-    new(body?: BodyInit | null, init?: ResponseInit): Response;
-    error(): Response;
-    redirect(url: string, status?: number): Response;
-};
 
 interface ServiceWorkerEventMap extends AbstractWorkerEventMap {
     "statechange": Event;
 }
 
 /** This ServiceWorker API interface provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object. */
-interface ServiceWorker extends EventTarget, AbstractWorker {
+interface ServiceWorker extends AbstractWorker {}
+declare class ServiceWorker extends EventTarget {
     onstatechange: ((this: ServiceWorker, ev: Event) => any) | null;
     readonly scriptURL: string;
     readonly state: ServiceWorkerState;
@@ -2877,11 +2514,6 @@ interface ServiceWorker extends EventTarget, AbstractWorker {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var ServiceWorker: {
-    prototype: ServiceWorker;
-    new(): ServiceWorker;
-};
-
 interface ServiceWorkerContainerEventMap {
     "controllerchange": Event;
     "message": MessageEvent;
@@ -2889,7 +2521,7 @@ interface ServiceWorkerContainerEventMap {
 }
 
 /** The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations. */
-interface ServiceWorkerContainer extends EventTarget {
+declare class ServiceWorkerContainer extends EventTarget {
     readonly controller: ServiceWorker | null;
     oncontrollerchange: ((this: ServiceWorkerContainer, ev: Event) => any) | null;
     onmessage: ((this: ServiceWorkerContainer, ev: MessageEvent) => any) | null;
@@ -2905,11 +2537,6 @@ interface ServiceWorkerContainer extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var ServiceWorkerContainer: {
-    prototype: ServiceWorkerContainer;
-    new(): ServiceWorkerContainer;
-};
-
 interface ServiceWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
     "activate": ExtendableEvent;
     "fetch": FetchEvent;
@@ -2924,7 +2551,7 @@ interface ServiceWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
 }
 
 /** This ServiceWorker API interface represents the global execution context of a service worker. */
-interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
+declare class ServiceWorkerGlobalScope extends WorkerGlobalScope {
     readonly clients: Clients;
     onactivate: ((this: ServiceWorkerGlobalScope, ev: ExtendableEvent) => any) | null;
     onfetch: ((this: ServiceWorkerGlobalScope, ev: FetchEvent) => any) | null;
@@ -2945,17 +2572,12 @@ interface ServiceWorkerGlobalScope extends WorkerGlobalScope {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var ServiceWorkerGlobalScope: {
-    prototype: ServiceWorkerGlobalScope;
-    new(): ServiceWorkerGlobalScope;
-};
-
 interface ServiceWorkerRegistrationEventMap {
     "updatefound": Event;
 }
 
 /** This ServiceWorker API interface represents the service worker registration. You register a service worker to control one or more pages that share the same origin. */
-interface ServiceWorkerRegistration extends EventTarget {
+declare class ServiceWorkerRegistration extends EventTarget {
     readonly active: ServiceWorker | null;
     readonly installing: ServiceWorker | null;
     readonly navigationPreload: NavigationPreloadManager;
@@ -2975,12 +2597,9 @@ interface ServiceWorkerRegistration extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var ServiceWorkerRegistration: {
-    prototype: ServiceWorkerRegistration;
-    new(): ServiceWorkerRegistration;
-};
-
-interface SharedWorker extends EventTarget, AbstractWorker {
+interface SharedWorker extends AbstractWorker {}
+declare class SharedWorker extends EventTarget {
+    constructor(scriptURL: string, options?: string | WorkerOptions);
     /**
      * Returns sharedWorker's MessagePort object which can be used to communicate with the global environment.
      */
@@ -2991,16 +2610,11 @@ interface SharedWorker extends EventTarget, AbstractWorker {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var SharedWorker: {
-    prototype: SharedWorker;
-    new(scriptURL: string, options?: string | WorkerOptions): SharedWorker;
-};
-
 interface SharedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
     "connect": MessageEvent;
 }
 
-interface SharedWorkerGlobalScope extends WorkerGlobalScope {
+declare class SharedWorkerGlobalScope extends WorkerGlobalScope {
     /**
      * Returns sharedWorkerGlobal's name, i.e. the value given to the SharedWorker constructor. Multiple SharedWorker objects can correspond to the same shared worker (and SharedWorkerGlobalScope), by reusing the same name.
      */
@@ -3016,23 +2630,13 @@ interface SharedWorkerGlobalScope extends WorkerGlobalScope {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var SharedWorkerGlobalScope: {
-    prototype: SharedWorkerGlobalScope;
-    new(): SharedWorkerGlobalScope;
-};
-
-interface StorageManager {
+declare class StorageManager {
     estimate(): Promise<StorageEstimate>;
     persisted(): Promise<boolean>;
 }
 
-declare var StorageManager: {
-    prototype: StorageManager;
-    new(): StorageManager;
-};
-
 /** This Web Crypto API interface provides a number of low-level cryptographic functions. It is accessed via the Crypto.subtle properties available in a window context (via Window.crypto). */
-interface SubtleCrypto {
+declare class SubtleCrypto {
     decrypt(algorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
     deriveBits(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, length: number): PromiseLike<ArrayBuffer>;
     deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: string | AesDerivedKeyParams | HmacImportParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): PromiseLike<CryptoKey>;
@@ -3053,35 +2657,23 @@ interface SubtleCrypto {
     wrapKey(format: "raw" | "pkcs8" | "spki" | "jwk" | string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams): PromiseLike<ArrayBuffer>;
 }
 
-declare var SubtleCrypto: {
-    prototype: SubtleCrypto;
-    new(): SubtleCrypto;
-};
-
 /** A sync action that is dispatched on the ServiceWorkerGlobalScope of a ServiceWorker.  */
-interface SyncEvent extends ExtendableEvent {
+declare class SyncEvent extends ExtendableEvent {
+    constructor(type: string, init: SyncEventInit);
     readonly lastChance: boolean;
     readonly tag: string;
 }
 
-declare var SyncEvent: {
-    prototype: SyncEvent;
-    new(type: string, init: SyncEventInit): SyncEvent;
-};
-
 /** This ServiceWorker API interface provides an interface for registering and listing sync registrations. */
-interface SyncManager {
+declare class SyncManager {
     getTags(): Promise<string[]>;
     register(tag: string): Promise<void>;
 }
 
-declare var SyncManager: {
-    prototype: SyncManager;
-    new(): SyncManager;
-};
-
 /** A decoder for a specific method, that is a specific character encoding, like utf-8, iso-8859-2, koi8, cp1261, gbk, etc. A decoder takes a stream of bytes as input and emits a stream of code points. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. */
-interface TextDecoder extends TextDecoderCommon {
+interface TextDecoder extends TextDecoderCommon {}
+declare class TextDecoder {
+    constructor(label?: string, options?: TextDecoderOptions);
     /**
      * Returns the result of running encoding's decoder. The method can be invoked zero or more times with options's stream set to true, and then once without options's stream (or set to false), to process a fragmented stream. If the invocation without options's stream (or set to false) has no input, it's clearest to omit both arguments.
      * 
@@ -3098,11 +2690,6 @@ interface TextDecoder extends TextDecoderCommon {
     decode(input?: BufferSource, options?: TextDecodeOptions): string;
 }
 
-declare var TextDecoder: {
-    prototype: TextDecoder;
-    new(label?: string, options?: TextDecoderOptions): TextDecoder;
-};
-
 interface TextDecoderCommon {
     /**
      * Returns encoding's name, lowercased.
@@ -3118,18 +2705,17 @@ interface TextDecoderCommon {
     readonly ignoreBOM: boolean;
 }
 
-interface TextDecoderStream extends GenericTransformStream, TextDecoderCommon {
+interface TextDecoderStream extends GenericTransformStream, TextDecoderCommon {}
+declare class TextDecoderStream {
+    constructor(label?: string, options?: TextDecoderOptions);
     readonly readable: ReadableStream<string>;
     readonly writable: WritableStream<BufferSource>;
 }
 
-declare var TextDecoderStream: {
-    prototype: TextDecoderStream;
-    new(label?: string, options?: TextDecoderOptions): TextDecoderStream;
-};
-
 /** TextEncoder takes a stream of code points as input and emits a stream of bytes. For a more scalable, non-native library, see StringView – a C-like representation of strings based on typed arrays. */
-interface TextEncoder extends TextEncoderCommon {
+interface TextEncoder extends TextEncoderCommon {}
+declare class TextEncoder {
+    constructor();
     /**
      * Returns the result of running UTF-8's encoder.
      */
@@ -3140,11 +2726,6 @@ interface TextEncoder extends TextEncoderCommon {
     encodeInto(source: string, destination: Uint8Array): TextEncoderEncodeIntoResult;
 }
 
-declare var TextEncoder: {
-    prototype: TextEncoder;
-    new(): TextEncoder;
-};
-
 interface TextEncoderCommon {
     /**
      * Returns "utf-8".
@@ -3152,18 +2733,15 @@ interface TextEncoderCommon {
     readonly encoding: string;
 }
 
-interface TextEncoderStream extends GenericTransformStream, TextEncoderCommon {
+interface TextEncoderStream extends GenericTransformStream, TextEncoderCommon {}
+declare class TextEncoderStream {
+    constructor();
     readonly readable: ReadableStream<Uint8Array>;
     readonly writable: WritableStream<string>;
 }
 
-declare var TextEncoderStream: {
-    prototype: TextEncoderStream;
-    new(): TextEncoderStream;
-};
-
 /** The dimensions of a piece of text in the canvas, as created by the CanvasRenderingContext2D.measureText() method. */
-interface TextMetrics {
+declare class TextMetrics {
     /**
      * Returns the measurement described below.
      */
@@ -3214,20 +2792,11 @@ interface TextMetrics {
     readonly width: number;
 }
 
-declare var TextMetrics: {
-    prototype: TextMetrics;
-    new(): TextMetrics;
-};
-
-interface TransformStream<I = any, O = any> {
+declare class TransformStream<I = any, O = any> {
+    constructor(transformer?: Transformer<I, O>, writableStrategy?: QueuingStrategy<I>, readableStrategy?: QueuingStrategy<O>);
     readonly readable: ReadableStream<O>;
     readonly writable: WritableStream<I>;
 }
-
-declare var TransformStream: {
-    prototype: TransformStream;
-    new<I = any, O = any>(transformer?: Transformer<I, O>, writableStrategy?: QueuingStrategy<I>, readableStrategy?: QueuingStrategy<O>): TransformStream<I, O>;
-};
 
 interface TransformStreamDefaultController<O = any> {
     readonly desiredSize: number | null;
@@ -3237,7 +2806,8 @@ interface TransformStreamDefaultController<O = any> {
 }
 
 /** The URL interface represents an object providing static methods used for creating object URLs. */
-interface URL {
+declare class URL {
+    constructor(url: string, base?: string | URL);
     hash: string;
     host: string;
     hostname: string;
@@ -3252,16 +2822,12 @@ interface URL {
     readonly searchParams: URLSearchParams;
     username: string;
     toJSON(): string;
+    static createObjectURL(object: any): string;
+    static revokeObjectURL(url: string): void;
 }
 
-declare var URL: {
-    prototype: URL;
-    new(url: string, base?: string | URL): URL;
-    createObjectURL(object: any): string;
-    revokeObjectURL(url: string): void;
-};
-
-interface URLSearchParams {
+declare class URLSearchParams {
+    constructor(init?: string[][] | Record<string, string> | string | URLSearchParams);
     /**
      * Appends a specified key/value pair as a new search parameter.
      */
@@ -3293,12 +2859,6 @@ interface URLSearchParams {
     toString(): string;
     forEach(callbackfn: (value: string, key: string, parent: URLSearchParams) => void, thisArg?: any): void;
 }
-
-declare var URLSearchParams: {
-    prototype: URLSearchParams;
-    new(init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams;
-    toString(): string;
-};
 
 interface WEBGL_color_buffer_float {
     readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT: GLenum;
@@ -3411,572 +2971,568 @@ interface WEBGL_lose_context {
     restoreContext(): void;
 }
 
-interface WebGL2RenderingContext extends WebGL2RenderingContextBase, WebGL2RenderingContextOverloads, WebGLRenderingContextBase {
+interface WebGL2RenderingContext extends WebGL2RenderingContextBase, WebGL2RenderingContextOverloads, WebGLRenderingContextBase {}
+declare class WebGL2RenderingContext {
+    static readonly ACTIVE_ATTRIBUTES: GLenum;
+    static readonly ACTIVE_TEXTURE: GLenum;
+    static readonly ACTIVE_UNIFORMS: GLenum;
+    static readonly ALIASED_LINE_WIDTH_RANGE: GLenum;
+    static readonly ALIASED_POINT_SIZE_RANGE: GLenum;
+    static readonly ALPHA: GLenum;
+    static readonly ALPHA_BITS: GLenum;
+    static readonly ALWAYS: GLenum;
+    static readonly ARRAY_BUFFER: GLenum;
+    static readonly ARRAY_BUFFER_BINDING: GLenum;
+    static readonly ATTACHED_SHADERS: GLenum;
+    static readonly BACK: GLenum;
+    static readonly BLEND: GLenum;
+    static readonly BLEND_COLOR: GLenum;
+    static readonly BLEND_DST_ALPHA: GLenum;
+    static readonly BLEND_DST_RGB: GLenum;
+    static readonly BLEND_EQUATION: GLenum;
+    static readonly BLEND_EQUATION_ALPHA: GLenum;
+    static readonly BLEND_EQUATION_RGB: GLenum;
+    static readonly BLEND_SRC_ALPHA: GLenum;
+    static readonly BLEND_SRC_RGB: GLenum;
+    static readonly BLUE_BITS: GLenum;
+    static readonly BOOL: GLenum;
+    static readonly BOOL_VEC2: GLenum;
+    static readonly BOOL_VEC3: GLenum;
+    static readonly BOOL_VEC4: GLenum;
+    static readonly BROWSER_DEFAULT_WEBGL: GLenum;
+    static readonly BUFFER_SIZE: GLenum;
+    static readonly BUFFER_USAGE: GLenum;
+    static readonly BYTE: GLenum;
+    static readonly CCW: GLenum;
+    static readonly CLAMP_TO_EDGE: GLenum;
+    static readonly COLOR_ATTACHMENT0: GLenum;
+    static readonly COLOR_BUFFER_BIT: GLenum;
+    static readonly COLOR_CLEAR_VALUE: GLenum;
+    static readonly COLOR_WRITEMASK: GLenum;
+    static readonly COMPILE_STATUS: GLenum;
+    static readonly COMPRESSED_TEXTURE_FORMATS: GLenum;
+    static readonly CONSTANT_ALPHA: GLenum;
+    static readonly CONSTANT_COLOR: GLenum;
+    static readonly CONTEXT_LOST_WEBGL: GLenum;
+    static readonly CULL_FACE: GLenum;
+    static readonly CULL_FACE_MODE: GLenum;
+    static readonly CURRENT_PROGRAM: GLenum;
+    static readonly CURRENT_VERTEX_ATTRIB: GLenum;
+    static readonly CW: GLenum;
+    static readonly DECR: GLenum;
+    static readonly DECR_WRAP: GLenum;
+    static readonly DELETE_STATUS: GLenum;
+    static readonly DEPTH_ATTACHMENT: GLenum;
+    static readonly DEPTH_BITS: GLenum;
+    static readonly DEPTH_BUFFER_BIT: GLenum;
+    static readonly DEPTH_CLEAR_VALUE: GLenum;
+    static readonly DEPTH_COMPONENT: GLenum;
+    static readonly DEPTH_COMPONENT16: GLenum;
+    static readonly DEPTH_FUNC: GLenum;
+    static readonly DEPTH_RANGE: GLenum;
+    static readonly DEPTH_STENCIL: GLenum;
+    static readonly DEPTH_STENCIL_ATTACHMENT: GLenum;
+    static readonly DEPTH_TEST: GLenum;
+    static readonly DEPTH_WRITEMASK: GLenum;
+    static readonly DITHER: GLenum;
+    static readonly DONT_CARE: GLenum;
+    static readonly DST_ALPHA: GLenum;
+    static readonly DST_COLOR: GLenum;
+    static readonly DYNAMIC_DRAW: GLenum;
+    static readonly ELEMENT_ARRAY_BUFFER: GLenum;
+    static readonly ELEMENT_ARRAY_BUFFER_BINDING: GLenum;
+    static readonly EQUAL: GLenum;
+    static readonly FASTEST: GLenum;
+    static readonly FLOAT: GLenum;
+    static readonly FLOAT_MAT2: GLenum;
+    static readonly FLOAT_MAT3: GLenum;
+    static readonly FLOAT_MAT4: GLenum;
+    static readonly FLOAT_VEC2: GLenum;
+    static readonly FLOAT_VEC3: GLenum;
+    static readonly FLOAT_VEC4: GLenum;
+    static readonly FRAGMENT_SHADER: GLenum;
+    static readonly FRAMEBUFFER: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: GLenum;
+    static readonly FRAMEBUFFER_BINDING: GLenum;
+    static readonly FRAMEBUFFER_COMPLETE: GLenum;
+    static readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: GLenum;
+    static readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: GLenum;
+    static readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: GLenum;
+    static readonly FRAMEBUFFER_UNSUPPORTED: GLenum;
+    static readonly FRONT: GLenum;
+    static readonly FRONT_AND_BACK: GLenum;
+    static readonly FRONT_FACE: GLenum;
+    static readonly FUNC_ADD: GLenum;
+    static readonly FUNC_REVERSE_SUBTRACT: GLenum;
+    static readonly FUNC_SUBTRACT: GLenum;
+    static readonly GENERATE_MIPMAP_HINT: GLenum;
+    static readonly GEQUAL: GLenum;
+    static readonly GREATER: GLenum;
+    static readonly GREEN_BITS: GLenum;
+    static readonly HIGH_FLOAT: GLenum;
+    static readonly HIGH_INT: GLenum;
+    static readonly IMPLEMENTATION_COLOR_READ_FORMAT: GLenum;
+    static readonly IMPLEMENTATION_COLOR_READ_TYPE: GLenum;
+    static readonly INCR: GLenum;
+    static readonly INCR_WRAP: GLenum;
+    static readonly INT: GLenum;
+    static readonly INT_VEC2: GLenum;
+    static readonly INT_VEC3: GLenum;
+    static readonly INT_VEC4: GLenum;
+    static readonly INVALID_ENUM: GLenum;
+    static readonly INVALID_FRAMEBUFFER_OPERATION: GLenum;
+    static readonly INVALID_OPERATION: GLenum;
+    static readonly INVALID_VALUE: GLenum;
+    static readonly INVERT: GLenum;
+    static readonly KEEP: GLenum;
+    static readonly LEQUAL: GLenum;
+    static readonly LESS: GLenum;
+    static readonly LINEAR: GLenum;
+    static readonly LINEAR_MIPMAP_LINEAR: GLenum;
+    static readonly LINEAR_MIPMAP_NEAREST: GLenum;
+    static readonly LINES: GLenum;
+    static readonly LINE_LOOP: GLenum;
+    static readonly LINE_STRIP: GLenum;
+    static readonly LINE_WIDTH: GLenum;
+    static readonly LINK_STATUS: GLenum;
+    static readonly LOW_FLOAT: GLenum;
+    static readonly LOW_INT: GLenum;
+    static readonly LUMINANCE: GLenum;
+    static readonly LUMINANCE_ALPHA: GLenum;
+    static readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: GLenum;
+    static readonly MAX_CUBE_MAP_TEXTURE_SIZE: GLenum;
+    static readonly MAX_FRAGMENT_UNIFORM_VECTORS: GLenum;
+    static readonly MAX_RENDERBUFFER_SIZE: GLenum;
+    static readonly MAX_TEXTURE_IMAGE_UNITS: GLenum;
+    static readonly MAX_TEXTURE_SIZE: GLenum;
+    static readonly MAX_VARYING_VECTORS: GLenum;
+    static readonly MAX_VERTEX_ATTRIBS: GLenum;
+    static readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: GLenum;
+    static readonly MAX_VERTEX_UNIFORM_VECTORS: GLenum;
+    static readonly MAX_VIEWPORT_DIMS: GLenum;
+    static readonly MEDIUM_FLOAT: GLenum;
+    static readonly MEDIUM_INT: GLenum;
+    static readonly MIRRORED_REPEAT: GLenum;
+    static readonly NEAREST: GLenum;
+    static readonly NEAREST_MIPMAP_LINEAR: GLenum;
+    static readonly NEAREST_MIPMAP_NEAREST: GLenum;
+    static readonly NEVER: GLenum;
+    static readonly NICEST: GLenum;
+    static readonly NONE: GLenum;
+    static readonly NOTEQUAL: GLenum;
+    static readonly NO_ERROR: GLenum;
+    static readonly ONE: GLenum;
+    static readonly ONE_MINUS_CONSTANT_ALPHA: GLenum;
+    static readonly ONE_MINUS_CONSTANT_COLOR: GLenum;
+    static readonly ONE_MINUS_DST_ALPHA: GLenum;
+    static readonly ONE_MINUS_DST_COLOR: GLenum;
+    static readonly ONE_MINUS_SRC_ALPHA: GLenum;
+    static readonly ONE_MINUS_SRC_COLOR: GLenum;
+    static readonly OUT_OF_MEMORY: GLenum;
+    static readonly PACK_ALIGNMENT: GLenum;
+    static readonly POINTS: GLenum;
+    static readonly POLYGON_OFFSET_FACTOR: GLenum;
+    static readonly POLYGON_OFFSET_FILL: GLenum;
+    static readonly POLYGON_OFFSET_UNITS: GLenum;
+    static readonly RED_BITS: GLenum;
+    static readonly RENDERBUFFER: GLenum;
+    static readonly RENDERBUFFER_ALPHA_SIZE: GLenum;
+    static readonly RENDERBUFFER_BINDING: GLenum;
+    static readonly RENDERBUFFER_BLUE_SIZE: GLenum;
+    static readonly RENDERBUFFER_DEPTH_SIZE: GLenum;
+    static readonly RENDERBUFFER_GREEN_SIZE: GLenum;
+    static readonly RENDERBUFFER_HEIGHT: GLenum;
+    static readonly RENDERBUFFER_INTERNAL_FORMAT: GLenum;
+    static readonly RENDERBUFFER_RED_SIZE: GLenum;
+    static readonly RENDERBUFFER_STENCIL_SIZE: GLenum;
+    static readonly RENDERBUFFER_WIDTH: GLenum;
+    static readonly RENDERER: GLenum;
+    static readonly REPEAT: GLenum;
+    static readonly REPLACE: GLenum;
+    static readonly RGB: GLenum;
+    static readonly RGB565: GLenum;
+    static readonly RGB5_A1: GLenum;
+    static readonly RGBA: GLenum;
+    static readonly RGBA4: GLenum;
+    static readonly SAMPLER_2D: GLenum;
+    static readonly SAMPLER_CUBE: GLenum;
+    static readonly SAMPLES: GLenum;
+    static readonly SAMPLE_ALPHA_TO_COVERAGE: GLenum;
+    static readonly SAMPLE_BUFFERS: GLenum;
+    static readonly SAMPLE_COVERAGE: GLenum;
+    static readonly SAMPLE_COVERAGE_INVERT: GLenum;
+    static readonly SAMPLE_COVERAGE_VALUE: GLenum;
+    static readonly SCISSOR_BOX: GLenum;
+    static readonly SCISSOR_TEST: GLenum;
+    static readonly SHADER_TYPE: GLenum;
+    static readonly SHADING_LANGUAGE_VERSION: GLenum;
+    static readonly SHORT: GLenum;
+    static readonly SRC_ALPHA: GLenum;
+    static readonly SRC_ALPHA_SATURATE: GLenum;
+    static readonly SRC_COLOR: GLenum;
+    static readonly STATIC_DRAW: GLenum;
+    static readonly STENCIL_ATTACHMENT: GLenum;
+    static readonly STENCIL_BACK_FAIL: GLenum;
+    static readonly STENCIL_BACK_FUNC: GLenum;
+    static readonly STENCIL_BACK_PASS_DEPTH_FAIL: GLenum;
+    static readonly STENCIL_BACK_PASS_DEPTH_PASS: GLenum;
+    static readonly STENCIL_BACK_REF: GLenum;
+    static readonly STENCIL_BACK_VALUE_MASK: GLenum;
+    static readonly STENCIL_BACK_WRITEMASK: GLenum;
+    static readonly STENCIL_BITS: GLenum;
+    static readonly STENCIL_BUFFER_BIT: GLenum;
+    static readonly STENCIL_CLEAR_VALUE: GLenum;
+    static readonly STENCIL_FAIL: GLenum;
+    static readonly STENCIL_FUNC: GLenum;
+    static readonly STENCIL_INDEX8: GLenum;
+    static readonly STENCIL_PASS_DEPTH_FAIL: GLenum;
+    static readonly STENCIL_PASS_DEPTH_PASS: GLenum;
+    static readonly STENCIL_REF: GLenum;
+    static readonly STENCIL_TEST: GLenum;
+    static readonly STENCIL_VALUE_MASK: GLenum;
+    static readonly STENCIL_WRITEMASK: GLenum;
+    static readonly STREAM_DRAW: GLenum;
+    static readonly SUBPIXEL_BITS: GLenum;
+    static readonly TEXTURE: GLenum;
+    static readonly TEXTURE0: GLenum;
+    static readonly TEXTURE1: GLenum;
+    static readonly TEXTURE10: GLenum;
+    static readonly TEXTURE11: GLenum;
+    static readonly TEXTURE12: GLenum;
+    static readonly TEXTURE13: GLenum;
+    static readonly TEXTURE14: GLenum;
+    static readonly TEXTURE15: GLenum;
+    static readonly TEXTURE16: GLenum;
+    static readonly TEXTURE17: GLenum;
+    static readonly TEXTURE18: GLenum;
+    static readonly TEXTURE19: GLenum;
+    static readonly TEXTURE2: GLenum;
+    static readonly TEXTURE20: GLenum;
+    static readonly TEXTURE21: GLenum;
+    static readonly TEXTURE22: GLenum;
+    static readonly TEXTURE23: GLenum;
+    static readonly TEXTURE24: GLenum;
+    static readonly TEXTURE25: GLenum;
+    static readonly TEXTURE26: GLenum;
+    static readonly TEXTURE27: GLenum;
+    static readonly TEXTURE28: GLenum;
+    static readonly TEXTURE29: GLenum;
+    static readonly TEXTURE3: GLenum;
+    static readonly TEXTURE30: GLenum;
+    static readonly TEXTURE31: GLenum;
+    static readonly TEXTURE4: GLenum;
+    static readonly TEXTURE5: GLenum;
+    static readonly TEXTURE6: GLenum;
+    static readonly TEXTURE7: GLenum;
+    static readonly TEXTURE8: GLenum;
+    static readonly TEXTURE9: GLenum;
+    static readonly TEXTURE_2D: GLenum;
+    static readonly TEXTURE_BINDING_2D: GLenum;
+    static readonly TEXTURE_BINDING_CUBE_MAP: GLenum;
+    static readonly TEXTURE_CUBE_MAP: GLenum;
+    static readonly TEXTURE_CUBE_MAP_NEGATIVE_X: GLenum;
+    static readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: GLenum;
+    static readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: GLenum;
+    static readonly TEXTURE_CUBE_MAP_POSITIVE_X: GLenum;
+    static readonly TEXTURE_CUBE_MAP_POSITIVE_Y: GLenum;
+    static readonly TEXTURE_CUBE_MAP_POSITIVE_Z: GLenum;
+    static readonly TEXTURE_MAG_FILTER: GLenum;
+    static readonly TEXTURE_MIN_FILTER: GLenum;
+    static readonly TEXTURE_WRAP_S: GLenum;
+    static readonly TEXTURE_WRAP_T: GLenum;
+    static readonly TRIANGLES: GLenum;
+    static readonly TRIANGLE_FAN: GLenum;
+    static readonly TRIANGLE_STRIP: GLenum;
+    static readonly UNPACK_ALIGNMENT: GLenum;
+    static readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: GLenum;
+    static readonly UNPACK_FLIP_Y_WEBGL: GLenum;
+    static readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: GLenum;
+    static readonly UNSIGNED_BYTE: GLenum;
+    static readonly UNSIGNED_INT: GLenum;
+    static readonly UNSIGNED_SHORT: GLenum;
+    static readonly UNSIGNED_SHORT_4_4_4_4: GLenum;
+    static readonly UNSIGNED_SHORT_5_5_5_1: GLenum;
+    static readonly UNSIGNED_SHORT_5_6_5: GLenum;
+    static readonly VALIDATE_STATUS: GLenum;
+    static readonly VENDOR: GLenum;
+    static readonly VERSION: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_ENABLED: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_POINTER: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_SIZE: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_STRIDE: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_TYPE: GLenum;
+    static readonly VERTEX_SHADER: GLenum;
+    static readonly VIEWPORT: GLenum;
+    static readonly ZERO: GLenum;
+    static readonly ACTIVE_UNIFORM_BLOCKS: GLenum;
+    static readonly ALREADY_SIGNALED: GLenum;
+    static readonly ANY_SAMPLES_PASSED: GLenum;
+    static readonly ANY_SAMPLES_PASSED_CONSERVATIVE: GLenum;
+    static readonly COLOR: GLenum;
+    static readonly COLOR_ATTACHMENT1: GLenum;
+    static readonly COLOR_ATTACHMENT10: GLenum;
+    static readonly COLOR_ATTACHMENT11: GLenum;
+    static readonly COLOR_ATTACHMENT12: GLenum;
+    static readonly COLOR_ATTACHMENT13: GLenum;
+    static readonly COLOR_ATTACHMENT14: GLenum;
+    static readonly COLOR_ATTACHMENT15: GLenum;
+    static readonly COLOR_ATTACHMENT2: GLenum;
+    static readonly COLOR_ATTACHMENT3: GLenum;
+    static readonly COLOR_ATTACHMENT4: GLenum;
+    static readonly COLOR_ATTACHMENT5: GLenum;
+    static readonly COLOR_ATTACHMENT6: GLenum;
+    static readonly COLOR_ATTACHMENT7: GLenum;
+    static readonly COLOR_ATTACHMENT8: GLenum;
+    static readonly COLOR_ATTACHMENT9: GLenum;
+    static readonly COMPARE_REF_TO_TEXTURE: GLenum;
+    static readonly CONDITION_SATISFIED: GLenum;
+    static readonly COPY_READ_BUFFER: GLenum;
+    static readonly COPY_READ_BUFFER_BINDING: GLenum;
+    static readonly COPY_WRITE_BUFFER: GLenum;
+    static readonly COPY_WRITE_BUFFER_BINDING: GLenum;
+    static readonly CURRENT_QUERY: GLenum;
+    static readonly DEPTH: GLenum;
+    static readonly DEPTH24_STENCIL8: GLenum;
+    static readonly DEPTH32F_STENCIL8: GLenum;
+    static readonly DEPTH_COMPONENT24: GLenum;
+    static readonly DEPTH_COMPONENT32F: GLenum;
+    static readonly DRAW_BUFFER0: GLenum;
+    static readonly DRAW_BUFFER1: GLenum;
+    static readonly DRAW_BUFFER10: GLenum;
+    static readonly DRAW_BUFFER11: GLenum;
+    static readonly DRAW_BUFFER12: GLenum;
+    static readonly DRAW_BUFFER13: GLenum;
+    static readonly DRAW_BUFFER14: GLenum;
+    static readonly DRAW_BUFFER15: GLenum;
+    static readonly DRAW_BUFFER2: GLenum;
+    static readonly DRAW_BUFFER3: GLenum;
+    static readonly DRAW_BUFFER4: GLenum;
+    static readonly DRAW_BUFFER5: GLenum;
+    static readonly DRAW_BUFFER6: GLenum;
+    static readonly DRAW_BUFFER7: GLenum;
+    static readonly DRAW_BUFFER8: GLenum;
+    static readonly DRAW_BUFFER9: GLenum;
+    static readonly DRAW_FRAMEBUFFER: GLenum;
+    static readonly DRAW_FRAMEBUFFER_BINDING: GLenum;
+    static readonly DYNAMIC_COPY: GLenum;
+    static readonly DYNAMIC_READ: GLenum;
+    static readonly FLOAT_32_UNSIGNED_INT_24_8_REV: GLenum;
+    static readonly FLOAT_MAT2x3: GLenum;
+    static readonly FLOAT_MAT2x4: GLenum;
+    static readonly FLOAT_MAT3x2: GLenum;
+    static readonly FLOAT_MAT3x4: GLenum;
+    static readonly FLOAT_MAT4x2: GLenum;
+    static readonly FLOAT_MAT4x3: GLenum;
+    static readonly FRAGMENT_SHADER_DERIVATIVE_HINT: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: GLenum;
+    static readonly FRAMEBUFFER_DEFAULT: GLenum;
+    static readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: GLenum;
+    static readonly HALF_FLOAT: GLenum;
+    static readonly INTERLEAVED_ATTRIBS: GLenum;
+    static readonly INT_2_10_10_10_REV: GLenum;
+    static readonly INT_SAMPLER_2D: GLenum;
+    static readonly INT_SAMPLER_2D_ARRAY: GLenum;
+    static readonly INT_SAMPLER_3D: GLenum;
+    static readonly INT_SAMPLER_CUBE: GLenum;
+    static readonly INVALID_INDEX: GLenum;
+    static readonly MAX: GLenum;
+    static readonly MAX_3D_TEXTURE_SIZE: GLenum;
+    static readonly MAX_ARRAY_TEXTURE_LAYERS: GLenum;
+    static readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
+    static readonly MAX_COLOR_ATTACHMENTS: GLenum;
+    static readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
+    static readonly MAX_COMBINED_UNIFORM_BLOCKS: GLenum;
+    static readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: GLenum;
+    static readonly MAX_DRAW_BUFFERS: GLenum;
+    static readonly MAX_ELEMENTS_INDICES: GLenum;
+    static readonly MAX_ELEMENTS_VERTICES: GLenum;
+    static readonly MAX_ELEMENT_INDEX: GLenum;
+    static readonly MAX_FRAGMENT_INPUT_COMPONENTS: GLenum;
+    static readonly MAX_FRAGMENT_UNIFORM_BLOCKS: GLenum;
+    static readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
+    static readonly MAX_PROGRAM_TEXEL_OFFSET: GLenum;
+    static readonly MAX_SAMPLES: GLenum;
+    static readonly MAX_SERVER_WAIT_TIMEOUT: GLenum;
+    static readonly MAX_TEXTURE_LOD_BIAS: GLenum;
+    static readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: GLenum;
+    static readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: GLenum;
+    static readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: GLenum;
+    static readonly MAX_UNIFORM_BLOCK_SIZE: GLenum;
+    static readonly MAX_UNIFORM_BUFFER_BINDINGS: GLenum;
+    static readonly MAX_VARYING_COMPONENTS: GLenum;
+    static readonly MAX_VERTEX_OUTPUT_COMPONENTS: GLenum;
+    static readonly MAX_VERTEX_UNIFORM_BLOCKS: GLenum;
+    static readonly MAX_VERTEX_UNIFORM_COMPONENTS: GLenum;
+    static readonly MIN: GLenum;
+    static readonly MIN_PROGRAM_TEXEL_OFFSET: GLenum;
+    static readonly OBJECT_TYPE: GLenum;
+    static readonly PACK_ROW_LENGTH: GLenum;
+    static readonly PACK_SKIP_PIXELS: GLenum;
+    static readonly PACK_SKIP_ROWS: GLenum;
+    static readonly PIXEL_PACK_BUFFER: GLenum;
+    static readonly PIXEL_PACK_BUFFER_BINDING: GLenum;
+    static readonly PIXEL_UNPACK_BUFFER: GLenum;
+    static readonly PIXEL_UNPACK_BUFFER_BINDING: GLenum;
+    static readonly QUERY_RESULT: GLenum;
+    static readonly QUERY_RESULT_AVAILABLE: GLenum;
+    static readonly R11F_G11F_B10F: GLenum;
+    static readonly R16F: GLenum;
+    static readonly R16I: GLenum;
+    static readonly R16UI: GLenum;
+    static readonly R32F: GLenum;
+    static readonly R32I: GLenum;
+    static readonly R32UI: GLenum;
+    static readonly R8: GLenum;
+    static readonly R8I: GLenum;
+    static readonly R8UI: GLenum;
+    static readonly R8_SNORM: GLenum;
+    static readonly RASTERIZER_DISCARD: GLenum;
+    static readonly READ_BUFFER: GLenum;
+    static readonly READ_FRAMEBUFFER: GLenum;
+    static readonly READ_FRAMEBUFFER_BINDING: GLenum;
+    static readonly RED: GLenum;
+    static readonly RED_INTEGER: GLenum;
+    static readonly RENDERBUFFER_SAMPLES: GLenum;
+    static readonly RG: GLenum;
+    static readonly RG16F: GLenum;
+    static readonly RG16I: GLenum;
+    static readonly RG16UI: GLenum;
+    static readonly RG32F: GLenum;
+    static readonly RG32I: GLenum;
+    static readonly RG32UI: GLenum;
+    static readonly RG8: GLenum;
+    static readonly RG8I: GLenum;
+    static readonly RG8UI: GLenum;
+    static readonly RG8_SNORM: GLenum;
+    static readonly RGB10_A2: GLenum;
+    static readonly RGB10_A2UI: GLenum;
+    static readonly RGB16F: GLenum;
+    static readonly RGB16I: GLenum;
+    static readonly RGB16UI: GLenum;
+    static readonly RGB32F: GLenum;
+    static readonly RGB32I: GLenum;
+    static readonly RGB32UI: GLenum;
+    static readonly RGB8: GLenum;
+    static readonly RGB8I: GLenum;
+    static readonly RGB8UI: GLenum;
+    static readonly RGB8_SNORM: GLenum;
+    static readonly RGB9_E5: GLenum;
+    static readonly RGBA16F: GLenum;
+    static readonly RGBA16I: GLenum;
+    static readonly RGBA16UI: GLenum;
+    static readonly RGBA32F: GLenum;
+    static readonly RGBA32I: GLenum;
+    static readonly RGBA32UI: GLenum;
+    static readonly RGBA8: GLenum;
+    static readonly RGBA8I: GLenum;
+    static readonly RGBA8UI: GLenum;
+    static readonly RGBA8_SNORM: GLenum;
+    static readonly RGBA_INTEGER: GLenum;
+    static readonly RGB_INTEGER: GLenum;
+    static readonly RG_INTEGER: GLenum;
+    static readonly SAMPLER_2D_ARRAY: GLenum;
+    static readonly SAMPLER_2D_ARRAY_SHADOW: GLenum;
+    static readonly SAMPLER_2D_SHADOW: GLenum;
+    static readonly SAMPLER_3D: GLenum;
+    static readonly SAMPLER_BINDING: GLenum;
+    static readonly SAMPLER_CUBE_SHADOW: GLenum;
+    static readonly SEPARATE_ATTRIBS: GLenum;
+    static readonly SIGNALED: GLenum;
+    static readonly SIGNED_NORMALIZED: GLenum;
+    static readonly SRGB: GLenum;
+    static readonly SRGB8: GLenum;
+    static readonly SRGB8_ALPHA8: GLenum;
+    static readonly STATIC_COPY: GLenum;
+    static readonly STATIC_READ: GLenum;
+    static readonly STENCIL: GLenum;
+    static readonly STREAM_COPY: GLenum;
+    static readonly STREAM_READ: GLenum;
+    static readonly SYNC_CONDITION: GLenum;
+    static readonly SYNC_FENCE: GLenum;
+    static readonly SYNC_FLAGS: GLenum;
+    static readonly SYNC_FLUSH_COMMANDS_BIT: GLenum;
+    static readonly SYNC_GPU_COMMANDS_COMPLETE: GLenum;
+    static readonly SYNC_STATUS: GLenum;
+    static readonly TEXTURE_2D_ARRAY: GLenum;
+    static readonly TEXTURE_3D: GLenum;
+    static readonly TEXTURE_BASE_LEVEL: GLenum;
+    static readonly TEXTURE_BINDING_2D_ARRAY: GLenum;
+    static readonly TEXTURE_BINDING_3D: GLenum;
+    static readonly TEXTURE_COMPARE_FUNC: GLenum;
+    static readonly TEXTURE_COMPARE_MODE: GLenum;
+    static readonly TEXTURE_IMMUTABLE_FORMAT: GLenum;
+    static readonly TEXTURE_IMMUTABLE_LEVELS: GLenum;
+    static readonly TEXTURE_MAX_LEVEL: GLenum;
+    static readonly TEXTURE_MAX_LOD: GLenum;
+    static readonly TEXTURE_MIN_LOD: GLenum;
+    static readonly TEXTURE_WRAP_R: GLenum;
+    static readonly TIMEOUT_EXPIRED: GLenum;
+    static readonly TIMEOUT_IGNORED: GLint64;
+    static readonly TRANSFORM_FEEDBACK: GLenum;
+    static readonly TRANSFORM_FEEDBACK_ACTIVE: GLenum;
+    static readonly TRANSFORM_FEEDBACK_BINDING: GLenum;
+    static readonly TRANSFORM_FEEDBACK_BUFFER: GLenum;
+    static readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: GLenum;
+    static readonly TRANSFORM_FEEDBACK_BUFFER_MODE: GLenum;
+    static readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: GLenum;
+    static readonly TRANSFORM_FEEDBACK_BUFFER_START: GLenum;
+    static readonly TRANSFORM_FEEDBACK_PAUSED: GLenum;
+    static readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: GLenum;
+    static readonly TRANSFORM_FEEDBACK_VARYINGS: GLenum;
+    static readonly UNIFORM_ARRAY_STRIDE: GLenum;
+    static readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: GLenum;
+    static readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: GLenum;
+    static readonly UNIFORM_BLOCK_BINDING: GLenum;
+    static readonly UNIFORM_BLOCK_DATA_SIZE: GLenum;
+    static readonly UNIFORM_BLOCK_INDEX: GLenum;
+    static readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: GLenum;
+    static readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: GLenum;
+    static readonly UNIFORM_BUFFER: GLenum;
+    static readonly UNIFORM_BUFFER_BINDING: GLenum;
+    static readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: GLenum;
+    static readonly UNIFORM_BUFFER_SIZE: GLenum;
+    static readonly UNIFORM_BUFFER_START: GLenum;
+    static readonly UNIFORM_IS_ROW_MAJOR: GLenum;
+    static readonly UNIFORM_MATRIX_STRIDE: GLenum;
+    static readonly UNIFORM_OFFSET: GLenum;
+    static readonly UNIFORM_SIZE: GLenum;
+    static readonly UNIFORM_TYPE: GLenum;
+    static readonly UNPACK_IMAGE_HEIGHT: GLenum;
+    static readonly UNPACK_ROW_LENGTH: GLenum;
+    static readonly UNPACK_SKIP_IMAGES: GLenum;
+    static readonly UNPACK_SKIP_PIXELS: GLenum;
+    static readonly UNPACK_SKIP_ROWS: GLenum;
+    static readonly UNSIGNALED: GLenum;
+    static readonly UNSIGNED_INT_10F_11F_11F_REV: GLenum;
+    static readonly UNSIGNED_INT_24_8: GLenum;
+    static readonly UNSIGNED_INT_2_10_10_10_REV: GLenum;
+    static readonly UNSIGNED_INT_5_9_9_9_REV: GLenum;
+    static readonly UNSIGNED_INT_SAMPLER_2D: GLenum;
+    static readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: GLenum;
+    static readonly UNSIGNED_INT_SAMPLER_3D: GLenum;
+    static readonly UNSIGNED_INT_SAMPLER_CUBE: GLenum;
+    static readonly UNSIGNED_INT_VEC2: GLenum;
+    static readonly UNSIGNED_INT_VEC3: GLenum;
+    static readonly UNSIGNED_INT_VEC4: GLenum;
+    static readonly UNSIGNED_NORMALIZED: GLenum;
+    static readonly VERTEX_ARRAY_BINDING: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_DIVISOR: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_INTEGER: GLenum;
+    static readonly WAIT_FAILED: GLenum;
 }
-
-declare var WebGL2RenderingContext: {
-    prototype: WebGL2RenderingContext;
-    new(): WebGL2RenderingContext;
-    readonly ACTIVE_ATTRIBUTES: GLenum;
-    readonly ACTIVE_TEXTURE: GLenum;
-    readonly ACTIVE_UNIFORMS: GLenum;
-    readonly ALIASED_LINE_WIDTH_RANGE: GLenum;
-    readonly ALIASED_POINT_SIZE_RANGE: GLenum;
-    readonly ALPHA: GLenum;
-    readonly ALPHA_BITS: GLenum;
-    readonly ALWAYS: GLenum;
-    readonly ARRAY_BUFFER: GLenum;
-    readonly ARRAY_BUFFER_BINDING: GLenum;
-    readonly ATTACHED_SHADERS: GLenum;
-    readonly BACK: GLenum;
-    readonly BLEND: GLenum;
-    readonly BLEND_COLOR: GLenum;
-    readonly BLEND_DST_ALPHA: GLenum;
-    readonly BLEND_DST_RGB: GLenum;
-    readonly BLEND_EQUATION: GLenum;
-    readonly BLEND_EQUATION_ALPHA: GLenum;
-    readonly BLEND_EQUATION_RGB: GLenum;
-    readonly BLEND_SRC_ALPHA: GLenum;
-    readonly BLEND_SRC_RGB: GLenum;
-    readonly BLUE_BITS: GLenum;
-    readonly BOOL: GLenum;
-    readonly BOOL_VEC2: GLenum;
-    readonly BOOL_VEC3: GLenum;
-    readonly BOOL_VEC4: GLenum;
-    readonly BROWSER_DEFAULT_WEBGL: GLenum;
-    readonly BUFFER_SIZE: GLenum;
-    readonly BUFFER_USAGE: GLenum;
-    readonly BYTE: GLenum;
-    readonly CCW: GLenum;
-    readonly CLAMP_TO_EDGE: GLenum;
-    readonly COLOR_ATTACHMENT0: GLenum;
-    readonly COLOR_BUFFER_BIT: GLenum;
-    readonly COLOR_CLEAR_VALUE: GLenum;
-    readonly COLOR_WRITEMASK: GLenum;
-    readonly COMPILE_STATUS: GLenum;
-    readonly COMPRESSED_TEXTURE_FORMATS: GLenum;
-    readonly CONSTANT_ALPHA: GLenum;
-    readonly CONSTANT_COLOR: GLenum;
-    readonly CONTEXT_LOST_WEBGL: GLenum;
-    readonly CULL_FACE: GLenum;
-    readonly CULL_FACE_MODE: GLenum;
-    readonly CURRENT_PROGRAM: GLenum;
-    readonly CURRENT_VERTEX_ATTRIB: GLenum;
-    readonly CW: GLenum;
-    readonly DECR: GLenum;
-    readonly DECR_WRAP: GLenum;
-    readonly DELETE_STATUS: GLenum;
-    readonly DEPTH_ATTACHMENT: GLenum;
-    readonly DEPTH_BITS: GLenum;
-    readonly DEPTH_BUFFER_BIT: GLenum;
-    readonly DEPTH_CLEAR_VALUE: GLenum;
-    readonly DEPTH_COMPONENT: GLenum;
-    readonly DEPTH_COMPONENT16: GLenum;
-    readonly DEPTH_FUNC: GLenum;
-    readonly DEPTH_RANGE: GLenum;
-    readonly DEPTH_STENCIL: GLenum;
-    readonly DEPTH_STENCIL_ATTACHMENT: GLenum;
-    readonly DEPTH_TEST: GLenum;
-    readonly DEPTH_WRITEMASK: GLenum;
-    readonly DITHER: GLenum;
-    readonly DONT_CARE: GLenum;
-    readonly DST_ALPHA: GLenum;
-    readonly DST_COLOR: GLenum;
-    readonly DYNAMIC_DRAW: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER_BINDING: GLenum;
-    readonly EQUAL: GLenum;
-    readonly FASTEST: GLenum;
-    readonly FLOAT: GLenum;
-    readonly FLOAT_MAT2: GLenum;
-    readonly FLOAT_MAT3: GLenum;
-    readonly FLOAT_MAT4: GLenum;
-    readonly FLOAT_VEC2: GLenum;
-    readonly FLOAT_VEC3: GLenum;
-    readonly FLOAT_VEC4: GLenum;
-    readonly FRAGMENT_SHADER: GLenum;
-    readonly FRAMEBUFFER: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: GLenum;
-    readonly FRAMEBUFFER_BINDING: GLenum;
-    readonly FRAMEBUFFER_COMPLETE: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_UNSUPPORTED: GLenum;
-    readonly FRONT: GLenum;
-    readonly FRONT_AND_BACK: GLenum;
-    readonly FRONT_FACE: GLenum;
-    readonly FUNC_ADD: GLenum;
-    readonly FUNC_REVERSE_SUBTRACT: GLenum;
-    readonly FUNC_SUBTRACT: GLenum;
-    readonly GENERATE_MIPMAP_HINT: GLenum;
-    readonly GEQUAL: GLenum;
-    readonly GREATER: GLenum;
-    readonly GREEN_BITS: GLenum;
-    readonly HIGH_FLOAT: GLenum;
-    readonly HIGH_INT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_FORMAT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_TYPE: GLenum;
-    readonly INCR: GLenum;
-    readonly INCR_WRAP: GLenum;
-    readonly INT: GLenum;
-    readonly INT_VEC2: GLenum;
-    readonly INT_VEC3: GLenum;
-    readonly INT_VEC4: GLenum;
-    readonly INVALID_ENUM: GLenum;
-    readonly INVALID_FRAMEBUFFER_OPERATION: GLenum;
-    readonly INVALID_OPERATION: GLenum;
-    readonly INVALID_VALUE: GLenum;
-    readonly INVERT: GLenum;
-    readonly KEEP: GLenum;
-    readonly LEQUAL: GLenum;
-    readonly LESS: GLenum;
-    readonly LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_NEAREST: GLenum;
-    readonly LINES: GLenum;
-    readonly LINE_LOOP: GLenum;
-    readonly LINE_STRIP: GLenum;
-    readonly LINE_WIDTH: GLenum;
-    readonly LINK_STATUS: GLenum;
-    readonly LOW_FLOAT: GLenum;
-    readonly LOW_INT: GLenum;
-    readonly LUMINANCE: GLenum;
-    readonly LUMINANCE_ALPHA: GLenum;
-    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_CUBE_MAP_TEXTURE_SIZE: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_VECTORS: GLenum;
-    readonly MAX_RENDERBUFFER_SIZE: GLenum;
-    readonly MAX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_TEXTURE_SIZE: GLenum;
-    readonly MAX_VARYING_VECTORS: GLenum;
-    readonly MAX_VERTEX_ATTRIBS: GLenum;
-    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_VECTORS: GLenum;
-    readonly MAX_VIEWPORT_DIMS: GLenum;
-    readonly MEDIUM_FLOAT: GLenum;
-    readonly MEDIUM_INT: GLenum;
-    readonly MIRRORED_REPEAT: GLenum;
-    readonly NEAREST: GLenum;
-    readonly NEAREST_MIPMAP_LINEAR: GLenum;
-    readonly NEAREST_MIPMAP_NEAREST: GLenum;
-    readonly NEVER: GLenum;
-    readonly NICEST: GLenum;
-    readonly NONE: GLenum;
-    readonly NOTEQUAL: GLenum;
-    readonly NO_ERROR: GLenum;
-    readonly ONE: GLenum;
-    readonly ONE_MINUS_CONSTANT_ALPHA: GLenum;
-    readonly ONE_MINUS_CONSTANT_COLOR: GLenum;
-    readonly ONE_MINUS_DST_ALPHA: GLenum;
-    readonly ONE_MINUS_DST_COLOR: GLenum;
-    readonly ONE_MINUS_SRC_ALPHA: GLenum;
-    readonly ONE_MINUS_SRC_COLOR: GLenum;
-    readonly OUT_OF_MEMORY: GLenum;
-    readonly PACK_ALIGNMENT: GLenum;
-    readonly POINTS: GLenum;
-    readonly POLYGON_OFFSET_FACTOR: GLenum;
-    readonly POLYGON_OFFSET_FILL: GLenum;
-    readonly POLYGON_OFFSET_UNITS: GLenum;
-    readonly RED_BITS: GLenum;
-    readonly RENDERBUFFER: GLenum;
-    readonly RENDERBUFFER_ALPHA_SIZE: GLenum;
-    readonly RENDERBUFFER_BINDING: GLenum;
-    readonly RENDERBUFFER_BLUE_SIZE: GLenum;
-    readonly RENDERBUFFER_DEPTH_SIZE: GLenum;
-    readonly RENDERBUFFER_GREEN_SIZE: GLenum;
-    readonly RENDERBUFFER_HEIGHT: GLenum;
-    readonly RENDERBUFFER_INTERNAL_FORMAT: GLenum;
-    readonly RENDERBUFFER_RED_SIZE: GLenum;
-    readonly RENDERBUFFER_STENCIL_SIZE: GLenum;
-    readonly RENDERBUFFER_WIDTH: GLenum;
-    readonly RENDERER: GLenum;
-    readonly REPEAT: GLenum;
-    readonly REPLACE: GLenum;
-    readonly RGB: GLenum;
-    readonly RGB565: GLenum;
-    readonly RGB5_A1: GLenum;
-    readonly RGBA: GLenum;
-    readonly RGBA4: GLenum;
-    readonly SAMPLER_2D: GLenum;
-    readonly SAMPLER_CUBE: GLenum;
-    readonly SAMPLES: GLenum;
-    readonly SAMPLE_ALPHA_TO_COVERAGE: GLenum;
-    readonly SAMPLE_BUFFERS: GLenum;
-    readonly SAMPLE_COVERAGE: GLenum;
-    readonly SAMPLE_COVERAGE_INVERT: GLenum;
-    readonly SAMPLE_COVERAGE_VALUE: GLenum;
-    readonly SCISSOR_BOX: GLenum;
-    readonly SCISSOR_TEST: GLenum;
-    readonly SHADER_TYPE: GLenum;
-    readonly SHADING_LANGUAGE_VERSION: GLenum;
-    readonly SHORT: GLenum;
-    readonly SRC_ALPHA: GLenum;
-    readonly SRC_ALPHA_SATURATE: GLenum;
-    readonly SRC_COLOR: GLenum;
-    readonly STATIC_DRAW: GLenum;
-    readonly STENCIL_ATTACHMENT: GLenum;
-    readonly STENCIL_BACK_FAIL: GLenum;
-    readonly STENCIL_BACK_FUNC: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_BACK_REF: GLenum;
-    readonly STENCIL_BACK_VALUE_MASK: GLenum;
-    readonly STENCIL_BACK_WRITEMASK: GLenum;
-    readonly STENCIL_BITS: GLenum;
-    readonly STENCIL_BUFFER_BIT: GLenum;
-    readonly STENCIL_CLEAR_VALUE: GLenum;
-    readonly STENCIL_FAIL: GLenum;
-    readonly STENCIL_FUNC: GLenum;
-    readonly STENCIL_INDEX8: GLenum;
-    readonly STENCIL_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_REF: GLenum;
-    readonly STENCIL_TEST: GLenum;
-    readonly STENCIL_VALUE_MASK: GLenum;
-    readonly STENCIL_WRITEMASK: GLenum;
-    readonly STREAM_DRAW: GLenum;
-    readonly SUBPIXEL_BITS: GLenum;
-    readonly TEXTURE: GLenum;
-    readonly TEXTURE0: GLenum;
-    readonly TEXTURE1: GLenum;
-    readonly TEXTURE10: GLenum;
-    readonly TEXTURE11: GLenum;
-    readonly TEXTURE12: GLenum;
-    readonly TEXTURE13: GLenum;
-    readonly TEXTURE14: GLenum;
-    readonly TEXTURE15: GLenum;
-    readonly TEXTURE16: GLenum;
-    readonly TEXTURE17: GLenum;
-    readonly TEXTURE18: GLenum;
-    readonly TEXTURE19: GLenum;
-    readonly TEXTURE2: GLenum;
-    readonly TEXTURE20: GLenum;
-    readonly TEXTURE21: GLenum;
-    readonly TEXTURE22: GLenum;
-    readonly TEXTURE23: GLenum;
-    readonly TEXTURE24: GLenum;
-    readonly TEXTURE25: GLenum;
-    readonly TEXTURE26: GLenum;
-    readonly TEXTURE27: GLenum;
-    readonly TEXTURE28: GLenum;
-    readonly TEXTURE29: GLenum;
-    readonly TEXTURE3: GLenum;
-    readonly TEXTURE30: GLenum;
-    readonly TEXTURE31: GLenum;
-    readonly TEXTURE4: GLenum;
-    readonly TEXTURE5: GLenum;
-    readonly TEXTURE6: GLenum;
-    readonly TEXTURE7: GLenum;
-    readonly TEXTURE8: GLenum;
-    readonly TEXTURE9: GLenum;
-    readonly TEXTURE_2D: GLenum;
-    readonly TEXTURE_BINDING_2D: GLenum;
-    readonly TEXTURE_BINDING_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: GLenum;
-    readonly TEXTURE_MAG_FILTER: GLenum;
-    readonly TEXTURE_MIN_FILTER: GLenum;
-    readonly TEXTURE_WRAP_S: GLenum;
-    readonly TEXTURE_WRAP_T: GLenum;
-    readonly TRIANGLES: GLenum;
-    readonly TRIANGLE_FAN: GLenum;
-    readonly TRIANGLE_STRIP: GLenum;
-    readonly UNPACK_ALIGNMENT: GLenum;
-    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: GLenum;
-    readonly UNPACK_FLIP_Y_WEBGL: GLenum;
-    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: GLenum;
-    readonly UNSIGNED_BYTE: GLenum;
-    readonly UNSIGNED_INT: GLenum;
-    readonly UNSIGNED_SHORT: GLenum;
-    readonly UNSIGNED_SHORT_4_4_4_4: GLenum;
-    readonly UNSIGNED_SHORT_5_5_5_1: GLenum;
-    readonly UNSIGNED_SHORT_5_6_5: GLenum;
-    readonly VALIDATE_STATUS: GLenum;
-    readonly VENDOR: GLenum;
-    readonly VERSION: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_ENABLED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_POINTER: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_SIZE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_STRIDE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_TYPE: GLenum;
-    readonly VERTEX_SHADER: GLenum;
-    readonly VIEWPORT: GLenum;
-    readonly ZERO: GLenum;
-    readonly ACTIVE_UNIFORM_BLOCKS: GLenum;
-    readonly ALREADY_SIGNALED: GLenum;
-    readonly ANY_SAMPLES_PASSED: GLenum;
-    readonly ANY_SAMPLES_PASSED_CONSERVATIVE: GLenum;
-    readonly COLOR: GLenum;
-    readonly COLOR_ATTACHMENT1: GLenum;
-    readonly COLOR_ATTACHMENT10: GLenum;
-    readonly COLOR_ATTACHMENT11: GLenum;
-    readonly COLOR_ATTACHMENT12: GLenum;
-    readonly COLOR_ATTACHMENT13: GLenum;
-    readonly COLOR_ATTACHMENT14: GLenum;
-    readonly COLOR_ATTACHMENT15: GLenum;
-    readonly COLOR_ATTACHMENT2: GLenum;
-    readonly COLOR_ATTACHMENT3: GLenum;
-    readonly COLOR_ATTACHMENT4: GLenum;
-    readonly COLOR_ATTACHMENT5: GLenum;
-    readonly COLOR_ATTACHMENT6: GLenum;
-    readonly COLOR_ATTACHMENT7: GLenum;
-    readonly COLOR_ATTACHMENT8: GLenum;
-    readonly COLOR_ATTACHMENT9: GLenum;
-    readonly COMPARE_REF_TO_TEXTURE: GLenum;
-    readonly CONDITION_SATISFIED: GLenum;
-    readonly COPY_READ_BUFFER: GLenum;
-    readonly COPY_READ_BUFFER_BINDING: GLenum;
-    readonly COPY_WRITE_BUFFER: GLenum;
-    readonly COPY_WRITE_BUFFER_BINDING: GLenum;
-    readonly CURRENT_QUERY: GLenum;
-    readonly DEPTH: GLenum;
-    readonly DEPTH24_STENCIL8: GLenum;
-    readonly DEPTH32F_STENCIL8: GLenum;
-    readonly DEPTH_COMPONENT24: GLenum;
-    readonly DEPTH_COMPONENT32F: GLenum;
-    readonly DRAW_BUFFER0: GLenum;
-    readonly DRAW_BUFFER1: GLenum;
-    readonly DRAW_BUFFER10: GLenum;
-    readonly DRAW_BUFFER11: GLenum;
-    readonly DRAW_BUFFER12: GLenum;
-    readonly DRAW_BUFFER13: GLenum;
-    readonly DRAW_BUFFER14: GLenum;
-    readonly DRAW_BUFFER15: GLenum;
-    readonly DRAW_BUFFER2: GLenum;
-    readonly DRAW_BUFFER3: GLenum;
-    readonly DRAW_BUFFER4: GLenum;
-    readonly DRAW_BUFFER5: GLenum;
-    readonly DRAW_BUFFER6: GLenum;
-    readonly DRAW_BUFFER7: GLenum;
-    readonly DRAW_BUFFER8: GLenum;
-    readonly DRAW_BUFFER9: GLenum;
-    readonly DRAW_FRAMEBUFFER: GLenum;
-    readonly DRAW_FRAMEBUFFER_BINDING: GLenum;
-    readonly DYNAMIC_COPY: GLenum;
-    readonly DYNAMIC_READ: GLenum;
-    readonly FLOAT_32_UNSIGNED_INT_24_8_REV: GLenum;
-    readonly FLOAT_MAT2x3: GLenum;
-    readonly FLOAT_MAT2x4: GLenum;
-    readonly FLOAT_MAT3x2: GLenum;
-    readonly FLOAT_MAT3x4: GLenum;
-    readonly FLOAT_MAT4x2: GLenum;
-    readonly FLOAT_MAT4x3: GLenum;
-    readonly FRAGMENT_SHADER_DERIVATIVE_HINT: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_RED_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: GLenum;
-    readonly FRAMEBUFFER_DEFAULT: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: GLenum;
-    readonly HALF_FLOAT: GLenum;
-    readonly INTERLEAVED_ATTRIBS: GLenum;
-    readonly INT_2_10_10_10_REV: GLenum;
-    readonly INT_SAMPLER_2D: GLenum;
-    readonly INT_SAMPLER_2D_ARRAY: GLenum;
-    readonly INT_SAMPLER_3D: GLenum;
-    readonly INT_SAMPLER_CUBE: GLenum;
-    readonly INVALID_INDEX: GLenum;
-    readonly MAX: GLenum;
-    readonly MAX_3D_TEXTURE_SIZE: GLenum;
-    readonly MAX_ARRAY_TEXTURE_LAYERS: GLenum;
-    readonly MAX_CLIENT_WAIT_TIMEOUT_WEBGL: GLenum;
-    readonly MAX_COLOR_ATTACHMENTS: GLenum;
-    readonly MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_COMBINED_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_DRAW_BUFFERS: GLenum;
-    readonly MAX_ELEMENTS_INDICES: GLenum;
-    readonly MAX_ELEMENTS_VERTICES: GLenum;
-    readonly MAX_ELEMENT_INDEX: GLenum;
-    readonly MAX_FRAGMENT_INPUT_COMPONENTS: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_COMPONENTS: GLenum;
-    readonly MAX_PROGRAM_TEXEL_OFFSET: GLenum;
-    readonly MAX_SAMPLES: GLenum;
-    readonly MAX_SERVER_WAIT_TIMEOUT: GLenum;
-    readonly MAX_TEXTURE_LOD_BIAS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS: GLenum;
-    readonly MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS: GLenum;
-    readonly MAX_UNIFORM_BLOCK_SIZE: GLenum;
-    readonly MAX_UNIFORM_BUFFER_BINDINGS: GLenum;
-    readonly MAX_VARYING_COMPONENTS: GLenum;
-    readonly MAX_VERTEX_OUTPUT_COMPONENTS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_BLOCKS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_COMPONENTS: GLenum;
-    readonly MIN: GLenum;
-    readonly MIN_PROGRAM_TEXEL_OFFSET: GLenum;
-    readonly OBJECT_TYPE: GLenum;
-    readonly PACK_ROW_LENGTH: GLenum;
-    readonly PACK_SKIP_PIXELS: GLenum;
-    readonly PACK_SKIP_ROWS: GLenum;
-    readonly PIXEL_PACK_BUFFER: GLenum;
-    readonly PIXEL_PACK_BUFFER_BINDING: GLenum;
-    readonly PIXEL_UNPACK_BUFFER: GLenum;
-    readonly PIXEL_UNPACK_BUFFER_BINDING: GLenum;
-    readonly QUERY_RESULT: GLenum;
-    readonly QUERY_RESULT_AVAILABLE: GLenum;
-    readonly R11F_G11F_B10F: GLenum;
-    readonly R16F: GLenum;
-    readonly R16I: GLenum;
-    readonly R16UI: GLenum;
-    readonly R32F: GLenum;
-    readonly R32I: GLenum;
-    readonly R32UI: GLenum;
-    readonly R8: GLenum;
-    readonly R8I: GLenum;
-    readonly R8UI: GLenum;
-    readonly R8_SNORM: GLenum;
-    readonly RASTERIZER_DISCARD: GLenum;
-    readonly READ_BUFFER: GLenum;
-    readonly READ_FRAMEBUFFER: GLenum;
-    readonly READ_FRAMEBUFFER_BINDING: GLenum;
-    readonly RED: GLenum;
-    readonly RED_INTEGER: GLenum;
-    readonly RENDERBUFFER_SAMPLES: GLenum;
-    readonly RG: GLenum;
-    readonly RG16F: GLenum;
-    readonly RG16I: GLenum;
-    readonly RG16UI: GLenum;
-    readonly RG32F: GLenum;
-    readonly RG32I: GLenum;
-    readonly RG32UI: GLenum;
-    readonly RG8: GLenum;
-    readonly RG8I: GLenum;
-    readonly RG8UI: GLenum;
-    readonly RG8_SNORM: GLenum;
-    readonly RGB10_A2: GLenum;
-    readonly RGB10_A2UI: GLenum;
-    readonly RGB16F: GLenum;
-    readonly RGB16I: GLenum;
-    readonly RGB16UI: GLenum;
-    readonly RGB32F: GLenum;
-    readonly RGB32I: GLenum;
-    readonly RGB32UI: GLenum;
-    readonly RGB8: GLenum;
-    readonly RGB8I: GLenum;
-    readonly RGB8UI: GLenum;
-    readonly RGB8_SNORM: GLenum;
-    readonly RGB9_E5: GLenum;
-    readonly RGBA16F: GLenum;
-    readonly RGBA16I: GLenum;
-    readonly RGBA16UI: GLenum;
-    readonly RGBA32F: GLenum;
-    readonly RGBA32I: GLenum;
-    readonly RGBA32UI: GLenum;
-    readonly RGBA8: GLenum;
-    readonly RGBA8I: GLenum;
-    readonly RGBA8UI: GLenum;
-    readonly RGBA8_SNORM: GLenum;
-    readonly RGBA_INTEGER: GLenum;
-    readonly RGB_INTEGER: GLenum;
-    readonly RG_INTEGER: GLenum;
-    readonly SAMPLER_2D_ARRAY: GLenum;
-    readonly SAMPLER_2D_ARRAY_SHADOW: GLenum;
-    readonly SAMPLER_2D_SHADOW: GLenum;
-    readonly SAMPLER_3D: GLenum;
-    readonly SAMPLER_BINDING: GLenum;
-    readonly SAMPLER_CUBE_SHADOW: GLenum;
-    readonly SEPARATE_ATTRIBS: GLenum;
-    readonly SIGNALED: GLenum;
-    readonly SIGNED_NORMALIZED: GLenum;
-    readonly SRGB: GLenum;
-    readonly SRGB8: GLenum;
-    readonly SRGB8_ALPHA8: GLenum;
-    readonly STATIC_COPY: GLenum;
-    readonly STATIC_READ: GLenum;
-    readonly STENCIL: GLenum;
-    readonly STREAM_COPY: GLenum;
-    readonly STREAM_READ: GLenum;
-    readonly SYNC_CONDITION: GLenum;
-    readonly SYNC_FENCE: GLenum;
-    readonly SYNC_FLAGS: GLenum;
-    readonly SYNC_FLUSH_COMMANDS_BIT: GLenum;
-    readonly SYNC_GPU_COMMANDS_COMPLETE: GLenum;
-    readonly SYNC_STATUS: GLenum;
-    readonly TEXTURE_2D_ARRAY: GLenum;
-    readonly TEXTURE_3D: GLenum;
-    readonly TEXTURE_BASE_LEVEL: GLenum;
-    readonly TEXTURE_BINDING_2D_ARRAY: GLenum;
-    readonly TEXTURE_BINDING_3D: GLenum;
-    readonly TEXTURE_COMPARE_FUNC: GLenum;
-    readonly TEXTURE_COMPARE_MODE: GLenum;
-    readonly TEXTURE_IMMUTABLE_FORMAT: GLenum;
-    readonly TEXTURE_IMMUTABLE_LEVELS: GLenum;
-    readonly TEXTURE_MAX_LEVEL: GLenum;
-    readonly TEXTURE_MAX_LOD: GLenum;
-    readonly TEXTURE_MIN_LOD: GLenum;
-    readonly TEXTURE_WRAP_R: GLenum;
-    readonly TIMEOUT_EXPIRED: GLenum;
-    readonly TIMEOUT_IGNORED: GLint64;
-    readonly TRANSFORM_FEEDBACK: GLenum;
-    readonly TRANSFORM_FEEDBACK_ACTIVE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BINDING: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_BINDING: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_MODE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_SIZE: GLenum;
-    readonly TRANSFORM_FEEDBACK_BUFFER_START: GLenum;
-    readonly TRANSFORM_FEEDBACK_PAUSED: GLenum;
-    readonly TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN: GLenum;
-    readonly TRANSFORM_FEEDBACK_VARYINGS: GLenum;
-    readonly UNIFORM_ARRAY_STRIDE: GLenum;
-    readonly UNIFORM_BLOCK_ACTIVE_UNIFORMS: GLenum;
-    readonly UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: GLenum;
-    readonly UNIFORM_BLOCK_BINDING: GLenum;
-    readonly UNIFORM_BLOCK_DATA_SIZE: GLenum;
-    readonly UNIFORM_BLOCK_INDEX: GLenum;
-    readonly UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: GLenum;
-    readonly UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: GLenum;
-    readonly UNIFORM_BUFFER: GLenum;
-    readonly UNIFORM_BUFFER_BINDING: GLenum;
-    readonly UNIFORM_BUFFER_OFFSET_ALIGNMENT: GLenum;
-    readonly UNIFORM_BUFFER_SIZE: GLenum;
-    readonly UNIFORM_BUFFER_START: GLenum;
-    readonly UNIFORM_IS_ROW_MAJOR: GLenum;
-    readonly UNIFORM_MATRIX_STRIDE: GLenum;
-    readonly UNIFORM_OFFSET: GLenum;
-    readonly UNIFORM_SIZE: GLenum;
-    readonly UNIFORM_TYPE: GLenum;
-    readonly UNPACK_IMAGE_HEIGHT: GLenum;
-    readonly UNPACK_ROW_LENGTH: GLenum;
-    readonly UNPACK_SKIP_IMAGES: GLenum;
-    readonly UNPACK_SKIP_PIXELS: GLenum;
-    readonly UNPACK_SKIP_ROWS: GLenum;
-    readonly UNSIGNALED: GLenum;
-    readonly UNSIGNED_INT_10F_11F_11F_REV: GLenum;
-    readonly UNSIGNED_INT_24_8: GLenum;
-    readonly UNSIGNED_INT_2_10_10_10_REV: GLenum;
-    readonly UNSIGNED_INT_5_9_9_9_REV: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_2D: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_2D_ARRAY: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_3D: GLenum;
-    readonly UNSIGNED_INT_SAMPLER_CUBE: GLenum;
-    readonly UNSIGNED_INT_VEC2: GLenum;
-    readonly UNSIGNED_INT_VEC3: GLenum;
-    readonly UNSIGNED_INT_VEC4: GLenum;
-    readonly UNSIGNED_NORMALIZED: GLenum;
-    readonly VERTEX_ARRAY_BINDING: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_DIVISOR: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_INTEGER: GLenum;
-    readonly WAIT_FAILED: GLenum;
-};
 
 interface WebGL2RenderingContextBase {
     beginQuery(target: GLenum, query: WebGLQuery): void;
@@ -4376,383 +3932,340 @@ interface WebGL2RenderingContextOverloads {
 }
 
 /** Part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getActiveAttrib() and WebGLRenderingContext.getActiveUniform() methods. */
-interface WebGLActiveInfo {
+declare class WebGLActiveInfo {
     readonly name: string;
     readonly size: GLint;
     readonly type: GLenum;
 }
 
-declare var WebGLActiveInfo: {
-    prototype: WebGLActiveInfo;
-    new(): WebGLActiveInfo;
-};
-
 /** Part of the WebGL API and represents an opaque buffer object storing data such as vertices or colors. */
-interface WebGLBuffer extends WebGLObject {
+declare class WebGLBuffer extends WebGLObject {
 }
 
-declare var WebGLBuffer: {
-    prototype: WebGLBuffer;
-    new(): WebGLBuffer;
-};
-
 /** The WebContextEvent interface is part of the WebGL API and is an interface for an event that is generated in response to a status change to the WebGL rendering context. */
-interface WebGLContextEvent extends Event {
+declare class WebGLContextEvent extends Event {
+    constructor(type: string, eventInit?: WebGLContextEventInit);
     readonly statusMessage: string;
 }
 
-declare var WebGLContextEvent: {
-    prototype: WebGLContextEvent;
-    new(type: string, eventInit?: WebGLContextEventInit): WebGLContextEvent;
-};
-
 /** Part of the WebGL API and represents a collection of buffers that serve as a rendering destination. */
-interface WebGLFramebuffer extends WebGLObject {
+declare class WebGLFramebuffer extends WebGLObject {
 }
 
-declare var WebGLFramebuffer: {
-    prototype: WebGLFramebuffer;
-    new(): WebGLFramebuffer;
-};
-
-interface WebGLObject {
+declare class WebGLObject {
 }
-
-declare var WebGLObject: {
-    prototype: WebGLObject;
-    new(): WebGLObject;
-};
 
 /** The WebGLProgram is part of the WebGL API and is a combination of two compiled WebGLShaders consisting of a vertex shader and a fragment shader (both written in GLSL). */
-interface WebGLProgram extends WebGLObject {
+declare class WebGLProgram extends WebGLObject {
 }
 
-declare var WebGLProgram: {
-    prototype: WebGLProgram;
-    new(): WebGLProgram;
-};
-
-interface WebGLQuery extends WebGLObject {
+declare class WebGLQuery extends WebGLObject {
 }
-
-declare var WebGLQuery: {
-    prototype: WebGLQuery;
-    new(): WebGLQuery;
-};
 
 /** Part of the WebGL API and represents a buffer that can contain an image, or can be source or target of an rendering operation. */
-interface WebGLRenderbuffer extends WebGLObject {
+declare class WebGLRenderbuffer extends WebGLObject {
 }
-
-declare var WebGLRenderbuffer: {
-    prototype: WebGLRenderbuffer;
-    new(): WebGLRenderbuffer;
-};
 
 /** Provides an interface to the OpenGL ES 2.0 graphics rendering context for the drawing surface of an HTML <canvas> element. */
-interface WebGLRenderingContext extends WebGLRenderingContextBase, WebGLRenderingContextOverloads {
+interface WebGLRenderingContext extends WebGLRenderingContextBase, WebGLRenderingContextOverloads {}
+declare class WebGLRenderingContext {
+    static readonly ACTIVE_ATTRIBUTES: GLenum;
+    static readonly ACTIVE_TEXTURE: GLenum;
+    static readonly ACTIVE_UNIFORMS: GLenum;
+    static readonly ALIASED_LINE_WIDTH_RANGE: GLenum;
+    static readonly ALIASED_POINT_SIZE_RANGE: GLenum;
+    static readonly ALPHA: GLenum;
+    static readonly ALPHA_BITS: GLenum;
+    static readonly ALWAYS: GLenum;
+    static readonly ARRAY_BUFFER: GLenum;
+    static readonly ARRAY_BUFFER_BINDING: GLenum;
+    static readonly ATTACHED_SHADERS: GLenum;
+    static readonly BACK: GLenum;
+    static readonly BLEND: GLenum;
+    static readonly BLEND_COLOR: GLenum;
+    static readonly BLEND_DST_ALPHA: GLenum;
+    static readonly BLEND_DST_RGB: GLenum;
+    static readonly BLEND_EQUATION: GLenum;
+    static readonly BLEND_EQUATION_ALPHA: GLenum;
+    static readonly BLEND_EQUATION_RGB: GLenum;
+    static readonly BLEND_SRC_ALPHA: GLenum;
+    static readonly BLEND_SRC_RGB: GLenum;
+    static readonly BLUE_BITS: GLenum;
+    static readonly BOOL: GLenum;
+    static readonly BOOL_VEC2: GLenum;
+    static readonly BOOL_VEC3: GLenum;
+    static readonly BOOL_VEC4: GLenum;
+    static readonly BROWSER_DEFAULT_WEBGL: GLenum;
+    static readonly BUFFER_SIZE: GLenum;
+    static readonly BUFFER_USAGE: GLenum;
+    static readonly BYTE: GLenum;
+    static readonly CCW: GLenum;
+    static readonly CLAMP_TO_EDGE: GLenum;
+    static readonly COLOR_ATTACHMENT0: GLenum;
+    static readonly COLOR_BUFFER_BIT: GLenum;
+    static readonly COLOR_CLEAR_VALUE: GLenum;
+    static readonly COLOR_WRITEMASK: GLenum;
+    static readonly COMPILE_STATUS: GLenum;
+    static readonly COMPRESSED_TEXTURE_FORMATS: GLenum;
+    static readonly CONSTANT_ALPHA: GLenum;
+    static readonly CONSTANT_COLOR: GLenum;
+    static readonly CONTEXT_LOST_WEBGL: GLenum;
+    static readonly CULL_FACE: GLenum;
+    static readonly CULL_FACE_MODE: GLenum;
+    static readonly CURRENT_PROGRAM: GLenum;
+    static readonly CURRENT_VERTEX_ATTRIB: GLenum;
+    static readonly CW: GLenum;
+    static readonly DECR: GLenum;
+    static readonly DECR_WRAP: GLenum;
+    static readonly DELETE_STATUS: GLenum;
+    static readonly DEPTH_ATTACHMENT: GLenum;
+    static readonly DEPTH_BITS: GLenum;
+    static readonly DEPTH_BUFFER_BIT: GLenum;
+    static readonly DEPTH_CLEAR_VALUE: GLenum;
+    static readonly DEPTH_COMPONENT: GLenum;
+    static readonly DEPTH_COMPONENT16: GLenum;
+    static readonly DEPTH_FUNC: GLenum;
+    static readonly DEPTH_RANGE: GLenum;
+    static readonly DEPTH_STENCIL: GLenum;
+    static readonly DEPTH_STENCIL_ATTACHMENT: GLenum;
+    static readonly DEPTH_TEST: GLenum;
+    static readonly DEPTH_WRITEMASK: GLenum;
+    static readonly DITHER: GLenum;
+    static readonly DONT_CARE: GLenum;
+    static readonly DST_ALPHA: GLenum;
+    static readonly DST_COLOR: GLenum;
+    static readonly DYNAMIC_DRAW: GLenum;
+    static readonly ELEMENT_ARRAY_BUFFER: GLenum;
+    static readonly ELEMENT_ARRAY_BUFFER_BINDING: GLenum;
+    static readonly EQUAL: GLenum;
+    static readonly FASTEST: GLenum;
+    static readonly FLOAT: GLenum;
+    static readonly FLOAT_MAT2: GLenum;
+    static readonly FLOAT_MAT3: GLenum;
+    static readonly FLOAT_MAT4: GLenum;
+    static readonly FLOAT_VEC2: GLenum;
+    static readonly FLOAT_VEC3: GLenum;
+    static readonly FLOAT_VEC4: GLenum;
+    static readonly FRAGMENT_SHADER: GLenum;
+    static readonly FRAMEBUFFER: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: GLenum;
+    static readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: GLenum;
+    static readonly FRAMEBUFFER_BINDING: GLenum;
+    static readonly FRAMEBUFFER_COMPLETE: GLenum;
+    static readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: GLenum;
+    static readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: GLenum;
+    static readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: GLenum;
+    static readonly FRAMEBUFFER_UNSUPPORTED: GLenum;
+    static readonly FRONT: GLenum;
+    static readonly FRONT_AND_BACK: GLenum;
+    static readonly FRONT_FACE: GLenum;
+    static readonly FUNC_ADD: GLenum;
+    static readonly FUNC_REVERSE_SUBTRACT: GLenum;
+    static readonly FUNC_SUBTRACT: GLenum;
+    static readonly GENERATE_MIPMAP_HINT: GLenum;
+    static readonly GEQUAL: GLenum;
+    static readonly GREATER: GLenum;
+    static readonly GREEN_BITS: GLenum;
+    static readonly HIGH_FLOAT: GLenum;
+    static readonly HIGH_INT: GLenum;
+    static readonly IMPLEMENTATION_COLOR_READ_FORMAT: GLenum;
+    static readonly IMPLEMENTATION_COLOR_READ_TYPE: GLenum;
+    static readonly INCR: GLenum;
+    static readonly INCR_WRAP: GLenum;
+    static readonly INT: GLenum;
+    static readonly INT_VEC2: GLenum;
+    static readonly INT_VEC3: GLenum;
+    static readonly INT_VEC4: GLenum;
+    static readonly INVALID_ENUM: GLenum;
+    static readonly INVALID_FRAMEBUFFER_OPERATION: GLenum;
+    static readonly INVALID_OPERATION: GLenum;
+    static readonly INVALID_VALUE: GLenum;
+    static readonly INVERT: GLenum;
+    static readonly KEEP: GLenum;
+    static readonly LEQUAL: GLenum;
+    static readonly LESS: GLenum;
+    static readonly LINEAR: GLenum;
+    static readonly LINEAR_MIPMAP_LINEAR: GLenum;
+    static readonly LINEAR_MIPMAP_NEAREST: GLenum;
+    static readonly LINES: GLenum;
+    static readonly LINE_LOOP: GLenum;
+    static readonly LINE_STRIP: GLenum;
+    static readonly LINE_WIDTH: GLenum;
+    static readonly LINK_STATUS: GLenum;
+    static readonly LOW_FLOAT: GLenum;
+    static readonly LOW_INT: GLenum;
+    static readonly LUMINANCE: GLenum;
+    static readonly LUMINANCE_ALPHA: GLenum;
+    static readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: GLenum;
+    static readonly MAX_CUBE_MAP_TEXTURE_SIZE: GLenum;
+    static readonly MAX_FRAGMENT_UNIFORM_VECTORS: GLenum;
+    static readonly MAX_RENDERBUFFER_SIZE: GLenum;
+    static readonly MAX_TEXTURE_IMAGE_UNITS: GLenum;
+    static readonly MAX_TEXTURE_SIZE: GLenum;
+    static readonly MAX_VARYING_VECTORS: GLenum;
+    static readonly MAX_VERTEX_ATTRIBS: GLenum;
+    static readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: GLenum;
+    static readonly MAX_VERTEX_UNIFORM_VECTORS: GLenum;
+    static readonly MAX_VIEWPORT_DIMS: GLenum;
+    static readonly MEDIUM_FLOAT: GLenum;
+    static readonly MEDIUM_INT: GLenum;
+    static readonly MIRRORED_REPEAT: GLenum;
+    static readonly NEAREST: GLenum;
+    static readonly NEAREST_MIPMAP_LINEAR: GLenum;
+    static readonly NEAREST_MIPMAP_NEAREST: GLenum;
+    static readonly NEVER: GLenum;
+    static readonly NICEST: GLenum;
+    static readonly NONE: GLenum;
+    static readonly NOTEQUAL: GLenum;
+    static readonly NO_ERROR: GLenum;
+    static readonly ONE: GLenum;
+    static readonly ONE_MINUS_CONSTANT_ALPHA: GLenum;
+    static readonly ONE_MINUS_CONSTANT_COLOR: GLenum;
+    static readonly ONE_MINUS_DST_ALPHA: GLenum;
+    static readonly ONE_MINUS_DST_COLOR: GLenum;
+    static readonly ONE_MINUS_SRC_ALPHA: GLenum;
+    static readonly ONE_MINUS_SRC_COLOR: GLenum;
+    static readonly OUT_OF_MEMORY: GLenum;
+    static readonly PACK_ALIGNMENT: GLenum;
+    static readonly POINTS: GLenum;
+    static readonly POLYGON_OFFSET_FACTOR: GLenum;
+    static readonly POLYGON_OFFSET_FILL: GLenum;
+    static readonly POLYGON_OFFSET_UNITS: GLenum;
+    static readonly RED_BITS: GLenum;
+    static readonly RENDERBUFFER: GLenum;
+    static readonly RENDERBUFFER_ALPHA_SIZE: GLenum;
+    static readonly RENDERBUFFER_BINDING: GLenum;
+    static readonly RENDERBUFFER_BLUE_SIZE: GLenum;
+    static readonly RENDERBUFFER_DEPTH_SIZE: GLenum;
+    static readonly RENDERBUFFER_GREEN_SIZE: GLenum;
+    static readonly RENDERBUFFER_HEIGHT: GLenum;
+    static readonly RENDERBUFFER_INTERNAL_FORMAT: GLenum;
+    static readonly RENDERBUFFER_RED_SIZE: GLenum;
+    static readonly RENDERBUFFER_STENCIL_SIZE: GLenum;
+    static readonly RENDERBUFFER_WIDTH: GLenum;
+    static readonly RENDERER: GLenum;
+    static readonly REPEAT: GLenum;
+    static readonly REPLACE: GLenum;
+    static readonly RGB: GLenum;
+    static readonly RGB565: GLenum;
+    static readonly RGB5_A1: GLenum;
+    static readonly RGBA: GLenum;
+    static readonly RGBA4: GLenum;
+    static readonly SAMPLER_2D: GLenum;
+    static readonly SAMPLER_CUBE: GLenum;
+    static readonly SAMPLES: GLenum;
+    static readonly SAMPLE_ALPHA_TO_COVERAGE: GLenum;
+    static readonly SAMPLE_BUFFERS: GLenum;
+    static readonly SAMPLE_COVERAGE: GLenum;
+    static readonly SAMPLE_COVERAGE_INVERT: GLenum;
+    static readonly SAMPLE_COVERAGE_VALUE: GLenum;
+    static readonly SCISSOR_BOX: GLenum;
+    static readonly SCISSOR_TEST: GLenum;
+    static readonly SHADER_TYPE: GLenum;
+    static readonly SHADING_LANGUAGE_VERSION: GLenum;
+    static readonly SHORT: GLenum;
+    static readonly SRC_ALPHA: GLenum;
+    static readonly SRC_ALPHA_SATURATE: GLenum;
+    static readonly SRC_COLOR: GLenum;
+    static readonly STATIC_DRAW: GLenum;
+    static readonly STENCIL_ATTACHMENT: GLenum;
+    static readonly STENCIL_BACK_FAIL: GLenum;
+    static readonly STENCIL_BACK_FUNC: GLenum;
+    static readonly STENCIL_BACK_PASS_DEPTH_FAIL: GLenum;
+    static readonly STENCIL_BACK_PASS_DEPTH_PASS: GLenum;
+    static readonly STENCIL_BACK_REF: GLenum;
+    static readonly STENCIL_BACK_VALUE_MASK: GLenum;
+    static readonly STENCIL_BACK_WRITEMASK: GLenum;
+    static readonly STENCIL_BITS: GLenum;
+    static readonly STENCIL_BUFFER_BIT: GLenum;
+    static readonly STENCIL_CLEAR_VALUE: GLenum;
+    static readonly STENCIL_FAIL: GLenum;
+    static readonly STENCIL_FUNC: GLenum;
+    static readonly STENCIL_INDEX8: GLenum;
+    static readonly STENCIL_PASS_DEPTH_FAIL: GLenum;
+    static readonly STENCIL_PASS_DEPTH_PASS: GLenum;
+    static readonly STENCIL_REF: GLenum;
+    static readonly STENCIL_TEST: GLenum;
+    static readonly STENCIL_VALUE_MASK: GLenum;
+    static readonly STENCIL_WRITEMASK: GLenum;
+    static readonly STREAM_DRAW: GLenum;
+    static readonly SUBPIXEL_BITS: GLenum;
+    static readonly TEXTURE: GLenum;
+    static readonly TEXTURE0: GLenum;
+    static readonly TEXTURE1: GLenum;
+    static readonly TEXTURE10: GLenum;
+    static readonly TEXTURE11: GLenum;
+    static readonly TEXTURE12: GLenum;
+    static readonly TEXTURE13: GLenum;
+    static readonly TEXTURE14: GLenum;
+    static readonly TEXTURE15: GLenum;
+    static readonly TEXTURE16: GLenum;
+    static readonly TEXTURE17: GLenum;
+    static readonly TEXTURE18: GLenum;
+    static readonly TEXTURE19: GLenum;
+    static readonly TEXTURE2: GLenum;
+    static readonly TEXTURE20: GLenum;
+    static readonly TEXTURE21: GLenum;
+    static readonly TEXTURE22: GLenum;
+    static readonly TEXTURE23: GLenum;
+    static readonly TEXTURE24: GLenum;
+    static readonly TEXTURE25: GLenum;
+    static readonly TEXTURE26: GLenum;
+    static readonly TEXTURE27: GLenum;
+    static readonly TEXTURE28: GLenum;
+    static readonly TEXTURE29: GLenum;
+    static readonly TEXTURE3: GLenum;
+    static readonly TEXTURE30: GLenum;
+    static readonly TEXTURE31: GLenum;
+    static readonly TEXTURE4: GLenum;
+    static readonly TEXTURE5: GLenum;
+    static readonly TEXTURE6: GLenum;
+    static readonly TEXTURE7: GLenum;
+    static readonly TEXTURE8: GLenum;
+    static readonly TEXTURE9: GLenum;
+    static readonly TEXTURE_2D: GLenum;
+    static readonly TEXTURE_BINDING_2D: GLenum;
+    static readonly TEXTURE_BINDING_CUBE_MAP: GLenum;
+    static readonly TEXTURE_CUBE_MAP: GLenum;
+    static readonly TEXTURE_CUBE_MAP_NEGATIVE_X: GLenum;
+    static readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: GLenum;
+    static readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: GLenum;
+    static readonly TEXTURE_CUBE_MAP_POSITIVE_X: GLenum;
+    static readonly TEXTURE_CUBE_MAP_POSITIVE_Y: GLenum;
+    static readonly TEXTURE_CUBE_MAP_POSITIVE_Z: GLenum;
+    static readonly TEXTURE_MAG_FILTER: GLenum;
+    static readonly TEXTURE_MIN_FILTER: GLenum;
+    static readonly TEXTURE_WRAP_S: GLenum;
+    static readonly TEXTURE_WRAP_T: GLenum;
+    static readonly TRIANGLES: GLenum;
+    static readonly TRIANGLE_FAN: GLenum;
+    static readonly TRIANGLE_STRIP: GLenum;
+    static readonly UNPACK_ALIGNMENT: GLenum;
+    static readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: GLenum;
+    static readonly UNPACK_FLIP_Y_WEBGL: GLenum;
+    static readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: GLenum;
+    static readonly UNSIGNED_BYTE: GLenum;
+    static readonly UNSIGNED_INT: GLenum;
+    static readonly UNSIGNED_SHORT: GLenum;
+    static readonly UNSIGNED_SHORT_4_4_4_4: GLenum;
+    static readonly UNSIGNED_SHORT_5_5_5_1: GLenum;
+    static readonly UNSIGNED_SHORT_5_6_5: GLenum;
+    static readonly VALIDATE_STATUS: GLenum;
+    static readonly VENDOR: GLenum;
+    static readonly VERSION: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_ENABLED: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_POINTER: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_SIZE: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_STRIDE: GLenum;
+    static readonly VERTEX_ATTRIB_ARRAY_TYPE: GLenum;
+    static readonly VERTEX_SHADER: GLenum;
+    static readonly VIEWPORT: GLenum;
+    static readonly ZERO: GLenum;
 }
-
-declare var WebGLRenderingContext: {
-    prototype: WebGLRenderingContext;
-    new(): WebGLRenderingContext;
-    readonly ACTIVE_ATTRIBUTES: GLenum;
-    readonly ACTIVE_TEXTURE: GLenum;
-    readonly ACTIVE_UNIFORMS: GLenum;
-    readonly ALIASED_LINE_WIDTH_RANGE: GLenum;
-    readonly ALIASED_POINT_SIZE_RANGE: GLenum;
-    readonly ALPHA: GLenum;
-    readonly ALPHA_BITS: GLenum;
-    readonly ALWAYS: GLenum;
-    readonly ARRAY_BUFFER: GLenum;
-    readonly ARRAY_BUFFER_BINDING: GLenum;
-    readonly ATTACHED_SHADERS: GLenum;
-    readonly BACK: GLenum;
-    readonly BLEND: GLenum;
-    readonly BLEND_COLOR: GLenum;
-    readonly BLEND_DST_ALPHA: GLenum;
-    readonly BLEND_DST_RGB: GLenum;
-    readonly BLEND_EQUATION: GLenum;
-    readonly BLEND_EQUATION_ALPHA: GLenum;
-    readonly BLEND_EQUATION_RGB: GLenum;
-    readonly BLEND_SRC_ALPHA: GLenum;
-    readonly BLEND_SRC_RGB: GLenum;
-    readonly BLUE_BITS: GLenum;
-    readonly BOOL: GLenum;
-    readonly BOOL_VEC2: GLenum;
-    readonly BOOL_VEC3: GLenum;
-    readonly BOOL_VEC4: GLenum;
-    readonly BROWSER_DEFAULT_WEBGL: GLenum;
-    readonly BUFFER_SIZE: GLenum;
-    readonly BUFFER_USAGE: GLenum;
-    readonly BYTE: GLenum;
-    readonly CCW: GLenum;
-    readonly CLAMP_TO_EDGE: GLenum;
-    readonly COLOR_ATTACHMENT0: GLenum;
-    readonly COLOR_BUFFER_BIT: GLenum;
-    readonly COLOR_CLEAR_VALUE: GLenum;
-    readonly COLOR_WRITEMASK: GLenum;
-    readonly COMPILE_STATUS: GLenum;
-    readonly COMPRESSED_TEXTURE_FORMATS: GLenum;
-    readonly CONSTANT_ALPHA: GLenum;
-    readonly CONSTANT_COLOR: GLenum;
-    readonly CONTEXT_LOST_WEBGL: GLenum;
-    readonly CULL_FACE: GLenum;
-    readonly CULL_FACE_MODE: GLenum;
-    readonly CURRENT_PROGRAM: GLenum;
-    readonly CURRENT_VERTEX_ATTRIB: GLenum;
-    readonly CW: GLenum;
-    readonly DECR: GLenum;
-    readonly DECR_WRAP: GLenum;
-    readonly DELETE_STATUS: GLenum;
-    readonly DEPTH_ATTACHMENT: GLenum;
-    readonly DEPTH_BITS: GLenum;
-    readonly DEPTH_BUFFER_BIT: GLenum;
-    readonly DEPTH_CLEAR_VALUE: GLenum;
-    readonly DEPTH_COMPONENT: GLenum;
-    readonly DEPTH_COMPONENT16: GLenum;
-    readonly DEPTH_FUNC: GLenum;
-    readonly DEPTH_RANGE: GLenum;
-    readonly DEPTH_STENCIL: GLenum;
-    readonly DEPTH_STENCIL_ATTACHMENT: GLenum;
-    readonly DEPTH_TEST: GLenum;
-    readonly DEPTH_WRITEMASK: GLenum;
-    readonly DITHER: GLenum;
-    readonly DONT_CARE: GLenum;
-    readonly DST_ALPHA: GLenum;
-    readonly DST_COLOR: GLenum;
-    readonly DYNAMIC_DRAW: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER: GLenum;
-    readonly ELEMENT_ARRAY_BUFFER_BINDING: GLenum;
-    readonly EQUAL: GLenum;
-    readonly FASTEST: GLenum;
-    readonly FLOAT: GLenum;
-    readonly FLOAT_MAT2: GLenum;
-    readonly FLOAT_MAT3: GLenum;
-    readonly FLOAT_MAT4: GLenum;
-    readonly FLOAT_VEC2: GLenum;
-    readonly FLOAT_VEC3: GLenum;
-    readonly FLOAT_VEC4: GLenum;
-    readonly FRAGMENT_SHADER: GLenum;
-    readonly FRAMEBUFFER: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: GLenum;
-    readonly FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: GLenum;
-    readonly FRAMEBUFFER_BINDING: GLenum;
-    readonly FRAMEBUFFER_COMPLETE: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_DIMENSIONS: GLenum;
-    readonly FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT: GLenum;
-    readonly FRAMEBUFFER_UNSUPPORTED: GLenum;
-    readonly FRONT: GLenum;
-    readonly FRONT_AND_BACK: GLenum;
-    readonly FRONT_FACE: GLenum;
-    readonly FUNC_ADD: GLenum;
-    readonly FUNC_REVERSE_SUBTRACT: GLenum;
-    readonly FUNC_SUBTRACT: GLenum;
-    readonly GENERATE_MIPMAP_HINT: GLenum;
-    readonly GEQUAL: GLenum;
-    readonly GREATER: GLenum;
-    readonly GREEN_BITS: GLenum;
-    readonly HIGH_FLOAT: GLenum;
-    readonly HIGH_INT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_FORMAT: GLenum;
-    readonly IMPLEMENTATION_COLOR_READ_TYPE: GLenum;
-    readonly INCR: GLenum;
-    readonly INCR_WRAP: GLenum;
-    readonly INT: GLenum;
-    readonly INT_VEC2: GLenum;
-    readonly INT_VEC3: GLenum;
-    readonly INT_VEC4: GLenum;
-    readonly INVALID_ENUM: GLenum;
-    readonly INVALID_FRAMEBUFFER_OPERATION: GLenum;
-    readonly INVALID_OPERATION: GLenum;
-    readonly INVALID_VALUE: GLenum;
-    readonly INVERT: GLenum;
-    readonly KEEP: GLenum;
-    readonly LEQUAL: GLenum;
-    readonly LESS: GLenum;
-    readonly LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_LINEAR: GLenum;
-    readonly LINEAR_MIPMAP_NEAREST: GLenum;
-    readonly LINES: GLenum;
-    readonly LINE_LOOP: GLenum;
-    readonly LINE_STRIP: GLenum;
-    readonly LINE_WIDTH: GLenum;
-    readonly LINK_STATUS: GLenum;
-    readonly LOW_FLOAT: GLenum;
-    readonly LOW_INT: GLenum;
-    readonly LUMINANCE: GLenum;
-    readonly LUMINANCE_ALPHA: GLenum;
-    readonly MAX_COMBINED_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_CUBE_MAP_TEXTURE_SIZE: GLenum;
-    readonly MAX_FRAGMENT_UNIFORM_VECTORS: GLenum;
-    readonly MAX_RENDERBUFFER_SIZE: GLenum;
-    readonly MAX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_TEXTURE_SIZE: GLenum;
-    readonly MAX_VARYING_VECTORS: GLenum;
-    readonly MAX_VERTEX_ATTRIBS: GLenum;
-    readonly MAX_VERTEX_TEXTURE_IMAGE_UNITS: GLenum;
-    readonly MAX_VERTEX_UNIFORM_VECTORS: GLenum;
-    readonly MAX_VIEWPORT_DIMS: GLenum;
-    readonly MEDIUM_FLOAT: GLenum;
-    readonly MEDIUM_INT: GLenum;
-    readonly MIRRORED_REPEAT: GLenum;
-    readonly NEAREST: GLenum;
-    readonly NEAREST_MIPMAP_LINEAR: GLenum;
-    readonly NEAREST_MIPMAP_NEAREST: GLenum;
-    readonly NEVER: GLenum;
-    readonly NICEST: GLenum;
-    readonly NONE: GLenum;
-    readonly NOTEQUAL: GLenum;
-    readonly NO_ERROR: GLenum;
-    readonly ONE: GLenum;
-    readonly ONE_MINUS_CONSTANT_ALPHA: GLenum;
-    readonly ONE_MINUS_CONSTANT_COLOR: GLenum;
-    readonly ONE_MINUS_DST_ALPHA: GLenum;
-    readonly ONE_MINUS_DST_COLOR: GLenum;
-    readonly ONE_MINUS_SRC_ALPHA: GLenum;
-    readonly ONE_MINUS_SRC_COLOR: GLenum;
-    readonly OUT_OF_MEMORY: GLenum;
-    readonly PACK_ALIGNMENT: GLenum;
-    readonly POINTS: GLenum;
-    readonly POLYGON_OFFSET_FACTOR: GLenum;
-    readonly POLYGON_OFFSET_FILL: GLenum;
-    readonly POLYGON_OFFSET_UNITS: GLenum;
-    readonly RED_BITS: GLenum;
-    readonly RENDERBUFFER: GLenum;
-    readonly RENDERBUFFER_ALPHA_SIZE: GLenum;
-    readonly RENDERBUFFER_BINDING: GLenum;
-    readonly RENDERBUFFER_BLUE_SIZE: GLenum;
-    readonly RENDERBUFFER_DEPTH_SIZE: GLenum;
-    readonly RENDERBUFFER_GREEN_SIZE: GLenum;
-    readonly RENDERBUFFER_HEIGHT: GLenum;
-    readonly RENDERBUFFER_INTERNAL_FORMAT: GLenum;
-    readonly RENDERBUFFER_RED_SIZE: GLenum;
-    readonly RENDERBUFFER_STENCIL_SIZE: GLenum;
-    readonly RENDERBUFFER_WIDTH: GLenum;
-    readonly RENDERER: GLenum;
-    readonly REPEAT: GLenum;
-    readonly REPLACE: GLenum;
-    readonly RGB: GLenum;
-    readonly RGB565: GLenum;
-    readonly RGB5_A1: GLenum;
-    readonly RGBA: GLenum;
-    readonly RGBA4: GLenum;
-    readonly SAMPLER_2D: GLenum;
-    readonly SAMPLER_CUBE: GLenum;
-    readonly SAMPLES: GLenum;
-    readonly SAMPLE_ALPHA_TO_COVERAGE: GLenum;
-    readonly SAMPLE_BUFFERS: GLenum;
-    readonly SAMPLE_COVERAGE: GLenum;
-    readonly SAMPLE_COVERAGE_INVERT: GLenum;
-    readonly SAMPLE_COVERAGE_VALUE: GLenum;
-    readonly SCISSOR_BOX: GLenum;
-    readonly SCISSOR_TEST: GLenum;
-    readonly SHADER_TYPE: GLenum;
-    readonly SHADING_LANGUAGE_VERSION: GLenum;
-    readonly SHORT: GLenum;
-    readonly SRC_ALPHA: GLenum;
-    readonly SRC_ALPHA_SATURATE: GLenum;
-    readonly SRC_COLOR: GLenum;
-    readonly STATIC_DRAW: GLenum;
-    readonly STENCIL_ATTACHMENT: GLenum;
-    readonly STENCIL_BACK_FAIL: GLenum;
-    readonly STENCIL_BACK_FUNC: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_BACK_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_BACK_REF: GLenum;
-    readonly STENCIL_BACK_VALUE_MASK: GLenum;
-    readonly STENCIL_BACK_WRITEMASK: GLenum;
-    readonly STENCIL_BITS: GLenum;
-    readonly STENCIL_BUFFER_BIT: GLenum;
-    readonly STENCIL_CLEAR_VALUE: GLenum;
-    readonly STENCIL_FAIL: GLenum;
-    readonly STENCIL_FUNC: GLenum;
-    readonly STENCIL_INDEX8: GLenum;
-    readonly STENCIL_PASS_DEPTH_FAIL: GLenum;
-    readonly STENCIL_PASS_DEPTH_PASS: GLenum;
-    readonly STENCIL_REF: GLenum;
-    readonly STENCIL_TEST: GLenum;
-    readonly STENCIL_VALUE_MASK: GLenum;
-    readonly STENCIL_WRITEMASK: GLenum;
-    readonly STREAM_DRAW: GLenum;
-    readonly SUBPIXEL_BITS: GLenum;
-    readonly TEXTURE: GLenum;
-    readonly TEXTURE0: GLenum;
-    readonly TEXTURE1: GLenum;
-    readonly TEXTURE10: GLenum;
-    readonly TEXTURE11: GLenum;
-    readonly TEXTURE12: GLenum;
-    readonly TEXTURE13: GLenum;
-    readonly TEXTURE14: GLenum;
-    readonly TEXTURE15: GLenum;
-    readonly TEXTURE16: GLenum;
-    readonly TEXTURE17: GLenum;
-    readonly TEXTURE18: GLenum;
-    readonly TEXTURE19: GLenum;
-    readonly TEXTURE2: GLenum;
-    readonly TEXTURE20: GLenum;
-    readonly TEXTURE21: GLenum;
-    readonly TEXTURE22: GLenum;
-    readonly TEXTURE23: GLenum;
-    readonly TEXTURE24: GLenum;
-    readonly TEXTURE25: GLenum;
-    readonly TEXTURE26: GLenum;
-    readonly TEXTURE27: GLenum;
-    readonly TEXTURE28: GLenum;
-    readonly TEXTURE29: GLenum;
-    readonly TEXTURE3: GLenum;
-    readonly TEXTURE30: GLenum;
-    readonly TEXTURE31: GLenum;
-    readonly TEXTURE4: GLenum;
-    readonly TEXTURE5: GLenum;
-    readonly TEXTURE6: GLenum;
-    readonly TEXTURE7: GLenum;
-    readonly TEXTURE8: GLenum;
-    readonly TEXTURE9: GLenum;
-    readonly TEXTURE_2D: GLenum;
-    readonly TEXTURE_BINDING_2D: GLenum;
-    readonly TEXTURE_BINDING_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_NEGATIVE_Z: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_X: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Y: GLenum;
-    readonly TEXTURE_CUBE_MAP_POSITIVE_Z: GLenum;
-    readonly TEXTURE_MAG_FILTER: GLenum;
-    readonly TEXTURE_MIN_FILTER: GLenum;
-    readonly TEXTURE_WRAP_S: GLenum;
-    readonly TEXTURE_WRAP_T: GLenum;
-    readonly TRIANGLES: GLenum;
-    readonly TRIANGLE_FAN: GLenum;
-    readonly TRIANGLE_STRIP: GLenum;
-    readonly UNPACK_ALIGNMENT: GLenum;
-    readonly UNPACK_COLORSPACE_CONVERSION_WEBGL: GLenum;
-    readonly UNPACK_FLIP_Y_WEBGL: GLenum;
-    readonly UNPACK_PREMULTIPLY_ALPHA_WEBGL: GLenum;
-    readonly UNSIGNED_BYTE: GLenum;
-    readonly UNSIGNED_INT: GLenum;
-    readonly UNSIGNED_SHORT: GLenum;
-    readonly UNSIGNED_SHORT_4_4_4_4: GLenum;
-    readonly UNSIGNED_SHORT_5_5_5_1: GLenum;
-    readonly UNSIGNED_SHORT_5_6_5: GLenum;
-    readonly VALIDATE_STATUS: GLenum;
-    readonly VENDOR: GLenum;
-    readonly VERSION: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_BUFFER_BINDING: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_ENABLED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_NORMALIZED: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_POINTER: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_SIZE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_STRIDE: GLenum;
-    readonly VERTEX_ATTRIB_ARRAY_TYPE: GLenum;
-    readonly VERTEX_SHADER: GLenum;
-    readonly VIEWPORT: GLenum;
-    readonly ZERO: GLenum;
-};
 
 interface WebGLRenderingContextBase {
     readonly canvas: OffscreenCanvas;
@@ -5220,76 +4733,36 @@ interface WebGLRenderingContextOverloads {
     uniformMatrix4fv(location: WebGLUniformLocation | null, transpose: GLboolean, value: Float32List): void;
 }
 
-interface WebGLSampler extends WebGLObject {
+declare class WebGLSampler extends WebGLObject {
 }
-
-declare var WebGLSampler: {
-    prototype: WebGLSampler;
-    new(): WebGLSampler;
-};
 
 /** The WebGLShader is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders. */
-interface WebGLShader extends WebGLObject {
+declare class WebGLShader extends WebGLObject {
 }
 
-declare var WebGLShader: {
-    prototype: WebGLShader;
-    new(): WebGLShader;
-};
-
 /** Part of the WebGL API and represents the information returned by calling the WebGLRenderingContext.getShaderPrecisionFormat() method. */
-interface WebGLShaderPrecisionFormat {
+declare class WebGLShaderPrecisionFormat {
     readonly precision: GLint;
     readonly rangeMax: GLint;
     readonly rangeMin: GLint;
 }
 
-declare var WebGLShaderPrecisionFormat: {
-    prototype: WebGLShaderPrecisionFormat;
-    new(): WebGLShaderPrecisionFormat;
-};
-
-interface WebGLSync extends WebGLObject {
+declare class WebGLSync extends WebGLObject {
 }
-
-declare var WebGLSync: {
-    prototype: WebGLSync;
-    new(): WebGLSync;
-};
 
 /** Part of the WebGL API and represents an opaque texture object providing storage and state for texturing operations. */
-interface WebGLTexture extends WebGLObject {
+declare class WebGLTexture extends WebGLObject {
 }
 
-declare var WebGLTexture: {
-    prototype: WebGLTexture;
-    new(): WebGLTexture;
-};
-
-interface WebGLTransformFeedback extends WebGLObject {
+declare class WebGLTransformFeedback extends WebGLObject {
 }
-
-declare var WebGLTransformFeedback: {
-    prototype: WebGLTransformFeedback;
-    new(): WebGLTransformFeedback;
-};
 
 /** Part of the WebGL API and represents the location of a uniform variable in a shader program. */
-interface WebGLUniformLocation {
+declare class WebGLUniformLocation {
 }
 
-declare var WebGLUniformLocation: {
-    prototype: WebGLUniformLocation;
-    new(): WebGLUniformLocation;
-};
-
-interface WebGLVertexArrayObject extends WebGLObject {
+declare class WebGLVertexArrayObject extends WebGLObject {
 }
-
-declare var WebGLVertexArrayObject: {
-    prototype: WebGLVertexArrayObject;
-    new(): WebGLVertexArrayObject;
-};
 
 interface WebGLVertexArrayObjectOES extends WebGLObject {
 }
@@ -5302,7 +4775,8 @@ interface WebSocketEventMap {
 }
 
 /** Provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection. */
-interface WebSocket extends EventTarget {
+declare class WebSocket extends EventTarget {
+    constructor(url: string, protocols?: string | string[]);
     /**
      * Returns a string that indicates how binary data from the WebSocket object is exposed to scripts:
      * 
@@ -5351,30 +4825,20 @@ interface WebSocket extends EventTarget {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof WebSocketEventMap>(type: K, listener: (this: WebSocket, ev: WebSocketEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    static readonly CLOSED: number;
+    static readonly CLOSING: number;
+    static readonly CONNECTING: number;
+    static readonly OPEN: number;
 }
 
-declare var WebSocket: {
-    prototype: WebSocket;
-    new(url: string, protocols?: string | string[]): WebSocket;
-    readonly CLOSED: number;
-    readonly CLOSING: number;
-    readonly CONNECTING: number;
-    readonly OPEN: number;
-};
-
 /** This ServiceWorker API interface represents the scope of a service worker client that is a document in a browser context, controlled by an active worker. The service worker client independently selects and uses a service worker for its own loading and sub-resources. */
-interface WindowClient extends Client {
+declare class WindowClient extends Client {
     readonly ancestorOrigins: ReadonlyArray<string>;
     readonly focused: boolean;
     readonly visibilityState: VisibilityState;
     focus(): Promise<WindowClient>;
     navigate(url: string): Promise<WindowClient | null>;
 }
-
-declare var WindowClient: {
-    prototype: WindowClient;
-    new(): WindowClient;
-};
 
 interface WindowOrWorkerGlobalScope {
     readonly caches: CacheStorage;
@@ -5401,7 +4865,9 @@ interface WorkerEventMap extends AbstractWorkerEventMap {
 }
 
 /** This Web Workers API interface represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker() constructor and specifying a script to be run in the worker thread. */
-interface Worker extends EventTarget, AbstractWorker {
+interface Worker extends AbstractWorker {}
+declare class Worker extends EventTarget {
+    constructor(stringUrl: string | URL, options?: WorkerOptions);
     onmessage: ((this: Worker, ev: MessageEvent) => any) | null;
     onmessageerror: ((this: Worker, ev: MessageEvent) => any) | null;
     /**
@@ -5419,11 +4885,6 @@ interface Worker extends EventTarget, AbstractWorker {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var Worker: {
-    prototype: Worker;
-    new(stringUrl: string | URL, options?: WorkerOptions): Worker;
-};
-
 interface WorkerGlobalScopeEventMap {
     "error": ErrorEvent;
     "languagechange": Event;
@@ -5434,7 +4895,8 @@ interface WorkerGlobalScopeEventMap {
 }
 
 /** This Web Workers API interface is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop. */
-interface WorkerGlobalScope extends EventTarget, WindowOrWorkerGlobalScope {
+interface WorkerGlobalScope extends WindowOrWorkerGlobalScope {}
+declare class WorkerGlobalScope extends EventTarget {
     /**
      * Returns workerGlobal's WorkerLocation object.
      */
@@ -5460,13 +4922,8 @@ interface WorkerGlobalScope extends EventTarget, WindowOrWorkerGlobalScope {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var WorkerGlobalScope: {
-    prototype: WorkerGlobalScope;
-    new(): WorkerGlobalScope;
-};
-
 /** The absolute location of the script executed by the Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.location property obtained by calling self.location. */
-interface WorkerLocation {
+declare class WorkerLocation {
     readonly hash: string;
     readonly host: string;
     readonly hostname: string;
@@ -5479,33 +4936,20 @@ interface WorkerLocation {
     readonly search: string;
 }
 
-declare var WorkerLocation: {
-    prototype: WorkerLocation;
-    new(): WorkerLocation;
-};
-
 /** A subset of the Navigator interface allowed to be accessed from a Worker. Such an object is initialized for each worker and is available via the WorkerGlobalScope.navigator property obtained by calling window.self.navigator. */
-interface WorkerNavigator extends NavigatorConcurrentHardware, NavigatorID, NavigatorLanguage, NavigatorOnLine, NavigatorStorage {
+interface WorkerNavigator extends NavigatorConcurrentHardware, NavigatorID, NavigatorLanguage, NavigatorOnLine, NavigatorStorage {}
+declare class WorkerNavigator {
     readonly permissions: Permissions;
     readonly serviceWorker: ServiceWorkerContainer;
 }
 
-declare var WorkerNavigator: {
-    prototype: WorkerNavigator;
-    new(): WorkerNavigator;
-};
-
 /** This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing. */
-interface WritableStream<W = any> {
+declare class WritableStream<W = any> {
+    constructor(underlyingSink?: UnderlyingSink<W>, strategy?: QueuingStrategy<W>);
     readonly locked: boolean;
     abort(reason?: any): Promise<void>;
     getWriter(): WritableStreamDefaultWriter<W>;
 }
-
-declare var WritableStream: {
-    prototype: WritableStream;
-    new<W = any>(underlyingSink?: UnderlyingSink<W>, strategy?: QueuingStrategy<W>): WritableStream<W>;
-};
 
 /** This Streams API interface represents a controller allowing control of a WritableStream's state. When constructing a WritableStream, the underlying sink is given a corresponding WritableStreamDefaultController instance to manipulate. */
 interface WritableStreamDefaultController {
@@ -5528,7 +4972,8 @@ interface XMLHttpRequestEventMap extends XMLHttpRequestEventTargetEventMap {
 }
 
 /** Use XMLHttpRequest (XHR) objects to interact with servers. You can retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just part of a page without disrupting what the user is doing. */
-interface XMLHttpRequest extends XMLHttpRequestEventTarget {
+declare class XMLHttpRequest extends XMLHttpRequestEventTarget {
+    constructor();
     onreadystatechange: ((this: XMLHttpRequest, ev: Event) => any) | null;
     /**
      * Returns client's state.
@@ -5621,17 +5066,12 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof XMLHttpRequestEventMap>(type: K, listener: (this: XMLHttpRequest, ev: XMLHttpRequestEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    static readonly DONE: number;
+    static readonly HEADERS_RECEIVED: number;
+    static readonly LOADING: number;
+    static readonly OPENED: number;
+    static readonly UNSENT: number;
 }
-
-declare var XMLHttpRequest: {
-    prototype: XMLHttpRequest;
-    new(): XMLHttpRequest;
-    readonly DONE: number;
-    readonly HEADERS_RECEIVED: number;
-    readonly LOADING: number;
-    readonly OPENED: number;
-    readonly UNSENT: number;
-};
 
 interface XMLHttpRequestEventTargetEventMap {
     "abort": ProgressEvent<XMLHttpRequestEventTarget>;
@@ -5643,7 +5083,7 @@ interface XMLHttpRequestEventTargetEventMap {
     "timeout": ProgressEvent<XMLHttpRequestEventTarget>;
 }
 
-interface XMLHttpRequestEventTarget extends EventTarget {
+declare class XMLHttpRequestEventTarget extends EventTarget {
     onabort: ((this: XMLHttpRequest, ev: ProgressEvent) => any) | null;
     onerror: ((this: XMLHttpRequest, ev: ProgressEvent) => any) | null;
     onload: ((this: XMLHttpRequest, ev: ProgressEvent) => any) | null;
@@ -5657,22 +5097,12 @@ interface XMLHttpRequestEventTarget extends EventTarget {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
-declare var XMLHttpRequestEventTarget: {
-    prototype: XMLHttpRequestEventTarget;
-    new(): XMLHttpRequestEventTarget;
-};
-
-interface XMLHttpRequestUpload extends XMLHttpRequestEventTarget {
+declare class XMLHttpRequestUpload extends XMLHttpRequestEventTarget {
     addEventListener<K extends keyof XMLHttpRequestEventTargetEventMap>(type: K, listener: (this: XMLHttpRequestUpload, ev: XMLHttpRequestEventTargetEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof XMLHttpRequestEventTargetEventMap>(type: K, listener: (this: XMLHttpRequestUpload, ev: XMLHttpRequestEventTargetEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
-
-declare var XMLHttpRequestUpload: {
-    prototype: XMLHttpRequestUpload;
-    new(): XMLHttpRequestUpload;
-};
 
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
@@ -5704,57 +5134,37 @@ interface Console {
 declare var console: Console;
 
 declare namespace WebAssembly {
-    interface Global {
+    class Global {
+        constructor(descriptor: GlobalDescriptor, v?: any);
         value: any;
         valueOf(): any;
     }
     
-    var Global: {
-        prototype: Global;
-        new(descriptor: GlobalDescriptor, v?: any): Global;
-    };
-    
-    interface Instance {
+    class Instance {
+        constructor(module: Module, importObject?: Imports);
         readonly exports: Exports;
     }
     
-    var Instance: {
-        prototype: Instance;
-        new(module: Module, importObject?: Imports): Instance;
-    };
-    
-    interface Memory {
+    class Memory {
+        constructor(descriptor: MemoryDescriptor);
         readonly buffer: ArrayBuffer;
         grow(delta: number): number;
     }
     
-    var Memory: {
-        prototype: Memory;
-        new(descriptor: MemoryDescriptor): Memory;
-    };
-    
-    interface Module {
+    class Module {
+        constructor(bytes: BufferSource);
+        static customSections(moduleObject: Module, sectionName: string): ArrayBuffer[];
+        static exports(moduleObject: Module): ModuleExportDescriptor[];
+        static imports(moduleObject: Module): ModuleImportDescriptor[];
     }
     
-    var Module: {
-        prototype: Module;
-        new(bytes: BufferSource): Module;
-        customSections(moduleObject: Module, sectionName: string): ArrayBuffer[];
-        exports(moduleObject: Module): ModuleExportDescriptor[];
-        imports(moduleObject: Module): ModuleImportDescriptor[];
-    };
-    
-    interface Table {
+    class Table {
+        constructor(descriptor: TableDescriptor);
         readonly length: number;
         get(index: number): Function | null;
         grow(delta: number): number;
         set(index: number, value: Function | null): void;
     }
-    
-    var Table: {
-        prototype: Table;
-        new(descriptor: TableDescriptor): Table;
-    };
     
     interface GlobalDescriptor {
         mutable?: boolean;
