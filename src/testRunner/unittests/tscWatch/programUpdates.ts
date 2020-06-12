@@ -575,7 +575,7 @@ export class A {
                 {
                     caption: "Write file2",
                     change: sys => sys.writeFile(`${projectRoot}/Project/file2.ts`, "export const y = 10;"),
-                    timeouts: sys => sys.checkTimeoutQueueLength(0),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
                 }
             ]
         });
