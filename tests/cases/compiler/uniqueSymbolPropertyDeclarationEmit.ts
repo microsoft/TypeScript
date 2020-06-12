@@ -4,10 +4,12 @@
 
 // @Filename: test.ts
 import Op from './op';
+import { Po } from './po';
 
 export default function foo() {
   return {
     [Op.or]: [],
+    [Po.ro]: {}
   };
 }
 
@@ -17,3 +19,8 @@ declare const Op: {
 };
 
 export default Op;
+
+// @Filename: po.d.ts
+export declare const Po: {
+  readonly ro: unique symbol;
+};

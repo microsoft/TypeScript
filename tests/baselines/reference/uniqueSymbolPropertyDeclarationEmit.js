@@ -2,10 +2,12 @@
 
 //// [test.ts]
 import Op from './op';
+import { Po } from './po';
 
 export default function foo() {
   return {
     [Op.or]: [],
+    [Po.ro]: {}
   };
 }
 
@@ -15,6 +17,11 @@ declare const Op: {
 };
 
 export default Op;
+
+//// [po.d.ts]
+export declare const Po: {
+  readonly ro: unique symbol;
+};
 
 
 //// [op.js]
@@ -28,10 +35,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var op_1 = __importDefault(require("./op"));
+var po_1 = require("./po");
 function foo() {
     var _a;
     return _a = {},
         _a[op_1["default"].or] = [],
+        _a[po_1.Po.ro] = {},
         _a;
 }
 exports["default"] = foo;
@@ -44,6 +53,8 @@ declare const Op: {
 export default Op;
 //// [test.d.ts]
 import Op from './op';
+import { Po } from './po';
 export default function foo(): {
     [Op.or]: any[];
+    [Po.ro]: {};
 };
