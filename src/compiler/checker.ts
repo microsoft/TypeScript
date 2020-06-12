@@ -13390,12 +13390,14 @@ namespace ts {
             if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                 indexType = stringType;
             }
-            // If the index type is generic, or if the object type is generic and doesn't originate in an expression,
-            // we are performing a higher-order index access where we cannot meaningfully access the properties of the
-            // object type. Note that for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in
-            // an expression. This is to preserve backwards compatibility. For example, an element access 'this["foo"]'
-            // has always been resolved eagerly using the constraint type of 'this' at the given location.
-            if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType) && isGenericObjectType(objectType)) {
+            // If the index type is generic, or if the object type is generic and doesn't originate in an expression and
+            // the operation isn't exclusively indexing the fixed (non-variadic) portion of a tuple type, we are performing
+            // a higher-order index access where we cannot meaningfully access the properties of the object type. Note that
+            // for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in an expression. This is to
+            // preserve backwards compatibility. For example, an element access 'this["foo"]' has always been resolved
+            // eagerly using the constraint type of 'this' at the given location.
+            if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType) && isGenericObjectType(objectType) &&
+                !(isTupleType(objectType) && everyType(indexType, t => !!(t.flags & TypeFlags.NumberLiteral) && (<NumberLiteralType>indexType).value < objectType.target.fixedLength))) {
                 if (objectType.flags & TypeFlags.AnyOrUnknown) {
                     return objectType;
                 }
@@ -16575,9 +16577,10 @@ namespace ts {
                     }
                 }
 
-                // For a generic type T, [...T] is assignable to T and T is assignable to readonly [...T].
-                if (isSingleElementGenericTupleType(source) && !source.target.readonly && getTypeArguments(source)[0] === target ||
-                    isSingleElementGenericTupleType(target) && target.target.readonly && getTypeArguments(target)[0] === source) {
+                // For a generic type T, [...T] is assignable to T, T is assignable to readonly [...T], and T is assignable
+                // to [...T] when T is constrained to a mutable array or tuple type.
+                if (isSingleElementGenericTupleType(source) && getTypeArguments(source)[0] === target && !source.target.readonly  ||
+                    isSingleElementGenericTupleType(target) && getTypeArguments(target)[0] === source && (target.target.readonly || isMutableArrayOrTuple(getBaseConstraintOfType(source) || source))) {
                     return Ternary.True;
                 }
 
@@ -25464,11 +25467,11 @@ namespace ts {
             return getInferredTypes(context);
         }
 
-        function getArrayifiedType(type: Type) {
-            return type.flags & TypeFlags.Union ? mapType(type, getArrayifiedType) :
-                type.flags & (TypeFlags.Any | TypeFlags.Instantiable) || isMutableArrayOrTuple(type) ? type :
+        function getMutableArrayOrTupleType(type: Type) {
+            return type.flags & TypeFlags.Union ? mapType(type, getMutableArrayOrTupleType) :
+                type.flags & TypeFlags.Any || isMutableArrayOrTuple(getBaseConstraintOfType(type) || type) ? type :
                 isTupleType(type) ? createTupleTypeEx(getTypeArguments(type), type.target.elementFlags, /*readonly*/ false, type.target.labeledElementDeclarations) :
-                createArrayType(getIndexedAccessType(type, numberType));
+                createTupleTypeEx([type], [ElementFlags.Variadic]);
         }
 
         function getSpreadArgumentType(args: readonly Expression[], index: number, argCount: number, restType: Type, context: InferenceContext | undefined) {
@@ -25477,28 +25480,38 @@ namespace ts {
                 if (isSpreadArgument(arg)) {
                     // We are inferring from a spread expression in the last argument position, i.e. both the parameter
                     // and the argument are ...x forms.
-                    return arg.kind === SyntaxKind.SyntheticExpression ? (<SyntheticExpression>arg).type :
-                        getArrayifiedType(checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context, CheckMode.Normal));
+                    return getMutableArrayOrTupleType(arg.kind === SyntaxKind.SyntheticExpression ? (<SyntheticExpression>arg).type :
+                        checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context, CheckMode.Normal));
                 }
             }
             const types = [];
-            const names: (ParameterDeclaration | NamedTupleMember)[] = [];
-            let spreadIndex = -1;
+            const flags = [];
+            const names = [];
             for (let i = index; i < argCount; i++) {
-                const contextualType = getIndexedAccessType(restType, getLiteralType(i - index));
-                const argType = checkExpressionWithContextualType(args[i], contextualType, context, CheckMode.Normal);
-                if (spreadIndex < 0 && isSpreadArgument(args[i])) {
-                    spreadIndex = i - index;
+                const arg = args[i];
+                if (isSpreadArgument(arg)) {
+                    const spreadType = arg.kind === SyntaxKind.SyntheticExpression ? (<SyntheticExpression>arg).type : checkExpression((<SpreadElement>arg).expression);
+                    if (isArrayLikeType(spreadType)) {
+                        types.push(spreadType);
+                        flags.push(ElementFlags.Variadic);
+                    }
+                    else {
+                        types.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, arg.kind === SyntaxKind.SpreadElement ? (<SpreadElement>arg).expression : arg));
+                        flags.push(ElementFlags.Rest);
+                    }
                 }
-                if (args[i].kind === SyntaxKind.SyntheticExpression && (args[i] as SyntheticExpression).tupleNameSource) {
-                    names.push((args[i] as SyntheticExpression).tupleNameSource!);
+                else {
+                    const contextualType = getIndexedAccessType(restType, getLiteralType(i - index));
+                    const argType = checkExpressionWithContextualType(arg, contextualType, context, CheckMode.Normal);
+                    const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
+                    types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
+                    flags.push(ElementFlags.Required);
                 }
-                const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
-                types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
+                if (arg.kind === SyntaxKind.SyntheticExpression && (arg as SyntheticExpression).tupleNameSource) {
+                    names.push((arg as SyntheticExpression).tupleNameSource!);
+                }
             }
-            return spreadIndex < 0 ?
-                createTupleType(types, /*minLength*/ undefined, /*hasRestElement*/ undefined, /*readonly*/ undefined, length(names) === length(types) ? names : undefined) :
-                createTupleType(append(types.slice(0, spreadIndex), getUnionType(types.slice(spreadIndex))), spreadIndex, /*hasRestElement*/ true, /*readonly*/ undefined);
+            return createTupleTypeEx(types, flags, /*readonly*/ false, length(names) === length(types) ? names : undefined);
         }
 
         function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
@@ -25779,22 +25792,27 @@ namespace ts {
                 return node.attributes.properties.length > 0 || (isJsxOpeningElement(node) && node.parent.children.length > 0) ? [node.attributes] : emptyArray;
             }
             const args = node.arguments || emptyArray;
-            const length = args.length;
-            if (length && isSpreadArgument(args[length - 1]) && getSpreadArgumentIndex(args) === length - 1) {
-                // We have a spread argument in the last position and no other spread arguments. If the type
-                // of the argument is a tuple type, spread the tuple elements into the argument list. We can
-                // call checkExpressionCached because spread expressions never have a contextual type.
-                const spreadArgument = <SpreadElement>args[length - 1];
-                const type = flowLoopCount ? checkExpression(spreadArgument.expression) : checkExpressionCached(spreadArgument.expression);
-                if (isTupleType(type)) {
-                    const typeArguments = getTypeArguments(type);
-                    const syntheticArgs = map(typeArguments, (t, i) => {
-                        const flags = type.target.elementFlags[i];
-                        return createSyntheticExpression(spreadArgument, flags & ElementFlags.Rest ? createArrayType(t) : t,
-                            !!(flags & ElementFlags.Variable), type.target.labeledElementDeclarations?.[i]);
-                    });
-                    return concatenate(args.slice(0, length - 1), syntheticArgs);
+            const spreadIndex = getSpreadArgumentIndex(args);
+            if (spreadIndex >= 0) {
+                // Create synthetic arguments from spreads of tuple types.
+                const effectiveArgs = args.slice(0, spreadIndex);
+                for (let i = spreadIndex; i < args.length; i++) {
+                    const arg = args[i];
+                    // We can call checkExpressionCached because spread expressions never have a contextual type.
+                    const spreadType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((<SpreadElement>arg).expression) : checkExpressionCached((<SpreadElement>arg).expression));
+                    if (spreadType && isTupleType(spreadType)) {
+                        forEach(getTypeArguments(spreadType), (t, i) => {
+                            const flags = spreadType.target.elementFlags[i];
+                            const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t,
+                                !!(flags & ElementFlags.Variable), spreadType.target.labeledElementDeclarations?.[i]);
+                            effectiveArgs.push(syntheticArg);
+                        });
+                    }
+                    else {
+                        effectiveArgs.push(arg);
+                    }
                 }
+                return effectiveArgs;
             }
             return args;
         }
@@ -27397,7 +27415,7 @@ namespace ts {
                 // otherwise would return the type 'undefined').
                 const restType = getTypeOfSymbol(signature.parameters[paramCount]);
                 const index = pos - paramCount;
-                if (!isTupleType(restType) || restType.target.hasRestElement || index < getTypeArguments(restType).length) {
+                if (!isTupleType(restType) || restType.target.hasRestElement || index < restType.target.fixedLength) {
                     return getIndexedAccessType(restType, getLiteralType(index));
                 }
             }
@@ -27405,37 +27423,30 @@ namespace ts {
         }
 
         function getRestTypeAtPosition(source: Signature, pos: number): Type {
-            const paramCount = getParameterCount(source);
+            const parameterCount = getParameterCount(source);
+            const minArgumentCount = getMinArgumentCount(source);
             const restType = getEffectiveRestType(source);
-            const nonRestCount = paramCount - (restType ? 1 : 0);
-            if (restType && pos === nonRestCount) {
-                return restType;
+            if (restType && pos >= parameterCount - 1) {
+                return pos === parameterCount - 1 ? restType : createArrayType(getIndexedAccessType(restType, numberType));
             }
             const types = [];
-            let names: (NamedTupleMember | ParameterDeclaration)[] | undefined = [];
-            for (let i = pos; i < nonRestCount; i++) {
-                types.push(getTypeAtPosition(source, i));
+            const flags = [];
+            const names = [];
+            for (let i = pos; i < parameterCount; i++) {
+                if (!restType || i < parameterCount - 1) {
+                    types.push(getTypeAtPosition(source, i));
+                    flags.push(i < minArgumentCount ? ElementFlags.Required : ElementFlags.Optional);
+                }
+                else {
+                    types.push(restType);
+                    flags.push(ElementFlags.Variadic);
+                }
                 const name = getNameableDeclarationAtPosition(source, i);
-                if (name && names) {
+                if (name) {
                     names.push(name);
                 }
-                else {
-                    names = undefined;
-                }
             }
-            if (restType) {
-                types.push(getIndexedAccessType(restType, numberType));
-                const name = getNameableDeclarationAtPosition(source, nonRestCount);
-                if (name && names) {
-                    names.push(name);
-                }
-                else {
-                    names = undefined;
-                }
-            }
-            const minArgumentCount = getMinArgumentCount(source);
-            const minLength = minArgumentCount < pos ? 0 : minArgumentCount - pos;
-            return createTupleType(types, minLength, !!restType, /*readonly*/ false, names);
+            return createTupleTypeEx(types, flags, /*readonly*/ false, length(names) === length(types) ? names : undefined);
         }
 
         function getParameterCount(signature: Signature) {
@@ -27443,7 +27454,7 @@ namespace ts {
             if (signatureHasRestParameter(signature)) {
                 const restType = getTypeOfSymbol(signature.parameters[length - 1]);
                 if (isTupleType(restType)) {
-                    return length + getTypeArguments(restType).length - 1;
+                    return length + restType.target.fixedLength - (restType.target.hasRestElement ? 0 : 1);
                 }
             }
             return length;
@@ -27453,9 +27464,10 @@ namespace ts {
             if (signatureHasRestParameter(signature)) {
                 const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
                 if (isTupleType(restType)) {
-                    const minLength = restType.target.minLength;
-                    if (minLength > 0) {
-                        return signature.parameters.length - 1 + minLength;
+                    const firstOptionalIndex = findIndex(restType.target.elementFlags, f => !(f & ElementFlags.Required));
+                    const requiredCount = firstOptionalIndex < 0 ? restType.target.fixedLength : firstOptionalIndex;
+                    if (requiredCount > 0) {
+                        return signature.parameters.length - 1 + requiredCount;
                     }
                 }
             }
@@ -27476,7 +27488,12 @@ namespace ts {
         function getEffectiveRestType(signature: Signature) {
             if (signatureHasRestParameter(signature)) {
                 const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
-                return isTupleType(restType) ? getRestArrayTypeOfTupleType(restType) : restType;
+                if (!isTupleType(restType)) {
+                    return restType;
+                }
+                if (restType.target.hasRestElement) {
+                    return sliceTupleType(restType, restType.target.fixedLength);
+                }
             }
             return undefined;
         }
