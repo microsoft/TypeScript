@@ -22589,7 +22589,7 @@ namespace ts {
                             const id = lhs.expression;
                             const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, undefined, id.escapedText, /*isUse*/ true);
                             if (parentSymbol) {
-                                const annotated = getEffectiveTypeAnnotationNode(parentSymbol.valueDeclaration);
+                                const annotated = parentSymbol.valueDeclaration && getEffectiveTypeAnnotationNode(parentSymbol.valueDeclaration);
                                 if (annotated) {
                                     const nameStr = getElementOrPropertyAccessName(lhs);
                                     if (nameStr !== undefined) {
