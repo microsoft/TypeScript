@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w -verbose src
+Input::
 //// [/user/username/projects/reexport/src/tsconfig.json]
 {
   "files": [],
@@ -62,6 +62,85 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
+
+
+/a/lib/tsc.js -b -w -verbose src
+Output::
+>> Screen clear
+[[90m12:00:35 AM[0m] Starting compilation in watch mode...
+
+
+[[90m12:00:36 AM[0m] Projects in this build: 
+    * src/pure/tsconfig.json
+    * src/main/tsconfig.json
+    * src/tsconfig.json
+
+
+[[90m12:00:37 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/index.js' does not exist
+
+
+[[90m12:00:38 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+
+
+[[90m12:00:54 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
+
+
+[[90m12:00:55 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+
+
+[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
+Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/reexport/src/pure/session.ts
+/user/username/projects/reexport/src/pure/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/reexport/src/pure/session.ts
+/user/username/projects/reexport/src/pure/index.ts
+
+Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
+Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/reexport/out/pure/session.d.ts
+/user/username/projects/reexport/out/pure/index.d.ts
+/user/username/projects/reexport/src/main/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/reexport/out/pure/session.d.ts
+/user/username/projects/reexport/out/pure/index.d.ts
+/user/username/projects/reexport/src/main/index.ts
+
+WatchedFiles::
+/user/username/projects/reexport/src/pure/tsconfig.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/tsconfig.json","pollingInterval":250}
+/user/username/projects/reexport/src/pure/index.ts:
+  {"fileName":"/user/username/projects/reexport/src/pure/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/session.ts:
+  {"fileName":"/user/username/projects/reexport/src/pure/session.ts","pollingInterval":250}
+/user/username/projects/reexport/src/main/tsconfig.json:
+  {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
+/user/username/projects/reexport/src/main/index.ts:
+  {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/tsconfig.json:
+  {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/reexport/src/pure:
+  {"directoryName":"/user/username/projects/reexport/src/pure","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/reexport/src/main:
+  {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/reexport/out/pure/session.js]
 "use strict";
@@ -150,147 +229,15 @@ exports.session = {
 
 
 
-Output::
->> Screen clear
-[[90m12:00:35 AM[0m] Starting compilation in watch mode...
-
-
-[[90m12:00:36 AM[0m] Projects in this build: 
-    * src/pure/tsconfig.json
-    * src/main/tsconfig.json
-    * src/tsconfig.json
-
-
-[[90m12:00:37 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output file 'out/pure/index.js' does not exist
-
-
-[[90m12:00:38 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
-
-
-[[90m12:00:54 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'out/main/index.js' does not exist
-
-
-[[90m12:00:55 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
-
-
-[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/reexport/src/pure/index.ts","/user/username/projects/reexport/src/pure/session.ts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/pure/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/reexport/src/pure/session.ts
-/user/username/projects/reexport/src/pure/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/reexport/src/pure/session.ts
-/user/username/projects/reexport/src/pure/index.ts
-
-Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
-Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/reexport/out/pure/session.d.ts
-/user/username/projects/reexport/out/pure/index.d.ts
-/user/username/projects/reexport/src/main/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/reexport/out/pure/session.d.ts
-/user/username/projects/reexport/out/pure/index.d.ts
-/user/username/projects/reexport/src/main/index.ts
-
-WatchedFiles::
-/user/username/projects/reexport/src/pure/tsconfig.json:
-  {"fileName":"/user/username/projects/reexport/src/pure/tsconfig.json","pollingInterval":250}
-/user/username/projects/reexport/src/pure/index.ts:
-  {"fileName":"/user/username/projects/reexport/src/pure/index.ts","pollingInterval":250}
-/user/username/projects/reexport/src/pure/session.ts:
-  {"fileName":"/user/username/projects/reexport/src/pure/session.ts","pollingInterval":250}
-/user/username/projects/reexport/src/main/tsconfig.json:
-  {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
-/user/username/projects/reexport/src/main/index.ts:
-  {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
-/user/username/projects/reexport/src/tsconfig.json:
-  {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/reexport/src/pure:
-  {"directoryName":"/user/username/projects/reexport/src/pure","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/reexport/src/main:
-  {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
 Change:: Introduce error
 
+Input::
 //// [/user/username/projects/reexport/src/pure/session.ts]
 export interface Session {
   foo: number;
   bar: number;
 }
 
-
-//// [/user/username/projects/reexport/out/pure/session.js] file written with same contents
-//// [/user/username/projects/reexport/out/pure/session.d.ts]
-export interface Session {
-    foo: number;
-    bar: number;
-}
-
-
-//// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
-//// [/user/username/projects/reexport/out/pure/index.d.ts] file written with same contents
-//// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-{
-  "program": {
-    "fileInfos": {
-      "../../../../../../a/lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "../../src/pure/session.ts": {
-        "version": "4223553457-export interface Session {\n  foo: number;\n  bar: number;\n}\n",
-        "signature": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n",
-        "affectsGlobalScope": false
-      },
-      "../../src/pure/index.ts": {
-        "version": "-5356193041-export * from \"./session\";\n",
-        "signature": "-5356193041-export * from \"./session\";\n",
-        "affectsGlobalScope": false
-      }
-    },
-    "options": {
-      "composite": true,
-      "outDir": "..",
-      "rootDir": "../../src",
-      "watch": true,
-      "configFilePath": "../../src/pure/tsconfig.json"
-    },
-    "referencedMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
-      ]
-    },
-    "exportedModulesMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../../../a/lib/lib.d.ts",
-      "../../src/pure/index.ts",
-      "../../src/pure/session.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
 
 
 Output::
@@ -373,19 +320,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Fix error
-
-//// [/user/username/projects/reexport/src/pure/session.ts]
-export interface Session {
-  foo: number;
-  // bar: number;
-}
-
-
 //// [/user/username/projects/reexport/out/pure/session.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/session.d.ts]
 export interface Session {
     foo: number;
+    bar: number;
 }
 
 
@@ -401,8 +340,8 @@ export interface Session {
         "affectsGlobalScope": true
       },
       "../../src/pure/session.ts": {
-        "version": "5375279855-export interface Session {\n  foo: number;\n  // bar: number;\n}\n",
-        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
+        "version": "4223553457-export interface Session {\n  foo: number;\n  bar: number;\n}\n",
+        "signature": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n",
         "affectsGlobalScope": false
       },
       "../../src/pure/index.ts": {
@@ -437,7 +376,17 @@ export interface Session {
   "version": "FakeTSVersion"
 }
 
-//// [/user/username/projects/reexport/out/main/index.js] file changed its modified time
+
+Change:: Fix error
+
+Input::
+//// [/user/username/projects/reexport/src/pure/session.ts]
+export interface Session {
+  foo: number;
+  // bar: number;
+}
+
+
 
 Output::
 >> Screen clear
@@ -510,3 +459,60 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/reexport/out/pure/session.js] file written with same contents
+//// [/user/username/projects/reexport/out/pure/session.d.ts]
+export interface Session {
+    foo: number;
+}
+
+
+//// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
+//// [/user/username/projects/reexport/out/pure/index.d.ts] file written with same contents
+//// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../../src/pure/session.ts": {
+        "version": "5375279855-export interface Session {\n  foo: number;\n  // bar: number;\n}\n",
+        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
+        "affectsGlobalScope": false
+      },
+      "../../src/pure/index.ts": {
+        "version": "-5356193041-export * from \"./session\";\n",
+        "signature": "-5356193041-export * from \"./session\";\n",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "composite": true,
+      "outDir": "..",
+      "rootDir": "../../src",
+      "watch": true,
+      "configFilePath": "../../src/pure/tsconfig.json"
+    },
+    "referencedMap": {
+      "../../src/pure/index.ts": [
+        "../../src/pure/session.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "../../src/pure/index.ts": [
+        "../../src/pure/session.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../../src/pure/index.ts",
+      "../../src/pure/session.ts"
+    ]
+  },
+  "version": "FakeTSVersion"
+}
+
+//// [/user/username/projects/reexport/out/main/index.js] file changed its modified time

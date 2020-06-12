@@ -28,10 +28,10 @@ namespace ts.tscWatch {
         verifyConsistentFileNames({
             subScenario: "when changing module name with different casing",
             changes: [
-                sys => {
-                    sys.writeFile(anotherFile.path, anotherFile.content.replace("./logger", "./Logger"));
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Change module name from logger to Logger";
+                {
+                    caption: "Change module name from logger to Logger",
+                    change: sys => sys.writeFile(anotherFile.path, anotherFile.content.replace("./logger", "./Logger")),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -39,10 +39,10 @@ namespace ts.tscWatch {
         verifyConsistentFileNames({
             subScenario: "when renaming file with different casing",
             changes: [
-                sys => {
-                    sys.renameFile(loggerFile.path, `${projectRoot}/Logger.ts`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Change name of file from logger to Logger";
+                {
+                    caption: "Change name of file from logger to Logger",
+                    change: sys => sys.renameFile(loggerFile.path, `${projectRoot}/Logger.ts`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });

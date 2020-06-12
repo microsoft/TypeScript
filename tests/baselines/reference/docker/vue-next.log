@@ -1,7 +1,7 @@
 Exit Code: 0
 Standard output:
 
-> @X.X.X-beta.12 build /vue-next
+> @X.X.X-beta.14 build /vue-next
 > node scripts/build.js "--types"
 Rolling up type definitions for compiler-core...
 Writing: /vue-next/temp/compiler-core.api.json
@@ -105,17 +105,17 @@ created packages/reactivity/dist/reactivity.global.prod.js in ?s
 [!] (plugin rpt2) Error: /vue-next/packages/runtime-core/src/apiInject.ts(40,9): semantic error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
 packages/runtime-core/src/apiInject.ts
 Error: /vue-next/packages/runtime-core/src/apiInject.ts(40,9): semantic error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
-    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:161:30)
-    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:16989:12)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:18021:24)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17162:38)
+    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:217:30)
+    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:17067:12)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17806:24)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17240:38)
     at RollupContext.error (/vue-next/node_modules/rollup-plugin-typescript2/src/rollupcontext.ts:37:18)
     at /vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:41:11
     at arrayEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:516:11)
     at forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9342:14)
     at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
     at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:242:5)
-(node:18) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:74ed7d1,NODE_ENV:production,TARGET:runtime-core,TYPES:true
+(node:18) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:db41c45,NODE_ENV:production,TARGET:runtime-core,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
     at handlePromise (/vue-next/node_modules/execa/index.js:112:26)
     at processTicksAndRejections (internal/process/task_queues.js:97:5)

@@ -203,6 +203,9 @@ namespace ts {
         GreaterThanGreaterThanGreaterThanEqualsToken,
         AmpersandEqualsToken,
         BarEqualsToken,
+        BarBarEqualsToken,
+        AmpersandAmpersandEqualsToken,
+        QuestionQuestionEqualsToken,
         CaretEqualsToken,
         // Identifiers and PrivateIdentifiers
         Identifier,
@@ -328,6 +331,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        NamedTupleMember,
         ImportType,
         // Binding patterns
         ObjectBindingPattern,
@@ -700,6 +704,7 @@ namespace ts {
         | ConstructorTypeNode
         | JSDocFunctionType
         | ExportDeclaration
+        | NamedTupleMember
         | EndOfFileToken;
 
     export type HasType =
@@ -1274,7 +1279,15 @@ namespace ts {
 
     export interface TupleTypeNode extends TypeNode {
         kind: SyntaxKind.TupleType;
-        elementTypes: NodeArray<TypeNode>;
+        elements: NodeArray<TypeNode | NamedTupleMember>;
+    }
+
+    export interface NamedTupleMember extends TypeNode, JSDocContainer, Declaration {
+        kind: SyntaxKind.NamedTupleMember;
+        dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
+        name: Identifier;
+        questionToken?: Token<SyntaxKind.QuestionToken>;
+        type: TypeNode;
     }
 
     export interface OptionalTypeNode extends TypeNode {
@@ -1478,6 +1491,7 @@ namespace ts {
         kind: SyntaxKind.SyntheticExpression;
         isSpread: boolean;
         type: Type;
+        tupleNameSource?: ParameterDeclaration | NamedTupleMember;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -1597,6 +1611,9 @@ namespace ts {
         | SyntaxKind.LessThanLessThanEqualsToken
         | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
         | SyntaxKind.GreaterThanGreaterThanEqualsToken
+        | SyntaxKind.BarBarEqualsToken
+        | SyntaxKind.AmpersandAmpersandEqualsToken
+        | SyntaxKind.QuestionQuestionEqualsToken
         ;
 
     // see: https://tc39.github.io/ecma262/#prod-AssignmentExpression
@@ -1616,6 +1633,12 @@ namespace ts {
     export type BinaryOperator
         = AssignmentOperatorOrHigher
         | SyntaxKind.CommaToken
+        ;
+
+    export type LogicalOrCoalescingAssignmentOperator
+        = SyntaxKind.AmpersandAmpersandEqualsToken
+        | SyntaxKind.BarBarEqualsToken
+        | SyntaxKind.QuestionQuestionEqualsToken
         ;
 
     export type BinaryOperatorToken = Token<BinaryOperator>;
@@ -2590,6 +2613,7 @@ namespace ts {
         text: string;
         pos: -1;
         end: -1;
+        hasLeadingNewline?: boolean;
     }
 
     // represents a top level: { type } expression in a JSDoc comment.
@@ -2791,32 +2815,19 @@ namespace ts {
     }
 
     export type FlowNode =
-        | AfterFinallyFlow
-        | PreFinallyFlow
         | FlowStart
         | FlowLabel
         | FlowAssignment
         | FlowCall
         | FlowCondition
         | FlowSwitchClause
-        | FlowArrayMutation;
+        | FlowArrayMutation
+        | FlowCall
+        | FlowReduceLabel;
 
     export interface FlowNodeBase {
         flags: FlowFlags;
         id?: number;     // Node id used by flow type cache in checker
-    }
-
-    export interface FlowLock {
-        locked?: boolean;
-    }
-
-    export interface AfterFinallyFlow extends FlowNodeBase, FlowLock {
-        antecedent: FlowNode;
-    }
-
-    export interface PreFinallyFlow extends FlowNodeBase {
-        antecedent: FlowNode;
-        lock: FlowLock;
     }
 
     // FlowStart represents the start of a control flow. For a function expression or arrow
@@ -3508,7 +3519,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
-        /* @internal */ getExpandedParameters(sig: Signature): readonly Symbol[];
+        /* @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
         /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
@@ -4161,6 +4172,7 @@ namespace ts {
         cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
         isConstructorDeclaredProperty?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
+        tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     }
 
     /* @internal */
@@ -4316,8 +4328,6 @@ namespace ts {
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         resolvedJSDocType?: Type;                   // Resolved type of a JSDoc type reference
-        hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
@@ -4633,7 +4643,7 @@ namespace ts {
         minLength: number;
         hasRestElement: boolean;
         readonly: boolean;
-        associatedNames?: __String[];
+        labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
     }
 
     export interface TupleTypeReference extends TypeReference {
@@ -5690,6 +5700,8 @@ namespace ts {
 
     /* @internal */
     export type HasInvalidatedResolution = (sourceFile: Path) => boolean;
+    /* @internal */
+    export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -5719,7 +5731,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
-        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
@@ -6574,7 +6586,8 @@ namespace ts {
         SingleLineTypeLiteralMembers = SingleLine | SpaceBetweenBraces | SpaceBetweenSiblings,
         MultiLineTypeLiteralMembers = MultiLine | Indented | OptionalIfEmpty,
 
-        TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        SingleLineTupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
+        MultiLineTupleTypeElements = CommaDelimited | Indented | SpaceBetweenSiblings | MultiLine,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
         ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,

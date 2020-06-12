@@ -127,6 +127,7 @@ namespace ts {
         getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
         getConfigFileParsingDiagnostics(): readonly Diagnostic[];
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+        emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
     }
 
     export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {

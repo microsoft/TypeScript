@@ -83,7 +83,6 @@ namespace ts {
 
             // https://github.com/microsoft/TypeScript/issues/35054
             printsCorrectly("jsx attribute escaping", {}, printer => {
-                debugger;
                 return printer.printFile(createSourceFile(
                     "source.ts",
                     String.raw`<a x='\\"'/>`,
@@ -229,7 +228,7 @@ namespace ts {
             // https://github.com/Microsoft/TypeScript/issues/15651
             printsCorrectly("functionTypes", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                createTupleTypeNode([
+                setEmitFlags(createTupleTypeNode([
                     createFunctionTypeNode(
                         /*typeArguments*/ undefined,
                         [createParameter(
@@ -293,7 +292,7 @@ namespace ts {
                         )],
                         createKeywordTypeNode(SyntaxKind.AnyKeyword)
                     ),
-                ]),
+                ]), EmitFlags.SingleLine),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
         });

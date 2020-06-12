@@ -810,15 +810,15 @@ namespace ts {
             : node;
     }
 
-    export function createTupleTypeNode(elementTypes: readonly TypeNode[]) {
+    export function createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]) {
         const node = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
-        node.elementTypes = createNodeArray(elementTypes);
+        node.elements = createNodeArray(elements);
         return node;
     }
 
-    export function updateTupleTypeNode(node: TupleTypeNode, elementTypes: readonly TypeNode[]) {
-        return node.elementTypes !== elementTypes
-            ? updateNode(createTupleTypeNode(elementTypes), node)
+    export function updateTupleTypeNode(node: TupleTypeNode, elements: readonly (TypeNode | NamedTupleMember)[]) {
+        return node.elements !== elements
+            ? updateNode(createTupleTypeNode(elements), node)
             : node;
     }
 
@@ -931,6 +931,24 @@ namespace ts {
     export function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode) {
         return node.type !== type
             ? updateNode(createParenthesizedType(type), node)
+            : node;
+    }
+
+    export function createNamedTupleMember(dotDotDotToken: Token<SyntaxKind.DotDotDotToken> | undefined, name: Identifier, questionToken: Token<SyntaxKind.QuestionToken> | undefined, type: TypeNode) {
+        const node = <NamedTupleMember>createSynthesizedNode(SyntaxKind.NamedTupleMember);
+        node.dotDotDotToken = dotDotDotToken;
+        node.name = name;
+        node.questionToken = questionToken;
+        node.type = type;
+        return node;
+    }
+
+    export function updateNamedTupleMember(node: NamedTupleMember, dotDotDotToken: Token<SyntaxKind.DotDotDotToken> | undefined, name: Identifier, questionToken: Token<SyntaxKind.QuestionToken> | undefined, type: TypeNode) {
+        return node.dotDotDotToken !== dotDotDotToken
+            || node.name !== name
+            || node.questionToken !== questionToken
+            || node.type !== type
+            ? updateNode(createNamedTupleMember(dotDotDotToken, name, questionToken, type), node)
             : node;
     }
 
@@ -2592,28 +2610,43 @@ namespace ts {
     }
 
     export function createJSDocAuthorTag(comment?: string) {
-        return createJSDocTag(SyntaxKind.JSDocAuthorTag, "author", comment);
+        return createJSDocTag<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag, "author", comment);
     }
 
     export function createJSDocPublicTag() {
-        return createJSDocTag(SyntaxKind.JSDocPublicTag, "public");
+        return createJSDocTag<JSDocPublicTag>(SyntaxKind.JSDocPublicTag, "public");
     }
 
     export function createJSDocPrivateTag() {
-        return createJSDocTag(SyntaxKind.JSDocPrivateTag, "private");
+        return createJSDocTag<JSDocPrivateTag>(SyntaxKind.JSDocPrivateTag, "private");
     }
 
     export function createJSDocProtectedTag() {
-        return createJSDocTag(SyntaxKind.JSDocProtectedTag, "protected");
+        return createJSDocTag<JSDocProtectedTag>(SyntaxKind.JSDocProtectedTag, "protected");
     }
 
     export function createJSDocReadonlyTag() {
-        return createJSDocTag(SyntaxKind.JSDocReadonlyTag, "readonly");
+        return createJSDocTag<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag, "readonly");
     }
 
     export function appendJSDocToContainer(node: JSDocContainer, jsdoc: JSDoc) {
         node.jsDoc = append(node.jsDoc, jsdoc);
         return node;
+    }
+
+
+    /* @internal */
+    export function createJSDocVariadicType(type: TypeNode): JSDocVariadicType {
+        const node = createSynthesizedNode(SyntaxKind.JSDocVariadicType) as JSDocVariadicType;
+        node.type = type;
+        return node;
+    }
+
+    /* @internal */
+    export function updateJSDocVariadicType(node: JSDocVariadicType, type: TypeNode): JSDocVariadicType {
+        return node.type !== type
+            ? updateNode(createJSDocVariadicType(type), node)
+            : node;
     }
 
     // JSX

@@ -2,8 +2,8 @@ tests/cases/compiler/widenedTypes.ts(1,1): error TS2358: The left-hand side of a
 tests/cases/compiler/widenedTypes.ts(4,1): error TS2531: Object is possibly 'null'.
 tests/cases/compiler/widenedTypes.ts(5,7): error TS2531: Object is possibly 'null'.
 tests/cases/compiler/widenedTypes.ts(9,14): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/compiler/widenedTypes.ts(10,1): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/compiler/widenedTypes.ts(17,1): error TS2322: Type '""' is not assignable to type 'number'.
+tests/cases/compiler/widenedTypes.ts(10,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/widenedTypes.ts(17,1): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/widenedTypes.ts(22,22): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/widenedTypes.ts(23,39): error TS2322: Type 'number' is not assignable to type 'string'.
 
@@ -28,7 +28,7 @@ tests/cases/compiler/widenedTypes.ts(23,39): error TS2322: Type 'number' is not 
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
     t[3] = "";
     ~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     var x: typeof undefined = 3;
     x = 3;
@@ -37,7 +37,7 @@ tests/cases/compiler/widenedTypes.ts(23,39): error TS2322: Type 'number' is not 
     var u = [3, (y = null)];
     u[3] = "";
     ~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     var ob: { x: typeof undefined } = { x: "" };
     

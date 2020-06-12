@@ -197,9 +197,6 @@ namespace ts.server {
         dirty = false;
 
         /*@internal*/
-        hasChangedAutomaticTypeDirectiveNames = false;
-
-        /*@internal*/
         typingFiles: SortedReadonlyArray<string> = emptyArray;
 
         /*@internal*/
@@ -483,6 +480,29 @@ namespace ts.server {
         }
 
         /*@internal*/
+        clearInvalidateResolutionOfFailedLookupTimer() {
+            return this.projectService.throttledOperations.cancel(`${this.getProjectName()}FailedLookupInvalidation`);
+        }
+
+        /*@internal*/
+        scheduleInvalidateResolutionsOfFailedLookupLocations() {
+            this.projectService.throttledOperations.schedule(`${this.getProjectName()}FailedLookupInvalidation`, /*delay*/ 1000, () => {
+                if (this.resolutionCache.invalidateResolutionsOfFailedLookupLocations()) {
+                    this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
+                }
+            });
+        }
+
+        /*@internal*/
+        invalidateResolutionsOfFailedLookupLocations() {
+            if (this.clearInvalidateResolutionOfFailedLookupTimer() &&
+                this.resolutionCache.invalidateResolutionsOfFailedLookupLocations()) {
+                this.markAsDirty();
+                this.projectService.delayEnsureProjectForOpenFiles();
+            }
+        }
+
+        /*@internal*/
         onInvalidatedResolution() {
             this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
         }
@@ -501,8 +521,12 @@ namespace ts.server {
         }
 
         /*@internal*/
+        hasChangedAutomaticTypeDirectiveNames() {
+            return this.resolutionCache.hasChangedAutomaticTypeDirectiveNames();
+        }
+
+        /*@internal*/
         onChangedAutomaticTypeDirectiveNames() {
-            this.hasChangedAutomaticTypeDirectiveNames = true;
             this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
         }
 
@@ -725,6 +749,7 @@ namespace ts.server {
                 this.packageJsonFilesMap = undefined;
             }
             this.clearGeneratedFileWatch();
+            this.clearInvalidateResolutionOfFailedLookupTimer();
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -1009,7 +1034,6 @@ namespace ts.server {
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
             const hasNewProgram = this.program && (!oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused! & StructureIsReused.Completely)));
-            this.hasChangedAutomaticTypeDirectiveNames = false;
             if (hasNewProgram) {
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
@@ -1037,7 +1061,7 @@ namespace ts.server {
                 );
 
                 if (this.generatedFilesMap) {
-                    const outPath = this.compilerOptions.outFile && this.compilerOptions.out;
+                    const outPath = outFile(this.compilerOptions);
                     if (isGeneratedFileWatcher(this.generatedFilesMap)) {
                         // --out
                         if (!outPath || !this.isValidGeneratedFileWatcher(
@@ -1211,7 +1235,7 @@ namespace ts.server {
 
         /* @internal */
         addGeneratedFileWatch(generatedFile: string, sourceFile: string) {
-            if (this.compilerOptions.outFile || this.compilerOptions.out) {
+            if (outFile(this.compilerOptions)) {
                 // Single watcher
                 if (!this.generatedFilesMap) {
                     this.generatedFilesMap = this.createGeneratedFileWatcher(generatedFile);

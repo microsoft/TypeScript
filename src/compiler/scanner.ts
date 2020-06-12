@@ -208,6 +208,9 @@ namespace ts {
         "&=": SyntaxKind.AmpersandEqualsToken,
         "|=": SyntaxKind.BarEqualsToken,
         "^=": SyntaxKind.CaretEqualsToken,
+        "||=": SyntaxKind.BarBarEqualsToken,
+        "&&=": SyntaxKind.AmpersandAmpersandEqualsToken,
+        "??=": SyntaxKind.QuestionQuestionEqualsToken,
         "@": SyntaxKind.AtToken,
         "`": SyntaxKind.BacktickToken
     });
@@ -1667,6 +1670,9 @@ namespace ts {
                         return token = SyntaxKind.PercentToken;
                     case CharacterCodes.ampersand:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.ampersand) {
+                            if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
+                                return pos += 3, token = SyntaxKind.AmpersandAmpersandEqualsToken;
+                            }
                             return pos += 2, token = SyntaxKind.AmpersandAmpersandToken;
                         }
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
@@ -1928,15 +1934,16 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.GreaterThanToken;
                     case CharacterCodes.question:
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 2))) {
+                            return pos += 2, token = SyntaxKind.QuestionDotToken;
+                        }
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.question) {
+                            if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
+                                return pos += 3, token = SyntaxKind.QuestionQuestionEqualsToken;
+                            }
+                            return pos += 2, token = SyntaxKind.QuestionQuestionToken;
+                        }
                         pos++;
-                        if (text.charCodeAt(pos) === CharacterCodes.dot && !isDigit(text.charCodeAt(pos + 1))) {
-                            pos++;
-                            return token = SyntaxKind.QuestionDotToken;
-                        }
-                        if (text.charCodeAt(pos) === CharacterCodes.question) {
-                            pos++;
-                            return token = SyntaxKind.QuestionQuestionToken;
-                        }
                         return token = SyntaxKind.QuestionToken;
                     case CharacterCodes.openBracket:
                         pos++;
@@ -1965,6 +1972,9 @@ namespace ts {
                         }
 
                         if (text.charCodeAt(pos + 1) === CharacterCodes.bar) {
+                            if (text.charCodeAt(pos + 2) === CharacterCodes.equals) {
+                                return pos += 3, token = SyntaxKind.BarBarEqualsToken;
+                            }
                             return pos += 2, token = SyntaxKind.BarBarToken;
                         }
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {

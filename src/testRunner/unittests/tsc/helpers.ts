@@ -1,7 +1,7 @@
 namespace ts {
     export type TscCompileSystem = fakes.System & {
         writtenFiles: Map<true>;
-        baseLine(): void;
+        baseLine(): { file: string; text: string; };
     };
 
     export enum BuildKind {
@@ -16,6 +16,7 @@ namespace ts {
         buildKind: BuildKind.NoChangeRun,
         modifyFs: noop
     };
+    export const noChangeOnlyRuns = [noChangeRun];
 
     export interface TscCompile {
         scenario: string;
@@ -27,6 +28,7 @@ namespace ts {
         modifyFs?: (fs: vfs.FileSystem) => void;
         baselineSourceMap?: boolean;
         baselineReadFileCalls?: boolean;
+        baselinePrograms?: boolean;
     }
 
     export type CommandLineProgram = [Program, EmitAndSemanticDiagnosticsBuilderProgram?];
@@ -69,14 +71,16 @@ namespace ts {
     }
 
     export function tscCompile(input: TscCompile) {
-        const baseFs = input.fs();
-        const fs = baseFs.shadow();
+        const initialFs = input.fs();
+        const inputFs = initialFs.shadow();
         const {
             scenario, subScenario, buildKind,
             commandLineArgs, modifyFs,
-            baselineSourceMap, baselineReadFileCalls
+            baselineSourceMap, baselineReadFileCalls, baselinePrograms
         } = input;
-        if (modifyFs) modifyFs(fs);
+        if (modifyFs) modifyFs(inputFs);
+        inputFs.makeReadonly();
+        const fs = inputFs.shadow();
 
         // Create system
         const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
@@ -100,49 +104,67 @@ namespace ts {
 
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
+        const { cb, getPrograms } = commandLineCallbacks(sys, originalReadFile);
         executeCommandLine(
             sys,
-            commandLineCallbacks(sys, originalReadFile).cb,
+            cb,
             commandLineArgs,
         );
         sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
+        if (baselinePrograms) {
+            const baseline: string[] = [];
+            tscWatch.baselinePrograms(baseline, getPrograms);
+            sys.write(baseline.join("\n"));
+        }
         if (baselineReadFileCalls) {
             sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
         }
         if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
 
-        // Baseline the errors
-        fs.writeFileSync(`/lib/${buildKind || BuildKind.Initial}Output.txt`, sys.output.join(""));
         fs.makeReadonly();
 
         sys.baseLine = () => {
-            const patch = fs.diff(baseFs, { includeChangedFileWithSameContent: true });
-            // eslint-disable-next-line no-null/no-null
-            Harness.Baseline.runBaseline(`${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
+            const baseFsPatch = !buildKind || buildKind === BuildKind.Initial ?
+                inputFs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true }) :
+                inputFs.diff(initialFs, { includeChangedFileWithSameContent: true });
+            const patch = fs.diff(inputFs, { includeChangedFileWithSameContent: true });
+            return {
+                file: `${isBuild(commandLineArgs) ? "tsbuild" : "tsc"}/${scenario}/${buildKind || BuildKind.Initial}/${subScenario.split(" ").join("-")}.js`,
+                text: `Input::
+${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
+
+Output::
+${sys.output.join("")}
+
+${patch ? vfs.formatPatch(patch) : ""}`
+            };
         };
         return sys;
     }
 
-    export function verifyTscBaseline(sys: () => TscCompileSystem) {
+    export function verifyTscBaseline(sys: () => { baseLine: TscCompileSystem["baseLine"]; }) {
         it(`Generates files matching the baseline`, () => {
-            sys().baseLine();
+            const { file, text } = sys().baseLine();
+            Harness.Baseline.runBaseline(file, text);
         });
     }
 
     export function verifyTsc(input: TscCompile) {
-        describe(input.scenario, () => {
-            describe(input.subScenario, () => {
-                let sys: TscCompileSystem;
-                before(() => {
-                    sys = tscCompile({
-                        ...input,
-                        fs: () => getFsWithTime(input.fs()).fs.makeReadonly()
+        describe(`tsc ${input.commandLineArgs.join(" ")} ${input.scenario}:: ${input.subScenario}`, () => {
+            describe(input.scenario, () => {
+                describe(input.subScenario, () => {
+                    let sys: TscCompileSystem;
+                    before(() => {
+                        sys = tscCompile({
+                            ...input,
+                            fs: () => getFsWithTime(input.fs()).fs.makeReadonly()
+                        });
                     });
+                    after(() => {
+                        sys = undefined!;
+                    });
+                    verifyTscBaseline(() => sys);
                 });
-                after(() => {
-                    sys = undefined!;
-                });
-                verifyTscBaseline(() => sys);
             });
         });
     }

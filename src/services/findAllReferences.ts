@@ -399,23 +399,40 @@ namespace ts.FindAllReferences {
     function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker): PrefixAndSuffix {
         if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
             const { node, kind } = entry;
+            const parent = node.parent;
             const name = originalNode.text;
-            const isShorthandAssignment = isShorthandPropertyAssignment(node.parent);
-            if (isShorthandAssignment || isObjectBindingElementWithoutPropertyName(node.parent) && node.parent.name === node) {
+            const isShorthandAssignment = isShorthandPropertyAssignment(parent);
+            if (isShorthandAssignment || isObjectBindingElementWithoutPropertyName(parent) && parent.name === node) {
                 const prefixColon: PrefixAndSuffix = { prefixText: name + ": " };
                 const suffixColon: PrefixAndSuffix = { suffixText: ": " + name };
-                return kind === EntryKind.SearchedLocalFoundProperty ? prefixColon
-                    : kind === EntryKind.SearchedPropertyFoundLocal ? suffixColon
-                    // In `const o = { x }; o.x`, symbolAtLocation at `x` in `{ x }` is the property symbol.
-                    // For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
-                    : isShorthandAssignment ? suffixColon : prefixColon;
+                if (kind === EntryKind.SearchedLocalFoundProperty) {
+                    return prefixColon;
+                }
+                if (kind === EntryKind.SearchedPropertyFoundLocal) {
+                    return suffixColon;
+                }
+
+                // In `const o = { x }; o.x`, symbolAtLocation at `x` in `{ x }` is the property symbol.
+                // For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
+                if (isShorthandAssignment) {
+                    const grandParent = parent.parent;
+                    if (isObjectLiteralExpression(grandParent) &&
+                        isBinaryExpression(grandParent.parent) &&
+                        isModuleExportsAccessExpression(grandParent.parent.left)) {
+                        return prefixColon;
+                    }
+                    return suffixColon;
+                }
+                else {
+                    return prefixColon;
+                }
             }
-            else if (isImportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
+            else if (isImportSpecifier(parent) && !parent.propertyName) {
                 // If the original symbol was using this alias, just rename the alias.
                 const originalSymbol = isExportSpecifier(originalNode.parent) ? checker.getExportSpecifierLocalTargetSymbol(originalNode.parent) : checker.getSymbolAtLocation(originalNode);
-                return contains(originalSymbol!.declarations, entry.node.parent) ? { prefixText: name + " as " } : emptyOptions;
+                return contains(originalSymbol!.declarations, parent) ? { prefixText: name + " as " } : emptyOptions;
             }
-            else if (isExportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
+            else if (isExportSpecifier(parent) && !parent.propertyName) {
                 // If the symbol for the node is same as declared node symbol use prefix text
                 return originalNode === entry.node || checker.getSymbolAtLocation(originalNode) === checker.getSymbolAtLocation(entry.node) ?
                     { prefixText: name + " as " } :

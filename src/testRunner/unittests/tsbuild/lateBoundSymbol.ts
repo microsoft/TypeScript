@@ -1,6 +1,6 @@
 namespace ts {
     describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contains late bound member", () => {
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             subScenario: "interface is merged and contains late bound member",
             fs: () => loadProjectFromDisk("tests/projects/lateBoundSymbol"),
             scenario: "lateBoundSymbol",
