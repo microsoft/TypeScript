@@ -104,7 +104,7 @@ let x = foo([]);  // never
 >x : never
 >foo([]) : never
 >foo : <T>(a: readonly T[]) => T
->[] : []
+>[] : never[]
 
 // Modified repros from #26127
 

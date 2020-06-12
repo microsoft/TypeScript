@@ -1,7 +1,7 @@
 === tests/cases/conformance/directives/a.ts ===
 export const texts: string[] = [];
 >texts : string[]
->[] : []
+>[] : undefined[]
 
 /**
  @ts-ignore */

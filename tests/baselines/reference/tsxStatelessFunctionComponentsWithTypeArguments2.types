@@ -83,8 +83,8 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) 
 >i : JSX.Element
 ><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} /> : JSX.Element
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
->values : [number, number, number, number]
->[1, 2, 3, 4] : [number, number, number, number]
+>values : number[]
+>[1, 2, 3, 4] : number[]
 >1 : 1
 >2 : 2
 >3 : 3

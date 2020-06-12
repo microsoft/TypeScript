@@ -113,7 +113,7 @@ const t8: [] = t7;
 
 const a1: readonly number[] = [1];
 >a1 : readonly number[]
->[1] : [number]
+>[1] : number[]
 >1 : 1
 
 const a2: readonly boolean[] = a1;
@@ -122,7 +122,7 @@ const a2: readonly boolean[] = a1;
 
 const a3: readonly number[] = [1];
 >a3 : readonly number[]
->[1] : [number]
+>[1] : number[]
 >1 : 1
 
 const a4: boolean[] = a3;
@@ -185,7 +185,7 @@ const ta8: boolean[] = ta7;
 
 const at1: readonly number[] = [1];
 >at1 : readonly number[]
->[1] : [number]
+>[1] : number[]
 >1 : 1
 
 const at2: readonly [1] = at1;
@@ -194,7 +194,7 @@ const at2: readonly [1] = at1;
 
 const at3: readonly number[] = [1];
 >at3 : readonly number[]
->[1] : [number]
+>[1] : number[]
 >1 : 1
 
 const at4: [1] = at3;

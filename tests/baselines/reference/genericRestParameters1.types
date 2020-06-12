@@ -238,8 +238,8 @@ const x17 = f10(42, "hello", true, ...t0);  // [number, string, boolean]
 >t0 : []
 
 const x18 = f10(...ns, true);  // (string | number | boolean)[]
->x18 : (string | number | boolean)[]
->f10(...ns, true) : (string | number | boolean)[]
+>x18 : [number, string, boolean]
+>f10(...ns, true) : [number, string, boolean]
 >f10 : <T extends unknown[]>(...args: T) => T
 >...ns : string | number
 >ns : [number, string]
@@ -265,16 +265,16 @@ function g10<U extends string[], V extends [number, number]>(u: U, v: V) {
 >v : V
 
     let x3 = f10(1, ...u);  // [number, ...string[]]
->x3 : [number, ...string[]]
->f10(1, ...u) : [number, ...string[]]
+>x3 : [number, ...U]
+>f10(1, ...u) : [number, ...U]
 >f10 : <T extends unknown[]>(...args: T) => T
 >1 : 1
 >...u : string
 >u : U
 
     let x4 = f10(...u, ...v);  // (string | number)[]
->x4 : (string | number)[]
->f10(...u, ...v) : (string | number)[]
+>x4 : [...U, ...V]
+>f10(...u, ...v) : [...U, ...V]
 >f10 : <T extends unknown[]>(...args: T) => T
 >...u : string
 >u : U
@@ -347,8 +347,8 @@ const z17 = f11(42, "hello", true, ...t0);  // [42, "hello", true]
 >t0 : []
 
 const z18 = f11(...ns, true);  // (string | number | true)[]
->z18 : (string | number | true)[]
->f11(...ns, true) : (string | number | true)[]
+>z18 : [number, string, true]
+>f11(...ns, true) : [number, string, true]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
 >...ns : string | number
 >ns : [number, string]
@@ -374,16 +374,16 @@ function g11<U extends string[], V extends [number, number]>(u: U, v: V) {
 >v : V
 
     let x3 = f11(1, ...u);  // [1, ...string[]]
->x3 : [1, ...string[]]
->f11(1, ...u) : [1, ...string[]]
+>x3 : [1, ...U]
+>f11(1, ...u) : [1, ...U]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
 >1 : 1
 >...u : string
 >u : U
 
     let x4 = f11(...u, ...v);  // (string | number)[]
->x4 : (string | number)[]
->f11(...u, ...v) : (string | number)[]
+>x4 : [...U, ...V]
+>f11(...u, ...v) : [...U, ...V]
 >f11 : <T extends (string | number | boolean)[]>(...args: T) => T
 >...u : string
 >u : U
