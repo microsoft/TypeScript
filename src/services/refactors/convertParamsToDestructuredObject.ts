@@ -384,11 +384,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
         if (hasRestParameter && functionArguments.length >= parameters.length) {
             const restArguments = functionArguments.slice(parameters.length - 1);
-            const restProperty = factory.createPropertyAssignment(getParameterName(last(parameters)), factory.createArrayLiteral(restArguments));
+            const restProperty = factory.createPropertyAssignment(getParameterName(last(parameters)), factory.createArrayLiteralExpression(restArguments));
             properties.push(restProperty);
         }
 
-        const objectLiteral = factory.createObjectLiteral(properties, /*multiLine*/ false);
+        const objectLiteral = factory.createObjectLiteralExpression(properties, /*multiLine*/ false);
         return objectLiteral;
     }
 
@@ -402,7 +402,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         let objectInitializer: Expression | undefined;
         // If every parameter in the original function was optional, add an empty object initializer to the new object parameter
         if (every(refactorableParameters, isOptionalParameter)) {
-            objectInitializer = factory.createObjectLiteral();
+            objectInitializer = factory.createObjectLiteralExpression();
         }
 
         const objectParameter = factory.createParameterDeclaration(
@@ -440,7 +440,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 /*dotDotDotToken*/ undefined,
                 /*propertyName*/ undefined,
                 getParameterName(parameterDeclaration),
-                isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteral() : parameterDeclaration.initializer);
+                isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression() : parameterDeclaration.initializer);
 
             suppressLeadingAndTrailingTrivia(element);
             if (parameterDeclaration.initializer && element.initializer) {

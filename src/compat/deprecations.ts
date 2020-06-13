@@ -284,22 +284,22 @@ namespace ts {
     export const updateBindingElement = Debug.deprecate(factory.updateBindingElement, factoryDeprecation);
 
     /** @deprecated Use `factory.createArrayLiteral` or the factory supplied by your transformation context instead. */
-    export const createArrayLiteral = Debug.deprecate(factory.createArrayLiteral, factoryDeprecation);
+    export const createArrayLiteral = Debug.deprecate(factory.createArrayLiteralExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateArrayLiteral` or the factory supplied by your transformation context instead. */
-    export const updateArrayLiteral = Debug.deprecate(factory.updateArrayLiteral, factoryDeprecation);
+    export const updateArrayLiteral = Debug.deprecate(factory.updateArrayLiteralExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createObjectLiteral` or the factory supplied by your transformation context instead. */
-    export const createObjectLiteral = Debug.deprecate(factory.createObjectLiteral, factoryDeprecation);
+    export const createObjectLiteral = Debug.deprecate(factory.createObjectLiteralExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateObjectLiteral` or the factory supplied by your transformation context instead. */
-    export const updateObjectLiteral = Debug.deprecate(factory.updateObjectLiteral, factoryDeprecation);
+    export const updateObjectLiteral = Debug.deprecate(factory.updateObjectLiteralExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createPropertyAccess` or the factory supplied by your transformation context instead. */
-    export const createPropertyAccess = Debug.deprecate(factory.createPropertyAccess, factoryDeprecation);
+    export const createPropertyAccess = Debug.deprecate(factory.createPropertyAccessExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updatePropertyAccess` or the factory supplied by your transformation context instead. */
-    export const updatePropertyAccess = Debug.deprecate(factory.updatePropertyAccess, factoryDeprecation);
+    export const updatePropertyAccess = Debug.deprecate(factory.updatePropertyAccessExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createPropertyAccessChain` or the factory supplied by your transformation context instead. */
     export const createPropertyAccessChain = Debug.deprecate(factory.createPropertyAccessChain, factoryDeprecation);
@@ -308,10 +308,10 @@ namespace ts {
     export const updatePropertyAccessChain = Debug.deprecate(factory.updatePropertyAccessChain, factoryDeprecation);
 
     /** @deprecated Use `factory.createElementAccess` or the factory supplied by your transformation context instead. */
-    export const createElementAccess = Debug.deprecate(factory.createElementAccess, factoryDeprecation);
+    export const createElementAccess = Debug.deprecate(factory.createElementAccessExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateElementAccess` or the factory supplied by your transformation context instead. */
-    export const updateElementAccess = Debug.deprecate(factory.updateElementAccess, factoryDeprecation);
+    export const updateElementAccess = Debug.deprecate(factory.updateElementAccessExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createElementAccessChain` or the factory supplied by your transformation context instead. */
     export const createElementAccessChain = Debug.deprecate(factory.createElementAccessChain, factoryDeprecation);
@@ -320,10 +320,10 @@ namespace ts {
     export const updateElementAccessChain = Debug.deprecate(factory.updateElementAccessChain, factoryDeprecation);
 
     /** @deprecated Use `factory.createCall` or the factory supplied by your transformation context instead. */
-    export const createCall = Debug.deprecate(factory.createCall, factoryDeprecation);
+    export const createCall = Debug.deprecate(factory.createCallExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateCall` or the factory supplied by your transformation context instead. */
-    export const updateCall = Debug.deprecate(factory.updateCall, factoryDeprecation);
+    export const updateCall = Debug.deprecate(factory.updateCallExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createCallChain` or the factory supplied by your transformation context instead. */
     export const createCallChain = Debug.deprecate(factory.createCallChain, factoryDeprecation);
@@ -332,10 +332,10 @@ namespace ts {
     export const updateCallChain = Debug.deprecate(factory.updateCallChain, factoryDeprecation);
 
     /** @deprecated Use `factory.createNew` or the factory supplied by your transformation context instead. */
-    export const createNew = Debug.deprecate(factory.createNew, factoryDeprecation);
+    export const createNew = Debug.deprecate(factory.createNewExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateNew` or the factory supplied by your transformation context instead. */
-    export const updateNew = Debug.deprecate(factory.updateNew, factoryDeprecation);
+    export const updateNew = Debug.deprecate(factory.updateNewExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createTypeAssertion` or the factory supplied by your transformation context instead. */
     export const createTypeAssertion = Debug.deprecate(factory.createTypeAssertion, factoryDeprecation);
@@ -344,10 +344,10 @@ namespace ts {
     export const updateTypeAssertion = Debug.deprecate(factory.updateTypeAssertion, factoryDeprecation);
 
     /** @deprecated Use `factory.createParen` or the factory supplied by your transformation context instead. */
-    export const createParen = Debug.deprecate(factory.createParen, factoryDeprecation);
+    export const createParen = Debug.deprecate(factory.createParenthesizedExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateParen` or the factory supplied by your transformation context instead. */
-    export const updateParen = Debug.deprecate(factory.updateParen, factoryDeprecation);
+    export const updateParen = Debug.deprecate(factory.updateParenthesizedExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createFunctionExpression` or the factory supplied by your transformation context instead. */
     export const createFunctionExpression = Debug.deprecate(factory.createFunctionExpression, factoryDeprecation);
@@ -356,46 +356,46 @@ namespace ts {
     export const updateFunctionExpression = Debug.deprecate(factory.updateFunctionExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createDelete` or the factory supplied by your transformation context instead. */
-    export const createDelete = Debug.deprecate(factory.createDelete, factoryDeprecation);
+    export const createDelete = Debug.deprecate(factory.createDeleteExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateDelete` or the factory supplied by your transformation context instead. */
-    export const updateDelete = Debug.deprecate(factory.updateDelete, factoryDeprecation);
+    export const updateDelete = Debug.deprecate(factory.updateDeleteExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createTypeOf` or the factory supplied by your transformation context instead. */
-    export const createTypeOf = Debug.deprecate(factory.createTypeOf, factoryDeprecation);
+    export const createTypeOf = Debug.deprecate(factory.createTypeOfExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateTypeOf` or the factory supplied by your transformation context instead. */
-    export const updateTypeOf = Debug.deprecate(factory.updateTypeOf, factoryDeprecation);
+    export const updateTypeOf = Debug.deprecate(factory.updateTypeOfExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createVoid` or the factory supplied by your transformation context instead. */
-    export const createVoid = Debug.deprecate(factory.createVoid, factoryDeprecation);
+    export const createVoid = Debug.deprecate(factory.createVoidExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateVoid` or the factory supplied by your transformation context instead. */
-    export const updateVoid = Debug.deprecate(factory.updateVoid, factoryDeprecation);
+    export const updateVoid = Debug.deprecate(factory.updateVoidExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createAwait` or the factory supplied by your transformation context instead. */
-    export const createAwait = Debug.deprecate(factory.createAwait, factoryDeprecation);
+    export const createAwait = Debug.deprecate(factory.createAwaitExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateAwait` or the factory supplied by your transformation context instead. */
-    export const updateAwait = Debug.deprecate(factory.updateAwait, factoryDeprecation);
+    export const updateAwait = Debug.deprecate(factory.updateAwaitExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createPrefix` or the factory supplied by your transformation context instead. */
-    export const createPrefix = Debug.deprecate(factory.createPrefix, factoryDeprecation);
+    export const createPrefix = Debug.deprecate(factory.createPrefixUnaryExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updatePrefix` or the factory supplied by your transformation context instead. */
-    export const updatePrefix = Debug.deprecate(factory.updatePrefix, factoryDeprecation);
+    export const updatePrefix = Debug.deprecate(factory.updatePrefixUnaryExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createPostfix` or the factory supplied by your transformation context instead. */
-    export const createPostfix = Debug.deprecate(factory.createPostfix, factoryDeprecation);
+    export const createPostfix = Debug.deprecate(factory.createPostfixUnaryExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updatePostfix` or the factory supplied by your transformation context instead. */
-    export const updatePostfix = Debug.deprecate(factory.updatePostfix, factoryDeprecation);
+    export const updatePostfix = Debug.deprecate(factory.updatePostfixUnaryExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createBinary` or the factory supplied by your transformation context instead. */
-    export const createBinary = Debug.deprecate(factory.createBinary, factoryDeprecation);
+    export const createBinary = Debug.deprecate(factory.createBinaryExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateConditional` or the factory supplied by your transformation context instead. */
-    export const updateConditional = Debug.deprecate(factory.updateConditional, factoryDeprecation);
+    export const updateConditional = Debug.deprecate(factory.updateConditionalExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createTemplateExpression` or the factory supplied by your transformation context instead. */
     export const createTemplateExpression = Debug.deprecate(factory.createTemplateExpression, factoryDeprecation);
@@ -416,13 +416,13 @@ namespace ts {
     export const createNoSubstitutionTemplateLiteral = Debug.deprecate(factory.createNoSubstitutionTemplateLiteral, factoryDeprecation);
 
     /** @deprecated Use `factory.updateYield` or the factory supplied by your transformation context instead. */
-    export const updateYield = Debug.deprecate(factory.updateYield, factoryDeprecation);
+    export const updateYield = Debug.deprecate(factory.updateYieldExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createSpread` or the factory supplied by your transformation context instead. */
-    export const createSpread = Debug.deprecate(factory.createSpread, factoryDeprecation);
+    export const createSpread = Debug.deprecate(factory.createSpreadElement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateSpread` or the factory supplied by your transformation context instead. */
-    export const updateSpread = Debug.deprecate(factory.updateSpread, factoryDeprecation);
+    export const updateSpread = Debug.deprecate(factory.updateSpreadElement, factoryDeprecation);
 
     /** @deprecated Use `factory.createOmittedExpression` or the factory supplied by your transformation context instead. */
     export const createOmittedExpression = Debug.deprecate(factory.createOmittedExpression, factoryDeprecation);
@@ -488,88 +488,88 @@ namespace ts {
     export const updateStatement = Debug.deprecate(factory.updateExpressionStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createIf` or the factory supplied by your transformation context instead. */
-    export const createIf = Debug.deprecate(factory.createIf, factoryDeprecation);
+    export const createIf = Debug.deprecate(factory.createIfStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateIf` or the factory supplied by your transformation context instead. */
-    export const updateIf = Debug.deprecate(factory.updateIf, factoryDeprecation);
+    export const updateIf = Debug.deprecate(factory.updateIfStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createDo` or the factory supplied by your transformation context instead. */
-    export const createDo = Debug.deprecate(factory.createDo, factoryDeprecation);
+    export const createDo = Debug.deprecate(factory.createDoStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateDo` or the factory supplied by your transformation context instead. */
-    export const updateDo = Debug.deprecate(factory.updateDo, factoryDeprecation);
+    export const updateDo = Debug.deprecate(factory.updateDoStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createWhile` or the factory supplied by your transformation context instead. */
-    export const createWhile = Debug.deprecate(factory.createWhile, factoryDeprecation);
+    export const createWhile = Debug.deprecate(factory.createWhileStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateWhile` or the factory supplied by your transformation context instead. */
-    export const updateWhile = Debug.deprecate(factory.updateWhile, factoryDeprecation);
+    export const updateWhile = Debug.deprecate(factory.updateWhileStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createFor` or the factory supplied by your transformation context instead. */
-    export const createFor = Debug.deprecate(factory.createFor, factoryDeprecation);
+    export const createFor = Debug.deprecate(factory.createForStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateFor` or the factory supplied by your transformation context instead. */
-    export const updateFor = Debug.deprecate(factory.updateFor, factoryDeprecation);
+    export const updateFor = Debug.deprecate(factory.updateForStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createForIn` or the factory supplied by your transformation context instead. */
-    export const createForIn = Debug.deprecate(factory.createForIn, factoryDeprecation);
+    export const createForIn = Debug.deprecate(factory.createForInStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateForIn` or the factory supplied by your transformation context instead. */
-    export const updateForIn = Debug.deprecate(factory.updateForIn, factoryDeprecation);
+    export const updateForIn = Debug.deprecate(factory.updateForInStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createForOf` or the factory supplied by your transformation context instead. */
-    export const createForOf = Debug.deprecate(factory.createForOf, factoryDeprecation);
+    export const createForOf = Debug.deprecate(factory.createForOfStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateForOf` or the factory supplied by your transformation context instead. */
-    export const updateForOf = Debug.deprecate(factory.updateForOf, factoryDeprecation);
+    export const updateForOf = Debug.deprecate(factory.updateForOfStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createContinue` or the factory supplied by your transformation context instead. */
-    export const createContinue = Debug.deprecate(factory.createContinue, factoryDeprecation);
+    export const createContinue = Debug.deprecate(factory.createContinueStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateContinue` or the factory supplied by your transformation context instead. */
-    export const updateContinue = Debug.deprecate(factory.updateContinue, factoryDeprecation);
+    export const updateContinue = Debug.deprecate(factory.updateContinueStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createBreak` or the factory supplied by your transformation context instead. */
-    export const createBreak = Debug.deprecate(factory.createBreak, factoryDeprecation);
+    export const createBreak = Debug.deprecate(factory.createBreakStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateBreak` or the factory supplied by your transformation context instead. */
-    export const updateBreak = Debug.deprecate(factory.updateBreak, factoryDeprecation);
+    export const updateBreak = Debug.deprecate(factory.updateBreakStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createReturn` or the factory supplied by your transformation context instead. */
-    export const createReturn = Debug.deprecate(factory.createReturn, factoryDeprecation);
+    export const createReturn = Debug.deprecate(factory.createReturnStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateReturn` or the factory supplied by your transformation context instead. */
-    export const updateReturn = Debug.deprecate(factory.updateReturn, factoryDeprecation);
+    export const updateReturn = Debug.deprecate(factory.updateReturnStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createWith` or the factory supplied by your transformation context instead. */
-    export const createWith = Debug.deprecate(factory.createWith, factoryDeprecation);
+    export const createWith = Debug.deprecate(factory.createWithStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateWith` or the factory supplied by your transformation context instead. */
-    export const updateWith = Debug.deprecate(factory.updateWith, factoryDeprecation);
+    export const updateWith = Debug.deprecate(factory.updateWithStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createSwitch` or the factory supplied by your transformation context instead. */
-    export const createSwitch = Debug.deprecate(factory.createSwitch, factoryDeprecation);
+    export const createSwitch = Debug.deprecate(factory.createSwitchStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateSwitch` or the factory supplied by your transformation context instead. */
-    export const updateSwitch = Debug.deprecate(factory.updateSwitch, factoryDeprecation);
+    export const updateSwitch = Debug.deprecate(factory.updateSwitchStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createLabel` or the factory supplied by your transformation context instead. */
-    export const createLabel = Debug.deprecate(factory.createLabel, factoryDeprecation);
+    export const createLabel = Debug.deprecate(factory.createLabeledStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateLabel` or the factory supplied by your transformation context instead. */
-    export const updateLabel = Debug.deprecate(factory.updateLabel, factoryDeprecation);
+    export const updateLabel = Debug.deprecate(factory.updateLabeledStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createThrow` or the factory supplied by your transformation context instead. */
-    export const createThrow = Debug.deprecate(factory.createThrow, factoryDeprecation);
+    export const createThrow = Debug.deprecate(factory.createThrowStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateThrow` or the factory supplied by your transformation context instead. */
-    export const updateThrow = Debug.deprecate(factory.updateThrow, factoryDeprecation);
+    export const updateThrow = Debug.deprecate(factory.updateThrowStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createTry` or the factory supplied by your transformation context instead. */
-    export const createTry = Debug.deprecate(factory.createTry, factoryDeprecation);
+    export const createTry = Debug.deprecate(factory.createTryStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.updateTry` or the factory supplied by your transformation context instead. */
-    export const updateTry = Debug.deprecate(factory.updateTry, factoryDeprecation);
+    export const updateTry = Debug.deprecate(factory.updateTryStatement, factoryDeprecation);
 
     /** @deprecated Use `factory.createDebuggerStatement` or the factory supplied by your transformation context instead. */
     export const createDebuggerStatement = Debug.deprecate(factory.createDebuggerStatement, factoryDeprecation);
@@ -881,10 +881,10 @@ namespace ts {
     export const updatePartiallyEmittedExpression = Debug.deprecate(factory.updatePartiallyEmittedExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createCommaList` or the factory supplied by your transformation context instead. */
-    export const createCommaList = Debug.deprecate(factory.createCommaList, factoryDeprecation);
+    export const createCommaList = Debug.deprecate(factory.createCommaListExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.updateCommaList` or the factory supplied by your transformation context instead. */
-    export const updateCommaList = Debug.deprecate(factory.updateCommaList, factoryDeprecation);
+    export const updateCommaList = Debug.deprecate(factory.updateCommaListExpression, factoryDeprecation);
 
     /** @deprecated Use `factory.createBundle` or the factory supplied by your transformation context instead. */
     export const createBundle = Debug.deprecate(factory.createBundle, factoryDeprecation);
@@ -1029,7 +1029,7 @@ namespace ts {
         else {
             template = typeArgumentsOrTemplate as TemplateLiteral;
         }
-        return factory.createTaggedTemplate(tag, typeArguments, template);
+        return factory.createTaggedTemplateExpression(tag, typeArguments, template);
     } as {
         (tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
         (tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression;
@@ -1044,7 +1044,7 @@ namespace ts {
         else {
             template = typeArgumentsOrTemplate as TemplateLiteral;
         }
-        return factory.updateTaggedTemplate(node, tag, typeArguments, template);
+        return factory.updateTaggedTemplateExpression(node, tag, typeArguments, template);
     } as {
         (node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
         (node: TaggedTemplateExpression, tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral): TaggedTemplateExpression;
@@ -1055,13 +1055,13 @@ namespace ts {
         if (typeof operator === "number") {
             operator = operator === node.operatorToken.kind ? node.operatorToken : factory.createToken(operator);
         }
-        return factory.updateBinary(node, left, operator, right);
+        return factory.updateBinaryExpression(node, left, operator, right);
     }, factoryDeprecation);
 
     /** @deprecated Use `factory.createConditional` or the factory supplied by your transformation context instead. */
     export const createConditional = Debug.deprecate(function createConditional(condition: Expression, questionTokenOrWhenTrue: QuestionToken | Expression, whenTrueOrWhenFalse: Expression, colonToken?: ColonToken, whenFalse?: Expression) {
-        return arguments.length === 5 ? factory.createConditional(condition, questionTokenOrWhenTrue as QuestionToken, whenTrueOrWhenFalse, colonToken, whenFalse!) :
-            arguments.length === 3 ? factory.createConditional(condition, factory.createToken(SyntaxKind.QuestionToken), questionTokenOrWhenTrue as Expression, factory.createToken(SyntaxKind.ColonToken), whenTrueOrWhenFalse) :
+        return arguments.length === 5 ? factory.createConditionalExpression(condition, questionTokenOrWhenTrue as QuestionToken, whenTrueOrWhenFalse, colonToken, whenFalse!) :
+            arguments.length === 3 ? factory.createConditionalExpression(condition, factory.createToken(SyntaxKind.QuestionToken), questionTokenOrWhenTrue as Expression, factory.createToken(SyntaxKind.ColonToken), whenTrueOrWhenFalse) :
             Debug.fail("Argument count mismatch");
     } as {
         (condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
@@ -1077,7 +1077,7 @@ namespace ts {
         else {
             expression = asteriskTokenOrExpression as Expression;
         }
-        return factory.createYield(asteriskToken, expression);
+        return factory.createYieldExpression(asteriskToken, expression);
     } as {
         (expression?: Expression): YieldExpression;
         (asteriskToken: AsteriskToken | undefined, expression: Expression): YieldExpression;

@@ -93,7 +93,7 @@ namespace ts.codefix {
             };
         }
         else if (isLabeledStatement(firstStatement) && isExpressionStatement(firstStatement.statement)) {
-            const node = factory.createObjectLiteral([factory.createPropertyAssignment(firstStatement.label, firstStatement.statement.expression)]);
+            const node = factory.createObjectLiteralExpression([factory.createPropertyAssignment(firstStatement.label, firstStatement.statement.expression)]);
             const nodeType = createObjectTypeFromLabeledExpression(checker, firstStatement.label, firstStatement.statement.expression);
             if (checkFixedAssignableTo(checker, declaration, nodeType, expectType, isFunctionType)) {
                 return isArrowFunction(declaration) ? {
@@ -114,7 +114,7 @@ namespace ts.codefix {
         else if (isBlock(firstStatement) && length(firstStatement.statements) === 1) {
             const firstBlockStatement = first(firstStatement.statements);
             if (isLabeledStatement(firstBlockStatement) && isExpressionStatement(firstBlockStatement.statement)) {
-                const node = factory.createObjectLiteral([factory.createPropertyAssignment(firstBlockStatement.label, firstBlockStatement.statement.expression)]);
+                const node = factory.createObjectLiteralExpression([factory.createPropertyAssignment(firstBlockStatement.label, firstBlockStatement.statement.expression)]);
                 const nodeType = createObjectTypeFromLabeledExpression(checker, firstBlockStatement.label, firstBlockStatement.statement.expression);
                 if (checkFixedAssignableTo(checker, declaration, nodeType, expectType, isFunctionType)) {
                     return {
@@ -208,7 +208,7 @@ namespace ts.codefix {
     function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, expression: Expression, statement: Statement) {
         suppressLeadingAndTrailingTrivia(expression);
         const probablyNeedSemi = probablyUsesSemicolons(sourceFile);
-        changes.replaceNode(sourceFile, statement, factory.createReturn(expression), {
+        changes.replaceNode(sourceFile, statement, factory.createReturnStatement(expression), {
             leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
             trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
             suffix: probablyNeedSemi ? ";" : undefined
@@ -216,7 +216,7 @@ namespace ts.codefix {
     }
 
     function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression, commentSource: Node, withParen: boolean) {
-        const newBody = (withParen || needsParentheses(expression)) ? factory.createParen(expression) : expression;
+        const newBody = (withParen || needsParentheses(expression)) ? factory.createParenthesizedExpression(expression) : expression;
         suppressLeadingAndTrailingTrivia(commentSource);
         copyComments(commentSource, newBody);
 
@@ -224,7 +224,7 @@ namespace ts.codefix {
     }
 
     function wrapBlockWithParen(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression) {
-        changes.replaceNode(sourceFile, declaration.body, factory.createParen(expression));
+        changes.replaceNode(sourceFile, declaration.body, factory.createParenthesizedExpression(expression));
     }
 
     function getActionForfixAddReturnStatement(context: CodeFixContext, expression: Expression, statement: Statement) {

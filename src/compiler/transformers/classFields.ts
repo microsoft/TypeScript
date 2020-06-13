@@ -253,13 +253,13 @@ namespace ts {
                     const receiver = visitNode(node.operand.expression, visitor, isExpression);
                     const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
 
-                    const existingValue = factory.createPrefix(SyntaxKind.PlusToken, createPrivateIdentifierAccess(info, readExpression));
+                    const existingValue = factory.createPrefixUnaryExpression(SyntaxKind.PlusToken, createPrivateIdentifierAccess(info, readExpression));
 
                     return setOriginalNode(
                         createPrivateIdentifierAssignment(
                             info,
                             initializeExpression || readExpression,
-                            factory.createBinary(existingValue, operator, factory.createNumericLiteral(1)),
+                            factory.createBinaryExpression(existingValue, operator, factory.createNumericLiteral(1)),
                             SyntaxKind.EqualsToken
                         ),
                         node
@@ -279,7 +279,7 @@ namespace ts {
                     const receiver = visitNode(node.operand.expression, visitor, isExpression);
                     const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
 
-                    const existingValue = factory.createPrefix(SyntaxKind.PlusToken, createPrivateIdentifierAccess(info, readExpression));
+                    const existingValue = factory.createPrefixUnaryExpression(SyntaxKind.PlusToken, createPrivateIdentifierAccess(info, readExpression));
 
                     // Create a temporary variable to store the value returned by the expression.
                     const returnValue = valueIsDiscarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
@@ -289,7 +289,7 @@ namespace ts {
                             createPrivateIdentifierAssignment(
                                 info,
                                 initializeExpression || readExpression,
-                                factory.createBinary(
+                                factory.createBinaryExpression(
                                     returnValue ? factory.createAssignment(returnValue, existingValue) : existingValue,
                                     operator,
                                     factory.createNumericLiteral(1)
@@ -307,7 +307,7 @@ namespace ts {
 
         function visitForStatement(node: ForStatement) {
             if (node.incrementor && isPostfixUnaryExpression(node.incrementor)) {
-                return factory.updateFor(
+                return factory.updateForStatement(
                     node,
                     visitNode(node.initializer, visitor, isForInitializer),
                     visitNode(node.condition, visitor, isExpression),
@@ -339,9 +339,9 @@ namespace ts {
             if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.expression)) {
                 // Transform call expressions of private names to properly bind the `this` parameter.
                 const { thisArg, target } = factory.createCallBinding(node.expression, hoistVariableDeclaration, languageVersion);
-                return factory.updateCall(
+                return factory.updateCallExpression(
                     node,
-                    factory.createPropertyAccess(visitNode(target, visitor), "call"),
+                    factory.createPropertyAccessExpression(visitNode(target, visitor), "call"),
                     /*typeArguments*/ undefined,
                     [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)]
                 );
@@ -353,10 +353,10 @@ namespace ts {
             if (shouldTransformPrivateFields && isPrivateIdentifierPropertyAccessExpression(node.tag)) {
                 // Bind the `this` correctly for tagged template literals when the tag is a private identifier property access.
                 const { thisArg, target } = factory.createCallBinding(node.tag, hoistVariableDeclaration, languageVersion);
-                return factory.updateTaggedTemplate(
+                return factory.updateTaggedTemplateExpression(
                     node,
-                    factory.createCall(
-                        factory.createPropertyAccess(visitNode(target, visitor), "bind"),
+                    factory.createCallExpression(
+                        factory.createPropertyAccessExpression(visitNode(target, visitor), "bind"),
                         /*typeArguments*/ undefined,
                         [visitNode(thisArg, visitor, isExpression)]
                     ),
@@ -372,7 +372,7 @@ namespace ts {
                 if (isDestructuringAssignment(node)) {
                     const savedPendingExpressions = pendingExpressions;
                     pendingExpressions = undefined!;
-                    node = factory.updateBinary(
+                    node = factory.updateBinaryExpression(
                         node,
                         visitNode(node.left, visitorDestructuringTarget),
                         node.operatorToken,
@@ -414,7 +414,7 @@ namespace ts {
                 return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
                     initializeExpression || readExpression,
                     info.weakMapName,
-                    factory.createBinary(
+                    factory.createBinaryExpression(
                         context.getEmitHelperFactory().createClassPrivateFieldGetHelper(readExpression, info.weakMapName),
                         getNonAssignmentOperatorForCompoundAssignment(operator),
                         right
@@ -642,10 +642,10 @@ namespace ts {
                 //
                 statements.push(
                     factory.createExpressionStatement(
-                        factory.createCall(
+                        factory.createCallExpression(
                             factory.createSuper(),
                             /*typeArguments*/ undefined,
-                            [factory.createSpread(factory.createIdentifier("arguments"))]
+                            [factory.createSpreadElement(factory.createIdentifier("arguments"))]
                         )
                     )
                 );
@@ -905,7 +905,7 @@ namespace ts {
             getPendingExpressions().push(
                 factory.createAssignment(
                     weakMapName,
-                    factory.createNew(
+                    factory.createNewExpression(
                         factory.createIdentifier("WeakMap"),
                         /*typeArguments*/ undefined,
                         []
@@ -946,12 +946,12 @@ namespace ts {
             // differently inside the function.
             if (isThisProperty(node) || isSuperProperty(node) || !isSimpleCopiableExpression(node.expression)) {
                 receiver = factory.createTempVariable(hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
-                getPendingExpressions().push(factory.createBinary(receiver, SyntaxKind.EqualsToken, node.expression));
+                getPendingExpressions().push(factory.createBinaryExpression(receiver, SyntaxKind.EqualsToken, node.expression));
             }
-            return factory.createPropertyAccess(
+            return factory.createPropertyAccessExpression(
                 // Explicit parens required because of v8 regression (https://bugs.chromium.org/p/v8/issues/detail?id=9560)
-                factory.createParen(
-                    factory.createObjectLiteral([
+                factory.createParenthesizedExpression(
+                    factory.createObjectLiteralExpression([
                         factory.createSetAccessorDeclaration(
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
@@ -987,7 +987,7 @@ namespace ts {
             if (target && isPrivateIdentifierPropertyAccessExpression(target)) {
                 const wrapped = wrapPrivateIdentifierForDestructuringTarget(target);
                 if (isAssignmentExpression(node)) {
-                    return factory.updateBinary(
+                    return factory.updateBinaryExpression(
                         node,
                         wrapped,
                         node.operatorToken,
@@ -995,7 +995,7 @@ namespace ts {
                     );
                 }
                 else if (isSpreadElement(node)) {
-                    return factory.updateSpread(node, wrapped);
+                    return factory.updateSpreadElement(node, wrapped);
                 }
                 else {
                     return wrapped;
@@ -1035,7 +1035,7 @@ namespace ts {
                 //
                 // Transformation:
                 // [ { set value(x) { this.#myProp = x; } }.value ] = [ "hello" ];
-                return factory.updateArrayLiteral(
+                return factory.updateArrayLiteralExpression(
                     node,
                     visitNodes(node.elements, visitArrayAssignmentTarget, isExpression)
                 );
@@ -1048,7 +1048,7 @@ namespace ts {
                 //
                 // Transformation:
                 // ({ stringProperty: { set value(x) { this.#myProp = x; } }.value }) = { stringProperty: "hello" };
-                return factory.updateObjectLiteral(
+                return factory.updateObjectLiteralExpression(
                     node,
                     visitNodes(node.properties, visitObjectAssignmentTarget, isObjectLiteralElementLike)
                 );
@@ -1057,8 +1057,8 @@ namespace ts {
     }
 
     function createPrivateInstanceFieldInitializer(receiver: LeftHandSideExpression, initializer: Expression | undefined, weakMapName: Identifier) {
-        return factory.createCall(
-            factory.createPropertyAccess(weakMapName, "set"),
+        return factory.createCallExpression(
+            factory.createPropertyAccessExpression(weakMapName, "set"),
             /*typeArguments*/ undefined,
             [receiver, initializer || factory.createVoidZero()]
         );

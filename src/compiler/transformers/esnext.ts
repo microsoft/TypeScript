@@ -40,11 +40,11 @@ namespace ts {
             if (isAccessExpression(left)) {
                 const tempVariable = factory.createTempVariable(hoistVariableDeclaration);
                 if (isPropertyAccessExpression(left)) {
-                    assignmentTarget = factory.createPropertyAccess(
+                    assignmentTarget = factory.createPropertyAccessExpression(
                         tempVariable,
                         left.name
                     );
-                    left = factory.createPropertyAccess(
+                    left = factory.createPropertyAccessExpression(
                         factory.createAssignment(
                             tempVariable,
                             left.expression
@@ -53,11 +53,11 @@ namespace ts {
                     );
                 }
                 else {
-                    assignmentTarget = factory.createElementAccess(
+                    assignmentTarget = factory.createElementAccessExpression(
                         tempVariable,
                         left.argumentExpression
                     );
-                    left = factory.createElementAccess(
+                    left = factory.createElementAccessExpression(
                         factory.createAssignment(
                             tempVariable,
                             left.expression
@@ -67,10 +67,10 @@ namespace ts {
                 }
             }
 
-            return factory.createBinary(
+            return factory.createBinaryExpression(
                 left,
                 nonAssignmentOperator,
-                factory.createParen(
+                factory.createParenthesizedExpression(
                     factory.createAssignment(
                         assignmentTarget,
                         right

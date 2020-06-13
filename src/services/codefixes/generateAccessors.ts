@@ -79,7 +79,7 @@ namespace ts.codefix {
 
     function createAccessorAccessExpression(fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
         const leftHead = isStatic ? (<ClassLikeDeclaration>container).name! : factory.createThis(); // TODO: GH#18217
-        return isIdentifier(fieldName) ? factory.createPropertyAccess(leftHead, fieldName) : factory.createElementAccess(leftHead, factory.createStringLiteralFromNode(fieldName));
+        return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName) : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
     }
 
     function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
@@ -138,7 +138,7 @@ namespace ts.codefix {
             /*parameters*/ undefined!, // TODO: GH#18217
             type,
             factory.createBlock([
-                factory.createReturn(
+                factory.createReturnStatement(
                     createAccessorAccessExpression(fieldName, isStatic, container)
                 )
             ], /*multiLine*/ true)

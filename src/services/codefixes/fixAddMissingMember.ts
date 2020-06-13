@@ -198,7 +198,7 @@ namespace ts.codefix {
     }
 
     function initializePropertyToUndefined(obj: Expression, propertyName: string) {
-        return factory.createExpressionStatement(factory.createAssignment(factory.createPropertyAccess(obj, propertyName), factory.createIdentifier("undefined")));
+        return factory.createExpressionStatement(factory.createAssignment(factory.createPropertyAccessExpression(obj, propertyName), factory.createIdentifier("undefined")));
     }
 
     function createActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContext, { parentDeclaration, declSourceFile, modifierFlags, token }: ClassOrInterfaceInfo): CodeFixAction[] | undefined {

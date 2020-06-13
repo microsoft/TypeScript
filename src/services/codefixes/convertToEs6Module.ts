@@ -31,7 +31,7 @@ namespace ts.codefix {
                     break;
                 case SyntaxKind.CallExpression:
                     if (isRequireCall(importNode, /*checkArgumentIsStringLiteralLike*/ false)) {
-                        changes.replaceNode(importingFile, importNode, factory.createPropertyAccess(getSynthesizedDeepClone(importNode), "default"));
+                        changes.replaceNode(importingFile, importNode, factory.createPropertyAccessExpression(getSynthesizedDeepClone(importNode), "default"));
                     }
                     break;
             }

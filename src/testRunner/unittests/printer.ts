@@ -146,9 +146,9 @@ namespace ts {
 
             printsCorrectly("newExpressionWithPropertyAccessOnCallExpression", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                factory.createNew(
-                    factory.createPropertyAccess(
-                        factory.createCall(factory.createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
+                factory.createNewExpression(
+                    factory.createPropertyAccessExpression(
+                        factory.createCallExpression(factory.createIdentifier("f"), /*typeArguments*/ undefined, /*argumentsArray*/ undefined),
                         "x"),
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ undefined
@@ -158,8 +158,8 @@ namespace ts {
 
             printsCorrectly("newExpressionOnConditionalExpression", {}, printer => printer.printNode(
                 EmitHint.Unspecified,
-                factory.createNew(
-                    factory.createConditional(
+                factory.createNewExpression(
+                    factory.createConditionalExpression(
                         factory.createIdentifier("x"), factory.createToken(SyntaxKind.QuestionToken),
                         factory.createIdentifier("y"), factory.createToken(SyntaxKind.ColonToken),
                         factory.createIdentifier("z")),

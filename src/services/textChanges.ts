@@ -803,7 +803,7 @@ namespace ts.textChanges {
         }
 
         public parenthesizeExpression(sourceFile: SourceFile, expression: Expression) {
-            this.replaceRange(sourceFile, rangeOfNode(expression), factory.createParen(expression));
+            this.replaceRange(sourceFile, rangeOfNode(expression), factory.createParenthesizedExpression(expression));
         }
 
         private finishClassesWithNodesInsertedAtStart(): void {
@@ -1415,7 +1415,7 @@ namespace ts.textChanges {
             switch (gp.kind) {
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.ForInStatement:
-                    changes.replaceNode(sourceFile, node, factory.createObjectLiteral());
+                    changes.replaceNode(sourceFile, node, factory.createObjectLiteralExpression());
                     break;
 
                 case SyntaxKind.ForStatement:

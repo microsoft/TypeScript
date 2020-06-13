@@ -410,7 +410,7 @@ namespace ts {
                 continue;
             }
             else if (!getRestIndicatorOfBindingOrAssignmentElement(element)) {
-                const rhsValue = flattenContext.context.factory.createElementAccess(value, i);
+                const rhsValue = flattenContext.context.factory.createElementAccessExpression(value, i);
                 flattenBindingOrAssignmentElement(flattenContext, element, rhsValue, /*location*/ element);
             }
             else if (i === numElements - 1) {
@@ -438,7 +438,7 @@ namespace ts {
      */
     function createDefaultValueCheck(flattenContext: FlattenContext, value: Expression, defaultValue: Expression, location: TextRange): Expression {
         value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
-        return flattenContext.context.factory.createConditional(flattenContext.context.factory.createTypeCheck(value, "undefined"), /*questionToken*/ undefined, defaultValue, /*colonToken*/ undefined, value);
+        return flattenContext.context.factory.createConditionalExpression(flattenContext.context.factory.createTypeCheck(value, "undefined"), /*questionToken*/ undefined, defaultValue, /*colonToken*/ undefined, value);
     }
 
     /**
@@ -454,15 +454,15 @@ namespace ts {
     function createDestructuringPropertyAccess(flattenContext: FlattenContext, value: Expression, propertyName: PropertyName): LeftHandSideExpression {
         if (isComputedPropertyName(propertyName)) {
             const argumentExpression = ensureIdentifier(flattenContext, visitNode(propertyName.expression, flattenContext.visitor), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
-            return flattenContext.context.factory.createElementAccess(value, argumentExpression);
+            return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
         }
         else if (isStringOrNumericLiteralLike(propertyName)) {
             const argumentExpression = factory.cloneNode(propertyName);
-            return flattenContext.context.factory.createElementAccess(value, argumentExpression);
+            return flattenContext.context.factory.createElementAccessExpression(value, argumentExpression);
         }
         else {
             const name = flattenContext.context.factory.createIdentifier(idText(propertyName));
-            return flattenContext.context.factory.createPropertyAccess(value, name);
+            return flattenContext.context.factory.createPropertyAccessExpression(value, name);
         }
     }
 
@@ -500,7 +500,7 @@ namespace ts {
     }
 
     function makeArrayAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
-        return factory.createArrayLiteral(map(elements, factory.converters.convertToArrayAssignmentElement));
+        return factory.createArrayLiteralExpression(map(elements, factory.converters.convertToArrayAssignmentElement));
     }
 
     function makeObjectBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
@@ -509,7 +509,7 @@ namespace ts {
     }
 
     function makeObjectAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
-        return factory.createObjectLiteral(map(elements, factory.converters.convertToObjectAssignmentElement));
+        return factory.createObjectLiteralExpression(map(elements, factory.converters.convertToObjectAssignmentElement));
     }
 
     function makeBindingElement(factory: NodeFactory, name: Identifier) {

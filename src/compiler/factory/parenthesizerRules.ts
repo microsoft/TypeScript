@@ -201,7 +201,7 @@ namespace ts {
             }
 
             return binaryOperandNeedsParentheses(binaryOperator, operand, isLeftSideOfBinary, leftOperand)
-                ? factory.createParen(operand)
+                ? factory.createParenthesizedExpression(operand)
                 : operand;
         }
 
@@ -215,7 +215,7 @@ namespace ts {
         }
 
         function parenthesizeExpressionOfComputedPropertyName(expression: Expression): Expression {
-            return isCommaSequence(expression) ? factory.createParen(expression) : expression;
+            return isCommaSequence(expression) ? factory.createParenthesizedExpression(expression) : expression;
         }
 
         function parenthesizeConditionOfConditionalExpression(condition: Expression): Expression {
@@ -223,7 +223,7 @@ namespace ts {
             const emittedCondition = skipPartiallyEmittedExpressions(condition);
             const conditionPrecedence = getExpressionPrecedence(emittedCondition);
             if (compareValues(conditionPrecedence, conditionalPrecedence) !== Comparison.GreaterThan) {
-                return factory.createParen(condition);
+                return factory.createParenthesizedExpression(condition);
             }
             return condition;
         }
@@ -234,7 +234,7 @@ namespace ts {
             // if should be wrapped in parens since comma operator has the lowest precedence
             const emittedExpression = skipPartiallyEmittedExpressions(branch);
             return isCommaSequence(emittedExpression)
-                ? factory.createParen(branch)
+                ? factory.createParenthesizedExpression(branch)
                 : branch;
         }
 
@@ -259,7 +259,7 @@ namespace ts {
                         needsParens = true;
                 }
             }
-            return needsParens ? factory.createParen(expression) : expression;
+            return needsParens ? factory.createParenthesizedExpression(expression) : expression;
         }
 
         /**
@@ -270,11 +270,11 @@ namespace ts {
             const leftmostExpr = getLeftmostExpression(expression, /*stopAtCallExpressions*/ true);
             switch (leftmostExpr.kind) {
                 case SyntaxKind.CallExpression:
-                    return factory.createParen(expression);
+                    return factory.createParenthesizedExpression(expression);
 
                 case SyntaxKind.NewExpression:
                     return !(leftmostExpr as NewExpression).arguments
-                        ? factory.createParen(expression)
+                        ? factory.createParenthesizedExpression(expression)
                         : expression as LeftHandSideExpression; // TODO(rbuckton): Verify this assertion holds
             }
 
@@ -300,17 +300,17 @@ namespace ts {
             }
 
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-            return setTextRange(factory.createParen(expression), expression);
+            return setTextRange(factory.createParenthesizedExpression(expression), expression);
         }
 
         function parenthesizeOperandOfPostfixUnary(operand: Expression): LeftHandSideExpression {
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-            return isLeftHandSideExpression(operand) ? operand : setTextRange(factory.createParen(operand), operand);
+            return isLeftHandSideExpression(operand) ? operand : setTextRange(factory.createParenthesizedExpression(operand), operand);
         }
 
         function parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression {
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-            return isUnaryExpression(operand) ? operand : setTextRange(factory.createParen(operand), operand);
+            return isUnaryExpression(operand) ? operand : setTextRange(factory.createParenthesizedExpression(operand), operand);
         }
 
         function parenthesizeExpressionsOfCommaDelimitedList(elements: NodeArray<Expression>): NodeArray<Expression> {
@@ -323,7 +323,7 @@ namespace ts {
             const expressionPrecedence = getExpressionPrecedence(emittedExpression);
             const commaPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, SyntaxKind.CommaToken);
             // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-            return expressionPrecedence > commaPrecedence ? expression : setTextRange(factory.createParen(expression), expression);
+            return expressionPrecedence > commaPrecedence ? expression : setTextRange(factory.createParenthesizedExpression(expression), expression);
         }
 
         function parenthesizeExpressionOfExpressionStatement(expression: Expression): Expression {
@@ -333,9 +333,9 @@ namespace ts {
                 const kind = skipPartiallyEmittedExpressions(callee).kind;
                 if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
                     // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-                    const updated = factory.updateCall(
+                    const updated = factory.updateCallExpression(
                         emittedExpression,
-                        setTextRange(factory.createParen(callee), callee),
+                        setTextRange(factory.createParenthesizedExpression(callee), callee),
                         emittedExpression.typeArguments,
                         emittedExpression.arguments
                     );
@@ -346,7 +346,7 @@ namespace ts {
             const leftmostExpressionKind = getLeftmostExpression(emittedExpression, /*stopAtCallExpressions*/ false).kind;
             if (leftmostExpressionKind === SyntaxKind.ObjectLiteralExpression || leftmostExpressionKind === SyntaxKind.FunctionExpression) {
                 // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-                return setTextRange(factory.createParen(expression), expression);
+                return setTextRange(factory.createParenthesizedExpression(expression), expression);
             }
 
             return expression;
@@ -355,7 +355,7 @@ namespace ts {
         function parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody {
             if (!isBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
                 // TODO(rbuckton): Verifiy whether `setTextRange` is needed.
-                return setTextRange(factory.createParen(body), body);
+                return setTextRange(factory.createParenthesizedExpression(body), body);
             }
 
             return body;

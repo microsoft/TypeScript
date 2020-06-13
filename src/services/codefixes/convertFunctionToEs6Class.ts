@@ -208,7 +208,7 @@ namespace ts.codefix {
                     }
                     // case 2: () => [1,2,3]
                     else {
-                        bodyBlock = factory.createBlock([factory.createReturn(arrowFunctionBody)]);
+                        bodyBlock = factory.createBlock([factory.createReturnStatement(arrowFunctionBody)]);
                     }
                     const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
                     const method = factory.createMethodDeclaration(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,

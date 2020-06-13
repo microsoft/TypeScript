@@ -847,15 +847,15 @@ namespace ts.refactor.extractSymbol {
         // replace range with function call
         const called = getCalledExpression(scope, range, functionNameText);
 
-        let call: Expression = factory.createCall(
+        let call: Expression = factory.createCallExpression(
             called,
             callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
-            call = factory.createYield(factory.createToken(SyntaxKind.AsteriskToken), call);
+            call = factory.createYieldExpression(factory.createToken(SyntaxKind.AsteriskToken), call);
         }
         if (range.facts & RangeFacts.IsAsyncFunction) {
-            call = factory.createAwait(call);
+            call = factory.createAwaitExpression(call);
         }
 
         if (exposedVariableDeclarations.length && !writes) {
@@ -958,22 +958,22 @@ namespace ts.refactor.extractSymbol {
                 newNodes.push(factory.createExpressionStatement(factory.createAssignment(assignments[0].name, call)));
 
                 if (range.facts & RangeFacts.HasReturn) {
-                    newNodes.push(factory.createReturn());
+                    newNodes.push(factory.createReturnStatement());
                 }
             }
             else {
                 // emit e.g.
                 //   { a, b, __return } = newFunction(a, b);
                 //   return __return;
-                newNodes.push(factory.createExpressionStatement(factory.createAssignment(factory.createObjectLiteral(assignments), call)));
+                newNodes.push(factory.createExpressionStatement(factory.createAssignment(factory.createObjectLiteralExpression(assignments), call)));
                 if (returnValueProperty) {
-                    newNodes.push(factory.createReturn(factory.createIdentifier(returnValueProperty)));
+                    newNodes.push(factory.createReturnStatement(factory.createIdentifier(returnValueProperty)));
                 }
             }
         }
         else {
             if (range.facts & RangeFacts.HasReturn) {
-                newNodes.push(factory.createReturn(call));
+                newNodes.push(factory.createReturnStatement(call));
             }
             else if (isReadonlyArray(range.range)) {
                 newNodes.push(factory.createExpressionStatement(call));
@@ -1060,7 +1060,7 @@ namespace ts.refactor.extractSymbol {
                 variableType,
                 initializer);
 
-            const localReference = factory.createPropertyAccess(
+            const localReference = factory.createPropertyAccessExpression(
                 rangeFacts & RangeFacts.InStaticRegion
                     ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
                     : factory.createThis(),
@@ -1256,7 +1256,7 @@ namespace ts.refactor.extractSymbol {
         const functionReference = factory.createIdentifier(functionNameText);
         if (isClassLike(scope)) {
             const lhs = range.facts & RangeFacts.InStaticRegion ? factory.createIdentifier(scope.name!.text) : factory.createThis(); // TODO: GH#18217
-            return factory.createPropertyAccess(lhs, functionReference);
+            return factory.createPropertyAccessExpression(lhs, functionReference);
         }
         else {
             return functionReference;
@@ -1271,7 +1271,7 @@ namespace ts.refactor.extractSymbol {
         }
         let returnValueProperty: string | undefined;
         let ignoreReturns = false;
-        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturn(<Expression>body)]);
+        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(<Expression>body)]);
         // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
         if (hasWritesOrVariableDeclarations || substitutions.size) {
             const rewrittenStatements = visitNodes(statements, visitor).slice();
@@ -1280,10 +1280,10 @@ namespace ts.refactor.extractSymbol {
                 // it is ok to know that range has at least one return since it we only allow unconditional returns
                 const assignments = getPropertyAssignmentsForWritesAndVariableDeclarations(exposedVariableDeclarations, writes);
                 if (assignments.length === 1) {
-                    rewrittenStatements.push(factory.createReturn(assignments[0].name));
+                    rewrittenStatements.push(factory.createReturnStatement(assignments[0].name));
                 }
                 else {
-                    rewrittenStatements.push(factory.createReturn(factory.createObjectLiteral(assignments)));
+                    rewrittenStatements.push(factory.createReturnStatement(factory.createObjectLiteralExpression(assignments)));
                 }
             }
             return { body: factory.createBlock(rewrittenStatements, /*multiLine*/ true), returnValueProperty };
@@ -1302,10 +1302,10 @@ namespace ts.refactor.extractSymbol {
                     assignments.unshift(factory.createPropertyAssignment(returnValueProperty, visitNode(node.expression, visitor)));
                 }
                 if (assignments.length === 1) {
-                    return factory.createReturn(assignments[0].name as Expression);
+                    return factory.createReturnStatement(assignments[0].name as Expression);
                 }
                 else {
-                    return factory.createReturn(factory.createObjectLiteral(assignments));
+                    return factory.createReturnStatement(factory.createObjectLiteralExpression(assignments));
                 }
             }
             else {
@@ -1844,7 +1844,7 @@ namespace ts.refactor.extractSymbol {
             }
             return isTypeNode
                 ? factory.createQualifiedName(<EntityName>prefix, factory.createIdentifier(symbol.name))
-                : factory.createPropertyAccess(<Expression>prefix, symbol.name);
+                : factory.createPropertyAccessExpression(<Expression>prefix, symbol.name);
         }
     }
 

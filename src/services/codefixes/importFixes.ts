@@ -777,7 +777,7 @@ namespace ts.codefix {
                     typeof name === "string" ? factory.createIdentifier(name) : name,
                     /*exclamationToken*/ undefined,
                     /*type*/ undefined,
-                    factory.createCall(factory.createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier]))],
+                    factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier]))],
                 NodeFlags.Const));
     }
 

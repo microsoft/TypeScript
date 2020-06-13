@@ -4292,7 +4292,7 @@ namespace ts {
                 if (type.flags & TypeFlags.NumberLiteral) {
                     const value = (<NumberLiteralType>type).value;
                     context.approximateLength += ("" + value).length;
-                    return factory.createLiteralTypeNode(value < 0 ? factory.createPrefix(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) : factory.createNumericLiteral(value));
+                    return factory.createLiteralTypeNode(value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) : factory.createNumericLiteral(value));
                 }
                 if (type.flags & TypeFlags.BigIntLiteral) {
                     context.approximateLength += (pseudoBigIntToString((<BigIntLiteralType>type).value).length) + 1;
@@ -5517,7 +5517,7 @@ namespace ts {
                         const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                         identifier.symbol = symbol;
 
-                        return index > 0 ? factory.createPropertyAccess(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
+                        return index > 0 ? factory.createPropertyAccessExpression(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
                     }
                     else {
                         if (firstChar === CharacterCodes.openBracket) {
@@ -5539,7 +5539,7 @@ namespace ts {
                             expression = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                             expression.symbol = symbol;
                         }
-                        return factory.createElementAccess(createExpressionFromSymbolChain(chain, index - 1), expression);
+                        return factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
                     }
                 }
             }
@@ -5562,7 +5562,7 @@ namespace ts {
                     return fromNameType;
                 }
                 if (isKnownSymbol(symbol)) {
-                    return factory.createComputedPropertyName(factory.createPropertyAccess(factory.createIdentifier("Symbol"), (symbol.escapedName as string).substr(3)));
+                    return factory.createComputedPropertyName(factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), (symbol.escapedName as string).substr(3)));
                 }
                 const rawName = unescapeLeadingUnderscores(symbol.escapedName);
                 return createPropertyNameNodeForIdentifierOrLiteral(rawName, singleQuote);
@@ -7577,7 +7577,7 @@ namespace ts {
                 const propName = getDestructuringPropertyName(node);
                 if (propName) {
                     const literal = setTextRange(parseNodeFactory.createStringLiteral(propName), node);
-                    const result = setTextRange(parseNodeFactory.createElementAccess(parentAccess, literal), node);
+                    const result = setTextRange(parseNodeFactory.createElementAccessExpression(parentAccess, literal), node);
                     setParent(literal, result);
                     setParent(result, node);
                     result.flowNode = parentAccess.flowNode;
@@ -7869,7 +7869,7 @@ namespace ts {
         }
 
         function getFlowTypeInConstructor(symbol: Symbol, constructor: ConstructorDeclaration) {
-            const reference = factory.createPropertyAccess(factory.createThis(), unescapeLeadingUnderscores(symbol.escapedName));
+            const reference = factory.createPropertyAccessExpression(factory.createThis(), unescapeLeadingUnderscores(symbol.escapedName));
             setParent(reference.expression, reference);
             setParent(reference, constructor);
             reference.flowNode = constructor.returnFlowNode;
@@ -34238,7 +34238,7 @@ namespace ts {
         }
 
         function isPropertyInitializedInConstructor(propName: Identifier | PrivateIdentifier, propType: Type, constructor: ConstructorDeclaration) {
-            const reference = factory.createPropertyAccess(factory.createThis(), propName);
+            const reference = factory.createPropertyAccessExpression(factory.createThis(), propName);
             setParent(reference.expression, reference);
             setParent(reference, constructor);
             reference.flowNode = constructor.returnFlowNode;

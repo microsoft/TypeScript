@@ -46,14 +46,14 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         let body: ConciseBody;
 
         if (actionName === addBracesActionName) {
-            const returnStatement = factory.createReturn(expression);
+            const returnStatement = factory.createReturnStatement(expression);
             body = factory.createBlock([returnStatement], /* multiLine */ true);
             suppressLeadingAndTrailingTrivia(body);
             copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
         }
         else if (actionName === removeBracesActionName && returnStatement) {
             const actualExpression = expression || factory.createVoidZero();
-            body = needsParentheses(actualExpression) ? factory.createParen(actualExpression) : actualExpression;
+            body = needsParentheses(actualExpression) ? factory.createParenthesizedExpression(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
             copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
