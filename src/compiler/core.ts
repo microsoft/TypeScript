@@ -1791,54 +1791,57 @@ namespace ts {
 
     /**
      * Given a name and a list of names that are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
-     * Names less than length 3 only check for case-insensitive equality, not Levenshtein distance.
+     * Names less than length 3 only check for case-insensitive equality.
      *
-     * If there is a candidate that's the same except for case, return that.
-     * If there is a candidate that's within one edit of the name, return that.
-     * Otherwise, return the candidate with the smallest Levenshtein distance,
+     * find the candidate with the smallest Levenshtein distance in a case-insensitive manner,
      *    except for candidates:
      *      * With no name
      *      * Whose length differs from the target name by more than 0.34 of the length of the name.
      *      * Whose levenshtein distance is more than 0.4 of the length of the name
      *        (0.4 allows 1 substitution/transposition for every 5 characters,
      *         and 1 insertion/deletion at 3 characters)
+     * if another candidates are found with same distance, select the one with smaller distance in a case-sensitive manner.
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
         const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
-        let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result isn't better than this, don't bother.
+        let bestDistance = Math.floor(name.length * 0.4); // If the best result is worse than this, don't bother.
+        let bestCaseSensitiveDistance = Infinity;
         let bestCandidate: T | undefined;
-        let justCheckExactMatches = false;
         const nameLowerCase = name.toLowerCase();
         for (const candidate of candidates) {
             const candidateName = getName(candidate);
             if (candidateName !== undefined && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference) {
                 const candidateNameLowerCase = candidateName.toLowerCase();
-                if (candidateNameLowerCase === nameLowerCase) {
-                    if (candidateName === name) {
-                        continue;
-                    }
-                    return candidate;
-                }
-                if (justCheckExactMatches) {
+                if (candidateName === name) {
                     continue;
                 }
-                if (candidateName.length < 3) {
-                    // Don't bother, user would have noticed a 2-character name having an extra character
+                // Don't bother, user would have noticed a 2-character name having an extra character
+                if (candidateName.length < 3 && candidateNameLowerCase !== nameLowerCase) {
                     continue;
                 }
-                // Only care about a result better than the best so far.
-                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance - 1);
+                // Only care about a result better or maybe better than the best so far.
+                const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance);
                 if (distance === undefined) {
                     continue;
                 }
-                if (distance < 3) {
-                    justCheckExactMatches = true;
-                    bestCandidate = candidate;
-                }
-                else {
-                    Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
+
+                Debug.assert(distance <= bestDistance); // Else `levenshteinWithMax` should return undefined
+
+                if (distance < bestDistance) {
                     bestDistance = distance;
                     bestCandidate = candidate;
+                    const newBestCaseSensitiveDistance = levenshteinWithMax(name, candidateName, Infinity);
+                    Debug.assert(newBestCaseSensitiveDistance !== undefined);
+                    bestCaseSensitiveDistance = newBestCaseSensitiveDistance;
+                }
+                else {
+                    const caseSensitiveDistance = levenshteinWithMax(name, candidateName, bestCaseSensitiveDistance - 1);
+                    if (caseSensitiveDistance === undefined) {
+                        continue;
+                    }
+                    bestDistance = distance;
+                    bestCandidate = candidate;
+                    bestCaseSensitiveDistance = caseSensitiveDistance;
                 }
             }
         }
