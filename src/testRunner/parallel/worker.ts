@@ -41,7 +41,7 @@ namespace Harness.Parallel.Worker {
             return class extends (base as typeof Mocha.Runnable) {
                 resetTimeout() {
                     this.clearTimeout();
-                    if (this.enableTimeouts()) {
+                    if (this.timeout() > 0) {
                         sendMessage({ type: "timeout", payload: { duration: this.timeout() || 1e9 } });
                         this.timer = true;
                     }

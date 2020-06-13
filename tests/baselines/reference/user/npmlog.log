@@ -4,14 +4,14 @@ node_modules/npmlog/log.js(83,12): error TS2551: Property '_pause' does not exis
 node_modules/npmlog/log.js(149,8): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
 node_modules/npmlog/log.js(154,13): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
 node_modules/npmlog/log.js(155,8): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
-node_modules/npmlog/log.js(194,37): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[any, ...any[]]'.
-  Property '0' is missing in type 'any[]' but required in type '[any, ...any[]]'.
+node_modules/npmlog/log.js(194,37): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[format: any, ...param: any[]]'.
+  Property '0' is missing in type 'any[]' but required in type '[format: any, ...param: any[]]'.
 node_modules/npmlog/log.js(218,12): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
 node_modules/npmlog/log.js(271,16): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buffer: string | Uint8Array, cb?: ((err?: Error | undefined) => void) | undefined): boolean', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | Uint8Array'.
       Type 'undefined' is not assignable to type 'string | Uint8Array'.
-  Overload 2 of 2, '(str: string | Uint8Array, encoding?: string | undefined, cb?: ((err?: Error | undefined) => void) | undefined): boolean', gave the following error.
+  Overload 2 of 2, '(str: string | Uint8Array, encoding?: "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" | undefined, cb?: ((err?: Error | undefined) => void) | undefined): boolean', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | Uint8Array'.
       Type 'undefined' is not assignable to type 'string | Uint8Array'.
 

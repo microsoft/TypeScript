@@ -3,7 +3,7 @@ tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(11,3): error 
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(14,4): error TS2540: Cannot assign to 'foo' because it is a read-only property.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(24,1): error TS7053: Element implicitly has an 'any' type because expression of type '1' can't be used to index type 'Both'.
   Property '1' does not exist on type 'Both'.
-tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(25,1): error TS2322: Type '"not ok"' is not assignable to type 'number'.
+tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(25,1): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(26,1): error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'Both'.
   Property '[sym]' does not exist on type 'Both'.
 
@@ -43,7 +43,7 @@ tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(26,1): error 
 !!! error TS7053:   Property '1' does not exist on type 'Both'.
     both[0] = 'not ok'
     ~~~~~~~
-!!! error TS2322: Type '"not ok"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     both[sym] = 'not ok'
     ~~~~~~~~~
 !!! error TS7053: Element implicitly has an 'any' type because expression of type 'unique symbol' can't be used to index type 'Both'.

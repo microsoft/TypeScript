@@ -1,0 +1,19 @@
+=== tests/cases/compiler/declarationEmitTypeParamMergedWithPrivate.ts ===
+export class Test<T> {
+>Test : Symbol(Test, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 18), Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 22))
+
+    private get T(): T {
+>T : Symbol(T, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 18), Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 22))
+>T : Symbol(T, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 18), Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 22))
+
+        throw "";
+    }
+
+    public test(): T {
+>test : Symbol(Test.test, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 3, 5))
+>T : Symbol(T, Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 18), Decl(declarationEmitTypeParamMergedWithPrivate.ts, 0, 22))
+
+        return null as any;
+    }
+}

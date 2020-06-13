@@ -392,6 +392,9 @@ namespace ts {
             case SyntaxKind.EqualsToken:
             case SyntaxKind.CommaToken:
             case SyntaxKind.QuestionQuestionToken:
+            case SyntaxKind.BarBarEqualsToken:
+            case SyntaxKind.AmpersandAmpersandEqualsToken:
+            case SyntaxKind.QuestionQuestionEqualsToken:
                 return true;
             default:
                 return false;

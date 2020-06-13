@@ -34,6 +34,7 @@ namespace vfs {
 
     export interface DiffOptions {
         includeChangedFileWithSameContent?: boolean;
+        baseIsNotShadowRoot?: boolean;
     }
 
     /**
@@ -697,7 +698,8 @@ namespace vfs {
          * Generates a `FileSet` patch containing all the entries in this `FileSystem` that are not in `base`.
          * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
          */
-        public diff(base = this.shadowRoot, options: DiffOptions = {}) {
+        public diff(base?: FileSystem | undefined, options: DiffOptions = {}) {
+            if (!base && !options.baseIsNotShadowRoot) base = this.shadowRoot;
             const differences: FileSet = {};
             const hasDifferences = base ?
                 FileSystem.rootDiff(differences, this, base, options) :
