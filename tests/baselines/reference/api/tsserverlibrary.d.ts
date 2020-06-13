@@ -488,13 +488,14 @@ declare namespace ts {
         Default = 512,
         Const = 2048,
         HasComputedJSDocModifiers = 4096,
+        Deprecated = 8192,
         HasComputedFlags = 536870912,
         AccessibilityModifier = 28,
         ParameterPropertyModifier = 92,
         NonPublicAccessibilityModifier = 24,
         TypeScriptModifier = 2270,
         ExportDefault = 513,
-        All = 3071
+        All = 11263
     }
     export enum JsxFlags {
         None = 0,

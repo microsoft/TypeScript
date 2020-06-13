@@ -13027,7 +13027,7 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (accessNode && prop?.isDeprecated) {
+                    if (accessNode && hasEffectiveModifierFlagsFromSymbol(prop, ModifierFlags.Deprecated)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                         errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                     }
@@ -21555,7 +21555,7 @@ namespace ts {
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
             const target = (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-            if (target.isDeprecated) {
+            if (hasEffectiveModifierFlagsFromSymbol(target, ModifierFlags.Deprecated)) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
             }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
@@ -24528,7 +24528,7 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
-                if (prop?.isDeprecated) {
+                if (hasEffectiveModifierFlagsFromSymbol(prop, ModifierFlags.Deprecated)) {
                     errorOrSuggestion(/* isError */ false, right, Diagnostics._0_is_deprecated, right.escapedText as string);
                 }
 
@@ -30353,13 +30353,15 @@ namespace ts {
                         checkTypeArgumentConstraints(node, typeParameters);
                     }
                 }
-                const symbol = getNodeLinks(node).resolvedSymbol!;
-                if (symbol?.isDeprecated) {
-                    const diagLocation = isTypeReferenceNode(node) && isQualifiedName(node.typeName) ? node.typeName.right : node;
-                    errorOrSuggestion(/* isError */ false, diagLocation, Diagnostics._0_is_deprecated, symbol.escapedName as string);
-                }
-                if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {
-                    error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
+                const symbol = getNodeLinks(node).resolvedSymbol;
+                if (symbol) {
+                    if (hasEffectiveModifierFlagsFromSymbol(symbol, ModifierFlags.Deprecated)) {
+                        const diagLocation = isTypeReferenceNode(node) && isQualifiedName(node.typeName) ? node.typeName.right : node;
+                        errorOrSuggestion(/* isError */ false, diagLocation, Diagnostics._0_is_deprecated, symbol.escapedName as string);
+                    }
+                    if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {
+                        error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
+                    }
                 }
             }
         }
@@ -34694,7 +34696,7 @@ namespace ts {
                     }
                 }
 
-                if (isImportSpecifier(node) && target.isDeprecated) {
+                if (isImportSpecifier(node) && hasEffectiveModifierFlagsFromSymbol(target, ModifierFlags.Deprecated)) {
                     errorOrSuggestion(/* isError */ false, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
             }

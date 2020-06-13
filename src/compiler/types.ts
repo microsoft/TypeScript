@@ -615,6 +615,8 @@ namespace ts {
         Default =            1 << 9,  // Function/Class (export default declaration)
         Const =              1 << 11, // Const enum
         HasComputedJSDocModifiers = 1 << 12, // Indicates the computed modifier flags include modifiers from JSDoc.
+
+        Deprecated =         1 << 13, // Deprecated tag.
         HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
         AccessibilityModifier = Public | Private | Protected,
@@ -624,7 +626,7 @@ namespace ts {
 
         TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const,
         ExportDefault = Export | Default,
-        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const
+        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated
     }
 
     export const enum JsxFlags {
@@ -4136,7 +4138,6 @@ namespace ts {
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
         /* @internal */ assignmentDeclarationMembers?: Map<Declaration>; // detected late-bound assignment declarations associated with the symbol
-        /* @internal */ isDeprecated?: boolean;
     }
 
     /* @internal */

@@ -4360,6 +4360,10 @@ namespace ts {
         return getSyntacticModifierFlags(node) & flags;
     }
 
+    export function hasEffectiveModifierFlagsFromSymbol(symbol: Symbol, flags: ModifierFlags): boolean {
+        return symbol.declarations.some(decl => !!getSelectedEffectiveModifierFlags(decl, flags));
+    }
+
     function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {
         if (node.kind >= SyntaxKind.FirstToken && node.kind <= SyntaxKind.LastToken) {
             return ModifierFlags.None;
