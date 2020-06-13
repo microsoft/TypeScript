@@ -3488,16 +3488,17 @@ namespace ts {
          * Attempts to find the symbol corresponding to the container a symbol is in - usually this
          * is just its' `.parent`, but for locals, this value is `undefined`
          */
-        function getContainersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined): Symbol[] | undefined {
+        function getContainersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags): Symbol[] | undefined {
             const container = getParentOfSymbol(symbol);
             // Type parameters end up in the `members` lists but are not externally visible
             if (container && !(symbol.flags & SymbolFlags.TypeParameter)) {
                 const additionalContainers = mapDefined(container.declarations, fileSymbolIfFileSymbolExportEqualsContainer);
                 const reexportContainers = enclosingDeclaration && getAlternativeContainingModules(symbol, enclosingDeclaration);
+                const objectLiteralContainer = getVariableDeclarationOfObjectLiteral(container, meaning);
                 if (enclosingDeclaration && getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)) {
-                    return concatenate(concatenate([container], additionalContainers), reexportContainers); // This order expresses a preference for the real container if it is in scope
+                    return append(concatenate(concatenate([container], additionalContainers), reexportContainers), objectLiteralContainer); // This order expresses a preference for the real container if it is in scope
                 }
-                const res = append(additionalContainers, container);
+                const res = append(append(additionalContainers, container), objectLiteralContainer);
                 return concatenate(res, reexportContainers);
             }
             const candidates = mapDefined(symbol.declarations, d => {
@@ -3519,6 +3520,18 @@ namespace ts {
 
             function fileSymbolIfFileSymbolExportEqualsContainer(d: Declaration) {
                 return container && getFileSymbolIfFileSymbolExportEqualsContainer(d, container);
+            }
+        }
+
+        function getVariableDeclarationOfObjectLiteral(symbol: Symbol, meaning: SymbolFlags) {
+            // If we're trying to reference some object literal in, eg `var a = { x: 1 }`, the symbol for the literal, `__object`, is distinct
+            // from the symbol of the declaration it is being assigned to. Since we can use the declaration to refer to the literal, however,
+            // we'd like to make that connection here - potentially causing us to paint the declaration's visibility, and therefore the literal.
+            const firstDecl: Node | false = !!length(symbol.declarations) && first(symbol.declarations);
+            if (meaning & SymbolFlags.Value && firstDecl && firstDecl.parent && isVariableDeclaration(firstDecl.parent)) {
+                if (isObjectLiteralExpression(firstDecl) && firstDecl === firstDecl.parent.initializer || isTypeLiteralNode(firstDecl) && firstDecl === firstDecl.parent.type) {
+                    return getSymbolOfNode(firstDecl.parent);
+                }
             }
         }
 
@@ -3915,16 +3928,7 @@ namespace ts {
                 // But it can't, hence the accessible is going to be undefined, but that doesn't mean m.c is inaccessible
                 // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
 
-                let containers = getContainersOfSymbol(symbol, enclosingDeclaration);
-                // If we're trying to reference some object literal in, eg `var a = { x: 1 }`, the symbol for the literal, `__object`, is distinct
-                // from the symbol of the declaration it is being assigned to. Since we can use the declaration to refer to the literal, however,
-                // we'd like to make that connection here - potentially causing us to paint the declaration's visibility, and therefore the literal.
-                const firstDecl: Node | false = !!length(symbol.declarations) && first(symbol.declarations);
-                if (!length(containers) && meaning & SymbolFlags.Value && firstDecl && isObjectLiteralExpression(firstDecl)) {
-                    if (firstDecl.parent && isVariableDeclaration(firstDecl.parent) && firstDecl === firstDecl.parent.initializer) {
-                        containers = [getSymbolOfNode(firstDecl.parent)];
-                    }
-                }
+                const containers = getContainersOfSymbol(symbol, enclosingDeclaration, meaning);
                 const parentResult = isAnySymbolAccessible(containers, enclosingDeclaration, initialSymbol, initialSymbol === symbol ? getQualifiedLeftMeaning(meaning) : meaning, shouldComputeAliasesToMakeVisible, allowModules);
                 if (parentResult) {
                     return parentResult;
@@ -5071,7 +5075,7 @@ namespace ts {
                         needsQualification(accessibleSymbolChain[0], context.enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
 
                         // Go up and add our parent.
-                        const parents = getContainersOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol, context.enclosingDeclaration);
+                        const parents = getContainersOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol, context.enclosingDeclaration, meaning);
                         if (length(parents)) {
                             parentSpecifiers = parents!.map(symbol =>
                                 some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)
@@ -22593,7 +22597,7 @@ namespace ts {
                             const id = lhs.expression;
                             const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, undefined, id.escapedText, /*isUse*/ true);
                             if (parentSymbol) {
-                                const annotated = getEffectiveTypeAnnotationNode(parentSymbol.valueDeclaration);
+                                const annotated = parentSymbol.valueDeclaration && getEffectiveTypeAnnotationNode(parentSymbol.valueDeclaration);
                                 if (annotated) {
                                     const nameStr = getElementOrPropertyAccessName(lhs);
                                     if (nameStr !== undefined) {
@@ -36117,15 +36121,16 @@ namespace ts {
         // Emitter support
 
         function isArgumentsLocalBinding(nodeIn: Identifier): boolean {
-            if (!isGeneratedIdentifier(nodeIn)) {
-                const node = getParseTreeNode(nodeIn, isIdentifier);
-                if (node) {
-                    const isPropertyName = node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node;
-                    return !isPropertyName && getReferencedValueSymbol(node) === argumentsSymbol;
-                }
-            }
-
-            return false;
+            // Note: does not handle isShorthandPropertyAssignment (and probably a few more)
+            if (isGeneratedIdentifier(nodeIn)) return false;
+            const node = getParseTreeNode(nodeIn, isIdentifier);
+            if (!node) return false;
+            const parent = node.parent;
+            if (!parent) return false;
+            const isPropertyName = ((isPropertyAccessExpression(parent)
+                                     || isPropertyAssignment(parent))
+                                    && parent.name === node);
+            return !isPropertyName && getReferencedValueSymbol(node) === argumentsSymbol;
         }
 
         function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
