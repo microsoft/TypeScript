@@ -740,6 +740,11 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocReadonlyTag, /*noCache*/ true);
     }
 
+    /** Gets the JSDoc deprecated tag for the node if present */
+    export function getJSDocDeprecatedTagNoCache(node: Node): JSDocDeprecatedTag | undefined {
+        return getFirstJSDocTag(node, isJSDocDeprecatedTag, /*noCache*/ true);
+    }
+
     /** Gets the JSDoc enum tag for the node if present */
     export function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined {
         return getFirstJSDocTag(node, isJSDocEnumTag);
@@ -758,11 +763,6 @@ namespace ts {
     /** Gets the JSDoc template tag for the node if present */
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined {
         return getFirstJSDocTag(node, isJSDocTemplateTag);
-    }
-
-    /** Gets the JSDoc deprecated tag for the node if present */
-    export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined {
-        return getFirstJSDocTag(node, isJSDocDeprecatedTag);
     }
 
     /** Gets the JSDoc type tag for the node if present and valid */

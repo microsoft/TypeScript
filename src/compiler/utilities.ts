@@ -4373,8 +4373,11 @@ namespace ts {
             node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
         }
 
-        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && isInJSFile(node) && node.parent) {
+        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
             node.modifierFlagsCache |= getJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
+        }
+
+        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && isInJSFile(node) && node.parent) {
         }
 
         return node.modifierFlagsCache & ~(ModifierFlags.HasComputedFlags | ModifierFlags.HasComputedJSDocModifiers);
@@ -4400,12 +4403,17 @@ namespace ts {
 
     function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
         let flags = ModifierFlags.None;
-        if (isInJSFile(node) && !!node.parent && !isParameter(node)) {
-            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.Public;
-            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
-            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
-            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
+        if (!!node.parent && !isParameter(node)) {
+            if (isInJSFile(node)) {
+                if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.Public;
+                if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
+                if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
+                if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
+    
+            }
+            if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
         }
+
         return flags;
     }
 
