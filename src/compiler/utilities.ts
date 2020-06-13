@@ -4361,7 +4361,7 @@ namespace ts {
     }
 
     export function hasEffectiveModifierFlagsFromSymbol(symbol: Symbol, flags: ModifierFlags): boolean {
-        return symbol.declarations?.some(decl => !!getSelectedEffectiveModifierFlags(decl, flags));
+        return !!symbol.declarations?.some(decl => !!getSelectedEffectiveModifierFlags(decl, flags));
     }
 
     function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {
