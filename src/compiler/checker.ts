@@ -16579,7 +16579,7 @@ namespace ts {
 
                 // For a generic type T, [...T] is assignable to T, T is assignable to readonly [...T], and T is assignable
                 // to [...T] when T is constrained to a mutable array or tuple type.
-                if (isSingleElementGenericTupleType(source) && getTypeArguments(source)[0] === target && !source.target.readonly  ||
+                if (isSingleElementGenericTupleType(source) && getTypeArguments(source)[0] === target && !source.target.readonly ||
                     isSingleElementGenericTupleType(target) && getTypeArguments(target)[0] === source && (target.target.readonly || isMutableArrayOrTuple(getBaseConstraintOfType(source) || source))) {
                     return Ternary.True;
                 }
