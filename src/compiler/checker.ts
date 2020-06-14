@@ -14446,9 +14446,12 @@ namespace ts {
                 if (typeVariable !== mappedTypeVariable) {
                     return mapType(getReducedType(mappedTypeVariable), t => {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
+                            if (isGenericTupleType(t)) {
+                                return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
+                            }
                             const replacementMapper = prependTypeMapping(typeVariable, t, mapper);
                             return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
-                                isTupleType(t) && !isGenericTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
+                                isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
                                 instantiateAnonymousType(type, replacementMapper);
                         }
                         return t;
@@ -14460,6 +14463,23 @@ namespace ts {
 
         function getModifiedReadonlyState(state: boolean, modifiers: MappedTypeModifiers) {
             return modifiers & MappedTypeModifiers.IncludeReadonly ? true : modifiers & MappedTypeModifiers.ExcludeReadonly ? false : state;
+        }
+
+        function instantiateMappedGenericTupleType(tupleType: TupleTypeReference, mappedType: MappedType, typeVariable: TypeVariable, mapper: TypeMapper) {
+            // When a tuple type is generic (i.e. when it contains variadic elements), we want to eagerly map the
+            // non-generic elements and defer mapping the generic elements. In order to facilitate this, we transform
+            // M<[A, B?, ...T, ...C[]] into [...M<[A]>, ...M<[B?]>, ...M<T>, ...M<C[]>] and then rely on tuple type
+            // normalization to resolve the non-generic parts of the resulting tuple.
+            const elementFlags = tupleType.target.elementFlags;
+            const elementTypes = map(getTypeArguments(tupleType), (t, i) => {
+                const singleton = elementFlags[i] & ElementFlags.Variadic ? t :
+                    elementFlags[i] & ElementFlags.Rest ? createArrayType(t) :
+                    createTupleType([t], [elementFlags[i]]);
+                // The singleton is never a generic tuple type, so it is safe to recurse here.
+                return instantiateMappedType(mappedType, prependTypeMapping(typeVariable, singleton, mapper));
+            });
+            const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, getMappedTypeModifiers(mappedType));
+            return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly);
         }
 
         function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
