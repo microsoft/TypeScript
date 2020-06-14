@@ -11513,17 +11513,12 @@ namespace ts {
                                 }
                             }
                         }
-                        // When an 'infer T' declaration is immediately contained in a rest parameter declaration
-                        // we infer an 'unknown[]' constraint.
-                        else if (grandParent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>grandParent).dotDotDotToken) {
+                        // When an 'infer T' declaration is immediately contained in a rest parameter declaration, a rest type
+                        // or a named rest tuple element, we infer an 'unknown[]' constraint.
+                        else if (grandParent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>grandParent).dotDotDotToken ||
+                            grandParent.kind === SyntaxKind.RestType ||
+                            grandParent.kind === SyntaxKind.NamedTupleMember && (<NamedTupleMember>grandParent).dotDotDotToken) {
                             inferences = append(inferences, createArrayType(unknownType));
-                        }
-                        // When an 'infer T' declaration is immediately contained in a rest type or a named rest tuple element
-                        // we infer an 'unknown[]' or 'readonly unknown[]' constraint.
-                        else if (grandParent.kind === SyntaxKind.RestType || grandParent.kind === SyntaxKind.NamedTupleMember && (<NamedTupleMember>grandParent).dotDotDotToken) {
-                            const tupleParent = grandParent.parent.parent;
-                            const readonly = tupleParent.kind === SyntaxKind.TypeOperator && (<TypeOperatorNode>tupleParent).operator === SyntaxKind.ReadonlyKeyword;
-                            inferences = append(inferences, createArrayType(unknownType, readonly));
                         }
                     }
                 }
@@ -12436,13 +12431,9 @@ namespace ts {
         function sliceTupleType(type: TupleTypeReference, index: number, endSkipCount = 0) {
             const target = type.target;
             const endIndex = getTypeReferenceArity(type) - endSkipCount;
-            return index > target.fixedLength ? getRestArrayTypeOfTupleType(type) || getEmptyTupleType(target.readonly) :
+            return index > target.fixedLength ? getRestArrayTypeOfTupleType(type) || createTupleType(emptyArray) :
                 createTupleType(getTypeArguments(type).slice(index, endIndex), target.elementFlags.slice(index, endIndex),
-                    target.readonly, target.labeledElementDeclarations && target.labeledElementDeclarations.slice(index, endIndex));
-        }
-
-        function getEmptyTupleType(readonly = false) {
-            return createTupleType(emptyArray, emptyArray, readonly);
+                    /*readonly*/ false, target.labeledElementDeclarations && target.labeledElementDeclarations.slice(index, endIndex));
         }
 
         function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
@@ -13370,6 +13361,19 @@ namespace ts {
             return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, AccessFlags.None) || (accessNode ? errorType : unknownType);
         }
 
+        function indexTypeLessThan(indexType: Type, limit: number) {
+            return everyType(indexType, t => {
+                if (t.flags & TypeFlags.StringOrNumberLiteral) {
+                    const propName = getPropertyNameFromType(<StringLiteralType | NumberLiteralType>t);
+                    if (isNumericLiteralName(propName)) {
+                        const index = +propName;
+                        return index >= 0 && index < limit;
+                    }
+                }
+                return false;
+            });
+        }
+
         function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None): Type | undefined {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
@@ -13386,7 +13390,7 @@ namespace ts {
             // preserve backwards compatibility. For example, an element access 'this["foo"]' has always been resolved
             // eagerly using the constraint type of 'this' at the given location.
             if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType) && isGenericObjectType(objectType) &&
-                !(isTupleType(objectType) && everyType(indexType, t => !!(t.flags & TypeFlags.NumberLiteral) && (<NumberLiteralType>indexType).value < objectType.target.fixedLength))) {
+                !(isTupleType(objectType) && indexTypeLessThan(indexType, objectType.target.fixedLength))) {
                 if (objectType.flags & TypeFlags.AnyOrUnknown) {
                     return objectType;
                 }
@@ -19418,12 +19422,11 @@ namespace ts {
                             }
                             if (fixedLength < targetArity - endFixedLength) {
                                 // Process elements that remain between the starting and ending fixed parts.
-                                const sourceReadonly = isTupleType(source) ? source.target.readonly : isReadonlyArrayType(source);
                                 let targetExcessIndex = fixedLength;
                                 let sourceExcessIndex = fixedLength;
                                 if (elementFlags[fixedLength] & ElementFlags.Variadic) {
                                     // When first non-fixed element in target is variadic, infer the slice between the fixed parts in the source.
-                                    inferFromTypes(isTupleType(source) ? sliceTupleType(source, fixedLength, endFixedLength) : source, elementTypes[fixedLength]);
+                                    inferFromTypes(isTupleType(source) ? sliceTupleType(source, fixedLength, endFixedLength) : createArrayType(getTypeArguments(source)[0]), elementTypes[fixedLength]);
                                     const sourceHasRest = sourceArity > 0 && (<TupleTypeReference>source).target.elementFlags[sourceArity - 1] & ElementFlags.Rest;
                                     targetExcessIndex = fixedLength + 1;
                                     sourceExcessIndex = sourceArity - endFixedLength - (sourceHasRest ? 1 : 0);
@@ -19433,7 +19436,7 @@ namespace ts {
                                 const sourceRestType = isTupleType(source) ? getElementTypeOfTupleType(source, sourceExcessIndex, endFixedLength) : getElementTypeOfArrayType(source);
                                 for (let i = targetExcessIndex; i < targetArity - endFixedLength; i++) {
                                     if (elementFlags[i] & ElementFlags.Variadic) {
-                                        inferFromTypes(sourceRestType ? createArrayType(sourceRestType) : getEmptyTupleType(sourceReadonly), elementTypes[i]);
+                                        inferFromTypes(sourceRestType ? createArrayType(sourceRestType) : createTupleType(emptyArray), elementTypes[i]);
                                     }
                                     else if (sourceRestType) {
                                         inferFromTypes(sourceRestType, elementTypes[i]);
