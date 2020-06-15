@@ -340,37 +340,6 @@ namespace ts {
                 }
             }
 
-            for (const externalImport of moduleInfo.externalImports) {
-                if (externalImport.kind !== SyntaxKind.ExportDeclaration) {
-                    continue;
-                }
-
-                if (!externalImport.exportClause) {
-                    // export * from ...
-                    continue;
-                }
-
-                if (isNamedExports(externalImport.exportClause)) {
-                    for (const element of externalImport.exportClause.elements) {
-                        // write name of indirectly exported entry, i.e. 'export {x} from ...'
-                        exportedNames.push(
-                            factory.createPropertyAssignment(
-                                factory.createStringLiteral(idText(element.name || element.propertyName)),
-                                factory.createTrue()
-                            )
-                        );
-                    }
-                }
-                else {
-                    exportedNames.push(
-                        factory.createPropertyAssignment(
-                            factory.createStringLiteral(idText(externalImport.exportClause.name)),
-                            factory.createTrue()
-                        )
-                    );
-                }
-            }
-
             const exportedNamesStorageRef = factory.createUniqueName("exportedNames");
             statements.push(
                 factory.createVariableStatement(
