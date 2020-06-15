@@ -33533,7 +33533,7 @@ namespace ts {
         function checkThrowStatement(node: ThrowStatement) {
             // Grammar checking
             if (!checkGrammarStatementInAmbientContext(node)) {
-                if (node.expression === undefined) {
+                if (isIdentifier(node.expression) && !node.expression.escapedText) {
                     grammarErrorAfterFirstToken(node, Diagnostics.Line_break_not_permitted_here);
                 }
             }

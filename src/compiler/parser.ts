@@ -8,6 +8,12 @@ namespace ts {
         JSDoc = 1 << 5,
     }
 
+    const enum SpeculationKind {
+        TryParse,
+        Lookahead,
+        Reparse
+    }
+
     let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
@@ -704,6 +710,33 @@ namespace ts {
 
         const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
 
+        const reparseContext: TransformationContext = {
+            get factory() { return factory; },
+            enableEmitNotification: notImplemented,
+            enableSubstitution: notImplemented,
+            endLexicalEnvironment: returnUndefined,
+            getCompilerOptions: notImplemented,
+            getEmitHost: notImplemented,
+            getEmitResolver: notImplemented,
+            getEmitHelperFactory: notImplemented,
+            setLexicalEnvironmentFlags: notImplemented,
+            getLexicalEnvironmentFlags: notImplemented,
+            hoistFunctionDeclaration: notImplemented,
+            hoistVariableDeclaration: notImplemented,
+            addInitializationStatement: notImplemented,
+            isEmitNotificationEnabled: notImplemented,
+            isSubstitutionEnabled: notImplemented,
+            onEmitNode: notImplemented,
+            onSubstituteNode: notImplemented,
+            readEmitHelpers: notImplemented,
+            requestEmitHelper: notImplemented,
+            resumeLexicalEnvironment: noop,
+            startLexicalEnvironment: noop,
+            suspendLexicalEnvironment: noop,
+            addDiagnostic: notImplemented,
+        };
+
+
         let fileName: string;
         let sourceFlags: NodeFlags;
         let sourceText: string;
@@ -988,8 +1021,6 @@ namespace ts {
             processCommentPragmas(sourceFile as {} as PragmaContext, sourceText);
             processPragmasIntoFields(sourceFile as {} as PragmaContext, reportPragmaDiagnostic);
 
-            setExternalModuleIndicator(sourceFile);
-
             sourceFile.commentDirectives = scanner.getCommentDirectives();
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
@@ -1021,6 +1052,121 @@ namespace ts {
             return node;
         }
 
+        function reparseTopLevelAwait(sourceFile: SourceFile) {
+            return visitEachChild(sourceFile, visitor, reparseContext);
+
+            function visitor(node: Node): VisitResult<Node> {
+                if (!(node.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait)) {
+                    return node;
+                }
+                switch (node.kind) {
+                    case SyntaxKind.Decorator: return reparseDecorator(node as Decorator);
+                    case SyntaxKind.ComputedPropertyName: return reparseComputedPropertyName(node as ComputedPropertyName);
+                    case SyntaxKind.ExpressionWithTypeArguments: return reparseExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
+                    case SyntaxKind.ExpressionStatement: return reparseExpressionStatement(node as ExpressionStatement);
+                    case SyntaxKind.IfStatement: return reparseIfStatement(node as IfStatement);
+                    case SyntaxKind.SwitchStatement: return reparseSwitchStatement(node as SwitchStatement);
+                    case SyntaxKind.WithStatement: return reparseWithStatement(node as WithStatement);
+                    case SyntaxKind.DoStatement: return reparseDoStatement(node as DoStatement);
+                    case SyntaxKind.WhileStatement: return reparseWhileStatement(node as WhileStatement);
+                    case SyntaxKind.ForStatement: return reparseForStatement(node as ForStatement);
+                    case SyntaxKind.ForInStatement: return reparseForInStatement(node as ForInStatement);
+                    case SyntaxKind.ForOfStatement: return reparseForOfStatement(node as ForOfStatement);
+                    case SyntaxKind.ReturnStatement: return reparseReturnStatement(node as ReturnStatement);
+                    case SyntaxKind.ThrowStatement: return reparseThrowStatement(node as ThrowStatement);
+                    case SyntaxKind.ExportAssignment: return reparseExportAssignment(node as ExportAssignment);
+                    case SyntaxKind.VariableDeclaration: return reparseVariableDeclaration(node as VariableDeclaration);
+                    case SyntaxKind.BindingElement: return reparseBindingElement(node as BindingElement);
+                    default: return visitEachChild(node, visitor, reparseContext);
+                }
+            }
+
+            function reparse<T extends Node>(node: T, parse: () => T): T | Expression;
+            function reparse<T extends Node>(node: T | undefined, parse: () => T): T | Expression | undefined;
+            function reparse<T extends Node>(node: T | undefined, parse: () => T) {
+                if (node && node.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
+                    if (isExpression(node)) {
+                        return speculationHelper(() => {
+                            scanner.setTextPos(node.pos);
+                            contextFlags = node.flags & NodeFlags.ContextFlags;
+                            nextToken();
+                            return doInAwaitContext(parse);
+                        }, SpeculationKind.Reparse);
+                    }
+                    return visitEachChild(node, visitor, reparseContext);
+                }
+                return node;
+            }
+
+            function reparseExpressionStatement(node: ExpressionStatement) {
+                return factory.updateExpressionStatement(node, reparse(node.expression, parseExpression));
+            }
+
+            function reparseReturnStatement(node: ReturnStatement) {
+                return factory.updateReturnStatement(node, reparse(node.expression, parseExpression));
+            }
+
+            function reparseThrowStatement(node: ThrowStatement) {
+                return factory.updateThrowStatement(node, reparse(node.expression, parseExpression));
+            }
+
+            function reparseIfStatement(node: IfStatement) {
+                return factory.updateIfStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.thenStatement, visitor), ts.visitNode(node.elseStatement, visitor));
+            }
+
+            function reparseSwitchStatement(node: SwitchStatement) {
+                return factory.updateSwitchStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.caseBlock, visitor));
+            }
+
+            function reparseWithStatement(node: WithStatement) {
+                return factory.updateWithStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor));
+            }
+
+            function reparseDoStatement(node: DoStatement) {
+                return factory.updateDoStatement(node, ts.visitNode(node.statement, visitor), reparse(node.expression, parseExpression));
+            }
+
+            function reparseWhileStatement(node: WhileStatement) {
+                return factory.updateWhileStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor));
+            }
+
+            function reparseForStatement(node: ForStatement) {
+                return factory.updateForStatement(node, reparse(node.initializer, parseExpression), reparse(node.condition, parseExpression), reparse(node.incrementor, parseExpression), ts.visitNode(node, visitor));
+            }
+
+            function reparseForInStatement(node: ForInStatement) {
+                return factory.updateForInStatement(node, reparse(node.initializer, parseExpression), reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor));
+            }
+
+            function reparseForOfStatement(node: ForOfStatement) {
+                return factory.updateForOfStatement(node, node.awaitModifier, reparse(node.initializer, parseExpression), reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor));
+            }
+
+            function reparseExportAssignment(node: ExportAssignment) {
+                return factory.updateExportAssignment(node, ts.visitNodes(node.decorators, visitor), node.modifiers, reparse(node.expression, parseExpression));
+            }
+
+            function reparseExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
+                return factory.updateExpressionWithTypeArguments(node, reparse(node.expression, parseLeftHandSideExpressionOrHigher), node.typeArguments);
+            }
+
+            function reparseDecorator(node: Decorator) {
+                return factory.updateDecorator(node, reparse(node.expression, parseLeftHandSideExpressionOrHigher));
+            }
+
+            function reparseComputedPropertyName(node: ComputedPropertyName) {
+                return factory.updateComputedPropertyName(node, reparse(node.expression, parseExpression));
+            }
+
+            function reparseVariableDeclaration(node: VariableDeclaration) {
+                return factory.updateVariableDeclaration(node, ts.visitNode(node.name, visitor), node.exclamationToken, node.type, reparse(node.initializer, parseExpression));
+            }
+
+            function reparseBindingElement(node: BindingElement) {
+                return factory.updateBindingElement(node, node.dotDotDotToken, ts.visitNode(node.propertyName, visitor), ts.visitNode(node.name, visitor), reparse(node.initializer, parseExpression));
+            }
+        }
+
         export function fixupParentReferences(rootNode: Node) {
             // normally parent references are set during binding. However, for clients that only need
             // a syntax tree, and no semantic features, then the binding process is an unnecessary
@@ -1032,8 +1178,15 @@ namespace ts {
         function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind, isDeclarationFile: boolean, statements: readonly Statement[], endOfFileToken: EndOfFileToken, flags: NodeFlags): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
-            const sourceFile = factory.createSourceFile(statements, endOfFileToken, flags);
+            let sourceFile = factory.createSourceFile(statements, endOfFileToken, flags);
             setTextRangePosWidth(sourceFile, 0, sourceText.length);
+            setExternalModuleIndicator(sourceFile);
+
+            // If we parsed this as an external module, it may contain top-level await
+            if (isExternalModule(sourceFile) && sourceFile.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
+                sourceFile = reparseTopLevelAwait(sourceFile);
+            }
+
             sourceFile.text = sourceText;
             sourceFile.bindDiagnostics = [];
             sourceFile.bindSuggestionDiagnostics = undefined;
@@ -1265,7 +1418,7 @@ namespace ts {
             return currentToken = scanner.scanJsxAttributeValue();
         }
 
-        function speculationHelper<T>(callback: () => T, isLookAhead: boolean): T {
+        function speculationHelper<T>(callback: () => T, speculationKind: SpeculationKind): T {
             // Keep track of the state we'll need to rollback to if lookahead fails (or if the
             // caller asked us to always reset our state).
             const saveToken = currentToken;
@@ -1281,7 +1434,7 @@ namespace ts {
             // If we're only looking ahead, then tell the scanner to only lookahead as well.
             // Otherwise, if we're actually speculatively parsing, then tell the scanner to do the
             // same.
-            const result = isLookAhead
+            const result = speculationKind !== SpeculationKind.TryParse
                 ? scanner.lookAhead(callback)
                 : scanner.tryScan(callback);
 
@@ -1289,9 +1442,11 @@ namespace ts {
 
             // If our callback returned something 'falsy' or we're just looking ahead,
             // then unconditionally restore us to where we were.
-            if (!result || isLookAhead) {
+            if (!result || speculationKind !== SpeculationKind.TryParse) {
                 currentToken = saveToken;
-                parseDiagnostics.length = saveParseDiagnosticsLength;
+                if (speculationKind !== SpeculationKind.Reparse) {
+                    parseDiagnostics.length = saveParseDiagnosticsLength;
+                }
                 parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
             }
 
@@ -1303,7 +1458,7 @@ namespace ts {
          * is returned from this function.
          */
         function lookAhead<T>(callback: () => T): T {
-            return speculationHelper(callback, /*isLookAhead*/ true);
+            return speculationHelper(callback, SpeculationKind.Lookahead);
         }
 
         /** Invokes the provided callback.  If the callback returns something falsy, then it restores
@@ -1312,7 +1467,7 @@ namespace ts {
          * of invoking the callback is returned from this function.
          */
         function tryParse<T>(callback: () => T): T {
-            return speculationHelper(callback, /*isLookAhead*/ false);
+            return speculationHelper(callback, SpeculationKind.TryParse);
         }
 
         // Ignore strict mode flag because we will report an error in type checker instead.
@@ -3784,7 +3939,6 @@ namespace ts {
 
         function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined): ArrowFunction {
             Debug.assert(token() === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
-
             const parameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
@@ -3800,7 +3954,6 @@ namespace ts {
             const equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
             const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier);
             const node = factory.createArrowFunction(asyncModifier, /*typeParameters*/ undefined, parameters, /*type*/ undefined, equalsGreaterThanToken, body);
-
             return addJSDocComment(finishNode(node, pos));
         }
 
@@ -4028,20 +4181,20 @@ namespace ts {
             let parameters: NodeArray<ParameterDeclaration>;
             if (!parseExpected(SyntaxKind.OpenParenToken)) {
                 if (!allowAmbiguity) {
-                    return undefined;
+                            return undefined;
                 }
                 parameters = createMissingList<ParameterDeclaration>();
             }
             else {
                 parameters = parseParametersWorker(isAsync);
                 if (!parseExpected(SyntaxKind.CloseParenToken) && !allowAmbiguity) {
-                    return undefined;
+                            return undefined;
                 }
             }
 
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             if (type && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(type)) {
-                return undefined;
+                    return undefined;
             }
 
             // Parsing a signature isn't enough.
@@ -4056,7 +4209,7 @@ namespace ts {
             const hasJSDocFunctionType = type && isJSDocFunctionType(type);
             if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (hasJSDocFunctionType || token() !== SyntaxKind.OpenBraceToken)) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
-                return undefined;
+                    return undefined;
             }
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
@@ -5492,12 +5645,15 @@ namespace ts {
             // Because of automatic semicolon insertion, we need to report error if this
             // throw could be terminated with a semicolon.  Note: we can't call 'parseExpression'
             // directly as that might consume an expression on the following line.
-            // We just return 'undefined' in that case.  The actual error will be reported in the
-            // grammar walker.
-            // TODO(rbuckton): Should we use `createMissingNode` here instead?
-            const expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
+            // Instead, we create a "missing" identifier, but don't report an error. The actual error
+            // will be reported in the grammar walker.
+            let expression = scanner.hasPrecedingLineBreak() ? undefined : allowInAnd(parseExpression);
+            if (expression === undefined) {
+                identifierCount++;
+                expression = finishNode(factory.createIdentifier(""), getNodePos());
+            }
             parseSemicolon();
-            return finishNode(factory.createThrowStatement(expression!), pos);
+            return finishNode(factory.createThrowStatement(expression), pos);
         }
 
         // TODO: Review for error recovery

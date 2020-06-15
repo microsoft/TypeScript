@@ -1,0 +1,54 @@
+=== tests/cases/conformance/externalModules/topLevelAwaitErrors.ts ===
+export const x = 1;
+>x : 1
+>1 : 1
+
+// reparse call as invalid await should error
+await (x,);
+>await (x,) : any
+>(x,) : any
+>x, : any
+>x : 1
+> : any
+
+await <number, string>(x);
+>await <number, string>(x) : boolean
+>await <number : number
+><number : number
+> : any
+>string>(x) : boolean
+>string : any
+>(x) : 1
+>x : 1
+
+// reparse tagged template as invalid await should error
+await <number, string> ``;
+>await <number, string> `` : boolean
+>await <number : number
+><number : number
+> : any
+>string> `` : boolean
+>string : any
+>`` : ""
+
+// reparse variable names and patterns as await should fail
+var await = 1;
+>await : number
+>1 : 1
+
+var {await} = {await:1};
+>await : number
+>{await:1} : { await: number; }
+>await : number
+>1 : 1
+
+var [await] = [1];
+>await : number
+>[1] : [number]
+>1 : 1
+
+// reparse class extends clause should fail
+class C extends await<string> {
+>C : C
+> : any
+}

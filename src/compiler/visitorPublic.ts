@@ -838,7 +838,7 @@ namespace ts {
 
             case SyntaxKind.ThrowStatement:
                 return factory.updateThrowStatement(<ThrowStatement>node,
-                    nodeVisitor((<ThrowStatement>node).expression!, visitor, isExpression)); // expression could be `undefined` due to invalid parse.
+                    nodeVisitor((<ThrowStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.TryStatement:
                 return factory.updateTryStatement(<TryStatement>node,
