@@ -1,4 +1,3 @@
-// @noUnusedLocals: false
 // @Filename: a.ts
 //// export namespace foo {
 ////     /** @deprecated */

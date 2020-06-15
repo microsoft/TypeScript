@@ -1,0 +1,109 @@
+=== tests/cases/conformance/jsdoc/a.ts ===
+export namespace foo {
+>foo : typeof foo
+
+    /** @deprecated */
+    export function faff () { }
+>faff : () => void
+
+    faff()
+>faff() : void
+>faff : () => void
+}
+const a = foo.faff() 
+>a : void
+>foo.faff() : void
+>foo.faff : () => void
+>foo : typeof foo
+>faff : () => void
+
+foo["faff"]
+>foo["faff"] : () => void
+>foo : typeof foo
+>"faff" : "faff"
+
+const { faff } = foo
+>faff : () => void
+>foo : typeof foo
+
+faff()
+>faff() : void
+>faff : () => void
+
+/** @deprecated */
+export function bar () {
+>bar : () => void
+
+    foo?.faff()
+>foo?.faff() : void
+>foo?.faff : () => void
+>foo : typeof foo
+>faff : () => void
+}
+foo?.["faff"]?.()
+>foo?.["faff"]?.() : void
+>foo?.["faff"] : () => void
+>foo : typeof foo
+>"faff" : "faff"
+
+bar();
+>bar() : void
+>bar : () => void
+
+/** @deprecated */
+export interface Foo {
+    /** @deprecated */
+    zzz: number
+>zzz : number
+}
+/** @deprecated */
+export type QW = Foo["zzz"]
+>QW : number
+
+export type WQ = QW
+>WQ : number
+
+=== tests/cases/conformance/jsdoc/b.ts ===
+import * as f from './a';
+>f : typeof f
+
+import { bar, QW } from './a';
+>bar : () => void
+>QW : any
+
+f.bar();
+>f.bar() : void
+>f.bar : () => void
+>f : typeof f
+>bar : () => void
+
+f.foo.faff();
+>f.foo.faff() : void
+>f.foo.faff : () => void
+>f.foo : typeof f.foo
+>f : typeof f
+>foo : typeof f.foo
+>faff : () => void
+
+bar();
+>bar() : void
+>bar : () => void
+
+type Z = QW;
+>Z : number
+
+type A = f.Foo;
+>A : f.Foo
+>f : any
+
+type B = f.QW;
+>B : number
+>f : any
+
+type C = f.WQ;
+>C : number
+>f : any
+
+type O = Z | A | B | C;
+>O : O
+
