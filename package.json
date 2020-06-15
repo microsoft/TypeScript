@@ -29,7 +29,7 @@
         "node": ">=4.2.0"
     },
     "devDependencies": {
-        "@octokit/rest": "latest",
+        "@octokit/rest": "17.11.2",
         "@types/browserify": "latest",
         "@types/chai": "latest",
         "@types/convert-source-map": "latest",
