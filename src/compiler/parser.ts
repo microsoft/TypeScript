@@ -702,7 +702,7 @@ namespace ts {
             createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0))
         };
 
-        const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters, baseNodeFactory);
+        const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
 
         let fileName: string;
         let sourceFlags: NodeFlags;
@@ -818,10 +818,6 @@ namespace ts {
             initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind);
 
             const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind);
-
-            if (setParentNodes) {
-                fixupParentReferences(result);
-            }
 
             clearState();
 
@@ -992,6 +988,8 @@ namespace ts {
             processCommentPragmas(sourceFile as {} as PragmaContext, sourceText);
             processPragmasIntoFields(sourceFile as {} as PragmaContext, reportPragmaDiagnostic);
 
+            setExternalModuleIndicator(sourceFile);
+
             sourceFile.commentDirectives = scanner.getCommentDirectives();
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
@@ -1001,7 +999,6 @@ namespace ts {
                 sourceFile.jsDocDiagnostics = attachFileToDiagnostics(jsDocDiagnostics, sourceFile);
             }
 
-            setExternalModuleIndicator(sourceFile);
             if (setParentNodes) {
                 fixupParentReferences(sourceFile);
             }

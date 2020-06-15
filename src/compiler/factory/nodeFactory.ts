@@ -10,6 +10,8 @@ namespace ts {
         NoNodeConverters = 1 << 1,
         // Ensures new `PropertyAccessExpression` nodes are created with the `NoIndentation` emit flag set.
         NoIndentationOnFreshPropertyAccess = 1 << 2,
+        // Do not set an `original` pointer when updating a node.
+        NoOriginalNode = 1 << 3,
     }
 
     /**
@@ -19,6 +21,8 @@ namespace ts {
      */
     /* @internal */
     export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNodeFactory): NodeFactory {
+        const update = flags & NodeFactoryFlags.NoOriginalNode ? updateWithoutOriginal : updateWithOriginal;
+
         // Lazily load the parenthesizer, node converters, and some factory methods until they are used.
         const parenthesizerRules = memoize(() => flags & NodeFactoryFlags.NoParenthesizerRules ? nullParenthesizerRules : createParenthesizerRules(factory));
         const converters = memoize(() => flags & NodeFactoryFlags.NoNodeConverters ? nullNodeConverters : createNodeConverters(factory));
@@ -4753,7 +4757,7 @@ namespace ts {
             hasNoDefaultLib: boolean,
             libReferences: readonly FileReference[]
         ) {
-            const node = createBaseNode<SourceFile>(SyntaxKind.SourceFile);
+            const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
             for (const p in source) {
                 if (p === "emitNode" || hasProperty(node, p) || !hasProperty(source, p)) continue;
                 (node as any)[p] = (source as any)[p];
@@ -5680,7 +5684,14 @@ namespace ts {
         }
     }
 
-    function update<T extends Node>(updated: T, original: T): T {
+    function updateWithoutOriginal<T extends Node>(updated: T, original: T): T {
+        if (updated !== original) {
+            setTextRange(updated, original);
+        }
+        return updated;
+    }
+
+    function updateWithOriginal<T extends Node>(updated: T, original: T): T {
         if (updated !== original) {
             setOriginalNode(updated, original);
             setTextRange(updated, original);
