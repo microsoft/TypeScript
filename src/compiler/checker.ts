@@ -21558,8 +21558,8 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
-            const target = (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-            if (hasEffectiveModifierFlagsFromSymbol(target, ModifierFlags.Deprecated)) {
+            // const target = (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+            if (hasEffectiveModifierFlagsFromSymbol(symbol, ModifierFlags.Deprecated)) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
             }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
