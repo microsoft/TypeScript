@@ -741,6 +741,11 @@ namespace ts {
     }
 
     /** Gets the JSDoc deprecated tag for the node if present */
+    export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined {
+        return getFirstJSDocTag(node, isJSDocDeprecatedTag);
+    }
+
+    /*@internal */
     export function getJSDocDeprecatedTagNoCache(node: Node): JSDocDeprecatedTag | undefined {
         return getFirstJSDocTag(node, isJSDocDeprecatedTag, /*noCache*/ true);
     }
