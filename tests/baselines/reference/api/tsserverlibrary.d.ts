@@ -3551,7 +3551,7 @@ declare namespace ts {
     /** Gets the JSDoc protected tag for the node if present */
     function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined;
     /** Gets the JSDoc deprecated tag for the node if present */
-    function getJSDocDeprecatedTagNoCache(node: Node): JSDocDeprecatedTag | undefined;
+    function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined;
     /** Gets the JSDoc enum tag for the node if present */
     function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined;
     /** Gets the JSDoc this tag for the node if present */
