@@ -134,7 +134,7 @@ type Q11 = Shape["width" | "height"];  // number
 >Q11 : number
 
 type Q12 = Shape["name" | "visible"];  // string | boolean
->Q12 : string | boolean
+>Q12 : Q12
 
 type Q20 = Shape[NAME];  // string
 >Q20 : string
@@ -231,8 +231,8 @@ function f10(shape: Shape) {
 >"height" : "height"
 
     let nameOrVisible = getProperty(shape, cond ? "name" : "visible");  // string | boolean
->nameOrVisible : string | boolean
->getProperty(shape, cond ? "name" : "visible") : string | boolean
+>nameOrVisible : Q12
+>getProperty(shape, cond ? "name" : "visible") : Q12
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >cond ? "name" : "visible" : "name" | "visible"
@@ -397,8 +397,8 @@ function f20(component: Component<Shape>) {
 >"height" : "height"
 
     let nameOrVisible = component.getProperty(cond ? "name" : "visible");  // string | boolean
->nameOrVisible : string | boolean
->component.getProperty(cond ? "name" : "visible") : string | boolean
+>nameOrVisible : Q12
+>component.getProperty(cond ? "name" : "visible") : Q12
 >component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
 >component : Component<Shape>
 >getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
@@ -474,8 +474,8 @@ function f30(shapes: Shape[]) {
 >"width" : "width"
 
     let nameOrVisibles = pluck(shapes, cond ? "name" : "visible");  // (string | boolean)[]
->nameOrVisibles : (string | boolean)[]
->pluck(shapes, cond ? "name" : "visible") : (string | boolean)[]
+>nameOrVisibles : Q12[]
+>pluck(shapes, cond ? "name" : "visible") : Q12[]
 >pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
 >shapes : Shape[]
 >cond ? "name" : "visible" : "name" | "visible"
@@ -959,8 +959,8 @@ function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[
 >'a' : "a"
 
     let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
->b : string | boolean
->func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b') : string | boolean
+>b : Q12
+>func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b') : Q12
 >func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >a : number

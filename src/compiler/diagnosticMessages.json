@@ -3509,6 +3509,10 @@
         "category": "Error",
         "code": 5083
     },
+    "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 5088
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
