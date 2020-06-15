@@ -4361,7 +4361,7 @@ namespace ts {
     }
 
     export function hasEffectiveModifierFlagsFromSymbol(symbol: Symbol, flags: ModifierFlags): boolean {
-        return !!(symbol.valueDeclaration && getSelectedEffectiveModifierFlags(symbol.valueDeclaration, flags));
+        return flags && !!symbol.declarations?.some(decl => !!getJSDocDeprecatedTagNoCache(decl));
     }
 
     function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {
