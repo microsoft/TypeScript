@@ -423,7 +423,7 @@ interface Symbol {
                         subScenario,
                         baseFs,
                         newSys,
-                        commandLineArgs,
+                        commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
                         incrementalModifyFs,
                         modifyFs,
                         tick
@@ -515,12 +515,12 @@ interface Symbol {
                 }));
             });
             describe("incremental correctness", () => {
-                incrementalScenarios.forEach((_, index) => verifyIncrementalCorrectness(() => ({
+                incrementalScenarios.forEach(({ commandLineArgs: incrementalCommandLineArgs }, index) => verifyIncrementalCorrectness(() => ({
                     scenario,
                     subScenario,
                     baseFs,
                     newSys: incrementalSys[index],
-                    commandLineArgs,
+                    commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
                     incrementalModifyFs: fs => {
                         for (let i = 0; i <= index; i++) {
                             incrementalScenarios[i].modifyFs(fs);
