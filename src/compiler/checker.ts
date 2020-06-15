@@ -23470,8 +23470,8 @@ namespace ts {
 
         function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], kind: IndexKind): IndexInfo {
             const propTypes: Type[] = [];
-            for (let i = 0; i < properties.length; i++) {
-                if (kind === IndexKind.String || isNumericName(node.properties[i + offset].name!)) {
+            for (let i = offset; i < properties.length; i++) {
+                if (kind === IndexKind.String || isNumericName(node.properties[i].name!)) {
                     propTypes.push(getTypeOfSymbol(properties[i]));
                 }
             }
