@@ -504,7 +504,7 @@ namespace FourSlashInterface {
         /**
          * This method *requires* an ordered stream of classifications for a file, and spans are highly recommended.
          */
-        public semanticClassificationsAre(format: "original" | "2020", ...classifications: Classification[]) {
+        public semanticClassificationsAre(format: ts.SemanticClassificationFormat, ...classifications: Classification[]) {
             this.state.verifySemanticClassifications(format, classifications);
         }
 
@@ -754,22 +754,73 @@ namespace FourSlashInterface {
         textSpan?: FourSlash.TextSpan;
     }
 
-    export function classification(format: "original" | "2020") {
-        function token(identifier: number, text: string, _position: number): Classification {
+
+    export function classification(format: ts.SemanticClassificationFormat) {
+
+        function semanticToken(identifier: string, text: string, _position: number): Classification {
+
+            const tokenTypes = {
+                class: ts.classifier.vscode.TokenType.class,
+                enum: ts.classifier.vscode.TokenType.enum,
+                interface: ts.classifier.vscode.TokenType.interface,
+                namespace: ts.classifier.vscode.TokenType.namespace,
+                typeParameter: ts.classifier.vscode.TokenType.typeParameter,
+                type: ts.classifier.vscode.TokenType.type,
+                parameter: ts.classifier.vscode.TokenType.parameter,
+                variable: ts.classifier.vscode.TokenType.variable,
+                enumMember: ts.classifier.vscode.TokenType.enumMember,
+                property: ts.classifier.vscode.TokenType.property,
+                function: ts.classifier.vscode.TokenType.function,
+                member: ts.classifier.vscode.TokenType.member
+            };
+
+            const tokenModifiers = {
+                async: ts.classifier.vscode.TokenModifier.async,
+                declaration: ts.classifier.vscode.TokenModifier.declaration,
+                readonly: ts.classifier.vscode.TokenModifier.readonly,
+                static: ts.classifier.vscode.TokenModifier.static,
+                local: ts.classifier.vscode.TokenModifier.local,
+                defaultLibrary: ts.classifier.vscode.TokenModifier.defaultLibrary,
+            };
+
+            function identifierToClassificationID(identifier: string): number {
+                const [tokenType, ...modifiers] = identifier.split(".");
+                // @ts-expect-error
+                const tokenValue = tokenTypes[tokenType];
+                if (tokenValue === undefined) {
+                    throw new Error(`Did not find ${tokenType} in tokenTypes for classifiers.`);
+                }
+
+                let classification = (tokenValue + 1) << 8;
+                ts.forEach(modifiers, (modifier) => {
+                    // @ts-expect-error
+                    const modifierValue = tokenModifiers[modifiers];
+                    if (tokenValue === undefined) {
+                        throw new Error(`Did not find ${modifier} in tokenModifiers for classifiers.`);
+                    }
+                    classification += modifierValue + 1;
+                    console.log("adding: ", modifierValue);
+                });
+
+                // debugger;
+
+                return classification;
+            }
+
             return {
-                classificationType: identifier,
-                // textSpan: { 
+                classificationType: identifierToClassificationID(identifier),
+                // textSpan: {
                 //     start: position,
                 //     end: -1
                 // },
                 text
-             }
+             };
         }
 
-        if (format === "2020") {
+        if (format === ts.SemanticClassificationFormat.TwentyTwenty) {
             return {
-                token
-            }
+                semanticToken
+            };
         }
 
         function comment(text: string, position?: number): Classification {
@@ -894,7 +945,7 @@ namespace FourSlashInterface {
             jsxText,
             jsxAttributeStringLiteralValue,
             getClassification
-        }
+        };
     }
 
     export namespace Completion {

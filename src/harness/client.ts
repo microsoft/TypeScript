@@ -747,7 +747,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getEncodedSemanticClassifications(_fileName: string, _span: TextSpan, _format?: "original" | "2020"): Classifications {
+        getEncodedSemanticClassifications(_fileName: string, _span: TextSpan, _format?: SemanticClassificationFormat): Classifications {
             return notImplemented();
         }
 

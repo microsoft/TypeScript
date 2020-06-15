@@ -375,23 +375,23 @@ namespace ts {
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
         /** @deprecated Use getEncodedSyntacticClassifications instead. */
-        getSyntacticClassifications(fileName: string, span: TextSpan, format?: "original" | "2020"): ClassifiedSpan[];
+        getSyntacticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[];
 
         /** @deprecated Use getEncodedSemanticClassifications instead. */
-        getSemanticClassifications(fileName: string, span: TextSpan, format?: "original" | "2020"): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[];
         /** Encoded as triples of [start, length, ClassificationType]. */
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
 
         /**
          * Gets semantic highlights information for a particular file. Has two formats, an older
          * version used by VS and a format used by VS Code.
-         * 
+         *
          * @param fileName The path to the file
          * @param position A text span to return results within
          * @param format Which format to use, defaults to "original"
-         * @returns a number array encoded as triples of [start, length, ClassificationType, ...]. 
+         * @returns a number array encoded as triples of [start, length, ClassificationType, ...].
          */
-        getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: "original" | "2020"): Classifications;
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications;
 
         /**
          * Gets completion entries at a particular position in a file.

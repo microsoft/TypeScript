@@ -456,7 +456,7 @@ declare namespace FourSlashInterface {
     }
 
     interface ModernClassificationFactory {
-        token(identifier: number, name: string, position: number)
+        semanticToken(identifier: string, name: string, position: number)
     }
 
     interface ClassificationFactory {

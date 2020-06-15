@@ -2513,7 +2513,7 @@ namespace FourSlash {
             }
         }
 
-        public verifySemanticClassifications(format: "original" | "2020", expected: { classificationType: string | number; text?: string }[]) {
+        public verifySemanticClassifications(format: ts.SemanticClassificationFormat, expected: { classificationType: string | number; text?: string }[]) {
             const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
                 ts.createTextSpan(0, this.activeFile.content.length), format);
 

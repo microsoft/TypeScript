@@ -1,29 +1,32 @@
 namespace ts.classifier.vscode {
-    
-  enum TokenType {
+
+  /** @internal */
+  export enum TokenType {
     class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member, _
   }
 
-  enum TokenModifier {
+  /** @internal */
+  export enum TokenModifier {
     declaration, static, async, readonly, defaultLibrary, local, _
   }
 
-  enum TokenEncodingConsts {
+  /** @internal */
+  export enum TokenEncodingConsts {
     typeOffset = 8,
     modifierMask = (1 << typeOffset) - 1
   }
 
-  /** This is mainly used internally for testing  */
+  /** This is mainly used internally for testing */
   export function getSemanticClassifications(program: Program, _cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan[] {
-    const classifications = getEncodedSemanticClassifications(program, _cancellationToken, sourceFile, span)
-    
+    const classifications = getEncodedSemanticClassifications(program, _cancellationToken, sourceFile, span);
+
     Debug.assert(classifications.spans.length % 3 === 0);
     const dense = classifications.spans;
     const result: ClassifiedSpan[] = [];
     for (let i = 0; i < dense.length; i += 3) {
         result.push({
             textSpan: createTextSpan(dense[i], dense[i + 1]),
-            classificationType: dense[i + 2] as any // getClassificationTypeName(dense[i + 2])
+            classificationType: dense[i + 2]
         });
     }
 
@@ -33,12 +36,12 @@ namespace ts.classifier.vscode {
   export function getEncodedSemanticClassifications(program: Program, _cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
     return {
       spans: getSemanticTokens(program, sourceFile, span),
-      endOfLineState: ts.EndOfLineState.None
-    }
+      endOfLineState: EndOfLineState.None
+    };
   }
 
-  function getSemanticTokens(program: Program, sourceFile:SourceFile, span: TextSpan): number[] {
-    let resultTokens: number[] = [];
+  function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextSpan): number[] {
+    const resultTokens: number[] = [];
 
     const collector = (node: Node, typeIdx: number, modifierSet: number) => {
       resultTokens.push(node.getStart(), node.getWidth(), ((typeIdx + 1) << TokenEncodingConsts.typeOffset) + modifierSet);
@@ -111,7 +114,8 @@ namespace ts.classifier.vscode {
               if (program.isSourceFileDefaultLibrary(decl.getSourceFile())) {
                 modifierSet |= 1 << TokenModifier.defaultLibrary;
               }
-            } else if (symbol.declarations && symbol.declarations.some(d => program.isSourceFileDefaultLibrary(d.getSourceFile()))) {
+            }
+            else if (symbol.declarations && symbol.declarations.some(d => program.isSourceFileDefaultLibrary(d.getSourceFile()))) {
               modifierSet |= 1 << TokenModifier.defaultLibrary;
             }
 
@@ -131,20 +135,24 @@ namespace ts.classifier.vscode {
     const flags = symbol.getFlags();
     if (flags & SymbolFlags.Class) {
       return TokenType.class;
-    } else if (flags & SymbolFlags.Enum) {
+    }
+    else if (flags & SymbolFlags.Enum) {
       return TokenType.enum;
-    } else if (flags & SymbolFlags.TypeAlias) {
+    }
+     else if (flags & SymbolFlags.TypeAlias) {
       return TokenType.type;
-    } else if (flags & SymbolFlags.Interface) {
+    }
+    else if (flags & SymbolFlags.Interface) {
       if (meaning & SemanticMeaning.Type) {
         return TokenType.interface;
       }
-    } else if (flags & SymbolFlags.TypeParameter) {
+    }
+    else if (flags & SymbolFlags.TypeParameter) {
       return TokenType.typeParameter;
     }
     let decl = symbol.valueDeclaration || symbol.declarations && symbol.declarations[0];
     if (decl && isBindingElement(decl)) {
-      decl = getDeclarationForBindingElement(<BindingElement>decl);
+      decl = getDeclarationForBindingElement(decl);
     }
     return decl && tokenFromDeclarationMapping[decl.kind];
   }
@@ -156,7 +164,7 @@ namespace ts.classifier.vscode {
       if (type) {
         const test = (condition: (type: Type) => boolean) => {
           return condition(type) || type.isUnion() && type.types.some(condition);
-        }
+        };
         if (typeIdx !== TokenType.parameter && test(t => t.getConstructSignatures().length > 0)) {
           return TokenType.class;
         }
@@ -174,7 +182,8 @@ namespace ts.classifier.vscode {
     }
     if (isVariableDeclaration(decl)) {
       return (!isSourceFile(decl.parent.parent.parent) || isCatchClause(decl.parent)) && decl.getSourceFile() === sourceFile;
-    } else if (isFunctionDeclaration(decl)) {
+    }
+    else if (isFunctionDeclaration(decl)) {
       return !isSourceFile(decl.parent) && decl.getSourceFile() === sourceFile;
     }
     return false;
@@ -184,7 +193,8 @@ namespace ts.classifier.vscode {
     while (true) {
       if (isBindingElement(element.parent.parent)) {
         element = element.parent.parent;
-      } else {
+      }
+      else {
         return element.parent.parent;
       }
     }
@@ -197,7 +207,7 @@ namespace ts.classifier.vscode {
 
   function isExpressionInCallExpression(node: Node): boolean {
     while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
-      node = node.parent
+      node = node.parent;
     }
     return isCallExpression(node.parent) && node.parent.expression === node;
   }
@@ -216,7 +226,7 @@ namespace ts.classifier.vscode {
 
   function getMeaningFromLocation(node: Node): SemanticMeaning {
     const f = (<any>ts).getMeaningFromLocation;
-    if (typeof f === 'function') {
+    if (typeof f === "function") {
       return f(node);
     }
     return SemanticMeaning.All;
