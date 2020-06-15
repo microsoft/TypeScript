@@ -10,7 +10,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Value = void 0;
+exports.Value = exports.Y = exports.X = void 0;
 /*comment*/
 var somewhere_1 = require("somewhere");
 Object.defineProperty(exports, "Value", { enumerable: true, get: function () { return somewhere_1.Value; } });
