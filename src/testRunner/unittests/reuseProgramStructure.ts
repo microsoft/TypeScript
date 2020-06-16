@@ -915,7 +915,7 @@ namespace ts {
                 program, newRootFileNames, newOptions,
                 path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
-                /*hasChangedAutomaticTypeDirectiveNames*/ false,
+                /*hasChangedAutomaticTypeDirectiveNames*/ undefined,
                 /*projectReferences*/ undefined
             );
         }
@@ -937,12 +937,20 @@ namespace ts {
             }
 
             function verifyProgramWithoutConfigFile(system: System, rootFiles: string[], options: CompilerOptions) {
-                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, /*watchOptions*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions({
+                    rootFiles,
+                    options,
+                    watchOptions: undefined,
+                    system
+                })).getCurrentProgram().getProgram();
                 verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
             }
 
             function verifyProgramWithConfigFile(system: System, configFileName: string) {
-                const program = createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, {}, /*watchOptionsToExtend*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfConfigFile({
+                    configFileName,
+                    system
+                })).getCurrentProgram().getProgram();
                 const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, /*watchOptionsToExtend*/ undefined, system, notImplemented)!; // TODO: GH#18217
                 verifyProgramIsUptoDate(program, fileNames, options);
             }
@@ -1081,7 +1089,12 @@ namespace ts {
                 const rootFiles = [module1.path, module2.path, module3.path];
                 const system = createTestSystem([module1, module2, module3]);
                 const options = {};
-                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, /*watchOptions*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions({
+                    rootFiles,
+                    options,
+                    watchOptions: undefined,
+                    system
+                })).getCurrentProgram().getProgram();
                 verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
             });
 
@@ -1112,7 +1125,12 @@ namespace ts {
                 const newRootFiles = [module1.path, module2.path, module3.path];
                 const system = createTestSystem([module1, module2, module3]);
                 const options = {};
-                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, /*watchOptions*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions({
+                    rootFiles,
+                    options,
+                    watchOptions: undefined,
+                    system
+                })).getCurrentProgram().getProgram();
                 verifyProgramIsNotUptoDate(program, duplicate(newRootFiles), duplicate(options));
             });
             it("has one root file replaced by another", () => {
@@ -1132,7 +1150,12 @@ namespace ts {
                 const newRootFiles = [module2.path, module3.path];
                 const system = createTestSystem([module1, module2, module3]);
                 const options = {};
-                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, /*watchOptions*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions({
+                    rootFiles,
+                    options,
+                    watchOptions: undefined,
+                    system
+                })).getCurrentProgram().getProgram();
                 verifyProgramIsNotUptoDate(program, duplicate(newRootFiles), duplicate(options));
             });
         });

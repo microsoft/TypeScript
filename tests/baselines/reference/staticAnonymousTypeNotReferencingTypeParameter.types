@@ -319,9 +319,9 @@ class ListWrapper {
 >index : number
 >value : T
 >list.splice(index, 0, value) : T[]
->list.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
 >0 : 0
 >value : T
@@ -341,9 +341,9 @@ class ListWrapper {
 
     list.splice(index, 1);
 >list.splice(index, 1) : T[]
->list.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
 >1 : 1
 
@@ -380,9 +380,9 @@ class ListWrapper {
 
       list.splice(index, 1);
 >list.splice(index, 1) : T[]
->list.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
 >1 : 1
     }
@@ -410,9 +410,9 @@ class ListWrapper {
 
       list.splice(index, 1);
 >list.splice(index, 1) : T[]
->list.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
 >1 : 1
 
@@ -543,9 +543,9 @@ class ListWrapper {
 >from : number
 >length : number
 >l.splice(from, length) : T[]
->l.splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>l.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >l : T[]
->splice : { (start: number, deleteCount: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >from : number
 >length : number
 

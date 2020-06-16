@@ -53,11 +53,10 @@ namespace ts.projectSystem {
                 path: `${projectSrcFolder}/file2.ts`,
                 content: ""
             };
-            files.push(file2);
             fileNames.push(file2.path);
             expectedWatchedFiles.set(file2.path, 1);
             expectedCompletions.push("file2");
-            host.reloadFS(files);
+            host.writeFile(file2.path, file2.content);
             host.runQueuedTimeoutCallbacks();
             assert.equal(projectService.configuredProjects.get(configFile.path), project);
             verifyProjectAndCompletions();

@@ -63,7 +63,7 @@ namespace ts.projectSystem {
         };
         const aDts: File = {
             path: "/a/bin/a.d.ts",
-            // Need to mangle the sourceMappingURL part or it breaks the build
+            // ${""} is needed to mangle the sourceMappingURL part or it breaks the build
             content: `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
         };
 
@@ -86,7 +86,7 @@ namespace ts.projectSystem {
             content: JSON.stringify(bDtsMapContent),
         };
         const bDts: File = {
-            // Need to mangle the sourceMappingURL part or it breaks the build
+            // ${""} is need to mangle the sourceMappingURL part so it doesn't break the build
             path: "/b/bin/b.d.ts",
             content: `export declare function fnB(): void;\n//# source${""}MappingURL=b.d.ts.map`,
         };
@@ -114,7 +114,7 @@ namespace ts.projectSystem {
             })
         };
 
-        function makeSampleProjects(addUserTsConfig?: boolean) {
+        function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
             const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
             const session = createSession(host);
 
@@ -122,7 +122,9 @@ namespace ts.projectSystem {
             checkDeclarationFiles(bTs, session, [bDtsMap, bDts]);
 
             // Testing what happens if we delete the original sources.
-            host.deleteFile(bTs.path);
+            if (!keepAllFiles) {
+                host.deleteFile(bTs.path);
+            }
 
             openFilesForSession([userTs], session);
             const service = session.getProjectService();
@@ -320,6 +322,64 @@ namespace ts.projectSystem {
             ]);
 
             verifyATsConfigOriginalProject(session);
+        });
+
+        it("navigateToAll -- when neither file nor project is specified", () => {
+            const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
+            const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: undefined, searchValue: "fn" });
+            assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: bTs,
+                        text: "export function fnB() {}"
+                    }),
+                    name: "fnB",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                },
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: aTs,
+                        text: "export function fnA() {}"
+                    }),
+                    name: "fnA",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                },
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: userTs,
+                        text: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
+                    }),
+                    name: "fnUser",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                }
+            ]);
+        });
+
+        it("navigateToAll -- when file is not specified but project is", () => {
+            const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
+            const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" });
+            assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+                {
+                    ...protocolFileSpanFromSubstring({
+                        file: bTs,
+                        text: "export function fnB() {}"
+                    }),
+                    name: "fnB",
+                    matchKind: "prefix",
+                    isCaseSensitive: true,
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: "export",
+                }
+            ]);
         });
 
         const referenceATs = (aTs: File): protocol.ReferencesResponseItem => makeReferenceItem({

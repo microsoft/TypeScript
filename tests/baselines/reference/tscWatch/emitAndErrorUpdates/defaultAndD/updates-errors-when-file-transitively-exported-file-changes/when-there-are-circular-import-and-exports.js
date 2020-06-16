@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w
+Input::
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
 export interface ITest {
     title: string;
@@ -54,6 +54,67 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
+
+/a/lib/tsc.js --w
+Output::
+>> Screen clear
+[[90m12:00:39 AM[0m] Starting compilation in watch mode...
+
+
+[[90m12:01:08 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/app.ts"]
+Program options: {"baseUrl":"/user/username/projects/myproject","declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data2.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib1/tools/tools.interface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data2.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+WatchedFiles::
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/app.ts:
+  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
+/user/username/projects/myproject/lib2/public.ts:
+  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
+/user/username/projects/myproject/lib2/data.ts:
+  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
+/user/username/projects/myproject/lib1/public.ts:
+  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
+/user/username/projects/myproject/lib1/tools/public.ts:
+  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
+/user/username/projects/myproject/lib1/tools/tools.interface.ts:
+  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
+/user/username/projects/myproject/lib2/data2.ts:
+  {"fileName":"/user/username/projects/myproject/lib2/data2.ts","pollingInterval":250}
+/a/lib/lib.d.ts:
+  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules/@types:
+  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
+
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.js]
 "use strict";
 exports.__esModule = true;
@@ -75,8 +136,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
 exports.__esModule = true;
 __exportStar(require("./tools.interface"), exports);
 
@@ -95,8 +156,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
 exports.__esModule = true;
 __exportStar(require("./tools/public"), exports);
 
@@ -161,8 +222,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
 exports.__esModule = true;
 __exportStar(require("./data"), exports);
 
@@ -192,86 +253,14 @@ export declare class App {
 
 
 
-Output::
->> Screen clear
-[[90m12:00:39 AM[0m] Starting compilation in watch mode...
-
-
-[[90m12:01:08 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data2.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/tools.interface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data2.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/app.ts:
-  {"fileName":"/user/username/projects/myproject/app.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/data.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/data.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/public.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/public.ts","pollingInterval":250}
-/user/username/projects/myproject/lib1/tools/tools.interface.ts:
-  {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
-/user/username/projects/myproject/lib2/data2.ts:
-  {"fileName":"/user/username/projects/myproject/lib2/data2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
 Change:: Rename property title to title2 of interface ITest
 
+Input::
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.ts]
 export interface ITest {
     title2: string;
 }
 
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/tools.interface.d.ts]
-export interface ITest {
-    title2: string;
-}
-
-
-//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/app.d.ts] file written with same contents
 
 Output::
 >> Screen clear
@@ -337,3 +326,18 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/lib1/tools/tools.interface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/tools.interface.d.ts]
+export interface ITest {
+    title2: string;
+}
+
+
+//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/app.d.ts] file written with same contents

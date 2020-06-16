@@ -1,0 +1,53 @@
+tests/cases/compiler/a.js(29,1): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
+tests/cases/compiler/a.js(35,1): error TS2349: This expression is not callable.
+  Type 'Number' has no call signatures.
+
+
+==== tests/cases/compiler/a.js (2 errors) ====
+    var x = 0;
+    
+    
+    /// @ts-ignore
+    x();
+    
+    /// @ts-ignore
+    x();
+    
+    /// @ts-ignore
+    x(
+        2,
+        3);
+    
+    
+    
+    // @ts-ignore
+    // come comment
+    // some other comment
+    
+    // @another
+    
+    x();
+    
+    /* @ts-ignore */
+    /*another comment
+     that could be multiline*/
+    
+    x();
+    ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
+    
+    /* @ts-ignore
+    continuing comment
+     that could be multiline*/
+    
+    x();
+    ~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type 'Number' has no call signatures.
+    
+    
+    
+    // @ts-ignore: no call signature
+    x();

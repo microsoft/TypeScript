@@ -12,7 +12,7 @@ interface FormikConfig<Values> {
 }
 
 declare function Func<Values = object, ExtraProps = {}>(
->Func : <Values = object, ExtraProps = {}>(x: string extends keyof ExtraProps | "validate" | "initialValues" ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, Exclude<keyof ExtraProps, "validateOnChange"> | "validate" | "initialValues"> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>) => void
+>Func : <Values = object, ExtraProps = {}>(x: (string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>)) => void
 
     x: (string extends "validate" | "initialValues" | keyof ExtraProps
 >x : string extends keyof ExtraProps | "validate" | "initialValues" ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, Exclude<keyof ExtraProps, "validateOnChange"> | "validate" | "initialValues"> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>

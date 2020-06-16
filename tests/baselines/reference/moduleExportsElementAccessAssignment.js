@@ -21,7 +21,7 @@ mod1.default;
 
 //// [mod1.d.ts]
 export namespace a {
-    export const x: string;
+    const x: string;
 }
 export namespace b {
     const x_1: string;
@@ -37,7 +37,7 @@ export namespace c {
     export { x_3 as x };
 }
 export namespace d {
-    export const e: number;
+    const e: number;
 }
 //// [mod2.d.ts]
 export {};

@@ -30,13 +30,13 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterator<number, any, undefined>'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(34,7): error TS2322: Type '() => AsyncGenerator<string, void, unknown>' is not assignable to type '() => AsyncIterator<number, any, undefined>'.
   Type 'AsyncGenerator<string, void, unknown>' is not assignable to type 'AsyncIterator<number, any, undefined>'.
-tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(38,11): error TS2322: Type '"a"' is not assignable to type 'number'.
+tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(38,11): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(41,12): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(44,12): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(47,11): error TS2322: Type '"a"' is not assignable to type 'number'.
+tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(47,11): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(50,12): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(53,12): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(56,11): error TS2322: Type '"a"' is not assignable to type 'number'.
+tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(56,11): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(59,12): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(62,12): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(64,42): error TS2741: Property '[Symbol.iterator]' is missing in type 'AsyncGenerator<number, any, undefined>' but required in type 'IterableIterator<number>'.
@@ -132,7 +132,7 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
     async function * explicitReturnType1(): AsyncIterableIterator<number> {
         yield "a";
               ~~~
-!!! error TS2322: Type '"a"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     }
     async function * explicitReturnType2(): AsyncIterableIterator<number> {
         yield* ["a", "b"];
@@ -147,7 +147,7 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
     async function * explicitReturnType4(): AsyncIterable<number> {
         yield "a";
               ~~~
-!!! error TS2322: Type '"a"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     }
     async function * explicitReturnType5(): AsyncIterable<number> {
         yield* ["a", "b"];
@@ -162,7 +162,7 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
     async function * explicitReturnType7(): AsyncIterator<number> {
         yield "a";
               ~~~
-!!! error TS2322: Type '"a"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     }
     async function * explicitReturnType8(): AsyncIterator<number> {
         yield* ["a", "b"];

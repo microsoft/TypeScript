@@ -12,11 +12,21 @@
 ////};
 ////
 ////x[|./*a*/|];
-////x["/*b*/"];
+////x["[|/*b*/|]"];
 
 const replacementSpan = test.ranges()[0];
+const replacementSpan1 = test.ranges()[1];
 verify.completions(
-    { marker: "b", exact: ["foo ", "bar", "break", "any", "#", "$", "b", "1b"] },
+    { marker: "b", exact: [
+        { name: "foo ", replacementSpan: replacementSpan1 },
+        { name: "bar", replacementSpan: replacementSpan1 },
+        { name: "break", replacementSpan: replacementSpan1 },
+        { name: "any", replacementSpan: replacementSpan1 },
+        { name: "#", replacementSpan: replacementSpan1 },
+        { name: "$", replacementSpan: replacementSpan1 },
+        { name: "b", replacementSpan: replacementSpan1 },
+        { name: "1b", replacementSpan: replacementSpan1 },
+    ] },
     {
         marker: "a",
         exact: [

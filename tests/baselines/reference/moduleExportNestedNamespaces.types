@@ -39,9 +39,9 @@ module.exports.Classic = class {
     constructor() {
         this.p = 1
 >this.p = 1 : 1
->this.p : number
+>this.p : any
 >this : this
->p : number
+>p : any
 >1 : 1
     }
 }
@@ -75,7 +75,7 @@ var classic = new s.Classic()
 /** @param {s.n.K} c
     @param {s.Classic} classic */
 function f(c, classic) {
->f : (c: C, classic: Classic) => void
+>f : (c: C, classic: s.Classic) => void
 >c : C
 >classic : Classic
 

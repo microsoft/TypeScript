@@ -14,8 +14,8 @@ declare module Sample.Thing {
 >destroy : () => any
 
 		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
->gar : (runner: (widget: IWidget) => any) => any
->runner : (widget: IWidget) => any
+>gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
+>runner : (widget: Sample.Thing.IWidget) => any
 >widget : IWidget
 >Sample : any
 >Thing : any
@@ -88,8 +88,8 @@ module Sample.Thing.Widgets {
 >Thing : typeof Thing
 
 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
->gar : (runner: (widget: IWidget) => any) => any
->runner : (widget: IWidget) => any
+>gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
+>runner : (widget: Sample.Thing.IWidget) => any
 >widget : IWidget
 >Sample : any
 >Thing : any

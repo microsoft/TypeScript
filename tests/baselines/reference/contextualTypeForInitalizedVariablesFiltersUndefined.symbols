@@ -12,3 +12,16 @@ const fAnnotated: typeof fInferred = ({ a = 0 } = {}) => a;
 >a : Symbol(a, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 3, 39))
 >a : Symbol(a, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 3, 39))
 
+declare var t: { s: string } | undefined;
+>t : Symbol(t, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 11))
+>s : Symbol(s, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 16))
+
+const { s } = t;
+>s : Symbol(s, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 6, 7))
+>t : Symbol(t, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 11))
+
+function fst({ s } = t) { }
+>fst : Symbol(fst, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 6, 16))
+>s : Symbol(s, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 7, 14))
+>t : Symbol(t, Decl(contextualTypeForInitalizedVariablesFiltersUndefined.ts, 5, 11))
+

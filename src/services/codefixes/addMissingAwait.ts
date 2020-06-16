@@ -148,7 +148,7 @@ namespace ts.codefix {
                 declaration.type ||
                 !declaration.initializer ||
                 variableStatement.getSourceFile() !== sourceFile ||
-                hasModifier(variableStatement, ModifierFlags.Export) ||
+                hasSyntacticModifier(variableStatement, ModifierFlags.Export) ||
                 !variableName ||
                 !isInsideAwaitableBody(declaration.initializer)) {
                 isCompleteFix = false;
@@ -211,7 +211,7 @@ namespace ts.codefix {
             reference;
         const diagnostic = find(diagnostics, diagnostic =>
             diagnostic.start === errorNode.getStart(sourceFile) &&
-            diagnostic.start + diagnostic.length! === errorNode.getEnd());
+            (diagnostic.start + diagnostic.length!) === errorNode.getEnd());
 
         return diagnostic && contains(errorCodes, diagnostic.code) ||
             // A Promise is usually not correct in a binary expression (it’s not valid

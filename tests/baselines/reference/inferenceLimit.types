@@ -87,7 +87,7 @@ export class BrokenClass {
 
       .then((orders: Array<MyModule.MyModel>) => {
 >then : <TResult1 = unknown[], TResult2 = never>(onfulfilled?: (value: unknown[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->(orders: Array<MyModule.MyModel>) => {        resolve(orders);      } : (orders: MyModule.MyModel[]) => void
+>(orders: Array<MyModule.MyModel>) => {        resolve(orders);      } : (orders: Array<MyModule.MyModel>) => void
 >orders : MyModule.MyModel[]
 >MyModule : any
 

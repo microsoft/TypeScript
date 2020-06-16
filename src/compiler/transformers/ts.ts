@@ -23,10 +23,11 @@ namespace ts {
         IsNamedExternalExport = 1 << 4,
         IsDefaultExternalExport = 1 << 5,
         IsDerivedClass = 1 << 6,
+        UseImmediatelyInvokedFunctionExpression = 1 << 7,
 
         HasAnyDecorators = HasConstructorDecorators | HasMemberDecorators,
         NeedsName = HasStaticInitializedProperties | HasMemberDecorators,
-        UseImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
+        MayNeedImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
         IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
     }
 
@@ -166,7 +167,7 @@ namespace ts {
 
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.FunctionDeclaration:
-                    if (hasModifier(node, ModifierFlags.Ambient)) {
+                    if (hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                         break;
                     }
 
@@ -178,7 +179,7 @@ namespace ts {
                         // These nodes should always have names unless they are default-exports;
                         // however, class declaration parsing allows for undefined names, so syntactically invalid
                         // programs may also have an undefined name.
-                        Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasModifier(node, ModifierFlags.Default));
+                        Debug.assert(node.kind === SyntaxKind.ClassDeclaration || hasSyntacticModifier(node, ModifierFlags.Default));
                     }
                     if (isClassDeclaration(node)) {
                         // XXX: should probably also cover interfaces and type aliases that can have type variables?
@@ -287,7 +288,7 @@ namespace ts {
                 // do not emit ES6 imports and exports since they are illegal inside a namespace
                 return undefined;
             }
-            else if (node.transformFlags & TransformFlags.ContainsTypeScript || hasModifier(node, ModifierFlags.Export)) {
+            else if (node.transformFlags & TransformFlags.ContainsTypeScript || hasSyntacticModifier(node, ModifierFlags.Export)) {
                 return visitTypeScript(node);
             }
 
@@ -349,7 +350,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitTypeScript(node: Node): VisitResult<Node> {
-            if (isStatement(node) && hasModifier(node, ModifierFlags.Ambient)) {
+            if (isStatement(node) && hasSyntacticModifier(node, ModifierFlags.Ambient)) {
                 // TypeScript ambient declarations are elided, but some comments may be preserved.
                 // See the implementation of `getLeadingComments` in comments.ts for more details.
                 return createNotEmittedStatement(node);
@@ -540,6 +541,12 @@ namespace ts {
                     // TypeScript namespace or external module import.
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
+                case SyntaxKind.JsxSelfClosingElement:
+                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
+
+                case SyntaxKind.JsxOpeningElement:
+                    return visitJsxJsxOpeningElement(<JsxOpeningElement>node);
+
                 default:
                     // node contains some other TypeScript syntax
                     return visitEachChild(node, visitor, context);
@@ -589,6 +596,7 @@ namespace ts {
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
             else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
+            if (languageVersion <= ScriptTarget.ES5 && (facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression)) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
             return facts;
         }
 
@@ -604,7 +612,7 @@ namespace ts {
         }
 
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-            if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasModifier(node, ModifierFlags.Export))) {
+            if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasSyntacticModifier(node, ModifierFlags.Export))) {
                 return visitEachChild(node, visitor, context);
             }
 
@@ -659,12 +667,6 @@ namespace ts {
                 const iife = createImmediatelyInvokedArrowFunction(statements);
                 setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
 
-                // Class comment is already added by the ES2015 transform when targeting ES5 or below.
-                // Only add if targetting ES2015+ to prevent duplicates
-                if (languageVersion > ScriptTarget.ES5) {
-                    addSyntheticLeadingComment(iife, SyntaxKind.MultiLineCommentTrivia, "* @class ");
-                }
-
                 const varStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([
@@ -673,7 +675,7 @@ namespace ts {
                             /*type*/ undefined,
                             iife
                         )
-                    ], languageVersion > ScriptTarget.ES5 ? NodeFlags.Let : undefined)
+                    ])
                 );
 
                 setOriginalNode(varStatement, node);
@@ -960,7 +962,7 @@ namespace ts {
          */
         function isDecoratedClassElement(member: ClassElement, isStatic: boolean, parent: ClassLikeDeclaration) {
             return nodeOrChildIsDecorated(member, parent)
-                && isStatic === hasModifier(member, ModifierFlags.Static);
+                && isStatic === hasSyntacticModifier(member, ModifierFlags.Static);
         }
 
         /**
@@ -1584,6 +1586,18 @@ namespace ts {
                 case SyntaxKind.ImportType:
                     break;
 
+                // handle JSDoc types from an invalid parse
+                case SyntaxKind.JSDocAllType:
+                case SyntaxKind.JSDocUnknownType:
+                case SyntaxKind.JSDocFunctionType:
+                case SyntaxKind.JSDocVariadicType:
+                case SyntaxKind.JSDocNamepathType:
+                    break;
+
+                case SyntaxKind.JSDocNullableType:
+                case SyntaxKind.JSDocNonNullableType:
+                case SyntaxKind.JSDocOptionalType:
+                    return serializeTypeNode((<JSDocNullableType | JSDocNonNullableType | JSDocOptionalType>node).type);
 
                 default:
                     return Debug.failBadSyntaxKind(node);
@@ -2027,7 +2041,7 @@ namespace ts {
          * @param node The declaration node.
          */
         function shouldEmitAccessorDeclaration(node: AccessorDeclaration) {
-            return !(nodeIsMissing(node.body) && hasModifier(node, ModifierFlags.Abstract));
+            return !(nodeIsMissing(node.body) && hasSyntacticModifier(node, ModifierFlags.Abstract));
         }
 
         function visitGetAccessor(node: GetAccessorDeclaration) {
@@ -2271,6 +2285,22 @@ namespace ts {
                 visitNode(node.template, visitor, isExpression));
         }
 
+        function visitJsxSelfClosingElement(node: JsxSelfClosingElement) {
+            return updateJsxSelfClosingElement(
+                node,
+                visitNode(node.tagName, visitor, isJsxTagNameExpression),
+                /*typeArguments*/ undefined,
+                visitNode(node.attributes, visitor, isJsxAttributes));
+        }
+
+        function visitJsxJsxOpeningElement(node: JsxOpeningElement) {
+            return updateJsxOpeningElement(
+                node,
+                visitNode(node.tagName, visitor, isJsxTagNameExpression),
+                /*typeArguments*/ undefined,
+                visitNode(node.attributes, visitor, isJsxAttributes));
+        }
+
         /**
          * Determines whether to emit an enum declaration.
          *
@@ -2318,7 +2348,7 @@ namespace ts {
             const containerName = getNamespaceContainerName(node);
 
             // `exportName` is the expression used within this node's container for any exported references.
-            const exportName = hasModifier(node, ModifierFlags.Export)
+            const exportName = hasSyntacticModifier(node, ModifierFlags.Export)
                 ? getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
                 : getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
@@ -2619,7 +2649,7 @@ namespace ts {
             const containerName = getNamespaceContainerName(node);
 
             // `exportName` is the expression used within this node's container for any exported references.
-            const exportName = hasModifier(node, ModifierFlags.Export)
+            const exportName = hasSyntacticModifier(node, ModifierFlags.Export)
                 ? getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
                 : getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
@@ -2693,27 +2723,28 @@ namespace ts {
             const statements: Statement[] = [];
             startLexicalEnvironment();
 
-            let statementsLocation: TextRange;
+            let statementsLocation: TextRange | undefined;
             let blockLocation: TextRange | undefined;
-            const body = node.body!;
-            if (body.kind === SyntaxKind.ModuleBlock) {
-                saveStateAndInvoke(body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
-                statementsLocation = body.statements;
-                blockLocation = body;
-            }
-            else {
-                const result = visitModuleDeclaration(<ModuleDeclaration>body);
-                if (result) {
-                    if (isArray(result)) {
-                        addRange(statements, result);
-                    }
-                    else {
-                        statements.push(result);
-                    }
+            if (node.body) {
+                if (node.body.kind === SyntaxKind.ModuleBlock) {
+                    saveStateAndInvoke(node.body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
+                    statementsLocation = node.body.statements;
+                    blockLocation = node.body;
                 }
+                else {
+                    const result = visitModuleDeclaration(<ModuleDeclaration>node.body);
+                    if (result) {
+                        if (isArray(result)) {
+                            addRange(statements, result);
+                        }
+                        else {
+                            statements.push(result);
+                        }
+                    }
 
-                const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node)!.body;
-                statementsLocation = moveRangePos(moduleBlock.statements, -1);
+                    const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node)!.body;
+                    statementsLocation = moveRangePos(moduleBlock.statements, -1);
+                }
             }
 
             insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
@@ -2750,7 +2781,7 @@ namespace ts {
             //     })(hi = hello.hi || (hello.hi = {}));
             // })(hello || (hello = {}));
             // We only want to emit comment on the namespace which contains block body itself, not the containing namespaces.
-            if (body.kind !== SyntaxKind.ModuleBlock) {
+            if (!node.body || node.body.kind !== SyntaxKind.ModuleBlock) {
                 setEmitFlags(block, getEmitFlags(block) | EmitFlags.NoComments);
             }
             return block;
@@ -3004,7 +3035,7 @@ namespace ts {
          * @param node The node to test.
          */
         function isExportOfNamespace(node: Node) {
-            return currentNamespace !== undefined && hasModifier(node, ModifierFlags.Export);
+            return currentNamespace !== undefined && hasSyntacticModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -3013,7 +3044,7 @@ namespace ts {
          * @param node The node to test.
          */
         function isExternalModuleExport(node: Node) {
-            return currentNamespace === undefined && hasModifier(node, ModifierFlags.Export);
+            return currentNamespace === undefined && hasSyntacticModifier(node, ModifierFlags.Export);
         }
 
         /**
@@ -3023,7 +3054,7 @@ namespace ts {
          */
         function isNamedExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && !hasModifier(node, ModifierFlags.Default);
+                && !hasSyntacticModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -3033,7 +3064,7 @@ namespace ts {
          */
         function isDefaultExternalModuleExport(node: Node) {
             return isExternalModuleExport(node)
-                && hasModifier(node, ModifierFlags.Default);
+                && hasSyntacticModifier(node, ModifierFlags.Default);
         }
 
         /**
@@ -3112,7 +3143,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasModifier(member, ModifierFlags.Static)
+            return hasSyntacticModifier(member, ModifierFlags.Static)
                 ? getDeclarationName(node)
                 : getClassPrototype(node);
         }

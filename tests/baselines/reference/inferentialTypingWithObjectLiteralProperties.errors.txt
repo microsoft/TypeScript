@@ -1,5 +1,5 @@
-tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts(4,1): error TS2322: Type '""' is not assignable to type 'number'.
-tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts(5,1): error TS2322: Type '""' is not assignable to type 'number'.
+tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts(4,1): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts(5,1): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts (2 errors) ====
@@ -8,8 +8,8 @@ tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts(5,1): error
     }
     f({ x: [null] }, { x: [1] }).x[0] = "" // ok
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     f({ x: [1] }, { x: [null] }).x[0] = "" // was error TS2011: Cannot convert 'string' to 'number'.
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     

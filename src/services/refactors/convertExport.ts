@@ -5,7 +5,7 @@ namespace ts.refactor {
     const actionNameNamedToDefault = "Convert named export to default export";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const info = getInfo(context);
+            const info = getInfo(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
             const description = info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
             const actionName = info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
@@ -27,18 +27,18 @@ namespace ts.refactor {
         readonly exportingModuleSymbol: Symbol;
     }
 
-    function getInfo(context: RefactorContext): Info | undefined {
+    function getInfo(context: RefactorContext, considerPartialSpans = true): Info | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        const exportNode = getParentNodeInSpan(token, file, span);
+        const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
             return undefined;
         }
 
         const exportingModuleSymbol = isSourceFile(exportNode.parent) ? exportNode.parent.symbol : exportNode.parent.parent.symbol;
 
-        const flags = getModifierFlags(exportNode);
+        const flags = getSyntacticModifierFlags(exportNode);
         const wasDefault = !!(flags & ModifierFlags.Default);
         // If source file already has a default export, don't offer refactor.
         if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {

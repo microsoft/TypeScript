@@ -583,13 +583,10 @@ namespace ts {
             if (!convertedLoopState) {
                 return node;
             }
-            if (isGeneratedIdentifier(node)) {
-                return node;
+            if (resolver.isArgumentsLocalBinding(node)) {
+                return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
             }
-            if (node.escapedText !== "arguments" || !resolver.isArgumentsLocalBinding(node)) {
-                return node;
-            }
-            return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = createUniqueName("arguments"));
+            return node;
         }
 
         function visitBreakOrContinueStatement(node: BreakOrContinueStatement): Statement {
@@ -681,8 +678,8 @@ namespace ts {
             statements.push(statement);
 
             // Add an `export default` statement for default exports (for `--target es5 --module es6`)
-            if (hasModifier(node, ModifierFlags.Export)) {
-                const exportStatement = hasModifier(node, ModifierFlags.Default)
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                const exportStatement = hasSyntacticModifier(node, ModifierFlags.Default)
                     ? createExportDefault(getLocalName(node))
                     : createExternalModuleExport(getLocalName(node));
 
@@ -1804,7 +1801,7 @@ namespace ts {
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const ancestorFacts = container && isClassLike(container) && !hasModifier(node, ModifierFlags.Static)
+            const ancestorFacts = container && isClassLike(container) && !hasSyntacticModifier(node, ModifierFlags.Static)
                 ? enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes | HierarchyFacts.NonStaticClassElement)
                 : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
@@ -1853,6 +1850,8 @@ namespace ts {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
                 statementOffset = addStandardPrologue(prologue, body.statements, /*ensureUseStrict*/ false);
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor, isHoistedFunction);
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor, isHoistedVariableStatement);
             }
 
             multiLine = addDefaultValueAssignmentsIfNeeded(statements, node) || multiLine;
@@ -2009,7 +2008,7 @@ namespace ts {
         }
 
         function visitVariableStatement(node: VariableStatement): Statement | undefined {
-            const ancestorFacts = enterSubtree(HierarchyFacts.None, hasModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
+            const ancestorFacts = enterSubtree(HierarchyFacts.None, hasSyntacticModifier(node, ModifierFlags.Export) ? HierarchyFacts.ExportedVariableStatement : HierarchyFacts.None);
             let updated: Statement | undefined;
             if (convertedLoopState && (node.declarationList.flags & NodeFlags.BlockScoped) === 0 && !isVariableStatementOfTypeScriptClassWrapper(node)) {
                 // we are inside a converted loop - hoist variable declarations
@@ -2567,62 +2566,54 @@ namespace ts {
          * @param node An ObjectLiteralExpression node.
          */
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
-            // We are here because a ComputedPropertyName was used somewhere in the expression.
             const properties = node.properties;
-            const numProperties = properties.length;
 
             // Find the first computed property.
             // Everything until that point can be emitted as part of the initial object literal.
-            let numInitialProperties = numProperties;
-            let numInitialPropertiesWithoutYield = numProperties;
-            for (let i = 0; i < numProperties; i++) {
+            let numInitialProperties = -1, hasComputed = false;
+            for (let i = 0; i < properties.length; i++) {
                 const property = properties[i];
-                if ((property.transformFlags & TransformFlags.ContainsYield && hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
-                    && i < numInitialPropertiesWithoutYield) {
-                    numInitialPropertiesWithoutYield = i;
-                }
-                if (property.name!.kind === SyntaxKind.ComputedPropertyName) {
+                if ((property.transformFlags & TransformFlags.ContainsYield &&
+                     hierarchyFacts & HierarchyFacts.AsyncFunctionBody)
+                    || (hasComputed = Debug.checkDefined(property.name).kind === SyntaxKind.ComputedPropertyName)) {
                     numInitialProperties = i;
                     break;
                 }
             }
 
-            if (numInitialProperties !== numProperties) {
-                if (numInitialPropertiesWithoutYield < numInitialProperties) {
-                    numInitialProperties = numInitialPropertiesWithoutYield;
-                }
-
-                // For computed properties, we need to create a unique handle to the object
-                // literal so we can modify it without risking internal assignments tainting the object.
-                const temp = createTempVariable(hoistVariableDeclaration);
-
-                // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
-                const expressions: Expression[] = [];
-                const assignment = createAssignment(
-                    temp,
-                    setEmitFlags(
-                        createObjectLiteral(
-                            visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
-                            node.multiLine
-                        ),
-                        EmitFlags.Indented
-                    )
-                );
-
-                if (node.multiLine) {
-                    startOnNewLine(assignment);
-                }
-
-                expressions.push(assignment);
-
-                addObjectLiteralMembers(expressions, node, temp, numInitialProperties);
-
-                // We need to clone the temporary identifier so that we can write it on a
-                // new line
-                expressions.push(node.multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
-                return inlineExpressions(expressions);
+            if (numInitialProperties < 0) {
+                return visitEachChild(node, visitor, context);
             }
-            return visitEachChild(node, visitor, context);
+
+            // For computed properties, we need to create a unique handle to the object
+            // literal so we can modify it without risking internal assignments tainting the object.
+            const temp = createTempVariable(hoistVariableDeclaration);
+
+            // Write out the first non-computed properties, then emit the rest through indexing on the temp variable.
+            const expressions: Expression[] = [];
+            const assignment = createAssignment(
+                temp,
+                setEmitFlags(
+                    createObjectLiteral(
+                        visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
+                        node.multiLine
+                    ),
+                    hasComputed ? EmitFlags.Indented : 0
+                )
+            );
+
+            if (node.multiLine) {
+                startOnNewLine(assignment);
+            }
+
+            expressions.push(assignment);
+
+            addObjectLiteralMembers(expressions, node, temp, numInitialProperties);
+
+            // We need to clone the temporary identifier so that we can write it on a
+            // new line
+            expressions.push(node.multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
+            return inlineExpressions(expressions);
         }
 
         interface ForStatementWithConvertibleInitializer extends ForStatement {
@@ -3515,7 +3506,7 @@ namespace ts {
             return setTextRange(
                 createPropertyAssignment(
                     node.name,
-                    getSynthesizedClone(node.name)
+                    visitIdentifier(getSynthesizedClone(node.name))
                 ),
                 /*location*/ node
             );
@@ -4255,7 +4246,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasModifier(member, ModifierFlags.Static)
+            return hasSyntacticModifier(member, ModifierFlags.Static)
                 ? getInternalName(node)
                 : createPropertyAccess(getInternalName(node), "prototype");
         }

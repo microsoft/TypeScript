@@ -49,7 +49,7 @@ declare let f11: (a: number, ...x: [string, ...boolean[]]) => void;
 >x : [string, ...boolean[]]
 
 declare let f12: (a: number, b: string, ...x: [...boolean[]]) => void;
->f12 : (a: number, b: string, ...x: boolean[]) => void
+>f12 : (a: number, b: string, ...x: [...boolean[]]) => void
 >a : number
 >b : string
 >x : boolean[]
@@ -417,7 +417,7 @@ f20(42, "hello", ...t2, true);
 >true : true
 
 type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
->T01 : [number, string, ...boolean[]]
+>T01 : [x: number, y: string, ...z: boolean[]]
 >x : number
 >y : string
 >z : boolean[]
@@ -427,7 +427,7 @@ type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
 >args : [number, string, ...boolean[]]
 
 type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
->T03 : [number, string, ...boolean[]]
+>T03 : [x: number, y: string, ...z: boolean[]]
 >x : number
 >y : string
 >z : boolean[]
@@ -452,7 +452,7 @@ type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any
 >tail : B
 
 type T10 = P1<(x: number, y: string, ...z: boolean[]) => void>;
->T10 : { head: number; tail: [string, ...boolean[]]; }
+>T10 : { head: number; tail: [y: string, ...z: boolean[]]; }
 >x : number
 >y : string
 >z : boolean[]
@@ -462,7 +462,7 @@ type T11 = P1<(...z: number[]) => void>;
 >z : number[]
 
 type T12 = P1<(x: number, y: number) => void>;
->T12 : { head: number; tail: [number]; }
+>T12 : { head: number; tail: [y: number]; }
 >x : number
 >y : number
 

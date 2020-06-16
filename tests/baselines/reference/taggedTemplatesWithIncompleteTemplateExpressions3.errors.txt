@@ -1,4 +1,4 @@
-tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions3.ts(5,18): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions3.ts(5,18): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions3.ts(5,23): error TS1109: Expression expected.
 
 
@@ -9,6 +9,6 @@ tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions3.ts(5,23):
     // Incomplete call, not enough parameters.
     f `123qdawdrqw${ 1 }${
                      ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
                           
 !!! error TS1109: Expression expected.

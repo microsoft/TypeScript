@@ -16,8 +16,8 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     }
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const { file, startPosition } = context;
-        const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
+        const { file, startPosition, triggerReason } = context;
+        const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason === "invoked");
         if (!info) return emptyArray;
 
         return [{
@@ -44,6 +44,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         const { expression, returnStatement, func } = info;
 
         let body: ConciseBody;
+
         if (actionName === addBracesActionName) {
             const returnStatement = createReturn(expression);
             body = createBlock([returnStatement], /* multiLine */ true);
@@ -54,24 +55,27 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             const actualExpression = expression || createVoidZero();
             body = needsParentheses(actualExpression) ? createParen(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
+            copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
         else {
             Debug.fail("invalid action");
         }
 
-        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func.body, body));
+        const edits = textChanges.ChangeTracker.with(context, t => {
+            t.replaceNode(file, func.body, body);
+        });
+
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function needsParentheses(expression: Expression) {
-        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
-    }
-
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): Info | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true): Info | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
-        if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node) || rangeContainsRange(func.body, node))) return undefined;
+        // Only offer a refactor in the function body on explicit refactor requests.
+        if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node)
+            || (rangeContainsRange(func.body, node) && !considerFunctionBodies))) return undefined;
 
         if (isExpression(func.body)) {
             return {

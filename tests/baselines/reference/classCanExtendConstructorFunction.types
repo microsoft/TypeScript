@@ -9,18 +9,18 @@ function Wagon(numberOxen) {
 
     this.numberOxen = numberOxen
 >this.numberOxen = numberOxen : number
->this.numberOxen : number
+>this.numberOxen : any
 >this : this
->numberOxen : number
+>numberOxen : any
 >numberOxen : number
 }
 /** @param {Wagon[]=} wagons */
 Wagon.circle = function (wagons) {
->Wagon.circle = function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[]) => number
->Wagon.circle : (wagons?: Wagon[]) => number
+>Wagon.circle = function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
+>Wagon.circle : (wagons?: Wagon[] | undefined) => number
 >Wagon : typeof Wagon
 >circle : (wagons?: Wagon[]) => number
->function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[]) => number
+>function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
 >wagons : Wagon[]
 
     return wagons ? wagons.length : 3.14;
@@ -33,24 +33,24 @@ Wagon.circle = function (wagons) {
 }
 /** @param {*[]=} supplies - *[]= is my favourite type */
 Wagon.prototype.load = function (supplies) {
->Wagon.prototype.load = function (supplies) {} : (supplies?: any[]) => void
+>Wagon.prototype.load = function (supplies) {} : (supplies?: any[] | undefined) => void
 >Wagon.prototype.load : any
 >Wagon.prototype : any
 >Wagon : typeof Wagon
 >prototype : any
 >load : any
->function (supplies) {} : (supplies?: any[]) => void
+>function (supplies) {} : (supplies?: any[] | undefined) => void
 >supplies : any[]
 }
 /** @param {*[]=} supplies - Yep, still a great type */
 Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
->Wagon.prototype.weight = supplies => supplies ? supplies.length : -1 : (supplies?: any[]) => number
+>Wagon.prototype.weight = supplies => supplies ? supplies.length : -1 : (supplies?: any[] | undefined) => number
 >Wagon.prototype.weight : any
 >Wagon.prototype : any
 >Wagon : typeof Wagon
 >prototype : any
 >weight : any
->supplies => supplies ? supplies.length : -1 : (supplies?: any[]) => number
+>supplies => supplies ? supplies.length : -1 : (supplies?: any[] | undefined) => number
 >supplies : any[]
 >supplies ? supplies.length : -1 : number
 >supplies : any[]
@@ -91,9 +91,9 @@ class Sql extends Wagon {
 
         this.foonly = 12
 >this.foonly = 12 : 12
->this.foonly : number
+>this.foonly : any
 >this : this
->foonly : number
+>foonly : any
 >12 : 12
     }
     /**
@@ -102,7 +102,7 @@ class Sql extends Wagon {
      * This is not assignable, so should have a type error
      */
     load(files, format) {
->load : (files: string[], format: "csv" | "json" | "xmlolololol") => void
+>load : (files: Array<string>, format: "csv" | "json" | "xmlolololol") => void
 >files : string[]
 >format : "csv" | "json" | "xmlolololol"
 

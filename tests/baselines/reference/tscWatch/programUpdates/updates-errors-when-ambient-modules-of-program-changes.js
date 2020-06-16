@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 declare module 'a' {
   type foo = number;
@@ -20,10 +20,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/a.js]
 
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
@@ -61,16 +59,17 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js]
+
+
+
 Change:: Create b.ts with same content
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
+Input::
 //// [/user/username/projects/myproject/b.ts]
 declare module 'a' {
   type foo = number;
 }
-
-//// [/user/username/projects/myproject/b.js]
-
 
 
 Output::
@@ -136,9 +135,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js]
+
+
+
 Change:: Delete b.ts
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
+Input::
 //// [/user/username/projects/myproject/b.ts] deleted
 
 Output::
@@ -177,3 +181,5 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/a.js] file written with same contents

@@ -112,26 +112,22 @@ namespace ts {
                             // export * as ns from "mod"
                             // export { x, y } from "mod"
                             externalImports.push(<ExportDeclaration>node);
+                            if (isNamedExports((node as ExportDeclaration).exportClause!)) {
+                                addExportedNamesForExportDeclaration(node as ExportDeclaration);
+                            }
+                            else {
+                                const name = ((node as ExportDeclaration).exportClause as NamespaceExport).name;
+                                if (!uniqueExports.get(idText(name))) {
+                                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
+                                    uniqueExports.set(idText(name), true);
+                                    exportedNames = append(exportedNames, name);
+                                }
+                            }
                         }
                     }
                     else {
                         // export { x, y }
-                        for (const specifier of cast((<ExportDeclaration>node).exportClause, isNamedExports).elements) {
-                            if (!uniqueExports.get(idText(specifier.name))) {
-                                const name = specifier.propertyName || specifier.name;
-                                exportSpecifiers.add(idText(name), specifier);
-
-                                const decl = resolver.getReferencedImportDeclaration(name)
-                                    || resolver.getReferencedValueDeclaration(name);
-
-                                if (decl) {
-                                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
-                                }
-
-                                uniqueExports.set(idText(specifier.name), true);
-                                exportedNames = append(exportedNames, specifier.name);
-                            }
-                        }
+                        addExportedNamesForExportDeclaration(node as ExportDeclaration);
                     }
                     break;
 
@@ -143,7 +139,7 @@ namespace ts {
                     break;
 
                 case SyntaxKind.VariableStatement:
-                    if (hasModifier(node, ModifierFlags.Export)) {
+                    if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                         for (const decl of (<VariableStatement>node).declarationList.declarations) {
                             exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames);
                         }
@@ -151,8 +147,8 @@ namespace ts {
                     break;
 
                 case SyntaxKind.FunctionDeclaration:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        if (hasModifier(node, ModifierFlags.Default)) {
+                    if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                        if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                             // export default function() { }
                             if (!hasExportDefault) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
@@ -172,8 +168,8 @@ namespace ts {
                     break;
 
                 case SyntaxKind.ClassDeclaration:
-                    if (hasModifier(node, ModifierFlags.Export)) {
-                        if (hasModifier(node, ModifierFlags.Default)) {
+                    if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                        if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                             // export default class { }
                             if (!hasExportDefault) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
@@ -200,6 +196,25 @@ namespace ts {
         }
 
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
+
+        function addExportedNamesForExportDeclaration(node: ExportDeclaration) {
+            for (const specifier of cast(node.exportClause, isNamedExports).elements) {
+                if (!uniqueExports.get(idText(specifier.name))) {
+                    const name = specifier.propertyName || specifier.name;
+                    exportSpecifiers.add(idText(name), specifier);
+
+                    const decl = resolver.getReferencedImportDeclaration(name)
+                        || resolver.getReferencedValueDeclaration(name);
+
+                    if (decl) {
+                        multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                    }
+
+                    uniqueExports.set(idText(specifier.name), true);
+                    exportedNames = append(exportedNames, specifier.name);
+                }
+            }
+        }
     }
 
     function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[] | undefined) {
@@ -259,7 +274,7 @@ namespace ts {
             && kind <= SyntaxKind.LastCompoundAssignment;
     }
 
-    export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): BitwiseOperatorOrHigher {
+    export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
         switch (kind) {
             case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
             case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
@@ -273,6 +288,10 @@ namespace ts {
             case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
             case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
             case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
+            case SyntaxKind.BarBarEqualsToken: return SyntaxKind.BarBarToken;
+            case SyntaxKind.AmpersandAmpersandEqualsToken: return SyntaxKind.AmpersandAmpersandToken;
+            case SyntaxKind.QuestionQuestionEqualsToken: return SyntaxKind.QuestionQuestionToken;
+
         }
     }
 

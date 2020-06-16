@@ -163,6 +163,7 @@ namespace ts.NavigationBar {
         // Save the old parent
         parentsStack.push(parent);
         trackedEs5ClassesStack.push(trackedEs5Classes);
+        trackedEs5Classes = undefined;
         parent = navNode;
     }
 
@@ -307,7 +308,18 @@ namespace ts.NavigationBar {
                 addNodeWithRecursiveChild(node, getInteriorModule(<ModuleDeclaration>node).body);
                 break;
 
-            case SyntaxKind.ExportAssignment:
+            case SyntaxKind.ExportAssignment: {
+                const expression = (<ExportAssignment>node).expression;
+                if (isObjectLiteralExpression(expression)) {
+                    startNode(node);
+                    addChildrenRecursively(expression);
+                    endNode();
+                }
+                else {
+                    addLeafNode(node);
+                }
+                break;
+            }
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.IndexSignature:
@@ -590,7 +602,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return hasModifier(a, ModifierFlags.Static) === hasModifier(b, ModifierFlags.Static);
+                return hasSyntacticModifier(a, ModifierFlags.Static) === hasSyntacticModifier(b, ModifierFlags.Static);
             case SyntaxKind.ModuleDeclaration:
                 return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b);
             default:
@@ -690,7 +702,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                if (getModifierFlags(node) & ModifierFlags.Default) {
+                if (getSyntacticModifierFlags(node) & ModifierFlags.Default) {
                     return "default";
                 }
                 // We may get a string with newlines or other whitespace in the case of an object dereference
@@ -883,7 +895,7 @@ namespace ts.NavigationBar {
             return nodeText(parent.name);
         }
         // Default exports are named "default"
-        else if (getModifierFlags(node) & ModifierFlags.Default) {
+        else if (getSyntacticModifierFlags(node) & ModifierFlags.Default) {
             return "default";
         }
         else if (isClassLike(node)) {

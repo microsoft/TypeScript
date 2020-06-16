@@ -474,9 +474,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             return new Date(this.time);
         }
 
-        reloadFS(fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[], options?: Partial<ReloadWatchInvokeOptions>) {
-            const mapNewLeaves = createMap<true>();
-            const isNewFs = this.fs.size === 0;
+        private reloadFS(fileOrFolderOrSymLinkList: readonly FileOrFolderOrSymLink[], options?: Partial<ReloadWatchInvokeOptions>) {
+            Debug.assert(this.fs.size === 0);
             fileOrFolderOrSymLinkList = fileOrFolderOrSymLinkList.concat(this.withSafeList ? safeList : []);
             const filesOrFoldersToLoad: readonly FileOrFolderOrSymLink[] = !this.windowsStyleRoot ? fileOrFolderOrSymLinkList :
                 fileOrFolderOrSymLinkList.map<FileOrFolderOrSymLink>(f => {
@@ -486,7 +485,6 @@ interface Array<T> { length: number; [n: number]: T; }`
                 });
             for (const fileOrDirectory of filesOrFoldersToLoad) {
                 const path = this.toFullPath(fileOrDirectory.path);
-                mapNewLeaves.set(path, true);
                 // If its a change
                 const currentEntry = this.fs.get(path);
                 if (currentEntry) {
@@ -519,18 +517,6 @@ interface Array<T> { length: number; [n: number]: T; }`
                 else {
                     this.ensureFileOrFolder(fileOrDirectory, options && options.ignoreWatchInvokedWithTriggerAsFileCreate);
                 }
-            }
-
-            if (!isNewFs) {
-                this.fs.forEach((fileOrDirectory, path) => {
-                    // If this entry is not from the new file or folder
-                    if (!mapNewLeaves.get(path)) {
-                        // Leaf entries that arent in new list => remove these
-                        if (isFsFile(fileOrDirectory) || isFsSymLink(fileOrDirectory) || isFsFolder(fileOrDirectory) && fileOrDirectory.entries.length === 0) {
-                            this.removeFileOrFolder(fileOrDirectory, folder => !mapNewLeaves.get(folder.path));
-                        }
-                    }
-                });
             }
         }
 

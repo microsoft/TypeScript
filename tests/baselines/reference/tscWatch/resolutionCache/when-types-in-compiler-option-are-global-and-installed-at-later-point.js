@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
+Input::
 //// [/user/username/projects/myproject/lib/app.ts]
 myapp.component("hello");
 
@@ -18,11 +18,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/lib/app.js]
-myapp.component("hello");
 
-
-
+/a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -61,9 +58,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/lib/app.js]
+myapp.component("hello");
+
+
+
 Change:: npm install ts-types
 
-//// [/user/username/projects/myproject/lib/app.js] file written with same contents
+Input::
 //// [/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json]
 {"version":"1.65.1","types":"types/somefile.define.d.ts"}
 
@@ -115,8 +117,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/lib/app.js] file written with same contents
+
 Change:: No change, just check program
 
+Input::
 
 Output::
 
@@ -139,3 +144,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

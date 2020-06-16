@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/c/app.ts
+Input::
 //// [/a/b/c/app.ts]
 
                 import {f} from "./module"
@@ -21,14 +21,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/c/app.js]
-"use strict";
-exports.__esModule = true;
-var module_1 = require("./module");
-console.log(module_1.f);
 
-
-
+/a/lib/tsc.js -w /a/b/c/app.ts
 Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
@@ -77,3 +71,11 @@ FsWatchesRecursive::
   {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/c/app.js]
+"use strict";
+exports.__esModule = true;
+var module_1 = require("./module");
+console.log(module_1.f);
+
+

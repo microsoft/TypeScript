@@ -34,6 +34,7 @@ namespace vfs {
 
     export interface DiffOptions {
         includeChangedFileWithSameContent?: boolean;
+        baseIsNotShadowRoot?: boolean;
     }
 
     /**
@@ -649,14 +650,14 @@ namespace vfs {
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
-        public readFileSync(path: string, encoding: string): string;
+        public readFileSync(path: string, encoding: BufferEncoding): string;
         /**
          * Read from a file.
          *
          * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
          */
-        public readFileSync(path: string, encoding?: string | null): string | Buffer;
-        public readFileSync(path: string, encoding: string | null = null) { // eslint-disable-line no-null/no-null
+        public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer;
+        public readFileSync(path: string, encoding: BufferEncoding | null = null) { // eslint-disable-line no-null/no-null
             const { node } = this._walk(this._resolve(path));
             if (!node) throw createIOError("ENOENT");
             if (isDirectory(node)) throw createIOError("EISDIR");
@@ -697,7 +698,8 @@ namespace vfs {
          * Generates a `FileSet` patch containing all the entries in this `FileSystem` that are not in `base`.
          * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
          */
-        public diff(base = this.shadowRoot, options: DiffOptions = {}) {
+        public diff(base?: FileSystem | undefined, options: DiffOptions = {}) {
+            if (!base && !options.baseIsNotShadowRoot) base = this.shadowRoot;
             const differences: FileSet = {};
             const hasDifferences = base ?
                 FileSystem.rootDiff(differences, this, base, options) :

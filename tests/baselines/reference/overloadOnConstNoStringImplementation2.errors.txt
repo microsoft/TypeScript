@@ -1,9 +1,9 @@
-tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(18,9): error TS2345: Argument of type '(x: "bye") => number' is not assignable to parameter of type '(x: "hi") => number'.
+tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(18,9): error TS2345: Argument of type '(x: 'bye') => number' is not assignable to parameter of type '(x: "hi") => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '"hi"' is not assignable to type '"bye"'.
 tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(20,9): error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: "hi") => number'.
   Types of parameters 'x' and 'x' are incompatible.
-    Type '"hi"' is not assignable to type 'number'.
+    Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/overloadOnConstNoStringImplementation2.ts (2 errors) ====
@@ -26,7 +26,7 @@ tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(20,9): error TS23
     c.x1(1, (x: 'hi') => { return 1; } );
     c.x1(1, (x: 'bye') => { return 1; } ); 
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: "bye") => number' is not assignable to parameter of type '(x: "hi") => number'.
+!!! error TS2345: Argument of type '(x: 'bye') => number' is not assignable to parameter of type '(x: "hi") => number'.
 !!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2345:     Type '"hi"' is not assignable to type '"bye"'.
     c.x1(1, (x: string) => { return 1; } );
@@ -34,4 +34,4 @@ tests/cases/compiler/overloadOnConstNoStringImplementation2.ts(20,9): error TS23
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: number) => number' is not assignable to parameter of type '(x: "hi") => number'.
 !!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2345:     Type '"hi"' is not assignable to type 'number'.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.

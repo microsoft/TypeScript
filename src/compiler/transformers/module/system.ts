@@ -119,7 +119,7 @@ namespace ts {
                     )
                 ), EmitFlags.NoTrailingComments);
 
-            if (!(compilerOptions.outFile || compilerOptions.out)) {
+            if (!outFile(compilerOptions)) {
                 moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
             }
 
@@ -333,37 +333,6 @@ namespace ts {
                     exportedNames.push(
                         createPropertyAssignment(
                             createLiteral(exportedLocalName),
-                            createTrue()
-                        )
-                    );
-                }
-            }
-
-            for (const externalImport of moduleInfo.externalImports) {
-                if (externalImport.kind !== SyntaxKind.ExportDeclaration) {
-                    continue;
-                }
-
-                if (!externalImport.exportClause) {
-                    // export * from ...
-                    continue;
-                }
-
-                if (isNamedExports(externalImport.exportClause)) {
-                    for (const element of externalImport.exportClause.elements) {
-                        // write name of indirectly exported entry, i.e. 'export {x} from ...'
-                        exportedNames.push(
-                            createPropertyAssignment(
-                                createLiteral(idText(element.name || element.propertyName)),
-                                createTrue()
-                            )
-                        );
-                    }
-                }
-                else {
-                    exportedNames.push(
-                        createPropertyAssignment(
-                            createLiteral(idText(externalImport.exportClause.name)),
                             createTrue()
                         )
                     );
@@ -693,7 +662,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-            if (hasModifier(node, ModifierFlags.Export)) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 hoistedStatements = append(hoistedStatements,
                     updateFunctionDeclaration(
                         node,
@@ -780,7 +749,7 @@ namespace ts {
             }
 
             let expressions: Expression[] | undefined;
-            const isExportedDeclaration = hasModifier(node, ModifierFlags.Export);
+            const isExportedDeclaration = hasSyntacticModifier(node, ModifierFlags.Export);
             const isMarkedDeclaration = hasAssociatedEndOfDeclarationMarker(node);
             for (const variable of node.declarationList.declarations) {
                 if (variable.initializer) {
@@ -911,7 +880,7 @@ namespace ts {
             // statement until we visit this declaration's `EndOfDeclarationMarker`.
             if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
                 const id = getOriginalNodeId(node);
-                const isExportedDeclaration = hasModifier(node.original!, ModifierFlags.Export);
+                const isExportedDeclaration = hasSyntacticModifier(node.original!, ModifierFlags.Export);
                 deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], <VariableStatement>node.original, isExportedDeclaration);
             }
 
@@ -1087,8 +1056,8 @@ namespace ts {
             }
 
             let excludeName: string | undefined;
-            if (hasModifier(decl, ModifierFlags.Export)) {
-                const exportName = hasModifier(decl, ModifierFlags.Default) ? createLiteral("default") : decl.name!;
+            if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
+                const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? createLiteral("default") : decl.name!;
                 statements = appendExportStatement(statements, exportName, getLocalName(decl));
                 excludeName = getTextOfIdentifierOrLiteral(exportName);
             }

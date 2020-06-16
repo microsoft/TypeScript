@@ -23,3 +23,8 @@ function F() {
     /** @readonly */
     this.z = 1
 }
+
+// https://github.com/microsoft/TypeScript/issues/38401
+class D {
+    constructor(/** @readonly */ x) {}
+}

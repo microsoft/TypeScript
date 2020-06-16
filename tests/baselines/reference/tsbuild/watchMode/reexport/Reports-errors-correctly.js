@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w -verbose src
+Input::
 //// [/user/username/projects/reexport/src/tsconfig.json]
 {
   "files": [],
@@ -63,93 +63,8 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/user/username/projects/reexport/out/pure/session.js]
-"use strict";
-exports.__esModule = true;
 
-
-//// [/user/username/projects/reexport/out/pure/session.d.ts]
-export interface Session {
-    foo: number;
-}
-
-
-//// [/user/username/projects/reexport/out/pure/index.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
-exports.__esModule = true;
-__exportStar(require("./session"), exports);
-
-
-//// [/user/username/projects/reexport/out/pure/index.d.ts]
-export * from "./session";
-
-
-//// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
-{
-  "program": {
-    "fileInfos": {
-      "../../../../../../a/lib/lib.d.ts": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "../../src/pure/session.ts": {
-        "version": "5375279855-export interface Session {\n  foo: number;\n  // bar: number;\n}\n",
-        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
-        "affectsGlobalScope": false
-      },
-      "../../src/pure/index.ts": {
-        "version": "-5356193041-export * from \"./session\";\n",
-        "signature": "-5356193041-export * from \"./session\";\n",
-        "affectsGlobalScope": false
-      }
-    },
-    "options": {
-      "composite": true,
-      "outDir": "..",
-      "rootDir": "../../src",
-      "watch": true,
-      "configFilePath": "../../src/pure/tsconfig.json"
-    },
-    "referencedMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
-      ]
-    },
-    "exportedModulesMap": {
-      "../../src/pure/index.ts": [
-        "../../src/pure/session.ts"
-      ]
-    },
-    "semanticDiagnosticsPerFile": [
-      "../../../../../../a/lib/lib.d.ts",
-      "../../src/pure/index.ts",
-      "../../src/pure/session.ts"
-    ]
-  },
-  "version": "FakeTSVersion"
-}
-
-//// [/user/username/projects/reexport/out/main/index.js]
-"use strict";
-exports.__esModule = true;
-exports.session = void 0;
-exports.session = {
-    foo: 1
-};
-
-
-
+/a/lib/tsc.js -b -w -verbose src
 Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] Starting compilation in watch mode...
@@ -227,25 +142,37 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Introduce error
-
-//// [/user/username/projects/reexport/src/pure/session.ts]
-export interface Session {
-  foo: number;
-  bar: number;
-}
+//// [/user/username/projects/reexport/out/pure/session.js]
+"use strict";
+exports.__esModule = true;
 
 
-//// [/user/username/projects/reexport/out/pure/session.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/session.d.ts]
 export interface Session {
     foo: number;
-    bar: number;
 }
 
 
-//// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
-//// [/user/username/projects/reexport/out/pure/index.d.ts] file written with same contents
+//// [/user/username/projects/reexport/out/pure/index.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
+exports.__esModule = true;
+__exportStar(require("./session"), exports);
+
+
+//// [/user/username/projects/reexport/out/pure/index.d.ts]
+export * from "./session";
+
+
 //// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
 {
   "program": {
@@ -256,8 +183,8 @@ export interface Session {
         "affectsGlobalScope": true
       },
       "../../src/pure/session.ts": {
-        "version": "4223553457-export interface Session {\n  foo: number;\n  bar: number;\n}\n",
-        "signature": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n",
+        "version": "5375279855-export interface Session {\n  foo: number;\n  // bar: number;\n}\n",
+        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
         "affectsGlobalScope": false
       },
       "../../src/pure/index.ts": {
@@ -291,6 +218,26 @@ export interface Session {
   },
   "version": "FakeTSVersion"
 }
+
+//// [/user/username/projects/reexport/out/main/index.js]
+"use strict";
+exports.__esModule = true;
+exports.session = void 0;
+exports.session = {
+    foo: 1
+};
+
+
+
+Change:: Introduce error
+
+Input::
+//// [/user/username/projects/reexport/src/pure/session.ts]
+export interface Session {
+  foo: number;
+  bar: number;
+}
+
 
 
 Output::
@@ -373,19 +320,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Fix error
-
-//// [/user/username/projects/reexport/src/pure/session.ts]
-export interface Session {
-  foo: number;
-  // bar: number;
-}
-
-
 //// [/user/username/projects/reexport/out/pure/session.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/session.d.ts]
 export interface Session {
     foo: number;
+    bar: number;
 }
 
 
@@ -401,8 +340,8 @@ export interface Session {
         "affectsGlobalScope": true
       },
       "../../src/pure/session.ts": {
-        "version": "5375279855-export interface Session {\n  foo: number;\n  // bar: number;\n}\n",
-        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
+        "version": "4223553457-export interface Session {\n  foo: number;\n  bar: number;\n}\n",
+        "signature": "309257137-export interface Session {\n    foo: number;\n    bar: number;\n}\n",
         "affectsGlobalScope": false
       },
       "../../src/pure/index.ts": {
@@ -437,7 +376,17 @@ export interface Session {
   "version": "FakeTSVersion"
 }
 
-//// [/user/username/projects/reexport/out/main/index.js] file changed its modified time
+
+Change:: Fix error
+
+Input::
+//// [/user/username/projects/reexport/src/pure/session.ts]
+export interface Session {
+  foo: number;
+  // bar: number;
+}
+
+
 
 Output::
 >> Screen clear
@@ -510,3 +459,60 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/reexport/src/main","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/reexport/out/pure/session.js] file written with same contents
+//// [/user/username/projects/reexport/out/pure/session.d.ts]
+export interface Session {
+    foo: number;
+}
+
+
+//// [/user/username/projects/reexport/out/pure/index.js] file written with same contents
+//// [/user/username/projects/reexport/out/pure/index.d.ts] file written with same contents
+//// [/user/username/projects/reexport/out/pure/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../../../../../a/lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../../src/pure/session.ts": {
+        "version": "5375279855-export interface Session {\n  foo: number;\n  // bar: number;\n}\n",
+        "signature": "-1218067212-export interface Session {\n    foo: number;\n}\n",
+        "affectsGlobalScope": false
+      },
+      "../../src/pure/index.ts": {
+        "version": "-5356193041-export * from \"./session\";\n",
+        "signature": "-5356193041-export * from \"./session\";\n",
+        "affectsGlobalScope": false
+      }
+    },
+    "options": {
+      "composite": true,
+      "outDir": "..",
+      "rootDir": "../../src",
+      "watch": true,
+      "configFilePath": "../../src/pure/tsconfig.json"
+    },
+    "referencedMap": {
+      "../../src/pure/index.ts": [
+        "../../src/pure/session.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "../../src/pure/index.ts": [
+        "../../src/pure/session.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../../../../../a/lib/lib.d.ts",
+      "../../src/pure/index.ts",
+      "../../src/pure/session.ts"
+    ]
+  },
+  "version": "FakeTSVersion"
+}
+
+//// [/user/username/projects/reexport/out/main/index.js] file changed its modified time
