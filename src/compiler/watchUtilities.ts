@@ -329,6 +329,83 @@ namespace ts {
         }
     }
 
+    export interface IsIgnoredFileFromWildCardWatchingInput {
+        watchedDirPath: Path;
+        fileOrDirectory: string;
+        fileOrDirectoryPath: Path;
+        configFileName: string;
+        options: CompilerOptions;
+        configFileSpecs: ConfigFileSpecs;
+        program: BuilderProgram | Program | undefined;
+        extraFileExtensions?: readonly FileExtensionInfo[];
+        currentDirectory: string;
+        useCaseSensitiveFileNames: boolean;
+        writeLog: (s: string) => void;
+    }
+    /* @internal */
+    export function isIgnoredFileFromWildCardWatching({
+        watchedDirPath, fileOrDirectory, fileOrDirectoryPath,
+        configFileName, options, configFileSpecs, program, extraFileExtensions,
+        currentDirectory, useCaseSensitiveFileNames,
+        writeLog,
+    }: IsIgnoredFileFromWildCardWatchingInput): boolean {
+        const newPath = removeIgnoredPath(fileOrDirectoryPath);
+        if (!newPath) {
+            writeLog(`Project: ${configFileName} Detected ignored path: ${fileOrDirectory}`);
+            return true;
+        }
+
+        fileOrDirectoryPath = newPath;
+        if (fileOrDirectoryPath === watchedDirPath) return false;
+
+        // If the the added or created file or directory is not supported file name, ignore the file
+        // But when watched directory is added/removed, we need to reload the file list
+        if (hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, options, extraFileExtensions)) {
+            writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
+            return true;
+        }
+
+        if (isExcludedFile(fileOrDirectory, configFileSpecs, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), useCaseSensitiveFileNames, currentDirectory)) {
+            writeLog(`Project: ${configFileName} Detected excluded file: ${fileOrDirectory}`);
+            return true;
+        }
+
+        if (!program) return false;
+
+        // We want to ignore emit file check if file is not going to be emitted next to source file
+        // In that case we follow config file inclusion rules
+        if (options.outFile || options.outDir) return false;
+
+        // File if emitted next to input needs to be ignored
+        if (fileExtensionIs(fileOrDirectoryPath, Extension.Dts)) {
+            // If its declaration directory: its not ignored if not excluded by config
+            if (options.declarationDir) return false;
+        }
+        else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensions)) {
+            return false;
+        }
+
+        // just check if sourceFile with the name exists
+        const filePathWithoutExtension = removeFileExtension(fileOrDirectoryPath);
+        const realProgram = isBuilderProgram(program) ? program.getProgramOrUndefined() : program;
+        if (hasSourceFile((filePathWithoutExtension + Extension.Ts) as Path) ||
+            hasSourceFile((filePathWithoutExtension + Extension.Tsx) as Path)) {
+            writeLog(`Project: ${configFileName} Detected output file: ${fileOrDirectory}`);
+            return true;
+        }
+        return false;
+
+        function hasSourceFile(file: Path) {
+            return realProgram ?
+                !!realProgram.getSourceFileByPath(file) :
+                (program as BuilderProgram).getState().fileInfos.has(file);
+        }
+    }
+
+    function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
+        return !!(program as T).getState;
+    }
+
     export function isEmittedFileOfProgram(program: Program | undefined, file: string) {
         if (!program) {
             return false;

@@ -2049,6 +2049,7 @@ namespace ts {
         let oldIndex = 0;
         const newLen = newItems.length;
         const oldLen = oldItems.length;
+        let hasChanges = false;
         while (newIndex < newLen && oldIndex < oldLen) {
             const newItem = newItems[newIndex];
             const oldItem = oldItems[oldIndex];
@@ -2056,10 +2057,12 @@ namespace ts {
             if (compareResult === Comparison.LessThan) {
                 inserted(newItem);
                 newIndex++;
+                hasChanges = true;
             }
             else if (compareResult === Comparison.GreaterThan) {
                 deleted(oldItem);
                 oldIndex++;
+                hasChanges = true;
             }
             else {
                 unchanged(oldItem, newItem);
@@ -2069,10 +2072,13 @@ namespace ts {
         }
         while (newIndex < newLen) {
             inserted(newItems[newIndex++]);
+            hasChanges = true;
         }
         while (oldIndex < oldLen) {
             deleted(oldItems[oldIndex++]);
+            hasChanges = true;
         }
+        return hasChanges;
     }
 
     export function fill<T>(length: number, cb: (index: number) => T): T[] {
