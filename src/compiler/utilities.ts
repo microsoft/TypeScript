@@ -4360,8 +4360,8 @@ namespace ts {
         return getSyntacticModifierFlags(node) & flags;
     }
 
-    export function hasEffectiveModifierFlagsFromSymbol(symbol: Symbol, flags: ModifierFlags): boolean {
-        return !!symbol.declarations?.some(decl => !!getSelectedEffectiveModifierFlags(decl, flags));
+    export function hasNodeFlagsFromSymbol(symbol: Symbol, flags: NodeFlags): boolean {
+        return some(symbol.declarations, decl => !!(decl.flags & flags));
     }
 
     function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {

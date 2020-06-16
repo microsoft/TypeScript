@@ -12,8 +12,7 @@ namespace ts {
     let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-
+    let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;    
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
         if (kind === SyntaxKind.SourceFile) {
             return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, pos, end);
@@ -971,10 +970,15 @@ namespace ts {
             }
         }
 
+        let hasDeprecatedTag = false;
         function addJSDocComment<T extends HasJSDoc>(node: T): T {
             Debug.assert(!node.jsDoc); // Should only be called once per node
             const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceFile.text), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
             if (jsDoc.length) node.jsDoc = jsDoc;
+            if (hasDeprecatedTag) {
+                hasDeprecatedTag = false;
+                node.flags |= NodeFlags.Deprecated;
+            }
             return node;
         }
 
@@ -7096,7 +7100,7 @@ namespace ts {
                             tag = parseSimpleTag(start, SyntaxKind.JSDocReadonlyTag, tagName);
                             break;
                         case "deprecated":
-                            tag = parseSimpleTag(start, SyntaxKind.JSDocDeprecatedTag, tagName);
+                            tag = parseDeprecatedTag(start, tagName);
                             break;
                         case "this":
                             tag = parseThisTag(start, tagName);
@@ -7482,6 +7486,13 @@ namespace ts {
                     tag.tagName = tagName;
                     tag.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     skipWhitespace();
+                    return finishNode(tag);
+                }
+
+                function parseDeprecatedTag(start: number, tagName: Identifier): JSDocDeprecatedTag {
+                    const tag = <JSDocDeprecatedTag>createNode(SyntaxKind.JSDocDeprecatedTag, start);
+                    tag.tagName = tagName;
+                    hasDeprecatedTag = true;
                     return finishNode(tag);
                 }
 

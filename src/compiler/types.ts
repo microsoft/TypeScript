@@ -583,6 +583,7 @@ namespace ts {
         /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
         JsonFile                                      = 1 << 25, // If node was parsed in a Json
         /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
+        /* @internal */ Deprecated                    = 1 << 27, // If has '@deprecated' JSDoc tag
 
         BlockScoped = Let | Const,
 
