@@ -294,11 +294,6 @@ namespace ts.server {
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
-        /**
-         * @internal
-         * Projects whose auto-import providers include this file
-         */
-        private auxiliaryFileContainingProjects: Project[] | undefined;
         private formatSettings: FormatCodeSettings | undefined;
         private preferences: protocol.UserPreferences | undefined;
 
@@ -435,80 +430,40 @@ namespace ts.server {
             return isNew;
         }
 
-        /*@internal*/
-        attachToProjectAsAuxiliaryFile(project: Project) {
-            const isNew = !this.isAttachedAsAuxiliaryFile(project);
-            if (isNew) {
-                this.auxiliaryFileContainingProjects = append(this.auxiliaryFileContainingProjects, project);
-            }
-            return isNew;
-        }
-
         isAttached(project: Project) {
-            return this.isContainedBy(project, this.containingProjects);
-        }
-
-        /*@internal*/
-        isAttachedAsAuxiliaryFile(project: Project): boolean {
-            return !!this.auxiliaryFileContainingProjects
-                && this.isContainedBy(project, this.auxiliaryFileContainingProjects);
-        }
-
-        /*@internal*/
-        private isContainedBy(project: Project, container: readonly Project[]) {
             // unrolled for common cases
-            switch (container.length) {
+            switch (this.containingProjects.length) {
                 case 0: return false;
-                case 1: return container[0] === project;
-                case 2: return container[0] === project || container[1] === project;
-                default: return contains(container, project);
+                case 1: return this.containingProjects[0] === project;
+                case 2: return this.containingProjects[0] === project || this.containingProjects[1] === project;
+                default: return contains(this.containingProjects, project);
             }
         }
 
         detachFromProject(project: Project) {
-            this.removeFromContainingProject(project, this.containingProjects, /*invokeProjectCallback*/ true);
-        }
-
-        /*@internal*/
-        detachFromProjectAsAuxiliaryFile(project: Project) {
-            if (this.auxiliaryFileContainingProjects) {
-                this.removeFromContainingProject(project, this.auxiliaryFileContainingProjects, /*invokeProjectCallback*/ false);
-            }
-        }
-
-        /*@internal*/
-        private removeFromContainingProject(project: Project, container: Project[], invokeProjectCallback: boolean) {
             // unrolled for common cases
-            switch (container.length) {
+            switch (this.containingProjects.length) {
                 case 0:
                     return;
                 case 1:
-                    if (container[0] === project) {
-                        if (invokeProjectCallback) {
-                            project.onFileAddedOrRemoved();
-                        }
-                        container.pop();
+                    if (this.containingProjects[0] === project) {
+                        project.onFileAddedOrRemoved();
+                        this.containingProjects.pop();
                     }
                     break;
                 case 2:
-                    if (container[0] === project) {
-                        if (invokeProjectCallback) {
-                            project.onFileAddedOrRemoved();
-                        }
-                        container[0] = container.pop()!;
+                    if (this.containingProjects[0] === project) {
+                        project.onFileAddedOrRemoved();
+                        this.containingProjects[0] = this.containingProjects.pop()!;
                     }
-                    else if (container[1] === project) {
-                        if (invokeProjectCallback) {
-                            project.onFileAddedOrRemoved();
-                        }
-                        container.pop();
+                    else if (this.containingProjects[1] === project) {
+                        project.onFileAddedOrRemoved();
+                        this.containingProjects.pop();
                     }
                     break;
                 default:
-                    if (unorderedRemoveItem(container, project)) {
-                        if (invokeProjectCallback) {
-                            project.onFileAddedOrRemoved();
-                        }
+                    if (unorderedRemoveItem(this.containingProjects, project)) {
+                        project.onFileAddedOrRemoved();
                     }
                     break;
             }
@@ -529,7 +484,6 @@ namespace ts.server {
                 }
             }
             clear(this.containingProjects);
-            this.auxiliaryFileContainingProjects = undefined;
         }
 
         getDefaultProject() {
@@ -568,20 +522,21 @@ namespace ts.server {
                             firstExternalProject = project;
                         }
                     }
-                    return defaultConfiguredProject ||
+                    const result = defaultConfiguredProject ||
                         firstNonSourceOfProjectReferenceRedirect ||
                         firstConfiguredProject ||
                         firstExternalProject ||
                         this.containingProjects[0];
+
+                    if (result.projectKind === ProjectKind.AutoImportProvider) {
+                        return Errors.ThrowNoProject();
+                    }
+                    return result;
             }
         }
 
-        /**
-         * @internal
-         * Gets projects whose auto-import providers include this file
-         */
-        getAuxiliaryFileContainingProjects() {
-            return this.auxiliaryFileContainingProjects;
+        getContainingAutoImportProviderProjects() {
+            return this.containingProjects.filter(p => p.projectKind === ProjectKind.AutoImportProvider);
         }
 
         registerFileUpdate(): void {
@@ -659,11 +614,6 @@ namespace ts.server {
 
         isOrphan() {
             return !forEach(this.containingProjects, p => !p.isOrphan());
-        }
-
-        /*@internal*/
-        isContainedAsAuxiliaryFile() {
-            return !!this.auxiliaryFileContainingProjects?.length;
         }
 
         /**

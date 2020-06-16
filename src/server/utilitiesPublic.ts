@@ -117,6 +117,15 @@ namespace ts.server {
         return `/dev/null/inferredProject${counter}*`;
     }
 
+    export function isAuxiliaryProjectName(name: string) {
+        // POSIX defines /dev/null as a device - there should be no file with this prefix
+        return /dev\/null\/auxiliaryProject\d+\*/.test(name);
+    }
+
+    export function makeAuxiliaryProjectName(counter: number) {
+        return `/dev/null/auxiliaryProject${counter}*`;
+    }
+
     export function createSortedArray<T>(): SortedArray<T> {
         return [] as any as SortedArray<T>; // TODO: GH#19873
     }

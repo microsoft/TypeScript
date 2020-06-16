@@ -3,7 +3,8 @@ namespace ts.server {
     export enum ProjectKind {
         Inferred,
         Configured,
-        External
+        External,
+        AutoImportProvider,
     }
 
     /* @internal */
@@ -188,9 +189,6 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
-        /*@internal*/
-        private autoImportProgramVersion = 0;
-
         protected isInitialLoadPending: () => boolean = returnFalse;
 
         /*@internal*/
@@ -249,6 +247,8 @@ namespace ts.server {
         private dirtyFilesForSuggestions: Map<true> | undefined;
         /*@internal*/
         private symlinks: ReadonlyMap<string> | undefined;
+        /*@internal*/
+        private autoImportProviderHost: AutoImportProviderProject | undefined;
 
         /*@internal*/
         constructor(
@@ -343,12 +343,6 @@ namespace ts.server {
             return this.projectStateVersion.toString();
         }
 
-        /*@internal*/
-        getPackageJsonAutoImportProviderVersion() {
-            // Include the preference in the version string to ensure a reconfiguration triggers an update
-            return `${this.projectService.includePackageJsonAutoImports}.${this.autoImportProgramVersion}`;
-        }
-
         getProjectReferences(): readonly ProjectReference[] | undefined {
             return undefined;
         }
@@ -369,7 +363,7 @@ namespace ts.server {
             return addRange(result, this.typingFiles) || ts.emptyArray;
         }
 
-        private getOrCreateScriptInfoAndAttachToProject(fileName: string, isAuxiliaryFile?: boolean) {
+        private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
             const scriptInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
             if (scriptInfo) {
                 const existingValue = this.rootFilesMap.get(scriptInfo.path);
@@ -378,12 +372,7 @@ namespace ts.server {
                     this.rootFiles.push(scriptInfo);
                     existingValue.info = scriptInfo;
                 }
-                if (isAuxiliaryFile) {
-                    scriptInfo.attachToProjectAsAuxiliaryFile(this);
-                }
-                else if (isAuxiliaryFile === false || !scriptInfo.isAttachedAsAuxiliaryFile(this)) {
-                    scriptInfo.attachToProject(this);
-                }
+                scriptInfo.attachToProject(this);
             }
             return scriptInfo;
         }
@@ -400,8 +389,8 @@ namespace ts.server {
             return (info && info.getLatestVersion())!; // TODO: GH#18217
         }
 
-        getScriptSnapshot(filename: string, isAuxiliaryFile?: boolean): IScriptSnapshot | undefined {
-            const scriptInfo = this.getOrCreateScriptInfoAndAttachToProject(filename, isAuxiliaryFile);
+        getScriptSnapshot(filename: string): IScriptSnapshot | undefined {
+            const scriptInfo = this.getOrCreateScriptInfoAndAttachToProject(filename);
             if (scriptInfo) {
                 return scriptInfo.getSnapshot();
             }
@@ -730,13 +719,6 @@ namespace ts.server {
                 });
             }
 
-            const autoImportProvider = this.languageService.getAutoImportProvider(/*ensureSynchronized*/ false);
-            if (autoImportProvider) {
-                for (const f of autoImportProvider.getSourceFiles()) {
-                    this.getScriptInfo(f.fileName)?.detachFromProjectAsAuxiliaryFile(this);
-                }
-            }
-
             // Release external files
             forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
             // Always remove root files from the project
@@ -960,7 +942,7 @@ namespace ts.server {
 
         /*@internal*/
         markAutoImportProviderAsDirty() {
-            this.autoImportProgramVersion++;
+            this.autoImportProviderHost?.markAsDirty();
         }
 
         /* @internal */
@@ -1008,7 +990,7 @@ namespace ts.server {
 
             if (hasNewProgram) {
                 this.projectProgramVersion++;
-                this.autoImportProgramVersion++;
+                this.autoImportProviderHost?.markAsDirty();
             }
             perfLogger.logStopUpdateGraph();
             return !hasNewProgram;
@@ -1612,11 +1594,34 @@ namespace ts.server {
 
         /*@internal*/
         includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
-            if (this.projectService.includePackageJsonAutoImports === PackageJsonAutoImportPreference.None ||
+            if (this.projectService.includePackageJsonAutoImports() === PackageJsonAutoImportPreference.None ||
+                isInsideNodeModules(this.currentDirectory) ||
                 !this.isDefaultProjectForOpenFiles()) {
                 return PackageJsonAutoImportPreference.None;
             }
-            return this.projectService.includePackageJsonAutoImports;
+            return this.projectService.includePackageJsonAutoImports();
+        }
+
+        /*@internal*/
+        getPackageJsonAutoImportProvider(): Program | undefined {
+            if (this.autoImportProviderHost) {
+                updateProjectIfDirty(this.autoImportProviderHost);
+                if (!this.autoImportProviderHost.hasRoots()) {
+                    this.autoImportProviderHost.close();
+                    this.autoImportProviderHost = undefined;
+                    return undefined;
+                }
+                return this.autoImportProviderHost.getCurrentProgram();
+            }
+
+            const dependencySelection = this.includePackageJsonAutoImports();
+            if (dependencySelection) {
+                this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.documentRegistry);
+                if (this.autoImportProviderHost) {
+                    updateProjectIfDirty(this.autoImportProviderHost);
+                    return this.autoImportProviderHost.getCurrentProgram();
+                }
+            }
         }
 
         /*@internal*/
@@ -1651,19 +1656,17 @@ namespace ts.server {
         });
     }
 
+    function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => string) {
+        let nextId = 1;
+        return () => nameFactory(nextId++);
+    }
+
     /**
      * If a file is opened and no tsconfig (or jsconfig) is found,
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
-        private static readonly newName = (() => {
-            let nextId = 1;
-            return () => {
-                const id = nextId;
-                nextId++;
-                return makeInferredProjectName(id);
-            };
-        })();
+        private static readonly newName = createProjectNameFactoryWithCounter(makeInferredProjectName);
 
         private _isJsInferredProject = false;
 
@@ -1768,6 +1771,136 @@ namespace ts.server {
                 include: [],
                 exclude: []
             };
+        }
+    }
+
+    export class AutoImportProviderProject extends Project {
+        private static readonly newName = createProjectNameFactoryWithCounter(makeAuxiliaryProjectName);
+
+        static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, compilerOptions: CompilerOptions): string[] {
+            if (!dependencySelection) {
+                return [];
+            }
+
+            let dependencyNames: Map<true> | undefined;
+            let rootNames: string[] | undefined;
+            const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
+            const packageJsons = hostProject.getPackageJsonsForAutoImport(combinePaths(hostProject.currentDirectory, rootFileName));
+            for (const packageJson of packageJsons) {
+                packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
+                packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
+                if (dependencySelection === PackageJsonAutoImportPreference.All) {
+                    packageJson.devDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
+                }
+            }
+
+            if (dependencyNames) {
+                const resolutions = map(arrayFrom(dependencyNames.keys()), name => resolveTypeReferenceDirective(
+                    name,
+                    rootFileName,
+                    compilerOptions,
+                    hostProject));
+
+                for (const resolution of resolutions) {
+                    if (resolution.resolvedTypeReferenceDirective?.resolvedFileName && !hostProject.getCurrentProgram()!.getSourceFile(resolution.resolvedTypeReferenceDirective.resolvedFileName)) {
+                        rootNames = append(rootNames, resolution.resolvedTypeReferenceDirective.resolvedFileName);
+                    }
+                }
+            }
+
+            return rootNames || [];
+
+            function addDependency(dependency: string) {
+                if (!startsWith(dependency, "@types/")) {
+                    (dependencyNames || (dependencyNames = createMap())).set(dependency, true);
+                }
+            }
+        }
+
+        static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
+            if (dependencySelection === PackageJsonAutoImportPreference.None) {
+                return undefined;
+            }
+
+            const compilerOptions: CompilerOptions = {
+                ...hostProject.getCompilerOptions(),
+                noLib: true,
+                diagnostics: false,
+                skipLibCheck: true,
+                types: ts.emptyArray,
+                lib: ts.emptyArray,
+                sourceMap: false
+            };
+
+            const rootNames = this.getRootFileNames(dependencySelection, hostProject, compilerOptions);
+            if (!rootNames.length) {
+                return undefined;
+            }
+
+            return new AutoImportProviderProject(hostProject, rootNames, documentRegistry, compilerOptions);
+        }
+
+        private rootFileNames: string[] | undefined;
+
+        /*@internal*/
+        constructor(
+            private hostProject: Project,
+            initialRootNames: string[],
+            documentRegistry: DocumentRegistry,
+            compilerOptions: CompilerOptions,
+        ) {
+            super(AutoImportProviderProject.newName(),
+                ProjectKind.AutoImportProvider,
+                hostProject.projectService,
+                documentRegistry,
+                /*hasExplicitListOfFiles*/ false,
+                /*lastFileExceededProgramSize*/ undefined,
+                compilerOptions,
+                /*compileOnSaveEnabled*/ false,
+                hostProject.getWatchOptions(),
+                hostProject.projectService.host,
+                hostProject.currentDirectory);
+
+            this.rootFileNames = initialRootNames;
+        }
+
+        updateGraph() {
+            let rootFileNames = this.rootFileNames;
+            if (!rootFileNames) {
+                rootFileNames = AutoImportProviderProject.getRootFileNames(
+                    this.hostProject.includePackageJsonAutoImports(),
+                    this.hostProject,
+                    this.getCompilationSettings());
+            }
+
+            this.projectService.setFileNamesOfAutoImportProviderProject(this, rootFileNames);
+            this.rootFileNames = rootFileNames;
+            return super.updateGraph();
+        }
+
+        markAsDirty() {
+            this.rootFileNames = undefined;
+            super.markAsDirty();
+        }
+
+        getScriptFileNames() {
+            return this.rootFileNames || ts.emptyArray;
+        }
+
+        getLanguageService(): never {
+            throw new Error("AutoImportProviderProject language service should never be used. To get the program, use `project.getCurrentProgram()`.");
+        }
+
+        markAutoImportProviderAsDirty(): never {
+            throw new Error("AutoImportProviderProject is an auto import provider; use `markAsDirty()` instead.");
+        }
+
+        includePackageJsonAutoImports() {
+            return PackageJsonAutoImportPreference.None;
+        }
+
+        getTypeAcquisition(): TypeAcquisition {
+            return { enable: false };
         }
     }
 

@@ -1084,7 +1084,7 @@ namespace ts.server {
                 this.logger.msg(`Error: got watch notification for unknown file: ${fileName}`);
             }
             else {
-                info.getAuxiliaryFileContainingProjects()?.forEach(p => p.markAutoImportProviderAsDirty());
+                info.getContainingAutoImportProviderProjects().forEach(p => p.markAsDirty());
                 if (info.containingProjects) {
                     info.containingProjects.forEach(project => project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(info.path));
                 }
@@ -2046,7 +2046,7 @@ namespace ts.server {
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
         }
 
-        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {
+        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
             const newRootScriptInfoMap = createMap<true>();
 
@@ -2141,6 +2141,11 @@ namespace ts.server {
             project.updateErrorOnNoInputFiles(fileNamesResult);
             this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
+        }
+
+        /*@internal*/
+        setFileNamesOfAutoImportProviderProject(project: AutoImportProviderProject, fileNames: string[]) {
+            this.updateNonInferredProjectFiles(project, fileNames, fileNamePropertyReader);
         }
 
         /**
@@ -2687,7 +2692,7 @@ namespace ts.server {
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
-                    const { lazyConfiguredProjectsFromExternalProject } = this.hostConfiguration.preferences;
+                    const { lazyConfiguredProjectsFromExternalProject, includePackageJsonAutoImports } = this.hostConfiguration.preferences;
                     this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                     if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
                         // Load configured projects for external projects that are pending reload
@@ -2698,6 +2703,9 @@ namespace ts.server {
                                 project.updateGraph();
                             }
                         });
+                    }
+                    if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
+                        this.invalidateProjectAutoImports(/*packageJsonPath*/ undefined);
                     }
                 }
                 if (args.extraFileExtensions) {
@@ -3203,7 +3211,7 @@ namespace ts.server {
             const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
-                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedAsAuxiliaryFile()) {
+                if (!info.isScriptOpen() && info.isOrphan()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
                     let sourceInfos: Map<true> | undefined;
@@ -3749,7 +3757,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        get includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
+        includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
             switch (this.hostConfiguration.preferences.includePackageJsonAutoImports) {
                 case "none": return PackageJsonAutoImportPreference.None;
                 case "all": return PackageJsonAutoImportPreference.All;
@@ -3758,14 +3766,14 @@ namespace ts.server {
         }
 
         /*@internal*/
-        private invalidateProjectAutoImports(packageJsonPath: Path) {
-            if (this.includePackageJsonAutoImports) {
+        private invalidateProjectAutoImports(packageJsonPath: Path | undefined) {
+            if (this.includePackageJsonAutoImports()) {
                 this.configuredProjects.forEach(invalidate);
                 this.inferredProjects.forEach(invalidate);
                 this.externalProjects.forEach(invalidate);
             }
             function invalidate(project: Project) {
-                if (project.packageJsonsForAutoImport?.has(packageJsonPath)) {
+                if (!packageJsonPath || project.packageJsonsForAutoImport?.has(packageJsonPath)) {
                     project.getImportSuggestionsCache().clear();
                     project.markAutoImportProviderAsDirty();
                 }
