@@ -86,7 +86,7 @@ namespace ts.projectSystem {
             const proj = projectService.inferredProjects[0];
             assert.isDefined(proj);
 
-            assert.isFalse(proj.languageServiceEnabled);
+            assert.isTrue(proj.languageServiceEnabled);
         });
 
         it("project settings for inferred projects", () => {

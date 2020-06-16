@@ -725,7 +725,13 @@ namespace ts.server {
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
-            this.watchFactory = getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
+            this.watchFactory = this.syntaxOnly ?
+                {
+                    watchFile: returnNoopFileWatcher,
+                    watchFilePath: returnNoopFileWatcher,
+                    watchDirectory: returnNoopFileWatcher,
+                } :
+                getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
         }
 
         toPath(fileName: string) {
