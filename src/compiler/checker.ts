@@ -10319,6 +10319,9 @@ namespace ts {
                     return indexedAccess;
                 }
             }
+            if (isGenericTupleType(type.objectType)) {
+                return getIndexTypeOfType(type.objectType, IndexKind.Number);
+            }
             const objectConstraint = getSimplifiedTypeOrConstraint(type.objectType);
             if (objectConstraint && objectConstraint !== type.objectType) {
                 return getIndexedAccessTypeOrUndefined(objectConstraint, type.indexType);
@@ -10507,6 +10510,9 @@ namespace ts {
                     return keyofConstraintType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
+                    if (isGenericTupleType((<IndexedAccessType>t).objectType)) {
+                        return getIndexTypeOfType((<IndexedAccessType>t).objectType, IndexKind.Number);
+                    }
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType);
