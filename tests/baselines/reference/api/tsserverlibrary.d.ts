@@ -8875,7 +8875,8 @@ declare namespace ts.server {
     enum ProjectKind {
         Inferred = 0,
         Configured = 1,
-        External = 2
+        External = 2,
+        AutoImportProvider = 3
     }
     function allRootFilesAreJsOrDts(project: Project): boolean;
     function allFilesAreJsOrDts(project: Project): boolean;
@@ -8960,7 +8961,7 @@ declare namespace ts.server {
         private getOrCreateScriptInfoAndAttachToProject;
         getScriptKind(fileName: string): ScriptKind;
         getScriptVersion(filename: string): string;
-        getScriptSnapshot(filename: string, isAuxiliaryFile?: boolean): IScriptSnapshot | undefined;
+        getScriptSnapshot(filename: string): IScriptSnapshot | undefined;
         getCancellationToken(): HostCancellationToken;
         getCurrentDirectory(): string;
         getDefaultLibFileName(): string;
@@ -9052,6 +9053,17 @@ declare namespace ts.server {
         removeRoot(info: ScriptInfo): void;
         isProjectWithSingleRoot(): boolean;
         close(): void;
+        getTypeAcquisition(): TypeAcquisition;
+    }
+    class AutoImportProviderProject extends Project {
+        private hostProject;
+        private static readonly newName;
+        private rootFileNames;
+        updateGraph(): boolean;
+        markAsDirty(): void;
+        getScriptFileNames(): string[];
+        getLanguageService(): never;
+        markAutoImportProviderAsDirty(): never;
         getTypeAcquisition(): TypeAcquisition;
     }
     /**

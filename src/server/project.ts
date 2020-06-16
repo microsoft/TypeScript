@@ -1776,8 +1776,9 @@ namespace ts.server {
     }
 
     export class AutoImportProviderProject extends Project {
-        private static readonly newName = createProjectNameFactoryWithCounter(makeAuxiliaryProjectName);
+        private static readonly newName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
 
+        /*@internal*/
         static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, compilerOptions: CompilerOptions): string[] {
             if (!dependencySelection) {
                 return [];
@@ -1818,6 +1819,7 @@ namespace ts.server {
             }
         }
 
+        /*@internal*/
         static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
             if (dependencySelection === PackageJsonAutoImportPreference.None) {
                 return undefined;
@@ -1896,6 +1898,7 @@ namespace ts.server {
             throw new Error("AutoImportProviderProject is an auto import provider; use `markAsDirty()` instead.");
         }
 
+        /*@internal*/
         includePackageJsonAutoImports() {
             return PackageJsonAutoImportPreference.None;
         }

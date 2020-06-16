@@ -534,6 +534,7 @@ namespace ts.server {
             }
         }
 
+        /*@internal*/
         getContainingAutoImportProviderProjects() {
             return this.containingProjects.filter(p => p.projectKind === ProjectKind.AutoImportProvider);
         }
