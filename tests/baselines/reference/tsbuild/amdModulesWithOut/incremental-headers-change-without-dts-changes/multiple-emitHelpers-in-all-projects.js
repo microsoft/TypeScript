@@ -1,4 +1,10 @@
-//// [/lib/incremental-headers-change-without-dts-changesOutput.txt]
+Input::
+//// [/src/lib/file1.ts]
+export const x = 10;function forlibfile1Rest() { }
+
+
+
+Output::
 /lib/tsc --b /src/app --verbose
 [[90m12:08:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
@@ -799,9 +805,6 @@ declare const myVar = 30;
 declare function appfile4Spread(...b: number[]): void;
 
 ======================================================================
-
-//// [/src/lib/file1.ts]
-export const x = 10;function forlibfile1Rest() { }
 
 //// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents

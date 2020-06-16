@@ -1,0 +1,43 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment8.ts ===
+declare const bar: { value?: number[] } | undefined
+>bar : Symbol(bar, Decl(logicalAssignment8.ts, 0, 13))
+>value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+
+function foo1(results: number[] | undefined) {
+>foo1 : Symbol(foo1, Decl(logicalAssignment8.ts, 0, 51))
+>results : Symbol(results, Decl(logicalAssignment8.ts, 2, 14))
+
+    (results ||= bar?.value ?? []).push(100);
+>(results ||= bar?.value ?? []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment8.ts, 2, 14))
+>bar?.value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+>bar : Symbol(bar, Decl(logicalAssignment8.ts, 0, 13))
+>value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function foo2(results: number[] | undefined) {
+>foo2 : Symbol(foo2, Decl(logicalAssignment8.ts, 4, 1))
+>results : Symbol(results, Decl(logicalAssignment8.ts, 6, 14))
+
+    (results ??= bar?.value ?? []).push(100);
+>(results ??= bar?.value ?? []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment8.ts, 6, 14))
+>bar?.value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+>bar : Symbol(bar, Decl(logicalAssignment8.ts, 0, 13))
+>value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+function foo3(results: number[] | undefined) {
+>foo3 : Symbol(foo3, Decl(logicalAssignment8.ts, 8, 1))
+>results : Symbol(results, Decl(logicalAssignment8.ts, 10, 14))
+
+    (results &&= bar?.value ?? []).push(100);
+>(results &&= bar?.value ?? []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results : Symbol(results, Decl(logicalAssignment8.ts, 10, 14))
+>bar?.value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+>bar : Symbol(bar, Decl(logicalAssignment8.ts, 0, 13))
+>value : Symbol(value, Decl(logicalAssignment8.ts, 0, 20))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}

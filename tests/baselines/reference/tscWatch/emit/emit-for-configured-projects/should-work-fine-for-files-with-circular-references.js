@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -23,23 +23,8 @@ export var t2 = 10;
 //// [/a/b/tsconfig.json]
 {}
 
-//// [/a/b/file2.js]
-"use strict";
-exports.__esModule = true;
-exports.t2 = void 0;
-/// <reference path="./file1.ts" />
-exports.t2 = 10;
 
-
-//// [/a/b/file1.js]
-"use strict";
-exports.__esModule = true;
-exports.t1 = void 0;
-/// <reference path="./file2.ts" />
-exports.t1 = 10;
-
-
-
+/a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
@@ -81,21 +66,29 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: change file1
+//// [/a/b/file2.js]
+"use strict";
+exports.__esModule = true;
+exports.t2 = void 0;
+/// <reference path="./file1.ts" />
+exports.t2 = 10;
 
-//// [/a/b/file1.ts]
-/// <reference path="./file2.ts" />
-export var t1 = 10;export var t3 = 10;
 
-//// [/a/b/file2.js] file written with same contents
 //// [/a/b/file1.js]
 "use strict";
 exports.__esModule = true;
-exports.t3 = exports.t1 = void 0;
+exports.t1 = void 0;
 /// <reference path="./file2.ts" />
 exports.t1 = 10;
-exports.t3 = 10;
 
+
+
+Change:: change file1
+
+Input::
+//// [/a/b/file1.ts]
+/// <reference path="./file2.ts" />
+export var t1 = 10;export var t3 = 10;
 
 
 Output::
@@ -137,3 +130,14 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/file2.js] file written with same contents
+//// [/a/b/file1.js]
+"use strict";
+exports.__esModule = true;
+exports.t3 = exports.t1 = void 0;
+/// <reference path="./file2.ts" />
+exports.t1 = 10;
+exports.t3 = 10;
+
+

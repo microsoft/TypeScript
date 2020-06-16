@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a.ts]
 export class C {}
 
@@ -21,24 +21,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a.js]
-"use strict";
-exports.__esModule = true;
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
 
-
-//// [/b.js]
-"use strict";
-exports.__esModule = true;
-
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
@@ -78,8 +62,27 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a.js]
+"use strict";
+exports.__esModule = true;
+exports.C = void 0;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+exports.C = C;
+
+
+//// [/b.js]
+"use strict";
+exports.__esModule = true;
+
+
+
 Change:: Enable forceConsistentCasingInFileNames
 
+Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"forceConsistentCasingInFileNames":true}}
 
@@ -125,3 +128,4 @@ FsWatchesRecursive::
   {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

@@ -1721,7 +1721,7 @@ namespace ts.server {
                     return {
                         projectFileName: project.getProjectName(),
                         fileNames: project.getCompileOnSaveAffectedFileList(info),
-                        projectUsesOutFile: !!compilationSettings.outFile || !!compilationSettings.out
+                        projectUsesOutFile: !!outFile(compilationSettings)
                     };
                 }
             );
@@ -1970,7 +1970,7 @@ namespace ts.server {
         private getApplicableRefactors(args: protocol.GetApplicableRefactorsRequestArgs): protocol.ApplicableRefactorInfo[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file)!;
-            return project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
+            return project.getLanguageService().getApplicableRefactors(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file), args.triggerReason);
         }
 
         private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): RefactorEditInfo | protocol.RefactorEditInfo {

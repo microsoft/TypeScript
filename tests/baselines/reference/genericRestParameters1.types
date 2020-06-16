@@ -98,7 +98,7 @@ f1(ns[0], ns[1], true);
 >1 : 1
 >true : true
 
-f1(...ns, true);  // Error, tuple spread only expanded when last
+f1(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 >f1(...ns, true) : void
 >f1 : (x_0: number, x_1: string, x_2: boolean) => void
 >...ns : string | number
@@ -166,7 +166,7 @@ f2(ns[0], ns[1], true);
 >1 : 1
 >true : true
 
-f2(...ns, true);  // Error, tuple spread only expanded when last
+f2(...ns, true);  // FIXME: Error, since ...ns is considered as string|number here
 >f2(...ns, true) : void
 >f2 : (x0: number, x1: string, x2: boolean) => void
 >...ns : string | number

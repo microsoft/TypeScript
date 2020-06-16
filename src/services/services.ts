@@ -1230,7 +1230,7 @@ namespace ts {
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
                 if (hostProjectVersion) {
-                    if (lastProjectVersion === hostProjectVersion && !host.hasChangedAutomaticTypeDirectiveNames) {
+                    if (lastProjectVersion === hostProjectVersion && !host.hasChangedAutomaticTypeDirectiveNames?.()) {
                         return;
                     }
 
@@ -1250,10 +1250,11 @@ namespace ts {
             const rootFileNames = hostCache.getRootFileNames();
 
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
             const projectReferences = hostCache.getProjectReferences();
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), (_path, fileName) => host.getScriptVersion(fileName), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), (_path, fileName) => host.getScriptVersion(fileName), fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
                 return;
             }
 
@@ -1291,7 +1292,7 @@ namespace ts {
                 },
                 onReleaseOldSourceFile,
                 hasInvalidatedResolution,
-                hasChangedAutomaticTypeDirectiveNames: host.hasChangedAutomaticTypeDirectiveNames
+                hasChangedAutomaticTypeDirectiveNames
             };
             if (host.trace) {
                 compilerHost.trace = message => host.trace!(message);
@@ -2140,7 +2141,7 @@ namespace ts {
             return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, options);
         }
 
-        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings): RefactorContext {
+        function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings, triggerReason?: RefactorTriggerReason): RefactorContext {
             const [startPosition, endPosition] = typeof positionOrRange === "number" ? [positionOrRange, undefined] : [positionOrRange.pos, positionOrRange.end];
             return {
                 file,
@@ -2151,6 +2152,7 @@ namespace ts {
                 formatContext: formatting.getFormatContext(formatOptions!, host), // TODO: GH#18217
                 cancellationToken,
                 preferences,
+                triggerReason,
             };
         }
 
@@ -2158,10 +2160,10 @@ namespace ts {
             return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
         }
 
-        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): ApplicableRefactorInfo[] {
+        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason): ApplicableRefactorInfo[] {
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences));
+            return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange, preferences, emptyOptions, triggerReason));
         }
 
         function getEditsForRefactor(

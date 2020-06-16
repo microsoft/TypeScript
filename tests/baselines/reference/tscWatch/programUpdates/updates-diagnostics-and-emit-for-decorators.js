@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -25,29 +25,8 @@ export class B {}
 //// [/tsconfig.json]
 {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error"}}
 
-//// [/b.js]
-export class B {
-}
 
-
-//// [/a.js]
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-import './b';
-let A = class A {
-    constructor(p) { }
-};
-A = __decorate([
-    ((_) => { })
-], A);
-export { A };
-
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
@@ -99,8 +78,32 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/b.js]
+export class B {
+}
+
+
+//// [/a.js]
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+import './b';
+let A = class A {
+    constructor(p) { }
+};
+A = __decorate([
+    ((_) => { })
+], A);
+export { A };
+
+
+
 Change:: Enable experimentalDecorators
 
+Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true}}
 
@@ -150,32 +153,12 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Enable emitDecoratorMetadata
 
+Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true,"emitDecoratorMetadata":true}}
-
-//// [/b.js] file written with same contents
-//// [/a.js]
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-import { B } from './b';
-let A = class A {
-    constructor(p) { }
-};
-A = __decorate([
-    ((_) => { }),
-    __metadata("design:paramtypes", [B])
-], A);
-export { A };
-
 
 
 Output::
@@ -216,3 +199,26 @@ FsWatchesRecursive::
   {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/b.js] file written with same contents
+//// [/a.js]
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+import { B } from './b';
+let A = class A {
+    constructor(p) { }
+};
+A = __decorate([
+    ((_) => { }),
+    __metadata("design:paramtypes", [B])
+], A);
+export { A };
+
+

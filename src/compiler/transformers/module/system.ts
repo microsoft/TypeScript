@@ -119,7 +119,7 @@ namespace ts {
                     )
                 ), EmitFlags.NoTrailingComments);
 
-            if (!(compilerOptions.outFile || compilerOptions.out)) {
+            if (!outFile(compilerOptions)) {
                 moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
             }
 
@@ -333,37 +333,6 @@ namespace ts {
                     exportedNames.push(
                         createPropertyAssignment(
                             createLiteral(exportedLocalName),
-                            createTrue()
-                        )
-                    );
-                }
-            }
-
-            for (const externalImport of moduleInfo.externalImports) {
-                if (externalImport.kind !== SyntaxKind.ExportDeclaration) {
-                    continue;
-                }
-
-                if (!externalImport.exportClause) {
-                    // export * from ...
-                    continue;
-                }
-
-                if (isNamedExports(externalImport.exportClause)) {
-                    for (const element of externalImport.exportClause.elements) {
-                        // write name of indirectly exported entry, i.e. 'export {x} from ...'
-                        exportedNames.push(
-                            createPropertyAssignment(
-                                createLiteral(idText(element.name || element.propertyName)),
-                                createTrue()
-                            )
-                        );
-                    }
-                }
-                else {
-                    exportedNames.push(
-                        createPropertyAssignment(
-                            createLiteral(idText(externalImport.exportClause.name)),
                             createTrue()
                         )
                     );

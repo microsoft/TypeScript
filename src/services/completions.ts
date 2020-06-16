@@ -1235,7 +1235,7 @@ namespace ts.Completions {
                 // each individual type has. This is because we're going to add all identifiers
                 // anyways. So we might as well elevate the members that were at least part
                 // of the individual types to a higher status since we know what they are.
-                symbols.push(...getPropertiesForCompletion(type, typeChecker));
+                symbols.push(...filter(getPropertiesForCompletion(type, typeChecker), s => typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, s)));
             }
             else {
                 for (const symbol of type.getApparentProperties()) {

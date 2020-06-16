@@ -243,6 +243,7 @@ declare namespace FourSlashInterface {
         applicableRefactorAvailableForRange(): void;
 
         refactorAvailable(name: string, actionName?: string): void;
+        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -682,6 +683,8 @@ declare namespace FourSlashInterface {
          */
         triggerCharacter?: string,
     }
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     export interface VerifyCodeFixAvailableOptions {
         readonly description: string;
