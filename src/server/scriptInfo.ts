@@ -491,7 +491,7 @@ namespace ts.server {
                 case 0:
                     return Errors.ThrowNoProject();
                 case 1:
-                    return this.containingProjects[0];
+                    return ensureNotAutoImportProvider(this.containingProjects[0]);
                 default:
                     // If this file belongs to multiple projects, below is the order in which default project is used
                     // - for open script info, its default configured project during opening is default if info is part of it
@@ -501,6 +501,7 @@ namespace ts.server {
                     // - first inferred project
                     let firstExternalProject: ExternalProject | undefined;
                     let firstConfiguredProject: ConfiguredProject | undefined;
+                    let firstInferredProject: InferredProject | undefined;
                     let firstNonSourceOfProjectReferenceRedirect: ConfiguredProject | undefined;
                     let defaultConfiguredProject: ConfiguredProject | false | undefined;
                     for (let index = 0; index < this.containingProjects.length; index++) {
@@ -521,17 +522,15 @@ namespace ts.server {
                         else if (!firstExternalProject && isExternalProject(project)) {
                             firstExternalProject = project;
                         }
+                        else if (!firstInferredProject && isInferredProject(project)) {
+                            firstInferredProject = project;
+                        }
                     }
-                    const result = defaultConfiguredProject ||
+                    return ensureNotAutoImportProvider(defaultConfiguredProject ||
                         firstNonSourceOfProjectReferenceRedirect ||
                         firstConfiguredProject ||
                         firstExternalProject ||
-                        this.containingProjects[0];
-
-                    if (result.projectKind === ProjectKind.AutoImportProvider) {
-                        return Errors.ThrowNoProject();
-                    }
-                    return result;
+                        firstInferredProject);
             }
         }
 
@@ -613,7 +612,12 @@ namespace ts.server {
         }
 
         isOrphan() {
-            return !forEach(this.containingProjects, p => !p.isOrphan());
+            return !forEach(this.containingProjects, p => p.projectKind !== ProjectKind.AutoImportProvider && !p.isOrphan());
+        }
+
+        /*@internal*/
+        isContainedByAutoImportProvider() {
+            return some(this.containingProjects, p => p.projectKind === ProjectKind.AutoImportProvider);
         }
 
         /**
@@ -657,6 +661,13 @@ namespace ts.server {
                 this.sourceMapFilePath = undefined;
             }
         }
+    }
+
+    function ensureNotAutoImportProvider(project: Project | undefined) {
+        if (!project || project.projectKind === ProjectKind.AutoImportProvider) {
+            return Errors.ThrowNoProject();
+        }
+        return project;
     }
 
     function failIfInvalidPosition(position: number) {

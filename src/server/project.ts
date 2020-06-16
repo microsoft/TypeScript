@@ -1595,6 +1595,7 @@ namespace ts.server {
         /*@internal*/
         includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
             if (this.projectService.includePackageJsonAutoImports() === PackageJsonAutoImportPreference.None ||
+                !this.languageServiceEnabled ||
                 isInsideNodeModules(this.currentDirectory) ||
                 !this.isDefaultProjectForOpenFiles()) {
                 return PackageJsonAutoImportPreference.None;

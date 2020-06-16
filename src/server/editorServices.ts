@@ -1973,6 +1973,7 @@ namespace ts.server {
         private createLoadAndUpdateConfiguredProject(configFileName: NormalizedPath, reason: string) {
             const project = this.createAndLoadConfiguredProject(configFileName, reason);
             project.updateGraph();
+            project.getPackageJsonAutoImportProvider(); // Preload AutoImportProviderProject to avoid creating it on first completions request
             return project;
         }
 
@@ -2843,7 +2844,7 @@ namespace ts.server {
             if (!firstProject.isOrphan() &&
                 isInferredProject(firstProject) &&
                 firstProject.isRoot(info) &&
-                forEach(info.containingProjects, p => p !== firstProject && !p.isOrphan())) {
+                forEach(info.containingProjects, p => p !== firstProject && p.projectKind !== ProjectKind.AutoImportProvider && !p.isOrphan())) {
                 firstProject.removeFile(info, /*fileExists*/ true, /*detachFromProject*/ true);
             }
         }
@@ -3211,7 +3212,7 @@ namespace ts.server {
             const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
-                if (!info.isScriptOpen() && info.isOrphan()) {
+                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByAutoImportProvider()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
                     let sourceInfos: Map<true> | undefined;
