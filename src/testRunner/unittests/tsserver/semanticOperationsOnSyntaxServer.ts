@@ -78,7 +78,7 @@ class c { prop = "hello"; foo() { return this.prop; } }`
                 session.executeCommand(request);
             }
             catch (e) {
-                assert.equal(e.message, `Request: semanticDiagnosticsSync not allowed on syntaxServer:: Request::${JSON.stringify(request)}`);
+                assert.equal(e.message, `Request: semanticDiagnosticsSync not allowed on syntaxServer`);
                 hasException = true;
             }
             assert.isTrue(hasException);
@@ -89,7 +89,7 @@ class c { prop = "hello"; foo() { return this.prop; } }`
                 project.getLanguageService().getSemanticDiagnostics(file1.path);
             }
             catch (e) {
-                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed on syntaxServer:: arguments::${JSON.stringify([file1.path])}`);
+                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed on syntaxServer`);
                 hasException = true;
             }
             assert.isTrue(hasException);

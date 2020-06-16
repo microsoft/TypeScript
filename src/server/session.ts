@@ -708,7 +708,7 @@ namespace ts.server {
             if (this.projectService.syntaxOnly) {
                 invalidSyntaxOnlyCommands.forEach(commandName =>
                     this.handlers.set(commandName, request => {
-                        throw new Error(`Request: ${request.command} not allowed on syntaxServer:: Request::${JSON.stringify(request)}`);
+                        throw new Error(`Request: ${request.command} not allowed on syntaxServer`);
                     })
                 );
             }

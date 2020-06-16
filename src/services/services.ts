@@ -2275,8 +2275,8 @@ namespace ts {
 
         if (syntaxOnly) {
             invalidOperationsOnSyntaxOnly.forEach(key =>
-                ls[key] = (...args: any[]) => {
-                    throw new Error(`LanguageService Operation: ${key} not allowed on syntaxServer:: arguments::${JSON.stringify(args)}`);
+                ls[key] = () => {
+                    throw new Error(`LanguageService Operation: ${key} not allowed on syntaxServer`);
                 }
             );
         }
