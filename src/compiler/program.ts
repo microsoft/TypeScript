@@ -1530,7 +1530,7 @@ namespace ts {
         function getPrependNodes() {
             return createPrependNodes(
                 projectReferences,
-                (_ref, index) => resolvedProjectReferences![index]!.commandLine,
+                (_ref, index) => resolvedProjectReferences![index]?.commandLine,
                 fileName => {
                     const path = toPath(fileName);
                     const sourceFile = getSourceFileByPath(path);
