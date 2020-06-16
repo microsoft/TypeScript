@@ -4361,7 +4361,7 @@ namespace ts {
     }
 
     export function hasEffectiveModifierFlagsFromSymbol(symbol: Symbol, flags: ModifierFlags): boolean {
-        return flags && !!symbol.declarations?.some(decl => !!getJSDocDeprecatedTag(decl));
+        return !!symbol.declarations?.some(decl => !!getSelectedEffectiveModifierFlags(decl, flags));
     }
 
     function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {
@@ -4407,7 +4407,7 @@ namespace ts {
                 if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
                 if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
             }
-            if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
+            // if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
         }
 
         return flags;
