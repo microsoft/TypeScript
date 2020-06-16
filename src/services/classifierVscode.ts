@@ -1,6 +1,12 @@
 namespace ts.classifier.vscode {
 
   /** @internal */
+  export enum TokenEncodingConsts {
+    typeOffset = 8,
+    modifierMask = (1 << typeOffset) - 1
+  }
+
+  /** @internal */
   export enum TokenType {
     class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member, _
   }
@@ -8,12 +14,6 @@ namespace ts.classifier.vscode {
   /** @internal */
   export enum TokenModifier {
     declaration, static, async, readonly, defaultLibrary, local, _
-  }
-
-  /** @internal */
-  export enum TokenEncodingConsts {
-    typeOffset = 8,
-    modifierMask = (1 << typeOffset) - 1
   }
 
   /** This is mainly used internally for testing */

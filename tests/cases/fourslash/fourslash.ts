@@ -358,6 +358,8 @@ declare namespace FourSlashInterface {
             text?: string;
             textSpan?: TextSpan;
         }[]): void;
+        /** Edits the current testfile and replaces with the semantic classifications */
+        replaceWithSemanticClassifications(format: "2020")
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
         renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
@@ -456,7 +458,7 @@ declare namespace FourSlashInterface {
     }
 
     interface ModernClassificationFactory {
-        semanticToken(identifier: string, name: string, position: number)
+        semanticToken(identifier: string, name: string)
     }
 
     interface ClassificationFactory {

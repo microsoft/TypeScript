@@ -2448,9 +2448,50 @@ namespace FourSlash {
             Harness.IO.log(this.spanInfoToString(this.getNameOrDottedNameSpan(pos)!, "**"));
         }
 
+        private classificationToIdentifier(classification: number){
+
+            const tokenTypes: string[] = [];
+            tokenTypes[ts.classifier.vscode.TokenType.class] = "class";
+            tokenTypes[ts.classifier.vscode.TokenType.enum] = "enum";
+            tokenTypes[ts.classifier.vscode.TokenType.interface] = "interface";
+            tokenTypes[ts.classifier.vscode.TokenType.namespace] = "namespace";
+            tokenTypes[ts.classifier.vscode.TokenType.typeParameter] = "typeParameter";
+            tokenTypes[ts.classifier.vscode.TokenType.type] = "type";
+            tokenTypes[ts.classifier.vscode.TokenType.parameter] = "parameter";
+            tokenTypes[ts.classifier.vscode.TokenType.variable] = "variable";
+            tokenTypes[ts.classifier.vscode.TokenType.enumMember] = "enumMember";
+            tokenTypes[ts.classifier.vscode.TokenType.property] = "property";
+            tokenTypes[ts.classifier.vscode.TokenType.function] = "function";
+            tokenTypes[ts.classifier.vscode.TokenType.member] = "member";
+
+            const tokenModifiers: string[] = [];
+            tokenModifiers[ts.classifier.vscode.TokenModifier.async] = "async";
+            tokenModifiers[ts.classifier.vscode.TokenModifier.declaration] = "declaration";
+            tokenModifiers[ts.classifier.vscode.TokenModifier.readonly] = "readonly";
+            tokenModifiers[ts.classifier.vscode.TokenModifier.static] = "static";
+            tokenModifiers[ts.classifier.vscode.TokenModifier.local] = "local";
+            tokenModifiers[ts.classifier.vscode.TokenModifier.defaultLibrary] = "defaultLibrary";
+
+
+            function getTokenTypeFromClassification(tsClassification: number): number | undefined {
+                if (tsClassification > ts.classifier.vscode.TokenEncodingConsts.modifierMask) {
+                    return (tsClassification >> ts.classifier.vscode.TokenEncodingConsts.typeOffset) - 1;
+                }
+                return undefined;
+            }
+
+            function getTokenModifierFromClassification(tsClassification: number) {
+                return tsClassification & ts.classifier.vscode.TokenEncodingConsts.modifierMask;
+            }
+
+            const typeIdx = getTokenTypeFromClassification(classification) || 0;
+            const modSet = getTokenModifierFromClassification(classification);
+
+            const tokenClassifiction = [tokenTypes[typeIdx], ...tokenModifiers.filter((_, i) => modSet & 1 << i)].join(".");
+            return tokenClassifiction;
+        }
+
         private verifyClassifications(expected: { classificationType: string | number, text?: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[], sourceFileText: string) {
-            console.log("expected:", expected);
-            console.log("actual:", actual);
             if (actual.length !== expected.length) {
                 this.raiseError("verifyClassifications failed - expected total classifications to be " + expected.length +
                     ", but was " + actual.length +
@@ -2459,10 +2500,12 @@ namespace FourSlash {
 
             ts.zipWith(expected, actual, (expectedClassification, actualClassification) => {
                 const expectedType = expectedClassification.classificationType;
-                if (expectedType !== actualClassification.classificationType) {
+                const actualType = typeof actualClassification.classificationType === "number"  ? this.classificationToIdentifier(actualClassification.classificationType) : actualClassification.classificationType;
+
+                if (expectedType !== actualType) {
                     this.raiseError("verifyClassifications failed - expected classifications type to be " +
                         expectedType + ", but was " +
-                        actualClassification.classificationType +
+                        actualType +
                         jsonMismatchString());
                 }
 
@@ -2512,6 +2555,29 @@ namespace FourSlash {
                 );
             }
         }
+
+        public replaceWithSemanticClassifications(format: ts.SemanticClassificationFormat.TwentyTwenty) {
+            const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
+                ts.createTextSpan(0, this.activeFile.content.length), format);
+            const replacement = [`const c2 = classification("2020");`,`verify.semanticClassificationsAre("2020",`];
+            actual.forEach(a => {
+                const identifier = this.classificationToIdentifier(a.classificationType as number);
+                const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
+                replacement.push(`    c2.semanticToken("${identifier}", "${text}"), `);
+            });
+            replacement.push(");");
+
+            throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
+
+            /**
+            const fs = require("fs");
+            const testfilePath = this.originalInputFileName.slice(1);
+            const testfile = fs.readFileSync(testfilePath, "utf8");
+            const newfile = testfile.replace("verify.replaceWithSemanticClassifications(\"2020\")", replacement.join("\n"));
+            fs.writeFileSync(testfilePath, newfile);
+             */
+        }
+
 
         public verifySemanticClassifications(format: ts.SemanticClassificationFormat, expected: { classificationType: string | number; text?: string }[]) {
             const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,

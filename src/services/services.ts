@@ -1804,11 +1804,11 @@ namespace ts {
             }
             synchronizeHostData();
 
-            const responseFormat = format || "original";
-            if (responseFormat === "original") {
+            const responseFormat = format || SemanticClassificationFormat.Original;
+            if (responseFormat === SemanticClassificationFormat.Original) {
                 return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
             }
- else {
+            else {
                 return classifier.vscode.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
             }
         }
@@ -1820,11 +1820,11 @@ namespace ts {
             }
             synchronizeHostData();
 
-            const responseFormat = format || "original";
-            if (responseFormat === "original") {
+            const responseFormat = format || SemanticClassificationFormat.Original;
+            if (responseFormat === SemanticClassificationFormat.Original) {
                 return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
             }
- else {
+            else {
                 return classifier.vscode.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
             }
         }
