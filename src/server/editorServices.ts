@@ -1989,9 +1989,6 @@ namespace ts.server {
 
             const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
             const result = parseJsonText(configFilename, isString(configFileContent) ? configFileContent : "");
-            if (!result.endOfFileToken) {
-                result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
-            }
             const configFileErrors = result.parseDiagnostics as Diagnostic[];
             if (!isString(configFileContent)) configFileErrors.push(configFileContent);
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(

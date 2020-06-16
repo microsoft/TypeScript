@@ -40,7 +40,7 @@ namespace ts.codefix {
 
     function doChange(changeTracker: textChanges.ChangeTracker, sf: SourceFile, node: Node) {
         const jsx = flattenInvalidBinaryExpr(node);
-        if (jsx) changeTracker.replaceNode(sf, node, createJsxFragment(createJsxOpeningFragment(), jsx, createJsxJsxClosingFragment()));
+        if (jsx) changeTracker.replaceNode(sf, node, factory.createJsxFragment(factory.createJsxOpeningFragment(), jsx, factory.createJsxJsxClosingFragment()));
     }
     // The invalid syntax is constructed as
     // InvalidJsxTree :: One of
