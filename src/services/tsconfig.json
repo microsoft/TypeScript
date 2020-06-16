@@ -105,7 +105,7 @@
         "codefixes/fixExpectedComma.ts",
         "refactors/convertExport.ts",
         "refactors/convertImport.ts",
-        "refactors/convertOptionalChainExpression.ts",
+        "refactors/convertToOptionalChainExpression.ts",
         "refactors/convertOverloadListToSingleSignature.ts",
         "refactors/extractSymbol.ts",
         "refactors/extractType.ts",
