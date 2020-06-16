@@ -4251,7 +4251,6 @@ declare namespace Intl {
         maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
-        notation?: string;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -4266,7 +4265,6 @@ declare namespace Intl {
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
         useGrouping: boolean;
-        notation?: string;
     }
 
     interface NumberFormat {
