@@ -1,11 +1,5 @@
 /*@internal*/
 namespace ts.server {
-    export interface PackageJsonCacheHost {
-        toPath(fileName: string): Path;
-        readFile(fileName: string): string | undefined;
-        fileExists(fileName: string): boolean;
-    }
-
     export interface PackageJsonCache {
         addOrUpdate(fileName: Path): void;
         forEach(action: (info: PackageJsonInfo, fileName: Path) => void): void;
@@ -16,7 +10,7 @@ namespace ts.server {
         searchDirectoryAndAncestors(directory: Path): void;
     }
 
-    export function createPackageJsonCache(host: PackageJsonCacheHost): PackageJsonCache {
+    export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
         const packageJsons = createMap<PackageJsonInfo>();
         const directoriesWithoutPackageJson = createMap<true>();
         return {
@@ -48,7 +42,7 @@ namespace ts.server {
         };
 
         function addOrUpdate(fileName: Path) {
-            const packageJsonInfo = createPackageJsonInfo(fileName, host);
+            const packageJsonInfo = createPackageJsonInfo(fileName, host.host);
             if (packageJsonInfo !== undefined) {
                 packageJsons.set(fileName, packageJsonInfo);
                 directoriesWithoutPackageJson.delete(getDirectoryPath(fileName));

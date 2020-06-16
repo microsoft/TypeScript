@@ -727,11 +727,7 @@ namespace ts.server {
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
             this.watchFactory = getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
 
-            this.packageJsonCache = createPackageJsonCache({
-                fileExists: fileName => this.host.fileExists(fileName),
-                readFile: fileName => this.host.readFile(fileName),
-                toPath: this.toPath.bind(this),
-            });
+            this.packageJsonCache = createPackageJsonCache(this);
         }
 
         toPath(fileName: string) {
