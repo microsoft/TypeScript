@@ -8,7 +8,7 @@ namespace ts {
     export interface ExternalModuleInfo {
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
-        exportSpecifiers: Map<ExportSpecifier[]>; // export specifiers by name
+        exportSpecifiers: Map<string, ExportSpecifier[]>; // export specifiers by name
         exportedBindings: Identifier[][]; // exported names of local declarations
         exportedNames: Identifier[] | undefined; // all exported names local to module
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
@@ -217,7 +217,7 @@ namespace ts {
         }
     }
 
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[] | undefined) {
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined) {
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {

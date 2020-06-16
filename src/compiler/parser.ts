@@ -749,13 +749,13 @@ namespace ts {
 
         let currentToken: SyntaxKind;
         let nodeCount: number;
-        let identifiers: Map<string>;
-        let privateIdentifiers: Map<string>;
+        let identifiers: Map<string, string>;
+        let privateIdentifiers: Map<string, string>;
         let identifierCount: number;
 
         let parsingContext: ParsingContext;
 
-        let notParenthesizedArrow: Map<true> | undefined;
+        let notParenthesizedArrow: Map<string, true> | undefined;
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is

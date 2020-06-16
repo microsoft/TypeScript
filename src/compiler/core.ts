@@ -1,30 +1,54 @@
-
 /* @internal */
 namespace ts {
+    export const Map: MapConstructor = tryGetNativeMap() || (() => {
+        // NOTE: ts.createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        if (typeof createMapShim === "function") {
+            return createMapShim();
+        }
+        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
+    })();
+
+    export const Set: SetConstructor = tryGetNativeSet() || (() => {
+        // NOTE: ts.createSetShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        if (typeof createSetShim === "function") {
+            return createSetShim();
+        }
+        throw new Error("TypeScript requires an environment that provides a compatible native Set implementation.");
+    })();
+
+    export const WeakMap: WeakMapConstructor = tryGetNativeWeakMap() || (() => {
+        // NOTE: ts.createWeakMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        if (typeof createWeakMapShim === "function") {
+            return createWeakMapShim();
+        }
+        throw new Error("TypeScript requires an environment that provides a compatible native WeakMap implementation.");
+    })();
+
+    export const WeakSet: WeakSetConstructor = tryGetNativeWeakSet() || (() => {
+        // NOTE: ts.createWeakSetShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        if (typeof createWeakSetShim === "function") {
+            return createWeakSetShim();
+        }
+        throw new Error("TypeScript requires an environment that provides a compatible native WeakSet implementation.");
+    })();
 
     export const emptyArray: never[] = [] as never[];
 
     /** Create a new map. */
-    export function createMap<T>(): Map<T>;
-    export function createMap<K, V>(): ESMap<K, V>;
-    export function createMap<K, V>(): ESMap<K, V> {
+    export function createMap<T>(): Map<string, T>;
+    export function createMap<K, V>(): Map<K, V>;
+    export function createMap<K, V>(): Map<K, V> {
         return new Map<K, V>();
     }
 
     /** Create a new map from an array of entries. */
-    export function createMapFromEntries<T>(entries: readonly [string, T][]): Map<T>;
-    export function createMapFromEntries<K, V>(entries: readonly [K, V][]): ESMap<K, V>;
-    export function createMapFromEntries<K, V>(entries: readonly [K, V][]): ESMap<K, V> {
-        const map = createMap<K, V>();
-        for (const [key, value] of entries) {
-            map.set(key, value);
-        }
-        return map;
+    export function createMapFromEntries<K, V>(entries: readonly [K, V][]): Map<K, V> {
+        return new Map(entries);
     }
 
     /** Create a new map from a template object is provided, the map will copy entries from it. */
-    export function createMapFromTemplate<T>(template: MapLike<T>): Map<T> {
-        const map: Map<T> = new Map<string, T>();
+    export function createMapFromTemplate<T>(template: MapLike<T>): Map<string, T> {
+        const map: Map<string, T> = new Map<string, T>();
 
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
@@ -42,11 +66,7 @@ namespace ts {
     }
 
     export function createSetFromValues<T>(values: readonly T[]): Set<T> {
-        const set = createSet<T>();
-        for (const value of values) {
-            set.add(value);
-        }
-        return set;
+        return new Set(values);
     }
 
     export function length(array: readonly any[] | undefined): number {
@@ -136,9 +156,9 @@ namespace ts {
         };
     }
 
-    export function zipToMap<T>(keys: readonly string[], values: readonly T[]): Map<T> {
+    export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
         Debug.assert(keys.length === values.length);
-        const map = createMap<T>();
+        const map = createMap<K, V>();
         for (let i = 0; i < keys.length; ++i) {
             map.set(keys[i], values[i]);
         }
@@ -530,14 +550,24 @@ namespace ts {
         };
     }
 
-    export function mapDefinedMap<T, U>(map: ReadonlyMap<T>, mapValue: (value: T, key: string) => U | undefined, mapKey: (key: string) => string = identity): Map<U> {
-        const result = createMap<U>();
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): Map<K2, V2>;
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined;
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined {
+        if (!map) {
+            return undefined;
+        }
+
+        const result = createMap<K2, V2>();
         map.forEach((value, key) => {
-            const mapped = mapValue(value, key);
-            if (mapped !== undefined) {
-                result.set(mapKey(key), mapped);
+            const entry = f(key, value);
+            if (entry !== undefined) {
+                const [newKey, newValue] = entry;
+                if (newKey !== undefined && newValue !== undefined) {
+                    result.set(newKey, newValue);
+                }
             }
         });
+
         return result;
     }
 
@@ -603,20 +633,21 @@ namespace ts {
         return result;
     }
 
-    export function mapEntries<T, U>(map: ReadonlyMap<T>, f: (key: string, value: T) => [string, U]): Map<U>;
-    export function mapEntries<T, U>(map: ReadonlyMap<T> | undefined, f: (key: string, value: T) => [string, U]): Map<U> | undefined;
-    export function mapEntries<T, U>(map: ReadonlyMap<T> | undefined, f: (key: string, value: T) => [string, U]): Map<U> | undefined {
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2>;
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined;
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined {
         if (!map) {
             return undefined;
         }
 
-        const result = createMap<U>();
+        const result = createMap<K2, V2>();
         map.forEach((value, key) => {
             const [newKey, newValue] = f(key, value);
             result.set(newKey, newValue);
         });
         return result;
     }
+
     export function some<T>(array: readonly T[] | undefined): array is readonly T[];
     export function some<T>(array: readonly T[] | undefined, predicate: (value: T) => boolean): boolean;
     export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) => boolean): boolean {
@@ -1276,10 +1307,12 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<T>;
-    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<U>;
-    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => T | U = identity): Map<T | U> {
-        const result = createMap<T | U>();
+    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<string, T>;
+    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<string, U>;
+    export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): Map<K, V>;
+    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): Map<K, V2>;
+    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): Map<K, V1 | V2> {
+        const result = createMap<K, V1 | V2>();
         for (const value of array) {
             const key = makeKey(value);
             if (key !== undefined) result.set(key, makeValue(value));
@@ -1297,10 +1330,10 @@ namespace ts {
         return result;
     }
 
-    export function arrayToMultiMap<T>(values: readonly T[], makeKey: (value: T) => string): MultiMap<T>;
-    export function arrayToMultiMap<T, U>(values: readonly T[], makeKey: (value: T) => string, makeValue: (value: T) => U): MultiMap<U>;
-    export function arrayToMultiMap<T, U>(values: readonly T[], makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): MultiMap<T | U> {
-        const result = createMultiMap<T | U>();
+    export function arrayToMultiMap<K, V>(values: readonly V[], makeKey: (value: V) => K): MultiMap<K, V>;
+    export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: V) => K, makeValue: (value: V) => U): MultiMap<K, U>;
+    export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: V) => K, makeValue: (value: V) => V | U = identity): MultiMap<K, V | U> {
+        const result = createMultiMap<K, V | U>();
         for (const value of values) {
             result.add(makeKey(value), makeValue(value));
         }
@@ -1357,35 +1390,29 @@ namespace ts {
         return fn ? fn.bind(obj) : undefined;
     }
 
-    export function mapMap<T, U>(map: Map<T>, f: (t: T, key: string) => [string, U]): Map<U>;
-    export function mapMap<T, U>(map: UnderscoreEscapedMap<T>, f: (t: T, key: __String) => [string, U]): Map<U>;
-    export function mapMap<T, U>(map: Map<T> | UnderscoreEscapedMap<T>, f: ((t: T, key: string) => [string, U]) | ((t: T, key: __String) => [string, U])): Map<U> {
-        const result = createMap<U>();
-        map.forEach((t: T, key: string & __String) => result.set(...(f(t, key))));
-        return result;
-    }
-
-    export interface MultiMap<T> extends Map<T[]> {
+    export interface MultiMap<K, V> extends Map<K, V[]> {
         /**
          * Adds the value to an array of values associated with the key, and returns the array.
          * Creates the array if it does not already exist.
          */
-        add(key: string, value: T): T[];
+        add(key: K, value: V): V[];
         /**
          * Removes a value from an array of values associated with the key.
          * Does not preserve the order of those values.
          * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
          */
-        remove(key: string, value: T): void;
+        remove(key: K, value: V): void;
     }
 
-    export function createMultiMap<T>(): MultiMap<T> {
-        const map = createMap<T[]>() as MultiMap<T>;
+    export function createMultiMap<V>(): MultiMap<string, V>;
+    export function createMultiMap<K, V>(): MultiMap<K, V>;
+    export function createMultiMap<K, V>(): MultiMap<K, V> {
+        const map = createMap<K, V[]>() as MultiMap<K, V>;
         map.add = multiMapAdd;
         map.remove = multiMapRemove;
         return map;
     }
-    function multiMapAdd<T>(this: MultiMap<T>, key: string, value: T) {
+    function multiMapAdd<K, V>(this: MultiMap<K, V>, key: K, value: V) {
         let values = this.get(key);
         if (values) {
             values.push(value);
@@ -1395,7 +1422,7 @@ namespace ts {
         }
         return values;
     }
-    function multiMapRemove<T>(this: MultiMap<T>, key: string, value: T) {
+    function multiMapRemove<K, V>(this: MultiMap<K, V>, key: K, value: V) {
         const values = this.get(key);
         if (values) {
             unorderedRemoveItem(values, value);
@@ -1420,7 +1447,7 @@ namespace ts {
     }
 
     export function createUnderscoreEscapedMultiMap<T>(): UnderscoreEscapedMultiMap<T> {
-        return createMultiMap<T>() as UnderscoreEscapedMultiMap<T>;
+        return createMultiMap() as UnderscoreEscapedMultiMap<T>;
     }
 
     /**

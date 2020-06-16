@@ -35,7 +35,7 @@ namespace ts {
             "Y"
         ];
 
-        function testMapIterationAddedValues<K>(keys: K[], map: ESMap<K, string>, useForEach: boolean): string {
+        function testMapIterationAddedValues<K>(keys: K[], map: Map<K, string>, useForEach: boolean): string {
             let resultString = "";
 
             map.set(keys[0], "1");

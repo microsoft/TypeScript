@@ -4,30 +4,40 @@ namespace ts {
         next(): { value: T, done?: false } | { value: never, done: true };
     }
 
-    interface MapShim<K, V> {
+    interface ReadonlyMapShim<K, V> {
         readonly size: number;
         get(key: K): V | undefined;
-        set(key: K, value: V): this;
         has(key: K): boolean;
-        delete(key: K): boolean;
-        clear(): void;
         keys(): IteratorShim<K>;
         values(): IteratorShim<V>;
         entries(): IteratorShim<[K, V]>;
         forEach(action: (value: V, key: K) => void): void;
     }
 
-    interface SetShim<T> {
-        readonly size: number;
-        add(value: T): this;
-        delete(value: T): boolean;
-        has(value: T): boolean;
+    interface MapShim<K, V> extends ReadonlyMapShim<K, V> {
+        set(key: K, value: V): this;
+        delete(key: K): boolean;
         clear(): void;
+    }
+
+    type MapShimConstructor = new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyMapShim<K, V>) => MapShim<K, V>;
+
+    interface ReadonlySetShim<T> {
+        readonly size: number;
+        has(value: T): boolean;
         keys(): IteratorShim<T>;
         values(): IteratorShim<T>;
         entries(): IteratorShim<[T, T]>;
         forEach(action: (value: T, key: T) => void): void;
     }
+
+    interface SetShim<T> extends ReadonlySetShim<T> {
+        add(value: T): this;
+        delete(value: T): boolean;
+        clear(): void;
+    }
+
+    type SetShimConstructor = new <T>(iterable?: readonly T[] | ReadonlySetShim<T>) => SetShim<T>;
 
     interface WeakMapShim<K extends object, V> {
         get(key: K): V | undefined;
@@ -400,10 +410,26 @@ namespace ts {
     function pickEntry<K, V>(key: K, value: V) { return [key, value] as [K, V]; }
 
     /* @internal */
-    export function createMapShim(): new <K, V>() => MapShim<K, V> {
+    export function createMapShim(): MapShimConstructor {
         const MapIterator = createIterator("MapIterator");
         class Map<K, V> implements MapShim<K, V> {
             private _mapData = createMapData<K, V>();
+            constructor(iterable?: readonly (readonly [K, V])[] | ReadonlyMapShim<K, V>) {
+                if (iterable) {
+                    if ((Array.isArray as (value: any) => value is readonly any[])(iterable)) {
+                        for (const [key, value] of iterable) {
+                            this.set(key, value);
+                        }
+                    }
+                    else {
+                        const iterator = iterable.entries();
+                        for (let result = iterator.next(); !result.done; result = iterator.next()) {
+                            const [key, value] = result.value;
+                            this.set(key, value);
+                        }
+                    }
+                }
+            }
             get size() { return this._mapData.size; }
             get(key: K): V | undefined { return getEntry(this._mapData, key)?.value; }
             set(key: K, value: V): this { return addOrUpdateEntry(this._mapData, key, value), this; }
@@ -420,10 +446,25 @@ namespace ts {
     }
 
     /* @internal */
-    export function createSetShim(): new <T>() => SetShim<T> {
+    export function createSetShim(): SetShimConstructor {
         const SetIterator = createIterator("SetIterator");
         class Set<T> implements SetShim<T> {
             private _mapData = createMapData<T, T>();
+            constructor(iterable?: readonly T[] | ReadonlySetShim<T>) {
+                if (iterable) {
+                    if ((Array.isArray as (value: any) => value is readonly any[])(iterable)) {
+                        for (const value of iterable) {
+                            this.add(value);
+                        }
+                    }
+                    else {
+                        const iterator = iterable.values();
+                        for (let result = iterator.next(); !result.done; result = iterator.next()) {
+                            this.add(result.value);
+                        }
+                    }
+                }
+            }
             get size() { return this._mapData.size; }
             add(value: T): this { return addOrUpdateEntry(this._mapData, value, value), this; }
             has(value: T): boolean { return hasEntry(this._mapData, value); }

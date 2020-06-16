@@ -58,7 +58,7 @@ namespace ts.codefix {
         },
     });
 
-    function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
+    function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<string, true>) {
         const { sourceFile, program, cancellationToken } = context;
         const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
         if (awaitableInitializers) {
@@ -79,7 +79,7 @@ namespace ts.codefix {
         }
     }
 
-    function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
+    function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<string, true>) {
         const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations));
         return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
     }
@@ -234,7 +234,7 @@ namespace ts.codefix {
                 ancestor.parent.kind === SyntaxKind.MethodDeclaration));
     }
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Map<true>) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Map<string, true>) {
         if (isBinaryExpression(insertionSite)) {
             for (const side of [insertionSite.left, insertionSite.right]) {
                 if (fixedDeclarations && isIdentifier(side)) {

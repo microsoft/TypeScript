@@ -165,7 +165,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies });
     }
 
-    export function createTypesRegistry(...list: string[]): Map<MapLike<string>> {
+    export function createTypesRegistry(...list: string[]): Map<string, MapLike<string>> {
         const versionMap = {
             "latest": "1.3.0",
             "ts2.0": "1.0.0",

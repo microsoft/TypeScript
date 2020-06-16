@@ -512,7 +512,7 @@ namespace ts.codefix {
         checker: TypeChecker,
         program: Program,
         host: LanguageServiceHost
-    ): ReadonlyMap<readonly SymbolExportInfo[]> {
+    ): ReadonlyMap<string, readonly SymbolExportInfo[]> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
         // Maps symbol id to info for modules providing that symbol (original export + re-exports).
         const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();

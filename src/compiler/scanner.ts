@@ -330,7 +330,7 @@ namespace ts {
                 lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
 
-    function makeReverseMap(source: Map<number>): string[] {
+    function makeReverseMap(source: Map<string, number>): string[] {
         const result: string[] = [];
         source.forEach((value, name) => {
             result[value] = name;

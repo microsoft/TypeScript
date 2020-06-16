@@ -27,7 +27,7 @@ namespace FourSlashInterface {
             return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
         }
 
-        public rangesByText(): ts.Map<FourSlash.Range[]> {
+        public rangesByText(): ts.Map<string, FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 

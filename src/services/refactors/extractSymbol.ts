@@ -22,10 +22,10 @@ namespace ts.refactor.extractSymbol {
         }
 
         const functionActions: RefactorActionInfo[] = [];
-        const usedFunctionNames: Map<boolean> = createMap();
+        const usedFunctionNames: Map<string, boolean> = createMap();
 
         const constantActions: RefactorActionInfo[] = [];
-        const usedConstantNames: Map<boolean> = createMap();
+        const usedConstantNames: Map<string, boolean> = createMap();
 
         let i = 0;
         for (const { functionExtraction, constantExtraction } of extractions) {
@@ -1263,7 +1263,7 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyMap<Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
+    function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyMap<string, Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
         const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
         if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
             // already block, no declarations or writes to propagate back, no substitutions - can use node as is
@@ -1319,7 +1319,7 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyMap<Node>): Expression {
+    function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyMap<string, Node>): Expression {
         return substitutions.size
             ? visitor(initializer) as Expression
             : initializer;
@@ -1467,9 +1467,9 @@ namespace ts.refactor.extractSymbol {
     }
 
     interface ScopeUsages {
-        readonly usages: Map<UsageEntry>;
-        readonly typeParameterUsages: Map<TypeParameter>; // Key is type ID
-        readonly substitutions: Map<Node>;
+        readonly usages: Map<string, UsageEntry>;
+        readonly typeParameterUsages: Map<string, TypeParameter>; // Key is type ID
+        readonly substitutions: Map<string, Node>;
     }
 
     interface ReadsAndWrites {
@@ -1489,7 +1489,7 @@ namespace ts.refactor.extractSymbol {
 
         const allTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
         const usagesPerScope: ScopeUsages[] = [];
-        const substitutionsPerScope: Map<Node>[] = [];
+        const substitutionsPerScope: Map<string, Node>[] = [];
         const functionErrorsPerScope: Diagnostic[][] = [];
         const constantErrorsPerScope: Diagnostic[][] = [];
         const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];

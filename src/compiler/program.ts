@@ -126,7 +126,7 @@ namespace ts {
             }
         }
 
-        let outputFingerprints: Map<OutputFingerprint>;
+        let outputFingerprints: Map<string, OutputFingerprint>;
         function writeFileWorker(fileName: string, data: string, writeByteOrderMark: boolean) {
             if (!isWatchSet(options) || !system.createHash || !system.getModifiedTime) {
                 system.writeFile(fileName, data, writeByteOrderMark);
@@ -533,7 +533,7 @@ namespace ts {
     export const inferredTypesContainingFile = "__inferred type names__.ts";
 
     interface DiagnosticCache<T extends Diagnostic> {
-        perFile?: Map<readonly T[]>;
+        perFile?: Map<string, readonly T[]>;
         allDiagnostics?: readonly T[];
     }
 
@@ -702,14 +702,14 @@ namespace ts {
         let processingDefaultLibFiles: SourceFile[] | undefined;
         let processingOtherFiles: SourceFile[] | undefined;
         let files: SourceFile[];
-        let symlinks: ReadonlyMap<string> | undefined;
+        let symlinks: ReadonlyMap<string, string> | undefined;
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: UnderscoreEscapedMap<true>;
         const ambientModuleNameToUnmodifiedFileName = createMap<string>();
         // Todo:: Use this to report why file was included in --extendedDiagnostics
-        let refFileMap: MultiMap<ts.RefFile> | undefined;
+        let refFileMap: MultiMap<string, ts.RefFile> | undefined;
 
         const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
@@ -803,9 +803,9 @@ namespace ts {
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
         let resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined;
-        let projectReferenceRedirects: Map<ResolvedProjectReference | false> | undefined;
-        let mapFromFileToProjectReferenceRedirects: Map<Path> | undefined;
-        let mapFromToProjectReferenceRedirectSource: Map<SourceOfProjectReferenceRedirect> | undefined;
+        let projectReferenceRedirects: Map<string, ResolvedProjectReference | false> | undefined;
+        let mapFromFileToProjectReferenceRedirects: Map<string, Path> | undefined;
+        let mapFromToProjectReferenceRedirectSource: Map<string, SourceOfProjectReferenceRedirect> | undefined;
 
         const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
             !options.disableSourceOfProjectReferenceRedirect;
@@ -2892,7 +2892,7 @@ namespace ts {
         function checkSourceFilesBelongToPath(sourceFiles: readonly SourceFile[], rootDirectory: string): boolean {
             let allFilesBelongToPath = true;
             const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
-            let rootPaths: Map<true> | undefined;
+            let rootPaths: Map<string, true> | undefined;
 
             for (const sourceFile of sourceFiles) {
                 if (!sourceFile.isDeclarationFile) {
@@ -3214,7 +3214,7 @@ namespace ts {
             }
 
             // Verify that all the emit files are unique and don't overwrite input files
-            function verifyEmitFilePath(emitFileName: string | undefined, emitFilesSeen: Map<true>) {
+            function verifyEmitFilePath(emitFileName: string | undefined, emitFilesSeen: Map<string, true>) {
                 if (emitFileName) {
                     const emitFilePath = toPath(emitFileName);
                     // Report error if the output overwrites input file
@@ -3262,7 +3262,7 @@ namespace ts {
             return createFileDiagnostic(refFile, pos, end - pos, message, ...args);
         }
 
-        function addProgramDiagnosticAtRefPath(file: SourceFile, rootPaths: Map<true>, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
+        function addProgramDiagnosticAtRefPath(file: SourceFile, rootPaths: Map<string, true>, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
             const refPaths = refFileMap && refFileMap.get(file.path);
             const refPathToReportErrorOn = forEach(refPaths, refPath => rootPaths.has(refPath.file) ? refPath : undefined) ||
                 elementAt(refPaths, 0);
@@ -3455,7 +3455,7 @@ namespace ts {
             return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
 
-        function getProbableSymlinks(): ReadonlyMap<string> {
+        function getProbableSymlinks(): ReadonlyMap<string, string> {
             if (host.getSymlinks) {
                 return host.getSymlinks();
             }
@@ -3481,9 +3481,9 @@ namespace ts {
     }
 
     function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSourceOfProjectReferenceRedirect) {
-        let mapOfDeclarationDirectories: Map<true> | undefined;
-        let symlinkedDirectories: Map<SymlinkedDirectory | false> | undefined;
-        let symlinkedFiles: Map<string> | undefined;
+        let mapOfDeclarationDirectories: Map<string, true> | undefined;
+        let symlinkedDirectories: Map<string, SymlinkedDirectory | false> | undefined;
+        let symlinkedFiles: Map<string, string> | undefined;
 
         const originalFileExists = host.compilerHost.fileExists;
         const originalDirectoryExists = host.compilerHost.directoryExists;

@@ -46,7 +46,7 @@ namespace ts.codefix {
         },
     });
 
-    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Map<true>) {
+    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Map<string, true>) {
         const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
         // Only need to add `// @ts-ignore` for a line once.
         if (!seenLines || addToSeen(seenLines, lineNumber)) {

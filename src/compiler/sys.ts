@@ -538,7 +538,7 @@ namespace ts {
             };
         }
 
-        type InvokeMap = Map<string[] | true>;
+        type InvokeMap = Map<string, string[] | true>;
         function invokeCallbacks(dirPath: Path, fileName: string): void;
         function invokeCallbacks(dirPath: Path, invokeMap: InvokeMap, fileNames: string[] | undefined): void;
         function invokeCallbacks(dirPath: Path, fileNameOrInvokeMap: string | InvokeMap, fileNames?: string[]) {

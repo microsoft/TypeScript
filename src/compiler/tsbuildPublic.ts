@@ -51,17 +51,7 @@ namespace ts {
 
     /*@internal*/
     export type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
-    interface FileMap<T, U extends Path = Path> extends Map<T> {
-        get(key: U): T | undefined;
-        has(key: U): boolean;
-        forEach(action: (value: T, key: U) => void): void;
-        readonly size: number;
-        keys(): Iterator<U>;
-        values(): Iterator<T>;
-        entries(): Iterator<[U, T]>;
-        set(key: U, value: T): this;
-        delete(key: U): boolean;
-        clear(): void;
+    interface FileMap<T, U extends Path = Path> extends Map<U, T> {
     }
     type ConfigFileMap<T> = FileMap<T, ResolvedConfigFilePath>;
     function createConfigFileMap<T>(): ConfigFileMap<T> {
@@ -78,8 +68,8 @@ namespace ts {
         return existingValue || newValue!;
     }
 
-    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ConfigFileMap<Map<T>>, resolved: ResolvedConfigFilePath): Map<T> {
-        return getOrCreateValueFromConfigFileMap<Map<T>>(configFileMap, resolved, createMap);
+    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ConfigFileMap<Map<string, T>>, resolved: ResolvedConfigFilePath): Map<string, T> {
+        return getOrCreateValueFromConfigFileMap<Map<string, T>>(configFileMap, resolved, createMap);
     }
 
     function newer(date1: Date, date2: Date): Date {
@@ -238,12 +228,12 @@ namespace ts {
         readonly rootNames: readonly string[];
         readonly baseWatchOptions: WatchOptions | undefined;
 
-        readonly resolvedConfigFilePaths: Map<ResolvedConfigFilePath>;
+        readonly resolvedConfigFilePaths: Map<string, ResolvedConfigFilePath>;
         readonly configFileCache: ConfigFileMap<ConfigFileCacheEntry>;
         /** Map from config file name to up-to-date status */
         readonly projectStatus: ConfigFileMap<UpToDateStatus>;
         readonly buildInfoChecked: ConfigFileMap<true>;
-        readonly extendedConfigCache: Map<ExtendedConfigCacheEntry>;
+        readonly extendedConfigCache: Map<string, ExtendedConfigCacheEntry>;
 
         readonly builderPrograms: ConfigFileMap<T>;
         readonly diagnostics: ConfigFileMap<readonly Diagnostic[]>;
@@ -265,8 +255,8 @@ namespace ts {
 
         // Watch state
         readonly watch: boolean;
-        readonly allWatchedWildcardDirectories: ConfigFileMap<Map<WildcardDirectoryWatcher>>;
-        readonly allWatchedInputFiles: ConfigFileMap<Map<FileWatcher>>;
+        readonly allWatchedWildcardDirectories: ConfigFileMap<Map<string, WildcardDirectoryWatcher>>;
+        readonly allWatchedInputFiles: ConfigFileMap<Map<string, FileWatcher>>;
         readonly allWatchedConfigFiles: ConfigFileMap<FileWatcher>;
 
         timerToBuildInvalidatedProject: any;

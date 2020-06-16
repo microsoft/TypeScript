@@ -1,6 +1,6 @@
 namespace ts {
     export type TscCompileSystem = fakes.System & {
-        writtenFiles: Map<true>;
+        writtenFiles: Map<string, true>;
         baseLine(): { file: string; text: string; };
     };
 
@@ -44,7 +44,7 @@ namespace ts {
         return !!(program as Program | EmitAndSemanticDiagnosticsBuilderProgram).getCompilerOptions;
     }
     export function commandLineCallbacks(
-        sys: System & { writtenFiles: Map<any>; },
+        sys: System & { writtenFiles: Map<string, any>; },
         originalReadCall?: System["readFile"]
     ): CommandLineCallbacks {
         let programs: CommandLineProgram[] | undefined;

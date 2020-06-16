@@ -24,11 +24,11 @@ namespace ts {
         /**
          * Cache of bind and check diagnostics for files with their Path being the key
          */
-        semanticDiagnosticsPerFile?: ReadonlyMap<readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
+        semanticDiagnosticsPerFile?: ReadonlyMap<string, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
         /**
          * The map has key by source file's path that has been changed
          */
-        changedFilesSet?: ReadonlyMap<true>;
+        changedFilesSet?: ReadonlyMap<string, true>;
         /**
          * Set of affected files being iterated
          */
@@ -41,7 +41,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures?: ReadonlyMap<string> | undefined;
+        currentAffectedFilesSignatures?: ReadonlyMap<string, string> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -49,7 +49,7 @@ namespace ts {
         /**
          * True if the semantic diagnostics were copied from the old state
          */
-        semanticDiagnosticsFromOldState?: Map<true>;
+        semanticDiagnosticsFromOldState?: Map<string, true>;
         /**
          * program corresponding to this state
          */
@@ -65,7 +65,7 @@ namespace ts {
         /**
          * Files pending to be emitted kind.
          */
-        affectedFilesPendingEmitKind?: ReadonlyMap<BuilderFileEmit> | undefined;
+        affectedFilesPendingEmitKind?: ReadonlyMap<string, BuilderFileEmit> | undefined;
         /**
          * Current index to retrieve pending affected file
          */
@@ -89,11 +89,11 @@ namespace ts {
         /**
          * Cache of bind and check diagnostics for files with their Path being the key
          */
-        semanticDiagnosticsPerFile: Map<readonly Diagnostic[]> | undefined;
+        semanticDiagnosticsPerFile: Map<string, readonly Diagnostic[]> | undefined;
         /**
          * The map has key by source file's path that has been changed
          */
-        changedFilesSet: Map<true>;
+        changedFilesSet: Map<string, true>;
         /**
          * Set of affected files being iterated
          */
@@ -110,7 +110,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures: Map<string> | undefined;
+        currentAffectedFilesSignatures: Map<string, string> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -118,7 +118,7 @@ namespace ts {
         /**
          * Already seen affected files
          */
-        seenAffectedFiles: Map<true> | undefined;
+        seenAffectedFiles: Map<string, true> | undefined;
         /**
          * whether this program has cleaned semantic diagnostics cache for lib files
          */
@@ -126,7 +126,7 @@ namespace ts {
         /**
          * True if the semantic diagnostics were copied from the old state
          */
-        semanticDiagnosticsFromOldState?: Map<true>;
+        semanticDiagnosticsFromOldState?: Map<string, true>;
         /**
          * program corresponding to this state
          */
@@ -142,7 +142,7 @@ namespace ts {
         /**
          * Files pending to be emitted kind.
          */
-        affectedFilesPendingEmitKind: Map<BuilderFileEmit> | undefined;
+        affectedFilesPendingEmitKind: Map<string, BuilderFileEmit> | undefined;
         /**
          * Current index to retrieve pending affected file
          */
@@ -154,16 +154,16 @@ namespace ts {
         /**
          * Already seen emitted files
          */
-        seenEmittedFiles: Map<BuilderFileEmit> | undefined;
+        seenEmittedFiles: Map<string, BuilderFileEmit> | undefined;
         /**
          * true if program has been emitted
          */
         programEmitComplete?: true;
     }
 
-    function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined): boolean {
+    function hasSameKeys<T, U>(map1: ReadonlyMap<string, T> | undefined, map2: ReadonlyMap<string, U> | undefined): boolean {
         // Has same size and every key is present in both maps
-        return map1 as ReadonlyMap<T | U> === map2 || map1 !== undefined && map2 !== undefined && map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
+        return map1 as ReadonlyMap<string, T | U> === map2 || map1 !== undefined && map2 !== undefined && map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
     }
 
     /**
@@ -555,7 +555,7 @@ namespace ts {
     /**
      * Iterate on files referencing referencedPath
      */
-    function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Map<true>, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
+    function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Map<string, true>, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
         return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
             referencesInFile.has(referencedPath) && forEachFileAndExportsOfFile(state, filePath as Path, seenFileAndExportsOfFile, fn)
         );
@@ -564,7 +564,7 @@ namespace ts {
     /**
      * fn on file and iterate on anything that exports this file
      */
-    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Map<true>, fn: (state: BuilderProgramState, filePath: Path) => boolean): boolean {
+    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Map<string, true>, fn: (state: BuilderProgramState, filePath: Path) => boolean): boolean {
         if (!addToSeen(seenFileAndExportsOfFile, filePath)) {
             return false;
         }
@@ -1142,7 +1142,7 @@ namespace ts {
         }
     }
 
-    function getMapOfReferencedSet(mapLike: MapLike<readonly string[]> | undefined, toPath: (path: string) => Path): ReadonlyMap<BuilderState.ReferencedSet> | undefined {
+    function getMapOfReferencedSet(mapLike: MapLike<readonly string[]> | undefined, toPath: (path: string) => Path): ReadonlyMap<string, BuilderState.ReferencedSet> | undefined {
         if (!mapLike) return undefined;
         const map = createMap<BuilderState.ReferencedSet>();
         // Copies keys/values from template. Note that for..in will not throw if

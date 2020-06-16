@@ -23,35 +23,27 @@ namespace ts {
     }
 
     /** ES6 Map interface, only read methods included. */
-    export interface ReadonlyESMap<K, V> {
+    export interface ReadonlyMap<K, V> {
+        readonly size: number;
         get(key: K): V | undefined;
         has(key: K): boolean;
-        forEach(action: (value: V, key: K) => void): void;
-        readonly size: number;
         keys(): Iterator<K>;
         values(): Iterator<V>;
         entries(): Iterator<[K, V]>;
+        forEach(action: (value: V, key: K) => void): void;
     }
 
     /** ES6 Map interface. */
-    export interface ESMap<K, V> extends ReadonlyESMap<K, V> {
+    export interface Map<K, V> extends ReadonlyMap<K, V> {
         set(key: K, value: V): this;
         delete(key: K): boolean;
         clear(): void;
     }
 
-    /** ES6 Map interface, only read methods included. */
-    export interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
-    }
-
-    /** ES6 Map interface. */
-    export interface Map<T> extends ESMap<string, T>, ReadonlyMap<T> {
-    }
-
     /* @internal */
     export interface MapConstructor {
         // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <K, V>(): ESMap<K, V>;
+        new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyMap<K, V>): Map<K, V>;
     }
 
     export interface ReadonlySet<T> {
@@ -72,7 +64,7 @@ namespace ts {
     /* @internal */
     export interface SetConstructor {
         // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <T>(): Set<T>;
+        new <T>(iterable?: readonly T[] | ReadonlySet<T>): Set<T>;
     }
 
     export interface WeakMap<K extends object, V> {
@@ -133,13 +125,13 @@ namespace ts {
         export function tryGetNativeMap(): MapConstructor | undefined {
             // Internet Explorer's Map doesn't support iteration, so don't use it.
             // eslint-disable-next-line no-in-operator
-            return typeof Map !== "undefined" && "entries" in Map.prototype ? Map : undefined;
+            return typeof Map !== "undefined" && "entries" in Map.prototype && new Map([[0, 0]]).size === 1 ? Map : undefined;
         }
 
         export function tryGetNativeSet(): SetConstructor | undefined {
             // Internet Explorer's Set doesn't support iteration, so don't use it.
             // eslint-disable-next-line no-in-operator
-            return typeof Set !== "undefined" && "entries" in Set.prototype ? Set : undefined;
+            return typeof Set !== "undefined" && "entries" in Set.prototype && new Set([0]).size === 1 ? Set : undefined;
         }
 
         export function tryGetNativeWeakMap(): WeakMapConstructor | undefined {
@@ -182,36 +174,4 @@ namespace ts {
     export function tryGetNativeWeakSet() {
         return NativeCollections.tryGetNativeWeakSet();
     }
-
-    export const Map: MapConstructor = tryGetNativeMap() || (() => {
-        // NOTE: ts.createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createMapShim === "function") {
-            return createMapShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
-    })();
-
-    export const Set: SetConstructor = tryGetNativeSet() || (() => {
-        // NOTE: ts.createSetShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createSetShim === "function") {
-            return createSetShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native Set implementation.");
-    })();
-
-    export const WeakMap: WeakMapConstructor = tryGetNativeWeakMap() || (() => {
-        // NOTE: ts.createWeakMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createWeakMapShim === "function") {
-            return createWeakMapShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native WeakMap implementation.");
-    })();
-
-    export const WeakSet: WeakSetConstructor = tryGetNativeWeakSet() || (() => {
-        // NOTE: ts.createWeakSetShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createWeakSetShim === "function") {
-            return createWeakSetShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native WeakSet implementation.");
-    })();
 }

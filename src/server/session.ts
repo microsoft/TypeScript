@@ -262,7 +262,7 @@ namespace ts.server {
 
     type Projects = readonly Project[] | {
         readonly projects: readonly Project[];
-        readonly symLinkedProjects: MultiMap<Project>;
+        readonly symLinkedProjects: MultiMap<string, Project>;
     };
 
     /**
@@ -496,7 +496,7 @@ namespace ts.server {
         location: TLocation,
         projectService: ProjectService,
         toDo: ProjectAndLocation<TLocation>[] | undefined,
-        seenProjects: Map<true>,
+        seenProjects: Map<string, true>,
         cb: CombineProjectOutputCallback<TLocation>,
     ): ProjectAndLocation<TLocation>[] | undefined {
         if (project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
@@ -526,11 +526,11 @@ namespace ts.server {
         return toDo;
     }
 
-    function addToTodo<TLocation extends DocumentPosition | undefined>(project: Project, location: TLocation, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
+    function addToTodo<TLocation extends DocumentPosition | undefined>(project: Project, location: TLocation, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<string, true>): void {
         if (addToSeen(seenProjects, project)) toDo.push({ project, location });
     }
 
-    function addToSeen(seenProjects: Map<true>, project: Project) {
+    function addToSeen(seenProjects: Map<string, true>, project: Project) {
         return ts.addToSeen(seenProjects, getProjectKey(project));
     }
 
@@ -1355,7 +1355,7 @@ namespace ts.server {
 
         private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
             let projects: readonly Project[] | undefined;
-            let symLinkedProjects: MultiMap<Project> | undefined;
+            let symLinkedProjects: MultiMap<string, Project> | undefined;
             if (args.projectFileName) {
                 const project = this.getProject(args.projectFileName);
                 if (project) {
