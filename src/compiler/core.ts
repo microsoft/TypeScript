@@ -1815,7 +1815,8 @@ namespace ts {
                 if (candidateName === name) {
                     continue;
                 }
-                // Don't bother, user would have noticed a 2-character name having an extra character
+                // Only consider candidates less than 3 characters long when they differ by case.
+                // Otherwise, don't bother, since a user would usually notice differences of a 2-character name.
                 if (candidateName.length < 3 && candidateNameLowerCase !== nameLowerCase) {
                     continue;
                 }

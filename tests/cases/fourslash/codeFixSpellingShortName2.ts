@@ -3,4 +3,4 @@
 ////export let ab = 1;
 ////abc;
 
-verify.codeFixAvailable([]);
+verify.not.codeFixAvailable();
