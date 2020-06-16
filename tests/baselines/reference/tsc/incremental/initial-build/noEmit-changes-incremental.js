@@ -195,7 +195,8 @@ function someFunc(arguments) {
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
             "category": 1,
-            "code": 2396
+            "code": 2396,
+            "skippedOn": "noEmit"
           }
         ]
       ]
@@ -212,15 +213,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
-
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -231,15 +224,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
-
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -255,16 +240,173 @@ export class classC {
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
+[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+[7m2[0m new indirectClass().classC.prop;
+[7m [0m [91m                           ~~~~[0m
+
+  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m     prop1 = 1;
+    [7m [0m [96m    ~~~~~[0m
+    'prop1' is declared here.
+
+[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+
+[7m2[0m new indirectClass().classC.prop;
+[7m [0m [91m                           ~~~~[0m
+
+  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m     prop1 = 1;
+    [7m [0m [96m    ~~~~~[0m
+    'prop1' is declared here.
 
 
-Found 1 error.
+Found 2 errors.
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
+
+//// [/src/project/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./src/class.ts": {
+        "version": "1786859709-export class classC {\n    prop1 = 1;\n}",
+        "signature": "-3790894605-export declare class classC {\r\n    prop1: number;\r\n}\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/indirectclass.ts": {
+        "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
+        "signature": "-9860349972-import { classC } from './class';\r\nexport declare class indirectClass {\r\n    classC: classC;\r\n}\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/directuse.ts": {
+        "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+        "signature": "-4882119183-export {};\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/indirectuse.ts": {
+        "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+        "signature": "-4882119183-export {};\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/nochangefile.ts": {
+        "version": "6714567633-export function writeLog(s: string) {\n}",
+        "signature": "8117292349-export declare function writeLog(s: string): void;\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/nochangefilewithemitspecificerror.ts": {
+        "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
+        "signature": "-4920141752-declare function someFunc(arguments: boolean, ...rest: any[]): void;\r\n",
+        "affectsGlobalScope": true
+      }
+    },
+    "options": {
+      "incremental": true,
+      "project": "./",
+      "noEmit": true,
+      "configFilePath": "./tsconfig.json"
+    },
+    "referencedMap": {
+      "./src/directuse.ts": [
+        "./src/indirectclass.ts"
+      ],
+      "./src/indirectclass.ts": [
+        "./src/class.ts"
+      ],
+      "./src/indirectuse.ts": [
+        "./src/indirectclass.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "./src/indirectclass.ts": [
+        "./src/class.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.d.ts",
+      "./src/class.ts",
+      [
+        "./src/directuse.ts",
+        [
+          {
+            "file": "./src/directuse.ts",
+            "start": 76,
+            "length": 4,
+            "code": 2551,
+            "category": 1,
+            "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
+            "relatedInformation": [
+              {
+                "file": "./src/class.ts",
+                "start": 26,
+                "length": 5,
+                "messageText": "'prop1' is declared here.",
+                "category": 3,
+                "code": 2728
+              }
+            ]
+          }
+        ]
+      ],
+      "./src/indirectclass.ts",
+      [
+        "./src/indirectuse.ts",
+        [
+          {
+            "file": "./src/indirectuse.ts",
+            "start": 76,
+            "length": 4,
+            "code": 2551,
+            "category": 1,
+            "messageText": "Property 'prop' does not exist on type 'classC'. Did you mean 'prop1'?",
+            "relatedInformation": [
+              {
+                "file": "./src/class.ts",
+                "start": 26,
+                "length": 5,
+                "messageText": "'prop1' is declared here.",
+                "category": 3,
+                "code": 2728
+              }
+            ]
+          }
+        ]
+      ],
+      "./src/nochangefile.ts",
+      [
+        "./src/nochangefilewithemitspecificerror.ts",
+        [
+          {
+            "file": "./src/nochangefilewithemitspecificerror.ts",
+            "start": 18,
+            "length": 18,
+            "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
+            "category": 1,
+            "code": 2396,
+            "skippedOn": "noEmit"
+          }
+        ]
+      ]
+    ],
+    "affectedFilesPendingEmit": [
+      [
+        "./src/class.ts",
+        1
+      ],
+      [
+        "./src/indirectclass.ts",
+        1
+      ]
+    ]
+  },
+  "version": "FakeTSVersion"
+}
 
 
 
@@ -289,6 +431,95 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
+
+//// [/src/project/src/class.js] file written with same contents
+//// [/src/project/src/indirectClass.js] file written with same contents
+//// [/src/project/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./src/class.ts": {
+        "version": "545032748-export class classC {\n    prop = 1;\n}",
+        "signature": "-6712382238-export declare class classC {\r\n    prop: number;\r\n}\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/indirectclass.ts": {
+        "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
+        "signature": "-9860349972-import { classC } from './class';\r\nexport declare class indirectClass {\r\n    classC: classC;\r\n}\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/directuse.ts": {
+        "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+        "signature": "-4882119183-export {};\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/indirectuse.ts": {
+        "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+        "signature": "-4882119183-export {};\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/nochangefile.ts": {
+        "version": "6714567633-export function writeLog(s: string) {\n}",
+        "signature": "8117292349-export declare function writeLog(s: string): void;\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/nochangefilewithemitspecificerror.ts": {
+        "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
+        "signature": "-4920141752-declare function someFunc(arguments: boolean, ...rest: any[]): void;\r\n",
+        "affectsGlobalScope": true
+      }
+    },
+    "options": {
+      "incremental": true,
+      "project": "./",
+      "configFilePath": "./tsconfig.json"
+    },
+    "referencedMap": {
+      "./src/directuse.ts": [
+        "./src/indirectclass.ts"
+      ],
+      "./src/indirectclass.ts": [
+        "./src/class.ts"
+      ],
+      "./src/indirectuse.ts": [
+        "./src/indirectclass.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "./src/indirectclass.ts": [
+        "./src/class.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.d.ts",
+      "./src/class.ts",
+      "./src/directuse.ts",
+      "./src/indirectclass.ts",
+      "./src/indirectuse.ts",
+      "./src/nochangefile.ts",
+      [
+        "./src/nochangefilewithemitspecificerror.ts",
+        [
+          {
+            "file": "./src/nochangefilewithemitspecificerror.ts",
+            "start": 18,
+            "length": 18,
+            "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
+            "category": 1,
+            "code": 2396,
+            "skippedOn": "noEmit"
+          }
+        ]
+      ]
+    ]
+  },
+  "version": "FakeTSVersion"
+}
 
 
 
@@ -317,15 +548,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
-
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -336,15 +559,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
-
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -545,7 +760,8 @@ exports.classC = classC;
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
             "category": 1,
-            "code": 2396
+            "code": 2396,
+            "skippedOn": "noEmit"
           }
         ]
       ]
@@ -601,13 +817,28 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
+[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+[7m2[0m new indirectClass().classC.prop;
+[7m [0m [91m                           ~~~~[0m
+
+  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m     prop1 = 1;
+    [7m [0m [96m    ~~~~~[0m
+    'prop1' is declared here.
+
+[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+
+[7m2[0m new indirectClass().classC.prop;
+[7m [0m [91m                           ~~~~[0m
+
+  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m     prop1 = 1;
+    [7m [0m [96m    ~~~~~[0m
+    'prop1' is declared here.
 
 
-Found 1 error.
+Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
@@ -620,13 +851,28 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
+[96msrc/project/src/directUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
 
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+[7m2[0m new indirectClass().classC.prop;
+[7m [0m [91m                           ~~~~[0m
+
+  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m     prop1 = 1;
+    [7m [0m [96m    ~~~~~[0m
+    'prop1' is declared here.
+
+[96msrc/project/src/indirectUse.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2551: [0mProperty 'prop' does not exist on type 'classC'. Did you mean 'prop1'?
+
+[7m2[0m new indirectClass().classC.prop;
+[7m [0m [91m                           ~~~~[0m
+
+  [96msrc/project/src/class.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m     prop1 = 1;
+    [7m [0m [96m    ~~~~~[0m
+    'prop1' is declared here.
 
 
-Found 1 error.
+Found 2 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
@@ -683,16 +929,106 @@ export class classC {
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
-
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+exitCode:: ExitStatus.Success
 
 
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
+//// [/src/project/tsconfig.tsbuildinfo]
+{
+  "program": {
+    "fileInfos": {
+      "../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./src/class.ts": {
+        "version": "545032748-export class classC {\n    prop = 1;\n}",
+        "signature": "-6712382238-export declare class classC {\r\n    prop: number;\r\n}\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/indirectclass.ts": {
+        "version": "6324910780-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}",
+        "signature": "-9860349972-import { classC } from './class';\r\nexport declare class indirectClass {\r\n    classC: classC;\r\n}\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/directuse.ts": {
+        "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+        "signature": "-4882119183-export {};\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/indirectuse.ts": {
+        "version": "-8953710208-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",
+        "signature": "-4882119183-export {};\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/nochangefile.ts": {
+        "version": "6714567633-export function writeLog(s: string) {\n}",
+        "signature": "8117292349-export declare function writeLog(s: string): void;\r\n",
+        "affectsGlobalScope": false
+      },
+      "./src/nochangefilewithemitspecificerror.ts": {
+        "version": "-19339541508-function someFunc(arguments: boolean, ...rest: any[]) {\n}",
+        "signature": "-4920141752-declare function someFunc(arguments: boolean, ...rest: any[]): void;\r\n",
+        "affectsGlobalScope": true
+      }
+    },
+    "options": {
+      "incremental": true,
+      "project": "./",
+      "noEmit": true,
+      "configFilePath": "./tsconfig.json"
+    },
+    "referencedMap": {
+      "./src/directuse.ts": [
+        "./src/indirectclass.ts"
+      ],
+      "./src/indirectclass.ts": [
+        "./src/class.ts"
+      ],
+      "./src/indirectuse.ts": [
+        "./src/indirectclass.ts"
+      ]
+    },
+    "exportedModulesMap": {
+      "./src/indirectclass.ts": [
+        "./src/class.ts"
+      ]
+    },
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.d.ts",
+      "./src/class.ts",
+      "./src/directuse.ts",
+      "./src/indirectclass.ts",
+      "./src/indirectuse.ts",
+      "./src/nochangefile.ts",
+      [
+        "./src/nochangefilewithemitspecificerror.ts",
+        [
+          {
+            "file": "./src/nochangefilewithemitspecificerror.ts",
+            "start": 18,
+            "length": 18,
+            "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
+            "category": 1,
+            "code": 2396,
+            "skippedOn": "noEmit"
+          }
+        ]
+      ]
+    ],
+    "affectedFilesPendingEmit": [
+      [
+        "./src/class.ts",
+        1
+      ],
+      [
+        "./src/indirectclass.ts",
+        1
+      ]
+    ]
+  },
+  "version": "FakeTSVersion"
+}
 
 
 
@@ -804,7 +1140,8 @@ exports.classC = classC;
             "length": 18,
             "messageText": "Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.",
             "category": 1,
-            "code": 2396
+            "code": 2396,
+            "skippedOn": "noEmit"
           }
         ]
       ]
@@ -821,15 +1158,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
-
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 
@@ -840,15 +1169,7 @@ Input::
 
 Output::
 /lib/tsc --p src/project --noEmit
-[96msrc/project/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS5053: [0mOption 'noEmit' cannot be specified with option 'incremental'.
-
-[7m1[0m {"compilerOptions":{"incremental":true}}
-[7m [0m [91m                    ~~~~~~~~~~~~~[0m
-
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+exitCode:: ExitStatus.Success
 
 
 

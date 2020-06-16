@@ -5522,6 +5522,7 @@ namespace ts {
         reportsUnnecessary?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
+        /* @internal */ skippedOn?: keyof CompilerOptions;
     }
 
     export interface DiagnosticRelatedInformation {
