@@ -14,7 +14,7 @@ namespace ts {
 
         function convertToFunctionBlock(node: ConciseBody, multiLine?: boolean): Block {
             if (isBlock(node)) return node;
-            const returnStatement = factory.createReturn(node);
+            const returnStatement = factory.createReturnStatement(node);
             setTextRange(returnStatement, node);
             const body = factory.createBlock([returnStatement], multiLine);
             setTextRange(body, node);
@@ -44,7 +44,7 @@ namespace ts {
             if (isBindingElement(element)) {
                 if (element.dotDotDotToken) {
                     Debug.assertNode(element.name, isIdentifier);
-                    return setOriginalNode(setTextRange(factory.createSpread(element.name), element), element);
+                    return setOriginalNode(setTextRange(factory.createSpreadElement(element.name), element), element);
                 }
                 const expression = convertToAssignmentElementTarget(element.name);
                 return element.initializer
@@ -93,7 +93,7 @@ namespace ts {
             if (isObjectBindingPattern(node)) {
                 return setOriginalNode(
                     setTextRange(
-                        factory.createObjectLiteral(map(node.elements, convertToObjectAssignmentElement)),
+                        factory.createObjectLiteralExpression(map(node.elements, convertToObjectAssignmentElement)),
                         node
                     ),
                     node
@@ -106,7 +106,7 @@ namespace ts {
             if (isArrayBindingPattern(node)) {
                 return setOriginalNode(
                     setTextRange(
-                        factory.createArrayLiteral(map(node.elements, convertToArrayAssignmentElement)),
+                        factory.createArrayLiteralExpression(map(node.elements, convertToArrayAssignmentElement)),
                         node
                     ),
                     node

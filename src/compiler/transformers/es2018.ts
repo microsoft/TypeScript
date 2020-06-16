@@ -264,7 +264,7 @@ namespace ts {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
                 return setOriginalNode(
                     setTextRange(
-                        factory.createYield(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(visitNode(node.expression, visitor, isExpression))),
+                        factory.createYieldExpression(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(visitNode(node.expression, visitor, isExpression))),
                         /*location*/ node
                     ),
                     node
@@ -280,10 +280,10 @@ namespace ts {
 
                     return setOriginalNode(
                         setTextRange(
-                            factory.createYield(
+                            factory.createYieldExpression(
                                 /*asteriskToken*/ undefined,
                                 emitHelpers().createAwaitHelper(
-                                    factory.updateYield(
+                                    factory.updateYieldExpression(
                                         node,
                                         node.asteriskToken,
                                         setTextRange(
@@ -306,7 +306,7 @@ namespace ts {
 
                 return setOriginalNode(
                     setTextRange(
-                        factory.createYield(
+                        factory.createYieldExpression(
                             /*asteriskToken*/ undefined,
                             createDownlevelAwait(
                                 node.expression
@@ -325,7 +325,7 @@ namespace ts {
 
         function visitReturnStatement(node: ReturnStatement) {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
-                return factory.updateReturn(node, createDownlevelAwait(
+                return factory.updateReturnStatement(node, createDownlevelAwait(
                     node.expression ? visitNode(node.expression, visitor, isExpression) : factory.createVoidZero()
                 ));
             }
@@ -350,7 +350,7 @@ namespace ts {
             for (const e of elements) {
                 if (e.kind === SyntaxKind.SpreadAssignment) {
                     if (chunkObject) {
-                        objects.push(factory.createObjectLiteral(chunkObject));
+                        objects.push(factory.createObjectLiteralExpression(chunkObject));
                         chunkObject = undefined;
                     }
                     const target = e.expression;
@@ -363,7 +363,7 @@ namespace ts {
                 }
             }
             if (chunkObject) {
-                objects.push(factory.createObjectLiteral(chunkObject));
+                objects.push(factory.createObjectLiteralExpression(chunkObject));
             }
 
             return objects;
@@ -394,7 +394,7 @@ namespace ts {
                 // end up with `{ a: 1, b: 2, c: 3 }`
                 const objects = chunkObjectLiteralElements(node.properties);
                 if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
-                    objects.unshift(factory.createObjectLiteral());
+                    objects.unshift(factory.createObjectLiteralExpression());
                 }
                 let expression: Expression = objects[0];
                 if (objects.length > 1) {
@@ -462,7 +462,7 @@ namespace ts {
                 );
             }
             else if (node.operatorToken.kind === SyntaxKind.CommaToken) {
-                return factory.updateBinary(
+                return factory.updateBinaryExpression(
                     node,
                     visitNode(node.left, visitorNoDestructuringValue, isExpression),
                     node.operatorToken,
@@ -537,7 +537,7 @@ namespace ts {
         }
 
         function visitForStatement(node: ForStatement): VisitResult<Statement> {
-            return factory.updateFor(
+            return factory.updateForStatement(
                 node,
                 visitNode(node.initializer, visitorNoDestructuringValue, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
@@ -584,7 +584,7 @@ namespace ts {
                     bodyLocation = node.statement;
                     statementsLocation = node.statement;
                 }
-                return factory.updateForOf(
+                return factory.updateForOfStatement(
                     node,
                     node.awaitModifier,
                     setTextRange(
@@ -639,8 +639,8 @@ namespace ts {
 
         function createDownlevelAwait(expression: Expression) {
             return enclosingFunctionFlags & FunctionFlags.Generator
-                ? factory.createYield(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(expression))
-                : factory.createAwait(expression);
+                ? factory.createYieldExpression(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(expression))
+                : factory.createAwaitExpression(expression);
         }
 
         function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts) {
@@ -651,9 +651,9 @@ namespace ts {
             const catchVariable = factory.getGeneratedNameForNode(errorRecord);
             const returnMethod = factory.createTempVariable(/*recordTempVariable*/ undefined);
             const callValues = setTextRange(emitHelpers().createAsyncValuesHelper(expression), node.expression);
-            const callNext = factory.createCall(factory.createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
-            const getDone = factory.createPropertyAccess(result, "done");
-            const getValue = factory.createPropertyAccess(result, "value");
+            const callNext = factory.createCallExpression(factory.createPropertyAccessExpression(iterator, "next"), /*typeArguments*/ undefined, []);
+            const getDone = factory.createPropertyAccessExpression(result, "done");
+            const getValue = factory.createPropertyAccessExpression(result, "value");
             const callReturn = factory.createFunctionCallCall(returnMethod, iterator, []);
 
             hoistVariableDeclaration(errorRecord);
@@ -666,7 +666,7 @@ namespace ts {
 
             const forStatement = setEmitFlags(
                 setTextRange(
-                    factory.createFor(
+                    factory.createForStatement(
                         /*initializer*/ setEmitFlags(
                             setTextRange(
                                 factory.createVariableDeclarationList([
@@ -689,7 +689,7 @@ namespace ts {
                 EmitFlags.NoTokenTrailingSourceMaps
             );
 
-            return factory.createTry(
+            return factory.createTryStatement(
                 factory.createBlock([
                     factory.restoreEnclosingLabel(
                         forStatement,
@@ -703,7 +703,7 @@ namespace ts {
                             factory.createExpressionStatement(
                                 factory.createAssignment(
                                     errorRecord,
-                                    factory.createObjectLiteral([
+                                    factory.createObjectLiteralExpression([
                                         factory.createPropertyAssignment("error", catchVariable)
                                     ])
                                 )
@@ -713,10 +713,10 @@ namespace ts {
                     )
                 ),
                 factory.createBlock([
-                    factory.createTry(
+                    factory.createTryStatement(
                         /*tryBlock*/ factory.createBlock([
                             setEmitFlags(
-                                factory.createIf(
+                                factory.createIfStatement(
                                     factory.createLogicalAnd(
                                         factory.createLogicalAnd(
                                             result,
@@ -724,7 +724,7 @@ namespace ts {
                                         ),
                                         factory.createAssignment(
                                             returnMethod,
-                                            factory.createPropertyAccess(iterator, "return")
+                                            factory.createPropertyAccessExpression(iterator, "return")
                                         )
                                     ),
                                     factory.createExpressionStatement(createDownlevelAwait(callReturn))
@@ -736,10 +736,10 @@ namespace ts {
                         /*finallyBlock*/ setEmitFlags(
                             factory.createBlock([
                                 setEmitFlags(
-                                    factory.createIf(
+                                    factory.createIfStatement(
                                         errorRecord,
-                                        factory.createThrow(
-                                            factory.createPropertyAccess(errorRecord, "error")
+                                        factory.createThrowStatement(
+                                            factory.createPropertyAccessExpression(errorRecord, "error")
                                         )
                                     ),
                                     EmitFlags.SingleLine
@@ -914,7 +914,7 @@ namespace ts {
             capturedSuperProperties = createUnderscoreEscapedMap<true>();
             hasSuperElementAccess = false;
 
-            const returnStatement = factory.createReturn(
+            const returnStatement = factory.createReturnStatement(
                 emitHelpers().createAsyncGeneratorHelper(
                     factory.createFunctionExpression(
                         /*modifiers*/ undefined,
@@ -1094,7 +1094,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return setTextRange(
-                    factory.createPropertyAccess(
+                    factory.createPropertyAccessExpression(
                         factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         node.name),
                     node
@@ -1119,8 +1119,8 @@ namespace ts {
                 const argumentExpression = isPropertyAccessExpression(expression)
                     ? substitutePropertyAccessExpression(expression)
                     : substituteElementAccessExpression(expression);
-                return factory.createCall(
-                    factory.createPropertyAccess(argumentExpression, "call"),
+                return factory.createCallExpression(
+                    factory.createPropertyAccessExpression(argumentExpression, "call"),
                     /*typeArguments*/ undefined,
                     [
                         factory.createThis(),
@@ -1143,8 +1143,8 @@ namespace ts {
         function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
             if (enclosingSuperContainerFlags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
                 return setTextRange(
-                    factory.createPropertyAccess(
-                        factory.createCall(
+                    factory.createPropertyAccessExpression(
+                        factory.createCallExpression(
                             factory.createIdentifier("_superIndex"),
                             /*typeArguments*/ undefined,
                             [argumentExpression]
@@ -1156,7 +1156,7 @@ namespace ts {
             }
             else {
                 return setTextRange(
-                    factory.createCall(
+                    factory.createCallExpression(
                         factory.createIdentifier("_superIndex"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]

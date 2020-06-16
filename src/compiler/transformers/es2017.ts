@@ -219,7 +219,7 @@ namespace ts {
         }
 
         function visitForInStatementInAsyncBody(node: ForInStatement) {
-            return factory.updateForIn(
+            return factory.updateForInStatement(
                 node,
                 isVariableDeclarationListWithCollidingName(node.initializer)
                     ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
@@ -230,7 +230,7 @@ namespace ts {
         }
 
         function visitForOfStatementInAsyncBody(node: ForOfStatement) {
-            return factory.updateForOf(
+            return factory.updateForOfStatement(
                 node,
                 visitNode(node.awaitModifier, visitor, isToken),
                 isVariableDeclarationListWithCollidingName(node.initializer)
@@ -243,7 +243,7 @@ namespace ts {
 
         function visitForStatementInAsyncBody(node: ForStatement) {
             const initializer = node.initializer!; // TODO: GH#18217
-            return factory.updateFor(
+            return factory.updateForStatement(
                 node,
                 isVariableDeclarationListWithCollidingName(initializer)
                     ? visitVariableDeclarationListWithCollidingNames(initializer, /*hasReceiver*/ false)
@@ -268,7 +268,7 @@ namespace ts {
             }
             return setOriginalNode(
                 setTextRange(
-                    factory.createYield(
+                    factory.createYieldExpression(
                         /*asteriskToken*/ undefined,
                         visitNode(node.expression, visitor, isExpression)
                     ),
@@ -483,7 +483,7 @@ namespace ts {
                 const statements: Statement[] = [];
                 const statementOffset = factory.copyPrologue((<Block>node.body).statements, statements, /*ensureUseStrict*/ false, visitor);
                 statements.push(
-                    factory.createReturn(
+                    factory.createReturnStatement(
                         emitHelpers().createAwaiterHelper(
                             inHasLexicalThisContext(),
                             hasLexicalArguments,
@@ -653,7 +653,7 @@ namespace ts {
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return setTextRange(
-                    factory.createPropertyAccess(
+                    factory.createPropertyAccessExpression(
                         factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         node.name),
                     node
@@ -678,8 +678,8 @@ namespace ts {
                 const argumentExpression = isPropertyAccessExpression(expression)
                     ? substitutePropertyAccessExpression(expression)
                     : substituteElementAccessExpression(expression);
-                return factory.createCall(
-                    factory.createPropertyAccess(argumentExpression, "call"),
+                return factory.createCallExpression(
+                    factory.createPropertyAccessExpression(argumentExpression, "call"),
                     /*typeArguments*/ undefined,
                     [
                         factory.createThis(),
@@ -702,8 +702,8 @@ namespace ts {
         function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
             if (enclosingSuperContainerFlags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
                 return setTextRange(
-                    factory.createPropertyAccess(
-                        factory.createCall(
+                    factory.createPropertyAccessExpression(
+                        factory.createCallExpression(
                             factory.createUniqueName("_superIndex", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                             /*typeArguments*/ undefined,
                             [argumentExpression]
@@ -715,7 +715,7 @@ namespace ts {
             }
             else {
                 return setTextRange(
-                    factory.createCall(
+                    factory.createCallExpression(
                         factory.createUniqueName("_superIndex", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
@@ -744,7 +744,7 @@ namespace ts {
                     /* type */ undefined,
                     /* equalsGreaterThanToken */ undefined,
                     setEmitFlags(
-                        factory.createPropertyAccess(
+                        factory.createPropertyAccessExpression(
                             setEmitFlags(
                                 factory.createSuper(),
                                 EmitFlags.NoSubstitution
@@ -777,7 +777,7 @@ namespace ts {
                             /* equalsGreaterThanToken */ undefined,
                             factory.createAssignment(
                                 setEmitFlags(
-                                    factory.createPropertyAccess(
+                                    factory.createPropertyAccessExpression(
                                         setEmitFlags(
                                             factory.createSuper(),
                                             EmitFlags.NoSubstitution
@@ -795,7 +795,7 @@ namespace ts {
             accessors.push(
                 factory.createPropertyAssignment(
                     name,
-                    factory.createObjectLiteral(getterAndSetter),
+                    factory.createObjectLiteralExpression(getterAndSetter),
                 )
             );
         });
@@ -807,15 +807,15 @@ namespace ts {
                         factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
                         /*exclamationToken*/ undefined,
                         /* type */ undefined,
-                        factory.createCall(
-                            factory.createPropertyAccess(
+                        factory.createCallExpression(
+                            factory.createPropertyAccessExpression(
                                 factory.createIdentifier("Object"),
                                 "create"
                             ),
                             /* typeArguments */ undefined,
                             [
                                 factory.createNull(),
-                                factory.createObjectLiteral(accessors, /* multiline */ true)
+                                factory.createObjectLiteralExpression(accessors, /* multiline */ true)
                             ]
                         )
                     )

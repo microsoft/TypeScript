@@ -287,7 +287,7 @@ namespace ts.codefix {
             varDeclList = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList(varDecl, NodeFlags.Let));
         }
 
-        const tryStatement = factory.createTry(tryBlock, catchClause, /*finallyBlock*/ undefined);
+        const tryStatement = factory.createTryStatement(tryBlock, catchClause, /*finallyBlock*/ undefined);
         const destructuredResult = prevArgName && varDeclIdentifier && isSynthBindingPattern(prevArgName)
             && factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(getSynthesizedDeepCloneWithRenames(prevArgName.bindingPattern), /*exclamationToken*/ undefined, /*type*/ undefined, varDeclIdentifier)], NodeFlags.Const));
         return compact([varDeclList, tryStatement, destructuredResult]);
@@ -311,7 +311,7 @@ namespace ts.codefix {
             const catchVariableDeclaration = factory.createVariableDeclaration(catchArg);
             const catchClause = factory.createCatchClause(catchVariableDeclaration, factory.createBlock(transformationBody2));
 
-            return [factory.createTry(tryBlock, catchClause, /* finallyBlock */ undefined)];
+            return [factory.createTryStatement(tryBlock, catchClause, /* finallyBlock */ undefined)];
         }
 
         return transformExpression(node.expression, transformer, onFulfilledArgumentName).concat(transformationBody);
@@ -322,10 +322,10 @@ namespace ts.codefix {
      */
     function transformPromiseExpressionOfPropertyAccess(node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
         if (shouldReturn(node, transformer)) {
-            return [factory.createReturn(getSynthesizedDeepClone(node))];
+            return [factory.createReturnStatement(getSynthesizedDeepClone(node))];
         }
 
-        return createVariableOrAssignmentOrExpressionStatement(prevArgName, factory.createAwait(node), /*typeAnnotation*/ undefined);
+        return createVariableOrAssignmentOrExpressionStatement(prevArgName, factory.createAwaitExpression(node), /*typeAnnotation*/ undefined);
     }
 
     function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBindingName | undefined, rightHandSide: Expression, typeAnnotation: TypeNode | undefined): readonly Statement[] {
@@ -356,10 +356,10 @@ namespace ts.codefix {
             const name = factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
             return [
                 ...createVariableOrAssignmentOrExpressionStatement(createSynthIdentifier(name), expressionToReturn, typeAnnotation),
-                factory.createReturn(name)
+                factory.createReturnStatement(name)
             ];
         }
-        return [factory.createReturn(expressionToReturn)];
+        return [factory.createReturnStatement(expressionToReturn)];
     }
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
@@ -374,7 +374,7 @@ namespace ts.codefix {
                     break;
                 }
 
-                const synthCall = factory.createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, isSynthIdentifier(argName) ? [argName.identifier] : []);
+                const synthCall = factory.createCallExpression(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, isSynthIdentifier(argName) ? [argName.identifier] : []);
                 if (shouldReturn(parent, transformer)) {
                     return maybeAnnotateAndReturn(synthCall, parent.typeArguments?.[0]);
                 }
@@ -386,7 +386,7 @@ namespace ts.codefix {
                     return silentFail();
                 }
                 const returnType = callSignatures[0].getReturnType();
-                const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(prevArgName, factory.createAwait(synthCall), parent.typeArguments?.[0]);
+                const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(prevArgName, factory.createAwaitExpression(synthCall), parent.typeArguments?.[0]);
                 if (prevArgName) {
                     prevArgName.types.push(returnType);
                 }
@@ -424,7 +424,7 @@ namespace ts.codefix {
                             seenReturnStatement);
                 }
                 else {
-                    const innerRetStmts = isFixablePromiseHandler(funcBody) ? [factory.createReturn(funcBody)] : emptyArray;
+                    const innerRetStmts = isFixablePromiseHandler(funcBody) ? [factory.createReturnStatement(funcBody)] : emptyArray;
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
@@ -434,7 +434,7 @@ namespace ts.codefix {
                     const type = transformer.checker.getTypeAtLocation(func);
                     const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
                     const rightHandSide = getSynthesizedDeepClone(funcBody);
-                    const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? factory.createAwait(rightHandSide) : rightHandSide;
+                    const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? factory.createAwaitExpression(rightHandSide) : rightHandSide;
                     if (!shouldReturn(parent, transformer)) {
                         const transformedStatement = createVariableOrAssignmentOrExpressionStatement(prevArgName, possiblyAwaitedRightHandSide, /*typeAnnotation*/ undefined);
                         if (prevArgName) {
@@ -465,7 +465,7 @@ namespace ts.codefix {
         for (const stmt of stmts) {
             if (isReturnStatement(stmt)) {
                 if (stmt.expression) {
-                    const possiblyAwaitedExpression = isPromiseTypedExpression(stmt.expression, transformer.checker) ? factory.createAwait(stmt.expression) : stmt.expression;
+                    const possiblyAwaitedExpression = isPromiseTypedExpression(stmt.expression, transformer.checker) ? factory.createAwaitExpression(stmt.expression) : stmt.expression;
                     if (prevArgName === undefined) {
                         ret.push(factory.createExpressionStatement(possiblyAwaitedExpression));
                     }

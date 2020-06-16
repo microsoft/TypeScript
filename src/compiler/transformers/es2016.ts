@@ -49,14 +49,14 @@ namespace ts {
                 const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
                 const argumentExpressionTemp = factory.createTempVariable(hoistVariableDeclaration);
                 target = setTextRange(
-                    factory.createElementAccess(
+                    factory.createElementAccessExpression(
                         setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
                         setTextRange(factory.createAssignment(argumentExpressionTemp, left.argumentExpression), left.argumentExpression)
                     ),
                     left
                 );
                 value = setTextRange(
-                    factory.createElementAccess(
+                    factory.createElementAccessExpression(
                         expressionTemp,
                         argumentExpressionTemp
                     ),
@@ -67,14 +67,14 @@ namespace ts {
                 // Transforms `a.x **= b` into `(_a = a).x = Math.pow(_a.x, b)`
                 const expressionTemp = factory.createTempVariable(hoistVariableDeclaration);
                 target = setTextRange(
-                    factory.createPropertyAccess(
+                    factory.createPropertyAccessExpression(
                         setTextRange(factory.createAssignment(expressionTemp, left.expression), left.expression),
                         left.name
                     ),
                     left
                 );
                 value = setTextRange(
-                    factory.createPropertyAccess(
+                    factory.createPropertyAccessExpression(
                         expressionTemp,
                         left.name
                     ),

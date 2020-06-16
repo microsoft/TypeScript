@@ -131,10 +131,10 @@ namespace ts.codefix {
             const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
             if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
-            return factory.createNew(factory.createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+            return factory.createNewExpression(factory.createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
         }
         else if (checker.isArrayLikeType(type)) {
-            return factory.createArrayLiteral();
+            return factory.createArrayLiteralExpression();
         }
         return undefined;
     }

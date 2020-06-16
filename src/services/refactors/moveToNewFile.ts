@@ -303,7 +303,7 @@ namespace ts.refactor {
     }
 
     function createRequireCall(moduleSpecifier: StringLiteralLike): CallExpression {
-        return factory.createCall(factory.createIdentifier("require"), /*typeArguments*/ undefined, [moduleSpecifier]);
+        return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [moduleSpecifier]);
     }
 
     function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needExport: ReadonlySymbolSet, useEs6Exports: boolean): readonly Statement[] {
@@ -798,8 +798,8 @@ namespace ts.refactor {
     /** Creates `exports.x = x;` */
     function createExportAssignment(name: string): Statement {
         return factory.createExpressionStatement(
-            factory.createBinary(
-                factory.createPropertyAccess(factory.createIdentifier("exports"), factory.createIdentifier(name)),
+            factory.createBinaryExpression(
+                factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(name)),
                 SyntaxKind.EqualsToken,
                 factory.createIdentifier(name)));
     }

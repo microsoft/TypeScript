@@ -102,14 +102,14 @@ namespace ts {
                 const segments = flatten<Expression | ObjectLiteralExpression>(
                     spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                         ? map(attrs, transformJsxSpreadAttributeToExpression)
-                        : factory.createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                        : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
                     )
                 );
 
                 if (isJsxSpreadAttribute(attrs[0])) {
                     // We must always emit at least one object literal before a spread
                     // argument.factory.createObjectLiteral
-                    segments.unshift(factory.createObjectLiteral());
+                    segments.unshift(factory.createObjectLiteralExpression());
                 }
 
                 // Either emit one big object literal (no spread attribs), or

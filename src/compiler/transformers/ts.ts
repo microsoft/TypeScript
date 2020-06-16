@@ -659,7 +659,7 @@ namespace ts {
                 setTextRangeEnd(outer, closingBraceLocation.end);
                 setEmitFlags(outer, EmitFlags.NoComments);
 
-                const statement = factory.createReturn(outer);
+                const statement = factory.createReturnStatement(outer);
                 setTextRangePos(statement, closingBraceLocation.pos);
                 setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
                 statements.push(statement);
@@ -1336,7 +1336,7 @@ namespace ts {
                     (properties || (properties = [])).push(factory.createPropertyAssignment("returnType", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), serializeReturnTypeOfNode(node))));
                 }
                 if (properties) {
-                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:typeinfo", factory.createObjectLiteral(properties, /*multiLine*/ true)));
+                    decoratorExpressions.push(emitHelpers().createMetadataHelper("design:typeinfo", factory.createObjectLiteralExpression(properties, /*multiLine*/ true)));
                 }
             }
         }
@@ -1449,7 +1449,7 @@ namespace ts {
                 }
             }
 
-            return factory.createArrayLiteral(expressions);
+            return factory.createArrayLiteralExpression(expressions);
         }
 
         function getParametersOfDecoratedDeclaration(node: SignatureDeclaration, container: ClassLikeDeclaration) {
@@ -1664,7 +1664,7 @@ namespace ts {
 
                     const serialized = serializeEntityNameAsExpressionFallback(node.typeName);
                     const temp = factory.createTempVariable(hoistVariableDeclaration);
-                    return factory.createConditional(
+                    return factory.createConditionalExpression(
                         factory.createTypeCheck(factory.createAssignment(temp, serialized), "function"),
                         /*questionToken*/ undefined,
                         temp,
@@ -1713,7 +1713,7 @@ namespace ts {
 
         function createCheckedValue(left: Expression, right: Expression) {
             return factory.createLogicalAnd(
-                factory.createStrictInequality(factory.createTypeOf(left), factory.createStringLiteral("undefined")),
+                factory.createStrictInequality(factory.createTypeOfExpression(left), factory.createStringLiteral("undefined")),
                 right
             );
         }
@@ -1741,7 +1741,7 @@ namespace ts {
                     left.left,
                     factory.createStrictInequality(factory.createAssignment(temp, left.right), factory.createVoidZero())
                 ),
-                factory.createPropertyAccess(temp, node.right)
+                factory.createPropertyAccessExpression(temp, node.right)
             );
         }
 
@@ -1773,7 +1773,7 @@ namespace ts {
          *                    qualified name at runtime.
          */
         function serializeQualifiedNameAsExpression(node: QualifiedName): SerializedEntityNameAsExpression {
-            return factory.createPropertyAccess(serializeEntityNameAsExpression(node.left), node.right);
+            return factory.createPropertyAccessExpression(serializeEntityNameAsExpression(node.left), node.right);
         }
 
         /**
@@ -1781,7 +1781,7 @@ namespace ts {
          * available.
          */
         function getGlobalSymbolNameWithFallback(): ConditionalExpression {
-            return factory.createConditional(
+            return factory.createConditionalExpression(
                 factory.createTypeCheck(factory.createIdentifier("Symbol"), "function"),
                 /*questionToken*/ undefined,
                 factory.createIdentifier("Symbol"),
@@ -1796,7 +1796,7 @@ namespace ts {
          */
         function getGlobalBigIntNameWithFallback(): SerializedTypeNode {
             return languageVersion < ScriptTarget.ESNext
-                ? factory.createConditional(
+                ? factory.createConditionalExpression(
                     factory.createTypeCheck(factory.createIdentifier("BigInt"), "function"),
                     /*questionToken*/ undefined,
                     factory.createIdentifier("BigInt"),
@@ -1999,7 +1999,7 @@ namespace ts {
                             factory.createExpressionStatement(
                                 factory.createAssignment(
                                     setTextRange(
-                                        factory.createPropertyAccess(
+                                        factory.createPropertyAccessExpression(
                                             factory.createThis(),
                                             propertyName
                                         ),
@@ -2250,7 +2250,7 @@ namespace ts {
                 // HOWEVER - if there are leading comments on the expression itself, to handle ASI
                 // correctly for return and throw, we must keep the parenthesis
                 if (length(getLeadingCommentRangesOfNode(expression, currentSourceFile))) {
-                    return factory.updateParen(node, expression);
+                    return factory.updateParenthesizedExpression(node, expression);
                 }
                 return factory.createPartiallyEmittedExpression(expression, node);
             }
@@ -2269,7 +2269,7 @@ namespace ts {
         }
 
         function visitCallExpression(node: CallExpression) {
-            return factory.updateCall(
+            return factory.updateCallExpression(
                 node,
                 visitNode(node.expression, visitor, isExpression),
                 /*typeArguments*/ undefined,
@@ -2277,7 +2277,7 @@ namespace ts {
         }
 
         function visitNewExpression(node: NewExpression) {
-            return factory.updateNew(
+            return factory.updateNewExpression(
                 node,
                 visitNode(node.expression, visitor, isExpression),
                 /*typeArguments*/ undefined,
@@ -2285,7 +2285,7 @@ namespace ts {
         }
 
         function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            return factory.updateTaggedTemplate(
+            return factory.updateTaggedTemplateExpression(
                 node,
                 visitNode(node.tag, visitor, isExpression),
                 /*typeArguments*/ undefined,
@@ -2366,7 +2366,7 @@ namespace ts {
                     exportName,
                     factory.createAssignment(
                         exportName,
-                        factory.createObjectLiteral()
+                        factory.createObjectLiteralExpression()
                     )
                 );
 
@@ -2383,7 +2383,7 @@ namespace ts {
             //      ...
             //  })(x || (x = {}));
             const enumStatement = factory.createExpressionStatement(
-                factory.createCall(
+                factory.createCallExpression(
                     factory.createFunctionExpression(
                         /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
@@ -2448,7 +2448,7 @@ namespace ts {
             const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
             const valueExpression = transformEnumMemberDeclarationValue(member);
             const innerAssignment = factory.createAssignment(
-                factory.createElementAccess(
+                factory.createElementAccessExpression(
                     currentNamespaceContainerName,
                     name
                 ),
@@ -2457,7 +2457,7 @@ namespace ts {
             const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
                 innerAssignment :
                 factory.createAssignment(
-                    factory.createElementAccess(
+                    factory.createElementAccessExpression(
                         currentNamespaceContainerName,
                         innerAssignment
                     ),
@@ -2667,7 +2667,7 @@ namespace ts {
                     exportName,
                     factory.createAssignment(
                         exportName,
-                        factory.createObjectLiteral()
+                        factory.createObjectLiteralExpression()
                     )
                 );
 
@@ -2683,7 +2683,7 @@ namespace ts {
             //      x_1.y = ...;
             //  })(x || (x = {}));
             const moduleStatement = factory.createExpressionStatement(
-                factory.createCall(
+                factory.createCallExpression(
                     factory.createFunctionExpression(
                         /*modifiers*/ undefined,
                         /*asteriskToken*/ undefined,
@@ -3147,7 +3147,7 @@ namespace ts {
         }
 
         function getClassPrototype(node: ClassExpression | ClassDeclaration) {
-            return factory.createPropertyAccess(factory.getDeclarationName(node), "prototype");
+            return factory.createPropertyAccessExpression(factory.getDeclarationName(node), "prototype");
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
@@ -3317,7 +3317,7 @@ namespace ts {
                         (applicableSubstitutions & TypeScriptSubstitutionFlags.NonQualifiedEnumMembers && container.kind === SyntaxKind.EnumDeclaration);
                     if (substitute) {
                         return setTextRange(
-                            factory.createPropertyAccess(factory.getGeneratedNameForNode(container), node),
+                            factory.createPropertyAccessExpression(factory.getGeneratedNameForNode(container), node),
                             /*location*/ node
                         );
                     }

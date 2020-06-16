@@ -53,7 +53,7 @@ namespace ts {
         function createTaggedTemplateLiteral(): Transformer<SourceFile> {
             return sourceFile => factory.updateSourceFile(sourceFile, [
                 factory.createExpressionStatement(
-                    factory.createTaggedTemplate(
+                    factory.createTaggedTemplateExpression(
                         factory.createIdentifier("$tpl"),
                         /*typeArguments*/ undefined,
                         factory.createNoSubstitutionTemplateLiteral("foo", "foo")))

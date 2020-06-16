@@ -381,8 +381,8 @@ namespace ts.codefix {
 
     function createStubbedMethodBody(preferences: UserPreferences): Block {
         return factory.createBlock(
-            [factory.createThrow(
-                factory.createNew(
+            [factory.createThrowStatement(
+                factory.createNewExpression(
                     factory.createIdentifier("Error"),
                     /*typeArguments*/ undefined,
                     // TODO Handle auto quote preference.
@@ -412,7 +412,7 @@ namespace ts.codefix {
         if (compilerOptionsProperty === undefined) {
             changeTracker.insertNodeAtObjectStart(configFile, tsconfigObjectLiteral, createJsonPropertyAssignment(
                 "compilerOptions",
-                factory.createObjectLiteral(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true)));
+                factory.createObjectLiteralExpression(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true)));
             return;
         }
 

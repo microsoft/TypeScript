@@ -218,7 +218,7 @@ namespace ts {
                         /*exclamationToken*/ undefined,
                         parameter.type,
                         parameter.initializer ?
-                            factory.createConditional(
+                            factory.createConditionalExpression(
                                 factory.createStrictEquality(
                                     factory.getGeneratedNameForNode(parameter),
                                     factory.createVoidZero()
@@ -246,7 +246,7 @@ namespace ts {
     function addDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration, name: Identifier, initializer: Expression, context: TransformationContext) {
         const factory = context.factory;
         context.addInitializationStatement(
-            factory.createIf(
+            factory.createIfStatement(
                 factory.createTypeCheck(factory.cloneNode(name), "undefined"),
                 setEmitFlags(
                     setTextRange(
@@ -588,11 +588,11 @@ namespace ts {
 
             // Expression
             case SyntaxKind.ArrayLiteralExpression:
-                return factory.updateArrayLiteral(<ArrayLiteralExpression>node,
+                return factory.updateArrayLiteralExpression(<ArrayLiteralExpression>node,
                     nodesVisitor((<ArrayLiteralExpression>node).elements, visitor, isExpression));
 
             case SyntaxKind.ObjectLiteralExpression:
-                return factory.updateObjectLiteral(<ObjectLiteralExpression>node,
+                return factory.updateObjectLiteralExpression(<ObjectLiteralExpression>node,
                     nodesVisitor((<ObjectLiteralExpression>node).properties, visitor, isObjectLiteralElementLike));
 
             case SyntaxKind.PropertyAccessExpression:
@@ -602,7 +602,7 @@ namespace ts {
                         nodeVisitor((<PropertyAccessChain>node).questionDotToken, tokenVisitor, isToken),
                         nodeVisitor((<PropertyAccessChain>node).name, visitor, isIdentifier));
                 }
-                return factory.updatePropertyAccess(<PropertyAccessExpression>node,
+                return factory.updatePropertyAccessExpression(<PropertyAccessExpression>node,
                     nodeVisitor((<PropertyAccessExpression>node).expression, visitor, isExpression),
                     nodeVisitor((<PropertyAccessExpression>node).name, visitor, isIdentifierOrPrivateIdentifier));
 
@@ -613,7 +613,7 @@ namespace ts {
                         nodeVisitor((<ElementAccessChain>node).questionDotToken, tokenVisitor, isToken),
                         nodeVisitor((<ElementAccessChain>node).argumentExpression, visitor, isExpression));
                 }
-                return factory.updateElementAccess(<ElementAccessExpression>node,
+                return factory.updateElementAccessExpression(<ElementAccessExpression>node,
                     nodeVisitor((<ElementAccessExpression>node).expression, visitor, isExpression),
                     nodeVisitor((<ElementAccessExpression>node).argumentExpression, visitor, isExpression));
 
@@ -625,19 +625,19 @@ namespace ts {
                         nodesVisitor((<CallChain>node).typeArguments, visitor, isTypeNode),
                         nodesVisitor((<CallChain>node).arguments, visitor, isExpression));
                 }
-                return factory.updateCall(<CallExpression>node,
+                return factory.updateCallExpression(<CallExpression>node,
                     nodeVisitor((<CallExpression>node).expression, visitor, isExpression),
                     nodesVisitor((<CallExpression>node).typeArguments, visitor, isTypeNode),
                     nodesVisitor((<CallExpression>node).arguments, visitor, isExpression));
 
             case SyntaxKind.NewExpression:
-                return factory.updateNew(<NewExpression>node,
+                return factory.updateNewExpression(<NewExpression>node,
                     nodeVisitor((<NewExpression>node).expression, visitor, isExpression),
                     nodesVisitor((<NewExpression>node).typeArguments, visitor, isTypeNode),
                     nodesVisitor((<NewExpression>node).arguments, visitor, isExpression));
 
             case SyntaxKind.TaggedTemplateExpression:
-                return factory.updateTaggedTemplate(<TaggedTemplateExpression>node,
+                return factory.updateTaggedTemplateExpression(<TaggedTemplateExpression>node,
                     nodeVisitor((<TaggedTemplateExpression>node).tag, visitor, isExpression),
                     visitNodes((<TaggedTemplateExpression>node).typeArguments, visitor, isExpression),
                     nodeVisitor((<TaggedTemplateExpression>node).template, visitor, isTemplateLiteral));
@@ -648,7 +648,7 @@ namespace ts {
                     nodeVisitor((<TypeAssertion>node).expression, visitor, isExpression));
 
             case SyntaxKind.ParenthesizedExpression:
-                return factory.updateParen(<ParenthesizedExpression>node,
+                return factory.updateParenthesizedExpression(<ParenthesizedExpression>node,
                     nodeVisitor((<ParenthesizedExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.FunctionExpression:
@@ -671,37 +671,37 @@ namespace ts {
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context, nodeVisitor));
 
             case SyntaxKind.DeleteExpression:
-                return factory.updateDelete(<DeleteExpression>node,
+                return factory.updateDeleteExpression(<DeleteExpression>node,
                     nodeVisitor((<DeleteExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.TypeOfExpression:
-                return factory.updateTypeOf(<TypeOfExpression>node,
+                return factory.updateTypeOfExpression(<TypeOfExpression>node,
                     nodeVisitor((<TypeOfExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.VoidExpression:
-                return factory.updateVoid(<VoidExpression>node,
+                return factory.updateVoidExpression(<VoidExpression>node,
                     nodeVisitor((<VoidExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.AwaitExpression:
-                return factory.updateAwait(<AwaitExpression>node,
+                return factory.updateAwaitExpression(<AwaitExpression>node,
                     nodeVisitor((<AwaitExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.PrefixUnaryExpression:
-                return factory.updatePrefix(<PrefixUnaryExpression>node,
+                return factory.updatePrefixUnaryExpression(<PrefixUnaryExpression>node,
                     nodeVisitor((<PrefixUnaryExpression>node).operand, visitor, isExpression));
 
             case SyntaxKind.PostfixUnaryExpression:
-                return factory.updatePostfix(<PostfixUnaryExpression>node,
+                return factory.updatePostfixUnaryExpression(<PostfixUnaryExpression>node,
                     nodeVisitor((<PostfixUnaryExpression>node).operand, visitor, isExpression));
 
             case SyntaxKind.BinaryExpression:
-                return factory.updateBinary(<BinaryExpression>node,
+                return factory.updateBinaryExpression(<BinaryExpression>node,
                     nodeVisitor((<BinaryExpression>node).left, visitor, isExpression),
                     nodeVisitor((<BinaryExpression>node).operatorToken, tokenVisitor, isToken),
                     nodeVisitor((<BinaryExpression>node).right, visitor, isExpression));
 
             case SyntaxKind.ConditionalExpression:
-                return factory.updateConditional(<ConditionalExpression>node,
+                return factory.updateConditionalExpression(<ConditionalExpression>node,
                     nodeVisitor((<ConditionalExpression>node).condition, visitor, isExpression),
                     nodeVisitor((<ConditionalExpression>node).questionToken, tokenVisitor, isToken),
                     nodeVisitor((<ConditionalExpression>node).whenTrue, visitor, isExpression),
@@ -714,12 +714,12 @@ namespace ts {
                     nodesVisitor((<TemplateExpression>node).templateSpans, visitor, isTemplateSpan));
 
             case SyntaxKind.YieldExpression:
-                return factory.updateYield(<YieldExpression>node,
+                return factory.updateYieldExpression(<YieldExpression>node,
                     nodeVisitor((<YieldExpression>node).asteriskToken, tokenVisitor, isToken),
                     nodeVisitor((<YieldExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.SpreadElement:
-                return factory.updateSpread(<SpreadElement>node,
+                return factory.updateSpreadElement(<SpreadElement>node,
                     nodeVisitor((<SpreadElement>node).expression, visitor, isExpression));
 
             case SyntaxKind.ClassExpression:
@@ -774,74 +774,74 @@ namespace ts {
                     nodeVisitor((<ExpressionStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.IfStatement:
-                return factory.updateIf(<IfStatement>node,
+                return factory.updateIfStatement(<IfStatement>node,
                     nodeVisitor((<IfStatement>node).expression, visitor, isExpression),
                     nodeVisitor((<IfStatement>node).thenStatement, visitor, isStatement, factory.liftToBlock),
                     nodeVisitor((<IfStatement>node).elseStatement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.DoStatement:
-                return factory.updateDo(<DoStatement>node,
+                return factory.updateDoStatement(<DoStatement>node,
                     nodeVisitor((<DoStatement>node).statement, visitor, isStatement, factory.liftToBlock),
                     nodeVisitor((<DoStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.WhileStatement:
-                return factory.updateWhile(<WhileStatement>node,
+                return factory.updateWhileStatement(<WhileStatement>node,
                     nodeVisitor((<WhileStatement>node).expression, visitor, isExpression),
                     nodeVisitor((<WhileStatement>node).statement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.ForStatement:
-                return factory.updateFor(<ForStatement>node,
+                return factory.updateForStatement(<ForStatement>node,
                     nodeVisitor((<ForStatement>node).initializer, visitor, isForInitializer),
                     nodeVisitor((<ForStatement>node).condition, visitor, isExpression),
                     nodeVisitor((<ForStatement>node).incrementor, visitor, isExpression),
                     nodeVisitor((<ForStatement>node).statement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.ForInStatement:
-                return factory.updateForIn(<ForInStatement>node,
+                return factory.updateForInStatement(<ForInStatement>node,
                     nodeVisitor((<ForInStatement>node).initializer, visitor, isForInitializer),
                     nodeVisitor((<ForInStatement>node).expression, visitor, isExpression),
                     nodeVisitor((<ForInStatement>node).statement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.ForOfStatement:
-                return factory.updateForOf(<ForOfStatement>node,
+                return factory.updateForOfStatement(<ForOfStatement>node,
                     nodeVisitor((<ForOfStatement>node).awaitModifier, tokenVisitor, isToken),
                     nodeVisitor((<ForOfStatement>node).initializer, visitor, isForInitializer),
                     nodeVisitor((<ForOfStatement>node).expression, visitor, isExpression),
                     nodeVisitor((<ForOfStatement>node).statement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.ContinueStatement:
-                return factory.updateContinue(<ContinueStatement>node,
+                return factory.updateContinueStatement(<ContinueStatement>node,
                     nodeVisitor((<ContinueStatement>node).label, visitor, isIdentifier));
 
             case SyntaxKind.BreakStatement:
-                return factory.updateBreak(<BreakStatement>node,
+                return factory.updateBreakStatement(<BreakStatement>node,
                     nodeVisitor((<BreakStatement>node).label, visitor, isIdentifier));
 
             case SyntaxKind.ReturnStatement:
-                return factory.updateReturn(<ReturnStatement>node,
+                return factory.updateReturnStatement(<ReturnStatement>node,
                     nodeVisitor((<ReturnStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.WithStatement:
-                return factory.updateWith(<WithStatement>node,
+                return factory.updateWithStatement(<WithStatement>node,
                     nodeVisitor((<WithStatement>node).expression, visitor, isExpression),
                     nodeVisitor((<WithStatement>node).statement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.SwitchStatement:
-                return factory.updateSwitch(<SwitchStatement>node,
+                return factory.updateSwitchStatement(<SwitchStatement>node,
                     nodeVisitor((<SwitchStatement>node).expression, visitor, isExpression),
                     nodeVisitor((<SwitchStatement>node).caseBlock, visitor, isCaseBlock));
 
             case SyntaxKind.LabeledStatement:
-                return factory.updateLabel(<LabeledStatement>node,
+                return factory.updateLabeledStatement(<LabeledStatement>node,
                     nodeVisitor((<LabeledStatement>node).label, visitor, isIdentifier),
                     nodeVisitor((<LabeledStatement>node).statement, visitor, isStatement, factory.liftToBlock));
 
             case SyntaxKind.ThrowStatement:
-                return factory.updateThrow(<ThrowStatement>node,
+                return factory.updateThrowStatement(<ThrowStatement>node,
                     nodeVisitor((<ThrowStatement>node).expression!, visitor, isExpression)); // expression could be `undefined` due to invalid parse.
 
             case SyntaxKind.TryStatement:
-                return factory.updateTry(<TryStatement>node,
+                return factory.updateTryStatement(<TryStatement>node,
                     nodeVisitor((<TryStatement>node).tryBlock, visitor, isBlock),
                     nodeVisitor((<TryStatement>node).catchClause, visitor, isCatchClause),
                     nodeVisitor((<TryStatement>node).finallyBlock, visitor, isBlock));
@@ -1082,7 +1082,7 @@ namespace ts {
                     nodeVisitor((<PartiallyEmittedExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.CommaListExpression:
-                return factory.updateCommaList(<CommaListExpression>node,
+                return factory.updateCommaListExpression(<CommaListExpression>node,
                     nodesVisitor((<CommaListExpression>node).elements, visitor, isExpression));
 
             default:

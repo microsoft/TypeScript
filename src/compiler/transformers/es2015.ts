@@ -553,7 +553,7 @@ namespace ts {
         }
 
         function returnCapturedThis(node: Node): ReturnStatement {
-            return setOriginalNode(factory.createReturn(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)), node);
+            return setOriginalNode(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)), node);
         }
 
         function visitReturnStatement(node: ReturnStatement): Statement {
@@ -562,8 +562,8 @@ namespace ts {
                 if (isReturnVoidStatementInConstructorWithCapturedSuper(node)) {
                     node = returnCapturedThis(node);
                 }
-                return factory.createReturn(
-                    factory.createObjectLiteral(
+                return factory.createReturnStatement(
+                    factory.createObjectLiteralExpression(
                         [
                             factory.createPropertyAssignment(
                                 factory.createIdentifier("value"),
@@ -651,12 +651,12 @@ namespace ts {
                                 expr = copyExpr;
                             }
                             else {
-                                expr = factory.createBinary(expr!, SyntaxKind.CommaToken, copyExpr);
+                                expr = factory.createBinaryExpression(expr!, SyntaxKind.CommaToken, copyExpr);
                             }
                         }
-                        returnExpression = factory.createBinary(expr!, SyntaxKind.CommaToken, returnExpression);
+                        returnExpression = factory.createBinaryExpression(expr!, SyntaxKind.CommaToken, returnExpression);
                     }
-                    return factory.createReturn(returnExpression);
+                    return factory.createReturnStatement(returnExpression);
                 }
             }
             return visitEachChild(node, visitor, context);
@@ -793,8 +793,8 @@ namespace ts {
             setTextRangeEnd(outer, skipTrivia(currentText, node.pos));
             setEmitFlags(outer, EmitFlags.NoComments);
 
-            const result = factory.createParen(
-                factory.createCall(
+            const result = factory.createParenthesizedExpression(
+                factory.createCallExpression(
                     outer,
                     /*typeArguments*/ undefined,
                     extendsClauseElement
@@ -829,7 +829,7 @@ namespace ts {
             setTextRangeEnd(outer, closingBraceLocation.end);
             setEmitFlags(outer, EmitFlags.NoComments);
 
-            const statement = factory.createReturn(outer);
+            const statement = factory.createReturnStatement(outer);
             setTextRangePos(statement, closingBraceLocation.pos);
             setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
             statements.push(statement);
@@ -922,7 +922,7 @@ namespace ts {
 
             if (isDerivedClass) {
                 // return _super !== null && _super.apply(this, arguments) || this;
-                statements.push(factory.createReturn(createDefaultSuperCallOrThis()));
+                statements.push(factory.createReturnStatement(createDefaultSuperCallOrThis()));
             }
 
             const statementsArray = factory.createNodeArray(statements);
@@ -1024,7 +1024,7 @@ namespace ts {
                     // })(Base);
                     // ```
                     const superCall = cast(cast(superCallExpression, isBinaryExpression).left, isCallExpression);
-                    const returnStatement = factory.createReturn(superCallExpression);
+                    const returnStatement = factory.createReturnStatement(superCallExpression);
                     setCommentRange(returnStatement, getCommentRange(superCall));
                     setEmitFlags(superCall, EmitFlags.NoComments);
                     statements.push(returnStatement);
@@ -1057,7 +1057,7 @@ namespace ts {
                     insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
 
                     if (!isSufficientlyCoveredByReturnStatements(constructor.body)) {
-                        statements.push(factory.createReturn(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
+                        statements.push(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
                     }
                 }
             }
@@ -1295,7 +1295,7 @@ namespace ts {
          */
         function insertDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
             initializer = visitNode(initializer, visitor, isExpression);
-            const statement = factory.createIf(
+            const statement = factory.createIfStatement(
                 factory.createTypeCheck(factory.cloneNode(name), "undefined"),
                 setEmitFlags(
                     setTextRange(
@@ -1375,7 +1375,7 @@ namespace ts {
                                     declarationName,
                                     /*exclamationToken*/ undefined,
                                     /*type*/ undefined,
-                                    factory.createArrayLiteral([])
+                                    factory.createArrayLiteralExpression([])
                                 )
                             ])
                         ),
@@ -1388,7 +1388,7 @@ namespace ts {
             // for (var _i = restIndex; _i < arguments.length; _i++) {
             //   param[_i - restIndex] = arguments[_i];
             // }
-            const forStatement = factory.createFor(
+            const forStatement = factory.createForStatement(
                 setTextRange(
                     factory.createVariableDeclarationList([
                         factory.createVariableDeclaration(temp, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(restIndex))
@@ -1398,7 +1398,7 @@ namespace ts {
                 setTextRange(
                     factory.createLessThan(
                         temp,
-                        factory.createPropertyAccess(factory.createIdentifier("arguments"), "length")
+                        factory.createPropertyAccessExpression(factory.createIdentifier("arguments"), "length")
                     ),
                     parameter
                 ),
@@ -1408,13 +1408,13 @@ namespace ts {
                         setTextRange(
                             factory.createExpressionStatement(
                                 factory.createAssignment(
-                                    factory.createElementAccess(
+                                    factory.createElementAccessExpression(
                                         expressionName,
                                         restIndex === 0
                                             ? temp
                                             : factory.createSubtract(temp, factory.createNumericLiteral(restIndex))
                                     ),
-                                    factory.createElementAccess(factory.createIdentifier("arguments"), temp)
+                                    factory.createElementAccessExpression(factory.createIdentifier("arguments"), temp)
                                 )
                             ),
                             /*location*/ parameter
@@ -1500,7 +1500,7 @@ namespace ts {
                     case SyntaxKind.Constructor:
                         // Class constructors can only be called with `new`, so `this.constructor`
                         // should be relatively safe to use.
-                        newTarget = factory.createPropertyAccess(
+                        newTarget = factory.createPropertyAccessExpression(
                             setEmitFlags(factory.createThis(), EmitFlags.NoSubstitution),
                             "constructor"
                         );
@@ -1510,17 +1510,17 @@ namespace ts {
                     case SyntaxKind.FunctionExpression:
                         // Functions can be called or constructed, and may have a `this` due to
                         // being a member or when calling an imported function via `other_1.f()`.
-                        newTarget = factory.createConditional(
+                        newTarget = factory.createConditionalExpression(
                             factory.createLogicalAnd(
                                 setEmitFlags(factory.createThis(), EmitFlags.NoSubstitution),
-                                factory.createBinary(
+                                factory.createBinaryExpression(
                                     setEmitFlags(factory.createThis(), EmitFlags.NoSubstitution),
                                     SyntaxKind.InstanceOfKeyword,
                                     factory.getLocalName(node)
                                 )
                             ),
                             /*questionToken*/ undefined,
-                            factory.createPropertyAccess(
+                            factory.createPropertyAccessExpression(
                                 setEmitFlags(factory.createThis(), EmitFlags.NoSubstitution),
                                 "constructor"
                             ),
@@ -1702,13 +1702,13 @@ namespace ts {
                 factory.createPropertyAssignment("configurable", factory.createTrue())
             );
 
-            const call = factory.createCall(
-                factory.createPropertyAccess(factory.createIdentifier("Object"), "defineProperty"),
+            const call = factory.createCallExpression(
+                factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
                 /*typeArguments*/ undefined,
                 [
                     target,
                     propertyName,
-                    factory.createObjectLiteral(properties, /*multiLine*/ true)
+                    factory.createObjectLiteralExpression(properties, /*multiLine*/ true)
                 ]
             );
             if (startsOnNewLine) {
@@ -1915,7 +1915,7 @@ namespace ts {
                 }
 
                 const expression = visitNode(body, visitor, isExpression);
-                const returnStatement = factory.createReturn(expression);
+                const returnStatement = factory.createReturnStatement(expression);
                 setTextRange(returnStatement, body);
                 moveSyntheticComments(returnStatement, body);
                 setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);
@@ -1999,9 +1999,9 @@ namespace ts {
                 // we pass that information along to the children that care about it.
                 switch (node.expression.kind) {
                     case SyntaxKind.ParenthesizedExpression:
-                        return factory.updateParen(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
+                        return factory.updateParenthesizedExpression(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
                     case SyntaxKind.BinaryExpression:
-                        return factory.updateParen(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
+                        return factory.updateParenthesizedExpression(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
                 }
             }
             return visitEachChild(node, visitor, context);
@@ -2052,7 +2052,7 @@ namespace ts {
                             );
                         }
                         else {
-                            assignment = factory.createBinary(decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
+                            assignment = factory.createBinaryExpression(decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
                             setTextRange(assignment, decl);
                         }
 
@@ -2439,7 +2439,7 @@ namespace ts {
             setEmitFlags(expression, EmitFlags.NoSourceMap | getEmitFlags(expression));
 
             const forStatement = setTextRange(
-                factory.createFor(
+                factory.createForStatement(
                     /*initializer*/ setEmitFlags(
                         setTextRange(
                             factory.createVariableDeclarationList([
@@ -2453,14 +2453,14 @@ namespace ts {
                     /*condition*/ setTextRange(
                         factory.createLessThan(
                             counter,
-                            factory.createPropertyAccess(rhsReference, "length")
+                            factory.createPropertyAccessExpression(rhsReference, "length")
                         ),
                         node.expression
                     ),
                     /*incrementor*/ setTextRange(factory.createPostfixIncrement(counter), node.expression),
                     /*statement*/ convertForOfStatementHead(
                         node,
-                        factory.createElementAccess(rhsReference, counter),
+                        factory.createElementAccessExpression(rhsReference, counter),
                         convertedLoopBodyStatements
                     )
                 ),
@@ -2481,7 +2481,7 @@ namespace ts {
             const catchVariable = factory.getGeneratedNameForNode(errorRecord);
             const returnMethod = factory.createTempVariable(/*recordTempVariable*/ undefined);
             const values = setTextRange(emitHelpers().createValuesHelper(expression), node.expression);
-            const next = factory.createCall(factory.createPropertyAccess(iterator, "next"), /*typeArguments*/ undefined, []);
+            const next = factory.createCallExpression(factory.createPropertyAccessExpression(iterator, "next"), /*typeArguments*/ undefined, []);
 
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
@@ -2493,7 +2493,7 @@ namespace ts {
 
             const forStatement = setEmitFlags(
                 setTextRange(
-                    factory.createFor(
+                    factory.createForStatement(
                         /*initializer*/ setEmitFlags(
                             setTextRange(
                                 factory.createVariableDeclarationList([
@@ -2504,11 +2504,11 @@ namespace ts {
                             ),
                             EmitFlags.NoHoisting
                         ),
-                        /*condition*/ factory.createLogicalNot(factory.createPropertyAccess(result, "done")),
+                        /*condition*/ factory.createLogicalNot(factory.createPropertyAccessExpression(result, "done")),
                         /*incrementor*/ factory.createAssignment(result, next),
                         /*statement*/ convertForOfStatementHead(
                             node,
-                            factory.createPropertyAccess(result, "value"),
+                            factory.createPropertyAccessExpression(result, "value"),
                             convertedLoopBodyStatements
                         )
                     ),
@@ -2517,7 +2517,7 @@ namespace ts {
                 EmitFlags.NoTokenTrailingSourceMaps
             );
 
-            return factory.createTry(
+            return factory.createTryStatement(
                 factory.createBlock([
                     factory.restoreEnclosingLabel(
                         forStatement,
@@ -2531,7 +2531,7 @@ namespace ts {
                             factory.createExpressionStatement(
                                 factory.createAssignment(
                                     errorRecord,
-                                    factory.createObjectLiteral([
+                                    factory.createObjectLiteralExpression([
                                         factory.createPropertyAssignment("error", catchVariable)
                                     ])
                                 )
@@ -2541,20 +2541,20 @@ namespace ts {
                     )
                 ),
                 factory.createBlock([
-                    factory.createTry(
+                    factory.createTryStatement(
                         /*tryBlock*/ factory.createBlock([
                             setEmitFlags(
-                                factory.createIf(
+                                factory.createIfStatement(
                                     factory.createLogicalAnd(
                                         factory.createLogicalAnd(
                                             result,
                                             factory.createLogicalNot(
-                                                factory.createPropertyAccess(result, "done")
+                                                factory.createPropertyAccessExpression(result, "done")
                                             )
                                         ),
                                         factory.createAssignment(
                                             returnMethod,
-                                            factory.createPropertyAccess(iterator, "return")
+                                            factory.createPropertyAccessExpression(iterator, "return")
                                         )
                                     ),
                                     factory.createExpressionStatement(
@@ -2568,10 +2568,10 @@ namespace ts {
                         /*finallyBlock*/ setEmitFlags(
                             factory.createBlock([
                                 setEmitFlags(
-                                    factory.createIf(
+                                    factory.createIfStatement(
                                         errorRecord,
-                                        factory.createThrow(
-                                            factory.createPropertyAccess(errorRecord, "error")
+                                        factory.createThrowStatement(
+                                            factory.createPropertyAccessExpression(errorRecord, "error")
                                         )
                                     ),
                                     EmitFlags.SingleLine
@@ -2618,7 +2618,7 @@ namespace ts {
             const assignment = factory.createAssignment(
                 temp,
                 setEmitFlags(
-                    factory.createObjectLiteral(
+                    factory.createObjectLiteralExpression(
                         visitNodes(properties, visitor, isObjectLiteralElementLike, 0, numInitialProperties),
                         node.multiLine
                     ),
@@ -2774,7 +2774,7 @@ namespace ts {
         function convertForStatement(node: ForStatement, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, convertedLoopBody: Statement) {
             const shouldConvertCondition = node.condition && shouldConvertPartOfIterationStatement(node.condition);
             const shouldConvertIncrementor = shouldConvertCondition || node.incrementor && shouldConvertPartOfIterationStatement(node.incrementor);
-            return factory.updateFor(
+            return factory.updateForStatement(
                 node,
                 visitNode(initializerFunction ? initializerFunction.part : node.initializer, visitor, isForInitializer),
                 visitNode(shouldConvertCondition ? undefined : node.condition, visitor, isExpression),
@@ -2784,7 +2784,7 @@ namespace ts {
         }
 
         function convertForOfStatement(node: ForOfStatement, convertedLoopBody: Statement) {
-            return factory.updateForOf(
+            return factory.updateForOfStatement(
                 node,
                 /*awaitModifier*/ undefined,
                 visitNode(node.initializer, visitor, isForInitializer),
@@ -2793,7 +2793,7 @@ namespace ts {
         }
 
         function convertForInStatement(node: ForInStatement, convertedLoopBody: Statement) {
-            return factory.updateForIn(
+            return factory.updateForInStatement(
                 node,
                 visitNode(node.initializer, visitor, isForInitializer),
                 visitNode(node.expression, visitor, isExpression),
@@ -2801,14 +2801,14 @@ namespace ts {
         }
 
         function convertDoStatement(node: DoStatement, convertedLoopBody: Statement) {
-            return factory.updateDo(
+            return factory.updateDoStatement(
                 node,
                 convertedLoopBody,
                 visitNode(node.expression, visitor, isExpression));
         }
 
         function convertWhileStatement(node: WhileStatement, convertedLoopBody: Statement) {
-            return factory.updateWhile(
+            return factory.updateWhileStatement(
                 node,
                 visitNode(node.expression, visitor, isExpression),
                 convertedLoopBody);
@@ -3086,23 +3086,23 @@ namespace ts {
 
                 currentState.conditionVariable = factory.createUniqueName("inc");
                 if (node.incrementor) {
-                    statements.push(factory.createIf(
+                    statements.push(factory.createIfStatement(
                         currentState.conditionVariable,
                         factory.createExpressionStatement(visitNode(node.incrementor, visitor, isExpression)),
                         factory.createExpressionStatement(factory.createAssignment(currentState.conditionVariable, factory.createTrue()))
                     ));
                 }
                 else {
-                    statements.push(factory.createIf(
+                    statements.push(factory.createIfStatement(
                         factory.createLogicalNot(currentState.conditionVariable),
                         factory.createExpressionStatement(factory.createAssignment(currentState.conditionVariable, factory.createTrue()))
                     ));
                 }
 
                 if (shouldConvertConditionOfForStatement(node)) {
-                    statements.push(factory.createIf(
-                        factory.createPrefix(SyntaxKind.ExclamationToken, visitNode(node.condition, visitor, isExpression)),
-                        visitNode(factory.createBreak(), visitor, isStatement)
+                    statements.push(factory.createIfStatement(
+                        factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, visitNode(node.condition, visitor, isExpression)),
+                        visitNode(factory.createBreakStatement(), visitor, isStatement)
                     ));
                 }
             }
@@ -3177,7 +3177,7 @@ namespace ts {
         function copyOutParameter(outParam: LoopOutParameter, copyDirection: CopyDirection): BinaryExpression {
             const source = copyDirection === CopyDirection.ToOriginal ? outParam.outParamName : outParam.originalName;
             const target = copyDirection === CopyDirection.ToOriginal ? outParam.originalName : outParam.outParamName;
-            return factory.createBinary(target, SyntaxKind.EqualsToken, source);
+            return factory.createBinaryExpression(target, SyntaxKind.EqualsToken, source);
         }
 
         function copyOutParameters(outParams: LoopOutParameter[], partFlags: LoopOutParameterFlags, copyDirection: CopyDirection, statements: Statement[]): void {
@@ -3189,9 +3189,9 @@ namespace ts {
         }
 
         function generateCallToConvertedLoopInitializer(initFunctionExpressionName: Identifier, containsYield: boolean): Statement {
-            const call = factory.createCall(initFunctionExpressionName, /*typeArguments*/ undefined, []);
+            const call = factory.createCallExpression(initFunctionExpressionName, /*typeArguments*/ undefined, []);
             const callResult = containsYield
-                ? factory.createYield(
+                ? factory.createYieldExpression(
                     factory.createToken(SyntaxKind.AsteriskToken),
                     setEmitFlags(call, EmitFlags.Iterator)
                 )
@@ -3210,9 +3210,9 @@ namespace ts {
                 !state.labeledNonLocalBreaks &&
                 !state.labeledNonLocalContinues;
 
-            const call = factory.createCall(loopFunctionExpressionName, /*typeArguments*/ undefined, map(state.loopParameters, p => <Identifier>p.name));
+            const call = factory.createCallExpression(loopFunctionExpressionName, /*typeArguments*/ undefined, map(state.loopParameters, p => <Identifier>p.name));
             const callResult = containsYield
-                ? factory.createYield(
+                ? factory.createYieldExpression(
                     factory.createToken(SyntaxKind.AsteriskToken),
                     setEmitFlags(call, EmitFlags.Iterator)
                 )
@@ -3236,13 +3236,13 @@ namespace ts {
                     let returnStatement: ReturnStatement;
                     if (outerState) {
                         outerState.nonLocalJumps! |= Jump.Return;
-                        returnStatement = factory.createReturn(loopResultName);
+                        returnStatement = factory.createReturnStatement(loopResultName);
                     }
                     else {
-                        returnStatement = factory.createReturn(factory.createPropertyAccess(loopResultName, "value"));
+                        returnStatement = factory.createReturnStatement(factory.createPropertyAccessExpression(loopResultName, "value"));
                     }
                     statements.push(
-                        factory.createIf(
+                        factory.createIfStatement(
                             factory.createTypeCheck(loopResultName, "object"),
                             returnStatement
                         )
@@ -3251,12 +3251,12 @@ namespace ts {
 
                 if (state.nonLocalJumps! & Jump.Break) {
                     statements.push(
-                        factory.createIf(
+                        factory.createIfStatement(
                             factory.createStrictEquality(
                                 loopResultName,
                                 factory.createStringLiteral("break")
                             ),
-                            factory.createBreak()
+                            factory.createBreakStatement()
                         )
                     );
                 }
@@ -3266,7 +3266,7 @@ namespace ts {
                     processLabeledJumps(state.labeledNonLocalBreaks!, /*isBreak*/ true, loopResultName, outerState, caseClauses);
                     processLabeledJumps(state.labeledNonLocalContinues!, /*isBreak*/ false, loopResultName, outerState, caseClauses);
                     statements.push(
-                        factory.createSwitch(
+                        factory.createSwitchStatement(
                             loopResultName,
                             factory.createCaseBlock(caseClauses)
                         )
@@ -3302,11 +3302,11 @@ namespace ts {
                 // otherwise propagate pair 'label -> marker' to outer converted loop and emit 'return labelMarker' so outer loop can later decide what to do
                 if (!outerLoop || (outerLoop.labels && outerLoop.labels.get(labelText))) {
                     const label = factory.createIdentifier(labelText);
-                    statements.push(isBreak ? factory.createBreak(label) : factory.createContinue(label));
+                    statements.push(isBreak ? factory.createBreakStatement(label) : factory.createContinueStatement(label));
                 }
                 else {
                     setLabeledJump(outerLoop, isBreak, labelText, labelMarker);
-                    statements.push(factory.createReturn(loopResultName));
+                    statements.push(factory.createReturnStatement(loopResultName));
                 }
                 caseClauses.push(factory.createCaseClause(factory.createStringLiteral(labelMarker), statements));
             });
@@ -3588,7 +3588,7 @@ namespace ts {
                 return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
             }
 
-            return factory.updateCall(
+            return factory.updateCallExpression(
                 node,
                 visitNode(node.expression, callExpressionVisitor, isExpression),
                 /*typeArguments*/ undefined,
@@ -3728,7 +3728,7 @@ namespace ts {
             return factory.restoreOuterExpressions(node.expression,
                 factory.restoreOuterExpressions(variable.initializer,
                     factory.restoreOuterExpressions(aliasAssignment && aliasAssignment.right,
-                        factory.updateCall(call,
+                        factory.updateCallExpression(call,
                             factory.restoreOuterExpressions(call.expression,
                                 factory.updateFunctionExpression(
                                     func,
@@ -3840,8 +3840,8 @@ namespace ts {
                 // [output]
                 //      new ((_a = C).bind.apply(_a, [void 0].concat(a)))()
 
-                const { target, thisArg } = factory.createCallBinding(factory.createPropertyAccess(node.expression, "bind"), hoistVariableDeclaration);
-                return factory.createNew(
+                const { target, thisArg } = factory.createCallBinding(factory.createPropertyAccessExpression(node.expression, "bind"), hoistVariableDeclaration);
+                return factory.createNewExpression(
                     factory.createFunctionApplyCall(
                         visitNode(target, visitor, isExpression),
                         thisArg,
@@ -3930,7 +3930,7 @@ namespace ts {
         }
 
         function visitSpanOfNonSpreads(chunk: Expression[], multiLine: boolean, hasTrailingComma: boolean): VisitResult<Expression> {
-            return factory.createArrayLiteral(
+            return factory.createArrayLiteralExpression(
                 visitNodes(factory.createNodeArray(chunk, hasTrailingComma), visitor, isExpression),
                 multiLine
             );
@@ -4092,7 +4092,7 @@ namespace ts {
         function visitSuperKeyword(isExpressionOfCall: boolean): LeftHandSideExpression {
             return hierarchyFacts & HierarchyFacts.NonStaticClassElement
                 && !isExpressionOfCall
-                    ? factory.createPropertyAccess(factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), "prototype")
+                    ? factory.createPropertyAccessExpression(factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel), "prototype")
                     : factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
         }
 
@@ -4283,7 +4283,7 @@ namespace ts {
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
             return hasSyntacticModifier(member, ModifierFlags.Static)
                 ? factory.getInternalName(node)
-                : factory.createPropertyAccess(factory.getInternalName(node), "prototype");
+                : factory.createPropertyAccessExpression(factory.getInternalName(node), "prototype");
         }
 
         function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration | undefined, hasExtendsClause: boolean) {

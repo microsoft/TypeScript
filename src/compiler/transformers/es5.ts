@@ -88,7 +88,7 @@ namespace ts {
             }
             const literalName = trySubstituteReservedName(node.name);
             if (literalName) {
-                return setTextRange(factory.createElementAccess(node.expression, literalName), node);
+                return setTextRange(factory.createElementAccessExpression(node.expression, literalName), node);
             }
             return node;
         }

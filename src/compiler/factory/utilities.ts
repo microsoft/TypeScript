@@ -9,13 +9,13 @@ namespace ts {
 
     export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
         if (isComputedPropertyName(memberName)) {
-             return setTextRange(factory.createElementAccess(target, memberName.expression), location);
+             return setTextRange(factory.createElementAccessExpression(target, memberName.expression), location);
         }
         else {
             const expression = setTextRange(
                 isIdentifierOrPrivateIdentifier(memberName)
-                    ? factory.createPropertyAccess(target, memberName)
-                    : factory.createElementAccess(target, memberName),
+                    ? factory.createPropertyAccessExpression(target, memberName)
+                    : factory.createElementAccessExpression(target, memberName),
                 memberName
             );
             getOrCreateEmitNode(expression).flags |= EmitFlags.NoNestedSourceMaps;
@@ -39,7 +39,7 @@ namespace ts {
             const left = createJsxFactoryExpressionFromEntityName(factory, jsxFactory.left, parent);
             const right = factory.createIdentifier(idText(jsxFactory.right)) as Mutable<Identifier>;
             right.escapedText = jsxFactory.right.escapedText;
-            return factory.createPropertyAccess(left, right);
+            return factory.createPropertyAccessExpression(left, right);
         }
         else {
             return createReactNamespace(idText(jsxFactory), parent);
@@ -49,7 +49,7 @@ namespace ts {
     function createJsxFactoryExpression(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
         return jsxFactoryEntity ?
             createJsxFactoryExpressionFromEntityName(factory, jsxFactoryEntity, parent) :
-            factory.createPropertyAccess(
+            factory.createPropertyAccessExpression(
                 createReactNamespace(reactNamespace, parent),
                 "createElement"
             );
@@ -78,7 +78,7 @@ namespace ts {
         }
 
         return setTextRange(
-            factory.createCall(
+            factory.createCallExpression(
                 createJsxFactoryExpression(factory, jsxFactoryEntity, reactNamespace, parentElement),
                 /*typeArguments*/ undefined,
                 argumentsList
@@ -88,7 +88,7 @@ namespace ts {
     }
 
     export function createExpressionForJsxFragment(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, children: readonly Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
-        const tagName = factory.createPropertyAccess(
+        const tagName = factory.createPropertyAccessExpression(
             createReactNamespace(reactNamespace, parentElement),
             "Fragment"
         );
@@ -109,7 +109,7 @@ namespace ts {
         }
 
         return setTextRange(
-            factory.createCall(
+            factory.createCallExpression(
                 createJsxFactoryExpression(factory, jsxFactoryEntity, reactNamespace, parentElement),
                 /*typeArguments*/ undefined,
                 argumentsList
@@ -158,7 +158,7 @@ namespace ts {
             const left = createExpressionFromEntityName(factory, node.left);
             // TODO(rbuckton): Does this need to be parented?
             const right = setParent(setTextRange(factory.cloneNode(node.right), node.right), node.right.parent);
-            return setTextRange(factory.createPropertyAccess(left, right), node);
+            return setTextRange(factory.createPropertyAccessExpression(left, right), node);
         }
         else {
             // TODO(rbuckton): Does this need to be parented?

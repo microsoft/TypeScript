@@ -147,7 +147,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function convertToBlock(body: ConciseBody): Block {
         if (isExpression(body)) {
-            return factory.createBlock([factory.createReturn(body)], /* multiLine */ true);
+            return factory.createBlock([factory.createReturnStatement(body)], /* multiLine */ true);
         }
         else {
             return body;

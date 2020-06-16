@@ -99,7 +99,7 @@ namespace ts {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
             if (length(currentModuleInfo.exportedNames)) {
-                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccess(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
             }
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
@@ -152,7 +152,7 @@ namespace ts {
                 setTextRange(
                     factory.createNodeArray([
                         factory.createExpressionStatement(
-                            factory.createCall(
+                            factory.createCallExpression(
                                 define,
                                 /*typeArguments*/ undefined,
                                 [
@@ -162,7 +162,7 @@ namespace ts {
                                     // Add the dependency array argument:
                                     //
                                     //     ["require", "exports", module1", "module2", ...]
-                                    factory.createArrayLiteral(jsonSourceFile ? emptyArray : [
+                                    factory.createArrayLiteralExpression(jsonSourceFile ? emptyArray : [
                                         factory.createStringLiteral("require"),
                                         factory.createStringLiteral("exports"),
                                         ...aliasedModuleNames,
@@ -173,7 +173,7 @@ namespace ts {
                                     //
                                     //     function (require, exports, module1, module2) ...
                                     jsonSourceFile ?
-                                        jsonSourceFile.statements.length ? jsonSourceFile.statements[0].expression : factory.createObjectLiteral() :
+                                        jsonSourceFile.statements.length ? jsonSourceFile.statements[0].expression : factory.createObjectLiteralExpression() :
                                         factory.createFunctionExpression(
                                             /*modifiers*/ undefined,
                                             /*asteriskToken*/ undefined,
@@ -217,10 +217,10 @@ namespace ts {
                 setTextRange(
                     factory.createBlock(
                         [
-                            factory.createIf(
+                            factory.createIfStatement(
                                 factory.createLogicalAnd(
                                     factory.createTypeCheck(factory.createIdentifier("module"), "object"),
-                                    factory.createTypeCheck(factory.createPropertyAccess(factory.createIdentifier("module"), "exports"), "object")
+                                    factory.createTypeCheck(factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"), "object")
                                 ),
                                 factory.createBlock([
                                     factory.createVariableStatement(
@@ -230,7 +230,7 @@ namespace ts {
                                                 "v",
                                                 /*exclamationToken*/ undefined,
                                                 /*type*/ undefined,
-                                                factory.createCall(
+                                                factory.createCallExpression(
                                                     factory.createIdentifier("factory"),
                                                     /*typeArguments*/ undefined,
                                                     [
@@ -242,14 +242,14 @@ namespace ts {
                                         ]
                                     ),
                                     setEmitFlags(
-                                        factory.createIf(
+                                        factory.createIfStatement(
                                             factory.createStrictInequality(
                                                 factory.createIdentifier("v"),
                                                 factory.createIdentifier("undefined")
                                             ),
                                             factory.createExpressionStatement(
                                                 factory.createAssignment(
-                                                    factory.createPropertyAccess(factory.createIdentifier("module"), "exports"),
+                                                    factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"),
                                                     factory.createIdentifier("v")
                                                 )
                                             )
@@ -257,20 +257,20 @@ namespace ts {
                                         EmitFlags.SingleLine
                                     )
                                 ]),
-                                factory.createIf(
+                                factory.createIfStatement(
                                     factory.createLogicalAnd(
                                         factory.createTypeCheck(factory.createIdentifier("define"), "function"),
-                                        factory.createPropertyAccess(factory.createIdentifier("define"), "amd")
+                                        factory.createPropertyAccessExpression(factory.createIdentifier("define"), "amd")
                                     ),
                                     factory.createBlock([
                                         factory.createExpressionStatement(
-                                            factory.createCall(
+                                            factory.createCallExpression(
                                                 factory.createIdentifier("define"),
                                                 /*typeArguments*/ undefined,
                                                 [
                                                     // Add the module name (if provided).
                                                     ...(moduleName ? [moduleName] : []),
-                                                    factory.createArrayLiteral([
+                                                    factory.createArrayLiteralExpression([
                                                         factory.createStringLiteral("require"),
                                                         factory.createStringLiteral("exports"),
                                                         ...aliasedModuleNames,
@@ -307,7 +307,7 @@ namespace ts {
                 setTextRange(
                     factory.createNodeArray([
                         factory.createExpressionStatement(
-                            factory.createCall(
+                            factory.createCallExpression(
                                 umdHeader,
                                 /*typeArguments*/ undefined,
                                 [
@@ -421,7 +421,7 @@ namespace ts {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
             if (length(currentModuleInfo.exportedNames)) {
-                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccess(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+                append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
             }
 
             // Visit each statement of the module body.
@@ -459,7 +459,7 @@ namespace ts {
                 const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, moduleExpressionElementVisitor);
                 if (expressionResult) {
                     if (emitAsReturn) {
-                        const statement = factory.createReturn(expressionResult);
+                        const statement = factory.createReturnStatement(expressionResult);
                         setTextRange(statement, currentModuleInfo.exportEquals);
                         setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
                         statements.push(statement);
@@ -467,7 +467,7 @@ namespace ts {
                     else {
                         const statement = factory.createExpressionStatement(
                             factory.createAssignment(
-                                factory.createPropertyAccess(
+                                factory.createPropertyAccessExpression(
                                     factory.createIdentifier("module"),
                                     "exports"
                                 ),
@@ -627,7 +627,7 @@ namespace ts {
             needUMDDynamicImportHelper = true;
             if (isSimpleCopiableExpression(arg)) {
                 const argClone = isGeneratedIdentifier(arg) ? arg : isStringLiteral(arg) ? factory.createStringLiteralFromNode(arg) : setEmitFlags(setTextRange(factory.cloneNode(arg), arg), EmitFlags.NoComments);
-                return factory.createConditional(
+                return factory.createConditionalExpression(
                     /*condition*/ factory.createIdentifier("__syncRequire"),
                     /*questionToken*/ undefined,
                     /*whenTrue*/ createImportCallExpressionCommonJS(arg, containsLexicalThis),
@@ -637,7 +637,7 @@ namespace ts {
             }
             else {
                 const temp = factory.createTempVariable(hoistVariableDeclaration);
-                return factory.createComma(factory.createAssignment(temp, arg), factory.createConditional(
+                return factory.createComma(factory.createAssignment(temp, arg), factory.createConditionalExpression(
                     /*condition*/ factory.createIdentifier("__syncRequire"),
                     /*questionToken*/ undefined,
                     /*whenTrue*/ createImportCallExpressionCommonJS(temp, containsLexicalThis),
@@ -662,10 +662,10 @@ namespace ts {
             ];
             const body = factory.createBlock([
                 factory.createExpressionStatement(
-                    factory.createCall(
+                    factory.createCallExpression(
                         factory.createIdentifier("require"),
                         /*typeArguments*/ undefined,
-                        [factory.createArrayLiteral([arg || factory.createOmittedExpression()]), resolve, reject]
+                        [factory.createArrayLiteralExpression([arg || factory.createOmittedExpression()]), resolve, reject]
                     )
                 )
             ]);
@@ -698,10 +698,10 @@ namespace ts {
                 }
             }
 
-            const promise = factory.createNew(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
+            const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
             if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
-                return factory.createCall(factory.createPropertyAccess(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [emitHelpers().createImportStarCallbackHelper()]);
+                return factory.createCallExpression(factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [emitHelpers().createImportStarCallbackHelper()]);
             }
             return promise;
         }
@@ -712,8 +712,8 @@ namespace ts {
             // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-            const promiseResolveCall = factory.createCall(factory.createPropertyAccess(factory.createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
-            let requireCall: Expression = factory.createCall(factory.createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+            const promiseResolveCall = factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
+            let requireCall: Expression = factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
             if (compilerOptions.esModuleInterop) {
                 context.requestEmitHelper(importStarHelper);
                 requireCall = emitHelpers().createImportStarHelper(requireCall);
@@ -737,7 +737,7 @@ namespace ts {
                     /*typeParameters*/ undefined,
                     /*parameters*/ [],
                     /*type*/ undefined,
-                    factory.createBlock([factory.createReturn(requireCall)]));
+                    factory.createBlock([factory.createReturnStatement(requireCall)]));
 
                 // if there is a lexical 'this' in the import call arguments, ensure we indicate
                 // that this new function expression indicates it captures 'this' so that the
@@ -747,7 +747,7 @@ namespace ts {
                 }
             }
 
-            return factory.createCall(factory.createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
+            return factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
         function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
@@ -756,7 +756,7 @@ namespace ts {
             }
             if (getExportNeedsImportStarHelper(node)) {
                 context.requestEmitHelper(importStarHelper);
-                return factory.createCall(context.getEmitHelperFactory().getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+                return factory.createCallExpression(context.getEmitHelperFactory().getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
             }
             return innerExpr;
         }
@@ -893,7 +893,7 @@ namespace ts {
                 args.push(moduleName);
             }
 
-            return factory.createCall(factory.createIdentifier("require"), /*typeArguments*/ undefined, args);
+            return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, args);
         }
 
         /**
@@ -1023,7 +1023,7 @@ namespace ts {
                         );
                     }
                     else {
-                        const exportedValue = factory.createPropertyAccess(
+                        const exportedValue = factory.createPropertyAccessExpression(
                             generatedName,
                             specifier.propertyName || specifier.name
                         );
@@ -1271,7 +1271,7 @@ namespace ts {
             else {
                 return factory.createAssignment(
                     setTextRange(
-                        factory.createPropertyAccess(
+                        factory.createPropertyAccessExpression(
                             factory.createIdentifier("exports"),
                             node.name
                         ),
@@ -1515,13 +1515,13 @@ namespace ts {
             }
             else {
                 statement = factory.createExpressionStatement(
-                    factory.createCall(
-                        factory.createPropertyAccess(factory.createIdentifier("Object"), "defineProperty"),
+                    factory.createCallExpression(
+                        factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
                         /*typeArguments*/ undefined,
                         [
                             factory.createIdentifier("exports"),
                             factory.createStringLiteral("__esModule"),
-                            factory.createObjectLiteral([
+                            factory.createObjectLiteralExpression([
                                 factory.createPropertyAssignment("value", factory.createTrue())
                             ])
                         ]
@@ -1559,8 +1559,8 @@ namespace ts {
          */
         function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
             return setTextRange(
-                liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCall(
-                    factory.createPropertyAccess(
+                liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCallExpression(
+                    factory.createPropertyAccessExpression(
                         factory.createIdentifier("Object"),
                         "defineProperty"
                     ),
@@ -1568,7 +1568,7 @@ namespace ts {
                     [
                         factory.createIdentifier("exports"),
                         factory.createStringLiteralFromNode(name),
-                        factory.createObjectLiteral([
+                        factory.createObjectLiteralExpression([
                             factory.createPropertyAssignment("enumerable", factory.createTrue()),
                             factory.createPropertyAssignment("get", factory.createFunctionExpression(
                                 /*modifiers*/ undefined,
@@ -1577,12 +1577,12 @@ namespace ts {
                                 /*typeParameters*/ undefined,
                                 /*parameters*/ [],
                                 /*type*/ undefined,
-                                factory.createBlock([factory.createReturn(value)])
+                                factory.createBlock([factory.createReturnStatement(value)])
                             ))
                         ])
                     ]
                 ) : factory.createAssignment(
-                    factory.createPropertyAccess(
+                    factory.createPropertyAccessExpression(
                         factory.createIdentifier("exports"),
                         factory.cloneNode(name)
                     ),
@@ -1716,7 +1716,7 @@ namespace ts {
             if (getEmitFlags(node) & EmitFlags.HelperName) {
                 const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
                 if (externalHelpersModuleName) {
-                    return factory.createPropertyAccess(externalHelpersModuleName, node);
+                    return factory.createPropertyAccessExpression(externalHelpersModuleName, node);
                 }
 
                 return node;
@@ -1726,7 +1726,7 @@ namespace ts {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
                     return setTextRange(
-                        factory.createPropertyAccess(
+                        factory.createPropertyAccessExpression(
                             factory.createIdentifier("exports"),
                             factory.cloneNode(node)
                         ),
@@ -1738,7 +1738,7 @@ namespace ts {
                 if (importDeclaration) {
                     if (isImportClause(importDeclaration)) {
                         return setTextRange(
-                            factory.createPropertyAccess(
+                            factory.createPropertyAccessExpression(
                                 factory.getGeneratedNameForNode(importDeclaration.parent),
                                 factory.createIdentifier("default")
                             ),
@@ -1748,7 +1748,7 @@ namespace ts {
                     else if (isImportSpecifier(importDeclaration)) {
                         const name = importDeclaration.propertyName || importDeclaration.name;
                         return setTextRange(
-                            factory.createPropertyAccess(
+                            factory.createPropertyAccessExpression(
                                 factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
                                 factory.cloneNode(name)
                             ),
@@ -1820,7 +1820,7 @@ namespace ts {
                 if (exportedNames) {
                     let expression: Expression = node.kind === SyntaxKind.PostfixUnaryExpression
                         ? setTextRange(
-                            factory.createBinary(
+                            factory.createBinaryExpression(
                                 node.operand,
                                 factory.createToken(node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
                                 factory.createNumericLiteral(1)
@@ -1872,7 +1872,7 @@ namespace ts {
 
     function createExportStarHelper(context: TransformationContext, module: Expression) {
         context.requestEmitHelper(exportStarHelper);
-        return context.factory.createCall(context.getEmitHelperFactory().getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, context.factory.createIdentifier("exports")]);
+        return context.factory.createCallExpression(context.getEmitHelperFactory().getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, context.factory.createIdentifier("exports")]);
     }
 
     // emit helper for dynamic import

@@ -96,8 +96,8 @@ namespace M
                 changeTracker.insertNodeBefore(sourceFile, /*before*/findChild("M2", sourceFile), newFunction);
 
                 // replace statements with return statement
-                const newStatement = factory.createReturn(
-                    factory.createCall(
+                const newStatement = factory.createReturnStatement(
+                    factory.createCallExpression(
                         /*expression*/ newFunction.name!,
                         /*typeArguments*/ undefined,
                         /*argumentsArray*/ emptyArray
@@ -178,7 +178,7 @@ var a = 4; // comment 7
             });
         }
         function createTestVariableDeclaration(name: string) {
-            return factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createObjectLiteral([factory.createPropertyAssignment("p1", factory.createNumericLiteral(1))], /*multiline*/ true));
+            return factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createObjectLiteralExpression([factory.createPropertyAssignment("p1", factory.createNumericLiteral(1))], /*multiline*/ true));
         }
         function createTestClass() {
             return factory.createClassDeclaration(
@@ -333,7 +333,7 @@ namespace M {
             return find<ClassElement, ConstructorDeclaration>(classDecl.members, (m): m is ConstructorDeclaration => isConstructorDeclaration(m) && !!m.body)!;
         }
         function createTestSuperCall() {
-            const superCall = factory.createCall(
+            const superCall = factory.createCallExpression(
                 factory.createSuper(),
                 /*typeArguments*/ undefined,
                 /*argumentsArray*/ emptyArray
@@ -755,7 +755,7 @@ interface A {
 let x = foo
 `;
             runSingleFileTest("insertNodeInStatementListAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
-                const newNode = factory.createExpressionStatement(factory.createParen(factory.createNumericLiteral(1)));
+                const newNode = factory.createExpressionStatement(factory.createParenthesizedExpression(factory.createNumericLiteral(1)));
                 changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), newNode);
             });
         }

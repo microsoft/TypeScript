@@ -43,8 +43,8 @@ namespace ts {
         }
 
         const helperCall = context.getEmitHelperFactory().createTemplateObjectHelper(
-            factory.createArrayLiteral(cookedStrings),
-            factory.createArrayLiteral(rawStrings));
+            factory.createArrayLiteralExpression(cookedStrings),
+            factory.createArrayLiteralExpression(rawStrings));
 
         // Create a variable to cache the template object if we're in a module.
         // Do not do this in the global scope, as any variable we currently generate could conflict with
@@ -63,7 +63,7 @@ namespace ts {
             templateArguments[0] = helperCall;
         }
 
-        return factory.createCall(tag, /*typeArguments*/ undefined, templateArguments);
+        return factory.createCallExpression(tag, /*typeArguments*/ undefined, templateArguments);
     }
 
     function createTemplateCooked(template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {

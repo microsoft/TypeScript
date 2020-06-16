@@ -102,7 +102,7 @@ namespace ts.refactor {
         for (const element of toConvert.elements) {
             const propertyName = (element.propertyName || element.name).text;
             FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
-                const access = factory.createPropertyAccess(factory.createIdentifier(namespaceImportName), propertyName);
+                const access = factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), propertyName);
                 if (isShorthandPropertyAssignment(id.parent)) {
                     changes.replaceNode(sourceFile, id.parent, factory.createPropertyAssignment(id.text, access));
                 }

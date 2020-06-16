@@ -19,15 +19,15 @@ namespace ts {
                     factory.createPropertyDeclaration(/*decorators*/ undefined, [factory.createToken(SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral("1")),
                 ]);
                 checkExpression(clazz);
-                checkExpression(factory.createPropertyAccess(clazz, "prop"));
+                checkExpression(factory.createPropertyAccessExpression(clazz, "prop"));
 
                 const func = factory.createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, "fn", /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, factory.createBlock([]));
                 checkExpression(func);
-                checkExpression(factory.createCall(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
-                checkExpression(factory.createTaggedTemplate(func, /*typeArguments*/ undefined, factory.createNoSubstitutionTemplateLiteral("")));
+                checkExpression(factory.createCallExpression(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
+                checkExpression(factory.createTaggedTemplateExpression(func, /*typeArguments*/ undefined, factory.createNoSubstitutionTemplateLiteral("")));
 
-                checkExpression(factory.createBinary(factory.createStringLiteral("a"), SyntaxKind.CommaToken, factory.createStringLiteral("b")));
-                checkExpression(factory.createCommaList([factory.createStringLiteral("a"), factory.createStringLiteral("b")]));
+                checkExpression(factory.createBinaryExpression(factory.createStringLiteral("a"), SyntaxKind.CommaToken, factory.createStringLiteral("b")));
+                checkExpression(factory.createCommaListExpression([factory.createStringLiteral("a"), factory.createStringLiteral("b")]));
             });
         });
 
@@ -45,12 +45,12 @@ namespace ts {
                     assertSyntaxKind(node.body, SyntaxKind.ParenthesizedExpression);
                 }
 
-                checkBody(factory.createObjectLiteral());
-                checkBody(factory.createPropertyAccess(factory.createObjectLiteral(), "prop"));
-                checkBody(factory.createAsExpression(factory.createPropertyAccess(factory.createObjectLiteral(), "prop"), factory.createTypeReferenceNode("T", /*typeArguments*/ undefined)));
-                checkBody(factory.createNonNullExpression(factory.createPropertyAccess(factory.createObjectLiteral(), "prop")));
-                checkBody(factory.createCommaList([factory.createStringLiteral("a"), factory.createStringLiteral("b")]));
-                checkBody(factory.createBinary(factory.createStringLiteral("a"), SyntaxKind.CommaToken, factory.createStringLiteral("b")));
+                checkBody(factory.createObjectLiteralExpression());
+                checkBody(factory.createPropertyAccessExpression(factory.createObjectLiteralExpression(), "prop"));
+                checkBody(factory.createAsExpression(factory.createPropertyAccessExpression(factory.createObjectLiteralExpression(), "prop"), factory.createTypeReferenceNode("T", /*typeArguments*/ undefined)));
+                checkBody(factory.createNonNullExpression(factory.createPropertyAccessExpression(factory.createObjectLiteralExpression(), "prop")));
+                checkBody(factory.createCommaListExpression([factory.createStringLiteral("a"), factory.createStringLiteral("b")]));
+                checkBody(factory.createBinaryExpression(factory.createStringLiteral("a"), SyntaxKind.CommaToken, factory.createStringLiteral("b")));
             });
         });
 
@@ -66,7 +66,7 @@ namespace ts {
                     factory.createBlock([]),
                 );
                 function checkRhs(operator: BinaryOperator, expectParens: boolean) {
-                    const node = factory.createBinary(lhs, operator, rhs);
+                    const node = factory.createBinaryExpression(lhs, operator, rhs);
                     assertSyntaxKind(node.right, expectParens ? SyntaxKind.ParenthesizedExpression : SyntaxKind.ArrowFunction);
                 }
 
