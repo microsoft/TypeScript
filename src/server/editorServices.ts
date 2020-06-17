@@ -725,7 +725,13 @@ namespace ts.server {
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
-            this.watchFactory = getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
+            this.watchFactory = this.syntaxOnly ?
+                {
+                    watchFile: returnNoopFileWatcher,
+                    watchFilePath: returnNoopFileWatcher,
+                    watchDirectory: returnNoopFileWatcher,
+                } :
+                getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
         }
 
         toPath(fileName: string) {
@@ -1160,8 +1166,29 @@ namespace ts.server {
                 this.host,
                 directory,
                 fileOrDirectory => {
-                    let fileOrDirectoryPath: Path | undefined = this.toPath(fileOrDirectory);
+                    const fileOrDirectoryPath = this.toPath(fileOrDirectory);
                     const fsResult = project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    const configFileName = project.getConfigFilePath();
+                    if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
+                        (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
+                    ) {
+                        this.logger.info(`Project: ${configFileName} Detected new package.json: ${fileOrDirectory}`);
+                        project.onAddPackageJson(fileOrDirectoryPath);
+                    }
+
+                    if (isIgnoredFileFromWildCardWatching({
+                        watchedDirPath: directory,
+                        fileOrDirectory,
+                        fileOrDirectoryPath,
+                        configFileName,
+                        configFileSpecs: project.configFileSpecs!,
+                        extraFileExtensions: this.hostConfiguration.extraFileExtensions,
+                        currentDirectory: this.currentDirectory,
+                        options: project.getCompilationSettings(),
+                        program: project.getCurrentProgram(),
+                        useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
+                        writeLog: s => this.logger.info(s)
+                    })) return;
 
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
@@ -1175,24 +1202,6 @@ namespace ts.server {
                                 this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
                             }
                         }
-                        return;
-                    }
-
-                    fileOrDirectoryPath = removeIgnoredPath(fileOrDirectoryPath);
-                    if (!fileOrDirectoryPath) return;
-                    const configFilename = project.getConfigFilePath();
-
-                    if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
-                        (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
-                    ) {
-                        this.logger.info(`Project: ${configFilename} Detected new package.json: ${fileOrDirectory}`);
-                        project.onAddPackageJson(fileOrDirectoryPath);
-                    }
-
-                    // If the the added or created file or directory is not supported file name, ignore the file
-                    // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrDirectoryPath !== directory && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {
-                        this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
                         return;
                     }
 
@@ -1980,9 +1989,6 @@ namespace ts.server {
 
             const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
             const result = parseJsonText(configFilename, isString(configFileContent) ? configFileContent : "");
-            if (!result.endOfFileToken) {
-                result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
-            }
             const configFileErrors = result.parseDiagnostics as Diagnostic[];
             if (!isString(configFileContent)) configFileErrors.push(configFileContent);
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(

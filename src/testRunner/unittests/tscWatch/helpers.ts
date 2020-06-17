@@ -305,6 +305,12 @@ namespace ts.tscWatch {
         sys: () => WatchedSystem;
     }
 
+    export const noopChange: TscWatchCompileChange = {
+        caption: "No change",
+        change: noop,
+        timeouts: sys => sys.checkTimeoutQueueLength(0),
+    };
+
     export type SystemSnap = ReturnType<WatchedSystem["snap"]>;
     function tscWatchCompile(input: TscWatchCompile) {
         it("tsc-watch:: Generates files matching the baseline", () => {

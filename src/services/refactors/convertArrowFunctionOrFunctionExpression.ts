@@ -147,7 +147,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function convertToBlock(body: ConciseBody): Block {
         if (isExpression(body)) {
-            return createBlock([createReturn(body)], /* multiLine */ true);
+            return factory.createBlock([factory.createReturnStatement(body)], /* multiLine */ true);
         }
         else {
             return body;
@@ -168,7 +168,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): FileTextChanges[] {
         const { file } = context;
         const body = convertToBlock(func.body);
-        const newNode = createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
+        const newNode = factory.createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
         return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
     }
 
@@ -178,7 +178,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
         const { variableDeclaration, variableDeclarationList, statement, name } = variableInfo;
         suppressLeadingTrivia(statement);
-        const newNode = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
+        const newNode = factory.createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
 
         if (variableDeclarationList.declarations.length === 1) {
             return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
@@ -206,7 +206,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
             body = func.body;
         }
 
-        const newNode = createArrowFunction(func.modifiers, func.typeParameters, func.parameters, func.type, createToken(SyntaxKind.EqualsGreaterThanToken), body);
+        const newNode = factory.createArrowFunction(func.modifiers, func.typeParameters, func.parameters, func.type, factory.createToken(SyntaxKind.EqualsGreaterThanToken), body);
         return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
     }
 

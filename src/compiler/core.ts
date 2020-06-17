@@ -1516,6 +1516,20 @@ namespace ts {
         };
     }
 
+    /** A version of `memoize` that supports a single primitive argument */
+    export function memoizeOne<A extends string | number | boolean | undefined, T>(callback: (arg: A) => T): (arg: A) => T {
+        const map = createMap<T>();
+        return (arg: A) => {
+            const key = `${typeof arg}:${arg}`;
+            let value = map.get(key);
+            if (value === undefined && !map.has(key)) {
+                value = callback(arg);
+                map.set(key, value);
+            }
+            return value!;
+        };
+    }
+
     /**
      * High-order function, composes functions. Note that functions are composed inside-out;
      * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
@@ -2049,6 +2063,7 @@ namespace ts {
         let oldIndex = 0;
         const newLen = newItems.length;
         const oldLen = oldItems.length;
+        let hasChanges = false;
         while (newIndex < newLen && oldIndex < oldLen) {
             const newItem = newItems[newIndex];
             const oldItem = oldItems[oldIndex];
@@ -2056,10 +2071,12 @@ namespace ts {
             if (compareResult === Comparison.LessThan) {
                 inserted(newItem);
                 newIndex++;
+                hasChanges = true;
             }
             else if (compareResult === Comparison.GreaterThan) {
                 deleted(oldItem);
                 oldIndex++;
+                hasChanges = true;
             }
             else {
                 unchanged(oldItem, newItem);
@@ -2069,10 +2086,13 @@ namespace ts {
         }
         while (newIndex < newLen) {
             inserted(newItems[newIndex++]);
+            hasChanges = true;
         }
         while (oldIndex < oldLen) {
             deleted(oldItems[oldIndex++]);
+            hasChanges = true;
         }
+        return hasChanges;
     }
 
     export function fill<T>(length: number, cb: (index: number) => T): T[] {

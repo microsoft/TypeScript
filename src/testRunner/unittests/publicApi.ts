@@ -49,13 +49,13 @@ describe("unittests:: Public APIs:: token to string", () => {
 
 describe("unittests:: Public APIs:: createPrivateIdentifier", () => {
     it("throws when name doesn't start with #", () => {
-        assert.throw(() => ts.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+        assert.throw(() => ts.factory.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
     });
 });
 
 describe("unittests:: Public APIs:: isPropertyName", () => {
     it("checks if a PrivateIdentifier is a valid property name", () => {
-        const prop = ts.createPrivateIdentifier("#foo");
+        const prop = ts.factory.createPrivateIdentifier("#foo");
         assert.isTrue(ts.isPropertyName(prop), "PrivateIdentifier must be a valid property name.");
     });
 });

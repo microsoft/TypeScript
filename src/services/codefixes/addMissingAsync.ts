@@ -52,9 +52,9 @@ namespace ts.codefix {
             }
         }
         fixedDeclarations?.set(getNodeId(insertionSite).toString(), true);
-        const cloneWithModifier = getSynthesizedDeepClone(insertionSite, /*includeTrivia*/ true);
-        cloneWithModifier.modifiers = createNodeArray(createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async));
-        cloneWithModifier.modifierFlagsCache = 0;
+        const cloneWithModifier = factory.updateModifiers(
+            getSynthesizedDeepClone(insertionSite, /*includeTrivia*/ true),
+            factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)));
         changeTracker.replaceNode(
             sourceFile,
             insertionSite,
