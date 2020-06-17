@@ -674,6 +674,11 @@ namespace ts {
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
             isDeclarationVisible,
+            containsMatchingReference: (node, target) =>{
+                node = getParseTreeNode(node);
+                target = getParseTreeNode(target);
+                return !!node && !!target && containsMatchingReference(node, target);
+            },
         };
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
