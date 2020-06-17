@@ -5,33 +5,33 @@
 ////    b: number
 ////) => {
 ////    return a + b;
-////}|]
-/////
-////(a: number, b: number) => [|{
+////}|];
+////
+////(a: number, b: number) =>[| {
 ////    return a + b;
-////}|]
+////}|];
 ////
 ////const f1 = function[| (
 ////    a: number
 ////    b: number
 ////) {
 ////    return a + b;
-////}|]
+////}|];
 ////
 ////const f2 = function (a: number, b: number)[| {
 ////    return a + b;
-////}|]
+////}|];
 ////
 ////function f3[| (
 ////    a: number
 ////    b: number
 ////) {
 ////    return a + b;
-////}|]
+////}|];
 ////
 ////function f4(a: number, b: number)[| {
 ////    return a + b;
-////}|]
+////}|];
 ////
 ////class Foo[| {
 ////    constructor[|(
@@ -52,33 +52,33 @@
 ////    m1(a: number, b: number)[| {
 ////        return a + b;
 ////    }|]
-////}|]
+////}|];
 ////
 ////declare function foo(props: any): void;
-////foo(
+////foo[|(
 ////    a =>[| {
 ////
 ////    }|]
-////)
+////)|];
 ////
-////foo(
+////foo[|(
 ////    (a) =>[| {
 ////
 ////    }|]
-////)
+////)|];
 ////
-////foo(
+////foo[|(
 ////    (a, b, c) =>[| {
 ////
 ////    }|]
-////)
+////)|];
 ////
-////foo([|
+////foo[|([|
 ////    (a,
 ////     b,
 ////     c) => {
 ////
 ////    }|]
-////)
+////)|];
 
 verify.outliningSpansInCurrentFile(test.ranges());
