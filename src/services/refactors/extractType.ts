@@ -159,21 +159,21 @@ namespace ts.refactor {
     function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: TypeAliasInfo) {
         const { firstStatement, selection, typeParameters } = info;
 
-        const newTypeNode = createTypeAliasDeclaration(
+        const newTypeNode = factory.createTypeAliasDeclaration(
             /* decorators */ undefined,
             /* modifiers */ undefined,
             name,
-            typeParameters.map(id => updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)),
+            typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)),
             selection
         );
         changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
-        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
+        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
     function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: InterfaceInfo) {
         const { firstStatement, selection, typeParameters, typeElements } = info;
 
-        const newTypeNode = createInterfaceDeclaration(
+        const newTypeNode = factory.createInterfaceDeclaration(
             /* decorators */ undefined,
             /* modifiers */ undefined,
             name,
@@ -182,34 +182,30 @@ namespace ts.refactor {
             typeElements
         );
         changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
-        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
+        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
     function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: Info) {
         const { firstStatement, selection, typeParameters } = info;
 
-        const node = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag);
-        node.tagName = createIdentifier("typedef"); // TODO: jsdoc factory https://github.com/Microsoft/TypeScript/pull/29539
-        node.fullName = createIdentifier(name);
-        node.name = node.fullName;
-        node.typeExpression = createJSDocTypeExpression(selection);
+        const node = factory.createJSDocTypedefTag(
+            factory.createIdentifier("typedef"),
+            factory.createJSDocTypeExpression(selection),
+            factory.createIdentifier(name));
 
         const templates: JSDocTemplateTag[] = [];
         forEach(typeParameters, typeParameter => {
             const constraint = getEffectiveConstraintOfTypeParameter(typeParameter);
-
-            const template = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag);
-            template.tagName = createIdentifier("template");
-            template.constraint = constraint && cast(constraint, isJSDocTypeExpression);
-
-            const parameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-            parameter.name = typeParameter.name;
-            template.typeParameters = createNodeArray([parameter]);
-
+            const parameter = factory.createTypeParameterDeclaration(typeParameter.name);
+            const template = factory.createJSDocTemplateTag(
+                factory.createIdentifier("template"),
+                constraint && cast(constraint, isJSDocTypeExpression),
+                [parameter]
+            );
             templates.push(template);
         });
 
-        changes.insertNodeBefore(file, firstStatement, createJSDocComment(/* comment */ undefined, createNodeArray(concatenate<JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
-        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
+        changes.insertNodeBefore(file, firstStatement, factory.createJSDocComment(/* comment */ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
+        changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 }

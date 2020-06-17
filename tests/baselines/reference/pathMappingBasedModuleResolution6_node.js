@@ -21,6 +21,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports.x = void 0;
 var file2_1 = require("../file2");
 __createBinding(exports, file2_1, "x");
 //// [file1.js]

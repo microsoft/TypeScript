@@ -279,7 +279,10 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
-            this.languageServiceEnabled = !projectService.syntaxOnly;
+            this.languageServiceEnabled = true;
+            if (projectService.syntaxOnly) {
+                this.compilerOptions.noResolve = true;
+            }
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
@@ -293,7 +296,7 @@ namespace ts.server {
 
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory, /*logChangesWhenResolvingModule*/ true);
-            this.languageService = createLanguageService(this, this.documentRegistry, projectService.syntaxOnly);
+            this.languageService = createLanguageService(this, this.documentRegistry, this.projectService.syntaxOnly);
             if (lastFileExceededProgramSize) {
                 this.disableLanguageService(lastFileExceededProgramSize);
             }
@@ -642,7 +645,7 @@ namespace ts.server {
         }
 
         enableLanguageService() {
-            if (this.languageServiceEnabled || this.projectService.syntaxOnly) {
+            if (this.languageServiceEnabled) {
                 return;
             }
             this.languageServiceEnabled = true;
@@ -654,7 +657,6 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return;
             }
-            Debug.assert(!this.projectService.syntaxOnly);
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
@@ -970,7 +972,7 @@ namespace ts.server {
 
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
-            if (this.languageServiceEnabled) {
+            if (this.languageServiceEnabled && !this.projectService.syntaxOnly) {
                 // 1. no changes in structure, no changes in unresolved imports - do nothing
                 // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
                 // (can reuse cached imports for files that were not changed)
@@ -1092,7 +1094,7 @@ namespace ts.server {
                 }
 
                 // Watch the type locations that would be added to program as part of automatic type resolutions
-                if (this.languageServiceEnabled) {
+                if (this.languageServiceEnabled && !this.projectService.syntaxOnly) {
                     this.resolutionCache.updateTypeRootsWatch();
                 }
             }

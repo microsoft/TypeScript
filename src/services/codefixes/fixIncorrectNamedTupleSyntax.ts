@@ -37,11 +37,11 @@ namespace ts.codefix {
             }
             unwrappedType = (unwrappedType as OptionalTypeNode | RestTypeNode | ParenthesizedTypeNode).type;
         }
-        const updated = updateNamedTupleMember(
+        const updated = factory.updateNamedTupleMember(
             namedTupleMember,
-            namedTupleMember.dotDotDotToken || (sawRest ? createToken(SyntaxKind.DotDotDotToken) : undefined),
+            namedTupleMember.dotDotDotToken || (sawRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined),
             namedTupleMember.name,
-            namedTupleMember.questionToken || (sawOptional ? createToken(SyntaxKind.QuestionToken) : undefined),
+            namedTupleMember.questionToken || (sawOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined),
             unwrappedType
         );
         if (updated === namedTupleMember) {

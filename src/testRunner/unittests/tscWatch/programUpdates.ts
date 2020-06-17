@@ -558,6 +558,30 @@ export class A {
 
         verifyTscWatch({
             scenario,
+            subScenario: "can correctly update configured project when set of root files has changed through include",
+            commandLineArgs: ["-w", "-p", "."],
+            sys: () => {
+                const file1 = {
+                    path: `${projectRoot}/Project/file1.ts`,
+                    content: "export const x = 10;"
+                };
+                const configFile = {
+                    path: `${projectRoot}/Project/tsconfig.json`,
+                    content: JSON.stringify({ include: [".", "./**/*.json"] })
+                };
+                return createWatchedSystem([file1, libFile, configFile], { currentDirectory: `${projectRoot}/Project` });
+            },
+            changes: [
+                {
+                    caption: "Write file2",
+                    change: sys => sys.writeFile(`${projectRoot}/Project/file2.ts`, "export const y = 10;"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                }
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
             subScenario: "can update configured project when set of root files was not changed",
             commandLineArgs: ["-w", "-p", configFilePath],
             sys: () => {
@@ -1007,7 +1031,15 @@ declare const eval: any`
                         };
                         return createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: projectRoot });
                     },
-                    changes: emptyArray
+                    changes: [
+                        noopChange,
+                        {
+                            caption: "Add new file",
+                            change: sys => sys.writeFile(`${projectRoot}/src/file3.ts`, `export const y = 10;`),
+                            timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2), // To update program and failed lookups
+                        },
+                        noopChange,
+                    ]
                 });
             }
 
@@ -1024,6 +1056,11 @@ declare const eval: any`
             verifyWithOptions(
                 "when outDir is specified",
                 { module: ModuleKind.AMD, outDir: "build" }
+            );
+
+            verifyWithOptions(
+                "without outDir or outFile is specified with declaration enabled",
+                { module: ModuleKind.AMD, declaration: true }
             );
 
             verifyWithOptions(

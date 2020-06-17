@@ -167,11 +167,11 @@ namespace ts.codefix {
                 return;
             }
             const className = classDeclaration.name!.getText();
-            const staticInitialization = initializePropertyToUndefined(createIdentifier(className), tokenName);
+            const staticInitialization = initializePropertyToUndefined(factory.createIdentifier(className), tokenName);
             changeTracker.insertNodeAfter(declSourceFile, classDeclaration, staticInitialization);
         }
         else if (isPrivateIdentifier(token)) {
-            const property = createProperty(
+            const property = factory.createPropertyDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 tokenName,
@@ -192,13 +192,13 @@ namespace ts.codefix {
             if (!classConstructor) {
                 return;
             }
-            const propertyInitialization = initializePropertyToUndefined(createThis(), tokenName);
+            const propertyInitialization = initializePropertyToUndefined(factory.createThis(), tokenName);
             changeTracker.insertNodeAtConstructorEnd(declSourceFile, classConstructor, propertyInitialization);
         }
     }
 
     function initializePropertyToUndefined(obj: Expression, propertyName: string) {
-        return createStatement(createAssignment(createPropertyAccess(obj, propertyName), createIdentifier("undefined")));
+        return factory.createExpressionStatement(factory.createAssignment(factory.createPropertyAccessExpression(obj, propertyName), factory.createIdentifier("undefined")));
     }
 
     function createActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContext, { parentDeclaration, declSourceFile, modifierFlags, token }: ClassOrInterfaceInfo): CodeFixAction[] | undefined {
@@ -232,13 +232,13 @@ namespace ts.codefix {
             const contextualType = checker.getContextualType(token.parent as Expression);
             typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, /*flags*/ undefined) : undefined;
         }
-        return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        return typeNode || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
     function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, tokenName: string, typeNode: TypeNode, modifierFlags: ModifierFlags): void {
-        const property = createProperty(
+        const property = factory.createPropertyDeclaration(
             /*decorators*/ undefined,
-            /*modifiers*/ modifierFlags ? createNodeArray(createModifiersFromModifierFlags(modifierFlags)) : undefined,
+            /*modifiers*/ modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined,
             tokenName,
             /*questionToken*/ undefined,
             typeNode,
@@ -265,8 +265,8 @@ namespace ts.codefix {
 
     function createAddIndexSignatureAction(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassOrInterface, tokenName: string, typeNode: TypeNode): CodeFixAction {
         // Index signatures cannot have the static modifier.
-        const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
-        const indexingParameter = createParameter(
+        const stringTypeNode = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
+        const indexingParameter = factory.createParameterDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
@@ -274,7 +274,7 @@ namespace ts.codefix {
             /*questionToken*/ undefined,
             stringTypeNode,
             /*initializer*/ undefined);
-        const indexSignature = createIndexSignature(
+        const indexSignature = factory.createIndexSignature(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             [indexingParameter],
@@ -338,8 +338,8 @@ namespace ts.codefix {
             return !!(type && type.flags & TypeFlags.StringLike);
         });
 
-        const enumMember = createEnumMember(token, hasStringInitializer ? createStringLiteral(token.text) : undefined);
-        changes.replaceNode(enumDeclaration.getSourceFile(), enumDeclaration, updateEnumDeclaration(
+        const enumMember = factory.createEnumMember(token, hasStringInitializer ? factory.createStringLiteral(token.text) : undefined);
+        changes.replaceNode(enumDeclaration.getSourceFile(), enumDeclaration, factory.updateEnumDeclaration(
             enumDeclaration,
             enumDeclaration.decorators,
             enumDeclaration.modifiers,

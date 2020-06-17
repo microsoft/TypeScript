@@ -21,9 +21,13 @@ namespace ts {
         hasUnicodeEscape(): boolean;
         hasExtendedUnicodeEscape(): boolean;
         hasPrecedingLineBreak(): boolean;
+        /* @internal */
+        hasPrecedingJSDocComment(): boolean;
         isIdentifier(): boolean;
         isReservedWord(): boolean;
         isUnterminated(): boolean;
+        /* @internal */
+        getNumericLiteralFlags(): TokenFlags;
         /* @internal */
         getCommentDirectives(): CommentDirective[] | undefined;
         /* @internal */
@@ -942,10 +946,12 @@ namespace ts {
             hasUnicodeEscape: () => (tokenFlags & TokenFlags.UnicodeEscape) !== 0,
             hasExtendedUnicodeEscape: () => (tokenFlags & TokenFlags.ExtendedUnicodeEscape) !== 0,
             hasPrecedingLineBreak: () => (tokenFlags & TokenFlags.PrecedingLineBreak) !== 0,
+            hasPrecedingJSDocComment: () => (tokenFlags & TokenFlags.PrecedingJSDocComment) !== 0,
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
             isUnterminated: () => (tokenFlags & TokenFlags.Unterminated) !== 0,
             getCommentDirectives: () => commentDirectives,
+            getNumericLiteralFlags: () => tokenFlags & TokenFlags.NumericLiteralFlags,
             getTokenFlags: () => tokenFlags,
             reScanGreaterToken,
             reScanSlashToken,

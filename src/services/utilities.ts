@@ -1751,17 +1751,17 @@ namespace ts {
     }
 
     export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
-        return createImportDeclaration(
+        return factory.createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
-                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined, isTypeOnly)
+                ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
                 : undefined,
             typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier);
     }
 
     export function makeStringLiteral(text: string, quotePreference: QuotePreference): StringLiteral {
-        return createLiteral(text, quotePreference === QuotePreference.Single);
+        return factory.createStringLiteral(text, quotePreference === QuotePreference.Single);
     }
 
     export const enum QuotePreference { Single, Double }
@@ -2198,7 +2198,7 @@ namespace ts {
 
             if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
                 clone = setOriginalNode(
-                    createBindingElement(
+                    factory.createBindingElement(
                         node.dotDotDotToken,
                         node.propertyName || node.name,
                         renameInfo,
@@ -2211,7 +2211,7 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo) {
-                clone = setOriginalNode(createIdentifier(renameInfo.text), node);
+                clone = setOriginalNode(factory.createIdentifier(renameInfo.text), node);
             }
         }
 
@@ -2233,20 +2233,17 @@ namespace ts {
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
-            const clone = getSynthesizedClone(node);
-            if (isStringLiteral(clone)) {
-                clone.textSourceNode = node as any;
-            }
-            else if (isNumericLiteral(clone)) {
-                clone.numericLiteralFlags = (node as any).numericLiteralFlags;
-            }
+            const clone =
+                isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
+                isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
+                factory.cloneNode(node);
             return setTextRange(clone, node);
         }
 
         // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
         // the new node created by visitEachChild with the extra changes getSynthesizedClone
         // would have made.
-        visited.parent = undefined!;
+        (visited as Mutable<T>).parent = undefined!;
         return visited;
 
         function wrapper(node: T) {
@@ -2257,7 +2254,7 @@ namespace ts {
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        return nodes && factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
     }
 
     /**

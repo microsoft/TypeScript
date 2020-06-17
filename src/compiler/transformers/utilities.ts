@@ -25,7 +25,7 @@ namespace ts {
         return e.propertyName !== undefined && e.propertyName.escapedText === InternalSymbolName.Default;
     }
 
-    export function chainBundle(transformSourceFile: (x: SourceFile) => SourceFile): (x: SourceFile | Bundle) => SourceFile | Bundle {
+    export function chainBundle(context: CoreTransformationContext, transformSourceFile: (x: SourceFile) => SourceFile): (x: SourceFile | Bundle) => SourceFile | Bundle {
         return transformSourceFileOrBundle;
 
         function transformSourceFileOrBundle(node: SourceFile | Bundle) {
@@ -33,7 +33,7 @@ namespace ts {
         }
 
         function transformBundle(node: Bundle) {
-            return createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+            return context.factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
         }
     }
 
@@ -65,7 +65,7 @@ namespace ts {
         return !getImportNeedsImportStarHelper(node) && (isDefaultImport(node) || (!!node.importClause && isNamedImports(node.importClause.namedBindings!) && containsDefaultReference(node.importClause.namedBindings))); // TODO: GH#18217
     }
 
-    export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
+    export function collectExternalModuleInfo(context: TransformationContext, sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMultiMap<ExportSpecifier>();
         const exportedBindings: Identifier[][] = [];
@@ -112,26 +112,22 @@ namespace ts {
                             // export * as ns from "mod"
                             // export { x, y } from "mod"
                             externalImports.push(<ExportDeclaration>node);
+                            if (isNamedExports((node as ExportDeclaration).exportClause!)) {
+                                addExportedNamesForExportDeclaration(node as ExportDeclaration);
+                            }
+                            else {
+                                const name = ((node as ExportDeclaration).exportClause as NamespaceExport).name;
+                                if (!uniqueExports.get(idText(name))) {
+                                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
+                                    uniqueExports.set(idText(name), true);
+                                    exportedNames = append(exportedNames, name);
+                                }
+                            }
                         }
                     }
                     else {
                         // export { x, y }
-                        for (const specifier of cast((<ExportDeclaration>node).exportClause, isNamedExports).elements) {
-                            if (!uniqueExports.get(idText(specifier.name))) {
-                                const name = specifier.propertyName || specifier.name;
-                                exportSpecifiers.add(idText(name), specifier);
-
-                                const decl = resolver.getReferencedImportDeclaration(name)
-                                    || resolver.getReferencedValueDeclaration(name);
-
-                                if (decl) {
-                                    multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
-                                }
-
-                                uniqueExports.set(idText(specifier.name), true);
-                                exportedNames = append(exportedNames, specifier.name);
-                            }
-                        }
+                        addExportedNamesForExportDeclaration(node as ExportDeclaration);
                     }
                     break;
 
@@ -155,7 +151,7 @@ namespace ts {
                         if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                             // export default function() { }
                             if (!hasExportDefault) {
-                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<FunctionDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(<FunctionDeclaration>node));
                                 hasExportDefault = true;
                             }
                         }
@@ -176,7 +172,7 @@ namespace ts {
                         if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                             // export default class { }
                             if (!hasExportDefault) {
-                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), getDeclarationName(<ClassDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(<ClassDeclaration>node));
                                 hasExportDefault = true;
                             }
                         }
@@ -194,12 +190,31 @@ namespace ts {
             }
         }
 
-        const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar, hasImportDefault);
+        const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(context.factory, context.getEmitHelperFactory(), sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStar, hasImportDefault);
         if (externalHelpersImportDeclaration) {
             externalImports.unshift(externalHelpersImportDeclaration);
         }
 
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
+
+        function addExportedNamesForExportDeclaration(node: ExportDeclaration) {
+            for (const specifier of cast(node.exportClause, isNamedExports).elements) {
+                if (!uniqueExports.get(idText(specifier.name))) {
+                    const name = specifier.propertyName || specifier.name;
+                    exportSpecifiers.add(idText(name), specifier);
+
+                    const decl = resolver.getReferencedImportDeclaration(name)
+                        || resolver.getReferencedValueDeclaration(name);
+
+                    if (decl) {
+                        multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
+                    }
+
+                    uniqueExports.set(idText(specifier.name), true);
+                    exportedNames = append(exportedNames, specifier.name);
+                }
+            }
+        }
     }
 
     function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<boolean>, exportedNames: Identifier[] | undefined) {
@@ -288,11 +303,11 @@ namespace ts {
      * @param visitor The visitor to apply to each node added to the result array.
      * @returns index of the statement that follows super call
      */
-    export function addPrologueDirectivesAndInitialSuperCall(ctor: ConstructorDeclaration, result: Statement[], visitor: Visitor): number {
+    export function addPrologueDirectivesAndInitialSuperCall(factory: NodeFactory, ctor: ConstructorDeclaration, result: Statement[], visitor: Visitor): number {
         if (ctor.body) {
             const statements = ctor.body.statements;
             // add prologue directives to the list (if any)
-            const index = addPrologue(result, statements, /*ensureUseStrict*/ false, visitor);
+            const index = factory.copyPrologue(statements, result, /*ensureUseStrict*/ false, visitor);
             if (index === statements.length) {
                 // list contains nothing but prologue directives (or empty) - exit
                 return index;
@@ -312,29 +327,14 @@ namespace ts {
         return 0;
     }
 
-
-    /**
-     * @param input Template string input strings
-     * @param args Names which need to be made file-level unique
-     */
-    export function helperString(input: TemplateStringsArray, ...args: string[]) {
-        return (uniqueName: EmitHelperUniqueNameCallback) => {
-            let result = "";
-            for (let i = 0; i < args.length; i++) {
-                result += input[i];
-                result += uniqueName(args[i]);
-            }
-            result += input[input.length - 1];
-            return result;
-        };
-    }
-
     /**
      * Gets all the static or all the instance property declarations of a class
      *
      * @param node The class node.
      * @param isStatic A value indicating whether to get properties from the static or instance side of the class.
      */
+    export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: true, isStatic: boolean): readonly InitializedPropertyDeclaration[];
+    export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[];
     export function getProperties(node: ClassExpression | ClassDeclaration, requireInitializer: boolean, isStatic: boolean): readonly PropertyDeclaration[] {
         return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
     }
