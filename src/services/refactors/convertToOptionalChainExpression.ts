@@ -6,9 +6,9 @@ namespace ts.refactor.convertToOptionalChainExpression {
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const { file, startPosition, program } = context;
-        const convertableExpression = getExpressionToConvert(file, startPosition, program);
-        if (!convertableExpression) return emptyArray;
+        const { file, startPosition, endPosition, program } = context;
+        const info = getExpressionToConvert(file, startPosition, endPosition, program);
+        if (!info) return emptyArray;
         return [{
             name: refactorName,
             description: convertToOptionalChainExpression,
@@ -20,95 +20,79 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const { file, startPosition, program } = context;
-        const checker = program.getTypeChecker();
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, checker, t, getExpressionToConvert(file, startPosition, program), actionName));
+        const { file, startPosition, endPosition, program } = context;
+        const info = getExpressionToConvert(file, startPosition, endPosition, program);
+        if (!info) return undefined;
+        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, t, info, actionName));
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
 
-    type ConvertableExpression = PropertyAccessExpression | CallExpression | undefined;
+    interface Info {
+        fullPropertyAccess: PropertyAccessExpression,
+        firstOccurence: Node,
+        containingExpression: BinaryExpression
+    }
 
-    // returns the final property access chain in a binary expression e.g. a && a.b && a.b.c -> a.b.c
-    function getExpressionToConvert(file: SourceFile, startPosition: number, program: Program): ConvertableExpression {
-        const node = getTokenAtPosition(file, startPosition);
-        const parent = <BinaryExpression>findAncestor(node, (node) => { return node.parent && isParentBinaryExpression(node) && !isParentBinaryExpression(node.parent); });
+    function getExpressionToConvert(file: SourceFile, startPosition: number, endPosition: number | undefined, program: Program): Info | undefined {
+        const startToken = getTokenAtPosition(file, startPosition);
+        const endToken = endPosition ? findTokenOnLeftOfPosition(file, endPosition) : startToken;
+        const startBinary = findAncestor(startToken, (node) => { return isBinaryExpression(node); });
+        const endBinary = endToken !== startToken ? findAncestor(endToken, (node) => { return isBinaryExpression(node); }) : startBinary;
 
-        if (!parent || parent.kind !== SyntaxKind.BinaryExpression) return undefined;
+        if (!startBinary || !endBinary || !isBinaryExpression(startBinary) || !isBinaryExpression(endBinary)) return undefined;
+        const parent = getParentNodeInSpan(startBinary, file, createTextSpanFromBounds(startBinary.pos, endBinary.end));
+
+        if (!parent || !isBinaryExpression(parent)) return undefined;
 
         const checker = program.getTypeChecker();
-        return parent.getStart() <= startPosition ? getPropertyAccessChain(parent, checker) : undefined;
+
+        const fullPropertyAccess = getFullPropertyAccessChain(parent, checker);
+        if (!fullPropertyAccess) return undefined;
+
+        // ensure that each sequential operand in range matches the longest acceess chain
+        let checkNode = parent.left;
+        let firstOccurence: PropertyAccessExpression | Identifier = fullPropertyAccess;
+        while (isBinaryExpression(checkNode) && (isPropertyAccessExpression(checkNode.right) || isIdentifier(checkNode.right)) && checkNode.right.pos >= startBinary.right.pos) {
+            if (!checker.containsMatchingReference(fullPropertyAccess, checkNode.right)) {
+                return undefined;
+            }
+            firstOccurence = checkNode.right;
+            checkNode = checkNode.left;
+        }
+        // check final identifier
+        if ((isIdentifier(checkNode) || isPropertyAccessExpression(checkNode)) && checker.containsMatchingReference(fullPropertyAccess, checkNode) && checkNode.pos >= startBinary.pos) {
+            firstOccurence = checkNode;
+        }
+        return firstOccurence ? { fullPropertyAccess, firstOccurence, containingExpression:parent } : undefined;
     }
 
-    // finds the parent binary expression with && operatorToken
-    function isParentBinaryExpression(node: Node): boolean {
-        return isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken;
-    }
-
-    // Checks the symbol in each operand of a && a.b && a.b.c appears in the next.
-    function getPropertyAccessChain(node: BinaryExpression, checker: TypeChecker): PropertyAccessExpression | CallExpression | undefined {
-        if (isIdentifier(node.left) && (isPropertyAccessExpression(node.right) || isCallExpression(node.right))) {
-            return node.right;
+    function getRightHandSidePropertyAccess(node: BinaryExpression | CallExpression): PropertyAccessExpression | undefined {
+        if (isCallExpression(node) && isPropertyAccessExpression(node.expression)) {
+            // a && |a.b|();
+            return node.expression;
         }
-        else if (isBinaryExpression(node.right) && isPropertyAccessExpression(node.right.left)) {
-            return node.right.left;
-        }
-        else if (isBinaryExpression(node.right) && isCallExpression(node.right.left)) {
-            return <PropertyAccessExpression>node.right.left.expression;
-        }
-        else if (isBinaryExpression(node.left) && (isPropertyAccessExpression(node.right) || isCallExpression(node.right))) {
-            const previousOperand = getPropertyAccessChain(node.left, checker);
-            const previousSymbol = previousOperand ? checker.getSymbolAtLocation(previousOperand) : undefined;
-            const currentSymbol = isCallExpression(node.right) && isPropertyAccessExpression(node.right.expression) ?
-                checker.getSymbolAtLocation(node.right.expression.expression) : checker.getSymbolAtLocation(node.right.expression);
-            if (previousSymbol && previousSymbol === currentSymbol) {
-                return node.right;
+        else if (isBinaryExpression(node)) {
+            if (isPropertyAccessExpression(node.left)) {
+                // a && |a.b| == 1;
+                return node.left;
+            }
+            else if (isCallExpression(node.left) && isPropertyAccessExpression(node.left.expression)) {
+                // a && |a.b|() == 1;
+                return node.left.expression;
             }
         }
         return undefined;
     }
 
-    function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: ConvertableExpression, _actionName: string): void {
-        if (!toConvert) return;
-        if (isCallExpression(toConvert)) {
-            doCallExpression(sourceFile, checker, changes, toConvert);
-        }
-        else if (isPropertyAccessExpression(toConvert)) {
-            doPropertyAccessExpression(sourceFile, checker, changes, toConvert);
-        }
+    function getFullPropertyAccessChain(node: BinaryExpression, _checker: TypeChecker): PropertyAccessExpression | undefined {
+        return isBinaryExpression(node.right) || isCallExpression(node.right)
+            ? getRightHandSidePropertyAccess(node.right) : isPropertyAccessExpression(node.right)
+                ? node.right : undefined;
     }
 
-    function doPropertyAccessExpression(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: PropertyAccessExpression): void {
-        let checkNode = <BinaryExpression>findAncestor(toConvert, (node) => { return node.parent && isParentBinaryExpression(node) && !isParentBinaryExpression(node.parent); });
-        let startNode: Node = toConvert;
-        while (isBinaryExpression(checkNode.left)) {
-            if (isPropertyAccessExpression(checkNode.right) && checker.containsMatchingReference(toConvert, checkNode.right)) {
-                startNode = checkNode.right;
-            }
-            checkNode = checkNode.left;
-        }
-        if (isIdentifier(checkNode.left) && checker.containsMatchingReference(toConvert, checkNode.right)) {
-            startNode = checkNode.left;
-        }
-        changes.replaceNodeRange(sourceFile, startNode, toConvert, convertPropertyAccessToOptionalChain(toConvert));
-    }
-
-    function doCallExpression(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: CallExpression) {
-        if (!toConvert || !isBinaryExpression(toConvert.parent)) return;
-
-        let checkNode = <BinaryExpression>findAncestor(toConvert, (node) => { return node.parent && isParentBinaryExpression(node) && !isParentBinaryExpression(node.parent); });
-        let startNode: Node = toConvert;
-        while (isBinaryExpression(checkNode.left)) {
-            if (isPropertyAccessExpression(checkNode.right) && checker.containsMatchingReference(toConvert, checkNode.right)) {
-                startNode = checkNode.right;
-            }
-            checkNode = checkNode.left;
-        }
-        if (isIdentifier(checkNode.left) && checker.containsMatchingReference(toConvert.expression, checkNode.right)) {
-            startNode = checkNode.left;
-        }
-        if (isPropertyAccessExpression(toConvert.expression)) {
-            changes.replaceNodeRange(sourceFile, startNode, toConvert, createCall(convertPropertyAccessToOptionalChain(toConvert.expression), toConvert.typeArguments, toConvert.arguments));
-        }
+    function doChange(sourceFile: SourceFile, changes: textChanges.ChangeTracker, info: Info, _actionName: string): void {
+        const { fullPropertyAccess, firstOccurence } = info;
+        changes.replaceNodeRange(sourceFile, firstOccurence, fullPropertyAccess, convertPropertyAccessToOptionalChain(fullPropertyAccess));
     }
 
     function convertPropertyAccessToOptionalChain(toConvert: PropertyAccessExpression): PropertyAccessExpression {
