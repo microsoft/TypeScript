@@ -116,7 +116,7 @@ type T24 = T20[0 | 1 | 2 | 3];
 >T24 : string | number | boolean
 
 type T25 = T20[1 | 2 | 3];
->T25 : string | boolean
+>T25 : T25
 
 type T26 = T20[2 | 3];
 >T26 : boolean
@@ -187,7 +187,7 @@ f0([1, 2, 3]);
 >3 : 3
 
 f0([1, "hello", true]);
->f0([1, "hello", true]) : [number, string | boolean]
+>f0([1, "hello", true]) : [number, T25]
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
 >[1, "hello", true] : [number, string, true]
 >1 : 1

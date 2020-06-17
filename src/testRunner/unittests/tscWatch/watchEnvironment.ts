@@ -185,12 +185,10 @@ namespace ts.tscWatch {
                 },
                 changes: [
                     {
-                        caption: "Pending updates because of file1.js creation",
+                        caption: "Directory watch updates because of file1.js creation",
                         change: noop,
                         timeouts: sys => {
                             sys.checkTimeoutQueueLengthAndRun(1); // To update directory callbacks for file1.js output
-                            sys.checkTimeoutQueueLengthAndRun(2); // Update program again and Failed lookup update
-                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
                             sys.checkTimeoutQueueLength(0);
                         },
                     },
@@ -250,6 +248,90 @@ namespace ts.tscWatch {
                         change: noop,
                         timeouts: sys => {
                             sys.runQueuedTimeoutCallbacks();
+                            sys.checkTimeoutQueueLength(0);
+                        },
+                    },
+                ],
+            });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchDirectories/with non synchronous watch directory with outDir and declaration enabled",
+                commandLineArgs: ["--w", "-p", `${projectRoot}/tsconfig.json`],
+                sys: () => {
+                    const configFile: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ compilerOptions: { outDir: "dist", declaration: true } })
+                    };
+                    const file1: File = {
+                        path: `${projectRoot}/src/file1.ts`,
+                        content: `import { x } from "file2";`
+                    };
+                    const file2: File = {
+                        path: `${projectRoot}/node_modules/file2/index.d.ts`,
+                        content: `export const x = 10;`
+                    };
+                    const files = [libFile, file1, file2, configFile];
+                    return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                },
+                changes: [
+                    noopChange,
+                    {
+                        caption: "Add new file, should schedule and run timeout to update directory watcher",
+                        change: sys => sys.writeFile(`${projectRoot}/src/file3.ts`, `export const y = 10;`),
+                        timeouts: checkSingleTimeoutQueueLengthAndRun, // Update the child watch
+                    },
+                    {
+                        caption: "Actual program update to include new file",
+                        change: noop,
+                        timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2), // Scheduling failed lookup update and program update
+                    },
+                    {
+                        caption: "After program emit with new file, should schedule and run timeout to update directory watcher",
+                        change: noop,
+                        timeouts: checkSingleTimeoutQueueLengthAndRun, // Update the child watch
+                    },
+                    noopChange,
+                ],
+            });
+
+            verifyTscWatch({
+                scenario,
+                subScenario: "watchDirectories/with non synchronous watch directory renaming a file",
+                commandLineArgs: ["--w", "-p", `${projectRoot}/tsconfig.json`],
+                sys: () => {
+                    const configFile: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ compilerOptions: { outDir: "dist" } })
+                    };
+                    const file1: File = {
+                        path: `${projectRoot}/src/file1.ts`,
+                        content: `import { x } from "./file2";`
+                    };
+                    const file2: File = {
+                        path: `${projectRoot}/src/file2.ts`,
+                        content: `export const x = 10;`
+                    };
+                    const files = [libFile, file1, file2, configFile];
+                    return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                },
+                changes: [
+                    noopChange,
+                    {
+                        caption: "rename the file",
+                        change: sys => sys.renameFile(`${projectRoot}/src/file2.ts`, `${projectRoot}/src/renamed.ts`),
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLength(2); // 1. For updating program and 2. for updating child watches
+                            sys.runQueuedTimeoutCallbacks(1); // Update program
+                        },
+                    },
+                    {
+                        caption: "Pending directory watchers and program update",
+                        change: noop,
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
+                            sys.checkTimeoutQueueLengthAndRun(2); // To Update program and failed lookup update
+                            sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
                             sys.checkTimeoutQueueLength(0);
                         },
                     },

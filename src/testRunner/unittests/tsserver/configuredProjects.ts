@@ -967,7 +967,7 @@ declare var console: {
                     files: errorOnNewFileBeforeOldFile ?
                         [fooBar, foo] :
                         [foo, fooBar],
-                    existingTimeouts: 2
+                    existingTimeouts: withExclude ? 0 : 2
                 });
                 checkProjectAfterError(service);
             }

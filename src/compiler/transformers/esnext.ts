@@ -2,9 +2,10 @@
 namespace ts {
     export function transformESNext(context: TransformationContext) {
         const {
-            hoistVariableDeclaration
+            hoistVariableDeclaration,
+            factory
         } = context;
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -37,14 +38,14 @@ namespace ts {
             let assignmentTarget = left;
             const right = skipParentheses(visitNode(binaryExpression.right, visitor, isExpression));
             if (isAccessExpression(left)) {
-                const tempVariable = createTempVariable(hoistVariableDeclaration);
+                const tempVariable = factory.createTempVariable(hoistVariableDeclaration);
                 if (isPropertyAccessExpression(left)) {
-                    assignmentTarget = createPropertyAccess(
+                    assignmentTarget = factory.createPropertyAccessExpression(
                         tempVariable,
                         left.name
                     );
-                    left = createPropertyAccess(
-                        createAssignment(
+                    left = factory.createPropertyAccessExpression(
+                        factory.createAssignment(
                             tempVariable,
                             left.expression
                         ),
@@ -52,12 +53,12 @@ namespace ts {
                     );
                 }
                 else {
-                    assignmentTarget = createElementAccess(
+                    assignmentTarget = factory.createElementAccessExpression(
                         tempVariable,
                         left.argumentExpression
                     );
-                    left = createElementAccess(
-                        createAssignment(
+                    left = factory.createElementAccessExpression(
+                        factory.createAssignment(
                             tempVariable,
                             left.expression
                         ),
@@ -66,11 +67,11 @@ namespace ts {
                 }
             }
 
-            return createBinary(
+            return factory.createBinaryExpression(
                 left,
                 nonAssignmentOperator,
-                createParen(
-                    createAssignment(
+                factory.createParenthesizedExpression(
+                    factory.createAssignment(
                         assignmentTarget,
                         right
                     )

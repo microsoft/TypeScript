@@ -3898,6 +3898,7 @@ declare module Intl {
         maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
+        notation?: string;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -3912,6 +3913,7 @@ declare module Intl {
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
         useGrouping: boolean;
+        notation?: string;
     }
 
     interface NumberFormat {
