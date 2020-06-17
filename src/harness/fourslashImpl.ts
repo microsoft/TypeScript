@@ -2567,15 +2567,15 @@ namespace FourSlash {
             });
             replacement.push(");");
 
-            throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
+            // throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
 
-            /**
+
             const fs = require("fs");
             const testfilePath = this.originalInputFileName.slice(1);
             const testfile = fs.readFileSync(testfilePath, "utf8");
             const newfile = testfile.replace("verify.replaceWithSemanticClassifications(\"2020\")", replacement.join("\n"));
             fs.writeFileSync(testfilePath, newfile);
-             */
+
         }
 
 
