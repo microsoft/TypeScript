@@ -3115,7 +3115,7 @@ namespace ts {
                 return finishNode(factory.createRestTypeNode(parseType()), pos);
             }
             const type = parseType();
-            if (!(contextFlags & NodeFlags.JSDoc) && isJSDocNullableType(type) && type.pos === type.type.pos) {
+            if (isJSDocNullableType(type) && type.pos === type.type.pos) {
                 const node = factory.createOptionalTypeNode(type.type);
                 setTextRange(node, type);
                 (node as Mutable<Node>).flags = type.flags;
@@ -3356,7 +3356,7 @@ namespace ts {
                         break;
                     case SyntaxKind.QuestionToken:
                         // If not in JSDoc and next token is start of a type we have a conditional type
-                        if (!(contextFlags & NodeFlags.JSDoc) && lookAhead(nextTokenIsStartOfType)) {
+                        if (lookAhead(nextTokenIsStartOfType)) {
                             return type;
                         }
                         nextToken();
