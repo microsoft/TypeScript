@@ -13496,6 +13496,15 @@ namespace ts {
             // So ultimately (reading):
             // ((A & B) | C)[K1 | K2] -> ((A & B) | C)[K1] | ((A & B) | C)[K2] -> (A & B)[K1] | C[K1] | (A & B)[K2] | C[K2] -> (A[K1] & B[K1]) | C[K1] | (A[K2] & B[K2]) | C[K2]
 
+            // A generic tuple type indexed by a number exists only when the index type doesn't select a
+            // fixed element. We simplify to either the combined type of all elements (when the index type
+            // the actual number type) or to the combined type of all non-fixed elements.
+            if (isGenericTupleType(objectType) && indexType.flags & TypeFlags.NumberLike) {
+                const elementType = getElementTypeOfTupleType(objectType, indexType.flags & TypeFlags.Number ? 0 : objectType.target.fixedLength, /*endSkipCount*/ 0, writing);
+                if (elementType) {
+                    return type[cache] = elementType;
+                }
+            }
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
@@ -18386,7 +18395,7 @@ namespace ts {
             return getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !!(f & ElementFlags.Variable)) - 1;
         }
 
-        function getElementTypeOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0) {
+        function getElementTypeOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0, writing = false) {
             const length = getTypeReferenceArity(type) - endSkipCount;
             if (index < length) {
                 const typeArguments = getTypeArguments(type);
@@ -18395,7 +18404,7 @@ namespace ts {
                     const t = typeArguments[i];
                     elementTypes.push(type.target.elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessType(t, numberType) : t);
                 }
-                return getUnionType(elementTypes);
+                return writing ? getIntersectionType(elementTypes) : getUnionType(elementTypes);
             }
             return undefined;
         }
