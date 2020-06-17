@@ -143,9 +143,9 @@ function C6() {
 
   this.functions = [x => x, x => x + 1, x => x - 1]
 >this.functions = [x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
->this.functions : ((x: any) => any)[]
+>this.functions : any
 >this : this
->functions : ((x: any) => any)[]
+>functions : any
 >[x => x, x => x + 1, x => x - 1] : ((x: any) => any)[]
 >x => x : (x: any) => any
 >x : any

@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
 
@@ -30,39 +30,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
 
-
-//// [/a/b/file1Consumer1.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = 10;
-
-
-//// [/a/b/file1Consumer2.js]
-"use strict";
-exports.__esModule = true;
-var z = 10;
-
-
-//// [/a/b/globalFile3.js]
-
-
-//// [/a/b/moduleFile2.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
-
-
-
+/a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -116,19 +85,45 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+exports.y = void 0;
+exports.y = 10;
+
+
+//// [/a/b/file1Consumer2.js]
+"use strict";
+exports.__esModule = true;
+var z = 10;
+
+
+//// [/a/b/globalFile3.js]
+
+
+//// [/a/b/moduleFile2.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo4 = void 0;
+exports.Foo4 = 10;
+
+
+
 Change:: change shape of global file
 
+Input::
 //// [/a/b/globalFile3.ts]
 interface GlobalFoo { age: number }var T2: string;
 
-//// [/a/b/moduleFile1.js] file written with same contents
-//// [/a/b/file1Consumer1.js] file written with same contents
-//// [/a/b/file1Consumer2.js] file written with same contents
-//// [/a/b/globalFile3.js]
-var T2;
-
-
-//// [/a/b/moduleFile2.js] file written with same contents
 
 Output::
 >> Screen clear
@@ -182,3 +177,12 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/moduleFile1.js] file written with same contents
+//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer2.js] file written with same contents
+//// [/a/b/globalFile3.js]
+var T2;
+
+
+//// [/a/b/moduleFile2.js] file written with same contents

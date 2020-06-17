@@ -65,7 +65,7 @@ namespace ts {
                         // If there isn't some include for this, add a new one.
                         if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
                             !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
-                            changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), createStringLiteral(relativePath(newFileOrDirPath)));
+                            changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
                         }
                     }
                     break;

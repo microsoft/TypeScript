@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 import { x } from "../b";
 
@@ -21,19 +21,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/lib/b.js]
-"use strict";
-exports.__esModule = true;
-exports.x = void 0;
-exports.x = 10;
 
-
-//// [/user/username/projects/myproject/lib/myproject/a.js]
-"use strict";
-exports.__esModule = true;
-
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -81,14 +70,27 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/lib/b.js]
+"use strict";
+exports.__esModule = true;
+exports.x = void 0;
+exports.x = 10;
+
+
+//// [/user/username/projects/myproject/lib/myproject/a.js]
+"use strict";
+exports.__esModule = true;
+
+
+
 Change:: Make changes to file a
 
+Input::
 //// [/user/username/projects/myproject/a.ts]
 
 
 import { x } from "../b";
 
-//// [/user/username/projects/myproject/lib/myproject/a.js] file written with same contents
 
 Output::
 >> Screen clear
@@ -134,3 +136,5 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/lib/myproject/a.js] file written with same contents

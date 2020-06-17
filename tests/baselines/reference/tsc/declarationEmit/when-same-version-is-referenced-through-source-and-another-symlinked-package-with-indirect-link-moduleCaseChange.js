@@ -1,4 +1,4 @@
-/a/lib/tsc.js -p plugin-one --listFiles
+Input::
 //// [/user/username/projects/myProject/plugin-two/package.json]
 {"name":"plugin-two","version":"0.1.3","main":"dist/commonjs/index.js"}
 
@@ -86,25 +86,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/plugin-one/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.actions = void 0;
-var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
-var action = typescript_fsa_1.actionCreatorFactory("somekey");
-var featureOne = action("feature-one");
-exports.actions = { featureOne: featureOne };
 
-
-//// [/user/username/projects/myproject/plugin-one/index.d.ts]
-export declare const actions: {
-    featureOne: import("typescript-fsa").ActionCreator<{
-        route: string;
-    }>;
-};
-
-
-
+/a/lib/tsc.js -p plugin-one --listFiles
 Output::
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
 
@@ -246,3 +229,22 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.Success
+
+//// [/user/username/projects/myproject/plugin-one/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.actions = void 0;
+var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
+var action = typescript_fsa_1.actionCreatorFactory("somekey");
+var featureOne = action("feature-one");
+exports.actions = { featureOne: featureOne };
+
+
+//// [/user/username/projects/myproject/plugin-one/index.d.ts]
+export declare const actions: {
+    featureOne: import("typescript-fsa").ActionCreator<{
+        route: string;
+    }>;
+};
+
+

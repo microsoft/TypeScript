@@ -139,23 +139,10 @@ gulp runtests --tests=2dArrays
 
 ## Debugging the tests
 
-To debug the tests, invoke the `runtests-browser` task from gulp.
-You will probably only want to debug one test at a time:
+You can debug with VS Code or Node instead with `gulp runtests --inspect`:
 
 ```Shell
-gulp runtests-browser --tests=2dArrays
-```
-
-You can specify which browser to use for debugging. Currently, Chrome and IE are supported:
-
-```Shell
-gulp runtests-browser --tests=2dArrays --browser=chrome
-```
-
-You can debug with VS Code or Node instead with `gulp runtests --inspect=true`:
-
-```Shell
-gulp runtests --tests=2dArrays --inspect=true
+gulp runtests --tests=2dArrays --inspect
 ```
 
 You can also use the [provided VS Code launch configuration](./.vscode/launch.template.json) to launch a debug session for an open test file. Rename the file 'launch.json', open the test file of interest, and launch the debugger from the debug panel (or press F5).

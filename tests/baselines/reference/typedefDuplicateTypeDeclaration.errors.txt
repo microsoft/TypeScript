@@ -1,0 +1,13 @@
+tests/cases/conformance/jsdoc/typedefDuplicateTypeDeclaration.js(4,16): error TS8033: A JSDoc '@typedef' comment may not contain multiple '@type' tags.
+
+
+==== tests/cases/conformance/jsdoc/typedefDuplicateTypeDeclaration.js (1 errors) ====
+    /**
+     * @typedef Name
+     * @type {string}
+     * @type {Oops}
+                   
+     */
+    
+!!! error TS8033: A JSDoc '@typedef' comment may not contain multiple '@type' tags.
+!!! related TS8034 tests/cases/conformance/jsdoc/typedefDuplicateTypeDeclaration.js:1:1: The tag was first specified here.

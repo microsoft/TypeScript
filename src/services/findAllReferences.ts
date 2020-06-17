@@ -102,7 +102,7 @@ namespace ts.FindAllReferences {
             ((isImportOrExportSpecifier(node.parent) || isBindingElement(node.parent))
                 && node.parent.propertyName === node) ||
             // Is default export
-            (node.kind === SyntaxKind.DefaultKeyword && hasModifier(node.parent, ModifierFlags.ExportDefault))) {
+            (node.kind === SyntaxKind.DefaultKeyword && hasSyntacticModifier(node.parent, ModifierFlags.ExportDefault))) {
             return getContextNode(node.parent);
         }
 
@@ -399,23 +399,40 @@ namespace ts.FindAllReferences {
     function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker): PrefixAndSuffix {
         if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
             const { node, kind } = entry;
+            const parent = node.parent;
             const name = originalNode.text;
-            const isShorthandAssignment = isShorthandPropertyAssignment(node.parent);
-            if (isShorthandAssignment || isObjectBindingElementWithoutPropertyName(node.parent) && node.parent.name === node) {
+            const isShorthandAssignment = isShorthandPropertyAssignment(parent);
+            if (isShorthandAssignment || isObjectBindingElementWithoutPropertyName(parent) && parent.name === node) {
                 const prefixColon: PrefixAndSuffix = { prefixText: name + ": " };
                 const suffixColon: PrefixAndSuffix = { suffixText: ": " + name };
-                return kind === EntryKind.SearchedLocalFoundProperty ? prefixColon
-                    : kind === EntryKind.SearchedPropertyFoundLocal ? suffixColon
-                    // In `const o = { x }; o.x`, symbolAtLocation at `x` in `{ x }` is the property symbol.
-                    // For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
-                    : isShorthandAssignment ? suffixColon : prefixColon;
+                if (kind === EntryKind.SearchedLocalFoundProperty) {
+                    return prefixColon;
+                }
+                if (kind === EntryKind.SearchedPropertyFoundLocal) {
+                    return suffixColon;
+                }
+
+                // In `const o = { x }; o.x`, symbolAtLocation at `x` in `{ x }` is the property symbol.
+                // For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
+                if (isShorthandAssignment) {
+                    const grandParent = parent.parent;
+                    if (isObjectLiteralExpression(grandParent) &&
+                        isBinaryExpression(grandParent.parent) &&
+                        isModuleExportsAccessExpression(grandParent.parent.left)) {
+                        return prefixColon;
+                    }
+                    return suffixColon;
+                }
+                else {
+                    return prefixColon;
+                }
             }
-            else if (isImportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
+            else if (isImportSpecifier(parent) && !parent.propertyName) {
                 // If the original symbol was using this alias, just rename the alias.
                 const originalSymbol = isExportSpecifier(originalNode.parent) ? checker.getExportSpecifierLocalTargetSymbol(originalNode.parent) : checker.getSymbolAtLocation(originalNode);
-                return contains(originalSymbol!.declarations, entry.node.parent) ? { prefixText: name + " as " } : emptyOptions;
+                return contains(originalSymbol!.declarations, parent) ? { prefixText: name + " as " } : emptyOptions;
             }
-            else if (isExportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
+            else if (isExportSpecifier(parent) && !parent.propertyName) {
                 // If the symbol for the node is same as declared node symbol use prefix text
                 return originalNode === entry.node || checker.getSymbolAtLocation(originalNode) === checker.getSymbolAtLocation(entry.node) ?
                     { prefixText: name + " as " } :
@@ -1146,7 +1163,7 @@ namespace ts.FindAllReferences {
 
             // If this is private property or method, the scope is the containing class
             if (flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-                const privateDeclaration = find(declarations, d => hasModifier(d, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(d));
+                const privateDeclaration = find(declarations, d => hasEffectiveModifier(d, ModifierFlags.Private) || isPrivateIdentifierPropertyDeclaration(d));
                 if (privateDeclaration) {
                     return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
                 }
@@ -1561,7 +1578,7 @@ namespace ts.FindAllReferences {
             Debug.assert(classLike.name === referenceLocation);
             const addRef = state.referenceAdder(search.symbol);
             for (const member of classLike.members) {
-                if (!(isMethodOrAccessor(member) && hasModifier(member, ModifierFlags.Static))) {
+                if (!(isMethodOrAccessor(member) && hasSyntacticModifier(member, ModifierFlags.Static))) {
                     continue;
                 }
                 if (member.body) {
@@ -1776,7 +1793,7 @@ namespace ts.FindAllReferences {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    staticFlag &= getModifierFlags(searchSpaceNode);
+                    staticFlag &= getSyntacticModifierFlags(searchSpaceNode);
                     searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                     break;
                 default:
@@ -1794,7 +1811,7 @@ namespace ts.FindAllReferences {
                 // If we have a 'super' container, we must have an enclosing class.
                 // Now make sure the owning class is the same as the search-space
                 // and has the same static qualifier as the original 'super's owner.
-                return container && (ModifierFlags.Static & getModifierFlags(container)) === staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
+                return container && (ModifierFlags.Static & getSyntacticModifierFlags(container)) === staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
             });
 
             return [{ definition: { type: DefinitionKind.Symbol, symbol: searchSpaceNode.symbol }, references }];
@@ -1822,7 +1839,7 @@ namespace ts.FindAllReferences {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    staticFlag &= getModifierFlags(searchSpaceNode);
+                    staticFlag &= getSyntacticModifierFlags(searchSpaceNode);
                     searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                     break;
                 case SyntaxKind.SourceFile:
@@ -1857,7 +1874,7 @@ namespace ts.FindAllReferences {
                         case SyntaxKind.ClassDeclaration:
                             // Make sure the container belongs to the same class
                             // and has the appropriate static modifier from the original container.
-                            return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getModifierFlags(container) & ModifierFlags.Static) === staticFlag;
+                            return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getSyntacticModifierFlags(container) & ModifierFlags.Static) === staticFlag;
                         case SyntaxKind.SourceFile:
                             return container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container) && !isParameterName(node);
                     }

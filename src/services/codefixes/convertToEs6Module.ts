@@ -31,7 +31,7 @@ namespace ts.codefix {
                     break;
                 case SyntaxKind.CallExpression:
                     if (isRequireCall(importNode, /*checkArgumentIsStringLiteralLike*/ false)) {
-                        changes.replaceNode(importingFile, importNode, createPropertyAccess(getSynthesizedDeepClone(importNode), "default"));
+                        changes.replaceNode(importingFile, importNode, factory.createPropertyAccessExpression(getSynthesizedDeepClone(importNode), "default"));
                     }
                     break;
             }
@@ -81,7 +81,7 @@ namespace ts.codefix {
                 return;
             }
             const { text } = node.name;
-            changes.replaceNode(sourceFile, node, createIdentifier(exports.get(text) || text));
+            changes.replaceNode(sourceFile, node, factory.createIdentifier(exports.get(text) || text));
         });
     }
 
@@ -154,7 +154,7 @@ namespace ts.codefix {
                 }
             }
             // Move it out to its own variable statement. (This will not be used if `!foundImport`)
-            return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([decl], declarationList.flags));
+            return factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([decl], declarationList.flags));
         });
         if (foundImport) {
             // useNonAdjustedEndPosition to ensure we don't eat the newline after the statement.
@@ -171,7 +171,7 @@ namespace ts.codefix {
                 const tmp  = makeUniqueName(propertyName, identifiers);
                 return [
                     makeSingleImport(tmp, propertyName, moduleSpecifier, quotePreference),
-                    makeConst(/*modifiers*/ undefined, name, createIdentifier(tmp)),
+                    makeConst(/*modifiers*/ undefined, name, factory.createIdentifier(tmp)),
                 ];
             }
             case SyntaxKind.Identifier:
@@ -237,7 +237,7 @@ namespace ts.codefix {
                 case SyntaxKind.PropertyAssignment:
                     return !isIdentifier(prop.name) ? undefined : convertExportsDotXEquals_replaceNode(prop.name.text, prop.initializer);
                 case SyntaxKind.MethodDeclaration:
-                    return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [createToken(SyntaxKind.ExportKeyword)], prop);
+                    return !isIdentifier(prop.name) ? undefined : functionExpressionToDeclaration(prop.name.text, [factory.createToken(SyntaxKind.ExportKeyword)], prop);
                 default:
                     Debug.assertNever(prop, `Convert to ES6 got invalid prop kind ${(prop as ObjectLiteralElementLike).kind}`);
             }
@@ -261,7 +261,7 @@ namespace ts.codefix {
             */
             const newNodes = [
                 makeConst(/*modifiers*/ undefined, rename, assignment.right),
-                makeExportDeclaration([createExportSpecifier(rename, text)]),
+                makeExportDeclaration([factory.createExportSpecifier(rename, text)]),
             ];
             changes.replaceNodeWithNodes(sourceFile, assignment.parent, newNodes);
         }
@@ -284,14 +284,14 @@ namespace ts.codefix {
         return makeExportDeclaration(/*exportClause*/ undefined, moduleSpecifier);
     }
     function reExportDefault(moduleSpecifier: string): ExportDeclaration {
-        return makeExportDeclaration([createExportSpecifier(/*propertyName*/ undefined, "default")], moduleSpecifier);
+        return makeExportDeclaration([factory.createExportSpecifier(/*propertyName*/ undefined, "default")], moduleSpecifier);
     }
 
     function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {
         const name = left.name.text;
         if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!right.name || right.name.text === name)) {
             // `exports.f = function() {}` -> `export function f() {}` -- Replace `exports.f = ` with `export `, and insert the name after `function`.
-            changes.replaceRange(sourceFile, { pos: left.getStart(sourceFile), end: right.getStart(sourceFile) }, createToken(SyntaxKind.ExportKeyword), { suffix: " " });
+            changes.replaceRange(sourceFile, { pos: left.getStart(sourceFile), end: right.getStart(sourceFile) }, factory.createToken(SyntaxKind.ExportKeyword), { suffix: " " });
 
             if (!right.name) changes.insertName(sourceFile, right, name);
 
@@ -301,14 +301,14 @@ namespace ts.codefix {
         else {
             // `exports.f = function g() {}` -> `export const f = function g() {}` -- just replace `exports.` with `export const `
             changes.replaceNodeRangeWithNodes(sourceFile, left.expression, findChildOfKind(left, SyntaxKind.DotToken, sourceFile)!,
-                [createToken(SyntaxKind.ExportKeyword), createToken(SyntaxKind.ConstKeyword)],
+                [factory.createToken(SyntaxKind.ExportKeyword), factory.createToken(SyntaxKind.ConstKeyword)],
                 { joiner: " ", suffix: " " });
         }
     }
 
     // TODO: GH#22492 this will cause an error if a change has been made inside the body of the node.
     function convertExportsDotXEquals_replaceNode(name: string | undefined, exported: Expression): Statement {
-        const modifiers = [createToken(SyntaxKind.ExportKeyword)];
+        const modifiers = [factory.createToken(SyntaxKind.ExportKeyword)];
         switch (exported.kind) {
             case SyntaxKind.FunctionExpression: {
                 const { name: expressionName } = exported as FunctionExpression;
@@ -331,7 +331,7 @@ namespace ts.codefix {
 
         function exportConst() {
             // `exports.x = 0;` --> `export const x = 0;`
-            return makeConst(modifiers, createIdentifier(name!), exported); // TODO: GH#18217
+            return makeConst(modifiers, factory.createIdentifier(name!), exported); // TODO: GH#18217
         }
     }
 
@@ -370,8 +370,8 @@ namespace ts.codefix {
                 */
                 const tmp = makeUniqueName(moduleSpecifierToValidIdentifier(moduleSpecifier.text, target), identifiers);
                 return [
-                    makeImport(createIdentifier(tmp), /*namedImports*/ undefined, moduleSpecifier, quotePreference),
-                    makeConst(/*modifiers*/ undefined, getSynthesizedDeepClone(name), createIdentifier(tmp)),
+                    makeImport(factory.createIdentifier(tmp), /*namedImports*/ undefined, moduleSpecifier, quotePreference),
+                    makeConst(/*modifiers*/ undefined, getSynthesizedDeepClone(name), factory.createIdentifier(tmp)),
                 ];
             }
             case SyntaxKind.Identifier:
@@ -407,7 +407,7 @@ namespace ts.codefix {
                     idName = makeUniqueName(propertyName, identifiers);
                     namedBindingsNames.set(propertyName, idName);
                 }
-                changes.replaceNode(file, parent, createIdentifier(idName));
+                changes.replaceNode(file, parent, factory.createIdentifier(idName));
             }
             else {
                 needDefaultImport = true;
@@ -415,7 +415,7 @@ namespace ts.codefix {
         }
 
         const namedBindings = namedBindingsNames.size === 0 ? undefined : arrayFrom(mapIterator(namedBindingsNames.entries(), ([propertyName, idName]) =>
-            createImportSpecifier(propertyName === idName ? undefined : createIdentifier(propertyName), createIdentifier(idName))));
+            factory.createImportSpecifier(propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName))));
         if (!namedBindings) {
             // If it was unused, ensure that we at least import *something*.
             needDefaultImport = true;
@@ -477,7 +477,7 @@ namespace ts.codefix {
     // Node helpers
 
     function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], fn: FunctionExpression | ArrowFunction | MethodDeclaration): FunctionDeclaration {
-        return createFunctionDeclaration(
+        return factory.createFunctionDeclaration(
             getSynthesizedDeepClones(fn.decorators), // TODO: GH#19915 Don't think this is even legal.
             concatenate(additionalModifiers, getSynthesizedDeepClones(fn.modifiers)),
             getSynthesizedDeepClone(fn.asteriskToken),
@@ -485,11 +485,11 @@ namespace ts.codefix {
             getSynthesizedDeepClones(fn.typeParameters),
             getSynthesizedDeepClones(fn.parameters),
             getSynthesizedDeepClone(fn.type),
-            convertToFunctionBody(getSynthesizedDeepClone(fn.body!)));
+            factory.converters.convertToFunctionBlock(getSynthesizedDeepClone(fn.body!)));
     }
 
     function classExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], cls: ClassExpression): ClassDeclaration {
-        return createClassDeclaration(
+        return factory.createClassDeclaration(
             getSynthesizedDeepClones(cls.decorators), // TODO: GH#19915 Don't think this is even legal.
             concatenate(additionalModifiers, getSynthesizedDeepClones(cls.modifiers)),
             name,
@@ -500,27 +500,28 @@ namespace ts.codefix {
 
     function makeSingleImport(localName: string, propertyName: string, moduleSpecifier: StringLiteralLike, quotePreference: QuotePreference): ImportDeclaration {
         return propertyName === "default"
-            ? makeImport(createIdentifier(localName), /*namedImports*/ undefined, moduleSpecifier, quotePreference)
+            ? makeImport(factory.createIdentifier(localName), /*namedImports*/ undefined, moduleSpecifier, quotePreference)
             : makeImport(/*name*/ undefined, [makeImportSpecifier(propertyName, localName)], moduleSpecifier, quotePreference);
     }
 
     function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {
-        return createImportSpecifier(propertyName !== undefined && propertyName !== name ? createIdentifier(propertyName) : undefined, createIdentifier(name));
+        return factory.createImportSpecifier(propertyName !== undefined && propertyName !== name ? factory.createIdentifier(propertyName) : undefined, factory.createIdentifier(name));
     }
 
     function makeConst(modifiers: readonly Modifier[] | undefined, name: string | BindingName, init: Expression): VariableStatement {
-        return createVariableStatement(
+        return factory.createVariableStatement(
             modifiers,
-            createVariableDeclarationList(
-                [createVariableDeclaration(name, /*type*/ undefined, init)],
+            factory.createVariableDeclarationList(
+                [factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, /*type*/ undefined, init)],
                 NodeFlags.Const));
     }
 
     function makeExportDeclaration(exportSpecifiers: ExportSpecifier[] | undefined, moduleSpecifier?: string): ExportDeclaration {
-        return createExportDeclaration(
+        return factory.createExportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
-            exportSpecifiers && createNamedExports(exportSpecifiers),
-            moduleSpecifier === undefined ? undefined : createLiteral(moduleSpecifier));
+            /*isTypeOnly*/ false,
+            exportSpecifiers && factory.createNamedExports(exportSpecifiers),
+            moduleSpecifier === undefined ? undefined : factory.createStringLiteral(moduleSpecifier));
     }
 }

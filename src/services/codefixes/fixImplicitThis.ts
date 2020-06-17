@@ -46,7 +46,7 @@ namespace ts.codefix {
             else {
                 // `function f() {}` => `const f = () => {}`
                 // `name` should be defined because we only do this in inner contexts, and name is only undefined for `export default function() {}`.
-                changes.replaceNode(sourceFile, fnKeyword, createToken(SyntaxKind.ConstKeyword));
+                changes.replaceNode(sourceFile, fnKeyword, factory.createToken(SyntaxKind.ConstKeyword));
                 changes.insertText(sourceFile, name!.end, " = ");
                 changes.insertText(sourceFile, body.pos, " =>");
                 return [Diagnostics.Convert_function_declaration_0_to_arrow_function, name!.text];
@@ -54,7 +54,7 @@ namespace ts.codefix {
         }
         // No outer 'this', add a @class tag if in a JS constructor function
         else if (isSourceFileJS(sourceFile) && isPropertyAccessExpression(token.parent) && isAssignmentExpression(token.parent.parent)) {
-            addJSDocTags(changes, sourceFile, fn, [createJSDocClassTag()]);
+            addJSDocTags(changes, sourceFile, fn, [factory.createJSDocClassTag(/*tagName*/ undefined)]);
             return Diagnostics.Add_class_tag;
         }
     }

@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -22,24 +22,8 @@ export function Foo() { };
 //// [/a/b/tsconfig.json]
 {}
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
 
-
-//// [/a/b/referenceFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.x = void 0;
-/// <reference path="./moduleFile1.ts" />
-exports.x = Foo();
-
-
-
+/a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
@@ -87,9 +71,27 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/referenceFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.x = void 0;
+/// <reference path="./moduleFile1.ts" />
+exports.x = Foo();
+
+
+
 Change:: delete moduleFile1
 
-//// [/a/b/referenceFile1.js] file written with same contents
+Input::
 //// [/a/b/moduleFile1.ts] deleted
 
 Output::
@@ -141,3 +143,5 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/referenceFile1.js] file written with same contents

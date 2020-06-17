@@ -4,21 +4,21 @@ node_modules/graceful-fs/clone.js(12,9): error TS2403: Subsequent variable decla
 node_modules/graceful-fs/clone.js(15,38): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
     Type 'undefined' is not assignable to type 'PropertyDescriptor'.
-node_modules/graceful-fs/graceful-fs.js(26,3): error TS2322: Type '(msg: string, ...param: any[]) => void' is not assignable to type '() => void'.
-node_modules/graceful-fs/graceful-fs.js(29,37): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any, ...any[]]'.
-node_modules/graceful-fs/graceful-fs.js(48,3): error TS2741: Property '__promisify__' is missing in type '(fd: any, cb: any) => void' but required in type 'typeof close'.
-node_modules/graceful-fs/graceful-fs.js(70,30): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[number]'.
-node_modules/graceful-fs/graceful-fs.js(82,13): error TS2554: Expected 0 arguments, but got 1.
-node_modules/graceful-fs/graceful-fs.js(89,54): error TS2339: Property '__patched' does not exist on type 'typeof import("fs")'.
-node_modules/graceful-fs/graceful-fs.js(91,8): error TS2339: Property '__patched' does not exist on type 'typeof import("fs")'.
-node_modules/graceful-fs/graceful-fs.js(199,5): error TS2539: Cannot assign to 'ReadStream' because it is not a variable.
-node_modules/graceful-fs/graceful-fs.js(200,5): error TS2539: Cannot assign to 'WriteStream' because it is not a variable.
-node_modules/graceful-fs/graceful-fs.js(220,7): error TS2539: Cannot assign to 'ReadStream' because it is not a variable.
-node_modules/graceful-fs/graceful-fs.js(230,7): error TS2539: Cannot assign to 'WriteStream' because it is not a variable.
-node_modules/graceful-fs/graceful-fs.js(264,68): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, ...any[]]'.
-node_modules/graceful-fs/graceful-fs.js(287,70): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, ...any[]]'.
-node_modules/graceful-fs/graceful-fs.js(336,9): error TS2554: Expected 0 arguments, but got 3.
-node_modules/graceful-fs/graceful-fs.js(343,11): error TS2554: Expected 0 arguments, but got 3.
+node_modules/graceful-fs/graceful-fs.js(34,3): error TS2322: Type '(msg: string, ...param: any[]) => void' is not assignable to type '() => void'.
+node_modules/graceful-fs/graceful-fs.js(37,37): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[format: any, ...param: any[]]'.
+node_modules/graceful-fs/graceful-fs.js(52,3): error TS2741: Property '__promisify__' is missing in type '(fd: any, cb: any) => void' but required in type 'typeof close'.
+node_modules/graceful-fs/graceful-fs.js(74,30): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[fd: number]'.
+node_modules/graceful-fs/graceful-fs.js(86,13): error TS2554: Expected 0 arguments, but got 1.
+node_modules/graceful-fs/graceful-fs.js(97,54): error TS2339: Property '__patched' does not exist on type 'typeof import("fs")'.
+node_modules/graceful-fs/graceful-fs.js(99,8): error TS2339: Property '__patched' does not exist on type 'typeof import("fs")'.
+node_modules/graceful-fs/graceful-fs.js(207,5): error TS2539: Cannot assign to 'ReadStream' because it is not a variable.
+node_modules/graceful-fs/graceful-fs.js(208,5): error TS2539: Cannot assign to 'WriteStream' because it is not a variable.
+node_modules/graceful-fs/graceful-fs.js(228,7): error TS2539: Cannot assign to 'ReadStream' because it is not a variable.
+node_modules/graceful-fs/graceful-fs.js(238,7): error TS2539: Cannot assign to 'WriteStream' because it is not a variable.
+node_modules/graceful-fs/graceful-fs.js(272,68): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, ...any[]]'.
+node_modules/graceful-fs/graceful-fs.js(295,70): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, ...any[]]'.
+node_modules/graceful-fs/graceful-fs.js(344,9): error TS2554: Expected 0 arguments, but got 3.
+node_modules/graceful-fs/graceful-fs.js(351,11): error TS2554: Expected 0 arguments, but got 3.
 
 
 

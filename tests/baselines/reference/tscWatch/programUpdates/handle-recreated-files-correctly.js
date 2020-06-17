@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,15 +21,8 @@ let y = 1
 //// [/a/b/tsconfig.json]
 {}
 
-//// [/a/b/commonFile1.js]
-var x = 1;
 
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-
-
+/a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
@@ -71,9 +64,18 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+
+
 Change:: delete file2
 
-//// [/a/b/commonFile1.js] file written with same contents
+Input::
 //// [/a/b/commonFile2.ts] deleted
 
 Output::
@@ -112,10 +114,11 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/commonFile1.js] file written with same contents
+
 Change:: recreate file2
 
-//// [/a/b/commonFile1.js] file written with same contents
-//// [/a/b/commonFile2.js] file written with same contents
+Input::
 //// [/a/b/commonFile2.ts]
 let y = 1
 
@@ -160,3 +163,6 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/commonFile1.js] file written with same contents
+//// [/a/b/commonFile2.js] file written with same contents
