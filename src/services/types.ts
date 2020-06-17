@@ -255,7 +255,7 @@ namespace ts {
 
         /*
          * Required for full import and type reference completions.
-         * These should be unprefixed names. E.g. `getDirectories("/foo/bar")` should return `["a", "b"]`, not `["/foo/bar/a", "/foo/bar/b"]`.
+         * These should be un-prefixed names. E.g. `getDirectories("/foo/bar")` should return `["a", "b"]`, not `["/foo/bar/a", "/foo/bar/b"]`.
          */
         getDirectories?(directoryName: string): string[];
 
@@ -409,6 +409,7 @@ namespace ts {
 
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
+        /** Test */
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
