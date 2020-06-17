@@ -3,10 +3,10 @@ namespace ts {
         function assertSyntaxKind(node: Node, expected: SyntaxKind) {
             assert.strictEqual(node.kind, expected, `Actual: ${Debug.formatSyntaxKind(node.kind)} Expected: ${Debug.formatSyntaxKind(expected)}`);
         }
-        describe("createExportAssignment", () => {
+        describe("factory.createExportAssignment", () => {
             it("parenthesizes default export if necessary", () => {
                 function checkExpression(expression: Expression) {
-                    const node = createExportAssignment(
+                    const node = factory.createExportAssignment(
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         /*isExportEquals*/ false,
@@ -15,26 +15,26 @@ namespace ts {
                     assertSyntaxKind(node.expression, SyntaxKind.ParenthesizedExpression);
                 }
 
-                const clazz = createClassExpression(/*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    createProperty(/*decorators*/ undefined, [createToken(SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, createLiteral("1")),
+                const clazz = factory.createClassExpression(/*decorators*/ undefined, /*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                    factory.createPropertyDeclaration(/*decorators*/ undefined, [factory.createToken(SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral("1")),
                 ]);
                 checkExpression(clazz);
-                checkExpression(createPropertyAccess(clazz, "prop"));
+                checkExpression(factory.createPropertyAccessExpression(clazz, "prop"));
 
-                const func = createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, "fn", /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, createBlock([]));
+                const func = factory.createFunctionExpression(/*modifiers*/ undefined, /*asteriskToken*/ undefined, "fn", /*typeParameters*/ undefined, /*parameters*/ undefined, /*type*/ undefined, factory.createBlock([]));
                 checkExpression(func);
-                checkExpression(createCall(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
-                checkExpression(createTaggedTemplate(func, createNoSubstitutionTemplateLiteral("")));
+                checkExpression(factory.createCallExpression(func, /*typeArguments*/ undefined, /*argumentsArray*/ undefined));
+                checkExpression(factory.createTaggedTemplateExpression(func, /*typeArguments*/ undefined, factory.createNoSubstitutionTemplateLiteral("")));
 
-                checkExpression(createBinary(createLiteral("a"), SyntaxKind.CommaToken, createLiteral("b")));
-                checkExpression(createCommaList([createLiteral("a"), createLiteral("b")]));
+                checkExpression(factory.createBinaryExpression(factory.createStringLiteral("a"), SyntaxKind.CommaToken, factory.createStringLiteral("b")));
+                checkExpression(factory.createCommaListExpression([factory.createStringLiteral("a"), factory.createStringLiteral("b")]));
             });
         });
 
-        describe("createArrowFunction", () => {
+        describe("factory.createArrowFunction", () => {
             it("parenthesizes concise body if necessary", () => {
                 function checkBody(body: ConciseBody) {
-                    const node = createArrowFunction(
+                    const node = factory.createArrowFunction(
                         /*modifiers*/ undefined,
                         /*typeParameters*/ undefined,
                         [],
@@ -45,28 +45,28 @@ namespace ts {
                     assertSyntaxKind(node.body, SyntaxKind.ParenthesizedExpression);
                 }
 
-                checkBody(createObjectLiteral());
-                checkBody(createPropertyAccess(createObjectLiteral(), "prop"));
-                checkBody(createAsExpression(createPropertyAccess(createObjectLiteral(), "prop"), createTypeReferenceNode("T", /*typeArguments*/ undefined)));
-                checkBody(createNonNullExpression(createPropertyAccess(createObjectLiteral(), "prop")));
-                checkBody(createCommaList([createLiteral("a"), createLiteral("b")]));
-                checkBody(createBinary(createLiteral("a"), SyntaxKind.CommaToken, createLiteral("b")));
+                checkBody(factory.createObjectLiteralExpression());
+                checkBody(factory.createPropertyAccessExpression(factory.createObjectLiteralExpression(), "prop"));
+                checkBody(factory.createAsExpression(factory.createPropertyAccessExpression(factory.createObjectLiteralExpression(), "prop"), factory.createTypeReferenceNode("T", /*typeArguments*/ undefined)));
+                checkBody(factory.createNonNullExpression(factory.createPropertyAccessExpression(factory.createObjectLiteralExpression(), "prop")));
+                checkBody(factory.createCommaListExpression([factory.createStringLiteral("a"), factory.createStringLiteral("b")]));
+                checkBody(factory.createBinaryExpression(factory.createStringLiteral("a"), SyntaxKind.CommaToken, factory.createStringLiteral("b")));
             });
         });
 
         describe("createBinaryExpression", () => {
             it("parenthesizes arrow function in RHS if necessary", () => {
-                const lhs = createIdentifier("foo");
-                const rhs = createArrowFunction(
+                const lhs = factory.createIdentifier("foo");
+                const rhs = factory.createArrowFunction(
                     /*modifiers*/ undefined,
                     /*typeParameters*/ undefined,
                     [],
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ undefined,
-                    createBlock([]),
+                    factory.createBlock([]),
                 );
                 function checkRhs(operator: BinaryOperator, expectParens: boolean) {
-                    const node = createBinary(lhs, operator, rhs);
+                    const node = factory.createBinaryExpression(lhs, operator, rhs);
                     assertSyntaxKind(node.right, expectParens ? SyntaxKind.ParenthesizedExpression : SyntaxKind.ArrowFunction);
                 }
 

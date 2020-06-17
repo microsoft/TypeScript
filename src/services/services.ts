@@ -1171,6 +1171,26 @@ namespace ts {
         }
     }
 
+    const invalidOperationsOnSyntaxOnly: readonly (keyof LanguageService)[] = [
+        "getSyntacticDiagnostics",
+        "getSemanticDiagnostics",
+        "getSuggestionDiagnostics",
+        "getCompilerOptionsDiagnostics",
+        "getSemanticClassifications",
+        "getEncodedSemanticClassifications",
+        "getCodeFixesAtPosition",
+        "getCombinedCodeFix",
+        "applyCodeActionCommand",
+        "organizeImports",
+        "getEditsForFileRename",
+        "getEmitOutput",
+        "getApplicableRefactors",
+        "getEditsForRefactor",
+        "prepareCallHierarchy",
+        "provideCallHierarchyIncomingCalls",
+        "provideCallHierarchyOutgoingCalls",
+    ];
+
     export function createLanguageService(
         host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
@@ -1224,8 +1244,6 @@ namespace ts {
         }
 
         function synchronizeHostData(): void {
-            Debug.assert(!syntaxOnly);
-
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1419,11 +1437,6 @@ namespace ts {
 
         // TODO: GH#18217 frequently asserted as defined
         function getProgram(): Program | undefined {
-            if (syntaxOnly) {
-                Debug.assert(program === undefined);
-                return undefined;
-            }
-
             synchronizeHostData();
 
             return program;
@@ -2199,7 +2212,7 @@ namespace ts {
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
         }
 
-        return {
+        const ls: LanguageService = {
             dispose,
             cleanupSemanticCache,
             getSyntacticDiagnostics,
@@ -2259,6 +2272,16 @@ namespace ts {
             provideCallHierarchyIncomingCalls,
             provideCallHierarchyOutgoingCalls
         };
+
+        if (syntaxOnly) {
+            invalidOperationsOnSyntaxOnly.forEach(key =>
+                ls[key] = () => {
+                    throw new Error(`LanguageService Operation: ${key} not allowed on syntaxServer`);
+                }
+            );
+        }
+
+        return ls;
     }
 
     /* @internal */

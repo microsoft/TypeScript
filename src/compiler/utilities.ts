@@ -290,13 +290,13 @@ namespace ts {
 
             // If so, mark ourselves accordingly.
             if (thisNodeOrAnySubNodesHasError) {
-                node.flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
+                (node as Mutable<Node>).flags |= NodeFlags.ThisNodeOrAnySubNodesHasError;
             }
 
             // Also mark that we've propagated the child information to this node.  This way we can
             // always consult the bit directly on this node without needing to check its children
             // again.
-            node.flags |= NodeFlags.HasAggregatedChildData;
+            (node as Mutable<Node>).flags |= NodeFlags.HasAggregatedChildData;
         }
     }
 
@@ -1637,8 +1637,9 @@ namespace ts {
                     ? <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
                     : undefined;
 
-            case SyntaxKind.Identifier:
-            case SyntaxKind.QualifiedName:
+            // TODO(rbuckton): These aren't valid TypeNodes, but we treat them as such because of `isPartOfTypeNode`, which returns `true` for things that aren't `TypeNode`s.
+            case SyntaxKind.Identifier as TypeNodeSyntaxKind:
+            case SyntaxKind.QualifiedName as TypeNodeSyntaxKind:
                 return (<EntityName><Node>node);
         }
 
@@ -2594,8 +2595,8 @@ namespace ts {
             switch (parent.kind) {
                 case SyntaxKind.BinaryExpression:
                     const binaryOperator = (<BinaryExpression>parent).operatorToken.kind;
-                    return isAssignmentOperator(binaryOperator) && !isLogicalOrCoalescingAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
-                        binaryOperator === SyntaxKind.EqualsToken ? AssignmentKind.Definite : AssignmentKind.Compound :
+                    return isAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
+                        binaryOperator === SyntaxKind.EqualsToken || isLogicalOrCoalescingAssignmentOperator(binaryOperator) ? AssignmentKind.Definite : AssignmentKind.Compound :
                         AssignmentKind.None;
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
@@ -3104,7 +3105,6 @@ namespace ts {
         }
     }
 
-    export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
     export function isPropertyNameLiteral(node: Node): node is PropertyNameLiteral {
         switch (node.kind) {
             case SyntaxKind.Identifier:
@@ -3253,24 +3253,217 @@ namespace ts {
         }
     }
 
+    export const enum OperatorPrecedence {
+        // Expression:
+        //     AssignmentExpression
+        //     Expression `,` AssignmentExpression
+        Comma,
+
+        // NOTE: `Spread` is higher than `Comma` due to how it is parsed in |ElementList|
+        // SpreadElement:
+        //     `...` AssignmentExpression
+        Spread,
+
+        // AssignmentExpression:
+        //     ConditionalExpression
+        //     YieldExpression
+        //     ArrowFunction
+        //     AsyncArrowFunction
+        //     LeftHandSideExpression `=` AssignmentExpression
+        //     LeftHandSideExpression AssignmentOperator AssignmentExpression
+        //
+        // NOTE: AssignmentExpression is broken down into several precedences due to the requirements
+        //       of the parenthesizer rules.
+
+        // AssignmentExpression: YieldExpression
+        // YieldExpression:
+        //     `yield`
+        //     `yield` AssignmentExpression
+        //     `yield` `*` AssignmentExpression
+        Yield,
+
+        // AssignmentExpression: LeftHandSideExpression `=` AssignmentExpression
+        // AssignmentExpression: LeftHandSideExpression AssignmentOperator AssignmentExpression
+        // AssignmentOperator: one of
+        //     `*=` `/=` `%=` `+=` `-=` `<<=` `>>=` `>>>=` `&=` `^=` `|=` `**=`
+        Assignment,
+
+        // NOTE: `Conditional` is considered higher than `Assignment` here, but in reality they have
+        //       the same precedence.
+        // AssignmentExpression: ConditionalExpression
+        // ConditionalExpression:
+        //     ShortCircuitExpression
+        //     ShortCircuitExpression `?` AssignmentExpression `:` AssignmentExpression
+        // ShortCircuitExpression:
+        //     LogicalORExpression
+        //     CoalesceExpression
+        Conditional,
+
+        // CoalesceExpression:
+        //     CoalesceExpressionHead `??` BitwiseORExpression
+        // CoalesceExpressionHead:
+        //     CoalesceExpression
+        //     BitwiseORExpression
+        Coalesce = Conditional, // NOTE: This is wrong
+
+        // LogicalORExpression:
+        //     LogicalANDExpression
+        //     LogicalORExpression `||` LogicalANDExpression
+        LogicalOR,
+
+        // LogicalANDExpression:
+        //     BitwiseORExpression
+        //     LogicalANDExprerssion `&&` BitwiseORExpression
+        LogicalAND,
+
+        // BitwiseORExpression:
+        //     BitwiseXORExpression
+        //     BitwiseORExpression `^` BitwiseXORExpression
+        BitwiseOR,
+
+        // BitwiseXORExpression:
+        //     BitwiseANDExpression
+        //     BitwiseXORExpression `^` BitwiseANDExpression
+        BitwiseXOR,
+
+        // BitwiseANDExpression:
+        //     EqualityExpression
+        //     BitwiseANDExpression `^` EqualityExpression
+        BitwiseAND,
+
+        // EqualityExpression:
+        //     RelationalExpression
+        //     EqualityExpression `==` RelationalExpression
+        //     EqualityExpression `!=` RelationalExpression
+        //     EqualityExpression `===` RelationalExpression
+        //     EqualityExpression `!==` RelationalExpression
+        Equality,
+
+        // RelationalExpression:
+        //     ShiftExpression
+        //     RelationalExpression `<` ShiftExpression
+        //     RelationalExpression `>` ShiftExpression
+        //     RelationalExpression `<=` ShiftExpression
+        //     RelationalExpression `>=` ShiftExpression
+        //     RelationalExpression `instanceof` ShiftExpression
+        //     RelationalExpression `in` ShiftExpression
+        //     [+TypeScript] RelationalExpression `as` Type
+        Relational,
+
+        // ShiftExpression:
+        //     AdditiveExpression
+        //     ShiftExpression `<<` AdditiveExpression
+        //     ShiftExpression `>>` AdditiveExpression
+        //     ShiftExpression `>>>` AdditiveExpression
+        Shift,
+
+        // AdditiveExpression:
+        //     MultiplicativeExpression
+        //     AdditiveExpression `+` MultiplicativeExpression
+        //     AdditiveExpression `-` MultiplicativeExpression
+        Additive,
+
+        // MultiplicativeExpression:
+        //     ExponentiationExpression
+        //     MultiplicativeExpression MultiplicativeOperator ExponentiationExpression
+        // MultiplicativeOperator: one of `*`, `/`, `%`
+        Multiplicative,
+
+        // ExponentiationExpression:
+        //     UnaryExpression
+        //     UpdateExpression `**` ExponentiationExpression
+        Exponentiation,
+
+        // UnaryExpression:
+        //     UpdateExpression
+        //     `delete` UnaryExpression
+        //     `void` UnaryExpression
+        //     `typeof` UnaryExpression
+        //     `+` UnaryExpression
+        //     `-` UnaryExpression
+        //     `~` UnaryExpression
+        //     `!` UnaryExpression
+        //     AwaitExpression
+        // UpdateExpression:            // TODO: Do we need to investigate the precedence here?
+        //     `++` UnaryExpression
+        //     `--` UnaryExpression
+        Unary,
+
+
+        // UpdateExpression:
+        //     LeftHandSideExpression
+        //     LeftHandSideExpression `++`
+        //     LeftHandSideExpression `--`
+        Update,
+
+        // LeftHandSideExpression:
+        //     NewExpression
+        //     CallExpression
+        // NewExpression:
+        //     MemberExpression
+        //     `new` NewExpression
+        LeftHandSide,
+
+        // CallExpression:
+        //     CoverCallExpressionAndAsyncArrowHead
+        //     SuperCall
+        //     ImportCall
+        //     CallExpression Arguments
+        //     CallExpression `[` Expression `]`
+        //     CallExpression `.` IdentifierName
+        //     CallExpression TemplateLiteral
+        // MemberExpression:
+        //     PrimaryExpression
+        //     MemberExpression `[` Expression `]`
+        //     MemberExpression `.` IdentifierName
+        //     MemberExpression TemplateLiteral
+        //     SuperProperty
+        //     MetaProperty
+        //     `new` MemberExpression Arguments
+        Member,
+
+        // TODO: JSXElement?
+        // PrimaryExpression:
+        //     `this`
+        //     IdentifierReference
+        //     Literal
+        //     ArrayLiteral
+        //     ObjectLiteral
+        //     FunctionExpression
+        //     ClassExpression
+        //     GeneratorExpression
+        //     AsyncFunctionExpression
+        //     AsyncGeneratorExpression
+        //     RegularExpressionLiteral
+        //     TemplateLiteral
+        //     CoverParenthesizedExpressionAndArrowParameterList
+        Primary,
+
+        Highest = Primary,
+        Lowest = Comma,
+        // -1 is lower than all other precedences. Returning it will cause binary expression
+        // parsing to stop.
+        Invalid = -1,
+    }
+
     export function getOperatorPrecedence(nodeKind: SyntaxKind, operatorKind: SyntaxKind, hasArguments?: boolean) {
         switch (nodeKind) {
             case SyntaxKind.CommaListExpression:
-                return 0;
+                return OperatorPrecedence.Comma;
 
             case SyntaxKind.SpreadElement:
-                return 1;
+                return OperatorPrecedence.Spread;
 
             case SyntaxKind.YieldExpression:
-                return 2;
+                return OperatorPrecedence.Yield;
 
             case SyntaxKind.ConditionalExpression:
-                return 4;
+                return OperatorPrecedence.Conditional;
 
             case SyntaxKind.BinaryExpression:
                 switch (operatorKind) {
                     case SyntaxKind.CommaToken:
-                        return 0;
+                        return OperatorPrecedence.Comma;
 
                     case SyntaxKind.EqualsToken:
                     case SyntaxKind.PlusEqualsToken:
@@ -3288,32 +3481,34 @@ namespace ts {
                     case SyntaxKind.BarBarEqualsToken:
                     case SyntaxKind.AmpersandAmpersandEqualsToken:
                     case SyntaxKind.QuestionQuestionEqualsToken:
-                        return 3;
+                        return OperatorPrecedence.Assignment;
 
                     default:
                         return getBinaryOperatorPrecedence(operatorKind);
                 }
 
+            // TODO: Should prefix `++` and `--` be moved to the `Update` precedence?
+            // TODO: We are missing `TypeAssertionExpression`
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.VoidExpression:
             case SyntaxKind.DeleteExpression:
             case SyntaxKind.AwaitExpression:
-                return 16;
+                return OperatorPrecedence.Unary;
 
             case SyntaxKind.PostfixUnaryExpression:
-                return 17;
+                return OperatorPrecedence.Update;
 
             case SyntaxKind.CallExpression:
-                return 18;
+                return OperatorPrecedence.LeftHandSide;
 
             case SyntaxKind.NewExpression:
-                return hasArguments ? 19 : 18;
+                return hasArguments ? OperatorPrecedence.Member : OperatorPrecedence.LeftHandSide;
 
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
-                return 19;
+                return OperatorPrecedence.Member;
 
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
@@ -3329,40 +3524,40 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.ClassExpression:
-            case SyntaxKind.JsxElement:
-            case SyntaxKind.JsxSelfClosingElement:
-            case SyntaxKind.JsxFragment:
             case SyntaxKind.RegularExpressionLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
-                return 20;
+            case SyntaxKind.JsxElement:
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxFragment:
+                return OperatorPrecedence.Primary;
 
             default:
-                return -1;
+                return OperatorPrecedence.Invalid;
         }
     }
 
-    export function getBinaryOperatorPrecedence(kind: SyntaxKind): number {
+    export function getBinaryOperatorPrecedence(kind: SyntaxKind): OperatorPrecedence {
         switch (kind) {
             case SyntaxKind.QuestionQuestionToken:
-                return 4;
+                return OperatorPrecedence.Coalesce;
             case SyntaxKind.BarBarToken:
-                return 5;
+                return OperatorPrecedence.LogicalOR;
             case SyntaxKind.AmpersandAmpersandToken:
-                return 6;
+                return OperatorPrecedence.LogicalAND;
             case SyntaxKind.BarToken:
-                return 7;
+                return OperatorPrecedence.BitwiseOR;
             case SyntaxKind.CaretToken:
-                return 8;
+                return OperatorPrecedence.BitwiseXOR;
             case SyntaxKind.AmpersandToken:
-                return 9;
+                return OperatorPrecedence.BitwiseAND;
             case SyntaxKind.EqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsToken:
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
-                return 10;
+                return OperatorPrecedence.Equality;
             case SyntaxKind.LessThanToken:
             case SyntaxKind.GreaterThanToken:
             case SyntaxKind.LessThanEqualsToken:
@@ -3370,20 +3565,20 @@ namespace ts {
             case SyntaxKind.InstanceOfKeyword:
             case SyntaxKind.InKeyword:
             case SyntaxKind.AsKeyword:
-                return 11;
+                return OperatorPrecedence.Relational;
             case SyntaxKind.LessThanLessThanToken:
             case SyntaxKind.GreaterThanGreaterThanToken:
             case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                return 12;
+                return OperatorPrecedence.Shift;
             case SyntaxKind.PlusToken:
             case SyntaxKind.MinusToken:
-                return 13;
+                return OperatorPrecedence.Additive;
             case SyntaxKind.AsteriskToken:
             case SyntaxKind.SlashToken:
             case SyntaxKind.PercentToken:
-                return 14;
+                return OperatorPrecedence.Multiplicative;
             case SyntaxKind.AsteriskAsteriskToken:
-                return 15;
+                return OperatorPrecedence.Exponentiation;
         }
 
         // -1 is lower than all other precedences.  Returning it will cause binary expression
@@ -4927,7 +5122,7 @@ namespace ts {
         return filter(node.declarations, isInitializedVariable);
     }
 
-    function isInitializedVariable(node: VariableDeclaration) {
+    function isInitializedVariable(node: VariableDeclaration): node is InitializedVariableDeclaration {
         return node.initializer !== undefined;
     }
 
@@ -5195,7 +5390,7 @@ namespace ts {
         return isClassLike(node) || isInterfaceDeclaration(node) || isTypeLiteralNode(node);
     }
 
-    export function isTypeNodeKind(kind: SyntaxKind) {
+    export function isTypeNodeKind(kind: SyntaxKind): kind is TypeNodeSyntaxKind {
         return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
             || kind === SyntaxKind.AnyKeyword
             || kind === SyntaxKind.UnknownKeyword
@@ -5205,10 +5400,8 @@ namespace ts {
             || kind === SyntaxKind.BooleanKeyword
             || kind === SyntaxKind.StringKeyword
             || kind === SyntaxKind.SymbolKeyword
-            || kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.VoidKeyword
             || kind === SyntaxKind.UndefinedKeyword
-            || kind === SyntaxKind.NullKeyword
             || kind === SyntaxKind.NeverKeyword
             || kind === SyntaxKind.ExpressionWithTypeArguments
             || kind === SyntaxKind.JSDocAllType
@@ -5244,6 +5437,43 @@ namespace ts {
 
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
+    }
+
+    export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
+        while (true) {
+            switch (node.kind) {
+                case SyntaxKind.PostfixUnaryExpression:
+                    node = (<PostfixUnaryExpression>node).operand;
+                    continue;
+
+                case SyntaxKind.BinaryExpression:
+                    node = (<BinaryExpression>node).left;
+                    continue;
+
+                case SyntaxKind.ConditionalExpression:
+                    node = (<ConditionalExpression>node).condition;
+                    continue;
+
+                case SyntaxKind.TaggedTemplateExpression:
+                    node = (<TaggedTemplateExpression>node).tag;
+                    continue;
+
+                case SyntaxKind.CallExpression:
+                    if (stopAtCallExpressions) {
+                        return node;
+                    }
+                    // falls through
+                case SyntaxKind.AsExpression:
+                case SyntaxKind.ElementAccessExpression:
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.NonNullExpression:
+                case SyntaxKind.PartiallyEmittedExpression:
+                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression>node).expression;
+                    continue;
+            }
+
+            return node;
+        }
     }
 
     export interface ObjectAllocator {
@@ -5282,7 +5512,7 @@ namespace ts {
         }
     }
 
-    function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
+    function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
         this.end = end;
         this.kind = kind;
@@ -5294,7 +5524,7 @@ namespace ts {
         this.original = undefined;
     }
 
-    function Token(this: Node, kind: SyntaxKind, pos: number, end: number) {
+    function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
         this.end = end;
         this.kind = kind;
@@ -5304,7 +5534,7 @@ namespace ts {
         this.parent = undefined!;
     }
 
-    function Identifier(this: Node, kind: SyntaxKind, pos: number, end: number) {
+    function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
         this.pos = pos;
         this.end = end;
         this.kind = kind;
@@ -5352,6 +5582,76 @@ namespace ts {
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
+    }
+
+    export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithDetachedLocation;
+    export function createDetachedDiagnostic(fileName: string, start: number, length: number, message: DiagnosticMessage): DiagnosticWithDetachedLocation {
+        Debug.assertGreaterThanOrEqual(start, 0);
+        Debug.assertGreaterThanOrEqual(length, 0);
+
+        let text = getLocaleSpecificMessage(message);
+
+        if (arguments.length > 4) {
+            text = formatStringFromArgs(text, arguments, 4);
+        }
+
+        return {
+            file: undefined,
+            start,
+            length,
+
+            messageText: text,
+            category: message.category,
+            code: message.code,
+            reportsUnnecessary: message.reportsUnnecessary,
+            fileName,
+        };
+    }
+
+    function isDiagnosticWithDetachedLocation(diagnostic: DiagnosticRelatedInformation | DiagnosticWithDetachedLocation): diagnostic is DiagnosticWithDetachedLocation {
+        return diagnostic.file === undefined
+            && diagnostic.start !== undefined
+            && diagnostic.length !== undefined
+            && typeof (diagnostic as DiagnosticWithDetachedLocation).fileName === "string";
+    }
+
+    function attachFileToDiagnostic(diagnostic: DiagnosticWithDetachedLocation, file: SourceFile): DiagnosticWithLocation {
+        const fileName = file.fileName || "";
+        const length = file.text.length;
+        Debug.assertEqual(diagnostic.fileName, fileName);
+        Debug.assertLessThanOrEqual(diagnostic.start, length);
+        Debug.assertLessThanOrEqual(diagnostic.start + diagnostic.length, length);
+        const diagnosticWithLocation: DiagnosticWithLocation = {
+            file,
+            start: diagnostic.start,
+            length: diagnostic.length,
+            messageText: diagnostic.messageText,
+            category: diagnostic.category,
+            code: diagnostic.code,
+            reportsUnnecessary: diagnostic.reportsUnnecessary
+        };
+        if (diagnostic.relatedInformation) {
+            diagnosticWithLocation.relatedInformation = [];
+            for (const related of diagnostic.relatedInformation) {
+                if (isDiagnosticWithDetachedLocation(related) && related.fileName === fileName) {
+                    Debug.assertLessThanOrEqual(related.start, length);
+                    Debug.assertLessThanOrEqual(related.start + related.length, length);
+                    diagnosticWithLocation.relatedInformation.push(attachFileToDiagnostic(related, file));
+                }
+                else {
+                    diagnosticWithLocation.relatedInformation.push(related);
+                }
+            }
+        }
+        return diagnosticWithLocation;
+    }
+
+    export function attachFileToDiagnostics(diagnostics: DiagnosticWithDetachedLocation[], file: SourceFile): DiagnosticWithLocation[] {
+        const diagnosticsWithLocation: DiagnosticWithLocation[] = [];
+        for (const diagnostic of diagnostics) {
+            diagnosticsWithLocation.push(attachFileToDiagnostic(diagnostic, file));
+        }
+        return diagnosticsWithLocation;
     }
 
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
@@ -5520,6 +5820,11 @@ namespace ts {
             return Comparison.GreaterThan;
         }
         return Comparison.EqualTo;
+    }
+
+    export function getLanguageVariant(scriptKind: ScriptKind) {
+        // .tsx and .jsx files are treated as jsx language variant.
+        return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
@@ -6478,5 +6783,120 @@ namespace ts {
             if (!comparer(first, target)) return false;
         }
         return true;
+    }
+
+    /**
+     * Bypasses immutability and directly sets the `pos` property of a `TextRange` or `Node`.
+     */
+    /* @internal */
+    export function setTextRangePos<T extends ReadonlyTextRange>(range: T, pos: number) {
+        (range as TextRange).pos = pos;
+        return range;
+    }
+
+    /**
+     * Bypasses immutability and directly sets the `end` property of a `TextRange` or `Node`.
+     */
+    /* @internal */
+    export function setTextRangeEnd<T extends ReadonlyTextRange>(range: T, end: number) {
+        (range as TextRange).end = end;
+        return range;
+    }
+
+    /**
+     * Bypasses immutability and directly sets the `pos` and `end` properties of a `TextRange` or `Node`.
+     */
+    /* @internal */
+    export function setTextRangePosEnd<T extends ReadonlyTextRange>(range: T, pos: number, end: number) {
+        return setTextRangeEnd(setTextRangePos(range, pos), end);
+    }
+
+    /**
+     * Bypasses immutability and directly sets the `pos` and `end` properties of a `TextRange` or `Node` from the
+     * provided position and width.
+     */
+    /* @internal */
+    export function setTextRangePosWidth<T extends ReadonlyTextRange>(range: T, pos: number, width: number) {
+        return setTextRangePosEnd(range, pos, pos + width);
+    }
+
+    /**
+     * Bypasses immutability and directly sets the `flags` property of a `Node`.
+     */
+    /* @internal */
+    export function setNodeFlags<T extends Node>(node: T, newFlags: NodeFlags): T;
+    /* @internal */
+    export function setNodeFlags<T extends Node>(node: T | undefined, newFlags: NodeFlags): T | undefined;
+    export function setNodeFlags<T extends Node>(node: T | undefined, newFlags: NodeFlags): T | undefined {
+        if (node) {
+            (node as Mutable<T>).flags = newFlags;
+        }
+        return node;
+    }
+
+    /**
+     * Bypasses immutability and directly sets the `parent` property of a `Node`.
+     */
+    /* @internal */
+    export function setParent<T extends Node>(child: T, parent: T["parent"] | undefined): T;
+    /* @internal */
+    export function setParent<T extends Node>(child: T | undefined, parent: T["parent"] | undefined): T | undefined;
+    export function setParent<T extends Node>(child: T | undefined, parent: T["parent"] | undefined): T | undefined {
+        if (child && parent) {
+            (child as Mutable<T>).parent = parent;
+        }
+        return child;
+    }
+
+    /**
+     * Bypasses immutability and directly sets the `parent` property of each `Node` in an array of nodes, if is not already set.
+     */
+    /* @internal */
+    export function setEachParent<T extends readonly Node[]>(children: T, parent: T[number]["parent"]): T;
+    /* @internal */
+    export function setEachParent<T extends readonly Node[]>(children: T | undefined, parent: T[number]["parent"]): T | undefined;
+    export function setEachParent<T extends readonly Node[]>(children: T | undefined, parent: T[number]["parent"]): T | undefined {
+        if (children) {
+            for (const child of children) {
+                setParent(child, parent);
+            }
+        }
+        return children;
+    }
+
+    /**
+     * Bypasses immutability and directly sets the `parent` property of each `Node` recursively.
+     * @param rootNode The root node from which to start the recursion.
+     * @param incremental When `true`, only recursively descends through nodes whose `parent` pointers are incorrect.
+     * This allows us to quickly bail out of setting `parent` for subtrees during incremental parsing.
+     */
+    /* @internal */
+    export function setParentRecursive<T extends Node>(rootNode: T, incremental: boolean): T;
+    /* @internal */
+    export function setParentRecursive<T extends Node>(rootNode: T | undefined, incremental: boolean): T | undefined;
+    export function setParentRecursive<T extends Node>(rootNode: T | undefined, incremental: boolean): T | undefined {
+        if (!rootNode) return rootNode;
+        forEachChildRecursively(rootNode, isJSDocNode(rootNode) ? bindParentToChildIgnoringJSDoc : bindParentToChild);
+        return rootNode;
+
+        function bindParentToChildIgnoringJSDoc(child: Node, parent: Node): void | "skip" {
+            if (incremental && child.parent === parent) {
+                return "skip";
+            }
+            setParent(child, parent);
+        }
+
+        function bindJSDoc(child: Node) {
+            if (hasJSDocNodes(child)) {
+                for (const doc of child.jsDoc!) {
+                    bindParentToChildIgnoringJSDoc(doc, child);
+                    forEachChildRecursively(doc, bindParentToChildIgnoringJSDoc);
+                }
+            }
+        }
+
+        function bindParentToChild(child: Node, parent: Node) {
+            return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
+        }
     }
 }

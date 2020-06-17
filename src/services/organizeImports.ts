@@ -116,7 +116,7 @@ namespace ts.OrganizeImports {
                     const newElements = namedBindings.elements.filter(e => isDeclarationUsed(e.name));
                     if (newElements.length < namedBindings.elements.length) {
                         namedBindings = newElements.length
-                            ? updateNamedImports(namedBindings, newElements)
+                            ? factory.updateNamedImports(namedBindings, newElements)
                             : undefined;
                     }
                 }
@@ -129,7 +129,7 @@ namespace ts.OrganizeImports {
             else if (hasModuleDeclarationMatchingSpecifier(sourceFile, moduleSpecifier)) {
                 // If we’re in a declaration file, it’s safe to remove the import clause from it
                 if (sourceFile.isDeclarationFile) {
-                    usedImports.push(createImportDeclaration(
+                    usedImports.push(factory.createImportDeclaration(
                         importDecl.decorators,
                         importDecl.modifiers,
                         /*importClause*/ undefined,
@@ -217,7 +217,7 @@ namespace ts.OrganizeImports {
             else {
                 for (const defaultImport of defaultImports) {
                     newImportSpecifiers.push(
-                        createImportSpecifier(createIdentifier("default"), defaultImport.importClause!.name!)); // TODO: GH#18217
+                        factory.createImportSpecifier(factory.createIdentifier("default"), defaultImport.importClause!.name!)); // TODO: GH#18217
                 }
             }
 
@@ -232,10 +232,10 @@ namespace ts.OrganizeImports {
             const newNamedImports = sortedImportSpecifiers.length === 0
                 ? newDefaultImport
                     ? undefined
-                    : createNamedImports(emptyArray)
+                    : factory.createNamedImports(emptyArray)
                 : namedImports.length === 0
-                    ? createNamedImports(sortedImportSpecifiers)
-                    : updateNamedImports(namedImports[0].importClause!.namedBindings as NamedImports, sortedImportSpecifiers); // TODO: GH#18217
+                    ? factory.createNamedImports(sortedImportSpecifiers)
+                    : factory.updateNamedImports(namedImports[0].importClause!.namedBindings as NamedImports, sortedImportSpecifiers); // TODO: GH#18217
 
             // Type-only imports are not allowed to mix default, namespace, and named imports in any combination.
             // We could rewrite a default import as a named import (`import { default as name }`), but we currently
@@ -334,17 +334,17 @@ namespace ts.OrganizeImports {
 
             const exportDecl = exportGroup[0];
             coalescedExports.push(
-                updateExportDeclaration(
+                factory.updateExportDeclaration(
                     exportDecl,
                     exportDecl.decorators,
                     exportDecl.modifiers,
+                    exportDecl.isTypeOnly,
                     exportDecl.exportClause && (
                         isNamedExports(exportDecl.exportClause) ?
-                            updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
-                            updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
+                            factory.updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
+                            factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                     ),
-                    exportDecl.moduleSpecifier,
-                    exportDecl.isTypeOnly));
+                    exportDecl.moduleSpecifier));
         }
 
         return coalescedExports;
@@ -386,11 +386,11 @@ namespace ts.OrganizeImports {
         name: Identifier | undefined,
         namedBindings: NamedImportBindings | undefined) {
 
-        return updateImportDeclaration(
+        return factory.updateImportDeclaration(
             importDeclaration,
             importDeclaration.decorators,
             importDeclaration.modifiers,
-            updateImportClause(importDeclaration.importClause!, name, namedBindings, importDeclaration.importClause!.isTypeOnly), // TODO: GH#18217
+            factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
             importDeclaration.moduleSpecifier);
     }
 

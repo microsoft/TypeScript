@@ -1,10 +1,14 @@
 /*@internal*/
 namespace ts {
     export function transformJsx(context: TransformationContext) {
+        const {
+            factory,
+            getEmitHelperFactory: emitHelpers,
+        } = context;
         const compilerOptions = context.getCompilerOptions();
         let currentSourceFile: SourceFile;
 
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         /**
          * Transform JSX-specific syntax in a SourceFile.
@@ -89,8 +93,8 @@ namespace ts {
             let objectProperties: Expression | undefined;
             const attrs = node.attributes.properties;
             if (attrs.length === 0) {
+                objectProperties = factory.createNull();
                 // When there are no attributes, React wants "null"
-                objectProperties = createNull();
             }
             else {
                 // Map spans of JsxAttribute nodes into object literals and spans
@@ -98,25 +102,26 @@ namespace ts {
                 const segments = flatten<Expression | ObjectLiteralExpression>(
                     spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
                         ? map(attrs, transformJsxSpreadAttributeToExpression)
-                        : createObjectLiteral(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                        : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
                     )
                 );
 
                 if (isJsxSpreadAttribute(attrs[0])) {
                     // We must always emit at least one object literal before a spread
-                    // argument.
-                    segments.unshift(createObjectLiteral());
+                    // argument.factory.createObjectLiteral
+                    segments.unshift(factory.createObjectLiteralExpression());
                 }
 
                 // Either emit one big object literal (no spread attribs), or
                 // a call to the __assign helper.
                 objectProperties = singleOrUndefined(segments);
                 if (!objectProperties) {
-                    objectProperties = createAssignHelper(context, segments);
+                    objectProperties = emitHelpers().createAssignHelper(segments);
                 }
             }
 
             const element = createExpressionForJsxElement(
+                factory,
                 context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
                 compilerOptions.reactNamespace!, // TODO: GH#18217
                 tagName,
@@ -135,6 +140,7 @@ namespace ts {
 
         function visitJsxOpeningFragment(node: JsxOpeningFragment, children: readonly JsxChild[], isChild: boolean, location: TextRange) {
             const element = createExpressionForJsxFragment(
+                factory,
                 context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
                 compilerOptions.reactNamespace!, // TODO: GH#18217
                 mapDefined(children, transformJsxChildToExpression),
@@ -156,25 +162,25 @@ namespace ts {
         function transformJsxAttributeToObjectLiteralElement(node: JsxAttribute) {
             const name = getAttributeName(node);
             const expression = transformJsxAttributeInitializer(node.initializer);
-            return createPropertyAssignment(name, expression);
+            return factory.createPropertyAssignment(name, expression);
         }
 
         function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression | undefined): Expression {
             if (node === undefined) {
-                return createTrue();
+                return factory.createTrue();
             }
             else if (node.kind === SyntaxKind.StringLiteral) {
                 // Always recreate the literal to escape any escape sequences or newlines which may be in the original jsx string and which
                 // Need to be escaped to be handled correctly in a normal string
-                const literal = createLiteral(tryDecodeEntities(node.text) || node.text);
-                literal.singleQuote = node.singleQuote !== undefined ? node.singleQuote : !isStringDoubleQuoted(node, currentSourceFile);
+                const singleQuote = node.singleQuote !== undefined ? node.singleQuote : !isStringDoubleQuoted(node, currentSourceFile);
+                const literal = factory.createStringLiteral(tryDecodeEntities(node.text) || node.text, singleQuote);
                 return setTextRange(literal, node);
             }
             else if (node.kind === SyntaxKind.JsxExpression) {
                 if (node.expression === undefined) {
-                    return createTrue();
+                    return factory.createTrue();
                 }
-                return visitJsxExpression(node);
+                return visitNode(node.expression, visitor, isExpression);
             }
             else {
                 return Debug.failBadSyntaxKind(node);
@@ -183,7 +189,7 @@ namespace ts {
 
         function visitJsxText(node: JsxText): StringLiteral | undefined {
             const fixed = fixupWhitespaceAndDecodeEntities(node.text);
-            return fixed === undefined ? undefined : createLiteral(fixed);
+            return fixed === undefined ? undefined : factory.createStringLiteral(fixed);
         }
 
         /**
@@ -279,10 +285,10 @@ namespace ts {
             else {
                 const name = node.tagName;
                 if (isIdentifier(name) && isIntrinsicJsxName(name.escapedText)) {
-                    return createLiteral(idText(name));
+                    return factory.createStringLiteral(idText(name));
                 }
                 else {
-                    return createExpressionFromEntityName(name);
+                    return createExpressionFromEntityName(factory, name);
                 }
             }
         }
@@ -299,7 +305,7 @@ namespace ts {
                 return name;
             }
             else {
-                return createLiteral(text);
+                return factory.createStringLiteral(text);
             }
         }
 

@@ -356,16 +356,16 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
     function getRefactorableParameters(parameters: NodeArray<ValidParameterDeclaration>): NodeArray<ValidParameterDeclaration> {
         if (hasThisParameter(parameters)) {
-            parameters = createNodeArray(parameters.slice(1), parameters.hasTrailingComma);
+            parameters = factory.createNodeArray(parameters.slice(1), parameters.hasTrailingComma);
         }
         return parameters;
     }
 
     function createPropertyOrShorthandAssignment(name: string, initializer: Expression): PropertyAssignment | ShorthandPropertyAssignment {
         if (isIdentifier(initializer) && getTextOfIdentifierOrLiteral(initializer) === name) {
-            return createShorthandPropertyAssignment(name);
+            return factory.createShorthandPropertyAssignment(name);
         }
-        return createPropertyAssignment(name, initializer);
+        return factory.createPropertyAssignment(name, initializer);
     }
 
     function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functionArguments: NodeArray<Expression>): ObjectLiteralExpression {
@@ -384,11 +384,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
         if (hasRestParameter && functionArguments.length >= parameters.length) {
             const restArguments = functionArguments.slice(parameters.length - 1);
-            const restProperty = createPropertyAssignment(getParameterName(last(parameters)), createArrayLiteral(restArguments));
+            const restProperty = factory.createPropertyAssignment(getParameterName(last(parameters)), factory.createArrayLiteralExpression(restArguments));
             properties.push(restProperty);
         }
 
-        const objectLiteral = createObjectLiteral(properties, /*multiLine*/ false);
+        const objectLiteral = factory.createObjectLiteralExpression(properties, /*multiLine*/ false);
         return objectLiteral;
     }
 
@@ -396,16 +396,16 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         const checker = program.getTypeChecker();
         const refactorableParameters = getRefactorableParameters(functionDeclaration.parameters);
         const bindingElements = map(refactorableParameters, createBindingElementFromParameterDeclaration);
-        const objectParameterName = createObjectBindingPattern(bindingElements);
+        const objectParameterName = factory.createObjectBindingPattern(bindingElements);
         const objectParameterType = createParameterTypeNode(refactorableParameters);
 
         let objectInitializer: Expression | undefined;
         // If every parameter in the original function was optional, add an empty object initializer to the new object parameter
         if (every(refactorableParameters, isOptionalParameter)) {
-            objectInitializer = createObjectLiteral();
+            objectInitializer = factory.createObjectLiteralExpression();
         }
 
-        const objectParameter = createParameter(
+        const objectParameter = factory.createParameterDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
@@ -416,7 +416,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
         if (hasThisParameter(functionDeclaration.parameters)) {
             const thisParameter = functionDeclaration.parameters[0];
-            const newThisParameter = createParameter(
+            const newThisParameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
@@ -431,16 +431,16 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 copyComments(thisParameter.type, newThisParameter.type!);
             }
 
-            return createNodeArray([newThisParameter, objectParameter]);
+            return factory.createNodeArray([newThisParameter, objectParameter]);
         }
-        return createNodeArray([objectParameter]);
+        return factory.createNodeArray([objectParameter]);
 
         function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
-            const element = createBindingElement(
+            const element = factory.createBindingElement(
                 /*dotDotDotToken*/ undefined,
                 /*propertyName*/ undefined,
                 getParameterName(parameterDeclaration),
-                isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? createArrayLiteral() : parameterDeclaration.initializer);
+                isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression() : parameterDeclaration.initializer);
 
             suppressLeadingAndTrailingTrivia(element);
             if (parameterDeclaration.initializer && element.initializer) {
@@ -451,7 +451,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
         function createParameterTypeNode(parameters: NodeArray<ValidParameterDeclaration>): TypeLiteralNode {
             const members = map(parameters, createPropertySignatureFromParameterDeclaration);
-            const typeNode = addEmitFlags(createTypeLiteralNode(members), EmitFlags.SingleLine);
+            const typeNode = addEmitFlags(factory.createTypeLiteralNode(members), EmitFlags.SingleLine);
             return typeNode;
         }
 
@@ -461,12 +461,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 parameterType = getTypeNode(parameterDeclaration);
             }
 
-            const propertySignature = createPropertySignature(
+            const propertySignature = factory.createPropertySignature(
                 /*modifiers*/ undefined,
                 getParameterName(parameterDeclaration),
-                isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
-                parameterType,
-                /*initializer*/ undefined);
+                isOptionalParameter(parameterDeclaration) ? factory.createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
+                parameterType);
 
             suppressLeadingAndTrailingTrivia(propertySignature);
             copyComments(parameterDeclaration.name, propertySignature.name);

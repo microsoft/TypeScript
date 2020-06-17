@@ -58,12 +58,12 @@ namespace ts.codefix {
     }
 
     function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
-        const property = updateProperty(
+        const property = factory.updatePropertyDeclaration(
             propertyDeclaration,
             propertyDeclaration.decorators,
             propertyDeclaration.modifiers,
             propertyDeclaration.name,
-            createToken(SyntaxKind.ExclamationToken),
+            factory.createToken(SyntaxKind.ExclamationToken),
             propertyDeclaration.type,
             propertyDeclaration.initializer
         );
@@ -76,10 +76,10 @@ namespace ts.codefix {
     }
 
     function addUndefinedType(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
-        const undefinedTypeNode = createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
+        const undefinedTypeNode = factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
         const type = propertyDeclaration.type!; // TODO: GH#18217
         const types = isUnionTypeNode(type) ? type.types.concat(undefinedTypeNode) : [type, undefinedTypeNode];
-        changeTracker.replaceNode(propertyDeclarationSourceFile, type, createUnionTypeNode(types));
+        changeTracker.replaceNode(propertyDeclarationSourceFile, type, factory.createUnionTypeNode(types));
     }
 
     function getActionForAddMissingInitializer(context: CodeFixContext, propertyDeclaration: PropertyDeclaration): CodeFixAction | undefined {
@@ -92,7 +92,7 @@ namespace ts.codefix {
     }
 
     function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
-        const property = updateProperty(
+        const property = factory.updatePropertyDeclaration(
             propertyDeclaration,
             propertyDeclaration.decorators,
             propertyDeclaration.modifiers,
@@ -110,10 +110,16 @@ namespace ts.codefix {
 
     function getDefaultValueFromType(checker: TypeChecker, type: Type): Expression | undefined {
         if (type.flags & TypeFlags.BooleanLiteral) {
-            return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? createFalse() : createTrue();
+            return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? factory.createFalse() : factory.createTrue();
         }
-        else if (type.isLiteral()) {
-            return createLiteral(type.value);
+        else if (type.isStringLiteral()) {
+            return factory.createStringLiteral(type.value);
+        }
+        else if (type.isNumberLiteral()) {
+            return factory.createNumericLiteral(type.value);
+        }
+        else if (type.flags & TypeFlags.BigIntLiteral) {
+            return factory.createBigIntLiteral((type as BigIntLiteralType).value);
         }
         else if (type.isUnion()) {
             return firstDefined(type.types, t => getDefaultValueFromType(checker, t));
@@ -125,10 +131,10 @@ namespace ts.codefix {
             const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
             if (constructorDeclaration && constructorDeclaration.parameters.length) return undefined;
 
-            return createNew(createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+            return factory.createNewExpression(factory.createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
         }
         else if (checker.isArrayLikeType(type)) {
-            return createArrayLiteral();
+            return factory.createArrayLiteralExpression();
         }
         return undefined;
     }
