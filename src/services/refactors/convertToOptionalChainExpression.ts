@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.refactor.convertToOptionalChainExpression {
     const refactorName = "Convert to optional chain expression";
-    const convertToOptionalChainExpression = "Convert to optional chain expression";
+    const convertToOptionalChainExpression = "Convert && chain to optional chain expression";
 
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
