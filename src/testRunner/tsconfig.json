@@ -195,6 +195,7 @@
         "unittests/tsserver/typeReferenceDirectives.ts",
         "unittests/tsserver/typingsInstaller.ts",
         "unittests/tsserver/versionCache.ts",
-        "unittests/tsserver/watchEnvironment.ts"
+        "unittests/tsserver/watchEnvironment.ts",
+        "unittests/debugDeprecation.ts"
     ]
 }

@@ -93,7 +93,7 @@ namespace ts.codefix {
                         }
                     }
                     else {
-                        const memberElement = createClassElement(member, [createToken(SyntaxKind.StaticKeyword)]);
+                        const memberElement = createClassElement(member, [factory.createToken(SyntaxKind.StaticKeyword)]);
                         if (memberElement) {
                             memberElements.push(...memberElement);
                         }
@@ -146,7 +146,7 @@ namespace ts.codefix {
                 changes.delete(sourceFile, nodeToDelete);
 
                 if (!assignmentExpr) {
-                    members.push(createProperty([], modifiers, symbol.name, /*questionToken*/ undefined,
+                    members.push(factory.createPropertyDeclaration([], modifiers, symbol.name, /*questionToken*/ undefined,
                         /*type*/ undefined, /*initializer*/ undefined));
                     return members;
                 }
@@ -177,13 +177,13 @@ namespace ts.codefix {
                     // Don't try to declare members in JavaScript files
                     if (isSourceFileJS(sourceFile)) return members;
                     if (!isPropertyAccessExpression(memberDeclaration)) return members;
-                    const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined, /*type*/ undefined, assignmentExpr);
+                    const prop = factory.createPropertyDeclaration(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined, /*type*/ undefined, assignmentExpr);
                     copyLeadingComments(assignmentBinaryExpression.parent, prop, sourceFile);
                     members.push(prop);
                     return members;
                 }
 
-                type MethodName = Parameters<typeof createMethod>[3];
+                type MethodName = Parameters<typeof factory.createMethodDeclaration>[3];
 
                 function createFunctionLikeExpressionMember(members: readonly ClassElement[], expression: FunctionExpression | ArrowFunction, name: MethodName) {
                     if (isFunctionExpression(expression)) return createFunctionExpressionMember(members, expression, name);
@@ -192,8 +192,8 @@ namespace ts.codefix {
 
                 function createFunctionExpressionMember(members: readonly ClassElement[], functionExpression: FunctionExpression, name: MethodName) {
                     const fullModifiers = concatenate(modifiers, getModifierKindFromSource(functionExpression, SyntaxKind.AsyncKeyword));
-                    const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,
-    /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
+                    const method = factory.createMethodDeclaration(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,
+                        /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
                     copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
                     return members.concat(method);
                 }
@@ -208,10 +208,10 @@ namespace ts.codefix {
                     }
                     // case 2: () => [1,2,3]
                     else {
-                        bodyBlock = createBlock([createReturn(arrowFunctionBody)]);
+                        bodyBlock = factory.createBlock([factory.createReturnStatement(arrowFunctionBody)]);
                     }
                     const fullModifiers = concatenate(modifiers, getModifierKindFromSource(arrowFunction, SyntaxKind.AsyncKeyword));
-                    const method = createMethod(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,
+                    const method = factory.createMethodDeclaration(/*decorators*/ undefined, fullModifiers, /*asteriskToken*/ undefined, name, /*questionToken*/ undefined,
                         /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
                     copyLeadingComments(assignmentBinaryExpression, method, sourceFile);
                     return members.concat(method);
@@ -231,11 +231,11 @@ namespace ts.codefix {
 
             const memberElements = createClassElementsFromSymbol(node.symbol);
             if (initializer.body) {
-                memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
+                memberElements.unshift(factory.createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
 
             const modifiers = getModifierKindFromSource(precedingNode!, SyntaxKind.ExportKeyword);
-            const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
+            const cls = factory.createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
             // Don't call copyComments here because we'll already leave them in place
             return cls;
@@ -244,11 +244,11 @@ namespace ts.codefix {
         function createClassFromFunctionDeclaration(node: FunctionDeclaration): ClassDeclaration {
             const memberElements = createClassElementsFromSymbol(ctorSymbol);
             if (node.body) {
-                memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, node.parameters, node.body));
+                memberElements.unshift(factory.createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.parameters, node.body));
             }
 
             const modifiers = getModifierKindFromSource(node, SyntaxKind.ExportKeyword);
-            const cls = createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
+            const cls = factory.createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
             // Don't call copyComments here because we'll already leave them in place
             return cls;

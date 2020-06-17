@@ -143,13 +143,13 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const [begin, headText, headIndexes] = concatConsecutiveString(0, nodes);
 
         if (begin === nodes.length) {
-            const noSubstitutionTemplateLiteral = createNoSubstitutionTemplateLiteral(headText);
+            const noSubstitutionTemplateLiteral = factory.createNoSubstitutionTemplateLiteral(headText);
             copyCommentFromStringLiterals(headIndexes, noSubstitutionTemplateLiteral);
             return noSubstitutionTemplateLiteral;
         }
 
         const templateSpans: TemplateSpan[] = [];
-        const templateHead = createTemplateHead(headText);
+        const templateHead = factory.createTemplateHead(headText);
         copyCommentFromStringLiterals(headIndexes, templateHead);
 
         for (let i = begin; i < nodes.length; i++) {
@@ -159,12 +159,12 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             const [newIndex, subsequentText, stringIndexes] = concatConsecutiveString(i + 1, nodes);
             i = newIndex - 1;
 
-            const templatePart = i === nodes.length - 1 ? createTemplateTail(subsequentText) : createTemplateMiddle(subsequentText);
+            const templatePart = i === nodes.length - 1 ? factory.createTemplateTail(subsequentText) : factory.createTemplateMiddle(subsequentText);
             copyCommentFromStringLiterals(stringIndexes, templatePart);
-            templateSpans.push(createTemplateSpan(currentNode, templatePart));
+            templateSpans.push(factory.createTemplateSpan(currentNode, templatePart));
         }
 
-        return createTemplateExpression(templateHead, templateSpans);
+        return factory.createTemplateExpression(templateHead, templateSpans);
     }
 
     // to copy comments following the opening & closing parentheses

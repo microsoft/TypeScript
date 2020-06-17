@@ -67,14 +67,14 @@ namespace ts.codefix {
         if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
             const valDecl = suggestedSymbol.valueDeclaration;
             if (isNamedDeclaration(valDecl) && isPrivateIdentifier(valDecl.name)) {
-                changes.replaceNode(sourceFile, node, createIdentifier(suggestion));
+                changes.replaceNode(sourceFile, node, factory.createIdentifier(suggestion));
             }
             else {
-                changes.replaceNode(sourceFile, node.parent, createElementAccess(node.parent.expression, createLiteral(suggestion)));
+                changes.replaceNode(sourceFile, node.parent, factory.createElementAccessExpression(node.parent.expression, factory.createStringLiteral(suggestion)));
             }
         }
         else {
-            changes.replaceNode(sourceFile, node, createIdentifier(suggestion));
+            changes.replaceNode(sourceFile, node, factory.createIdentifier(suggestion));
         }
     }
 

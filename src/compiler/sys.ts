@@ -475,7 +475,7 @@ namespace ts {
 
         const cache = createMap<HostDirectoryWatcher>();
         const callbackCache = createMultiMap<{ dirName: string; callback: DirectoryWatcherCallback; }>();
-        const cacheToUpdateChildWatches = createMap<{ dirName: string; options: WatchOptions | undefined; }>();
+        const cacheToUpdateChildWatches = createMap<{ dirName: string; options: WatchOptions | undefined; fileNames: string[]; }>();
         let timerToUpdateChildWatches: any;
 
         const filePathComparer = getStringComparer(!host.useCaseSensitiveFileNames);
@@ -538,9 +538,12 @@ namespace ts {
             };
         }
 
-        function invokeCallbacks(dirPath: Path, fileNameOrInvokeMap: string | Map<true>) {
+        type InvokeMap = Map<string[] | true>;
+        function invokeCallbacks(dirPath: Path, fileName: string): void;
+        function invokeCallbacks(dirPath: Path, invokeMap: InvokeMap, fileNames: string[] | undefined): void;
+        function invokeCallbacks(dirPath: Path, fileNameOrInvokeMap: string | InvokeMap, fileNames?: string[]) {
             let fileName: string | undefined;
-            let invokeMap: Map<true> | undefined;
+            let invokeMap: InvokeMap | undefined;
             if (isString(fileNameOrInvokeMap)) {
                 fileName = fileNameOrInvokeMap;
             }
@@ -549,10 +552,21 @@ namespace ts {
             }
             // Call the actual callback
             callbackCache.forEach((callbacks, rootDirName) => {
-                if (invokeMap && invokeMap.has(rootDirName)) return;
+                if (invokeMap && invokeMap.get(rootDirName) === true) return;
                 if (rootDirName === dirPath || (startsWith(dirPath, rootDirName) && dirPath[rootDirName.length] === directorySeparator)) {
                     if (invokeMap) {
-                        invokeMap.set(rootDirName, true);
+                        if (fileNames) {
+                            const existing = invokeMap.get(rootDirName);
+                            if (existing) {
+                                (existing as string[]).push(...fileNames);
+                            }
+                            else {
+                                invokeMap.set(rootDirName, fileNames.slice());
+                            }
+                        }
+                        else {
+                            invokeMap.set(rootDirName, true);
+                        }
                     }
                     else {
                         callbacks.forEach(({ callback }) => callback(fileName!));
@@ -566,7 +580,7 @@ namespace ts {
             const parentWatcher = cache.get(dirPath);
             if (parentWatcher && host.directoryExists(dirName)) {
                 // Schedule the update and postpone invoke for callbacks
-                scheduleUpdateChildWatches(dirName, dirPath, options);
+                scheduleUpdateChildWatches(dirName, dirPath, fileName, options);
                 return;
             }
 
@@ -575,9 +589,13 @@ namespace ts {
             removeChildWatches(parentWatcher);
         }
 
-        function scheduleUpdateChildWatches(dirName: string, dirPath: Path, options: WatchOptions | undefined) {
-            if (!cacheToUpdateChildWatches.has(dirPath)) {
-                cacheToUpdateChildWatches.set(dirPath, { dirName, options });
+        function scheduleUpdateChildWatches(dirName: string, dirPath: Path, fileName: string, options: WatchOptions | undefined) {
+            const existing = cacheToUpdateChildWatches.get(dirPath);
+            if (existing) {
+                existing.fileNames.push(fileName);
+            }
+            else {
+                cacheToUpdateChildWatches.set(dirPath, { dirName, options, fileNames: [fileName] });
             }
             if (timerToUpdateChildWatches) {
                 host.clearTimeout(timerToUpdateChildWatches);
@@ -590,22 +608,30 @@ namespace ts {
             timerToUpdateChildWatches = undefined;
             sysLog(`sysLog:: onTimerToUpdateChildWatches:: ${cacheToUpdateChildWatches.size}`);
             const start = timestamp();
-            const invokeMap = createMap<true>();
+            const invokeMap = createMap<string[]>();
 
             while (!timerToUpdateChildWatches && cacheToUpdateChildWatches.size) {
-                const { value: [dirPath, { dirName, options }], done } = cacheToUpdateChildWatches.entries().next();
+                const { value: [dirPath, { dirName, options, fileNames }], done } = cacheToUpdateChildWatches.entries().next();
                 Debug.assert(!done);
                 cacheToUpdateChildWatches.delete(dirPath);
                 // Because the child refresh is fresh, we would need to invalidate whole root directory being watched
                 // to ensure that all the changes are reflected at this time
-                invokeCallbacks(dirPath as Path, invokeMap);
-                updateChildWatches(dirName, dirPath as Path, options);
+                const hasChanges = updateChildWatches(dirName, dirPath as Path, options);
+                invokeCallbacks(dirPath as Path, invokeMap, hasChanges ? undefined : fileNames);
             }
 
             sysLog(`sysLog:: invokingWatchers:: ${timestamp() - start}ms:: ${cacheToUpdateChildWatches.size}`);
             callbackCache.forEach((callbacks, rootDirName) => {
-                if (invokeMap.has(rootDirName)) {
-                    callbacks.forEach(({ callback, dirName }) => callback(dirName));
+                const existing = invokeMap.get(rootDirName);
+                if (existing) {
+                    callbacks.forEach(({ callback, dirName }) => {
+                        if (isArray(existing)) {
+                            existing.forEach(callback);
+                        }
+                        else {
+                            callback(dirName);
+                        }
+                    });
                 }
             });
 
@@ -623,34 +649,26 @@ namespace ts {
             }
         }
 
-        function updateChildWatches(dirName: string, dirPath: Path, options: WatchOptions | undefined) {
+        function updateChildWatches(parentDir: string, parentDirPath: Path, options: WatchOptions | undefined) {
             // Iterate through existing children and update the watches if needed
-            const parentWatcher = cache.get(dirPath);
-            if (parentWatcher) {
-                parentWatcher.childWatches = watchChildDirectories(dirName, parentWatcher.childWatches, options);
-            }
-        }
-
-        /**
-         * Watch the directories in the parentDir
-         */
-        function watchChildDirectories(parentDir: string, existingChildWatches: ChildWatches, options: WatchOptions | undefined): ChildWatches {
+            const parentWatcher = cache.get(parentDirPath);
+            if (!parentWatcher) return false;
             let newChildWatches: ChildDirectoryWatcher[] | undefined;
-            enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
+            const hasChanges = enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
                 host.directoryExists(parentDir) ? mapDefined(host.getAccessibleSortedChildDirectories(parentDir), child => {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
                     return !isIgnoredPath(childFullName) && filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
                 }) : emptyArray,
-                existingChildWatches,
+                parentWatcher.childWatches,
                 (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
                 createAndAddChildDirectoryWatcher,
                 closeFileWatcher,
                 addChildDirectoryWatcher
             );
-
-            return newChildWatches || emptyArray;
+            parentWatcher.childWatches = newChildWatches || emptyArray;
+            return hasChanges;
 
             /**
              * Create new childDirectoryWatcher and add it to the new ChildDirectoryWatcher list
@@ -1231,7 +1249,7 @@ namespace ts {
                 enableCPUProfiler,
                 disableCPUProfiler,
                 realpath,
-                debugMode: !!process.env.NODE_INSPECTOR_IPC || some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+                debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
                     try {
                         require("source-map-support").install();

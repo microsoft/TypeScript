@@ -59,6 +59,6 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, returnTypeNode: TypeNode, promisedTypeNode: TypeNode): void {
-        changes.replaceNode(sourceFile, returnTypeNode, createTypeReferenceNode("Promise", [promisedTypeNode]));
+        changes.replaceNode(sourceFile, returnTypeNode, factory.createTypeReferenceNode("Promise", [promisedTypeNode]));
     }
 }

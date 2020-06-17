@@ -30,6 +30,6 @@ namespace ts.codefix {
     });
 
     function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
-        setJsonCompilerOptionValue(changeTracker, configFile, "jsx", createStringLiteral("react"));
+        setJsonCompilerOptionValue(changeTracker, configFile, "jsx", factory.createStringLiteral("react"));
     }
 }

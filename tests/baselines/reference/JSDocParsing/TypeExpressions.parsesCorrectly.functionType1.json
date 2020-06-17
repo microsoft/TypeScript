@@ -8,6 +8,8 @@
     "parameters": {
         "length": 0,
         "pos": 10,
-        "end": 10
+        "end": 10,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }
