@@ -719,8 +719,8 @@ namespace ts {
             getEmitHost: notImplemented,
             getEmitResolver: notImplemented,
             getEmitHelperFactory: notImplemented,
-            setLexicalEnvironmentFlags: notImplemented,
-            getLexicalEnvironmentFlags: notImplemented,
+            setLexicalEnvironmentFlags: noop,
+            getLexicalEnvironmentFlags: () => 0,
             hoistFunctionDeclaration: notImplemented,
             hoistVariableDeclaration: notImplemented,
             addInitializationStatement: notImplemented,
@@ -1059,6 +1059,8 @@ namespace ts {
                 if (!(node.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait)) {
                     return node;
                 }
+                // We explicitly visit each non-Expression node that has an immediate Expression child so that
+                // we can reparse the Expression in an Await context
                 switch (node.kind) {
                     case SyntaxKind.Decorator: return reparseDecorator(node as Decorator);
                     case SyntaxKind.ComputedPropertyName: return reparseComputedPropertyName(node as ComputedPropertyName);
@@ -1088,9 +1090,12 @@ namespace ts {
                     if (isExpression(node)) {
                         return speculationHelper(() => {
                             scanner.setTextPos(node.pos);
+                            const savedContextFlags = contextFlags;
                             contextFlags = node.flags & NodeFlags.ContextFlags;
                             nextToken();
-                            return doInAwaitContext(parse);
+                            const result = doInAwaitContext(parse);
+                            contextFlags = savedContextFlags;
+                            return result;
                         }, SpeculationKind.Reparse);
                     }
                     return visitEachChild(node, visitor, reparseContext);
@@ -1098,72 +1103,79 @@ namespace ts {
                 return node;
             }
 
+            function update<T extends Node>(updated: T, original: T) {
+                if (updated !== original) {
+                    setNodeFlags(updated, updated.flags | NodeFlags.AwaitContext);
+                }
+                return updated;
+            }
+
             function reparseExpressionStatement(node: ExpressionStatement) {
-                return factory.updateExpressionStatement(node, reparse(node.expression, parseExpression));
+                return update(factory.updateExpressionStatement(node, reparse(node.expression, parseExpression)), node);
             }
 
             function reparseReturnStatement(node: ReturnStatement) {
-                return factory.updateReturnStatement(node, reparse(node.expression, parseExpression));
+                return update(factory.updateReturnStatement(node, reparse(node.expression, parseExpression)), node);
             }
 
             function reparseThrowStatement(node: ThrowStatement) {
-                return factory.updateThrowStatement(node, reparse(node.expression, parseExpression));
+                return update(factory.updateThrowStatement(node, reparse(node.expression, parseExpression)), node);
             }
 
             function reparseIfStatement(node: IfStatement) {
-                return factory.updateIfStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.thenStatement, visitor), ts.visitNode(node.elseStatement, visitor));
+                return update(factory.updateIfStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.thenStatement, visitor), ts.visitNode(node.elseStatement, visitor)), node);
             }
 
             function reparseSwitchStatement(node: SwitchStatement) {
-                return factory.updateSwitchStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.caseBlock, visitor));
+                return update(factory.updateSwitchStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.caseBlock, visitor)), node);
             }
 
             function reparseWithStatement(node: WithStatement) {
-                return factory.updateWithStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor));
+                return update(factory.updateWithStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor)), node);
             }
 
             function reparseDoStatement(node: DoStatement) {
-                return factory.updateDoStatement(node, ts.visitNode(node.statement, visitor), reparse(node.expression, parseExpression));
+                return update(factory.updateDoStatement(node, ts.visitNode(node.statement, visitor), reparse(node.expression, parseExpression)), node);
             }
 
             function reparseWhileStatement(node: WhileStatement) {
-                return factory.updateWhileStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor));
+                return update(factory.updateWhileStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor)), node);
             }
 
             function reparseForStatement(node: ForStatement) {
-                return factory.updateForStatement(node, reparse(node.initializer, parseExpression), reparse(node.condition, parseExpression), reparse(node.incrementor, parseExpression), ts.visitNode(node, visitor));
+                return update(factory.updateForStatement(node, reparse(node.initializer, parseExpression), reparse(node.condition, parseExpression), reparse(node.incrementor, parseExpression), ts.visitNode(node, visitor)), node);
             }
 
             function reparseForInStatement(node: ForInStatement) {
-                return factory.updateForInStatement(node, reparse(node.initializer, parseExpression), reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor));
+                return update(factory.updateForInStatement(node, reparse(node.initializer, parseExpression), reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor)), node);
             }
 
             function reparseForOfStatement(node: ForOfStatement) {
-                return factory.updateForOfStatement(node, node.awaitModifier, reparse(node.initializer, parseExpression), reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor));
+                return update(factory.updateForOfStatement(node, node.awaitModifier, reparse(node.initializer, parseExpression), reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor)), node);
             }
 
             function reparseExportAssignment(node: ExportAssignment) {
-                return factory.updateExportAssignment(node, ts.visitNodes(node.decorators, visitor), node.modifiers, reparse(node.expression, parseExpression));
+                return update(factory.updateExportAssignment(node, ts.visitNodes(node.decorators, visitor), node.modifiers, reparse(node.expression, parseExpression)), node);
             }
 
             function reparseExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
-                return factory.updateExpressionWithTypeArguments(node, reparse(node.expression, parseLeftHandSideExpressionOrHigher), node.typeArguments);
+                return update(factory.updateExpressionWithTypeArguments(node, reparse(node.expression, parseLeftHandSideExpressionOrHigher), node.typeArguments), node);
             }
 
             function reparseDecorator(node: Decorator) {
-                return factory.updateDecorator(node, reparse(node.expression, parseLeftHandSideExpressionOrHigher));
+                return update(factory.updateDecorator(node, reparse(node.expression, parseLeftHandSideExpressionOrHigher)), node);
             }
 
             function reparseComputedPropertyName(node: ComputedPropertyName) {
-                return factory.updateComputedPropertyName(node, reparse(node.expression, parseExpression));
+                return update(factory.updateComputedPropertyName(node, reparse(node.expression, parseExpression)), node);
             }
 
             function reparseVariableDeclaration(node: VariableDeclaration) {
-                return factory.updateVariableDeclaration(node, ts.visitNode(node.name, visitor), node.exclamationToken, node.type, reparse(node.initializer, parseExpression));
+                return update(factory.updateVariableDeclaration(node, ts.visitNode(node.name, visitor), node.exclamationToken, node.type, reparse(node.initializer, parseExpression)), node);
             }
 
             function reparseBindingElement(node: BindingElement) {
-                return factory.updateBindingElement(node, node.dotDotDotToken, ts.visitNode(node.propertyName, visitor), ts.visitNode(node.name, visitor), reparse(node.initializer, parseExpression));
+                return update(factory.updateBindingElement(node, node.dotDotDotToken, ts.visitNode(node.propertyName, visitor), ts.visitNode(node.name, visitor), reparse(node.initializer, parseExpression)), node);
             }
         }
 
@@ -1183,7 +1195,7 @@ namespace ts {
             setExternalModuleIndicator(sourceFile);
 
             // If we parsed this as an external module, it may contain top-level await
-            if (isExternalModule(sourceFile) && sourceFile.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
+            if (!isDeclarationFile && isExternalModule(sourceFile) && sourceFile.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
                 sourceFile = reparseTopLevelAwait(sourceFile);
             }
 
@@ -4181,20 +4193,20 @@ namespace ts {
             let parameters: NodeArray<ParameterDeclaration>;
             if (!parseExpected(SyntaxKind.OpenParenToken)) {
                 if (!allowAmbiguity) {
-                            return undefined;
+                    return undefined;
                 }
                 parameters = createMissingList<ParameterDeclaration>();
             }
             else {
                 parameters = parseParametersWorker(isAsync);
                 if (!parseExpected(SyntaxKind.CloseParenToken) && !allowAmbiguity) {
-                            return undefined;
+                    return undefined;
                 }
             }
 
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             if (type && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(type)) {
-                    return undefined;
+                return undefined;
             }
 
             // Parsing a signature isn't enough.
@@ -6216,16 +6228,20 @@ namespace ts {
         }
 
         function parseFunctionDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): FunctionDeclaration {
+            const savedAwaitContext = inAwaitContext();
             const modifierFlags = modifiersToFlags(modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
+            // We don't parse the name here in await context, instead we will report a grammar error in the checker.
             const name = modifierFlags & ModifierFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
             const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
             const isAsync = modifierFlags & ModifierFlags.Async ? SignatureFlags.Await : SignatureFlags.None;
             const typeParameters = parseTypeParameters();
+            if (modifierFlags & ModifierFlags.Export) setAwaitContext(/*value*/ true);
             const parameters = parseParameters(isGenerator | isAsync);
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
+            setAwaitContext(savedAwaitContext);
             const node = factory.createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -6541,9 +6557,12 @@ namespace ts {
         }
 
         function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
+            const savedAwaitContext = inAwaitContext();
             parseExpected(SyntaxKind.ClassKeyword);
+            // We don't parse the name here in await context, instead we will report a grammar error in the checker.
             const name = parseNameOfClassDeclarationOrExpression();
             const typeParameters = parseTypeParameters();
+            if (some(modifiers, isExportModifier)) setAwaitContext(/*value*/ true);
             const heritageClauses = parseHeritageClauses();
 
             let members;
@@ -6556,7 +6575,7 @@ namespace ts {
             else {
                 members = createMissingList<ClassElement>();
             }
-
+            setAwaitContext(savedAwaitContext);
             const node = kind === SyntaxKind.ClassDeclaration
                 ? factory.createClassDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members)
                 : factory.createClassExpression(decorators, modifiers, name, typeParameters, heritageClauses, members);
@@ -6759,8 +6778,10 @@ namespace ts {
 
         function parseImportDeclarationOrImportEqualsDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ImportEqualsDeclaration | ImportDeclaration {
             parseExpected(SyntaxKind.ImportKeyword);
+
             const afterImportPos = scanner.getStartPos();
 
+            // We don't parse the identifier here in await context, instead we will report a grammar error in the checker.
             let identifier: Identifier | undefined;
             if (isIdentifier()) {
                 identifier = parseIdentifier();
@@ -6943,6 +6964,8 @@ namespace ts {
         }
 
         function parseExportDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ExportDeclaration {
+            const savedAwaitContext = inAwaitContext();
+            setAwaitContext(/*value*/ true);
             let exportClause: NamedExportBindings | undefined;
             let moduleSpecifier: Expression | undefined;
             const isTypeOnly = parseOptional(SyntaxKind.TypeKeyword);
@@ -6965,11 +6988,14 @@ namespace ts {
                 }
             }
             parseSemicolon();
+            setAwaitContext(savedAwaitContext);
             const node = factory.createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
         function parseExportAssignment(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ExportAssignment {
+            const savedAwaitContext = inAwaitContext();
+            setAwaitContext(/*value*/ true);
             let isExportEquals: boolean | undefined;
             if (parseOptional(SyntaxKind.EqualsToken)) {
                 isExportEquals = true;
@@ -6979,6 +7005,7 @@ namespace ts {
             }
             const expression = parseAssignmentExpressionOrHigher();
             parseSemicolon();
+            setAwaitContext(savedAwaitContext);
             const node = factory.createExportAssignment(decorators, modifiers, isExportEquals, expression);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -8007,6 +8034,7 @@ namespace ts {
             const incrementalSourceFile = <IncrementalNode><Node>sourceFile;
             Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
             incrementalSourceFile.hasBeenIncrementallyParsed = true;
+            Parser.fixupParentReferences(incrementalSourceFile);
             const oldText = sourceFile.text;
             const syntaxCursor = createSyntaxCursor(sourceFile);
 
@@ -8245,8 +8273,8 @@ namespace ts {
 
             Debug.assert(pos <= end);
             if (element.parent) {
-                Debug.assert(pos >= element.parent.pos);
-                Debug.assert(end <= element.parent.end);
+                Debug.assertGreaterThanOrEqual(pos, element.parent.pos);
+                Debug.assertLessThanOrEqual(end, element.parent.end);
             }
 
             setTextRangePosEnd(element, pos, end);

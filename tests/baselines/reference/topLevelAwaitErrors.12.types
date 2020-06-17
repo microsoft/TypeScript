@@ -1,0 +1,12 @@
+=== tests/cases/conformance/externalModules/topLevelAwaitErrors.12.ts ===
+export {};
+declare namespace foo { const await: any; }
+>foo : typeof foo
+>await : any
+
+// await disallowed in import=namespace when in a module
+import await = foo.await;
+>await : any
+>foo : typeof foo
+>await : any
+

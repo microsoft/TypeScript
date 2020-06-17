@@ -867,6 +867,11 @@
         "category": "Error",
         "code": 1261
     },
+    "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
+        "category": "Error",
+        "code": 1262
+    },
+
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300

@@ -812,6 +812,11 @@ namespace ts {
     }
 
     /* @internal */
+    export function isExportModifier(node: Modifier): node is ExportKeyword {
+        return node.kind === SyntaxKind.ExportKeyword;
+    }
+
+    /* @internal */
     export function isAsyncModifier(node: Modifier): node is AsyncKeyword {
         return node.kind === SyntaxKind.AsyncKeyword;
     }
