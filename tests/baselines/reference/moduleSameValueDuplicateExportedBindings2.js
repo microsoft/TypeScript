@@ -33,6 +33,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports.Animals = void 0;
 var c_1 = require("./c");
 __createBinding(exports, c_1, "Animals");
 //// [a.js]
@@ -46,7 +47,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
-}
+};
 exports.__esModule = true;
 __exportStar(require("./b"), exports);
 __exportStar(require("./c"), exports);

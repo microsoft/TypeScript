@@ -109,7 +109,7 @@ namespace ts.codefix {
     });
 
     function changeInferToUnknown(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-        changes.replaceNode(sourceFile, token.parent, createKeywordTypeNode(SyntaxKind.UnknownKeyword));
+        changes.replaceNode(sourceFile, token.parent, factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword));
     }
 
     function createDeleteFix(changes: FileTextChanges[], diag: DiagnosticAndArguments): CodeFixAction {
@@ -153,11 +153,11 @@ namespace ts.codefix {
             token = cast(token.parent, isInferTypeNode).typeParameter.name;
         }
         if (isIdentifier(token) && canPrefix(token)) {
-            changes.replaceNode(sourceFile, token, createIdentifier(`_${token.text}`));
+            changes.replaceNode(sourceFile, token, factory.createIdentifier(`_${token.text}`));
             if (isParameter(token.parent)) {
                 getJSDocParameterTags(token.parent).forEach((tag) => {
                     if (isIdentifier(tag.name)) {
-                        changes.replaceNode(sourceFile, tag.name, createIdentifier(`_${tag.name.text}`));
+                        changes.replaceNode(sourceFile, tag.name, factory.createIdentifier(`_${tag.name.text}`));
                     }
                 });
             }

@@ -5,6 +5,6 @@ class C {}
 
 /** @param {C} p */
 function f(p) {}
->f : (p: C) => void
+>f : (p: C<any>) => void
 >p : C<any>
 

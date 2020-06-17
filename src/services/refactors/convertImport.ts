@@ -5,7 +5,7 @@ namespace ts.refactor {
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const i = getImportToConvert(context);
+            const i = getImportToConvert(context, context.triggerReason === "invoked");
             if (!i) return emptyArray;
             const description = i.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
             const actionName = i.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
@@ -19,12 +19,12 @@ namespace ts.refactor {
     });
 
     // Can convert imports of the form `import * as m from "m";` or `import d, { x, y } from "m";`.
-    function getImportToConvert(context: RefactorContext): NamedImportBindings | undefined {
+    function getImportToConvert(context: RefactorContext, considerPartialSpans = true): NamedImportBindings | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        const importDecl = getParentNodeInSpan(token, file, span);
-        if (!importDecl || !isImportDeclaration(importDecl)) return undefined;
+        const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
+        if (!importDecl || !isImportDeclaration(importDecl) || (importDecl.getEnd() < span.start + span.length)) return undefined;
         const { importClause } = importDecl;
         return importClause && importClause.namedBindings;
     }
@@ -69,12 +69,12 @@ namespace ts.refactor {
             if (importName === undefined) {
                 exportNameToImportName.set(exportName, importName = conflictingNames.has(exportName) ? getUniqueName(exportName, sourceFile) : exportName);
             }
-            changes.replaceNode(sourceFile, propertyAccess, createIdentifier(importName));
+            changes.replaceNode(sourceFile, propertyAccess, factory.createIdentifier(importName));
         }
 
         const importSpecifiers: ImportSpecifier[] = [];
         exportNameToImportName.forEach((name, propertyName) => {
-            importSpecifiers.push(createImportSpecifier(name === propertyName ? undefined : createIdentifier(propertyName), createIdentifier(name)));
+            importSpecifiers.push(factory.createImportSpecifier(name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)));
         });
 
         const importDecl = toConvert.parent.parent;
@@ -83,7 +83,7 @@ namespace ts.refactor {
             changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers));
         }
         else {
-            changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? createIdentifier(toConvert.name.text) : undefined, importSpecifiers));
+            changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined, importSpecifiers));
         }
     }
 
@@ -102,13 +102,13 @@ namespace ts.refactor {
         for (const element of toConvert.elements) {
             const propertyName = (element.propertyName || element.name).text;
             FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
-                const access = createPropertyAccess(createIdentifier(namespaceImportName), propertyName);
+                const access = factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), propertyName);
                 if (isShorthandPropertyAssignment(id.parent)) {
-                    changes.replaceNode(sourceFile, id.parent, createPropertyAssignment(id.text, access));
+                    changes.replaceNode(sourceFile, id.parent, factory.createPropertyAssignment(id.text, access));
                 }
                 else if (isExportSpecifier(id.parent) && !id.parent.propertyName) {
                     if (!neededNamedImports.some(n => n.name === element.name)) {
-                        neededNamedImports.push(createImportSpecifier(element.propertyName && createIdentifier(element.propertyName.text), createIdentifier(element.name.text)));
+                        neededNamedImports.push(factory.createImportSpecifier(element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
                     }
                 }
                 else {
@@ -117,14 +117,14 @@ namespace ts.refactor {
             });
         }
 
-        changes.replaceNode(sourceFile, toConvert, createNamespaceImport(createIdentifier(namespaceImportName)));
+        changes.replaceNode(sourceFile, toConvert, factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)));
         if (neededNamedImports.length) {
             changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, neededNamedImports));
         }
     }
 
     function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
-        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
-            createImportClause(defaultImportName, elements && elements.length ? createNamedImports(elements) : undefined), old.moduleSpecifier);
+        return factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
+            factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier);
     }
 }

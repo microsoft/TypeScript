@@ -1,4 +1,4 @@
-tests/cases/compiler/functionOverloads27.ts(4,13): error TS2345: Argument of type '5' is not assignable to parameter of type 'string'.
+tests/cases/compiler/functionOverloads27.ts(4,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/compiler/functionOverloads27.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/compiler/functionOverloads27.ts(4,13): error TS2345: Argument of typ
     function foo(bar?:any):any{ return '' }
     var x = foo(5);
                 ~
-!!! error TS2345: Argument of type '5' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     

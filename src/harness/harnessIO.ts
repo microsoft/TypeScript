@@ -1385,7 +1385,7 @@ namespace Harness {
                 if (require && opts && opts.PrintDiff) {
                     const Diff = require("diff");
                     const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
-                    throw new Error(`The baseline file ${relativeFileName} has changed.\n\n${patch}`);
+                    throw new Error(`The baseline file ${relativeFileName} has changed.${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
                 }
                 else {
                     throw new Error(`The baseline file ${relativeFileName} has changed.`);

@@ -53,6 +53,7 @@ namespace ts {
         ["es2020.promise", "lib.es2020.promise.d.ts"],
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
+        ["es2020.intl", "lib.es2020.intl.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
@@ -2942,7 +2943,13 @@ namespace ts {
      * @param extraFileExtensions optionaly file extra file extension information from host
      */
     /* @internal */
-    export function getFileNamesFromConfigSpecs(spec: ConfigFileSpecs, basePath: string, options: CompilerOptions, host: ParseConfigHost, extraFileExtensions: readonly FileExtensionInfo[] = []): ExpandResult {
+    export function getFileNamesFromConfigSpecs(
+        spec: ConfigFileSpecs,
+        basePath: string,
+        options: CompilerOptions,
+        host: ParseConfigHost,
+        extraFileExtensions: readonly FileExtensionInfo[] = emptyArray
+    ): ExpandResult {
         basePath = normalizePath(basePath);
 
         const keyMapper = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
@@ -3027,6 +3034,33 @@ namespace ts {
             wildcardDirectories,
             spec
         };
+    }
+
+    /* @internal */
+    export function isExcludedFile(
+        pathToCheck: string,
+        spec: ConfigFileSpecs,
+        basePath: string,
+        useCaseSensitiveFileNames: boolean,
+        currentDirectory: string
+    ): boolean {
+        const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs } = spec;
+        if (!length(validatedIncludeSpecs) || !length(validatedExcludeSpecs)) return false;
+
+        basePath = normalizePath(basePath);
+
+        const keyMapper = createGetCanonicalFileName(useCaseSensitiveFileNames);
+        if (filesSpecs) {
+            for (const fileName of filesSpecs) {
+                if (keyMapper(getNormalizedAbsolutePath(fileName, basePath)) === pathToCheck) return false;
+            }
+        }
+
+        const excludePattern = getRegularExpressionForWildcard(validatedExcludeSpecs, combinePaths(normalizePath(currentDirectory), basePath), "exclude");
+        const excludeRegex = excludePattern && getRegexFromPattern(excludePattern, useCaseSensitiveFileNames);
+        if (!excludeRegex) return false;
+        if (excludeRegex.test(pathToCheck)) return true;
+        return !hasExtension(pathToCheck) && excludeRegex.test(ensureTrailingDirectorySeparator(pathToCheck));
     }
 
     function validateSpecs(specs: readonly string[], errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile | undefined, specKey: string): readonly string[] {
@@ -3119,7 +3153,10 @@ namespace ts {
             };
         }
         if (isImplicitGlob(spec)) {
-            return { key: spec, flags: WatchDirectoryFlags.Recursive };
+            return {
+                key: useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec),
+                flags: WatchDirectoryFlags.Recursive
+            };
         }
         return undefined;
     }

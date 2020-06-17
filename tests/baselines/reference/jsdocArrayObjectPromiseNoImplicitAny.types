@@ -16,7 +16,7 @@ var numberArray = [5];
  * @return {Array}
  */
 function returnNotAnyArray(arr) {
->returnNotAnyArray : (arr: Array) => Array
+>returnNotAnyArray : (arr: any[]) => any[]
 >arr : any[]
 
   return arr;
@@ -46,7 +46,7 @@ var numberPromise = Promise.resolve(5);
  * @return {Promise}
  */
 function returnNotAnyPromise(pr) {
->returnNotAnyPromise : (pr: Promise) => Promise
+>returnNotAnyPromise : (pr: Promise<any>) => Promise<any>
 >pr : Promise<any>
 
   return pr;

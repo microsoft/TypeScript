@@ -1,0 +1,33 @@
+=== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts ===
+export type Segment1 = [length: number, number]; // partially named, disallowed
+>Segment1 : Symbol(Segment1, Decl(namedTupleMembersErrors.ts, 0, 0))
+
+export type List = [item: any, ...any];  // partially named, disallowed
+>List : Symbol(List, Decl(namedTupleMembersErrors.ts, 0, 48))
+
+export type Pair = [item: any, any?];  // partially named, disallowed
+>Pair : Symbol(Pair, Decl(namedTupleMembersErrors.ts, 2, 39))
+
+export type Opt = [element: string?]; // question mark on element disallowed
+>Opt : Symbol(Opt, Decl(namedTupleMembersErrors.ts, 4, 37))
+
+export type Trailing = [first: string, rest: ...string[]]; // dots on element disallowed
+>Trailing : Symbol(Trailing, Decl(namedTupleMembersErrors.ts, 6, 37))
+
+export type OptTrailing = [first: string, rest: ...string[]?]; // dots+question on element disallowed
+>OptTrailing : Symbol(OptTrailing, Decl(namedTupleMembersErrors.ts, 8, 58))
+
+export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disallowed
+>OptRest : Symbol(OptRest, Decl(namedTupleMembersErrors.ts, 10, 62))
+
+export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike rest, disallowed
+>NonArrayRest : Symbol(NonArrayRest, Decl(namedTupleMembersErrors.ts, 12, 58))
+
+export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
+>RecusiveRestUnlabeled : Symbol(RecusiveRestUnlabeled, Decl(namedTupleMembersErrors.ts, 14, 60))
+>RecusiveRestUnlabeled : Symbol(RecusiveRestUnlabeled, Decl(namedTupleMembersErrors.ts, 14, 60))
+
+export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
+>RecusiveRest : Symbol(RecusiveRest, Decl(namedTupleMembersErrors.ts, 16, 71))
+>RecusiveRest : Symbol(RecusiveRest, Decl(namedTupleMembersErrors.ts, 16, 71))
+

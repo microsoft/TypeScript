@@ -48,3 +48,10 @@ function F() {
 >1 : 1
 }
 
+// https://github.com/microsoft/TypeScript/issues/38401
+class D {
+>D : D
+
+    constructor(/** @readonly */ x) {}
+>x : any
+}
