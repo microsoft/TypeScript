@@ -36,7 +36,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (!parent || parent.kind !== SyntaxKind.BinaryExpression) return undefined;
 
         const checker = program.getTypeChecker();
-        return getPropertyAccessChain(parent, checker);
+        return parent.getStart() <= startPosition ? getPropertyAccessChain(parent, checker) : undefined;
     }
 
     // finds the parent binary expression with && operatorToken
