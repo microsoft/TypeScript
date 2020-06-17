@@ -13477,8 +13477,9 @@ namespace ts {
             // for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in an expression. This is to
             // preserve backwards compatibility. For example, an element access 'this["foo"]' has always been resolved
             // eagerly using the constraint type of 'this' at the given location.
-            if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType) && isGenericObjectType(objectType) &&
-                !(isTupleType(objectType) && indexTypeLessThan(indexType, objectType.target.fixedLength))) {
+            if (isGenericIndexType(indexType) || (accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType ?
+                isGenericTupleType(objectType) && !indexTypeLessThan(indexType, objectType.target.fixedLength) :
+                isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, objectType.target.fixedLength)))) {
                 if (objectType.flags & TypeFlags.AnyOrUnknown) {
                     return objectType;
                 }
@@ -18277,10 +18278,6 @@ namespace ts {
             return restType && createArrayType(restType);
         }
 
-        function getLengthOfTupleType(type: TupleTypeReference) {
-            return type.target.fixedLength;
-        }
-
         function getEndLengthOfTupleType(type: TupleTypeReference) {
             return getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !!(f & ElementFlags.Variable)) - 1;
         }
@@ -18299,7 +18296,7 @@ namespace ts {
             return undefined;
         }
 
-        function isMatchingTupleTypes(t1: TupleTypeReference, t2: TupleTypeReference) {
+        function isTupleTypeStructureMatching(t1: TupleTypeReference, t2: TupleTypeReference) {
             return getTypeReferenceArity(t1) === getTypeReferenceArity(t2) &&
                 every(t1.target.elementFlags, (f, i) => (f & ElementFlags.Variable) === (t2.target.elementFlags[i] & ElementFlags.Variable));
         }
@@ -19008,7 +19005,7 @@ namespace ts {
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
             return !(target.target.combinedFlags & ElementFlags.Variadic) && target.target.minLength > source.target.minLength ||
-                !target.target.hasRestElement && (source.target.hasRestElement || getLengthOfTupleType(target) < getLengthOfTupleType(source));
+                !target.target.hasRestElement && (source.target.hasRestElement || target.target.fixedLength < source.target.fixedLength);
         }
 
         function typesDefinitelyUnrelated(source: Type, target: Type) {
@@ -19517,13 +19514,13 @@ namespace ts {
                             const elementFlags = target.target.elementFlags;
                             // When source and target are tuple types with the same structure (fixed, variadic, and rest are matched
                             // to the same kind in each position), simply infer between the element types.
-                            if (isTupleType(source) && isMatchingTupleTypes(source, target)) {
+                            if (isTupleType(source) && isTupleTypeStructureMatching(source, target)) {
                                 for (let i = 0; i < targetArity; i++) {
                                     inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
                                 }
                                 return;
                             }
-                            const fixedLength = isTupleType(source) ? Math.min(getLengthOfTupleType(source), getLengthOfTupleType(target)) : 0;
+                            const fixedLength = isTupleType(source) ? Math.min(source.target.fixedLength, target.target.fixedLength) : 0;
                             const endFixedLength = isTupleType(source) && target.target.combinedFlags & ElementFlags.Variadic ? Math.min(getEndLengthOfTupleType(source), getEndLengthOfTupleType(target)) : 0;
                             // Infer between starting fixed elements.
                             for (let i = 0; i < fixedLength; i++) {
