@@ -143,6 +143,27 @@ namespace ts.projectSystem {
             assert.isUndefined(hostProject.autoImportProviderHost);
         });
 
+        it("Does not schedule ensureProjectForOpenFiles on AutoImportProviderProject creation", () => {
+            const { projectService, session, host } = setup([
+                angularFormsDts,
+                angularFormsPackageJson,
+                tsconfig,
+                indexTs
+            ]);
+
+            // Create configured project only, ensure !projectService.pendingEnsureProjectForOpenFiles
+            openFilesForSession([indexTs], session);
+            const hostProject = projectService.configuredProjects.get(tsconfig.path)!;
+            projectService.delayEnsureProjectForOpenFiles();
+            host.runQueuedTimeoutCallbacks();
+            assert.isFalse(projectService.pendingEnsureProjectForOpenFiles);
+
+            // Create auto import provider project, ensure still !projectService.pendingEnsureProjectForOpenFiles
+            host.writeFile(packageJson.path, packageJson.content);
+            hostProject.getPackageJsonAutoImportProvider();
+            assert.isFalse(projectService.pendingEnsureProjectForOpenFiles);
+        });
+
         it("Responds to changes in node_modules", () => {
             const { projectService, session, host } = setup([
                 angularFormsDts,

@@ -301,7 +301,9 @@ namespace ts.server {
                 this.disableLanguageService(lastFileExceededProgramSize);
             }
             this.markAsDirty();
-            this.projectService.pendingEnsureProjectForOpenFiles = true;
+            if (projectKind !== ProjectKind.AutoImportProvider) {
+                this.projectService.pendingEnsureProjectForOpenFiles = true;
+            }
         }
 
         isKnownTypesPackageName(name: string): boolean {
