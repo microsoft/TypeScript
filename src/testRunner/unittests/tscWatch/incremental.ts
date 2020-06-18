@@ -195,7 +195,8 @@ namespace ts.tscWatch {
                         relatedInformation: undefined,
                         reportsUnnecessary: undefined,
                         reportsDeprecated: undefined,
-                        source: undefined
+                        source: undefined,
+                        skippedOn: undefined,
                     }]);
                 });
             });

@@ -3462,7 +3462,9 @@ namespace ts {
         /* @internal */ version: string;
         /* @internal */ pragmas: ReadonlyPragmaMap;
         /* @internal */ localJsxNamespace?: __String;
+        /* @internal */ localJsxFragmentNamespace?: __String;
         /* @internal */ localJsxFactory?: EntityName;
+        /* @internal */ localJsxFragmentFactory?: EntityName;
 
         /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
@@ -4471,6 +4473,7 @@ namespace ts {
         getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): string[] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         getJsxFactoryEntity(location?: Node): EntityName | undefined;
+        getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
         isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
@@ -5533,6 +5536,7 @@ namespace ts {
         reportsDeprecated?: {}
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
+        /* @internal */ skippedOn?: keyof CompilerOptions;
     }
 
     export interface DiagnosticRelatedInformation {
@@ -5692,6 +5696,7 @@ namespace ts {
         /* @internal */ pretty?: boolean;
         reactNamespace?: string;
         jsxFactory?: string;
+        jsxFragmentFactory?: string;
         composite?: boolean;
         incremental?: boolean;
         tsBuildInfoFile?: string;
@@ -7938,6 +7943,10 @@ namespace ts {
             kind: PragmaKindFlags.SingleLine
         },
         "jsx": {
+            args: [{ name: "factory" }],
+            kind: PragmaKindFlags.MultiLine
+        },
+        "jsxfrag": {
             args: [{ name: "factory" }],
             kind: PragmaKindFlags.MultiLine
         },

@@ -954,16 +954,32 @@ namespace ts {
             if (location) {
                 const file = getSourceFileOfNode(location);
                 if (file) {
-                    if (file.localJsxNamespace) {
-                        return file.localJsxNamespace;
+                    if (isJsxOpeningFragment(location)) {
+                        if (file.localJsxFragmentNamespace) {
+                            return file.localJsxFragmentNamespace;
+                        }
+                        const jsxFragmentPragma = file.pragmas.get("jsxfrag");
+                        if (jsxFragmentPragma) {
+                            const chosenPragma = isArray(jsxFragmentPragma) ? jsxFragmentPragma[0] : jsxFragmentPragma;
+                            file.localJsxFragmentFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
+                            visitNode(file.localJsxFragmentFactory, markAsSynthetic);
+                            if (file.localJsxFragmentFactory) {
+                                return file.localJsxFragmentNamespace = getFirstIdentifier(file.localJsxFragmentFactory).escapedText;
+                            }
+                        }
                     }
-                    const jsxPragma = file.pragmas.get("jsx");
-                    if (jsxPragma) {
-                        const chosenpragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
-                        file.localJsxFactory = parseIsolatedEntityName(chosenpragma.arguments.factory, languageVersion);
-                        visitNode(file.localJsxFactory, markAsSynthetic);
-                        if (file.localJsxFactory) {
-                            return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
+                    else {
+                        if (file.localJsxNamespace) {
+                            return file.localJsxNamespace;
+                        }
+                        const jsxPragma = file.pragmas.get("jsx");
+                        if (jsxPragma) {
+                            const chosenPragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
+                            file.localJsxFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
+                            visitNode(file.localJsxFactory, markAsSynthetic);
+                            if (file.localJsxFactory) {
+                                return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
+                            }
                         }
                     }
                 }
@@ -1011,6 +1027,12 @@ namespace ts {
                 diagnostics.add(diagnostic);
                 return diagnostic;
             }
+        }
+
+        function errorSkippedOn(key: keyof CompilerOptions, location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+            const diagnostic = error(location, message, arg0, arg1, arg2, arg3);
+            diagnostic.skippedOn = key;
+            return diagnostic;
         }
 
         function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
@@ -23478,8 +23500,8 @@ namespace ts {
 
         function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], kind: IndexKind): IndexInfo {
             const propTypes: Type[] = [];
-            for (let i = 0; i < properties.length; i++) {
-                if (kind === IndexKind.String || isNumericName(node.properties[i + offset].name!)) {
+            for (let i = offset; i < properties.length; i++) {
+                if (kind === IndexKind.String || isNumericName(node.properties[i].name!)) {
                     propTypes.push(getTypeOfSymbol(properties[i]));
                 }
             }
@@ -23744,10 +23766,14 @@ namespace ts {
         function checkJsxFragment(node: JsxFragment): Type {
             checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment);
 
-            if (compilerOptions.jsx === JsxEmit.React && (compilerOptions.jsxFactory || getSourceFileOfNode(node).pragmas.has("jsx"))) {
+            // by default, jsx:'react' will use jsxFactory = React.createElement and jsxFragmentFactory = React.Fragment
+            // if jsxFactory compiler option is provided, ensure jsxFragmentFactory compiler option or @jsxFrag pragma is provided too
+            const nodeSourceFile = getSourceFileOfNode(node);
+            if (compilerOptions.jsx === JsxEmit.React && (compilerOptions.jsxFactory || nodeSourceFile.pragmas.has("jsx"))
+                && !compilerOptions.jsxFragmentFactory && !nodeSourceFile.pragmas.has("jsxfrag")) {
                 error(node, compilerOptions.jsxFactory
-                    ? Diagnostics.JSX_fragment_is_not_supported_when_using_jsxFactory
-                    : Diagnostics.JSX_fragment_is_not_supported_when_using_an_inline_JSX_factory_pragma);
+                    ? Diagnostics.The_jsxFragmentFactory_compiler_option_must_be_provided_to_use_JSX_fragments_with_the_jsxFactory_compiler_option
+                    : Diagnostics.An_jsxFrag_pragma_is_required_when_using_an_jsx_pragma_with_JSX_fragments);
             }
 
             checkJsxChildren(node);
@@ -24205,21 +24231,28 @@ namespace ts {
             if (isNodeOpeningLikeElement) {
                 checkGrammarJsxElement(<JsxOpeningLikeElement>node);
             }
+
             checkJsxPreconditions(node);
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const reactNamespace = getJsxNamespace(node);
-            const reactLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
-            const reactSym = resolveName(reactLocation, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
-            if (reactSym) {
-                // Mark local symbol as referenced here because it might not have been marked
-                // if jsx emit was not react as there wont be error being emitted
-                reactSym.isReferenced = SymbolFlags.All;
+            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const jsxFactoryNamespace = getJsxNamespace(node);
+            const jsxFactoryLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
 
-                // If react symbol is alias, mark it as referenced
-                if (reactSym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(reactSym)) {
-                    markAliasSymbolAsReferenced(reactSym);
+            // allow null as jsxFragmentFactory
+            let jsxFactorySym: Symbol | undefined;
+            if (!(isJsxOpeningFragment(node) && jsxFactoryNamespace === "null")) {
+                jsxFactorySym = resolveName(jsxFactoryLocation, jsxFactoryNamespace, SymbolFlags.Value, jsxFactoryRefErr, jsxFactoryNamespace, /*isUse*/ true);
+            }
+
+            if (jsxFactorySym) {
+                // Mark local symbol as referenced here because it might not have been marked
+                // if jsx emit was not jsxFactory as there wont be error being emitted
+                jsxFactorySym.isReferenced = SymbolFlags.All;
+
+                // If react/jsxFactory symbol is alias, mark it as refereced
+                if (jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
+                    markAliasSymbolAsReferenced(jsxFactorySym);
                 }
             }
 
@@ -32050,13 +32083,13 @@ namespace ts {
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
             // no rest parameters \ declaration context \ overload - no codegen impact
-            if (languageVersion >= ScriptTarget.ES2015 || compilerOptions.noEmit || !hasRestParameter(node) || node.flags & NodeFlags.Ambient || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
+            if (languageVersion >= ScriptTarget.ES2015 || !hasRestParameter(node) || node.flags & NodeFlags.Ambient || nodeIsMissing((<FunctionLikeDeclaration>node).body)) {
                 return;
             }
 
             forEach(node.parameters, p => {
                 if (p.name && !isBindingPattern(p.name) && p.name.escapedText === argumentsSymbol.escapedName) {
-                    error(p, Diagnostics.Duplicate_identifier_arguments_Compiler_uses_arguments_to_initialize_rest_parameters);
+                    errorSkippedOn("noEmit", p, Diagnostics.Duplicate_identifier_arguments_Compiler_uses_arguments_to_initialize_rest_parameters);
                 }
             });
         }
@@ -32126,13 +32159,13 @@ namespace ts {
         function checkWeakMapCollision(node: Node) {
             const enclosingBlockScope = getEnclosingBlockScopeContainer(node);
             if (getNodeCheckFlags(enclosingBlockScope) & NodeCheckFlags.ContainsClassWithPrivateIdentifiers) {
-                error(node, Diagnostics.Compiler_reserves_name_0_when_emitting_private_identifier_downlevel, "WeakMap");
+                errorSkippedOn("noEmit", node, Diagnostics.Compiler_reserves_name_0_when_emitting_private_identifier_downlevel, "WeakMap");
             }
         }
 
         function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier) {
             // No need to check for require or exports for ES6 modules and later
-            if (moduleKind >= ModuleKind.ES2015 || compilerOptions.noEmit) {
+            if (moduleKind >= ModuleKind.ES2015) {
                 return;
             }
 
@@ -32149,13 +32182,13 @@ namespace ts {
             const parent = getDeclarationContainer(node);
             if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>parent)) {
                 // If the declaration happens to be in external module, report error that require and exports are reserved keywords
-                error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module,
+                errorSkippedOn("noEmit", name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module,
                     declarationNameToString(name), declarationNameToString(name));
             }
         }
 
         function checkCollisionWithGlobalPromiseInGeneratedCode(node: Node, name: Identifier): void {
-            if (languageVersion >= ScriptTarget.ES2017 || compilerOptions.noEmit || !needCollisionCheckForIdentifier(node, name, "Promise")) {
+            if (languageVersion >= ScriptTarget.ES2017 || !needCollisionCheckForIdentifier(node, name, "Promise")) {
                 return;
             }
 
@@ -32168,7 +32201,7 @@ namespace ts {
             const parent = getDeclarationContainer(node);
             if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(<SourceFile>parent) && parent.flags & NodeFlags.HasAsyncFunctions) {
                 // If the declaration happens to be in external module, report error that Promise is a reserved identifier.
-                error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module_containing_async_functions,
+                errorSkippedOn("noEmit", name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module_containing_async_functions,
                     declarationNameToString(name), declarationNameToString(name));
             }
         }
@@ -32386,7 +32419,7 @@ namespace ts {
                 }
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
-                if (!compilerOptions.noEmit && languageVersion < ScriptTarget.ESNext && needCollisionCheckForIdentifier(node, node.name, "WeakMap")) {
+                if (languageVersion < ScriptTarget.ESNext && needCollisionCheckForIdentifier(node, node.name, "WeakMap")) {
                     potentialWeakMapCollisions.push(node);
                 }
             }
@@ -36754,8 +36787,29 @@ namespace ts {
             return literalTypeToNode(<FreshableType>type, node, tracker);
         }
 
-        function getJsxFactoryEntity(location: Node) {
+        function getJsxFactoryEntity(location: Node): EntityName | undefined {
             return location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity;
+        }
+
+        function getJsxFragmentFactoryEntity(location: Node): EntityName | undefined {
+            if (location) {
+                const file = getSourceFileOfNode(location);
+                if (file) {
+                    if (file.localJsxFragmentFactory) {
+                        return file.localJsxFragmentFactory;
+                    }
+                    const jsxFragPragmas = file.pragmas.get("jsxfrag");
+                    const jsxFragPragma = isArray(jsxFragPragmas) ? jsxFragPragmas[0] : jsxFragPragmas;
+                    if (jsxFragPragma) {
+                        file.localJsxFragmentFactory = parseIsolatedEntityName(jsxFragPragma.arguments.factory, languageVersion);
+                        return file.localJsxFragmentFactory;
+                    }
+                }
+            }
+
+            if (compilerOptions.jsxFragmentFactory) {
+                return parseIsolatedEntityName(compilerOptions.jsxFragmentFactory, languageVersion);
+            }
         }
 
         function createResolver(): EmitResolver {
@@ -36832,6 +36886,7 @@ namespace ts {
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
                 getJsxFactoryEntity,
+                getJsxFragmentFactoryEntity,
                 getAllAccessorDeclarations(accessor: AccessorDeclaration): AllAccessorDeclarations {
                     accessor = getParseTreeNode(accessor, isGetOrSetAccessorDeclaration)!; // TODO: GH#18217
                     const otherKind = accessor.kind === SyntaxKind.SetAccessor ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
@@ -38293,7 +38348,7 @@ namespace ts {
 
             const moduleKind = getEmitModuleKind(compilerOptions);
 
-            if (moduleKind < ModuleKind.ES2015 && moduleKind !== ModuleKind.System && !compilerOptions.noEmit &&
+            if (moduleKind < ModuleKind.ES2015 && moduleKind !== ModuleKind.System &&
                 !(node.parent.parent.flags & NodeFlags.Ambient) && hasSyntacticModifier(node.parent.parent, ModifierFlags.Export)) {
                 checkESModuleMarker(node.name);
             }
@@ -38313,7 +38368,7 @@ namespace ts {
         function checkESModuleMarker(name: Identifier | BindingPattern): boolean {
             if (name.kind === SyntaxKind.Identifier) {
                 if (idText(name) === "__esModule") {
-                    return grammarErrorOnNode(name, Diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules);
+                    return grammarErrorOnNodeSkippedOn("noEmit", name, Diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules);
                 }
             }
             else {
@@ -38418,6 +38473,15 @@ namespace ts {
             const sourceFile = getSourceFileOfNode(nodeForSourceFile);
             if (!hasParseDiagnostics(sourceFile)) {
                 diagnostics.add(createFileDiagnostic(sourceFile, start, length, message, arg0, arg1, arg2));
+                return true;
+            }
+            return false;
+        }
+
+        function grammarErrorOnNodeSkippedOn(key: keyof CompilerOptions, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any): boolean {
+            const sourceFile = getSourceFileOfNode(node);
+            if (!hasParseDiagnostics(sourceFile)) {
+                errorSkippedOn(key, node, message, arg0, arg1, arg2);
                 return true;
             }
             return false;

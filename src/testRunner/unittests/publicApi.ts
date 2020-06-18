@@ -10,7 +10,7 @@ describe("unittests:: Public APIs", () => {
         });
 
         it("should be acknowledged when they change", () => {
-            Harness.Baseline.runBaseline(api, fileContent);
+            Harness.Baseline.runBaseline(api, fileContent, { PrintDiff: true });
         });
 
         it("should compile", () => {

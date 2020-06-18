@@ -126,8 +126,8 @@ namespace ts {
     ): void {
         const allFiles = program.getSourceFiles();
         for (const sourceFile of allFiles) {
-            const newFromOld = oldToNew(sourceFile.path) as Path;
-            const newImportFromPath = newFromOld !== undefined ? newFromOld : sourceFile.path;
+            const newFromOld = oldToNew(sourceFile.fileName);
+            const newImportFromPath = newFromOld ?? sourceFile.fileName;
             const newImportFromDirectory = getDirectoryPath(newImportFromPath);
 
             const oldFromNew: string | undefined = newToOld(sourceFile.fileName);
@@ -157,7 +157,7 @@ namespace ts {
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), newImportFromPath, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
+                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
                         : undefined;
                 });
         }

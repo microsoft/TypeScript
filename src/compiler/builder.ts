@@ -6,6 +6,7 @@ namespace ts {
         reportDeprecated?: {}
         source?: string;
         relatedInformation?: ReusableDiagnosticRelatedInformation[];
+        skippedOn?: keyof CompilerOptions;
     }
 
     export interface ReusableDiagnosticRelatedInformation {
@@ -270,6 +271,7 @@ namespace ts {
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
             result.reportsDeprecated = diagnostic.reportDeprecated;
             result.source = diagnostic.source;
+            result.skippedOn = diagnostic.skippedOn;
             const { relatedInformation } = diagnostic;
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
@@ -678,7 +680,7 @@ namespace ts {
             const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
             // Report the bind and check diagnostics from the cache if we already have those diagnostics present
             if (cachedDiagnostics) {
-                return cachedDiagnostics;
+                return filterSemanticDiagnotics(cachedDiagnostics, state.compilerOptions);
             }
         }
 
@@ -687,7 +689,7 @@ namespace ts {
         if (state.semanticDiagnosticsPerFile) {
             state.semanticDiagnosticsPerFile.set(path, diagnostics);
         }
-        return diagnostics;
+        return filterSemanticDiagnotics(diagnostics, state.compilerOptions);
     }
 
     export type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
@@ -819,6 +821,7 @@ namespace ts {
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
             result.reportDeprecated = diagnostic.reportsDeprecated;
             result.source = diagnostic.source;
+            result.skippedOn = diagnostic.skippedOn;
             const { relatedInformation } = diagnostic;
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?

@@ -55,6 +55,15 @@ namespace ts {
             );
     }
 
+    function createJsxFragmentFactoryExpression(factory: NodeFactory, jsxFragmentFactoryEntity: EntityName | undefined, reactNamespace: string, parent: JsxOpeningLikeElement | JsxOpeningFragment): Expression {
+        return jsxFragmentFactoryEntity ?
+            createJsxFactoryExpressionFromEntityName(factory, jsxFragmentFactoryEntity, parent) :
+            factory.createPropertyAccessExpression(
+                createReactNamespace(reactNamespace, parent),
+                "Fragment"
+            );
+    }
+
     export function createExpressionForJsxElement(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, tagName: Expression, props: Expression | undefined, children: readonly Expression[] | undefined, parentElement: JsxOpeningLikeElement, location: TextRange): LeftHandSideExpression {
         const argumentsList = [tagName];
         if (props) {
@@ -87,14 +96,9 @@ namespace ts {
         );
     }
 
-    export function createExpressionForJsxFragment(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, reactNamespace: string, children: readonly Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
-        const tagName = factory.createPropertyAccessExpression(
-            createReactNamespace(reactNamespace, parentElement),
-            "Fragment"
-        );
-
-        const argumentsList = [<Expression>tagName];
-        argumentsList.push(factory.createNull());
+    export function createExpressionForJsxFragment(factory: NodeFactory, jsxFactoryEntity: EntityName | undefined, jsxFragmentFactoryEntity: EntityName | undefined, reactNamespace: string, children: readonly Expression[], parentElement: JsxOpeningFragment, location: TextRange): LeftHandSideExpression {
+        const tagName = createJsxFragmentFactoryExpression(factory, jsxFragmentFactoryEntity, reactNamespace, parentElement);
+        const argumentsList = [tagName, factory.createNull()];
 
         if (children && children.length > 0) {
             if (children.length > 1) {
