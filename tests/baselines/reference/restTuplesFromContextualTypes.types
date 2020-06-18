@@ -67,20 +67,20 @@ f1((a, b, c) => {})
 f1((...x) => {})
 >f1((...x) => {}) : void
 >f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
->(...x) => {} : (args_0: number, args_1: boolean, args_2: string) => void
+>(...x) => {} : (x_0: number, x_1: boolean, x_2: string) => void
 >x : [number, boolean, string]
 
 f1((a, ...x) => {})
 >f1((a, ...x) => {}) : void
 >f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
->(a, ...x) => {} : (a: number, args_1: boolean, args_2: string) => void
+>(a, ...x) => {} : (a: number, x_0: boolean, x_1: string) => void
 >a : number
 >x : [boolean, string]
 
 f1((a, b, ...x) => {})
 >f1((a, b, ...x) => {}) : void
 >f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
->(a, b, ...x) => {} : (a: number, b: boolean, args_2: string) => void
+>(a, b, ...x) => {} : (a: number, b: boolean, x_0: string) => void
 >a : number
 >b : boolean
 >x : [string]
@@ -162,13 +162,13 @@ f2((a, b, c) => {})
 f2((...x) => {})
 >f2((...x) => {}) : void
 >f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
->(...x) => {} : (args_0: number, args_1: boolean, ...args_2: string[]) => void
+>(...x) => {} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
 >x : [number, boolean, ...string[]]
 
 f2((a, ...x) => {})
 >f2((a, ...x) => {}) : void
 >f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
->(a, ...x) => {} : (a: number, args_1: boolean, ...args_2: string[]) => void
+>(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
 >a : number
 >x : [boolean, ...string[]]
 
@@ -263,13 +263,13 @@ f3((a, b, c) => {})
 f3((...x) => {})
 >f3((...x) => {}) : void
 >f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
->(...x) => {} : (x: number, args_0: boolean, ...args_1: string[]) => void
+>(...x) => {} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
 >x : [number, boolean, ...string[]]
 
 f3((a, ...x) => {})
 >f3((a, ...x) => {}) : void
 >f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
->(a, ...x) => {} : (a: number, args_0: boolean, ...args_1: string[]) => void
+>(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
 >a : number
 >x : [boolean, ...string[]]
 
@@ -333,7 +333,7 @@ function f4<T extends any[]>(t: T) {
 >f((...x) => {}) : void
 >f : (cb: (x: number, ...args: T) => void) => void
 >(...x) => {} : (x: number, ...args: T[number][]) => void
->x : [number, ...T[number][]]
+>x : [x: number, ...args: T[number][]]
 
     f((a, ...x) => {});
 >f((a, ...x) => {}) : void
@@ -496,7 +496,7 @@ take(function(...rest){});
 >take(function(...rest){}) : void
 >take : (cb: (a: number, b: string) => void) => void
 >function(...rest){} : (a: number, b: string) => void
->rest : [number, string]
+>rest : [a: number, b: string]
 
 // Repro from #29833
 

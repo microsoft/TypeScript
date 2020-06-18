@@ -42,7 +42,7 @@ namespace ts {
         constructor(major: number, minor?: number, patch?: number, prerelease?: string, build?: string);
         constructor(major: number | string, minor = 0, patch = 0, prerelease = "", build = "") {
             if (typeof major === "string") {
-                const result = Debug.assertDefined(tryParseComponents(major), "Invalid version");
+                const result = Debug.checkDefined(tryParseComponents(major), "Invalid version");
                 ({ major, minor, patch, prerelease, build } = result);
             }
 
@@ -171,7 +171,7 @@ namespace ts {
         private _alternatives: readonly (readonly Comparator[])[];
 
         constructor(spec: string) {
-            this._alternatives = spec ? Debug.assertDefined(parseRange(spec), "Invalid range spec.") : emptyArray;
+            this._alternatives = spec ? Debug.checkDefined(parseRange(spec), "Invalid range spec.") : emptyArray;
         }
 
         static tryParse(text: string) {

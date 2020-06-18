@@ -100,7 +100,7 @@ type b = Remap2<string[]>;  // string[]
 // Repro from #29992
 
 type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
->NonOptionalKeys : { [P in keyof T]: undefined extends T[P] ? never : P; }[keyof T]
+>NonOptionalKeys : NonOptionalKeys<T>
 
 type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
 >Child : Child<T>

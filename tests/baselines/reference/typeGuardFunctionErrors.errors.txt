@@ -1,10 +1,10 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(1,7): error TS2300: Duplicate identifier 'A'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(14,5): error TS2322: Type '""' is not assignable to type 'boolean'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,55): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,57): error TS1144: '{' or ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,60): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(17,62): error TS1005: ';' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(21,33): error TS2749: 'x' refers to a value, but is being used as a type here.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(21,33): error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(25,33): error TS1225: Cannot find parameter 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(29,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(30,5): error TS1131: Property or signature expected.
@@ -28,19 +28,19 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(84,1):
   Type predicate 'p2 is A' is not assignable to 'p1 is A'.
     Parameter 'p2' is not in the same position as parameter 'p1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(90,1): error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,9): error TS2749: 'b' refers to a value, but is being used as a type here.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,9): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,14): error TS2300: Duplicate identifier 'A'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,16): error TS2749: 'b' refers to a value, but is being used as a type here.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,16): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,18): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(96,21): error TS1005: ',' expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,20): error TS2749: 'b' refers to a value, but is being used as a type here.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,20): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,22): error TS1144: '{' or ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,25): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(97,27): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(103,25): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,9): error TS2322: Type 'true' is not assignable to type 'D'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,9): error TS2322: Type 'boolean' is not assignable to type 'D'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(106,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(109,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
@@ -91,7 +91,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     
     function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
                                                           ~
-!!! error TS2749: 'x' refers to a value, but is being used as a type here.
+!!! error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
                                                             ~~
 !!! error TS1144: '{' or ';' expected.
                                                                ~
@@ -103,7 +103,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     
     function hasMissingIsKeyword(): x {
                                     ~
-!!! error TS2749: 'x' refers to a value, but is being used as a type here.
+!!! error TS2749: 'x' refers to a value, but is being used as a type here. Did you mean 'typeof x'?
         return true;
     }
     
@@ -222,7 +222,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     // Type predicates in non-return type positions
     var b1: b is A;
             ~
-!!! error TS2749: 'b' refers to a value, but is being used as a type here.
+!!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
               ~~
 !!! error TS1005: ',' expected.
                  ~
@@ -231,14 +231,14 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
 !!! error TS2300: Duplicate identifier 'A'.
     function b2(a: b is A) {};
                    ~
-!!! error TS2749: 'b' refers to a value, but is being used as a type here.
+!!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
                      ~~
 !!! error TS1005: ',' expected.
                         ~
 !!! error TS1005: ',' expected.
     function b3(): A | b is A {
                        ~
-!!! error TS2749: 'b' refers to a value, but is being used as a type here.
+!!! error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
                          ~~
 !!! error TS1144: '{' or ';' expected.
                             ~
@@ -255,7 +255,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
             ~~~~~~~~~~~~
-!!! error TS2322: Type 'true' is not assignable to type 'D'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'D'.
             ~~~~~~~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }

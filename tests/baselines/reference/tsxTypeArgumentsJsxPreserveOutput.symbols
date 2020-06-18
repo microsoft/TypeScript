@@ -1,0 +1,98 @@
+=== tests/cases/conformance/jsx/foo.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(foo.tsx, 0, 0))
+
+type TypeProps = { foo?: boolean; };
+>TypeProps : Symbol(TypeProps, Decl(foo.tsx, 0, 32))
+>foo : Symbol(foo, Decl(foo.tsx, 2, 18))
+
+interface InterfaceProps { foo?: boolean; }
+>InterfaceProps : Symbol(InterfaceProps, Decl(foo.tsx, 2, 36))
+>foo : Symbol(InterfaceProps.foo, Decl(foo.tsx, 3, 26))
+
+function Foo<T>() {
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>T : Symbol(T, Decl(foo.tsx, 5, 13))
+
+    return null;
+}
+
+<>
+    {/* JsxSelfClosingElement */}
+    <Foo<unknown> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<string> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<boolean> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<object> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<null> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<any> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<never> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<undefined> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<TypeProps> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>TypeProps : Symbol(TypeProps, Decl(foo.tsx, 0, 32))
+
+    <Foo<InterfaceProps> />
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>InterfaceProps : Symbol(InterfaceProps, Decl(foo.tsx, 2, 36))
+
+    {/* JsxOpeningElement */}
+    <Foo<unknown>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<string>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<boolean>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<object>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<null>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<any>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<never>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<undefined>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<TypeProps>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>TypeProps : Symbol(TypeProps, Decl(foo.tsx, 0, 32))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+    <Foo<InterfaceProps>></Foo>
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+>InterfaceProps : Symbol(InterfaceProps, Decl(foo.tsx, 2, 36))
+>Foo : Symbol(Foo, Decl(foo.tsx, 3, 43))
+
+</>
+

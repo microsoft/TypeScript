@@ -19,9 +19,10 @@ tests/cases/compiler/inKeywordTypeguard.ts(74,32): error TS2339: Property 'a' do
 tests/cases/compiler/inKeywordTypeguard.ts(82,39): error TS2339: Property 'b' does not exist on type 'A'.
 tests/cases/compiler/inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' does not exist on type 'B'.
 tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
+tests/cases/compiler/inKeywordTypeguard.ts(103,13): error TS2322: Type '{ a: string; } & { b: string; }' is not assignable to type 'never'.
 
 
-==== tests/cases/compiler/inKeywordTypeguard.ts (17 errors) ====
+==== tests/cases/compiler/inKeywordTypeguard.ts (18 errors) ====
     class A { a: string; }
     class B { b: string; }
     
@@ -157,3 +158,14 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
             }
         }
     }
+    
+    function positiveIntersectionTest(x: { a: string } & { b: string }) {
+        if ("a" in x) {
+            let s: string = x.a;
+        } else {
+            let n: never = x;
+                ~
+!!! error TS2322: Type '{ a: string; } & { b: string; }' is not assignable to type 'never'.
+        }
+    }
+    

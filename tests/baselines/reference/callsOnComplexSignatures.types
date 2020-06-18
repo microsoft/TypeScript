@@ -103,24 +103,24 @@ function test3(items: string[] | number[]) {
 >item => console.log(item) : (item: any) => void
 >item : any
 >console.log(item) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >item : any
 }
 
 function test4(
->test4 : (arg1: ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number), arg2: ((a: { x: number; }, b: object) => number) | ((a: object, b: { x: number; }) => number), arg3: ((a: { x: number; }, ...objs: { y: number; }[]) => number) | ((...objs: { x: number; }[]) => number), arg4: ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number), arg5: ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number), arg6: ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)) => void
+>test4 : (arg1: ((...objs: {    x: number;}[]) => number) | ((...objs: {    y: number;}[]) => number), arg2: ((a: {    x: number;}, b: object) => number) | ((a: object, b: {    x: number;}) => number), arg3: ((a: {    x: number;}, ...objs: {    y: number;}[]) => number) | ((...objs: {    x: number;}[]) => number), arg4: ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number), arg5: ((a?: { x: number; } | undefined, ...b: {    x: number;}[]) => number) | ((a?: { y: number; } | undefined) => number), arg6: ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: {    y: number;}[]) => number)) => void
 
     arg1: ((...objs: {x: number}[]) => number) | ((...objs: {y: number}[]) => number),
->arg1 : ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number)
+>arg1 : ((...objs: {    x: number;}[]) => number) | ((...objs: {    y: number;}[]) => number)
 >objs : { x: number; }[]
 >x : number
 >objs : { y: number; }[]
 >y : number
 
     arg2: ((a: {x: number}, b: object) => number) | ((a: object, b: {x: number}) => number),
->arg2 : ((a: { x: number; }, b: object) => number) | ((a: object, b: { x: number; }) => number)
+>arg2 : ((a: {    x: number;}, b: object) => number) | ((a: object, b: {    x: number;}) => number)
 >a : { x: number; }
 >x : number
 >b : object
@@ -129,7 +129,7 @@ function test4(
 >x : number
 
     arg3: ((a: {x: number}, ...objs: {y: number}[]) => number) | ((...objs: {x: number}[]) => number),
->arg3 : ((a: { x: number; }, ...objs: { y: number; }[]) => number) | ((...objs: { x: number; }[]) => number)
+>arg3 : ((a: {    x: number;}, ...objs: {    y: number;}[]) => number) | ((...objs: {    x: number;}[]) => number)
 >a : { x: number; }
 >x : number
 >objs : { y: number; }[]
@@ -147,7 +147,7 @@ function test4(
 >y : number
 
     arg5: ((a?: {x: number}, ...b: {x: number}[]) => number) | ((a?: {y: number}) => number),
->arg5 : ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number)
+>arg5 : ((a?: { x: number; } | undefined, ...b: {    x: number;}[]) => number) | ((a?: { y: number; } | undefined) => number)
 >a : { x: number; } | undefined
 >x : number
 >b : { x: number; }[]
@@ -156,7 +156,7 @@ function test4(
 >y : number
 
     arg6: ((a?: {x: number}, b?: {x: number}) => number) | ((...a: {y: number}[]) => number),
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
+>arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: {    y: number;}[]) => number)
 >a : { x: number; } | undefined
 >x : number
 >b : { x: number; } | undefined
@@ -358,8 +358,8 @@ function test5() {
 
     // Union of all intrinsics and components of `any`
     function App(props: { component:React.ReactType }) {
->App : (props: { component: React.ReactType<any>; }) => JSX.Element
->props : { component: React.ReactType<any>; }
+>App : (props: {    component: React.ReactType;}) => JSX.Element
+>props : { component: React.ReactType; }
 >component : React.ReactType<any>
 >React : any
 

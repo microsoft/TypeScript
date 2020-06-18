@@ -56,7 +56,7 @@ namespace ts.codefix {
                     tryDeleteDeclaration(sourceFile, token, t, checker, sourceFiles, /*isFixAll*/ false));
                 if (deletion.length) {
                     const name = isComputedPropertyName(token.parent) ? token.parent : token;
-                    result.push(createDeleteFix(deletion, [Diagnostics.Remove_declaration_for_Colon_0, name.getText(sourceFile)]));
+                    result.push(createDeleteFix(deletion, [Diagnostics.Remove_unused_declaration_for_Colon_0, name.getText(sourceFile)]));
                 }
             }
 
@@ -109,7 +109,7 @@ namespace ts.codefix {
     });
 
     function changeInferToUnknown(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-        changes.replaceNode(sourceFile, token.parent, createKeywordTypeNode(SyntaxKind.UnknownKeyword));
+        changes.replaceNode(sourceFile, token.parent, factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword));
     }
 
     function createDeleteFix(changes: FileTextChanges[], diag: DiagnosticAndArguments): CodeFixAction {
@@ -117,7 +117,7 @@ namespace ts.codefix {
     }
 
     function deleteTypeParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node): void {
-        changes.delete(sourceFile, Debug.assertDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
+        changes.delete(sourceFile, Debug.checkDefined(cast(token.parent, isDeclarationWithTypeParameterChildren).typeParameters, "The type parameter to delete should exist"));
     }
 
     // Sometimes the diagnostic span is an entire ImportDeclaration, so we should remove the whole thing.
@@ -153,7 +153,14 @@ namespace ts.codefix {
             token = cast(token.parent, isInferTypeNode).typeParameter.name;
         }
         if (isIdentifier(token) && canPrefix(token)) {
-            changes.replaceNode(sourceFile, token, createIdentifier(`_${token.text}`));
+            changes.replaceNode(sourceFile, token, factory.createIdentifier(`_${token.text}`));
+            if (isParameter(token.parent)) {
+                getJSDocParameterTags(token.parent).forEach((tag) => {
+                    if (isIdentifier(tag.name)) {
+                        changes.replaceNode(sourceFile, tag.name, factory.createIdentifier(`_${tag.name.text}`));
+                    }
+                });
+            }
         }
     }
 

@@ -6,6 +6,10 @@ class C1 {
     b: number | undefined;
     c: number | null;  // Error
     d?: number;
+    #f: number; //Error
+    #g: number | undefined;
+    #h: number | null; //Error
+    #i?: number;
 }
 
 // No strict initialization checks in ambient contexts
@@ -15,6 +19,11 @@ declare class C2 {
     b: number | undefined;
     c: number | null;
     d?: number;
+    
+    #f: number;
+    #g: number | undefined;
+    #h: number | null;
+    #i?: number;
 }
 
 // No strict initialization checks for static members
@@ -32,14 +41,19 @@ class C4 {
     a = 0;
     b: number = 0;
     c: string = "abc";
+    #d = 0
+    #e: number = 0
+    #f: string= "abc"
 }
 
 // Assignment in constructor satisfies strict initialization check
 
 class C5 {
     a: number;
+    #b: number;
     constructor() {
         this.a = 0;
+        this.#b = 0;
     }
 }
 
@@ -47,22 +61,27 @@ class C5 {
 
 class C6 {
     a: number;  // Error
+    #b: number
     constructor(cond: boolean) {
         if (cond) {
             return;
         }
         this.a = 0;
+        this.#b = 0;
     }
 }
 
 class C7 {
     a: number;
+    #b: number;
     constructor(cond: boolean) {
         if (cond) {
             this.a = 1;
+            this.#b = 1;
             return;
         }
         this.a = 0;
+        this.#b = 1;
     }
 }
 
@@ -90,10 +109,13 @@ class C10 {
     a: number;
     b: number;
     c?: number;
+    #d: number;
     constructor() {
         let x = this.a;  // Error
         this.a = this.b;  // Error
+        this.b = this.#d //Error
         this.b = x;
+        this.#d = x;
         let y = this.c;
     }
 }
@@ -104,8 +126,10 @@ declare function someValue(): any;
 
 class C11 {
     a: number;
+    #b: number;
     constructor() {
         this.a = someValue();
+        this.#b = someValue();
     }
 }
 
@@ -113,92 +137,118 @@ class C11 {
 //// [strictPropertyInitialization.js]
 "use strict";
 // Properties with non-undefined types require initialization
-var C1 = /** @class */ (function () {
-    function C1() {
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
     }
-    return C1;
-}());
+    privateMap.set(receiver, value);
+    return value;
+};
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+};
+var _f, _g, _h, _i, _d, _e, _f_1, _b, _b_1, _b_2, _d_1, _b_3;
+class C1 {
+    constructor() {
+        _f.set(this, void 0); //Error
+        _g.set(this, void 0);
+        _h.set(this, void 0); //Error
+        _i.set(this, void 0);
+    }
+}
+_f = new WeakMap(), _g = new WeakMap(), _h = new WeakMap(), _i = new WeakMap();
 // No strict initialization checks for static members
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
+class C3 {
+}
 // Initializer satisfies strict initialization check
-var C4 = /** @class */ (function () {
-    function C4() {
+class C4 {
+    constructor() {
         this.a = 0;
         this.b = 0;
         this.c = "abc";
+        _d.set(this, 0);
+        _e.set(this, 0);
+        _f_1.set(this, "abc");
     }
-    return C4;
-}());
+}
+_d = new WeakMap(), _e = new WeakMap(), _f_1 = new WeakMap();
 // Assignment in constructor satisfies strict initialization check
-var C5 = /** @class */ (function () {
-    function C5() {
+class C5 {
+    constructor() {
+        _b.set(this, void 0);
         this.a = 0;
+        __classPrivateFieldSet(this, _b, 0);
     }
-    return C5;
-}());
+}
+_b = new WeakMap();
 // All code paths must contain assignment
-var C6 = /** @class */ (function () {
-    function C6(cond) {
+class C6 {
+    constructor(cond) {
+        _b_1.set(this, void 0);
         if (cond) {
             return;
         }
         this.a = 0;
+        __classPrivateFieldSet(this, _b_1, 0);
     }
-    return C6;
-}());
-var C7 = /** @class */ (function () {
-    function C7(cond) {
+}
+_b_1 = new WeakMap();
+class C7 {
+    constructor(cond) {
+        _b_2.set(this, void 0);
         if (cond) {
             this.a = 1;
+            __classPrivateFieldSet(this, _b_2, 1);
             return;
         }
         this.a = 0;
+        __classPrivateFieldSet(this, _b_2, 1);
     }
-    return C7;
-}());
+}
+_b_2 = new WeakMap();
 // Properties with string literal names aren't checked
-var C8 = /** @class */ (function () {
-    function C8() {
-    }
-    return C8;
-}());
+class C8 {
+}
 // No strict initialization checks for abstract members
-var C9 = /** @class */ (function () {
-    function C9() {
-    }
-    return C9;
-}());
+class C9 {
+}
 // Properties with non-undefined types must be assigned before they can be accessed
 // within their constructor
-var C10 = /** @class */ (function () {
-    function C10() {
-        var x = this.a; // Error
+class C10 {
+    constructor() {
+        _d_1.set(this, void 0);
+        let x = this.a; // Error
         this.a = this.b; // Error
+        this.b = __classPrivateFieldGet(this, _d_1); //Error
         this.b = x;
-        var y = this.c;
+        __classPrivateFieldSet(this, _d_1, x);
+        let y = this.c;
     }
-    return C10;
-}());
-var C11 = /** @class */ (function () {
-    function C11() {
+}
+_d_1 = new WeakMap();
+class C11 {
+    constructor() {
+        _b_3.set(this, void 0);
         this.a = someValue();
+        __classPrivateFieldSet(this, _b_3, someValue());
     }
-    return C11;
-}());
+}
+_b_3 = new WeakMap();
 
 
 //// [strictPropertyInitialization.d.ts]
 declare class C1 {
+    #private;
     a: number;
     b: number | undefined;
     c: number | null;
     d?: number;
 }
 declare class C2 {
+    #private;
     a: number;
     b: number | undefined;
     c: number | null;
@@ -211,19 +261,23 @@ declare class C3 {
     static d?: number;
 }
 declare class C4 {
+    #private;
     a: number;
     b: number;
     c: string;
 }
 declare class C5 {
+    #private;
     a: number;
     constructor();
 }
 declare class C6 {
+    #private;
     a: number;
     constructor(cond: boolean);
 }
 declare class C7 {
+    #private;
     a: number;
     constructor(cond: boolean);
 }
@@ -239,6 +293,7 @@ declare abstract class C9 {
     abstract d?: number;
 }
 declare class C10 {
+    #private;
     a: number;
     b: number;
     c?: number;
@@ -246,6 +301,7 @@ declare class C10 {
 }
 declare function someValue(): any;
 declare class C11 {
+    #private;
     a: number;
     constructor();
 }

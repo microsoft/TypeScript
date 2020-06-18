@@ -12,6 +12,7 @@ export class BuildWorkspaceService {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.BuildWorkspaceService = void 0;
     var BuildWorkspaceService = /** @class */ (function () {
         function BuildWorkspaceService() {
         }

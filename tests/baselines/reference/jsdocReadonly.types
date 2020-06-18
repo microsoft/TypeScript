@@ -1,0 +1,56 @@
+=== tests/cases/conformance/jsdoc/jsdocReadonly.js ===
+class LOL {
+>LOL : LOL
+
+    /**
+     * @readonly
+     * @private
+     * @type {number}
+     * Order rules do not apply to JSDoc
+     */
+    x = 1
+>x : number
+>1 : 1
+
+    /** @readonly */
+    y = 2
+>y : 2
+>2 : 2
+
+    /** @readonly Definitely not here */
+    static z = 3
+>z : 3
+>3 : 3
+
+    /** @readonly This is OK too */
+    constructor() {
+        /** ok */
+        this.y = 2
+>this.y = 2 : 2
+>this.y : 2
+>this : this
+>y : 2
+>2 : 2
+
+        /** @readonly ok */
+        this.ka = 2
+>this.ka = 2 : 2
+>this.ka : any
+>this : this
+>ka : any
+>2 : 2
+    }
+}
+
+var l = new LOL()
+>l : LOL
+>new LOL() : LOL
+>LOL : typeof LOL
+
+l.y = 12
+>l.y = 12 : 12
+>l.y : any
+>l : LOL
+>y : any
+>12 : 12
+

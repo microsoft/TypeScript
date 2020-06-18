@@ -10,9 +10,9 @@ tests/cases/compiler/overloadResolutionTest1.ts(18,16): error TS2769: No overloa
     Type 'string' is not assignable to type 'boolean'.
 tests/cases/compiler/overloadResolutionTest1.ts(24,15): error TS2769: No overload matches this call.
   Overload 1 of 2, '(bar: { a: number; }): number', gave the following error.
-    Type 'true' is not assignable to type 'number'.
+    Type 'boolean' is not assignable to type 'number'.
   Overload 2 of 2, '(bar: { a: string; }): string', gave the following error.
-    Type 'true' is not assignable to type 'string'.
+    Type 'boolean' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/overloadResolutionTest1.ts (3 errors) ====
@@ -59,8 +59,8 @@ tests/cases/compiler/overloadResolutionTest1.ts(24,15): error TS2769: No overloa
                   ~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(bar: { a: number; }): number', gave the following error.
-!!! error TS2769:     Type 'true' is not assignable to type 'number'.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'number'.
 !!! error TS2769:   Overload 2 of 2, '(bar: { a: string; }): string', gave the following error.
-!!! error TS2769:     Type 'true' is not assignable to type 'string'.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/compiler/overloadResolutionTest1.ts:21:20: The expected type comes from property 'a' which is declared here on type '{ a: number; }'
 !!! related TS6500 tests/cases/compiler/overloadResolutionTest1.ts:22:20: The expected type comes from property 'a' which is declared here on type '{ a: string; }'

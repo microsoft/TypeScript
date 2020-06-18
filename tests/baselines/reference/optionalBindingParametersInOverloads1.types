@@ -22,7 +22,7 @@ foo(["", 0, false]);
 foo([false, 0, ""]);
 >foo([false, 0, ""]) : any
 >foo : ([x, y, z]?: [string, number, boolean]) => any
->[false, 0, ""] : (string | number | boolean)[]
+>[false, 0, ""] : [boolean, number, string]
 >false : false
 >0 : 0
 >"" : ""

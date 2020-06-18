@@ -326,8 +326,9 @@ namespace ts.formatting {
         export function argumentStartsOnSameLineAsPreviousArgument(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
             if (isCallOrNewExpression(parent)) {
                 if (!parent.arguments) return false;
-
-                const currentNode = Debug.assertDefined(find(parent.arguments, arg => arg.pos === child.pos));
+                const currentNode = find(parent.arguments, arg => arg.pos === child.pos);
+                // If it's not one of the arguments, don't look past this
+                if (!currentNode) return false;
                 const currentIndex = parent.arguments.indexOf(currentNode);
                 if (currentIndex === 0) return false; // Can't look at previous node if first
 
@@ -573,7 +574,7 @@ namespace ts.formatting {
                     return childKind !== SyntaxKind.JsxClosingFragment;
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.UnionType:
-                    if (childKind === SyntaxKind.TypeLiteral) {
+                    if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType) {
                         return false;
                     }
                     // falls through

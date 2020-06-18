@@ -24,7 +24,7 @@ namespace ts.projectSystem {
 
         it("invalidates the cache when new files are added", () => {
             const { host, importSuggestionsCache, checker } = setup();
-            host.reloadFS([aTs, bTs, ambientDeclaration, tsconfig, { ...aTs, path: "/src/a2.ts" }]);
+            host.writeFile("/src/a2.ts", aTs.content);
             host.runQueuedTimeoutCallbacks();
             assert.isUndefined(importSuggestionsCache.get(bTs.path, checker));
         });
@@ -32,7 +32,7 @@ namespace ts.projectSystem {
         it("invalidates the cache when files are deleted", () => {
             const { host, projectService, importSuggestionsCache, checker } = setup();
             projectService.closeClientFile(aTs.path);
-            host.reloadFS([bTs, ambientDeclaration, tsconfig]);
+            host.deleteFile(aTs.path);
             host.runQueuedTimeoutCallbacks();
             assert.isUndefined(importSuggestionsCache.get(bTs.path, checker));
         });

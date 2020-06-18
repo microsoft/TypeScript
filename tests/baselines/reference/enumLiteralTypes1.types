@@ -42,7 +42,7 @@ function f1() {
 }
 
 function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
->f2 : (a: YesNo, b: Choice, c: Choice) => void
+>f2 : (a: YesNo, b: UnknownYesNo, c: Choice) => void
 >a : YesNo
 >b : Choice
 >c : Choice
@@ -211,7 +211,7 @@ declare function g(x: Choice): number;
 >x : Choice
 
 function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
->f5 : (a: YesNo, b: Choice, c: Choice) => void
+>f5 : (a: YesNo, b: UnknownYesNo, c: Choice) => void
 >a : YesNo
 >b : Choice
 >c : Choice
@@ -308,7 +308,7 @@ function f11(x: YesNo) {
 }
 
 function f12(x: UnknownYesNo) {
->f12 : (x: Choice) => void
+>f12 : (x: UnknownYesNo) => void
 >x : Choice
 
     if (x) {
@@ -324,7 +324,7 @@ function f12(x: UnknownYesNo) {
 }
 
 function f13(x: UnknownYesNo) {
->f13 : (x: Choice) => void
+>f13 : (x: UnknownYesNo) => void
 >x : Choice
 
     if (x === Choice.Yes) {

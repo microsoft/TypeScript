@@ -54,6 +54,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [moduleLookingFile01.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.z = exports.y = exports.x = void 0;
 exports.x = (import.meta);
 exports.y = (import.metal);
 exports.z = import.import.import.malkovich;
@@ -66,6 +67,7 @@ let globalC = import.import.import.malkovich;
 //// [assignmentTargets.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = void 0;
 exports.foo = import.meta.blah = import.meta.blue = import.meta;
 import.meta = exports.foo;
 const { a, b, c } = import.meta.wellKnownProperty;

@@ -8,9 +8,9 @@
 ////    b();
 ////}
 
-verify.codeFixAll({
-    fixId: "inferFromUsage",
-    fixAllDescription: "Infer all types from usage",
+verify.codeFix({
+    index: 0,
+    description: ignoreInterpolations(ts.Diagnostics.Infer_parameter_types_from_usage),
     newFileContent:
 `/**
  * @param {() => void} b

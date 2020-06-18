@@ -1,0 +1,143 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator_es2020.ts ===
+declare const a1: 'literal' | undefined | null
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator_es2020.ts, 0, 13))
+
+declare const a2: '' | undefined | null
+>a2 : Symbol(a2, Decl(nullishCoalescingOperator_es2020.ts, 1, 13))
+
+declare const a3: 1 | undefined | null
+>a3 : Symbol(a3, Decl(nullishCoalescingOperator_es2020.ts, 2, 13))
+
+declare const a4: 0 | undefined | null
+>a4 : Symbol(a4, Decl(nullishCoalescingOperator_es2020.ts, 3, 13))
+
+declare const a5: true | undefined | null
+>a5 : Symbol(a5, Decl(nullishCoalescingOperator_es2020.ts, 4, 13))
+
+declare const a6: false | undefined | null
+>a6 : Symbol(a6, Decl(nullishCoalescingOperator_es2020.ts, 5, 13))
+
+declare const a7: unknown | null
+>a7 : Symbol(a7, Decl(nullishCoalescingOperator_es2020.ts, 6, 13))
+
+declare const a8: never | null
+>a8 : Symbol(a8, Decl(nullishCoalescingOperator_es2020.ts, 7, 13))
+
+declare const a9: any | null
+>a9 : Symbol(a9, Decl(nullishCoalescingOperator_es2020.ts, 8, 13))
+
+
+const aa1 = a1 ?? 'whatever'
+>aa1 : Symbol(aa1, Decl(nullishCoalescingOperator_es2020.ts, 11, 5))
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator_es2020.ts, 0, 13))
+
+const aa2 = a2 ?? 'whatever'
+>aa2 : Symbol(aa2, Decl(nullishCoalescingOperator_es2020.ts, 12, 5))
+>a2 : Symbol(a2, Decl(nullishCoalescingOperator_es2020.ts, 1, 13))
+
+const aa3 = a3 ?? 'whatever'
+>aa3 : Symbol(aa3, Decl(nullishCoalescingOperator_es2020.ts, 13, 5))
+>a3 : Symbol(a3, Decl(nullishCoalescingOperator_es2020.ts, 2, 13))
+
+const aa4 = a4 ?? 'whatever'
+>aa4 : Symbol(aa4, Decl(nullishCoalescingOperator_es2020.ts, 14, 5))
+>a4 : Symbol(a4, Decl(nullishCoalescingOperator_es2020.ts, 3, 13))
+
+const aa5 = a5 ?? 'whatever'
+>aa5 : Symbol(aa5, Decl(nullishCoalescingOperator_es2020.ts, 15, 5))
+>a5 : Symbol(a5, Decl(nullishCoalescingOperator_es2020.ts, 4, 13))
+
+const aa6 = a6 ?? 'whatever'
+>aa6 : Symbol(aa6, Decl(nullishCoalescingOperator_es2020.ts, 16, 5))
+>a6 : Symbol(a6, Decl(nullishCoalescingOperator_es2020.ts, 5, 13))
+
+const aa7 = a7 ?? 'whatever'
+>aa7 : Symbol(aa7, Decl(nullishCoalescingOperator_es2020.ts, 17, 5))
+>a7 : Symbol(a7, Decl(nullishCoalescingOperator_es2020.ts, 6, 13))
+
+const aa8 = a8 ?? 'whatever'
+>aa8 : Symbol(aa8, Decl(nullishCoalescingOperator_es2020.ts, 18, 5))
+>a8 : Symbol(a8, Decl(nullishCoalescingOperator_es2020.ts, 7, 13))
+
+const aa9 = a9 ?? 'whatever'
+>aa9 : Symbol(aa9, Decl(nullishCoalescingOperator_es2020.ts, 19, 5))
+>a9 : Symbol(a9, Decl(nullishCoalescingOperator_es2020.ts, 8, 13))
+
+
+declare let a: any, b: any, c: any;
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+
+let x1 = (a ?? b as any) || c;
+>x1 : Symbol(x1, Decl(nullishCoalescingOperator_es2020.ts, 24, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+
+let x2 = c || (a ?? b as any);
+>x2 : Symbol(x2, Decl(nullishCoalescingOperator_es2020.ts, 25, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+
+let x3 = ((a ?? b) as any) || c;
+>x3 : Symbol(x3, Decl(nullishCoalescingOperator_es2020.ts, 26, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+
+let x4 = c || ((a ?? b) as any);
+>x4 : Symbol(x4, Decl(nullishCoalescingOperator_es2020.ts, 27, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+
+let x5 = (a ?? b) as any || c;
+>x5 : Symbol(x5, Decl(nullishCoalescingOperator_es2020.ts, 28, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+
+let x6 = c || (a ?? b) as any;
+>x6 : Symbol(x6, Decl(nullishCoalescingOperator_es2020.ts, 29, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+
+let y1 = (a ?? b as any) && c;
+>y1 : Symbol(y1, Decl(nullishCoalescingOperator_es2020.ts, 31, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+
+let y2 = c && (a ?? b as any);
+>y2 : Symbol(y2, Decl(nullishCoalescingOperator_es2020.ts, 32, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+
+let y3 = ((a ?? b) as any) && c;
+>y3 : Symbol(y3, Decl(nullishCoalescingOperator_es2020.ts, 33, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+
+let y4 = c && ((a ?? b) as any);
+>y4 : Symbol(y4, Decl(nullishCoalescingOperator_es2020.ts, 34, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+
+let y5 = (a ?? b) as any && c;
+>y5 : Symbol(y5, Decl(nullishCoalescingOperator_es2020.ts, 35, 3))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+
+let y6 = c && (a ?? b) as any;
+>y6 : Symbol(y6, Decl(nullishCoalescingOperator_es2020.ts, 36, 3))
+>c : Symbol(c, Decl(nullishCoalescingOperator_es2020.ts, 22, 27))
+>a : Symbol(a, Decl(nullishCoalescingOperator_es2020.ts, 22, 11))
+>b : Symbol(b, Decl(nullishCoalescingOperator_es2020.ts, 22, 19))
+

@@ -80,16 +80,16 @@ Installer.prototype.first = function () {
 
     this.twice = undefined // ok
 >this.twice = undefined : undefined
->this.twice : string | undefined
+>this.twice : string
 >this : this
->twice : string | undefined
+>twice : string
 >undefined : undefined
 
     this.twice = 'hi' // ok
 >this.twice = 'hi' : "hi"
->this.twice : string | undefined
+>this.twice : string
 >this : this
->twice : string | undefined
+>twice : string
 >'hi' : "hi"
 }
 Installer.prototype.second = function () {
@@ -124,16 +124,16 @@ Installer.prototype.second = function () {
 
     this.twice = null // error
 >this.twice = null : null
->this.twice : string | undefined
+>this.twice : string
 >this : this
->twice : string | undefined
+>twice : string
 >null : null
 
     this.twice = false // error
 >this.twice = false : false
->this.twice : string | undefined
+>this.twice : string
 >this : this
->twice : string | undefined
+>twice : string
 >false : false
 
     this.twices.push(1) // error: Object is possibly null

@@ -1,11 +1,11 @@
 namespace ts {
     describe("unittests:: tsc:: incremental::", () => {
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "incremental",
             subScenario: "when passing filename for buildinfo on commandline",
             fs: () => loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": utils.dedent`
+                "/src/project/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
                             "target": "es5",
@@ -17,15 +17,15 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo"],
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "incremental",
             subScenario: "when passing rootDir from commandline",
             fs: () => loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": utils.dedent`
+                "/src/project/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -34,10 +34,10 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "incremental",
             subScenario: "with only dts files",
             fs: () => loadProjectFromFiles({
@@ -55,12 +55,12 @@ namespace ts {
             ]
         });
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "incremental",
             subScenario: "when passing rootDir is in the tsconfig",
             fs: () => loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": utils.dedent`
+                "/src/project/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
                             "incremental": true,
@@ -70,7 +70,51 @@ namespace ts {
                     }`,
             }),
             commandLineArgs: ["--p", "src/project"],
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
+        });
+
+        describe("with noEmitOnError", () => {
+            let projFs: vfs.FileSystem;
+            before(() => {
+                projFs = loadProjectFromDisk("tests/projects/noEmitOnError");
+            });
+            after(() => {
+                projFs = undefined!;
+            });
+
+            function verifyNoEmitOnError(subScenario: string, fixModifyFs: TscIncremental["modifyFs"], modifyFs?: TscIncremental["modifyFs"]) {
+                verifyTscSerializedIncrementalEdits({
+                    scenario: "incremental",
+                    subScenario,
+                    fs: () => projFs,
+                    commandLineArgs: ["--incremental", "-p", "src"],
+                    modifyFs,
+                    incrementalScenarios: [
+                        noChangeRun,
+                        {
+                            buildKind: BuildKind.IncrementalDtsUnchanged,
+                            modifyFs: fixModifyFs
+                        },
+                        noChangeRun,
+                    ],
+                    baselinePrograms: true
+                });
+            }
+            verifyNoEmitOnError(
+                "with noEmitOnError syntax errors",
+                fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a = {
+    lastName: 'sdsd'
+};`, "utf-8")
+            );
+
+            verifyNoEmitOnError(
+                "with noEmitOnError semantic errors",
+                fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = "hello";`, "utf-8"),
+                fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = 10;`, "utf-8"),
+            );
         });
     });
 }

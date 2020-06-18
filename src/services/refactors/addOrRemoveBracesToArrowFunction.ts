@@ -25,8 +25,8 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     }
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const { file, startPosition } = context;
-        const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
+        const { file, startPosition, triggerReason } = context;
+        const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason === "invoked");
         if (!info) return emptyArray;
 
         if (info.error === undefined) {
@@ -70,31 +70,33 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         const { expression, returnStatement, func } = info.info;
 
         let body: ConciseBody;
+
         if (actionName === addBracesActionName) {
-            const returnStatement = createReturn(expression);
-            body = createBlock([returnStatement], /* multiLine */ true);
+            const returnStatement = factory.createReturnStatement(expression);
+            body = factory.createBlock([returnStatement], /* multiLine */ true);
             suppressLeadingAndTrailingTrivia(body);
             copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
         }
         else if (actionName === removeBracesActionName && returnStatement) {
-            const actualExpression = expression || createVoidZero();
-            body = needsParentheses(actualExpression) ? createParen(actualExpression) : actualExpression;
+            const actualExpression = expression || factory.createVoidZero();
+            body = needsParentheses(actualExpression) ? factory.createParenthesizedExpression(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
+            copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
         else {
             Debug.fail("invalid action");
         }
 
-        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func.body, body));
+        const edits = textChanges.ChangeTracker.with(context, t => {
+            t.replaceNode(file, func.body, body);
+        });
+
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function needsParentheses(expression: Expression) {
-        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
-    }
-
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number): InfoOrError | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true): InfoOrError | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
 
@@ -110,7 +112,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             }
         }
 
-        if ((!rangeContainsRange(func, node) || rangeContainsRange(func.body, node))) {
+        if ((!rangeContainsRange(func, node) || rangeContainsRange(func.body, node) && !considerFunctionBodies)) {
             return undefined;
         }        
 

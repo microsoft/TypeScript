@@ -9,7 +9,7 @@ namespace ts.server {
     }
 
     export function createPackageJsonCache(project: Project): PackageJsonCache {
-        const packageJsons = createMap<PackageJsonInfo>();
+        const packageJsons = createMap<PackageJsonInfo | false>();
         const directoriesWithoutPackageJson = createMap<true>();
         return {
             addOrUpdate,
@@ -18,7 +18,7 @@ namespace ts.server {
                 directoriesWithoutPackageJson.set(getDirectoryPath(fileName), true);
             },
             getInDirectory: directory => {
-                return packageJsons.get(combinePaths(directory, "package.json"));
+                return packageJsons.get(combinePaths(directory, "package.json")) || undefined;
             },
             directoryHasPackageJson,
             searchDirectoryAndAncestors: directory => {
@@ -39,7 +39,7 @@ namespace ts.server {
 
         function addOrUpdate(fileName: Path) {
             const packageJsonInfo = createPackageJsonInfo(fileName, project);
-            if (packageJsonInfo) {
+            if (packageJsonInfo !== undefined) {
                 packageJsons.set(fileName, packageJsonInfo);
                 directoriesWithoutPackageJson.delete(getDirectoryPath(fileName));
             }

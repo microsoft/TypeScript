@@ -1,0 +1,131 @@
+Input::
+//// [/user/username/projects/myProject/pkg1/dist/index.d.ts]
+export * from './types';
+
+//// [/user/username/projects/myProject/pkg1/dist/types.d.ts]
+export declare type A = {
+    id: string;
+};
+export declare type B = {
+    id: number;
+};
+export declare type IdType = A | B;
+export declare class MetadataAccessor<T, D extends IdType = IdType> {
+    readonly key: string;
+    private constructor();
+    toString(): string;
+    static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
+}
+
+//// [/user/username/projects/myProject/pkg1/package.json]
+{"name":"@raymondfeng/pkg1","version":"1.0.0","main":"dist/index.js","typings":"dist/index.d.ts"}
+
+//// [/user/username/projects/myproject/pkg2/dist/index.d.ts]
+export * from './types';
+
+//// [/user/username/projects/myproject/pkg2/dist/types.d.ts]
+export {MetadataAccessor} from '@raymondfeng/pkg1';
+
+//// [/user/username/projects/myproject/pkg2/package.json]
+{"name":"@raymondfeng/pkg2","version":"1.0.0","main":"dist/index.js","typings":"dist/index.d.ts"}
+
+//// [/user/username/projects/myproject/pkg3/src/index.ts]
+export * from './keys';
+
+//// [/user/username/projects/myproject/pkg3/src/keys.ts]
+import {MetadataAccessor} from "@raymondfeng/pkg2";
+export const ADMIN = MetadataAccessor.create<boolean>('1');
+
+//// [/user/username/projects/myproject/pkg3/tsconfig.json]
+{"compilerOptions":{"outDir":"dist","rootDir":"src","target":"es5","module":"commonjs","strict":true,"esModuleInterop":true,"declaration":true}}
+
+//// [/user/username/projects/myProject/pkg2/node_modules/@raymondfeng/pkg1] symlink(/user/username/projects/myProject/pkg1)
+//// [/user/username/projects/myproject/pkg3/node_modules/@raymondfeng/pkg2] symlink(/user/username/projects/myproject/pkg2)
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+/a/lib/tsc.js -p pkg3 --listFiles
+Output::
+[96mpkg3/src/keys.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS2742: [0mThe inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
+
+[7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
+[7m [0m [91m             ~~~~~[0m
+
+
+/a/lib/lib.d.ts
+
+/user/username/projects/myProject/pkg1/dist/types.d.ts
+
+/user/username/projects/myProject/pkg1/dist/index.d.ts
+
+/user/username/projects/myproject/pkg2/dist/types.d.ts
+
+/user/username/projects/myproject/pkg2/dist/index.d.ts
+
+/user/username/projects/myproject/pkg3/src/keys.ts
+
+/user/username/projects/myproject/pkg3/src/index.ts
+
+
+Found 1 error.
+
+
+
+Program root files: ["/user/username/projects/myproject/pkg3/src/index.ts","/user/username/projects/myproject/pkg3/src/keys.ts"]
+Program options: {"outDir":"/user/username/projects/myproject/pkg3/dist","rootDir":"/user/username/projects/myproject/pkg3/src","target":1,"module":1,"strict":true,"esModuleInterop":true,"declaration":true,"project":"/user/username/projects/myproject/pkg3","listFiles":true,"configFilePath":"/user/username/projects/myproject/pkg3/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myProject/pkg1/dist/types.d.ts
+/user/username/projects/myProject/pkg1/dist/index.d.ts
+/user/username/projects/myproject/pkg2/dist/types.d.ts
+/user/username/projects/myproject/pkg2/dist/index.d.ts
+/user/username/projects/myproject/pkg3/src/keys.ts
+/user/username/projects/myproject/pkg3/src/index.ts
+
+WatchedFiles::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+//// [/user/username/projects/myproject/pkg3/dist/keys.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ADMIN = void 0;
+var pkg2_1 = require("@raymondfeng/pkg2");
+exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
+
+
+//// [/user/username/projects/myproject/pkg3/dist/index.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./keys"), exports);
+
+
+//// [/user/username/projects/myproject/pkg3/dist/index.d.ts]
+export * from './keys';
+
+

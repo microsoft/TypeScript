@@ -1,0 +1,55 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/emitStatementsBeforeSuperCall.ts ===
+class Base {
+>Base : Base
+}
+class Sub extends Base {
+>Sub : Sub
+>Base : Base
+
+    // @ts-ignore
+    constructor(public p: number) {
+>p : number
+
+        console.log('hi'); // should emit before super
+>console.log('hi') : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>'hi' : "hi"
+
+        super();
+>super() : void
+>super : typeof Base
+    }
+    field = 0;
+>field : number
+>0 : 0
+}
+
+class Test extends Base {
+>Test : Test
+>Base : Base
+
+    prop: number;
+>prop : number
+
+    // @ts-ignore
+    constructor(public p: number) {
+>p : number
+
+        1; // should emit before super
+>1 : 1
+
+        super();
+>super() : void
+>super : typeof Base
+
+        this.prop = 1;
+>this.prop = 1 : 1
+>this.prop : number
+>this : this
+>prop : number
+>1 : 1
+    }
+}
+

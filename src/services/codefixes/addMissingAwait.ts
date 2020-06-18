@@ -68,7 +68,9 @@ namespace ts.codefix {
                     makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations);
                 }
             });
-            return createCodeFixActionNoFixId(
+            // No fix-all because it will already be included once with the use site fix,
+            // and for simplicity the fix-all doesn‘t let the user choose between use-site and declaration-site fixes.
+            return createCodeFixActionWithoutFixAll(
                 "addMissingAwaitToInitializer",
                 initializerChanges,
                 awaitableInitializers.initializers.length === 1
@@ -146,7 +148,7 @@ namespace ts.codefix {
                 declaration.type ||
                 !declaration.initializer ||
                 variableStatement.getSourceFile() !== sourceFile ||
-                hasModifier(variableStatement, ModifierFlags.Export) ||
+                hasSyntacticModifier(variableStatement, ModifierFlags.Export) ||
                 !variableName ||
                 !isInsideAwaitableBody(declaration.initializer)) {
                 isCompleteFix = false;
@@ -209,7 +211,7 @@ namespace ts.codefix {
             reference;
         const diagnostic = find(diagnostics, diagnostic =>
             diagnostic.start === errorNode.getStart(sourceFile) &&
-            diagnostic.start + diagnostic.length! === errorNode.getEnd());
+            (diagnostic.start + diagnostic.length!) === errorNode.getEnd());
 
         return diagnostic && contains(errorCodes, diagnostic.code) ||
             // A Promise is usually not correct in a binary expression (it’s not valid
@@ -242,7 +244,7 @@ namespace ts.codefix {
                     }
                 }
                 const type = checker.getTypeAtLocation(side);
-                const newNode = checker.getPromisedTypeOfPromise(type) ? createAwait(side) : side;
+                const newNode = checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(side) : side;
                 changeTracker.replaceNode(sourceFile, side, newNode);
             }
         }
@@ -256,7 +258,8 @@ namespace ts.codefix {
             changeTracker.replaceNode(
                 sourceFile,
                 insertionSite.parent.expression,
-                createParen(createAwait(insertionSite.parent.expression)));
+                factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite.parent.expression)));
+            insertLeadingSemicolonIfNeeded(changeTracker, insertionSite.parent.expression, sourceFile);
         }
         else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
             if (fixedDeclarations && isIdentifier(insertionSite)) {
@@ -265,7 +268,8 @@ namespace ts.codefix {
                     return;
                 }
             }
-            changeTracker.replaceNode(sourceFile, insertionSite, createParen(createAwait(insertionSite)));
+            changeTracker.replaceNode(sourceFile, insertionSite, factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite)));
+            insertLeadingSemicolonIfNeeded(changeTracker, insertionSite, sourceFile);
         }
         else {
             if (fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)) {
@@ -274,7 +278,14 @@ namespace ts.codefix {
                     return;
                 }
             }
-            changeTracker.replaceNode(sourceFile, insertionSite, createAwait(insertionSite));
+            changeTracker.replaceNode(sourceFile, insertionSite, factory.createAwaitExpression(insertionSite));
+        }
+    }
+
+    function insertLeadingSemicolonIfNeeded(changeTracker: textChanges.ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
+        const precedingToken = findPrecedingToken(beforeNode.pos, sourceFile);
+        if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
+            changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");
         }
     }
 }

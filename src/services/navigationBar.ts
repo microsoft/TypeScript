@@ -17,7 +17,7 @@ namespace ts.NavigationBar {
 
     /**
      * Maximum amount of characters to return
-     * The amount was choosen arbitrarily.
+     * The amount was chosen arbitrarily.
      */
     const maxLength = 150;
 
@@ -141,7 +141,7 @@ namespace ts.NavigationBar {
             const name = getNameOrArgument(entityName);
             const nameText = getElementOrPropertyAccessName(entityName);
             entityName = entityName.expression;
-            if (nameText === "prototype") continue;
+            if (nameText === "prototype" || isPrivateIdentifier(name)) continue;
             names.push(name);
         }
         names.push(entityName);
@@ -163,6 +163,7 @@ namespace ts.NavigationBar {
         // Save the old parent
         parentsStack.push(parent);
         trackedEs5ClassesStack.push(trackedEs5Classes);
+        trackedEs5Classes = undefined;
         parent = navNode;
     }
 
@@ -307,6 +308,18 @@ namespace ts.NavigationBar {
                 addNodeWithRecursiveChild(node, getInteriorModule(<ModuleDeclaration>node).body);
                 break;
 
+            case SyntaxKind.ExportAssignment: {
+                const expression = (<ExportAssignment>node).expression;
+                if (isObjectLiteralExpression(expression)) {
+                    startNode(node);
+                    addChildrenRecursively(expression);
+                    endNode();
+                }
+                else {
+                    addLeafNode(node);
+                }
+                break;
+            }
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.IndexSignature:
@@ -376,7 +389,7 @@ namespace ts.NavigationBar {
                         const memberName = defineCall.arguments[1];
                         const [depth, classNameIdentifier] = startNestedNodes(node, className);
                             startNode(node, classNameIdentifier);
-                                startNode(node, setTextRange(createIdentifier(memberName.text), memberName));
+                                startNode(node, setTextRange(factory.createIdentifier(memberName.text), memberName));
                                     addChildrenRecursively((node as CallExpression).arguments[2]);
                                 endNode();
                             endNode();
@@ -508,7 +521,7 @@ namespace ts.NavigationBar {
 
                 if (ctorFunction !== undefined) {
                     const ctorNode = setTextRange(
-                        createConstructor(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined),
+                        factory.createConstructorDeclaration(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined),
                         ctorFunction);
                     const ctor = emptyNavigationBarNode(ctorNode);
                     ctor.indent = a.indent + 1;
@@ -525,10 +538,10 @@ namespace ts.NavigationBar {
                     }
                 }
 
-                lastANode = a.node = setTextRange(createClassDeclaration(
+                lastANode = a.node = setTextRange(factory.createClassDeclaration(
                     /* decorators */ undefined,
                     /* modifiers */ undefined,
-                    a.name as Identifier || createIdentifier("__class__"),
+                    a.name as Identifier || factory.createIdentifier("__class__"),
                     /* typeParameters */ undefined,
                     /* heritageClauses */ undefined,
                     []
@@ -553,10 +566,10 @@ namespace ts.NavigationBar {
             }
             else {
                 if (!a.additionalNodes) a.additionalNodes = [];
-                a.additionalNodes.push(setTextRange(createClassDeclaration(
+                a.additionalNodes.push(setTextRange(factory.createClassDeclaration(
                     /* decorators */ undefined,
                     /* modifiers */ undefined,
-                    a.name as Identifier || createIdentifier("__class__"),
+                    a.name as Identifier || factory.createIdentifier("__class__"),
                     /* typeParameters */ undefined,
                     /* heritageClauses */ undefined,
                     []
@@ -589,7 +602,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return hasModifier(a, ModifierFlags.Static) === hasModifier(b, ModifierFlags.Static);
+                return hasSyntacticModifier(a, ModifierFlags.Static) === hasSyntacticModifier(b, ModifierFlags.Static);
             case SyntaxKind.ModuleDeclaration:
                 return areSameModule(<ModuleDeclaration>a, <ModuleDeclaration>b);
             default:
@@ -648,7 +661,8 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName && isPropertyName(declName)) {
-            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName)!); // TODO: GH#18217
+            const propertyName = getPropertyNameForPropertyNameNode(declName);
+            return propertyName && unescapeLeadingUnderscores(propertyName);
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -680,12 +694,15 @@ namespace ts.NavigationBar {
                 return isExternalModule(sourceFile)
                     ? `"${escapeString(getBaseFileName(removeFileExtension(normalizePath(sourceFile.fileName))))}"`
                     : "<global>";
+            case SyntaxKind.ExportAssignment:
+                return isExportAssignment(node) && node.isExportEquals ? InternalSymbolName.ExportEquals : InternalSymbolName.Default;
+
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                if (getModifierFlags(node) & ModifierFlags.Default) {
+                if (getSyntacticModifierFlags(node) & ModifierFlags.Default) {
                     return "default";
                 }
                 // We may get a string with newlines or other whitespace in the case of an object dereference
@@ -878,7 +895,7 @@ namespace ts.NavigationBar {
             return nodeText(parent.name);
         }
         // Default exports are named "default"
-        else if (getModifierFlags(node) & ModifierFlags.Default) {
+        else if (getSyntacticModifierFlags(node) & ModifierFlags.Default) {
             return "default";
         }
         else if (isClassLike(node)) {
@@ -900,6 +917,7 @@ namespace ts.NavigationBar {
         return "<function>";
     }
 
+    // See also 'tryGetPropertyAccessOrIdentifierToString'
     function getCalledExpressionName(expr: Expression): string | undefined {
         if (isIdentifier(expr)) {
             return expr.text;

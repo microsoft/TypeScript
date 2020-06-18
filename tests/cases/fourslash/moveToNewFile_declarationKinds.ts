@@ -24,16 +24,11 @@ type U = T; type V = I;`,
         "/x.ts":
 `export const x = 0;
 export function f() { }
-export class C {
-}
-export enum E {
-}
-export namespace N {
-    export const x = 0;
-}
+export class C { }
+export enum E { }
+export namespace N { export const x = 0; }
 export type T = number;
-export interface I {
-}
+export interface I { }
 `,
     },
 });

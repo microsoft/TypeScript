@@ -24,3 +24,9 @@ o5["b"]?.()["c"].d?.["e"];
 // GH#33744
 declare const o6: <T>() => undefined | ({ x: number });
 o6<number>()?.["x"];
+
+// GH#36031
+o2?.["b"]!.c;
+o2?.["b"]!["c"];
+o2?.["b"]!.c!;
+o2?.["b"]!["c"]!;

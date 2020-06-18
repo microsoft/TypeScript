@@ -51,7 +51,7 @@ namespace ts.projectSystem {
                 const { verifyProjectsUpdatedInBackgroundEventHandler, verifyInitialOpen } = createSession(host);
                 verifyInitialOpen(commonFile1);
 
-                host.reloadFS([commonFile1, libFile, configFile, commonFile2]);
+                host.writeFile(commonFile2.path, commonFile2.content);
                 host.runQueuedTimeoutCallbacks();
                 verifyProjectsUpdatedInBackgroundEventHandler([{
                     eventName: server.ProjectsUpdatedInBackgroundEvent,
@@ -60,7 +60,7 @@ namespace ts.projectSystem {
                     }
                 }]);
 
-                host.reloadFS([commonFile1, commonFile2, libFile, configFile, commonFile3]);
+                host.writeFile(commonFile3.path, commonFile3.content);
                 host.runQueuedTimeoutCallbacks();
                 verifyProjectsUpdatedInBackgroundEventHandler([{
                     eventName: server.ProjectsUpdatedInBackgroundEvent,
@@ -94,8 +94,7 @@ namespace ts.projectSystem {
                     const { verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host);
                     verifyInitialOpen(f1);
 
-                    files.push(f2);
-                    host.reloadFS(files);
+                    host.writeFile(f2.path, f2.content);
                     host.runQueuedTimeoutCallbacks();
 
                     verifyProjectsUpdatedInBackgroundEventHandler([{
@@ -105,8 +104,7 @@ namespace ts.projectSystem {
                         }
                     }]);
 
-                    f2.content = "export let x = 11";
-                    host.reloadFS(files);
+                    host.writeFile(f2.path, "export let x = 11");
                     host.runQueuedTimeoutCallbacks();
                     verifyProjectsUpdatedInBackgroundEventHandler([{
                         eventName: server.ProjectsUpdatedInBackgroundEvent,
@@ -186,11 +184,13 @@ namespace ts.projectSystem {
                     verifyInitialOpen(filesToReload[0]);
 
                     // Since this is first event, it will have all the files
-                    verifyProjectsUpdatedInBackgroundEvent(filesToReload);
+                    filesToReload.forEach(f => host.ensureFileOrFolder(f));
+                    if (!firstReloadFileList) host.runQueuedTimeoutCallbacks(); // Invalidated module resolutions to schedule project update
+                    verifyProjectsUpdatedInBackgroundEvent();
 
                     return {
+                        host,
                         moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile,
-                        files,
                         updateContentOfOpenFile,
                         verifyNoProjectsUpdatedInBackgroundEvent,
                         verifyProjectsUpdatedInBackgroundEvent
@@ -204,14 +204,12 @@ namespace ts.projectSystem {
                         return find(files, file => file.path === fileName)!;
                     }
 
-                    function verifyNoProjectsUpdatedInBackgroundEvent(filesToReload?: File[]) {
-                        host.reloadFS(filesToReload || files);
+                    function verifyNoProjectsUpdatedInBackgroundEvent() {
                         host.runQueuedTimeoutCallbacks();
                         verifyProjectsUpdatedInBackgroundEventHandler([]);
                     }
 
-                    function verifyProjectsUpdatedInBackgroundEvent(filesToReload?: File[]) {
-                        host.reloadFS(filesToReload || files);
+                    function verifyProjectsUpdatedInBackgroundEvent() {
                         host.runQueuedTimeoutCallbacks();
                         verifyProjectsUpdatedInBackgroundEventHandler([{
                             eventName: server.ProjectsUpdatedInBackgroundEvent,
@@ -238,26 +236,26 @@ namespace ts.projectSystem {
                 }
 
                 it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
-                    const { moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState();
+                    const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState();
 
                     // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
-                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                     verifyProjectsUpdatedInBackgroundEvent();
 
                     // Change the content of moduleFile1 to `export var T: number;export function Foo() { console.log('hi'); };`
-                    moduleFile1.content = `export var T: number;export function Foo() { console.log('hi'); };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { console.log('hi'); };`);
                     verifyProjectsUpdatedInBackgroundEvent();
                 });
 
                 it("should be up-to-date with the reference map changes", () => {
-                    const { moduleFile1, file1Consumer1, updateContentOfOpenFile, verifyProjectsUpdatedInBackgroundEvent, verifyNoProjectsUpdatedInBackgroundEvent } = getInitialState();
+                    const { host, moduleFile1, file1Consumer1, updateContentOfOpenFile, verifyProjectsUpdatedInBackgroundEvent, verifyNoProjectsUpdatedInBackgroundEvent } = getInitialState();
 
                     // Change file1Consumer1 content to `export let y = Foo();`
                     updateContentOfOpenFile(file1Consumer1, "export let y = Foo();");
                     verifyNoProjectsUpdatedInBackgroundEvent();
 
                     // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
-                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                     verifyProjectsUpdatedInBackgroundEvent();
 
                     // Add the import statements back to file1Consumer1
@@ -265,7 +263,7 @@ namespace ts.projectSystem {
                     verifyNoProjectsUpdatedInBackgroundEvent();
 
                     // Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
-                    moduleFile1.content = `export var T: number;export var T2: string;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export var T2: string;export function Foo() { };`);
                     verifyProjectsUpdatedInBackgroundEvent();
 
                     // Multiple file edits in one go:
@@ -273,68 +271,65 @@ namespace ts.projectSystem {
                     // Change file1Consumer1 content to `export let y = Foo();`
                     // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
                     updateContentOfOpenFile(file1Consumer1, `export let y = Foo();`);
-                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                     verifyProjectsUpdatedInBackgroundEvent();
                 });
 
                 it("should be up-to-date with deleted files", () => {
-                    const { moduleFile1, file1Consumer2, files, verifyProjectsUpdatedInBackgroundEvent } = getInitialState();
+                    const { host, moduleFile1, file1Consumer2, verifyProjectsUpdatedInBackgroundEvent } = getInitialState();
 
                     // Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
-                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
 
                     // Delete file1Consumer2
-                    const filesToLoad = filter(files, file => file !== file1Consumer2);
-                    verifyProjectsUpdatedInBackgroundEvent(filesToLoad);
+                    host.deleteFile(file1Consumer2.path);
+                    verifyProjectsUpdatedInBackgroundEvent();
                 });
 
                 it("should be up-to-date with newly created files", () => {
-                    const { moduleFile1, files, verifyProjectsUpdatedInBackgroundEvent, } = getInitialState();
+                    const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent, } = getInitialState();
 
-                    const file1Consumer3: File = {
-                        path: "/a/b/file1Consumer3.ts",
-                        content: `import {Foo} from "./moduleFile1"; let y = Foo();`
-                    };
-                    moduleFile1.content = `export var T: number;export function Foo() { };`;
-                    verifyProjectsUpdatedInBackgroundEvent(files.concat(file1Consumer3));
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
+                    host.writeFile("/a/b/file1Consumer3.ts", `import {Foo} from "./moduleFile1"; let y = Foo();`);
+                    verifyProjectsUpdatedInBackgroundEvent();
                 });
 
                 it("should detect changes in non-root files", () => {
-                    const { moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                    const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
                         configObj: { files: [file1Consumer1Path] },
                     });
 
-                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                     verifyProjectsUpdatedInBackgroundEvent();
 
                     // change file1 internal, and verify only file1 is affected
-                    moduleFile1.content += "var T1: number;";
+                    host.writeFile(moduleFile1.path, moduleFile1.content + "var T1: number;");
                     verifyProjectsUpdatedInBackgroundEvent();
                 });
 
                 it("should return all files if a global file changed shape", () => {
-                    const { globalFile3, verifyProjectsUpdatedInBackgroundEvent } = getInitialState();
+                    const { host, globalFile3, verifyProjectsUpdatedInBackgroundEvent } = getInitialState();
 
-                    globalFile3.content += "var T2: string;";
+                    host.writeFile(globalFile3.path, globalFile3.content + "var T2: string;");
                     verifyProjectsUpdatedInBackgroundEvent();
                 });
 
                 it("should always return the file itself if '--isolatedModules' is specified", () => {
-                    const { moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                    const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
                         configObj: { compilerOptions: { isolatedModules: true } }
                     });
 
-                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                     verifyProjectsUpdatedInBackgroundEvent();
                 });
 
                 it("should always return the file itself if '--out' or '--outFile' is specified", () => {
                     const outFilePath = "/a/b/out.js";
-                    const { moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                    const { host, moduleFile1, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
                         configObj: { compilerOptions: { module: "system", outFile: outFilePath } }
                     });
 
-                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                     verifyProjectsUpdatedInBackgroundEvent();
                 });
 
@@ -343,7 +338,7 @@ namespace ts.projectSystem {
                         path: "/a/b/file1Consumer1Consumer1.ts",
                         content: `import {y} from "./file1Consumer1";`
                     };
-                    const { moduleFile1, file1Consumer1, updateContentOfOpenFile, verifyNoProjectsUpdatedInBackgroundEvent, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                    const { host, moduleFile1, file1Consumer1, updateContentOfOpenFile, verifyNoProjectsUpdatedInBackgroundEvent, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
                         getAdditionalFileOrFolder: () => [file1Consumer1Consumer1]
                     });
 
@@ -351,12 +346,12 @@ namespace ts.projectSystem {
                     verifyNoProjectsUpdatedInBackgroundEvent();
 
                     // Doesnt change the shape of file1Consumer1
-                    moduleFile1.content = `export var T: number;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T: number;export function Foo() { };`);
                     verifyProjectsUpdatedInBackgroundEvent();
 
                     // Change both files before the timeout
                     updateContentOfOpenFile(file1Consumer1, file1Consumer1.content + "export var T2: number;");
-                    moduleFile1.content = `export var T2: number;export function Foo() { };`;
+                    host.writeFile(moduleFile1.path, `export var T2: number;export function Foo() { };`);
                     verifyProjectsUpdatedInBackgroundEvent();
                 });
 
@@ -373,13 +368,13 @@ namespace ts.projectSystem {
                     /// <reference path="./file1.ts" />
                     export var t2 = 10;`
                     };
-                    const { configFile, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                    const { host, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
                         getAdditionalFileOrFolder: () => [file1, file2],
                         firstReloadFileList: [file1.path, libFile.path, file2.path, configFilePath]
                     });
 
-                    file2.content += "export var t3 = 10;";
-                    verifyProjectsUpdatedInBackgroundEvent([file1, file2, libFile, configFile]);
+                    host.writeFile(file2.path, file2.content + "export var t3 = 10;");
+                    verifyProjectsUpdatedInBackgroundEvent();
                 });
 
                 it("should detect removed code file", () => {
@@ -389,12 +384,13 @@ namespace ts.projectSystem {
                     /// <reference path="./moduleFile1.ts" />
                     export var x = Foo();`
                     };
-                    const { configFile, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                    const { host, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
                         getAdditionalFileOrFolder: () => [referenceFile1],
                         firstReloadFileList: [referenceFile1.path, libFile.path, moduleFile1Path, configFilePath]
                     });
 
-                    verifyProjectsUpdatedInBackgroundEvent([libFile, referenceFile1, configFile]);
+                    host.deleteFile(moduleFile1Path);
+                    verifyProjectsUpdatedInBackgroundEvent();
                 });
 
                 it("should detect non-existing code file", () => {
@@ -404,21 +400,22 @@ namespace ts.projectSystem {
                     /// <reference path="./moduleFile2.ts" />
                     export var x = Foo();`
                     };
-                    const { configFile, moduleFile2, updateContentOfOpenFile, verifyNoProjectsUpdatedInBackgroundEvent, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
+                    const { host, moduleFile2, updateContentOfOpenFile, verifyNoProjectsUpdatedInBackgroundEvent, verifyProjectsUpdatedInBackgroundEvent } = getInitialState({
                         getAdditionalFileOrFolder: () => [referenceFile1],
                         firstReloadFileList: [referenceFile1.path, libFile.path, configFilePath]
                     });
 
                     updateContentOfOpenFile(referenceFile1, referenceFile1.content + "export var yy = Foo();");
-                    verifyNoProjectsUpdatedInBackgroundEvent([libFile, referenceFile1, configFile]);
+                    verifyNoProjectsUpdatedInBackgroundEvent();
 
                     // Create module File2 and see both files are saved
-                    verifyProjectsUpdatedInBackgroundEvent([libFile, moduleFile2, referenceFile1, configFile]);
+                    host.writeFile(moduleFile2.path, moduleFile2.content);
+                    verifyProjectsUpdatedInBackgroundEvent();
                 });
             });
 
             describe("resolution when resolution cache size", () => {
-                function verifyWithMaxCacheLimit(limitHit: boolean, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
+                function verifyWithMaxCacheLimit(useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
                     const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
                     const file1: File = {
                         path: rootFolder + "a/b/project/file1.ts",
@@ -451,12 +448,9 @@ namespace ts.projectSystem {
                     checkNumberOfProjects(projectService, { configuredProjects: 1 });
                     const project = projectService.configuredProjects.get(configFile.path)!;
                     verifyProject();
-                    if (limitHit) {
-                        (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
-                    }
 
                     file3.content += "export class d {}";
-                    host.reloadFS(projectFiles);
+                    host.writeFile(file3.path, file3.content);
                     host.checkTimeoutQueueLengthAndRun(2);
 
                     // Since this is first event
@@ -469,8 +463,9 @@ namespace ts.projectSystem {
                     }]);
 
                     projectFiles.push(file2);
-                    host.reloadFS(projectFiles);
-                    host.runQueuedTimeoutCallbacks();
+                    host.writeFile(file2.path, file2.content);
+                    host.runQueuedTimeoutCallbacks(); // For invalidation
+                    host.runQueuedTimeoutCallbacks(); // For actual update
                     if (useSlashRootAsSomeNotRootFolderInUserDirectory) {
                         watchedRecursiveDirectories.length = 3;
                     }
@@ -495,20 +490,12 @@ namespace ts.projectSystem {
                     }
                 }
 
-                it("limit not hit and project is not at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ false, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
+                it("project is not at root level", () => {
+                    verifyWithMaxCacheLimit(/*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
                 });
 
-                it("limit hit and project is not at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ true, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
-                });
-
-                it("limit not hit and project is at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ false, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
-                });
-
-                it("limit hit and project is at root level", () => {
-                    verifyWithMaxCacheLimit(/*limitHit*/ true, /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
+                it("project is at root level", () => {
+                    verifyWithMaxCacheLimit(/*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
                 });
             });
         }

@@ -1,5 +1,10 @@
 Exit Code: 1
 Standard output:
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(120,20): error TS2532: Object is possibly 'undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(123,17): error TS2532: Object is possibly 'undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(124,3): error TS2532: Object is possibly 'undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(125,23): error TS2345: Argument of type 'Set<any> | undefined' is not assignable to parameter of type 'Set<any>'.
+  Type 'undefined' is not assignable to type 'Set<any>'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(127,18): error TS2769: No overload matches this call.
   Overload 1 of 2, '(intervalId: Timeout): void', gave the following error.
     Argument of type 'Timeout | null' is not assignable to parameter of type 'Timeout'.
@@ -37,8 +42,6 @@ node_modules/enhanced-resolve/lib/Resolver.js(211,13): error TS2339: Property 'm
 node_modules/enhanced-resolve/lib/Resolver.js(262,20): error TS2339: Property 'recursion' does not exist on type 'Error'.
 node_modules/enhanced-resolve/lib/concord.js(80,30): error TS2531: Object is possibly 'null'.
 node_modules/enhanced-resolve/lib/concord.js(81,17): error TS2531: Object is possibly 'null'.
-node_modules/enhanced-resolve/lib/createInnerCallback.js(22,20): error TS2339: Property 'stack' does not exist on type '(...args: any[]) => any'.
-node_modules/enhanced-resolve/lib/createInnerCallback.js(23,20): error TS2339: Property 'missing' does not exist on type '(...args: any[]) => any'.
 
 
 

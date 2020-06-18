@@ -105,9 +105,9 @@
 >(...numbers) => numbers.every(n => n > 0) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
 >numbers : [number, number, number]
 >numbers.every(n => n > 0) : boolean
->numbers.every : (callbackfn: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean
+>numbers.every : { <S extends number>(callbackfn: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (callbackfn: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
 >numbers : [number, number, number]
->every : (callbackfn: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean
+>every : { <S extends number>(callbackfn: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (callbackfn: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
 >n => n > 0 : (n: number) => boolean
 >n : number
 >n > 0 : boolean
@@ -123,9 +123,9 @@
 >(...mixed) => mixed.every(n => !!n) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
 >mixed : [number, string, string]
 >mixed.every(n => !!n) : boolean
->mixed.every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any) => boolean
+>mixed.every : { <S extends string | number>(callbackfn: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (callbackfn: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
 >mixed : [number, string, string]
->every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any) => boolean
+>every : { <S extends string | number>(callbackfn: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): this is S[]; (callbackfn: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): boolean; }
 >n => !!n : (n: string | number) => boolean
 >n : string | number
 >!!n : boolean

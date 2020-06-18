@@ -62,6 +62,7 @@ export const ObjectLiteralVisibility = {
 //// [dynamicNamesErrors.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ObjectLiteralVisibility = exports.ClassMemberVisibility = void 0;
 const c0 = "1";
 const c1 = 1;
 let t1;

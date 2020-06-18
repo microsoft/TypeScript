@@ -29,7 +29,7 @@ namespace ts.projectSystem {
             assert.isUndefined(project.packageJsonCache.getInDirectory("/" as Path));
 
             // Add package.json
-            host.reloadFS([tsConfig, packageJson]);
+            host.writeFile(packageJson.path, packageJson.content);
             let packageJsonInfo = project.packageJsonCache.getInDirectory("/" as Path)!;
             assert.ok(packageJsonInfo);
             assert.ok(packageJsonInfo.dependencies);
@@ -38,16 +38,10 @@ namespace ts.projectSystem {
             assert.ok(packageJsonInfo.optionalDependencies);
 
             // Edit package.json
-            host.reloadFS([
-                tsConfig,
-                {
-                    ...packageJson,
-                    content: JSON.stringify({
-                        ...packageJsonContent,
-                        dependencies: undefined
-                    })
-                }
-            ]);
+            host.writeFile(packageJson.path, JSON.stringify({
+                ...packageJsonContent,
+                dependencies: undefined
+            }));
             packageJsonInfo = project.packageJsonCache.getInDirectory("/" as Path)!;
             assert.isUndefined(packageJsonInfo.dependencies);
         });
@@ -59,7 +53,7 @@ namespace ts.projectSystem {
             assert.ok(project.packageJsonCache.getInDirectory("/" as Path));
 
             // Delete package.json
-            host.reloadFS([tsConfig]);
+            host.deleteFile(packageJson.path);
             assert.isUndefined(project.packageJsonCache.getInDirectory("/" as Path));
         });
 
@@ -67,9 +61,26 @@ namespace ts.projectSystem {
             // Initialize project with package.json at root
             const { project, host } = setup();
             // Add package.json in /src
-            host.reloadFS([tsConfig, packageJson, { ...packageJson, path: "/src/package.json" }]);
+            host.writeFile("/src/package.json", packageJson.content);
             assert.lengthOf(project.getPackageJsonsVisibleToFile("/a.ts" as Path), 1);
             assert.lengthOf(project.getPackageJsonsVisibleToFile("/src/b.ts" as Path), 2);
+        });
+
+        it("handles errors in json parsing of package.json", () => {
+            const packageJsonContent = `{ "mod" }`;
+            const { project, host } = setup([tsConfig, { path: packageJson.path, content: packageJsonContent }]);
+            project.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            const packageJsonInfo = project.packageJsonCache.getInDirectory("/" as Path)!;
+            assert.isUndefined(packageJsonInfo);
+
+            host.writeFile(packageJson.path, packageJson.content);
+            project.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            const packageJsonInfo2 = project.packageJsonCache.getInDirectory("/" as Path)!;
+            assert.ok(packageJsonInfo2);
+            assert.ok(packageJsonInfo2.dependencies);
+            assert.ok(packageJsonInfo2.devDependencies);
+            assert.ok(packageJsonInfo2.peerDependencies);
+            assert.ok(packageJsonInfo2.optionalDependencies);
         });
     });
 

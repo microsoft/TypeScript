@@ -44,9 +44,9 @@ export class Crunch {
 
         this.n = n
 >this.n = n : number
->this.n : number
+>this.n : any
 >this : this
->n : number
+>n : any
 >n : number
     }
     m() {

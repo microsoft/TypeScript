@@ -42,7 +42,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(166,13): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(180,40): error TS2447: The '^' operator is not allowed for boolean types. Consider using '!==' instead.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(181,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(183,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(187,13): error TS2322: Type 'true' is not assignable to type 'number'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(187,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(191,13): error TS2322: Type 'boolean' is not assignable to type 'number'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(205,28): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(213,16): error TS2304: Cannot find name 'bool'.
@@ -370,7 +370,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                 i--;/*--*/
                 b = true && false || true;/*&& ||*/
                 ~
-!!! error TS2322: Type 'true' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
                 i = i << 5;/*<<*/
                 i = i >> 5;/*>>*/
                 var j = i;

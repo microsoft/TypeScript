@@ -1,104 +1,8 @@
-namespace ts {
-    // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
-    // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.7";
-    /** The version of the TypeScript compiler release */
-    export const version = `${versionMajorMinor}.0-dev`;
-}
-
-namespace ts {
-    /**
-     * Type of objects whose values are all of the same type.
-     * The `in` and `for-in` operators can *not* be safely used,
-     * since `Object.prototype` may be modified by outside code.
-     */
-    export interface MapLike<T> {
-        [index: string]: T;
-    }
-
-    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedArrayBrand": any;
-    }
-
-    export interface SortedArray<T> extends Array<T> {
-        " __sortedArrayBrand": any;
-    }
-
-    /** ES6 Map interface, only read methods included. */
-    export interface ReadonlyMap<T> {
-        get(key: string): T | undefined;
-        has(key: string): boolean;
-        forEach(action: (value: T, key: string) => void): void;
-        readonly size: number;
-        keys(): Iterator<string>;
-        values(): Iterator<T>;
-        entries(): Iterator<[string, T]>;
-    }
-
-    /** ES6 Map interface. */
-    export interface Map<T> extends ReadonlyMap<T> {
-        set(key: string, value: T): this;
-        delete(key: string): boolean;
-        clear(): void;
-    }
-
-    /* @internal */
-    export interface MapConstructor {
-        // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <T>(): Map<T>;
-    }
-
-    /** ES6 Iterator type. */
-    export interface Iterator<T> {
-        next(): { value: T, done?: false } | { value: never, done: true };
-    }
-
-    /** Array that is only intended to be pushed to, never read. */
-    export interface Push<T> {
-        push(...values: T[]): void;
-    }
-
-    /* @internal */
-    export type EqualityComparer<T> = (a: T, b: T) => boolean;
-
-    /* @internal */
-    export type Comparer<T> = (a: T, b: T) => Comparison;
-
-    /* @internal */
-    export const enum Comparison {
-        LessThan    = -1,
-        EqualTo     = 0,
-        GreaterThan = 1
-    }
-}
 
 /* @internal */
 namespace ts {
-    // Natives
-    // NOTE: This must be declared in a separate block from the one below so that we don't collide with the exported definition of `Map`.
-    declare const Map: (new <T>() => Map<T>) | undefined;
 
-    /**
-     * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
-     */
-    export function tryGetNativeMap(): MapConstructor | undefined {
-        // Internet Explorer's Map doesn't support iteration, so don't use it.
-        // eslint-disable-next-line no-in-operator
-        return typeof Map !== "undefined" && "entries" in Map.prototype ? Map : undefined;
-    }
-}
-
-/* @internal */
-namespace ts {
     export const emptyArray: never[] = [] as never[];
-
-    export const Map: MapConstructor = tryGetNativeMap() || (() => {
-        // NOTE: createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createMapShim === "function") {
-            return createMapShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
-    })();
 
     /** Create a new map. */
     export function createMap<T>(): Map<T> {
@@ -226,11 +130,27 @@ namespace ts {
     }
 
     /**
+     * Creates a new array with `element` interspersed in between each element of `input`
+     * if there is more than 1 value in `input`. Otherwise, returns the existing array.
+     */
+    export function intersperse<T>(input: T[], element: T): T[] {
+        if (input.length <= 1) {
+            return input;
+        }
+        const result: T[] = [];
+        for (let i = 0, n = input.length; i < n; i++) {
+            if (i) result.push(element);
+            result.push(input[i]);
+        }
+        return result;
+    }
+
+    /**
      * Iterates through `array` by index and performs the callback on each element of array until the callback
      * returns a falsey value, then returns false.
      * If no such value is found, the callback is applied to each element of array and `true` is returned.
      */
-    export function every<T>(array: readonly T[], callback: (element: T, index: number) => boolean): boolean {
+    export function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean {
         if (array) {
             for (let i = 0; i < array.length; i++) {
                 if (!callback(array[i], i)) {
@@ -594,6 +514,17 @@ namespace ts {
         };
     }
 
+    export function mapDefinedMap<T, U>(map: ReadonlyMap<T>, mapValue: (value: T, key: string) => U | undefined, mapKey: (key: string) => string = identity): Map<U> {
+        const result = createMap<U>();
+        map.forEach((value, key) => {
+            const mapped = mapValue(value, key);
+            if (mapped !== undefined) {
+                result.set(mapKey(key), mapped);
+            }
+        });
+        return result;
+    }
+
     export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
 
     export function singleIterator<T>(value: T): Iterator<T> {
@@ -715,10 +646,18 @@ namespace ts {
         return [...array1, ...array2];
     }
 
+    function selectIndex(_: unknown, i: number) {
+        return i;
+    }
+
+    export function indicesOf(array: readonly unknown[]): number[] {
+        return array.map(selectIndex);
+    }
+
     function deduplicateRelational<T>(array: readonly T[], equalityComparer: EqualityComparer<T>, comparer: Comparer<T>) {
         // Perform a stable sort of the array. This ensures the first entry in a list of
         // duplicates remains the first entry in the result.
-        const indices = array.map((_, i) => i);
+        const indices = indicesOf(array);
         stableSortIndices(array, indices, comparer);
 
         let last = array[indices[0]];
@@ -922,6 +861,28 @@ namespace ts {
     }
 
     /**
+     * Combines two arrays, values, or undefineds into the smallest container that can accommodate the resulting set:
+     *
+     * ```
+     * undefined -> undefined -> undefined
+     * T -> undefined -> T
+     * T -> T -> T[]
+     * T[] -> undefined -> T[] (no-op)
+     * T[] -> T -> T[]         (append)
+     * T[] -> T[] -> T[]       (concatenate)
+     * ```
+     */
+    export function combine<T>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
+    export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;
+    export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined) {
+        if (xs === undefined) return ys;
+        if (ys === undefined) return xs;
+        if (isArray(xs)) return isArray(ys) ? concatenate(xs, ys) : append(xs, ys);
+        if (isArray(ys)) return append(ys, xs);
+        return [xs, ys];
+    }
+
+    /**
      * Gets the actual offset into an array for a relative offset. Negative offsets indicate a
      * position offset from the end of the array.
      */
@@ -1024,7 +985,7 @@ namespace ts {
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
     export function stableSort<T>(array: readonly T[], comparer: Comparer<T>): SortedReadonlyArray<T> {
-        const indices = array.map((_, i) => i);
+        const indices = indicesOf(array);
         stableSortIndices(array, indices, comparer);
         return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
     }
@@ -1330,8 +1291,10 @@ namespace ts {
         return result;
     }
 
-    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[] {
-        return arrayFrom(arrayToMultiMap(values, getGroupId).values());
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[];
+    export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
+    export function group<T>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
+        return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
     }
 
     export function clone<T>(object: T): T {
@@ -1344,6 +1307,11 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Creates a new object by adding the own properties of `second`, then the own properties of `first`.
+     *
+     * NOTE: This means that if a property exists in both `first` and `second`, the property in `first` will be chosen.
+     */
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in second) {
@@ -1421,6 +1389,24 @@ namespace ts {
         }
     }
 
+    export interface UnderscoreEscapedMultiMap<T> extends UnderscoreEscapedMap<T[]> {
+        /**
+         * Adds the value to an array of values associated with the key, and returns the array.
+         * Creates the array if it does not already exist.
+         */
+        add(key: __String, value: T): T[];
+        /**
+         * Removes a value from an array of values associated with the key.
+         * Does not preserve the order of those values.
+         * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
+         */
+        remove(key: __String, value: T): void;
+    }
+
+    export function createUnderscoreEscapedMultiMap<T>(): UnderscoreEscapedMultiMap<T> {
+        return createMultiMap<T>() as UnderscoreEscapedMultiMap<T>;
+    }
+
     /**
      * Tests whether a value is an array.
      */
@@ -1474,6 +1460,46 @@ namespace ts {
     /** Returns lower case string */
     export function toLowerCase(x: string) { return x.toLowerCase(); }
 
+    // We convert the file names to lower case as key for file name on case insensitive file system
+    // While doing so we need to handle special characters (eg \u0130) to ensure that we dont convert
+    // it to lower case, fileName with its lowercase form can exist along side it.
+    // Handle special characters and make those case sensitive instead
+    //
+    // |-#--|-Unicode--|-Char code-|-Desc-------------------------------------------------------------------|
+    // | 1. | i        | 105       | Ascii i                                                                |
+    // | 2. | I        | 73        | Ascii I                                                                |
+    // |-------- Special characters ------------------------------------------------------------------------|
+    // | 3. | \u0130   | 304       | Uppper case I with dot above                                           |
+    // | 4. | i,\u0307 | 105,775   | i, followed by 775: Lower case of (3rd item)                           |
+    // | 5. | I,\u0307 | 73,775    | I, followed by 775: Upper case of (4th item), lower case is (4th item) |
+    // | 6. | \u0131   | 305       | Lower case i without dot, upper case is I (2nd item)                   |
+    // | 7. | \u00DF   | 223       | Lower case sharp s                                                     |
+    //
+    // Because item 3 is special where in its lowercase character has its own
+    // upper case form we cant convert its case.
+    // Rest special characters are either already in lower case format or
+    // they have corresponding upper case character so they dont need special handling
+    //
+    // But to avoid having to do string building for most common cases, also ignore
+    // a-z, 0-9, \u0131, \u00DF, \, /, ., : and space
+    const fileNameLowerCaseRegExp = /[^\u0130\u0131\u00DFa-z0-9\\/:\-_\. ]+/g;
+    /**
+     * Case insensitive file systems have descripencies in how they handle some characters (eg. turkish Upper case I with dot on top - \u0130)
+     * This function is used in places where we want to make file name as a key on these systems
+     * It is possible on mac to be able to refer to file name with I with dot on top as a fileName with its lower case form
+     * But on windows we cannot. Windows can have fileName with I with dot on top next to its lower case and they can not each be referred with the lowercase forms
+     * Technically we would want this function to be platform sepcific as well but
+     * our api has till now only taken caseSensitive as the only input and just for some characters we dont want to update API and ensure all customers use those api
+     * We could use upper case and we would still need to deal with the descripencies but
+     * we want to continue using lower case since in most cases filenames are lowercasewe and wont need any case changes and avoid having to store another string for the key
+     * So for this function purpose, we go ahead and assume character I with dot on top it as case sensitive since its very unlikely to use lower case form of that special character
+     */
+    export function toFileNameLowerCase(x: string) {
+        return fileNameLowerCaseRegExp.test(x) ?
+            x.replace(fileNameLowerCaseRegExp, toLowerCase) :
+            x;
+    }
+
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
         throw new Error("Not implemented");
@@ -1487,6 +1513,20 @@ namespace ts {
                 callback = undefined!;
             }
             return value;
+        };
+    }
+
+    /** A version of `memoize` that supports a single primitive argument */
+    export function memoizeOne<A extends string | number | boolean | undefined, T>(callback: (arg: A) => T): (arg: A) => T {
+        const map = createMap<T>();
+        return (arg: A) => {
+            const key = `${typeof arg}:${arg}`;
+            let value = map.get(key);
+            if (value === undefined && !map.has(key)) {
+                value = callback(arg);
+                map.set(key, value);
+            }
+            return value!;
         };
     }
 
@@ -1582,6 +1622,13 @@ namespace ts {
      */
     export function compareValues(a: number | undefined, b: number | undefined): Comparison {
         return compareComparableValues(a, b);
+    }
+
+    /**
+     * Compare two TextSpans, first by `start`, then by `length`.
+     */
+    export function compareTextSpans(a: Partial<TextSpan> | undefined, b: Partial<TextSpan> | undefined): Comparison {
+        return compareValues(a?.start, b?.start) || compareValues(a?.length, b?.length);
     }
 
     export function min<T>(a: T, b: T, compare: Comparer<T>): T {
@@ -1928,7 +1975,7 @@ namespace ts {
 
     export type GetCanonicalFileName = (fileName: string) => string;
     export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
-        return useCaseSensitiveFileNames ? identity : toLowerCase;
+        return useCaseSensitiveFileNames ? identity : toFileNameLowerCase;
     }
 
     /** Represents a "prefix*suffix" pattern. */
@@ -1989,10 +2036,10 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function or<T extends unknown>(...fs: ((arg: T) => boolean)[]): (arg: T) => boolean {
-        return arg => {
+    export function or<T extends unknown[]>(...fs: ((...args: T) => boolean)[]): (...args: T) => boolean {
+        return (...args) => {
             for (const f of fs) {
-                if (f(arg)) {
+                if (f(...args)) {
                     return true;
                 }
             }
@@ -2016,6 +2063,7 @@ namespace ts {
         let oldIndex = 0;
         const newLen = newItems.length;
         const oldLen = oldItems.length;
+        let hasChanges = false;
         while (newIndex < newLen && oldIndex < oldLen) {
             const newItem = newItems[newIndex];
             const oldItem = oldItems[oldIndex];
@@ -2023,10 +2071,12 @@ namespace ts {
             if (compareResult === Comparison.LessThan) {
                 inserted(newItem);
                 newIndex++;
+                hasChanges = true;
             }
             else if (compareResult === Comparison.GreaterThan) {
                 deleted(oldItem);
                 oldIndex++;
+                hasChanges = true;
             }
             else {
                 unchanged(oldItem, newItem);
@@ -2036,10 +2086,13 @@ namespace ts {
         }
         while (newIndex < newLen) {
             inserted(newItems[newIndex++]);
+            hasChanges = true;
         }
         while (oldIndex < oldLen) {
             deleted(oldItems[oldIndex++]);
+            hasChanges = true;
         }
+        return hasChanges;
     }
 
     export function fill<T>(length: number, cb: (index: number) => T): T[] {
@@ -2073,5 +2126,20 @@ namespace ts {
                 cartesianProductWorker(arrays, result, inner, index + 1);
             }
         }
+    }
+
+    export function padLeft(s: string, length: number) {
+        while (s.length < length) {
+            s = " " + s;
+        }
+        return s;
+    }
+
+    export function padRight(s: string, length: number) {
+        while (s.length < length) {
+            s = s + " ";
+        }
+
+        return s;
     }
 }

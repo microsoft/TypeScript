@@ -52,6 +52,7 @@ var Foo = /** @class */ (function () {
 define("ref/a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.A = void 0;
     /// <reference path="./b.ts" />
     var A = /** @class */ (function () {
         function A() {
@@ -63,6 +64,7 @@ define("ref/a", ["require", "exports"], function (require, exports) {
 define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.B = void 0;
     var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {

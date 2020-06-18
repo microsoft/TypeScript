@@ -26,6 +26,7 @@ nFoo(B);
 //// [items.js]
 "use strict";
 exports.__esModule = true;
+exports.q = void 0;
 exports["default"] = {
     foob: "a"
 };

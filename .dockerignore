@@ -22,7 +22,6 @@ scripts/buildProtocol.js
 scripts/ior.js
 scripts/authors.js
 scripts/configurePrerelease.js
-scripts/configureTSCBuild.js
 scripts/open-user-pr.js
 scripts/open-cherry-pick-pr.js
 scripts/processDiagnosticMessages.d.ts
@@ -30,6 +29,7 @@ scripts/processDiagnosticMessages.js
 scripts/produceLKG.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 scripts/generateLocalizedDiagnosticMessages.js
+scripts/configureLanguageServiceBuild.js
 scripts/*.js.map
 scripts/typings/
 coverage/

@@ -169,12 +169,12 @@ namespace ts {
             return fs;
         }
 
-        verifyTscIncrementalEdits({
+        verifyTscSerializedIncrementalEdits({
             scenario: "outFile",
             subScenario: "clean projects",
             fs: getOutFileFsAfterBuild,
             commandLineArgs: ["--b", "/src/third", "--clean"],
-            incrementalScenarios: [noChangeRun]
+            incrementalScenarios: noChangeOnlyRuns
         });
 
         verifyTsc({
@@ -453,7 +453,7 @@ namespace ts {
 
                 function stripInternalOfThird(fs: vfs.FileSystem) {
                     replaceText(fs, sources[project.third][source.config], `"declaration": true,`, `"declaration": true,
-"stripInternal": true`);
+    "stripInternal": true,`);
                 }
 
                 function stripInternalScenario(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {

@@ -48,18 +48,6 @@ let addBefore: { a: number, b: string, c: boolean } =
 >false : false
 >o : { a: number; b: string; }
 
-// Note: ignore still changes the order that properties are printed
-let ignore: { a: number, b: string } =
->ignore : { a: number; b: string; }
->a : number
->b : string
-
-    { b: 'ignored', ...o }
->{ b: 'ignored', ...o } : { a: number; b: string; }
->b : string
->'ignored' : "ignored"
->o : { a: number; b: string; }
-
 let override: { a: number, b: string } =
 >override : { a: number; b: string; }
 >a : number
@@ -101,32 +89,6 @@ let combined: { a: number, b: string, c: boolean } =
 >o : { a: number; b: string; }
 >o2 : { b: string; c: boolean; }
 
-let combinedBefore: { a: number, b: string, c: boolean } =
->combinedBefore : { a: number; b: string; c: boolean; }
->a : number
->b : string
->c : boolean
-
-    { b: 'ok', ...o, ...o2 }
->{ b: 'ok', ...o, ...o2 } : { b: string; c: boolean; a: number; }
->b : string
->'ok' : "ok"
->o : { a: number; b: string; }
->o2 : { b: string; c: boolean; }
-
-let combinedMid: { a: number, b: string, c: boolean } =
->combinedMid : { a: number; b: string; c: boolean; }
->a : number
->b : string
->c : boolean
-
-    { ...o, b: 'ok', ...o2 }
->{ ...o, b: 'ok', ...o2 } : { b: string; c: boolean; a: number; }
->o : { a: number; b: string; }
->b : string
->'ok' : "ok"
->o2 : { b: string; c: boolean; }
-
 let combinedAfter: { a: number, b: string, c: boolean } =
 >combinedAfter : { a: number; b: string; c: boolean; }
 >a : number
@@ -139,31 +101,6 @@ let combinedAfter: { a: number, b: string, c: boolean } =
 >o2 : { b: string; c: boolean; }
 >b : string
 >'ok' : "ok"
-
-let combinedNested: { a: number, b: boolean, c: string, d: string } =
->combinedNested : { a: number; b: boolean; c: string; d: string; }
->a : number
->b : boolean
->c : string
->d : string
-
-    { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
->{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
->{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
->a : number
->4 : 4
->{ b: false, c: 'overriden' } : { b: false; c: string; }
->b : false
->false : false
->c : string
->'overriden' : "overriden"
->d : string
->'actually new' : "actually new"
->{ a: 5, d: 'maybe new' } : { a: number; d: string; }
->a : number
->5 : 5
->d : string
->'maybe new' : "maybe new"
 
 let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >combinedNestedChangeType : { a: number; b: boolean; c: number; }
@@ -186,7 +123,7 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >1 : 1
 
 let propertyNested: { a: { a: number, b: string } } =
->propertyNested : { a: { a: number; b: string; }; }
+>propertyNested : { a: {    a: number;    b: string;}; }
 >a : { a: number; b: string; }
 >a : number
 >b : string
@@ -237,14 +174,14 @@ type Header = { head: string, body: string, authToken: string }
 >authToken : string
 
 function from16326(this: { header: Header }, header: Header, authToken: string): Header {
->from16326 : (this: { header: Header; }, header: Header, authToken: string) => Header
+>from16326 : (this: {    header: Header;}, header: Header, authToken: string) => Header
 >this : { header: Header; }
 >header : Header
 >header : Header
 >authToken : string
 
     return {
->{        ...this.header,        ...header,        ...authToken && { authToken }    } : { head: string; body: string; authToken: string; } | { authToken: string; head: string; body: string; }
+>{        ...this.header,        ...header,        ...authToken && { authToken }    } : { authToken: string; head: string; body: string; }
 
         ...this.header,
 >this.header : Header
@@ -263,7 +200,7 @@ function from16326(this: { header: Header }, header: Header, authToken: string):
 }
 // boolean && T results in Partial<T>
 function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
->conditionalSpreadBoolean : (b: boolean) => { x: number; y: number; }
+>conditionalSpreadBoolean : (b: boolean) => {    x: number;    y: number;}
 >b : boolean
 >x : number
 >y : number
@@ -277,9 +214,9 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
 >13 : 13
 
     o = {
->o = {        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: number; y: number; }
+>o = {        ...o,        ...b && { x: 14 }    } : { x: number; y: number; }
 >o : { x: number; y: number; }
->{        ...o,        ...b && { x: 14 }    } : { x: number; y: number; } | { x: number; y: number; }
+>{        ...o,        ...b && { x: 14 }    } : { x: number; y: number; }
 
         ...o,
 >o : { x: number; y: number; }
@@ -292,8 +229,8 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
 >14 : 14
     }
     let o2 = { ...b && { x: 21 }}
->o2 : {}
->{ ...b && { x: 21 }} : {} | { x: number; }
+>o2 : { x?: number; }
+>{ ...b && { x: 21 }} : { x?: number; }
 >b && { x: 21 } : false | { x: number; }
 >b : boolean
 >{ x: 21 } : { x: number; }
@@ -304,7 +241,7 @@ function conditionalSpreadBoolean(b: boolean) : { x: number, y: number } {
 >o : { x: number; y: number; }
 }
 function conditionalSpreadNumber(nt: number): { x: number, y: number } {
->conditionalSpreadNumber : (nt: number) => { x: number; y: number; }
+>conditionalSpreadNumber : (nt: number) => {    x: number;    y: number;}
 >nt : number
 >x : number
 >y : number
@@ -318,9 +255,9 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
 >16 : 16
 
     o = {
->o = {        ...o,        ...nt && { x: nt }    } : { x: number; y: number; } | { x: number; y: number; }
+>o = {        ...o,        ...nt && { x: nt }    } : { x: number; y: number; }
 >o : { x: number; y: number; }
->{        ...o,        ...nt && { x: nt }    } : { x: number; y: number; } | { x: number; y: number; }
+>{        ...o,        ...nt && { x: nt }    } : { x: number; y: number; }
 
         ...o,
 >o : { x: number; y: number; }
@@ -333,8 +270,8 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
 >nt : number
     }
     let o2 = { ...nt && { x: nt }}
->o2 : {}
->{ ...nt && { x: nt }} : {} | { x: number; }
+>o2 : { x?: number; }
+>{ ...nt && { x: nt }} : { x?: number; }
 >nt && { x: nt } : 0 | { x: number; }
 >nt : number
 >{ x: nt } : { x: number; }
@@ -345,7 +282,7 @@ function conditionalSpreadNumber(nt: number): { x: number, y: number } {
 >o : { x: number; y: number; }
 }
 function conditionalSpreadString(st: string): { x: string, y: number } {
->conditionalSpreadString : (st: string) => { x: string; y: number; }
+>conditionalSpreadString : (st: string) => {    x: string;    y: number;}
 >st : string
 >x : string
 >y : number
@@ -359,9 +296,9 @@ function conditionalSpreadString(st: string): { x: string, y: number } {
 >17 : 17
 
     o = {
->o = {        ...o,        ...st && { x: st }    } : { x: string; y: number; } | { x: string; y: number; }
+>o = {        ...o,        ...st && { x: st }    } : { x: string; y: number; }
 >o : { x: string; y: number; }
->{        ...o,        ...st && { x: st }    } : { x: string; y: number; } | { x: string; y: number; }
+>{        ...o,        ...st && { x: st }    } : { x: string; y: number; }
 
         ...o,
 >o : { x: string; y: number; }
@@ -374,8 +311,8 @@ function conditionalSpreadString(st: string): { x: string, y: number } {
 >st : string
     }
     let o2 = { ...st && { x: st }}
->o2 : {}
->{ ...st && { x: st }} : {} | { x: string; }
+>o2 : { x?: string; }
+>{ ...st && { x: st }} : { x?: string; }
 >st && { x: st } : "" | { x: string; }
 >st : string
 >{ x: st } : { x: string; }
@@ -445,17 +382,6 @@ let changeTypeAfter: { a: string, b: string } =
 >a : string
 >'wrong type?' : "wrong type?"
 
-let changeTypeBefore: { a: number, b: string } =
->changeTypeBefore : { a: number; b: string; }
->a : number
->b : string
-
-    { a: 'wrong type?', ...o };
->{ a: 'wrong type?', ...o } : { a: number; b: string; }
->a : string
->'wrong type?' : "wrong type?"
->o : { a: number; b: string; }
-
 let changeTypeBoth: { a: string, b: number } =
 >changeTypeBoth : { a: string; b: number; }
 >a : string
@@ -468,7 +394,7 @@ let changeTypeBoth: { a: string, b: number } =
 
 // optional
 function container(
->container : (definiteBoolean: { sn: boolean; }, definiteString: { sn: string; }, optionalString: { sn?: string | undefined; }, optionalNumber: { sn?: number | undefined; }) => void
+>container : (definiteBoolean: {    sn: boolean;}, definiteString: {    sn: string;}, optionalString: {    sn?: string;}, optionalNumber: {    sn?: number;}) => void
 
     definiteBoolean: { sn: boolean },
 >definiteBoolean : { sn: boolean; }
@@ -518,30 +444,13 @@ function container(
 >"before everything" : number
 
         { ['before everything']: 12, ...o, b: 'yes' }
->{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; ['before everything']: number; }
+>{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; "before everything": number; }
 >['before everything'] : number
 >'before everything' : "before everything"
 >12 : 12
 >o : { a: number; b: string; }
 >b : string
 >'yes' : "yes"
-
-    let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
->computedMiddle : { a: number; b: string; c: boolean; "in the middle": number; }
->a : number
->b : string
->c : boolean
->"in the middle" : number
-
-        { ...o, ['in the middle']: 13, b: 'maybe?', ...o2 }
->{ ...o, ['in the middle']: 13, b: 'maybe?', ...o2 } : { b: string; c: boolean; ['in the middle']: number; a: number; }
->o : { a: number; b: string; }
->['in the middle'] : number
->'in the middle' : "in the middle"
->13 : 13
->b : string
->'maybe?' : "maybe?"
->o2 : { b: string; c: boolean; }
 
     let computedAfter: { a: number, b: string, "at the end": number } =
 >computedAfter : { a: number; b: string; "at the end": number; }
@@ -550,7 +459,7 @@ function container(
 >"at the end" : number
 
         { ...o, b: 'yeah', ['at the end']: 14 }
->{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; ['at the end']: number; a: number; }
+>{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; "at the end": number; a: number; }
 >o : { a: number; b: string; }
 >b : string
 >'yeah' : "yeah"
@@ -656,7 +565,7 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 >d : string
 
     f({ a: 1, id: true }, { c: 1, d: 'no' })
->f({ a: 1, id: true }, { c: 1, d: 'no' }) : { a: number; id: boolean; } & { c: number; d: string; } & { id: string; }
+>f({ a: 1, id: true }, { c: 1, d: 'no' }) : never
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >{ a: 1, id: true } : { a: number; id: true; }
 >a : number
@@ -670,7 +579,7 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 >'no' : "no"
 
 function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
->genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | { s: string; }, obj: { x: number; }) => void
+>genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | {    s: string;}, obj: {    x: number;}) => void
 >t : T
 >u : U
 >v : T | U

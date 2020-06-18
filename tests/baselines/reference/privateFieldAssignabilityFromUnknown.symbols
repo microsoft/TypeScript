@@ -1,0 +1,12 @@
+=== tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts ===
+export class Class {
+>Class : Symbol(Class, Decl(privateFieldAssignabilityFromUnknown.ts, 0, 0))
+
+  #field: any
+>#field : Symbol(Class.#field, Decl(privateFieldAssignabilityFromUnknown.ts, 0, 20))
+}
+
+const task: Class = {} as unknown;
+>task : Symbol(task, Decl(privateFieldAssignabilityFromUnknown.ts, 4, 5))
+>Class : Symbol(Class, Decl(privateFieldAssignabilityFromUnknown.ts, 0, 0))
+

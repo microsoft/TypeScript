@@ -1,5 +1,129 @@
 Exit Code: 1
 Standard output:
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(3,10): error TS2304: Cannot find name 'define'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(3,35): error TS2304: Cannot find name 'define'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(3,48): error TS2304: Cannot find name 'define'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(4,45): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/acorn-loose/dist/acorn-loose")'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(4,80): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/acorn-loose/dist/acorn-loose")'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(4,106): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/acorn-loose/dist/acorn-loose")'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(83,12): error TS2339: Property 'next' does not exist on type 'LooseParser'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(110,16): error TS2339: Property 'lookAhead' does not exist on type 'LooseParser'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(111,44): error TS2339: Property 'next' does not exist on type 'LooseParser'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(159,10): error TS2339: Property 'next' does not exist on type 'LooseParser'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(160,17): error TS2339: Property 'parseTopLevel' does not exist on type 'LooseParser'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(216,38): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(218,32): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(220,13): error TS2322: Type '{ start: any; end: any; type: any; value: any; }' is not assignable to type 'boolean'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(220,33): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(220,103): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(222,41): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(224,13): error TS2322: Type '{ start: any; end: any; type: any; value: any; }' is not assignable to type 'boolean'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(224,33): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(226,13): error TS2322: Type '{ start: any; end: any; type: any; value: any; }' is not assignable to type 'boolean'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(227,24): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(230,41): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(251,33): error TS2322: Type '{ start: any; end: any; type: any; value: string; }' is not assignable to type 'boolean'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(254,23): error TS2339: Property 'loc' does not exist on type 'true'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(256,53): error TS2339: Property 'start' does not exist on type 'true'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(257,53): error TS2339: Property 'end' does not exist on type 'true'.
+node_modules/acorn/acorn-loose/dist/acorn-loose.js(1243,96): error TS1313: The body of an 'if' statement cannot be the empty statement.
+node_modules/acorn/acorn-walk/dist/walk.js(3,10): error TS2304: Cannot find name 'define'.
+node_modules/acorn/acorn-walk/dist/walk.js(3,35): error TS2304: Cannot find name 'define'.
+node_modules/acorn/acorn-walk/dist/walk.js(3,48): error TS2304: Cannot find name 'define'.
+node_modules/acorn/acorn-walk/dist/walk.js(4,45): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/acorn-walk/dist/walk")'.
+node_modules/acorn/acorn-walk/dist/walk.js(4,80): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/acorn-walk/dist/walk")'.
+node_modules/acorn/acorn-walk/dist/walk.js(164,43): error TS2339: Property 'node' does not exist on type 'never'.
+node_modules/acorn/acorn/dist/acorn.js(3,10): error TS2304: Cannot find name 'define'.
+node_modules/acorn/acorn/dist/acorn.js(3,35): error TS2304: Cannot find name 'define'.
+node_modules/acorn/acorn/dist/acorn.js(3,48): error TS2304: Cannot find name 'define'.
+node_modules/acorn/acorn/dist/acorn.js(4,44): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/acorn/dist/acorn")'.
+node_modules/acorn/acorn/dist/acorn.js(42,3): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/acorn/acorn/dist/acorn.js(42,34): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/acorn/acorn/dist/acorn.js(155,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/acorn/dist/acorn.js(159,15): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/acorn/dist/acorn.js(161,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/acorn/dist/acorn.js(163,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/acorn/dist/acorn.js(167,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/acorn/dist/acorn.js(170,15): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/acorn/dist/acorn.js(171,22): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/acorn/dist/acorn.js(419,58): error TS2339: Property 'push' does not exist on type '(token: any) => any'.
+node_modules/acorn/acorn/dist/acorn.js(551,45): error TS2339: Property 'startNode' does not exist on type 'Parser'.
+node_modules/acorn/acorn/dist/acorn.js(552,10): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
+node_modules/acorn/acorn/dist/acorn.js(553,17): error TS2339: Property 'parseTopLevel' does not exist on type 'Parser'.
+node_modules/acorn/acorn/dist/acorn.js(564,87): error TS2339: Property 'currentThisScope' does not exist on type 'Parser'.
+node_modules/acorn/acorn/dist/acorn.js(576,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(581,12): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
+node_modules/acorn/acorn/dist/acorn.js(582,19): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
+node_modules/acorn/acorn/dist/acorn.js(586,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(600,16): error TS2531: Object is possibly 'null'.
+node_modules/acorn/acorn/dist/acorn.js(608,16): error TS2531: Object is possibly 'null'.
+node_modules/acorn/acorn/dist/acorn.js(768,27): error TS2531: Object is possibly 'null'.
+node_modules/acorn/acorn/dist/acorn.js(795,27): error TS2531: Object is possibly 'null'.
+node_modules/acorn/acorn/dist/acorn.js(852,31): error TS2531: Object is possibly 'null'.
+node_modules/acorn/acorn/dist/acorn.js(2826,9): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn/dist/acorn.js(2826,24): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn/dist/acorn.js(2826,39): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/acorn/acorn/dist/acorn.js(2934,20): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(2986,13): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(2987,13): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(2988,13): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(2989,13): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(2990,13): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(2991,13): error TS2554: Expected 5 arguments, but got 4.
+node_modules/acorn/acorn/dist/acorn.js(2992,13): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(2993,13): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/acorn/dist/acorn.js(3047,14): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3048,12): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3051,20): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3052,40): error TS2339: Property 'curContext' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3053,18): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3055,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3059,10): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3059,28): error TS2339: Property 'braceIsBlock' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3060,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3064,10): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3065,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3070,10): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3071,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3080,61): error TS2339: Property 'input' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3080,78): error TS2339: Property 'lastTokEnd' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3080,95): error TS2339: Property 'start' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3081,75): error TS2339: Property 'curContext' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3082,14): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3084,14): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3085,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3089,14): error TS2339: Property 'curContext' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3090,14): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3092,14): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3093,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3098,24): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3099,16): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3100,16): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3102,16): error TS2339: Property 'context' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3104,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3109,14): error TS2339: Property 'options' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3110,16): error TS2339: Property 'value' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3110,40): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3111,16): error TS2339: Property 'value' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3111,42): error TS2339: Property 'inGeneratorContext' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/acorn.js(3114,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/acorn/acorn/dist/bin.js(46,27): error TS2339: Property 'getToken' does not exist on type 'Parser'.
+node_modules/acorn/acorn/dist/bin.js(54,30): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string', gave the following error.
+    Argument of type 'null' is not assignable to parameter of type '((this: any, key: string, value: any) => any) | undefined'.
+  Overload 2 of 2, '(value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string', gave the following error.
+    Argument of type '2 | null' is not assignable to parameter of type 'string | number | undefined'.
+      Type 'null' is not assignable to type 'string | number | undefined'.
+node_modules/acorn/acorn/dist/bin.js(58,23): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(path: string | number | Buffer | URL, options?: { encoding?: null | undefined; flag?: string | undefined; } | null | undefined): Buffer', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
+      Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
+  Overload 2 of 3, '(path: string | number | Buffer | URL, options: { encoding: BufferEncoding; flag?: string | undefined; } | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | ... 4 more ... | "hex"): string', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
+      Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
+  Overload 3 of 3, '(path: string | number | Buffer | URL, options?: "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" | (BaseEncodingOptions & { ...; }) | null | undefined): string | Buffer', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
+      Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
 node_modules/acorn/bin/_acorn.js(51,30): error TS2339: Property 'getToken' does not exist on type 'Parser'.
 node_modules/acorn/bin/_acorn.js(59,30): error TS2769: No overload matches this call.
   Overload 1 of 2, '(value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string', gave the following error.
@@ -11,15 +135,22 @@ node_modules/acorn/bin/_acorn.js(63,23): error TS2769: No overload matches this 
   Overload 1 of 3, '(path: string | number | Buffer | URL, options?: { encoding?: null | undefined; flag?: string | undefined; } | null | undefined): Buffer', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
       Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
-  Overload 2 of 3, '(path: string | number | Buffer | URL, options: string | { encoding: string; flag?: string | undefined; }): string', gave the following error.
+  Overload 2 of 3, '(path: string | number | Buffer | URL, options: { encoding: BufferEncoding; flag?: string | undefined; } | "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | ... 4 more ... | "hex"): string', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
       Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
-  Overload 3 of 3, '(path: string | number | Buffer | URL, options?: string | { encoding?: string | null | undefined; flag?: string | undefined; } | null | undefined): string | Buffer', gave the following error.
+  Overload 3 of 3, '(path: string | number | Buffer | URL, options?: "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex" | (BaseEncodingOptions & { ...; }) | null | undefined): string | Buffer', gave the following error.
     Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Buffer | URL'.
       Type 'undefined' is not assignable to type 'string | number | Buffer | URL'.
-node_modules/acorn/bin/run_test262.js(3,21): error TS2307: Cannot find module 'test262-parser-runner'.
+node_modules/acorn/bin/run_test262.js(3,21): error TS2307: Cannot find module 'test262-parser-runner' or its corresponding type declarations.
 node_modules/acorn/dist/acorn.es.js(36,1): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/acorn/dist/acorn.es.js(36,32): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/acorn/dist/acorn.es.js(150,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.es.js(154,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.es.js(156,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.es.js(158,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.es.js(162,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.es.js(165,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.es.js(166,20): error TS2554: Expected 2 arguments, but got 1.
 node_modules/acorn/dist/acorn.es.js(410,56): error TS2339: Property 'push' does not exist on type '(token: any) => any'.
 node_modules/acorn/dist/acorn.es.js(543,43): error TS2339: Property 'startNode' does not exist on type 'Parser'.
 node_modules/acorn/dist/acorn.es.js(544,8): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
@@ -30,6 +161,15 @@ node_modules/acorn/dist/acorn.es.js(738,25): error TS2531: Object is possibly 'n
 node_modules/acorn/dist/acorn.es.js(2752,7): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
 node_modules/acorn/dist/acorn.es.js(2752,22): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 node_modules/acorn/dist/acorn.es.js(2752,37): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn.es.js(2846,18): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/dist/acorn.es.js(2900,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.es.js(2901,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.es.js(2902,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.es.js(2903,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.es.js(2904,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.es.js(2905,11): error TS2554: Expected 5 arguments, but got 4.
+node_modules/acorn/dist/acorn.es.js(2906,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.es.js(2907,11): error TS2554: Expected 5 arguments, but got 2.
 node_modules/acorn/dist/acorn.es.js(2963,12): error TS2339: Property 'context' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.es.js(2964,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.es.js(2967,18): error TS2339: Property 'context' does not exist on type 'TokenType'.
@@ -62,14 +202,23 @@ node_modules/acorn/dist/acorn.es.js(3025,38): error TS2339: Property 'exprAllowe
 node_modules/acorn/dist/acorn.es.js(3026,14): error TS2339: Property 'value' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.es.js(3026,40): error TS2339: Property 'inGeneratorContext' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.es.js(3029,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/acorn/dist/acorn.es.js(5291,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
-node_modules/acorn/dist/acorn.es.js(5292,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
+node_modules/acorn/dist/acorn.es.js(5284,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/dist/acorn.es.js(5293,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
+node_modules/acorn/dist/acorn.es.js(5294,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
+node_modules/acorn/dist/acorn.es.js(5301,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/acorn/dist/acorn.js(3,9): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/acorn.js(3,34): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/acorn.js(3,47): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/acorn.js(4,19): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/dist/acorn")'.
 node_modules/acorn/dist/acorn.js(42,1): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/acorn/dist/acorn.js(42,32): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/acorn/dist/acorn.js(156,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.js(160,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.js(162,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.js(164,11): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.js(168,8): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.js(171,13): error TS2554: Expected 2 arguments, but got 1.
+node_modules/acorn/dist/acorn.js(172,20): error TS2554: Expected 2 arguments, but got 1.
 node_modules/acorn/dist/acorn.js(416,56): error TS2339: Property 'push' does not exist on type '(token: any) => any'.
 node_modules/acorn/dist/acorn.js(549,43): error TS2339: Property 'startNode' does not exist on type 'Parser'.
 node_modules/acorn/dist/acorn.js(550,8): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
@@ -80,6 +229,15 @@ node_modules/acorn/dist/acorn.js(744,25): error TS2531: Object is possibly 'null
 node_modules/acorn/dist/acorn.js(2758,7): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
 node_modules/acorn/dist/acorn.js(2758,22): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 node_modules/acorn/dist/acorn.js(2758,37): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
+node_modules/acorn/dist/acorn.js(2852,18): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/dist/acorn.js(2906,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.js(2907,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.js(2908,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.js(2909,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.js(2910,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.js(2911,11): error TS2554: Expected 5 arguments, but got 4.
+node_modules/acorn/dist/acorn.js(2912,11): error TS2554: Expected 5 arguments, but got 2.
+node_modules/acorn/dist/acorn.js(2913,11): error TS2554: Expected 5 arguments, but got 2.
 node_modules/acorn/dist/acorn.js(2969,12): error TS2339: Property 'context' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(2970,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(2973,18): error TS2339: Property 'context' does not exist on type 'TokenType'.
@@ -112,8 +270,14 @@ node_modules/acorn/dist/acorn.js(3031,38): error TS2339: Property 'exprAllowed' 
 node_modules/acorn/dist/acorn.js(3032,14): error TS2339: Property 'value' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(3032,40): error TS2339: Property 'inGeneratorContext' does not exist on type 'TokenType'.
 node_modules/acorn/dist/acorn.js(3035,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/acorn/dist/acorn.js(5297,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
-node_modules/acorn/dist/acorn.js(5298,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
+node_modules/acorn/dist/acorn.js(5290,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/dist/acorn.js(5299,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
+node_modules/acorn/dist/acorn.js(5300,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
+node_modules/acorn/dist/acorn.js(5307,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/dist/acorn_loose.es.js(45,12): error TS2554: Expected 3 arguments, but got 2.
+node_modules/acorn/dist/acorn_loose.es.js(64,7): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(64,23): error TS2532: Object is possibly 'undefined'.
+node_modules/acorn/dist/acorn_loose.es.js(66,7): error TS2532: Object is possibly 'undefined'.
 node_modules/acorn/dist/acorn_loose.es.js(73,9): error TS2339: Property 'name' does not exist on type 'Node'.
 node_modules/acorn/dist/acorn_loose.es.js(79,9): error TS2339: Property 'value' does not exist on type 'Node'.
 node_modules/acorn/dist/acorn_loose.es.js(79,23): error TS2339: Property 'raw' does not exist on type 'Node'.

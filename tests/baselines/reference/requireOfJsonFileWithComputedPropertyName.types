@@ -1,0 +1,29 @@
+=== tests/cases/compiler/file1.ts ===
+import b1 = require('./b.json');
+>b1 : { [x: number]: number; }
+
+let x = b1;
+>x : { [x: number]: number; }
+>b1 : { [x: number]: number; }
+
+import b2 = require('./b.json');
+>b2 : { [x: number]: number; }
+
+if (x) {
+>x : { [x: number]: number; }
+
+    x = b2;
+>x = b2 : { [x: number]: number; }
+>x : { [x: number]: number; }
+>b2 : { [x: number]: number; }
+}
+
+=== tests/cases/compiler/b.json ===
+{
+>{    [a]: 10} : { [x: number]: number; }
+
+    [a]: 10
+>[a] : number
+>a : any
+>10 : 10
+}

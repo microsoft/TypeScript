@@ -19,8 +19,17 @@ declare let f4: (...args: [string, string] | [string, number, boolean]) => void;
 >f4 : Symbol(f4, Decl(genericRestParameters3.ts, 3, 11))
 >args : Symbol(args, Decl(genericRestParameters3.ts, 3, 17))
 
-declare const tt: [string] | [number, boolean];
->tt : Symbol(tt, Decl(genericRestParameters3.ts, 5, 13))
+declare const t1: [string] | [number, boolean];
+>t1 : Symbol(t1, Decl(genericRestParameters3.ts, 5, 13))
+
+declare const t2: readonly [string] | [number, boolean];
+>t2 : Symbol(t2, Decl(genericRestParameters3.ts, 6, 13))
+
+declare const t3: [string] | readonly [number, boolean];
+>t3 : Symbol(t3, Decl(genericRestParameters3.ts, 7, 13))
+
+declare const t4: readonly [string] | readonly [number, boolean];
+>t4 : Symbol(t4, Decl(genericRestParameters3.ts, 8, 13))
 
 f1("foo", "abc");
 >f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
@@ -28,9 +37,21 @@ f1("foo", "abc");
 f1("foo", 10, true);
 >f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
 
-f1("foo", ...tt);
+f1("foo", ...t1);
 >f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
->tt : Symbol(tt, Decl(genericRestParameters3.ts, 5, 13))
+>t1 : Symbol(t1, Decl(genericRestParameters3.ts, 5, 13))
+
+f1("foo", ...t2);
+>f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
+>t2 : Symbol(t2, Decl(genericRestParameters3.ts, 6, 13))
+
+f1("foo", ...t3);
+>f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
+>t3 : Symbol(t3, Decl(genericRestParameters3.ts, 7, 13))
+
+f1("foo", ...t4);
+>f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
+>t4 : Symbol(t4, Decl(genericRestParameters3.ts, 8, 13))
 
 f1("foo", 10);  // Error
 >f1 : Symbol(f1, Decl(genericRestParameters3.ts, 0, 11))
@@ -65,93 +86,107 @@ f1 = f4;  // Error, misaligned complex rest types
 // Repro from #26110
 
 interface CoolArray<E> extends Array<E> { 
->CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 18, 8))
->E : Symbol(E, Decl(genericRestParameters3.ts, 22, 20))
+>CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 24, 8))
+>E : Symbol(E, Decl(genericRestParameters3.ts, 28, 20))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->E : Symbol(E, Decl(genericRestParameters3.ts, 22, 20))
+>E : Symbol(E, Decl(genericRestParameters3.ts, 28, 20))
 
     hello: number;
->hello : Symbol(CoolArray.hello, Decl(genericRestParameters3.ts, 22, 41))
+>hello : Symbol(CoolArray.hello, Decl(genericRestParameters3.ts, 28, 41))
 }
 
 declare function foo<T extends any[]>(cb: (...args: T) => void): void;
->foo : Symbol(foo, Decl(genericRestParameters3.ts, 24, 1))
->T : Symbol(T, Decl(genericRestParameters3.ts, 26, 21))
->cb : Symbol(cb, Decl(genericRestParameters3.ts, 26, 38))
->args : Symbol(args, Decl(genericRestParameters3.ts, 26, 43))
->T : Symbol(T, Decl(genericRestParameters3.ts, 26, 21))
+>foo : Symbol(foo, Decl(genericRestParameters3.ts, 30, 1))
+>T : Symbol(T, Decl(genericRestParameters3.ts, 32, 21))
+>cb : Symbol(cb, Decl(genericRestParameters3.ts, 32, 38))
+>args : Symbol(args, Decl(genericRestParameters3.ts, 32, 43))
+>T : Symbol(T, Decl(genericRestParameters3.ts, 32, 21))
 
 foo<CoolArray<any>>();     // Error
->foo : Symbol(foo, Decl(genericRestParameters3.ts, 24, 1))
->CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 18, 8))
+>foo : Symbol(foo, Decl(genericRestParameters3.ts, 30, 1))
+>CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 24, 8))
 
 foo<CoolArray<any>>(100);  // Error
->foo : Symbol(foo, Decl(genericRestParameters3.ts, 24, 1))
->CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 18, 8))
+>foo : Symbol(foo, Decl(genericRestParameters3.ts, 30, 1))
+>CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 24, 8))
 
 foo<CoolArray<any>>(foo);  // Error
->foo : Symbol(foo, Decl(genericRestParameters3.ts, 24, 1))
->CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 18, 8))
->foo : Symbol(foo, Decl(genericRestParameters3.ts, 24, 1))
+>foo : Symbol(foo, Decl(genericRestParameters3.ts, 30, 1))
+>CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 24, 8))
+>foo : Symbol(foo, Decl(genericRestParameters3.ts, 30, 1))
 
 function bar<T extends any[]>(...args: T): T {
->bar : Symbol(bar, Decl(genericRestParameters3.ts, 30, 25))
->T : Symbol(T, Decl(genericRestParameters3.ts, 32, 13))
->args : Symbol(args, Decl(genericRestParameters3.ts, 32, 30))
->T : Symbol(T, Decl(genericRestParameters3.ts, 32, 13))
->T : Symbol(T, Decl(genericRestParameters3.ts, 32, 13))
+>bar : Symbol(bar, Decl(genericRestParameters3.ts, 36, 25))
+>T : Symbol(T, Decl(genericRestParameters3.ts, 38, 13))
+>args : Symbol(args, Decl(genericRestParameters3.ts, 38, 30))
+>T : Symbol(T, Decl(genericRestParameters3.ts, 38, 13))
+>T : Symbol(T, Decl(genericRestParameters3.ts, 38, 13))
 
     return args;
->args : Symbol(args, Decl(genericRestParameters3.ts, 32, 30))
+>args : Symbol(args, Decl(genericRestParameters3.ts, 38, 30))
 }
 
 let a = bar(10, 20);
->a : Symbol(a, Decl(genericRestParameters3.ts, 36, 3))
->bar : Symbol(bar, Decl(genericRestParameters3.ts, 30, 25))
+>a : Symbol(a, Decl(genericRestParameters3.ts, 42, 3))
+>bar : Symbol(bar, Decl(genericRestParameters3.ts, 36, 25))
 
 let b = bar<CoolArray<number>>(10, 20);  // Error
->b : Symbol(b, Decl(genericRestParameters3.ts, 37, 3))
->bar : Symbol(bar, Decl(genericRestParameters3.ts, 30, 25))
->CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 18, 8))
+>b : Symbol(b, Decl(genericRestParameters3.ts, 43, 3))
+>bar : Symbol(bar, Decl(genericRestParameters3.ts, 36, 25))
+>CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 24, 8))
 
 declare function baz<T>(...args: CoolArray<T>): void;
->baz : Symbol(baz, Decl(genericRestParameters3.ts, 37, 39))
->T : Symbol(T, Decl(genericRestParameters3.ts, 39, 21))
->args : Symbol(args, Decl(genericRestParameters3.ts, 39, 24))
->CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 18, 8))
->T : Symbol(T, Decl(genericRestParameters3.ts, 39, 21))
+>baz : Symbol(baz, Decl(genericRestParameters3.ts, 43, 39))
+>T : Symbol(T, Decl(genericRestParameters3.ts, 45, 21))
+>args : Symbol(args, Decl(genericRestParameters3.ts, 45, 24))
+>CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 24, 8))
+>T : Symbol(T, Decl(genericRestParameters3.ts, 45, 21))
 
 declare const ca: CoolArray<number>;
->ca : Symbol(ca, Decl(genericRestParameters3.ts, 40, 13))
->CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 18, 8))
+>ca : Symbol(ca, Decl(genericRestParameters3.ts, 46, 13))
+>CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 24, 8))
 
 baz();       // Error
->baz : Symbol(baz, Decl(genericRestParameters3.ts, 37, 39))
+>baz : Symbol(baz, Decl(genericRestParameters3.ts, 43, 39))
 
 baz(1);      // Error
->baz : Symbol(baz, Decl(genericRestParameters3.ts, 37, 39))
+>baz : Symbol(baz, Decl(genericRestParameters3.ts, 43, 39))
 
 baz(1, 2);   // Error
->baz : Symbol(baz, Decl(genericRestParameters3.ts, 37, 39))
+>baz : Symbol(baz, Decl(genericRestParameters3.ts, 43, 39))
 
 baz(...ca);  // Error
->baz : Symbol(baz, Decl(genericRestParameters3.ts, 37, 39))
->ca : Symbol(ca, Decl(genericRestParameters3.ts, 40, 13))
+>baz : Symbol(baz, Decl(genericRestParameters3.ts, 43, 39))
+>ca : Symbol(ca, Decl(genericRestParameters3.ts, 46, 13))
 
 // Repro from #26491
 
 declare function hmm<A extends [] | [number, string]>(...args: A): void;
->hmm : Symbol(hmm, Decl(genericRestParameters3.ts, 45, 11))
->A : Symbol(A, Decl(genericRestParameters3.ts, 49, 21))
->args : Symbol(args, Decl(genericRestParameters3.ts, 49, 54))
->A : Symbol(A, Decl(genericRestParameters3.ts, 49, 21))
+>hmm : Symbol(hmm, Decl(genericRestParameters3.ts, 51, 11))
+>A : Symbol(A, Decl(genericRestParameters3.ts, 55, 21))
+>args : Symbol(args, Decl(genericRestParameters3.ts, 55, 54))
+>A : Symbol(A, Decl(genericRestParameters3.ts, 55, 21))
 
 hmm(); // okay, A = []
->hmm : Symbol(hmm, Decl(genericRestParameters3.ts, 45, 11))
+>hmm : Symbol(hmm, Decl(genericRestParameters3.ts, 51, 11))
 
 hmm(1, "s"); // okay, A = [1, "s"]
->hmm : Symbol(hmm, Decl(genericRestParameters3.ts, 45, 11))
+>hmm : Symbol(hmm, Decl(genericRestParameters3.ts, 51, 11))
 
 hmm("what"); // no error?  A = [] | [number, string] ?
->hmm : Symbol(hmm, Decl(genericRestParameters3.ts, 45, 11))
+>hmm : Symbol(hmm, Decl(genericRestParameters3.ts, 51, 11))
+
+// Repro from #35066
+
+declare function foo2(...args: string[] | number[]): void;
+>foo2 : Symbol(foo2, Decl(genericRestParameters3.ts, 58, 12))
+>args : Symbol(args, Decl(genericRestParameters3.ts, 62, 22))
+
+let x2: ReadonlyArray<string> = ["hello"];
+>x2 : Symbol(x2, Decl(genericRestParameters3.ts, 63, 3))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+
+foo2(...x2);
+>foo2 : Symbol(foo2, Decl(genericRestParameters3.ts, 58, 12))
+>x2 : Symbol(x2, Decl(genericRestParameters3.ts, 63, 3))
 

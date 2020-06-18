@@ -17,12 +17,12 @@ namespace ts.codefix {
 
     function getNode(sourceFile: SourceFile, pos: number): ConstructorDeclaration {
         const token = getTokenAtPosition(sourceFile, pos);
-        Debug.assert(token.kind === SyntaxKind.ConstructorKeyword, "token should be at the constructor keyword");
-        return token.parent as ConstructorDeclaration;
+        Debug.assert(isConstructorDeclaration(token.parent), "token should be at the constructor declaration");
+        return token.parent;
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, ctr: ConstructorDeclaration) {
-        const superCall = createStatement(createCall(createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray));
+        const superCall = factory.createExpressionStatement(factory.createCallExpression(factory.createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ emptyArray));
         changes.insertNodeAtConstructorStart(sourceFile, ctr, superCall);
     }
 }
