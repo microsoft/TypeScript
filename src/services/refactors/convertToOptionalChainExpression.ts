@@ -99,10 +99,10 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     function convertPropertyAccessToOptionalChain(toConvert: PropertyAccessExpression): PropertyAccessExpression {
-        if (toConvert.expression.kind === SyntaxKind.PropertyAccessExpression) {
-            return factory.createPropertyAccessChain(convertPropertyAccessToOptionalChain(<PropertyAccessExpression>toConvert.expression), factory.createToken(SyntaxKind.QuestionDotToken), <Identifier>toConvert.name);
+        if (isPropertyAccessExpression(toConvert.expression)) {
+            return factory.createPropertyAccessChain(convertPropertyAccessToOptionalChain(toConvert.expression), factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name);
         }
-        return factory.createPropertyAccessChain(toConvert.expression, factory.createToken(SyntaxKind.QuestionDotToken), <Identifier>toConvert.name);
+        return factory.createPropertyAccessChain(toConvert.expression, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name);
     }
 
     function doChange(sourceFile: SourceFile, changes: textChanges.ChangeTracker, info: Info, _actionName: string): void {
