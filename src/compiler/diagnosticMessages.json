@@ -5189,7 +5189,7 @@
         "category": "Message",
         "code": 90054
     },
-    "Export all non-exported member": {
+    "Add all missing exports": {
         "category": "Message",
         "code": 90055
     },

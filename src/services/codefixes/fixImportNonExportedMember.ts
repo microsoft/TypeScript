@@ -31,7 +31,7 @@ namespace ts.codefix {
     function getInfo(sourceFile: SourceFile, context: CodeFixContext | CodeFixAllContext, pos: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
         if (node && isIdentifier(node)) {
-            const importDecl = findAncestor(node, isImportDeclaration);
+            const importDecl = findAncestor(node, node => node.kind === SyntaxKind.ImportDeclaration);
             if (!importDecl || !isStringLiteralLike(importDecl.moduleSpecifier)) {
                 return undefined;
             }
@@ -44,15 +44,12 @@ namespace ts.codefix {
         }
     }
 
-    function isImportDeclaration(node: Node): node is ImportDeclaration {
-        return node.kind === SyntaxKind.ImportDeclaration;
-    }
-
     function getNamedExportDeclaration(moduleSymbol: Symbol): ExportDeclaration | undefined {
         let namedExport;
         moduleSymbol.exports?.forEach((symbol) => {
             const specifier = symbol.declarations[0];
-            if(specifier && isExportSpecifier(specifier) && isNamedExports(specifier.parent)) {
+            if (specifier && isExportSpecifier(specifier)
+                && specifier.parent && isNamedExports(specifier.parent)) {
                 namedExport = specifier.parent?.parent;
             }
         });
@@ -62,19 +59,19 @@ namespace ts.codefix {
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Identifier): void {
         const moduleSymbol = sourceFile.localSymbol || sourceFile.symbol;
         const localSymbol = moduleSymbol.valueDeclaration.locals?.get(node.escapedText);
-        if(!localSymbol) {
+        if (!localSymbol) {
             return;
         }
-        if(isFunctionSymbol(localSymbol)) {
+        if (isFunctionSymbol(localSymbol)) {
             const start = localSymbol.valueDeclaration.pos;
-            changes.insertExportModifierAtPos(sourceFile, start ? start + 1 : 0);
+            changes.insertExportModifierAt(sourceFile, start ? start + 1 : 0);
             return;
         }
 
         const current: VariableDeclarationList | Node = localSymbol.valueDeclaration.parent;
         if(isVariableDeclarationList(current) && current.declarations.length <= 1) {
             const start = localSymbol.valueDeclaration.parent.pos;
-            changes.insertExportModifierAtPos(sourceFile, start ? start + 1 : 0);
+            changes.insertExportModifierAt(sourceFile, start ? start + 1 : 0);
             return;
         }
 

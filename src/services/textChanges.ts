@@ -665,10 +665,10 @@ namespace ts.textChanges {
         }
 
         public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatement | VariableStatement): void {
-            this.insertExportModifierAtPos(sourceFile, node.getStart(sourceFile));
+            this.insertExportModifierAt(sourceFile, node.getStart(sourceFile));
         }
 
-        public insertExportModifierAtPos(sourceFile: SourceFile, position: number): void {
+        public insertExportModifierAt(sourceFile: SourceFile, position: number): void {
             this.insertText(sourceFile, position, "export ");
         }
 
