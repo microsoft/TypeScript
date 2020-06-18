@@ -1,36 +1,43 @@
 /* @internal */
 namespace ts {
-    export const Map: MapConstructor = tryGetNativeMap() || (() => {
-        // NOTE: ts.createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createMapShim === "function") {
-            return createMapShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
-    })();
+    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I) => Iterator<
+        I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+        I extends ReadonlySet<infer T> ? T :
+        I extends readonly (infer T)[] ? T :
+        I extends undefined ? undefined :
+        never>;
 
-    export const Set: SetConstructor = tryGetNativeSet() || (() => {
-        // NOTE: ts.createSetShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createSetShim === "function") {
-            return createSetShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native Set implementation.");
-    })();
+    function getCollectionImplementation<
+        K1 extends MatchingKeys<typeof NativeCollections, () => any>,
+        K2 extends MatchingKeys<typeof ShimCollections, (getIterator?: GetIteratorCallback) => ReturnType<(typeof NativeCollections)[K1]>>
+    >(name: string, nativeFactory: K1, shimFactory: K2): NonNullable<ReturnType<(typeof NativeCollections)[K1]>> {
+        // NOTE: ts.ShimCollections will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        const constructor = NativeCollections[nativeFactory]() ?? ShimCollections?.[shimFactory](getIterator);
+        if (constructor) return constructor as NonNullable<ReturnType<(typeof NativeCollections)[K1]>>;
+        throw new Error(`TypeScript requires an environment that provides a compatible native ${name} implementation.`);
+    }
 
-    export const WeakMap: WeakMapConstructor = tryGetNativeWeakMap() || (() => {
-        // NOTE: ts.createWeakMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createWeakMapShim === "function") {
-            return createWeakMapShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native WeakMap implementation.");
-    })();
+    export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "createMapShim");
+    export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
 
-    export const WeakSet: WeakSetConstructor = tryGetNativeWeakSet() || (() => {
-        // NOTE: ts.createWeakSetShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createWeakSetShim === "function") {
-            return createWeakSetShim();
+    export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
+        I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+        I extends ReadonlySet<infer T> ? T :
+        I extends readonly (infer T)[] ? T :
+        I extends undefined ? undefined :
+        never>;
+    export function getIterator<K, V>(iterable: ReadonlyMap<K, V>): Iterator<[K, V]>;
+    export function getIterator<K, V>(iterable: ReadonlyMap<K, V> | undefined): Iterator<[K, V]> | undefined;
+    export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T>): Iterator<T>;
+    export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T> | undefined): Iterator<T> | undefined;
+    export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
+        if (iterable) {
+            if (isArray(iterable)) return arrayIterator(iterable);
+            if (iterable instanceof Map) return iterable.entries();
+            if (iterable instanceof Set) return iterable.values();
+            throw new Error("Iteration not supported.");
         }
-        throw new Error("TypeScript requires an environment that provides a compatible native WeakSet implementation.");
-    })();
+    }
 
     export const emptyArray: never[] = [] as never[];
 
@@ -59,14 +66,6 @@ namespace ts {
         }
 
         return map;
-    }
-
-    export function createSet<T>(): Set<T> {
-        return new Set<T>();
-    }
-
-    export function createSetFromValues<T>(values: readonly T[]): Set<T> {
-        return new Set(values);
     }
 
     export function length(array: readonly any[] | undefined): number {
@@ -133,6 +132,16 @@ namespace ts {
         }
     }
 
+    export function reduceLeftIterator<T, U>(iterator: Iterator<T> | undefined, f: (memo: U, value: T, i: number) => U, initial: U): U {
+        let result = initial;
+        if (iterator) {
+            for (let step = iterator.next(), pos = 0; !step.done; step = iterator.next(), pos++) {
+                result = f(result, step.value, pos);
+            }
+        }
+        return result;
+    }
+
     export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], callback: (a: T, b: U, index: number) => V): V[] {
         const result: V[] = [];
         Debug.assertEqual(arrayA.length, arrayB.length);
@@ -158,7 +167,7 @@ namespace ts {
 
     export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
         Debug.assert(keys.length === values.length);
-        const map = createMap<K, V>();
+        const map = new Map<K, V>();
         for (let i = 0; i < keys.length; ++i) {
             map.set(keys[i], values[i]);
         }
@@ -557,7 +566,7 @@ namespace ts {
             return undefined;
         }
 
-        const result = createMap<K2, V2>();
+        const result = new Map<K2, V2>();
         map.forEach((value, key) => {
             const entry = f(key, value);
             if (entry !== undefined) {
@@ -569,6 +578,21 @@ namespace ts {
         });
 
         return result;
+    }
+
+    export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1>, f: (value: V1) => V2 | undefined): Set<V2>;
+    export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): Set<V2> | undefined;
+    export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): Set<V2> | undefined {
+        if (set) {
+            const result = new Set<V2>();
+            set.forEach(value => {
+                const newValue = f(value);
+                if (newValue !== undefined) {
+                    result.add(newValue);
+                }
+            });
+            return result;
+        }
     }
 
     export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
@@ -640,7 +664,7 @@ namespace ts {
             return undefined;
         }
 
-        const result = createMap<K2, V2>();
+        const result = new Map<K2, V2>();
         map.forEach((value, key) => {
             const [newKey, newValue] = f(key, value);
             result.set(newKey, newValue);
@@ -1312,7 +1336,7 @@ namespace ts {
     export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): Map<K, V>;
     export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): Map<K, V2>;
     export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): Map<K, V1 | V2> {
-        const result = createMap<K, V1 | V2>();
+        const result = new Map<K, V1 | V2>();
         for (const value of array) {
             const key = makeKey(value);
             if (key !== undefined) result.set(key, makeValue(value));
@@ -1407,7 +1431,7 @@ namespace ts {
     export function createMultiMap<V>(): MultiMap<string, V>;
     export function createMultiMap<K, V>(): MultiMap<K, V>;
     export function createMultiMap<K, V>(): MultiMap<K, V> {
-        const map = createMap<K, V[]>() as MultiMap<K, V>;
+        const map = new Map<K, V[]>() as MultiMap<K, V>;
         map.add = multiMapAdd;
         map.remove = multiMapRemove;
         return map;

@@ -128,7 +128,7 @@ namespace ts {
             assert.equal(nativeMapIteratorResult, expectedResult, "nativeMap-iterator");
 
             // Then, test the map shim.
-            const MapShim = createMapShim(); // tslint:disable-line variable-name
+            const MapShim = ShimCollections.createMapShim(getIterator); // tslint:disable-line variable-name
             let localShimMap = new MapShim<string, string>();
             const shimMapForEachResult = testMapIterationAddedValues(stringKeys, localShimMap, /* useForEach */ true);
             assert.equal(shimMapForEachResult, expectedResult, "shimMap-forEach");
@@ -151,7 +151,7 @@ namespace ts {
             assert.equal(nativeMapIteratorResult, expectedResult, "nativeMap-iterator");
 
             // Then, test the map shim.
-            const MapShim = createMapShim(); // tslint:disable-line variable-name
+            const MapShim = ShimCollections.createMapShim(getIterator); // tslint:disable-line variable-name
             let localShimMap = new MapShim<any, string>();
             const shimMapForEachResult = testMapIterationAddedValues(mixedKeys, localShimMap, /* useForEach */ true);
             assert.equal(shimMapForEachResult, expectedResult, "shimMap-forEach");

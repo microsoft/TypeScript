@@ -1,7 +1,18 @@
 /* @internal */
 namespace ts {
+    type GetIteratorCallback = <I extends readonly any[] | ReadonlySetShim<any> | ReadonlyMapShim<any, any> | undefined>(iterable: I) => Iterator<
+        I extends ReadonlyMapShim<infer K, infer V> ? [K, V] :
+        I extends ReadonlySetShim<infer T> ? T :
+        I extends readonly (infer T)[] ? T :
+        I extends undefined ? undefined :
+        never>;
+
+    type IteratorResultShim<T> =
+        | { value: T, done?: false }
+        | { value: never, done: true };
+
     interface IteratorShim<T> {
-        next(): { value: T, done?: false } | { value: never, done: true };
+        next(): IteratorResultShim<T>;
     }
 
     interface ReadonlyMapShim<K, V> {
@@ -39,28 +50,14 @@ namespace ts {
 
     type SetShimConstructor = new <T>(iterable?: readonly T[] | ReadonlySetShim<T>) => SetShim<T>;
 
-    interface WeakMapShim<K extends object, V> {
-        get(key: K): V | undefined;
-        has(key: K): boolean;
-        set(key: K, value: V): this;
-        delete(key: K): boolean;
-    }
-
-    interface WeakSetShim<T extends object> {
-        has(key: T): boolean;
-        add(key: T): this;
-        delete(key: T): boolean;
-    }
-
-    interface WeakMapData<K, V> {
-        objects?: ObjectMapEntry<K, V>;
-    }
-
     interface MapData<K, V> {
         size: number;
         strings?: Record<string, MapEntry<K, V>>;
         numbers?: MapEntry<K, V>[];
-        objects?: ObjectMapEntry<K, V>;
+        nan?: MapEntry<K, V>;
+        positiveInfinity?: MapEntry<K, V>;
+        negativeInfinity?: MapEntry<K, V>;
+        list?: MapEntry<K, V>;
         true?: MapEntry<K, V>;
         false?: MapEntry<K, V>;
         null?: MapEntry<K, V>;
@@ -83,6 +80,9 @@ namespace ts {
         readonly key?: K;
         value?: V;
 
+        // Linked list references for non-primitive keys
+        next?: MapEntry<K, V>;
+
         // Linked list references for iterators.
         nextIterationEntry?: MapEntry<K, V>;
         previousIterationEntry?: MapEntry<K, V>;
@@ -95,15 +95,9 @@ namespace ts {
         skipNextIteration?: boolean;
     }
 
-    interface ObjectMapEntry<K, V> extends MapEntry<K, V> {
-        // Linked list references for object-based keys
-        next?: ObjectMapEntry<K, V>;
-    }
-
-    function isObject(value: unknown): value is object {
-        // eslint-disable-next-line no-null/no-null
-        return typeof value === "object" && value !== null
-            || typeof value === "function";
+    interface IteratorData<K, V, U extends (K | V | [K, V])> {
+        currentEntry?: MapEntry<K, V>;
+        selector: (key: K, value: V) => U;
     }
 
     function createDictionaryObject<T>(): Record<string, T> {
@@ -117,73 +111,44 @@ namespace ts {
         return map;
     }
 
-    function tryAddIterator<T>(value: T, iterator: (this: T) => IteratorShim<any>) {
-        if (typeof Symbol === "function" && Symbol.iterator !== undefined) {
-            (value as any)[Symbol.iterator] = iterator;
-        }
+    function createMapData<K, V>(): MapData<K, V> {
+        const entry: MapEntry<K, V> = {};
+        return { first: entry, last: entry, size: 0 };
     }
 
-    function createIterator(name: string) {
-        class Iterator<K, V, U extends (K | V | [K, V])> {
-            private currentEntry?: MapEntry<K, V>;
-            private selector: (key: K, value: V) => U;
-
-            constructor(data: MapData<K, V>, selector: (key: K, value: V) => U) {
-                this.currentEntry = data.first;
-                this.selector = selector;
-            }
-
-            public next(): { value: U, done?: false } | { value: never, done: true } {
-                // Navigate to the next entry.
-                while (this.currentEntry) {
-                    const skipNext = !!this.currentEntry.skipNextIteration;
-                    this.currentEntry = this.currentEntry.nextIterationEntry;
-                    if (!skipNext) {
-                        break;
-                    }
-                }
-
-                if (this.currentEntry) {
-                    return { value: this.selector(this.currentEntry.key!, this.currentEntry.value!), done: false };
-                }
-                else {
-                    return { value: undefined as never, done: true };
-                }
-            }
-        }
-        tryAddIterator(Iterator.prototype, function() { return this; })
-        Object.defineProperty(Iterator, "name", {
-            ...Object.getOwnPropertyDescriptor(Iterator, "name"),
-            configurable: true,
-            value: name
-        });
-        return Iterator;
+    function createMapEntry<K, V>(key: K, value: V): MapEntry<K, V> {
+        return { key, value, nextIterationEntry: undefined, previousIterationEntry: undefined, skipNextIteration: false };
     }
 
-    function hasEntry<K, V>(data: MapData<K, V>, key: K): boolean {
-        /* eslint-disable no-in-operator, no-null/no-null */
-        return typeof key === "string" ? !!data.strings && key in data.strings :
-            typeof key === "number" ? !!data.numbers && key in data.numbers :
-            typeof key === "boolean" ? key ? !!data.true : !!data.false :
-            key === null ? !!data.null :
-            key === undefined ? !!data.undefined :
-            !!getObjectEntry(data, key);
-        // eslint-enable no-in-operator, no-null/no-null
+    function createListMapEntry<K, V>(key: K, value: V, next?: MapEntry<K, V>): MapEntry<K, V> {
+        const entry = createMapEntry(key, value);
+        entry.next = next;
+        return entry;
     }
 
-    function getEntry<K, V>(data: MapData<K, V>, key: K): MapEntry<K, V> | undefined {
+    function getSingletonBucket(key: unknown) {
         /* eslint-disable no-null/no-null */
-        return typeof key === "string" ? data.strings && data.strings[key] :
-            typeof key === "number" ? data.numbers && data.numbers[key] :
-            typeof key === "boolean" ? key ? data.true : data.false :
-            key === undefined ? data.undefined :
-            key === null ? data.null :
-            getObjectEntry(data, key);
+        if (key === true) return "true";
+        if (key === false) return "false";
+        if (key === null) return "null";
+        if (key === undefined) return "undefined";
+        if (typeof key === "number") {
+            if (isNaN(key)) return "nan";
+            if (!isFinite(key)) return key < 0 ? "negativeInfinity" : "positiveInfinity";
+        }
         /* eslint-enable no-null/no-null */
     }
 
-    function getObjectEntry<K, V>(data: WeakMapData<K, V>, key: K): ObjectMapEntry<K, V> | undefined {
-        for (let node = data.objects; node; node = node.next) {
+    function getEntry<K, V>(data: MapData<K, V>, key: K): MapEntry<K, V> | undefined {
+        const bucket = getSingletonBucket(key);
+        return bucket ? data[bucket] :
+            typeof key === "string" ? data.strings?.[key] :
+            typeof key === "number" ? data.numbers?.[key] :
+            getListEntry(data, key);
+    }
+
+    function getListEntry<K, V>(data: MapData<K, V>, key: K): MapEntry<K, V> | undefined {
+        for (let node = data.list; node; node = node.next) {
             if (node.key === key) {
                 return node;
             }
@@ -191,44 +156,11 @@ namespace ts {
     }
 
     function addOrUpdateEntry<K, V>(data: MapData<K, V>, key: K, value: V): MapEntry<K, V> | undefined {
-        let entry: MapEntry<K, V> | undefined;
-        if (typeof key === "string") {
-            if (!data.strings) data.strings = createDictionaryObject();
-            if (!data.strings[key]) {
-                entry = data.strings[key] = { key, value };
-            }
-            else {
-                data.strings[key].value = value;
-            }
-        }
-        else if (typeof key === "number") {
-            if (!data.numbers) data.numbers = [];
-            if (!data.numbers[key]) {
-                entry = data.numbers[key] = { key, value };
-            }
-            else {
-                data.numbers[key].value = value;
-            }
-        }
-        else {
-            /* eslint-disable no-null/no-null */
-            const prop = typeof key === "boolean" ? key ? "true" : "false" :
-                key === null ? "null" :
-                key === undefined ? "undefined" :
-                undefined;
-            /* eslint-enable no-null/no-null */
-            if (prop) {
-                if (!data[prop]) {
-                    entry = data[prop] = { key, value };
-                }
-                else {
-                    data[prop]!.value = value;
-                }
-            }
-            else {
-                entry = addOrUpdateObjectEntry(data, key, value);
-            }
-        }
+        const bucket = getSingletonBucket(key);
+        const entry = bucket ? addOrUpdateSingletonEntry(data, bucket, key, value) :
+            typeof key === "string" ? addOrUpdateStringsEntry(data, key, value) :
+            typeof key === "number" ? addOrUpdateNumbersEntry(data, key, value) :
+            addOrUpdateListEntry(data, key, value);
         if (entry) {
             addToIteration(data, entry);
             data.size++;
@@ -236,47 +168,63 @@ namespace ts {
         return entry;
     }
 
-    function addOrUpdateObjectEntry<K, V>(data: WeakMapData<K, V>, key: K, value: V): ObjectMapEntry<K, V> | undefined {
-        if (!data.objects) return data.objects = { key, value, next: undefined };
-        const existing = getObjectEntry(data, key);
-        if (!existing) return data.objects = { key, value, next: data.objects };
+    function addOrUpdateSingletonEntry<K, V>(data: MapData<K, V>, prop: "nan" | "negativeInfinity" | "positiveInfinity" | "true" | "false" | "null" | "undefined", key: K, value: V) {
+        const entry = data[prop];
+        if (!entry) {
+            return data[prop] = createMapEntry(key, value);
+        }
+        else {
+            entry.value = value;
+        }
+    }
+
+    function addOrUpdateStringsEntry<K, V>(data: MapData<K, V>, key: K & string, value: V) {
+        if (!data.strings) data.strings = createDictionaryObject();
+        if (!data.strings[key]) {
+            return data.strings[key] = createMapEntry(key, value);
+        }
+        else {
+            data.strings[key].value = value;
+        }
+    }
+
+    function addOrUpdateNumbersEntry<K, V>(data: MapData<K, V>, key: K & number, value: V) {
+        if (!data.numbers) data.numbers = [];
+        if (!data.numbers[key]) {
+            return data.numbers[key] = createMapEntry(key, value);
+        }
+        else {
+            data.numbers[key].value = value;
+        }
+    }
+
+    function addOrUpdateListEntry<K, V>(data: MapData<K, V>, key: K, value: V): MapEntry<K, V> | undefined {
+        if (!data.list) return data.list = createListMapEntry(key, value, /*next*/ undefined);
+        const existing = getListEntry(data, key);
+        if (!existing) return data.list = createListMapEntry(key, value, data.list);
         existing.value = value;
     }
 
     function deleteEntry<K, V>(data: MapData<K, V>, key: K): MapEntry<K, V> | undefined {
+        const bucket = getSingletonBucket(key);
         let entry: MapEntry<K, V> | undefined;
-        if (typeof key === "string") {
-            if (data.strings) {
-                entry = data.strings[key];
-                if (entry) {
-                    delete data.strings[key];
-                }
+        if (bucket) {
+            if (entry = data[bucket]) {
+                delete data[bucket];
+            }
+        }
+        else if (typeof key === "string") {
+            if (entry = data.strings?.[key]) {
+                delete data.strings[key];
             }
         }
         else if (typeof key === "number") {
-            if (data.numbers) {
-                entry = data.numbers[key];
-                if (entry) {
-                    delete data.numbers[key];
-                }
+            if (entry = data.numbers?.[key]) {
+                delete data.numbers[key];
             }
         }
         else {
-            /* eslint-disable no-null/no-null */
-            const prop = typeof key === "boolean" ? key ? "true" : "false" :
-                key === null ? "null" :
-                key === undefined ? "undefined" :
-                undefined;
-            /* eslint-enable no-null/no-null */
-            if (prop) {
-                entry = data[prop];
-                if (entry) {
-                    data[prop] = undefined;
-                }
-            }
-            else {
-                entry = deleteObjectEntry(data, key);
-            }
+            entry = deleteListEntry(data, key);
         }
         if (entry) {
             removeFromIteration(data, entry);
@@ -285,15 +233,15 @@ namespace ts {
         return entry;
     }
 
-    function deleteObjectEntry<K, V>(data: WeakMapData<K, V>, key: K): ObjectMapEntry<K, V> | undefined {
-        let prev: ObjectMapEntry<K, V> | undefined;
-        for (let node = data.objects; node; prev = node, node = node.next) {
+    function deleteListEntry<K, V>(data: MapData<K, V>, key: K): MapEntry<K, V> | undefined {
+        let prev: MapEntry<K, V> | undefined;
+        for (let node = data.list; node; prev = node, node = node.next) {
             if (node.key === key) {
                 if (prev) {
                     prev.next = node.next;
                 }
                 else {
-                    data.objects = node.next;
+                    data.list = node.next;
                 }
                 node.next = undefined;
                 return node;
@@ -308,15 +256,15 @@ namespace ts {
         if (data.false) data.false = undefined;
         if (data.null) data.null = undefined;
         if (data.undefined) data.undefined = undefined;
-        clearObjectEntries(data);
+        clearListEntries(data);
         removeAllFromIteration(data);
         data.size = 0;
     }
 
-    function clearObjectEntries<K, V>(data: WeakMapData<K, V>) {
-        if (data.objects) {
-            let node = data.objects;
-            data.objects = undefined;
+    function clearListEntries<K, V>(data: MapData<K, V>) {
+        if (data.list) {
+            let node = data.list;
+            data.list = undefined;
             while (node) {
                 const next = node.next!;
                 node.next = undefined;
@@ -392,140 +340,104 @@ namespace ts {
         }
     }
 
-    function createMapData<K, V>(): MapData<K, V> {
-        const entry: MapEntry<K, V> = {};
-        return {
-            first: entry,
-            last: entry,
-            size: 0
-        };
+    function fill<T, O extends ReadonlyMapShim<any, any> | ReadonlySetShim<any>>(object: O, iterator: Iterator<T> | undefined, add: (object: O, value: any) => void) {
+        if (iterator) {
+            for (let step = iterator.next(); !step.done; step = iterator.next()) {
+                add(object, step.value);
+            }
+        }
     }
 
-    function createWeakMapData<K, V>(): WeakMapData<K, V> {
-        return {};
+    function createIteratorData<K, V, U extends (K | V | [K, V])>(data: MapData<K, V>, selector: (key: K, value: V) => U): IteratorData<K, V, U> {
+        return { currentEntry: data.first, selector };
     }
 
-    function pickKey<K, V>(key: K, _value: V) { return key; }
-    function pickValue<K, V>(_key: K, value: V) { return value; }
-    function pickEntry<K, V>(key: K, value: V) { return [key, value] as [K, V]; }
+    function iteratorNext<K, V, U extends (K | V | [K, V])>(data: IteratorData<K, V, U>): IteratorResultShim<U> {
+        // Navigate to the next entry.
+        while (data.currentEntry) {
+            const skipNext = !!data.currentEntry.skipNextIteration;
+            data.currentEntry = data.currentEntry.nextIterationEntry;
+            if (!skipNext) {
+                break;
+            }
+        }
+        if (data.currentEntry) {
+            return { value: data.selector(data.currentEntry.key!, data.currentEntry.value!), done: false };
+        }
+        else {
+            return { value: undefined as never, done: true };
+        }
+    }
+
+    function pickKey<K, V>(key: K, _value: V) {
+        return key;
+    }
+
+    function pickValue<K, V>(_key: K, value: V) {
+        return value;
+    }
+
+    function pickEntry<K, V>(key: K, value: V) {
+        return [key, value] as [K, V];
+    }
 
     /* @internal */
-    export function createMapShim(): MapShimConstructor {
-        const MapIterator = createIterator("MapIterator");
-        class Map<K, V> implements MapShim<K, V> {
-            private _mapData = createMapData<K, V>();
-            constructor(iterable?: readonly (readonly [K, V])[] | ReadonlyMapShim<K, V>) {
-                if (iterable) {
-                    if ((Array.isArray as (value: any) => value is readonly any[])(iterable)) {
-                        for (const [key, value] of iterable) {
-                            this.set(key, value);
-                        }
-                    }
-                    else {
-                        const iterator = iterable.entries();
-                        for (let result = iterator.next(); !result.done; result = iterator.next()) {
-                            const [key, value] = result.value;
-                            this.set(key, value);
-                        }
-                    }
+    export namespace ShimCollections {
+        export function createMapShim(getIterator: GetIteratorCallback): MapShimConstructor {
+            class MapIterator<K, V, U extends (K | V | [K, V])> {
+                private _data: IteratorData<K, V, U>;
+                constructor(data: MapData<K, V>, selector: (key: K, value: V) => U) {
+                    this._data = createIteratorData(data, selector);
                 }
+                next() { return iteratorNext(this._data); }
             }
-            get size() { return this._mapData.size; }
-            get(key: K): V | undefined { return getEntry(this._mapData, key)?.value; }
-            set(key: K, value: V): this { return addOrUpdateEntry(this._mapData, key, value), this; }
-            has(key: K): boolean { return hasEntry(this._mapData, key); }
-            delete(key: K): boolean { return !!deleteEntry(this._mapData, key); }
-            clear(): void { clearEntries(this._mapData); }
-            keys(): IteratorShim<K> { return new MapIterator(this._mapData, pickKey); }
-            values(): IteratorShim<V> { return new MapIterator(this._mapData, pickValue); }
-            entries(): IteratorShim<[K, V]> { return new MapIterator(this._mapData, pickEntry); }
-            forEach(action: (value: V, key: K) => void): void { forEachEntry(this._mapData, action); }
-        }
-        tryAddIterator(Map.prototype, Map.prototype.entries);
-        return Map;
-    }
-
-    /* @internal */
-    export function createSetShim(): SetShimConstructor {
-        const SetIterator = createIterator("SetIterator");
-        class Set<T> implements SetShim<T> {
-            private _mapData = createMapData<T, T>();
-            constructor(iterable?: readonly T[] | ReadonlySetShim<T>) {
-                if (iterable) {
-                    if ((Array.isArray as (value: any) => value is readonly any[])(iterable)) {
-                        for (const value of iterable) {
-                            this.add(value);
-                        }
-                    }
-                    else {
-                        const iterator = iterable.values();
-                        for (let result = iterator.next(); !result.done; result = iterator.next()) {
-                            this.add(result.value);
-                        }
-                    }
+            function fillMap<K, V>(object: MapShim<K, V>, [key, value]: readonly [K, V]) {
+                object.set(key, value);
+            }
+            return class Map<K, V> implements MapShim<K, V> {
+                private _mapData = createMapData<K, V>();
+                constructor(iterable?: readonly (readonly [K, V])[] | ReadonlyMapShim<K, V>) {
+                    fill(this, getIterator(iterable), fillMap);
                 }
-            }
-            get size() { return this._mapData.size; }
-            add(value: T): this { return addOrUpdateEntry(this._mapData, value, value), this; }
-            has(value: T): boolean { return hasEntry(this._mapData, value); }
-            delete(value: T): boolean { return !!deleteEntry(this._mapData, value); }
-            clear(): void { clearEntries(this._mapData); }
-            keys(): IteratorShim<T> { return new SetIterator(this._mapData, pickKey); }
-            values(): IteratorShim<T> { return new SetIterator(this._mapData, pickValue); }
-            entries(): IteratorShim<[T, T]> { return new SetIterator(this._mapData, pickEntry); }
-            forEach(action: (value: T, key: T) => void): void { forEachEntry(this._mapData, action); }
+                get size() { return this._mapData.size; }
+                get(key: K): V | undefined { return getEntry(this._mapData, key)?.value; }
+                set(key: K, value: V): this { return addOrUpdateEntry(this._mapData, key, value), this; }
+                has(key: K): boolean { return !!getEntry(this._mapData, key); }
+                delete(key: K): boolean { return !!deleteEntry(this._mapData, key); }
+                clear(): void { clearEntries(this._mapData); }
+                keys(): IteratorShim<K> { return new MapIterator(this._mapData, pickKey); }
+                values(): IteratorShim<V> { return new MapIterator(this._mapData, pickValue); }
+                entries(): IteratorShim<[K, V]> { return new MapIterator(this._mapData, pickEntry); }
+                forEach(action: (value: V, key: K) => void): void { forEachEntry(this._mapData, action); }
+            };
         }
-        tryAddIterator(Set.prototype, Set.prototype.values);
-        return Set;
-    }
 
-    // NOTE: Not a real WeakMap, this implementation will hold onto references until it is GC'ed. However, it's the best
-    // we can do without storing data on each value itself.
-    /* @internal */
-    export function createWeakMapShim(): new <K extends object, V>() => WeakMapShim<K, V> {
-        class WeakMap<K extends object, V> implements WeakMapShim<K, V> {
-            private _mapData = createWeakMapData<K, V>();
-            get(key: K): V | undefined {
-                if (!isObject(key)) throw new TypeError("Invalid value used as weak map key");
-                return getObjectEntry(this._mapData, key)?.value;
+        export function createSetShim(getIterator: GetIteratorCallback): SetShimConstructor {
+            class SetIterator<K, V, U extends (K | V | [K, V])> {
+                private _data: IteratorData<K, V, U>;
+                constructor(data: MapData<K, V>, selector: (key: K, value: V) => U) {
+                    this._data = createIteratorData(data, selector);
+                }
+                next() { return iteratorNext(this._data); }
             }
-            set(key: K, value: V): this {
-                if (!isObject(key)) throw new TypeError("Invalid value used as weak map key");
-                addOrUpdateObjectEntry(this._mapData, key, value);
-                return this;
+            function fillSet<T>(object: SetShim<T>, value: T) {
+                object.add(value);
             }
-            has(key: K): boolean {
-                if (!isObject(key)) throw new TypeError("Invalid value used as weak map key");
-                return !!getObjectEntry(this._mapData, key);
-            }
-            delete(key: K): boolean {
-                if (!isObject(key)) throw new TypeError("Invalid value used as weak map key");
-                return !!deleteObjectEntry(this._mapData, key);
-            }
+            return class Set<T> implements SetShim<T> {
+                private _mapData = createMapData<T, T>();
+                constructor(iterable?: readonly T[] | ReadonlySetShim<T>) {
+                    fill(this, getIterator(iterable), fillSet);
+                }
+                get size() { return this._mapData.size; }
+                add(value: T): this { return addOrUpdateEntry(this._mapData, value, value), this; }
+                has(value: T): boolean { return !!getEntry(this._mapData, value); }
+                delete(value: T): boolean { return !!deleteEntry(this._mapData, value); }
+                clear(): void { clearEntries(this._mapData); }
+                keys(): IteratorShim<T> { return new SetIterator(this._mapData, pickKey); }
+                values(): IteratorShim<T> { return new SetIterator(this._mapData, pickValue); }
+                entries(): IteratorShim<[T, T]> { return new SetIterator(this._mapData, pickEntry); }
+                forEach(action: (value: T, key: T) => void): void { forEachEntry(this._mapData, action); }
+            };
         }
-        return WeakMap;
-    }
-
-    // NOTE: Not a real WeakSet, this implementation will hold onto references until it is GC'ed. However, it's the best
-    // we can do without storing data on each value itself.
-    /* @internal */
-    export function createWeakSetShim(): new <T extends object>() => WeakSetShim<T> {
-        class WeakSet<T extends object> implements WeakSetShim<T> {
-            private _mapData = createWeakMapData<T, T>();
-            add(value: T): this {
-                if (!isObject(value)) throw new TypeError("Invalid value used in weak set");
-                addOrUpdateObjectEntry(this._mapData, value, value);
-                return this;
-            }
-            has(value: T): boolean {
-                if (!isObject(value)) throw new TypeError("Invalid value used in weak set");
-                return !!getObjectEntry(this._mapData, value);
-            }
-            delete(value: T): boolean {
-                if (!isObject(value)) throw new TypeError("Invalid value used in weak set");
-                return !!deleteObjectEntry(this._mapData, value);
-            }
-        }
-        return WeakSet;
     }
 }

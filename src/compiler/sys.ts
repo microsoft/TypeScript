@@ -310,7 +310,7 @@ namespace ts {
     function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSensitiveFileNames: boolean): HostWatchFile {
         // One file can have multiple watchers
         const fileWatcherCallbacks = createMultiMap<FileWatcherCallback>();
-        const dirWatchers = createMap<DirectoryWatcher>();
+        const dirWatchers = new Map<string, DirectoryWatcher>();
         const toCanonicalName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         return nonPollingWatchFile;
 
@@ -370,7 +370,7 @@ namespace ts {
             watcher: FileWatcher;
             refCount: number;
         }
-        const cache = createMap<SingleFileWatcher>();
+        const cache = new Map<string, SingleFileWatcher>();
         const callbacksCache = createMultiMap<FileWatcherCallback>();
         const toCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
@@ -473,9 +473,9 @@ namespace ts {
             refCount: number;
         }
 
-        const cache = createMap<HostDirectoryWatcher>();
+        const cache = new Map<string, HostDirectoryWatcher>();
         const callbackCache = createMultiMap<{ dirName: string; callback: DirectoryWatcherCallback; }>();
-        const cacheToUpdateChildWatches = createMap<{ dirName: string; options: WatchOptions | undefined; fileNames: string[]; }>();
+        const cacheToUpdateChildWatches = new Map<string, { dirName: string; options: WatchOptions | undefined; fileNames: string[]; }>();
         let timerToUpdateChildWatches: any;
 
         const filePathComparer = getStringComparer(!host.useCaseSensitiveFileNames);
@@ -608,7 +608,7 @@ namespace ts {
             timerToUpdateChildWatches = undefined;
             sysLog(`sysLog:: onTimerToUpdateChildWatches:: ${cacheToUpdateChildWatches.size}`);
             const start = timestamp();
-            const invokeMap = createMap<string[]>();
+            const invokeMap = new Map<string, string[]>();
 
             while (!timerToUpdateChildWatches && cacheToUpdateChildWatches.size) {
                 const { value: [dirPath, { dirName, options, fileNames }], done } = cacheToUpdateChildWatches.entries().next();
@@ -1316,7 +1316,7 @@ namespace ts {
              */
             function cleanupPaths(profile: import("inspector").Profiler.Profile) {
                 let externalFileCounter = 0;
-                const remappedPaths = createMap<string>();
+                const remappedPaths = new Map<string, string>();
                 const normalizedDir = normalizeSlashes(__dirname);
                 // Windows rooted dir names need an extra `/` prepended to be valid file:/// urls
                 const fileUrlRoot = `file://${getRootLength(normalizedDir) === 1 ? "" : "/"}${normalizedDir}`;

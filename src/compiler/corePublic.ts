@@ -22,22 +22,34 @@ namespace ts {
         " __sortedArrayBrand": any;
     }
 
-    /** ES6 Map interface, only read methods included. */
-    export interface ReadonlyMap<K, V> {
+    /** Common read methods for ES6 Map/Set. */
+    export interface ReadonlyCollection<K> {
         readonly size: number;
-        get(key: K): V | undefined;
         has(key: K): boolean;
         keys(): Iterator<K>;
+    }
+
+    /** Common write methods for ES6 Map/Set. */
+    export interface Collection<K> extends ReadonlyCollection<K> {
+        delete(key: K): boolean;
+        clear(): void;
+    }
+
+    /** ES6 Map interface, only read methods included. */
+    export interface ReadonlyMap<K, V> extends ReadonlyCollection<K> {
+        get(key: K): V | undefined;
         values(): Iterator<V>;
         entries(): Iterator<[K, V]>;
         forEach(action: (value: V, key: K) => void): void;
     }
 
+    /* @internal */
+    export interface ReadonlyMap<K, V> {
+    }
+
     /** ES6 Map interface. */
-    export interface Map<K, V> extends ReadonlyMap<K, V> {
+    export interface Map<K, V> extends ReadonlyMap<K, V>, Collection<K> {
         set(key: K, value: V): this;
-        delete(key: K): boolean;
-        clear(): void;
     }
 
     /* @internal */
@@ -46,50 +58,28 @@ namespace ts {
         new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyMap<K, V>): Map<K, V>;
     }
 
-    export interface ReadonlySet<T> {
-        readonly size: number;
+    /** ES6 Set interface, only read methods included. */
+    export interface ReadonlySet<T> extends ReadonlyCollection<T> {
         has(value: T): boolean;
-        forEach(action: (value: T, key: T) => void): void;
-        keys(): Iterator<T>;
         values(): Iterator<T>;
         entries(): Iterator<[T, T]>;
+        forEach(action: (value: T, key: T) => void): void;
     }
 
-    export interface Set<T> extends ReadonlySet<T> {
+    /* @internal */
+    export interface ReadonlySet<T> {
+    }
+
+    /** ES6 Set interface. */
+    export interface Set<T> extends ReadonlySet<T>, Collection<T> {
         add(value: T): this;
         delete(value: T): boolean;
-        clear(): void;
     }
 
     /* @internal */
     export interface SetConstructor {
         // eslint-disable-next-line @typescript-eslint/prefer-function-type
         new <T>(iterable?: readonly T[] | ReadonlySet<T>): Set<T>;
-    }
-
-    export interface WeakMap<K extends object, V> {
-        get(key: K): V | undefined;
-        has(key: K): boolean;
-        set(key: K, value: V): this;
-        delete(key: K): boolean;
-    }
-
-    /* @internal */
-    export interface WeakMapConstructor {
-        // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <K extends object, V>(): WeakMap<K, V>;
-    }
-
-    export interface WeakSet<T extends object> {
-        has(key: T): boolean;
-        add(key: T): this;
-        delete(key: T): boolean;
-    }
-
-    /* @internal */
-    export interface WeakSetConstructor {
-        // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <T extends object>(): WeakSet<T>;
     }
 
     /** ES6 Iterator type. */
@@ -116,62 +106,27 @@ namespace ts {
         GreaterThan = 1
     }
 
-    namespace NativeCollections {
+    /* @internal */
+    export namespace NativeCollections {
         declare const Map: MapConstructor | undefined;
         declare const Set: SetConstructor | undefined;
-        declare const WeakMap: WeakMapConstructor | undefined;
-        declare const WeakSet: WeakSetConstructor | undefined;
 
+        /**
+         * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
+         */
         export function tryGetNativeMap(): MapConstructor | undefined {
             // Internet Explorer's Map doesn't support iteration, so don't use it.
             // eslint-disable-next-line no-in-operator
             return typeof Map !== "undefined" && "entries" in Map.prototype && new Map([[0, 0]]).size === 1 ? Map : undefined;
         }
 
+        /**
+         * Returns the native Set implementation if it is available and compatible (i.e. supports iteration).
+         */
         export function tryGetNativeSet(): SetConstructor | undefined {
             // Internet Explorer's Set doesn't support iteration, so don't use it.
             // eslint-disable-next-line no-in-operator
             return typeof Set !== "undefined" && "entries" in Set.prototype && new Set([0]).size === 1 ? Set : undefined;
         }
-
-        export function tryGetNativeWeakMap(): WeakMapConstructor | undefined {
-            return typeof WeakMap !== "undefined" ? WeakMap : undefined;
-        }
-
-        export function tryGetNativeWeakSet(): WeakSetConstructor | undefined {
-            return typeof WeakSet !== "undefined" ? WeakSet : undefined;
-        }
-    }
-
-    /**
-     * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
-     */
-    /* @internal */
-    export function tryGetNativeMap() {
-        return NativeCollections.tryGetNativeMap();
-    }
-
-    /**
-     * Returns the native Set implementation if it is available and compatible (i.e. supports iteration).
-     */
-    /* @internal */
-    export function tryGetNativeSet() {
-        return NativeCollections.tryGetNativeSet();
-    }
-
-    /**
-     * Returns the native WeakMap implementation if it is available.
-     */
-    /* @internal */
-    export function tryGetNativeWeakMap() {
-        return NativeCollections.tryGetNativeWeakMap();
-    }
-
-    /**
-     * Returns the native WeakSet implementation if it is available.
-     */
-    /* @internal */
-    export function tryGetNativeWeakSet() {
-        return NativeCollections.tryGetNativeWeakSet();
     }
 }

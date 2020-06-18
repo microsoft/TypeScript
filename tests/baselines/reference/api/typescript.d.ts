@@ -31,45 +31,39 @@ declare namespace ts {
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
-    /** ES6 Map interface, only read methods included. */
-    interface ReadonlyMap<K, V> {
+    /** Common read methods for ES6 Map/Set. */
+    interface ReadonlyCollection<K> {
         readonly size: number;
-        get(key: K): V | undefined;
         has(key: K): boolean;
         keys(): Iterator<K>;
+    }
+    /** Common write methods for ES6 Map/Set. */
+    interface Collection<K> extends ReadonlyCollection<K> {
+        delete(key: K): boolean;
+        clear(): void;
+    }
+    /** ES6 Map interface, only read methods included. */
+    interface ReadonlyMap<K, V> extends ReadonlyCollection<K> {
+        get(key: K): V | undefined;
         values(): Iterator<V>;
         entries(): Iterator<[K, V]>;
         forEach(action: (value: V, key: K) => void): void;
     }
     /** ES6 Map interface. */
-    interface Map<K, V> extends ReadonlyMap<K, V> {
+    interface Map<K, V> extends ReadonlyMap<K, V>, Collection<K> {
         set(key: K, value: V): this;
-        delete(key: K): boolean;
-        clear(): void;
     }
-    interface ReadonlySet<T> {
-        readonly size: number;
+    /** ES6 Set interface, only read methods included. */
+    interface ReadonlySet<T> extends ReadonlyCollection<T> {
         has(value: T): boolean;
-        forEach(action: (value: T, key: T) => void): void;
-        keys(): Iterator<T>;
         values(): Iterator<T>;
         entries(): Iterator<[T, T]>;
+        forEach(action: (value: T, key: T) => void): void;
     }
-    interface Set<T> extends ReadonlySet<T> {
+    /** ES6 Set interface. */
+    interface Set<T> extends ReadonlySet<T>, Collection<T> {
         add(value: T): this;
         delete(value: T): boolean;
-        clear(): void;
-    }
-    interface WeakMap<K extends object, V> {
-        get(key: K): V | undefined;
-        has(key: K): boolean;
-        set(key: K, value: V): this;
-        delete(key: K): boolean;
-    }
-    interface WeakSet<T extends object> {
-        has(key: T): boolean;
-        add(key: T): this;
-        delete(key: T): boolean;
     }
     /** ES6 Iterator type. */
     interface Iterator<T> {
