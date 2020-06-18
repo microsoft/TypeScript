@@ -27,11 +27,14 @@ namespace ts.codefix {
         readonly importDecl: ImportDeclaration;
         readonly originSourceFile: SourceFile
     }
+    function isImportDeclaration(node: Node): node is ImportDeclaration {
+        return node.kind === SyntaxKind.ImportDeclaration;
+    }
 
     function getInfo(sourceFile: SourceFile, context: CodeFixContext | CodeFixAllContext, pos: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
         if (node && isIdentifier(node)) {
-            const importDecl = findAncestor(node, node => node.kind === SyntaxKind.ImportDeclaration);
+            const importDecl = findAncestor(node, isImportDeclaration);
             if (!importDecl || !isStringLiteralLike(importDecl.moduleSpecifier)) {
                 return undefined;
             }
@@ -69,7 +72,7 @@ namespace ts.codefix {
         }
 
         const current: VariableDeclarationList | Node = localSymbol.valueDeclaration.parent;
-        if(isVariableDeclarationList(current) && current.declarations.length <= 1) {
+        if (isVariableDeclarationList(current) && current.declarations.length <= 1) {
             const start = localSymbol.valueDeclaration.parent.pos;
             changes.insertExportModifierAt(sourceFile, start ? start + 1 : 0);
             return;
