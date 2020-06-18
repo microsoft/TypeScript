@@ -8568,7 +8568,9 @@ namespace ts {
                     });
                     break;
                 }
-                case "jsx": return; // Accessed directly
+                case "jsx":
+                case "jsxfrag":
+                    return; // Accessed directly
                 default: Debug.fail("Unhandled pragma kind"); // Can this be made into an assertNever in the future?
             }
         });

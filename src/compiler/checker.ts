@@ -954,16 +954,32 @@ namespace ts {
             if (location) {
                 const file = getSourceFileOfNode(location);
                 if (file) {
-                    if (file.localJsxNamespace) {
-                        return file.localJsxNamespace;
+                    if (isJsxOpeningFragment(location)) {
+                        if (file.localJsxFragmentNamespace) {
+                            return file.localJsxFragmentNamespace;
+                        }
+                        const jsxFragmentPragma = file.pragmas.get("jsxfrag");
+                        if (jsxFragmentPragma) {
+                            const chosenPragma = isArray(jsxFragmentPragma) ? jsxFragmentPragma[0] : jsxFragmentPragma;
+                            file.localJsxFragmentFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
+                            visitNode(file.localJsxFragmentFactory, markAsSynthetic);
+                            if (file.localJsxFragmentFactory) {
+                                return file.localJsxFragmentNamespace = getFirstIdentifier(file.localJsxFragmentFactory).escapedText;
+                            }
+                        }
                     }
-                    const jsxPragma = file.pragmas.get("jsx");
-                    if (jsxPragma) {
-                        const chosenpragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
-                        file.localJsxFactory = parseIsolatedEntityName(chosenpragma.arguments.factory, languageVersion);
-                        visitNode(file.localJsxFactory, markAsSynthetic);
-                        if (file.localJsxFactory) {
-                            return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
+                    else {
+                        if (file.localJsxNamespace) {
+                            return file.localJsxNamespace;
+                        }
+                        const jsxPragma = file.pragmas.get("jsx");
+                        if (jsxPragma) {
+                            const chosenPragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
+                            file.localJsxFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
+                            visitNode(file.localJsxFactory, markAsSynthetic);
+                            if (file.localJsxFactory) {
+                                return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
+                            }
                         }
                     }
                 }
@@ -23736,10 +23752,14 @@ namespace ts {
         function checkJsxFragment(node: JsxFragment): Type {
             checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment);
 
-            if (compilerOptions.jsx === JsxEmit.React && (compilerOptions.jsxFactory || getSourceFileOfNode(node).pragmas.has("jsx"))) {
+            // by default, jsx:'react' will use jsxFactory = React.createElement and jsxFragmentFactory = React.Fragment
+            // if jsxFactory compiler option is provided, ensure jsxFragmentFactory compiler option or @jsxFrag pragma is provided too
+            const nodeSourceFile = getSourceFileOfNode(node);
+            if (compilerOptions.jsx === JsxEmit.React && (compilerOptions.jsxFactory || nodeSourceFile.pragmas.has("jsx"))
+                && !compilerOptions.jsxFragmentFactory && !nodeSourceFile.pragmas.has("jsxfrag")) {
                 error(node, compilerOptions.jsxFactory
-                    ? Diagnostics.JSX_fragment_is_not_supported_when_using_jsxFactory
-                    : Diagnostics.JSX_fragment_is_not_supported_when_using_an_inline_JSX_factory_pragma);
+                    ? Diagnostics.The_jsxFragmentFactory_compiler_option_must_be_provided_to_use_JSX_fragments_with_the_jsxFactory_compiler_option
+                    : Diagnostics.An_jsxFrag_pragma_is_required_when_using_an_jsx_pragma_with_JSX_fragments);
             }
 
             checkJsxChildren(node);
@@ -24197,21 +24217,28 @@ namespace ts {
             if (isNodeOpeningLikeElement) {
                 checkGrammarJsxElement(<JsxOpeningLikeElement>node);
             }
+
             checkJsxPreconditions(node);
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const reactNamespace = getJsxNamespace(node);
-            const reactLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
-            const reactSym = resolveName(reactLocation, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
-            if (reactSym) {
-                // Mark local symbol as referenced here because it might not have been marked
-                // if jsx emit was not react as there wont be error being emitted
-                reactSym.isReferenced = SymbolFlags.All;
+            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const jsxFactoryNamespace = getJsxNamespace(node);
+            const jsxFactoryLocation = isNodeOpeningLikeElement ? (<JsxOpeningLikeElement>node).tagName : node;
 
-                // If react symbol is alias, mark it as referenced
-                if (reactSym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(reactSym)) {
-                    markAliasSymbolAsReferenced(reactSym);
+            // allow null as jsxFragmentFactory
+            let jsxFactorySym: Symbol | undefined;
+            if (!(isJsxOpeningFragment(node) && jsxFactoryNamespace === "null")) {
+                jsxFactorySym = resolveName(jsxFactoryLocation, jsxFactoryNamespace, SymbolFlags.Value, jsxFactoryRefErr, jsxFactoryNamespace, /*isUse*/ true);
+            }
+
+            if (jsxFactorySym) {
+                // Mark local symbol as referenced here because it might not have been marked
+                // if jsx emit was not jsxFactory as there wont be error being emitted
+                jsxFactorySym.isReferenced = SymbolFlags.All;
+
+                // If react/jsxFactory symbol is alias, mark it as refereced
+                if (jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
+                    markAliasSymbolAsReferenced(jsxFactorySym);
                 }
             }
 
@@ -36728,8 +36755,29 @@ namespace ts {
             return literalTypeToNode(<FreshableType>type, node, tracker);
         }
 
-        function getJsxFactoryEntity(location: Node) {
+        function getJsxFactoryEntity(location: Node): EntityName | undefined {
             return location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity;
+        }
+
+        function getJsxFragmentFactoryEntity(location: Node): EntityName | undefined {
+            if (location) {
+                const file = getSourceFileOfNode(location);
+                if (file) {
+                    if (file.localJsxFragmentFactory) {
+                        return file.localJsxFragmentFactory;
+                    }
+                    const jsxFragPragmas = file.pragmas.get("jsxfrag");
+                    const jsxFragPragma = isArray(jsxFragPragmas) ? jsxFragPragmas[0] : jsxFragPragmas;
+                    if (jsxFragPragma) {
+                        file.localJsxFragmentFactory = parseIsolatedEntityName(jsxFragPragma.arguments.factory, languageVersion);
+                        return file.localJsxFragmentFactory;
+                    }
+                }
+            }
+
+            if (compilerOptions.jsxFragmentFactory) {
+                return parseIsolatedEntityName(compilerOptions.jsxFragmentFactory, languageVersion);
+            }
         }
 
         function createResolver(): EmitResolver {
@@ -36806,6 +36854,7 @@ namespace ts {
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
                 getJsxFactoryEntity,
+                getJsxFragmentFactoryEntity,
                 getAllAccessorDeclarations(accessor: AccessorDeclaration): AllAccessorDeclarations {
                     accessor = getParseTreeNode(accessor, isGetOrSetAccessorDeclaration)!; // TODO: GH#18217
                     const otherKind = accessor.kind === SyntaxKind.SetAccessor ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;
