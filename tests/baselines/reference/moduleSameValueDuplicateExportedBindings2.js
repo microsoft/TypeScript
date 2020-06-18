@@ -33,6 +33,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports.Animals = void 0;
 var c_1 = require("./c");
 __createBinding(exports, c_1, "Animals");
 //// [a.js]

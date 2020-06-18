@@ -1293,6 +1293,7 @@ namespace Harness {
         export interface BaselineOptions {
             Subfolder?: string;
             Baselinefolder?: string;
+            PrintDiff?: true;
         }
 
         export function localPath(fileName: string, baselineFolder?: string, subfolder?: string) {
@@ -1347,7 +1348,7 @@ namespace Harness {
             return { expected, actual };
         }
 
-        function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string) {
+        function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, opts?: BaselineOptions) {
             // For now this is written using TypeScript, because sys is not available when running old test cases.
             // But we need to move to sys once we have
             // Creates the directory including its parent if not already present
@@ -1381,7 +1382,14 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
-                throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                if (require && opts && opts.PrintDiff) {
+                    const Diff = require("diff");
+                    const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
+                    throw new Error(`The baseline file ${relativeFileName} has changed.${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
+                }
+                else {
+                    throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                }
             }
         }
 
@@ -1391,7 +1399,7 @@ namespace Harness {
                 throw new Error("The generated content was \"undefined\". Return \"null\" if no baselining is required.\"");
             }
             const comparison = compareToBaseline(actual, relativeFileName, opts);
-            writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName);
+            writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, opts);
         }
 
         export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void {

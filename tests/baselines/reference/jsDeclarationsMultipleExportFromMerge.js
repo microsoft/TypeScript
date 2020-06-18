@@ -30,6 +30,7 @@ exports.c = 3;
 //// [justone.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = exports.b = exports.a = void 0;
 var items_1 = require("./items");
 Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
 Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });
@@ -37,6 +38,7 @@ Object.defineProperty(exports, "c", { enumerable: true, get: function () { retur
 //// [two.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.c = exports.b = exports.a = void 0;
 var items_1 = require("./items");
 Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
 var items_2 = require("./items");
@@ -45,6 +47,7 @@ Object.defineProperty(exports, "c", { enumerable: true, get: function () { retur
 //// [multiple.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.cc = exports.c = exports.bb = exports.aa = exports.b = exports.a = void 0;
 var items_1 = require("./items");
 Object.defineProperty(exports, "a", { enumerable: true, get: function () { return items_1.a; } });
 Object.defineProperty(exports, "b", { enumerable: true, get: function () { return items_1.b; } });

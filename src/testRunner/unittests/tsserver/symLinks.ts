@@ -221,7 +221,8 @@ new C();`
 
                         host.ensureFileOrFolder(nodeModulesRecorgnizersText);
                         host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
-                        host.runQueuedTimeoutCallbacks();
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
                         verifyProjectWithResolvedModule(session);
                     });
@@ -232,7 +233,8 @@ new C();`
                         verifyProjectWithUnresolvedModule(session);
 
                         host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
-                        host.runQueuedTimeoutCallbacks();
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
                         if (withPathMapping) {
                             verifyProjectWithResolvedModule(session);
@@ -250,12 +252,14 @@ new C();`
                         verifyProjectWithResolvedModule(session);
 
                         host.deleteFolder(recognizersTextDist, /*recursive*/ true);
-                        host.runQueuedTimeoutCallbacks();
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
                         verifyProjectWithUnresolvedModule(session);
 
                         host.ensureFileOrFolder(recongnizerTextDistTypingFile);
-                        host.runQueuedTimeoutCallbacks();
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
                         if (withPathMapping) {
                             verifyProjectWithResolvedModule(session);

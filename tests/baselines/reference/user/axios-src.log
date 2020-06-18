@@ -46,8 +46,7 @@ lib/core/enhanceError.js(38,18): error TS2339: Property 'code' does not exist on
 lib/core/settle.js(20,7): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
 lib/helpers/buildURL.js(22,49): error TS1016: A required parameter cannot follow an optional parameter.
 lib/helpers/cookies.js(16,56): error TS2551: Property 'toGMTString' does not exist on type 'Date'. Did you mean 'toUTCString'?
-lib/utils.js(258,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
-lib/utils.js(282,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+lib/utils.js(273,20): error TS8029: JSDoc '@param' tag has name 'obj1', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 
 
 

@@ -41,7 +41,7 @@ namespace ts.codefix {
         const declaration = declarations[0];
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getEffectiveModifierFlags(declaration));
-        const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
+        const modifiers = visibilityModifier ? factory.createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
         const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient);
@@ -58,11 +58,11 @@ namespace ts.codefix {
                         importSymbols(importAdder, importableReference.symbols);
                     }
                 }
-                addClassElement(createProperty(
-                    /*decorators*/undefined,
+                addClassElement(factory.createPropertyDeclaration(
+                    /*decorators*/ undefined,
                     modifiers,
                     name,
-                    optional ? createToken(SyntaxKind.QuestionToken) : undefined,
+                    optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                     typeNode,
                     /*initializer*/ undefined));
                 break;
@@ -82,7 +82,7 @@ namespace ts.codefix {
                 }
                 for (const accessor of orderedAccessors) {
                     if (isGetAccessorDeclaration(accessor)) {
-                        addClassElement(createGetAccessor(
+                        addClassElement(factory.createGetAccessorDeclaration(
                             /*decorators*/ undefined,
                             modifiers,
                             name,
@@ -94,7 +94,7 @@ namespace ts.codefix {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
                         const parameter = getSetAccessorValueParameter(accessor);
                         const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
-                        addClassElement(createSetAccessor(
+                        addClassElement(factory.createSetAccessorDeclaration(
                             /*decorators*/ undefined,
                             modifiers,
                             name,
@@ -167,49 +167,83 @@ namespace ts.codefix {
             return undefined;
         }
 
+        let typeParameters = signatureDeclaration.typeParameters;
+        let parameters = signatureDeclaration.parameters;
+        let type = signatureDeclaration.type;
         if (importAdder) {
-            if (signatureDeclaration.typeParameters) {
-                forEach(signatureDeclaration.typeParameters, (typeParameterDecl, i) => {
+            if (typeParameters) {
+                const newTypeParameters = sameMap(typeParameters, (typeParameterDecl, i) => {
                     const typeParameter = signature.typeParameters![i];
-                    if (typeParameterDecl.constraint) {
-                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.constraint, typeParameter.constraint, scriptTarget);
+                    let constraint = typeParameterDecl.constraint;
+                    let defaultType = typeParameterDecl.default;
+                    if (constraint) {
+                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(constraint, typeParameter.constraint, scriptTarget);
                         if (importableReference) {
-                            typeParameterDecl.constraint = importableReference.typeReference;
+                            constraint = importableReference.typeReference;
                             importSymbols(importAdder, importableReference.symbols);
                         }
                     }
-                    if (typeParameterDecl.default) {
-                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeParameterDecl.default, typeParameter.default, scriptTarget);
+                    if (defaultType) {
+                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(defaultType, typeParameter.default, scriptTarget);
                         if (importableReference) {
-                            typeParameterDecl.default = importableReference.typeReference;
+                            defaultType = importableReference.typeReference;
                             importSymbols(importAdder, importableReference.symbols);
                         }
                     }
+                    return factory.updateTypeParameterDeclaration(
+                        typeParameterDecl,
+                        typeParameterDecl.name,
+                        constraint,
+                        defaultType
+                    );
                 });
+                if (typeParameters !== newTypeParameters) {
+                    typeParameters = setTextRange(factory.createNodeArray(newTypeParameters, typeParameters.hasTrailingComma), typeParameters);
+                }
             }
-            forEach(signatureDeclaration.parameters, (parameterDecl, i) => {
+            const newParameters = sameMap(parameters, (parameterDecl, i) => {
                 const parameter = signature.parameters[i];
                 const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(parameterDecl.type, checker.getTypeAtLocation(parameter.valueDeclaration), scriptTarget);
+                let type = parameterDecl.type;
                 if (importableReference) {
-                    parameterDecl.type = importableReference.typeReference;
+                    type = importableReference.typeReference;
                     importSymbols(importAdder, importableReference.symbols);
                 }
+                return factory.updateParameterDeclaration(
+                    parameterDecl,
+                    parameterDecl.decorators,
+                    parameterDecl.modifiers,
+                    parameterDecl.dotDotDotToken,
+                    parameterDecl.name,
+                    parameterDecl.questionToken,
+                    type,
+                    parameterDecl.initializer
+                );
             });
-            if (signatureDeclaration.type) {
-                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(signatureDeclaration.type, signature.resolvedReturnType, scriptTarget);
+            if (parameters !== newParameters) {
+                parameters = setTextRange(factory.createNodeArray(newParameters, parameters.hasTrailingComma), parameters);
+            }
+            if (type) {
+                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(type, signature.resolvedReturnType, scriptTarget);
                 if (importableReference) {
-                    signatureDeclaration.type = importableReference.typeReference;
+                    type = importableReference.typeReference;
                     importSymbols(importAdder, importableReference.symbols);
                 }
             }
         }
 
-        signatureDeclaration.decorators = undefined;
-        signatureDeclaration.modifiers = modifiers;
-        signatureDeclaration.name = name;
-        signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
-        signatureDeclaration.body = body;
-        return signatureDeclaration;
+        return factory.updateMethodDeclaration(
+            signatureDeclaration,
+            /*decorators*/ undefined,
+            modifiers,
+            signatureDeclaration.asteriskToken,
+            name,
+            optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+            typeParameters,
+            parameters,
+            type,
+            body
+        );
     }
 
     export function createMethodFromCallExpression(
@@ -232,14 +266,14 @@ namespace ts.codefix {
             isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
         const returnType = (inJs || !contextualType) ? undefined : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
-        return createMethod(
+        return factory.createMethodDeclaration(
             /*decorators*/ undefined,
-            /*modifiers*/ modifierFlags ? createNodeArray(createModifiersFromModifierFlags(modifierFlags)) : undefined,
-            /*asteriskToken*/ isYieldExpression(parent) ? createToken(SyntaxKind.AsteriskToken) : undefined,
+            /*modifiers*/ modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined,
+            /*asteriskToken*/ isYieldExpression(parent) ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
             methodName,
             /*questionToken*/ undefined,
             /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>
-                createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
+                factory.createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
             /*type*/ returnType,
             body ? createStubbedMethodBody(context.preferences) : undefined);
@@ -260,13 +294,13 @@ namespace ts.codefix {
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
         const parameters: ParameterDeclaration[] = [];
         for (let i = 0; i < argCount; i++) {
-            const newParameter = createParameter(
+            const newParameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 /*name*/ names && names[i] || `arg${i}`,
-                /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
-                /*type*/ inJs ? undefined : types && types[i] || createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                /*type*/ inJs ? undefined : types && types[i] || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
                 /*initializer*/ undefined);
             parameters.push(newParameter);
         }
@@ -302,13 +336,13 @@ namespace ts.codefix {
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
 
         if (someSigHasRestParameter) {
-            const anyArrayType = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.AnyKeyword));
-            const restParameter = createParameter(
+            const anyArrayType = factory.createArrayTypeNode(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
+            const restParameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                createToken(SyntaxKind.DotDotDotToken),
+                factory.createToken(SyntaxKind.DotDotDotToken),
                 maxArgsParameterSymbolNames[maxNonRestArgs] || "rest",
-                /*questionToken*/ maxNonRestArgs >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
+                /*questionToken*/ maxNonRestArgs >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                 anyArrayType,
                 /*initializer*/ undefined);
             parameters.push(restParameter);
@@ -333,12 +367,12 @@ namespace ts.codefix {
         returnType: TypeNode | undefined,
         preferences: UserPreferences
     ): MethodDeclaration {
-        return createMethod(
+        return factory.createMethodDeclaration(
             /*decorators*/ undefined,
             modifiers,
             /*asteriskToken*/ undefined,
             name,
-            optional ? createToken(SyntaxKind.QuestionToken) : undefined,
+            optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
             typeParameters,
             parameters,
             returnType,
@@ -346,22 +380,22 @@ namespace ts.codefix {
     }
 
     function createStubbedMethodBody(preferences: UserPreferences): Block {
-        return createBlock(
-            [createThrow(
-                createNew(
-                    createIdentifier("Error"),
+        return factory.createBlock(
+            [factory.createThrowStatement(
+                factory.createNewExpression(
+                    factory.createIdentifier("Error"),
                     /*typeArguments*/ undefined,
                     // TODO Handle auto quote preference.
-                    [createLiteral("Method not implemented.", /*isSingleQuote*/ preferences.quotePreference === "single")]))],
+                    [factory.createStringLiteral("Method not implemented.", /*isSingleQuote*/ preferences.quotePreference === "single")]))],
             /*multiline*/ true);
     }
 
     function createVisibilityModifier(flags: ModifierFlags): Modifier | undefined {
         if (flags & ModifierFlags.Public) {
-            return createToken(SyntaxKind.PublicKeyword);
+            return factory.createToken(SyntaxKind.PublicKeyword);
         }
         else if (flags & ModifierFlags.Protected) {
-            return createToken(SyntaxKind.ProtectedKeyword);
+            return factory.createToken(SyntaxKind.ProtectedKeyword);
         }
         return undefined;
     }
@@ -378,7 +412,7 @@ namespace ts.codefix {
         if (compilerOptionsProperty === undefined) {
             changeTracker.insertNodeAtObjectStart(configFile, tsconfigObjectLiteral, createJsonPropertyAssignment(
                 "compilerOptions",
-                createObjectLiteral(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true)));
+                factory.createObjectLiteralExpression(options.map(([optionName, optionValue]) => createJsonPropertyAssignment(optionName, optionValue)), /*multiLine*/ true)));
             return;
         }
 
@@ -408,7 +442,7 @@ namespace ts.codefix {
     }
 
     export function createJsonPropertyAssignment(name: string, initializer: Expression) {
-        return createPropertyAssignment(createStringLiteral(name), initializer);
+        return factory.createPropertyAssignment(factory.createStringLiteral(name), initializer);
     }
 
     export function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
@@ -426,7 +460,7 @@ namespace ts.codefix {
             const firstIdentifier = getFirstIdentifier(importTypeNode.qualifier);
             const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
             const qualifier = name !== firstIdentifier.text
-                ? replaceFirstIdentifierOfEntityName(importTypeNode.qualifier, createIdentifier(name))
+                ? replaceFirstIdentifierOfEntityName(importTypeNode.qualifier, factory.createIdentifier(name))
                 : importTypeNode.qualifier;
 
             const symbols = [firstIdentifier.symbol];
@@ -446,7 +480,7 @@ namespace ts.codefix {
 
             return {
                 symbols,
-                typeReference: createTypeReferenceNode(qualifier, typeArguments)
+                typeReference: factory.createTypeReferenceNode(qualifier, typeArguments)
             };
         }
     }
@@ -455,7 +489,7 @@ namespace ts.codefix {
         if (name.kind === SyntaxKind.Identifier) {
             return newIdentifier;
         }
-        return createQualifiedName(replaceFirstIdentifierOfEntityName(name.left, newIdentifier), name.right);
+        return factory.createQualifiedName(replaceFirstIdentifierOfEntityName(name.left, newIdentifier), name.right);
     }
 
     export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
