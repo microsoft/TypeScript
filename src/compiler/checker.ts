@@ -13146,7 +13146,7 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (accessNode && hasNodeFlagsFromSymbol(prop, NodeFlags.Deprecated)) {
+                    if (accessNode && prop.isDeprecated) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                         errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                     }
@@ -21681,7 +21681,7 @@ namespace ts {
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
             const target = (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-            if (hasNodeFlagsFromSymbol(target, NodeFlags.Deprecated)) {
+            if (target.isDeprecated) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
             }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
@@ -24654,7 +24654,7 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
-                if (hasNodeFlagsFromSymbol(prop, NodeFlags.Deprecated)) {
+                if (prop.isDeprecated) {
                     errorOrSuggestion(/* isError */ false, right, Diagnostics._0_is_deprecated, right.escapedText as string);
                 }
 
@@ -30480,7 +30480,7 @@ namespace ts {
                 }
                 const symbol = getNodeLinks(node).resolvedSymbol;
                 if (symbol) {
-                    if (hasNodeFlagsFromSymbol(symbol, NodeFlags.Deprecated)) {
+                    if (symbol.isDeprecated) {
                         const diagLocation = isTypeReferenceNode(node) && isQualifiedName(node.typeName) ? node.typeName.right : node;
                         errorOrSuggestion(/* isError */ false, diagLocation, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                     }
@@ -34821,7 +34821,7 @@ namespace ts {
                     }
                 }
 
-                if (isImportSpecifier(node) && hasNodeFlagsFromSymbol(target, NodeFlags.Deprecated)) {
+                if (isImportSpecifier(node) && target.isDeprecated) {
                     errorOrSuggestion(/* isError */ false, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
             }
