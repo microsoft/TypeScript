@@ -2936,20 +2936,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Catch_clause_variable_cannot_have_a_type_annotation_1196" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Catch clause variable cannot have a type annotation.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Catch yan tümcesi değişkeni bir tür ek açıklamasına sahip olamaz.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Catch_clause_variable_cannot_have_an_initializer_1197" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Catch clause variable cannot have an initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Catch yan tümcesi değişkeni bir başlatıcıya sahip olamaz.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified_1196" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Catch clause variable type annotation must be 'any' or 'unknown' if specified.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Belirtilmişse catch yan tümcesi değişken türü ek açıklaması 'any ' veya 'unknown' olmalıdır.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10114,6 +10114,15 @@
           <Val><![CDATA[The inferred type of '{0}' cannot be named without a reference to '{1}'. This is likely not portable. A type annotation is necessary.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' öğesinin çıkarsanan türü, '{1}' başvurusu olmadan adlandırılamaz. Bu büyük olasılıkla taşınabilir değildir. Tür ek açıklaması gereklidir.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialize_5088" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Çıkarsanan '{0}' türü, önemsiz olarak seri hale getirilemeyen döngüsel yapıya sahip bir türe başvurur. Tür ek açıklaması gerekir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
