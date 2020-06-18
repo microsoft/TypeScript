@@ -264,9 +264,13 @@ declare namespace Intl {
 
     interface NumberFormatOptions {
         notation?: string;
+        unit?: string;
+        unitDisplay?: string;
     }
 
     interface ResolvedNumberFormatOptions {
         notation?: string;
+        unit?: string;
+        unitDisplay?: string;
     }
 }
