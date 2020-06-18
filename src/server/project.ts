@@ -1335,6 +1335,7 @@ namespace ts.server {
             this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]})`);
             this.writeLog(this.filesToString(writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose)));
             this.writeLog("-----------------------------------------------");
+            this.autoImportProviderHost?.print(/*writeProjectFileNames*/ false);
         }
 
         setCompilerOptions(compilerOptions: CompilerOptions) {
