@@ -13,7 +13,7 @@ namespace ts.codefix {
                 return undefined;
             }
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, info.originSourceFile, info.node));
-            return [createCodeFixAction(fixId, changes, [Diagnostics.Export_0_from_module_1, info.node.text, showModuleSpecifier(info.importDecl)], fixId, Diagnostics.Export_all_non_exported_member)];
+            return [createCodeFixAction(fixId, changes, [Diagnostics.Export_0_from_module_1, info.node.text, showModuleSpecifier(info.importDecl)], fixId, Diagnostics.Add_all_missing_exports)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
