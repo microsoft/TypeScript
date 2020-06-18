@@ -33,7 +33,7 @@ namespace ts.refactor {
                         description: "Error extracting type",
                         error: info.error
                     }]
-                }]; 
+                }];
             }
 
             return emptyArray;
@@ -80,7 +80,7 @@ namespace ts.refactor {
     } | {
         info?: never,
         error: string
-    }
+    };
 
     function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): InfoOrError | undefined {
         const { file, startPosition } = context;

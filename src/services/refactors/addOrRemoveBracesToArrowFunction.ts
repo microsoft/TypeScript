@@ -22,7 +22,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     } | {
         info?: never,
         error: string
-    }
+    };
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, triggerReason } = context;
@@ -46,8 +46,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             }];
         }
 
-        if (context.preferences.provideRefactorErrorReason)
-        {
+        if (context.preferences.provideRefactorErrorReason) {
             return [{
                 name: refactorName,
                 description: refactorDescription,
@@ -102,19 +101,19 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
         if (!func) {
             return {
-                error: 'Could not find a containing arrow function.'
-            }
+                error: "Could not find a containing arrow function."
+            };
         }
 
         if (!isArrowFunction(func)) {
             return {
-                error: 'Containing function is not an arrow function.'
-            }
+                error: "Containing function is not an arrow function."
+            };
         }
 
         if ((!rangeContainsRange(func, node) || rangeContainsRange(func.body, node) && !considerFunctionBodies)) {
             return undefined;
-        }        
+        }
 
         if (isExpression(func.body)) {
             return {

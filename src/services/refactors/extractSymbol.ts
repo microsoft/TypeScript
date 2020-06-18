@@ -12,7 +12,7 @@ namespace ts.refactor.extractSymbol {
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
-            if (!rangeToExtract.errors || rangeToExtract.errors.length == 0 || !context.preferences.provideRefactorErrorReason) {
+            if (!rangeToExtract.errors || rangeToExtract.errors.length === 0 || !context.preferences.provideRefactorErrorReason) {
                 return emptyArray;
             }
 
@@ -21,7 +21,7 @@ namespace ts.refactor.extractSymbol {
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
                 actions: [{
                     description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                    name: 'extract_function_error',
+                    name: "extract_function_error",
                     error: getStringError(rangeToExtract.errors)
                 }]
             },
@@ -30,7 +30,7 @@ namespace ts.refactor.extractSymbol {
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: [{
                     description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-                    name: 'extract_constant_error',
+                    name: "extract_constant_error",
                     error: getStringError(rangeToExtract.errors)
                 }]
             }];
@@ -44,12 +44,12 @@ namespace ts.refactor.extractSymbol {
 
         const functionActions: RefactorActionInfo[] = [];
         const usedFunctionNames: Map<boolean> = createMap();
-        let innermostErrorFunctionAction: ts.RefactorActionInfo | undefined;
+        let innermostErrorFunctionAction: RefactorActionInfo | undefined;
 
         const constantActions: RefactorActionInfo[] = [];
         const usedConstantNames: Map<boolean> = createMap();
-        let innermostErrorConstantAction: ts.RefactorActionInfo | undefined;
-        
+        let innermostErrorConstantAction: RefactorActionInfo | undefined;
+
         let i = 0;
         for (const { functionExtraction, constantExtraction } of extractions) {
             const description = functionExtraction.description;
@@ -64,12 +64,13 @@ namespace ts.refactor.extractSymbol {
                         name: `function_scope_${i}`
                     });
                 }
-            } else if (!innermostErrorFunctionAction) {
+            }
+            else if (!innermostErrorFunctionAction) {
                 innermostErrorFunctionAction = {
                     description,
                     name: `function_scope_${i}`,
                     error: getStringError(functionExtraction.errors)
-                }
+                };
             }
 
             // Skip these since we don't have a way to report errors yet
@@ -85,12 +86,13 @@ namespace ts.refactor.extractSymbol {
                         name: `constant_scope_${i}`
                     });
                 }
-            } else if (!innermostErrorConstantAction) {
+            }
+            else if (!innermostErrorConstantAction) {
                 innermostErrorConstantAction = {
                     description,
                     name: `constant_scope_${i}`,
                     error: getStringError(constantExtraction.errors)
-                }
+                };
             }
 
             // *do* increment i anyway because we'll look for the i-th scope
@@ -106,7 +108,8 @@ namespace ts.refactor.extractSymbol {
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
                 actions: functionActions
             });
-        } else if (context.preferences.provideRefactorErrorReason && innermostErrorFunctionAction) {
+        }
+        else if (context.preferences.provideRefactorErrorReason && innermostErrorFunctionAction) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
@@ -120,7 +123,8 @@ namespace ts.refactor.extractSymbol {
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: constantActions
             });
-        } else if (context.preferences.provideRefactorErrorReason && innermostErrorConstantAction) {
+        }
+        else if (context.preferences.provideRefactorErrorReason && innermostErrorConstantAction) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
@@ -132,7 +136,7 @@ namespace ts.refactor.extractSymbol {
 
         function getStringError(errors: readonly Diagnostic[]) {
             let error = errors[0].messageText;
-            if (typeof error !== 'string') {
+            if (typeof error !== "string") {
                 error = error.messageText;
             }
             return error;

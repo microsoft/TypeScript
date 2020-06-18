@@ -11,14 +11,14 @@ namespace ts.refactor {
     } | {
         info?: never,
         error: string
-    }
+    };
 
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const i = getImportToConvert(context, context.triggerReason === "invoked");
             if (!i) return emptyArray;
 
-            if (i.error == undefined) {
+            if (i.error === undefined) {
                 const description = i.info.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
                 const actionName = i.info.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
                 return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
@@ -43,16 +43,16 @@ namespace ts.refactor {
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
         const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
-        if (!importDecl || !isImportDeclaration(importDecl)) return { error: 'Selection is not an import declaration.' }
+        if (!importDecl || !isImportDeclaration(importDecl)) return { error: "Selection is not an import declaration." };
         if (importDecl.getEnd() < span.start + span.length) return undefined;
 
         const { importClause } = importDecl;
         if (!importClause) {
-            return { error: 'Could not find import clause.' };
+            return { error: "Could not find import clause." };
         }
 
         if (!importClause.namedBindings) {
-            return { error: 'Could not find namespace import or named imports.' }
+            return { error: "Could not find namespace import or named imports." };
         }
 
         return { info: importClause.namedBindings };

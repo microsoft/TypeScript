@@ -10,7 +10,7 @@ namespace ts.refactor {
             const info = getInfo(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
-            if (info.error == undefined) {
+            if (info.error === undefined) {
                 const description = info.info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
                 const actionName = info.info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
                 return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
@@ -44,7 +44,7 @@ namespace ts.refactor {
     } | {
         info?: never,
         error: string
-    }
+    };
 
     function getInfo(context: RefactorContext, considerPartialSpans = true): InfoOrError | undefined {
         const { file } = context;
@@ -52,7 +52,7 @@ namespace ts.refactor {
         const token = getTokenAtPosition(file, span.start);
         const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
-            return { error: 'Could not find export statement.' };
+            return { error: "Could not find export statement." };
         }
 
         const exportingModuleSymbol = isSourceFile(exportNode.parent) ? exportNode.parent.symbol : exportNode.parent.parent.symbol;
@@ -61,7 +61,7 @@ namespace ts.refactor {
         const wasDefault = !!(flags & ModifierFlags.Default);
         // If source file already has a default export, don't offer refactor.
         if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {
-            return { error: 'This file already has a default export.' };
+            return { error: "This file already has a default export." };
         }
 
         switch (exportNode.kind) {

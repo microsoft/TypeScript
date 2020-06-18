@@ -22,7 +22,7 @@ namespace ts.codefix {
     } | {
         info?: never,
         error: string
-    }
+    };
 
     export function generateAccessorFromProperty(file: SourceFile, start: number, end: number, context: textChanges.TextChangesContext, _actionName: string): FileTextChanges[] | undefined {
         const fieldInfo = getAccessorConvertiblePropertyAtPosition(file, start, end);
@@ -121,8 +121,8 @@ namespace ts.codefix {
 
         if (!declaration) {
             return {
-                error: 'Could not find property for which to generate accessor.'
-            }
+                error: "Could not find property for which to generate accessor."
+            };
         }
 
         if (!(nodeOverlapsWithStartEnd(declaration.name, file, start, end) || cursorRequest)) {
@@ -131,14 +131,14 @@ namespace ts.codefix {
 
         if (!isConvertibleName(declaration.name)) {
             return {
-                error: 'Name is not valid.'
-            }
+                error: "Name is not valid."
+            };
         }
 
         if ((getEffectiveModifierFlags(declaration) | meaning) !== meaning) {
             return {
-                error: 'Property has invalid accessibility.'
-            }
+                error: "Property has invalid accessibility."
+            };
         }
 
         const name = declaration.name.text;
