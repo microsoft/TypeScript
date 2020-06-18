@@ -4555,11 +4555,7 @@ namespace ts {
         return getSyntacticModifierFlags(node) & flags;
     }
 
-    export function hasEffectiveModifierFlagsFromSymbol(symbol: Symbol, flags: ModifierFlags): boolean {
-        return some(symbol.declarations, decl => !!getSelectedEffectiveModifierFlags(decl, flags));
-    }
-
-    function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {
+    function getModifierFlagsWorker(node: Node, includeJSDoc: boolean, alwaysIncludeJSDoc?: boolean): ModifierFlags {
         if (node.kind >= SyntaxKind.FirstToken && node.kind <= SyntaxKind.LastToken) {
             return ModifierFlags.None;
         }
@@ -4568,7 +4564,7 @@ namespace ts {
             node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
         }
 
-        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
+        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && (alwaysIncludeJSDoc || isInJSFile(node)) && node.parent) {
             node.modifierFlagsCache |= getJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
         }
 
@@ -4582,6 +4578,10 @@ namespace ts {
      */
     export function getEffectiveModifierFlags(node: Node): ModifierFlags {
         return getModifierFlagsWorker(node, /*includeJSDoc*/ true);
+    }
+
+    export function getEffectiveModifierFlagsAlwaysIncludeJSDoc(node: Node): ModifierFlags {
+        return getModifierFlagsWorker(node, /*includeJSDOc*/ true, /*alwaysIncludeJSDOc*/ true);
     }
 
     /**

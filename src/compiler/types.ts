@@ -754,6 +754,7 @@ namespace ts {
         /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
         JsonFile                                      = 1 << 25, // If node was parsed in a Json
         /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
+        /* @internal */ Deprecated                    = 1 << 27, // If has '@deprecated' JSDoc tag
 
         BlockScoped = Let | Const,
 
@@ -4587,6 +4588,7 @@ namespace ts {
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
         /* @internal */ assignmentDeclarationMembers?: Map<Declaration>; // detected late-bound assignment declarations associated with the symbol
+        /* @internal */ isDeprecated?: boolean
     }
 
     /* @internal */

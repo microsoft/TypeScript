@@ -1014,10 +1014,15 @@ namespace ts {
             return hasJSDoc ? addJSDocComment(node) : node;
         }
 
+        let hasDeprecatedTag = false;
         function addJSDocComment<T extends HasJSDoc>(node: T): T {
             Debug.assert(!node.jsDoc); // Should only be called once per node
             const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
             if (jsDoc.length) node.jsDoc = jsDoc;
+            if (hasDeprecatedTag) {
+                hasDeprecatedTag = false;
+                (node as Mutable<T>).flags |= NodeFlags.Deprecated;
+            }
             return node;
         }
 
@@ -7179,6 +7184,7 @@ namespace ts {
                             tag = parseSimpleTag(start, factory.createJSDocReadonlyTag, tagName, margin, indentText);
                             break;
                         case "deprecated":
+                            hasDeprecatedTag = true;
                             tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
                             break;
                         case "this":
