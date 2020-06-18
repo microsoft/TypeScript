@@ -63,12 +63,12 @@ declare namespace Handler {
 }
 declare function statische(): void;
 declare namespace Strings {
-    export const a: string;
-    export const b: string;
+    const a: string;
+    const b: string;
 }
 type HandlerOptions = {
     /**
      * Should be able to export a type alias at the same time.
      */
-    name: String;
+    name: string;
 };

@@ -16,6 +16,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
+            const newLineCharacter = sourceFile.checkJsDirective ? "" : getNewLineOrDefaultFromHost(host, formatContext.options);
             const fixes: CodeFixAction[] = [
                 // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
                 createCodeFixActionWithoutFixAll(
@@ -23,7 +24,7 @@ namespace ts.codefix {
                     [createFileTextChanges(sourceFile.fileName, [
                         createTextChange(sourceFile.checkJsDirective
                             ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
-                            : createTextSpan(0, 0), `// @ts-nocheck${getNewLineOrDefaultFromHost(host, formatContext.options)}`),
+                            : createTextSpan(0, 0), `// @ts-nocheck${newLineCharacter}`),
                     ])],
                     Diagnostics.Disable_checking_for_this_file),
             ];

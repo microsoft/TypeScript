@@ -1,15 +1,40 @@
 // @ts-expect-error additional commenting
-var invalidCommentedFancy: number = 'nope';
+var invalidCommentedFancySingle: number = 'nope';
+
+/*
+ @ts-expect-error additional commenting */
+var invalidCommentedFancyMulti: number = 'nope';
 
 // @ts-expect-error additional commenting
-var validCommentedFancy: string = 'nope';
+var validCommentedFancySingle: string = 'nope';
+
+/* @ts-expect-error additional commenting */
+var validCommentedFancyMulti: string = 'nope';
 
 // @ts-expect-error
-var invalidCommentedPlain: number = 'nope';
+var invalidCommentedPlainSingle: number = 'nope';
+
+/*
+ @ts-expect-error */
+var invalidCommentedPlainMulti: number = 'nope';
 
 // @ts-expect-error
-var validCommentedPlain: string = 'nope';
+var validCommentedPlainSingle: string = 'nope';
+
+/* @ts-expect-error */
+var validCommentedPlainMulti1: string = 'nope';
+
+/*
+@ts-expect-error */
+var validCommentedPlainMulti2: string = 'nope';
 
 var invalidPlain: number = 'nope';
 
 var validPlain: string = 'nope';
+
+// @ts-expect-error
+(({ a: true } as const).a === false); // <-- compiles (as expected via comment)
+(({ a: true } as const).a === false); // Should error
+
+(({ a: true } as const).a === false); // error
+(({ a: true } as const).a === false); // error

@@ -5,10 +5,10 @@ node_modules/bluebird/js/release/bluebird.js(5,15): error TS2367: This condition
 node_modules/bluebird/js/release/bluebird.js(10,10): error TS2339: Property 'noConflict' does not exist on type 'typeof Promise'.
 node_modules/bluebird/js/release/debuggability.js(225,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
 node_modules/bluebird/js/release/debuggability.js(232,26): error TS2339: Property 'detail' does not exist on type 'Event'.
-node_modules/bluebird/js/release/debuggability.js(258,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
+node_modules/bluebird/js/release/debuggability.js(258,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[event: "multipleResolves", listener: MultipleResolveListener]'.
 node_modules/bluebird/js/release/debuggability.js(301,9): error TS2322: Type 'Process' is not assignable to type 'boolean'.
-node_modules/bluebird/js/release/debuggability.js(301,28): error TS2684: The 'this' context of type '((...args: any[]) => Process) | ((name: any, ...args: any[]) => boolean)' is not assignable to method's 'this' of type '(this: null, name?: any, ...args: any[]) => Process'.
-  Type '(name: any, ...args: any[]) => boolean' is not assignable to type '(this: null, name?: any, ...args: any[]) => Process'.
+node_modules/bluebird/js/release/debuggability.js(301,28): error TS2684: The 'this' context of type '((...args: any[]) => Process) | ((name: any, ...args: any[]) => boolean)' is not assignable to method's 'this' of type '(this: null, args_0?: any, ...args_1: any[]) => Process'.
+  Type '(name: any, ...args: any[]) => boolean' is not assignable to type '(this: null, args_0?: any, ...args_1: any[]) => Process'.
     Type 'boolean' is not assignable to type 'Process'.
 node_modules/bluebird/js/release/debuggability.js(562,19): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/debuggability.js(633,59): error TS2554: Expected 0 arguments, but got 1.

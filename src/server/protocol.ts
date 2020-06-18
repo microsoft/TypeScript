@@ -546,7 +546,11 @@ namespace ts.server.protocol {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
+    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
+        triggerReason?: RefactorTriggerReason
+    };
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     /**
      * Response is a list of available refactorings.
@@ -2784,7 +2788,7 @@ namespace ts.server.protocol {
     /**
      * Arguments for navto request message.
      */
-    export interface NavtoRequestArgs extends FileRequestArgs {
+    export interface NavtoRequestArgs {
         /**
          * Search term to navigate to from current location; term can
          * be '.*' or an identifier prefix.
@@ -2794,6 +2798,10 @@ namespace ts.server.protocol {
          *  Optional limit on the number of items to return.
          */
         maxResultCount?: number;
+        /**
+         * The file for the request (absolute pathname required).
+         */
+        file?: string;
         /**
          * Optional flag to indicate we want results for just the current file
          * or the entire project.
@@ -2809,7 +2817,7 @@ namespace ts.server.protocol {
      * match the search term given in argument 'searchTerm'.  The
      * context for the search is given by the named file.
      */
-    export interface NavtoRequest extends FileRequest {
+    export interface NavtoRequest extends Request {
         command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }
@@ -3061,6 +3069,7 @@ namespace ts.server.protocol {
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        containerName?: string;
     }
 
     export interface CallHierarchyIncomingCall {

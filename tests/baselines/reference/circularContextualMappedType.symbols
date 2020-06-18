@@ -1,0 +1,51 @@
+=== tests/cases/compiler/circularContextualMappedType.ts ===
+type Func<T> = () => T;
+>Func : Symbol(Func, Decl(circularContextualMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(circularContextualMappedType.ts, 0, 10))
+>T : Symbol(T, Decl(circularContextualMappedType.ts, 0, 10))
+
+type Mapped<T> = { [K in keyof T]: Func<T[K]> };
+>Mapped : Symbol(Mapped, Decl(circularContextualMappedType.ts, 0, 23))
+>T : Symbol(T, Decl(circularContextualMappedType.ts, 2, 12))
+>K : Symbol(K, Decl(circularContextualMappedType.ts, 2, 20))
+>T : Symbol(T, Decl(circularContextualMappedType.ts, 2, 12))
+>Func : Symbol(Func, Decl(circularContextualMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(circularContextualMappedType.ts, 2, 12))
+>K : Symbol(K, Decl(circularContextualMappedType.ts, 2, 20))
+
+declare function reproduce(options: number): void;
+>reproduce : Symbol(reproduce, Decl(circularContextualMappedType.ts, 2, 48), Decl(circularContextualMappedType.ts, 4, 50))
+>options : Symbol(options, Decl(circularContextualMappedType.ts, 4, 27))
+
+declare function reproduce<T>(options: Mapped<T>): T
+>reproduce : Symbol(reproduce, Decl(circularContextualMappedType.ts, 2, 48), Decl(circularContextualMappedType.ts, 4, 50))
+>T : Symbol(T, Decl(circularContextualMappedType.ts, 5, 27))
+>options : Symbol(options, Decl(circularContextualMappedType.ts, 5, 30))
+>Mapped : Symbol(Mapped, Decl(circularContextualMappedType.ts, 0, 23))
+>T : Symbol(T, Decl(circularContextualMappedType.ts, 5, 27))
+>T : Symbol(T, Decl(circularContextualMappedType.ts, 5, 27))
+
+reproduce({
+>reproduce : Symbol(reproduce, Decl(circularContextualMappedType.ts, 2, 48), Decl(circularContextualMappedType.ts, 4, 50))
+
+  name:   () => { return 123 }
+>name : Symbol(name, Decl(circularContextualMappedType.ts, 7, 11))
+
+});
+
+reproduce({
+>reproduce : Symbol(reproduce, Decl(circularContextualMappedType.ts, 2, 48), Decl(circularContextualMappedType.ts, 4, 50))
+
+  name() { return 123 }
+>name : Symbol(name, Decl(circularContextualMappedType.ts, 11, 11))
+
+});
+
+reproduce({
+>reproduce : Symbol(reproduce, Decl(circularContextualMappedType.ts, 2, 48), Decl(circularContextualMappedType.ts, 4, 50))
+
+  name: function () { return 123 }
+>name : Symbol(name, Decl(circularContextualMappedType.ts, 15, 11))
+
+});
+

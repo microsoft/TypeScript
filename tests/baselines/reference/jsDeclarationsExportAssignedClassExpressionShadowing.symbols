@@ -27,7 +27,7 @@ module.exports = class Q {
     }
 }
 module.exports.Another = Q;
->module.exports.Another : Symbol(Another)
+>module.exports.Another : Symbol(Another, Decl(index.js, 10, 1))
 >module.exports : Symbol(Another, Decl(index.js, 10, 1))
 >module : Symbol(module, Decl(index.js, 5, 1))
 >exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))

@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configurePrerelease` too.
-    export const versionMajorMinor = "3.9";
+    export const versionMajorMinor = "4.0";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 
@@ -79,6 +79,7 @@ namespace ts {
     /** Array that is only intended to be pushed to, never read. */
     export interface Push<T> {
         push(...values: T[]): void;
+        /* @internal*/ readonly length: number;
     }
 
     /* @internal */

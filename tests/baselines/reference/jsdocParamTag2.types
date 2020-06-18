@@ -49,7 +49,7 @@ function good4({a, b}) {}
  * @param {string} x
  */
 function good5({a, b}, x) {}
->good5 : ({ a, b }:  * @param {string} obj.a - this is like the saddest way to specify a type * @param {string} obj.b - but it sure does allow a lot of documentation, x: string) => void
+>good5 : ({ a, b }: {    a: string;    b: string;}, x: string) => void
 >a : string
 >b : string
 >x : string
@@ -63,7 +63,7 @@ function good5({a, b}, x) {}
  * @param {string} OBJECTION.d - meh
  */
 function good6({a, b}, {c, d}) {}
->good6 : ({ a, b }:  * @param {string} obj.a * @param {string} obj.b - but it sure does allow a lot of documentation, { c, d }:  * @param {string} OBJECTION.c * @param {string} OBJECTION.d - meh) => void
+>good6 : ({ a, b }: {    a: string;    b: string;}, { c, d }: {    c: string;    d: string;}) => void
 >a : string
 >b : string
 >c : string
@@ -77,7 +77,7 @@ function good6({a, b}, {c, d}) {}
  * @param {string} y
  */
 function good7(x, {a, b}, y) {}
->good7 : (x: number, { a, b }:  * @param {string} obj.a * @param {string} obj.b, y: string) => void
+>good7 : (x: number, { a, b }: {    a: string;    b: string;}, y: string) => void
 >x : number
 >a : string
 >b : string
@@ -89,7 +89,7 @@ function good7(x, {a, b}, y) {}
  * @param {string} obj.b
  */
 function good8({a, b}) {}
->good8 : ({ a, b }:  * @param {string} obj.a * @param {string} obj.b) => void
+>good8 : ({ a, b }: {    a: string;    b: string;}) => void
 >a : string
 >b : string
 

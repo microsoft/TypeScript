@@ -40,3 +40,10 @@ function F() {
 >z : Symbol(F.z, Decl(jsdocReadonlyDeclarations.js, 15, 14))
 }
 
+// https://github.com/microsoft/TypeScript/issues/38401
+class D {
+>D : Symbol(D, Decl(jsdocReadonlyDeclarations.js, 18, 1))
+
+    constructor(/** @readonly */ x) {}
+>x : Symbol(x, Decl(jsdocReadonlyDeclarations.js, 22, 16))
+}

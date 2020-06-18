@@ -875,7 +875,7 @@ namespace ts.Completions {
                     //    *         |c|
                     //    */
                     const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                    if (!(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/))) {
+                    if (!/[^\*|\s(/)]/.test(sourceFile.text.substring(lineStart, position))) {
                         return { kind: CompletionDataKind.JsDocTag };
                     }
                 }
@@ -1235,7 +1235,7 @@ namespace ts.Completions {
                 // each individual type has. This is because we're going to add all identifiers
                 // anyways. So we might as well elevate the members that were at least part
                 // of the individual types to a higher status since we know what they are.
-                symbols.push(...getPropertiesForCompletion(type, typeChecker));
+                symbols.push(...filter(getPropertiesForCompletion(type, typeChecker), s => typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, s)));
             }
             else {
                 for (const symbol of type.getApparentProperties()) {
@@ -1990,7 +1990,7 @@ namespace ts.Completions {
             if (!isClassLike(decl)) return GlobalsSearch.Success;
 
             const classElement = contextToken.kind === SyntaxKind.SemicolonToken ? contextToken.parent.parent : contextToken.parent;
-            let classElementModifierFlags = isClassElement(classElement) ? getModifierFlags(classElement) : ModifierFlags.None;
+            let classElementModifierFlags = isClassElement(classElement) ? getEffectiveModifierFlags(classElement) : ModifierFlags.None;
             // If this is context token is not something we are editing now, consider if this would lead to be modifier
             if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
                 switch (contextToken.getText()) {
@@ -2409,12 +2409,12 @@ namespace ts.Completions {
                 }
 
                 // Dont filter member even if the name matches if it is declared private in the list
-                if (hasModifier(m, ModifierFlags.Private)) {
+                if (hasEffectiveModifier(m, ModifierFlags.Private)) {
                     continue;
                 }
 
                 // do not filter it out if the static presence doesnt match
-                if (hasModifier(m, ModifierFlags.Static) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
+                if (hasEffectiveModifier(m, ModifierFlags.Static) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
                     continue;
                 }
 
@@ -2427,7 +2427,8 @@ namespace ts.Completions {
             return baseSymbols.filter(propertySymbol =>
                 !existingMemberNames.has(propertySymbol.escapedName) &&
                 !!propertySymbol.declarations &&
-                !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private));
+                !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private) &&
+                !isPrivateIdentifierPropertyDeclaration(propertySymbol.valueDeclaration));
         }
 
         /**
@@ -2684,10 +2685,16 @@ namespace ts.Completions {
                     return cls;
                 }
                 break;
-            case SyntaxKind.Identifier: // class c extends React.Component { a: () => 1\n compon| }
+           case SyntaxKind.Identifier: {
+                // class c { public prop = c| }
+                if (isPropertyDeclaration(location.parent) && location.parent.initializer === location) {
+                    return undefined;
+                }
+                // class c extends React.Component { a: () => 1\n compon| }
                 if (isFromObjectTypeDeclaration(location)) {
                     return findAncestor(location, isObjectTypeDeclaration);
                 }
+            }
         }
 
         if (!contextToken) return undefined;

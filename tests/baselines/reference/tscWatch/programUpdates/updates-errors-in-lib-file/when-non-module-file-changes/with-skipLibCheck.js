@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /user/username/projects/myproject/a.ts --skipLibCheck
+Input::
 //// [/user/username/projects/myproject/a.ts]
 interface Document {
     fullscreen: boolean;
@@ -21,11 +21,8 @@ interface Document {
     readonly fullscreen: boolean;
 }
 
-//// [/user/username/projects/myproject/a.js]
-var y;
 
-
-
+/a/lib/tsc.js -w /user/username/projects/myproject/a.ts --skipLibCheck
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
@@ -65,16 +62,17 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js]
+var y;
+
+
+
 Change:: Remove document declaration from file
 
+Input::
 //// [/user/username/projects/myproject/a.ts]
 var x: string;
 var y: number;
-
-//// [/user/username/projects/myproject/a.js]
-var x;
-var y;
-
 
 
 Output::
@@ -109,17 +107,20 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js]
+var x;
+var y;
+
+
+
 Change:: Rever the file to contain document declaration
 
+Input::
 //// [/user/username/projects/myproject/a.ts]
 interface Document {
     fullscreen: boolean;
 }
 var y: number;
-
-//// [/user/username/projects/myproject/a.js]
-var y;
-
 
 
 Output::
@@ -159,3 +160,8 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/a.js]
+var y;
+
+

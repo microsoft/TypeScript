@@ -25,9 +25,9 @@ class B extends A {
 
     this.foo = () => 3;
 >this.foo = () => 3 : () => number
->this.foo : () => number
+>this.foo : any
 >this : this
->foo : () => number
+>foo : any
 >() => 3 : () => number
 >3 : 3
   }

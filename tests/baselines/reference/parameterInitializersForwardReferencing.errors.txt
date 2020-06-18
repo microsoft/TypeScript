@@ -1,13 +1,13 @@
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(6,20): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(11,21): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(11,28): error TS2373: Initializer of parameter 'b' cannot reference identifier 'c' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(17,21): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(23,25): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(32,21): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(33,16): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,14): error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,21): error TS2373: Initializer of parameter 'b' cannot reference identifier 'c' declared after it.
-tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,28): error TS2373: Initializer of parameter 'c' cannot reference identifier 'd' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(6,20): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(11,21): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(11,28): error TS2373: Parameter 'b' cannot reference identifier 'c' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(17,21): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(23,25): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(32,21): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(33,16): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,14): error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,21): error TS2373: Parameter 'b' cannot reference identifier 'c' declared after it.
+tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,28): error TS2373: Parameter 'c' cannot reference identifier 'd' declared after it.
 
 
 ==== tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts (10 errors) ====
@@ -18,16 +18,16 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,
     
     function right(a = b, b = a) {
                        ~
-!!! error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+!!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
         a;
         b;
     }
     
     function right2(a = b, b = c, c = a) {
                         ~
-!!! error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+!!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
                                ~
-!!! error TS2373: Initializer of parameter 'b' cannot reference identifier 'c' declared after it.
+!!! error TS2373: Parameter 'b' cannot reference identifier 'c' declared after it.
         a;
         b;
         c;
@@ -35,7 +35,7 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,
     
     function inside(a = b) {
                         ~
-!!! error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+!!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
         var b;
     }
     
@@ -43,7 +43,7 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,
         var b;
         function inside(a = b) { // Still an error because b is declared inside the function
                             ~
-!!! error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+!!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
             var b;
         }
     }
@@ -54,20 +54,20 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts(37,
     class C {
         constructor(a = b, b = 1) { }
                         ~
-!!! error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+!!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
         method(a = b, b = 1) { }
                    ~
-!!! error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+!!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
     }
     
     // Function expressions
     var x = (a = b, b = c, c = d) => { var d; };
                  ~
-!!! error TS2373: Initializer of parameter 'a' cannot reference identifier 'b' declared after it.
+!!! error TS2373: Parameter 'a' cannot reference identifier 'b' declared after it.
                         ~
-!!! error TS2373: Initializer of parameter 'b' cannot reference identifier 'c' declared after it.
+!!! error TS2373: Parameter 'b' cannot reference identifier 'c' declared after it.
                                ~
-!!! error TS2373: Initializer of parameter 'c' cannot reference identifier 'd' declared after it.
+!!! error TS2373: Parameter 'c' cannot reference identifier 'd' declared after it.
     
     // Should not produce errors - can reference later parameters if they occur within a function expression initializer.
     function f(a, b = function () { return c; }, c = b()) {

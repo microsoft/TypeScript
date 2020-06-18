@@ -85,10 +85,10 @@ var j = new A(2)
 
 k.x === j.x
 >k.x === j.x : boolean
->k.x : number
+>k.x : number | undefined
 >k : A
->x : number
->j.x : number
+>x : number | undefined
+>j.x : number | undefined
 >j : A
->x : number
+>x : number | undefined
 

@@ -2,10 +2,10 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(11,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(19,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,18): error TS2322: Type '""' is not assignable to type 'T'.
-  '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
-tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(32,9): error TS2322: Type '""' is not assignable to type 'T'.
-  '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(30,18): error TS2322: Type 'string' is not assignable to type 'T'.
+  'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(32,9): error TS2322: Type 'string' is not assignable to type 'T'.
+  'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts(41,1): error TS2322: Type 'E<string>' is not assignable to type 'C<number>'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -51,13 +51,13 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                      ~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'T'.
-!!! error TS2322:   '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322: Type 'string' is not assignable to type 'T'.
+!!! error TS2322:   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
         foo(): T {
             return ''; // error
             ~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'T'.
-!!! error TS2322:   '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322: Type 'string' is not assignable to type 'T'.
+!!! error TS2322:   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
         }
     }
     

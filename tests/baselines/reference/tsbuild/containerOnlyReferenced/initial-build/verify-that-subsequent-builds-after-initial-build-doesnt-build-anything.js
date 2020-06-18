@@ -1,4 +1,82 @@
-//// [/lib/initial-buildOutput.txt]
+Input::
+//// [/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/src/src/folder/index.ts]
+export const x = 10;
+
+//// [/src/src/folder/tsconfig.json]
+{
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true
+    }
+}
+
+//// [/src/src/folder2/index.ts]
+export const x = 10;
+
+//// [/src/src/folder2/tsconfig.json]
+{
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true
+    }
+}
+
+//// [/src/src/tsconfig.json]
+{
+    "files": [],
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [ 
+        { "path": "./folder" },
+        { "path": "./folder2"}
+    ]
+  }
+
+//// [/src/tests/index.ts]
+export const x = 10;
+
+//// [/src/tests/tsconfig.json]
+{
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../src" }
+    ]
+}
+
+//// [/src/tsconfig.json]
+{
+  "files": [],
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [ 
+      { "path": "./src" },
+      { "path": "./tests"}
+  ]
+}
+
+
+
+Output::
 /lib/tsc --b /src --verbose
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/src/folder/tsconfig.json
@@ -141,4 +219,28 @@ exports.x = 10;
   },
   "version": "FakeTSVersion"
 }
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc --b /src --verbose
+[[90m12:04:00 AM[0m] Projects in this build: 
+    * src/src/folder/tsconfig.json
+    * src/src/folder2/tsconfig.json
+    * src/src/tsconfig.json
+    * src/tests/tsconfig.json
+    * src/tsconfig.json
+
+[[90m12:04:00 AM[0m] Project 'src/src/folder/tsconfig.json' is up to date because newest input 'src/src/folder/index.ts' is older than oldest output 'src/src/folder/index.js'
+
+[[90m12:04:00 AM[0m] Project 'src/src/folder2/tsconfig.json' is up to date because newest input 'src/src/folder2/index.ts' is older than oldest output 'src/src/folder2/index.js'
+
+[[90m12:04:00 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than oldest output 'src/tests/index.js'
+
+exitCode:: ExitStatus.Success
+
 

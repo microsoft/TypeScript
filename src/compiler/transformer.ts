@@ -109,11 +109,11 @@ namespace ts {
     /**
      * Wrap a transformer factory that may return a custom script or declaration transformer object.
      */
-    function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (node: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
+    function wrapCustomTransformerFactory<T extends SourceFile | Bundle>(transformer: TransformerFactory<T> | CustomTransformerFactory, handleDefault: (context: TransformationContext, tx: Transformer<T>) => Transformer<Bundle | SourceFile>): TransformerFactory<Bundle | SourceFile> {
         return context => {
             const customTransformer = transformer(context);
             return typeof customTransformer === "function"
-                ? handleDefault(customTransformer)
+                ? handleDefault(context, customTransformer)
                 : wrapCustomTransformer(customTransformer);
         };
     }
@@ -123,7 +123,7 @@ namespace ts {
     }
 
     function wrapDeclarationTransformerFactory(transformer: TransformerFactory<Bundle | SourceFile> | CustomTransformerFactory): TransformerFactory<Bundle | SourceFile> {
-        return wrapCustomTransformerFactory(transformer, identity);
+        return wrapCustomTransformerFactory(transformer, (_, node) => node);
     }
 
     export function noEmitSubstitution(_hint: EmitHint, node: Node) {
@@ -144,12 +144,16 @@ namespace ts {
      * @param transforms An array of `TransformerFactory` callbacks.
      * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
-    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
+    export function transformNodes<T extends Node>(resolver: EmitResolver | undefined, host: EmitHost | undefined, factory: NodeFactory, options: CompilerOptions, nodes: readonly T[], transformers: readonly TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
         let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
         let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
+        let lexicalEnvironmentStatements: Statement[];
+        let lexicalEnvironmentFlags = LexicalEnvironmentFlags.None;
         let lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
         let lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
+        let lexicalEnvironmentStatementsStack: Statement[][] = [];
+        let lexicalEnvironmentFlagsStack: LexicalEnvironmentFlags[] = [];
         let lexicalEnvironmentStackOffset = 0;
         let lexicalEnvironmentSuspended = false;
         let emitHelpers: EmitHelper[] | undefined;
@@ -161,15 +165,20 @@ namespace ts {
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
         const context: TransformationContext = {
+            factory,
             getCompilerOptions: () => options,
             getEmitResolver: () => resolver!, // TODO: GH#18217
             getEmitHost: () => host!, // TODO: GH#18217
+            getEmitHelperFactory: memoize(() => createEmitHelperFactory(context)),
             startLexicalEnvironment,
             suspendLexicalEnvironment,
             resumeLexicalEnvironment,
             endLexicalEnvironment,
+            setLexicalEnvironmentFlags,
+            getLexicalEnvironmentFlags,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
+            addInitializationStatement,
             requestEmitHelper,
             readEmitHelpers,
             enableSubstitution,
@@ -306,12 +315,15 @@ namespace ts {
         function hoistVariableDeclaration(name: Identifier): void {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
-            const decl = setEmitFlags(createVariableDeclaration(name), EmitFlags.NoNestedSourceMaps);
+            const decl = setEmitFlags(factory.createVariableDeclaration(name), EmitFlags.NoNestedSourceMaps);
             if (!lexicalEnvironmentVariableDeclarations) {
                 lexicalEnvironmentVariableDeclarations = [decl];
             }
             else {
                 lexicalEnvironmentVariableDeclarations.push(decl);
+            }
+            if (lexicalEnvironmentFlags & LexicalEnvironmentFlags.InParameters) {
+                lexicalEnvironmentFlags |= LexicalEnvironmentFlags.VariablesHoistedInParameters;
             }
         }
 
@@ -321,11 +333,27 @@ namespace ts {
         function hoistFunctionDeclaration(func: FunctionDeclaration): void {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+            setEmitFlags(func, EmitFlags.CustomPrologue);
             if (!lexicalEnvironmentFunctionDeclarations) {
                 lexicalEnvironmentFunctionDeclarations = [func];
             }
             else {
                 lexicalEnvironmentFunctionDeclarations.push(func);
+            }
+        }
+
+        /**
+         * Adds an initialization statement to the top of the lexical environment.
+         */
+        function addInitializationStatement(node: Statement): void {
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+            setEmitFlags(node, EmitFlags.CustomPrologue);
+            if (!lexicalEnvironmentStatements) {
+                lexicalEnvironmentStatements = [node];
+            }
+            else {
+                lexicalEnvironmentStatements.push(node);
             }
         }
 
@@ -344,9 +372,13 @@ namespace ts {
             // transformation.
             lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentVariableDeclarations;
             lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentFunctionDeclarations;
+            lexicalEnvironmentStatementsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentStatements;
+            lexicalEnvironmentFlagsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentFlags;
             lexicalEnvironmentStackOffset++;
             lexicalEnvironmentVariableDeclarations = undefined!;
             lexicalEnvironmentFunctionDeclarations = undefined!;
+            lexicalEnvironmentStatements = undefined!;
+            lexicalEnvironmentFlags = LexicalEnvironmentFlags.None;
         }
 
         /** Suspends the current lexical environment, usually after visiting a parameter list. */
@@ -375,15 +407,17 @@ namespace ts {
             Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
             let statements: Statement[] | undefined;
-            if (lexicalEnvironmentVariableDeclarations || lexicalEnvironmentFunctionDeclarations) {
+            if (lexicalEnvironmentVariableDeclarations ||
+                lexicalEnvironmentFunctionDeclarations ||
+                lexicalEnvironmentStatements) {
                 if (lexicalEnvironmentFunctionDeclarations) {
                     statements = [...lexicalEnvironmentFunctionDeclarations];
                 }
 
                 if (lexicalEnvironmentVariableDeclarations) {
-                    const statement = createVariableStatement(
+                    const statement = factory.createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
+                        factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
                     );
 
                     setEmitFlags(statement, EmitFlags.CustomPrologue);
@@ -395,17 +429,40 @@ namespace ts {
                         statements.push(statement);
                     }
                 }
+
+                if (lexicalEnvironmentStatements) {
+                    if (!statements) {
+                        statements = [...lexicalEnvironmentStatements];
+                    }
+                    else {
+                        statements = [...statements, ...lexicalEnvironmentStatements];
+                    }
+                }
             }
 
             // Restore the previous lexical environment.
             lexicalEnvironmentStackOffset--;
             lexicalEnvironmentVariableDeclarations = lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset];
             lexicalEnvironmentFunctionDeclarations = lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset];
+            lexicalEnvironmentStatements = lexicalEnvironmentStatementsStack[lexicalEnvironmentStackOffset];
+            lexicalEnvironmentFlags = lexicalEnvironmentFlagsStack[lexicalEnvironmentStackOffset];
             if (lexicalEnvironmentStackOffset === 0) {
                 lexicalEnvironmentVariableDeclarationsStack = [];
                 lexicalEnvironmentFunctionDeclarationsStack = [];
+                lexicalEnvironmentStatementsStack = [];
+                lexicalEnvironmentFlagsStack = [];
             }
             return statements;
+        }
+
+        function setLexicalEnvironmentFlags(flags: LexicalEnvironmentFlags, value: boolean): void {
+            lexicalEnvironmentFlags = value ?
+                lexicalEnvironmentFlags | flags :
+                lexicalEnvironmentFlags & ~flags;
+        }
+
+        function getLexicalEnvironmentFlags(): LexicalEnvironmentFlags {
+            return lexicalEnvironmentFlags;
         }
 
         function requestEmitHelper(helper: EmitHelper): void {
@@ -449,4 +506,30 @@ namespace ts {
             }
         }
     }
+
+    export const nullTransformationContext: TransformationContext = {
+        get factory() { return factory; },
+        enableEmitNotification: noop,
+        enableSubstitution: noop,
+        endLexicalEnvironment: returnUndefined,
+        getCompilerOptions: () => ({}),
+        getEmitHost: notImplemented,
+        getEmitResolver: notImplemented,
+        getEmitHelperFactory: notImplemented,
+        setLexicalEnvironmentFlags: noop,
+        getLexicalEnvironmentFlags: () => 0,
+        hoistFunctionDeclaration: noop,
+        hoistVariableDeclaration: noop,
+        addInitializationStatement: noop,
+        isEmitNotificationEnabled: notImplemented,
+        isSubstitutionEnabled: notImplemented,
+        onEmitNode: noop,
+        onSubstituteNode: notImplemented,
+        readEmitHelpers: notImplemented,
+        requestEmitHelper: noop,
+        resumeLexicalEnvironment: noop,
+        startLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop,
+        addDiagnostic: noop,
+    };
 }
