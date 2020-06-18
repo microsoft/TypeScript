@@ -2024,7 +2024,10 @@ namespace ts.server {
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
-        updateGraph(): boolean {
+        updateGraph(): boolean;
+        /*@internal*/
+        updateGraph(skipEvents: boolean): boolean; // eslint-disable-line @typescript-eslint/unified-signatures
+        updateGraph(skipEvents?: boolean): boolean {
             this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
             this.pendingReload = ConfigFileProgramReloadLevel.None;
@@ -2045,9 +2048,16 @@ namespace ts.server {
                     result = super.updateGraph();
             }
             this.compilerHost = undefined;
+            if (!skipEvents) {
+                this.onFinishedLoading();
+            }
+            return result;
+        }
+
+        /*@internal*/
+        onFinishedLoading() {
             this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
-            return result;
         }
 
         /*@internal*/

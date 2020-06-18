@@ -56,6 +56,7 @@ class c { prop = "hello"; foo() { return this.prop; } }`
                     sortText: Completions.SortText.LocationPriority,
                     hasAction: undefined,
                     insertText: undefined,
+                    isPackageJsonImport: undefined,
                     isRecommended: undefined,
                     replacementSpan: undefined,
                     source: undefined
