@@ -1085,7 +1085,6 @@ namespace ts.server {
                 this.logger.msg(`Error: got watch notification for unknown file: ${fileName}`);
             }
             else {
-                info.getContainingAutoImportProviderProjects().forEach(p => p.markAsDirty());
                 if (info.containingProjects) {
                     info.containingProjects.forEach(project => project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(info.path));
                 }

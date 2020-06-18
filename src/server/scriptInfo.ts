@@ -534,11 +534,6 @@ namespace ts.server {
             }
         }
 
-        /*@internal*/
-        getContainingAutoImportProviderProjects() {
-            return this.containingProjects.filter(p => p.projectKind === ProjectKind.AutoImportProvider);
-        }
-
         registerFileUpdate(): void {
             for (const p of this.containingProjects) {
                 p.registerFileUpdate(this.path);
