@@ -1175,7 +1175,7 @@ namespace ts.server {
                         (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
                     ) {
                         this.logger.info(`Project: ${configFileName} Detected new package.json: ${fileOrDirectory}`);
-                        this.onAddPackageJson(fileOrDirectoryPath, watchOptions);
+                        this.onAddPackageJson(fileOrDirectoryPath);
                     }
 
                     if (isIgnoredFileFromWildCardWatching({
@@ -3722,7 +3722,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        private watchPackageJsonFile(path: Path, watchOptions: WatchOptions | undefined) {
+        private watchPackageJsonFile(path: Path) {
             const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
             if (!watchers.has(path)) {
                 this.invalidateProjectAutoImports(path);
@@ -3746,16 +3746,16 @@ namespace ts.server {
                         }
                     },
                     PollingInterval.Low,
-                    watchOptions,
+                    this.hostConfiguration.watchOptions,
                     WatchType.PackageJsonFile,
                 ));
             }
         }
 
         /*@internal*/
-        private onAddPackageJson(path: Path, watchOptions: WatchOptions | undefined) {
+        private onAddPackageJson(path: Path) {
             this.packageJsonCache.addOrUpdate(path);
-            this.watchPackageJsonFile(path, watchOptions);
+            this.watchPackageJsonFile(path);
         }
 
         /*@internal*/
