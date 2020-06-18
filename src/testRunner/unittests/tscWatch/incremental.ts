@@ -194,7 +194,8 @@ namespace ts.tscWatch {
                         messageText: "Type 'number' is not assignable to type 'string'.",
                         relatedInformation: undefined,
                         reportsUnnecessary: undefined,
-                        source: undefined
+                        source: undefined,
+                        skippedOn: undefined,
                     }]);
                 });
             });

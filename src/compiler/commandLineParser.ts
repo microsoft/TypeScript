@@ -462,7 +462,6 @@ namespace ts {
         {
             name: "noEmit",
             type: "boolean",
-            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Do_not_emit_outputs,

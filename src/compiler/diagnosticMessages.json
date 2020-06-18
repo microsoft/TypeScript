@@ -4458,6 +4458,10 @@
         "category": "Error",
         "code": 6309
     },
+    "Referenced project '{0}' may not disable emit.": {
+        "category": "Error",
+        "code": 6310
+    },
     "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
         "category": "Message",
         "code": 6350
