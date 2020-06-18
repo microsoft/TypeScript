@@ -660,6 +660,7 @@ namespace ts {
         getTypeReferenceDirectivesForSymbol: notImplemented,
         isLiteralConstDeclaration: notImplemented,
         getJsxFactoryEntity: notImplemented,
+        getJsxFragmentFactoryEntity: notImplemented,
         getAllAccessorDeclarations: notImplemented,
         getSymbolOfExternalModuleSpecifier: notImplemented,
         isBindingCapturedByNode: notImplemented,
