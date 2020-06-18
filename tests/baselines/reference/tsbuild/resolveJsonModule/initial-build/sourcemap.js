@@ -99,7 +99,7 @@ exports["default"] = hello_json_1["default"].hello;
       },
       "../src/hello.json": {
         "version": "6651571919-{\n  \"hello\": \"world\"\n}",
-        "signature": "-4341462827-export declare const hello: string;\r\n",
+        "signature": "-17173785019-export const hello: string;\r\n",
         "affectsGlobalScope": true
       },
       "../src/index.ts": {

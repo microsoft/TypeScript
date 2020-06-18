@@ -853,6 +853,9 @@ namespace ts {
                 getConfigFileParsingDiagnostics(config),
                 config.projectReferences
             );
+            if (state.watch) {
+                state.builderPrograms.set(projectPath, program);
+            }
             step++;
         }
 
@@ -982,7 +985,7 @@ namespace ts {
             if (emitResult.emittedFiles && state.writeFileName) {
                 emitResult.emittedFiles.forEach(name => listEmittedFile(state, config, name));
             }
-            afterProgramDone(state, projectPath, program, config);
+            afterProgramDone(state, program, config);
             step = BuildStep.QueueReferencingProjects;
             return emitResult;
         }
@@ -1023,7 +1026,7 @@ namespace ts {
                     newestDeclarationFileContentChangedTime,
                 oldestOutputFileName
             });
-            afterProgramDone(state, projectPath, program, config);
+            afterProgramDone(state, program, config);
             step = BuildStep.QueueReferencingProjects;
             buildResult = resultFlags;
             return emitDiagnostics;
@@ -1269,7 +1272,6 @@ namespace ts {
 
     function afterProgramDone<T extends BuilderProgram>(
         state: SolutionBuilderState<T>,
-        proj: ResolvedConfigFilePath,
         program: T | undefined,
         config: ParsedCommandLine
     ) {
@@ -1278,10 +1280,7 @@ namespace ts {
             if (state.host.afterProgramEmitAndDiagnostics) {
                 state.host.afterProgramEmitAndDiagnostics(program);
             }
-            if (state.watch) {
-                program.releaseProgram();
-                state.builderPrograms.set(proj, program);
-            }
+            program.releaseProgram();
         }
         else if (state.host.afterEmitBundle) {
             state.host.afterEmitBundle(config);
@@ -1304,7 +1303,7 @@ namespace ts {
         // List files if any other build error using program (emit errors already report files)
         state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
         if (canEmitBuildInfo) return { buildResult, step: BuildStep.EmitBuildInfo };
-        afterProgramDone(state, resolvedPath, program, config);
+        afterProgramDone(state, program, config);
         return { buildResult, step: BuildStep.QueueReferencingProjects };
     }
 
@@ -1809,38 +1808,6 @@ namespace ts {
         ));
     }
 
-    function isSameFile(state: SolutionBuilderState, file1: string, file2: string) {
-        return comparePaths(file1, file2, state.currentDirectory, !state.host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
-    }
-
-    function isOutputFile(state: SolutionBuilderState, fileName: string, configFile: ParsedCommandLine) {
-        if (configFile.options.noEmit) return false;
-
-        // ts or tsx files are not output
-        if (!fileExtensionIs(fileName, Extension.Dts) &&
-            (fileExtensionIs(fileName, Extension.Ts) || fileExtensionIs(fileName, Extension.Tsx))) {
-            return false;
-        }
-
-        // If options have --outFile or --out, check if its that
-        const out = outFile(configFile.options);
-        if (out && (isSameFile(state, fileName, out) || isSameFile(state, fileName, removeFileExtension(out) + Extension.Dts))) {
-            return true;
-        }
-
-        // If declarationDir is specified, return if its a file in that directory
-        if (configFile.options.declarationDir && containsPath(configFile.options.declarationDir, fileName, state.currentDirectory, !state.host.useCaseSensitiveFileNames())) {
-            return true;
-        }
-
-        // If --outDir, check if file is in that directory
-        if (configFile.options.outDir && containsPath(configFile.options.outDir, fileName, state.currentDirectory, !state.host.useCaseSensitiveFileNames())) {
-            return true;
-        }
-
-        return !forEach(configFile.fileNames, inputFile => isSameFile(state, fileName, inputFile));
-    }
-
     function watchWildCardDirectories(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
         if (!state.watch) return;
         updateWatchingWildcardDirectories(
@@ -1850,16 +1817,18 @@ namespace ts {
                 state.hostWithWatch,
                 dir,
                 fileOrDirectory => {
-                    const fileOrDirectoryPath = toPath(state, fileOrDirectory);
-                    if (fileOrDirectoryPath !== toPath(state, dir) && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, parsed.options)) {
-                        state.writeLog(`Project: ${resolved} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
-                        return;
-                    }
-
-                    if (isOutputFile(state, fileOrDirectory, parsed)) {
-                        state.writeLog(`${fileOrDirectory} is output file`);
-                        return;
-                    }
+                    if (isIgnoredFileFromWildCardWatching({
+                        watchedDirPath: toPath(state, dir),
+                        fileOrDirectory,
+                        fileOrDirectoryPath: toPath(state, fileOrDirectory),
+                        configFileName: resolved,
+                        configFileSpecs: parsed.configFileSpecs!,
+                        currentDirectory: state.currentDirectory,
+                        options: parsed.options,
+                        program: state.builderPrograms.get(resolvedPath),
+                        useCaseSensitiveFileNames: state.parseConfigFileHost.useCaseSensitiveFileNames,
+                        writeLog: s => state.writeLog(s)
+                    })) return;
 
                     invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Partial);
                 },

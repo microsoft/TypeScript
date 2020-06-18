@@ -97,13 +97,13 @@ const result6 = obj[key]
 
 // Expanded examples from https://github.com/Microsoft/TypeScript/issues/21988
 type RequiredPropNames<T> = {
->RequiredPropNames : { [P in keyof T]-?: undefined extends T[P] ? never : P; }[keyof T]
+>RequiredPropNames : RequiredPropNames<T>
 
   [P in keyof T]-?: undefined extends T[P] ? never : P
 }[keyof T];
 
 type OptionalPropNames<T> = {
->OptionalPropNames : { [P in keyof T]-?: undefined extends T[P] ? P : never; }[keyof T]
+>OptionalPropNames : OptionalPropNames<T>
 
   [P in keyof T]-?: undefined extends T[P] ? P : never
 }[keyof T];
@@ -145,7 +145,7 @@ type P0 = {};
 >P0 : P0
 
 type P3Names = RequiredPropNames<P3>; // expect 'a' | 'b'
->P3Names : "a" | "b"
+>P3Names : RequiredPropNames<P3>
 
 type P2Names = RequiredPropNames<P2>; // expect 'a'
 >P2Names : "a"
@@ -214,7 +214,7 @@ type O0 = {};
 >O0 : O0
 
 type O3Names = OptionalPropNames<O3>; // expect 'a' | 'b'
->O3Names : "a" | "b"
+>O3Names : RequiredPropNames<P3>
 
 type O2Names = OptionalPropNames<O2>; // expect 'a'
 >O2Names : "a"
@@ -267,7 +267,7 @@ declare const o0Test: ExpectType<{}, O0Props>;
 // Repro from #23005
 
 type Example<T extends Record<'a', string>> = T['a'];
->Example : T["a"]
+>Example : Example<T>
 
 type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"
 >Res1 : "x" | "y"

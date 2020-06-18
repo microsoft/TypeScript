@@ -29,6 +29,7 @@ exports.subject1 = 10;
 //// [2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.subject1 = exports.subject = void 0;
 /* blah0 */
 // blah 
 // blah 

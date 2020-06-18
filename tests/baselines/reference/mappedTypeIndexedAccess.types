@@ -15,7 +15,7 @@ type Pairs<T> = {
 };
 
 type Pair<T> = Pairs<T>[keyof T];
->Pair : Pairs<T>[keyof T]
+>Pair : Pair<T>
 
 type FooBar = {
 >FooBar : FooBar
@@ -30,7 +30,7 @@ type FooBar = {
 
 // Error expected here
 let pair1: Pair<FooBar> = {
->pair1 : { key: "foo"; value: string; } | { key: "bar"; value: number; }
+>pair1 : Pair<FooBar>
 >{    key: "foo",    value: 3} : { key: "foo"; value: number; }
 
     key: "foo",
@@ -45,7 +45,7 @@ let pair1: Pair<FooBar> = {
 
 // Error expected here
 let pair2: Pairs<FooBar>[keyof FooBar] = {
->pair2 : { key: "foo"; value: string; } | { key: "bar"; value: number; }
+>pair2 : Pair<FooBar>
 >{    key: "foo",    value: 3} : { key: "foo"; value: number; }
 
     key: "foo",

@@ -619,7 +619,7 @@
         "category": "Error",
         "code": 1195
     },
-    "Catch clause variable cannot have a type annotation.": {
+    "Catch clause variable type annotation must be 'any' or 'unknown' if specified.": {
         "category": "Error",
         "code": 1196
     },
@@ -3532,6 +3532,10 @@
     "A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.": {
         "category": "Error",
         "code": 5087
+    },
+    "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 5088
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

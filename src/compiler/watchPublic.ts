@@ -734,7 +734,7 @@ namespace ts {
                 fileOrDirectory => {
                     Debug.assert(!!configFileName);
 
-                    let fileOrDirectoryPath: Path | undefined = toPath(fileOrDirectory);
+                    const fileOrDirectoryPath = toPath(fileOrDirectory);
 
                     // Since the file existence changed, update the sourceFiles cache
                     if (cachedDirectoryStructureHost) {
@@ -742,15 +742,18 @@ namespace ts {
                     }
                     nextSourceFileVersion(fileOrDirectoryPath);
 
-                    fileOrDirectoryPath = removeIgnoredPath(fileOrDirectoryPath);
-                    if (!fileOrDirectoryPath) return;
-
-                    // If the the added or created file or directory is not supported file name, ignore the file
-                    // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrDirectoryPath !== directory && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, compilerOptions)) {
-                        writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
-                        return;
-                    }
+                    if (isIgnoredFileFromWildCardWatching({
+                        watchedDirPath: toPath(directory),
+                        fileOrDirectory,
+                        fileOrDirectoryPath,
+                        configFileName,
+                        configFileSpecs,
+                        options: compilerOptions,
+                        program: getCurrentBuilderProgram(),
+                        currentDirectory,
+                        useCaseSensitiveFileNames,
+                        writeLog
+                    })) return;
 
                     // Reload is pending, do the reload
                     if (reloadLevel !== ConfigFileProgramReloadLevel.Full) {
