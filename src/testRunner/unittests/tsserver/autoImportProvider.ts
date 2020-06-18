@@ -123,6 +123,26 @@ namespace ts.projectSystem {
                 autoImportProvider);
         });
 
+        it("Closes AutoImportProviderProject when host project closes", () => {
+            const { projectService, session } = setup([
+                angularFormsDts,
+                angularFormsPackageJson,
+                tsconfig,
+                packageJson,
+                indexTs
+            ]);
+
+            openFilesForSession([indexTs], session);
+            const hostProject = projectService.configuredProjects.get(tsconfig.path)!;
+            hostProject.getPackageJsonAutoImportProvider();
+            const autoImportProviderProject = hostProject.autoImportProviderHost;
+            assert.ok(autoImportProviderProject);
+
+            hostProject.close();
+            assert.ok(autoImportProviderProject!.isClosed());
+            assert.isUndefined(hostProject.autoImportProviderHost);
+        });
+
         it("Responds to changes in node_modules", () => {
             const { projectService, session, host } = setup([
                 angularFormsDts,

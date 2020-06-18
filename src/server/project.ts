@@ -248,7 +248,7 @@ namespace ts.server {
         /*@internal*/
         private symlinks: ReadonlyMap<string> | undefined;
         /*@internal*/
-        private autoImportProviderHost: AutoImportProviderProject | undefined;
+        autoImportProviderHost: AutoImportProviderProject | undefined;
 
         /*@internal*/
         constructor(
@@ -746,6 +746,8 @@ namespace ts.server {
             }
             this.clearGeneratedFileWatch();
             this.clearInvalidateResolutionOfFailedLookupTimer();
+            this.autoImportProviderHost?.close();
+            this.autoImportProviderHost = undefined;
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
