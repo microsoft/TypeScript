@@ -538,7 +538,7 @@ namespace ts {
             }
 
             if (node.flags & NodeFlags.Deprecated) {
-                symbol.isDeprecated = true;
+                symbol.flags |= SymbolFlags.Deprecated;
             }
 
             return symbol;

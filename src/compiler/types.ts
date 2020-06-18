@@ -4508,10 +4508,10 @@ namespace ts {
         Transient               = 1 << 25,  // Transient symbol (created during type check)
         Assignment              = 1 << 26,  // Assignment treated as declaration (eg `this.prop = 1`)
         ModuleExports           = 1 << 27,  // Symbol for CommonJS `module` of `module.exports`
-
+        Deprecated              = 1 << 28,  // Symbol has Deprecated declaration tag (eg `@deprecated`)        
         /* @internal */
         All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
-            | ObjectLiteral | Method | Constructor | GetAccessor | SetAccessor | Signature | TypeParameter | TypeAlias | ExportValue | Alias | Prototype | ExportStar | Optional | Transient,
+            | ObjectLiteral | Method | Constructor | GetAccessor | SetAccessor | Signature | TypeParameter | TypeAlias | ExportValue | Alias | Prototype | ExportStar | Optional | Transient | Deprecated,
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -4588,7 +4588,6 @@ namespace ts {
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
         /* @internal */ assignmentDeclarationMembers?: Map<Declaration>; // detected late-bound assignment declarations associated with the symbol
-        /* @internal */ isDeprecated?: boolean
     }
 
     /* @internal */
