@@ -47,7 +47,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             ? parentForEmptySpan
             : startBinary && endBinary
                 ? getParentNodeInSpan(startBinary, file, createTextSpanFromBounds(startBinary.pos, endBinary.end)) : undefined;
-        if (!parent || !isBinaryExpression(parent)) return undefined;
+        if (!parent || !isBinaryExpression(parent) || (parent !== endBinary && parent.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken)) return undefined;
 
         const firstBinaryForEmpty = forEmptySpan ? findAncestor<BinaryExpression>(parent.getFirstToken(), (node): node is BinaryExpression => { return isBinaryExpression(node); }): undefined;
         const startNode = forEmptySpan ? firstBinaryForEmpty : startBinary;
@@ -94,7 +94,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
     function getFullPropertyAccessChain(node: BinaryExpression, _checker: TypeChecker): PropertyAccessExpression | undefined {
         return isBinaryExpression(node.right) || isCallExpression(node.right)
-            ? getRightHandSidePropertyAccess(node.right) : isPropertyAccessExpression(node.right)
+            ? getRightHandSidePropertyAccess(node.right) : node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && isPropertyAccessExpression(node.right)
                 ? node.right : undefined;
     }
 
