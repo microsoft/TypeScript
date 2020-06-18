@@ -730,6 +730,10 @@ namespace ts {
          */
         description: string;
 
+        /**
+         * An error message to show to the user if the refactoring cannot be applied in
+         * the current context.
+         */
         error?: string;
     }
 

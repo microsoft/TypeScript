@@ -3779,6 +3779,7 @@ declare namespace ts {
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly provideRefactorErrorReason?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -5646,6 +5647,11 @@ declare namespace ts {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
+        /**
+         * An error message to show to the user if the refactoring cannot be applied in
+         * the current context.
+         */
+        error?: string;
     }
     /**
      * A set of edits to make in response to a refactor action, plus an optional
