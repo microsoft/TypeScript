@@ -1636,12 +1636,9 @@ namespace ts.server {
 
         /*@internal*/
         private isDefaultProjectForOpenFiles(): boolean {
-            return someIterator(
-                this.projectService.openFiles.keys(),
-                fileName => {
-                    const info = this.getScriptInfo(fileName);
-                    return !!info?.containingProjects.length && info.getDefaultProject() === this;
-                });
+            return !!forEachEntry(
+                this.projectService.openFiles,
+                (_, fileName) => this.projectService.tryGetDefaultProjectForFile(toNormalizedPath(fileName)) === this);
         }
     }
 
@@ -1790,7 +1787,7 @@ namespace ts.server {
         /*@internal*/
         static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, compilerOptions: CompilerOptions): string[] {
             if (!dependencySelection) {
-                return [];
+                return ts.emptyArray;
             }
 
             let dependencyNames: Map<true> | undefined;
