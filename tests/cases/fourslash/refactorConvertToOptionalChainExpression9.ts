@@ -1,8 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-////let a = { b: 0 };
-////let x = { y: 0 };
-////a && a.b() && /*a*/x && x.y()/*b*/;
+////let a = { b: { c: 0 } };
+/////*a*/a.b && a.b.c/*b*/;
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -10,7 +9,6 @@ edit.applyRefactor({
     actionName: "Convert to optional chain expression",
     actionDescription: "Convert && chain to optional chain expression",
     newContent:
-`let a = { b: 0 };
-let x = { y: 0 };
-a && a.b() && x?.y();`
+`let a = { b: { c: 0 } };
+a?.b?.c;`
 });

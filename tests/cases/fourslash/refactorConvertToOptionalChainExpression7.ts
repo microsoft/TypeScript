@@ -2,7 +2,7 @@
 
 ////let a = { b: 0 };
 ////let x = { y: 0 };
-/////*a*/a && a.b/*b*/ && x && x.y;
+/////*a*/a && a.b()/*b*/ && x && x.y();
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -12,5 +12,5 @@ edit.applyRefactor({
     newContent:
 `let a = { b: 0 };
 let x = { y: 0 };
-a?.b && x && x.y;`
+a?.b() && x && x.y();`
 });
