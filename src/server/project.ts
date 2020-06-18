@@ -1821,6 +1821,10 @@ namespace ts.server {
             }
         }
 
+        isOrphan() {
+            return true;
+        }
+
         /*@internal*/
         static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
             if (dependencySelection === PackageJsonAutoImportPreference.None) {

@@ -2845,7 +2845,7 @@ namespace ts.server {
             if (!firstProject.isOrphan() &&
                 isInferredProject(firstProject) &&
                 firstProject.isRoot(info) &&
-                forEach(info.containingProjects, p => p !== firstProject && p.projectKind !== ProjectKind.AutoImportProvider && !p.isOrphan())) {
+                forEach(info.containingProjects, p => p !== firstProject && !p.isOrphan())) {
                 firstProject.removeFile(info, /*fileExists*/ true, /*detachFromProject*/ true);
             }
         }

@@ -608,7 +608,7 @@ namespace ts.server {
         }
 
         isOrphan() {
-            return !forEach(this.containingProjects, p => p.projectKind !== ProjectKind.AutoImportProvider && !p.isOrphan());
+            return !forEach(this.containingProjects, p => !p.isOrphan());
         }
 
         /*@internal*/
