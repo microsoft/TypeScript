@@ -4556,7 +4556,10 @@ namespace ts {
     }
 
     export function hasNodeFlagsFromSymbol(symbol: Symbol, flags: NodeFlags): boolean {
-        return some(symbol.declarations, decl => !!(decl.flags & flags));
+        if (symbol.isDeprecated === undefined) {
+            symbol.isDeprecated = some(symbol.declarations, decl => !!(decl.flags & flags));
+        }
+        return symbol.isDeprecated;
     }
 
     function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {
