@@ -545,7 +545,7 @@ namespace ts {
         }
 
         function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
-            const hasExportModifier = getCombinedSyntacticModifierFlags(node) & ModifierFlags.Export;
+            const hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export;
             if (symbolFlags & SymbolFlags.Alias) {
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);

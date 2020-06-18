@@ -302,10 +302,6 @@ namespace ts {
         return getCombinedFlags(node, getEffectiveModifierFlags);
     }
 
-    export function getCombinedSyntacticModifierFlags(node: Declaration): ModifierFlags {
-        return getCombinedFlags(node, getSyntacticModifierFlags);
-    }
-
     /* @internal */
     export function getCombinedNodeFlagsAlwaysIncludeJSDoc(node: Declaration): ModifierFlags {
         return getCombinedFlags(node, getEffectiveModifierFlagsAlwaysIncludeJSDoc);
