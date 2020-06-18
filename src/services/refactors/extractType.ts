@@ -4,26 +4,43 @@ namespace ts.refactor {
     const extractToTypeAlias = "Extract to type alias";
     const extractToInterface = "Extract to interface";
     const extractToTypeDef = "Extract to typedef";
+    const errorExtractingType = "Error extracting type";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
 
-            return [{
-                name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_type),
-                actions: info.isJS ? [{
-                    name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef)
-                }] : append([{
-                    name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias)
-                }], info.typeElements && {
-                    name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface)
-                })
-            }];
+            if (info.error === undefined) {
+                return [{
+                    name: refactorName,
+                    description: getLocaleSpecificMessage(Diagnostics.Extract_type),
+                    actions: info.info.isJS ? [{
+                        name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef)
+                    }] : append([{
+                        name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias)
+                    }], info.info.typeElements && {
+                        name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface)
+                    })
+                }];
+            }
+
+            if (context.preferences.provideRefactorErrorReason) {
+                return [{
+                    name: refactorName,
+                    description: getLocaleSpecificMessage(Diagnostics.Extract_type),
+                    actions: [{
+                        name: errorExtractingType,
+                        description: "Error extracting type",
+                        error: info.error
+                    }]
+                }]; 
+            }
+
+            return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             const { file, } = context;
-            const info = Debug.checkDefined(getRangeToExtract(context), "Expected to find a range to extract");
+            const info = Debug.checkDefined(getRangeToExtract(context)?.info, "Expected to find a range to extract");
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => {
@@ -57,8 +74,15 @@ namespace ts.refactor {
     }
 
     type Info = TypeAliasInfo | InterfaceInfo;
+    type InfoOrError = {
+        info: Info,
+        error?: never
+    } | {
+        info?: never,
+        error: string
+    }
 
-    function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): Info | undefined {
+    function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): InfoOrError | undefined {
         const { file, startPosition } = context;
         const isJS = isSourceFileJS(file);
         const current = getTokenAtPosition(file, startPosition);
@@ -67,15 +91,15 @@ namespace ts.refactor {
 
         const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
             (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
-        if (!selection || !isTypeNode(selection)) return undefined;
+        if (!selection || !isTypeNode(selection)) return { error: "Selection is not a valid type node." };
 
         const checker = context.program.getTypeChecker();
         const firstStatement = Debug.checkDefined(findAncestor(selection, isStatement), "Should find a statement");
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
-        if (!typeParameters) return undefined;
+        if (!typeParameters) return { error: "No type could be extracted from this type node." };
 
         const typeElements = flattenTypeLiteralNodeReference(checker, selection);
-        return { isJS, selection, firstStatement, typeParameters, typeElements };
+        return { info: { isJS, selection, firstStatement, typeParameters, typeElements } };
     }
 
     function flattenTypeLiteralNodeReference(checker: TypeChecker, node: TypeNode | undefined): readonly TypeElement[] | undefined {

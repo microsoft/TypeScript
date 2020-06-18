@@ -100,11 +100,11 @@ namespace ts.refactor.extractSymbol {
 
         const infos: ApplicableRefactorInfo[] = [];
 
-        if (constantActions.length) {
+        if (functionActions.length) {
             infos.push({
                 name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-                actions: constantActions
+                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
+                actions: functionActions
             });
         } else if (context.preferences.provideRefactorErrorReason && innermostErrorFunctionAction) {
             infos.push({
@@ -117,8 +117,8 @@ namespace ts.refactor.extractSymbol {
         if (constantActions.length) {
             infos.push({
                 name: refactorName,
-                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: functionActions
+                description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
+                actions: constantActions
             });
         } else if (context.preferences.provideRefactorErrorReason && innermostErrorConstantAction) {
             infos.push({

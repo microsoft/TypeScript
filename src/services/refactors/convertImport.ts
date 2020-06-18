@@ -3,30 +3,59 @@ namespace ts.refactor {
     const refactorName = "Convert import";
     const actionNameNamespaceToNamed = "Convert namespace import to named imports";
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
+    const errorConvertingImport = "Error converting import";
+
+    type NamedImportBindingsOrError = {
+        info: NamedImportBindings,
+        error?: never
+    } | {
+        info?: never,
+        error: string
+    }
+
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const i = getImportToConvert(context, context.triggerReason === "invoked");
             if (!i) return emptyArray;
-            const description = i.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
-            const actionName = i.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
-            return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+
+            if (i.error == undefined) {
+                const description = i.info.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
+                const actionName = i.info.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
+                return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+            }
+
+            if (context.preferences.provideRefactorErrorReason) {
+                return [{ name: refactorName, description: errorConvertingImport, actions: [{ name: errorConvertingImport, description: errorConvertingImport }] }];
+            }
+
+            return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace, "Unexpected action name");
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.checkDefined(getImportToConvert(context), "Context must provide an import to convert")));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.checkDefined(getImportToConvert(context)?.info, "Context must provide an import to convert")));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
     });
 
     // Can convert imports of the form `import * as m from "m";` or `import d, { x, y } from "m";`.
-    function getImportToConvert(context: RefactorContext, considerPartialSpans = true): NamedImportBindings | undefined {
+    function getImportToConvert(context: RefactorContext, considerPartialSpans = true): NamedImportBindingsOrError | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
         const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
-        if (!importDecl || !isImportDeclaration(importDecl) || (importDecl.getEnd() < span.start + span.length)) return undefined;
+        if (!importDecl || !isImportDeclaration(importDecl)) return { error: 'Selection is not an import declaration.' }
+        if (importDecl.getEnd() < span.start + span.length) return undefined;
+
         const { importClause } = importDecl;
-        return importClause && importClause.namedBindings;
+        if (!importClause) {
+            return { error: 'Could not find import clause.' };
+        }
+
+        if (!importClause.namedBindings) {
+            return { error: 'Could not find namespace import or named imports.' }
+        }
+
+        return { info: importClause.namedBindings };
     }
 
     function doChange(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImportBindings): void {
