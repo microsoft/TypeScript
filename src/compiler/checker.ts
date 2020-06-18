@@ -12445,7 +12445,9 @@ namespace ts {
 
         function createTupleType(elementTypes: readonly Type[], elementFlags?: readonly ElementFlags[], readonly = false, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]) {
             const tupleTarget = getTupleTargetType(elementFlags || map(elementTypes, _ => ElementFlags.Required), readonly, namedMemberDeclarations);
-            return elementTypes.length ? createNormalizedTypeReference(tupleTarget, elementTypes) : tupleTarget;
+            return tupleTarget === emptyGenericType ? emptyObjectType :
+                elementTypes.length ? createNormalizedTypeReference(tupleTarget, elementTypes) :
+                tupleTarget;
         }
 
         function getTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]): GenericType {
@@ -12578,7 +12580,9 @@ namespace ts {
                 expandedTypes[expandedTypes.length - 1] = getUnionType(restTypes);
             }
             const tupleTarget = getTupleTargetType(expandedFlags, target.readonly, expandedDeclarations);
-            return expandedFlags.length ? createTypeReference(tupleTarget, expandedTypes) : tupleTarget;
+            return tupleTarget === emptyGenericType ? emptyObjectType :
+                expandedFlags.length ? createTypeReference(tupleTarget, expandedTypes) :
+                tupleTarget;
 
             function addElementOrRest(type: Type, flags: ElementFlags, declaration: NamedTupleMember | ParameterDeclaration | undefined) {
                 if (restTypes) {
