@@ -12213,7 +12213,7 @@ interface RTCPeerConnection extends EventTarget {
     removeTrack(sender: RTCRtpSender): void;
     setConfiguration(configuration: RTCConfiguration): void;
     setIdentityProvider(provider: string, options?: RTCIdentityProviderOptions): void;
-    setLocalDescription(description: RTCSessionDescriptionInit): Promise<void>;
+    setLocalDescription(description?: RTCSessionDescriptionInit): Promise<void>;
     setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void>;
     addEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
