@@ -1396,7 +1396,6 @@ namespace ts {
     export interface CodeFixContextBase extends textChanges.TextChangesContext {
         sourceFile: SourceFile;
         program: Program;
-        autoImportProvider: Program | undefined;
         cancellationToken: CancellationToken;
         preferences: UserPreferences;
     }
