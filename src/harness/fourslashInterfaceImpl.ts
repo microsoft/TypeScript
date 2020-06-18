@@ -1483,6 +1483,7 @@ namespace FourSlashInterface {
         actionName: string;
         actionDescription: string;
         newContent: NewFileContent;
+        triggerReason?: ts.RefactorTriggerReason;
     }
 
     export type ExpectedCompletionEntry = string | ExpectedCompletionEntryObject;
