@@ -4555,13 +4555,6 @@ namespace ts {
         return getSyntacticModifierFlags(node) & flags;
     }
 
-    export function hasNodeFlagsFromSymbol(symbol: Symbol, flags: NodeFlags): boolean {
-        if (symbol.isDeprecated === undefined) {
-            symbol.isDeprecated = some(symbol.declarations, decl => !!(decl.flags & flags));
-        }
-        return symbol.isDeprecated;
-    }
-
     function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {
         if (node.kind >= SyntaxKind.FirstToken && node.kind <= SyntaxKind.LastToken) {
             return ModifierFlags.None;
@@ -4571,7 +4564,7 @@ namespace ts {
             node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
         }
 
-        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && node.parent) {
+        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && isInJSFile(node) && node.parent) {
             node.modifierFlagsCache |= getJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
         }
 
