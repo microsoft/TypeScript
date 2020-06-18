@@ -76,25 +76,23 @@ namespace ts.codefix {
         }
 
         const namedExportDeclaration = getNamedExportDeclaration(moduleSymbol);
-        let exportDeclaration;
         const exportSpecifier = createExportSpecifier(/*propertyName*/ undefined, node);
-        if(namedExportDeclaration?.exportClause && isNamedExports(namedExportDeclaration.exportClause)) {
-            exportDeclaration = updateExportDeclaration(
+        if (namedExportDeclaration?.exportClause && isNamedExports(namedExportDeclaration.exportClause)) {
+            return changes.replaceNode(sourceFile, namedExportDeclaration, updateExportDeclaration(
                 namedExportDeclaration,
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 updateNamedExports(namedExportDeclaration.exportClause, namedExportDeclaration.exportClause.elements.concat(exportSpecifier)),
                 /*moduleSpecifier*/ undefined,
-                /*isTypeOnly*/ false);
-            changes.replaceNode(sourceFile, namedExportDeclaration, exportDeclaration);
-            return;
+                /*isTypeOnly*/ false));
         }
-        exportDeclaration = createExportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createNamedExports([exportSpecifier]),
-            /*moduleSpecifier*/ undefined,
-            /*isTypeOnly*/ false);
-        changes.insertNodeAtEndOfScope(sourceFile, sourceFile, exportDeclaration);
+        else {
+            return changes.insertNodeAtEndOfScope(sourceFile, sourceFile, createExportDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                createNamedExports([exportSpecifier]),
+                /*moduleSpecifier*/ undefined,
+                /*isTypeOnly*/ false));
+        }
     }
 }
