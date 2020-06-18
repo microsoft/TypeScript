@@ -4263,8 +4263,6 @@ declare namespace Intl {
         style?: string;
         currency?: string;
         currencyDisplay?: string;
-        unit?: string;
-        unitDisplay?: string;
         useGrouping?: boolean;
         minimumIntegerDigits?: number;
         minimumFractionDigits?: number;
@@ -4279,8 +4277,6 @@ declare namespace Intl {
         style: string;
         currency?: string;
         currencyDisplay?: string;
-        unit?: string;
-        unitDisplay?: string;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
