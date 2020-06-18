@@ -6,8 +6,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const { file, startPosition, endPosition, program, triggerReason } = context;
-        const info = getInfo(file, startPosition, endPosition, program, triggerReason === "invoked");
+        const info = getInfo(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
         return [{
             name: refactorName,
@@ -20,8 +19,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const { file, startPosition, endPosition, program } = context;
-        const info = getInfo(file, startPosition, endPosition, program);
+        const info = getInfo(context);
         if (!info) return undefined;
         const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, t, info, actionName));
         return { edits, renameFilename: undefined, renameLocation: undefined };
@@ -33,34 +31,32 @@ namespace ts.refactor.convertToOptionalChainExpression {
         containingExpression: BinaryExpression
     }
 
-    function getInfo(file: SourceFile, startPosition: number, endPosition: number | undefined, program: Program, considerEmptySpans = true): Info | undefined {
-        if (startPosition === endPosition && !considerEmptySpans) return undefined;
-        const forEmptySpan = startPosition === endPosition && considerEmptySpans;
-        const startToken = getTokenAtPosition(file, startPosition);
-        const endToken = endPosition ? findTokenOnLeftOfPosition(file, endPosition) : startToken;
-        const startBinary = findAncestor<BinaryExpression>(startToken, (node): node is BinaryExpression => { return isBinaryExpression(node); });
-        const endBinary = endToken !== startToken ? findAncestor<BinaryExpression>(endToken, (node): node is BinaryExpression => { return isBinaryExpression(node); }) : startBinary;
+    function getInfo(context: RefactorContext, considerEmptySpans = true): Info | undefined {
+        const { file, program } = context;
+        const span = getRefactorContextSpan(context);
 
-        // a request for an empty span should simply check if the largest containing binary expression is valid
-        const parentForEmptySpan = forEmptySpan ? findAncestor(startBinary, (node) => { return node.parent && isBinaryExpression(node) && !isBinaryExpression(node.parent); }): undefined;
-        const parent = forEmptySpan
-            ? parentForEmptySpan
-            : startBinary && endBinary
-                ? getParentNodeInSpan(startBinary, file, createTextSpanFromBounds(startBinary.pos, endBinary.end)) : undefined;
-        if (!parent || !isBinaryExpression(parent) || (parent !== endBinary && parent.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken)) return undefined;
+        if (span.length === 0 && !considerEmptySpans) return undefined;
+        const forEmptySpan = span.length === 0 && considerEmptySpans;
 
-        const firstBinaryForEmpty = forEmptySpan ? findAncestor<BinaryExpression>(parent.getFirstToken(), (node): node is BinaryExpression => { return isBinaryExpression(node); }): undefined;
-        const startNode = forEmptySpan ? firstBinaryForEmpty : startBinary;
-        if (!startNode) return undefined;
+        const startToken = getTokenAtPosition(file, span.start);
+
+        const parent = forEmptySpan ? findAncestor(startToken, (node) => { return isExpressionStatement(node) && isBinaryExpression(node.expression); }) : getParentNodeInSpan(startToken, file, span);
+        if (!parent) return undefined;
+
+        const binaryExpression = isExpressionStatement(parent) && isBinaryExpression(parent.expression) ? parent.expression : isBinaryExpression(parent) ? parent : undefined;
+        if (!binaryExpression) return undefined;
+
+        const start = forEmptySpan ? binaryExpression.pos : startToken.pos;
+
         const checker = program.getTypeChecker();
-
-        const fullPropertyAccess = getFullPropertyAccessChain(parent, checker);
+        const fullPropertyAccess = getFullPropertyAccessChain(binaryExpression);
         if (!fullPropertyAccess) return undefined;
+        if (binaryExpression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken && binaryExpression.operatorToken.pos <= fullPropertyAccess.pos) return undefined;
 
         // ensure that each sequential operand in range matches the longest acceess chain
-        let checkNode = parent.left;
+        let checkNode = binaryExpression.left;
         let firstOccurence: PropertyAccessExpression | Identifier = fullPropertyAccess;
-        while (isBinaryExpression(checkNode) && (isPropertyAccessExpression(checkNode.right) || isIdentifier(checkNode.right)) && checkNode.right.pos >= startNode.right.pos) {
+        while (isBinaryExpression(checkNode) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && (isPropertyAccessExpression(checkNode.right) || isIdentifier(checkNode.right)) && checkNode.right.pos >= start) {
             if (!checker.containsMatchingReference(fullPropertyAccess, checkNode.right)) {
                 return undefined;
             }
@@ -68,10 +64,10 @@ namespace ts.refactor.convertToOptionalChainExpression {
             checkNode = checkNode.left;
         }
         // check final identifier
-        if ((isIdentifier(checkNode) || isPropertyAccessExpression(checkNode)) && checker.containsMatchingReference(fullPropertyAccess, checkNode) && checkNode.pos >= startNode.pos) {
+        if ((isIdentifier(checkNode) || isPropertyAccessExpression(checkNode)) && checker.containsMatchingReference(fullPropertyAccess, checkNode) && checkNode.pos >= start) {
             firstOccurence = checkNode;
         }
-        return firstOccurence ? { fullPropertyAccess, firstOccurence, containingExpression:parent } : undefined;
+        return firstOccurence ? { fullPropertyAccess, firstOccurence, containingExpression:binaryExpression } : undefined;
     }
 
     function getRightHandSidePropertyAccess(node: BinaryExpression | CallExpression): PropertyAccessExpression | undefined {
@@ -92,9 +88,9 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return undefined;
     }
 
-    function getFullPropertyAccessChain(node: BinaryExpression, _checker: TypeChecker): PropertyAccessExpression | undefined {
+    function getFullPropertyAccessChain(node: BinaryExpression): PropertyAccessExpression | undefined {
         return isBinaryExpression(node.right) || isCallExpression(node.right)
-            ? getRightHandSidePropertyAccess(node.right) : node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && isPropertyAccessExpression(node.right)
+            ? getRightHandSidePropertyAccess(node.right) : node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && isPropertyAccessExpression(node.right) && !isOptionalChain(node.right)
                 ? node.right : undefined;
     }
 

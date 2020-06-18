@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////let a = { b: { c: () => { } } };
-/////*a*/a && a.b && a.b.c() === 1/*b*/;
+/////*a*/a && a.b && a.b.c() === 1;/*b*/
 
 goTo.select("a", "b");
 edit.applyRefactor({

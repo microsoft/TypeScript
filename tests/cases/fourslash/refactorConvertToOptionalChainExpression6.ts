@@ -6,7 +6,7 @@
 ////    }
 ////}
 ////declare let foo: Foo | undefined;
-/////*a*/foo && foo.bar && foo.bar.baz/*b*/;
+/////*a*/foo && foo.bar && foo.bar.baz;/*b*/
 
 goTo.select("a", "b");
 edit.applyRefactor({
