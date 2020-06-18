@@ -12,7 +12,7 @@ namespace ts {
                 getCompilationSettings: () => settings,
                 getScriptFileNames: () => map(files, f => f.unitName),
                 getScriptVersion: () => "1",
-                getScriptSnapshot: (name: string) => snapFor(name),
+                getScriptSnapshot: name => snapFor(name),
                 getDefaultLibFileName: () => "lib.d.ts",
                 getCurrentDirectory: () => "",
             };

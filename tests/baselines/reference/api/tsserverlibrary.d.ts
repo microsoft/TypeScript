@@ -9184,6 +9184,7 @@ declare namespace ts.server {
     class AutoImportProviderProject extends Project {
         private hostProject;
         private static readonly newName;
+        isOrphan(): boolean;
         private rootFileNames;
         updateGraph(): boolean;
         markAsDirty(): void;

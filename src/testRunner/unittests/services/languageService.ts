@@ -29,7 +29,7 @@ export function Component(x: Config): any;`
                 getScriptVersion(_fileName) {
                     return "";
                 },
-                getScriptSnapshot(fileName: string) {
+                getScriptSnapshot(fileName) {
                     if (fileName === ".ts") {
                         return ScriptSnapshot.fromString("");
                     }
