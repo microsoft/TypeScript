@@ -29,7 +29,25 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
         if (!info) return emptyArray;
 
-        if (info.error !== undefined) {
+        if (info.error === undefined) {
+            return [{
+                name: refactorName,
+                description: refactorDescription,
+                actions: [
+                    info.info.addBraces ?
+                        {
+                            name: addBracesActionName,
+                            description: addBracesActionDescription
+                        } : {
+                            name: removeBracesActionName,
+                            description: removeBracesActionDescription
+                        }
+                ]
+            }];
+        }
+
+        if (context.preferences.provideRefactorErrorReason)
+        {
             return [{
                 name: refactorName,
                 description: refactorDescription,
@@ -41,20 +59,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             }];
         }
 
-        return [{
-            name: refactorName,
-            description: refactorDescription,
-            actions: [
-                info.info.addBraces ?
-                    {
-                        name: addBracesActionName,
-                        description: addBracesActionDescription
-                    } : {
-                        name: removeBracesActionName,
-                        description: removeBracesActionDescription
-                    }
-            ]
-        }];
+        return emptyArray;
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {

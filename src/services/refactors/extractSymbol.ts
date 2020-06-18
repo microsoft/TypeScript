@@ -12,7 +12,7 @@ namespace ts.refactor.extractSymbol {
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
-            if (!rangeToExtract.errors || rangeToExtract.errors.length == 0) {
+            if (!rangeToExtract.errors || rangeToExtract.errors.length == 0 || !context.preferences.provideRefactorErrorReason) {
                 return emptyArray;
             }
 
@@ -100,11 +100,17 @@ namespace ts.refactor.extractSymbol {
 
         const infos: ApplicableRefactorInfo[] = [];
 
-        if (functionActions.length || innermostErrorFunctionAction) {
+        if (functionActions.length) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                actions: functionActions.length ? functionActions : [ innermostErrorFunctionAction! ]
+                actions: functionActions
+            });
+        } else if (context.preferences.provideRefactorErrorReason && innermostErrorFunctionAction) {
+            infos.push({
+                name: refactorName,
+                description: getLocaleSpecificMessage(Diagnostics.Extract_function),
+                actions: [ innermostErrorFunctionAction ]
             });
         }
 
@@ -112,7 +118,13 @@ namespace ts.refactor.extractSymbol {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-                actions: constantActions.length ? constantActions : [ innermostErrorConstantAction! ]
+                actions: constantActions
+            });
+        } else if (context.preferences.provideRefactorErrorReason && innermostErrorConstantAction) {
+            infos.push({
+                name: refactorName,
+                description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
+                actions: [ innermostErrorConstantAction ]
             });
         }
 
