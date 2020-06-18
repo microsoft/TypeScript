@@ -302,6 +302,10 @@ namespace ts {
         return getCombinedFlags(node, getEffectiveModifierFlags);
     }
 
+    export function getCombinedSyntacticModifierFlags(node: Declaration): ModifierFlags {
+        return getCombinedFlags(node, getSyntacticModifierFlags);
+    }
+
     // Returns the node flags for this node and all relevant parent nodes.  This is done so that
     // nodes like variable declarations and binding elements can returned a view of their flags
     // that includes the modifiers from their container.  i.e. flags like export/declare aren't
