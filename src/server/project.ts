@@ -996,6 +996,8 @@ namespace ts.server {
 
             if (hasNewProgram) {
                 this.projectProgramVersion++;
+            }
+            if (hasAddedorRemovedFiles) {
                 this.autoImportProviderHost?.markAsDirty();
             }
             perfLogger.logStopUpdateGraph();
