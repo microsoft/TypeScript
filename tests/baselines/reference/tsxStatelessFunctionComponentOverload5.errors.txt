@@ -17,18 +17,18 @@ tests/cases/conformance/jsx/file.tsx(54,51): error TS2769: No overload matches t
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(55,68): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
-    Type 'true' is not assignable to type 'string'.
+    Type 'boolean' is not assignable to type 'string'.
   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
-    Type 'true' is not assignable to type 'string'.
+    Type 'boolean' is not assignable to type 'string'.
   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
-    Type 'true' is not assignable to type 'string'.
+    Type 'boolean' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
     Property 'onClick' is missing in type '{ "data-format": true; }' but required in type 'ButtonProps'.
   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
     Property 'to' is missing in type '{ "data-format": true; }' but required in type 'LinkProps'.
   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
-    Type 'true' is not assignable to type 'string'.
+    Type 'boolean' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
@@ -112,11 +112,11 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches t
                                                                        ~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
-!!! error TS2769:     Type 'true' is not assignable to type 'string'.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
 !!! error TS2769:   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
-!!! error TS2769:     Type 'true' is not assignable to type 'string'.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
 !!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
-!!! error TS2769:     Type 'true' is not assignable to type 'string'.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & ButtonProps'
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & LinkProps'
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & HyphenProps'
@@ -128,7 +128,7 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches t
 !!! error TS2769:   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
 !!! error TS2769:     Property 'to' is missing in type '{ "data-format": true; }' but required in type 'LinkProps'.
 !!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
-!!! error TS2769:     Type 'true' is not assignable to type 'string'.
+!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:5: 'onClick' is declared here.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:13:5: 'to' is declared here.
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:17:5: The expected type comes from property 'data-format' which is declared here on type 'IntrinsicAttributes & HyphenProps'

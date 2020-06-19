@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/foo.ts
+Input::
 //// [/a/b/foo.ts]
 import * as fs from "fs";
 
@@ -15,12 +15,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/foo.js]
-"use strict";
-exports.__esModule = true;
 
-
-
+/a/lib/tsc.js -w /a/b/foo.ts
 Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
@@ -62,9 +58,15 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/foo.js]
+"use strict";
+exports.__esModule = true;
+
+
+
 Change:: npm install node types
 
-//// [/a/b/foo.js] file written with same contents
+Input::
 //// [/a/b/node_modules/@types/node/package.json]
 
 {
@@ -116,3 +118,5 @@ FsWatchesRecursive::
   {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/foo.js] file written with same contents

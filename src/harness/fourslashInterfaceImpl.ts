@@ -208,7 +208,11 @@ namespace FourSlashInterface {
         }
 
         public refactorAvailable(name: string, actionName?: string) {
-            this.state.verifyRefactorAvailable(this.negative, name, actionName);
+            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName);
+        }
+
+        public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
+            this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
         }
     }
 
@@ -1608,6 +1612,7 @@ namespace FourSlashInterface {
         range?: FourSlash.Range;
         code: number;
         reportsUnnecessary?: true;
+        reportsDeprecated?: true;
     }
 
     export interface GetEditsForFileRenameOptions {

@@ -244,7 +244,7 @@ namespace ts.codefix {
                     }
                 }
                 const type = checker.getTypeAtLocation(side);
-                const newNode = checker.getPromisedTypeOfPromise(type) ? createAwait(side) : side;
+                const newNode = checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(side) : side;
                 changeTracker.replaceNode(sourceFile, side, newNode);
             }
         }
@@ -258,7 +258,7 @@ namespace ts.codefix {
             changeTracker.replaceNode(
                 sourceFile,
                 insertionSite.parent.expression,
-                createParen(createAwait(insertionSite.parent.expression)));
+                factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite.parent.expression)));
             insertLeadingSemicolonIfNeeded(changeTracker, insertionSite.parent.expression, sourceFile);
         }
         else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
@@ -268,7 +268,7 @@ namespace ts.codefix {
                     return;
                 }
             }
-            changeTracker.replaceNode(sourceFile, insertionSite, createParen(createAwait(insertionSite)));
+            changeTracker.replaceNode(sourceFile, insertionSite, factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite)));
             insertLeadingSemicolonIfNeeded(changeTracker, insertionSite, sourceFile);
         }
         else {
@@ -278,7 +278,7 @@ namespace ts.codefix {
                     return;
                 }
             }
-            changeTracker.replaceNode(sourceFile, insertionSite, createAwait(insertionSite));
+            changeTracker.replaceNode(sourceFile, insertionSite, factory.createAwaitExpression(insertionSite));
         }
     }
 

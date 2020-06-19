@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w /f.ts --diagnostics
+Input::
 //// [/f.ts]
 
 
@@ -15,10 +15,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/f.js]
 
-
-
+/a/lib/tsc.js --w /f.ts --diagnostics
 Output::
 [[90m12:00:11 AM[0m] Starting compilation in watch mode...
 
@@ -59,14 +57,15 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/f.js]
+
+
+
 Change:: Comment added to file f
 
+Input::
 //// [/f.ts]
 //
-
-//// [/f.js]
-//
-
 
 
 Output::
@@ -111,3 +110,8 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/f.js]
+//
+
+

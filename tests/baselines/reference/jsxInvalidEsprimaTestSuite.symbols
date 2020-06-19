@@ -50,7 +50,7 @@ No type information for this code.=== tests/cases/conformance/jsx/17.tsx ===
 >b : Symbol(b, Decl(17.tsx, 0, 2))
 
 === tests/cases/conformance/jsx/18.tsx ===
-var x = <div>one</div><div>two</div>;;
+var x = /* Leading trivia */ <div>one</div><div>two</div>;;
 >x : Symbol(x, Decl(18.tsx, 0, 3), Decl(19.tsx, 0, 3))
 
 === tests/cases/conformance/jsx/19.tsx ===

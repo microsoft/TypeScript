@@ -65,6 +65,7 @@
         "chalk": "latest",
         "convert-source-map": "latest",
         "del": "5.1.0",
+        "diff": "^4.0.2",
         "eslint": "6.8.0",
         "eslint-formatter-autolinkable-stylish": "1.1.2",
         "eslint-plugin-import": "2.20.2",
@@ -96,7 +97,7 @@
         "source-map-support": "latest",
         "through2": "latest",
         "travis-fold": "latest",
-        "typescript": "next",
+        "typescript": "^3.9.3",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.19"

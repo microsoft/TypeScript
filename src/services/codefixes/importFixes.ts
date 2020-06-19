@@ -660,11 +660,11 @@ namespace ts.codefix {
         const convertTypeOnlyToRegular = !canUseTypeOnlyImport && clause.isTypeOnly;
         if (defaultImport) {
             Debug.assert(!clause.name, "Cannot add a default import to an import clause that already has one");
-            changes.insertNodeAt(sourceFile, clause.getStart(sourceFile), createIdentifier(defaultImport), { suffix: ", " });
+            changes.insertNodeAt(sourceFile, clause.getStart(sourceFile), factory.createIdentifier(defaultImport), { suffix: ", " });
         }
 
         if (namedImports.length) {
-            const specifiers = namedImports.map(name => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name)));
+            const specifiers = namedImports.map(name => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(name)));
             if (clause.namedBindings && cast(clause.namedBindings, isNamedImports).elements.length) {
                 for (const spec of specifiers) {
                     changes.insertNodeInListAfter(sourceFile, last(cast(clause.namedBindings, isNamedImports).elements), spec);
@@ -672,7 +672,7 @@ namespace ts.codefix {
             }
             else {
                 if (specifiers.length) {
-                    const namedImports = createNamedImports(specifiers);
+                    const namedImports = factory.createNamedImports(specifiers);
                     if (clause.namedBindings) {
                         changes.replaceNode(sourceFile, clause.namedBindings, namedImports);
                     }
@@ -688,12 +688,12 @@ namespace ts.codefix {
         }
 
         function addElementToBindingPattern(bindingPattern: ObjectBindingPattern, name: string, propertyName: string | undefined) {
-            const element = createBindingElement(/*dotDotDotToken*/ undefined, propertyName, name);
+            const element = factory.createBindingElement(/*dotDotDotToken*/ undefined, propertyName, name);
             if (bindingPattern.elements.length) {
                 changes.insertNodeInListAfter(sourceFile, last(bindingPattern.elements), element);
             }
             else {
-                changes.replaceNode(sourceFile, bindingPattern, createObjectBindingPattern([element]));
+                changes.replaceNode(sourceFile, bindingPattern, factory.createObjectBindingPattern([element]));
             }
         }
     }
@@ -725,24 +725,24 @@ namespace ts.codefix {
         let statements: Statement | readonly Statement[] | undefined;
         if (imports.defaultImport !== undefined || imports.namedImports?.length) {
             statements = combine(statements, makeImport(
-                imports.defaultImport === undefined ? undefined : createIdentifier(imports.defaultImport),
-                imports.namedImports?.map(n => createImportSpecifier(/*propertyName*/ undefined, createIdentifier(n))), moduleSpecifier, quotePreference, imports.typeOnly));
+                imports.defaultImport === undefined ? undefined : factory.createIdentifier(imports.defaultImport),
+                imports.namedImports?.map(n => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(n))), moduleSpecifier, quotePreference, imports.typeOnly));
         }
         const { namespaceLikeImport, typeOnly } = imports;
         if (namespaceLikeImport) {
             const declaration = namespaceLikeImport.importKind === ImportKind.CommonJS
-                ? createImportEqualsDeclaration(
+                ? factory.createImportEqualsDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
-                    createIdentifier(namespaceLikeImport.name),
-                    createExternalModuleReference(quotedModuleSpecifier))
-                : createImportDeclaration(
+                    factory.createIdentifier(namespaceLikeImport.name),
+                    factory.createExternalModuleReference(quotedModuleSpecifier))
+                : factory.createImportDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
-                    createImportClause(
+                    factory.createImportClause(
+                        typeOnly,
                         /*name*/ undefined,
-                        createNamespaceImport(createIdentifier(namespaceLikeImport.name)),
-                        typeOnly),
+                        factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name))),
                     quotedModuleSpecifier);
             statements = combine(statements, declaration);
         }
@@ -754,11 +754,11 @@ namespace ts.codefix {
         let statements: Statement | readonly Statement[] | undefined;
         // const { default: foo, bar, etc } = require('./mod');
         if (imports.defaultImport || imports.namedImports?.length) {
-            const bindingElements = imports.namedImports?.map(name => createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) || [];
+            const bindingElements = imports.namedImports?.map(name => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) || [];
             if (imports.defaultImport) {
-                bindingElements.unshift(createBindingElement(/*dotDotDotToken*/ undefined, "default", imports.defaultImport));
+                bindingElements.unshift(factory.createBindingElement(/*dotDotDotToken*/ undefined, "default", imports.defaultImport));
             }
-            const declaration = createConstEqualsRequireDeclaration(createObjectBindingPattern(bindingElements), quotedModuleSpecifier);
+            const declaration = createConstEqualsRequireDeclaration(factory.createObjectBindingPattern(bindingElements), quotedModuleSpecifier);
             statements = combine(statements, declaration);
         }
         // const foo = require('./mod');
@@ -770,13 +770,14 @@ namespace ts.codefix {
     }
 
     function createConstEqualsRequireDeclaration(name: string | ObjectBindingPattern, quotedModuleSpecifier: StringLiteral): VariableStatement {
-        return createVariableStatement(
+        return factory.createVariableStatement(
             /*modifiers*/ undefined,
-            createVariableDeclarationList([
-                createVariableDeclaration(
-                    typeof name === "string" ? createIdentifier(name) : name,
+            factory.createVariableDeclarationList([
+                factory.createVariableDeclaration(
+                    typeof name === "string" ? factory.createIdentifier(name) : name,
+                    /*exclamationToken*/ undefined,
                     /*type*/ undefined,
-                    createCall(createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier]))],
+                    factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier]))],
                 NodeFlags.Const));
     }
 

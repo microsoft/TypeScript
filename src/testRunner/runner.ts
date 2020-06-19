@@ -223,6 +223,12 @@ namespace Harness {
     }
 
     function beginTests() {
+        ts.Debug.loggingHost = {
+            log(_level, s) {
+                console.log(s || "");
+            }
+        };
+
         if (ts.Debug.isDebugging) {
             ts.Debug.enableDebugInfo();
         }

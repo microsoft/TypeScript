@@ -79,6 +79,7 @@ namespace ts {
     /** Array that is only intended to be pushed to, never read. */
     export interface Push<T> {
         push(...values: T[]): void;
+        /* @internal*/ readonly length: number;
     }
 
     /* @internal */

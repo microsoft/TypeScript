@@ -1,5 +1,5 @@
-tests/cases/compiler/numberVsBigIntOperations.ts(3,14): error TS2322: Type '2' is not assignable to type 'bigint'.
-tests/cases/compiler/numberVsBigIntOperations.ts(3,26): error TS2322: Type '1n' is not assignable to type 'number'.
+tests/cases/compiler/numberVsBigIntOperations.ts(3,14): error TS2322: Type 'number' is not assignable to type 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(3,26): error TS2322: Type 'bigint' is not assignable to type 'number'.
 tests/cases/compiler/numberVsBigIntOperations.ts(4,15): error TS2365: Operator '+=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(4,28): error TS2365: Operator '+=' cannot be applied to types 'number' and '1n'.
 tests/cases/compiler/numberVsBigIntOperations.ts(5,15): error TS2365: Operator '-=' cannot be applied to types 'bigint' and 'number'.
@@ -69,9 +69,9 @@ tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' de
     let bigInt = 1n, num = 2;
     bigInt = 1n; bigInt = 2; num = 1n; num = 2;
                  ~~~~~~
-!!! error TS2322: Type '2' is not assignable to type 'bigint'.
+!!! error TS2322: Type 'number' is not assignable to type 'bigint'.
                              ~~~
-!!! error TS2322: Type '1n' is not assignable to type 'number'.
+!!! error TS2322: Type 'bigint' is not assignable to type 'number'.
     bigInt += 1n; bigInt += 2; num += 1n; num += 2;
                   ~~~~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'bigint' and '2'.

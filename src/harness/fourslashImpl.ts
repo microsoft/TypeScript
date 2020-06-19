@@ -1218,6 +1218,7 @@ namespace FourSlash {
                     code: e.code,
                     ...ts.createTextSpanFromRange(range),
                     reportsUnnecessary: e.reportsUnnecessary,
+                    reportsDeprecated: e.reportsDeprecated
                 };
             }));
         }
@@ -3214,8 +3215,8 @@ namespace FourSlash {
             };
         }
 
-        public verifyRefactorAvailable(negative: boolean, name: string, actionName?: string) {
-            let refactors = this.getApplicableRefactorsAtSelection();
+        public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
+            let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
             refactors = refactors.filter(r => r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)));
             const isAvailable = refactors.length > 0;
 
@@ -3440,6 +3441,9 @@ namespace FourSlash {
             let text = "";
             text += `${prefix}╭ name: ${callHierarchyItem.name}\n`;
             text += `${prefix}├ kind: ${callHierarchyItem.kind}\n`;
+            if (callHierarchyItem.containerName) {
+                text += `${prefix}├ containerName: ${callHierarchyItem.containerName}\n`;
+            }
             text += `${prefix}├ file: ${callHierarchyItem.file}\n`;
             text += `${prefix}├ span:\n`;
             text += this.formatCallHierarchyItemSpan(file, callHierarchyItem.span, `${prefix}│ `);
@@ -3644,14 +3648,14 @@ namespace FourSlash {
             test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
         }
 
-        private getApplicableRefactorsAtSelection() {
-            return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName);
+        private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit") {
+            return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, ts.emptyOptions, triggerReason);
         }
-        private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions): readonly ts.ApplicableRefactorInfo[] {
-            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences); // eslint-disable-line no-in-operator
+        private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit"): readonly ts.ApplicableRefactorInfo[] {
+            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason); // eslint-disable-line no-in-operator
         }
-        private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions): readonly ts.ApplicableRefactorInfo[] {
-            return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences) || ts.emptyArray;
+        private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason): readonly ts.ApplicableRefactorInfo[] {
+            return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason) || ts.emptyArray;
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {

@@ -1,0 +1,49 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment3.ts ===
+interface A {
+>A : Symbol(A, Decl(logicalAssignment3.ts, 0, 0))
+
+    baz: 0 | 1 | 42 | undefined | ''
+>baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+}
+
+declare const result: A;
+>result : Symbol(result, Decl(logicalAssignment3.ts, 4, 13))
+>A : Symbol(A, Decl(logicalAssignment3.ts, 0, 0))
+
+declare const a: A;
+>a : Symbol(a, Decl(logicalAssignment3.ts, 5, 13))
+>A : Symbol(A, Decl(logicalAssignment3.ts, 0, 0))
+
+declare const b: A;
+>b : Symbol(b, Decl(logicalAssignment3.ts, 6, 13))
+>A : Symbol(A, Decl(logicalAssignment3.ts, 0, 0))
+
+declare const c: A;
+>c : Symbol(c, Decl(logicalAssignment3.ts, 7, 13))
+>A : Symbol(A, Decl(logicalAssignment3.ts, 0, 0))
+
+(a.baz) &&= result.baz;
+>a.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+>a : Symbol(a, Decl(logicalAssignment3.ts, 5, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+>result.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+>result : Symbol(result, Decl(logicalAssignment3.ts, 4, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+
+(b.baz) ||= result.baz;
+>b.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+>b : Symbol(b, Decl(logicalAssignment3.ts, 6, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+>result.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+>result : Symbol(result, Decl(logicalAssignment3.ts, 4, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+
+(c.baz) ??= result.baz;
+>c.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+>c : Symbol(c, Decl(logicalAssignment3.ts, 7, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+>result.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+>result : Symbol(result, Decl(logicalAssignment3.ts, 4, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
+
+
