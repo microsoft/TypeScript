@@ -51,7 +51,7 @@ namespace ts.codefix {
             if (parent.flags & NodeFlags.OptionalChain) {
                 containingType = checker.getNonNullableType(containingType);
             }
-            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType, /** isJsxAttr */ false);
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType, /*isJsxAttr*/ false);
         }
         else if (isImportSpecifier(parent) && parent.name === node) {
             Debug.assertNode(node, isIdentifier, "Expected an identifier for spelling (import)");
