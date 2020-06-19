@@ -51,7 +51,7 @@ namespace ts.codefix {
             if (parent.flags & NodeFlags.OptionalChain) {
                 containingType = checker.getNonNullableType(containingType);
             }
-            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType, /*isJsxAttr*/ false);
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType);
         }
         else if (isImportSpecifier(parent) && parent.name === node) {
             Debug.assertNode(node, isIdentifier, "Expected an identifier for spelling (import)");
@@ -65,7 +65,7 @@ namespace ts.codefix {
             Debug.assertNode(node, isIdentifier, "Expected an identifier for JSX attribute");
             const tag = findAncestor(node, isJsxOpeningLikeElement)!;
             const props = checker.getContextualTypeForArgumentAtIndex(tag, 0);
-            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, props!, /** isJsxAttr */ true);
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentJSXAttribute(node, props!);
         }
         else {
             const meaning = getMeaningFromLocation(node);
