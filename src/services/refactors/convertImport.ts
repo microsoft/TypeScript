@@ -3,7 +3,6 @@ namespace ts.refactor {
     const refactorName = "Convert import";
     const actionNameNamespaceToNamed = "Convert namespace import to named imports";
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
-    const errorConvertingImport = "Error converting import";
 
     type NamedImportBindingsOrError = {
         info: NamedImportBindings,
@@ -25,7 +24,10 @@ namespace ts.refactor {
             }
 
             if (context.preferences.provideRefactorErrorReason) {
-                return [{ name: refactorName, description: errorConvertingImport, actions: [{ name: errorConvertingImport, description: errorConvertingImport }] }];
+                return [
+                    { name: refactorName, description: Diagnostics.Convert_namespace_import_to_named_imports.message, actions: [{ name: actionNameNamespaceToNamed, description: Diagnostics.Convert_namespace_import_to_named_imports.message, error: i.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_named_imports_to_namespace_import.message, actions: [{ name: actionNameNamedToNamespace, description: Diagnostics.Convert_named_imports_to_namespace_import.message, error: i.error }] }
+                ];
             }
 
             return emptyArray;
@@ -48,11 +50,11 @@ namespace ts.refactor {
 
         const { importClause } = importDecl;
         if (!importClause) {
-            return { error: "Could not find import clause." };
+            return { error: Diagnostics.Could_not_find_import_clause.message };
         }
 
         if (!importClause.namedBindings) {
-            return { error: "Could not find namespace import or named imports." };
+            return { error: Diagnostics.Could_not_find_namespace_import_or_named_imports.message };
         }
 
         return { info: importClause.namedBindings };

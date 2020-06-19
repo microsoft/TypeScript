@@ -4,7 +4,6 @@ namespace ts.refactor {
     const extractToTypeAlias = "Extract to type alias";
     const extractToInterface = "Extract to interface";
     const extractToTypeDef = "Extract to typedef";
-    const errorExtractingType = "Error extracting type";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
@@ -28,11 +27,11 @@ namespace ts.refactor {
                 return [{
                     name: refactorName,
                     description: getLocaleSpecificMessage(Diagnostics.Extract_type),
-                    actions: [{
-                        name: errorExtractingType,
-                        description: "Error extracting type",
-                        error: info.error
-                    }]
+                    actions: [
+                        { name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef), error: info.error },
+                        { name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias), error: info.error },
+                        { name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface), error: info.error },
+                    ]
                 }];
             }
 
@@ -91,12 +90,12 @@ namespace ts.refactor {
 
         const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
             (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
-        if (!selection || !isTypeNode(selection)) return { error: "Selection is not a valid type node." };
+        if (!selection || !isTypeNode(selection)) return { error: Diagnostics.Selection_is_not_a_valid_type_node.message };
 
         const checker = context.program.getTypeChecker();
         const firstStatement = Debug.checkDefined(findAncestor(selection, isStatement), "Should find a statement");
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
-        if (!typeParameters) return { error: "No type could be extracted from this type node." };
+        if (!typeParameters) return { error: Diagnostics.No_type_could_be_extracted_from_this_type_node.message };
 
         const typeElements = flattenTypeLiteralNodeReference(checker, selection);
         return { info: { isJS, selection, firstStatement, typeParameters, typeElements } };

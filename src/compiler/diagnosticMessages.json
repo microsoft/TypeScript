@@ -5737,6 +5737,50 @@
         "category": "Message",
         "code": 95125
     },
+    "Could_not_find_a_containing_arrow_function": {
+        "category": "Message",
+        "code": 95126
+    },
+    "Containing_function_is_not_an_arrow_function": {
+        "category": "Message",
+        "code": 95127
+    },
+    "Could_not_find_export_statement": {
+        "category": "Message",
+        "code": 95128
+    },
+    "This_file_already_has_a_default_export": {
+        "category": "Message",
+        "code": 95129
+    },
+    "Could_not_find_import_clause": {
+        "category": "Message",
+        "code": 95130
+    },
+    "Could_not_find_namespace_import_or_named_imports": {
+        "category": "Message",
+        "code": 95131
+    },
+    "Selection_is_not_a_valid_type_node": {
+        "category": "Message",
+        "code": 95132
+    },
+    "No_type_could_be_extracted_from_this_type_node": {
+        "category": "Message",
+        "code": 95133
+    },
+    "Could_not_find_property_for_which_to_generate_accessor": {
+        "category": "Message",
+        "code": 95134
+    },
+    "Name_is_not_valid": {
+        "category": "Message",
+        "code": 95135
+    },
+    "Property_has_invalid_accessibility": {
+        "category": "Message",
+        "code": 95136
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",

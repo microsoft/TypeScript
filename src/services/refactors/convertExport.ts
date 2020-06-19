@@ -3,7 +3,6 @@ namespace ts.refactor {
     const refactorName = "Convert export";
     const actionNameDefaultToNamed = "Convert default export to named export";
     const actionNameNamedToDefault = "Convert named export to default export";
-    const errorConvertingExport = "Error converting export";
 
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
@@ -17,7 +16,10 @@ namespace ts.refactor {
             }
 
             if (context.preferences.provideRefactorErrorReason) {
-                return [{ name: refactorName, description: errorConvertingExport, actions: [{ name: errorConvertingExport, description: errorConvertingExport }] }];
+                return [
+                    { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message, actions: [{ name: actionNameDefaultToNamed, description: Diagnostics.Convert_default_export_to_named_export.message, error: info.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_named_export_to_default_export.message, actions: [{ name: actionNameNamedToDefault, description: Diagnostics.Convert_named_export_to_default_export.message, error: info.error }] },
+                ];
             }
 
             return emptyArray;
@@ -52,7 +54,7 @@ namespace ts.refactor {
         const token = getTokenAtPosition(file, span.start);
         const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
-            return { error: "Could not find export statement." };
+            return { error: Diagnostics.Could_not_find_export_statement.message };
         }
 
         const exportingModuleSymbol = isSourceFile(exportNode.parent) ? exportNode.parent.symbol : exportNode.parent.parent.symbol;
@@ -61,7 +63,7 @@ namespace ts.refactor {
         const wasDefault = !!(flags & ModifierFlags.Default);
         // If source file already has a default export, don't offer refactor.
         if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {
-            return { error: "This file already has a default export." };
+            return { error: Diagnostics.This_file_already_has_a_default_export.message };
         }
 
         switch (exportNode.kind) {

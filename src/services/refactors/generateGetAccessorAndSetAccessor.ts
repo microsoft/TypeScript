@@ -1,7 +1,6 @@
 /* @internal */
 namespace ts.refactor.generateGetAccessorAndSetAccessor {
     const actionName = "Generate 'get' and 'set' accessors";
-    const errorActionName = "Error generating 'get' and 'set' accessors";
     const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
     registerRefactor(actionName, {
         getEditsForAction(context, actionName) {
@@ -41,8 +40,8 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
                     name: actionName,
                     description: actionDescription,
                     actions: [{
-                        name: errorActionName,
-                        description: "Error generating 'get' and 'set' accessors",
+                        name: actionName,
+                        description: actionDescription,
                         error: info.error
                     }]
                 }];

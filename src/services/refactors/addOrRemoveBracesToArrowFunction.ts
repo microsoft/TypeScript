@@ -4,7 +4,6 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
     const addBracesActionName = "Add braces to arrow function";
     const removeBracesActionName = "Remove braces from arrow function";
-    const errorBracesActionName = "Error adding or removing braces from arrow function";
     const addBracesActionDescription = Diagnostics.Add_braces_to_arrow_function.message;
     const removeBracesActionDescription = Diagnostics.Remove_braces_from_arrow_function.message;
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
@@ -51,8 +50,12 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 name: refactorName,
                 description: refactorDescription,
                 actions: [{
-                    name: errorBracesActionName,
-                    description: "Error adding or removing braces from arrow function",
+                    name: addBracesActionName,
+                    description: addBracesActionDescription,
+                    error: info.error
+                }, {
+                    name: removeBracesActionName,
+                    description: removeBracesActionDescription,
                     error: info.error
                 }]
             }];
@@ -101,13 +104,13 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
         if (!func) {
             return {
-                error: "Could not find a containing arrow function."
+                error: Diagnostics.Could_not_find_a_containing_arrow_function.message
             };
         }
 
         if (!isArrowFunction(func)) {
             return {
-                error: "Containing function is not an arrow function."
+                error: Diagnostics.Containing_function_is_not_an_arrow_function.message
             };
         }
 

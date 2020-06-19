@@ -121,7 +121,7 @@ namespace ts.codefix {
 
         if (!declaration) {
             return {
-                error: "Could not find property for which to generate accessor."
+                error: Diagnostics.Could_not_find_property_for_which_to_generate_accessor.message
             };
         }
 
@@ -131,13 +131,13 @@ namespace ts.codefix {
 
         if (!isConvertibleName(declaration.name)) {
             return {
-                error: "Name is not valid."
+                error: Diagnostics.Name_is_not_valid.message
             };
         }
 
         if ((getEffectiveModifierFlags(declaration) | meaning) !== meaning) {
             return {
-                error: "Property has invalid accessibility."
+                error: Diagnostics.Property_has_invalid_accessibility.message
             };
         }
 
