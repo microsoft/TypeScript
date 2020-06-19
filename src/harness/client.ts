@@ -388,6 +388,7 @@ namespace ts.server {
                     category: Debug.checkDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
                     reportsUnnecessary: entry.reportsUnnecessary,
+                    reportsDeprecated: entry.reportsDeprecated,
                 };
             });
         }
@@ -748,6 +749,7 @@ namespace ts.server {
                 file: item.file,
                 name: item.name,
                 kind: item.kind,
+                kindModifiers: item.kindModifiers,
                 span: this.decodeSpan(item.span, item.file),
                 selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
             };

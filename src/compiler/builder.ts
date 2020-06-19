@@ -3,6 +3,7 @@ namespace ts {
     export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        reportDeprecated?: {}
         source?: string;
         relatedInformation?: ReusableDiagnosticRelatedInformation[];
         skippedOn?: keyof CompilerOptions;
@@ -268,6 +269,7 @@ namespace ts {
         return diagnostics.map(diagnostic => {
             const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
+            result.reportsDeprecated = diagnostic.reportDeprecated;
             result.source = diagnostic.source;
             result.skippedOn = diagnostic.skippedOn;
             const { relatedInformation } = diagnostic;
@@ -817,6 +819,7 @@ namespace ts {
         return diagnostics.map(diagnostic => {
             const result: ReusableDiagnostic = convertToReusableDiagnosticRelatedInformation(diagnostic, relativeToBuildInfo);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
+            result.reportDeprecated = diagnostic.reportsDeprecated;
             result.source = diagnostic.source;
             result.skippedOn = diagnostic.skippedOn;
             const { relatedInformation } = diagnostic;

@@ -615,7 +615,8 @@ export = C;
                         "D.ts",
                         "d.ts",
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });
@@ -641,7 +642,8 @@ export = C;
                         "/a/b/D.ts",
                         "d.ts",
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });
@@ -667,7 +669,8 @@ export = C;
                         "ModuleB.ts",
                         "moduleB.ts",
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });
@@ -694,7 +697,8 @@ export = C;
                         "/a/b/D.ts",
                         "d.ts",
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });
@@ -722,7 +726,8 @@ export = C;
                             "ModuleC.ts",
                             "moduleC.ts",
                         ),
-                        reportsUnnecessary: undefined
+                        reportsUnnecessary: undefined,
+                        reportsDeprecated: undefined
                     },
                     {
                         ...tscWatch.getDiagnosticOfFileFromProgram(
@@ -734,7 +739,8 @@ export = C;
                             "moduleC.ts",
                             "ModuleC.ts"
                         ),
-                        reportsUnnecessary: undefined
+                        reportsUnnecessary: undefined,
+                        reportsDeprecated: undefined
                     }
                 ]
             );
@@ -766,7 +772,8 @@ import b = require("./moduleB");
                         "/a/B/c/moduleC.ts",
                         "/a/B/c/ModuleC.ts"
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });

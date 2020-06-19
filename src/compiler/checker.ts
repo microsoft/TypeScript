@@ -13168,6 +13168,10 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
+                    if (accessNode && prop.flags & SymbolFlags.Deprecated) {
+                        const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
+                        errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
+                    }
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
                         if (isAssignmentToReadonlyEntity(accessExpression, prop, getAssignmentTargetKind(accessExpression))) {
@@ -21698,6 +21702,10 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
+            const target = (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+            if (target.flags & SymbolFlags.Deprecated) {
+                errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
+            }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
@@ -24679,6 +24687,10 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
+                if (prop.flags & SymbolFlags.Deprecated) {
+                    errorOrSuggestion(/* isError */ false, right, Diagnostics._0_is_deprecated, right.escapedText as string);
+                }
+
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
                 getNodeLinks(node).resolvedSymbol = prop;
@@ -30499,8 +30511,15 @@ namespace ts {
                         checkTypeArgumentConstraints(node, typeParameters);
                     }
                 }
-                if (type.flags & TypeFlags.Enum && getNodeLinks(node).resolvedSymbol!.flags & SymbolFlags.EnumMember) {
-                    error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
+                const symbol = getNodeLinks(node).resolvedSymbol;
+                if (symbol) {
+                    if (symbol.flags & SymbolFlags.Deprecated) {
+                        const diagLocation = isTypeReferenceNode(node) && isQualifiedName(node.typeName) ? node.typeName.right : node;
+                        errorOrSuggestion(/* isError */ false, diagLocation, Diagnostics._0_is_deprecated, symbol.escapedName as string);
+                    }
+                    if (type.flags & TypeFlags.Enum && symbol.flags & SymbolFlags.EnumMember) {
+                        error(node, Diagnostics.Enum_type_0_has_members_with_initializers_that_are_not_literals, typeToString(type));
+                    }
                 }
             }
         }
@@ -31644,6 +31663,7 @@ namespace ts {
                 error(classLike, Diagnostics.JSDoc_0_is_not_attached_to_a_class, idText(node.tagName));
             }
         }
+
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
             const classLike = getEffectiveJSDocHost(node);
             if (!classLike || !isClassDeclaration(classLike) && !isClassExpression(classLike)) {
@@ -34803,33 +34823,39 @@ namespace ts {
             let symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
-            const shouldSkipWithJSExpandoTargets = symbol.flags & SymbolFlags.Assignment;
-            if (!shouldSkipWithJSExpandoTargets && target !== unknownSymbol) {
-                // For external modules symbol represents local symbol for an alias.
-                // This local symbol will merge any other local declarations (excluding other aliases)
-                // and symbol.flags will contains combined representation for all merged declaration.
-                // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
-                // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
-                // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
-                symbol = getMergedSymbol(symbol.exportSymbol || symbol);
-                const excludedMeanings =
-                    (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
-                    (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
-                    (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
-                if (target.flags & excludedMeanings) {
-                    const message = node.kind === SyntaxKind.ExportSpecifier ?
-                        Diagnostics.Export_declaration_conflicts_with_exported_declaration_of_0 :
-                        Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
-                    error(node, message, symbolToString(symbol));
+            if (target !== unknownSymbol) {
+                const shouldSkipWithJSExpandoTargets = symbol.flags & SymbolFlags.Assignment;
+                if (!shouldSkipWithJSExpandoTargets) {
+                    // For external modules symbol represents local symbol for an alias.
+                    // This local symbol will merge any other local declarations (excluding other aliases)
+                    // and symbol.flags will contains combined representation for all merged declaration.
+                    // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
+                    // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
+                    // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
+                    symbol = getMergedSymbol(symbol.exportSymbol || symbol);
+                    const excludedMeanings =
+                        (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
+                        (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
+                        (symbol.flags & SymbolFlags.Namespace ? SymbolFlags.Namespace : 0);
+                    if (target.flags & excludedMeanings) {
+                        const message = node.kind === SyntaxKind.ExportSpecifier ?
+                            Diagnostics.Export_declaration_conflicts_with_exported_declaration_of_0 :
+                            Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
+                        error(node, message, symbolToString(symbol));
+                    }
+
+                    // Don't allow to re-export something with no value side when `--isolatedModules` is set.
+                    if (compilerOptions.isolatedModules
+                        && node.kind === SyntaxKind.ExportSpecifier
+                        && !node.parent.parent.isTypeOnly
+                        && !(target.flags & SymbolFlags.Value)
+                        && !(node.flags & NodeFlags.Ambient)) {
+                        error(node, Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type);
+                    }
                 }
 
-                // Don't allow to re-export something with no value side when `--isolatedModules` is set.
-                if (compilerOptions.isolatedModules
-                    && node.kind === SyntaxKind.ExportSpecifier
-                    && !node.parent.parent.isTypeOnly
-                    && !(target.flags & SymbolFlags.Value)
-                    && !(node.flags & NodeFlags.Ambient)) {
-                    error(node, Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type);
+                if (isImportSpecifier(node) && target.flags & SymbolFlags.Deprecated) {
+                    errorOrSuggestion(/* isError */ false, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
             }
         }
