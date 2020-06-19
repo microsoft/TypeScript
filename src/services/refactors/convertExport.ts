@@ -15,10 +15,10 @@ namespace ts.refactor {
                 return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
             }
 
-            if (context.preferences.provideRefactorErrorReason) {
+            if (context.preferences.provideRefactorNotApplicableReason) {
                 return [
-                    { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message, actions: [{ name: actionNameDefaultToNamed, description: Diagnostics.Convert_default_export_to_named_export.message, error: info.error }] },
-                    { name: refactorName, description: Diagnostics.Convert_named_export_to_default_export.message, actions: [{ name: actionNameNamedToDefault, description: Diagnostics.Convert_named_export_to_default_export.message, error: info.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message, actions: [{ name: actionNameDefaultToNamed, description: Diagnostics.Convert_default_export_to_named_export.message, notApplicableReason: info.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_named_export_to_default_export.message, actions: [{ name: actionNameNamedToDefault, description: Diagnostics.Convert_named_export_to_default_export.message, notApplicableReason: info.error }] },
                 ];
             }
 

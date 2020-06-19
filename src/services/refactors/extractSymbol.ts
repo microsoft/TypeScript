@@ -12,7 +12,7 @@ namespace ts.refactor.extractSymbol {
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
-            if (!rangeToExtract.errors || rangeToExtract.errors.length === 0 || !context.preferences.provideRefactorErrorReason) {
+            if (!rangeToExtract.errors || rangeToExtract.errors.length === 0 || !context.preferences.provideRefactorNotApplicableReason) {
                 return emptyArray;
             }
 
@@ -22,7 +22,7 @@ namespace ts.refactor.extractSymbol {
                 actions: [{
                     description: getLocaleSpecificMessage(Diagnostics.Extract_function),
                     name: "extract_function_error",
-                    error: getStringError(rangeToExtract.errors)
+                    notApplicableReason: getStringError(rangeToExtract.errors)
                 }]
             },
             {
@@ -31,7 +31,7 @@ namespace ts.refactor.extractSymbol {
                 actions: [{
                     description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                     name: "extract_constant_error",
-                    error: getStringError(rangeToExtract.errors)
+                    notApplicableReason: getStringError(rangeToExtract.errors)
                 }]
             }];
         }
@@ -69,7 +69,7 @@ namespace ts.refactor.extractSymbol {
                 innermostErrorFunctionAction = {
                     description,
                     name: `function_scope_${i}`,
-                    error: getStringError(functionExtraction.errors)
+                    notApplicableReason: getStringError(functionExtraction.errors)
                 };
             }
 
@@ -91,7 +91,7 @@ namespace ts.refactor.extractSymbol {
                 innermostErrorConstantAction = {
                     description,
                     name: `constant_scope_${i}`,
-                    error: getStringError(constantExtraction.errors)
+                    notApplicableReason: getStringError(constantExtraction.errors)
                 };
             }
 
@@ -109,7 +109,7 @@ namespace ts.refactor.extractSymbol {
                 actions: functionActions
             });
         }
-        else if (context.preferences.provideRefactorErrorReason && innermostErrorFunctionAction) {
+        else if (context.preferences.provideRefactorNotApplicableReason && innermostErrorFunctionAction) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
@@ -124,7 +124,7 @@ namespace ts.refactor.extractSymbol {
                 actions: constantActions
             });
         }
-        else if (context.preferences.provideRefactorErrorReason && innermostErrorConstantAction) {
+        else if (context.preferences.provideRefactorNotApplicableReason && innermostErrorConstantAction) {
             infos.push({
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),

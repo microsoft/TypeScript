@@ -45,18 +45,18 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             }];
         }
 
-        if (context.preferences.provideRefactorErrorReason) {
+        if (context.preferences.provideRefactorNotApplicableReason) {
             return [{
                 name: refactorName,
                 description: refactorDescription,
                 actions: [{
                     name: addBracesActionName,
                     description: addBracesActionDescription,
-                    error: info.error
+                    notApplicableReason: info.error
                 }, {
                     name: removeBracesActionName,
                     description: removeBracesActionDescription,
-                    error: info.error
+                    notApplicableReason: info.error
                 }]
             }];
         }

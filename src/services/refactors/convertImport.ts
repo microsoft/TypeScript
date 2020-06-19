@@ -23,10 +23,10 @@ namespace ts.refactor {
                 return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
             }
 
-            if (context.preferences.provideRefactorErrorReason) {
+            if (context.preferences.provideRefactorNotApplicableReason) {
                 return [
-                    { name: refactorName, description: Diagnostics.Convert_namespace_import_to_named_imports.message, actions: [{ name: actionNameNamespaceToNamed, description: Diagnostics.Convert_namespace_import_to_named_imports.message, error: i.error }] },
-                    { name: refactorName, description: Diagnostics.Convert_named_imports_to_namespace_import.message, actions: [{ name: actionNameNamedToNamespace, description: Diagnostics.Convert_named_imports_to_namespace_import.message, error: i.error }] }
+                    { name: refactorName, description: Diagnostics.Convert_namespace_import_to_named_imports.message, actions: [{ name: actionNameNamespaceToNamed, description: Diagnostics.Convert_namespace_import_to_named_imports.message, notApplicableReason: i.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_named_imports_to_namespace_import.message, actions: [{ name: actionNameNamedToNamespace, description: Diagnostics.Convert_named_imports_to_namespace_import.message, notApplicableReason: i.error }] }
                 ];
             }
 

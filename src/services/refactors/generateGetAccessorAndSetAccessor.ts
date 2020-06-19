@@ -35,14 +35,14 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
                 }];
             }
 
-            if (context.preferences.provideRefactorErrorReason) {
+            if (context.preferences.provideRefactorNotApplicableReason) {
                 return [{
                     name: actionName,
                     description: actionDescription,
                     actions: [{
                         name: actionName,
                         description: actionDescription,
-                        error: info.error
+                        notApplicableReason: info.error
                     }]
                 }];
             }

@@ -23,14 +23,14 @@ namespace ts.refactor {
                 }];
             }
 
-            if (context.preferences.provideRefactorErrorReason) {
+            if (context.preferences.provideRefactorNotApplicableReason) {
                 return [{
                     name: refactorName,
                     description: getLocaleSpecificMessage(Diagnostics.Extract_type),
                     actions: [
-                        { name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef), error: info.error },
-                        { name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias), error: info.error },
-                        { name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface), error: info.error },
+                        { name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef), notApplicableReason: info.error },
+                        { name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias), notApplicableReason: info.error },
+                        { name: extractToInterface, description: getLocaleSpecificMessage(Diagnostics.Extract_to_interface), notApplicableReason: info.error },
                     ]
                 }];
             }
