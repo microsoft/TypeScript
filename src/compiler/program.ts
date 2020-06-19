@@ -1530,7 +1530,7 @@ namespace ts {
         function getPrependNodes() {
             return createPrependNodes(
                 projectReferences,
-                (_ref, index) => resolvedProjectReferences![index]!.commandLine,
+                (_ref, index) => resolvedProjectReferences![index]?.commandLine,
                 fileName => {
                     const path = toPath(fileName);
                     const sourceFile = getSourceFileByPath(path);
@@ -1719,7 +1719,7 @@ namespace ts {
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return concatenate(
-                getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken),
+                filterSemanticDiagnotics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
                 getProgramDiagnostics(sourceFile)
             );
         }
@@ -3011,10 +3011,6 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
             }
 
-            if (!options.listFilesOnly && options.noEmit && isIncrementalCompilation(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmit", options.incremental ? "incremental" : "composite");
-            }
-
             verifyProjectReferences();
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list
@@ -3196,6 +3192,15 @@ namespace ts {
                 createOptionValueDiagnostic("reactNamespace", Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace);
             }
 
+            if (options.jsxFragmentFactory) {
+                if (!options.jsxFactory) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "jsxFragmentFactory", "jsxFactory");
+                }
+                if (!parseIsolatedEntityName(options.jsxFragmentFactory, languageVersion)) {
+                    createOptionValueDiagnostic("jsxFragmentFactory", Diagnostics.Invalid_value_for_jsxFragmentFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFragmentFactory);
+                }
+            }
+
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
             if (!options.noEmit && !options.suppressOutputPathCheck) {
                 const emitHost = getEmitHost();
@@ -3269,7 +3274,7 @@ namespace ts {
         }
 
         function verifyProjectReferences() {
-            const buildInfoPath = !options.noEmit && !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
+            const buildInfoPath = !options.suppressOutputPathCheck ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
             forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
                 const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                 const parentFile = parent && parent.sourceFile as JsonSourceFile;
@@ -3278,11 +3283,12 @@ namespace ts {
                     return;
                 }
                 const options = resolvedRef.commandLine.options;
-                if (!options.composite) {
+                if (!options.composite || options.noEmit) {
                     // ok to not have composite if the current program is container only
                     const inputs = parent ? parent.commandLine.fileNames : rootNames;
                     if (inputs.length) {
-                        createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                        if (!options.composite) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                        if (options.noEmit) createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_may_not_disable_emit, ref.path);
                     }
                 }
                 if (ref.prepend) {
@@ -3648,7 +3654,13 @@ namespace ts {
         cancellationToken: CancellationToken | undefined
     ): EmitResult | undefined {
         const options = program.getCompilerOptions();
-        if (options.noEmit) return emitSkippedWithNoDiagnostics;
+        if (options.noEmit) {
+            // Cache the semantic diagnostics
+            program.getSemanticDiagnostics(sourceFile, cancellationToken);
+            return sourceFile || outFile(options) ?
+                emitSkippedWithNoDiagnostics :
+                program.emitBuildInfo(writeFile, cancellationToken);
+        }
 
         // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
         // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
@@ -3673,6 +3685,11 @@ namespace ts {
             emittedFiles = emitResult.emittedFiles;
         }
         return { diagnostics, sourceMaps: undefined, emittedFiles, emitSkipped: true };
+    }
+
+    /*@internal*/
+    export function filterSemanticDiagnotics(diagnostic: readonly Diagnostic[], option: CompilerOptions): readonly Diagnostic[] {
+        return filter(diagnostic, d => !d.skippedOn || !option[d.skippedOn]);
     }
 
     /*@internal*/

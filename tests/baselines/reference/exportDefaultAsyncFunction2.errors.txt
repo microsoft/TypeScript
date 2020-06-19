@@ -1,0 +1,43 @@
+tests/cases/compiler/a.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+tests/cases/compiler/asyncawait.ts(2,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+tests/cases/compiler/c.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+tests/cases/compiler/d.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+tests/cases/compiler/e.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+
+
+==== tests/cases/compiler/asyncawait.ts (1 errors) ====
+    export function async<T>(...args: any[]): any { }
+    export function await(...args: any[]): any { }
+                    ~~~~~
+!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+    
+==== tests/cases/compiler/a.ts (1 errors) ====
+    import { async, await } from 'asyncawait';
+                    ~~~~~
+!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+    export default async(() => await(Promise.resolve(1)));
+    
+==== tests/cases/compiler/b.ts (0 errors) ====
+    export default async () => { return 0; };
+    
+==== tests/cases/compiler/c.ts (1 errors) ====
+    import { async, await } from 'asyncawait';
+                    ~~~~~
+!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+    export default async<number>();
+    
+==== tests/cases/compiler/d.ts (1 errors) ====
+    import { async, await } from 'asyncawait';
+                    ~~~~~
+!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+    
+    export default async;
+    
+==== tests/cases/compiler/e.ts (1 errors) ====
+    import { async, await } from 'asyncawait';
+                    ~~~~~
+!!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
+    
+    export default async
+    
+    export function foo() { }

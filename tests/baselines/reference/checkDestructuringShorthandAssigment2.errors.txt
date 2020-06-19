@@ -1,0 +1,14 @@
+tests/cases/compiler/checkDestructuringShorthandAssigment2.ts(4,7): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/compiler/checkDestructuringShorthandAssigment2.ts(4,27): error TS2353: Object literal may only specify known properties, and '[k]' does not exist in type '{ x: any; }'.
+
+
+==== tests/cases/compiler/checkDestructuringShorthandAssigment2.ts (2 errors) ====
+    // GH #38175 -- should not crash while checking
+    
+    let o: any, k: any;
+    let { x } = { x: 1, ...o, [k]: 1 };
+          ~
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+                              ~~~
+!!! error TS2353: Object literal may only specify known properties, and '[k]' does not exist in type '{ x: any; }'.
+    
