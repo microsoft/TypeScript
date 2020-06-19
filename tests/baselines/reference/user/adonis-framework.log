@@ -35,6 +35,7 @@ node_modules/adonis-framework/src/Encryption/index.js(101,62): error TS2769: No 
     Argument of type 'string' is not assignable to parameter of type 'Utf8AsciiBinaryEncoding'.
 node_modules/adonis-framework/src/Encryption/index.js(102,5): error TS2322: Type 'string' is not assignable to type 'Buffer & string'.
   Type 'string' is not assignable to type 'Buffer'.
+node_modules/adonis-framework/src/Encryption/index.js(102,33): error TS2345: Argument of type 'string' is not assignable to parameter of type 'BufferEncoding'.
 node_modules/adonis-framework/src/Encryption/index.js(114,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(119,23): error TS2554: Expected 2 arguments, but got 1.
 node_modules/adonis-framework/src/Encryption/index.js(183,15): error TS2304: Cannot find name 'Mixed'.
@@ -56,8 +57,8 @@ node_modules/adonis-framework/src/Event/index.js(207,24): error TS2304: Cannot f
 node_modules/adonis-framework/src/Event/index.js(256,52): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
   Type 'Function' provides no match for the signature '(...values: any[]): void'.
 node_modules/adonis-framework/src/Event/index.js(264,28): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
-node_modules/adonis-framework/src/Event/index.js(271,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[string, any, TimerHandler]'.
-node_modules/adonis-framework/src/Event/index.js(278,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[string, any, TimerHandler]'.
+node_modules/adonis-framework/src/Event/index.js(271,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[event: string, name: any, handler: TimerHandler]'.
+node_modules/adonis-framework/src/Event/index.js(278,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[event: string, name: any, handler: TimerHandler]'.
 node_modules/adonis-framework/src/Event/index.js(294,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
 node_modules/adonis-framework/src/Exceptions/index.js(13,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/adonis-framework/src/Exceptions/index.js(27,21): error TS2554: Expected 0 arguments, but got 3.
@@ -89,7 +90,7 @@ node_modules/adonis-framework/src/Helpers/index.js(240,45): error TS2345: Argume
   Type 'undefined' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(256,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-node_modules/adonis-framework/src/Helpers/index.js(330,23): error TS2532: Object is possibly 'undefined'.
+node_modules/adonis-framework/src/Helpers/index.js(330,31): error TS2339: Property 'mainModule' does not exist on type 'Process'.
 node_modules/adonis-framework/src/Middleware/index.js(13,21): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
 node_modules/adonis-framework/src/Middleware/index.js(87,38): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/adonis-framework/src/Middleware/index.js(230,20): error TS8024: JSDoc '@param' tag has name 'Middleware', but there is no parameter with that name.

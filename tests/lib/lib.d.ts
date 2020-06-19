@@ -3892,12 +3892,15 @@ declare module Intl {
         style?: string;
         currency?: string;
         currencyDisplay?: string;
+        unit?: string;
+        unitDisplay?: string;
         useGrouping?: boolean;
         minimumIntegerDigits?: number;
         minimumFractionDigits?: number;
         maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
+        notation?: string;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -3906,12 +3909,15 @@ declare module Intl {
         style: string;
         currency?: string;
         currencyDisplay?: string;
+        unit?: string;
+        unitDisplay?: string;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
         useGrouping: boolean;
+        notation?: string;
     }
 
     interface NumberFormat {

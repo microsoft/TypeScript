@@ -1,4 +1,22 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+//// [/src/tests/tsconfig.json]
+{
+    "references": [
+        { "path": "../core" },
+        { "path": "../logic" }
+    ],
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true, "target": "es3",
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    }
+}
+
+
+
+Output::
 /lib/tsc --b /src/tests --verbose
 [[90m12:20:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
@@ -18,21 +36,6 @@ exitCode:: ExitStatus.Success
 
 //// [/src/tests/index.d.ts] file written with same contents
 //// [/src/tests/index.js] file written with same contents
-//// [/src/tests/tsconfig.json]
-{
-    "references": [
-        { "path": "../core" },
-        { "path": "../logic" }
-    ],
-    "files": ["index.ts"],
-    "compilerOptions": {
-        "composite": true, "target": "es3",
-        "declaration": true,
-        "forceConsistentCasingInFileNames": true,
-        "skipDefaultLibCheck": true
-    }
-}
-
 //// [/src/tests/tsconfig.tsbuildinfo]
 {
   "program": {

@@ -1,4 +1,4 @@
-importHigher/root.ts(6,1): error TS2322: Type '"10"' is not assignable to type 'number'.
+importHigher/root.ts(6,1): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== importHigher/tsconfig.json (0 errors) ====
@@ -46,5 +46,5 @@ importHigher/root.ts(6,1): error TS2322: Type '"10"' is not assignable to type '
     m1.f2.a = 10;
     m1.f2.person.age = "10"; // Error: Should be number (if direct import of m2 made the m3 module visible). 
     ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '"10"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     

@@ -601,6 +601,7 @@ namespace ts {
         category: string;
         code: number;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
     }
     export function realizeDiagnostics(diagnostics: readonly Diagnostic[], newLine: string): RealizedDiagnostic[] {
         return diagnostics.map(d => realizeDiagnostic(d, newLine));
@@ -614,6 +615,7 @@ namespace ts {
             category: diagnosticCategoryName(diagnostic),
             code: diagnostic.code,
             reportsUnnecessary: diagnostic.reportsUnnecessary,
+            reportsDeprecated: diagnostic.reportsDeprecated
         };
     }
 

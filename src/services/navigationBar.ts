@@ -163,6 +163,7 @@ namespace ts.NavigationBar {
         // Save the old parent
         parentsStack.push(parent);
         trackedEs5ClassesStack.push(trackedEs5Classes);
+        trackedEs5Classes = undefined;
         parent = navNode;
     }
 
@@ -388,7 +389,7 @@ namespace ts.NavigationBar {
                         const memberName = defineCall.arguments[1];
                         const [depth, classNameIdentifier] = startNestedNodes(node, className);
                             startNode(node, classNameIdentifier);
-                                startNode(node, setTextRange(createIdentifier(memberName.text), memberName));
+                                startNode(node, setTextRange(factory.createIdentifier(memberName.text), memberName));
                                     addChildrenRecursively((node as CallExpression).arguments[2]);
                                 endNode();
                             endNode();
@@ -520,7 +521,7 @@ namespace ts.NavigationBar {
 
                 if (ctorFunction !== undefined) {
                     const ctorNode = setTextRange(
-                        createConstructor(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined),
+                        factory.createConstructorDeclaration(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined),
                         ctorFunction);
                     const ctor = emptyNavigationBarNode(ctorNode);
                     ctor.indent = a.indent + 1;
@@ -537,10 +538,10 @@ namespace ts.NavigationBar {
                     }
                 }
 
-                lastANode = a.node = setTextRange(createClassDeclaration(
+                lastANode = a.node = setTextRange(factory.createClassDeclaration(
                     /* decorators */ undefined,
                     /* modifiers */ undefined,
-                    a.name as Identifier || createIdentifier("__class__"),
+                    a.name as Identifier || factory.createIdentifier("__class__"),
                     /* typeParameters */ undefined,
                     /* heritageClauses */ undefined,
                     []
@@ -565,10 +566,10 @@ namespace ts.NavigationBar {
             }
             else {
                 if (!a.additionalNodes) a.additionalNodes = [];
-                a.additionalNodes.push(setTextRange(createClassDeclaration(
+                a.additionalNodes.push(setTextRange(factory.createClassDeclaration(
                     /* decorators */ undefined,
                     /* modifiers */ undefined,
-                    a.name as Identifier || createIdentifier("__class__"),
+                    a.name as Identifier || factory.createIdentifier("__class__"),
                     /* typeParameters */ undefined,
                     /* heritageClauses */ undefined,
                     []

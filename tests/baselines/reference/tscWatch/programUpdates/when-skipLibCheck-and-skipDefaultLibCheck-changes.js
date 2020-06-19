@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 interface Document {
     fullscreen: boolean;
@@ -28,10 +28,8 @@ interface Document {
     readonly fullscreen: boolean;
 }
 
-//// [/user/username/projects/myproject/a.js]
 
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -91,8 +89,13 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/a.js]
+
+
+
 Change:: Changing config to {"compilerOptions":{"skipLibCheck":true}}
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"skipLibCheck":true}}
 
@@ -143,8 +146,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Changing config to {"compilerOptions":{"skipDefaultLibCheck":true}}
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"skipDefaultLibCheck":true}}
 
@@ -201,8 +206,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Changing config to {"compilerOptions":{}}
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{}}
 
@@ -264,8 +271,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Changing config to {"compilerOptions":{"skipDefaultLibCheck":true}}
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"skipDefaultLibCheck":true}}
 
@@ -321,8 +330,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Changing config to {"compilerOptions":{"skipLibCheck":true}}
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"skipLibCheck":true}}
 
@@ -373,8 +384,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Changing config to {"compilerOptions":{}}
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{}}
 
@@ -436,3 +449,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

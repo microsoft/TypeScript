@@ -34,6 +34,7 @@ namespace vfs {
 
     export interface DiffOptions {
         includeChangedFileWithSameContent?: boolean;
+        baseIsNotShadowRoot?: boolean;
     }
 
     /**
@@ -595,7 +596,9 @@ namespace vfs {
             if (existingNode) {
                 if (isDirectory(node)) {
                     if (!isDirectory(existingNode)) throw createIOError("ENOTDIR");
-                    if (this._getLinks(existingNode).size > 0) throw createIOError("ENOTEMPTY");
+                    // if both old and new arguments point to the same directory, just pass. So we could rename /src/a/1 to /src/A/1 in Win.
+                    // if not and the directory pointed by the new path is not empty, throw an error.
+                    if (this.stringComparer(oldpath, newpath) !== 0 && this._getLinks(existingNode).size > 0) throw createIOError("ENOTEMPTY");
                 }
                 else {
                     if (isDirectory(existingNode)) throw createIOError("EISDIR");
@@ -697,7 +700,8 @@ namespace vfs {
          * Generates a `FileSet` patch containing all the entries in this `FileSystem` that are not in `base`.
          * @param base The base file system. If not provided, this file system's `shadowRoot` is used (if present).
          */
-        public diff(base = this.shadowRoot, options: DiffOptions = {}) {
+        public diff(base?: FileSystem | undefined, options: DiffOptions = {}) {
+            if (!base && !options.baseIsNotShadowRoot) base = this.shadowRoot;
             const differences: FileSet = {};
             const hasDifferences = base ?
                 FileSystem.rootDiff(differences, this, base, options) :

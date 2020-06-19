@@ -28,26 +28,21 @@ namespace ts.tscWatch {
             { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
             incremental: boolean
         ) {
-            const sys = TestFSWithWatch.changeToHostTrackingWrittenFiles(
-                fakes.patchHostForBuildInfoReadWrite(createWatchedSystem(files(), { currentDirectory: project }))
-            );
+            const { sys, baseline, oldSnap } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
             if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
             const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || emptyArray)];
-            const baseline: string[] = [];
             baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
             const { cb, getPrograms } = commandLineCallbacks(sys);
-            build(/*oldSnap*/ undefined);
+            build(oldSnap);
 
             if (modifyFs) {
-                const oldSnap = sys.snap();
-                modifyFs(sys);
-                baseline.push(`Change::`, "");
+                const oldSnap = applyChange(sys, baseline, modifyFs);
                 build(oldSnap);
             }
 
             Harness.Baseline.runBaseline(`${isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
 
-            function build(oldSnap: SystemSnap | undefined) {
+            function build(oldSnap: SystemSnap) {
                 const closer = executeCommandLine(
                     sys,
                     cb,
@@ -196,10 +191,12 @@ namespace ts.tscWatch {
                         length: 1,
                         code: Diagnostics.Type_0_is_not_assignable_to_type_1.code,
                         category: Diagnostics.Type_0_is_not_assignable_to_type_1.category,
-                        messageText: "Type '20' is not assignable to type 'string'.",
+                        messageText: "Type 'number' is not assignable to type 'string'.",
                         relatedInformation: undefined,
                         reportsUnnecessary: undefined,
-                        source: undefined
+                        reportsDeprecated: undefined,
+                        source: undefined,
+                        skippedOn: undefined,
                     }]);
                 });
             });

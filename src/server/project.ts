@@ -197,9 +197,6 @@ namespace ts.server {
         dirty = false;
 
         /*@internal*/
-        hasChangedAutomaticTypeDirectiveNames = false;
-
-        /*@internal*/
         typingFiles: SortedReadonlyArray<string> = emptyArray;
 
         /*@internal*/
@@ -282,7 +279,10 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
-            this.languageServiceEnabled = !projectService.syntaxOnly;
+            this.languageServiceEnabled = true;
+            if (projectService.syntaxOnly) {
+                this.compilerOptions.noResolve = true;
+            }
 
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
@@ -296,7 +296,7 @@ namespace ts.server {
 
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory, /*logChangesWhenResolvingModule*/ true);
-            this.languageService = createLanguageService(this, this.documentRegistry, projectService.syntaxOnly);
+            this.languageService = createLanguageService(this, this.documentRegistry, this.projectService.syntaxOnly);
             if (lastFileExceededProgramSize) {
                 this.disableLanguageService(lastFileExceededProgramSize);
             }
@@ -480,6 +480,29 @@ namespace ts.server {
         }
 
         /*@internal*/
+        clearInvalidateResolutionOfFailedLookupTimer() {
+            return this.projectService.throttledOperations.cancel(`${this.getProjectName()}FailedLookupInvalidation`);
+        }
+
+        /*@internal*/
+        scheduleInvalidateResolutionsOfFailedLookupLocations() {
+            this.projectService.throttledOperations.schedule(`${this.getProjectName()}FailedLookupInvalidation`, /*delay*/ 1000, () => {
+                if (this.resolutionCache.invalidateResolutionsOfFailedLookupLocations()) {
+                    this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
+                }
+            });
+        }
+
+        /*@internal*/
+        invalidateResolutionsOfFailedLookupLocations() {
+            if (this.clearInvalidateResolutionOfFailedLookupTimer() &&
+                this.resolutionCache.invalidateResolutionsOfFailedLookupLocations()) {
+                this.markAsDirty();
+                this.projectService.delayEnsureProjectForOpenFiles();
+            }
+        }
+
+        /*@internal*/
         onInvalidatedResolution() {
             this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
         }
@@ -498,8 +521,12 @@ namespace ts.server {
         }
 
         /*@internal*/
+        hasChangedAutomaticTypeDirectiveNames() {
+            return this.resolutionCache.hasChangedAutomaticTypeDirectiveNames();
+        }
+
+        /*@internal*/
         onChangedAutomaticTypeDirectiveNames() {
-            this.hasChangedAutomaticTypeDirectiveNames = true;
             this.projectService.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(this);
         }
 
@@ -618,7 +645,7 @@ namespace ts.server {
         }
 
         enableLanguageService() {
-            if (this.languageServiceEnabled || this.projectService.syntaxOnly) {
+            if (this.languageServiceEnabled) {
                 return;
             }
             this.languageServiceEnabled = true;
@@ -630,7 +657,6 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return;
             }
-            Debug.assert(!this.projectService.syntaxOnly);
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
@@ -723,6 +749,7 @@ namespace ts.server {
                 this.packageJsonFilesMap = undefined;
             }
             this.clearGeneratedFileWatch();
+            this.clearInvalidateResolutionOfFailedLookupTimer();
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -945,7 +972,7 @@ namespace ts.server {
 
             // update builder only if language service is enabled
             // otherwise tell it to drop its internal state
-            if (this.languageServiceEnabled) {
+            if (this.languageServiceEnabled && !this.projectService.syntaxOnly) {
                 // 1. no changes in structure, no changes in unresolved imports - do nothing
                 // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
                 // (can reuse cached imports for files that were not changed)
@@ -1007,7 +1034,6 @@ namespace ts.server {
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
             const hasNewProgram = this.program && (!oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused! & StructureIsReused.Completely)));
-            this.hasChangedAutomaticTypeDirectiveNames = false;
             if (hasNewProgram) {
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
@@ -1035,7 +1061,7 @@ namespace ts.server {
                 );
 
                 if (this.generatedFilesMap) {
-                    const outPath = this.compilerOptions.outFile && this.compilerOptions.out;
+                    const outPath = outFile(this.compilerOptions);
                     if (isGeneratedFileWatcher(this.generatedFilesMap)) {
                         // --out
                         if (!outPath || !this.isValidGeneratedFileWatcher(
@@ -1068,7 +1094,7 @@ namespace ts.server {
                 }
 
                 // Watch the type locations that would be added to program as part of automatic type resolutions
-                if (this.languageServiceEnabled) {
+                if (this.languageServiceEnabled && !this.projectService.syntaxOnly) {
                     this.resolutionCache.updateTypeRootsWatch();
                 }
             }
@@ -1209,7 +1235,7 @@ namespace ts.server {
 
         /* @internal */
         addGeneratedFileWatch(generatedFile: string, sourceFile: string) {
-            if (this.compilerOptions.outFile || this.compilerOptions.out) {
+            if (outFile(this.compilerOptions)) {
                 // Single watcher
                 if (!this.generatedFilesMap) {
                     this.generatedFilesMap = this.createGeneratedFileWatcher(generatedFile);

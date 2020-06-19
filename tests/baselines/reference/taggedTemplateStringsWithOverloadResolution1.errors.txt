@@ -19,9 +19,9 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(14,23): error TS2554: Expected 1-3 arguments, but got 4.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(19,20): error TS2769: No overload matches this call.
   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
-    Argument of type 'true' is not assignable to parameter of type 'number'.
+    Argument of type 'boolean' is not assignable to parameter of type 'number'.
   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
-    Argument of type 'true' is not assignable to parameter of type 'string'.
+    Argument of type 'boolean' is not assignable to parameter of type 'string'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1.ts(21,24): error TS2554: Expected 1-3 arguments, but got 4.
 
 
@@ -74,9 +74,9 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
                        ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 4, '(strs: TemplateStringsArray, x: number, y: number): boolean', gave the following error.
-!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'number'.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'number'.
 !!! error TS2769:   Overload 2 of 4, '(strs: TemplateStringsArray, x: number, y: string): {}', gave the following error.
-!!! error TS2769:     Argument of type 'true' is not assignable to parameter of type 'string'.
+!!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
     var y = foo `${1}${"2"}`;    // {}
     var z = foo `${1}${2}${3}`;  // any (with error)
                            ~

@@ -1,7 +1,11 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: navigate-to for javascript project", () => {
+        function findNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
+            return find(items, item => item.name === itemName && item.kind === itemKind);
+        }
+
         function containsNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
-            return find(items, item => item.name === itemName && item.kind === itemKind) !== undefined;
+            return findNavToItem(items, itemName, itemKind) !== undefined;
         }
 
         it("should not include type symbols", () => {
@@ -66,6 +70,27 @@ export const ghijkl = a.abcdef;`
             const item = items[0];
             assert.strictEqual(item.name, "abcdef");
             assert.strictEqual(item.file, file1.path);
+        });
+
+        it("should work with Deprecated", () => {
+            const file1: File = {
+                path: "/a/b/file1.js",
+                content: "/** @deprecated */\nfunction foo () {}"
+            };
+            const configFile: File = {
+                path: "/a/b/jsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([file1, configFile, libFile]);
+            const session = createSession(host);
+            openFilesForSession([file1], session);
+
+            // Try to find some interface type defined in lib.d.ts
+            const libTypeNavToRequest = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
+            const items = session.executeCommand(libTypeNavToRequest).response as protocol.NavtoItem[];
+            const fooItem = findNavToItem(items, "foo", "function");
+            assert.isNotNull(fooItem, `Cannot find function symbol "foo".`);
+            assert.isTrue(fooItem?.kindModifiers?.includes("deprecated"));
         });
     });
 }

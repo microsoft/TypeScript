@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/tsconfig.json
+Input::
 //// [/a/app.ts]
 let x = 1
 
@@ -25,6 +25,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+/a/lib/tsc.js -w -p /a/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -57,3 +58,4 @@ FsWatchesRecursive::
   {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

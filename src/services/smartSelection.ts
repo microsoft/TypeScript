@@ -252,9 +252,7 @@ namespace ts.SmartSelectionRange {
 
     function createSyntaxList(children: Node[]): SyntaxList {
         Debug.assertGreaterThanOrEqual(children.length, 1);
-        const syntaxList = createNode(SyntaxKind.SyntaxList, children[0].pos, last(children).end) as SyntaxList;
-        syntaxList._children = children;
-        return syntaxList;
+        return setTextRangePosEnd(parseNodeFactory.createSyntaxList(children), children[0].pos, last(children).end);
     }
 
     function isListOpener(token: Node | undefined): token is Node {

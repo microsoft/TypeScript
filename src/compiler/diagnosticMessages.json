@@ -619,7 +619,7 @@
         "category": "Error",
         "code": 1195
     },
-    "Catch clause variable cannot have a type annotation.": {
+    "Catch clause variable type annotation must be 'any' or 'unknown' if specified.": {
         "category": "Error",
         "code": 1196
     },
@@ -3533,6 +3533,10 @@
         "category": "Error",
         "code": 5087
     },
+    "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 5088
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -4454,6 +4458,10 @@
         "category": "Error",
         "code": 6309
     },
+    "Referenced project '{0}' may not disable emit.": {
+        "category": "Error",
+        "code": 6310
+    },
     "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
         "category": "Message",
         "code": 6350
@@ -4593,6 +4601,11 @@
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
         "code": 6384
+    },
+    "'{0}' is deprecated": {
+        "category": "Suggestion",
+        "code": 6385,
+        "reportsDeprecated": true
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -5023,11 +5036,11 @@
         "category": "Error",
         "code": 17015
     },
-    "JSX fragment is not supported when using --jsxFactory": {
+    "The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.": {
         "category": "Error",
         "code": 17016
     },
-    "JSX fragment is not supported when using an inline JSX factory pragma": {
+    "An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.": {
         "category": "Error",
         "code": 17017
     },
@@ -5705,6 +5718,38 @@
         "category": "Message",
         "code": 95118
     },
+    "Generate 'get' and 'set' accessors for all overriding properties": {
+        "category": "Message",
+        "code": 95119
+    },
+    "Wrap in JSX fragment": {
+        "category": "Message",
+        "code": 95120
+    },
+    "Wrap all unparented JSX in JSX fragment": {
+        "category": "Message",
+        "code": 95121
+    },
+    "Convert arrow function or function expression": {
+        "category": "Message",
+        "code": 95122
+    },
+    "Convert to anonymous function": {
+        "category": "Message",
+        "code": 95123
+    },
+    "Convert to named function": {
+        "category": "Message",
+        "code": 95124
+    },
+    "Convert to arrow function": {
+        "category": "Message",
+        "code": 95125
+    },
+    "Remove parentheses": {
+        "category": "Message",
+        "code": 95126
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -5805,5 +5850,13 @@
     "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
         "category": "Error",
         "code": 18033
+    },
+    "Specify the JSX fragment factory function to use when targeting 'react' JSX emit with 'jsxFactory' compiler option is specified, e.g. 'Fragment'.": {
+        "category": "Message",
+        "code": 18034
+    },
+    "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
+        "category": "Error",
+        "code": 18035
     }
 }

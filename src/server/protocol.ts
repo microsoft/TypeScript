@@ -498,6 +498,7 @@ namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
     }
 
@@ -546,7 +547,11 @@ namespace ts.server.protocol {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
+    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
+        triggerReason?: RefactorTriggerReason
+    };
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     /**
      * Response is a list of available refactorings.
@@ -2531,6 +2536,8 @@ namespace ts.server.protocol {
 
         reportsUnnecessary?: {};
 
+        reportsDeprecated?: {};
+
         /**
          * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
          */
@@ -3062,9 +3069,11 @@ namespace ts.server.protocol {
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        containerName?: string;
     }
 
     export interface CallHierarchyIncomingCall {

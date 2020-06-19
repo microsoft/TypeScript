@@ -443,6 +443,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_c_5086" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Um elemento de tupla rotulado é declarado como opcional com um ponto de interrogação depois do nome e antes de dois-pontos, em vez de depois do tipo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_labeled_tuple_element_is_declared_as_rest_with_a_before_the_name_rather_than_before_the_type_5087" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Um elemento de tupla rotulado é declarado como rest com um `...` antes do nome, em vez de antes do tipo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_memb_2651" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.]]></Val>
@@ -853,6 +871,15 @@
           <Val><![CDATA[A 'tsconfig.json' file is already defined at: '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Um arquivo 'tsconfig.json' já está definido em: '{0}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";A_tuple_member_cannot_be_both_optional_and_rest_5085" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A tuple member cannot be both optional and rest.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Um membro de tupla não pode ser opcional e rest.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2909,20 +2936,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Catch_clause_variable_cannot_have_a_type_annotation_1196" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Catch clause variable cannot have a type annotation.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[A variável de cláusula catch não pode ter uma anotação de tipo.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Catch_clause_variable_cannot_have_an_initializer_1197" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Catch clause variable cannot have an initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[A variável de cláusula catch não pode ter um inicializador.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified_1196" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Catch clause variable type annotation must be 'any' or 'unknown' if specified.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[A anotação de tipo de variável da cláusula catch precisa ser 'any' ou 'unknown' quando especificada.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3425,6 +3452,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_arrow_function_or_function_expression_95122" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert arrow function or function expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Converter a função de seta ou a expressão de função]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_const_to_let_95093" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert 'const' to 'let']]></Val>
@@ -3515,6 +3551,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_overload_list_to_single_signature_95118" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert overload list to single signature]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Converter a lista de sobrecarga em assinatura única]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_parameters_to_destructured_object_95075" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert parameters to destructured object]]></Val>
@@ -3551,6 +3596,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_to_anonymous_function_95123" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to anonymous function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Converter em uma função anônima]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_to_arrow_function_95125" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to arrow function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Converter em uma função de seta]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_to_async_function_95065" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert to async function]]></Val>
@@ -3565,6 +3628,15 @@
           <Val><![CDATA[Convert to default import]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Converter para importação padrão]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_to_named_function_95124" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to named function]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Converter em uma função nomeada]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5333,6 +5405,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Generate_get_and_set_accessors_for_all_overriding_properties_95119" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Generate 'get' and 'set' accessors for all overriding properties]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Gerar os acessadores 'get' e 'set' para todas as propriedades de substituição]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Generates_a_CPU_profile_6223" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Generates a CPU profile.]]></Val>
@@ -6048,7 +6129,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its element type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo de elemento '{0}' não é um elemento JSX válido.]]></Val>
+            <Val><![CDATA[Seu tipo de elemento '{0}' não é um elemento JSX válido.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6057,7 +6138,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its instance type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo de instância '{0}' não é um elemento JSX válido.]]></Val>
+            <Val><![CDATA[Seu tipo de instância '{0}' não é um elemento JSX válido.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6066,7 +6147,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Its return type '{0}' is not a valid JSX element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O tipo de retorno '{0}' não é um elemento JSX válido.]]></Val>
+            <Val><![CDATA[Seu tipo de retorno '{0}' não é um elemento JSX válido.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6797,6 +6878,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Module resolution using 'rootDirs' has failed]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Move_labeled_tuple_element_modifiers_to_labels_95117" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Move labeled tuple element modifiers to labels]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Mover os modificadores de elemento de tupla rotulados para rótulos]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10025,6 +10115,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialize_5088" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O tipo inferido '{0}' faz referência a um tipo com uma estrutura cíclica que não pode ser serializada trivialmente. Uma anotação de tipo é necessária.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary_2527" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The inferred type of '{0}' references an inaccessible '{1}' type. A type annotation is necessary.]]></Val>
@@ -10589,6 +10688,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_expression_is_not_callable_because_it_is_a_get_accessor_Did_you_mean_to_use_it_without_6234" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Esta expressão não pode ser chamada porque é um acessador 'get'. Você quis usá-la sem '()'?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_expression_is_not_constructable_2351" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This expression is not constructable.]]></Val>
@@ -10750,6 +10858,15 @@
           <Val><![CDATA[Trying substitution '{0}', candidate module location: '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Tentando substituição '{0}', local de módulo candidato: '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Tuple_members_must_all_have_names_or_all_not_have_names_5084" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Tuple members must all have names or all not have names.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Todos os membros de tupla precisam ter nomes ou não ter nomes.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11748,7 +11865,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Using compiler options of project reference redirect '{0}'.]]></Val>
+            <Val><![CDATA[Usando as opções do compilador de redirecionamento de referência do projeto '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11902,6 +12019,24 @@
           <Val><![CDATA[Wrap all object literal with parentheses]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Colocar todo o literal de objeto entre parênteses]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_all_unparented_JSX_in_JSX_fragment_95121" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap all unparented JSX in JSX fragment]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Empacotar todos os JSXs sem pai no fragmento de JSX]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Wrap_in_JSX_fragment_95120" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Wrap in JSX fragment]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Encapsular o fragmento de JSX]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
