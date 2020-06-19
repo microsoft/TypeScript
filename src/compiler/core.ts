@@ -595,6 +595,14 @@ namespace ts {
         }
     }
 
+    export function tryAddToSet<T>(set: Set<T>, value: T) {
+        if (!set.has(value)) {
+            set.add(value);
+            return true;
+        }
+        return false;
+    }
+
     export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
 
     export function singleIterator<T>(value: T): Iterator<T> {

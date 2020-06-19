@@ -143,7 +143,7 @@ namespace ts {
 
     export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
-        let filesWithInvalidatedResolutions: Map<string, true> | undefined;
+        let filesWithInvalidatedResolutions: Set<string> | undefined;
         let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<string, readonly string[]> | undefined;
         const nonRelativeExternalModuleResolutions = createMultiMap<ResolutionWithFailedLookupLocations>();
 
@@ -722,7 +722,7 @@ namespace ts {
                 if (resolution.isInvalidated || !canInvalidate(resolution)) continue;
                 resolution.isInvalidated = invalidated = true;
                 for (const containingFilePath of Debug.assertDefined(resolution.files)) {
-                    (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = createMap<true>())).set(containingFilePath, true);
+                    (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = new Set())).add(containingFilePath);
                     // When its a file with inferred types resolution, invalidate type reference directive resolution
                     hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || containingFilePath.endsWith(inferredTypesContainingFile);
                 }

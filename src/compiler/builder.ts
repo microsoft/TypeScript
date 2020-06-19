@@ -28,7 +28,7 @@ namespace ts {
         /**
          * The map has key by source file's path that has been changed
          */
-        changedFilesSet?: ReadonlyMap<string, true>;
+        changedFilesSet?: ReadonlySet<string>;
         /**
          * Set of affected files being iterated
          */
@@ -49,7 +49,7 @@ namespace ts {
         /**
          * True if the semantic diagnostics were copied from the old state
          */
-        semanticDiagnosticsFromOldState?: Map<string, true>;
+        semanticDiagnosticsFromOldState?: Set<string>;
         /**
          * program corresponding to this state
          */
@@ -93,7 +93,7 @@ namespace ts {
         /**
          * The map has key by source file's path that has been changed
          */
-        changedFilesSet: Map<string, true>;
+        changedFilesSet: Set<string>;
         /**
          * Set of affected files being iterated
          */
@@ -118,7 +118,7 @@ namespace ts {
         /**
          * Already seen affected files
          */
-        seenAffectedFiles: Map<string, true> | undefined;
+        seenAffectedFiles: Set<string> | undefined;
         /**
          * whether this program has cleaned semantic diagnostics cache for lib files
          */
@@ -126,7 +126,7 @@ namespace ts {
         /**
          * True if the semantic diagnostics were copied from the old state
          */
-        semanticDiagnosticsFromOldState?: Map<string, true>;
+        semanticDiagnosticsFromOldState?: Set<string>;
         /**
          * program corresponding to this state
          */
@@ -161,9 +161,9 @@ namespace ts {
         programEmitComplete?: true;
     }
 
-    function hasSameKeys<T, U>(map1: ReadonlyMap<string, T> | undefined, map2: ReadonlyMap<string, U> | undefined): boolean {
+    function hasSameKeys(map1: ReadonlyCollection<string> | undefined, map2: ReadonlyCollection<string> | undefined): boolean {
         // Has same size and every key is present in both maps
-        return map1 as ReadonlyMap<string, T | U> === map2 || map1 !== undefined && map2 !== undefined && map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
+        return map1 === map2 || map1 !== undefined && map2 !== undefined && map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
     }
 
     /**
@@ -178,7 +178,7 @@ namespace ts {
         if (!outFile(compilerOptions)) {
             state.semanticDiagnosticsPerFile = createMap<readonly Diagnostic[]>();
         }
-        state.changedFilesSet = createMap<true>();
+        state.changedFilesSet = new Set();
 
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
         const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
@@ -196,14 +196,12 @@ namespace ts {
             }
 
             // Copy old state's changed files set
-            if (changedFilesSet) {
-                copyEntries(changedFilesSet, state.changedFilesSet);
-            }
+            changedFilesSet?.forEach(value => state.changedFilesSet.add(value));
             if (!outFile(compilerOptions) && oldState!.affectedFilesPendingEmit) {
                 state.affectedFilesPendingEmit = oldState!.affectedFilesPendingEmit.slice();
                 state.affectedFilesPendingEmitKind = cloneMapOrUndefined(oldState!.affectedFilesPendingEmitKind);
                 state.affectedFilesPendingEmitIndex = oldState!.affectedFilesPendingEmitIndex;
-                state.seenAffectedFiles = createMap();
+                state.seenAffectedFiles = new Set();
             }
         }
 
@@ -227,7 +225,7 @@ namespace ts {
                 // Referenced file was deleted in the new program
                 newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState!.fileInfos.has(path))) {
                 // Register file as changed file and do not copy semantic diagnostics, since all changed files need to be re-evaluated
-                state.changedFilesSet.set(sourceFilePath, true);
+                state.changedFilesSet.add(sourceFilePath);
             }
             else if (canCopySemanticDiagnostics) {
                 const sourceFile = newProgram.getSourceFileByPath(sourceFilePath as Path)!;
@@ -240,9 +238,9 @@ namespace ts {
                 if (diagnostics) {
                     state.semanticDiagnosticsPerFile!.set(sourceFilePath, oldState!.hasReusableDiagnostic ? convertToDiagnostics(diagnostics as readonly ReusableDiagnostic[], newProgram, getCanonicalFileName) : diagnostics as readonly Diagnostic[]);
                     if (!state.semanticDiagnosticsFromOldState) {
-                        state.semanticDiagnosticsFromOldState = createMap<true>();
+                        state.semanticDiagnosticsFromOldState = new Set();
                     }
-                    state.semanticDiagnosticsFromOldState.set(sourceFilePath, true);
+                    state.semanticDiagnosticsFromOldState.add(sourceFilePath);
                 }
             }
         });
@@ -250,13 +248,13 @@ namespace ts {
         // If the global file is removed, add all files as changed
         if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => info.affectsGlobalScope && !state.fileInfos.has(sourceFilePath))) {
             BuilderState.getAllFilesExcludingDefaultLibraryFile(state, newProgram, /*firstSourceFile*/ undefined)
-                .forEach(file => state.changedFilesSet.set(file.resolvedPath, true));
+                .forEach(file => state.changedFilesSet.add(file.resolvedPath));
         }
         else if (oldCompilerOptions && !outFile(compilerOptions) && compilerOptionsAffectEmit(compilerOptions, oldCompilerOptions)) {
             // Add all files to affectedFilesPendingEmit since emit changed
             newProgram.getSourceFiles().forEach(f => addToAffectedFilesPendingEmit(state, f.resolvedPath, BuilderFileEmit.Full));
             Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
-            state.seenAffectedFiles = state.seenAffectedFiles || createMap<true>();
+            state.seenAffectedFiles = state.seenAffectedFiles || new Set();
         }
 
         state.buildInfoEmitPending = !!state.changedFilesSet.size;
@@ -308,15 +306,15 @@ namespace ts {
     function cloneBuilderProgramState(state: Readonly<BuilderProgramState>): BuilderProgramState {
         const newState = BuilderState.clone(state) as BuilderProgramState;
         newState.semanticDiagnosticsPerFile = cloneMapOrUndefined(state.semanticDiagnosticsPerFile);
-        newState.changedFilesSet = cloneMap(state.changedFilesSet);
+        newState.changedFilesSet = new Set(state.changedFilesSet);
         newState.affectedFiles = state.affectedFiles;
         newState.affectedFilesIndex = state.affectedFilesIndex;
         newState.currentChangedFilePath = state.currentChangedFilePath;
         newState.currentAffectedFilesSignatures = cloneMapOrUndefined(state.currentAffectedFilesSignatures);
         newState.currentAffectedFilesExportedModulesMap = cloneMapOrUndefined(state.currentAffectedFilesExportedModulesMap);
-        newState.seenAffectedFiles = cloneMapOrUndefined(state.seenAffectedFiles);
+        newState.seenAffectedFiles = state.seenAffectedFiles && new Set(state.seenAffectedFiles);
         newState.cleanedDiagnosticsOfLibFiles = state.cleanedDiagnosticsOfLibFiles;
-        newState.semanticDiagnosticsFromOldState = cloneMapOrUndefined(state.semanticDiagnosticsFromOldState);
+        newState.semanticDiagnosticsFromOldState = state.semanticDiagnosticsFromOldState && new Set(state.semanticDiagnosticsFromOldState);
         newState.program = state.program;
         newState.compilerOptions = state.compilerOptions;
         newState.affectedFilesPendingEmit = state.affectedFilesPendingEmit && state.affectedFilesPendingEmit.slice();
@@ -391,7 +389,7 @@ namespace ts {
             state.affectedFiles = BuilderState.getFilesAffectedBy(state, program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
             state.currentChangedFilePath = nextKey.value as Path;
             state.affectedFilesIndex = 0;
-            state.seenAffectedFiles = state.seenAffectedFiles || createMap<true>();
+            state.seenAffectedFiles = state.seenAffectedFiles || new Set();
         }
     }
 
@@ -533,7 +531,7 @@ namespace ts {
         }
 
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
-        const seenFileAndExportsOfFile = createMap<true>();
+        const seenFileAndExportsOfFile = new Set<string>();
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
         if (forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
@@ -555,7 +553,7 @@ namespace ts {
     /**
      * Iterate on files referencing referencedPath
      */
-    function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Map<string, true>, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
+    function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
         return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
             referencesInFile.has(referencedPath) && forEachFileAndExportsOfFile(state, filePath as Path, seenFileAndExportsOfFile, fn)
         );
@@ -564,8 +562,8 @@ namespace ts {
     /**
      * fn on file and iterate on anything that exports this file
      */
-    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Map<string, true>, fn: (state: BuilderProgramState, filePath: Path) => boolean): boolean {
-        if (!addToSeen(seenFileAndExportsOfFile, filePath)) {
+    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => boolean): boolean {
+        if (!tryAddToSet(seenFileAndExportsOfFile, filePath)) {
             return false;
         }
 
@@ -622,7 +620,7 @@ namespace ts {
             state.programEmitComplete = true;
         }
         else {
-            state.seenAffectedFiles!.set((affected as SourceFile).resolvedPath, true);
+            state.seenAffectedFiles!.add((affected as SourceFile).resolvedPath);
             if (emitKind !== undefined) {
                 (state.seenEmittedFiles || (state.seenEmittedFiles = createMap())).set((affected as SourceFile).resolvedPath, emitKind);
             }
@@ -1149,7 +1147,7 @@ namespace ts {
         // template is undefined, and instead will just exit the loop.
         for (const key in mapLike) {
             if (hasProperty(mapLike, key)) {
-                map.set(toPath(key), arrayToSet(mapLike[key], toPath));
+                map.set(toPath(key), new Set(mapLike[key].map(toPath)));
             }
         }
         return map;

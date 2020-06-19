@@ -1,6 +1,6 @@
 namespace ts {
     export type TscCompileSystem = fakes.System & {
-        writtenFiles: Map<string, true>;
+        writtenFiles: Set<string>;
         baseLine(): { file: string; text: string; };
     };
 
@@ -44,7 +44,7 @@ namespace ts {
         return !!(program as Program | EmitAndSemanticDiagnosticsBuilderProgram).getCompilerOptions;
     }
     export function commandLineCallbacks(
-        sys: System & { writtenFiles: Map<string, any>; },
+        sys: System & { writtenFiles: ReadonlyCollection<string>; },
         originalReadCall?: System["readFile"]
     ): CommandLineCallbacks {
         let programs: CommandLineProgram[] | undefined;
@@ -85,11 +85,11 @@ namespace ts {
         // Create system
         const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
         fakes.patchHostForBuildInfoReadWrite(sys);
-        const writtenFiles = sys.writtenFiles = createMap<true>();
+        const writtenFiles = sys.writtenFiles = new Set<string>();
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (fileName, content, writeByteOrderMark) => {
             assert.isFalse(writtenFiles.has(fileName));
-            writtenFiles.set(fileName, true);
+            writtenFiles.add(fileName);
             return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
         };
         const actualReadFileMap: MapLike<number> = {};

@@ -1119,7 +1119,7 @@ namespace ts.server {
             }
         }
 
-        private delayUpdateSourceInfoProjects(sourceInfos: Map<string, true> | undefined) {
+        private delayUpdateSourceInfoProjects(sourceInfos: Set<string> | undefined) {
             if (sourceInfos) {
                 sourceInfos.forEach((_value, path) => this.delayUpdateProjectsOfScriptInfoPath(path as Path));
             }
@@ -2592,11 +2592,11 @@ namespace ts.server {
             return documentPositionMapper;
         }
 
-        private addSourceInfoToSourceMap(sourceFileName: string | undefined, project: Project, sourceInfos?: Map<string, true>) {
+        private addSourceInfoToSourceMap(sourceFileName: string | undefined, project: Project, sourceInfos?: Set<string>) {
             if (sourceFileName) {
                 // Attach as source
                 const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
-                (sourceInfos || (sourceInfos = createMap())).set(sourceInfo.path, true);
+                (sourceInfos || (sourceInfos = new Set())).add(sourceInfo.path);
             }
             return sourceInfos;
         }
@@ -2638,7 +2638,7 @@ namespace ts.server {
             if (declarationInfo && isString(declarationInfo.sourceMapFilePath) && info !== declarationInfo) {
                 const sourceMapInfo = this.getScriptInfoForPath(declarationInfo.sourceMapFilePath);
                 if (sourceMapInfo) {
-                    (sourceMapInfo.sourceInfos || (sourceMapInfo.sourceInfos = createMap())).set(info.path, true);
+                    (sourceMapInfo.sourceInfos || (sourceMapInfo.sourceInfos = new Set())).add(info.path);
                 }
             }
 
@@ -2926,9 +2926,9 @@ namespace ts.server {
 
             function addOriginalConfiguredProject(originalProject: ConfiguredProject) {
                 if (!project.originalConfiguredProjects) {
-                    project.originalConfiguredProjects = createMap<true>();
+                    project.originalConfiguredProjects = new Set();
                 }
-                project.originalConfiguredProjects.set(originalProject.canonicalConfigFilePath, true);
+                project.originalConfiguredProjects.add(originalProject.canonicalConfigFilePath);
             }
         }
 
@@ -3075,13 +3075,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        loadAncestorProjectTree(forProjects?: ReadonlyMap<string, true>) {
+        loadAncestorProjectTree(forProjects?: ReadonlyCollection<string>) {
             forProjects = forProjects || mapDefinedEntries(
                 this.configuredProjects,
                 (key, project) => !project.isInitialLoadPending() ? [key, true] : undefined
             );
 
-            const seenProjects = createMap<true>();
+            const seenProjects = new Set<string>();
             // Work on array copy as we could add more projects as part of callback
             for (const project of arrayFrom(this.configuredProjects.values())) {
                 // If this project has potential project reference for any of the project we are loading ancestor tree for
@@ -3099,8 +3099,8 @@ namespace ts.server {
             }
         }
 
-        private ensureProjectChildren(project: ConfiguredProject, seenProjects: Map<string, true>) {
-            if (!addToSeen(seenProjects, project.canonicalConfigFilePath)) return;
+        private ensureProjectChildren(project: ConfiguredProject, seenProjects: Set<string>) {
+            if (!tryAddToSet(seenProjects, project.canonicalConfigFilePath)) return;
             // Update the project
             updateProjectIfDirty(project);
 
@@ -3204,7 +3204,7 @@ namespace ts.server {
                 if (!info.isScriptOpen() && info.isOrphan()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
-                    let sourceInfos: Map<string, true> | undefined;
+                    let sourceInfos: Set<string> | undefined;
                     if (isString(info.sourceMapFilePath)) {
                         const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
                         sourceInfos = sourceMapInfo && sourceMapInfo.sourceInfos;
@@ -3224,7 +3224,7 @@ namespace ts.server {
                 // Retain this script info
                 toRemoveScriptInfos.delete(info.path);
                 if (info.sourceMapFilePath) {
-                    let sourceInfos: Map<string, true> | undefined;
+                    let sourceInfos: Set<string> | undefined;
                     if (isString(info.sourceMapFilePath)) {
                         // And map file info and source infos
                         toRemoveScriptInfos.delete(info.sourceMapFilePath);

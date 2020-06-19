@@ -58,7 +58,7 @@ namespace ts {
         let needsScopeFixMarker = false;
         let resultHasScopeMarker = false;
         let enclosingDeclaration: Node;
-        let necessaryTypeReferences: Map<string, true> | undefined;
+        let necessaryTypeReferences: Set<string> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
         let lateStatementReplacementMap: Map<string, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
@@ -93,9 +93,9 @@ namespace ts {
             if (!typeReferenceDirectives) {
                 return;
             }
-            necessaryTypeReferences = necessaryTypeReferences || createMap<true>();
+            necessaryTypeReferences = necessaryTypeReferences || new Set();
             for (const ref of typeReferenceDirectives) {
-                necessaryTypeReferences.set(ref, true);
+                necessaryTypeReferences.add(ref);
             }
         }
 

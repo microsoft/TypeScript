@@ -423,7 +423,7 @@ namespace ts.server {
     ): void {
         const projectService = defaultProject.projectService;
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
-        const seenProjects = createMap<true>();
+        const seenProjects = new Set<string>();
         forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
             // TLocation should be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
             const location = (initialLocation ? { fileName: path, pos: initialLocation.pos } : undefined) as TLocation;
@@ -496,7 +496,7 @@ namespace ts.server {
         location: TLocation,
         projectService: ProjectService,
         toDo: ProjectAndLocation<TLocation>[] | undefined,
-        seenProjects: Map<string, true>,
+        seenProjects: Set<string>,
         cb: CombineProjectOutputCallback<TLocation>,
     ): ProjectAndLocation<TLocation>[] | undefined {
         if (project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
@@ -526,12 +526,12 @@ namespace ts.server {
         return toDo;
     }
 
-    function addToTodo<TLocation extends DocumentPosition | undefined>(project: Project, location: TLocation, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<string, true>): void {
+    function addToTodo<TLocation extends DocumentPosition | undefined>(project: Project, location: TLocation, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Set<string>): void {
         if (addToSeen(seenProjects, project)) toDo.push({ project, location });
     }
 
-    function addToSeen(seenProjects: Map<string, true>, project: Project) {
-        return ts.addToSeen(seenProjects, getProjectKey(project));
+    function addToSeen(seenProjects: Set<string>, project: Project) {
+        return tryAddToSet(seenProjects, getProjectKey(project));
     }
 
     function getProjectKey(project: Project) {

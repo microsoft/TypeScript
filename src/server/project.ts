@@ -169,7 +169,7 @@ namespace ts.server {
         /**
          * Set of files names that were updated since the last call to getChangesSinceVersion.
          */
-        private updatedFileNames: Map<string, true> | undefined;
+        private updatedFileNames: Set<string> | undefined;
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
@@ -200,7 +200,7 @@ namespace ts.server {
         typingFiles: SortedReadonlyArray<string> = emptyArray;
 
         /*@internal*/
-        originalConfiguredProjects: Map<string, true> | undefined;
+        originalConfiguredProjects: Set<string> | undefined;
 
         /*@internal*/
         getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
@@ -246,7 +246,7 @@ namespace ts.server {
         /*@internal*/
         private importSuggestionsCache = Completions.createImportSuggestionsForFileCache();
         /*@internal*/
-        private dirtyFilesForSuggestions: Map<string, true> | undefined;
+        private dirtyFilesForSuggestions: Set<string> | undefined;
         /*@internal*/
         private symlinks: ReadonlyMap<string, string> | undefined;
 
@@ -928,14 +928,14 @@ namespace ts.server {
         }
 
         registerFileUpdate(fileName: string) {
-            (this.updatedFileNames || (this.updatedFileNames = createMap<true>())).set(fileName, true);
+            (this.updatedFileNames || (this.updatedFileNames = new Set<string>())).add(fileName);
         }
 
         /*@internal*/
         markFileAsDirty(changedFile: Path) {
             this.markAsDirty();
             if (!this.importSuggestionsCache.isEmpty()) {
-                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = createMap())).set(changedFile, true);
+                (this.dirtyFilesForSuggestions || (this.dirtyFilesForSuggestions = new Set())).add(changedFile);
             }
         }
 
@@ -1814,7 +1814,7 @@ namespace ts.server {
 
         /** Potential project references before the project is actually loaded (read config file) */
         /*@internal*/
-        potentialProjectReferences: Map<string, true> | undefined;
+        potentialProjectReferences: Set<string> | undefined;
 
         /*@internal*/
         projectOptions?: ProjectOptions | true;
@@ -1940,7 +1940,7 @@ namespace ts.server {
         /*@internal*/
         setPotentialProjectReference(canonicalConfigPath: NormalizedPath) {
             Debug.assert(this.isInitialLoadPending());
-            (this.potentialProjectReferences || (this.potentialProjectReferences = createMap())).set(canonicalConfigPath, true);
+            (this.potentialProjectReferences || (this.potentialProjectReferences = new Set())).add(canonicalConfigPath);
         }
 
         /*@internal*/

@@ -277,13 +277,13 @@ namespace ts {
     }
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
-        const getPackagesSet: () => Map<string, true> = memoize(() => {
-            const set = createMap<true>();
+        const getPackagesSet = memoize(() => {
+            const set = new Set<string>();
             host.getSourceFiles().forEach(sf => {
                 if (!sf.resolvedModules) return;
 
                 forEachEntry(sf.resolvedModules, r => {
-                    if (r && r.packageId) set.set(r.packageId.name, true);
+                    if (r && r.packageId) set.add(r.packageId.name);
                 });
             });
             return set;
@@ -4457,7 +4457,7 @@ namespace ts {
 
                 function typeToTypeNodeOrCircularityElision(type: Type) {
                     if (type.flags & TypeFlags.Union) {
-                        if (context.visitedTypes && context.visitedTypes.has("" + getTypeId(type))) {
+                        if (context.visitedTypes?.has(getTypeId(type))) {
                             if (!(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
                                 context.encounteredError = true;
                                 context.tracker?.reportCyclicStructureError?.();
@@ -4490,7 +4490,7 @@ namespace ts {
                 }
 
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
-                    const typeId = "" + type.id;
+                    const typeId = type.id;
                     const symbol = type.symbol;
                     if (symbol) {
                         if (isJSConstructor(symbol.valueDeclaration)) {
@@ -4504,7 +4504,7 @@ namespace ts {
                             shouldWriteTypeOfFunctionSymbol()) {
                             return symbolToTypeNode(symbol, context, SymbolFlags.Value);
                         }
-                        else if (context.visitedTypes && context.visitedTypes.has(typeId)) {
+                        else if (context.visitedTypes?.has(typeId)) {
                             // If type is an anonymous type literal in a type alias declaration, use type alias name
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
@@ -4532,14 +4532,14 @@ namespace ts {
                                     declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
                         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
-                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || (context.visitedTypes && context.visitedTypes.has(typeId))) && // it is type of the symbol uses itself recursively
+                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || (context.visitedTypes?.has(typeId))) && // it is type of the symbol uses itself recursively
                                 (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration)); // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
                 }
 
                 function visitAndTransformType<T>(type: Type, transform: (type: Type) => T) {
-                    const typeId = "" + type.id;
+                    const typeId = type.id;
                     const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
                     const id = getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).node ? "N" + getNodeId((<TypeReference>type).node!) :
                         type.symbol ? (isConstructorObject ? "+" : "") + getSymbolId(type.symbol) :
@@ -4547,7 +4547,7 @@ namespace ts {
                     // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                     // of types allows us to catch circular references to instantiations of the same anonymous type
                     if (!context.visitedTypes) {
-                        context.visitedTypes = createMap<true>();
+                        context.visitedTypes = new Set();
                     }
                     if (id && !context.symbolDepth) {
                         context.symbolDepth = createMap<number>();
@@ -4561,7 +4561,7 @@ namespace ts {
                         }
                         context.symbolDepth!.set(id, depth + 1);
                     }
-                    context.visitedTypes.set(typeId, true);
+                    context.visitedTypes.add(typeId);
                     const result = transform(type);
                     context.visitedTypes.delete(typeId);
                     if (id) {
@@ -5250,11 +5250,11 @@ namespace ts {
             function lookupTypeParameterNodes(chain: Symbol[], index: number, context: NodeBuilderContext) {
                 Debug.assert(chain && 0 <= index && index < chain.length);
                 const symbol = chain[index];
-                const symbolId = "" + getSymbolId(symbol);
-                if (context.typeParameterSymbolList && context.typeParameterSymbolList.get(symbolId)) {
+                const symbolId = getSymbolId(symbol);
+                if (context.typeParameterSymbolList?.has(symbolId)) {
                     return undefined;
                 }
-                (context.typeParameterSymbolList || (context.typeParameterSymbolList = createMap())).set(symbolId, true);
+                (context.typeParameterSymbolList || (context.typeParameterSymbolList = new Set())).add(symbolId);
                 let typeParameterNodes: readonly TypeNode[] | readonly TypeParameterDeclaration[] | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index < (chain.length - 1)) {
                     const parentSymbol = symbol;
@@ -5467,7 +5467,7 @@ namespace ts {
                     const rawtext = result.escapedText as string;
                     let i = 0;
                     let text = rawtext;
-                    while ((context.typeParameterNamesByText && context.typeParameterNamesByText.get(text)) || typeParameterShadowsNameInScope(text as __String, context, type)) {
+                    while (context.typeParameterNamesByText?.has(text) || typeParameterShadowsNameInScope(text as __String, context, type)) {
                         i++;
                         text = `${rawtext}_${i}`;
                     }
@@ -5475,7 +5475,7 @@ namespace ts {
                         result = factory.createIdentifier(text, result.typeArguments);
                     }
                     (context.typeParameterNames || (context.typeParameterNames = createMap())).set("" + getTypeId(type), result);
-                    (context.typeParameterNamesByText || (context.typeParameterNamesByText = createMap())).set(result.escapedText as string, true);
+                    (context.typeParameterNamesByText || (context.typeParameterNamesByText = new Set())).add(result.escapedText as string);
                 }
                 return result;
             }
@@ -5634,10 +5634,10 @@ namespace ts {
                     initial.typeParameterNames = cloneMap(initial.typeParameterNames);
                 }
                 if (initial.typeParameterNamesByText) {
-                    initial.typeParameterNamesByText = cloneMap(initial.typeParameterNamesByText);
+                    initial.typeParameterNamesByText = new Set(initial.typeParameterNamesByText);
                 }
                 if (initial.typeParameterSymbolList) {
-                    initial.typeParameterSymbolList = cloneMap(initial.typeParameterSymbolList);
+                    initial.typeParameterSymbolList = new Set(initial.typeParameterSymbolList);
                 }
                 return initial;
             }
@@ -5876,12 +5876,12 @@ namespace ts {
                 // we're trying to emit from later on)
                 const enclosingDeclaration = context.enclosingDeclaration!;
                 let results: Statement[] = [];
-                const visitedSymbols: Map<string, true> = createMap();
+                const visitedSymbols = new Set<number>();
                 let deferredPrivates: Map<string, Symbol> | undefined;
                 const oldcontext = context;
                 context = {
                     ...oldcontext,
-                    usedSymbolNames: createMap(),
+                    usedSymbolNames: new Set(oldcontext.usedSymbolNames),
                     remappedSymbolNames: createMap(),
                     tracker: {
                         ...oldcontext.tracker,
@@ -5900,11 +5900,6 @@ namespace ts {
                         }
                     }
                 };
-                if (oldcontext.usedSymbolNames) {
-                    oldcontext.usedSymbolNames.forEach((_, name) => {
-                        context.usedSymbolNames!.set(name, true);
-                    });
-                }
                 forEachEntry(symbolTable, (symbol, name) => {
                     const baseName = unescapeLeadingUnderscores(name);
                     void getInternalSymbolName(symbol, baseName); // Called to cache values into `usedSymbolNames` and `remappedSymbolNames`
@@ -6115,10 +6110,10 @@ namespace ts {
                     // cache visited list based on merged symbol, since we want to use the unmerged top-level symbol, but
                     // still skip reserializing it if we encounter the merged product later on
                     const visitedSym = getMergedSymbol(symbol);
-                    if (visitedSymbols.has("" + getSymbolId(visitedSym))) {
+                    if (visitedSymbols.has(getSymbolId(visitedSym))) {
                         return; // Already printed
                     }
-                    visitedSymbols.set("" + getSymbolId(visitedSym), true);
+                    visitedSymbols.add(getSymbolId(visitedSym));
                     // Only actually serialize symbols within the correct enclosing declaration, otherwise do nothing with the out-of-context symbol
                     const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope
                     if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
@@ -7073,11 +7068,11 @@ namespace ts {
                     }
                     let i = 0;
                     const original = input;
-                    while (context.usedSymbolNames!.has(input)) {
+                    while (context.usedSymbolNames?.has(input)) {
                         i++;
                         input = `${original}_${i}`;
                     }
-                    context.usedSymbolNames!.set(input, true);
+                    context.usedSymbolNames?.add(input);
                     if (symbol) {
                         context.remappedSymbolNames!.set("" + getSymbolId(symbol), input);
                     }
@@ -7189,15 +7184,15 @@ namespace ts {
 
             // State
             encounteredError: boolean;
-            visitedTypes: Map<string, true> | undefined;
+            visitedTypes: Set<number> | undefined;
             symbolDepth: Map<string, number> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
             approximateLength: number;
             truncating?: boolean;
-            typeParameterSymbolList?: Map<string, true>;
+            typeParameterSymbolList?: Set<number>;
             typeParameterNames?: Map<string, Identifier>;
-            typeParameterNamesByText?: Map<string, true>;
-            usedSymbolNames?: Map<string, true>;
+            typeParameterNamesByText?: Set<string>;
+            usedSymbolNames?: Set<string>;
             remappedSymbolNames?: Map<string, string>;
         }
 
@@ -7394,10 +7389,10 @@ namespace ts {
                 exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
             let result: Node[] | undefined;
-            let visited: Map<string, true> | undefined;
+            let visited: Set<number> | undefined;
             if (exportSymbol) {
-                visited = createMap();
-                visited.set("" + getSymbolId(exportSymbol), true);
+                visited = new Set();
+                visited.add(getSymbolId(exportSymbol));
                 buildVisibleNodeList(exportSymbol.declarations);
             }
             return result;
@@ -7419,10 +7414,10 @@ namespace ts {
                         const firstIdentifier = getFirstIdentifier(internalModuleReference);
                         const importSymbol = resolveName(declaration, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
                             undefined, undefined, /*isUse*/ false);
-                        const id = importSymbol && "" + getSymbolId(importSymbol);
-                        if (importSymbol && !visited!.has(id!)) {
-                            visited!.set(id!, true);
-                            buildVisibleNodeList(importSymbol.declarations);
+                        if (importSymbol && visited) {
+                            if (tryAddToSet(visited, getSymbolId(importSymbol))) {
+                                buildVisibleNodeList(importSymbol.declarations);
+                            }
                         }
                     }
                 });

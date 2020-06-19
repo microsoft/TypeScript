@@ -39,7 +39,7 @@ namespace ts.codefix {
     interface Transformer {
         readonly checker: TypeChecker;
         readonly synthNamesMap: Map<string, SynthIdentifier>; // keys are the symbol id of the identifier
-        readonly setOfExpressionsToReturn: ReadonlyMap<string, true>; // keys are the node ids of the expressions
+        readonly setOfExpressionsToReturn: ReadonlySet<number>; // keys are the node ids of the expressions
         readonly isInJSFile: boolean;
     }
 
@@ -99,24 +99,24 @@ namespace ts.codefix {
     /*
         Finds all of the expressions of promise type that should not be saved in a variable during the refactor
     */
-    function getAllPromiseExpressionsToReturn(func: FunctionLikeDeclaration, checker: TypeChecker): Map<string, true> {
+    function getAllPromiseExpressionsToReturn(func: FunctionLikeDeclaration, checker: TypeChecker): Set<number> {
         if (!func.body) {
-            return createMap<true>();
+            return new Set();
         }
 
-        const setOfExpressionsToReturn: Map<string, true> = createMap<true>();
+        const setOfExpressionsToReturn = new Set<number>();
         forEachChild(func.body, function visit(node: Node) {
             if (isPromiseReturningCallExpression(node, checker, "then")) {
-                setOfExpressionsToReturn.set(getNodeId(node).toString(), true);
+                setOfExpressionsToReturn.add(getNodeId(node));
                 forEach(node.arguments, visit);
             }
             else if (isPromiseReturningCallExpression(node, checker, "catch")) {
-                setOfExpressionsToReturn.set(getNodeId(node).toString(), true);
+                setOfExpressionsToReturn.add(getNodeId(node));
                 // if .catch() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
                 forEachChild(node, visit);
             }
             else if (isPromiseTypedExpression(node, checker)) {
-                setOfExpressionsToReturn.set(getNodeId(node).toString(), true);
+                setOfExpressionsToReturn.add(getNodeId(node));
                 // don't recurse here, since we won't refactor any children or arguments of the expression
             }
             else {
@@ -593,6 +593,6 @@ namespace ts.codefix {
     }
 
     function shouldReturn(expression: Expression, transformer: Transformer): boolean {
-        return !!expression.original && transformer.setOfExpressionsToReturn.has(getNodeId(expression.original).toString());
+        return !!expression.original && transformer.setOfExpressionsToReturn.has(getNodeId(expression.original));
     }
 }

@@ -145,7 +145,7 @@ namespace ts {
     }
 
     /** `forEachEntry` for just keys. */
-    export function forEachKey<K, T>(map: ReadonlyMap<K, unknown>, callback: (key: K) => T | undefined): T | undefined {
+    export function forEachKey<K, T>(map: ReadonlyCollection<K>, callback: (key: K) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
             const result = callback(iterResult.value);

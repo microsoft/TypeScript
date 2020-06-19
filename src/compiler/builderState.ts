@@ -50,7 +50,7 @@ namespace ts {
          * That means hence forth these files are assumed to have
          * no change in their signature for this version of the program
          */
-        hasCalledUpdateShapeSignature: Map<string, true>;
+        hasCalledUpdateShapeSignature: Set<string>;
         /**
          * Cache of all files excluding default library file for the current program
          */
@@ -73,7 +73,7 @@ namespace ts {
         /**
          * Referenced files with values for the keys as referenced file's path to be true
          */
-        export type ReferencedSet = ReadonlyMap<string, true>;
+        export type ReferencedSet = ReadonlySet<string>;
         /**
          * Compute the hash to store the shape of the file
          */
@@ -113,8 +113,8 @@ namespace ts {
         /**
          * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
          */
-        function getReferencedFiles(program: Program, sourceFile: SourceFile, getCanonicalFileName: GetCanonicalFileName): Map<string, true> | undefined {
-            let referencedFiles: Map<string, true> | undefined;
+        function getReferencedFiles(program: Program, sourceFile: SourceFile, getCanonicalFileName: GetCanonicalFileName): Set<string> | undefined {
+            let referencedFiles: Set<string> | undefined;
 
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
@@ -186,9 +186,9 @@ namespace ts {
 
             function addReferencedFile(referencedPath: Path) {
                 if (!referencedFiles) {
-                    referencedFiles = createMap<true>();
+                    referencedFiles = new Set<string>();
                 }
-                referencedFiles.set(referencedPath, true);
+                referencedFiles.add(referencedPath);
             }
         }
 
@@ -206,7 +206,7 @@ namespace ts {
             const fileInfos = createMap<FileInfo>();
             const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createMap<ReferencedSet>() : undefined;
             const exportedModulesMap = referencedMap ? createMap<ReferencedSet>() : undefined;
-            const hasCalledUpdateShapeSignature = createMap<true>();
+            const hasCalledUpdateShapeSignature = new Set<string>();
             const useOldState = canReuseOldState(referencedMap, oldState);
 
             // Create the reference map, and set the file infos
@@ -258,7 +258,7 @@ namespace ts {
                 fileInfos,
                 referencedMap: cloneMapOrUndefined(state.referencedMap),
                 exportedModulesMap: cloneMapOrUndefined(state.exportedModulesMap),
-                hasCalledUpdateShapeSignature: cloneMap(state.hasCalledUpdateShapeSignature),
+                hasCalledUpdateShapeSignature: new Set(state.hasCalledUpdateShapeSignature),
             };
         }
 
@@ -298,7 +298,7 @@ namespace ts {
 
         export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
             state.fileInfos.get(path)!.signature = signature;
-            state.hasCalledUpdateShapeSignature.set(path, true);
+            state.hasCalledUpdateShapeSignature.add(path);
         }
 
         /**
@@ -365,16 +365,16 @@ namespace ts {
                 return;
             }
 
-            let exportedModules: Map<string, true> | undefined;
+            let exportedModules: Set<string> | undefined;
             exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFileFromImportedModuleSymbol(symbol)));
             exportedModulesMapCache.set(sourceFile.resolvedPath, exportedModules || false);
 
             function addExportedModule(exportedModulePath: Path | undefined) {
                 if (exportedModulePath) {
                     if (!exportedModules) {
-                        exportedModules = createMap<true>();
+                        exportedModules = new Set();
                     }
-                    exportedModules.set(exportedModulePath, true);
+                    exportedModules.add(exportedModulePath);
                 }
             }
         }

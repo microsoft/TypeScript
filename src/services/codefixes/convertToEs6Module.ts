@@ -40,7 +40,7 @@ namespace ts.codefix {
 
     /** @returns Whether we converted a `module.exports =` to a default export. */
     function convertFileToEs6Module(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
-        const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: createMap<true>() };
+        const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: new Set() };
         const exports = collectExportRenames(sourceFile, checker, identifiers);
         convertExportsAccesses(sourceFile, exports, changes);
         let moduleExportsChangedToDefault = false;
@@ -429,7 +429,7 @@ namespace ts.codefix {
         while (identifiers.original.has(name) || identifiers.additional.has(name)) {
             name = `_${name}`;
         }
-        identifiers.additional.set(name, true);
+        identifiers.additional.add(name);
         return name;
     }
 
@@ -441,7 +441,7 @@ namespace ts.codefix {
     interface Identifiers {
         readonly original: FreeIdentifiers;
         // Additional identifiers we've added. Mutable!
-        readonly additional: Map<string, true>;
+        readonly additional: Set<string>;
     }
 
     type FreeIdentifiers = ReadonlyMap<string, readonly Identifier[]>;
