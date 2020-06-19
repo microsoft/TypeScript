@@ -13246,7 +13246,7 @@ namespace ts {
                         }
                         else {
                             let suggestion: string | undefined;
-                            if (propName !== undefined && (suggestion = getSuggestionForNonexistentProperty(propName as string, objectType, /*isJsxAttr*/ false))) {
+                            if (propName !== undefined && (suggestion = getSuggestionForNonexistentProperty(propName as string, objectType))) {
                                 if (suggestion !== undefined) {
                                     error(accessExpression.argumentExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName as string, typeToString(objectType), suggestion);
                                 }
@@ -16320,7 +16320,8 @@ namespace ts {
                                         errorNode = prop.valueDeclaration.name;
                                     }
                                     const propName = symbolToString(prop);
-                                    const suggestion = getSuggestionForNonexistentProperty(propName, errorTarget, /*isJsxAttr*/ true);
+                                    const suggestionSymbol = getSuggestedSymbolForNonexistentJSXAttribute(propName, errorTarget);
+                                    const suggestion = suggestionSymbol ? symbolToString(suggestionSymbol) : undefined;
                                     if (suggestion) reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(errorTarget), suggestion);
                                     else reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(errorTarget));
                                 }
@@ -16336,7 +16337,7 @@ namespace ts {
 
                                         const name = propDeclaration.name!;
                                         if (isIdentifier(name)) {
-                                            suggestion = getSuggestionForNonexistentProperty(name, errorTarget, /*isJsxAttr*/ false);
+                                            suggestion = getSuggestionForNonexistentProperty(name, errorTarget);
                                         }
                                     }
                                     if (suggestion !== undefined) {
@@ -24892,8 +24893,8 @@ namespace ts {
             return defaultSuggestion();
           }
 
-        function getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type, isJsxAttr: boolean): string | undefined {
-            const suggestion = (isJsxAttr ? getSuggestedSymbolForNonexistentJSXAttribute : getSuggestedSymbolForNonexistentProperty)(name, containingType);
+        function getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): string | undefined {
+            const suggestion = getSuggestedSymbolForNonexistentProperty(name, containingType);
             return suggestion && symbolName(suggestion);
         }
 
