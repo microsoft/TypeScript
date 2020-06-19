@@ -7,8 +7,16 @@
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
-        "types": ["node"],
-        "lib": ["esnext", "dom"],
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "esnext",
+            "dom"
+        ]
     },
-    "include": ["node_modules/adonis-framework"]
+    "include": [
+        "node_modules/adonis-framework",
+        "index.ts"
+    ]
 }
