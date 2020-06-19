@@ -333,7 +333,7 @@ namespace ts {
             // Write build information if applicable
             if (!buildInfoPath || targetSourceFile || emitSkipped) return;
             const program = host.getProgramBuildInfo();
-            if (host.isEmitBlocked(buildInfoPath) || compilerOptions.noEmit) {
+            if (host.isEmitBlocked(buildInfoPath)) {
                 emitSkipped = true;
                 return;
             }

@@ -867,6 +867,11 @@
         "category": "Error",
         "code": 1261
     },
+    "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
+        "category": "Error",
+        "code": 1262
+    },
+
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -4458,6 +4463,10 @@
         "category": "Error",
         "code": 6309
     },
+    "Referenced project '{0}' may not disable emit.": {
+        "category": "Error",
+        "code": 6310
+    },
     "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
         "category": "Message",
         "code": 6350
@@ -4597,6 +4606,11 @@
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
         "code": 6384
+    },
+    "'{0}' is deprecated": {
+        "category": "Suggestion",
+        "code": 6385,
+        "reportsDeprecated": true
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -5737,49 +5751,53 @@
         "category": "Message",
         "code": 95125
     },
-    "Could_not_find_a_containing_arrow_function": {
+    "Remove parentheses": {
         "category": "Message",
         "code": 95126
     },
-    "Containing_function_is_not_an_arrow_function": {
+    "Could_not_find_a_containing_arrow_function": {
         "category": "Message",
         "code": 95127
     },
-    "Could_not_find_export_statement": {
+    "Containing_function_is_not_an_arrow_function": {
         "category": "Message",
         "code": 95128
     },
-    "This_file_already_has_a_default_export": {
+    "Could_not_find_export_statement": {
         "category": "Message",
         "code": 95129
     },
-    "Could_not_find_import_clause": {
+    "This_file_already_has_a_default_export": {
         "category": "Message",
         "code": 95130
     },
-    "Could_not_find_namespace_import_or_named_imports": {
+    "Could_not_find_import_clause": {
         "category": "Message",
         "code": 95131
     },
-    "Selection_is_not_a_valid_type_node": {
+    "Could_not_find_namespace_import_or_named_imports": {
         "category": "Message",
         "code": 95132
     },
-    "No_type_could_be_extracted_from_this_type_node": {
+    "Selection_is_not_a_valid_type_node": {
         "category": "Message",
         "code": 95133
     },
-    "Could_not_find_property_for_which_to_generate_accessor": {
+    "No_type_could_be_extracted_from_this_type_node": {
         "category": "Message",
         "code": 95134
     },
-    "Name_is_not_valid": {
+    "Could_not_find_property_for_which_to_generate_accessor": {
         "category": "Message",
         "code": 95135
     },
-    "Property_has_invalid_accessibility": {
+    "Name_is_not_valid": {
         "category": "Message",
         "code": 95136
+    },
+    "Property_has_invalid_accessibility": {
+        "category": "Message",
+        "code": 95137
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
