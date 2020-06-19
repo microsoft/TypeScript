@@ -18395,8 +18395,8 @@ namespace ts {
             return restType && createArrayType(restType);
         }
 
-        function getEndLengthOfTupleType(type: TupleTypeReference) {
-            return getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !!(f & ElementFlags.Variable)) - 1;
+        function getEndLengthOfType(type: Type) {
+            return isTupleType(type) ? getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !!(f & ElementFlags.Variable)) - 1 : 0;
         }
 
         function getElementTypeOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0, writing = false) {
@@ -18938,7 +18938,8 @@ namespace ts {
                 inferredType: undefined,
                 priority: undefined,
                 topLevel: true,
-                isFixed: false
+                isFixed: false,
+                impliedArity: undefined
             };
         }
 
@@ -18950,7 +18951,8 @@ namespace ts {
                 inferredType: inference.inferredType,
                 priority: inference.priority,
                 topLevel: inference.topLevel,
-                isFixed: inference.isFixed
+                isFixed: inference.isFixed,
+                impliedArity: inference.impliedArity
             };
         }
 
@@ -19625,7 +19627,7 @@ namespace ts {
                 if (!typesDefinitelyUnrelated(source, target)) {
                     if (isArrayType(source) || isTupleType(source)) {
                         if (isTupleType(target)) {
-                            const sourceArity = isTupleType(source) ? getTypeReferenceArity(source) : 0;
+                            const sourceArity = getTypeReferenceArity(source);
                             const targetArity = getTypeReferenceArity(target);
                             const elementTypes = getTypeArguments(target);
                             const elementFlags = target.target.elementFlags;
@@ -19637,38 +19639,49 @@ namespace ts {
                                 }
                                 return;
                             }
-                            const fixedLength = isTupleType(source) ? Math.min(source.target.fixedLength, target.target.fixedLength) : 0;
-                            const endFixedLength = isTupleType(source) && target.target.combinedFlags & ElementFlags.Variadic ? Math.min(getEndLengthOfTupleType(source), getEndLengthOfTupleType(target)) : 0;
+                            const startLength = isTupleType(source) ? Math.min(source.target.fixedLength, target.target.fixedLength) : 0;
+                            const sourceRestType = !isTupleType(source) || sourceArity > 0 && source.target.elementFlags[sourceArity - 1] & ElementFlags.Rest ?
+                                getTypeArguments(source)[sourceArity - 1] : undefined;
+                            const endLength = !(target.target.combinedFlags & ElementFlags.Variable) ? 0 :
+                                sourceRestType ? getEndLengthOfType(target) :
+                                Math.min(getEndLengthOfType(source), getEndLengthOfType(target));
+                            const sourceEndLength = sourceRestType ? 0 : endLength;
                             // Infer between starting fixed elements.
-                            for (let i = 0; i < fixedLength; i++) {
+                            for (let i = 0; i < startLength; i++) {
                                 inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
                             }
-                            if (fixedLength < targetArity - endFixedLength) {
-                                // Process elements that remain between the starting and ending fixed parts.
-                                let targetExcessIndex = fixedLength;
-                                let sourceExcessIndex = fixedLength;
-                                if (elementFlags[fixedLength] & ElementFlags.Variadic) {
-                                    // When first non-fixed element in target is variadic, infer the slice between the fixed parts in the source.
-                                    inferFromTypes(isTupleType(source) ? sliceTupleType(source, fixedLength, endFixedLength) : createArrayType(getTypeArguments(source)[0]), elementTypes[fixedLength]);
-                                    const sourceHasRest = sourceArity > 0 && (<TupleTypeReference>source).target.elementFlags[sourceArity - 1] & ElementFlags.Rest;
-                                    targetExcessIndex = fixedLength + 1;
-                                    sourceExcessIndex = sourceArity - endFixedLength - (sourceHasRest ? 1 : 0);
+                            if (sourceRestType && sourceArity - startLength === 1) {
+                                // Single rest element remains in source, infer from that to every element in target
+                                for (let i = startLength; i < targetArity - endLength; i++) {
+                                    inferFromTypes(elementFlags[i] & ElementFlags.Variadic ? createArrayType(sourceRestType) : sourceRestType, elementTypes[i]);
                                 }
-                                // If source has a rest element of type R, infer R[] for remaining variadic elements and R for other remaining elements.
-                                // If source has no rest element, infer [] for remaining variadic elements and nothing for other remaining elements.
-                                const sourceRestType = isTupleType(source) ? getElementTypeOfTupleType(source, sourceExcessIndex, endFixedLength) : getElementTypeOfArrayType(source);
-                                for (let i = targetExcessIndex; i < targetArity - endFixedLength; i++) {
-                                    if (elementFlags[i] & ElementFlags.Variadic) {
-                                        inferFromTypes(sourceRestType ? createArrayType(sourceRestType) : createTupleType(emptyArray), elementTypes[i]);
+                            }
+                            else {
+                                const middleLength = targetArity - startLength - endLength;
+                                if (middleLength === 2 && elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                    // Middle of target is [...T, ...U] and source is tuple type
+                                    const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
+                                    if (targetInfo && targetInfo.impliedArity !== undefined) {
+                                        // Infer slices from source based on implied arity of T.
+                                        inferFromTypes(sliceTupleType(source, startLength, sourceEndLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
+                                        inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, sourceEndLength), elementTypes[startLength + 1]);
                                     }
-                                    else if (sourceRestType) {
-                                        inferFromTypes(sourceRestType, elementTypes[i]);
+                                }
+                                else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Variadic) {
+                                    // Middle of target is exactly one variadic element. Infer the slice between the fixed parts in the source.
+                                    inferFromTypes(isTupleType(source) ? sliceTupleType(source, startLength, sourceEndLength) : createArrayType(sourceRestType!), elementTypes[startLength]);
+                                }
+                                else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Rest) {
+                                    // Middle of target is exactly one rest element. If middle of source is not empty, infer union of middle element types.
+                                    const restType = isTupleType(source) ? getElementTypeOfTupleType(source, startLength, sourceEndLength) : sourceRestType;
+                                    if (restType) {
+                                        inferFromTypes(restType, elementTypes[startLength]);
                                     }
                                 }
                             }
                             // Infer between ending fixed elements
-                            for (let i = 0; i < endFixedLength; i++) {
-                                inferFromTypes(getTypeArguments(source)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
+                            for (let i = 0; i < endLength; i++) {
+                                inferFromTypes(sourceRestType || getTypeArguments(source)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
                             }
                             return;
                         }
@@ -25667,6 +25680,12 @@ namespace ts {
 
             const restType = getNonArrayRestType(signature);
             const argCount = restType ? Math.min(getParameterCount(signature) - 1, args.length) : args.length;
+            if (restType && restType.flags & TypeFlags.TypeParameter) {
+                const info = find(context.inferences, info => info.typeParameter === restType);
+                if (info) {
+                    info.impliedArity = findIndex(args, isSpreadArgument, argCount) < 0 ? args.length - argCount : undefined;
+                }
+            }
             for (let i = 0; i < argCount; i++) {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {

@@ -5421,6 +5421,7 @@ namespace ts {
         priority?: InferencePriority;            // Priority of current inference set
         topLevel: boolean;                       // True if all inferences are to top level occurrences
         isFixed: boolean;                        // True if inferences are fixed
+        impliedArity?: number;
     }
 
     /* @internal */
