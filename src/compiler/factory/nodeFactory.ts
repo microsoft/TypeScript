@@ -558,8 +558,29 @@ namespace ts {
                 decorators,
                 modifiers
             );
-            node.name = asName(name);
-            node.transformFlags |= propagateChildFlags(node.name);
+            name = asName(name);
+            node.name = name;
+
+            // The PropertyName of a member is allowed to be `await`.
+            // We don't need to exclude `await` for type signatures since types
+            // don't propagate child flags.
+            if (name) {
+                switch (node.kind) {
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertyAssignment:
+                        if (isIdentifier(name)) {
+                            node.transformFlags |= propagateIdentifierNameFlags(name);
+                            break;
+                        }
+                        // fall through
+                    default:
+                        node.transformFlags |= propagateChildFlags(name);
+                        break;
+                }
+            }
             return node;
         }
 
@@ -633,7 +654,7 @@ namespace ts {
                 type
             );
             node.body = body;
-            node.transformFlags |= propagateChildFlags(node.body);
+            node.transformFlags |= propagateChildFlags(node.body) & ~TransformFlags.ContainsPossibleTopLevelAwait;
             if (!body) node.transformFlags |= TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -826,6 +847,9 @@ namespace ts {
                 // NOTE: we do not use `setChildren` here because typeArguments in an identifier do not contribute to transformations
                 node.typeArguments = createNodeArray(typeArguments);
             }
+            if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
+                node.transformFlags |= TransformFlags.ContainsPossibleTopLevelAwait;
+            }
             return node;
         }
 
@@ -1015,7 +1039,7 @@ namespace ts {
             node.right = asName(right);
             node.transformFlags |=
                 propagateChildFlags(node.left) |
-                propagateChildFlags(node.right);
+                propagateIdentifierNameFlags(node.right);
             return node;
         }
 
@@ -2030,9 +2054,13 @@ namespace ts {
             node.propertyName = asName(propertyName);
             node.dotDotDotToken = dotDotDotToken;
             node.transformFlags |=
-                propagateChildFlags(node.propertyName) |
                 propagateChildFlags(node.dotDotDotToken) |
                 TransformFlags.ContainsES2015;
+            if (node.propertyName) {
+                node.transformFlags |= isIdentifier(node.propertyName) ?
+                    propagateIdentifierNameFlags(node.propertyName) :
+                    propagateChildFlags(node.propertyName);
+            }
             if (dotDotDotToken) node.transformFlags |= TransformFlags.ContainsRestOrSpread;
             return node;
         }
@@ -2096,7 +2124,9 @@ namespace ts {
             node.name = asName(name);
             node.transformFlags =
                 propagateChildFlags(node.expression) |
-                propagateChildFlags(node.name);
+                (isIdentifier(node.name) ?
+                    propagateIdentifierNameFlags(node.name) :
+                    propagateChildFlags(node.name));
             if (isSuperKeyword(expression)) {
                 // super method calls require a lexical 'this'
                 // super method calls require 'super' hoisting in ES2017 and ES2018 async functions and async generators
@@ -2126,10 +2156,12 @@ namespace ts {
             node.questionDotToken = questionDotToken;
             node.name = asName(name);
             node.transformFlags |=
+                TransformFlags.ContainsES2020 |
                 propagateChildFlags(node.expression) |
                 propagateChildFlags(node.questionDotToken) |
-                propagateChildFlags(node.name) |
-                TransformFlags.ContainsES2020;
+                (isIdentifier(node.name) ?
+                    propagateIdentifierNameFlags(node.name) :
+                    propagateChildFlags(node.name));
             return node;
         }
 
@@ -3558,6 +3590,7 @@ namespace ts {
             node.transformFlags |=
                 propagateChildrenFlags(node.members) |
                 TransformFlags.ContainsTypeScript;
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Enum declarations cannot contain `await`
             return node;
         }
 
@@ -3601,6 +3634,7 @@ namespace ts {
                     propagateChildFlags(node.body) |
                     TransformFlags.ContainsTypeScript;
             }
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Module declarations cannot contain `await`.
             return node;
         }
 
@@ -3685,6 +3719,7 @@ namespace ts {
             node.moduleReference = moduleReference;
             node.transformFlags |= propagateChildFlags(node.moduleReference);
             if (!isExternalModuleReference(node.moduleReference)) node.transformFlags |= TransformFlags.ContainsTypeScript;
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Import= declaration is always parsed in an Await context
             return node;
         }
 
@@ -3721,6 +3756,7 @@ namespace ts {
             node.transformFlags |=
                 propagateChildFlags(node.importClause) |
                 propagateChildFlags(node.moduleSpecifier);
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3752,6 +3788,7 @@ namespace ts {
             if (isTypeOnly) {
                 node.transformFlags |= TransformFlags.ContainsTypeScript;
             }
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3769,6 +3806,7 @@ namespace ts {
             const node = createBaseNode<NamespaceImport>(SyntaxKind.NamespaceImport);
             node.name = name;
             node.transformFlags |= propagateChildFlags(node.name);
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3786,6 +3824,7 @@ namespace ts {
             node.transformFlags |=
                 propagateChildFlags(node.name) |
                 TransformFlags.ContainsESNext;
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3801,6 +3840,7 @@ namespace ts {
             const node = createBaseNode<NamedImports>(SyntaxKind.NamedImports);
             node.elements = createNodeArray(elements);
             node.transformFlags |= propagateChildrenFlags(node.elements);
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3819,6 +3859,7 @@ namespace ts {
             node.transformFlags |=
                 propagateChildFlags(node.propertyName) |
                 propagateChildFlags(node.name);
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3847,6 +3888,7 @@ namespace ts {
                 ? parenthesizerRules().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
                 : parenthesizerRules().parenthesizeExpressionOfExportDefault(expression);
             node.transformFlags |= propagateChildFlags(node.expression);
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3883,6 +3925,7 @@ namespace ts {
             node.transformFlags |=
                 propagateChildFlags(node.exportClause) |
                 propagateChildFlags(node.moduleSpecifier);
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3909,6 +3952,7 @@ namespace ts {
             const node = createBaseNode<NamedExports>(SyntaxKind.NamedExports);
             node.elements = createNodeArray(elements);
             node.transformFlags |= propagateChildrenFlags(node.elements);
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3927,6 +3971,7 @@ namespace ts {
             node.transformFlags |=
                 propagateChildFlags(node.propertyName) |
                 propagateChildFlags(node.name);
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -3957,6 +4002,7 @@ namespace ts {
             const node = createBaseNode<ExternalModuleReference>(SyntaxKind.ExternalModuleReference);
             node.expression = expression;
             node.transformFlags |= propagateChildFlags(node.expression);
+            node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
             return node;
         }
 
@@ -5781,14 +5827,19 @@ namespace ts {
         return tokenValue;
     }
 
-    function propagatePropertyNameFlags(node: PropertyName, transformFlags: TransformFlags) {
+    function propagateIdentifierNameFlags(node: Identifier) {
+        // An IdentifierName is allowed to be `await`
+        return propagateChildFlags(node) & ~TransformFlags.ContainsPossibleTopLevelAwait;
+    }
+
+    function propagatePropertyNameFlagsOfChild(node: PropertyName, transformFlags: TransformFlags) {
         return transformFlags | (node.transformFlags & TransformFlags.PropertyNamePropagatingFlags);
     }
 
     function propagateChildFlags(child: Node | undefined): TransformFlags {
         if (!child) return TransformFlags.None;
         const childFlags = child.transformFlags & ~getTransformFlagsSubtreeExclusions(child.kind);
-        return isNamedDeclaration(child) && isPropertyName(child.name) ? propagatePropertyNameFlags(child.name, childFlags) : childFlags;
+        return isNamedDeclaration(child) && isPropertyName(child.name) ? propagatePropertyNameFlagsOfChild(child.name, childFlags) : childFlags;
     }
 
     function propagateChildrenFlags(children: NodeArray<Node> | undefined): TransformFlags {

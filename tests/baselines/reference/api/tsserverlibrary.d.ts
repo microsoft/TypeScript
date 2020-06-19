@@ -1447,7 +1447,7 @@ declare namespace ts {
     }
     export interface ThrowStatement extends Statement {
         readonly kind: SyntaxKind.ThrowStatement;
-        readonly expression?: Expression;
+        readonly expression: Expression;
     }
     export interface TryStatement extends Statement {
         readonly kind: SyntaxKind.TryStatement;

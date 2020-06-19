@@ -28255,7 +28255,7 @@ namespace ts {
             return undefinedWideningType;
         }
 
-        function isTopLevelAwait(node: AwaitExpression) {
+        function isInTopLevelContext(node: Node) {
             const container = getThisContainer(node, /*includeArrowFunctions*/ true);
             return isSourceFile(container);
         }
@@ -28264,7 +28264,7 @@ namespace ts {
             // Grammar checking
             if (produceDiagnostics) {
                 if (!(node.flags & NodeFlags.AwaitContext)) {
-                    if (isTopLevelAwait(node)) {
+                    if (isInTopLevelContext(node)) {
                         const sourceFile = getSourceFileOfNode(node);
                         if (!hasParseDiagnostics(sourceFile)) {
                             let span: TextSpan | undefined;
@@ -33586,7 +33586,7 @@ namespace ts {
         function checkThrowStatement(node: ThrowStatement) {
             // Grammar checking
             if (!checkGrammarStatementInAmbientContext(node)) {
-                if (node.expression === undefined) {
+                if (isIdentifier(node.expression) && !node.expression.escapedText) {
                     grammarErrorAfterFirstToken(node, Diagnostics.Line_break_not_permitted_here);
                 }
             }
@@ -34861,6 +34861,7 @@ namespace ts {
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
+            checkGrammarAwaitIdentifier(node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
             checkAliasSymbol(node);
@@ -37626,17 +37627,32 @@ namespace ts {
             return false;
         }
 
+        function checkGrammarAwaitIdentifier(name: Identifier | undefined): boolean {
+            if (name && isIdentifier(name) && name.originalKeywordKind === SyntaxKind.AwaitKeyword && isInTopLevelContext(name.parent)) {
+                const file = getSourceFileOfNode(name);
+                if (!file.isDeclarationFile && isExternalModule(file)) {
+                    return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module, idText(name));
+                }
+            }
+            return false;
+        }
+
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration | MethodSignature): boolean {
             // Prevent cascading error by short-circuit
             const file = getSourceFileOfNode(node);
-            return checkGrammarDecoratorsAndModifiers(node) || checkGrammarTypeParameterList(node.typeParameters, file) ||
-                checkGrammarParameterList(node.parameters) || checkGrammarArrowFunction(node, file) ||
+            return checkGrammarDecoratorsAndModifiers(node) ||
+                checkGrammarTypeParameterList(node.typeParameters, file) ||
+                (isFunctionDeclaration(node) && checkGrammarAwaitIdentifier(node.name)) ||
+                checkGrammarParameterList(node.parameters) ||
+                checkGrammarArrowFunction(node, file) ||
                 (isFunctionLikeDeclaration(node) && checkGrammarForUseStrictSimpleParameterList(node));
         }
 
         function checkGrammarClassLikeDeclaration(node: ClassLikeDeclaration): boolean {
             const file = getSourceFileOfNode(node);
-            return checkGrammarClassDeclarationHeritageClauses(node) || checkGrammarTypeParameterList(node.typeParameters, file);
+            return (isClassDeclaration(node) && checkGrammarAwaitIdentifier(node.name)) ||
+                checkGrammarClassDeclarationHeritageClauses(node) ||
+                checkGrammarTypeParameterList(node.typeParameters, file);
         }
 
         function checkGrammarArrowFunction(node: Node, file: SourceFile): boolean {
@@ -38276,11 +38292,15 @@ namespace ts {
                 if (node.propertyName) {
                     return grammarErrorOnNode(node.name, Diagnostics.A_rest_element_cannot_have_a_property_name);
                 }
+            }
 
-                if (node.initializer) {
-                    // Error on equals token which immediately precedes the initializer
-                    return grammarErrorAtPos(node, node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
-                }
+            if (isIdentifier(node.name) && checkGrammarAwaitIdentifier(node.name)) {
+                return true;
+            }
+
+            if (node.dotDotDotToken && node.initializer) {
+                // Error on equals token which immediately precedes the initializer
+                return grammarErrorAtPos(node, node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
             }
         }
 
@@ -38340,6 +38360,9 @@ namespace ts {
                         return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
                     }
                 }
+            }
+            if (isIdentifier(node.name) && checkGrammarAwaitIdentifier(node.name)) {
+                return true;
             }
 
             if (node.exclamationToken && (node.parent.parent.kind !== SyntaxKind.VariableStatement || !node.type || node.initializer || node.flags & NodeFlags.Ambient)) {
