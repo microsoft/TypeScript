@@ -10,10 +10,10 @@ obj[incr()] ??= incr();
 
 //// [logicalAssignment10.js]
 var _a;
-var _b, _c;
+var _b;
 var count = 0;
 var obj = {};
 function incr() {
     return ++count;
 }
-(_a = (_b = obj)[_c = incr()]) !== null && _a !== void 0 ? _a : (_b[_c] = incr());
+(_a = obj[_b = incr()]) !== null && _a !== void 0 ? _a : (obj[_b] = incr());

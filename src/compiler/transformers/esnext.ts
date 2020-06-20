@@ -25,7 +25,7 @@ namespace ts {
                     if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
                         return transformLogicalAssignment(binaryExpression);
                     }
-                    // falls through
+                // falls through
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -37,35 +37,39 @@ namespace ts {
             let left = skipParentheses(visitNode(binaryExpression.left, visitor, isLeftHandSideExpression));
             let assignmentTarget = left;
             const right = skipParentheses(visitNode(binaryExpression.right, visitor, isExpression));
+
             if (isAccessExpression(left)) {
-                const tempVariable = factory.createTempVariable(hoistVariableDeclaration);
+                const propertyAccessTargetSimpleCopiable = isSimpleCopiableExpression(left.expression);
+                const propertyAccessTarget = propertyAccessTargetSimpleCopiable ? left.expression :
+                    factory.createTempVariable(hoistVariableDeclaration);
+                const propertyAccessTargetAssignment = propertyAccessTargetSimpleCopiable ? left.expression : factory.createAssignment(
+                    propertyAccessTarget,
+                    left.expression
+                );
+
                 if (isPropertyAccessExpression(left)) {
                     assignmentTarget = factory.createPropertyAccessExpression(
-                        tempVariable,
+                        propertyAccessTarget,
                         left.name
                     );
                     left = factory.createPropertyAccessExpression(
-                        factory.createAssignment(
-                            tempVariable,
-                            left.expression
-                        ),
+                        propertyAccessTargetAssignment,
                         left.name
                     );
                 }
                 else {
-                    const tempArgumentExpression = factory.createTempVariable(hoistVariableDeclaration);
+                    const elementAccessArgumentSimpleCopiable = isSimpleCopiableExpression(left.argumentExpression);
+                    const elementAccessArgument = elementAccessArgumentSimpleCopiable ? left.argumentExpression :
+                        factory.createTempVariable(hoistVariableDeclaration);
 
                     assignmentTarget = factory.createElementAccessExpression(
-                        tempVariable,
-                        tempArgumentExpression
+                        propertyAccessTarget,
+                        elementAccessArgument
                     );
                     left = factory.createElementAccessExpression(
-                        factory.createAssignment(
-                            tempVariable,
-                            left.expression
-                        ),
-                        factory.createAssignment(
-                            tempArgumentExpression,
+                        propertyAccessTargetAssignment,
+                        elementAccessArgumentSimpleCopiable ? left.argumentExpression : factory.createAssignment(
+                            elementAccessArgument,
                             left.argumentExpression
                         )
                     );
