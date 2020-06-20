@@ -15,10 +15,29 @@ function incr() {
 >count : number
 }
 
+const oobj = {
+>oobj : { obj: {}; }
+>{    obj} : { obj: {}; }
+
+    obj
+>obj : {}
+}
+
 obj[incr()] ??= incr();
 >obj[incr()] ??= incr() : any
 >obj[incr()] : error
 >obj : {}
+>incr() : number
+>incr : () => number
+>incr() : number
+>incr : () => number
+
+oobj["obj"][incr()] ??= incr();
+>oobj["obj"][incr()] ??= incr() : any
+>oobj["obj"][incr()] : error
+>oobj["obj"] : {}
+>oobj : { obj: {}; }
+>"obj" : "obj"
 >incr() : number
 >incr : () => number
 >incr() : number

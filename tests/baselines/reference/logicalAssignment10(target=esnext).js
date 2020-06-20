@@ -5,7 +5,12 @@ function incr() {
     return ++count;
 }
 
+const oobj = {
+    obj
+}
+
 obj[incr()] ??= incr();
+oobj["obj"][incr()] ??= incr();
 
 
 //// [logicalAssignment10.js]
@@ -14,4 +19,8 @@ var obj = {};
 function incr() {
     return ++count;
 }
+const oobj = {
+    obj
+};
 obj[incr()] ??= incr();
+oobj["obj"][incr()] ??= incr();
