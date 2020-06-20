@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.refactor.convertToOptionalChainExpression {
     const refactorName = "Convert to optional chain expression";
-    const convertToOptionalChainExpression = "Convert && chain to optional chain expression";
+    const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
 
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
@@ -10,10 +10,10 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (!info) return emptyArray;
         return [{
             name: refactorName,
-            description: convertToOptionalChainExpression,
+            description: convertToOptionalChainExpressionMessage,
             actions: [{
                 name: refactorName,
-                description: convertToOptionalChainExpression
+                description: convertToOptionalChainExpressionMessage
             }]
         }];
     }

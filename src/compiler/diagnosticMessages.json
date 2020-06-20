@@ -5737,6 +5737,10 @@
         "category": "Message",
         "code": 95125
     },
+    "Convert to optional chain expression": {
+        "category": "Message",
+        "code": 95126
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
