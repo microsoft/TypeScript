@@ -53,16 +53,21 @@ namespace ts {
                     );
                 }
                 else {
+                    const tempArgumentExpression = factory.createTempVariable(hoistVariableDeclaration);
+
                     assignmentTarget = factory.createElementAccessExpression(
                         tempVariable,
-                        left.argumentExpression
+                        tempArgumentExpression
                     );
                     left = factory.createElementAccessExpression(
                         factory.createAssignment(
                             tempVariable,
                             left.expression
                         ),
-                        left.argumentExpression
+                        factory.createAssignment(
+                            tempArgumentExpression,
+                            left.argumentExpression
+                        )
                     );
                 }
             }

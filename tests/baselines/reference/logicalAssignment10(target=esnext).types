@@ -1,0 +1,26 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment10.ts ===
+var count = 0;
+>count : number
+>0 : 0
+
+var obj = {};
+>obj : {}
+>{} : {}
+
+function incr() {
+>incr : () => number
+
+    return ++count;
+>++count : number
+>count : number
+}
+
+obj[incr()] ??= incr();
+>obj[incr()] ??= incr() : any
+>obj[incr()] : error
+>obj : {}
+>incr() : number
+>incr : () => number
+>incr() : number
+>incr : () => number
+
