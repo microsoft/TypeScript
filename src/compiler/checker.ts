@@ -30731,7 +30731,7 @@ namespace ts {
                         if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                             if (operator === SyntaxKind.AmpersandAmpersandToken) {
                                 const parent = walkUpParenthesizedExpressions(node.parent);
-                                checkTestingKnownTruthyCallableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
+                                checkTestingKnownTruthyCallableOrAwaitableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
                             }
                             checkTruthinessOfType(leftType, node.left);
                         }
@@ -31275,7 +31275,7 @@ namespace ts {
 
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
             const type = checkTruthinessExpression(node.condition);
-            checkTestingKnownTruthyCallableType(node.condition, type, node.whenTrue);
+            checkTestingKnownTruthyCallableOrAwaitableType(node.condition, type, node.whenTrue);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
             return getUnionType([type1, type2], UnionReduction.Subtype);
@@ -34526,7 +34526,7 @@ namespace ts {
             // Grammar checking
             checkGrammarStatementInAmbientContext(node);
             const type = checkTruthinessExpression(node.expression);
-            checkTestingKnownTruthyCallableType(node.expression, type, node.thenStatement);
+            checkTestingKnownTruthyCallableOrAwaitableType(node.expression, type, node.thenStatement);
             checkSourceElement(node.thenStatement);
 
             if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -34536,8 +34536,16 @@ namespace ts {
             checkSourceElement(node.elseStatement);
         }
 
-        function checkTestingKnownTruthyCallableType(condExpr: Expression, type: Type, body: Statement | Expression | undefined) {
-            if (!strictNullChecks) {
+        function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, type: Type, body?: Statement | Expression) {
+            if (!strictNullChecks) return;
+            if (getFalsyFlags(type)) return;
+
+            if (getAwaitedTypeOfPromise(type)) {
+                errorAndMaybeSuggestAwait(
+                    condExpr,
+                    /*maybeMissingAwait*/ true,
+                    Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap,
+                    "true", getTypeNameForErrorDisplay(type), "false");
                 return;
             }
 
@@ -34549,11 +34557,6 @@ namespace ts {
             const isPropertyExpressionCast = isPropertyAccessExpression(location)
                 && isAssertionExpression(skipParentheses(location.expression));
             if (!testedNode || isPropertyExpressionCast) {
-                return;
-            }
-
-            const possiblyFalsy = getFalsyFlags(type);
-            if (possiblyFalsy) {
                 return;
             }
 
