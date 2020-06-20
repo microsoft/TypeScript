@@ -612,6 +612,7 @@ namespace ts {
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
@@ -1297,6 +1298,8 @@ namespace ts {
         staticModifier = "static",
         abstractModifier = "abstract",
         optionalModifier = "optional",
+
+        deprecatedModifier = "deprecated",
 
         dtsModifier = ".d.ts",
         tsModifier = ".ts",

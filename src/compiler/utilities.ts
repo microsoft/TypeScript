@@ -4555,7 +4555,7 @@ namespace ts {
         return getSyntacticModifierFlags(node) & flags;
     }
 
-    function getModifierFlagsWorker(node: Node, includeJSDoc: boolean): ModifierFlags {
+    function getModifierFlagsWorker(node: Node, includeJSDoc: boolean, alwaysIncludeJSDoc?: boolean): ModifierFlags {
         if (node.kind >= SyntaxKind.FirstToken && node.kind <= SyntaxKind.LastToken) {
             return ModifierFlags.None;
         }
@@ -4564,7 +4564,7 @@ namespace ts {
             node.modifierFlagsCache = getSyntacticModifierFlagsNoCache(node) | ModifierFlags.HasComputedFlags;
         }
 
-        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && isInJSFile(node) && node.parent) {
+        if (includeJSDoc && !(node.modifierFlagsCache & ModifierFlags.HasComputedJSDocModifiers) && (alwaysIncludeJSDoc || isInJSFile(node)) && node.parent) {
             node.modifierFlagsCache |= getJSDocModifierFlagsNoCache(node) | ModifierFlags.HasComputedJSDocModifiers;
         }
 
@@ -4580,6 +4580,10 @@ namespace ts {
         return getModifierFlagsWorker(node, /*includeJSDoc*/ true);
     }
 
+    export function getEffectiveModifierFlagsAlwaysIncludeJSDoc(node: Node): ModifierFlags {
+        return getModifierFlagsWorker(node, /*includeJSDOc*/ true, /*alwaysIncludeJSDOc*/ true);
+    }
+
     /**
      * Gets the ModifierFlags for syntactic modifiers on the provided node. The modifiers will be cached on the node to improve performance.
      *
@@ -4591,12 +4595,16 @@ namespace ts {
 
     function getJSDocModifierFlagsNoCache(node: Node): ModifierFlags {
         let flags = ModifierFlags.None;
-        if (isInJSFile(node) && !!node.parent && !isParameter(node)) {
-            if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.Public;
-            if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
-            if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
-            if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
+        if (!!node.parent && !isParameter(node)) {
+            if (isInJSFile(node)) {
+                if (getJSDocPublicTagNoCache(node)) flags |= ModifierFlags.Public;
+                if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
+                if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
+                if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
+            }
+            if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
         }
+
         return flags;
     }
 
@@ -5679,6 +5687,7 @@ namespace ts {
             category: message.category,
             code: message.code,
             reportsUnnecessary: message.reportsUnnecessary,
+            reportsDeprecated: message.reportsDeprecated
         };
     }
 
@@ -5710,6 +5719,7 @@ namespace ts {
             category: message.category,
             code: message.code,
             reportsUnnecessary: message.reportsUnnecessary,
+            reportsDeprecated: message.reportsDeprecated
         };
     }
 

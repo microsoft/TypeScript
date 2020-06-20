@@ -99,6 +99,7 @@
         "codefixes/fixAddModuleReferTypeMissingTypeof.ts",
         "codefixes/wrapJsxInFragment.ts",
         "codefixes/convertToMappedObjectType.ts",
+        "codefixes/removeAccidentalCallParentheses.ts",
         "codefixes/removeUnnecessaryAwait.ts",
         "codefixes/splitTypeOnlyImport.ts",
         "codefixes/convertConstToLet.ts",

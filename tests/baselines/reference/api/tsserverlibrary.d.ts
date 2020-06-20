@@ -390,28 +390,29 @@ declare namespace ts {
         JSDocAugmentsTag = 311,
         JSDocImplementsTag = 312,
         JSDocAuthorTag = 313,
-        JSDocClassTag = 314,
-        JSDocPublicTag = 315,
-        JSDocPrivateTag = 316,
-        JSDocProtectedTag = 317,
-        JSDocReadonlyTag = 318,
-        JSDocCallbackTag = 319,
-        JSDocEnumTag = 320,
-        JSDocParameterTag = 321,
-        JSDocReturnTag = 322,
-        JSDocThisTag = 323,
-        JSDocTypeTag = 324,
-        JSDocTemplateTag = 325,
-        JSDocTypedefTag = 326,
-        JSDocPropertyTag = 327,
-        SyntaxList = 328,
-        NotEmittedStatement = 329,
-        PartiallyEmittedExpression = 330,
-        CommaListExpression = 331,
-        MergeDeclarationMarker = 332,
-        EndOfDeclarationMarker = 333,
-        SyntheticReferenceExpression = 334,
-        Count = 335,
+        JSDocDeprecatedTag = 314,
+        JSDocClassTag = 315,
+        JSDocPublicTag = 316,
+        JSDocPrivateTag = 317,
+        JSDocProtectedTag = 318,
+        JSDocReadonlyTag = 319,
+        JSDocCallbackTag = 320,
+        JSDocEnumTag = 321,
+        JSDocParameterTag = 322,
+        JSDocReturnTag = 323,
+        JSDocThisTag = 324,
+        JSDocTypeTag = 325,
+        JSDocTemplateTag = 326,
+        JSDocTypedefTag = 327,
+        JSDocPropertyTag = 328,
+        SyntaxList = 329,
+        NotEmittedStatement = 330,
+        PartiallyEmittedExpression = 331,
+        CommaListExpression = 332,
+        MergeDeclarationMarker = 333,
+        EndOfDeclarationMarker = 334,
+        SyntheticReferenceExpression = 335,
+        Count = 336,
         FirstAssignment = 62,
         LastAssignment = 77,
         FirstCompoundAssignment = 63,
@@ -440,9 +441,9 @@ declare namespace ts {
         LastStatement = 245,
         FirstNode = 156,
         FirstJSDocNode = 298,
-        LastJSDocNode = 327,
+        LastJSDocNode = 328,
         FirstJSDocTagNode = 310,
-        LastJSDocTagNode = 327,
+        LastJSDocTagNode = 328,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -498,13 +499,14 @@ declare namespace ts {
         Default = 512,
         Const = 2048,
         HasComputedJSDocModifiers = 4096,
+        Deprecated = 8192,
         HasComputedFlags = 536870912,
         AccessibilityModifier = 28,
         ParameterPropertyModifier = 92,
         NonPublicAccessibilityModifier = 24,
         TypeScriptModifier = 2270,
         ExportDefault = 513,
-        All = 3071
+        All = 11263
     }
     export enum JsxFlags {
         None = 0,
@@ -1445,7 +1447,7 @@ declare namespace ts {
     }
     export interface ThrowStatement extends Statement {
         readonly kind: SyntaxKind.ThrowStatement;
-        readonly expression?: Expression;
+        readonly expression: Expression;
     }
     export interface TryStatement extends Statement {
         readonly kind: SyntaxKind.TryStatement;
@@ -1717,6 +1719,9 @@ declare namespace ts {
     }
     export interface JSDocAuthorTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocAuthorTag;
+    }
+    export interface JSDocDeprecatedTag extends JSDocTag {
+        kind: SyntaxKind.JSDocDeprecatedTag;
     }
     export interface JSDocClassTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocClassTag;
@@ -2103,9 +2108,9 @@ declare namespace ts {
         /** Note that the resulting nodes cannot be checked. */
         typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeNode | undefined;
         /** Note that the resulting nodes cannot be checked. */
-        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): (SignatureDeclaration & {
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): SignatureDeclaration & {
             typeArguments?: NodeArray<TypeNode>;
-        }) | undefined;
+        } | undefined;
         /** Note that the resulting nodes cannot be checked. */
         indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): IndexSignatureDeclaration | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -2308,6 +2313,7 @@ declare namespace ts {
         Transient = 33554432,
         Assignment = 67108864,
         ModuleExports = 134217728,
+        Deprecated = 268435456,
         Enum = 384,
         Variable = 3,
         Value = 111551,
@@ -2637,6 +2643,7 @@ declare namespace ts {
         code: number;
         message: string;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
     }
     /**
      * A linked list of formatted diagnostic messages to be used as part of a multiline message.
@@ -2653,6 +2660,7 @@ declare namespace ts {
     export interface Diagnostic extends DiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
@@ -2770,6 +2778,7 @@ declare namespace ts {
         project?: string;
         reactNamespace?: string;
         jsxFactory?: string;
+        jsxFragmentFactory?: string;
         composite?: boolean;
         incremental?: boolean;
         tsBuildInfoFile?: string;
@@ -3403,6 +3412,8 @@ declare namespace ts {
         updateJSDocReadonlyTag(node: JSDocReadonlyTag, tagName: Identifier | undefined, comment: string | undefined): JSDocReadonlyTag;
         createJSDocUnknownTag(tagName: Identifier, comment?: string): JSDocUnknownTag;
         updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | undefined): JSDocUnknownTag;
+        createJSDocDeprecatedTag(tagName: Identifier, comment?: string): JSDocDeprecatedTag;
+        updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string): JSDocDeprecatedTag;
         createJSDocComment(comment?: string | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
         updateJSDocComment(node: JSDoc, comment: string | undefined, tags: readonly JSDocTag[] | undefined): JSDoc;
         createJsxElement(openingElement: JsxOpeningElement, children: readonly JsxChild[], closingElement: JsxClosingElement): JsxElement;
@@ -4038,6 +4049,8 @@ declare namespace ts {
     function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined;
     /** Gets the JSDoc protected tag for the node if present */
     function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined;
+    /** Gets the JSDoc deprecated tag for the node if present */
+    function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined;
     /** Gets the JSDoc enum tag for the node if present */
     function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined;
     /** Gets the JSDoc this tag for the node if present */
@@ -4397,6 +4410,7 @@ declare namespace ts {
     function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag;
     function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag;
     function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag;
+    function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag;
     function isJSDocEnumTag(node: Node): node is JSDocEnumTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
     function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
@@ -5548,6 +5562,7 @@ declare namespace ts {
     interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
@@ -6097,6 +6112,7 @@ declare namespace ts {
         staticModifier = "static",
         abstractModifier = "abstract",
         optionalModifier = "optional",
+        deprecatedModifier = "deprecated",
         dtsModifier = ".d.ts",
         tsModifier = ".ts",
         tsxModifier = ".tsx",
@@ -6719,6 +6735,7 @@ declare namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
     }
     /**
@@ -8272,6 +8289,7 @@ declare namespace ts.server.protocol {
          */
         category: string;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         /**
          * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
          */
@@ -8708,6 +8726,7 @@ declare namespace ts.server.protocol {
     interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;

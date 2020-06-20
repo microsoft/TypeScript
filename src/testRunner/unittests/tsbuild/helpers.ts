@@ -296,9 +296,9 @@ interface Symbol {
                 }
                 else if (actualText !== expectedText) {
                     // Verify build info without affectedFilesPendingEmit
-                    const { text: actualBuildInfoText, affectedFilesPendingEmit: actualAffectedFilesPendingEmit } = getBuildInfoWithoutAffectedFilesPendingEmit(actualText);
-                    const { text: expectedBuildInfoText, affectedFilesPendingEmit: expectedAffectedFilesPendingEmit } = getBuildInfoWithoutAffectedFilesPendingEmit(expectedText);
-                    assert.equal(actualBuildInfoText, expectedBuildInfoText, `TsBuild info text without affectedFilesPendingEmit: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
+                    const { buildInfo: actualBuildInfo, affectedFilesPendingEmit: actualAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(actualText);
+                    const { buildInfo: expectedBuildInfo, affectedFilesPendingEmit: expectedAffectedFilesPendingEmit } = getBuildInfoForIncrementalCorrectnessCheck(expectedText);
+                    assert.deepEqual(actualBuildInfo, expectedBuildInfo, `TsBuild info text without affectedFilesPendingEmit: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
                     // Verify that incrementally pending affected file emit are in clean build since clean build can contain more files compared to incremental depending of noEmitOnError option
                     if (actualAffectedFilesPendingEmit) {
                         assert.isDefined(expectedAffectedFilesPendingEmit, `Incremental build contains affectedFilesPendingEmit, clean build should also have it: ${outputFile}::\nIncremental buildInfoText:: ${actualText}\nClean buildInfoText:: ${expectedText}`);
@@ -314,15 +314,19 @@ interface Symbol {
         });
     }
 
-    function getBuildInfoWithoutAffectedFilesPendingEmit(text: string | undefined): { text: string | undefined; affectedFilesPendingEmit?: ProgramBuildInfo["affectedFilesPendingEmit"]; } {
+    function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): { buildInfo: BuildInfo | undefined; affectedFilesPendingEmit?: ProgramBuildInfo["affectedFilesPendingEmit"]; } {
         const buildInfo = text ? getBuildInfo(text) : undefined;
-        if (!buildInfo?.program?.affectedFilesPendingEmit) return { text };
-        const { program: { affectedFilesPendingEmit, ...programRest }, ...rest } = buildInfo;
+        if (!buildInfo?.program) return { buildInfo };
+        // Ignore noEmit since that shouldnt be reason to emit the tsbuild info and presence of it in the buildinfo file does not matter
+        const { program: { affectedFilesPendingEmit, options: { noEmit, ...optionsRest}, ...programRest }, ...rest } = buildInfo;
         return {
-            text: getBuildInfoText({
+            buildInfo: {
                 ...rest,
-                program: programRest
-            }),
+                program: {
+                    options: optionsRest,
+                    ...programRest
+                }
+            },
             affectedFilesPendingEmit
         };
     }
@@ -423,7 +427,7 @@ interface Symbol {
                         subScenario,
                         baseFs,
                         newSys,
-                        commandLineArgs,
+                        commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
                         incrementalModifyFs,
                         modifyFs,
                         tick
@@ -515,12 +519,12 @@ interface Symbol {
                 }));
             });
             describe("incremental correctness", () => {
-                incrementalScenarios.forEach((_, index) => verifyIncrementalCorrectness(() => ({
+                incrementalScenarios.forEach(({ commandLineArgs: incrementalCommandLineArgs }, index) => verifyIncrementalCorrectness(() => ({
                     scenario,
                     subScenario,
                     baseFs,
                     newSys: incrementalSys[index],
-                    commandLineArgs,
+                    commandLineArgs: incrementalCommandLineArgs || commandLineArgs,
                     incrementalModifyFs: fs => {
                         for (let i = 0; i <= index; i++) {
                             incrementalScenarios[i].modifyFs(fs);
