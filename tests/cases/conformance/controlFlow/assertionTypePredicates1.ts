@@ -193,3 +193,11 @@ function example1(things: Thing[]) {
         thing.good;
     }
 }
+
+// Repro from #38699
+
+declare function strictEqual<T>(actual: any, expected: T, message?: string | Error): asserts actual is T;
+
+const b = false;
+strictEqual(false, b);
+let b2 = b;

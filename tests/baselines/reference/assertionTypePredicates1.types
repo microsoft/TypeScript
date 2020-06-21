@@ -666,3 +666,25 @@ function example1(things: Thing[]) {
     }
 }
 
+// Repro from #38699
+
+declare function strictEqual<T>(actual: any, expected: T, message?: string | Error): asserts actual is T;
+>strictEqual : <T>(actual: any, expected: T, message?: string | Error | undefined) => asserts actual is T
+>actual : any
+>expected : T
+>message : string | Error | undefined
+
+const b = false;
+>b : false
+>false : false
+
+strictEqual(false, b);
+>strictEqual(false, b) : void
+>strictEqual : <T>(actual: any, expected: T, message?: string | Error | undefined) => asserts actual is T
+>false : false
+>b : false
+
+let b2 = b;
+>b2 : boolean
+>b : false
+

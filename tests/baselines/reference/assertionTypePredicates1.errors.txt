@@ -240,3 +240,11 @@ tests/cases/conformance/controlFlow/assertionTypePredicates1.ts(170,5): error TS
         }
     }
     
+    // Repro from #38699
+    
+    declare function strictEqual<T>(actual: any, expected: T, message?: string | Error): asserts actual is T;
+    
+    const b = false;
+    strictEqual(false, b);
+    let b2 = b;
+    

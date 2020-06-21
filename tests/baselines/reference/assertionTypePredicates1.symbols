@@ -542,3 +542,27 @@ function example1(things: Thing[]) {
     }
 }
 
+// Repro from #38699
+
+declare function strictEqual<T>(actual: any, expected: T, message?: string | Error): asserts actual is T;
+>strictEqual : Symbol(strictEqual, Decl(assertionTypePredicates1.ts, 190, 1))
+>T : Symbol(T, Decl(assertionTypePredicates1.ts, 194, 29))
+>actual : Symbol(actual, Decl(assertionTypePredicates1.ts, 194, 32))
+>expected : Symbol(expected, Decl(assertionTypePredicates1.ts, 194, 44))
+>T : Symbol(T, Decl(assertionTypePredicates1.ts, 194, 29))
+>message : Symbol(message, Decl(assertionTypePredicates1.ts, 194, 57))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>actual : Symbol(actual, Decl(assertionTypePredicates1.ts, 194, 32))
+>T : Symbol(T, Decl(assertionTypePredicates1.ts, 194, 29))
+
+const b = false;
+>b : Symbol(b, Decl(assertionTypePredicates1.ts, 196, 5))
+
+strictEqual(false, b);
+>strictEqual : Symbol(strictEqual, Decl(assertionTypePredicates1.ts, 190, 1))
+>b : Symbol(b, Decl(assertionTypePredicates1.ts, 196, 5))
+
+let b2 = b;
+>b2 : Symbol(b2, Decl(assertionTypePredicates1.ts, 198, 3))
+>b : Symbol(b, Decl(assertionTypePredicates1.ts, 196, 5))
+

@@ -191,6 +191,14 @@ function example1(things: Thing[]) {
     }
 }
 
+// Repro from #38699
+
+declare function strictEqual<T>(actual: any, expected: T, message?: string | Error): asserts actual is T;
+
+const b = false;
+strictEqual(false, b);
+let b2 = b;
+
 
 //// [assertionTypePredicates1.js]
 "use strict";
@@ -374,6 +382,9 @@ function example1(things) {
         thing.good;
     }
 }
+var b = false;
+strictEqual(false, b);
+var b2 = b;
 
 
 //// [assertionTypePredicates1.d.ts]
@@ -426,3 +437,6 @@ interface GoodThing {
     good: true;
 }
 declare function example1(things: Thing[]): void;
+declare function strictEqual<T>(actual: any, expected: T, message?: string | Error): asserts actual is T;
+declare const b = false;
+declare let b2: boolean;
