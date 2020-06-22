@@ -20454,7 +20454,7 @@ namespace ts {
                     const signature = getEffectsSignature((<FlowCall>flow).node);
                     if (signature) {
                         const predicate = getTypePredicateOfSignature(signature);
-                        if (predicate && predicate.kind === TypePredicateKind.AssertsIdentifier) {
+                        if (predicate && predicate.kind === TypePredicateKind.AssertsIdentifier && !predicate.type) {
                             const predicateArgument = (<FlowCall>flow).node.arguments[predicate.parameterIndex];
                             if (predicateArgument && isFalseExpression(predicateArgument)) {
                                 return false;

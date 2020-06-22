@@ -114,19 +114,19 @@ Warning: /vue-next/packages/runtime-dom/src/components/Transition.ts:77:5 - (TS7
 [!] (plugin rpt2) Error: /vue-next/packages/runtime-core/src/apiInject.ts(40,9): semantic error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
 packages/runtime-core/src/apiInject.ts
 Error: /vue-next/packages/runtime-core/src/apiInject.ts(40,9): semantic error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
-    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:213:30)
-    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:17117:12)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17911:24)
-    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17290:38)
+    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:5154:30)
+    at throwPluginError (/vue-next/node_modules/rollup/dist/shared/rollup.js:17381:12)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:18002:24)
+    at Object.error (/vue-next/node_modules/rollup/dist/shared/rollup.js:17554:38)
     at RollupContext.error (/vue-next/node_modules/rollup-plugin-typescript2/src/rollupcontext.ts:37:18)
     at /vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:41:11
     at arrayEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:516:11)
     at forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9342:14)
     at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
     at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:242:5)
-(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1 (EPERM): rollup -c --environment COMMIT:cf2f278,NODE_ENV:production,TARGET:runtime-core,TYPES:true
+(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1: rollup -c --environment COMMIT:ca137db,NODE_ENV:production,TARGET:runtime-core,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
-    at handlePromise (/vue-next/node_modules/execa/index.js:112:26)
+    at handlePromise (/vue-next/node_modules/execa/index.js:114:26)
     at processTicksAndRejections (internal/process/task_queues.js:97:5)
     at async build (/vue-next/scripts/build.js:71:3)
     at async buildAll (/vue-next/scripts/build.js:50:5)

@@ -3527,7 +3527,7 @@ namespace ts {
                         type = finishNode(factory.createJSDocNonNullableType(type), pos);
                         break;
                     case SyntaxKind.QuestionToken:
-                        // If not in JSDoc and next token is start of a type we have a conditional type
+                        // If next token is start of a type we have a conditional type
                         if (lookAhead(nextTokenIsStartOfType)) {
                             return type;
                         }
