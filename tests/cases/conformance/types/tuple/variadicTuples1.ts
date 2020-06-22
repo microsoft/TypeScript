@@ -1,4 +1,5 @@
 // @strict: true
+// @declaration: true
 
 // Variadics in tuple types
 
