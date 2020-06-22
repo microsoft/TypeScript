@@ -1634,7 +1634,7 @@ namespace ts.server {
 
             const dependencySelection = this.includePackageJsonAutoImports();
             if (dependencySelection) {
-                this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.documentRegistry);
+                this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.projectService.host, this.documentRegistry);
                 if (this.autoImportProviderHost) {
                     updateProjectIfDirty(this.autoImportProviderHost);
                     return this.autoImportProviderHost.getCurrentProgram();
@@ -1793,7 +1793,7 @@ namespace ts.server {
         private static readonly newName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
 
         /*@internal*/
-        static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, compilerOptions: CompilerOptions): string[] {
+        static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, compilerOptions: CompilerOptions): string[] {
             if (!dependencySelection) {
                 return ts.emptyArray;
             }
@@ -1815,7 +1815,7 @@ namespace ts.server {
                     name,
                     rootFileName,
                     compilerOptions,
-                    hostProject));
+                    moduleResolutionHost));
 
                 for (const resolution of resolutions) {
                     if (resolution.resolvedTypeReferenceDirective?.resolvedFileName && !hostProject.getCurrentProgram()!.getSourceFile(resolution.resolvedTypeReferenceDirective.resolvedFileName)) {
@@ -1834,7 +1834,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
+        static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
             if (dependencySelection === PackageJsonAutoImportPreference.None) {
                 return undefined;
             }
@@ -1849,7 +1849,7 @@ namespace ts.server {
                 sourceMap: false
             };
 
-            const rootNames = this.getRootFileNames(dependencySelection, hostProject, compilerOptions);
+            const rootNames = this.getRootFileNames(dependencySelection, hostProject, moduleResolutionHost, compilerOptions);
             if (!rootNames.length) {
                 return undefined;
             }
@@ -1891,6 +1891,7 @@ namespace ts.server {
                 rootFileNames = AutoImportProviderProject.getRootFileNames(
                     this.hostProject.includePackageJsonAutoImports(),
                     this.hostProject,
+                    this.projectService.host,
                     this.getCompilationSettings());
             }
 
@@ -2062,14 +2063,9 @@ namespace ts.server {
                     result = super.updateGraph();
             }
             this.compilerHost = undefined;
-            this.onFinishedLoading();
-            return result;
-        }
-
-        /*@internal*/
-        onFinishedLoading() {
             this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
+            return result;
         }
 
         /*@internal*/
