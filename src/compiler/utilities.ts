@@ -5924,6 +5924,22 @@ namespace ts {
         return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
     }
 
+    export function getJSXTransformEnabled(options: CompilerOptions): boolean {
+        const jsx = options.jsx;
+        return jsx === JsxEmit.React || jsx === JsxEmit.ReactJSX || jsx === JsxEmit.ReactJSXDev;
+    }
+
+    export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file: SourceFile): string | undefined {
+        const jsxImportSourcePragmas = file.pragmas.get("jsximportsource");
+        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
+        return compilerOptions.jsx === JsxEmit.ReactJSX ||
+            compilerOptions.jsx === JsxEmit.ReactJSXDev ||
+            compilerOptions.jsxImportSource ||
+            jsxImportSourcePragma ?
+                jsxImportSourcePragma?.arguments.factory || compilerOptions.jsxImportSource || "react" :
+                undefined;
+    }
+
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {

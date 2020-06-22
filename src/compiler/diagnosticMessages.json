@@ -3542,6 +3542,10 @@
         "category": "Error",
         "code": 5088
     },
+    "Option '{0}' cannot be specified when option 'jsx' is '{1}'.": {
+        "category": "Error",
+        "code": 5089
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -4428,6 +4432,10 @@
     "This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?": {
         "category": "Error",
         "code": 6234
+    },
+    "Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react": {
+        "category": "Error",
+        "code": 6235
     },
 
     "Projects to reference": {

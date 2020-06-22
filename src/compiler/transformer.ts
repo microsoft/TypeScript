@@ -37,7 +37,6 @@ namespace ts {
     function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean) {
         if (emitOnlyDtsFiles) return emptyArray;
 
-        const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
@@ -47,7 +46,7 @@ namespace ts {
         transformers.push(transformTypeScript);
         transformers.push(transformClassFields);
 
-        if (jsx === JsxEmit.React) {
+        if (getJSXTransformEnabled(compilerOptions)) {
             transformers.push(transformJsx);
         }
 
