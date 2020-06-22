@@ -662,6 +662,8 @@ namespace ts.server {
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
             this.builderState = undefined;
+            this.autoImportProviderHost?.close();
+            this.autoImportProviderHost = undefined;
             this.resolutionCache.closeTypeRootsWatch();
             this.clearGeneratedFileWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
