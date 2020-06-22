@@ -122,7 +122,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    function createWatcher<T>(map: MultiMap<string, T>, path: string, callback: T): FileWatcher {
+    function createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): FileWatcher {
         map.add(path, callback);
         return { close: () => map.remove(path, callback) };
     }
@@ -376,7 +376,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         private readonly output: string[] = [];
 
-        private fs: Map<string, FSEntry> = createMap<FSEntry>();
+        private fs: Map<Path, FSEntry> = new Map();
         private time = timeIncrements;
         getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
@@ -384,9 +384,9 @@ interface Array<T> { length: number; [n: number]: T; }`
         private immediateCallbacks = new Callbacks();
         readonly screenClears: number[] = [];
 
-        readonly watchedFiles = createMultiMap<TestFileWatcher>();
-        readonly fsWatches = createMultiMap<TestFsWatcher>();
-        readonly fsWatchesRecursive = createMultiMap<TestFsWatcher>();
+        readonly watchedFiles = createMultiMap<Path, TestFileWatcher>();
+        readonly fsWatches = createMultiMap<Path, TestFsWatcher>();
+        readonly fsWatchesRecursive = createMultiMap<Path, TestFsWatcher>();
         runWithFallbackPolling: boolean;
         public readonly useCaseSensitiveFileNames: boolean;
         public readonly newLine: string;
@@ -1042,8 +1042,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.clearOutput();
         }
 
-        snap(): Map<string, FSEntry> {
-            const result = new Map<string, FSEntry>();
+        snap(): Map<Path, FSEntry> {
+            const result = new Map<Path, FSEntry>();
             this.fs.forEach((value, key) => {
                 const cloneValue = clone(value);
                 if (isFsFolder(cloneValue)) {
@@ -1055,7 +1055,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             return result;
         }
 
-        writtenFiles?: Map<string, number>;
+        writtenFiles?: Map<Path, number>;
         diff(baseline: string[], base: Map<string, FSEntry> = new Map()) {
             this.fs.forEach(newFsEntry => {
                 diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, this.writtenFiles);
@@ -1208,12 +1208,12 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: Map<string, number>; };
+    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: Map<Path, number>; };
 
     export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
         const host = inputHost as TestServerHostTrackingWrittenFiles;
         const originalWriteFile = host.writeFile;
-        host.writtenFiles = createMap<number>();
+        host.writtenFiles = new Map<Path, number>();
         host.writeFile = (fileName, content) => {
             originalWriteFile.call(host, fileName, content);
             const path = host.toFullPath(fileName);

@@ -474,8 +474,8 @@ namespace ts {
         }
 
         const cache = new Map<string, HostDirectoryWatcher>();
-        const callbackCache = createMultiMap<{ dirName: string; callback: DirectoryWatcherCallback; }>();
-        const cacheToUpdateChildWatches = new Map<string, { dirName: string; options: WatchOptions | undefined; fileNames: string[]; }>();
+        const callbackCache = createMultiMap<Path, { dirName: string; callback: DirectoryWatcherCallback; }>();
+        const cacheToUpdateChildWatches = new Map<Path, { dirName: string; options: WatchOptions | undefined; fileNames: string[]; }>();
         let timerToUpdateChildWatches: any;
 
         const filePathComparer = getStringComparer(!host.useCaseSensitiveFileNames);
@@ -538,7 +538,7 @@ namespace ts {
             };
         }
 
-        type InvokeMap = Map<string, string[] | true>;
+        type InvokeMap = Map<Path, string[] | true>;
         function invokeCallbacks(dirPath: Path, fileName: string): void;
         function invokeCallbacks(dirPath: Path, invokeMap: InvokeMap, fileNames: string[] | undefined): void;
         function invokeCallbacks(dirPath: Path, fileNameOrInvokeMap: string | InvokeMap, fileNames?: string[]) {
@@ -608,7 +608,7 @@ namespace ts {
             timerToUpdateChildWatches = undefined;
             sysLog(`sysLog:: onTimerToUpdateChildWatches:: ${cacheToUpdateChildWatches.size}`);
             const start = timestamp();
-            const invokeMap = new Map<string, string[]>();
+            const invokeMap = new Map<Path, string[]>();
 
             while (!timerToUpdateChildWatches && cacheToUpdateChildWatches.size) {
                 const { value: [dirPath, { dirName, options, fileNames }], done } = cacheToUpdateChildWatches.entries().next();
@@ -617,7 +617,7 @@ namespace ts {
                 // Because the child refresh is fresh, we would need to invalidate whole root directory being watched
                 // to ensure that all the changes are reflected at this time
                 const hasChanges = updateChildWatches(dirName, dirPath as Path, options);
-                invokeCallbacks(dirPath as Path, invokeMap, hasChanges ? undefined : fileNames);
+                invokeCallbacks(dirPath, invokeMap, hasChanges ? undefined : fileNames);
             }
 
             sysLog(`sysLog:: invokingWatchers:: ${timestamp() - start}ms:: ${cacheToUpdateChildWatches.size}`);

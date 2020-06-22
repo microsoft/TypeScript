@@ -9436,7 +9436,7 @@ declare namespace ts.server {
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
-        readonly openFiles: Map<string, NormalizedPath | undefined>;
+        readonly openFiles: Map<Path, NormalizedPath | undefined>;
         /**
          * Map of open files that are opened without complete path but have projectRoot as current directory
          */

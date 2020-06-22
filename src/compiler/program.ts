@@ -533,7 +533,7 @@ namespace ts {
     export const inferredTypesContainingFile = "__inferred type names__.ts";
 
     interface DiagnosticCache<T extends Diagnostic> {
-        perFile?: Map<string, readonly T[]>;
+        perFile?: Map<Path, readonly T[]>;
         allDiagnostics?: readonly T[];
     }
 
@@ -709,7 +709,7 @@ namespace ts {
         let classifiableNames: UnderscoreEscapedMap<true>;
         const ambientModuleNameToUnmodifiedFileName = createMap<string>();
         // Todo:: Use this to report why file was included in --extendedDiagnostics
-        let refFileMap: MultiMap<string, ts.RefFile> | undefined;
+        let refFileMap: MultiMap<Path, ts.RefFile> | undefined;
 
         const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
@@ -803,9 +803,9 @@ namespace ts {
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
         let resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined;
-        let projectReferenceRedirects: Map<string, ResolvedProjectReference | false> | undefined;
-        let mapFromFileToProjectReferenceRedirects: Map<string, Path> | undefined;
-        let mapFromToProjectReferenceRedirectSource: Map<string, SourceOfProjectReferenceRedirect> | undefined;
+        let projectReferenceRedirects: Map<Path, ResolvedProjectReference | false> | undefined;
+        let mapFromFileToProjectReferenceRedirects: Map<Path, Path> | undefined;
+        let mapFromToProjectReferenceRedirectSource: Map<Path, SourceOfProjectReferenceRedirect> | undefined;
 
         const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
             !options.disableSourceOfProjectReferenceRedirect;
@@ -2028,7 +2028,7 @@ namespace ts {
         ): readonly U[] {
 
             const cachedResult = sourceFile
-                ? cache.perFile && cache.perFile.get(sourceFile.path)
+                ? cache.perFile?.get(sourceFile.path)
                 : cache.allDiagnostics;
 
             if (cachedResult) {
@@ -2036,10 +2036,7 @@ namespace ts {
             }
             const result = getDiagnostics(sourceFile, cancellationToken);
             if (sourceFile) {
-                if (!cache.perFile) {
-                    cache.perFile = createMap();
-                }
-                cache.perFile.set(sourceFile.path, result);
+                (cache.perFile ??= new Map()).set(sourceFile.path, result);
             }
             else {
                 cache.allDiagnostics = result;
@@ -2498,7 +2495,7 @@ namespace ts {
 
         function addFileToRefFileMap(referencedFileName: string, file: SourceFile | undefined, refFile: RefFile | undefined) {
             if (refFile && file) {
-                (refFileMap || (refFileMap = createMultiMap())).add(file.path, {
+                (refFileMap ??= createMultiMap()).add(file.path, {
                     referencedFileName,
                     kind: refFile.kind,
                     index: refFile.index,
@@ -2546,7 +2543,7 @@ namespace ts {
          */
         function getResolvedProjectReferenceToRedirect(fileName: string) {
             if (mapFromFileToProjectReferenceRedirects === undefined) {
-                mapFromFileToProjectReferenceRedirects = createMap();
+                mapFromFileToProjectReferenceRedirects = new Map();
                 forEachResolvedProjectReference((referencedProject, referenceProjectPath) => {
                     // not input file from the referenced project, ignore
                     if (referencedProject &&
@@ -2892,7 +2889,7 @@ namespace ts {
         function checkSourceFilesBelongToPath(sourceFiles: readonly SourceFile[], rootDirectory: string): boolean {
             let allFilesBelongToPath = true;
             const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
-            let rootPaths: Set<string> | undefined;
+            let rootPaths: Set<Path> | undefined;
 
             for (const sourceFile of sourceFiles) {
                 if (!sourceFile.isDeclarationFile) {
@@ -2916,7 +2913,7 @@ namespace ts {
 
         function parseProjectReferenceConfigFile(ref: ProjectReference): ResolvedProjectReference | undefined {
             if (!projectReferenceRedirects) {
-                projectReferenceRedirects = createMap<ResolvedProjectReference | false>();
+                projectReferenceRedirects = new Map();
             }
 
             // The actual filename (i.e. add "/tsconfig.json" if necessary)
@@ -3262,8 +3259,8 @@ namespace ts {
             return createFileDiagnostic(refFile, pos, end - pos, message, ...args);
         }
 
-        function addProgramDiagnosticAtRefPath(file: SourceFile, rootPaths: Set<string>, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
-            const refPaths = refFileMap && refFileMap.get(file.path);
+        function addProgramDiagnosticAtRefPath(file: SourceFile, rootPaths: Set<Path>, message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
+            const refPaths = refFileMap?.get(file.path);
             const refPathToReportErrorOn = forEach(refPaths, refPath => rootPaths.has(refPath.file) ? refPath : undefined) ||
                 elementAt(refPaths, 0);
             programDiagnostics.add(
@@ -3481,9 +3478,9 @@ namespace ts {
     }
 
     function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSourceOfProjectReferenceRedirect) {
-        let setOfDeclarationDirectories: Set<string> | undefined;
-        let symlinkedDirectories: Map<string, SymlinkedDirectory | false> | undefined;
-        let symlinkedFiles: Map<string, string> | undefined;
+        let setOfDeclarationDirectories: Set<Path> | undefined;
+        let symlinkedDirectories: Map<Path, SymlinkedDirectory | false> | undefined;
+        let symlinkedFiles: Map<Path, string> | undefined;
 
         const originalFileExists = host.compilerHost.fileExists;
         const originalDirectoryExists = host.compilerHost.directoryExists;
@@ -3590,7 +3587,7 @@ namespace ts {
 
             // Because we already watch node_modules, handle symlinks in there
             if (!originalRealpath || !stringContains(directory, nodeModulesPathPart)) return;
-            if (!symlinkedDirectories) symlinkedDirectories = createMap();
+            if (!symlinkedDirectories) symlinkedDirectories = new Map();
             const directoryPath = ensureTrailingDirectorySeparator(host.toPath(directory));
             if (symlinkedDirectories.has(directoryPath)) return;
 
@@ -3629,7 +3626,7 @@ namespace ts {
                     if (!symlinkedDirectory || !startsWith(fileOrDirectoryPath, directoryPath)) return undefined;
                     const result = fileOrDirectoryExistsUsingSource(fileOrDirectoryPath.replace(directoryPath, symlinkedDirectory.realPath));
                     if (isFile && result) {
-                        if (!symlinkedFiles) symlinkedFiles = createMap();
+                        if (!symlinkedFiles) symlinkedFiles = new Map();
                         // Store the real path for the file'
                         const absolutePath = getNormalizedAbsolutePath(fileOrDirectory, host.compilerHost.getCurrentDirectory());
                         symlinkedFiles.set(

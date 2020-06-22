@@ -42,15 +42,10 @@ namespace ts {
     export const emptyArray: never[] = [] as never[];
 
     /** Create a new map. */
-    export function createMap<T>(): Map<string, T>;
     export function createMap<K, V>(): Map<K, V>;
+    export function createMap<T>(): Map<string, T>;
     export function createMap<K, V>(): Map<K, V> {
         return new Map<K, V>();
-    }
-
-    /** Create a new map from an array of entries. */
-    export function createMapFromEntries<K, V>(entries: readonly [K, V][]): Map<K, V> {
-        return new Map(entries);
     }
 
     /** Create a new map from a template object is provided, the map will copy entries from it. */
@@ -1339,10 +1334,10 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<string, T>;
-    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<string, U>;
     export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): Map<K, V>;
     export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): Map<K, V2>;
+    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<string, T>;
+    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<string, U>;
     export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): Map<K, V1 | V2> {
         const result = new Map<K, V1 | V2>();
         for (const value of array) {
@@ -1436,8 +1431,8 @@ namespace ts {
         remove(key: K, value: V): void;
     }
 
-    export function createMultiMap<V>(): MultiMap<string, V>;
     export function createMultiMap<K, V>(): MultiMap<K, V>;
+    export function createMultiMap<V>(): MultiMap<string, V>;
     export function createMultiMap<K, V>(): MultiMap<K, V> {
         const map = new Map<K, V[]>() as MultiMap<K, V>;
         map.add = multiMapAdd;
@@ -1662,7 +1657,7 @@ namespace ts {
      * Case-sensitive comparisons compare both strings one code-point at a time using the integer
      * value of each code-point after applying `toUpperCase` to each string. We always map both
      * strings to their upper-case form as some unicode characters do not properly round-trip to
-     * lowercase (such as `áºž` (German sharp capital s)).
+     * lowercase (such as `ẞ` (German sharp capital s)).
      */
     export function equateStringsCaseInsensitive(a: string, b: string) {
         return a === b
@@ -1720,7 +1715,7 @@ namespace ts {
      * Case-insensitive comparisons compare both strings one code-point at a time using the integer
      * value of each code-point after applying `toUpperCase` to each string. We always map both
      * strings to their upper-case form as some unicode characters do not properly round-trip to
-     * lowercase (such as `Ã¡ÂºÅ¾` (German sharp capital s)).
+     * lowercase (such as `ẞ` (German sharp capital s)).
      */
     export function compareStringsCaseInsensitive(a: string, b: string) {
         if (a === b) return Comparison.EqualTo;

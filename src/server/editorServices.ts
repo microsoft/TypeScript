@@ -379,7 +379,7 @@ namespace ts.server {
          * It is false when the open file that would still be impacted by existence of
          *   this config file but it is not the root of inferred project
          */
-        openFilesImpactedByConfigFile: Map<string, boolean>;
+        openFilesImpactedByConfigFile: Map<Path, boolean>;
         /**
          * The file watcher watching the config file because there is open script info that is root of
          * inferred project and will be impacted by change in the status of the config file
@@ -592,7 +592,7 @@ namespace ts.server {
          * Map to the real path of the infos
          */
         /* @internal */
-        readonly realpathToScriptInfos: MultiMap<string, ScriptInfo> | undefined;
+        readonly realpathToScriptInfos: MultiMap<Path, ScriptInfo> | undefined;
         /**
          * maps external project file name to list of config files that were the part of this project
          */
@@ -613,7 +613,7 @@ namespace ts.server {
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
-        readonly openFiles = createMap<NormalizedPath | undefined>();
+        readonly openFiles = new Map<Path, NormalizedPath | undefined>();
         /**
          * Map of open files that are opened without complete path but have projectRoot as current directory
          */
@@ -1119,9 +1119,9 @@ namespace ts.server {
             }
         }
 
-        private delayUpdateSourceInfoProjects(sourceInfos: Set<string> | undefined) {
+        private delayUpdateSourceInfoProjects(sourceInfos: Set<Path> | undefined) {
             if (sourceInfos) {
-                sourceInfos.forEach((_value, path) => this.delayUpdateProjectsOfScriptInfoPath(path as Path));
+                sourceInfos.forEach((_value, path) => this.delayUpdateProjectsOfScriptInfoPath(path));
             }
         }
 
@@ -1491,7 +1491,7 @@ namespace ts.server {
 
             // Cache the host value of file exists and add the info to map of open files impacted by this config file
             const exists = this.host.fileExists(configFileName);
-            const openFilesImpactedByConfigFile = createMap<boolean>();
+            const openFilesImpactedByConfigFile = new Map<Path, boolean>();
             if (isOpenScriptInfo(info)) {
                 openFilesImpactedByConfigFile.set(info.path, false);
             }
@@ -1519,7 +1519,7 @@ namespace ts.server {
                 // Since that route doesnt check if the config file is present or not
                 this.configFileExistenceInfoCache.set(project.canonicalConfigFilePath, {
                     exists: true,
-                    openFilesImpactedByConfigFile: createMap<boolean>()
+                    openFilesImpactedByConfigFile: new Map<Path, boolean>()
                 });
             }
         }
@@ -1655,7 +1655,7 @@ namespace ts.server {
                     // Create the cache
                     configFileExistenceInfo = {
                         exists: this.host.fileExists(configFileName),
-                        openFilesImpactedByConfigFile: createMap<boolean>()
+                        openFilesImpactedByConfigFile: new Map<Path, boolean>()
                     };
                     this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
                 }
@@ -2296,8 +2296,8 @@ namespace ts.server {
          * Note that this does not return projects in info.containingProjects
          */
         /*@internal*/
-        getSymlinkedProjects(info: ScriptInfo): MultiMap<string, Project> | undefined {
-            let projects: MultiMap<string, Project> | undefined;
+        getSymlinkedProjects(info: ScriptInfo): MultiMap<Path, Project> | undefined {
+            let projects: MultiMap<Path, Project> | undefined;
             if (this.realpathToScriptInfos) {
                 const realpath = info.getRealpathIfDifferent();
                 if (realpath) {
@@ -2592,7 +2592,7 @@ namespace ts.server {
             return documentPositionMapper;
         }
 
-        private addSourceInfoToSourceMap(sourceFileName: string | undefined, project: Project, sourceInfos?: Set<string>) {
+        private addSourceInfoToSourceMap(sourceFileName: string | undefined, project: Project, sourceInfos?: Set<Path>) {
             if (sourceFileName) {
                 // Attach as source
                 const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
@@ -2761,7 +2761,7 @@ namespace ts.server {
          * If the there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles<T>(openFiles: Map<string, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
+        private reloadConfiguredProjectForFiles<T>(openFiles: Map<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
             const updatedProjects = createMap<true>();
             // try to reload config file for all open files
             openFiles.forEach((openFileValue, path) => {
@@ -3081,7 +3081,7 @@ namespace ts.server {
                 (key, project) => !project.isInitialLoadPending() ? [key, true] : undefined
             );
 
-            const seenProjects = new Set<string>();
+            const seenProjects = new Set<NormalizedPath>();
             // Work on array copy as we could add more projects as part of callback
             for (const project of arrayFrom(this.configuredProjects.values())) {
                 // If this project has potential project reference for any of the project we are loading ancestor tree for
@@ -3099,7 +3099,7 @@ namespace ts.server {
             }
         }
 
-        private ensureProjectChildren(project: ConfiguredProject, seenProjects: Set<string>) {
+        private ensureProjectChildren(project: ConfiguredProject, seenProjects: Set<NormalizedPath>) {
             if (!tryAddToSet(seenProjects, project.canonicalConfigFilePath)) return;
             // Update the project
             updateProjectIfDirty(project);
@@ -3204,7 +3204,7 @@ namespace ts.server {
                 if (!info.isScriptOpen() && info.isOrphan()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
-                    let sourceInfos: Set<string> | undefined;
+                    let sourceInfos: Set<Path> | undefined;
                     if (isString(info.sourceMapFilePath)) {
                         const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
                         sourceInfos = sourceMapInfo && sourceMapInfo.sourceInfos;
@@ -3224,7 +3224,7 @@ namespace ts.server {
                 // Retain this script info
                 toRemoveScriptInfos.delete(info.path);
                 if (info.sourceMapFilePath) {
-                    let sourceInfos: Set<string> | undefined;
+                    let sourceInfos: Set<Path> | undefined;
                     if (isString(info.sourceMapFilePath)) {
                         // And map file info and source infos
                         toRemoveScriptInfos.delete(info.sourceMapFilePath);

@@ -24,11 +24,11 @@ namespace ts {
         /**
          * Cache of bind and check diagnostics for files with their Path being the key
          */
-        semanticDiagnosticsPerFile?: ReadonlyMap<string, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
+        semanticDiagnosticsPerFile?: ReadonlyMap<Path, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
         /**
          * The map has key by source file's path that has been changed
          */
-        changedFilesSet?: ReadonlySet<string>;
+        changedFilesSet?: ReadonlySet<Path>;
         /**
          * Set of affected files being iterated
          */
@@ -41,7 +41,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures?: ReadonlyMap<string, string> | undefined;
+        currentAffectedFilesSignatures?: ReadonlyMap<Path, string> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -49,7 +49,7 @@ namespace ts {
         /**
          * True if the semantic diagnostics were copied from the old state
          */
-        semanticDiagnosticsFromOldState?: Set<string>;
+        semanticDiagnosticsFromOldState?: Set<Path>;
         /**
          * program corresponding to this state
          */
@@ -65,7 +65,7 @@ namespace ts {
         /**
          * Files pending to be emitted kind.
          */
-        affectedFilesPendingEmitKind?: ReadonlyMap<string, BuilderFileEmit> | undefined;
+        affectedFilesPendingEmitKind?: ReadonlyMap<Path, BuilderFileEmit> | undefined;
         /**
          * Current index to retrieve pending affected file
          */
@@ -89,11 +89,11 @@ namespace ts {
         /**
          * Cache of bind and check diagnostics for files with their Path being the key
          */
-        semanticDiagnosticsPerFile: Map<string, readonly Diagnostic[]> | undefined;
+        semanticDiagnosticsPerFile: Map<Path, readonly Diagnostic[]> | undefined;
         /**
          * The map has key by source file's path that has been changed
          */
-        changedFilesSet: Set<string>;
+        changedFilesSet: Set<Path>;
         /**
          * Set of affected files being iterated
          */
@@ -110,7 +110,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures: Map<string, string> | undefined;
+        currentAffectedFilesSignatures: Map<Path, string> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -118,7 +118,7 @@ namespace ts {
         /**
          * Already seen affected files
          */
-        seenAffectedFiles: Set<string> | undefined;
+        seenAffectedFiles: Set<Path> | undefined;
         /**
          * whether this program has cleaned semantic diagnostics cache for lib files
          */
@@ -126,7 +126,7 @@ namespace ts {
         /**
          * True if the semantic diagnostics were copied from the old state
          */
-        semanticDiagnosticsFromOldState?: Set<string>;
+        semanticDiagnosticsFromOldState?: Set<Path>;
         /**
          * program corresponding to this state
          */
@@ -142,7 +142,7 @@ namespace ts {
         /**
          * Files pending to be emitted kind.
          */
-        affectedFilesPendingEmitKind: Map<string, BuilderFileEmit> | undefined;
+        affectedFilesPendingEmitKind: Map<Path, BuilderFileEmit> | undefined;
         /**
          * Current index to retrieve pending affected file
          */
@@ -154,7 +154,7 @@ namespace ts {
         /**
          * Already seen emitted files
          */
-        seenEmittedFiles: Map<string, BuilderFileEmit> | undefined;
+        seenEmittedFiles: Map<Path, BuilderFileEmit> | undefined;
         /**
          * true if program has been emitted
          */
@@ -176,7 +176,7 @@ namespace ts {
         state.compilerOptions = compilerOptions;
         // With --out or --outFile, any change affects all semantic diagnostics so no need to cache them
         if (!outFile(compilerOptions)) {
-            state.semanticDiagnosticsPerFile = createMap<readonly Diagnostic[]>();
+            state.semanticDiagnosticsPerFile = new Map();
         }
         state.changedFilesSet = new Set();
 
@@ -199,7 +199,7 @@ namespace ts {
             changedFilesSet?.forEach(value => state.changedFilesSet.add(value));
             if (!outFile(compilerOptions) && oldState!.affectedFilesPendingEmit) {
                 state.affectedFilesPendingEmit = oldState!.affectedFilesPendingEmit.slice();
-                state.affectedFilesPendingEmitKind = cloneMapOrUndefined(oldState!.affectedFilesPendingEmitKind);
+                state.affectedFilesPendingEmitKind = oldState!.affectedFilesPendingEmitKind && new Map(oldState!.affectedFilesPendingEmitKind);
                 state.affectedFilesPendingEmitIndex = oldState!.affectedFilesPendingEmitIndex;
                 state.seenAffectedFiles = new Set();
             }
@@ -305,22 +305,22 @@ namespace ts {
      */
     function cloneBuilderProgramState(state: Readonly<BuilderProgramState>): BuilderProgramState {
         const newState = BuilderState.clone(state) as BuilderProgramState;
-        newState.semanticDiagnosticsPerFile = cloneMapOrUndefined(state.semanticDiagnosticsPerFile);
+        newState.semanticDiagnosticsPerFile = state.semanticDiagnosticsPerFile && new Map(state.semanticDiagnosticsPerFile);
         newState.changedFilesSet = new Set(state.changedFilesSet);
         newState.affectedFiles = state.affectedFiles;
         newState.affectedFilesIndex = state.affectedFilesIndex;
         newState.currentChangedFilePath = state.currentChangedFilePath;
-        newState.currentAffectedFilesSignatures = cloneMapOrUndefined(state.currentAffectedFilesSignatures);
-        newState.currentAffectedFilesExportedModulesMap = cloneMapOrUndefined(state.currentAffectedFilesExportedModulesMap);
+        newState.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures && new Map(state.currentAffectedFilesSignatures);
+        newState.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap && new Map(state.currentAffectedFilesExportedModulesMap);
         newState.seenAffectedFiles = state.seenAffectedFiles && new Set(state.seenAffectedFiles);
         newState.cleanedDiagnosticsOfLibFiles = state.cleanedDiagnosticsOfLibFiles;
         newState.semanticDiagnosticsFromOldState = state.semanticDiagnosticsFromOldState && new Set(state.semanticDiagnosticsFromOldState);
         newState.program = state.program;
         newState.compilerOptions = state.compilerOptions;
         newState.affectedFilesPendingEmit = state.affectedFilesPendingEmit && state.affectedFilesPendingEmit.slice();
-        newState.affectedFilesPendingEmitKind = cloneMapOrUndefined(state.affectedFilesPendingEmitKind);
+        newState.affectedFilesPendingEmitKind = state.affectedFilesPendingEmitKind && new Map(state.affectedFilesPendingEmitKind);
         newState.affectedFilesPendingEmitIndex = state.affectedFilesPendingEmitIndex;
-        newState.seenEmittedFiles = cloneMapOrUndefined(state.seenEmittedFiles);
+        newState.seenEmittedFiles = state.seenEmittedFiles && new Map(state.seenEmittedFiles);
         newState.programEmitComplete = state.programEmitComplete;
         return newState;
     }
@@ -382,14 +382,14 @@ namespace ts {
             }
 
             // Get next batch of affected files
-            state.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures || createMap();
+            state.currentAffectedFilesSignatures ??= new Map();
             if (state.exportedModulesMap) {
-                state.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap || createMap<BuilderState.ReferencedSet | false>();
+                state.currentAffectedFilesExportedModulesMap ??= new Map();
             }
-            state.affectedFiles = BuilderState.getFilesAffectedBy(state, program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
-            state.currentChangedFilePath = nextKey.value as Path;
+            state.affectedFiles = BuilderState.getFilesAffectedBy(state, program, nextKey.value, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
+            state.currentChangedFilePath = nextKey.value;
             state.affectedFilesIndex = 0;
-            state.seenAffectedFiles = state.seenAffectedFiles || new Set();
+            state.seenAffectedFiles ??= new Set();
         }
     }
 
@@ -399,7 +399,7 @@ namespace ts {
     function getNextAffectedFilePendingEmit(state: BuilderProgramState) {
         const { affectedFilesPendingEmit } = state;
         if (affectedFilesPendingEmit) {
-            const seenEmittedFiles = state.seenEmittedFiles || (state.seenEmittedFiles = createMap());
+            const seenEmittedFiles = (state.seenEmittedFiles ??= new Map());
             for (let i = state.affectedFilesPendingEmitIndex!; i < affectedFilesPendingEmit.length; i++) {
                 const affectedFile = Debug.checkDefined(state.program).getSourceFileByPath(affectedFilesPendingEmit[i]);
                 if (affectedFile) {
@@ -514,7 +514,7 @@ namespace ts {
         // Since isolated modules dont change js files, files affected by change in signature is itself
         // But we need to cleanup semantic diagnostics and queue dts emit for affected files
         if (state.compilerOptions.isolatedModules) {
-            const seenFileNamesMap = createMap<true>();
+            const seenFileNamesMap = new Map<Path, true>();
             seenFileNamesMap.set(affectedFile.resolvedPath, true);
             const queue = BuilderState.getReferencedByPaths(state, affectedFile.resolvedPath);
             while (queue.length > 0) {
@@ -622,7 +622,7 @@ namespace ts {
         else {
             state.seenAffectedFiles!.add((affected as SourceFile).resolvedPath);
             if (emitKind !== undefined) {
-                (state.seenEmittedFiles || (state.seenEmittedFiles = createMap())).set((affected as SourceFile).resolvedPath, emitKind);
+                (state.seenEmittedFiles ??= new Map()).set((affected as SourceFile).resolvedPath, emitKind);
             }
             if (isPendingEmit) {
                 state.affectedFilesPendingEmitIndex!++;
@@ -758,9 +758,9 @@ namespace ts {
 
         if (state.affectedFilesPendingEmit) {
             const affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] = [];
-            const seenFiles = createMap<true>();
+            const seenFiles = new Set<Path>();
             for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
-                if (addToSeen(seenFiles, path)) {
+                if (tryAddToSet(seenFiles, path)) {
                     affectedFilesPendingEmit.push([relativeToBuildInfo(path), state.affectedFilesPendingEmitKind!.get(path)!]);
                 }
             }
@@ -1124,8 +1124,8 @@ namespace ts {
     }
 
     function addToAffectedFilesPendingEmit(state: BuilderProgramState, affectedFilePendingEmit: Path, kind: BuilderFileEmit) {
-        if (!state.affectedFilesPendingEmit) state.affectedFilesPendingEmit = [];
-        if (!state.affectedFilesPendingEmitKind) state.affectedFilesPendingEmitKind = createMap();
+        state.affectedFilesPendingEmit ??= [];
+        state.affectedFilesPendingEmitKind ??= new Map();
 
         const existingKind = state.affectedFilesPendingEmitKind.get(affectedFilePendingEmit);
         state.affectedFilesPendingEmit.push(affectedFilePendingEmit);
@@ -1140,9 +1140,9 @@ namespace ts {
         }
     }
 
-    function getMapOfReferencedSet(mapLike: MapLike<readonly string[]> | undefined, toPath: (path: string) => Path): ReadonlyMap<string, BuilderState.ReferencedSet> | undefined {
+    function getMapOfReferencedSet(mapLike: MapLike<readonly string[]> | undefined, toPath: (path: string) => Path): ReadonlyMap<Path, BuilderState.ReferencedSet> | undefined {
         if (!mapLike) return undefined;
-        const map = createMap<BuilderState.ReferencedSet>();
+        const map = new Map<Path, BuilderState.ReferencedSet>();
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
         for (const key in mapLike) {
@@ -1157,7 +1157,7 @@ namespace ts {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
-        const fileInfos = createMap<BuilderState.FileInfo>();
+        const fileInfos = new Map<Path, BuilderState.FileInfo>();
         for (const key in program.fileInfos) {
             if (hasProperty(program.fileInfos, key)) {
                 fileInfos.set(toPath(key), program.fileInfos[key]);

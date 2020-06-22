@@ -43,10 +43,6 @@ namespace ts {
         forEach(action: (value: V, key: K) => void): void;
     }
 
-    /* @internal */
-    export interface ReadonlyMap<K, V> {
-    }
-
     /** ES6 Map interface. */
     export interface Map<K, V> extends ReadonlyMap<K, V>, Collection<K> {
         set(key: K, value: V): this;
@@ -64,10 +60,6 @@ namespace ts {
         values(): Iterator<T>;
         entries(): Iterator<[T, T]>;
         forEach(action: (value: T, key: T) => void): void;
-    }
-
-    /* @internal */
-    export interface ReadonlySet<T> {
     }
 
     /** ES6 Set interface. */

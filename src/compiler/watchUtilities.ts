@@ -262,7 +262,7 @@ namespace ts {
      */
     export function updateMissingFilePathsWatch(
         program: Program,
-        missingFileWatches: Map<string, FileWatcher>,
+        missingFileWatches: Map<Path, FileWatcher>,
         createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
     ) {
         const missingFilePaths = program.getMissingFilePaths();

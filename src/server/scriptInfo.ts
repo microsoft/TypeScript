@@ -286,7 +286,7 @@ namespace ts.server {
     /*@internal*/
     export interface SourceMapFileWatcher {
         watcher: FileWatcher;
-        sourceInfos?: Set<string>;
+        sourceInfos?: Set<Path>;
     }
 
     export class ScriptInfo {
@@ -324,7 +324,7 @@ namespace ts.server {
         /*@internal*/
         declarationInfoPath?: Path;
         /*@internal*/
-        sourceInfos?: Set<string>;
+        sourceInfos?: Set<Path>;
         /*@internal*/
         documentPositionMapper?: DocumentPositionMapper | false;
 

@@ -466,7 +466,7 @@ namespace ts {
     }
 
     export function createCommentDirectivesMap(sourceFile: SourceFile, commentDirectives: CommentDirective[]): CommentDirectivesMap {
-        const directivesByLine = createMapFromEntries(
+        const directivesByLine = new Map(
             commentDirectives.map(commentDirective => ([
                 `${getLineAndCharacterOfPosition(sourceFile, commentDirective.range.end).line}`,
                 commentDirective,

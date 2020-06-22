@@ -473,7 +473,7 @@ namespace ts {
     /*@internal*/
     export interface CacheWithRedirects<T> {
         ownMap: Map<string, T>;
-        redirectsMap: Map<string, Map<string, T>>;
+        redirectsMap: Map<Path, Map<string, T>>;
         getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<string, T>;
         clear(): void;
         setOwnOptions(newOptions: CompilerOptions): void;
@@ -483,7 +483,7 @@ namespace ts {
     /*@internal*/
     export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWithRedirects<T> {
         let ownMap: Map<string, T> = createMap();
-        const redirectsMap: Map<string, Map<string, T>> = createMap();
+        const redirectsMap = new Map<Path, Map<string, T>>();
         return {
             ownMap,
             redirectsMap,
