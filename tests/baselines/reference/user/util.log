@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/util/util.js(27,20): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/util/util.js(35,45): error TS2769: No overload matches this call.

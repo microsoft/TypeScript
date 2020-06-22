@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/graceful-fs/clone.js(12,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'copy' must be of type '{ __proto__: any; }', but here has type 'any'.
 node_modules/graceful-fs/clone.js(15,38): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
