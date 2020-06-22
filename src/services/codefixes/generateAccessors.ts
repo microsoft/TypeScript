@@ -119,25 +119,21 @@ namespace ts.codefix {
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
 
-        if (!declaration) {
+        if (!declaration || (!(nodeOverlapsWithStartEnd(declaration.name, file, start, end) || cursorRequest))) {
             return {
-                error: Diagnostics.Could_not_find_property_for_which_to_generate_accessor.message
+                error: getLocaleSpecificMessage(Diagnostics.Could_not_find_property_for_which_to_generate_accessor)
             };
-        }
-
-        if (!(nodeOverlapsWithStartEnd(declaration.name, file, start, end) || cursorRequest)) {
-            return undefined;
         }
 
         if (!isConvertibleName(declaration.name)) {
             return {
-                error: Diagnostics.Name_is_not_valid.message
+                error: getLocaleSpecificMessage(Diagnostics.Name_is_not_valid)
             };
         }
 
         if ((getEffectiveModifierFlags(declaration) | meaning) !== meaning) {
             return {
-                error: Diagnostics.Property_has_invalid_accessibility.message
+                error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_property_with_modifier)
             };
         }
 

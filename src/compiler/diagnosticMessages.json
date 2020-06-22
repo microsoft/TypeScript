@@ -5755,47 +5755,47 @@
         "category": "Message",
         "code": 95126
     },
-    "Could_not_find_a_containing_arrow_function": {
+    "Could not find a containing arrow function": {
         "category": "Message",
         "code": 95127
     },
-    "Containing_function_is_not_an_arrow_function": {
+    "Containing function is not an arrow function": {
         "category": "Message",
         "code": 95128
     },
-    "Could_not_find_export_statement": {
+    "Could not find export statement": {
         "category": "Message",
         "code": 95129
     },
-    "This_file_already_has_a_default_export": {
+    "This file already has a default export": {
         "category": "Message",
         "code": 95130
     },
-    "Could_not_find_import_clause": {
+    "Could not find import clause": {
         "category": "Message",
         "code": 95131
     },
-    "Could_not_find_namespace_import_or_named_imports": {
+    "Could not find namespace import or named imports": {
         "category": "Message",
         "code": 95132
     },
-    "Selection_is_not_a_valid_type_node": {
+    "Selection is not a valid type node": {
         "category": "Message",
         "code": 95133
     },
-    "No_type_could_be_extracted_from_this_type_node": {
+    "No type could be extracted from this type node": {
         "category": "Message",
         "code": 95134
     },
-    "Could_not_find_property_for_which_to_generate_accessor": {
+    "Could not find property for which to generate accessor": {
         "category": "Message",
         "code": 95135
     },
-    "Name_is_not_valid": {
+    "Name is not valid": {
         "category": "Message",
         "code": 95136
     },
-    "Property_has_invalid_accessibility": {
+    "Can only convert property with modifier": {
         "category": "Message",
         "code": 95137
     },

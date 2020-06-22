@@ -104,13 +104,13 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
 
         if (!func) {
             return {
-                error: Diagnostics.Could_not_find_a_containing_arrow_function.message
+                error: getLocaleSpecificMessage(Diagnostics.Could_not_find_a_containing_arrow_function)
             };
         }
 
         if (!isArrowFunction(func)) {
             return {
-                error: Diagnostics.Containing_function_is_not_an_arrow_function.message
+                error: getLocaleSpecificMessage(Diagnostics.Containing_function_is_not_an_arrow_function)
             };
         }
 

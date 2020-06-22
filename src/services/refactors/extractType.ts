@@ -90,12 +90,12 @@ namespace ts.refactor {
 
         const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
             (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
-        if (!selection || !isTypeNode(selection)) return { error: Diagnostics.Selection_is_not_a_valid_type_node.message };
+        if (!selection || !isTypeNode(selection)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
 
         const checker = context.program.getTypeChecker();
         const firstStatement = Debug.checkDefined(findAncestor(selection, isStatement), "Should find a statement");
         const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
-        if (!typeParameters) return { error: Diagnostics.No_type_could_be_extracted_from_this_type_node.message };
+        if (!typeParameters) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
 
         const typeElements = flattenTypeLiteralNodeReference(checker, selection);
         return { info: { isJS, selection, firstStatement, typeParameters, typeElements } };

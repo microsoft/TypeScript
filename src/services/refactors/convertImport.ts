@@ -50,11 +50,11 @@ namespace ts.refactor {
 
         const { importClause } = importDecl;
         if (!importClause) {
-            return { error: Diagnostics.Could_not_find_import_clause.message };
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_import_clause) };
         }
 
         if (!importClause.namedBindings) {
-            return { error: Diagnostics.Could_not_find_namespace_import_or_named_imports.message };
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_namespace_import_or_named_imports) };
         }
 
         return { info: importClause.namedBindings };

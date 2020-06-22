@@ -54,7 +54,7 @@ namespace ts.refactor {
         const token = getTokenAtPosition(file, span.start);
         const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
-            return { error: Diagnostics.Could_not_find_export_statement.message };
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_export_statement) };
         }
 
         const exportingModuleSymbol = isSourceFile(exportNode.parent) ? exportNode.parent.symbol : exportNode.parent.parent.symbol;
@@ -63,7 +63,7 @@ namespace ts.refactor {
         const wasDefault = !!(flags & ModifierFlags.Default);
         // If source file already has a default export, don't offer refactor.
         if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {
-            return { error: Diagnostics.This_file_already_has_a_default_export.message };
+            return { error: getLocaleSpecificMessage(Diagnostics.This_file_already_has_a_default_export) };
         }
 
         switch (exportNode.kind) {

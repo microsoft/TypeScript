@@ -21,7 +21,7 @@ namespace ts.refactor.extractSymbol {
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
                 actions: [{
                     description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-                    name: "extract_function_error",
+                    name: "function_extract_error",
                     notApplicableReason: getStringError(rangeToExtract.errors)
                 }]
             },
@@ -30,7 +30,7 @@ namespace ts.refactor.extractSymbol {
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: [{
                     description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-                    name: "extract_constant_error",
+                    name: "constant_extract_error",
                     notApplicableReason: getStringError(rangeToExtract.errors)
                 }]
             }];
