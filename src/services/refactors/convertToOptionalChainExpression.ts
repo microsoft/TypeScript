@@ -35,8 +35,8 @@ namespace ts.refactor.convertToOptionalChainExpression {
         const { file, program } = context;
         const span = getRefactorContextSpan(context);
 
-        if (span.length === 0 && !considerEmptySpans) return undefined;
-        const forEmptySpan = span.length === 0 && considerEmptySpans;
+        const forEmptySpan = span.length === 0;
+        if (forEmptySpan && !considerEmptySpans) return undefined;
 
         const startToken = getTokenAtPosition(file, span.start);
 
