@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/npmlog/log.js(83,12): error TS2551: Property '_pause' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
 node_modules/npmlog/log.js(149,8): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?

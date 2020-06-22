@@ -15,33 +15,61 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         addBraces: boolean;
     }
 
+    type InfoOrError = {
+        info: Info,
+        error?: never
+    } | {
+        info?: never,
+        error: string
+    };
+
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, triggerReason } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason === "invoked");
         if (!info) return emptyArray;
 
-        return [{
-            name: refactorName,
-            description: refactorDescription,
-            actions: [
-                info.addBraces ?
-                    {
-                        name: addBracesActionName,
-                        description: addBracesActionDescription
-                    } : {
-                        name: removeBracesActionName,
-                        description: removeBracesActionDescription
-                    }
-            ]
-        }];
+        if (info.error === undefined) {
+            return [{
+                name: refactorName,
+                description: refactorDescription,
+                actions: [
+                    info.info.addBraces ?
+                        {
+                            name: addBracesActionName,
+                            description: addBracesActionDescription
+                        } : {
+                            name: removeBracesActionName,
+                            description: removeBracesActionDescription
+                        }
+                ]
+            }];
+        }
+
+        if (context.preferences.provideRefactorNotApplicableReason) {
+            return [{
+                name: refactorName,
+                description: refactorDescription,
+                actions: [{
+                    name: addBracesActionName,
+                    description: addBracesActionDescription,
+                    notApplicableReason: info.error
+                }, {
+                    name: removeBracesActionName,
+                    description: removeBracesActionDescription,
+                    notApplicableReason: info.error
+                }]
+            }];
+        }
+
+        return emptyArray;
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
-        if (!info) return undefined;
+        if (!info || !info.info) return undefined;
 
-        const { expression, returnStatement, func } = info;
+        const { expression, returnStatement, func } = info.info;
 
         let body: ConciseBody;
 
@@ -70,28 +98,45 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true): Info | undefined {
+    function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: number, considerFunctionBodies = true): InfoOrError | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
-        // Only offer a refactor in the function body on explicit refactor requests.
-        if (!func || !isArrowFunction(func) || (!rangeContainsRange(func, node)
-            || (rangeContainsRange(func.body, node) && !considerFunctionBodies))) return undefined;
+
+        if (!func) {
+            return {
+                error: getLocaleSpecificMessage(Diagnostics.Could_not_find_a_containing_arrow_function)
+            };
+        }
+
+        if (!isArrowFunction(func)) {
+            return {
+                error: getLocaleSpecificMessage(Diagnostics.Containing_function_is_not_an_arrow_function)
+            };
+        }
+
+        if ((!rangeContainsRange(func, node) || rangeContainsRange(func.body, node) && !considerFunctionBodies)) {
+            return undefined;
+        }
 
         if (isExpression(func.body)) {
             return {
-                func,
-                addBraces: true,
-                expression: func.body
+                info: {
+                    func,
+                    addBraces: true,
+                    expression: func.body
+                }
             };
         }
         else if (func.body.statements.length === 1) {
             const firstStatement = first(func.body.statements);
             if (isReturnStatement(firstStatement)) {
                 return {
-                    func,
-                    addBraces: false,
-                    expression: firstStatement.expression,
-                    returnStatement: firstStatement
+                    info: {
+                        func,
+                        addBraces: false,
+                        expression: firstStatement.expression,
+                        returnStatement: firstStatement
+                    }
                 };
             }
         }
