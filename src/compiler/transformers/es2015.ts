@@ -980,12 +980,14 @@ namespace ts {
 
             // If the first statement is a call to `super()`, visit the statement directly
             let superCallExpression: Expression | undefined;
+            let superCallStatement: Statement | undefined;
             if (hasSynthesizedSuper) {
                 superCallExpression = createDefaultSuperCallOrThis();
             }
             else if (isDerivedClass && statementOffset < constructor.body.statements.length) {
                 const firstStatement = constructor.body.statements[statementOffset];
                 if (isExpressionStatement(firstStatement) && isSuperCall(firstStatement.expression)) {
+                    superCallStatement = firstStatement;
                     superCallExpression = visitImmediateSuperCallInBody(firstStatement.expression);
                 }
             }
@@ -997,13 +999,12 @@ namespace ts {
 
             // visit the remaining statements
             addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
-            addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
 
             factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
 
             if (isDerivedClass) {
-                if (superCallExpression && statementOffset === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
+                if (superCallExpression && superCallStatement && statementOffset === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
                     // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
                     // following representation:
                     //
@@ -1025,6 +1026,7 @@ namespace ts {
                     // ```
                     const superCall = cast(cast(superCallExpression, isBinaryExpression).left, isCallExpression);
                     const returnStatement = factory.createReturnStatement(superCallExpression);
+                    setOriginalNode(returnStatement, superCallStatement);
                     setCommentRange(returnStatement, getCommentRange(superCall));
                     setEmitFlags(superCall, EmitFlags.NoComments);
                     statements.push(returnStatement);
@@ -1079,6 +1081,7 @@ namespace ts {
                 insertCaptureThisForNodeIfNeeded(prologue, constructor);
             }
 
+            addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
             const block = factory.createBlock(
                 setTextRange(
                     factory.createNodeArray(
@@ -1355,7 +1358,6 @@ namespace ts {
             }
 
             const firstStatementContainsRestParameter = find(statements, stmt => !!(getOriginalNode(stmt).flags & NodeFlags.ContainsRestParameterReference));
-
             if (!firstStatementContainsRestParameter && !((getOriginalNode(parameter).flags & NodeFlags.RestParameterMustEmitAtTop))) {
                 return false;
             }
