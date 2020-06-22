@@ -48,8 +48,6 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
 
         if (isBinaryExpression(expression)) {
-            const start = forEmptySpan ? expression.pos : startToken.pos;
-
             const fullPropertyAccess = getFullPropertyAccessChain(expression);
             if (!fullPropertyAccess) return undefined;
             if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken && expression.operatorToken.pos <= fullPropertyAccess.pos) return undefined;
@@ -57,7 +55,8 @@ namespace ts.refactor.convertToOptionalChainExpression {
             // ensure that each sequential operand in range matches the longest acceess chain
             let checkNode = expression.left;
             let firstOccurrence: PropertyAccessExpression | Identifier = fullPropertyAccess;
-            while (isBinaryExpression(checkNode) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && (isPropertyAccessExpression(checkNode.right) || isIdentifier(checkNode.right)) && checkNode.right.pos >= start) {
+            while (isBinaryExpression(checkNode) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
+                (isPropertyAccessExpression(checkNode.right) || isIdentifier(checkNode.right))) {
                 if (!checker.containsMatchingReference(fullPropertyAccess, checkNode.right)) {
                     return undefined;
                 }
@@ -65,7 +64,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
                 checkNode = checkNode.left;
             }
             // check final identifier
-            if ((isIdentifier(checkNode) || isPropertyAccessExpression(checkNode)) && checker.containsMatchingReference(fullPropertyAccess, checkNode) && checkNode.pos >= start) {
+            if ((isIdentifier(checkNode) || isPropertyAccessExpression(checkNode)) && checker.containsMatchingReference(fullPropertyAccess, checkNode)) {
                 firstOccurrence = checkNode;
             }
             return firstOccurrence ? { fullPropertyAccess, firstOccurrence, expression } : undefined;
@@ -74,7 +73,8 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (isConditionalExpression(expression)) {
             const whenTrue = expression.whenTrue;
             const condition = expression.condition;
-            if ((isIdentifier(condition) || isPropertyAccessExpression(condition)) && isPropertyAccessExpression(whenTrue) && checker.containsMatchingReference(whenTrue, condition)) {
+            if ((isIdentifier(condition) || isPropertyAccessExpression(condition)) &&
+                isPropertyAccessExpression(whenTrue) && checker.containsMatchingReference(whenTrue, condition)) {
                 // The ternary expression and nullish coalescing would result in different return values if c is nullish so do not offer a refactor
                 const type = checker.getTypeAtLocation(whenTrue.name);
                 if (checker.isNullableType(type) || type.flags & TypeFlags.Any) {
@@ -105,9 +105,9 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     function getFullPropertyAccessChain(node: BinaryExpression): PropertyAccessExpression | undefined {
-        return isBinaryExpression(node.right) || isCallExpression(node.right)
-            ? getRightHandSidePropertyAccess(node.right) : node.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && isPropertyAccessExpression(node.right) && !isOptionalChain(node.right)
-                ? node.right : undefined;
+        return isBinaryExpression(node.right) || isCallExpression(node.right) ? getRightHandSidePropertyAccess(node.right)
+            : isPropertyAccessExpression(node.right) && !isOptionalChain(node.right) ? node.right
+            : undefined;
     }
 
     function convertPropertyAccessToOptionalChain(checker: TypeChecker, toConvert: PropertyAccessExpression, until: Identifier | PrivateIdentifier): PropertyAccessExpression {
