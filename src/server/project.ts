@@ -1796,8 +1796,8 @@ namespace ts.server {
         getTypeAcquisition(): TypeAcquisition {
             return {
                 enable: allRootFilesAreJsOrDts(this),
-                include: [],
-                exclude: []
+                include: ts.emptyArray,
+                exclude: ts.emptyArray
             };
         }
     }
