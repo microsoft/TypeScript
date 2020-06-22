@@ -951,6 +951,7 @@ namespace ts.server {
         /*@internal*/
         markAutoImportProviderAsDirty() {
             this.autoImportProviderHost?.markAsDirty();
+            this.importSuggestionsCache.clear();
         }
 
         /* @internal */
