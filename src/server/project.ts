@@ -996,11 +996,16 @@ namespace ts.server {
                 this.lastCachedUnresolvedImportsList = undefined;
             }
 
+            const isFirstLoad = this.projectProgramVersion === 0;
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
             if (hasAddedorRemovedFiles) {
                 this.autoImportProviderHost?.markAsDirty();
+            }
+            if (isFirstLoad) {
+                // Preload auto import provider so it's not created during completions request
+                this.getPackageJsonAutoImportProvider();
             }
             perfLogger.logStopUpdateGraph();
             return !hasNewProgram;
@@ -2034,10 +2039,7 @@ namespace ts.server {
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
-        updateGraph(): boolean;
-        /*@internal*/
-        updateGraph(skipEvents: boolean): boolean; // eslint-disable-line @typescript-eslint/unified-signatures
-        updateGraph(skipEvents?: boolean): boolean {
+        updateGraph(): boolean {
             this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
             this.pendingReload = ConfigFileProgramReloadLevel.None;
@@ -2058,9 +2060,7 @@ namespace ts.server {
                     result = super.updateGraph();
             }
             this.compilerHost = undefined;
-            if (!skipEvents) {
-                this.onFinishedLoading();
-            }
+            this.onFinishedLoading();
             return result;
         }
 

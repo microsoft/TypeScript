@@ -1975,9 +1975,7 @@ namespace ts.server {
         /* @internal */
         private createLoadAndUpdateConfiguredProject(configFileName: NormalizedPath, reason: string) {
             const project = this.createAndLoadConfiguredProject(configFileName, reason);
-            project.updateGraph(/*skipEvents*/ true); // Defer telemetry and loading event until after AutoImportProvider is created
-            project.getPackageJsonAutoImportProvider(); // Preload AutoImportProviderProject to avoid creating it on first completions request
-            project.onFinishedLoading(); // Fire skipped events
+            project.updateGraph();
             return project;
         }
 
