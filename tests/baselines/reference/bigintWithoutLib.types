@@ -72,7 +72,7 @@ stringVal = bigintVal.toLocaleString(); // should not error - bigintVal inferred
 >bigintVal : bigint
 >toLocaleString : () => string
 
-stringVal = bigintVal.toLocaleString('de-DE');
+stringVal = bigintVal.toLocaleString('de-DE'); // should not error - bigintVal inferred as {}
 >stringVal = bigintVal.toLocaleString('de-DE') : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE') : string
@@ -81,16 +81,7 @@ stringVal = bigintVal.toLocaleString('de-DE');
 >toLocaleString : () => string
 >'de-DE' : "de-DE"
 
-stringVal = bigintVal.toLocaleString('de-DE');
->stringVal = bigintVal.toLocaleString('de-DE') : string
->stringVal : string
->bigintVal.toLocaleString('de-DE') : string
->bigintVal.toLocaleString : () => string
->bigintVal : bigint
->toLocaleString : () => string
->'de-DE' : "de-DE"
-
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should error
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should not error - bigintVal inferred as {}
 >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
@@ -102,19 +93,7 @@ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should 
 >style : string
 >'currency' : "currency"
 
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'unit' }); // should error
->stringVal = bigintVal.toLocaleString('de-DE', { style: 'unit' }) : string
->stringVal : string
->bigintVal.toLocaleString('de-DE', { style: 'unit' }) : string
->bigintVal.toLocaleString : () => string
->bigintVal : bigint
->toLocaleString : () => string
->'de-DE' : "de-DE"
->{ style: 'unit' } : { style: string; }
->style : string
->'unit' : "unit"
-
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) // should not error - bigintVal inferred as {}
 >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string

@@ -10,9 +10,7 @@ let stringVal: string = bigintVal.toString();
 stringVal = bigintVal.toString(2);
 stringVal = bigintVal.toLocaleString();
 stringVal = bigintVal.toLocaleString('de-DE');
-stringVal = bigintVal.toLocaleString('de-DE');
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should error
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'unit' }); // should error
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
 stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })
 
 // Test BigInt64Array
@@ -75,9 +73,7 @@ let stringVal = bigintVal.toString();
 stringVal = bigintVal.toString(2);
 stringVal = bigintVal.toLocaleString();
 stringVal = bigintVal.toLocaleString('de-DE');
-stringVal = bigintVal.toLocaleString('de-DE');
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should error
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'unit' }); // should error
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
 stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
 // Test BigInt64Array
 let bigIntArray = new BigInt64Array();

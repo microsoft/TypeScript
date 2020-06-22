@@ -12,11 +12,9 @@ bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
 let stringVal: string = bigintVal.toString(); // should not error - bigintVal inferred as {}
 stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
 stringVal = bigintVal.toLocaleString(); // should not error - bigintVal inferred as {}
-stringVal = bigintVal.toLocaleString('de-DE');
-stringVal = bigintVal.toLocaleString('de-DE');
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should error
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'unit' }); // should error
-stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })
+stringVal = bigintVal.toLocaleString('de-DE'); // should not error - bigintVal inferred as {}
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should not error - bigintVal inferred as {}
+stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) // should not error - bigintVal inferred as {}
 
 // Test BigInt64Array
 let bigIntArray: BigInt64Array = new BigInt64Array();
