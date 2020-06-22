@@ -74,8 +74,12 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (isConditionalExpression(expression)) {
             const whenTrue = expression.whenTrue;
             const condition = expression.condition;
-
             if ((isIdentifier(condition) || isPropertyAccessExpression(condition)) && isPropertyAccessExpression(whenTrue) && checker.containsMatchingReference(whenTrue, condition)) {
+                // The ternary expression and nullish coalescing would result in different return values if c is nullish so do not offer a refactor
+                const type = checker.getTypeAtLocation(whenTrue.name);
+                if (checker.isNullableType(type) || type.flags & TypeFlags.Any) {
+                    return undefined;
+                }
                 return { fullPropertyAccess: whenTrue, firstOccurrence: condition, expression };
             }
         }
