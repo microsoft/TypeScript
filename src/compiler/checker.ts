@@ -21693,13 +21693,23 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if ((symbol.flags & SymbolFlags.Value) && symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isRestParameter(symbol.valueDeclaration)) {
+            if ((symbol.flags & SymbolFlags.Value) && symbol.valueDeclaration && symbol.valueDeclaration !== node.parent &&
+                isParameter(symbol.valueDeclaration) && isRestParameter(symbol.valueDeclaration) &&
+                !(symbol.valueDeclaration.flags & NodeFlags.RestParameterMustEmitAtTop)) {
                 const containerFunctionLikeDeclaration = findAncestor(symbol.valueDeclaration, isFunctionLikeDeclaration);
                 if (containerFunctionLikeDeclaration) {
+                    let insideOtherFunctionLikeScope = false;
                     const topLevelStatementInContainer = findAncestor(node, n => {
+                        if (isFunctionLikeDeclaration(n)) {
+                            insideOtherFunctionLikeScope = true;
+                            return "quit";
+                        }
                         return n.parent && (isBlock(n.parent) ? n.parent.parent === containerFunctionLikeDeclaration : n.parent === containerFunctionLikeDeclaration);
                     });
-                    if (topLevelStatementInContainer) {
+                    if (insideOtherFunctionLikeScope) {
+                        (<Mutable<Node>>symbol.valueDeclaration).flags |= NodeFlags.RestParameterMustEmitAtTop;
+                    }
+                    else if(topLevelStatementInContainer) {
                         (<Mutable<Node>>topLevelStatementInContainer).flags |= NodeFlags.ContainsRestParameterReference;
                     }
                 }

@@ -7,12 +7,8 @@ function * mergeStringLists(...strings: string[]) {
 //// [restParameterInDownlevelGenerator.js]
 // https://github.com/Microsoft/TypeScript/issues/30653
 function mergeStringLists() {
-    var _i, strings_1, strings_1_1, str;
+    var strings_1, strings_1_1, str;
     var e_1, _a;
-    var strings = [];
-    for (_i = 0; _i < arguments.length; _i++) {
-        strings[_i] = arguments[_i];
-    }
     return __generator(this, function (_b) {
         try {
             for (strings_1 = __values(strings), strings_1_1 = strings_1.next(); !strings_1_1.done; strings_1_1 = strings_1.next()) {

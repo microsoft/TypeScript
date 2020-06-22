@@ -758,6 +758,8 @@ namespace ts {
 
         /* @internal */ ContainsRestParameterReference  = 1 << 28, // If contains rest parameter reference
 
+        /* @internal */ RestParameterMustEmitAtTop      = 1 << 29, // If rest parameter must emit at top of function
+
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,

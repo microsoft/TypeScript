@@ -254,11 +254,11 @@ function onMouseOver() { return "onmouseover"; }
 var x = onMouseOver();
 // Repro from #23649
 function Set() {
+    var result = {};
     var keys = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         keys[_i] = arguments[_i];
     }
-    var result = {};
     keys.forEach(function (key) { return result[key] = true; });
     return result;
 }

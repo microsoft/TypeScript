@@ -112,10 +112,6 @@ function Tagged(superClass) {
     var C = /** @class */ (function (_super) {
         __extends(C, _super);
         function C() {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
             var _this = _super.apply(this, args) || this;
             _this._tag = "hello";
             return _this;

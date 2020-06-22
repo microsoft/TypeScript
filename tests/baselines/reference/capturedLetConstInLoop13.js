@@ -29,10 +29,6 @@ var Main = /** @class */ (function () {
     }
     Main.prototype.register = function () {
         var _this = this;
-        var names = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            names[_i] = arguments[_i];
-        }
         var _loop_1 = function (name_1) {
             var _a;
             this_1.bar((_a = {},
@@ -40,6 +36,10 @@ var Main = /** @class */ (function () {
                 _a));
         };
         var this_1 = this;
+        var names = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            names[_i] = arguments[_i];
+        }
         for (var _a = 0, names_1 = names; _a < names_1.length; _a++) {
             var name_1 = names_1[_a];
             _loop_1(name_1);

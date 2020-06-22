@@ -976,7 +976,6 @@ namespace ts {
             let statementOffset = 0;
             if (!hasSynthesizedSuper) statementOffset = factory.copyStandardPrologue(constructor.body.statements, prologue, /*ensureUseStrict*/ false);
             addDefaultValueAssignmentsIfNeeded(statements, constructor);
-            addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
             if (!hasSynthesizedSuper) statementOffset = factory.copyCustomPrologue(constructor.body.statements, statements, statementOffset, visitor);
 
             // If the first statement is a call to `super()`, visit the statement directly
@@ -998,6 +997,7 @@ namespace ts {
 
             // visit the remaining statements
             addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
+            addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
 
             factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
@@ -1354,11 +1354,9 @@ namespace ts {
                 return false;
             }
 
-            const firstStatementContainsRestParameter = node.body && (isBlock(node.body) ?
-                find(node.body.statements, stmt => !!(stmt.flags & NodeFlags.ContainsRestParameterReference)) :
-                (node.body.flags & NodeFlags.ContainsRestParameterReference) ? node.body : undefined
-            );
-            if (!firstStatementContainsRestParameter) {
+            const firstStatementContainsRestParameter = find(statements, stmt => !!(getOriginalNode(stmt).flags & NodeFlags.ContainsRestParameterReference));
+
+            if (!firstStatementContainsRestParameter && !((getOriginalNode(parameter).flags & NodeFlags.RestParameterMustEmitAtTop))) {
                 return false;
             }
 
@@ -1453,7 +1451,14 @@ namespace ts {
                 );
             }
 
-            insertStatementsAfterCustomPrologue(statements, prologueStatements);
+            if (!firstStatementContainsRestParameter || (getOriginalNode(parameter).flags & NodeFlags.RestParameterMustEmitAtTop) || !node.body || isExpression(node.body)) {
+                insertStatementsAfterCustomPrologue(statements, prologueStatements);
+            }
+            else {
+                const idx = statements.indexOf(firstStatementContainsRestParameter)
+                Debug.assert(idx > -1)
+                statements.splice(idx, 0, ...prologueStatements)
+            }
             return true;
         }
 
@@ -1889,7 +1894,6 @@ namespace ts {
             }
 
             multiLine = addDefaultValueAssignmentsIfNeeded(statements, node) || multiLine;
-            multiLine = addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false) || multiLine;
 
             if (isBlock(body)) {
                 // addCustomPrologue puts already-existing directives at the beginning of the target statement-array
@@ -1924,6 +1928,7 @@ namespace ts {
 
                 const expression = visitNode(body, visitor, isExpression);
                 const returnStatement = factory.createReturnStatement(expression);
+                setOriginalNode(returnStatement, expression)
                 setTextRange(returnStatement, body);
                 moveSyntheticComments(returnStatement, body);
                 setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);
@@ -1933,6 +1938,8 @@ namespace ts {
                 // source map location for the close brace.
                 closeBraceLocation = body;
             }
+
+            multiLine = addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false) || multiLine;
 
             factory.mergeLexicalEnvironment(prologue, endLexicalEnvironment());
             insertCaptureNewTargetIfNeeded(prologue, node, /*copyOnWrite*/ false);
@@ -2474,6 +2481,7 @@ namespace ts {
                 ),
                 /*location*/ node
             );
+            setOriginalNode(forStatement, node);
 
             // Disable trailing source maps for the OpenParenToken to align source map emit with the old emitter.
             setEmitFlags(forStatement, EmitFlags.NoTokenTrailingSourceMaps);
@@ -2525,7 +2533,7 @@ namespace ts {
                 EmitFlags.NoTokenTrailingSourceMaps
             );
 
-            return factory.createTryStatement(
+            const stmt = factory.createTryStatement(
                 factory.createBlock([
                     factory.restoreEnclosingLabel(
                         forStatement,
@@ -2590,6 +2598,8 @@ namespace ts {
                     )
                 ])
             );
+            setOriginalNode(stmt, node);
+            return stmt;
         }
 
         /**

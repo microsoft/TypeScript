@@ -43,10 +43,6 @@ define("Configurable", ["require", "exports"], function (require, exports) {
         return /** @class */ (function (_super) {
             __extends(class_1, _super);
             function class_1() {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i] = arguments[_i];
-                }
                 return _super.apply(this, args) || this;
             }
             return class_1;

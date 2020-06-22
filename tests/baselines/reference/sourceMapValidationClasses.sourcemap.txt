@@ -408,7 +408,7 @@ sourceFile:sourceMapValidationClasses.ts
 3 >                 ^^^^
 4 >                     ^
 5 >                      ^^^^^^^^
-6 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+6 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >    
@@ -422,52 +422,8 @@ sourceFile:sourceMapValidationClasses.ts
 4 >Emitted(20, 23) Source(21, 19) + SourceIndex(0)
 5 >Emitted(20, 31) Source(21, 35) + SourceIndex(0)
 ---
->>>            var restGreetings /* more greeting */ = [];
-1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^
-3 >                              ^^^^^^^^^^^^^^^^^^^
-4 >                                                 ^^^^^^
-5 >                                                       ^^^^^->
-1->, 
-2 >            ...restGreetings 
-3 >                              /* more greeting */
-4 >                                                 : string[]
-1->Emitted(21, 13) Source(21, 37) + SourceIndex(0)
-2 >Emitted(21, 31) Source(21, 54) + SourceIndex(0)
-3 >Emitted(21, 50) Source(21, 73) + SourceIndex(0)
-4 >Emitted(21, 56) Source(21, 83) + SourceIndex(0)
----
->>>            for (var _i = 1; _i < arguments.length; _i++) {
-1->^^^^^^^^^^^^^^^^^
-2 >                 ^^^^^^^^^^
-3 >                           ^^
-4 >                             ^^^^^^^^^^^^^^^^^^^^^
-5 >                                                  ^^
-6 >                                                    ^^^^
-1->
-2 >                 ...restGreetings /* more greeting */: string[]
-3 >                           
-4 >                             ...restGreetings /* more greeting */: string[]
-5 >                                                  
-6 >                                                    ...restGreetings /* more greeting */: string[]
-1->Emitted(22, 18) Source(21, 37) + SourceIndex(0)
-2 >Emitted(22, 28) Source(21, 83) + SourceIndex(0)
-3 >Emitted(22, 30) Source(21, 37) + SourceIndex(0)
-4 >Emitted(22, 51) Source(21, 83) + SourceIndex(0)
-5 >Emitted(22, 53) Source(21, 37) + SourceIndex(0)
-6 >Emitted(22, 57) Source(21, 83) + SourceIndex(0)
----
->>>                restGreetings[_i - 1] = arguments[_i];
-1 >^^^^^^^^^^^^^^^^
-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1 >
-2 >                ...restGreetings /* more greeting */: string[]
-1 >Emitted(23, 17) Source(21, 37) + SourceIndex(0)
-2 >Emitted(23, 55) Source(21, 83) + SourceIndex(0)
----
->>>            }
 >>>            var greeters = []; /* inline block comment */
-1 >^^^^^^^^^^^^
+1->^^^^^^^^^^^^
 2 >            ^^^^
 3 >                ^^^^^^^^
 4 >                        ^^^
@@ -475,7 +431,7 @@ sourceFile:sourceMapValidationClasses.ts
 6 >                             ^
 7 >                              ^
 8 >                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
-1 >) {
+1->, ...restGreetings /* more greeting */: string[]) {
   >        
 2 >            var 
 3 >                greeters
@@ -484,14 +440,14 @@ sourceFile:sourceMapValidationClasses.ts
 6 >                             ;
 7 >                               
 8 >                               /* inline block comment */
-1 >Emitted(25, 13) Source(22, 9) + SourceIndex(0)
-2 >Emitted(25, 17) Source(22, 13) + SourceIndex(0)
-3 >Emitted(25, 25) Source(22, 21) + SourceIndex(0)
-4 >Emitted(25, 28) Source(22, 35) + SourceIndex(0)
-5 >Emitted(25, 30) Source(22, 37) + SourceIndex(0)
-6 >Emitted(25, 31) Source(22, 38) + SourceIndex(0)
-7 >Emitted(25, 32) Source(22, 39) + SourceIndex(0)
-8 >Emitted(25, 58) Source(22, 65) + SourceIndex(0)
+1->Emitted(21, 13) Source(22, 9) + SourceIndex(0)
+2 >Emitted(21, 17) Source(22, 13) + SourceIndex(0)
+3 >Emitted(21, 25) Source(22, 21) + SourceIndex(0)
+4 >Emitted(21, 28) Source(22, 35) + SourceIndex(0)
+5 >Emitted(21, 30) Source(22, 37) + SourceIndex(0)
+6 >Emitted(21, 31) Source(22, 38) + SourceIndex(0)
+7 >Emitted(21, 32) Source(22, 39) + SourceIndex(0)
+8 >Emitted(21, 58) Source(22, 65) + SourceIndex(0)
 ---
 >>>            greeters[0] = new Greeter(greeting);
 1 >^^^^^^^^^^^^
@@ -506,7 +462,7 @@ sourceFile:sourceMapValidationClasses.ts
 10>                                      ^^^^^^^^
 11>                                              ^
 12>                                               ^
-13>                                                ^^^^^^^^^^^^^->
+13>                                                ^^^^^^^^->
 1 >
   >        
 2 >            greeters
@@ -520,21 +476,65 @@ sourceFile:sourceMapValidationClasses.ts
 10>                                      greeting
 11>                                              )
 12>                                               ;
-1 >Emitted(26, 13) Source(23, 9) + SourceIndex(0)
-2 >Emitted(26, 21) Source(23, 17) + SourceIndex(0)
-3 >Emitted(26, 22) Source(23, 18) + SourceIndex(0)
-4 >Emitted(26, 23) Source(23, 19) + SourceIndex(0)
-5 >Emitted(26, 24) Source(23, 20) + SourceIndex(0)
-6 >Emitted(26, 27) Source(23, 23) + SourceIndex(0)
-7 >Emitted(26, 31) Source(23, 27) + SourceIndex(0)
-8 >Emitted(26, 38) Source(23, 34) + SourceIndex(0)
-9 >Emitted(26, 39) Source(23, 35) + SourceIndex(0)
-10>Emitted(26, 47) Source(23, 43) + SourceIndex(0)
-11>Emitted(26, 48) Source(23, 44) + SourceIndex(0)
-12>Emitted(26, 49) Source(23, 45) + SourceIndex(0)
+1 >Emitted(22, 13) Source(23, 9) + SourceIndex(0)
+2 >Emitted(22, 21) Source(23, 17) + SourceIndex(0)
+3 >Emitted(22, 22) Source(23, 18) + SourceIndex(0)
+4 >Emitted(22, 23) Source(23, 19) + SourceIndex(0)
+5 >Emitted(22, 24) Source(23, 20) + SourceIndex(0)
+6 >Emitted(22, 27) Source(23, 23) + SourceIndex(0)
+7 >Emitted(22, 31) Source(23, 27) + SourceIndex(0)
+8 >Emitted(22, 38) Source(23, 34) + SourceIndex(0)
+9 >Emitted(22, 39) Source(23, 35) + SourceIndex(0)
+10>Emitted(22, 47) Source(23, 43) + SourceIndex(0)
+11>Emitted(22, 48) Source(23, 44) + SourceIndex(0)
+12>Emitted(22, 49) Source(23, 45) + SourceIndex(0)
 ---
->>>            for (var i = 0; i < restGreetings.length; i++) {
+>>>            var restGreetings /* more greeting */ = [];
 1->^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^
+3 >                              ^^^^^^^^^^^^^^^^^^^
+4 >                                                 ^^^^^^
+5 >                                                       ^^^^^->
+1->
+2 >            ...restGreetings 
+3 >                              /* more greeting */
+4 >                                                 : string[]
+1->Emitted(23, 13) Source(21, 37) + SourceIndex(0)
+2 >Emitted(23, 31) Source(21, 54) + SourceIndex(0)
+3 >Emitted(23, 50) Source(21, 73) + SourceIndex(0)
+4 >Emitted(23, 56) Source(21, 83) + SourceIndex(0)
+---
+>>>            for (var _i = 1; _i < arguments.length; _i++) {
+1->^^^^^^^^^^^^^^^^^
+2 >                 ^^^^^^^^^^
+3 >                           ^^
+4 >                             ^^^^^^^^^^^^^^^^^^^^^
+5 >                                                  ^^
+6 >                                                    ^^^^
+1->
+2 >                 ...restGreetings /* more greeting */: string[]
+3 >                           
+4 >                             ...restGreetings /* more greeting */: string[]
+5 >                                                  
+6 >                                                    ...restGreetings /* more greeting */: string[]
+1->Emitted(24, 18) Source(21, 37) + SourceIndex(0)
+2 >Emitted(24, 28) Source(21, 83) + SourceIndex(0)
+3 >Emitted(24, 30) Source(21, 37) + SourceIndex(0)
+4 >Emitted(24, 51) Source(21, 83) + SourceIndex(0)
+5 >Emitted(24, 53) Source(21, 37) + SourceIndex(0)
+6 >Emitted(24, 57) Source(21, 83) + SourceIndex(0)
+---
+>>>                restGreetings[_i - 1] = arguments[_i];
+1 >^^^^^^^^^^^^^^^^
+2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >                ...restGreetings /* more greeting */: string[]
+1 >Emitted(25, 17) Source(21, 37) + SourceIndex(0)
+2 >Emitted(25, 55) Source(21, 83) + SourceIndex(0)
+---
+>>>            }
+>>>            for (var i = 0; i < restGreetings.length; i++) {
+1 >^^^^^^^^^^^^
 2 >            ^^^^^
 3 >                 ^^^^
 4 >                     ^
@@ -551,7 +551,9 @@ sourceFile:sourceMapValidationClasses.ts
 15>                                                       ^^
 16>                                                         ^^
 17>                                                           ^^^->
-1->
+1 >) {
+  >        var greeters: Greeter[] = []; /* inline block comment */
+  >        greeters[0] = new Greeter(greeting);
   >        
 2 >            for (
 3 >                 var 
@@ -568,7 +570,7 @@ sourceFile:sourceMapValidationClasses.ts
 14>                                                      i
 15>                                                       ++
 16>                                                         ) 
-1->Emitted(27, 13) Source(24, 9) + SourceIndex(0)
+1 >Emitted(27, 13) Source(24, 9) + SourceIndex(0)
 2 >Emitted(27, 18) Source(24, 14) + SourceIndex(0)
 3 >Emitted(27, 22) Source(24, 18) + SourceIndex(0)
 4 >Emitted(27, 23) Source(24, 19) + SourceIndex(0)

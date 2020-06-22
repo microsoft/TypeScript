@@ -47,6 +47,10 @@ var Query = /** @class */ (function () {
     return Query;
 }());
 function css(styles) {
+    var classNames = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        classNames[_i - 1] = arguments[_i];
+    }
     var args = classNames.map(function (arg) {
         if (arg == null) {
             return null;
