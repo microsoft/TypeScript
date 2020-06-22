@@ -1008,8 +1008,9 @@ namespace ts.server {
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
-            if (hasAddedorRemovedFiles && this.autoImportProviderHost) {
-                this.autoImportProviderHost.markAsDirty();
+            if (hasAddedorRemovedFiles) {
+                if (!this.autoImportProviderHost) this.autoImportProviderHost = undefined;
+                this.autoImportProviderHost?.markAsDirty();
             }
             if (isFirstLoad) {
                 // Preload auto import provider so it's not created during completions request
