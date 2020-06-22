@@ -871,14 +871,12 @@ namespace FourSlash {
         }
 
         private verifyCompletionEntry(actual: ts.CompletionEntry, expected: FourSlashInterface.ExpectedCompletionEntry) {
-            const { insertText, replacementSpan, hasAction, isRecommended, isFromUncheckedFile, kind, kindModifiers, text, documentation, tags, source, sourceDisplay, sortText } = typeof expected === "string"
-                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, isFromUncheckedFile: undefined, kind: undefined, kindModifiers: undefined, text: undefined, documentation: undefined, tags: undefined, source: undefined, sourceDisplay: undefined, sortText: undefined }
-                : expected;
+            expected = typeof expected === "string" ? { name: expected } : expected;
 
-            if (actual.insertText !== insertText) {
-                this.raiseError(`Expected completion insert text to be ${insertText}, got ${actual.insertText}`);
+            if (actual.insertText !== expected.insertText) {
+                this.raiseError(`Expected completion insert text to be ${expected.insertText}, got ${actual.insertText}`);
             }
-            const convertedReplacementSpan = replacementSpan && ts.createTextSpanFromRange(replacementSpan);
+            const convertedReplacementSpan = expected.replacementSpan && ts.createTextSpanFromRange(expected.replacementSpan);
             try {
                 assert.deepEqual(actual.replacementSpan, convertedReplacementSpan);
             }
@@ -886,38 +884,34 @@ namespace FourSlash {
                 this.raiseError(`Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
             }
 
-            if (kind !== undefined || kindModifiers !== undefined) {
-                if (actual.kind !== kind) {
-                    this.raiseError(`Unexpected kind for ${actual.name}: Expected '${kind}', actual '${actual.kind}'`);
-                }
-                if (actual.kindModifiers !== (kindModifiers || "")) {
-                    this.raiseError(`Bad kindModifiers for ${actual.name}: Expected ${kindModifiers || ""}, actual ${actual.kindModifiers}`);
-                }
+            if (expected.kind !== undefined || expected.kindModifiers !== undefined) {
+                assert.equal(actual.kind, expected.kind, `Expected 'kind' for ${actual.name} to match`);
+                assert.equal(actual.kindModifiers, expected.kindModifiers || "", `Expected 'kindModifiers' for ${actual.name} to match`);
+            }
+            if (expected.isFromUncheckedFile !== undefined) {
+                assert.equal<boolean | undefined>(actual.isFromUncheckedFile, expected.isFromUncheckedFile, "Expected 'isFromUncheckedFile' properties to match");
+            }
+            if (expected.isPackageJsonImport !== undefined) {
+                assert.equal<boolean | undefined>(actual.isPackageJsonImport, expected.isPackageJsonImport, "Expected 'isPackageJsonImport' properties to match");
             }
 
-            if (isFromUncheckedFile !== undefined) {
-                if (actual.isFromUncheckedFile !== isFromUncheckedFile) {
-                    this.raiseError(`Expected 'isFromUncheckedFile' value '${actual.isFromUncheckedFile}' to equal '${isFromUncheckedFile}'`);
-                }
-            }
+            assert.equal(actual.hasAction, expected.hasAction, `Expected 'hasAction' properties to match`);
+            assert.equal(actual.isRecommended, expected.isRecommended, `Expected 'isRecommended' properties to match'`);
+            assert.equal(actual.source, expected.source, `Expected 'source' values to match`);
+            assert.equal(actual.sortText, expected.sortText || ts.Completions.SortText.LocationPriority, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
 
-            assert.equal(actual.hasAction, hasAction, `Expected 'hasAction' properties to match`);
-            assert.equal(actual.isRecommended, isRecommended, `Expected 'isRecommended' properties to match'`);
-            assert.equal(actual.source, source, `Expected 'source' values to match`);
-            assert.equal(actual.sortText, sortText || ts.Completions.SortText.LocationPriority, this.messageAtLastKnownMarker(`Actual entry: ${JSON.stringify(actual)}`));
-
-            if (text !== undefined) {
+            if (expected.text !== undefined) {
                 const actualDetails = this.getCompletionEntryDetails(actual.name, actual.source)!;
-                assert.equal(ts.displayPartsToString(actualDetails.displayParts), text, "Expected 'text' property to match 'displayParts' string");
-                assert.equal(ts.displayPartsToString(actualDetails.documentation), documentation || "", "Expected 'documentation' property to match 'documentation' display parts string");
+                assert.equal(ts.displayPartsToString(actualDetails.displayParts), expected.text, "Expected 'text' property to match 'displayParts' string");
+                assert.equal(ts.displayPartsToString(actualDetails.documentation), expected.documentation || "", "Expected 'documentation' property to match 'documentation' display parts string");
                 // TODO: GH#23587
                 // assert.equal(actualDetails.kind, actual.kind);
                 assert.equal(actualDetails.kindModifiers, actual.kindModifiers, "Expected 'kindModifiers' properties to match");
-                assert.equal(actualDetails.source && ts.displayPartsToString(actualDetails.source), sourceDisplay, "Expected 'sourceDisplay' property to match 'source' display parts string");
-                assert.deepEqual(actualDetails.tags, tags);
+                assert.equal(actualDetails.source && ts.displayPartsToString(actualDetails.source), expected.sourceDisplay, "Expected 'sourceDisplay' property to match 'source' display parts string");
+                assert.deepEqual(actualDetails.tags, expected.tags);
             }
             else {
-                assert(documentation === undefined && tags === undefined && sourceDisplay === undefined, "If specifying completion details, should specify 'text'");
+                assert(expected.documentation === undefined && expected.tags === undefined && expected.sourceDisplay === undefined, "If specifying completion details, should specify 'text'");
             }
         }
 
@@ -2122,6 +2116,9 @@ namespace FourSlash {
         public setFormatOptions(formatCodeOptions: ts.FormatCodeOptions | ts.FormatCodeSettings): ts.FormatCodeSettings {
             const oldFormatCodeOptions = this.formatCodeSettings;
             this.formatCodeSettings = ts.toEditorSettings(formatCodeOptions);
+            if (this.testType === FourSlashTestType.Server) {
+                (this.languageService as ts.server.SessionClient).setFormattingOptions(this.formatCodeSettings);
+            }
             return oldFormatCodeOptions;
         }
 

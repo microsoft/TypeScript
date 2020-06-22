@@ -8024,6 +8024,7 @@ namespace ts {
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
         readonly provideRefactorNotApplicableReason?: boolean;
     }
 

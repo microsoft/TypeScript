@@ -731,7 +731,7 @@ namespace FourSlashInterface {
         }
 
         public setOption(name: keyof ts.FormatCodeSettings, value: number | string | boolean): void {
-            this.state.formatCodeSettings = { ...this.state.formatCodeSettings, [name]: value };
+            this.state.setFormatOptions({ ...this.state.formatCodeSettings, [name]: value });
         }
     }
 
@@ -1495,6 +1495,7 @@ namespace FourSlashInterface {
         readonly isRecommended?: boolean; // If not specified, will assert that this is false.
         readonly isFromUncheckedFile?: boolean; // If not specified, won't assert about this
         readonly kind?: string; // If not specified, won't assert about this
+        readonly isPackageJsonImport?: boolean; // If not specified, won't assert about this
         readonly kindModifiers?: string; // Must be paired with 'kind'
         readonly text?: string;
         readonly documentation?: string;

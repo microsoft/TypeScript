@@ -3,7 +3,8 @@ namespace ts.server {
     export enum ProjectKind {
         Inferred,
         Configured,
-        External
+        External,
+        AutoImportProvider,
     }
 
     /* @internal */
@@ -134,9 +135,6 @@ namespace ts.server {
         private plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
-        private packageJsonFilesMap: Map<FileWatcher> | undefined;
-
-        /*@internal*/
         /**
          * This is map from files to unresolved imports in it
          * Maop does not contain entries for files that do not have unresolved imports
@@ -203,6 +201,9 @@ namespace ts.server {
         originalConfiguredProjects: Map<true> | undefined;
 
         /*@internal*/
+        packageJsonsForAutoImport: Map<true> | undefined;
+
+        /*@internal*/
         getResolvedProjectReferenceToRedirect(_fileName: string): ResolvedProjectReference | undefined {
             return undefined;
         }
@@ -241,14 +242,13 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
-        readonly packageJsonCache: PackageJsonCache;
-
-        /*@internal*/
         private importSuggestionsCache = Completions.createImportSuggestionsForFileCache();
         /*@internal*/
         private dirtyFilesForSuggestions: Map<true> | undefined;
         /*@internal*/
         private symlinks: ReadonlyMap<string> | undefined;
+        /*@internal*/
+        autoImportProviderHost: AutoImportProviderProject | false | undefined;
 
         /*@internal*/
         constructor(
@@ -301,8 +301,9 @@ namespace ts.server {
                 this.disableLanguageService(lastFileExceededProgramSize);
             }
             this.markAsDirty();
-            this.projectService.pendingEnsureProjectForOpenFiles = true;
-            this.packageJsonCache = createPackageJsonCache(this);
+            if (projectKind !== ProjectKind.AutoImportProvider) {
+                this.projectService.pendingEnsureProjectForOpenFiles = true;
+            }
         }
 
         isKnownTypesPackageName(name: string): boolean {
@@ -661,6 +662,10 @@ namespace ts.server {
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
             this.builderState = undefined;
+            if (this.autoImportProviderHost) {
+                this.autoImportProviderHost.close();
+            }
+            this.autoImportProviderHost = undefined;
             this.resolutionCache.closeTypeRootsWatch();
             this.clearGeneratedFileWatch();
             this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
@@ -721,6 +726,7 @@ namespace ts.server {
                     }
                 });
             }
+
             // Release external files
             forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
             // Always remove root files from the project
@@ -744,12 +750,12 @@ namespace ts.server {
                 clearMap(this.missingFilesMap, closeFileWatcher);
                 this.missingFilesMap = undefined!;
             }
-            if (this.packageJsonFilesMap) {
-                clearMap(this.packageJsonFilesMap, closeFileWatcher);
-                this.packageJsonFilesMap = undefined;
-            }
             this.clearGeneratedFileWatch();
             this.clearInvalidateResolutionOfFailedLookupTimer();
+            if (this.autoImportProviderHost) {
+                this.autoImportProviderHost.close();
+            }
+            this.autoImportProviderHost = undefined;
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -946,6 +952,15 @@ namespace ts.server {
             }
         }
 
+        /*@internal*/
+        markAutoImportProviderAsDirty() {
+            if (this.autoImportProviderHost === false) {
+                this.autoImportProviderHost = undefined;
+            }
+            this.autoImportProviderHost?.markAsDirty();
+            this.importSuggestionsCache.clear();
+        }
+
         /* @internal */
         onFileAddedOrRemoved() {
             this.hasAddedorRemovedFiles = true;
@@ -989,8 +1004,17 @@ namespace ts.server {
                 this.lastCachedUnresolvedImportsList = undefined;
             }
 
+            const isFirstLoad = this.projectProgramVersion === 0;
             if (hasNewProgram) {
                 this.projectProgramVersion++;
+            }
+            if (hasAddedorRemovedFiles) {
+                if (!this.autoImportProviderHost) this.autoImportProviderHost = undefined;
+                this.autoImportProviderHost?.markAsDirty();
+            }
+            if (isFirstLoad) {
+                // Preload auto import provider so it's not created during completions request
+                this.getPackageJsonAutoImportProvider();
             }
             perfLogger.logStopUpdateGraph();
             return !hasNewProgram;
@@ -1135,7 +1159,7 @@ namespace ts.server {
                 removed => this.detachScriptInfoFromProject(removed)
             );
             const elapsed = timestamp() - start;
-            this.projectService.sendUpdateGraphPerformanceEvent(elapsed);
+            this.sendPerformanceEvent("UpdateGraph", elapsed);
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
             if (this.hasAddedorRemovedFiles) {
                 this.print(/*writeProjectFileNames*/ true);
@@ -1144,6 +1168,11 @@ namespace ts.server {
                 this.writeLog(`Different program with same set of files:: oldProgram.structureIsReused:: ${oldProgram && oldProgram.structureIsReused}`);
             }
             return hasNewProgram;
+        }
+
+        /* @internal */
+        sendPerformanceEvent(kind: PerformanceEvent["kind"], durationMs: number) {
+            this.projectService.sendPerformanceEvent(kind, durationMs);
         }
 
         /*@internal*/
@@ -1322,6 +1351,9 @@ namespace ts.server {
             this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]})`);
             this.writeLog(this.filesToString(writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose)));
             this.writeLog("-----------------------------------------------");
+            if (this.autoImportProviderHost) {
+                this.autoImportProviderHost.print(/*writeProjectFileNames*/ false);
+            }
         }
 
         setCompilerOptions(compilerOptions: CompilerOptions) {
@@ -1572,37 +1604,14 @@ namespace ts.server {
 
         /*@internal*/
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
-            const packageJsonCache = this.packageJsonCache;
-            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
-            const toPath = this.toPath.bind(this);
-            const rootPath = rootDir && toPath(rootDir);
-            const filePath = toPath(fileName);
-            const result: PackageJsonInfo[] = [];
-            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
-                switch (packageJsonCache.directoryHasPackageJson(directory)) {
-                    // Sync and check same directory again
-                    case Ternary.Maybe:
-                        packageJsonCache.searchDirectoryAndAncestors(directory);
-                        return processDirectory(directory);
-                    // Check package.json
-                    case Ternary.True:
-                        const packageJsonFileName = combinePaths(directory, "package.json");
-                        watchPackageJsonFile(packageJsonFileName);
-                        const info = packageJsonCache.getInDirectory(directory);
-                        if (info) result.push(info);
-                }
-                if (rootPath && rootPath === toPath(directory)) {
-                    return true;
-                }
-            });
-
-            return result;
+            return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
         }
 
         /*@internal*/
-        onAddPackageJson(path: Path) {
-            this.packageJsonCache.addOrUpdate(path);
-            this.watchPackageJsonFile(path);
+        getPackageJsonsForAutoImport(rootDir?: string): readonly PackageJsonInfo[] {
+            const packageJsons = this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
+            this.packageJsonsForAutoImport = arrayToSet(packageJsons.map(p => p.fileName));
+            return packageJsons;
         }
 
         /*@internal*/
@@ -1610,31 +1619,47 @@ namespace ts.server {
             return this.importSuggestionsCache;
         }
 
-        private watchPackageJsonFile(path: Path) {
-            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
-            if (!watchers.has(path)) {
-                watchers.set(path, this.projectService.watchFactory.watchFile(
-                    this.projectService.host,
-                    path,
-                    (fileName, eventKind) => {
-                        const path = this.toPath(fileName);
-                        switch (eventKind) {
-                            case FileWatcherEventKind.Created:
-                                return Debug.fail();
-                            case FileWatcherEventKind.Changed:
-                                this.packageJsonCache.addOrUpdate(path);
-                                break;
-                            case FileWatcherEventKind.Deleted:
-                                this.packageJsonCache.delete(path);
-                                watchers.get(path)!.close();
-                                watchers.delete(path);
-                        }
-                    },
-                    PollingInterval.Low,
-                    this.projectService.getWatchOptions(this),
-                    WatchType.PackageJsonFile,
-                ));
+        /*@internal*/
+        includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
+            if (this.projectService.includePackageJsonAutoImports() === PackageJsonAutoImportPreference.None ||
+                !this.languageServiceEnabled ||
+                isInsideNodeModules(this.currentDirectory) ||
+                !this.isDefaultProjectForOpenFiles()) {
+                return PackageJsonAutoImportPreference.None;
             }
+            return this.projectService.includePackageJsonAutoImports();
+        }
+
+        /*@internal*/
+        getPackageJsonAutoImportProvider(): Program | undefined {
+            if (this.autoImportProviderHost === false) {
+                return undefined;
+            }
+            if (this.autoImportProviderHost) {
+                updateProjectIfDirty(this.autoImportProviderHost);
+                if (!this.autoImportProviderHost.hasRoots()) {
+                    this.autoImportProviderHost.close();
+                    this.autoImportProviderHost = undefined;
+                    return undefined;
+                }
+                return this.autoImportProviderHost.getCurrentProgram();
+            }
+
+            const dependencySelection = this.includePackageJsonAutoImports();
+            if (dependencySelection) {
+                this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.projectService.host, this.documentRegistry);
+                if (this.autoImportProviderHost) {
+                    updateProjectIfDirty(this.autoImportProviderHost);
+                    return this.autoImportProviderHost.getCurrentProgram();
+                }
+            }
+        }
+
+        /*@internal*/
+        private isDefaultProjectForOpenFiles(): boolean {
+            return !!forEachEntry(
+                this.projectService.openFiles,
+                (_, fileName) => this.projectService.tryGetDefaultProjectForFile(toNormalizedPath(fileName)) === this);
         }
     }
 
@@ -1659,19 +1684,17 @@ namespace ts.server {
         });
     }
 
+    function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => string) {
+        let nextId = 1;
+        return () => nameFactory(nextId++);
+    }
+
     /**
      * If a file is opened and no tsconfig (or jsconfig) is found,
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
-        private static readonly newName = (() => {
-            let nextId = 1;
-            return () => {
-                const id = nextId;
-                nextId++;
-                return makeInferredProjectName(id);
-            };
-        })();
+        private static readonly newName = createProjectNameFactoryWithCounter(makeInferredProjectName);
 
         private _isJsInferredProject = false;
 
@@ -1773,9 +1796,148 @@ namespace ts.server {
         getTypeAcquisition(): TypeAcquisition {
             return {
                 enable: allRootFilesAreJsOrDts(this),
-                include: [],
-                exclude: []
+                include: ts.emptyArray,
+                exclude: ts.emptyArray
             };
+        }
+    }
+
+    export class AutoImportProviderProject extends Project {
+        private static readonly newName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
+
+        /*@internal*/
+        static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, compilerOptions: CompilerOptions): string[] {
+            if (!dependencySelection) {
+                return ts.emptyArray;
+            }
+
+            let dependencyNames: Map<true> | undefined;
+            let rootNames: string[] | undefined;
+            const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
+            const packageJsons = hostProject.getPackageJsonsForAutoImport(combinePaths(hostProject.currentDirectory, rootFileName));
+            for (const packageJson of packageJsons) {
+                packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
+                packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
+                if (dependencySelection === PackageJsonAutoImportPreference.All) {
+                    packageJson.devDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
+                }
+            }
+
+            if (dependencyNames) {
+                const resolutions = map(arrayFrom(dependencyNames.keys()), name => resolveTypeReferenceDirective(
+                    name,
+                    rootFileName,
+                    compilerOptions,
+                    moduleResolutionHost));
+
+                for (const resolution of resolutions) {
+                    if (resolution.resolvedTypeReferenceDirective?.resolvedFileName && !hostProject.getCurrentProgram()!.getSourceFile(resolution.resolvedTypeReferenceDirective.resolvedFileName)) {
+                        rootNames = append(rootNames, resolution.resolvedTypeReferenceDirective.resolvedFileName);
+                    }
+                }
+            }
+
+            return rootNames || ts.emptyArray;
+
+            function addDependency(dependency: string) {
+                if (!startsWith(dependency, "@types/")) {
+                    (dependencyNames || (dependencyNames = createMap())).set(dependency, true);
+                }
+            }
+        }
+
+        /*@internal*/
+        static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
+            if (dependencySelection === PackageJsonAutoImportPreference.None) {
+                return undefined;
+            }
+
+            const compilerOptions: CompilerOptions = {
+                ...hostProject.getCompilerOptions(),
+                noLib: true,
+                diagnostics: false,
+                skipLibCheck: true,
+                types: ts.emptyArray,
+                lib: ts.emptyArray,
+                sourceMap: false
+            };
+
+            const rootNames = this.getRootFileNames(dependencySelection, hostProject, moduleResolutionHost, compilerOptions);
+            if (!rootNames.length) {
+                return undefined;
+            }
+
+            return new AutoImportProviderProject(hostProject, rootNames, documentRegistry, compilerOptions);
+        }
+
+        private rootFileNames: string[] | undefined;
+
+        /*@internal*/
+        constructor(
+            private hostProject: Project,
+            initialRootNames: string[],
+            documentRegistry: DocumentRegistry,
+            compilerOptions: CompilerOptions,
+        ) {
+            super(AutoImportProviderProject.newName(),
+                ProjectKind.AutoImportProvider,
+                hostProject.projectService,
+                documentRegistry,
+                /*hasExplicitListOfFiles*/ false,
+                /*lastFileExceededProgramSize*/ undefined,
+                compilerOptions,
+                /*compileOnSaveEnabled*/ false,
+                hostProject.getWatchOptions(),
+                hostProject.projectService.host,
+                hostProject.currentDirectory);
+
+            this.rootFileNames = initialRootNames;
+        }
+
+        isOrphan() {
+            return true;
+        }
+
+        updateGraph() {
+            let rootFileNames = this.rootFileNames;
+            if (!rootFileNames) {
+                rootFileNames = AutoImportProviderProject.getRootFileNames(
+                    this.hostProject.includePackageJsonAutoImports(),
+                    this.hostProject,
+                    this.projectService.host,
+                    this.getCompilationSettings());
+            }
+
+            this.projectService.setFileNamesOfAutoImportProviderProject(this, rootFileNames);
+            this.rootFileNames = rootFileNames;
+            this.hostProject.getImportSuggestionsCache().clear();
+            return super.updateGraph();
+        }
+
+        markAsDirty() {
+            this.rootFileNames = undefined;
+            super.markAsDirty();
+        }
+
+        getScriptFileNames() {
+            return this.rootFileNames || ts.emptyArray;
+        }
+
+        getLanguageService(): never {
+            throw new Error("AutoImportProviderProject language service should never be used. To get the program, use `project.getCurrentProgram()`.");
+        }
+
+        markAutoImportProviderAsDirty(): never {
+            throw new Error("AutoImportProviderProject is an auto import provider; use `markAsDirty()` instead.");
+        }
+
+        /*@internal*/
+        includePackageJsonAutoImports() {
+            return PackageJsonAutoImportPreference.None;
+        }
+
+        getTypeAcquisition(): TypeAcquisition {
+            return { enable: false };
         }
     }
 

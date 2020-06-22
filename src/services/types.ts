@@ -195,6 +195,7 @@ namespace ts {
     /* @internal */
     export interface PackageJsonInfo {
         fileName: string;
+        parseable: boolean;
         dependencies?: Map<string>;
         devDependencies?: Map<string>;
         peerDependencies?: Map<string>;
@@ -203,9 +204,21 @@ namespace ts {
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
 
-    /** @internal */
+    /* @internal */
     export interface FormattingHost {
         getNewLine?(): string;
+    }
+
+    /* @internal */
+    export const enum PackageJsonAutoImportPreference {
+        None,
+        ExcludeDevDependencies,
+        All
+    }
+
+    export interface PerformanceEvent {
+        kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
+        durationMs: number;
     }
 
     //
@@ -282,11 +295,17 @@ namespace ts {
         /* @internal */
         getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
+        getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */
         getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
         /* @internal */
         setCompilerHost?(host: CompilerHost): void;
         /* @internal */
         useSourceOfProjectReferenceRedirect?(): boolean;
+        /* @internal */
+        getPackageJsonAutoImportProvider?(): Program | undefined;
+        /* @internal */
+        sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     }
 
     /* @internal */
@@ -485,6 +504,7 @@ namespace ts {
         getProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
+        /* @internal */ getAutoImportProvider(): Program | undefined;
 
         dispose(): void;
     }
@@ -1081,6 +1101,7 @@ namespace ts {
         source?: string;
         isRecommended?: true;
         isFromUncheckedFile?: true;
+        isPackageJsonImport?: true;
     }
 
     export interface CompletionEntryDetails {

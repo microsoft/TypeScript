@@ -151,12 +151,6 @@ namespace ts.server {
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
     /*@internal*/
-    export interface PerformanceEvent {
-        kind: "UpdateGraph";
-        durationMs: number;
-    }
-
-    /*@internal*/
     export type PerformanceEventHandler = (event: PerformanceEvent) => void;
 
     export interface SafeList {
@@ -674,6 +668,12 @@ namespace ts.server {
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
+        /*@internal*/
+        readonly packageJsonCache: PackageJsonCache;
+        /*@internal*/
+        private packageJsonFilesMap: Map<FileWatcher> | undefined;
+
+
         private performanceEventHandler?: PerformanceEventHandler;
 
         constructor(opts: ProjectServiceOptions) {
@@ -725,6 +725,7 @@ namespace ts.server {
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
+            this.packageJsonCache = createPackageJsonCache(this);
             this.watchFactory = this.syntaxOnly ?
                 {
                     watchFile: returnNoopFileWatcher,
@@ -921,9 +922,9 @@ namespace ts.server {
         }
 
         /* @internal */
-        sendUpdateGraphPerformanceEvent(durationMs: number) {
+        sendPerformanceEvent(kind: PerformanceEvent["kind"], durationMs: number) {
             if (this.performanceEventHandler) {
-                this.performanceEventHandler({ kind: "UpdateGraph", durationMs });
+                this.performanceEventHandler({ kind, durationMs });
             }
         }
 
@@ -1162,6 +1163,7 @@ namespace ts.server {
          */
         /*@internal*/
         watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject) {
+            const watchOptions = this.getWatchOptions(project);
             return this.watchFactory.watchDirectory(
                 this.host,
                 directory,
@@ -1173,7 +1175,7 @@ namespace ts.server {
                         (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
                     ) {
                         this.logger.info(`Project: ${configFileName} Detected new package.json: ${fileOrDirectory}`);
-                        project.onAddPackageJson(fileOrDirectoryPath);
+                        this.onAddPackageJson(fileOrDirectoryPath);
                     }
 
                     if (isIgnoredFileFromWildCardWatching({
@@ -1212,7 +1214,7 @@ namespace ts.server {
                     }
                 },
                 flags,
-                this.getWatchOptions(project),
+                watchOptions,
                 WatchType.WildcardDirectory,
                 project
             );
@@ -2025,7 +2027,7 @@ namespace ts.server {
                 };
             }
             project.configFileSpecs = parsedCommandLine.configFileSpecs;
-            project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInutFiles(parsedCommandLine.raw);
+            project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
             project.setProjectErrors(configFileErrors);
             project.updateReferences(parsedCommandLine.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
@@ -2044,7 +2046,7 @@ namespace ts.server {
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
         }
 
-        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {
+        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
             const newRootScriptInfoMap = createMap<true>();
 
@@ -2139,6 +2141,11 @@ namespace ts.server {
             project.updateErrorOnNoInputFiles(fileNamesResult);
             this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
+        }
+
+        /*@internal*/
+        setFileNamesOfAutoImportProviderProject(project: AutoImportProviderProject, fileNames: string[]) {
+            this.updateNonInferredProjectFiles(project, fileNames, fileNamePropertyReader);
         }
 
         /**
@@ -2685,7 +2692,7 @@ namespace ts.server {
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
-                    const { lazyConfiguredProjectsFromExternalProject } = this.hostConfiguration.preferences;
+                    const { lazyConfiguredProjectsFromExternalProject, includePackageJsonAutoImports } = this.hostConfiguration.preferences;
                     this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                     if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
                         // Load configured projects for external projects that are pending reload
@@ -2696,6 +2703,9 @@ namespace ts.server {
                                 project.updateGraph();
                             }
                         });
+                    }
+                    if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
+                        this.invalidateProjectAutoImports(/*packageJsonPath*/ undefined);
                     }
                 }
                 if (args.extraFileExtensions) {
@@ -3201,7 +3211,7 @@ namespace ts.server {
             const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
-                if (!info.isScriptOpen() && info.isOrphan()) {
+                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByAutoImportProvider()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
                     let sourceInfos: Map<true> | undefined;
@@ -3678,6 +3688,95 @@ namespace ts.server {
             // If a plugin is configured twice, only the latest configuration will be remembered.
             this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || createMap();
             this.currentPluginConfigOverrides.set(args.pluginName, args.configuration);
+        }
+
+        /*@internal*/
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+            const packageJsonCache = this.packageJsonCache;
+            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
+            const toPath = this.toPath.bind(this);
+            const rootPath = rootDir && toPath(rootDir);
+            const filePath = toPath(fileName);
+            const result: PackageJsonInfo[] = [];
+            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
+                switch (packageJsonCache.directoryHasPackageJson(directory)) {
+                    // Sync and check same directory again
+                    case Ternary.Maybe:
+                        packageJsonCache.searchDirectoryAndAncestors(directory);
+                        return processDirectory(directory);
+                    // Check package.json
+                    case Ternary.True:
+                        const packageJsonFileName = combinePaths(directory, "package.json");
+                        watchPackageJsonFile(packageJsonFileName);
+                        const info = packageJsonCache.getInDirectory(directory);
+                        if (info) result.push(info);
+                }
+                if (rootPath && rootPath === toPath(directory)) {
+                    return true;
+                }
+            });
+
+            return result;
+        }
+
+        /*@internal*/
+        private watchPackageJsonFile(path: Path) {
+            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
+            if (!watchers.has(path)) {
+                this.invalidateProjectAutoImports(path);
+                watchers.set(path, this.watchFactory.watchFile(
+                    this.host,
+                    path,
+                    (fileName, eventKind) => {
+                        const path = this.toPath(fileName);
+                        switch (eventKind) {
+                            case FileWatcherEventKind.Created:
+                                return Debug.fail();
+                            case FileWatcherEventKind.Changed:
+                                this.packageJsonCache.addOrUpdate(path);
+                                this.invalidateProjectAutoImports(path);
+                                break;
+                            case FileWatcherEventKind.Deleted:
+                                this.packageJsonCache.delete(path);
+                                this.invalidateProjectAutoImports(path);
+                                watchers.get(path)!.close();
+                                watchers.delete(path);
+                        }
+                    },
+                    PollingInterval.Low,
+                    this.hostConfiguration.watchOptions,
+                    WatchType.PackageJsonFile,
+                ));
+            }
+        }
+
+        /*@internal*/
+        private onAddPackageJson(path: Path) {
+            this.packageJsonCache.addOrUpdate(path);
+            this.watchPackageJsonFile(path);
+        }
+
+        /*@internal*/
+        includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
+            switch (this.hostConfiguration.preferences.includePackageJsonAutoImports) {
+                case "none": return PackageJsonAutoImportPreference.None;
+                case "all": return PackageJsonAutoImportPreference.All;
+                default: return PackageJsonAutoImportPreference.ExcludeDevDependencies;
+            }
+        }
+
+        /*@internal*/
+        private invalidateProjectAutoImports(packageJsonPath: Path | undefined) {
+            if (this.includePackageJsonAutoImports()) {
+                this.configuredProjects.forEach(invalidate);
+                this.inferredProjects.forEach(invalidate);
+                this.externalProjects.forEach(invalidate);
+            }
+            function invalidate(project: Project) {
+                if (!packageJsonPath || project.packageJsonsForAutoImport?.has(packageJsonPath)) {
+                    project.markAutoImportProviderAsDirty();
+                }
+            }
         }
     }
 

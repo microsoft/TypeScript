@@ -1187,7 +1187,7 @@ namespace ts {
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
                 const result = getFileNamesFromConfigSpecs(config.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
-                updateErrorForNoInputFiles(result, project, config.configFileSpecs!, config.errors, canJsonReportNoInutFiles(config.raw));
+                updateErrorForNoInputFiles(result, project, config.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
                 config.fileNames = result.fileNames;
                 watchInputFiles(state, project, projectPath, config);
             }
@@ -1371,7 +1371,7 @@ namespace ts {
         }
 
         // Container if no files are specified in the project
-        if (!project.fileNames.length && !canJsonReportNoInutFiles(project.raw)) {
+        if (!project.fileNames.length && !canJsonReportNoInputFiles(project.raw)) {
             return {
                 type: UpToDateStatusType.ContainerOnly
             };

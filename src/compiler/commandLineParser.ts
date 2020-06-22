@@ -2361,7 +2361,7 @@ namespace ts {
             }
 
             const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
-            if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles(raw), resolutionStack)) {
+            if (shouldReportNoInputFiles(result, canJsonReportNoInputFiles(raw), resolutionStack)) {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
             }
 
@@ -2413,7 +2413,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function canJsonReportNoInutFiles(raw: any) {
+    export function canJsonReportNoInputFiles(raw: any) {
         return !hasProperty(raw, "files") && !hasProperty(raw, "references");
     }
 
