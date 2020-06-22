@@ -21155,9 +21155,6 @@ namespace ts {
                             assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
                     return getTypeWithFacts(type, facts);
                 }
-                if (type.flags & TypeFlags.NotUnionOrUnit) {
-                    return type;
-                }
                 if (assumeTrue) {
                     const filterFn: (t: Type) => boolean = operator === SyntaxKind.EqualsEqualsToken ?
                         (t => areTypesComparable(t, valueType) || isCoercibleUnderDoubleEquals(t, valueType)) :
