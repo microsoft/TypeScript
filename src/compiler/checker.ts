@@ -24884,13 +24884,10 @@ namespace ts {
         function getSuggestedSymbolForNonexistentJSXAttribute(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
             const strName = isString(name) ? name : idText(name);
             const properties = getPropertiesOfType(containingType);
-            const defaultSuggestion = () => getSpellingSuggestionForName(strName, properties, SymbolFlags.Value);
-            const getCandidate = (expectedName: string) => properties.find(x => symbolName(x) === expectedName);
-            switch (strName) {
-                case "for": return getCandidate("htmlFor") || defaultSuggestion();
-                case "class": return getCandidate("className") || defaultSuggestion();
-            }
-            return defaultSuggestion();
+            const jsxSpecific = strName === "for" ? properties.find(x => symbolName(x) === "htmlFor")
+                : strName === "class" ? properties.find(x => symbolName(x) === "className")
+                : undefined;
+            return jsxSpecific ?? getSpellingSuggestionForName(strName, properties, SymbolFlags.Value);
           }
 
         function getSuggestionForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): string | undefined {
