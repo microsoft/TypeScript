@@ -2487,8 +2487,7 @@ namespace FourSlash {
             const typeIdx = getTokenTypeFromClassification(classification) || 0;
             const modSet = getTokenModifierFromClassification(classification);
 
-            const tokenClassifiction = [tokenTypes[typeIdx], ...tokenModifiers.filter((_, i) => modSet & 1 << i)].join(".");
-            return tokenClassifiction;
+            return [tokenTypes[typeIdx], ...tokenModifiers.filter((_, i) => modSet & 1 << i)].join(".");
         }
 
         private verifyClassifications(expected: { classificationType: string | number, text?: string; textSpan?: TextSpan }[], actual: ts.ClassifiedSpan[], sourceFileText: string) {
