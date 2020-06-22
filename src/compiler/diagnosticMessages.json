@@ -5755,6 +5755,50 @@
         "category": "Message",
         "code": 95126
     },
+    "Could not find a containing arrow function": {
+        "category": "Message",
+        "code": 95127
+    },
+    "Containing function is not an arrow function": {
+        "category": "Message",
+        "code": 95128
+    },
+    "Could not find export statement": {
+        "category": "Message",
+        "code": 95129
+    },
+    "This file already has a default export": {
+        "category": "Message",
+        "code": 95130
+    },
+    "Could not find import clause": {
+        "category": "Message",
+        "code": 95131
+    },
+    "Could not find namespace import or named imports": {
+        "category": "Message",
+        "code": 95132
+    },
+    "Selection is not a valid type node": {
+        "category": "Message",
+        "code": 95133
+    },
+    "No type could be extracted from this type node": {
+        "category": "Message",
+        "code": 95134
+    },
+    "Could not find property for which to generate accessor": {
+        "category": "Message",
+        "code": 95135
+    },
+    "Name is not valid": {
+        "category": "Message",
+        "code": 95136
+    },
+    "Can only convert property with modifier": {
+        "category": "Message",
+        "code": 95137
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
