@@ -248,7 +248,7 @@ namespace ts.server {
         /*@internal*/
         private symlinks: ReadonlyMap<string> | undefined;
         /*@internal*/
-        autoImportProviderHost: AutoImportProviderProject | undefined;
+        autoImportProviderHost: AutoImportProviderProject | false | undefined;
 
         /*@internal*/
         constructor(
@@ -662,7 +662,9 @@ namespace ts.server {
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
             this.builderState = undefined;
-            this.autoImportProviderHost?.close();
+            if (this.autoImportProviderHost) {
+                this.autoImportProviderHost.close();
+            }
             this.autoImportProviderHost = undefined;
             this.resolutionCache.closeTypeRootsWatch();
             this.clearGeneratedFileWatch();
@@ -750,7 +752,9 @@ namespace ts.server {
             }
             this.clearGeneratedFileWatch();
             this.clearInvalidateResolutionOfFailedLookupTimer();
-            this.autoImportProviderHost?.close();
+            if (this.autoImportProviderHost) {
+                this.autoImportProviderHost.close();
+            }
             this.autoImportProviderHost = undefined;
 
             // signal language service to release source files acquired from document registry
@@ -950,6 +954,9 @@ namespace ts.server {
 
         /*@internal*/
         markAutoImportProviderAsDirty() {
+            if (this.autoImportProviderHost === false) {
+                this.autoImportProviderHost = undefined;
+            }
             this.autoImportProviderHost?.markAsDirty();
             this.importSuggestionsCache.clear();
         }
@@ -1001,8 +1008,8 @@ namespace ts.server {
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
-            if (hasAddedorRemovedFiles) {
-                this.autoImportProviderHost?.markAsDirty();
+            if (hasAddedorRemovedFiles && this.autoImportProviderHost) {
+                this.autoImportProviderHost.markAsDirty();
             }
             if (isFirstLoad) {
                 // Preload auto import provider so it's not created during completions request
@@ -1343,7 +1350,9 @@ namespace ts.server {
             this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]})`);
             this.writeLog(this.filesToString(writeProjectFileNames && this.projectService.logger.hasLevel(LogLevel.verbose)));
             this.writeLog("-----------------------------------------------");
-            this.autoImportProviderHost?.print(/*writeProjectFileNames*/ false);
+            if (this.autoImportProviderHost) {
+                this.autoImportProviderHost.print(/*writeProjectFileNames*/ false);
+            }
         }
 
         setCompilerOptions(compilerOptions: CompilerOptions) {
@@ -1622,6 +1631,9 @@ namespace ts.server {
 
         /*@internal*/
         getPackageJsonAutoImportProvider(): Program | undefined {
+            if (this.autoImportProviderHost === false) {
+                return undefined;
+            }
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
                 if (!this.autoImportProviderHost.hasRoots()) {

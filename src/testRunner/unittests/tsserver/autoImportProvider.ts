@@ -140,7 +140,7 @@ namespace ts.projectSystem {
             assert.ok(autoImportProviderProject);
 
             hostProject.close();
-            assert.ok(autoImportProviderProject!.isClosed());
+            assert.ok(autoImportProviderProject && autoImportProviderProject.isClosed());
             assert.isUndefined(hostProject.autoImportProviderHost);
         });
 
