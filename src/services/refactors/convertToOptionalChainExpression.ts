@@ -40,7 +40,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
         const startToken = getTokenAtPosition(file, span.start);
 
-        const containingNode = forEmptySpan ? findAncestor(startToken, (node) => { return isExpressionStatement(node) && (isBinaryExpression(node.expression) || isConditionalExpression(node.expression)); }) : getParentNodeInSpan(startToken, file, span);
+        const containingNode = forEmptySpan ? findAncestor(startToken, node => isExpressionStatement(node) && (isBinaryExpression(node.expression) || isConditionalExpression(node.expression))) : getParentNodeInSpan(startToken, file, span);
         const expression = containingNode && isExpressionStatement(containingNode) ? containingNode.expression : containingNode;
         if (!expression) return undefined;
 
