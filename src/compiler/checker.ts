@@ -21698,7 +21698,7 @@ namespace ts {
                 if (containerFunctionLikeDeclaration) {
                     const topLevelStatementInContainer = findAncestor(node, n => {
                         return n.parent && (isBlock(n.parent) ? n.parent.parent === containerFunctionLikeDeclaration : n.parent === containerFunctionLikeDeclaration);
-                    })
+                    });
                     if (topLevelStatementInContainer) {
                         (<Mutable<Node>>topLevelStatementInContainer).flags |= NodeFlags.ContainsRestParameterReference;
                     }
