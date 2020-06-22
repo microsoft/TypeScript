@@ -1895,6 +1895,7 @@ namespace ts.server {
 
             this.projectService.setFileNamesOfAutoImportProviderProject(this, rootFileNames);
             this.rootFileNames = rootFileNames;
+            this.hostProject.getImportSuggestionsCache().clear();
             return super.updateGraph();
         }
 

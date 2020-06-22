@@ -3774,7 +3774,6 @@ namespace ts.server {
             }
             function invalidate(project: Project) {
                 if (!packageJsonPath || project.packageJsonsForAutoImport?.has(packageJsonPath)) {
-                    project.getImportSuggestionsCache().clear();
                     project.markAutoImportProviderAsDirty();
                 }
             }

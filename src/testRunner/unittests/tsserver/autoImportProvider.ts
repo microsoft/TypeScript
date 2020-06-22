@@ -17,7 +17,7 @@ namespace ts.projectSystem {
     };
     const tsconfig: File = {
         path: "/tsconfig.json",
-        content: "{}",
+        content: `{ "compilerOptions": { "module": "commonjs" } }`,
     };
     const packageJson: File = {
         path: "/package.json",
@@ -165,7 +165,7 @@ namespace ts.projectSystem {
             assert.isFalse(projectService.pendingEnsureProjectForOpenFiles);
         });
 
-        it("Responds to changes in node_modules", () => {
+        it("Responds to automatic changes in node_modules", () => {
             const { projectService, session, host } = setup([
                 angularFormsDts,
                 angularFormsPackageJson,
@@ -177,15 +177,41 @@ namespace ts.projectSystem {
             ]);
 
             openFilesForSession([indexTs], session);
-            projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider();
+            const project = projectService.configuredProjects.get(tsconfig.path)!;
+            const completionsBefore = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, { includeCompletionsForModuleExports: true });
+            assert.isTrue(completionsBefore?.entries.some(c => c.name === "PatternValidator"));
 
             // Directory watchers only fire for add/remove, not change.
             // This is ok since a real `npm install` will always trigger add/remove events.
             host.deleteFile(angularFormsDts.path);
             host.writeFile(angularFormsDts.path, "");
 
-            const autoImportProvider = projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider();
+            const autoImportProvider = project.getLanguageService().getAutoImportProvider();
+            const completionsAfter = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, { includeCompletionsForModuleExports: true });
             assert.equal(autoImportProvider!.getSourceFile(angularFormsDts.path)!.getText(), "");
+            assert.isFalse(completionsAfter?.entries.some(c => c.name === "PatternValidator"));
+        });
+
+        it("Responds to manual changes in node_modules", () => {
+            const { projectService, session, updateFile } = setup([
+                angularFormsDts,
+                angularFormsPackageJson,
+                angularCoreDts,
+                angularCorePackageJson,
+                tsconfig,
+                packageJson,
+                indexTs
+            ]);
+
+            openFilesForSession([indexTs, angularFormsDts], session);
+            const project = projectService.configuredProjects.get(tsconfig.path)!;
+            const completionsBefore = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, { includeCompletionsForModuleExports: true });
+            assert.isTrue(completionsBefore?.entries.some(c => c.name === "PatternValidator"));
+
+            updateFile(angularFormsDts.path, "export class ValidatorPattern {}");
+            const completionsAfter = project.getLanguageService().getCompletionsAtPosition(indexTs.path, 0, { includeCompletionsForModuleExports: true });
+            assert.isFalse(completionsAfter?.entries.some(c => c.name === "PatternValidator"));
+            assert.isTrue(completionsAfter?.entries.some(c => c.name === "ValidatorPattern"));
         });
 
         it("Recovers from an unparseable package.json", () => {
