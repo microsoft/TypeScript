@@ -149,13 +149,7 @@ var f6 = function (x) {
     return 0;
 }; // number
 var f7 = function (x) { return 0; }; // Implicit any error
-var f8 = function () {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
-    return 0;
-}; // []
+var f8 = function () { return 0; }; // []
 g1(function (x) {
     if (x === void 0) { x = 1; }
     return 0;
@@ -181,13 +175,7 @@ g6(function (x) {
     return 0;
 }); // number
 g6(function (x) { return 0; }); // Implicit any error
-g6(function () {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
-    return 0;
-}); // []
+g6(function () { return 0; }); // []
 // Repro from #28816
 function id(input) { return input; }
 function getFoo(_a) {

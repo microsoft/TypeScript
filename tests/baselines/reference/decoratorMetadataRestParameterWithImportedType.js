@@ -99,10 +99,6 @@ var ClassA = /** @class */ (function () {
         this.array = init;
     }
     ClassA.prototype.foo = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     };
     __decorate([
         annotation1(),

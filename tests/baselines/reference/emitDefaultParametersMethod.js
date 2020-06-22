@@ -27,20 +27,12 @@ var C = /** @class */ (function () {
     };
     C.prototype.foo1 = function (x, t) {
         if (t === void 0) { t = false; }
-        var rest = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            rest[_i - 2] = arguments[_i];
-        }
     };
     C.prototype.bar = function (t) {
         if (t === void 0) { t = false; }
     };
     C.prototype.boo = function (t) {
         if (t === void 0) { t = false; }
-        var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
-        }
     };
     return C;
 }());
@@ -53,10 +45,6 @@ var D = /** @class */ (function () {
 var E = /** @class */ (function () {
     function E(y) {
         if (y === void 0) { y = "hello"; }
-        var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
-        }
     }
     return E;
 }());

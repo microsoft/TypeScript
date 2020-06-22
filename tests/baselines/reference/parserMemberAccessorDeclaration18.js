@@ -8,12 +8,7 @@ var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "Foo", {
-        set: function () {
-            var a = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                a[_i] = arguments[_i];
-            }
-        },
+        set: function () { },
         enumerable: false,
         configurable: true
     });

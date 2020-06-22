@@ -746,15 +746,17 @@ namespace ts {
         // removal, it is likely that users will add the import anyway.
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-        /* @internal */ PossiblyContainsDynamicImport = 1 << 20,
-        /* @internal */ PossiblyContainsImportMeta    = 1 << 21,
+        /* @internal */ PossiblyContainsDynamicImport   = 1 << 20,
+        /* @internal */ PossiblyContainsImportMeta      = 1 << 21,
 
-        JSDoc                                         = 1 << 22, // If node was parsed inside jsdoc
-        /* @internal */ Ambient                       = 1 << 23, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-        /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-        JsonFile                                      = 1 << 25, // If node was parsed in a Json
-        /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
-        /* @internal */ Deprecated                    = 1 << 27, // If has '@deprecated' JSDoc tag
+        JSDoc                                           = 1 << 22, // If node was parsed inside jsdoc
+        /* @internal */ Ambient                         = 1 << 23, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement                 = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        JsonFile                                        = 1 << 25, // If node was parsed in a Json
+        /* @internal */ TypeCached                      = 1 << 26, // If a type was cached for node at any point
+        /* @internal */ Deprecated                      = 1 << 27, // If has '@deprecated' JSDoc tag
+
+        /* @internal */ ContainsRestParameterReference  = 1 << 28, // If contains rest parameter reference
 
         BlockScoped = Let | Const,
 

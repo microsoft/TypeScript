@@ -242,17 +242,8 @@ m5.health = 0;
 var y = m5.isAlive.toString();
 var SplatMonster = /** @class */ (function () {
     function SplatMonster() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
-    SplatMonster.prototype.roar = function (name) {
-        var args = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
-        }
-    };
+    SplatMonster.prototype.roar = function (name) { };
     return SplatMonster;
 }());
 function foo() { return true; }

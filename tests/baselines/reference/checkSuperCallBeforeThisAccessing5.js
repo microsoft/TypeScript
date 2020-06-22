@@ -23,10 +23,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Based = /** @class */ (function () {
     function Based() {
-        var arg = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            arg[_i] = arguments[_i];
-        }
     }
     return Based;
 }());

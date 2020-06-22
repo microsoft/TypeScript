@@ -120,10 +120,6 @@ function fooWithTypeTypePredicateAndGeneric(a) {
 }
 exports.fooWithTypeTypePredicateAndGeneric = fooWithTypeTypePredicateAndGeneric;
 function fooWithTypeTypePredicateAndRestParam(a) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
     return true;
 }
 exports.fooWithTypeTypePredicateAndRestParam = fooWithTypeTypePredicateAndRestParam;

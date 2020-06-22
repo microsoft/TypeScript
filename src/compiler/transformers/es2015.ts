@@ -1354,6 +1354,14 @@ namespace ts {
                 return false;
             }
 
+            const firstStatementContainsRestParameter = node.body && (isBlock(node.body) ?
+                find(node.body.statements, stmt => !!(stmt.flags & NodeFlags.ContainsRestParameterReference)) :
+                (node.body.flags & NodeFlags.ContainsRestParameterReference) ? node.body : undefined
+            );
+            if (!firstStatementContainsRestParameter) {
+                return false;
+            }
+
             // `declarationName` is the name of the local declaration for the parameter.
             // TODO(rbuckton): Does this need to be parented?
             const declarationName = parameter.name.kind === SyntaxKind.Identifier ? setParent(setTextRange(factory.cloneNode(parameter.name), parameter.name), parameter.name.parent) : factory.createTempVariable(/*recordTempVariable*/ undefined);

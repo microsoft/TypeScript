@@ -30,10 +30,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Base = /** @class */ (function () {
     function Base() {
-        var a = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            a[_i] = arguments[_i];
-        }
     }
     return Base;
 }());

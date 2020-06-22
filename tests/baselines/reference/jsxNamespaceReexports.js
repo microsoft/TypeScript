@@ -19,12 +19,7 @@ const content = <my-element/>;
 "use strict";
 exports.__esModule = true;
 exports.createElement = void 0;
-function createElement(element, props) {
-    var children = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        children[_i - 2] = arguments[_i];
-    }
-}
+function createElement(element, props) { }
 exports.createElement = createElement;
 //// [index.js]
 "use strict";

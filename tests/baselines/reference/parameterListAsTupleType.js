@@ -30,12 +30,7 @@ function foo(a, b) {
 }
 var x = function (a) { return 5; };
 var a = ['should-not-work']; // works, but shouldn't
-function t() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-} // should work
+function t() { } // should work
 var C = /** @class */ (function () {
     function C(a, b) {
     }
@@ -43,10 +38,6 @@ var C = /** @class */ (function () {
 }());
 var D = /** @class */ (function () {
     function D(a) {
-        var rest = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            rest[_i - 1] = arguments[_i];
-        }
     }
     return D;
 }());

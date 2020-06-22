@@ -124,10 +124,6 @@ var SetOf = /** @class */ (function () {
 }());
 /* ... etc ... */
 function compose() {
-    var fns = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        fns[_i] = arguments[_i];
-    }
     return function (x) { return fns.reduce(function (prev, fn) { return fn(prev); }, x); };
 }
 function map(fn) {

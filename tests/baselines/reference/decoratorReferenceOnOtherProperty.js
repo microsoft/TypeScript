@@ -51,12 +51,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 exports.__esModule = true;
 var yoha_1 = require("./yoha");
-function foo() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-}
+function foo() { }
 var Bar = /** @class */ (function () {
     function Bar() {
     }
@@ -85,21 +80,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 exports.__esModule = true;
 var yoha_1 = require("./yoha");
-function foo() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-}
+function foo() { }
 var Bar = /** @class */ (function () {
     function Bar() {
     }
-    Bar.prototype.yoha = function (yoha) {
-        var bar = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            bar[_i - 1] = arguments[_i];
-        }
-    };
+    Bar.prototype.yoha = function (yoha) { };
     __decorate([
         __param(0, foo),
         __metadata("design:type", Function),

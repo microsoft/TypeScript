@@ -31,10 +31,6 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 function tag(str) {
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
     return str;
 }
 var a = tag(__makeTemplateObject(["123"], ["123"]));

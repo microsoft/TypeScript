@@ -148,55 +148,31 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Private = /** @class */ (function () {
     function Private() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
     return Private;
 }());
 var Private2 = /** @class */ (function () {
     function Private2() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
     return Private2;
 }());
 var Protected = /** @class */ (function () {
     function Protected() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
     return Protected;
 }());
 var Protected2 = /** @class */ (function () {
     function Protected2() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
     return Protected2;
 }());
 var Public = /** @class */ (function () {
     function Public() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
     return Public;
 }());
 var Public2 = /** @class */ (function () {
     function Public2() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
     }
     return Public2;
 }());

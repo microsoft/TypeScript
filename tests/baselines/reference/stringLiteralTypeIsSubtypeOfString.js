@@ -117,13 +117,7 @@ var C = /** @class */ (function () {
     C.prototype.toString = function () { return null; };
     C.prototype.charAt = function (pos) { return null; };
     C.prototype.charCodeAt = function (index) { return null; };
-    C.prototype.concat = function () {
-        var strings = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            strings[_i] = arguments[_i];
-        }
-        return null;
-    };
+    C.prototype.concat = function () { return null; };
     C.prototype.indexOf = function (searchString, position) { return null; };
     C.prototype.lastIndexOf = function (searchString, position) { return null; };
     C.prototype.localeCompare = function (that) { return null; };
