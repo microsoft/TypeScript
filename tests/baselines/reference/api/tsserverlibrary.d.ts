@@ -3733,10 +3733,6 @@ declare namespace ts {
         span: TextSpan;
         newLength: number;
     }
-    export enum SemanticClassificationFormat {
-        Original = "original",
-        TwentyTwenty = "2020"
-    }
     export interface SyntaxList extends Node {
         kind: SyntaxKind.SyntaxList;
         _children: Node[];
@@ -5354,6 +5350,10 @@ declare namespace ts {
     type WithMetadata<T> = T & {
         metadata?: unknown;
     };
+    enum SemanticClassificationFormat {
+        Original = "original",
+        TwentyTwenty = "2020"
+    }
     interface LanguageService {
         /** This is used as a part of restarting the language service. */
         cleanupSemanticCache(): void;
@@ -6232,11 +6232,6 @@ declare namespace ts {
 declare namespace ts {
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
     function createClassifier(): Classifier;
-}
-declare namespace ts.classifier.vscode {
-    /** This is mainly used internally for testing */
-    function getSemanticClassifications(program: Program, _cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan[];
-    function getEncodedSemanticClassifications(program: Program, _cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications;
 }
 declare namespace ts {
     interface DocumentHighlights {
