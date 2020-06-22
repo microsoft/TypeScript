@@ -3,7 +3,7 @@
 ////let a = { b: { c: 0 } };
 ////a && a.b && /*a*//*b*/a.b.c;
 
-// Only offer refactor for empty span if explicity requested
+// Only offer refactor for empty span if explicitly requested
 goTo.select("a", "b");
 verify.not.refactorAvailableForTriggerReason("implicit", "Convert to optional chain expression");
 verify.refactorAvailableForTriggerReason("invoked", "Convert to optional chain expression");
