@@ -44,26 +44,16 @@ Output::
 Program root files: []
 Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
 Program files::
-/a/node_modules/@types/typings/lib.d.ts
-/a/node_modules/@types/typings/index.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/node_modules/@types/typings/lib.d.ts
-/a/node_modules/@types/typings/index.d.ts
+No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /a/tsconfig.json:
   {"fileName":"/a/tsconfig.json","pollingInterval":250}
-/a/node_modules/@types/typings/index.d.ts:
-  {"fileName":"/a/node_modules/@types/typings/index.d.ts","pollingInterval":250}
-/a/node_modules/@types/typings/lib.d.ts:
-  {"fileName":"/a/node_modules/@types/typings/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/node_modules:
-  {"directoryName":"/a/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/node_modules/@types:
   {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
