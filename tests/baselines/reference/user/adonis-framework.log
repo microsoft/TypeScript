@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/adonis-framework/lib/util.js(24,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/providers/ConfigProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.

@@ -462,7 +462,6 @@ namespace ts {
         {
             name: "noEmit",
             type: "boolean",
-            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Do_not_emit_outputs,
@@ -765,6 +764,12 @@ namespace ts {
             type: "string",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h
+        },
+        {
+            name: "jsxFragmentFactory",
+            type: "string",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specify_the_JSX_fragment_factory_function_to_use_when_targeting_react_JSX_emit_with_jsxFactory_compiler_option_is_specified_e_g_Fragment
         },
         {
             name: "resolveJsonModule",

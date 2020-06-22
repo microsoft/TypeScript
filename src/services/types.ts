@@ -632,6 +632,7 @@ namespace ts {
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
@@ -749,6 +750,12 @@ namespace ts {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
+
+        /**
+         * A message to show to the user if the refactoring cannot be applied in
+         * the current context.
+         */
+        notApplicableReason?: string;
     }
 
     /**
@@ -1318,6 +1325,8 @@ namespace ts {
         staticModifier = "static",
         abstractModifier = "abstract",
         optionalModifier = "optional",
+
+        deprecatedModifier = "deprecated",
 
         dtsModifier = ".d.ts",
         tsModifier = ".ts",

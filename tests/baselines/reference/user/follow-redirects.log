@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/follow-redirects/index.js(68,11): error TS2554: Expected 1 arguments, but got 0.
 node_modules/follow-redirects/index.js(96,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.

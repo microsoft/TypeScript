@@ -142,6 +142,7 @@ namespace ts {
             const element = createExpressionForJsxFragment(
                 factory,
                 context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
+                context.getEmitResolver().getJsxFragmentFactoryEntity(currentSourceFile),
                 compilerOptions.reactNamespace!, // TODO: GH#18217
                 mapDefined(children, transformJsxChildToExpression),
                 node,

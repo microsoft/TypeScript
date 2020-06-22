@@ -204,6 +204,7 @@ namespace ts.projectSystem {
         category: DiagnosticCategory;
         code: number;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
@@ -699,8 +700,8 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
-        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
+    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[], reportsDeprecated?: {}): protocol.Diagnostic {
+        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, reportsDeprecated, relatedInformation, source: undefined };
     }
 
     export function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {

@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/acorn/acorn-loose/dist/acorn-loose.js(3,10): error TS2304: Cannot find name 'define'.
 node_modules/acorn/acorn-loose/dist/acorn-loose.js(3,35): error TS2304: Cannot find name 'define'.
