@@ -1,4 +1,5 @@
-namespace ts.classifier.vscode {
+/** @internal */
+namespace ts.classifier.modern {
 
   /** @internal */
   export enum TokenEncodingConsts {

@@ -7764,11 +7764,6 @@ namespace ts {
         newLength: number;
     }
 
-    export const enum SemanticClassificationFormat {
-        Original = "original",
-        TwentyTwenty = "2020"
-    }
-
     /* @internal */
     export interface DiagnosticCollection {
         // Adds a diagnostic to this diagnostic collection.

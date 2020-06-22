@@ -1809,7 +1809,7 @@ namespace ts {
                 return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
             }
             else {
-                return classifier.vscode.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+                return classifier.modern.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
             }
         }
 
@@ -1825,7 +1825,7 @@ namespace ts {
                 return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
             }
             else {
-                return classifier.vscode.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+                return classifier.modern.getEncodedSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
             }
         }
 

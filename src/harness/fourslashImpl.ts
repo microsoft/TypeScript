@@ -2451,37 +2451,37 @@ namespace FourSlash {
         private classificationToIdentifier(classification: number){
 
             const tokenTypes: string[] = [];
-            tokenTypes[ts.classifier.vscode.TokenType.class] = "class";
-            tokenTypes[ts.classifier.vscode.TokenType.enum] = "enum";
-            tokenTypes[ts.classifier.vscode.TokenType.interface] = "interface";
-            tokenTypes[ts.classifier.vscode.TokenType.namespace] = "namespace";
-            tokenTypes[ts.classifier.vscode.TokenType.typeParameter] = "typeParameter";
-            tokenTypes[ts.classifier.vscode.TokenType.type] = "type";
-            tokenTypes[ts.classifier.vscode.TokenType.parameter] = "parameter";
-            tokenTypes[ts.classifier.vscode.TokenType.variable] = "variable";
-            tokenTypes[ts.classifier.vscode.TokenType.enumMember] = "enumMember";
-            tokenTypes[ts.classifier.vscode.TokenType.property] = "property";
-            tokenTypes[ts.classifier.vscode.TokenType.function] = "function";
-            tokenTypes[ts.classifier.vscode.TokenType.member] = "member";
+            tokenTypes[ts.classifier.modern.TokenType.class] = "class";
+            tokenTypes[ts.classifier.modern.TokenType.enum] = "enum";
+            tokenTypes[ts.classifier.modern.TokenType.interface] = "interface";
+            tokenTypes[ts.classifier.modern.TokenType.namespace] = "namespace";
+            tokenTypes[ts.classifier.modern.TokenType.typeParameter] = "typeParameter";
+            tokenTypes[ts.classifier.modern.TokenType.type] = "type";
+            tokenTypes[ts.classifier.modern.TokenType.parameter] = "parameter";
+            tokenTypes[ts.classifier.modern.TokenType.variable] = "variable";
+            tokenTypes[ts.classifier.modern.TokenType.enumMember] = "enumMember";
+            tokenTypes[ts.classifier.modern.TokenType.property] = "property";
+            tokenTypes[ts.classifier.modern.TokenType.function] = "function";
+            tokenTypes[ts.classifier.modern.TokenType.member] = "member";
 
             const tokenModifiers: string[] = [];
-            tokenModifiers[ts.classifier.vscode.TokenModifier.async] = "async";
-            tokenModifiers[ts.classifier.vscode.TokenModifier.declaration] = "declaration";
-            tokenModifiers[ts.classifier.vscode.TokenModifier.readonly] = "readonly";
-            tokenModifiers[ts.classifier.vscode.TokenModifier.static] = "static";
-            tokenModifiers[ts.classifier.vscode.TokenModifier.local] = "local";
-            tokenModifiers[ts.classifier.vscode.TokenModifier.defaultLibrary] = "defaultLibrary";
+            tokenModifiers[ts.classifier.modern.TokenModifier.async] = "async";
+            tokenModifiers[ts.classifier.modern.TokenModifier.declaration] = "declaration";
+            tokenModifiers[ts.classifier.modern.TokenModifier.readonly] = "readonly";
+            tokenModifiers[ts.classifier.modern.TokenModifier.static] = "static";
+            tokenModifiers[ts.classifier.modern.TokenModifier.local] = "local";
+            tokenModifiers[ts.classifier.modern.TokenModifier.defaultLibrary] = "defaultLibrary";
 
 
             function getTokenTypeFromClassification(tsClassification: number): number | undefined {
-                if (tsClassification > ts.classifier.vscode.TokenEncodingConsts.modifierMask) {
-                    return (tsClassification >> ts.classifier.vscode.TokenEncodingConsts.typeOffset) - 1;
+                if (tsClassification > ts.classifier.modern.TokenEncodingConsts.modifierMask) {
+                    return (tsClassification >> ts.classifier.modern.TokenEncodingConsts.typeOffset) - 1;
                 }
                 return undefined;
             }
 
             function getTokenModifierFromClassification(tsClassification: number) {
-                return tsClassification & ts.classifier.vscode.TokenEncodingConsts.modifierMask;
+                return tsClassification & ts.classifier.modern.TokenEncodingConsts.modifierMask;
             }
 
             const typeIdx = getTokenTypeFromClassification(classification) || 0;
@@ -2566,15 +2566,13 @@ namespace FourSlash {
             });
             replacement.push(");");
 
-            // throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
+            throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
 
-
-            const fs = require("fs");
-            const testfilePath = this.originalInputFileName.slice(1);
-            const testfile = fs.readFileSync(testfilePath, "utf8");
-            const newfile = testfile.replace("verify.replaceWithSemanticClassifications(\"2020\")", replacement.join("\n"));
-            fs.writeFileSync(testfilePath, newfile);
-
+            // const fs = require("fs");
+            // const testfilePath = this.originalInputFileName.slice(1);
+            // const testfile = fs.readFileSync(testfilePath, "utf8");
+            // const newfile = testfile.replace("verify.replaceWithSemanticClassifications(\"2020\")", replacement.join("\n"));
+            // fs.writeFileSync(testfilePath, newfile);
         }
 
 

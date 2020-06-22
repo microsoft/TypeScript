@@ -313,6 +313,11 @@ namespace ts {
 
     export type WithMetadata<T> = T & { metadata?: unknown; };
 
+    export const enum SemanticClassificationFormat {
+        Original = "original",
+        TwentyTwenty = "2020"
+    }
+
     //
     // Public services of a language service instance associated
     // with a language service host instance

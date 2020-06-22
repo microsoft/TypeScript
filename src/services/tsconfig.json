@@ -12,7 +12,7 @@
         "types.ts",
         "utilities.ts",
         "classifier.ts",
-        "classifierVscode.ts",
+        "classifier2020.ts",
         "stringCompletions.ts",
         "completions.ts",
         "documentHighlights.ts",
