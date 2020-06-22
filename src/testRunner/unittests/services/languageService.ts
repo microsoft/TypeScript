@@ -97,7 +97,7 @@ export function Component(x: Config): any;`
                     getProjectVersion: !useProjectVersion ? undefined : () => projectVersion,
                     getScriptFileNames: () => ["/project/root.ts"],
                     getScriptVersion: path => files.get(path)?.version || "",
-                    getScriptSnapshot: (path: string) => {
+                    getScriptSnapshot: path => {
                         const text = files.get(path)?.text;
                         return text ? ScriptSnapshot.fromString(text) : undefined;
                     },

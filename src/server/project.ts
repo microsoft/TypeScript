@@ -1816,17 +1816,13 @@ namespace ts.server {
                 }
             }
 
-            return rootNames || [];
+            return rootNames || ts.emptyArray;
 
             function addDependency(dependency: string) {
                 if (!startsWith(dependency, "@types/")) {
                     (dependencyNames || (dependencyNames = createMap())).set(dependency, true);
                 }
             }
-        }
-
-        isOrphan() {
-            return true;
         }
 
         /*@internal*/
@@ -1875,6 +1871,10 @@ namespace ts.server {
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
+        }
+
+        isOrphan() {
+            return true;
         }
 
         updateGraph() {

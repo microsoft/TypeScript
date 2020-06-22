@@ -116,6 +116,7 @@ namespace ts.projectSystem {
 
             openFilesForSession([indexTs], session);
             const autoImportProvider = projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider();
+            assert.ok(autoImportProvider);
 
             updateFile(indexTs.path, "console.log(0)");
             assert.strictEqual(
