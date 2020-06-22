@@ -944,8 +944,12 @@ var OtherPerson = /** @class */ (function () {
 }());
 function path(obj) {
     var result = obj;
-    for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
-        var k = keys_1[_i];
+    var keys = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        keys[_i - 1] = arguments[_i];
+    }
+    for (var _a = 0, keys_1 = keys; _a < keys_1.length; _a++) {
+        var k = keys_1[_a];
         result = result[k];
     }
     return result;
