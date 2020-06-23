@@ -15,7 +15,7 @@ namespace ts {
         /**
          * Information of the file eg. its version, signature etc
          */
-        fileInfos: ReadonlyMap<BuilderState.FileInfo>;
+        fileInfos: ReadonlyMap<BuilderState.FileInfo>
         /**
          * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
          * Otherwise undefined
