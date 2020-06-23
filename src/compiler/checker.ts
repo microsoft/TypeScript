@@ -13530,7 +13530,7 @@ namespace ts {
             // fixed element. We simplify to either the combined type of all elements (when the index type
             // the actual number type) or to the combined type of all non-fixed elements.
             if (isGenericTupleType(objectType) && indexType.flags & TypeFlags.NumberLike) {
-                const elementType = getElementTypeOfTupleType(objectType, indexType.flags & TypeFlags.Number ? 0 : objectType.target.fixedLength, /*endSkipCount*/ 0, writing);
+                const elementType = getElementTypeOfSliceOfTupleType(objectType, indexType.flags & TypeFlags.Number ? 0 : objectType.target.fixedLength, /*endSkipCount*/ 0, writing);
                 if (elementType) {
                     return type[cache] = elementType;
                 }
@@ -18413,7 +18413,7 @@ namespace ts {
         }
 
         function getRestTypeOfTupleType(type: TupleTypeReference) {
-            return getElementTypeOfTupleType(type, type.target.fixedLength);
+            return getElementTypeOfSliceOfTupleType(type, type.target.fixedLength);
         }
 
         function getRestArrayTypeOfTupleType(type: TupleTypeReference) {
@@ -18425,7 +18425,7 @@ namespace ts {
             return isTupleType(type) ? getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !!(f & ElementFlags.Variable)) - 1 : 0;
         }
 
-        function getElementTypeOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0, writing = false) {
+        function getElementTypeOfSliceOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0, writing = false) {
             const length = getTypeReferenceArity(type) - endSkipCount;
             if (index < length) {
                 const typeArguments = getTypeArguments(type);
@@ -19699,7 +19699,7 @@ namespace ts {
                                 }
                                 else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Rest) {
                                     // Middle of target is exactly one rest element. If middle of source is not empty, infer union of middle element types.
-                                    const restType = isTupleType(source) ? getElementTypeOfTupleType(source, startLength, sourceEndLength) : sourceRestType;
+                                    const restType = isTupleType(source) ? getElementTypeOfSliceOfTupleType(source, startLength, sourceEndLength) : sourceRestType;
                                     if (restType) {
                                         inferFromTypes(restType, elementTypes[startLength]);
                                     }
