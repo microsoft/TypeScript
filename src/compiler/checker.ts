@@ -4621,26 +4621,26 @@ namespace ts {
                         if (typeArguments.length > 0) {
                             const arity = getTypeReferenceArity(type);
                             const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, arity), context);
-                            const hasRestElement = (<TupleType>type.target).hasRestElement;
                             if (tupleConstituentNodes) {
                                 if ((type.target as TupleType).labeledElementDeclarations) {
                                     for (let i = 0; i < tupleConstituentNodes.length; i++) {
-                                        const isOptionalOrRest = i >= (<TupleType>type.target).minLength;
-                                        const isRest = isOptionalOrRest && hasRestElement && i === arity - 1;
-                                        const isOptional = isOptionalOrRest && !isRest;
+                                        const flags = (type.target as TupleType).elementFlags[i];
                                         tupleConstituentNodes[i] = factory.createNamedTupleMember(
-                                            isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined,
+                                            flags & ElementFlags.Variable ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined,
                                             factory.createIdentifier(unescapeLeadingUnderscores(getTupleElementLabel((type.target as TupleType).labeledElementDeclarations![i]))),
-                                            isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                                            isRest ? factory.createArrayTypeNode(tupleConstituentNodes[i]) : tupleConstituentNodes[i]
+                                            flags & ElementFlags.Optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                                            flags & ElementFlags.Rest ? factory.createArrayTypeNode(tupleConstituentNodes[i]) :
+                                            tupleConstituentNodes[i]
                                         );
                                     }
                                 }
                                 else {
-                                    for (let i = (<TupleType>type.target).minLength; i < Math.min(arity, tupleConstituentNodes.length); i++) {
-                                        tupleConstituentNodes[i] = hasRestElement && i === arity - 1 ?
-                                        factory.createRestTypeNode(factory.createArrayTypeNode(tupleConstituentNodes[i])) :
-                                        factory.createOptionalTypeNode(tupleConstituentNodes[i]);
+                                    for (let i = 0; i < Math.min(arity, tupleConstituentNodes.length); i++) {
+                                        const flags = (type.target as TupleType).elementFlags[i];
+                                        tupleConstituentNodes[i] =
+                                            flags & ElementFlags.Variable ? factory.createRestTypeNode(flags & ElementFlags.Rest ? factory.createArrayTypeNode(tupleConstituentNodes[i]) : tupleConstituentNodes[i]) :
+                                            flags & ElementFlags.Optional ? factory.createOptionalTypeNode(tupleConstituentNodes[i]) :
+                                            tupleConstituentNodes[i];
                                     }
                                 }
                                 const tupleTypeNode = setEmitFlags(factory.createTupleTypeNode(tupleConstituentNodes), EmitFlags.SingleLine);
@@ -8207,13 +8207,14 @@ namespace ts {
         function getTypeFromArrayBindingPattern(pattern: BindingPattern, includePatternInType: boolean, reportErrors: boolean): Type {
             const elements = pattern.elements;
             const lastElement = lastOrUndefined(elements);
-            const hasRestElement = !!(lastElement && lastElement.kind === SyntaxKind.BindingElement && lastElement.dotDotDotToken);
-            if (elements.length === 0 || elements.length === 1 && hasRestElement) {
+            const restElement = lastElement && lastElement.kind === SyntaxKind.BindingElement && lastElement.dotDotDotToken ? lastElement : undefined;
+            if (elements.length === 0 || elements.length === 1 && restElement) {
                 return languageVersion >= ScriptTarget.ES2015 ? createIterableType(anyType) : anyArrayType;
             }
             const elementTypes = map(elements, e => isOmittedExpression(e) ? anyType : getTypeFromBindingElement(e, includePatternInType, reportErrors));
-            const minLength = findLastIndex(elements, e => !isOmittedExpression(e) && !hasDefaultValue(e), elements.length - (hasRestElement ? 2 : 1)) + 1;
-            let result = <TypeReference>createTupleType(elementTypes, minLength, hasRestElement);
+            const minLength = findLastIndex(elements, e => !(e === restElement || isOmittedExpression(e) || hasDefaultValue(e)), elements.length - 1) + 1;
+            const elementFlags = map(elements, (e, i) => e === restElement ? ElementFlags.Rest : i >= minLength ? ElementFlags.Optional : ElementFlags.Required);
+            let result = <TypeReference>createTupleType(elementTypes, elementFlags);
             if (includePatternInType) {
                 result = cloneTypeReference(result);
                 result.pattern = pattern;
@@ -8904,7 +8905,7 @@ namespace ts {
         function getBaseTypes(type: InterfaceType): BaseType[] {
             if (!type.resolvedBaseTypes) {
                 if (type.objectFlags & ObjectFlags.Tuple) {
-                    type.resolvedBaseTypes = [createArrayType(getUnionType(type.typeParameters || emptyArray), (<TupleType>type).readonly)];
+                    type.resolvedBaseTypes = [getTupleBaseType(<TupleType>type)];
                 }
                 else if (type.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                     if (type.symbol.flags & SymbolFlags.Class) {
@@ -8919,6 +8920,11 @@ namespace ts {
                 }
             }
             return type.resolvedBaseTypes;
+        }
+
+        function getTupleBaseType(type: TupleType) {
+            const elementTypes = sameMap(type.typeParameters, (t, i) => type.elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessType(t, numberType) : t);
+            return createArrayType(getUnionType(elementTypes || emptyArray), type.readonly);
         }
 
         function resolveBaseTypesOfClass(type: InterfaceType) {
@@ -9776,17 +9782,16 @@ namespace ts {
 
             function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number) {
                 const elementTypes = getTypeArguments(restType);
-                const minLength = restType.target.minLength;
-                const tupleRestIndex = restType.target.hasRestElement ? elementTypes.length - 1 : -1;
                 const associatedNames = restType.target.labeledElementDeclarations;
                 const restParams = map(elementTypes, (t, i) => {
                     // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
                     const tupleLabelName = !!associatedNames && getTupleElementLabel(associatedNames[i]);
                     const name = tupleLabelName || getParameterNameAtPosition(sig, restIndex + i);
-                    const checkFlags = i === tupleRestIndex ? CheckFlags.RestParameter :
-                        i >= minLength ? CheckFlags.OptionalParameter : 0;
+                    const flags = restType.target.elementFlags[i];
+                    const checkFlags = flags & ElementFlags.Variable ? CheckFlags.RestParameter :
+                        flags & ElementFlags.Optional ? CheckFlags.OptionalParameter : 0;
                     const symbol = createSymbol(SymbolFlags.FunctionScopedVariable, name, checkFlags);
-                    symbol.type = i === tupleRestIndex ? createArrayType(t) : t;
+                    symbol.type = flags & ElementFlags.Rest ? createArrayType(t) : t;
                     return symbol;
                 });
                 return concatenate(sig.parameters.slice(0, restIndex), restParams);
@@ -10515,6 +10520,9 @@ namespace ts {
                     return indexedAccess;
                 }
             }
+            if (isGenericTupleType(type.objectType)) {
+                return getIndexTypeOfType(type.objectType, IndexKind.Number);
+            }
             const objectConstraint = getSimplifiedTypeOrConstraint(type.objectType);
             if (objectConstraint && objectConstraint !== type.objectType) {
                 return getIndexedAccessTypeOrUndefined(objectConstraint, type.indexType);
@@ -10703,6 +10711,9 @@ namespace ts {
                     return keyofConstraintType;
                 }
                 if (t.flags & TypeFlags.IndexedAccess) {
+                    if (isGenericTupleType((<IndexedAccessType>t).objectType)) {
+                        return getIndexTypeOfType((<IndexedAccessType>t).objectType, IndexKind.Number);
+                    }
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
                     const baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType);
@@ -11709,9 +11720,11 @@ namespace ts {
                                 }
                             }
                         }
-                        // When an 'infer T' declaration is immediately contained in a rest parameter
-                        // declaration, we infer an 'unknown[]' constraint.
-                        else if (grandParent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>grandParent).dotDotDotToken) {
+                        // When an 'infer T' declaration is immediately contained in a rest parameter declaration, a rest type
+                        // or a named rest tuple element, we infer an 'unknown[]' constraint.
+                        else if (grandParent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>grandParent).dotDotDotToken ||
+                            grandParent.kind === SyntaxKind.RestType ||
+                            grandParent.kind === SyntaxKind.NamedTupleMember && (<NamedTupleMember>grandParent).dotDotDotToken) {
                             inferences = append(inferences, createArrayType(unknownType));
                         }
                     }
@@ -11841,10 +11854,7 @@ namespace ts {
                     type.resolvedTypeArguments = type.target.localTypeParameters?.map(() => errorType) || emptyArray;
                     error(
                         type.node || currentNode,
-                        type.target.symbol
-                            ? Diagnostics.Type_arguments_for_0_circularly_reference_themselves
-                            : Diagnostics.Tuple_type_arguments_circularly_reference_themselves
-                        ,
+                        type.target.symbol ? Diagnostics.Type_arguments_for_0_circularly_reference_themselves : Diagnostics.Tuple_type_arguments_circularly_reference_themselves,
                         type.target.symbol && symbolToString(type.target.symbol)
                     );
                 }
@@ -12339,24 +12349,34 @@ namespace ts {
             return createTypeFromGenericGlobalType(readonly ? globalReadonlyArrayType : globalArrayType, [elementType]);
         }
 
-        function isTupleRestElement(node: TypeNode) {
-            return node.kind === SyntaxKind.RestType || (node.kind === SyntaxKind.NamedTupleMember && !!(node as NamedTupleMember).dotDotDotToken);
+        function getTupleElementFlags(node: TypeNode) {
+            switch (node.kind) {
+                case SyntaxKind.OptionalType:
+                    return ElementFlags.Optional;
+                case SyntaxKind.RestType:
+                    return getRestTypeElementFlags(node as RestTypeNode);
+                case SyntaxKind.NamedTupleMember:
+                    return (node as NamedTupleMember).questionToken ? ElementFlags.Optional :
+                        (node as NamedTupleMember).dotDotDotToken ? getRestTypeElementFlags(node as NamedTupleMember) :
+                        ElementFlags.Required;
+                default:
+                    return ElementFlags.Required;
+            }
         }
 
-        function isTupleOptionalElement(node: TypeNode) {
-            return node.kind === SyntaxKind.OptionalType || (node.kind === SyntaxKind.NamedTupleMember && !!(node as NamedTupleMember).questionToken);
+        function getRestTypeElementFlags(node: RestTypeNode | NamedTupleMember) {
+            return getArrayElementTypeNode(node.type) ? ElementFlags.Rest : ElementFlags.Variadic;
         }
 
         function getArrayOrTupleTargetType(node: ArrayTypeNode | TupleTypeNode): GenericType {
             const readonly = isReadonlyTypeOperator(node.parent);
-            if (node.kind === SyntaxKind.ArrayType || node.elements.length === 1 && isTupleRestElement(node.elements[0])) {
+            const elementType = getArrayElementTypeNode(node);
+            if (elementType) {
                 return readonly ? globalReadonlyArrayType : globalArrayType;
             }
-            const lastElement = lastOrUndefined(node.elements);
-            const restElement = lastElement && isTupleRestElement(lastElement) ? lastElement : undefined;
-            const minLength = findLastIndex(node.elements, n => !isTupleOptionalElement(n) && n !== restElement) + 1;
-            const missingName = some(node.elements, e => e.kind !== SyntaxKind.NamedTupleMember);
-            return getTupleTypeOfArity(node.elements.length, minLength, !!restElement, readonly, /*associatedNames*/ missingName ? undefined : node.elements as readonly NamedTupleMember[]);
+            const elementFlags = map((node as TupleTypeNode).elements, getTupleElementFlags);
+            const missingName = some((node as TupleTypeNode).elements, e => e.kind !== SyntaxKind.NamedTupleMember);
+            return getTupleTargetType(elementFlags, readonly, /*associatedNames*/ missingName ? undefined : (node as TupleTypeNode).elements as readonly NamedTupleMember[]);
         }
 
         // Return true if the given type reference node is directly aliased or if it needs to be deferred
@@ -12430,13 +12450,13 @@ namespace ts {
                 if (target === emptyGenericType) {
                     links.resolvedType = emptyObjectType;
                 }
-                else if (isDeferredTypeReferenceNode(node)) {
+                else if (!(node.kind === SyntaxKind.TupleType && some(node.elements, e => !!(getTupleElementFlags(e) & ElementFlags.Variadic))) && isDeferredTypeReferenceNode(node)) {
                     links.resolvedType = node.kind === SyntaxKind.TupleType && node.elements.length === 0 ? target :
                         createDeferredTypeReference(target, node, /*mapper*/ undefined);
                 }
                 else {
                     const elementTypes = node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] : map(node.elements, getTypeFromTypeNode);
-                    links.resolvedType = createTypeReference(target, elementTypes);
+                    links.resolvedType = createNormalizedTypeReference(target, elementTypes);
                 }
             }
             return links.resolvedType;
@@ -12446,6 +12466,28 @@ namespace ts {
             return isTypeOperatorNode(node) && node.operator === SyntaxKind.ReadonlyKeyword;
         }
 
+        function createTupleType(elementTypes: readonly Type[], elementFlags?: readonly ElementFlags[], readonly = false, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]) {
+            const tupleTarget = getTupleTargetType(elementFlags || map(elementTypes, _ => ElementFlags.Required), readonly, namedMemberDeclarations);
+            return tupleTarget === emptyGenericType ? emptyObjectType :
+                elementTypes.length ? createNormalizedTypeReference(tupleTarget, elementTypes) :
+                tupleTarget;
+        }
+
+        function getTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]): GenericType {
+            if (elementFlags.length === 1 && elementFlags[0] & ElementFlags.Rest) {
+                // [...X[]] is equivalent to just X[]
+                return readonly ? globalReadonlyArrayType : globalArrayType;
+            }
+            const key = map(elementFlags, f => f & ElementFlags.Required ? "#" : f & ElementFlags.Optional ? "?" : f & ElementFlags.Rest ? "." : "*").join() +
+                (readonly ? "R" : "") +
+                (namedMemberDeclarations && namedMemberDeclarations.length ? "," + map(namedMemberDeclarations, getNodeId).join(",") : "");
+            let type = tupleTypes.get(key);
+            if (!type) {
+                tupleTypes.set(key, type = createTupleTargetType(elementFlags, readonly, namedMemberDeclarations));
+            }
+            return type;
+        }
+
         // We represent tuple types as type references to synthesized generic interface types created by
         // this function. The types are of the form:
         //
@@ -12453,16 +12495,20 @@ namespace ts {
         //
         // Note that the generic type created by this function has no symbol associated with it. The same
         // is true for each of the synthesized type parameters.
-        function createTupleTypeOfArity(arity: number, minLength: number, hasRestElement: boolean, readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration)[] | undefined): TupleType {
+        function createTupleTargetType(elementFlags: readonly ElementFlags[], readonly: boolean, namedMemberDeclarations: readonly (NamedTupleMember | ParameterDeclaration)[] | undefined): TupleType {
+            const arity = elementFlags.length;
+            const minLength = findLastIndex(elementFlags, f => !!(f & (ElementFlags.Required | ElementFlags.Variadic))) + 1;
             let typeParameters: TypeParameter[] | undefined;
             const properties: Symbol[] = [];
-            const maxLength = hasRestElement ? arity - 1 : arity;
+            let combinedFlags: ElementFlags = 0;
             if (arity) {
                 typeParameters = new Array(arity);
                 for (let i = 0; i < arity; i++) {
                     const typeParameter = typeParameters[i] = createTypeParameter();
-                    if (i < maxLength) {
-                        const property = createSymbol(SymbolFlags.Property | (i >= minLength ? SymbolFlags.Optional : 0),
+                    const flags = elementFlags[i];
+                    combinedFlags |= flags;
+                    if (!(combinedFlags & ElementFlags.Variable)) {
+                        const property = createSymbol(SymbolFlags.Property | (flags & ElementFlags.Optional ? SymbolFlags.Optional : 0),
                             "" + i as __String, readonly ? CheckFlags.Readonly : 0);
                         property.tupleLabelDeclaration = namedMemberDeclarations?.[i];
                         property.type = typeParameter;
@@ -12470,10 +12516,16 @@ namespace ts {
                     }
                 }
             }
-            const literalTypes = [];
-            for (let i = minLength; i <= maxLength; i++) literalTypes.push(getLiteralType(i));
+            const fixedLength = properties.length;
             const lengthSymbol = createSymbol(SymbolFlags.Property, "length" as __String);
-            lengthSymbol.type = hasRestElement ? numberType : getUnionType(literalTypes);
+            if (combinedFlags & ElementFlags.Variable) {
+                lengthSymbol.type = numberType;
+            }
+            else {
+                const literalTypes = [];
+                for (let i = minLength; i <= arity; i++) literalTypes.push(getLiteralType(i));
+                lengthSymbol.type = getUnionType(literalTypes);
+            }
             properties.push(lengthSymbol);
             const type = <TupleType & InterfaceTypeWithDeclaredMembers>createObjectType(ObjectFlags.Tuple | ObjectFlags.Reference);
             type.typeParameters = typeParameters;
@@ -12491,44 +12543,108 @@ namespace ts {
             type.declaredConstructSignatures = emptyArray;
             type.declaredStringIndexInfo = undefined;
             type.declaredNumberIndexInfo = undefined;
+            type.elementFlags = elementFlags;
             type.minLength = minLength;
-            type.hasRestElement = hasRestElement;
+            type.fixedLength = fixedLength;
+            type.hasRestElement = !!(combinedFlags & ElementFlags.Variable);
+            type.combinedFlags = combinedFlags;
             type.readonly = readonly;
             type.labeledElementDeclarations = namedMemberDeclarations;
             return type;
         }
 
-        function getTupleTypeOfArity(arity: number, minLength: number, hasRestElement: boolean, readonly: boolean, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]): GenericType {
-            const key = arity + (hasRestElement ? "+" : ",") + minLength + (readonly ? "R" : "") + (namedMemberDeclarations && namedMemberDeclarations.length ? "," + map(namedMemberDeclarations, getNodeId).join(",") : "");
-            let type = tupleTypes.get(key);
-            if (!type) {
-                tupleTypes.set(key, type = createTupleTypeOfArity(arity, minLength, hasRestElement, readonly, namedMemberDeclarations));
-            }
-            return type;
+        function createNormalizedTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined) {
+            return target.objectFlags & ObjectFlags.Tuple && (<TupleType>target).combinedFlags & ElementFlags.Variadic ?
+                createNormalizedTupleType(target as TupleType, typeArguments!) :
+                createTypeReference(target, typeArguments);
         }
 
-        function createTupleType(elementTypes: readonly Type[], minLength = elementTypes.length, hasRestElement = false, readonly = false, namedMemberDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[]) {
-            const arity = elementTypes.length;
-            if (arity === 1 && hasRestElement) {
-                return createArrayType(elementTypes[0], readonly);
+        function createNormalizedTupleType(target: TupleType, elementTypes: readonly Type[]): Type {
+            // Transform [A, ...(X | Y | Z)] into [A, ...X] | [A, ...Y] | [A, ...Z]
+            const unionIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic && t.flags & (TypeFlags.Never | TypeFlags.Union)));
+            if (unionIndex >= 0) {
+                return mapType(elementTypes[unionIndex], t => createNormalizedTupleType(target, replaceElement(elementTypes, unionIndex, t)));
             }
-            const tupleType = getTupleTypeOfArity(arity, minLength, arity > 0 && hasRestElement, readonly, namedMemberDeclarations);
-            return elementTypes.length ? createTypeReference(tupleType, elementTypes) : tupleType;
+            // If there are no variadic elements with non-generic types, just create a type reference with the same target type.
+            const spreadIndex = findIndex(elementTypes, (t, i) => !!(target.elementFlags[i] & ElementFlags.Variadic) && !(t.flags & TypeFlags.InstantiableNonPrimitive) && !isGenericMappedType(t));
+            if (spreadIndex < 0) {
+                return createTypeReference(target, elementTypes);
+            }
+            // We have non-generic variadic elements that need normalization.
+            const expandedTypes: Type[] = [];
+            const expandedFlags: ElementFlags[] = [];
+            let expandedDeclarations: (NamedTupleMember | ParameterDeclaration)[] | undefined = [];
+            let optionalIndex = -1;
+            let restTypes: Type[] | undefined;
+            for (let i = 0; i < elementTypes.length; i++) {
+                const type = elementTypes[i];
+                const flags = target.elementFlags[i];
+                if (flags & ElementFlags.Variadic) {
+                    if (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type)) {
+                        // Generic variadic elements stay as they are (except following a rest element).
+                        addElementOrRest(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
+                    }
+                    else if (isTupleType(type)) {
+                        // Spread variadic elements with tuple types into the resulting tuple.
+                        forEach(getTypeArguments(type), (t, n) => addElementOrRest(t, type.target.elementFlags[n], type.target.labeledElementDeclarations?.[n]));
+                    }
+                    else {
+                        // Treat everything else as an array type and create a rest element.
+                        addElementOrRest(isArrayLikeType(type) && getIndexTypeOfType(type, IndexKind.Number) || errorType, ElementFlags.Rest, target.labeledElementDeclarations?.[i]);
+                    }
+                }
+                else {
+                    // Copy other element kinds with no change.
+                    addElementOrRest(type, flags, target.labeledElementDeclarations?.[i]);
+                }
+            }
+            if (restTypes) {
+                // Create a union of the collected rest element types.
+                expandedTypes[expandedTypes.length - 1] = getUnionType(restTypes);
+            }
+            const tupleTarget = getTupleTargetType(expandedFlags, target.readonly, expandedDeclarations);
+            return tupleTarget === emptyGenericType ? emptyObjectType :
+                expandedFlags.length ? createTypeReference(tupleTarget, expandedTypes) :
+                tupleTarget;
+
+            function addElementOrRest(type: Type, flags: ElementFlags, declaration: NamedTupleMember | ParameterDeclaration | undefined) {
+                if (restTypes) {
+                    // A rest element was previously added, so simply collect the type of this element.
+                    restTypes.push(flags & ElementFlags.Variadic ? getIndexedAccessType(type, numberType) : type);
+                }
+                else {
+                    if (flags & ElementFlags.Required && optionalIndex >= 0) {
+                        // Turn preceding optional elements into required elements
+                        for (let i = optionalIndex; i < expandedFlags.length; i++) {
+                            if (expandedFlags[i] & ElementFlags.Optional) expandedFlags[i] = ElementFlags.Required;
+                        }
+                        optionalIndex = -1;
+                    }
+                    else if (flags & ElementFlags.Optional && optionalIndex < 0) {
+                        optionalIndex = expandedFlags.length;
+                    }
+                    else if (flags & ElementFlags.Rest) {
+                        // Start collecting element types when a rest element is added.
+                        restTypes = [type];
+                    }
+                    expandedTypes.push(type);
+                    expandedFlags.push(flags);
+                    if (expandedDeclarations && declaration) {
+                        expandedDeclarations.push(declaration);
+                    }
+                    else {
+                        expandedDeclarations = undefined;
+                    }
+                }
+            }
         }
 
-        function sliceTupleType(type: TupleTypeReference, index: number) {
-            const tuple = type.target;
-            if (tuple.hasRestElement) {
-                // don't slice off rest element
-                index = Math.min(index, getTypeReferenceArity(type) - 1);
-            }
-            return createTupleType(
-                getTypeArguments(type).slice(index),
-                Math.max(0, tuple.minLength - index),
-                tuple.hasRestElement,
-                tuple.readonly,
-                tuple.labeledElementDeclarations && tuple.labeledElementDeclarations.slice(index),
-            );
+        function sliceTupleType(type: TupleTypeReference, index: number, endSkipCount = 0) {
+            const target = type.target;
+            const endIndex = getTypeReferenceArity(type) - endSkipCount;
+            return index > target.fixedLength ? getRestArrayTypeOfTupleType(type) || createTupleType(emptyArray) :
+                createTupleType(getTypeArguments(type).slice(index, endIndex), target.elementFlags.slice(index, endIndex),
+                    /*readonly*/ false, target.labeledElementDeclarations && target.labeledElementDeclarations.slice(index, endIndex));
         }
 
         function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
@@ -13068,7 +13184,7 @@ namespace ts {
             type = getReducedType(type);
             return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
-                maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
+                type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? filterType(getConstraintTypeFromMappedType(<MappedType>type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String))) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
@@ -13329,7 +13445,7 @@ namespace ts {
                 }
                 return !!((<UnionOrIntersectionType>type).objectFlags & ObjectFlags.IsGenericObjectType);
             }
-            return !!(type.flags & TypeFlags.InstantiableNonPrimitive) || isGenericMappedType(type);
+            return !!(type.flags & TypeFlags.InstantiableNonPrimitive) || isGenericMappedType(type) || isGenericTupleType(type);
         }
 
         function isGenericIndexType(type: Type): boolean {
@@ -13411,6 +13527,15 @@ namespace ts {
             // So ultimately (reading):
             // ((A & B) | C)[K1 | K2] -> ((A & B) | C)[K1] | ((A & B) | C)[K2] -> (A & B)[K1] | C[K1] | (A & B)[K2] | C[K2] -> (A[K1] & B[K1]) | C[K1] | (A[K2] & B[K2]) | C[K2]
 
+            // A generic tuple type indexed by a number exists only when the index type doesn't select a
+            // fixed element. We simplify to either the combined type of all elements (when the index type
+            // the actual number type) or to the combined type of all non-fixed elements.
+            if (isGenericTupleType(objectType) && indexType.flags & TypeFlags.NumberLike) {
+                const elementType = getElementTypeOfSliceOfTupleType(objectType, indexType.flags & TypeFlags.Number ? 0 : objectType.target.fixedLength, /*endSkipCount*/ 0, writing);
+                if (elementType) {
+                    return type[cache] = elementType;
+                }
+            }
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
@@ -13462,6 +13587,19 @@ namespace ts {
             return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, AccessFlags.None, aliasSymbol, aliasTypeArguments) || (accessNode ? errorType : unknownType);
         }
 
+        function indexTypeLessThan(indexType: Type, limit: number) {
+            return everyType(indexType, t => {
+                if (t.flags & TypeFlags.StringOrNumberLiteral) {
+                    const propName = getPropertyNameFromType(<StringLiteralType | NumberLiteralType>t);
+                    if (isNumericLiteralName(propName)) {
+                        const index = +propName;
+                        return index >= 0 && index < limit;
+                    }
+                }
+                return false;
+            });
+        }
+
         function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
@@ -13471,12 +13609,15 @@ namespace ts {
             if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                 indexType = stringType;
             }
-            // If the index type is generic, or if the object type is generic and doesn't originate in an expression,
-            // we are performing a higher-order index access where we cannot meaningfully access the properties of the
-            // object type. Note that for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in
-            // an expression. This is to preserve backwards compatibility. For example, an element access 'this["foo"]'
-            // has always been resolved eagerly using the constraint type of 'this' at the given location.
-            if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType) && isGenericObjectType(objectType)) {
+            // If the index type is generic, or if the object type is generic and doesn't originate in an expression and
+            // the operation isn't exclusively indexing the fixed (non-variadic) portion of a tuple type, we are performing
+            // a higher-order index access where we cannot meaningfully access the properties of the object type. Note that
+            // for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in an expression. This is to
+            // preserve backwards compatibility. For example, an element access 'this["foo"]' has always been resolved
+            // eagerly using the constraint type of 'this' at the given location.
+            if (isGenericIndexType(indexType) || (accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType ?
+                isGenericTupleType(objectType) && !indexTypeLessThan(indexType, objectType.target.fixedLength) :
+                isGenericObjectType(objectType) && !(isTupleType(objectType) && indexTypeLessThan(indexType, objectType.target.fixedLength)))) {
                 if (objectType.flags & TypeFlags.AnyOrUnknown) {
                     return objectType;
                 }
@@ -14116,19 +14257,34 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromRestTypeNode(node: RestTypeNode | NamedTupleMember) {
+            return getTypeFromTypeNode(getArrayElementTypeNode(node.type) || node.type);
+        }
+
+        function getArrayElementTypeNode(node: TypeNode): TypeNode | undefined {
+            switch (node.kind) {
+                case SyntaxKind.ParenthesizedType:
+                    return getArrayElementTypeNode((node as ParenthesizedTypeNode).type);
+                case SyntaxKind.TupleType:
+                    if ((node as TupleTypeNode).elements.length === 1) {
+                        node = (node as TupleTypeNode).elements[0];
+                        if (node.kind === SyntaxKind.RestType || node.kind === SyntaxKind.NamedTupleMember && (node as NamedTupleMember).dotDotDotToken) {
+                            return getArrayElementTypeNode((node as RestTypeNode | NamedTupleMember).type);
+                        }
+                    }
+                    break;
+                case SyntaxKind.ArrayType:
+                    return (node as ArrayTypeNode).elementType;
+            }
+            return undefined;
+        }
+
         function getTypeFromNamedTupleTypeNode(node: NamedTupleMember): Type {
             const links = getNodeLinks(node);
-            if (!links.resolvedType) {
-                let type = getTypeFromTypeNode(node.type);
-                if (node.dotDotDotToken) {
-                    type = getElementTypeOfArrayType(type) || errorType;
-                }
-                if (node.questionToken && strictNullChecks) {
-                    type = getOptionalType(type);
-                }
-                links.resolvedType = type;
-            }
-            return links.resolvedType;
+            return links.resolvedType || (links.resolvedType =
+                    node.dotDotDotToken ? getTypeFromRestTypeNode(node) :
+                    node.questionToken && strictNullChecks ? getOptionalType(getTypeFromTypeNode(node.type)) :
+                    getTypeFromTypeNode(node.type));
         }
 
         function getTypeFromTypeNode(node: TypeNode): Type {
@@ -14198,7 +14354,7 @@ namespace ts {
                 case SyntaxKind.JSDocTypeExpression:
                     return getTypeFromTypeNode((<ParenthesizedTypeNode | JSDocTypeReferencingNode | JSDocTypeExpression | NamedTupleMember>node).type);
                 case SyntaxKind.RestType:
-                    return getElementTypeOfArrayType(getTypeFromTypeNode((<RestTypeNode>node).type)) || errorType;
+                    return getTypeFromRestTypeNode(<RestTypeNode>node);
                 case SyntaxKind.JSDocVariadicType:
                     return getTypeFromJSDocVariadicType(node as JSDocVariadicType);
                 case SyntaxKind.FunctionType:
@@ -14524,6 +14680,9 @@ namespace ts {
                 if (typeVariable !== mappedTypeVariable) {
                     return mapType(getReducedType(mappedTypeVariable), t => {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
+                            if (isGenericTupleType(t)) {
+                                return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
+                            }
                             const replacementMapper = prependTypeMapping(typeVariable, t, mapper);
                             return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
                                 isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
@@ -14540,6 +14699,23 @@ namespace ts {
             return modifiers & MappedTypeModifiers.IncludeReadonly ? true : modifiers & MappedTypeModifiers.ExcludeReadonly ? false : state;
         }
 
+        function instantiateMappedGenericTupleType(tupleType: TupleTypeReference, mappedType: MappedType, typeVariable: TypeVariable, mapper: TypeMapper) {
+            // When a tuple type is generic (i.e. when it contains variadic elements), we want to eagerly map the
+            // non-generic elements and defer mapping the generic elements. In order to facilitate this, we transform
+            // M<[A, B?, ...T, ...C[]] into [...M<[A]>, ...M<[B?]>, ...M<T>, ...M<C[]>] and then rely on tuple type
+            // normalization to resolve the non-generic parts of the resulting tuple.
+            const elementFlags = tupleType.target.elementFlags;
+            const elementTypes = map(getTypeArguments(tupleType), (t, i) => {
+                const singleton = elementFlags[i] & ElementFlags.Variadic ? t :
+                    elementFlags[i] & ElementFlags.Rest ? createArrayType(t) :
+                    createTupleType([t], [elementFlags[i]]);
+                // The singleton is never a generic tuple type, so it is safe to recurse here.
+                return instantiateMappedType(mappedType, prependTypeMapping(typeVariable, singleton, mapper));
+            });
+            const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, getMappedTypeModifiers(mappedType));
+            return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly);
+        }
+
         function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
             const elementType = instantiateMappedTypeTemplate(mappedType, numberType, /*isOptional*/ true, mapper);
             return elementType === errorType ? errorType :
@@ -14547,16 +14723,16 @@ namespace ts {
         }
 
         function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
-            const minLength = tupleType.target.minLength;
+            const elementFlags = tupleType.target.elementFlags;
             const elementTypes = map(getTypeArguments(tupleType), (_, i) =>
-                instantiateMappedTypeTemplate(mappedType, getLiteralType("" + i), i >= minLength, mapper));
+                instantiateMappedTypeTemplate(mappedType, getLiteralType("" + i), !!(elementFlags[i] & ElementFlags.Optional), mapper));
             const modifiers = getMappedTypeModifiers(mappedType);
-            const newMinLength = modifiers & MappedTypeModifiers.IncludeOptional ? 0 :
-                modifiers & MappedTypeModifiers.ExcludeOptional ? getTypeReferenceArity(tupleType) - (tupleType.target.hasRestElement ? 1 : 0) :
-                minLength;
+            const newTupleModifiers = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
+                modifiers & MappedTypeModifiers.ExcludeOptional ? map(elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
+                elementFlags;
             const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, modifiers);
             return contains(elementTypes, errorType) ? errorType :
-                createTupleType(elementTypes, newMinLength, tupleType.target.hasRestElement, newReadonly, tupleType.target.labeledElementDeclarations);
+                createTupleType(elementTypes, newTupleModifiers, newReadonly, tupleType.target.labeledElementDeclarations);
         }
 
         function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
@@ -14662,7 +14838,7 @@ namespace ts {
                     if (objectFlags & ObjectFlags.Reference && !((<TypeReference>type).node)) {
                         const resolvedTypeArguments = (<TypeReference>type).resolvedTypeArguments;
                         const newTypeArguments = instantiateTypes(resolvedTypeArguments, mapper);
-                        return newTypeArguments !== resolvedTypeArguments ? createTypeReference((<TypeReference>type).target, newTypeArguments) : type;
+                        return newTypeArguments !== resolvedTypeArguments ? createNormalizedTypeReference((<TypeReference>type).target, newTypeArguments) : type;
                     }
                     return getObjectTypeInstantiation(<TypeReference | AnonymousType | MappedType>type, mapper);
                 }
@@ -16655,6 +16831,13 @@ namespace ts {
                     }
                 }
 
+                // For a generic type T, [...T] is assignable to T, T is assignable to readonly [...T], and T is assignable
+                // to [...T] when T is constrained to a mutable array or tuple type.
+                if (isSingleElementGenericTupleType(source) && getTypeArguments(source)[0] === target && !source.target.readonly ||
+                    isSingleElementGenericTupleType(target) && getTypeArguments(target)[0] === source && (target.target.readonly || isMutableArrayOrTuple(getBaseConstraintOfType(source) || source))) {
+                    return Ternary.True;
+                }
+
                 if (target.flags & TypeFlags.TypeParameter) {
                     // A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
                     if (getObjectFlags(source) & ObjectFlags.Mapped && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(<MappedType>source))) {
@@ -17260,6 +17443,80 @@ namespace ts {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target, excludedProperties);
                 }
+                let result = Ternary.True;
+                if (isTupleType(target)) {
+                    if (isArrayType(source) || isTupleType(source)) {
+                        if (!target.target.readonly && (isReadonlyArrayType(source) || isTupleType(source) && source.target.readonly)) {
+                            return Ternary.False;
+                        }
+                        const sourceArity = getTypeReferenceArity(source);
+                        const targetArity = getTypeReferenceArity(target);
+                        const sourceRestFlag = isTupleType(source) ? source.target.combinedFlags & ElementFlags.Rest : ElementFlags.Rest;
+                        const targetRestFlag = target.target.combinedFlags & ElementFlags.Rest;
+                        const sourceMinLength = isTupleType(source) ? source.target.minLength : 0;
+                        const targetMinLength = target.target.minLength;
+                        if (!sourceRestFlag && sourceArity < targetMinLength) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Source_has_0_element_s_but_target_requires_1, sourceArity, targetMinLength);
+                            }
+                            return Ternary.False;
+                        }
+                        if (!targetRestFlag && targetArity < sourceMinLength) {
+                            if (reportErrors) {
+                                reportError(Diagnostics.Source_has_0_element_s_but_target_allows_only_1, sourceMinLength, targetArity);
+                            }
+                            return Ternary.False;
+                        }
+                        if (!targetRestFlag && sourceRestFlag) {
+                            if (reportErrors) {
+                                if (sourceMinLength < targetMinLength) {
+                                    reportError(Diagnostics.Target_requires_0_element_s_but_source_may_have_fewer, targetMinLength);
+                                }
+                                else {
+                                    reportError(Diagnostics.Target_allows_only_0_element_s_but_source_may_have_more, targetArity);
+                                }
+                            }
+                            return Ternary.False;
+                        }
+                        const maxArity = Math.max(sourceArity, targetArity);
+                        for (let i = 0; i < maxArity; i++) {
+                            const targetFlags = i < targetArity ? target.target.elementFlags[i] : targetRestFlag;
+                            const sourceFlags = isTupleType(source) && i < sourceArity ? source.target.elementFlags[i] : sourceRestFlag;
+                            if (sourceFlags && targetFlags) {
+                                if (targetFlags & ElementFlags.Variadic && !(sourceFlags & ElementFlags.Variadic) ||
+                                   (sourceFlags & ElementFlags.Variadic && !(targetFlags & ElementFlags.Variable))) {
+                                    if (reportErrors) {
+                                        reportError(Diagnostics.Element_at_index_0_is_variadic_in_one_type_but_not_in_the_other, i);
+                                    }
+                                    return Ternary.False;
+                                }
+                                if (targetFlags & ElementFlags.Required) {
+                                    if (!(sourceFlags & ElementFlags.Required)) {
+                                        if (reportErrors) {
+                                            reportError(Diagnostics.Property_0_is_optional_in_type_1_but_required_in_type_2, i, typeToString(source), typeToString(target));
+                                        }
+                                        return Ternary.False;
+                                    }
+                                }
+                                const sourceType = getTypeArguments(source)[Math.min(i, sourceArity - 1)];
+                                const targetType = getTypeArguments(target)[Math.min(i, targetArity - 1)];
+                                const targetCheckType = sourceFlags & ElementFlags.Variadic && targetFlags & ElementFlags.Rest ? createArrayType(targetType) : targetType;
+                                const related = isRelatedTo(sourceType, targetCheckType, reportErrors, /*headMessage*/ undefined, intersectionState);
+                                if (!related) {
+                                    if (reportErrors) {
+                                        reportIncompatibleError(Diagnostics.Types_of_property_0_are_incompatible, i);
+                                    }
+                                    return Ternary.False;
+                                }
+                                result &= related;
+                            }
+                        }
+                        return result;
+                    }
+                    if (target.target.combinedFlags & ElementFlags.Variable) {
+                        return Ternary.False;
+                    }
+                }
                 const requireOptionalProperties = (relation === subtypeRelation || relation === strictSubtypeRelation) && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source) && !isTupleType(source);
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false);
                 if (unmatchedProperty) {
@@ -17278,35 +17535,6 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
-                        }
-                    }
-                }
-                let result = Ternary.True;
-                if (isTupleType(target)) {
-                    const targetRestType = getRestTypeOfTupleType(target);
-                    if (targetRestType) {
-                        if (!isTupleType(source)) {
-                            return Ternary.False;
-                        }
-                        const sourceRestType = getRestTypeOfTupleType(source);
-                        if (sourceRestType && !isRelatedTo(sourceRestType, targetRestType, reportErrors)) {
-                            if (reportErrors) {
-                                reportError(Diagnostics.Rest_signatures_are_incompatible);
-                            }
-                            return Ternary.False;
-                        }
-                        const targetCount = getTypeReferenceArity(target) - 1;
-                        const sourceCount = getTypeReferenceArity(source) - (sourceRestType ? 1 : 0);
-                        const sourceTypeArguments = getTypeArguments(<TypeReference>source);
-                        for (let i = targetCount; i < sourceCount; i++) {
-                            const related = isRelatedTo(sourceTypeArguments[i], targetRestType, reportErrors);
-                            if (!related) {
-                                if (reportErrors) {
-                                    reportError(Diagnostics.Property_0_is_incompatible_with_rest_element_type, "" + i);
-                                }
-                                return Ternary.False;
-                            }
-                            result &= related;
                         }
                     }
                 }
@@ -18064,7 +18292,7 @@ namespace ts {
             return reduceLeft(types, (s, t) => isTypeSubtypeOf(t, s) ? t : s)!;
         }
 
-        function isArrayType(type: Type): boolean {
+        function isArrayType(type: Type): type is TypeReference {
             return !!(getObjectFlags(type) & ObjectFlags.Reference) && ((<TypeReference>type).target === globalArrayType || (<TypeReference>type).target === globalReadonlyArrayType);
         }
 
@@ -18077,7 +18305,7 @@ namespace ts {
         }
 
         function getElementTypeOfArrayType(type: Type): Type | undefined {
-            return isArrayType(type) ? getTypeArguments(type as TypeReference)[0] : undefined;
+            return isArrayType(type) ? getTypeArguments(type)[0] : undefined;
         }
 
         function isArrayLikeType(type: Type): boolean {
@@ -18087,7 +18315,7 @@ namespace ts {
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
-            const elementType = isArrayType(type) ? getTypeArguments(<TypeReference>type)[0] : undefined;
+            const elementType = isArrayType(type) ? getTypeArguments(type)[0] : undefined;
             return elementType === undefinedWideningType || elementType === implicitNeverType;
         }
 
@@ -18184,8 +18412,16 @@ namespace ts {
             return !!(getObjectFlags(type) & ObjectFlags.Reference && (<TypeReference>type).target.objectFlags & ObjectFlags.Tuple);
         }
 
+        function isGenericTupleType(type: Type): type is TupleTypeReference {
+            return isTupleType(type) && !!(type.target.combinedFlags & ElementFlags.Variadic);
+        }
+
+        function isSingleElementGenericTupleType(type: Type): type is TupleTypeReference {
+            return isGenericTupleType(type) && type.target.elementFlags.length === 1;
+        }
+
         function getRestTypeOfTupleType(type: TupleTypeReference) {
-            return type.target.hasRestElement ? getTypeArguments(type)[type.target.typeParameters!.length - 1] : undefined;
+            return getElementTypeOfSliceOfTupleType(type, type.target.fixedLength);
         }
 
         function getRestArrayTypeOfTupleType(type: TupleTypeReference) {
@@ -18193,8 +18429,27 @@ namespace ts {
             return restType && createArrayType(restType);
         }
 
-        function getLengthOfTupleType(type: TupleTypeReference) {
-            return getTypeReferenceArity(type) - (type.target.hasRestElement ? 1 : 0);
+        function getEndLengthOfType(type: Type) {
+            return isTupleType(type) ? getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !!(f & ElementFlags.Variable)) - 1 : 0;
+        }
+
+        function getElementTypeOfSliceOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0, writing = false) {
+            const length = getTypeReferenceArity(type) - endSkipCount;
+            if (index < length) {
+                const typeArguments = getTypeArguments(type);
+                const elementTypes: Type[] = [];
+                for (let i = index; i < length; i++) {
+                    const t = typeArguments[i];
+                    elementTypes.push(type.target.elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessType(t, numberType) : t);
+                }
+                return writing ? getIntersectionType(elementTypes) : getUnionType(elementTypes);
+            }
+            return undefined;
+        }
+
+        function isTupleTypeStructureMatching(t1: TupleTypeReference, t2: TupleTypeReference) {
+            return getTypeReferenceArity(t1) === getTypeReferenceArity(t2) &&
+                every(t1.target.elementFlags, (f, i) => (f & ElementFlags.Variable) === (t2.target.elementFlags[i] & ElementFlags.Variable));
         }
 
         function isZeroBigInt({value}: BigIntLiteralType) {
@@ -18497,7 +18752,7 @@ namespace ts {
                     result = getIntersectionType(sameMap((<IntersectionType>type).types, getWidenedType));
                 }
                 else if (isArrayType(type) || isTupleType(type)) {
-                    result = createTypeReference((<TypeReference>type).target, sameMap(getTypeArguments(<TypeReference>type), getWidenedType));
+                    result = createTypeReference(type.target, sameMap(getTypeArguments(type), getWidenedType));
                 }
                 if (result && context === undefined) {
                     type.widened = result;
@@ -18534,7 +18789,7 @@ namespace ts {
                     }
                 }
                 if (isArrayType(type) || isTupleType(type)) {
-                    for (const t of getTypeArguments(<TypeReference>type)) {
+                    for (const t of getTypeArguments(type)) {
                         if (reportWideningErrorsInType(t)) {
                             errorReported = true;
                         }
@@ -18717,7 +18972,8 @@ namespace ts {
                 inferredType: undefined,
                 priority: undefined,
                 topLevel: true,
-                isFixed: false
+                isFixed: false,
+                impliedArity: undefined
             };
         }
 
@@ -18729,7 +18985,8 @@ namespace ts {
                 inferredType: inference.inferredType,
                 priority: inference.priority,
                 topLevel: inference.topLevel,
-                isFixed: inference.isFixed
+                isFixed: inference.isFixed,
+                impliedArity: inference.impliedArity
             };
         }
 
@@ -18839,13 +19096,14 @@ namespace ts {
             // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
             // applied to the element type(s).
             if (isArrayType(source)) {
-                return createArrayType(inferReverseMappedType(getTypeArguments(<TypeReference>source)[0], target, constraint), isReadonlyArrayType(source));
+                return createArrayType(inferReverseMappedType(getTypeArguments(source)[0], target, constraint), isReadonlyArrayType(source));
             }
             if (isTupleType(source)) {
                 const elementTypes = map(getTypeArguments(source), t => inferReverseMappedType(t, target, constraint));
-                const minLength = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
-                    getTypeReferenceArity(source) - (source.target.hasRestElement ? 1 : 0) : source.target.minLength;
-                return createTupleType(elementTypes, minLength, source.target.hasRestElement, source.target.readonly, source.target.labeledElementDeclarations);
+                const elementFlags = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
+                    sameMap(source.target.elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
+                    source.target.elementFlags;
+                return createTupleType(elementTypes, elementFlags, source.target.readonly, source.target.labeledElementDeclarations);
             }
             // For all other object types we infer a new object type where the reverse mapping has been
             // applied to the type of each property.
@@ -18899,14 +19157,14 @@ namespace ts {
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
-            return target.target.minLength > source.target.minLength ||
-                !getRestTypeOfTupleType(target) && (!!getRestTypeOfTupleType(source) || getLengthOfTupleType(target) < getLengthOfTupleType(source));
+            return !(target.target.combinedFlags & ElementFlags.Variadic) && target.target.minLength > source.target.minLength ||
+                !target.target.hasRestElement && (source.target.hasRestElement || target.target.fixedLength < source.target.fixedLength);
         }
 
         function typesDefinitelyUnrelated(source: Type, target: Type) {
             // Two tuple types with incompatible arities are definitely unrelated.
             // Two object types that each have a property that is unmatched in the other are definitely unrelated.
-            return isTupleType(source) && isTupleType(target) && tupleTypesDefinitelyUnrelated(source, target) ||
+            return isTupleType(source) && isTupleType(target) ? tupleTypesDefinitelyUnrelated(source, target) :
                 !!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ true) &&
                 !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ true);
         }
@@ -19403,22 +19661,61 @@ namespace ts {
                 if (!typesDefinitelyUnrelated(source, target)) {
                     if (isArrayType(source) || isTupleType(source)) {
                         if (isTupleType(target)) {
-                            const sourceLength = isTupleType(source) ? getLengthOfTupleType(source) : 0;
-                            const targetLength = getLengthOfTupleType(target);
-                            const sourceRestType = isTupleType(source) ? getRestTypeOfTupleType(source) : getElementTypeOfArrayType(source);
-                            const targetRestType = getRestTypeOfTupleType(target);
-                            const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
-                            for (let i = 0; i < fixedLength; i++) {
-                                inferFromTypes(i < sourceLength ? getTypeArguments(<TypeReference>source)[i] : sourceRestType!, getTypeArguments(target)[i]);
+                            const sourceArity = getTypeReferenceArity(source);
+                            const targetArity = getTypeReferenceArity(target);
+                            const elementTypes = getTypeArguments(target);
+                            const elementFlags = target.target.elementFlags;
+                            // When source and target are tuple types with the same structure (fixed, variadic, and rest are matched
+                            // to the same kind in each position), simply infer between the element types.
+                            if (isTupleType(source) && isTupleTypeStructureMatching(source, target)) {
+                                for (let i = 0; i < targetArity; i++) {
+                                    inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
+                                }
+                                return;
                             }
-                            if (targetRestType) {
-                                const types = fixedLength < sourceLength ? getTypeArguments(<TypeReference>source).slice(fixedLength, sourceLength) : [];
-                                if (sourceRestType) {
-                                    types.push(sourceRestType);
+                            const startLength = isTupleType(source) ? Math.min(source.target.fixedLength, target.target.fixedLength) : 0;
+                            const sourceRestType = !isTupleType(source) || sourceArity > 0 && source.target.elementFlags[sourceArity - 1] & ElementFlags.Rest ?
+                                getTypeArguments(source)[sourceArity - 1] : undefined;
+                            const endLength = !(target.target.combinedFlags & ElementFlags.Variable) ? 0 :
+                                sourceRestType ? getEndLengthOfType(target) :
+                                Math.min(getEndLengthOfType(source), getEndLengthOfType(target));
+                            const sourceEndLength = sourceRestType ? 0 : endLength;
+                            // Infer between starting fixed elements.
+                            for (let i = 0; i < startLength; i++) {
+                                inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
+                            }
+                            if (sourceRestType && sourceArity - startLength === 1) {
+                                // Single rest element remains in source, infer from that to every element in target
+                                for (let i = startLength; i < targetArity - endLength; i++) {
+                                    inferFromTypes(elementFlags[i] & ElementFlags.Variadic ? createArrayType(sourceRestType) : sourceRestType, elementTypes[i]);
                                 }
-                                if (types.length) {
-                                    inferFromTypes(getUnionType(types), targetRestType);
+                            }
+                            else {
+                                const middleLength = targetArity - startLength - endLength;
+                                if (middleLength === 2 && elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                    // Middle of target is [...T, ...U] and source is tuple type
+                                    const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
+                                    if (targetInfo && targetInfo.impliedArity !== undefined) {
+                                        // Infer slices from source based on implied arity of T.
+                                        inferFromTypes(sliceTupleType(source, startLength, sourceEndLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
+                                        inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, sourceEndLength), elementTypes[startLength + 1]);
+                                    }
                                 }
+                                else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Variadic) {
+                                    // Middle of target is exactly one variadic element. Infer the slice between the fixed parts in the source.
+                                    inferFromTypes(isTupleType(source) ? sliceTupleType(source, startLength, sourceEndLength) : createArrayType(sourceRestType!), elementTypes[startLength]);
+                                }
+                                else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Rest) {
+                                    // Middle of target is exactly one rest element. If middle of source is not empty, infer union of middle element types.
+                                    const restType = isTupleType(source) ? getElementTypeOfSliceOfTupleType(source, startLength, sourceEndLength) : sourceRestType;
+                                    if (restType) {
+                                        inferFromTypes(restType, elementTypes[startLength]);
+                                    }
+                                }
+                            }
+                            // Infer between ending fixed elements
+                            for (let i = 0; i < endLength; i++) {
+                                inferFromTypes(sourceRestType || getTypeArguments(source)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
                             }
                             return;
                         }
@@ -22502,7 +22799,7 @@ namespace ts {
                 const args = getEffectiveCallArguments(iife);
                 const indexOfParameter = func.parameters.indexOf(parameter);
                 if (parameter.dotDotDotToken) {
-                    return getSpreadArgumentType(args, indexOfParameter, args.length, anyType, /*context*/ undefined);
+                    return getSpreadArgumentType(args, indexOfParameter, args.length, anyType, /*context*/ undefined, CheckMode.Normal);
                 }
                 const links = getNodeLinks(iife);
                 const cached = links.resolvedSignature;
@@ -23341,6 +23638,10 @@ namespace ts {
             return checkIteratedTypeOrElementType(IterationUse.Spread, arrayOrIterableType, undefinedType, node.expression);
         }
 
+        function checkSyntheticExpression(node: SyntheticExpression): Type {
+            return node.isSpread ? getIndexedAccessType(node.type, numberType) : node.type;
+        }
+
         function hasDefaultValue(node: BindingElement | Expression): boolean {
             return (node.kind === SyntaxKind.BindingElement && !!(<BindingElement>node).initializer) ||
                 (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
@@ -23350,24 +23651,22 @@ namespace ts {
             const elements = node.elements;
             const elementCount = elements.length;
             const elementTypes: Type[] = [];
-            let hasEndingSpreadElement = false;
-            let hasNonEndingSpreadElement = false;
+            const elementFlags: ElementFlags[] = [];
             const contextualType = getApparentTypeOfContextualType(node);
             const inDestructuringPattern = isAssignmentTarget(node);
             const inConstContext = isConstContext(node);
             for (let i = 0; i < elementCount; i++) {
                 const e = elements[i];
-                const spread = e.kind === SyntaxKind.SpreadElement && (<SpreadElement>e).expression;
-                const spreadType = spread && checkExpression(spread, checkMode, forceTuple);
-                if (spreadType && isTupleType(spreadType)) {
-                    elementTypes.push(...getTypeArguments(spreadType));
-                    if (spreadType.target.hasRestElement) {
-                        if (i === elementCount - 1) hasEndingSpreadElement = true;
-                        else hasNonEndingSpreadElement = true;
+                if (e.kind === SyntaxKind.SpreadElement) {
+                    if (languageVersion < ScriptTarget.ES2015) {
+                        checkExternalEmitHelpers(e, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArrays);
                     }
-                }
-                else {
-                    if (inDestructuringPattern && spreadType) {
+                    const spreadType = checkExpression((<SpreadElement>e).expression, checkMode, forceTuple);
+                    if (isArrayLikeType(spreadType)) {
+                        elementTypes.push(spreadType);
+                        elementFlags.push(ElementFlags.Variadic);
+                    }
+                    else if (inDestructuringPattern) {
                         // Given the following situation:
                         //    var c: {};
                         //    [...c] = ["", 0];
@@ -23381,45 +23680,35 @@ namespace ts {
                         // getContextualTypeForElementExpression, which will crucially not error
                         // if there is no index type / iterated type.
                         const restElementType = getIndexTypeOfType(spreadType, IndexKind.Number) ||
-                            getIteratedTypeOrElementType(IterationUse.Destructuring, spreadType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false);
-                        if (restElementType) {
-                            elementTypes.push(restElementType);
-                        }
+                            getIteratedTypeOrElementType(IterationUse.Destructuring, spreadType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false) ||
+                            unknownType;
+                        elementTypes.push(restElementType);
+                        elementFlags.push(ElementFlags.Rest);
                     }
                     else {
-                        const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
-                        const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
-                        elementTypes.push(type);
+                        elementTypes.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, (<SpreadElement>e).expression));
+                        elementFlags.push(ElementFlags.Rest);
                     }
-                    if (spread) { // tuples are done above, so these are only arrays
-                        if (i === elementCount - 1) hasEndingSpreadElement = true;
-                        else hasNonEndingSpreadElement = true;
-                    }
+                }
+                else {
+                    const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
+                    const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
+                    elementTypes.push(type);
+                    elementFlags.push(ElementFlags.Required);
                 }
             }
-            if (!hasNonEndingSpreadElement) {
-                const minLength = elementTypes.length - (hasEndingSpreadElement ? 1 : 0);
-                // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
-                // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
-                let tupleResult;
-                if (inDestructuringPattern && minLength > 0) {
-                    const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes, minLength, hasEndingSpreadElement));
-                    type.pattern = node;
-                    return type;
-                }
-                else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasEndingSpreadElement, elementTypes.length, inConstContext)) {
-                    return createArrayLiteralType(tupleResult);
-                }
-                else if (forceTuple) {
-                    return createArrayLiteralType(createTupleType(elementTypes, minLength, hasEndingSpreadElement));
-                }
+            if (inDestructuringPattern) {
+                return createTupleType(elementTypes, elementFlags);
+            }
+            if (forceTuple || inConstContext || contextualType && forEachType(contextualType, isTupleLikeType)) {
+                return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext));
             }
             return createArrayLiteralType(createArrayType(elementTypes.length ?
-                getUnionType(elementTypes, UnionReduction.Subtype) :
+                getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), UnionReduction.Subtype) :
                 strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
         }
 
-        function createArrayLiteralType(type: ObjectType) {
+        function createArrayLiteralType(type: Type) {
             if (!(getObjectFlags(type) & ObjectFlags.Reference)) {
                 return type;
             }
@@ -23429,13 +23718,6 @@ namespace ts {
                 literalType.objectFlags |= ObjectFlags.ArrayLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             }
             return literalType;
-        }
-
-        function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length, readonly = false) {
-            // Infer a tuple type when the contextual type is or contains a tuple-like type
-            if (readonly || (contextualType && forEachType(contextualType, isTupleLikeType))) {
-                return createTupleType(elementTypes, elementCount - (hasRestElement ? 1 : 0), hasRestElement, readonly);
-            }
         }
 
         function isNumericName(name: DeclarationName): boolean {
@@ -23895,9 +24177,9 @@ namespace ts {
                     const childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                     // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
                     const childrenPropSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, jsxChildrenPropertyName);
-                    childrenPropSymbol.type = childrenTypes.length === 1 ?
-                        childrenTypes[0] :
-                        (getArrayLiteralTupleTypeIfApplicable(childrenTypes, childrenContextualType, /*hasRestElement*/ false) || createArrayType(getUnionType(childrenTypes)));
+                    childrenPropSymbol.type = childrenTypes.length === 1 ? childrenTypes[0] :
+                        childrenContextualType && forEachType(childrenContextualType, isTupleLikeType) ? createTupleType(childrenTypes) :
+                        createArrayType(getUnionType(childrenTypes));
                     // Fake up a property declaration for the children
                     childrenPropSymbol.valueDeclaration = factory.createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined);
                     setParent(childrenPropSymbol.valueDeclaration, attributes);
@@ -25320,29 +25602,10 @@ namespace ts {
                 // If we are missing the close parenthesis, the call is incomplete.
                 callIsIncomplete = node.arguments.end === node.end;
 
-                // If one or more spread arguments are present, check that they correspond to a rest parameter or at least that they are in the valid range.
-                const firstSpreadArgIndex = getSpreadArgumentIndex(args);
-                if (firstSpreadArgIndex >= 0) {
-                    if (firstSpreadArgIndex === args.length - 1) {
-                        // Special case, handles the munged arguments that we receive in case of a spread in the end (breaks the arg.expression below)
-                        //   (see below for code that starts with "const spreadArgument")
-                        return firstSpreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || firstSpreadArgIndex < getParameterCount(signature));
-                    }
-
-                    let totalCount = firstSpreadArgIndex; // count previous arguments
-                    for (let i = firstSpreadArgIndex; i < args.length; i++) {
-                        const arg = args[i];
-                        if (!isSpreadArgument(arg)) {
-                            totalCount += 1;
-                        }
-                        else {
-                            const argType = flowLoopCount ? checkExpression((<SpreadElement>arg).expression) : checkExpressionCached((<SpreadElement>arg).expression);
-                            totalCount += isTupleType(argType) ? getTypeArguments(argType).length
-                                : isArrayType(argType) ? 0
-                                : 1;
-                        }
-                    }
-                    return totalCount >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || totalCount <= getParameterCount(signature));
+                // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
+                const spreadArgIndex = getSpreadArgumentIndex(args);
+                if (spreadArgIndex >= 0) {
+                    return spreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || spreadArgIndex < getParameterCount(signature));
                 }
             }
 
@@ -25479,6 +25742,12 @@ namespace ts {
 
             const restType = getNonArrayRestType(signature);
             const argCount = restType ? Math.min(getParameterCount(signature) - 1, args.length) : args.length;
+            if (restType && restType.flags & TypeFlags.TypeParameter) {
+                const info = find(context.inferences, info => info.typeParameter === restType);
+                if (info) {
+                    info.impliedArity = findIndex(args, isSpreadArgument, argCount) < 0 ? args.length - argCount : undefined;
+                }
+            }
             for (let i = 0; i < argCount; i++) {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
@@ -25489,49 +25758,58 @@ namespace ts {
             }
 
             if (restType) {
-                const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, context);
+                const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, context, checkMode);
                 inferTypes(context.inferences, spreadType, restType);
             }
 
             return getInferredTypes(context);
         }
 
-        function getArrayifiedType(type: Type) {
-            return type.flags & TypeFlags.Union ? mapType(type, getArrayifiedType) :
-                type.flags & (TypeFlags.Any | TypeFlags.Instantiable) || isMutableArrayOrTuple(type) ? type :
-                isTupleType(type) ? createTupleType(getTypeArguments(type), type.target.minLength, type.target.hasRestElement, /*readonly*/ false, type.target.labeledElementDeclarations) :
-                createArrayType(getIndexedAccessType(type, numberType));
+        function getMutableArrayOrTupleType(type: Type) {
+            return type.flags & TypeFlags.Union ? mapType(type, getMutableArrayOrTupleType) :
+                type.flags & TypeFlags.Any || isMutableArrayOrTuple(getBaseConstraintOfType(type) || type) ? type :
+                isTupleType(type) ? createTupleType(getTypeArguments(type), type.target.elementFlags, /*readonly*/ false, type.target.labeledElementDeclarations) :
+                createTupleType([type], [ElementFlags.Variadic]);
         }
 
-        function getSpreadArgumentType(args: readonly Expression[], index: number, argCount: number, restType: Type, context: InferenceContext | undefined) {
+        function getSpreadArgumentType(args: readonly Expression[], index: number, argCount: number, restType: Type, context: InferenceContext | undefined, checkMode: CheckMode) {
             if (index >= argCount - 1) {
                 const arg = args[argCount - 1];
                 if (isSpreadArgument(arg)) {
                     // We are inferring from a spread expression in the last argument position, i.e. both the parameter
                     // and the argument are ...x forms.
-                    return arg.kind === SyntaxKind.SyntheticExpression ?
-                        createArrayType((<SyntheticExpression>arg).type) :
-                        getArrayifiedType(checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context, CheckMode.Normal));
+                    return getMutableArrayOrTupleType(arg.kind === SyntaxKind.SyntheticExpression ? (<SyntheticExpression>arg).type :
+                        checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context, checkMode));
                 }
             }
             const types = [];
-            const names: (ParameterDeclaration | NamedTupleMember)[] = [];
-            let spreadIndex = -1;
+            const flags = [];
+            const names = [];
             for (let i = index; i < argCount; i++) {
-                const contextualType = getIndexedAccessType(restType, getLiteralType(i - index));
-                const argType = checkExpressionWithContextualType(args[i], contextualType, context, CheckMode.Normal);
-                if (spreadIndex < 0 && isSpreadArgument(args[i])) {
-                    spreadIndex = i - index;
+                const arg = args[i];
+                if (isSpreadArgument(arg)) {
+                    const spreadType = arg.kind === SyntaxKind.SyntheticExpression ? (<SyntheticExpression>arg).type : checkExpression((<SpreadElement>arg).expression);
+                    if (isArrayLikeType(spreadType)) {
+                        types.push(spreadType);
+                        flags.push(ElementFlags.Variadic);
+                    }
+                    else {
+                        types.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, arg.kind === SyntaxKind.SpreadElement ? (<SpreadElement>arg).expression : arg));
+                        flags.push(ElementFlags.Rest);
+                    }
                 }
-                if (args[i].kind === SyntaxKind.SyntheticExpression && (args[i] as SyntheticExpression).tupleNameSource) {
-                    names.push((args[i] as SyntheticExpression).tupleNameSource!);
+                else {
+                    const contextualType = getIndexedAccessType(restType, getLiteralType(i - index));
+                    const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
+                    const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
+                    types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
+                    flags.push(ElementFlags.Required);
                 }
-                const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
-                types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
+                if (arg.kind === SyntaxKind.SyntheticExpression && (arg as SyntheticExpression).tupleNameSource) {
+                    names.push((arg as SyntheticExpression).tupleNameSource!);
+                }
             }
-            return spreadIndex < 0 ?
-                createTupleType(types, /*minLength*/ undefined, /*hasRestElement*/ undefined, /*readonly*/ undefined, length(names) === length(types) ? names : undefined) :
-                createTupleType(append(types.slice(0, spreadIndex), getUnionType(types.slice(spreadIndex))), spreadIndex, /*hasRestElement*/ true, /*readonly*/ undefined);
+            return createTupleType(types, flags, /*readonly*/ false, length(names) === length(types) ? names : undefined);
         }
 
         function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
@@ -25746,7 +26024,7 @@ namespace ts {
                 }
             }
             if (restType) {
-                const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, /*context*/ undefined);
+                const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, /*context*/ undefined, checkMode);
                 const errorNode = reportErrors ? argCount < args.length ? args[argCount] : node : undefined;
                 if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, /*containingMessageChain*/ undefined, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
@@ -25810,19 +26088,27 @@ namespace ts {
                 return node.attributes.properties.length > 0 || (isJsxOpeningElement(node) && node.parent.children.length > 0) ? [node.attributes] : emptyArray;
             }
             const args = node.arguments || emptyArray;
-            const length = args.length;
-            if (length && isSpreadArgument(args[length - 1]) && getSpreadArgumentIndex(args) === length - 1) {
-                // We have a spread argument in the last position and no other spread arguments. If the type
-                // of the argument is a tuple type, spread the tuple elements into the argument list. We can
-                // call checkExpressionCached because spread expressions never have a contextual type.
-                const spreadArgument = <SpreadElement>args[length - 1];
-                const type = flowLoopCount ? checkExpression(spreadArgument.expression) : checkExpressionCached(spreadArgument.expression);
-                if (isTupleType(type)) {
-                    const typeArguments = getTypeArguments(type);
-                    const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
-                    const syntheticArgs = map(typeArguments, (t, i) => createSyntheticExpression(spreadArgument, t, /*isSpread*/ i === restIndex, type.target.labeledElementDeclarations?.[i]));
-                    return concatenate(args.slice(0, length - 1), syntheticArgs);
+            const spreadIndex = getSpreadArgumentIndex(args);
+            if (spreadIndex >= 0) {
+                // Create synthetic arguments from spreads of tuple types.
+                const effectiveArgs = args.slice(0, spreadIndex);
+                for (let i = spreadIndex; i < args.length; i++) {
+                    const arg = args[i];
+                    // We can call checkExpressionCached because spread expressions never have a contextual type.
+                    const spreadType = arg.kind === SyntaxKind.SpreadElement && (flowLoopCount ? checkExpression((<SpreadElement>arg).expression) : checkExpressionCached((<SpreadElement>arg).expression));
+                    if (spreadType && isTupleType(spreadType)) {
+                        forEach(getTypeArguments(spreadType), (t, i) => {
+                            const flags = spreadType.target.elementFlags[i];
+                            const syntheticArg = createSyntheticExpression(arg, flags & ElementFlags.Rest ? createArrayType(t) : t,
+                                !!(flags & ElementFlags.Variable), spreadType.target.labeledElementDeclarations?.[i]);
+                            effectiveArgs.push(syntheticArg);
+                        });
+                    }
+                    else {
+                        effectiveArgs.push(arg);
+                    }
                 }
+                return effectiveArgs;
             }
             return args;
         }
@@ -27426,7 +27712,7 @@ namespace ts {
                 // otherwise would return the type 'undefined').
                 const restType = getTypeOfSymbol(signature.parameters[paramCount]);
                 const index = pos - paramCount;
-                if (!isTupleType(restType) || restType.target.hasRestElement || index < getTypeArguments(restType).length) {
+                if (!isTupleType(restType) || restType.target.hasRestElement || index < restType.target.fixedLength) {
                     return getIndexedAccessType(restType, getLiteralType(index));
                 }
             }
@@ -27434,37 +27720,30 @@ namespace ts {
         }
 
         function getRestTypeAtPosition(source: Signature, pos: number): Type {
-            const paramCount = getParameterCount(source);
+            const parameterCount = getParameterCount(source);
+            const minArgumentCount = getMinArgumentCount(source);
             const restType = getEffectiveRestType(source);
-            const nonRestCount = paramCount - (restType ? 1 : 0);
-            if (restType && pos === nonRestCount) {
-                return restType;
+            if (restType && pos >= parameterCount - 1) {
+                return pos === parameterCount - 1 ? restType : createArrayType(getIndexedAccessType(restType, numberType));
             }
             const types = [];
-            let names: (NamedTupleMember | ParameterDeclaration)[] | undefined = [];
-            for (let i = pos; i < nonRestCount; i++) {
-                types.push(getTypeAtPosition(source, i));
+            const flags = [];
+            const names = [];
+            for (let i = pos; i < parameterCount; i++) {
+                if (!restType || i < parameterCount - 1) {
+                    types.push(getTypeAtPosition(source, i));
+                    flags.push(i < minArgumentCount ? ElementFlags.Required : ElementFlags.Optional);
+                }
+                else {
+                    types.push(restType);
+                    flags.push(ElementFlags.Variadic);
+                }
                 const name = getNameableDeclarationAtPosition(source, i);
-                if (name && names) {
+                if (name) {
                     names.push(name);
                 }
-                else {
-                    names = undefined;
-                }
             }
-            if (restType) {
-                types.push(getIndexedAccessType(restType, numberType));
-                const name = getNameableDeclarationAtPosition(source, nonRestCount);
-                if (name && names) {
-                    names.push(name);
-                }
-                else {
-                    names = undefined;
-                }
-            }
-            const minArgumentCount = getMinArgumentCount(source);
-            const minLength = minArgumentCount < pos ? 0 : minArgumentCount - pos;
-            return createTupleType(types, minLength, !!restType, /*readonly*/ false, names);
+            return createTupleType(types, flags, /*readonly*/ false, length(names) === length(types) ? names : undefined);
         }
 
         function getParameterCount(signature: Signature) {
@@ -27472,7 +27751,7 @@ namespace ts {
             if (signatureHasRestParameter(signature)) {
                 const restType = getTypeOfSymbol(signature.parameters[length - 1]);
                 if (isTupleType(restType)) {
-                    return length + getTypeArguments(restType).length - 1;
+                    return length + restType.target.fixedLength - (restType.target.hasRestElement ? 0 : 1);
                 }
             }
             return length;
@@ -27482,9 +27761,10 @@ namespace ts {
             if (signatureHasRestParameter(signature)) {
                 const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
                 if (isTupleType(restType)) {
-                    const minLength = restType.target.minLength;
-                    if (minLength > 0) {
-                        return signature.parameters.length - 1 + minLength;
+                    const firstOptionalIndex = findIndex(restType.target.elementFlags, f => !(f & ElementFlags.Required));
+                    const requiredCount = firstOptionalIndex < 0 ? restType.target.fixedLength : firstOptionalIndex;
+                    if (requiredCount > 0) {
+                        return signature.parameters.length - 1 + requiredCount;
                     }
                 }
             }
@@ -27505,7 +27785,12 @@ namespace ts {
         function getEffectiveRestType(signature: Signature) {
             if (signatureHasRestParameter(signature)) {
                 const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
-                return isTupleType(restType) ? getRestArrayTypeOfTupleType(restType) : restType;
+                if (!isTupleType(restType)) {
+                    return restType;
+                }
+                if (restType.target.hasRestElement) {
+                    return sliceTupleType(restType, restType.target.fixedLength);
+                }
             }
             return undefined;
         }
@@ -29397,18 +29682,19 @@ namespace ts {
 
         function padTupleType(type: TupleTypeReference, pattern: ArrayBindingPattern) {
             const patternElements = pattern.elements;
-            const arity = getTypeReferenceArity(type);
-            const elementTypes = arity ? getTypeArguments(type).slice() : [];
-            for (let i = arity; i < patternElements.length; i++) {
+            const elementTypes = getTypeArguments(type).slice();
+            const elementFlags = type.target.elementFlags.slice();
+            for (let i = getTypeReferenceArity(type); i < patternElements.length; i++) {
                 const e = patternElements[i];
                 if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && e.dotDotDotToken)) {
                     elementTypes.push(!isOmittedExpression(e) && hasDefaultValue(e) ? getTypeFromBindingElement(e, /*includePatternInType*/ false, /*reportErrors*/ false) : anyType);
+                    elementFlags.push(ElementFlags.Optional);
                     if (!isOmittedExpression(e) && !hasDefaultValue(e)) {
                         reportImplicitAny(e, anyType);
                     }
                 }
             }
-            return createTupleType(elementTypes, type.target.minLength, /*hasRestElement*/ false, type.target.readonly);
+            return createTupleType(elementTypes, elementFlags, type.target.readonly);
         }
 
         function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
@@ -29855,7 +30141,7 @@ namespace ts {
                 case SyntaxKind.YieldExpression:
                     return checkYieldExpression(<YieldExpression>node);
                 case SyntaxKind.SyntheticExpression:
-                    return (<SyntheticExpression>node).type;
+                    return checkSyntheticExpression(<SyntheticExpression>node);
                 case SyntaxKind.JsxExpression:
                     return checkJsxExpression(<JsxExpression>node, checkMode);
                 case SyntaxKind.JsxElement:
@@ -30580,16 +30866,20 @@ namespace ts {
                     grammarErrorOnNode(e, Diagnostics.Tuple_members_must_all_have_names_or_all_not_have_names);
                     break;
                 }
-                if (isTupleRestElement(e)) {
+                const flags = getTupleElementFlags(e);
+                if (flags & ElementFlags.Variadic) {
+                    if (!isArrayLikeType(getTypeFromTypeNode((<RestTypeNode | NamedTupleMember>e).type))) {
+                        error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
+                        break;
+                    }
+                }
+                else if (flags & ElementFlags.Rest) {
                     if (i !== elementTypes.length - 1) {
                         grammarErrorOnNode(e, Diagnostics.A_rest_element_must_be_last_in_a_tuple_type);
                         break;
                     }
-                    if (!isArrayType(getTypeFromTypeNode((<RestTypeNode>e).type))) {
-                        error(e, Diagnostics.A_rest_element_type_must_be_an_array_type);
-                    }
                 }
-                else if (isTupleOptionalElement(e)) {
+                else if (flags & ElementFlags.Optional) {
                     seenOptionalElement = true;
                 }
                 else if (seenOptionalElement) {

@@ -1201,6 +1201,14 @@ namespace ts {
         return values;
     }
 
+    export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
+        const result = new Array(count);
+        for (let i = 0; i < count; i++) {
+            result[i] = f(i);
+        }
+        return result;
+    }
+
     /** Shims `Array.from`. */
     export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
     export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];

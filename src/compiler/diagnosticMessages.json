@@ -2414,6 +2414,26 @@
         "category": "Error",
         "code": 2617
     },
+    "Source has {0} element(s) but target requires {1}.": {
+        "category": "Error",
+        "code": 2618
+    },
+    "Source has {0} element(s) but target allows only {1}.": {
+        "category": "Error",
+        "code": 2619
+    },
+    "Target requires {0} element(s) but source may have fewer.": {
+        "category": "Error",
+        "code": 2620
+    },
+    "Target allows only {0} element(s) but source may have more.": {
+        "category": "Error",
+        "code": 2621
+    },
+    "Element at index {0} is variadic in one type but not in the other.": {
+        "category": "Error",
+        "code": 2622
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
