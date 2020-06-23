@@ -1,0 +1,66 @@
+=== tests/cases/compiler/functionInferenceDecomposesIntersection.ts ===
+declare namespace React {
+>React : Symbol(React, Decl(functionInferenceDecomposesIntersection.ts, 0, 0))
+
+    type WeakValidationMap<T> = {
+>WeakValidationMap : Symbol(WeakValidationMap, Decl(functionInferenceDecomposesIntersection.ts, 0, 25))
+>T : Symbol(T, Decl(functionInferenceDecomposesIntersection.ts, 1, 27))
+
+        [K in keyof T]?: null extends T[K] ? string : string
+>K : Symbol(K, Decl(functionInferenceDecomposesIntersection.ts, 2, 9))
+>T : Symbol(T, Decl(functionInferenceDecomposesIntersection.ts, 1, 27))
+>T : Symbol(T, Decl(functionInferenceDecomposesIntersection.ts, 1, 27))
+>K : Symbol(K, Decl(functionInferenceDecomposesIntersection.ts, 2, 9))
+
+    };
+
+    interface FunctionComponent<P = {}> {
+>FunctionComponent : Symbol(FunctionComponent, Decl(functionInferenceDecomposesIntersection.ts, 3, 6))
+>P : Symbol(P, Decl(functionInferenceDecomposesIntersection.ts, 5, 32))
+
+        propTypes?: WeakValidationMap<P>;
+>propTypes : Symbol(FunctionComponent.propTypes, Decl(functionInferenceDecomposesIntersection.ts, 5, 41))
+>WeakValidationMap : Symbol(WeakValidationMap, Decl(functionInferenceDecomposesIntersection.ts, 0, 25))
+>P : Symbol(P, Decl(functionInferenceDecomposesIntersection.ts, 5, 32))
+    }
+}
+
+type A<T1> = <T2>() => React.FunctionComponent<T1 & T2>;
+>A : Symbol(A, Decl(functionInferenceDecomposesIntersection.ts, 8, 1))
+>T1 : Symbol(T1, Decl(functionInferenceDecomposesIntersection.ts, 10, 7))
+>T2 : Symbol(T2, Decl(functionInferenceDecomposesIntersection.ts, 10, 14))
+>React : Symbol(React, Decl(functionInferenceDecomposesIntersection.ts, 0, 0))
+>FunctionComponent : Symbol(React.FunctionComponent, Decl(functionInferenceDecomposesIntersection.ts, 3, 6))
+>T1 : Symbol(T1, Decl(functionInferenceDecomposesIntersection.ts, 10, 7))
+>T2 : Symbol(T2, Decl(functionInferenceDecomposesIntersection.ts, 10, 14))
+
+function B<T>(_: A<T>) {}
+>B : Symbol(B, Decl(functionInferenceDecomposesIntersection.ts, 10, 56))
+>T : Symbol(T, Decl(functionInferenceDecomposesIntersection.ts, 12, 11))
+>_ : Symbol(_, Decl(functionInferenceDecomposesIntersection.ts, 12, 14))
+>A : Symbol(A, Decl(functionInferenceDecomposesIntersection.ts, 8, 1))
+>T : Symbol(T, Decl(functionInferenceDecomposesIntersection.ts, 12, 11))
+
+interface C {
+>C : Symbol(C, Decl(functionInferenceDecomposesIntersection.ts, 12, 25))
+
+    r: string;
+>r : Symbol(C.r, Decl(functionInferenceDecomposesIntersection.ts, 14, 13))
+}
+
+function myFunction<T2>(): React.FunctionComponent<C & T2> {
+>myFunction : Symbol(myFunction, Decl(functionInferenceDecomposesIntersection.ts, 16, 1))
+>T2 : Symbol(T2, Decl(functionInferenceDecomposesIntersection.ts, 18, 20))
+>React : Symbol(React, Decl(functionInferenceDecomposesIntersection.ts, 0, 0))
+>FunctionComponent : Symbol(React.FunctionComponent, Decl(functionInferenceDecomposesIntersection.ts, 3, 6))
+>C : Symbol(C, Decl(functionInferenceDecomposesIntersection.ts, 12, 25))
+>T2 : Symbol(T2, Decl(functionInferenceDecomposesIntersection.ts, 18, 20))
+
+    return {};
+}
+
+// B<C>(myFunction) // No error
+B(myFunction) // should be the same as above (T in B inferred as C)
+>B : Symbol(B, Decl(functionInferenceDecomposesIntersection.ts, 10, 56))
+>myFunction : Symbol(myFunction, Decl(functionInferenceDecomposesIntersection.ts, 16, 1))
+

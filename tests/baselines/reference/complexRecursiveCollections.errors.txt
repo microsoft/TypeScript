@@ -1,3 +1,6 @@
+tests/cases/compiler/immutable.ts(189,20): error TS2430: Interface 'Stack<T>' incorrectly extends interface 'Indexed<T>'.
+  The types returned by 'concat(...).map(...).filter(...)' are incompatible between these types.
+    Type 'Set<any>' is not assignable to type 'Indexed<any>'.
 tests/cases/compiler/immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Keyed<K, V>' is not assignable to type 'this'.
@@ -33,7 +36,7 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
         flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N2<M>;
         toSeq(): N2<T>;
     }
-==== tests/cases/compiler/immutable.ts (3 errors) ====
+==== tests/cases/compiler/immutable.ts (4 errors) ====
     // Test that complex recursive collections can pass the `extends` assignability check without
     // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
     // started being checked.
@@ -223,6 +226,10 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
       export function Stack<T>(): Stack<T>;
       export function Stack<T>(collection: Iterable<T>): Stack<T>;
       export interface Stack<T> extends Collection.Indexed<T> {
+                       ~~~~~
+!!! error TS2430: Interface 'Stack<T>' incorrectly extends interface 'Indexed<T>'.
+!!! error TS2430:   The types returned by 'concat(...).map(...).filter(...)' are incompatible between these types.
+!!! error TS2430:     Type 'Set<any>' is not assignable to type 'Indexed<any>'.
         // Reading values
         peek(): T | undefined;
         // Persistent changes

@@ -700,6 +700,7 @@ namespace ts {
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
         const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
+        const erasedType = createIntrinsicType(TypeFlags.Any | TypeFlags.Never | TypeFlags.Unknown, "any");
         const errorType = createIntrinsicType(TypeFlags.Any, "error");
         const nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType);
         const unknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
@@ -12896,8 +12897,8 @@ namespace ts {
                     typeSet.set(type.id.toString(), type);
                 }
             }
-            else {
-                if (flags & TypeFlags.AnyOrUnknown) {
+            else if (!(flags & TypeFlags.Unknown)) {
+                if (flags & TypeFlags.Any) {
                     if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 }
                 else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !typeSet.has(type.id.toString())) {
@@ -14461,7 +14462,7 @@ namespace ts {
         }
 
         function createTypeEraser(sources: readonly TypeParameter[]): TypeMapper {
-            return createTypeMapper(sources, /*targets*/ undefined);
+            return createTypeMapper(sources, arrayOf(sources.length, () => erasedType));
         }
 
         /**
