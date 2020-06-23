@@ -131,6 +131,13 @@ namespace ts.server {
             this.processResponse(request, /*expectEmptyBody*/ true);
         }
 
+        /*@internal*/
+        setFormattingOptions(formatOptions: FormatCodeSettings) {
+            const args: protocol.ConfigureRequestArguments = { formatOptions };
+            const request = this.processRequest(CommandNames.Configure, args);
+            this.processResponse(request, /*expectEmptyBody*/ true);
+        }
+
         openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
             const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
             this.processRequest(CommandNames.Open, args);
@@ -791,7 +798,11 @@ namespace ts.server {
         }
 
         getProgram(): Program {
-            throw new Error("SourceFile objects are not serializable through the server protocol.");
+            throw new Error("Program objects are not serializable through the server protocol.");
+        }
+
+        getAutoImportProvider(): Program | undefined {
+            throw new Error("Program objects are not serializable through the server protocol.");
         }
 
         getNonBoundSourceFile(_fileName: string): SourceFile {

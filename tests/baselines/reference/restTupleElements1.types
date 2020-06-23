@@ -24,10 +24,10 @@ type T07 = [...string[], string];  // Error
 >T07 : T07
 
 type T08 = [...string];  // Error
->T08 : T08
+>T08 : any[]
 
 type T09 = [...string?];  // Error
->T09 : T09
+>T09 : any[]
 
 type T10 = [string, ...[...string[]]];
 >T10 : T10
@@ -107,7 +107,7 @@ type T21 = T20[0];
 >T21 : number
 
 type T22 = T20[0 | 1];
->T22 : string | number
+>T22 : T22
 
 type T23 = T20[0 | 1 | 2];
 >T23 : string | number | boolean

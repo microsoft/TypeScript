@@ -671,7 +671,7 @@ namespace ts {
             configFileSpecs = configFileParseResult.configFileSpecs!; // TODO: GH#18217
             projectReferences = configFileParseResult.projectReferences;
             configFileParsingDiagnostics = getConfigFileParsingDiagnostics(configFileParseResult).slice();
-            canConfigFileJsonReportNoInputFiles = canJsonReportNoInutFiles(configFileParseResult.raw);
+            canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(configFileParseResult.raw);
             hasChangedConfigFileParsingErrors = true;
         }
 
