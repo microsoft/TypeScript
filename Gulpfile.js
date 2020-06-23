@@ -354,13 +354,20 @@ const eslint = (folder) => async () => {
         "node_modules/eslint/bin/eslint",
         "--cache",
         "--cache-location", `${folder}/.eslintcache`,
-        "--format", "autolinkable-stylish",
         "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",
     ];
 
     if (cmdLineOptions.fix) {
         args.push("--fix");
+    }
+
+    // Use stylish format on CI, so that it can be picked up by GH Action's rule matchers
+    if (cmdLineOptions.ci) {
+        args.push("--format", "stylish");
+    }
+    else {
+        args.push("--format", "autolinkable-stylish");
     }
 
     args.push(folder);

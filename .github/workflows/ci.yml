@@ -33,6 +33,7 @@ jobs:
     - run:  npm install
     - run:  npm update
 
+    # Re: https://github.com/actions/setup-node/pull/125
     - name: Register Problem Matcher for TSC
       run: echo "##[add-matcher].github/tsc.json"
 
