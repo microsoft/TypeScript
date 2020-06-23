@@ -470,7 +470,6 @@ namespace ts.server {
         /*@internal*/
         watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
             return this.projectService.watchFactory.watchDirectory(
-                this.projectService.host,
                 directory,
                 cb,
                 flags,
@@ -511,7 +510,6 @@ namespace ts.server {
         /*@internal*/
         watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags) {
             return this.projectService.watchFactory.watchDirectory(
-                this.projectService.host,
                 directory,
                 cb,
                 flags,
@@ -1235,7 +1233,6 @@ namespace ts.server {
 
         private addMissingFileWatcher(missingFilePath: Path) {
             const fileWatcher = this.projectService.watchFactory.watchFile(
-                this.projectService.host,
                 missingFilePath,
                 (fileName, eventKind) => {
                     if (isConfiguredProject(this)) {
@@ -1291,7 +1288,6 @@ namespace ts.server {
             return {
                 generatedFilePath: this.toPath(generatedFile),
                 watcher: this.projectService.watchFactory.watchFile(
-                    this.projectService.host,
                     generatedFile,
                     () => {
                         this.clearSourceMapperCache();
@@ -2041,7 +2037,6 @@ namespace ts.server {
         /* @internal */
         createConfigFileWatcher() {
             this.configFileWatcher = this.projectService.watchFactory.watchFile(
-                this.projectService.host,
                 this.getConfigFilePath(),
                 (_fileName, eventKind) => this.projectService.onConfigChangedForConfiguredProject(this, eventKind),
                 PollingInterval.High,

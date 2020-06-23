@@ -120,7 +120,7 @@ namespace ts.server.typingsInstaller {
             if (isLoggingEnabled) {
                 this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
             }
-            this.watchFactory = getWatchFactory(isLoggingEnabled ? WatchLogLevel.Verbose : WatchLogLevel.None, s => this.log.writeLine(s), getDetailWatchInfo);
+            this.watchFactory = getWatchFactory(this.installTypingHost as WatchFactoryHost, isLoggingEnabled ? WatchLogLevel.Verbose : WatchLogLevel.None, s => this.log.writeLine(s), getDetailWatchInfo);
             this.processCacheLocation(this.globalCachePath);
         }
 
@@ -439,13 +439,13 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`${projectWatcherType}:: Added:: WatchInfo: ${path}`);
                 }
                 const watcher = projectWatcherType === ProjectWatcherType.FileWatcher ?
-                    this.watchFactory.watchFile(this.installTypingHost as WatchFileHost, path, () => {
+                    this.watchFactory.watchFile(path, () => {
                         if (!watchers.isInvoked) {
                             watchers.isInvoked = true;
                             this.sendResponse({ projectName, kind: ActionInvalidate });
                         }
                     }, PollingInterval.High, options, projectName, watchers) :
-                    this.watchFactory.watchDirectory(this.installTypingHost as WatchDirectoryHost, path, f => {
+                    this.watchFactory.watchDirectory(path, f => {
                         if (watchers.isInvoked || !fileExtensionIs(f, Extension.Json)) {
                             return;
                         }

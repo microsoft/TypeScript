@@ -729,10 +729,9 @@ namespace ts.server {
             this.watchFactory = this.syntaxOnly ?
                 {
                     watchFile: returnNoopFileWatcher,
-                    watchFilePath: returnNoopFileWatcher,
                     watchDirectory: returnNoopFileWatcher,
                 } :
-                getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
+                getWatchFactory(this.host, watchLogLevel, log, getDetailWatchInfo);
         }
 
         toPath(fileName: string) {
@@ -1079,26 +1078,20 @@ namespace ts.server {
             return this.hostConfiguration.preferences;
         }
 
-        private onSourceFileChanged(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
-            const info = this.getScriptInfoForPath(path);
-            if (!info) {
-                this.logger.msg(`Error: got watch notification for unknown file: ${fileName}`);
+        private onSourceFileChanged(info: ScriptInfo, eventKind: FileWatcherEventKind) {
+            if (info.containingProjects) {
+                info.containingProjects.forEach(project => project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(info.path));
             }
-            else {
-                if (info.containingProjects) {
-                    info.containingProjects.forEach(project => project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(info.path));
-                }
-                if (eventKind === FileWatcherEventKind.Deleted) {
-                    // File was deleted
-                    this.handleDeletedFile(info);
-                }
-                else if (!info.isScriptOpen()) {
-                    // file has been changed which might affect the set of referenced files in projects that include
-                    // this file and set of inferred projects
-                    info.delayReloadNonMixedContentFile();
-                    this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ false);
-                    this.handleSourceMapProjects(info);
-                }
+            if (eventKind === FileWatcherEventKind.Deleted) {
+                // File was deleted
+                this.handleDeletedFile(info);
+            }
+            else if (!info.isScriptOpen()) {
+                // file has been changed which might affect the set of referenced files in projects that include
+                // this file and set of inferred projects
+                info.delayReloadNonMixedContentFile();
+                this.delayUpdateProjectGraphs(info.containingProjects, /*clearSourceMapperCache*/ false);
+                this.handleSourceMapProjects(info);
             }
         }
 
@@ -1165,7 +1158,6 @@ namespace ts.server {
         watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject) {
             const watchOptions = this.getWatchOptions(project);
             return this.watchFactory.watchDirectory(
-                this.host,
                 directory,
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
@@ -1588,7 +1580,6 @@ namespace ts.server {
             configFileExistenceInfo.configFileWatcherForRootOfInferredProject =
                 canWatchDirectory(getDirectoryPath(canonicalConfigFilePath) as Path) ?
                     this.watchFactory.watchFile(
-                        this.host,
                         configFileName,
                         (_filename, eventKind) => this.onConfigFileChangeForOpenScriptInfo(configFileName, eventKind),
                         PollingInterval.High,
@@ -2345,13 +2336,11 @@ namespace ts.server {
                     !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
                 const indexOfNodeModules = info.path.indexOf("/node_modules/");
                 if (!this.host.getModifiedTime || indexOfNodeModules === -1) {
-                    info.fileWatcher = this.watchFactory.watchFilePath(
-                        this.host,
+                    info.fileWatcher = this.watchFactory.watchFile(
                         info.fileName,
-                        (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
+                        (_fileName, eventKind) => this.onSourceFileChanged(info, eventKind),
                         PollingInterval.Medium,
                         this.hostConfiguration.watchOptions,
-                        info.path,
                         WatchType.ClosedScriptInfo
                     );
                 }
@@ -2372,9 +2361,8 @@ namespace ts.server {
 
             const watchDir = dir + "/node_modules" as Path;
             const watcher = this.watchFactory.watchDirectory(
-                this.host,
                 watchDir,
-                (fileOrDirectory) => {
+                fileOrDirectory => {
                     const fileOrDirectoryPath = removeIgnoredPath(this.toPath(fileOrDirectory));
                     if (!fileOrDirectoryPath) return;
 
@@ -2425,7 +2413,7 @@ namespace ts.server {
             if (mTime !== info.mTime) {
                 const eventKind = getFileWatcherEventKind(info.mTime!, mTime);
                 info.mTime = mTime;
-                this.onSourceFileChanged(info.fileName, eventKind, info.path);
+                this.onSourceFileChanged(info, eventKind);
             }
         }
 
@@ -2610,7 +2598,6 @@ namespace ts.server {
 
         private addMissingSourceMapFile(mapFileName: string, declarationInfoPath: Path) {
             const fileWatcher = this.watchFactory.watchFile(
-                this.host,
                 mapFileName,
                 () => {
                     const declarationInfo = this.getScriptInfoForPath(declarationInfoPath);
@@ -3725,7 +3712,6 @@ namespace ts.server {
             if (!watchers.has(path)) {
                 this.invalidateProjectAutoImports(path);
                 watchers.set(path, this.watchFactory.watchFile(
-                    this.host,
                     path,
                     (fileName, eventKind) => {
                         const path = this.toPath(fileName);
