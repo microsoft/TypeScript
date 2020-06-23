@@ -2460,7 +2460,7 @@ namespace ts {
         }
     }
 
-    function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
+    export function getSingleVariableOfVariableStatement(node: Node): VariableDeclaration | undefined {
         return isVariableStatement(node) ? firstOrUndefined(node.declarationList.declarations) : undefined;
     }
 

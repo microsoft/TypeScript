@@ -31,6 +31,22 @@ namespace ts.refactor.convertToOptionalChainExpression {
         expression: BinaryExpression | ConditionalExpression
     }
 
+    type ValidExpressionOrStatement = ValidExpression | ValidStatement;
+    type ValidExpression = BinaryExpression | ConditionalExpression;
+    type ValidStatement = ExpressionStatement | ReturnStatement | VariableStatement;
+
+    function isValidExpression(node: Node): node is ValidExpression {
+        return isBinaryExpression(node) || isConditionalExpression(node);
+    }
+
+    function isValidStatement(node: Node): node is ValidStatement {
+        return isExpressionStatement(node) || isReturnStatement(node) || isVariableStatement(node);
+    }
+
+    function isValidExpressionOrStatement(node: Node): node is ValidExpressionOrStatement {
+        return isValidExpression(node) || isValidStatement(node);
+    }
+
     function getInfo(context: RefactorContext, considerEmptySpans = true): Info | undefined {
         const { file, program } = context;
         const span = getRefactorContextSpan(context);
@@ -40,8 +56,8 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
         const startToken = getTokenAtPosition(file, span.start);
 
-        const containingNode = forEmptySpan ? findAncestor(startToken, node => isExpressionStatement(node) && (isBinaryExpression(node.expression) || isConditionalExpression(node.expression))) : getParentNodeInSpan(startToken, file, span);
-        const expression = containingNode && isExpressionStatement(containingNode) ? containingNode.expression : containingNode;
+        const parent = forEmptySpan ? getParentForEmptySpanStartToken(startToken) : getParentNodeInSpan(startToken, file, span);
+        const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
         if (!expression) return undefined;
 
         const checker = program.getTypeChecker();
@@ -51,7 +67,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             if (!fullPropertyAccess) return undefined;
             if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken && expression.operatorToken.pos <= fullPropertyAccess.pos) return undefined;
 
-            // ensure that each sequential operand in range matches the longest acceess chain
+            // ensure that each sequential operand in range matches the longest access chain
             let checkNode = expression.left;
             let firstOccurrence: PropertyAccessExpression | Identifier = fullPropertyAccess;
             while (isBinaryExpression(checkNode) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
@@ -80,6 +96,26 @@ namespace ts.refactor.convertToOptionalChainExpression {
             }
         }
         return undefined;
+    }
+
+    function getParentForEmptySpanStartToken(start: Node): ValidExpressionOrStatement | undefined {
+        return findAncestor<ValidExpressionOrStatement>(start, (node): node is ValidExpressionOrStatement => {
+            return node.parent &&
+                (isValidExpression(node) && !isValidExpression(node.parent) ||
+                isValidStatement(node) && !isValidStatement(node.parent));
+        });
+    }
+
+    function getExpression(node: ValidExpressionOrStatement): ValidExpression | undefined {
+        if (isValidExpression(node)) {
+            return node;
+        }
+        if (isVariableStatement(node)) {
+            const variable = getSingleVariableOfVariableStatement(node);
+            const initializer = variable?.initializer;
+            return initializer && isValidExpression(initializer) ? initializer : undefined;
+        }
+        return node.expression && isValidExpression(node.expression) ? node.expression : undefined;
     }
 
     function getRightHandSidePropertyAccess(node: BinaryExpression | CallExpression): PropertyAccessExpression | undefined {

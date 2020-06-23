@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////let a = { b: { c: 0 } };
-////let x = a.b ? /*a*//*b*/a.b.c : "whenFalse";
+////let x = a && a.b && /*a*//*b*/a.b.c;
 
 // verify that the refactor is offered for empty spans in variable statements.
 goTo.select("a", "b");
@@ -13,6 +13,6 @@ edit.applyRefactor({
     actionDescription: "Convert to optional chain expression",
     newContent:
 `let a = { b: { c: 0 } };
-let x = a.b?.c ?? "whenFalse";`,
+let x = a?.b?.c;`,
     triggerReason: "invoked"
 });
