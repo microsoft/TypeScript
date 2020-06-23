@@ -1055,7 +1055,7 @@ namespace ts.server {
                 // Update the missing file paths watcher
                 updateMissingFilePathsWatch(
                     this.program,
-                    this.missingFilesMap ??= new Map(),
+                    this.missingFilesMap || (this.missingFilesMap = new Map()),
                     // Watch the missing files
                     missingFilePath => this.addMissingFileWatcher(missingFilePath)
                 );
@@ -1078,7 +1078,7 @@ namespace ts.server {
                         }
                         else {
                             this.generatedFilesMap.forEach((watcher, source) => {
-                                const sourceFile = this.program!.getSourceFileByPath(source as Path);
+                                const sourceFile = this.program!.getSourceFileByPath(source);
                                 if (!sourceFile ||
                                     sourceFile.resolvedPath !== source ||
                                     !this.isValidGeneratedFileWatcher(
@@ -2093,8 +2093,8 @@ namespace ts.server {
             return forEachEntry(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
                 (_value, infoPath) => isSolution ?
-                    !!this.getDefaultChildProjectFromSolution(this.projectService.getScriptInfoForPath(infoPath as Path)!) :
-                    this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath as Path)!)
+                    !!this.getDefaultChildProjectFromSolution(this.projectService.getScriptInfoForPath(infoPath)!) :
+                    this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath)!)
             ) || false;
         }
 

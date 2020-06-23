@@ -384,8 +384,8 @@ namespace ts {
     }
 
     function createBuildOrder(state: SolutionBuilderState, roots: readonly ResolvedConfigFileName[]): AnyBuildOrder {
-        const temporaryMarks = new Map() as Map<ResolvedConfigFilePath, true>;
-        const permanentMarks = new Map() as Map<ResolvedConfigFilePath, true>;
+        const temporaryMarks = new Map<ResolvedConfigFilePath, true>();
+        const permanentMarks = new Map<ResolvedConfigFilePath, true>();
         const circularityReportStack: string[] = [];
         let buildOrder: ResolvedConfigFileName[] | undefined;
         let circularDiagnostics: Diagnostic[] | undefined;
@@ -924,7 +924,7 @@ namespace ts {
             let newestDeclarationFileContentChangedTime = minimumDate;
             let anyDtsChanged = false;
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = new Map() as Map<Path, string>;
+            const emittedOutputs = new Map<Path, string>();
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFile(name)) {
@@ -1057,7 +1057,7 @@ namespace ts {
             // Actual Emit
             Debug.assert(!!outputFiles.length);
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = new Map() as Map<Path, string>;
+            const emittedOutputs = new Map<Path, string>();
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 emittedOutputs.set(toPath(state, name), name);
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);

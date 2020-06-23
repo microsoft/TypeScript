@@ -228,7 +228,7 @@ namespace ts {
                 state.changedFilesSet.add(sourceFilePath);
             }
             else if (canCopySemanticDiagnostics) {
-                const sourceFile = newProgram.getSourceFileByPath(sourceFilePath as Path)!;
+                const sourceFile = newProgram.getSourceFileByPath(sourceFilePath)!;
 
                 if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) { return; }
                 if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) { return; }
@@ -382,14 +382,14 @@ namespace ts {
             }
 
             // Get next batch of affected files
-            state.currentAffectedFilesSignatures ??= new Map();
+            if (!state.currentAffectedFilesSignatures) state.currentAffectedFilesSignatures = new Map();
             if (state.exportedModulesMap) {
-                state.currentAffectedFilesExportedModulesMap ??= new Map();
+                if (!state.currentAffectedFilesExportedModulesMap) state.currentAffectedFilesExportedModulesMap = new Map();
             }
             state.affectedFiles = BuilderState.getFilesAffectedBy(state, program, nextKey.value, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
             state.currentChangedFilePath = nextKey.value;
             state.affectedFilesIndex = 0;
-            state.seenAffectedFiles ??= new Set();
+            if (!state.seenAffectedFiles) state.seenAffectedFiles = new Set();
         }
     }
 
@@ -399,7 +399,7 @@ namespace ts {
     function getNextAffectedFilePendingEmit(state: BuilderProgramState) {
         const { affectedFilesPendingEmit } = state;
         if (affectedFilesPendingEmit) {
-            const seenEmittedFiles = (state.seenEmittedFiles ??= new Map());
+            const seenEmittedFiles = (state.seenEmittedFiles || (state.seenEmittedFiles = new Map()));
             for (let i = state.affectedFilesPendingEmitIndex!; i < affectedFilesPendingEmit.length; i++) {
                 const affectedFile = Debug.checkDefined(state.program).getSourceFileByPath(affectedFilesPendingEmit[i]);
                 if (affectedFile) {
@@ -537,7 +537,7 @@ namespace ts {
         if (forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
             exportedModules &&
             exportedModules.has(affectedFile.resolvedPath) &&
-            forEachFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile, fn)
+            forEachFilesReferencingPath(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         )) {
             return;
         }
@@ -546,7 +546,7 @@ namespace ts {
         forEachEntry(state.exportedModulesMap, (exportedModules, exportedFromPath) =>
             !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
             exportedModules.has(affectedFile.resolvedPath) &&
-            forEachFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile, fn)
+            forEachFilesReferencingPath(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         );
     }
 
@@ -555,7 +555,7 @@ namespace ts {
      */
     function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
         return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
-            referencesInFile.has(referencedPath) && forEachFileAndExportsOfFile(state, filePath as Path, seenFileAndExportsOfFile, fn)
+            referencesInFile.has(referencedPath) && forEachFileAndExportsOfFile(state, filePath, seenFileAndExportsOfFile, fn)
         );
     }
 
@@ -578,7 +578,7 @@ namespace ts {
         if (forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
             exportedModules &&
             exportedModules.has(filePath) &&
-            forEachFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile, fn)
+            forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         )) {
             return true;
         }
@@ -587,7 +587,7 @@ namespace ts {
         if (forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
             !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
             exportedModules.has(filePath) &&
-            forEachFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile, fn)
+            forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         )) {
             return true;
         }
@@ -596,7 +596,7 @@ namespace ts {
         return !!forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
             referencesInFile.has(filePath) &&
             !seenFileAndExportsOfFile.has(referencingFilePath) && // Not already removed diagnostic file
-            fn(state, referencingFilePath as Path) // Dont add to seen since this is not yet done with the export removal
+            fn(state, referencingFilePath) // Dont add to seen since this is not yet done with the export removal
         );
     }
 
@@ -622,7 +622,7 @@ namespace ts {
         else {
             state.seenAffectedFiles!.add((affected as SourceFile).resolvedPath);
             if (emitKind !== undefined) {
-                (state.seenEmittedFiles ??= new Map()).set((affected as SourceFile).resolvedPath, emitKind);
+                (state.seenEmittedFiles || (state.seenEmittedFiles = new Map())).set((affected as SourceFile).resolvedPath, emitKind);
             }
             if (isPendingEmit) {
                 state.affectedFilesPendingEmitIndex!++;
@@ -1124,8 +1124,8 @@ namespace ts {
     }
 
     function addToAffectedFilesPendingEmit(state: BuilderProgramState, affectedFilePendingEmit: Path, kind: BuilderFileEmit) {
-        state.affectedFilesPendingEmit ??= [];
-        state.affectedFilesPendingEmitKind ??= new Map();
+        if (!state.affectedFilesPendingEmit) state.affectedFilesPendingEmit = [];
+        if (!state.affectedFilesPendingEmitKind) state.affectedFilesPendingEmitKind = new Map();
 
         const existingKind = state.affectedFilesPendingEmitKind.get(affectedFilePendingEmit);
         state.affectedFilesPendingEmit.push(affectedFilePendingEmit);

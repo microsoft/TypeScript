@@ -616,7 +616,7 @@ namespace ts {
                 cacheToUpdateChildWatches.delete(dirPath);
                 // Because the child refresh is fresh, we would need to invalidate whole root directory being watched
                 // to ensure that all the changes are reflected at this time
-                const hasChanges = updateChildWatches(dirName, dirPath as Path, options);
+                const hasChanges = updateChildWatches(dirName, dirPath, options);
                 invokeCallbacks(dirPath, invokeMap, hasChanges ? undefined : fileNames);
             }
 

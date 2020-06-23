@@ -2036,7 +2036,7 @@ namespace ts {
             }
             const result = getDiagnostics(sourceFile, cancellationToken);
             if (sourceFile) {
-                (cache.perFile ??= new Map()).set(sourceFile.path, result);
+                (cache.perFile || (cache.perFile = new Map())).set(sourceFile.path, result);
             }
             else {
                 cache.allDiagnostics = result;
@@ -2495,7 +2495,7 @@ namespace ts {
 
         function addFileToRefFileMap(referencedFileName: string, file: SourceFile | undefined, refFile: RefFile | undefined) {
             if (refFile && file) {
-                (refFileMap ??= createMultiMap()).add(file.path, {
+                (refFileMap || (refFileMap = createMultiMap())).add(file.path, {
                     referencedFileName,
                     kind: refFile.kind,
                     index: refFile.index,

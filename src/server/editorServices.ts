@@ -874,7 +874,7 @@ namespace ts.server {
             const event: ProjectsUpdatedInBackgroundEvent = {
                 eventName: ProjectsUpdatedInBackgroundEvent,
                 data: {
-                    openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
+                    openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path)!.fileName)
                 }
             };
             this.eventHandler(event);
@@ -1373,7 +1373,7 @@ namespace ts.server {
         private assignOrphanScriptInfosToInferredProject() {
             // collect orphaned files and assign them to inferred project just like we treat open of a file
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path as Path)!;
+                const info = this.getScriptInfoForPath(path)!;
                 // collect all orphaned script infos from open files
                 if (info.isOrphan()) {
                     this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
@@ -1557,7 +1557,7 @@ namespace ts.server {
             const inferredRoots: string[] = [];
             const otherFiles: string[] = [];
             configFileExistenceInfo.openFilesImpactedByConfigFile.forEach((isRootOfInferredProject, key) => {
-                const info = this.getScriptInfoForPath(key as Path)!;
+                const info = this.getScriptInfoForPath(key)!;
                 (isRootOfInferredProject ? inferredRoots : otherFiles).push(info.fileName);
             });
 
@@ -1796,7 +1796,7 @@ namespace ts.server {
 
             this.logger.info("Open files: ");
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path as Path)!;
+                const info = this.getScriptInfoForPath(path)!;
                 this.logger.info(`\tFileName: ${info.fileName} ProjectRootPath: ${projectRootPath}`);
                 this.logger.info(`\t\tProjects: ${info.containingProjects.map(p => p.getProjectName())}`);
             });
@@ -2770,7 +2770,7 @@ namespace ts.server {
                     return;
                 }
 
-                const info = this.getScriptInfoForPath(path as Path)!; // TODO: GH#18217
+                const info = this.getScriptInfoForPath(path)!; // TODO: GH#18217
                 Debug.assert(info.isScriptOpen());
                 // This tries to search for a tsconfig.json for the given file. If we found it,
                 // we first detect if there is already a configured project created for it: if so,
@@ -2850,7 +2850,7 @@ namespace ts.server {
             this.printProjects();
 
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path as Path)!;
+                const info = this.getScriptInfoForPath(path)!;
                 // collect all orphaned script infos from open files
                 if (info.isOrphan()) {
                     this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
@@ -3214,7 +3214,7 @@ namespace ts.server {
                     }
                     if (!sourceInfos) return;
                     if (!forEachKey(sourceInfos, path => {
-                        const info = this.getScriptInfoForPath(path as Path);
+                        const info = this.getScriptInfoForPath(path);
                         return !!info && (info.isScriptOpen() || !info.isOrphan());
                     })) {
                         return;

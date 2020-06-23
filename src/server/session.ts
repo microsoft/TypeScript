@@ -277,7 +277,7 @@ namespace ts.server {
         const outputs = flatMapToMutable(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
         if (!isArray(projects) && projects.symLinkedProjects) {
             projects.symLinkedProjects.forEach((projects, path) => {
-                const value = getValue(path as Path);
+                const value = getValue(path);
                 outputs.push(...flatMap(projects, project => action(project, value)));
             });
         }

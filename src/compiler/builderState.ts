@@ -185,7 +185,7 @@ namespace ts {
             }
 
             function addReferencedFile(referencedPath: Path) {
-                (referencedFiles ??= new Set()).add(referencedPath);
+                (referencedFiles || (referencedFiles = new Set())).add(referencedPath);
             }
         }
 
@@ -416,7 +416,7 @@ namespace ts {
                     if (references) {
                         const iterator = references.keys();
                         for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-                            queue.push(iterResult.value as Path);
+                            queue.push(iterResult.value);
                         }
                     }
                 }
@@ -441,7 +441,7 @@ namespace ts {
          */
         export function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
             return arrayFrom(mapDefinedIterator(state.referencedMap!.entries(), ([filePath, referencesInFile]) =>
-                referencesInFile.has(referencedFilePath) ? filePath as Path : undefined
+                referencesInFile.has(referencedFilePath) ? filePath : undefined
             ));
         }
 
