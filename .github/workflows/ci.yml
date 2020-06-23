@@ -36,6 +36,8 @@ jobs:
     # Re: https://github.com/actions/setup-node/pull/125
     - name: Register Problem Matcher for TSC
       run: echo "##[add-matcher].github/tsc.json"
+      if: (contains(matrix.node-version, '12')
+
 
     - name: Tests
       run:  npm test -- --no-lint
