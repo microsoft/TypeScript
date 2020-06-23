@@ -45,10 +45,10 @@ node_modules/uglify-js/lib/compress.js(1887,45): error TS2554: Expected 0 argume
 node_modules/uglify-js/lib/compress.js(1907,42): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(1936,41): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(2066,49): error TS2345: Argument of type 'number[]' is not assignable to parameter of type '[start: number, deleteCount: number, ...items: never[]]'.
-  Type 'number[]' is missing the following properties from type '[start: number, deleteCount: number, ...items: never[]]': 0, 1
+  Property '0' is optional in type 'number[]' but required in type '[start: number, deleteCount: number, ...items: never[]]'.
 node_modules/uglify-js/lib/compress.js(2399,59): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(2437,53): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[start: number, deleteCount: number, ...items: never[]]'.
-  Type 'any[]' is missing the following properties from type '[start: number, deleteCount: number, ...items: never[]]': 0, 1
+  Property '0' is optional in type 'any[]' but required in type '[start: number, deleteCount: number, ...items: never[]]'.
 node_modules/uglify-js/lib/compress.js(2472,26): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(2628,39): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(2651,34): error TS2554: Expected 0 arguments, but got 1.
@@ -92,7 +92,7 @@ node_modules/uglify-js/lib/compress.js(5737,17): error TS2403: Subsequent variab
 node_modules/uglify-js/lib/compress.js(5880,37): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(5940,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(6136,57): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[pattern: string | RegExp, flags?: string | undefined]'.
-  Property '0' is missing in type 'any[]' but required in type '[pattern: string | RegExp, flags?: string | undefined]'.
+  Target requires 1 element(s) but source may have fewer.
 node_modules/uglify-js/lib/compress.js(6294,32): error TS2554: Expected 2 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(6300,45): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(6307,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'code' must be of type 'string', but here has type '{ get: () => string; toString: () => string; indent: (half: any) => void; indentation: () => number; current_width: () => number; should_break: () => boolean; has_parens: () => boolean; newline: () => void; print: (str: any) => void; ... 23 more ...; parent: (n: any) => any; }'.
@@ -176,8 +176,7 @@ node_modules/uglify-js/lib/sourcemap.js(82,11): error TS2339: Property 'index' d
 node_modules/uglify-js/lib/sourcemap.js(178,31): error TS2339: Property 'index' does not exist on type 'any[]'.
 node_modules/uglify-js/lib/sourcemap.js(186,34): error TS2339: Property 'index' does not exist on type 'any[]'.
 node_modules/uglify-js/tools/exit.js(10,37): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[code?: number | undefined]'.
-  Types of property 'length' are incompatible.
-    Type 'number' is not assignable to type '0 | 1'.
+  Target allows only 1 element(s) but source may have more.
 node_modules/uglify-js/tools/node.js(64,26): error TS2339: Property 'minify' does not exist on type 'typeof import("/uglify-js/node_modules/uglify-js/tools/node")'.
 
 
