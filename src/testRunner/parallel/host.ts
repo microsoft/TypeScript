@@ -548,7 +548,7 @@ namespace Harness.Parallel.Host {
                 else {
                     failedTestReporter = new FailedTestReporter(replayRunner, {
                         reporterOptions: {
-                            file: path.resolve(".failed-tests.json"),
+                            file: path.resolve(".failed-tests"),
                             keepFailed: Harness.keepFailed // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                         }
                     });

@@ -454,11 +454,11 @@ task("runtests", series(preBuild, preTest, runTests, postTest));
 task("runtests").description = "Runs the tests using the built run.js file.";
 task("runtests").flags = {
     "-t --tests=<regex>": "Pattern for tests to run.",
-    "   --failed": "Runs tests listed in '.failed-tests.json'.",
+    "   --failed": "Runs tests listed in '.failed-tests'.",
     "-r --reporter=<reporter>": "The mocha reporter to use.",
     "-d --debug": "Runs tests in debug mode (NodeJS 6 and earlier)",
     "-i --inspect": "Runs tests in inspector mode (NodeJS 8 and later)",
-    "   --keepFailed": "Keep tests in '.failed-tests.json even if they pass",
+    "   --keepFailed": "Keep tests in .failed-tests even if they pass",
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster)",
     "   --dirty": "Run tests without first cleaning test output directories",
     "   --stackTraceLimit=<limit>": "Sets the maximum number of stack frames to display. Use 'full' to show all frames.",
@@ -476,7 +476,7 @@ task("runtests-parallel").description = "Runs all the tests in parallel using th
 task("runtests-parallel").flags = {
     "   --no-lint": "disables lint.",
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
-    "   --keepFailed": "Keep tests in '.failed-tests.json' even if they pass.",
+    "   --keepFailed": "Keep tests in .failed-tests even if they pass.",
     "   --dirty": "Run tests without first cleaning test output directories.",
     "   --stackTraceLimit=<limit>": "Sets the maximum number of stack frames to display. Use 'full' to show all frames.",
     "   --workers=<number>": "The number of parallel workers to use.",
@@ -634,9 +634,9 @@ task("watch", series(preBuild, preTest, parallel(watchLib, watchDiagnostics, wat
 task("watch").description = "Watches for changes and rebuilds and runs tests in parallel.";
 task("watch").flags = {
     "-t --tests=<regex>": "Pattern for tests to run. Forces tests to be run in a single worker.",
-    "   --failed": "Runs tests listed in '.failed-tests.json'. Forces tests to be run in a single worker.",
+    "   --failed": "Runs tests listed in '.failed-tests'. Forces tests to be run in a single worker.",
     "-r --reporter=<reporter>": "The mocha reporter to use.",
-    "   --keepFailed": "Keep tests in '.failed-tests.json' even if they pass",
+    "   --keepFailed": "Keep tests in .failed-tests even if they pass",
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster)",
     "   --dirty": "Run tests without first cleaning test output directories",
     "   --stackTraceLimit=<limit>": "Sets the maximum number of stack frames to display. Use 'full' to show all frames.",

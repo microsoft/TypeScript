@@ -84,7 +84,15 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             args.push("-g", `"${tests}"`);
         }
         if (failed) {
-            args.push("--config", ".failed-tests.json");
+            const grep = fs.readFileSync(".failed-tests", "utf8")
+                .split(/\r?\n/g)
+                .map(test => test.trim())
+                .filter(test => test.length > 0)
+                .map(regExpEscape)
+                .join("|");
+            const file = path.join(os.tmpdir(), ".failed-tests.json");
+            fs.writeFileSync(file, JSON.stringify({ grep }), "utf8");
+            args.push("--config", file);
         }
         if (colors) {
             args.push("--colors");
@@ -205,4 +213,8 @@ function restoreSavedNodeEnv() {
 
 function deleteTemporaryProjectOutput() {
     return del(path.join(exports.localBaseline, "projectOutput/"));
+}
+
+function regExpEscape(text) {
+    return text.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&');
 }

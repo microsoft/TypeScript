@@ -42,7 +42,6 @@ yarn.lock
 yarn-error.log
 .parallelperf.*
 .failed-tests
-.failed-tests.json
 TEST-results.xml
 package-lock.json
 tests
