@@ -2,18 +2,19 @@
 namespace ts.classifier.modern {
 
     /** @internal */
-    export enum TokenEncodingConsts {
+    export const enum TokenEncodingConsts {
+
         typeOffset = 8,
         modifierMask = (1 << typeOffset) - 1
     }
 
     /** @internal */
-    export enum TokenType {
+    export const enum TokenType {
         class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member, _
     }
 
     /** @internal */
-    export enum TokenModifier {
+    export const enum TokenModifier {
         declaration, static, async, readonly, defaultLibrary, local, _
     }
 
@@ -49,7 +50,7 @@ namespace ts.classifier.modern {
         };
 
         if (program && sourceFile) {
-                collectTokens(program, sourceFile, span, collector);
+            collectTokens(program, sourceFile, span, collector);
         }
         return resultTokens;
     }
