@@ -1,9 +1,11 @@
 /// <reference path='fourslash.ts' />
 
 ////let a = { b: { c: 0 } };
-////a && a.b && /*a*//*b*/a.b.c;
+////function f(){
+////    return a.b ? /*a*//*b*/a.b.c : "whenFalse";
+////}
 
-// verify that the refactor is offered for empty spans in expression statements.
+// verify that the refactor is offered for empty spans in return statements.
 goTo.select("a", "b");
 verify.not.refactorAvailableForTriggerReason("implicit", "Convert to optional chain expression");
 
@@ -13,6 +15,8 @@ edit.applyRefactor({
     actionDescription: "Convert to optional chain expression",
     newContent:
 `let a = { b: { c: 0 } };
-a?.b?.c;`,
+function f(){
+    return a.b?.c ?? "whenFalse";
+}`,
     triggerReason: "invoked"
 });
