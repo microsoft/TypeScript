@@ -16322,8 +16322,12 @@ namespace ts {
                                     const propName = symbolToString(prop);
                                     const suggestionSymbol = getSuggestedSymbolForNonexistentJSXAttribute(propName, errorTarget);
                                     const suggestion = suggestionSymbol ? symbolToString(suggestionSymbol) : undefined;
-                                    if (suggestion) reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(errorTarget), suggestion);
-                                    else reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(errorTarget));
+                                    if (suggestion) {
+                                        reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(errorTarget), suggestion);
+                                    }
+                                    else {
+                                        reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(errorTarget));
+                                    }
                                 }
                                 else {
                                     // use the property's value declaration if the property is assigned inside the literal itself
@@ -24884,8 +24888,8 @@ namespace ts {
         function getSuggestedSymbolForNonexistentJSXAttribute(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
             const strName = isString(name) ? name : idText(name);
             const properties = getPropertiesOfType(containingType);
-            const jsxSpecific = strName === "for" ? properties.find(x => symbolName(x) === "htmlFor")
-                : strName === "class" ? properties.find(x => symbolName(x) === "className")
+            const jsxSpecific = strName === "for" ? find(properties, x => symbolName(x) === "htmlFor")
+                : strName === "class" ? find(properties, x => symbolName(x) === "className")
                 : undefined;
             return jsxSpecific ?? getSpellingSuggestionForName(strName, properties, SymbolFlags.Value);
           }
@@ -28236,7 +28240,7 @@ namespace ts {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_a_property_reference);
                 return booleanType;
             }
-            if (expr.kind === SyntaxKind.PropertyAccessExpression && isPrivateIdentifier(expr.name)) {
+            if (isPropertyAccessExpression(expr) && isPrivateIdentifier(expr.name)) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_cannot_be_a_private_identifier);
             }
             const links = getNodeLinks(expr);
