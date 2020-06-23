@@ -83,6 +83,7 @@ tests/cases/user/*/**/*.d.ts
 !tests/cases/user/discord.js/
 tests/baselines/reference/dt
 .failed-tests
+.failed-tests.json
 TEST-results.xml
 package-lock.json
 tests/cases/user/TypeScript-React-Starter/TypeScript-React-Starter

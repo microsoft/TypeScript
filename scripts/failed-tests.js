@@ -7,7 +7,7 @@ const os = require("os");
 const failingHookRegExp = /^(.*) "(before|after) (all|each)" hook$/;
 
 /**
- * .failed-tests reporter
+ * .failed-tests.json reporter
  *
  * @typedef {Object} ReporterOptions
  * @property {string} [file]
@@ -25,7 +25,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
         if (!runner) return;
 
         const reporterOptions = this.reporterOptions = options.reporterOptions || {};
-        if (reporterOptions.file === undefined) reporterOptions.file = ".failed-tests";
+        if (reporterOptions.file === undefined) reporterOptions.file = ".failed-tests.json";
         if (reporterOptions.keepFailed === undefined) reporterOptions.keepFailed = false;
         if (reporterOptions.reporter) {
             /** @type {Mocha.ReporterConstructor} */
@@ -70,7 +70,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
      * @param {(err?: NodeJS.ErrnoException) => void} done
      */
     static writeFailures(file, passes, failures, keepFailed, done) {
-        const failingTests = new Set(fs.existsSync(file) ? readTests() : undefined);
+        const failingTests = new Set(readTests());
         const possiblyPassingSuites = /**@type {Set<string>}*/(new Set());
 
         // Remove tests that are now passing and track suites that are now
@@ -104,9 +104,8 @@ class FailedTestsReporter extends Mocha.reporters.Base {
         if (failingTests.size > 0) {
             const failed = Array
                 .from(failingTests)
-                .sort()
-                .join(os.EOL);
-            fs.writeFile(file, failed, "utf8", done);
+                .sort();
+            fs.writeFile(file, JSON.stringify({ grep: failed }, undefined, "  "), "utf8", done);
         }
         else if (!keepFailed && fs.existsSync(file)) {
             fs.unlink(file, done);
@@ -116,10 +115,12 @@ class FailedTestsReporter extends Mocha.reporters.Base {
         }
 
         function readTests() {
-            return fs.readFileSync(file, "utf8")
-                .split(/\r?\n/g)
-                .map(line => line.trim())
-                .filter(line => line.length > 0);
+            try {
+                return JSON.parse(fs.readFileSync(file, "utf8")).grep;
+            }
+            catch {
+                return undefined;
+            }
         }
     }
 

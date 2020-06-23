@@ -77,11 +77,14 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if (!runInParallel) {
-        args.push(failed ? "scripts/run-failed-tests.js" : mochaJs);
+        args.push(mochaJs);
         args.push("-R", "scripts/failed-tests");
         args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
         if (tests) {
             args.push("-g", `"${tests}"`);
+        }
+        if (failed) {
+            args.push("--config", ".failed-tests.json");
         }
         if (colors) {
             args.push("--colors");
