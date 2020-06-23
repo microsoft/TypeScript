@@ -2010,6 +2010,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";An_jsxFrag_pragma_is_required_when_using_an_jsx_pragma_with_JSX_fragments_17017" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Quando si usa un'istruzione @jsx con frammenti JSX, è necessaria un'istruzione pragma @jsxFrag.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";An_object_literal_cannot_have_multiple_get_Slashset_accessors_with_the_same_name_1118" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An object literal cannot have multiple get/set accessors with the same name.]]></Val>
@@ -5574,6 +5583,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module_1262" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Identifier expected. '{0}' is a reserved word at the top-level of a module.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[È previsto un identificatore. '{0}' è una parola riservata al livello principale di un modulo.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Identifier_expected_0_is_a_reserved_word_in_strict_mode_1212" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Identifier expected. '{0}' is a reserved word in strict mode.]]></Val>
@@ -6123,6 +6141,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Invalid_value_for_jsxFragmentFactory_0_is_not_a_valid_identifier_or_qualified_name_18035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Il valore non è valido per 'jsxFragmentFactory'. '{0}' non è un identificatore o un nome qualificato valido.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier_5059" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Invalid value for '--reactNamespace'. '{0}' is not a valid identifier.]]></Val>
@@ -6362,24 +6389,6 @@
           <Val><![CDATA[JSX fragment has no corresponding closing tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Per il frammento JSX non esiste alcun tag di chiusura corrispondente.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";JSX_fragment_is_not_supported_when_using_an_inline_JSX_factory_pragma_17017" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSX fragment is not supported when using an inline JSX factory pragma]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il frammento JSX non è supportato quando si usa una direttiva pragma factory JSX inline]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";JSX_fragment_is_not_supported_when_using_jsxFactory_17016" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSX fragment is not supported when using --jsxFactory]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Il frammento JSX non è supportato quando si usa --jsxFactory]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8703,6 +8712,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Referenced_project_0_may_not_disable_emit_6310" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Referenced project '{0}' may not disable emit.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Il progetto di riferimento '{0}' non può disabilitare la creazione.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Referenced_project_0_must_have_setting_composite_Colon_true_6306" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Referenced project '{0}' must have setting "composite": true.]]></Val>
@@ -8780,6 +8798,15 @@
           <Val><![CDATA[Remove import from '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Rimuovere l'importazione da '{0}']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_parentheses_95126" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Rimuovere le parentesi]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9606,6 +9633,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Specify_the_JSX_fragment_factory_function_to_use_when_targeting_react_JSX_emit_with_jsxFactory_compi_18034" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Specify the JSX fragment factory function to use when targeting 'react' JSX emit with 'jsxFactory' compiler option is specified, e.g. 'Fragment'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Specificare la funzione della factory di frammenti JSX da usare quando la destinazione è la creazione JSX 'react' quando è specificata l'opzione del compilatore 'jsxFactory', ad esempio 'Fragment'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix_6060" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the end of line sequence to be used when emitting files: 'CRLF' (dos) or 'LF' (unix).]]></Val>
@@ -10157,6 +10193,15 @@
           <Val><![CDATA[The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[L'intersezione '{0}' è stata ridotta a 'never' perché in alcuni costituenti della proprietà '{1}' sono presenti tipi in conflitto.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_jsxFragmentFactory_compiler_option_must_be_provided_to_use_JSX_fragments_with_the_jsxFactory_com_17016" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Per usare frammenti JSX con l'opzione del compilatore 'jsxFactory', è necessario specificare l'opzione del compilatore 'jsxFragmentFactory'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12326,6 +12371,15 @@
           <Val><![CDATA['{0}' is defined as an accessor in class '{1}', but is overridden here in '{2}' as an instance property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' è definito come funzione di accesso nella classe '{1}', ma in questo punto ne viene eseguito l'override in '{2}' come proprietà di istanza.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_deprecated_6385" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is deprecated]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' è deprecato]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
