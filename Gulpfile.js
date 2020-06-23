@@ -374,7 +374,7 @@ const eslint = (folder) => async () => {
 
     log(`Linting: ${args.join(" ")}`);
     return exec(process.execPath, args);
-}
+};
 
 const lintScripts = eslint("scripts");
 lintScripts.displayName = "lint-scripts";
