@@ -2559,7 +2559,7 @@ namespace FourSlash {
             const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
                 ts.createTextSpan(0, this.activeFile.content.length), format);
             const replacement = [`const c2 = classification("2020");`,`verify.semanticClassificationsAre("2020",`];
-            actual.forEach(a => {
+            for (const a of actual) {
                 const identifier = this.classificationToIdentifier(a.classificationType as number);
                 const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
                 replacement.push(`    c2.semanticToken("${identifier}", "${text}"), `);
