@@ -54,9 +54,12 @@ namespace ts.refactor.convertToOptionalChainExpression {
         const forEmptySpan = span.length === 0;
         if (forEmptySpan && !considerEmptySpans) return undefined;
 
+        // selecting fo[|o && foo.ba|]r should be valid, so adjust span to fit start and end tokens
         const startToken = getTokenAtPosition(file, span.start);
+        const endToken = getTokenAtPosition(file, span.start + span.length);
+        const adjustedSpan = createTextSpanFromNode(startToken, file, endToken);
 
-        const parent = forEmptySpan ? getParentForEmptySpanStartToken(startToken) : getParentNodeInSpan(startToken, file, span);
+        const parent = forEmptySpan ? getParentForEmptySpanStartToken(startToken) : getParentNodeInSpan(startToken, file, adjustedSpan);
         const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
         if (!expression) return undefined;
 
@@ -65,27 +68,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (isBinaryExpression(expression)) {
             const lastPropertyAccessChain = getLastPropertyAccessChain(expression.right);
             if (!lastPropertyAccessChain) return undefined;
-            if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken && expression.operatorToken.pos <= lastPropertyAccessChain.pos) return undefined;
-
-            // ensure that each sequential operand in range matches the longest access chain
-            let checkNode = expression.left;
-            let firstOccurrence: PropertyAccessExpression | Identifier = lastPropertyAccessChain;
-            while (isBinaryExpression(checkNode) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
-                (isPropertyAccessExpression(checkNode.right) || isIdentifier(checkNode.right))) {
-                const previousReference = isPropertyAccessExpression(firstOccurrence) ? firstOccurrence.expression : firstOccurrence;
-                if (!checker.isMatchingReference(previousReference, checkNode.right)) {
-                    return undefined;
-                }
-                firstOccurrence = checkNode.right;
-                checkNode = checkNode.left;
-            }
-            // check final LHS node
-            if (isIdentifier(checkNode) || isPropertyAccessExpression(checkNode)) {
-                const previousReference = isPropertyAccessExpression(firstOccurrence) ? firstOccurrence.expression : firstOccurrence;
-                if (isPropertyAccessExpression(firstOccurrence) && checker.isMatchingReference(previousReference, checkNode)) {
-                    firstOccurrence = checkNode;
-                }
-            }
+            const firstOccurrence = getFirstOccurrence(expression, lastPropertyAccessChain, checker);
             return firstOccurrence ? { lastPropertyAccessChain, firstOccurrence, expression } : undefined;
         }
 
@@ -100,6 +83,30 @@ namespace ts.refactor.convertToOptionalChainExpression {
             }
         }
         return undefined;
+    }
+
+    function getFirstOccurrence(expression: BinaryExpression, lastPropertyAccessChain: PropertyAccessExpression, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
+        if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken && expression.operatorToken.pos <= lastPropertyAccessChain.pos) return undefined;
+        // ensure that each sequential operand in range matches the longest access chain
+        let checkNode = expression.left;
+        let firstOccurrence: PropertyAccessExpression | Identifier = lastPropertyAccessChain;
+        while (isBinaryExpression(checkNode) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
+            (isPropertyAccessExpression(checkNode.right) || isIdentifier(checkNode.right))) {
+            const previousReference = isPropertyAccessExpression(firstOccurrence) ? firstOccurrence.expression : firstOccurrence;
+            if (!checker.isMatchingReference(previousReference, checkNode.right)) {
+                return undefined;
+            }
+            firstOccurrence = checkNode.right;
+            checkNode = checkNode.left;
+        }
+        // check final LHS node
+        if (isIdentifier(checkNode) || isPropertyAccessExpression(checkNode)) {
+            const previousReference = isPropertyAccessExpression(firstOccurrence) ? firstOccurrence.expression : firstOccurrence;
+            if (isPropertyAccessExpression(firstOccurrence) && checker.isMatchingReference(previousReference, checkNode)) {
+                firstOccurrence = checkNode;
+            }
+        }
+        return firstOccurrence;
     }
 
     function getParentForEmptySpanStartToken(start: Node): ValidExpressionOrStatement | undefined {
