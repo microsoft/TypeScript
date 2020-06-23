@@ -46,7 +46,6 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
         const checker = program.getTypeChecker();
 
-
         if (isBinaryExpression(expression)) {
             const fullPropertyAccess = getFullPropertyAccessChain(expression);
             if (!fullPropertyAccess) return undefined;
@@ -77,10 +76,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
                 isPropertyAccessExpression(whenTrue) && checker.containsMatchingReference(whenTrue, condition)) {
                 // The ternary expression and nullish coalescing would result in different return values if c is nullish so do not offer a refactor
                 const type = checker.getTypeAtLocation(whenTrue.name);
-                if (checker.isNullableType(type) || type.flags & TypeFlags.Any) {
-                    return undefined;
-                }
-                return { fullPropertyAccess: whenTrue, firstOccurrence: condition, expression };
+                return !checker.isNullableType(type) ? { fullPropertyAccess: whenTrue, firstOccurrence: condition, expression } : undefined;
             }
         }
         return undefined;
