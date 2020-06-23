@@ -124,7 +124,7 @@ Error: /vue-next/packages/runtime-core/src/apiInject.ts(40,9): semantic error TS
     at forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9342:14)
     at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
     at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:242:5)
-(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1: rollup -c --environment COMMIT:ca137db,NODE_ENV:production,TARGET:runtime-core,TYPES:true
+(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1: rollup -c --environment COMMIT:37a5952,NODE_ENV:production,TARGET:runtime-core,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
     at handlePromise (/vue-next/node_modules/execa/index.js:114:26)
     at processTicksAndRejections (internal/process/task_queues.js:97:5)
