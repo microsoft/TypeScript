@@ -674,10 +674,10 @@ namespace ts {
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
             isDeclarationVisible,
-            containsMatchingReference: (nodeIn, targetIn) => {
+            isMatchingReference: (nodeIn, targetIn) => {
                 const node = getParseTreeNode(nodeIn);
                 const target = getParseTreeNode(targetIn);
-                return !!node && !!target && containsMatchingReference(node, target);
+                return !!node && !!target && isMatchingReference(node, target);
             },
         };
 
