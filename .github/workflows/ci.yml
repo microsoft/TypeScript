@@ -33,11 +33,14 @@ jobs:
     - run:  npm install
     - run:  npm update
 
+    - name: Register Problem Matcher for TSC
+      run: echo "##[add-matcher].github/tsc.json"
+
     - name: Tests
       run:  npm test -- --no-lint
 
     - name: Linter
-      run:  npm run lint
+      run:  npm run lint:ci
 
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
