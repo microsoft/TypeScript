@@ -170,6 +170,36 @@ function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) 
     r = m;
 }
 
+function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+    t0 = t1;
+    t0 = t2;
+    t1 = t0;
+    t1 = t2;
+    t2 = t0;  // Error
+    t2 = t1;  // Error
+}
+
+function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+    t0 = t1;
+    t0 = t2;
+    t1 = t0;  // Error
+    t1 = t2;
+    t2 = t0;  // Error
+    t2 = t1;  // Error
+}
+
+function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) {
+    k0 = 'length';
+    k1 = 'length';
+    k2 = 'length';
+    k0 = 'slice';
+    k1 = 'slice';
+    k2 = 'slice';
+    k3 = '0';
+    k3 = '1';
+    k3 = '2';  // Error
+}
+
 // Inference between variadic tuple types
 
 type First<T extends readonly unknown[]> = T[0];
