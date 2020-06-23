@@ -143,6 +143,29 @@ import { await as _await } from "./other";
 >await : 1
 >_await : 1
 
+// newlines
+// await in throw
+throw await
+>await    1 : 1
+
+    1;
+>1 : 1
+
+// await in var
+let y = await
+>y : number
+>await    1 : 1
+
+    1;
+>1 : 1
+
+// await in expression statement;
+await
+>await    1 : 1
+
+    1;
+>1 : 1
+
 === tests/cases/conformance/externalModules/other.ts ===
 const _await = 1;
 >_await : 1

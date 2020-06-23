@@ -32,7 +32,7 @@ await <number, string> ``;
 // reparse class extends clause should fail
 class C extends await<string> {
 >C : C
-> : any
+>string : any
 }
 
 // await in class decorators should fail
@@ -45,7 +45,9 @@ class C1 {}
 >C1 : C1
 
 @await(x)
+>await(x) : any
 > : any
+>x : any
 
 class C2 {}
 >C2 : C2
@@ -71,7 +73,9 @@ class C5 {
 >C5 : C5
 
     @await(1)
+>await(1) : any
 > : any
+>1 : 1
 
     ["foo"]() {}
 >["foo"] : () => void
@@ -101,7 +105,9 @@ class C7 {
 
     method2(@await(1) [x]) {}
 >method2 : ([x]: [any]) => void
+>await(1) : any
 > : any
+>1 : 1
 >x : any
 
     method3(@(await) [x]) {}

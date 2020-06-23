@@ -53,6 +53,19 @@ class C {
 // await allowed in aliased import
 import { await as _await } from "./other";
 
+// newlines
+// await in throw
+throw await
+    1;
+
+// await in var
+let y = await
+    1;
+
+// await in expression statement;
+await
+    1;
+
 //// [other.ts]
 const _await = 1;
 
@@ -75,7 +88,7 @@ System.register([], function (exports_1, context_1) {
 //// [index.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var x, C1, C2, C3, C;
+    var x, C1, C2, C3, C, y;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -122,6 +135,13 @@ System.register([], function (exports_1, context_1) {
             C = __decorate([
                 (await dec)
             ], C);
+            // newlines
+            // await in throw
+            throw await 1;
+            // await in var
+            y = await 1;
+            // await in expression statement;
+            await 1;
         }
     };
 });
