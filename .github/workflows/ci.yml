@@ -34,10 +34,10 @@ jobs:
     - run:  npm update
 
     - name: Tests
-      run:  npm test --no-lint
+      run:  npm test -- --no-lint
 
     - name: Linter
-      run:  npm lint
+      run:  npm run lint
 
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
