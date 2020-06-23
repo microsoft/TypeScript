@@ -2022,6 +2022,9 @@
       <Item ItemId=";An_jsxFrag_pragma_is_required_when_using_an_jsx_pragma_with_JSX_fragments_17017" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Při použití direktivy pragma @jsx s fragmenty JSX se vyžaduje direktiva pragma @jsxFrag.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6150,6 +6153,9 @@
       <Item ItemId=";Invalid_value_for_jsxFragmentFactory_0_is_not_a_valid_identifier_or_qualified_name_18035" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Neplatná hodnota pro jsxFragmentFactory. {0} není platný identifikátor nebo kvalifikovaný název.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8718,6 +8724,9 @@
       <Item ItemId=";Referenced_project_0_may_not_disable_emit_6310" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Referenced project '{0}' may not disable emit.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Odkazovaný projekt {0} nemůže zakazovat generování.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -8805,6 +8814,9 @@
       <Item ItemId=";Remove_parentheses_95126" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove parentheses]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Odebrat závorky]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9633,6 +9645,9 @@
       <Item ItemId=";Specify_the_JSX_fragment_factory_function_to_use_when_targeting_react_JSX_emit_with_jsxFactory_compi_18034" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specify the JSX fragment factory function to use when targeting 'react' JSX emit with 'jsxFactory' compiler option is specified, e.g. 'Fragment'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Zadejte funkci objektu pro vytváření fragmentů JSX, která se použije při cílení na generování JSX react se zadanou možností kompilátoru jsxFactory, například Fragment.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10194,6 +10209,9 @@
       <Item ItemId=";The_jsxFragmentFactory_compiler_option_must_be_provided_to_use_JSX_fragments_with_the_jsxFactory_com_17016" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aby bylo možné použít fragmenty JSX s možností kompilátoru jsxFactory, je třeba zadat možnost kompilátoru jsxFragmentFactory.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12369,6 +12387,9 @@
       <Item ItemId=";_0_is_deprecated_6385" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is deprecated]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[{0} je zastaralé]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
