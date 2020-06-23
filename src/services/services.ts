@@ -1805,11 +1805,11 @@ namespace ts {
             synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
-            if (responseFormat === SemanticClassificationFormat.Original) {
-                return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            if (responseFormat === SemanticClassificationFormat.TwentyTwenty) {
+                return classifier.modern.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
             }
             else {
-                return classifier.modern.getSemanticClassifications(program, cancellationToken, getValidSourceFile(fileName), span);
+                return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
             }
         }
 

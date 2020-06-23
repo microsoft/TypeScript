@@ -3,19 +3,18 @@ namespace ts.classifier.modern {
 
     /** @internal */
     export const enum TokenEncodingConsts {
-
         typeOffset = 8,
         modifierMask = (1 << typeOffset) - 1
     }
 
     /** @internal */
     export const enum TokenType {
-        class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member, _
+        class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member
     }
 
     /** @internal */
     export const enum TokenModifier {
-        declaration, static, async, readonly, defaultLibrary, local, _
+        declaration, static, async, readonly, defaultLibrary, local
     }
 
     /** This is mainly used internally for testing */
@@ -26,10 +25,10 @@ namespace ts.classifier.modern {
         const dense = classifications.spans;
         const result: ClassifiedSpan[] = [];
         for (let i = 0; i < dense.length; i += 3) {
-                result.push({
-                        textSpan: createTextSpan(dense[i], dense[i + 1]),
-                        classificationType: dense[i + 2]
-                });
+            result.push({
+                textSpan: createTextSpan(dense[i], dense[i + 1]),
+                classificationType: dense[i + 2]
+            });
         }
 
         return result;
@@ -46,7 +45,7 @@ namespace ts.classifier.modern {
         const resultTokens: number[] = [];
 
         const collector = (node: Node, typeIdx: number, modifierSet: number) => {
-            resultTokens.push(node.getStart(), node.getWidth(), ((typeIdx + 1) << TokenEncodingConsts.typeOffset) + modifierSet);
+            resultTokens.push(node.getStart(sourceFile), node.getWidth(sourceFile), ((typeIdx + 1) << TokenEncodingConsts.typeOffset) + modifierSet);
         };
 
         if (program && sourceFile) {
