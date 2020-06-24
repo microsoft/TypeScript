@@ -567,7 +567,7 @@ namespace ts.projectSystem {
         });
 
         describe("excludeDirectories", () => {
-            function setup(_configureHost?: boolean) {
+            function setup(configureHost?: boolean) {
                 const configFile: File = {
                     path: `${tscWatch.projectRoot}/tsconfig.json`,
                     content: JSON.stringify({ include: ["src"], watchOptions: { excludeDirectories: ["node_modules"] } })
@@ -587,6 +587,11 @@ namespace ts.projectSystem {
                 const files = [libFile, main, bar, foo, configFile];
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
                 const service = createProjectService(host);
+                if (configureHost) {
+                    service.setHostConfiguration({
+                        watchOptions: { excludeDirectories: ["node_modules"] }
+                    });
+                }
                 service.openClientFile(main.path);
                 return { host, configFile };
             }
@@ -611,11 +616,8 @@ namespace ts.projectSystem {
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
                 checkWatchedDirectoriesDetailed(
                     host,
-                    arrayToMap(
-                        [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`],
-                        identity,
-                        f => f === `${tscWatch.projectRoot}/node_modules` ? 1 : 2,
-                    ),
+                    [`${tscWatch.projectRoot}/src`],
+                    2,
                     /*recursive*/ true,
                 );
             });

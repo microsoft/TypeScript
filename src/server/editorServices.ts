@@ -253,6 +253,7 @@ namespace ts.server {
 
     export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): WatchOptions | undefined {
         let result: WatchOptions | undefined;
+        debugger;
         watchOptionsConverters.forEach((mappedValues, id) => {
             const propertyValue = protocolOptions[id];
             if (propertyValue === undefined) return;
