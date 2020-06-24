@@ -710,33 +710,6 @@ namespace ts {
 
         const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
 
-        const reparseContext: TransformationContext = {
-            get factory() { return factory; },
-            enableEmitNotification: notImplemented,
-            enableSubstitution: notImplemented,
-            endLexicalEnvironment: returnUndefined,
-            getCompilerOptions: notImplemented,
-            getEmitHost: notImplemented,
-            getEmitResolver: notImplemented,
-            getEmitHelperFactory: notImplemented,
-            setLexicalEnvironmentFlags: noop,
-            getLexicalEnvironmentFlags: () => 0,
-            hoistFunctionDeclaration: notImplemented,
-            hoistVariableDeclaration: notImplemented,
-            addInitializationStatement: notImplemented,
-            isEmitNotificationEnabled: notImplemented,
-            isSubstitutionEnabled: notImplemented,
-            onEmitNode: notImplemented,
-            onSubstituteNode: notImplemented,
-            readEmitHelpers: notImplemented,
-            requestEmitHelper: notImplemented,
-            resumeLexicalEnvironment: noop,
-            startLexicalEnvironment: noop,
-            suspendLexicalEnvironment: noop,
-            addDiagnostic: notImplemented,
-        };
-
-
         let fileName: string;
         let sourceFlags: NodeFlags;
         let sourceText: string;
@@ -804,6 +777,9 @@ namespace ts {
         // parsing.  These context flags are naturally stored and restored through normal recursive
         // descent parsing and unwinding.
         let contextFlags: NodeFlags;
+
+        // Indicates whether we are currently parsing top-level statements.
+        let topLevel = true;
 
         // Whether or not we've had a parse error since creating the last AST node.  If we have
         // encountered an error, it will be stored on the next AST node we create.  Parse errors
@@ -958,6 +934,7 @@ namespace ts {
             identifierCount = 0;
             nodeCount = 0;
             sourceFlags = 0;
+            topLevel = true;
 
             switch (scriptKind) {
                 case ScriptKind.JS:
@@ -998,6 +975,7 @@ namespace ts {
             parsingContext = 0;
             identifiers = undefined!;
             notParenthesizedArrow = undefined!;
+            topLevel = true;
         }
 
         function parseSourceFileWorker(languageVersion: ScriptTarget, setParentNodes: boolean, scriptKind: ScriptKind): SourceFile {
@@ -1058,130 +1036,112 @@ namespace ts {
         }
 
         function reparseTopLevelAwait(sourceFile: SourceFile) {
-            return visitEachChild(sourceFile, visitor, reparseContext);
+            const savedSyntaxCursor = syntaxCursor;
+            const baseSyntaxCursor = IncrementalParser.createSyntaxCursor(sourceFile);
+            syntaxCursor = { currentNode };
 
-            function visitor(node: Node): VisitResult<Node> {
-                if (!(node.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait)) {
-                    return node;
+            const statements: Statement[] = [];
+            const savedParseDiagnostics = parseDiagnostics;
+
+            parseDiagnostics = [];
+
+            let pos = 0;
+            let start = findNextStatementWithAwait(sourceFile.statements, 0);
+            while (start !== -1) {
+                // append all statements between pos and start
+                const prevStatement = sourceFile.statements[pos];
+                const nextStatement = sourceFile.statements[start];
+                addRange(statements, sourceFile.statements, pos, start);
+                pos = findNextStatementWithoutAwait(sourceFile.statements, start);
+
+                // append all diagnostics associated with the copied range
+                const diagnosticStart = findIndex(savedParseDiagnostics, diagnostic => diagnostic.start >= prevStatement.pos);
+                const diagnosticEnd = diagnosticStart >= 0 ? findIndex(savedParseDiagnostics, diagnostic => diagnostic.start >= nextStatement.pos, diagnosticStart) : -1;
+                if (diagnosticStart >= 0) {
+                    addRange(parseDiagnostics, savedParseDiagnostics, diagnosticStart, diagnosticEnd >= 0 ? diagnosticEnd : undefined);
                 }
-                // We explicitly visit each non-Expression node that has an immediate Expression child so that
-                // we can reparse the Expression in an Await context
-                switch (node.kind) {
-                    case SyntaxKind.Decorator: return reparseDecorator(node as Decorator);
-                    case SyntaxKind.ComputedPropertyName: return reparseComputedPropertyName(node as ComputedPropertyName);
-                    case SyntaxKind.ExpressionWithTypeArguments: return reparseExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
-                    case SyntaxKind.ExpressionStatement: return reparseExpressionStatement(node as ExpressionStatement);
-                    case SyntaxKind.IfStatement: return reparseIfStatement(node as IfStatement);
-                    case SyntaxKind.SwitchStatement: return reparseSwitchStatement(node as SwitchStatement);
-                    case SyntaxKind.WithStatement: return reparseWithStatement(node as WithStatement);
-                    case SyntaxKind.DoStatement: return reparseDoStatement(node as DoStatement);
-                    case SyntaxKind.WhileStatement: return reparseWhileStatement(node as WhileStatement);
-                    case SyntaxKind.ForStatement: return reparseForStatement(node as ForStatement);
-                    case SyntaxKind.ForInStatement: return reparseForInStatement(node as ForInStatement);
-                    case SyntaxKind.ForOfStatement: return reparseForOfStatement(node as ForOfStatement);
-                    case SyntaxKind.ReturnStatement: return reparseReturnStatement(node as ReturnStatement);
-                    case SyntaxKind.ThrowStatement: return reparseThrowStatement(node as ThrowStatement);
-                    case SyntaxKind.ExportAssignment: return reparseExportAssignment(node as ExportAssignment);
-                    case SyntaxKind.VariableDeclaration: return reparseVariableDeclaration(node as VariableDeclaration);
-                    case SyntaxKind.BindingElement: return reparseBindingElement(node as BindingElement);
-                    default: return visitEachChild(node, visitor, reparseContext);
+
+                // reparse all statements between start and pos. We skip existing diagnostics for the same range and allow the parser to generate new ones.
+                speculationHelper(() => {
+                    const savedContextFlags = contextFlags;
+                    contextFlags |= NodeFlags.AwaitContext;
+                    scanner.setTextPos(nextStatement.pos);
+                    nextToken();
+
+                    while (token() !== SyntaxKind.EndOfFileToken) {
+                        const startPos = scanner.getStartPos();
+                        const statement = parseListElement(ParsingContext.SourceElements, parseStatement);
+                        statements.push(statement);
+                        if (startPos === scanner.getStartPos()) {
+                            nextToken();
+                        }
+
+                        if (pos >= 0) {
+                            const nonAwaitStatement = sourceFile.statements[pos];
+                            if (statement.end === nonAwaitStatement.pos) {
+                                // done reparsing this section
+                                break;
+                            }
+                            if (statement.end > nonAwaitStatement.pos) {
+                                // we ate into the next statement, so we must reparse it.
+                                pos = findNextStatementWithoutAwait(sourceFile.statements, pos + 1);
+                            }
+                        }
+                    }
+
+                    contextFlags = savedContextFlags;
+                }, SpeculationKind.Reparse);
+
+                // find the next statement containing an `await`
+                start = pos >= 0 ? findNextStatementWithAwait(sourceFile.statements, pos) : -1;
+            }
+
+            // append all statements between pos and the end of the list
+            if (pos >= 0) {
+                const prevStatement = sourceFile.statements[pos];
+                addRange(statements, sourceFile.statements, pos);
+
+                // append all diagnostics associated with the copied range
+                const diagnosticStart = findIndex(savedParseDiagnostics, diagnostic => diagnostic.start >= prevStatement.pos);
+                if (diagnosticStart >= 0) {
+                    addRange(parseDiagnostics, savedParseDiagnostics, diagnosticStart);
                 }
             }
 
-            function reparse<T extends Node>(node: T, parse: () => T): T | Expression;
-            function reparse<T extends Node>(node: T | undefined, parse: () => T): T | Expression | undefined;
-            function reparse<T extends Node>(node: T | undefined, parse: () => T) {
-                if (node && node.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
-                    if (isExpression(node)) {
-                        return speculationHelper(() => {
-                            scanner.setTextPos(node.pos);
-                            const savedContextFlags = contextFlags;
-                            contextFlags = node.flags & NodeFlags.ContextFlags;
-                            nextToken();
-                            const result = doInAwaitContext(parse);
-                            contextFlags = savedContextFlags;
-                            return result;
-                        }, SpeculationKind.Reparse);
+            syntaxCursor = savedSyntaxCursor;
+            return factory.updateSourceFile(sourceFile, setTextRange(factory.createNodeArray(statements), sourceFile.statements));
+
+            function containsPossibleTopLevelAwait(node: Node) {
+                return !(node.flags & NodeFlags.AwaitContext)
+                    && !!(node.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait);
+            }
+
+            function findNextStatementWithAwait(statements: NodeArray<Statement>, start: number) {
+                for (let i = start; i < statements.length; i++) {
+                    if (containsPossibleTopLevelAwait(statements[i])) {
+                        return i;
                     }
-                    return visitEachChild(node, visitor, reparseContext);
+                }
+                return -1;
+            }
+
+            function findNextStatementWithoutAwait(statements: NodeArray<Statement>, start: number) {
+                for (let i = start; i < statements.length; i++) {
+                    if (!containsPossibleTopLevelAwait(statements[i])) {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+
+            function currentNode(position: number) {
+                const node = baseSyntaxCursor.currentNode(position);
+                if (topLevel && node && containsPossibleTopLevelAwait(node)) {
+                    node.intersectsChange = true;
                 }
                 return node;
             }
 
-            function update<T extends Node>(updated: T, original: T) {
-                if (updated !== original) {
-                    setNodeFlags(updated, updated.flags | NodeFlags.AwaitContext);
-                }
-                return updated;
-            }
-
-            function reparseExpressionStatement(node: ExpressionStatement) {
-                return update(factory.updateExpressionStatement(node, reparse(node.expression, parseExpression)), node);
-            }
-
-            function reparseReturnStatement(node: ReturnStatement) {
-                return update(factory.updateReturnStatement(node, reparse(node.expression, parseExpression)), node);
-            }
-
-            function reparseThrowStatement(node: ThrowStatement) {
-                return update(factory.updateThrowStatement(node, reparse(node.expression, parseExpression)), node);
-            }
-
-            function reparseIfStatement(node: IfStatement) {
-                return update(factory.updateIfStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.thenStatement, visitor), ts.visitNode(node.elseStatement, visitor)), node);
-            }
-
-            function reparseSwitchStatement(node: SwitchStatement) {
-                return update(factory.updateSwitchStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.caseBlock, visitor)), node);
-            }
-
-            function reparseWithStatement(node: WithStatement) {
-                return update(factory.updateWithStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor)), node);
-            }
-
-            function reparseDoStatement(node: DoStatement) {
-                return update(factory.updateDoStatement(node, ts.visitNode(node.statement, visitor), reparse(node.expression, parseExpression)), node);
-            }
-
-            function reparseWhileStatement(node: WhileStatement) {
-                return update(factory.updateWhileStatement(node, reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor)), node);
-            }
-
-            function reparseForStatement(node: ForStatement) {
-                return update(factory.updateForStatement(node, reparse(node.initializer, parseExpression), reparse(node.condition, parseExpression), reparse(node.incrementor, parseExpression), ts.visitNode(node, visitor)), node);
-            }
-
-            function reparseForInStatement(node: ForInStatement) {
-                return update(factory.updateForInStatement(node, reparse(node.initializer, parseExpression), reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor)), node);
-            }
-
-            function reparseForOfStatement(node: ForOfStatement) {
-                return update(factory.updateForOfStatement(node, node.awaitModifier, reparse(node.initializer, parseExpression), reparse(node.expression, parseExpression), ts.visitNode(node.statement, visitor)), node);
-            }
-
-            function reparseExportAssignment(node: ExportAssignment) {
-                return update(factory.updateExportAssignment(node, ts.visitNodes(node.decorators, visitor), node.modifiers, reparse(node.expression, parseExpression)), node);
-            }
-
-            function reparseExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
-                return update(factory.updateExpressionWithTypeArguments(node, reparse(node.expression, parseLeftHandSideExpressionOrHigher), node.typeArguments), node);
-            }
-
-            function reparseDecorator(node: Decorator) {
-                return update(factory.updateDecorator(node, reparse(node.expression, parseLeftHandSideExpressionOrHigher)), node);
-            }
-
-            function reparseComputedPropertyName(node: ComputedPropertyName) {
-                return update(factory.updateComputedPropertyName(node, reparse(node.expression, parseExpression)), node);
-            }
-
-            function reparseVariableDeclaration(node: VariableDeclaration) {
-                return update(factory.updateVariableDeclaration(node, ts.visitNode(node.name, visitor), node.exclamationToken, node.type, reparse(node.initializer, parseExpression)), node);
-            }
-
-            function reparseBindingElement(node: BindingElement) {
-                return update(factory.updateBindingElement(node, node.dotDotDotToken, ts.visitNode(node.propertyName, visitor), ts.visitNode(node.name, visitor), reparse(node.initializer, parseExpression)), node);
-            }
         }
 
         export function fixupParentReferences(rootNode: Node) {
@@ -1487,6 +1447,13 @@ namespace ts {
             return speculationHelper(callback, SpeculationKind.TryParse);
         }
 
+        function isBindingIdentifier(): boolean {
+            if (token() === SyntaxKind.Identifier) {
+                return true;
+            }
+            return token() > SyntaxKind.LastReservedWord;
+        }
+
         // Ignore strict mode flag because we will report an error in type checker instead.
         function isIdentifier(): boolean {
             if (token() === SyntaxKind.Identifier) {
@@ -1693,6 +1660,10 @@ namespace ts {
             return createMissingNode<Identifier>(SyntaxKind.Identifier, reportAtCurrentPosition, diagnosticMessage || defaultMessage, msgArg);
         }
 
+        function parseBindingIdentifier(privateIdentifierDiagnosticMessage?: DiagnosticMessage) {
+            return createIdentifier(isBindingIdentifier(), /*diagnosticMessage*/ undefined, privateIdentifierDiagnosticMessage);
+        }
+
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage, privateIdentifierDiagnosticMessage?: DiagnosticMessage): Identifier {
             return createIdentifier(isIdentifier(), diagnosticMessage, privateIdentifierDiagnosticMessage);
         }
@@ -1888,9 +1859,9 @@ namespace ts {
                         return isIdentifier() && !isHeritageClauseExtendsOrImplementsKeyword();
                     }
                 case ParsingContext.VariableDeclarations:
-                    return isIdentifierOrPrivateIdentifierOrPattern();
+                    return isBindingIdentifierOrPrivateIdentifierOrPattern();
                 case ParsingContext.ArrayBindingElements:
-                    return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isIdentifierOrPrivateIdentifierOrPattern();
+                    return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isBindingIdentifierOrPrivateIdentifierOrPattern();
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArrayLiteralMembers:
@@ -2893,7 +2864,7 @@ namespace ts {
 
         function isStartOfParameter(isJSDocParameter: boolean): boolean {
             return token() === SyntaxKind.DotDotDotToken ||
-                isIdentifierOrPrivateIdentifierOrPattern() ||
+                isBindingIdentifierOrPrivateIdentifierOrPattern() ||
                 isModifierKind(token()) ||
                 token() === SyntaxKind.AtToken ||
                 isStartOfType(/*inStartOfParameter*/ !isJSDocParameter);
@@ -2917,7 +2888,15 @@ namespace ts {
             return name;
         }
 
+        function parseParameterInOuterAwaitContext() {
+            return parseParameterWorker(/*inOuterAwaitContext*/ true);
+        }
+
         function parseParameter(): ParameterDeclaration {
+            return parseParameterWorker(/*inOuterAwaitContext*/ false);
+        }
+
+        function parseParameterWorker(inOuterAwaitContext: boolean): ParameterDeclaration {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             if (token() === SyntaxKind.ThisKeyword) {
@@ -2935,12 +2914,17 @@ namespace ts {
 
             // FormalParameter [Yield,Await]:
             //      BindingElement[?Yield,?Await]
-            let modifiers;
-            return withJSDoc(
+
+            // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
+            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : parseDecorators();
+            const savedTopLevel = topLevel;
+            topLevel = false;
+            const modifiers = parseModifiers();
+            const node = withJSDoc(
                 finishNode(
                     factory.createParameterDeclaration(
-                        parseDecorators(),
-                        modifiers = parseModifiers(),
+                        decorators,
+                        modifiers,
                         parseOptionalToken(SyntaxKind.DotDotDotToken),
                         parseNameOfParameter(modifiers),
                         parseOptionalToken(SyntaxKind.QuestionToken),
@@ -2951,6 +2935,8 @@ namespace ts {
                 ),
                 hasJSDoc
             );
+            topLevel = savedTopLevel;
+            return node;
         }
 
         function parseReturnType(returnToken: SyntaxKind.EqualsGreaterThanToken, isType: boolean): TypeNode;
@@ -3000,7 +2986,7 @@ namespace ts {
 
             const parameters = flags & SignatureFlags.JSDoc ?
                 parseDelimitedList(ParsingContext.JSDocParameters, parseJSDocParameter) :
-                parseDelimitedList(ParsingContext.Parameters, parseParameter);
+                parseDelimitedList(ParsingContext.Parameters, savedAwaitContext ? parseParameterInOuterAwaitContext : parseParameter);
 
             setYieldContext(savedYieldContext);
             setAwaitContext(savedAwaitContext);
@@ -4268,9 +4254,13 @@ namespace ts {
                 return parseFunctionBlock(SignatureFlags.IgnoreMissingOpenBrace | (isAsync ? SignatureFlags.Await : SignatureFlags.None));
             }
 
-            return isAsync
+            const savedTopLevel = topLevel;
+            topLevel = false;
+            const node = isAsync
                 ? doInAwaitContext(parseAssignmentExpressionOrHigher)
                 : doOutsideOfAwaitContext(parseAssignmentExpressionOrHigher);
+            topLevel = savedTopLevel;
+            return node;
         }
 
         function parseConditionalExpressionRest(leftOperand: Expression, pos: number): Expression {
@@ -5390,10 +5380,10 @@ namespace ts {
             const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
             const isAsync = some(modifiers, isAsyncModifier) ? SignatureFlags.Await : SignatureFlags.None;
             const name =
-                isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalIdentifier) :
-                isGenerator ? doInYieldContext(parseOptionalIdentifier) :
-                isAsync ? doInAwaitContext(parseOptionalIdentifier) :
-                parseOptionalIdentifier();
+                isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalBindingIdentifier) :
+                isGenerator ? doInYieldContext(parseOptionalBindingIdentifier) :
+                isAsync ? doInAwaitContext(parseOptionalBindingIdentifier) :
+                parseOptionalBindingIdentifier();
 
             const typeParameters = parseTypeParameters();
             const parameters = parseParameters(isGenerator | isAsync);
@@ -5408,8 +5398,8 @@ namespace ts {
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
-        function parseOptionalIdentifier(): Identifier | undefined {
-            return isIdentifier() ? parseIdentifier() : undefined;
+        function parseOptionalBindingIdentifier(): Identifier | undefined {
+            return isBindingIdentifier() ? parseBindingIdentifier() : undefined;
         }
 
         function parseNewExpressionOrNewDotTarget(): NewExpression | MetaProperty {
@@ -5476,6 +5466,9 @@ namespace ts {
             const savedAwaitContext = inAwaitContext();
             setAwaitContext(!!(flags & SignatureFlags.Await));
 
+            const savedTopLevel = topLevel;
+            topLevel = false;
+
             // We may be in a [Decorator] context when parsing a function expression or
             // arrow function. The body of the function is not in [Decorator] context.
             const saveDecoratorContext = inDecoratorContext();
@@ -5489,6 +5482,7 @@ namespace ts {
                 setDecoratorContext(/*val*/ true);
             }
 
+            topLevel = savedTopLevel;
             setYieldContext(savedYieldContext);
             setAwaitContext(savedAwaitContext);
 
@@ -6108,7 +6102,7 @@ namespace ts {
         function parseObjectBindingElement(): BindingElement {
             const pos = getNodePos();
             const dotDotDotToken = parseOptionalToken(SyntaxKind.DotDotDotToken);
-            const tokenIsIdentifier = isIdentifier();
+            const tokenIsIdentifier = isBindingIdentifier();
             let propertyName: PropertyName | undefined = parsePropertyName();
             let name: BindingName;
             if (tokenIsIdentifier && token() !== SyntaxKind.ColonToken) {
@@ -6139,11 +6133,11 @@ namespace ts {
             return finishNode(factory.createArrayBindingPattern(elements), pos);
         }
 
-        function isIdentifierOrPrivateIdentifierOrPattern() {
+        function isBindingIdentifierOrPrivateIdentifierOrPattern() {
             return token() === SyntaxKind.OpenBraceToken
                 || token() === SyntaxKind.OpenBracketToken
                 || token() === SyntaxKind.PrivateIdentifier
-                || isIdentifier();
+                || isBindingIdentifier();
         }
 
         function parseIdentifierOrPattern(privateIdentifierDiagnosticMessage?: DiagnosticMessage): Identifier | BindingPattern {
@@ -6153,7 +6147,7 @@ namespace ts {
             if (token() === SyntaxKind.OpenBraceToken) {
                 return parseObjectBindingPattern();
             }
-            return parseIdentifier(/*diagnosticMessage*/ undefined, privateIdentifierDiagnosticMessage);
+            return parseBindingIdentifier(privateIdentifierDiagnosticMessage);
         }
 
         function parseVariableDeclarationAllowExclamation() {
@@ -6238,7 +6232,7 @@ namespace ts {
             parseExpected(SyntaxKind.FunctionKeyword);
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             // We don't parse the name here in await context, instead we will report a grammar error in the checker.
-            const name = modifierFlags & ModifierFlags.Default ? parseOptionalIdentifier() : parseIdentifier();
+            const name = modifierFlags & ModifierFlags.Default ? parseOptionalBindingIdentifier() : parseBindingIdentifier();
             const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
             const isAsync = modifierFlags & ModifierFlags.Async ? SignatureFlags.Await : SignatureFlags.None;
             const typeParameters = parseTypeParameters();
@@ -6429,12 +6423,25 @@ namespace ts {
             return false;
         }
 
+        function parseDecoratorExpression() {
+            if (inAwaitContext() && token() === SyntaxKind.AwaitKeyword) {
+                // `@await` is is disallowed in an [Await] context, but can cause parsing to go off the rails
+                // This simply parses the missing identifier and moves on.
+                const pos = getNodePos();
+                const awaitExpression = parseIdentifier(Diagnostics.Expression_expected);
+                nextToken();
+                const memberExpression = parseMemberExpressionRest(pos, awaitExpression, /*allowOptionalChain*/ true);
+                return parseCallExpressionRest(pos, memberExpression);
+            }
+            return parseLeftHandSideExpressionOrHigher();
+        }
+
         function tryParseDecorator(): Decorator | undefined {
             const pos = getNodePos();
             if (!parseOptional(SyntaxKind.AtToken)) {
                 return undefined;
             }
-            const expression = doInDecoratorContext(parseLeftHandSideExpressionOrHigher);
+            const expression = doInDecoratorContext(parseDecoratorExpression);
             return finishNode(factory.createDecorator(expression), pos);
         }
 
@@ -6593,8 +6600,8 @@ namespace ts {
             // - class expression with omitted name, 'implements' starts heritage clause
             // - class with name 'implements'
             // 'isImplementsClause' helps to disambiguate between these two cases
-            return isIdentifier() && !isImplementsClause()
-                ? parseIdentifier()
+            return isBindingIdentifier() && !isImplementsClause()
+                ? createIdentifier(isBindingIdentifier())
                 : undefined;
         }
 
@@ -8538,7 +8545,7 @@ namespace ts {
             currentNode(position: number): IncrementalNode;
         }
 
-        function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
+        export function createSyntaxCursor(sourceFile: SourceFile): SyntaxCursor {
             let currentArray: NodeArray<Node> = sourceFile.statements;
             let currentArrayIndex = 0;
 
