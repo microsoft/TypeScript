@@ -16864,7 +16864,7 @@ namespace ts {
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
-                    const variances = getAliasVariances(source.aliasSymbol);
+                    const variances = getAliasVariances(source.aliasSymbol, relation === assignableRelation ? isRelatedTo : compareTypesAssignable);
                     if (variances === emptyArray) {
                         return Ternary.Maybe;
                     }
@@ -17095,7 +17095,7 @@ namespace ts {
                         // We have type references to the same generic type, and the type references are not marker
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
-                        const variances = getVariances((<TypeReference>source).target);
+                        const variances = getVariances((<TypeReference>source).target, relation === assignableRelation ? isRelatedTo : compareTypesAssignable);
                         // We return Ternary.Maybe for a recursive invocation of getVariances (signalled by emptyArray). This
                         // effectively means we measure variance only from type parameter occurrences that aren't nested in
                         // recursive instantiations of the generic type.
@@ -17988,13 +17988,13 @@ namespace ts {
             return result;
         }
 
-        function getAliasVariances(symbol: Symbol) {
+        function getAliasVariances(symbol: Symbol, compareTypes: (source: Type, target: Type) => Ternary) {
             const links = getSymbolLinks(symbol);
             return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => {
                 const type = getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)));
                 type.aliasTypeArgumentsContainsMarker = true;
                 return type;
-            });
+            }, compareTypes);
         }
 
         // Return an array containing the variance of each type parameter. The variance is effectively
@@ -18002,7 +18002,7 @@ namespace ts {
         // generic type are structurally compared. We infer the variance information by comparing
         // instantiations of the generic type for type arguments with known relations. The function
         // returns the emptyArray singleton when invoked recursively for the given generic type.
-        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
+        function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type, compareTypes: (source: Type, target: Type) => Ternary): VarianceFlags[] {
             let variances = cache.variances;
             if (!variances) {
                 // The emptyArray singleton is used to signal a recursive invocation.
@@ -18018,13 +18018,20 @@ namespace ts {
                     // invariance, covariance, contravariance or bivariance.
                     const typeWithSuper = createMarkerType(cache, tp, markerSuperType);
                     const typeWithSub = createMarkerType(cache, tp, markerSubType);
-                    let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
-                        (isTypeAssignableTo(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
+                    // Note: We consider a `Maybe` result to be affirmative below; if we're already trying to figure out if A<+?> is assignable to A<-?>
+                    // and we end up needing to check some type we're already comparing in the body of the calling comparison, we can assume it to be true
+                    // for the scope of the remainder of the comparison. (Simply because disproving it is the point of the _other_ comparisons we're performing)
+                    // The issue comes with invalidating the cached variance result if the root comparison turns out to be negative. _Right now_, we're simply...
+                    // not. This will _probably_ cause some subtle bugs, however coming up with an example exposing one such bug is nontrivial.
+                    // But! In the event such a motiviating example should come to light, the fix shouldn't be _too_ bad - here in `getVariancesWorker` we'd
+                    // just need a `Maybe` tracking stack just like we have in `recursiveTypeRelatedTo`.
+                    let variance = (compareTypes(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
+                        (compareTypes(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
                     // If the instantiations appear to be related bivariantly it may be because the
                     // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
                     // type). To determine this we compare instantiations where the type parameter is
                     // replaced with marker types that are known to be unrelated.
-                    if (variance === VarianceFlags.Bivariant && isTypeAssignableTo(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
+                    if (variance === VarianceFlags.Bivariant && compareTypes(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
                         variance = VarianceFlags.Independent;
                     }
                     outofbandVarianceMarkerHandler = oldHandler;
@@ -18043,12 +18050,12 @@ namespace ts {
             return variances;
         }
 
-        function getVariances(type: GenericType): VarianceFlags[] {
+        function getVariances(type: GenericType, compareTypes: (source: Type, target: Type) => Ternary): VarianceFlags[] {
             // Arrays and tuples are known to be covariant, no need to spend time computing this.
             if (type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
                 return arrayVariances;
             }
-            return getVariancesWorker(type.typeParameters, type, getMarkerTypeReference);
+            return getVariancesWorker(type.typeParameters, type, getMarkerTypeReference, compareTypes);
         }
 
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
@@ -19313,7 +19320,7 @@ namespace ts {
                 if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
                     // Source and target are types originating in the same generic type alias declaration.
                     // Simply infer from source type arguments to target type arguments.
-                    inferFromTypeArguments(source.aliasTypeArguments, target.aliasTypeArguments!, getAliasVariances(source.aliasSymbol));
+                    inferFromTypeArguments(source.aliasTypeArguments, target.aliasTypeArguments!, getAliasVariances(source.aliasSymbol, compareTypesAssignable));
                     return;
                 }
                 if (source === target && source.flags & TypeFlags.UnionOrIntersection) {
@@ -19435,7 +19442,7 @@ namespace ts {
                     (<TypeReference>source).target === (<TypeReference>target).target || isArrayType(source) && isArrayType(target)) &&
                     !((<TypeReference>source).node && (<TypeReference>target).node)) {
                     // If source and target are references to the same generic type, infer from type arguments
-                    inferFromTypeArguments(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), getVariances((<TypeReference>source).target));
+                    inferFromTypeArguments(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), getVariances((<TypeReference>source).target, compareTypesAssignable));
                 }
                 else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
                     contravariant = !contravariant;
@@ -19758,7 +19765,7 @@ namespace ts {
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
                     (<TypeReference>source).target === (<TypeReference>target).target || isArrayType(source) && isArrayType(target))) {
                     // If source and target are references to the same generic type, infer from type arguments
-                    inferFromTypeArguments(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), getVariances((<TypeReference>source).target));
+                    inferFromTypeArguments(getTypeArguments(<TypeReference>source), getTypeArguments(<TypeReference>target), getVariances((<TypeReference>source).target, compareTypesAssignable));
                     return;
                 }
                 if (isGenericMappedType(source) && isGenericMappedType(target)) {

@@ -1,0 +1,608 @@
+=== tests/cases/compiler/complexClassStructureNoCrash.ts ===
+const { assign } = Object
+>assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object : ObjectConstructor
+
+export type Name = string
+>Name : string
+
+export type List<T> = ReadonlyArray<T>
+>List : List<T>
+
+export type Payload<T> = Record<string, unknown>
+>Payload : Record<string, unknown>
+
+export type Stage = Raw | Filled | Linked
+>Stage : Stage
+
+export abstract class Raw { protected readonly rawTag = 'Raw' }
+>Raw : Raw
+>rawTag : "Raw"
+>'Raw' : "Raw"
+
+export abstract class Filled extends Raw { protected readonly filledTag = 'Filled' }
+>Filled : Filled
+>Raw : Raw
+>filledTag : "Filled"
+>'Filled' : "Filled"
+
+export abstract class Linked extends Filled { protected readonly linkedTag = 'Linked' }
+>Linked : Linked
+>Filled : Filled
+>linkedTag : "Linked"
+>'Linked' : "Linked"
+
+export type Final = Linked
+>Final : Linked
+
+type Stageable<S extends Stage, C extends Stage, T> = S extends C ? T : T | undefined
+>Stageable : Stageable<S, C, T>
+
+export type Fillable<S extends Stage, T> = Stageable<S, Filled, T>
+>Fillable : Stageable<S, Filled, T>
+
+export type Linkable<S extends Stage, T> = Stageable<S, Linked, T>
+>Linkable : Stageable<S, Linked, T>
+
+export type Kind = Node['kind']
+>Kind : "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try"
+
+export type Category = 'Entity' | 'Module' | 'Sentence' | 'Expression'
+>Category : Category
+
+export type NodeOfKind<K extends Kind, S extends Stage> = Extract<Node<S>, { kind: K }>
+>NodeOfKind : Extract<Parameter<S>, { kind: K; }> | Extract<NamedArgument<S>, { kind: K; }> | Extract<Import<S>, { kind: K; }> | Extract<Body<S>, { kind: K; }> | Extract<Catch<S>, { kind: K; }> | Extract<Package<S>, { kind: K; }> | Extract<Program<S>, { kind: K; }> | Extract<Test<S>, { kind: K; }> | Extract<Describe<S>, { kind: K; }> | Extract<Class<S>, { kind: K; }> | Extract<Singleton<S>, { kind: K; }> | Extract<Mixin<S>, { kind: K; }> | Extract<Variable<S>, { kind: K; }> | Extract<Fixture<S>, { kind: K; }> | Extract<Method<S>, { kind: K; }> | Extract<Constructor<S>, { kind: K; }> | Extract<Field<S>, { kind: K; }> | Extract<Return<S>, { kind: K; }> | Extract<Assignment<S>, { kind: K; }> | Extract<Reference<S>, { kind: K; }> | Extract<Self<S>, { kind: K; }> | Extract<Send<S>, { kind: K; }> | Extract<Super<S>, { kind: K; }> | Extract<New<S>, { kind: K; }> | Extract<If<S>, { kind: K; }> | Extract<Throw<S>, { kind: K; }> | Extract<Try<S>, { kind: K; }>
+>kind : K
+
+export type NodeOfKindOrCategory<Q extends Kind | Category, S extends Stage> =
+>NodeOfKindOrCategory : NodeOfKindOrCategory<Q, S>
+
+  Q extends Kind ? NodeOfKind<Q, S> :
+  never
+
+export type Node<S extends Stage = Final>
+>Node : Node<S>
+
+  = Parameter<S>
+  | NamedArgument<S>
+  | Import<S>
+  | Body<S>
+  | Catch<S>
+  | Entity<S>
+  | DescribeMember<S>
+  | ClassMember<S>
+  | Sentence<S>
+
+abstract class $Node<S extends Stage> {
+>$Node : $Node<S>
+
+  readonly stage?: S
+>stage : S
+
+  abstract readonly kind: Kind
+>kind : "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try"
+
+  constructor(payload: Record<string, unknown>) {
+>payload : Record<string, unknown>
+
+    assign(this, payload)
+>assign(this, payload) : this & Record<string, unknown>
+>assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>this : this
+>payload : Record<string, unknown>
+  }
+ 
+  is<Q extends Kind | Category>(kindOrCategory: Q): this is NodeOfKindOrCategory<Q, S> {
+>is : <Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>
+>kindOrCategory : Q
+
+    return this.kind === kindOrCategory
+>this.kind === kindOrCategory : boolean
+>this.kind : "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try"
+>this : this
+>kind : "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try"
+>kindOrCategory : Q
+  }
+}
+
+export class Parameter<S extends Stage = Final> extends $Node<S> {
+>Parameter : Parameter<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Parameter'
+>kind : "Parameter"
+>'Parameter' : "Parameter"
+}
+
+export class NamedArgument<S extends Stage = Final> extends $Node<S> {
+>NamedArgument : NamedArgument<S>
+>$Node : $Node<S>
+
+  readonly kind = 'NamedArgument'
+>kind : "NamedArgument"
+>'NamedArgument' : "NamedArgument"
+
+  readonly value!: Expression<S>
+>value : Expression<S>
+}
+
+export class Import<S extends Stage = Final> extends $Node<S> {
+>Import : Import<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Import'
+>kind : "Import"
+>'Import' : "Import"
+
+  readonly entity!: Reference<S>
+>entity : Reference<S>
+}
+
+export class Body<S extends Stage = Final> extends $Node<S> {
+>Body : Body<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Body'
+>kind : "Body"
+>'Body' : "Body"
+
+  readonly sentences!: List<Sentence<S>>
+>sentences : List<Sentence<S>>
+}
+
+export type Entity<S extends Stage = Final>
+>Entity : Entity<S>
+
+  = Package<S>
+  | Program<S>
+  | Test<S>
+  | Describe<S>
+  | Module<S>
+  | Variable<S>
+
+
+export class Package<S extends Stage = Final> extends $Node<S> {
+>Package : Package<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Package'
+>kind : "Package"
+>'Package' : "Package"
+
+  readonly imports!: List<Import<S>>
+>imports : List<Import<S>>
+
+  readonly members!: List<Entity<S>>
+>members : List<Entity<S>>
+}
+
+export class Program<S extends Stage = Final> extends $Node<S> {
+>Program : Program<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Program'
+>kind : "Program"
+>'Program' : "Program"
+
+  readonly body!: Body<S>
+>body : Body<S>
+}
+
+export class Test<S extends Stage = Final> extends $Node<S> {
+>Test : Test<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Test'
+>kind : "Test"
+>'Test' : "Test"
+
+  readonly body!: Body<S>
+>body : Body<S>
+}
+
+export class Describe<S extends Stage = Final> extends $Node<S> {
+>Describe : Describe<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Describe'
+>kind : "Describe"
+>'Describe' : "Describe"
+
+  readonly members!: List<DescribeMember<S>>
+>members : List<DescribeMember<S>>
+
+  tests(): List<Test<S>> { return this.members.filter((member): member is Test<S> => member.is('Test')) }
+>tests : () => List<Test<S>>
+>this.members.filter((member): member is Test<S> => member.is('Test')) : Test<S>[]
+>this.members.filter : { <S extends DescribeMember<S>>(predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => value is S, thisArg?: any): S[]; (predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => unknown, thisArg?: any): DescribeMember<S>[]; }
+>this.members : List<DescribeMember<S>>
+>this : this
+>members : List<DescribeMember<S>>
+>filter : { <S extends DescribeMember<S>>(predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => value is S, thisArg?: any): S[]; (predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => unknown, thisArg?: any): DescribeMember<S>[]; }
+>(member): member is Test<S> => member.is('Test') : (member: DescribeMember<S>) => member is Test<S>
+>member : DescribeMember<S>
+>member.is('Test') : boolean
+>member.is : (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>)
+>member : DescribeMember<S>
+>is : (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>)
+>'Test' : "Test"
+
+  methods(): List<Method<S>> { return this.members.filter((member): member is Method<S> => member.is('Method')) }
+>methods : () => List<Method<S>>
+>this.members.filter((member): member is Method<S> => member.is('Method')) : Method<S>[]
+>this.members.filter : { <S extends DescribeMember<S>>(predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => value is S, thisArg?: any): S[]; (predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => unknown, thisArg?: any): DescribeMember<S>[]; }
+>this.members : List<DescribeMember<S>>
+>this : this
+>members : List<DescribeMember<S>>
+>filter : { <S extends DescribeMember<S>>(predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => value is S, thisArg?: any): S[]; (predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => unknown, thisArg?: any): DescribeMember<S>[]; }
+>(member): member is Method<S> => member.is('Method') : (member: DescribeMember<S>) => member is Method<S>
+>member : DescribeMember<S>
+>member.is('Method') : boolean
+>member.is : (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>)
+>member : DescribeMember<S>
+>is : (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>)
+>'Method' : "Method"
+
+  variables(): List<Variable<S>> { return this.members.filter((member): member is Variable<S> => member.is('Variable')) }
+>variables : () => List<Variable<S>>
+>this.members.filter((member): member is Variable<S> => member.is('Variable')) : Variable<S>[]
+>this.members.filter : { <S extends DescribeMember<S>>(predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => value is S, thisArg?: any): S[]; (predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => unknown, thisArg?: any): DescribeMember<S>[]; }
+>this.members : List<DescribeMember<S>>
+>this : this
+>members : List<DescribeMember<S>>
+>filter : { <S extends DescribeMember<S>>(predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => value is S, thisArg?: any): S[]; (predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => unknown, thisArg?: any): DescribeMember<S>[]; }
+>(member): member is Variable<S> => member.is('Variable') : (member: DescribeMember<S>) => member is Variable<S>
+>member : DescribeMember<S>
+>member.is('Variable') : boolean
+>member.is : (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>)
+>member : DescribeMember<S>
+>is : (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>)
+>'Variable' : "Variable"
+
+  fixtures(): List<Fixture<S>> { return this.members.filter((member): member is Fixture<S> => member.is('Fixture')) }
+>fixtures : () => List<Fixture<S>>
+>this.members.filter((member): member is Fixture<S> => member.is('Fixture')) : Fixture<S>[]
+>this.members.filter : { <S extends DescribeMember<S>>(predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => value is S, thisArg?: any): S[]; (predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => unknown, thisArg?: any): DescribeMember<S>[]; }
+>this.members : List<DescribeMember<S>>
+>this : this
+>members : List<DescribeMember<S>>
+>filter : { <S extends DescribeMember<S>>(predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => value is S, thisArg?: any): S[]; (predicate: (value: DescribeMember<S>, index: number, array: readonly DescribeMember<S>[]) => unknown, thisArg?: any): DescribeMember<S>[]; }
+>(member): member is Fixture<S> => member.is('Fixture') : (member: DescribeMember<S>) => member is Fixture<S>
+>member : DescribeMember<S>
+>member.is('Fixture') : boolean
+>member.is : (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>)
+>member : DescribeMember<S>
+>is : (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>) | (<Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>)
+>'Fixture' : "Fixture"
+}
+
+export class Variable<S extends Stage = Final> extends $Node<S> {
+>Variable : Variable<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Variable'
+>kind : "Variable"
+>'Variable' : "Variable"
+
+  readonly value!: Fillable<S, Expression<S>>
+>value : Stageable<S, Filled, Expression<S>>
+
+  is<Q extends Kind | Category>(kindOrCategory: Q): this is NodeOfKindOrCategory<Q, S> {
+>is : <Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>
+>kindOrCategory : Q
+
+    return [this.kind, 'Sentence', 'Entity'].includes(kindOrCategory)
+>[this.kind, 'Sentence', 'Entity'].includes(kindOrCategory) : boolean
+>[this.kind, 'Sentence', 'Entity'].includes : (searchElement: string, fromIndex?: number) => boolean
+>[this.kind, 'Sentence', 'Entity'] : string[]
+>this.kind : "Variable"
+>this : this
+>kind : "Variable"
+>'Sentence' : "Sentence"
+>'Entity' : "Entity"
+>includes : (searchElement: string, fromIndex?: number) => boolean
+>kindOrCategory : Q
+  }
+}
+
+export type Module<S extends Stage = Final> = Class<S> | Singleton<S> | Mixin<S>
+>Module : Module<S>
+
+export class Class<S extends Stage = Final> extends $Node<S> {
+>Class : Class<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Class'
+>kind : "Class"
+>'Class' : "Class"
+
+  readonly mixins!: List<Reference<S>>
+>mixins : List<Reference<S>>
+
+  readonly members!: List<ClassMember<S>>
+>members : List<ClassMember<S>>
+
+  readonly superclass!: Fillable<S, Reference<S> | null>
+>superclass : Stageable<S, Filled, Reference<S>>
+>null : null
+}
+
+export class Singleton<S extends Stage = Final> extends $Node<S> {
+>Singleton : Singleton<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Singleton'
+>kind : "Singleton"
+>'Singleton' : "Singleton"
+
+  readonly mixins!: List<Reference<S>>
+>mixins : List<Reference<S>>
+
+  readonly members!: List<ObjectMember<S>>
+>members : List<ObjectMember<S>>
+
+  readonly superCall!: Fillable<S, {
+>superCall : Stageable<S, Filled, { superclass: Reference<S>; args: List<Expression<S>> | List<NamedArgument<S>>; }>
+
+    superclass: Reference<S>,
+>superclass : Reference<S>
+
+    args: List<Expression<S>> | List<NamedArgument<S>>
+>args : List<Expression<S>> | List<NamedArgument<S>>
+
+  }>
+}
+
+export class Mixin<S extends Stage = Final> extends $Node<S> {
+>Mixin : Mixin<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Mixin'
+>kind : "Mixin"
+>'Mixin' : "Mixin"
+
+  readonly mixins!: List<Reference<S>>
+>mixins : List<Reference<S>>
+
+  readonly members!: List<ObjectMember<S>>
+>members : List<ObjectMember<S>>
+}
+
+export type ObjectMember<S extends Stage = Final> = Field<S> | Method<S>
+>ObjectMember : ObjectMember<S>
+
+export type ClassMember<S extends Stage = Final> = Constructor<S> | ObjectMember<S>
+>ClassMember : ClassMember<S>
+
+export type DescribeMember<S extends Stage = Final> = Variable<S> | Fixture<S> | Test<S> | Method<S>
+>DescribeMember : DescribeMember<S>
+
+export class Field<S extends Stage = Final> extends $Node<S> {
+>Field : Field<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Field'
+>kind : "Field"
+>'Field' : "Field"
+
+  readonly value!: Fillable<S, Expression<S>>
+>value : Stageable<S, Filled, Expression<S>>
+}
+
+export class Method<S extends Stage = Final> extends $Node<S> {
+>Method : Method<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Method'
+>kind : "Method"
+>'Method' : "Method"
+
+  readonly parameters!: List<Parameter<S>>
+>parameters : List<Parameter<S>>
+
+  readonly body?: Body<S>
+>body : Body<S>
+}
+
+export class Constructor<S extends Stage = Final> extends $Node<S> {
+>Constructor : Constructor<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Constructor'
+>kind : "Constructor"
+>'Constructor' : "Constructor"
+
+  readonly parameters!: List<Parameter<S>>
+>parameters : List<Parameter<S>>
+
+  readonly body!: Body<S>
+>body : Body<S>
+
+  readonly baseCall?: { callsSuper: boolean, args: List<Expression<S>> }
+>baseCall : { callsSuper: boolean; args: List<Expression<S>>; }
+>callsSuper : boolean
+>args : List<Expression<S>>
+}
+
+export class Fixture<S extends Stage = Final> extends $Node<S> {
+>Fixture : Fixture<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Fixture'
+>kind : "Fixture"
+>'Fixture' : "Fixture"
+
+  readonly body!: Body<S>
+>body : Body<S>
+}
+
+export type Sentence<S extends Stage = Final> = Variable<S> | Return<S> | Assignment<S> | Expression<S>
+>Sentence : Sentence<S>
+
+export class Return<S extends Stage = Final> extends $Node<S> {
+>Return : Return<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Return'
+>kind : "Return"
+>'Return' : "Return"
+
+  readonly value?: Expression<S>
+>value : Expression<S>
+}
+
+export class Assignment<S extends Stage = Final> extends $Node<S> {
+>Assignment : Assignment<S>
+>$Node : $Node<S>
+
+  readonly kind = 'Assignment'
+>kind : "Assignment"
+>'Assignment' : "Assignment"
+
+  readonly variable!: Reference<S>
+>variable : Reference<S>
+
+  readonly value!: Expression<S>
+>value : Expression<S>
+}
+
+export type Expression<S extends Stage = Final>
+>Expression : Expression<S>
+
+  = Reference<S>
+  | Self<S>
+  | Send<S>
+  | Super<S>
+  | New<S>
+  | If<S>
+  | Throw<S>
+  | Try<S>
+
+abstract class $Expression<S extends Stage> extends $Node<S> {
+>$Expression : $Expression<S>
+>$Node : $Node<S>
+
+  is<Q extends Kind | Category>(kindOrCategory: Q): this is NodeOfKindOrCategory<Q, S> {
+>is : <Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>
+>kindOrCategory : Q
+
+    return kindOrCategory === 'Expression' || super.is(kindOrCategory)
+>kindOrCategory === 'Expression' || super.is(kindOrCategory) : boolean
+>kindOrCategory === 'Expression' : boolean
+>kindOrCategory : Q
+>'Expression' : "Expression"
+>super.is(kindOrCategory) : boolean
+>super.is : <Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>
+>super : $Node<S>
+>is : <Q extends "Parameter" | "NamedArgument" | "Import" | "Body" | "Catch" | "Package" | "Program" | "Test" | "Describe" | "Class" | "Singleton" | "Mixin" | "Variable" | "Fixture" | "Method" | "Constructor" | "Field" | "Return" | "Assignment" | "Reference" | "Self" | "Send" | "Super" | "New" | "If" | "Throw" | "Try" | "Entity" | "Module" | "Sentence" | "Expression">(kindOrCategory: Q) => this is NodeOfKindOrCategory<Q, S>
+>kindOrCategory : Q
+  }
+}
+
+export class Reference<S extends Stage = Final> extends $Expression<S> {
+>Reference : Reference<S>
+>$Expression : $Expression<S>
+
+  readonly kind = 'Reference'
+>kind : "Reference"
+>'Reference' : "Reference"
+
+  readonly name!: Name
+>name : string
+}
+
+export class Self<S extends Stage = Final> extends $Expression<S> {
+>Self : Self<S>
+>$Expression : $Expression<S>
+
+  readonly kind = 'Self'
+>kind : "Self"
+>'Self' : "Self"
+}
+
+export class Send<S extends Stage = Final> extends $Expression<S> {
+>Send : Send<S>
+>$Expression : $Expression<S>
+
+  readonly kind = 'Send'
+>kind : "Send"
+>'Send' : "Send"
+
+  readonly receiver!: Expression<S>
+>receiver : Expression<S>
+
+  readonly message!: Name
+>message : string
+
+  readonly args!: List<Expression<S>>
+>args : List<Expression<S>>
+}
+
+export class Super<S extends Stage = Final> extends $Expression<S> {
+>Super : Super<S>
+>$Expression : $Expression<S>
+
+  readonly kind = 'Super'
+>kind : "Super"
+>'Super' : "Super"
+
+  readonly args!: List<Expression<S>>
+>args : List<Expression<S>>
+}
+
+export class New<S extends Stage = Final> extends $Expression<S> {
+>New : New<S>
+>$Expression : $Expression<S>
+
+  readonly kind = 'New'
+>kind : "New"
+>'New' : "New"
+
+  readonly instantiated!: Reference<S>
+>instantiated : Reference<S>
+
+  readonly args!: List<Expression<S>> | List<NamedArgument<S>>
+>args : List<Expression<S>> | List<NamedArgument<S>>
+}
+
+export class If<S extends Stage = Final> extends $Expression<S> {
+>If : If<S>
+>$Expression : $Expression<S>
+
+  readonly kind = 'If'
+>kind : "If"
+>'If' : "If"
+
+  readonly thenBody!: Body<S>
+>thenBody : Body<S>
+
+  readonly elseBody!: Fillable<S, Body<S>>
+>elseBody : Stageable<S, Filled, Body<S>>
+}
+
+export class Throw<S extends Stage = Final> extends $Expression<S> {
+>Throw : Throw<S>
+>$Expression : $Expression<S>
+
+  readonly kind = 'Throw'
+>kind : "Throw"
+>'Throw' : "Throw"
+}
+
+export class Try<S extends Stage = Final> extends $Expression<S> {
+>Try : Try<S>
+>$Expression : $Expression<S>
+
+  readonly kind = 'Try'
+>kind : "Try"
+>'Try' : "Try"
+}
+
+export class Catch<S extends Stage = Final> extends $Expression<S> {
+>Catch : Catch<S>
+>$Expression : $Expression<S>
+
+  readonly kind = 'Catch'
+>kind : "Catch"
+>'Catch' : "Catch"
+}

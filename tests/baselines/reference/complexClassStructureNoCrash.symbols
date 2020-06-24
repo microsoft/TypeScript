@@ -1,0 +1,989 @@
+=== tests/cases/compiler/complexClassStructureNoCrash.ts ===
+const { assign } = Object
+>assign : Symbol(assign, Decl(complexClassStructureNoCrash.ts, 0, 7))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+export type Name = string
+>Name : Symbol(Name, Decl(complexClassStructureNoCrash.ts, 0, 25))
+
+export type List<T> = ReadonlyArray<T>
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 3, 17))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 3, 17))
+
+export type Payload<T> = Record<string, unknown>
+>Payload : Symbol(Payload, Decl(complexClassStructureNoCrash.ts, 3, 38))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 4, 20))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+export type Stage = Raw | Filled | Linked
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Raw : Symbol(Raw, Decl(complexClassStructureNoCrash.ts, 6, 41))
+>Filled : Symbol(Filled, Decl(complexClassStructureNoCrash.ts, 7, 63))
+>Linked : Symbol(Linked, Decl(complexClassStructureNoCrash.ts, 8, 84))
+
+export abstract class Raw { protected readonly rawTag = 'Raw' }
+>Raw : Symbol(Raw, Decl(complexClassStructureNoCrash.ts, 6, 41))
+>rawTag : Symbol(Raw.rawTag, Decl(complexClassStructureNoCrash.ts, 7, 27))
+
+export abstract class Filled extends Raw { protected readonly filledTag = 'Filled' }
+>Filled : Symbol(Filled, Decl(complexClassStructureNoCrash.ts, 7, 63))
+>Raw : Symbol(Raw, Decl(complexClassStructureNoCrash.ts, 6, 41))
+>filledTag : Symbol(Filled.filledTag, Decl(complexClassStructureNoCrash.ts, 8, 42))
+
+export abstract class Linked extends Filled { protected readonly linkedTag = 'Linked' }
+>Linked : Symbol(Linked, Decl(complexClassStructureNoCrash.ts, 8, 84))
+>Filled : Symbol(Filled, Decl(complexClassStructureNoCrash.ts, 7, 63))
+>linkedTag : Symbol(Linked.linkedTag, Decl(complexClassStructureNoCrash.ts, 9, 45))
+
+export type Final = Linked
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>Linked : Symbol(Linked, Decl(complexClassStructureNoCrash.ts, 8, 84))
+
+type Stageable<S extends Stage, C extends Stage, T> = S extends C ? T : T | undefined
+>Stageable : Symbol(Stageable, Decl(complexClassStructureNoCrash.ts, 10, 26))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 12, 15))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>C : Symbol(C, Decl(complexClassStructureNoCrash.ts, 12, 31))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 12, 48))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 12, 15))
+>C : Symbol(C, Decl(complexClassStructureNoCrash.ts, 12, 31))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 12, 48))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 12, 48))
+
+export type Fillable<S extends Stage, T> = Stageable<S, Filled, T>
+>Fillable : Symbol(Fillable, Decl(complexClassStructureNoCrash.ts, 12, 85))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 13, 21))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 13, 37))
+>Stageable : Symbol(Stageable, Decl(complexClassStructureNoCrash.ts, 10, 26))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 13, 21))
+>Filled : Symbol(Filled, Decl(complexClassStructureNoCrash.ts, 7, 63))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 13, 37))
+
+export type Linkable<S extends Stage, T> = Stageable<S, Linked, T>
+>Linkable : Symbol(Linkable, Decl(complexClassStructureNoCrash.ts, 13, 66))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 14, 21))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 14, 37))
+>Stageable : Symbol(Stageable, Decl(complexClassStructureNoCrash.ts, 10, 26))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 14, 21))
+>Linked : Symbol(Linked, Decl(complexClassStructureNoCrash.ts, 8, 84))
+>T : Symbol(T, Decl(complexClassStructureNoCrash.ts, 14, 37))
+
+export type Kind = Node['kind']
+>Kind : Symbol(Kind, Decl(complexClassStructureNoCrash.ts, 14, 66))
+>Node : Symbol(Node, Decl(complexClassStructureNoCrash.ts, 21, 7))
+
+export type Category = 'Entity' | 'Module' | 'Sentence' | 'Expression'
+>Category : Symbol(Category, Decl(complexClassStructureNoCrash.ts, 16, 31))
+
+export type NodeOfKind<K extends Kind, S extends Stage> = Extract<Node<S>, { kind: K }>
+>NodeOfKind : Symbol(NodeOfKind, Decl(complexClassStructureNoCrash.ts, 17, 70))
+>K : Symbol(K, Decl(complexClassStructureNoCrash.ts, 18, 23))
+>Kind : Symbol(Kind, Decl(complexClassStructureNoCrash.ts, 14, 66))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 18, 38))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Node : Symbol(Node, Decl(complexClassStructureNoCrash.ts, 21, 7))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 18, 38))
+>kind : Symbol(kind, Decl(complexClassStructureNoCrash.ts, 18, 76))
+>K : Symbol(K, Decl(complexClassStructureNoCrash.ts, 18, 23))
+
+export type NodeOfKindOrCategory<Q extends Kind | Category, S extends Stage> =
+>NodeOfKindOrCategory : Symbol(NodeOfKindOrCategory, Decl(complexClassStructureNoCrash.ts, 18, 87))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 19, 33))
+>Kind : Symbol(Kind, Decl(complexClassStructureNoCrash.ts, 14, 66))
+>Category : Symbol(Category, Decl(complexClassStructureNoCrash.ts, 16, 31))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 19, 59))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+
+  Q extends Kind ? NodeOfKind<Q, S> :
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 19, 33))
+>Kind : Symbol(Kind, Decl(complexClassStructureNoCrash.ts, 14, 66))
+>NodeOfKind : Symbol(NodeOfKind, Decl(complexClassStructureNoCrash.ts, 17, 70))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 19, 33))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 19, 59))
+
+  never
+
+export type Node<S extends Stage = Final>
+>Node : Symbol(Node, Decl(complexClassStructureNoCrash.ts, 21, 7))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+
+  = Parameter<S>
+>Parameter : Symbol(Parameter, Decl(complexClassStructureNoCrash.ts, 45, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+
+  | NamedArgument<S>
+>NamedArgument : Symbol(NamedArgument, Decl(complexClassStructureNoCrash.ts, 49, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+
+  | Import<S>
+>Import : Symbol(Import, Decl(complexClassStructureNoCrash.ts, 54, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+
+  | Body<S>
+>Body : Symbol(Body, Decl(complexClassStructureNoCrash.ts, 59, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+
+  | Catch<S>
+>Catch : Symbol(Catch, Decl(complexClassStructureNoCrash.ts, 230, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+
+  | Entity<S>
+>Entity : Symbol(Entity, Decl(complexClassStructureNoCrash.ts, 64, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+
+  | DescribeMember<S>
+>DescribeMember : Symbol(DescribeMember, Decl(complexClassStructureNoCrash.ts, 136, 83))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+
+  | ClassMember<S>
+>ClassMember : Symbol(ClassMember, Decl(complexClassStructureNoCrash.ts, 135, 72))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+
+  | Sentence<S>
+>Sentence : Symbol(Sentence, Decl(complexClassStructureNoCrash.ts, 160, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 23, 17))
+
+abstract class $Node<S extends Stage> {
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 34, 21))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+
+  readonly stage?: S
+>stage : Symbol($Node.stage, Decl(complexClassStructureNoCrash.ts, 34, 39))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 34, 21))
+
+  abstract readonly kind: Kind
+>kind : Symbol($Node.kind, Decl(complexClassStructureNoCrash.ts, 35, 20))
+>Kind : Symbol(Kind, Decl(complexClassStructureNoCrash.ts, 14, 66))
+
+  constructor(payload: Record<string, unknown>) {
+>payload : Symbol(payload, Decl(complexClassStructureNoCrash.ts, 38, 14))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    assign(this, payload)
+>assign : Symbol(assign, Decl(complexClassStructureNoCrash.ts, 0, 7))
+>this : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>payload : Symbol(payload, Decl(complexClassStructureNoCrash.ts, 38, 14))
+  }
+ 
+  is<Q extends Kind | Category>(kindOrCategory: Q): this is NodeOfKindOrCategory<Q, S> {
+>is : Symbol($Node.is, Decl(complexClassStructureNoCrash.ts, 40, 3))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 42, 5))
+>Kind : Symbol(Kind, Decl(complexClassStructureNoCrash.ts, 14, 66))
+>Category : Symbol(Category, Decl(complexClassStructureNoCrash.ts, 16, 31))
+>kindOrCategory : Symbol(kindOrCategory, Decl(complexClassStructureNoCrash.ts, 42, 32))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 42, 5))
+>NodeOfKindOrCategory : Symbol(NodeOfKindOrCategory, Decl(complexClassStructureNoCrash.ts, 18, 87))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 42, 5))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 34, 21))
+
+    return this.kind === kindOrCategory
+>this.kind : Symbol($Node.kind, Decl(complexClassStructureNoCrash.ts, 35, 20))
+>this : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>kind : Symbol($Node.kind, Decl(complexClassStructureNoCrash.ts, 35, 20))
+>kindOrCategory : Symbol(kindOrCategory, Decl(complexClassStructureNoCrash.ts, 42, 32))
+  }
+}
+
+export class Parameter<S extends Stage = Final> extends $Node<S> {
+>Parameter : Symbol(Parameter, Decl(complexClassStructureNoCrash.ts, 45, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 47, 23))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 47, 23))
+
+  readonly kind = 'Parameter'
+>kind : Symbol(Parameter.kind, Decl(complexClassStructureNoCrash.ts, 47, 66))
+}
+
+export class NamedArgument<S extends Stage = Final> extends $Node<S> {
+>NamedArgument : Symbol(NamedArgument, Decl(complexClassStructureNoCrash.ts, 49, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 51, 27))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 51, 27))
+
+  readonly kind = 'NamedArgument'
+>kind : Symbol(NamedArgument.kind, Decl(complexClassStructureNoCrash.ts, 51, 70))
+
+  readonly value!: Expression<S>
+>value : Symbol(NamedArgument.value, Decl(complexClassStructureNoCrash.ts, 52, 33))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 51, 27))
+}
+
+export class Import<S extends Stage = Final> extends $Node<S> {
+>Import : Symbol(Import, Decl(complexClassStructureNoCrash.ts, 54, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 56, 20))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 56, 20))
+
+  readonly kind = 'Import'
+>kind : Symbol(Import.kind, Decl(complexClassStructureNoCrash.ts, 56, 63))
+
+  readonly entity!: Reference<S>
+>entity : Symbol(Import.entity, Decl(complexClassStructureNoCrash.ts, 57, 26))
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 56, 20))
+}
+
+export class Body<S extends Stage = Final> extends $Node<S> {
+>Body : Symbol(Body, Decl(complexClassStructureNoCrash.ts, 59, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 61, 18))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 61, 18))
+
+  readonly kind = 'Body'
+>kind : Symbol(Body.kind, Decl(complexClassStructureNoCrash.ts, 61, 61))
+
+  readonly sentences!: List<Sentence<S>>
+>sentences : Symbol(Body.sentences, Decl(complexClassStructureNoCrash.ts, 62, 24))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Sentence : Symbol(Sentence, Decl(complexClassStructureNoCrash.ts, 160, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 61, 18))
+}
+
+export type Entity<S extends Stage = Final>
+>Entity : Symbol(Entity, Decl(complexClassStructureNoCrash.ts, 64, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 66, 19))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+
+  = Package<S>
+>Package : Symbol(Package, Decl(complexClassStructureNoCrash.ts, 72, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 66, 19))
+
+  | Program<S>
+>Program : Symbol(Program, Decl(complexClassStructureNoCrash.ts, 79, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 66, 19))
+
+  | Test<S>
+>Test : Symbol(Test, Decl(complexClassStructureNoCrash.ts, 84, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 66, 19))
+
+  | Describe<S>
+>Describe : Symbol(Describe, Decl(complexClassStructureNoCrash.ts, 89, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 66, 19))
+
+  | Module<S>
+>Module : Symbol(Module, Decl(complexClassStructureNoCrash.ts, 108, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 66, 19))
+
+  | Variable<S>
+>Variable : Symbol(Variable, Decl(complexClassStructureNoCrash.ts, 99, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 66, 19))
+
+
+export class Package<S extends Stage = Final> extends $Node<S> {
+>Package : Symbol(Package, Decl(complexClassStructureNoCrash.ts, 72, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 75, 21))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 75, 21))
+
+  readonly kind = 'Package'
+>kind : Symbol(Package.kind, Decl(complexClassStructureNoCrash.ts, 75, 64))
+
+  readonly imports!: List<Import<S>>
+>imports : Symbol(Package.imports, Decl(complexClassStructureNoCrash.ts, 76, 27))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Import : Symbol(Import, Decl(complexClassStructureNoCrash.ts, 54, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 75, 21))
+
+  readonly members!: List<Entity<S>>
+>members : Symbol(Package.members, Decl(complexClassStructureNoCrash.ts, 77, 36))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Entity : Symbol(Entity, Decl(complexClassStructureNoCrash.ts, 64, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 75, 21))
+}
+
+export class Program<S extends Stage = Final> extends $Node<S> {
+>Program : Symbol(Program, Decl(complexClassStructureNoCrash.ts, 79, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 81, 21))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 81, 21))
+
+  readonly kind = 'Program'
+>kind : Symbol(Program.kind, Decl(complexClassStructureNoCrash.ts, 81, 64))
+
+  readonly body!: Body<S>
+>body : Symbol(Program.body, Decl(complexClassStructureNoCrash.ts, 82, 27))
+>Body : Symbol(Body, Decl(complexClassStructureNoCrash.ts, 59, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 81, 21))
+}
+
+export class Test<S extends Stage = Final> extends $Node<S> {
+>Test : Symbol(Test, Decl(complexClassStructureNoCrash.ts, 84, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 86, 18))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 86, 18))
+
+  readonly kind = 'Test'
+>kind : Symbol(Test.kind, Decl(complexClassStructureNoCrash.ts, 86, 61))
+
+  readonly body!: Body<S>
+>body : Symbol(Test.body, Decl(complexClassStructureNoCrash.ts, 87, 24))
+>Body : Symbol(Body, Decl(complexClassStructureNoCrash.ts, 59, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 86, 18))
+}
+
+export class Describe<S extends Stage = Final> extends $Node<S> {
+>Describe : Symbol(Describe, Decl(complexClassStructureNoCrash.ts, 89, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+
+  readonly kind = 'Describe'
+>kind : Symbol(Describe.kind, Decl(complexClassStructureNoCrash.ts, 91, 65))
+
+  readonly members!: List<DescribeMember<S>>
+>members : Symbol(Describe.members, Decl(complexClassStructureNoCrash.ts, 92, 28))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>DescribeMember : Symbol(DescribeMember, Decl(complexClassStructureNoCrash.ts, 136, 83))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+
+  tests(): List<Test<S>> { return this.members.filter((member): member is Test<S> => member.is('Test')) }
+>tests : Symbol(Describe.tests, Decl(complexClassStructureNoCrash.ts, 93, 44))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Test : Symbol(Test, Decl(complexClassStructureNoCrash.ts, 84, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+>this.members.filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.members : Symbol(Describe.members, Decl(complexClassStructureNoCrash.ts, 92, 28))
+>this : Symbol(Describe, Decl(complexClassStructureNoCrash.ts, 89, 1))
+>members : Symbol(Describe.members, Decl(complexClassStructureNoCrash.ts, 92, 28))
+>filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 95, 55))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 95, 55))
+>Test : Symbol(Test, Decl(complexClassStructureNoCrash.ts, 84, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+>member.is : Symbol(is, Decl(complexClassStructureNoCrash.ts, 103, 45), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 95, 55))
+>is : Symbol(is, Decl(complexClassStructureNoCrash.ts, 103, 45), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3))
+
+  methods(): List<Method<S>> { return this.members.filter((member): member is Method<S> => member.is('Method')) }
+>methods : Symbol(Describe.methods, Decl(complexClassStructureNoCrash.ts, 95, 105))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Method : Symbol(Method, Decl(complexClassStructureNoCrash.ts, 142, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+>this.members.filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.members : Symbol(Describe.members, Decl(complexClassStructureNoCrash.ts, 92, 28))
+>this : Symbol(Describe, Decl(complexClassStructureNoCrash.ts, 89, 1))
+>members : Symbol(Describe.members, Decl(complexClassStructureNoCrash.ts, 92, 28))
+>filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 96, 59))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 96, 59))
+>Method : Symbol(Method, Decl(complexClassStructureNoCrash.ts, 142, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+>member.is : Symbol(is, Decl(complexClassStructureNoCrash.ts, 103, 45), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 96, 59))
+>is : Symbol(is, Decl(complexClassStructureNoCrash.ts, 103, 45), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3))
+
+  variables(): List<Variable<S>> { return this.members.filter((member): member is Variable<S> => member.is('Variable')) }
+>variables : Symbol(Describe.variables, Decl(complexClassStructureNoCrash.ts, 96, 113))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Variable : Symbol(Variable, Decl(complexClassStructureNoCrash.ts, 99, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+>this.members.filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.members : Symbol(Describe.members, Decl(complexClassStructureNoCrash.ts, 92, 28))
+>this : Symbol(Describe, Decl(complexClassStructureNoCrash.ts, 89, 1))
+>members : Symbol(Describe.members, Decl(complexClassStructureNoCrash.ts, 92, 28))
+>filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 97, 63))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 97, 63))
+>Variable : Symbol(Variable, Decl(complexClassStructureNoCrash.ts, 99, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+>member.is : Symbol(is, Decl(complexClassStructureNoCrash.ts, 103, 45), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 97, 63))
+>is : Symbol(is, Decl(complexClassStructureNoCrash.ts, 103, 45), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3))
+
+  fixtures(): List<Fixture<S>> { return this.members.filter((member): member is Fixture<S> => member.is('Fixture')) }
+>fixtures : Symbol(Describe.fixtures, Decl(complexClassStructureNoCrash.ts, 97, 121))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Fixture : Symbol(Fixture, Decl(complexClassStructureNoCrash.ts, 155, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+>this.members.filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.members : Symbol(Describe.members, Decl(complexClassStructureNoCrash.ts, 92, 28))
+>this : Symbol(Describe, Decl(complexClassStructureNoCrash.ts, 89, 1))
+>members : Symbol(Describe.members, Decl(complexClassStructureNoCrash.ts, 92, 28))
+>filter : Symbol(ReadonlyArray.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 98, 61))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 98, 61))
+>Fixture : Symbol(Fixture, Decl(complexClassStructureNoCrash.ts, 155, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 91, 22))
+>member.is : Symbol(is, Decl(complexClassStructureNoCrash.ts, 103, 45), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3))
+>member : Symbol(member, Decl(complexClassStructureNoCrash.ts, 98, 61))
+>is : Symbol(is, Decl(complexClassStructureNoCrash.ts, 103, 45), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3), Decl(complexClassStructureNoCrash.ts, 40, 3))
+}
+
+export class Variable<S extends Stage = Final> extends $Node<S> {
+>Variable : Symbol(Variable, Decl(complexClassStructureNoCrash.ts, 99, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 101, 22))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 101, 22))
+
+  readonly kind = 'Variable'
+>kind : Symbol(Variable.kind, Decl(complexClassStructureNoCrash.ts, 101, 65))
+
+  readonly value!: Fillable<S, Expression<S>>
+>value : Symbol(Variable.value, Decl(complexClassStructureNoCrash.ts, 102, 28))
+>Fillable : Symbol(Fillable, Decl(complexClassStructureNoCrash.ts, 12, 85))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 101, 22))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 101, 22))
+
+  is<Q extends Kind | Category>(kindOrCategory: Q): this is NodeOfKindOrCategory<Q, S> {
+>is : Symbol(Variable.is, Decl(complexClassStructureNoCrash.ts, 103, 45))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 105, 5))
+>Kind : Symbol(Kind, Decl(complexClassStructureNoCrash.ts, 14, 66))
+>Category : Symbol(Category, Decl(complexClassStructureNoCrash.ts, 16, 31))
+>kindOrCategory : Symbol(kindOrCategory, Decl(complexClassStructureNoCrash.ts, 105, 32))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 105, 5))
+>NodeOfKindOrCategory : Symbol(NodeOfKindOrCategory, Decl(complexClassStructureNoCrash.ts, 18, 87))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 105, 5))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 101, 22))
+
+    return [this.kind, 'Sentence', 'Entity'].includes(kindOrCategory)
+>[this.kind, 'Sentence', 'Entity'].includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>this.kind : Symbol(Variable.kind, Decl(complexClassStructureNoCrash.ts, 101, 65))
+>this : Symbol(Variable, Decl(complexClassStructureNoCrash.ts, 99, 1))
+>kind : Symbol(Variable.kind, Decl(complexClassStructureNoCrash.ts, 101, 65))
+>includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>kindOrCategory : Symbol(kindOrCategory, Decl(complexClassStructureNoCrash.ts, 105, 32))
+  }
+}
+
+export type Module<S extends Stage = Final> = Class<S> | Singleton<S> | Mixin<S>
+>Module : Symbol(Module, Decl(complexClassStructureNoCrash.ts, 108, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 110, 19))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>Class : Symbol(Class, Decl(complexClassStructureNoCrash.ts, 110, 80))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 110, 19))
+>Singleton : Symbol(Singleton, Decl(complexClassStructureNoCrash.ts, 117, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 110, 19))
+>Mixin : Symbol(Mixin, Decl(complexClassStructureNoCrash.ts, 127, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 110, 19))
+
+export class Class<S extends Stage = Final> extends $Node<S> {
+>Class : Symbol(Class, Decl(complexClassStructureNoCrash.ts, 110, 80))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 112, 19))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 112, 19))
+
+  readonly kind = 'Class'
+>kind : Symbol(Class.kind, Decl(complexClassStructureNoCrash.ts, 112, 62))
+
+  readonly mixins!: List<Reference<S>>
+>mixins : Symbol(Class.mixins, Decl(complexClassStructureNoCrash.ts, 113, 25))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 112, 19))
+
+  readonly members!: List<ClassMember<S>>
+>members : Symbol(Class.members, Decl(complexClassStructureNoCrash.ts, 114, 38))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>ClassMember : Symbol(ClassMember, Decl(complexClassStructureNoCrash.ts, 135, 72))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 112, 19))
+
+  readonly superclass!: Fillable<S, Reference<S> | null>
+>superclass : Symbol(Class.superclass, Decl(complexClassStructureNoCrash.ts, 115, 41))
+>Fillable : Symbol(Fillable, Decl(complexClassStructureNoCrash.ts, 12, 85))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 112, 19))
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 112, 19))
+}
+
+export class Singleton<S extends Stage = Final> extends $Node<S> {
+>Singleton : Symbol(Singleton, Decl(complexClassStructureNoCrash.ts, 117, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 119, 23))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 119, 23))
+
+  readonly kind = 'Singleton'
+>kind : Symbol(Singleton.kind, Decl(complexClassStructureNoCrash.ts, 119, 66))
+
+  readonly mixins!: List<Reference<S>>
+>mixins : Symbol(Singleton.mixins, Decl(complexClassStructureNoCrash.ts, 120, 29))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 119, 23))
+
+  readonly members!: List<ObjectMember<S>>
+>members : Symbol(Singleton.members, Decl(complexClassStructureNoCrash.ts, 121, 38))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>ObjectMember : Symbol(ObjectMember, Decl(complexClassStructureNoCrash.ts, 133, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 119, 23))
+
+  readonly superCall!: Fillable<S, {
+>superCall : Symbol(Singleton.superCall, Decl(complexClassStructureNoCrash.ts, 122, 42))
+>Fillable : Symbol(Fillable, Decl(complexClassStructureNoCrash.ts, 12, 85))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 119, 23))
+
+    superclass: Reference<S>,
+>superclass : Symbol(superclass, Decl(complexClassStructureNoCrash.ts, 123, 36))
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 119, 23))
+
+    args: List<Expression<S>> | List<NamedArgument<S>>
+>args : Symbol(args, Decl(complexClassStructureNoCrash.ts, 124, 29))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 119, 23))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>NamedArgument : Symbol(NamedArgument, Decl(complexClassStructureNoCrash.ts, 49, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 119, 23))
+
+  }>
+}
+
+export class Mixin<S extends Stage = Final> extends $Node<S> {
+>Mixin : Symbol(Mixin, Decl(complexClassStructureNoCrash.ts, 127, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 129, 19))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 129, 19))
+
+  readonly kind = 'Mixin'
+>kind : Symbol(Mixin.kind, Decl(complexClassStructureNoCrash.ts, 129, 62))
+
+  readonly mixins!: List<Reference<S>>
+>mixins : Symbol(Mixin.mixins, Decl(complexClassStructureNoCrash.ts, 130, 25))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 129, 19))
+
+  readonly members!: List<ObjectMember<S>>
+>members : Symbol(Mixin.members, Decl(complexClassStructureNoCrash.ts, 131, 38))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>ObjectMember : Symbol(ObjectMember, Decl(complexClassStructureNoCrash.ts, 133, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 129, 19))
+}
+
+export type ObjectMember<S extends Stage = Final> = Field<S> | Method<S>
+>ObjectMember : Symbol(ObjectMember, Decl(complexClassStructureNoCrash.ts, 133, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 135, 25))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>Field : Symbol(Field, Decl(complexClassStructureNoCrash.ts, 137, 100))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 135, 25))
+>Method : Symbol(Method, Decl(complexClassStructureNoCrash.ts, 142, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 135, 25))
+
+export type ClassMember<S extends Stage = Final> = Constructor<S> | ObjectMember<S>
+>ClassMember : Symbol(ClassMember, Decl(complexClassStructureNoCrash.ts, 135, 72))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 136, 24))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>Constructor : Symbol(Constructor, Decl(complexClassStructureNoCrash.ts, 148, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 136, 24))
+>ObjectMember : Symbol(ObjectMember, Decl(complexClassStructureNoCrash.ts, 133, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 136, 24))
+
+export type DescribeMember<S extends Stage = Final> = Variable<S> | Fixture<S> | Test<S> | Method<S>
+>DescribeMember : Symbol(DescribeMember, Decl(complexClassStructureNoCrash.ts, 136, 83))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 137, 27))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>Variable : Symbol(Variable, Decl(complexClassStructureNoCrash.ts, 99, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 137, 27))
+>Fixture : Symbol(Fixture, Decl(complexClassStructureNoCrash.ts, 155, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 137, 27))
+>Test : Symbol(Test, Decl(complexClassStructureNoCrash.ts, 84, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 137, 27))
+>Method : Symbol(Method, Decl(complexClassStructureNoCrash.ts, 142, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 137, 27))
+
+export class Field<S extends Stage = Final> extends $Node<S> {
+>Field : Symbol(Field, Decl(complexClassStructureNoCrash.ts, 137, 100))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 139, 19))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 139, 19))
+
+  readonly kind = 'Field'
+>kind : Symbol(Field.kind, Decl(complexClassStructureNoCrash.ts, 139, 62))
+
+  readonly value!: Fillable<S, Expression<S>>
+>value : Symbol(Field.value, Decl(complexClassStructureNoCrash.ts, 140, 25))
+>Fillable : Symbol(Fillable, Decl(complexClassStructureNoCrash.ts, 12, 85))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 139, 19))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 139, 19))
+}
+
+export class Method<S extends Stage = Final> extends $Node<S> {
+>Method : Symbol(Method, Decl(complexClassStructureNoCrash.ts, 142, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 144, 20))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 144, 20))
+
+  readonly kind = 'Method'
+>kind : Symbol(Method.kind, Decl(complexClassStructureNoCrash.ts, 144, 63))
+
+  readonly parameters!: List<Parameter<S>>
+>parameters : Symbol(Method.parameters, Decl(complexClassStructureNoCrash.ts, 145, 26))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Parameter : Symbol(Parameter, Decl(complexClassStructureNoCrash.ts, 45, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 144, 20))
+
+  readonly body?: Body<S>
+>body : Symbol(Method.body, Decl(complexClassStructureNoCrash.ts, 146, 42))
+>Body : Symbol(Body, Decl(complexClassStructureNoCrash.ts, 59, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 144, 20))
+}
+
+export class Constructor<S extends Stage = Final> extends $Node<S> {
+>Constructor : Symbol(Constructor, Decl(complexClassStructureNoCrash.ts, 148, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 150, 25))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 150, 25))
+
+  readonly kind = 'Constructor'
+>kind : Symbol(Constructor.kind, Decl(complexClassStructureNoCrash.ts, 150, 68))
+
+  readonly parameters!: List<Parameter<S>>
+>parameters : Symbol(Constructor.parameters, Decl(complexClassStructureNoCrash.ts, 151, 31))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Parameter : Symbol(Parameter, Decl(complexClassStructureNoCrash.ts, 45, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 150, 25))
+
+  readonly body!: Body<S>
+>body : Symbol(Constructor.body, Decl(complexClassStructureNoCrash.ts, 152, 42))
+>Body : Symbol(Body, Decl(complexClassStructureNoCrash.ts, 59, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 150, 25))
+
+  readonly baseCall?: { callsSuper: boolean, args: List<Expression<S>> }
+>baseCall : Symbol(Constructor.baseCall, Decl(complexClassStructureNoCrash.ts, 153, 25))
+>callsSuper : Symbol(callsSuper, Decl(complexClassStructureNoCrash.ts, 154, 23))
+>args : Symbol(args, Decl(complexClassStructureNoCrash.ts, 154, 44))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 150, 25))
+}
+
+export class Fixture<S extends Stage = Final> extends $Node<S> {
+>Fixture : Symbol(Fixture, Decl(complexClassStructureNoCrash.ts, 155, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 157, 21))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 157, 21))
+
+  readonly kind = 'Fixture'
+>kind : Symbol(Fixture.kind, Decl(complexClassStructureNoCrash.ts, 157, 64))
+
+  readonly body!: Body<S>
+>body : Symbol(Fixture.body, Decl(complexClassStructureNoCrash.ts, 158, 27))
+>Body : Symbol(Body, Decl(complexClassStructureNoCrash.ts, 59, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 157, 21))
+}
+
+export type Sentence<S extends Stage = Final> = Variable<S> | Return<S> | Assignment<S> | Expression<S>
+>Sentence : Symbol(Sentence, Decl(complexClassStructureNoCrash.ts, 160, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 162, 21))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>Variable : Symbol(Variable, Decl(complexClassStructureNoCrash.ts, 99, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 162, 21))
+>Return : Symbol(Return, Decl(complexClassStructureNoCrash.ts, 162, 103))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 162, 21))
+>Assignment : Symbol(Assignment, Decl(complexClassStructureNoCrash.ts, 167, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 162, 21))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 162, 21))
+
+export class Return<S extends Stage = Final> extends $Node<S> {
+>Return : Symbol(Return, Decl(complexClassStructureNoCrash.ts, 162, 103))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 164, 20))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 164, 20))
+
+  readonly kind = 'Return'
+>kind : Symbol(Return.kind, Decl(complexClassStructureNoCrash.ts, 164, 63))
+
+  readonly value?: Expression<S>
+>value : Symbol(Return.value, Decl(complexClassStructureNoCrash.ts, 165, 26))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 164, 20))
+}
+
+export class Assignment<S extends Stage = Final> extends $Node<S> {
+>Assignment : Symbol(Assignment, Decl(complexClassStructureNoCrash.ts, 167, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 169, 24))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 169, 24))
+
+  readonly kind = 'Assignment'
+>kind : Symbol(Assignment.kind, Decl(complexClassStructureNoCrash.ts, 169, 67))
+
+  readonly variable!: Reference<S>
+>variable : Symbol(Assignment.variable, Decl(complexClassStructureNoCrash.ts, 170, 30))
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 169, 24))
+
+  readonly value!: Expression<S>
+>value : Symbol(Assignment.value, Decl(complexClassStructureNoCrash.ts, 171, 34))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 169, 24))
+}
+
+export type Expression<S extends Stage = Final>
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 175, 23))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+
+  = Reference<S>
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 175, 23))
+
+  | Self<S>
+>Self : Symbol(Self, Decl(complexClassStructureNoCrash.ts, 194, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 175, 23))
+
+  | Send<S>
+>Send : Symbol(Send, Decl(complexClassStructureNoCrash.ts, 198, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 175, 23))
+
+  | Super<S>
+>Super : Symbol(Super, Decl(complexClassStructureNoCrash.ts, 205, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 175, 23))
+
+  | New<S>
+>New : Symbol(New, Decl(complexClassStructureNoCrash.ts, 210, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 175, 23))
+
+  | If<S>
+>If : Symbol(If, Decl(complexClassStructureNoCrash.ts, 216, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 175, 23))
+
+  | Throw<S>
+>Throw : Symbol(Throw, Decl(complexClassStructureNoCrash.ts, 222, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 175, 23))
+
+  | Try<S>
+>Try : Symbol(Try, Decl(complexClassStructureNoCrash.ts, 226, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 175, 23))
+
+abstract class $Expression<S extends Stage> extends $Node<S> {
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 185, 27))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>$Node : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 185, 27))
+
+  is<Q extends Kind | Category>(kindOrCategory: Q): this is NodeOfKindOrCategory<Q, S> {
+>is : Symbol($Expression.is, Decl(complexClassStructureNoCrash.ts, 185, 62))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 186, 5))
+>Kind : Symbol(Kind, Decl(complexClassStructureNoCrash.ts, 14, 66))
+>Category : Symbol(Category, Decl(complexClassStructureNoCrash.ts, 16, 31))
+>kindOrCategory : Symbol(kindOrCategory, Decl(complexClassStructureNoCrash.ts, 186, 32))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 186, 5))
+>NodeOfKindOrCategory : Symbol(NodeOfKindOrCategory, Decl(complexClassStructureNoCrash.ts, 18, 87))
+>Q : Symbol(Q, Decl(complexClassStructureNoCrash.ts, 186, 5))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 185, 27))
+
+    return kindOrCategory === 'Expression' || super.is(kindOrCategory)
+>kindOrCategory : Symbol(kindOrCategory, Decl(complexClassStructureNoCrash.ts, 186, 32))
+>super.is : Symbol($Node.is, Decl(complexClassStructureNoCrash.ts, 40, 3))
+>super : Symbol($Node, Decl(complexClassStructureNoCrash.ts, 32, 15))
+>is : Symbol($Node.is, Decl(complexClassStructureNoCrash.ts, 40, 3))
+>kindOrCategory : Symbol(kindOrCategory, Decl(complexClassStructureNoCrash.ts, 186, 32))
+  }
+}
+
+export class Reference<S extends Stage = Final> extends $Expression<S> {
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 191, 23))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 191, 23))
+
+  readonly kind = 'Reference'
+>kind : Symbol(Reference.kind, Decl(complexClassStructureNoCrash.ts, 191, 72))
+
+  readonly name!: Name
+>name : Symbol(Reference.name, Decl(complexClassStructureNoCrash.ts, 192, 29))
+>Name : Symbol(Name, Decl(complexClassStructureNoCrash.ts, 0, 25))
+}
+
+export class Self<S extends Stage = Final> extends $Expression<S> {
+>Self : Symbol(Self, Decl(complexClassStructureNoCrash.ts, 194, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 196, 18))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 196, 18))
+
+  readonly kind = 'Self'
+>kind : Symbol(Self.kind, Decl(complexClassStructureNoCrash.ts, 196, 67))
+}
+
+export class Send<S extends Stage = Final> extends $Expression<S> {
+>Send : Symbol(Send, Decl(complexClassStructureNoCrash.ts, 198, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 200, 18))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 200, 18))
+
+  readonly kind = 'Send'
+>kind : Symbol(Send.kind, Decl(complexClassStructureNoCrash.ts, 200, 67))
+
+  readonly receiver!: Expression<S>
+>receiver : Symbol(Send.receiver, Decl(complexClassStructureNoCrash.ts, 201, 24))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 200, 18))
+
+  readonly message!: Name
+>message : Symbol(Send.message, Decl(complexClassStructureNoCrash.ts, 202, 35))
+>Name : Symbol(Name, Decl(complexClassStructureNoCrash.ts, 0, 25))
+
+  readonly args!: List<Expression<S>>
+>args : Symbol(Send.args, Decl(complexClassStructureNoCrash.ts, 203, 25))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 200, 18))
+}
+
+export class Super<S extends Stage = Final> extends $Expression<S> {
+>Super : Symbol(Super, Decl(complexClassStructureNoCrash.ts, 205, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 207, 19))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 207, 19))
+
+  readonly kind = 'Super'
+>kind : Symbol(Super.kind, Decl(complexClassStructureNoCrash.ts, 207, 68))
+
+  readonly args!: List<Expression<S>>
+>args : Symbol(Super.args, Decl(complexClassStructureNoCrash.ts, 208, 25))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 207, 19))
+}
+
+export class New<S extends Stage = Final> extends $Expression<S> {
+>New : Symbol(New, Decl(complexClassStructureNoCrash.ts, 210, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 212, 17))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 212, 17))
+
+  readonly kind = 'New'
+>kind : Symbol(New.kind, Decl(complexClassStructureNoCrash.ts, 212, 66))
+
+  readonly instantiated!: Reference<S>
+>instantiated : Symbol(New.instantiated, Decl(complexClassStructureNoCrash.ts, 213, 23))
+>Reference : Symbol(Reference, Decl(complexClassStructureNoCrash.ts, 189, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 212, 17))
+
+  readonly args!: List<Expression<S>> | List<NamedArgument<S>>
+>args : Symbol(New.args, Decl(complexClassStructureNoCrash.ts, 214, 38))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>Expression : Symbol(Expression, Decl(complexClassStructureNoCrash.ts, 173, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 212, 17))
+>List : Symbol(List, Decl(complexClassStructureNoCrash.ts, 2, 25))
+>NamedArgument : Symbol(NamedArgument, Decl(complexClassStructureNoCrash.ts, 49, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 212, 17))
+}
+
+export class If<S extends Stage = Final> extends $Expression<S> {
+>If : Symbol(If, Decl(complexClassStructureNoCrash.ts, 216, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 218, 16))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 218, 16))
+
+  readonly kind = 'If'
+>kind : Symbol(If.kind, Decl(complexClassStructureNoCrash.ts, 218, 65))
+
+  readonly thenBody!: Body<S>
+>thenBody : Symbol(If.thenBody, Decl(complexClassStructureNoCrash.ts, 219, 22))
+>Body : Symbol(Body, Decl(complexClassStructureNoCrash.ts, 59, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 218, 16))
+
+  readonly elseBody!: Fillable<S, Body<S>>
+>elseBody : Symbol(If.elseBody, Decl(complexClassStructureNoCrash.ts, 220, 29))
+>Fillable : Symbol(Fillable, Decl(complexClassStructureNoCrash.ts, 12, 85))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 218, 16))
+>Body : Symbol(Body, Decl(complexClassStructureNoCrash.ts, 59, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 218, 16))
+}
+
+export class Throw<S extends Stage = Final> extends $Expression<S> {
+>Throw : Symbol(Throw, Decl(complexClassStructureNoCrash.ts, 222, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 224, 19))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 224, 19))
+
+  readonly kind = 'Throw'
+>kind : Symbol(Throw.kind, Decl(complexClassStructureNoCrash.ts, 224, 68))
+}
+
+export class Try<S extends Stage = Final> extends $Expression<S> {
+>Try : Symbol(Try, Decl(complexClassStructureNoCrash.ts, 226, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 228, 17))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 228, 17))
+
+  readonly kind = 'Try'
+>kind : Symbol(Try.kind, Decl(complexClassStructureNoCrash.ts, 228, 66))
+}
+
+export class Catch<S extends Stage = Final> extends $Expression<S> {
+>Catch : Symbol(Catch, Decl(complexClassStructureNoCrash.ts, 230, 1))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 232, 19))
+>Stage : Symbol(Stage, Decl(complexClassStructureNoCrash.ts, 4, 48))
+>Final : Symbol(Final, Decl(complexClassStructureNoCrash.ts, 9, 87))
+>$Expression : Symbol($Expression, Decl(complexClassStructureNoCrash.ts, 183, 10))
+>S : Symbol(S, Decl(complexClassStructureNoCrash.ts, 232, 19))
+
+  readonly kind = 'Catch'
+>kind : Symbol(Catch.kind, Decl(complexClassStructureNoCrash.ts, 232, 68))
+}
