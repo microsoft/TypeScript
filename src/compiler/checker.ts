@@ -18096,13 +18096,26 @@ namespace ts {
         // in such cases we need to terminate the expansion, and we do so here.
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
             // We track all object types that have an associated symbol (representing the origin of the type)
-            if (depth >= 5 && type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
-                const symbol = type.symbol;
-                if (symbol) {
+            if (depth >= 5 && type.flags & TypeFlags.Object) {
+                if (!isObjectOrArrayLiteralType(type)) {
+                    const symbol = type.symbol;
+                    if (symbol) {
+                        let count = 0;
+                        for (let i = 0; i < depth; i++) {
+                            const t = stack[i];
+                            if (t.flags & TypeFlags.Object && t.symbol === symbol) {
+                                count++;
+                                if (count >= 5) return true;
+                            }
+                        }
+                    }
+                }
+                if (getObjectFlags(type) && ObjectFlags.Reference && !!(type as TypeReference).node) {
+                    const root = (type as TypeReference).target;
                     let count = 0;
                     for (let i = 0; i < depth; i++) {
                         const t = stack[i];
-                        if (t.flags & TypeFlags.Object && t.symbol === symbol) {
+                        if (getObjectFlags(t) && ObjectFlags.Reference && !!(t as TypeReference).node && (t as TypeReference).target === root) {
                             count++;
                             if (count >= 5) return true;
                         }
@@ -18115,17 +18128,6 @@ namespace ts {
                 for (let i = 0; i < depth; i++) {
                     const t = stack[i];
                     if (getRootObjectTypeFromIndexedAccessChain(t) === root) {
-                        count++;
-                        if (count >= 5) return true;
-                    }
-                }
-            }
-            if (depth >= 5 && getObjectFlags(type) && ObjectFlags.Reference && !!(type as TypeReference).node) {
-                const root = (type as TypeReference).target;
-                let count = 0;
-                for (let i = 0; i < depth; i++) {
-                    const t = stack[i];
-                    if (getObjectFlags(t) && ObjectFlags.Reference && !!(t as TypeReference).node && (t as TypeReference).target === root) {
                         count++;
                         if (count >= 5) return true;
                     }
