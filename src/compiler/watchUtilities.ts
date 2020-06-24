@@ -434,9 +434,7 @@ namespace ts {
 
     export type GetDetailWatchInfo<X, Y> = (detailInfo1: X, detailInfo2: Y | undefined) => string;
     export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchLogLevel: WatchLogLevel, log: (s: string) => void, getDetailWatchInfo?: GetDetailWatchInfo<X, Y>): WatchFactory<X, Y> {
-        if (watchLogLevel === WatchLogLevel.Verbose && sysLog === noop) {
-            setSysLog(s => log(s));
-        }
+        setSysLog(watchLogLevel === WatchLogLevel.Verbose ? log : noop);
         const plainInvokeFactory: WatchFactory<X, Y> = {
             watchFile: (file, callback, pollingInterval, options) => host.watchFile(file, callback, pollingInterval, options),
             watchDirectory: (directory, callback, flags, options) => host.watchDirectory(directory, callback, (flags & WatchDirectoryFlags.Recursive) !== 0, options),
