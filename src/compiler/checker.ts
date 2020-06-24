@@ -22855,14 +22855,14 @@ namespace ts {
         //   the contextual type of an initializer expression is the type implied by the binding pattern.
         // Otherwise, in a binding pattern inside a variable or parameter declaration,
         //   the contextual type of an initializer expression is the type annotation of the containing declaration, if present.
-        function getContextualTypeForInitializerExpression(node: Expression): Type | undefined {
+        function getContextualTypeForInitializerExpression(node: Expression, contextFlags?: ContextFlags): Type | undefined {
             const declaration = <VariableLikeDeclaration>node.parent;
             if (hasInitializer(declaration) && node === declaration.initializer) {
                 const result = getContextualTypeForVariableLikeDeclaration(declaration);
                 if (result) {
                     return result;
                 }
-                if (isBindingPattern(declaration.name)) { // This is less a contextual type and more an implied shape - in some cases, this may be undesirable
+                if (!(contextFlags! & ContextFlags.SkipBindingPatterns) && isBindingPattern(declaration.name)) { // This is less a contextual type and more an implied shape - in some cases, this may be undesirable
                     return getTypeFromBindingPattern(declaration.name, /*includePatternInType*/ true, /*reportErrors*/ false);
                 }
             }
@@ -22889,8 +22889,8 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualTypeForAwaitOperand(node: AwaitExpression): Type | undefined {
-            const contextualType = getContextualType(node);
+        function getContextualTypeForAwaitOperand(node: AwaitExpression, contextFlags?: ContextFlags): Type | undefined {
+            const contextualType = getContextualType(node, contextFlags);
             if (contextualType) {
                 const contextualAwaitedType = getAwaitedType(contextualType);
                 return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
@@ -23355,14 +23355,14 @@ namespace ts {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.BindingElement:
-                    return getContextualTypeForInitializerExpression(node);
+                    return getContextualTypeForInitializerExpression(node, contextFlags);
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ReturnStatement:
                     return getContextualTypeForReturnExpression(node);
                 case SyntaxKind.YieldExpression:
                     return getContextualTypeForYieldOperand(<YieldExpression>parent);
                 case SyntaxKind.AwaitExpression:
-                    return getContextualTypeForAwaitOperand(<AwaitExpression>parent);
+                    return getContextualTypeForAwaitOperand(<AwaitExpression>parent, contextFlags);
                 case SyntaxKind.CallExpression:
                     if ((<CallExpression>parent).expression.kind === SyntaxKind.ImportKeyword) {
                         return stringType;
@@ -25700,7 +25700,7 @@ namespace ts {
             // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
             // return type of 'wrap'.
             if (node.kind !== SyntaxKind.Decorator) {
-                const contextualType = getContextualType(node);
+                const contextualType = getContextualType(node, every(signature.typeParameters, p => !!getDefaultFromTypeParameter(p)) ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
                 if (contextualType) {
                     // We clone the inference context to avoid disturbing a resolution in progress for an
                     // outer call expression. Effectively we just want a snapshot of whatever has been
