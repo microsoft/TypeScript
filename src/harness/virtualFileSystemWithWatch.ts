@@ -750,7 +750,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
         }
 
-        private fsWatchCallback(map: MultiMap<string, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
+        private fsWatchCallback(map: MultiMap<Path, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
             invokeWatcherCallbacks(map.get(this.toPath(fullPath)), ({ cb }) => cb(eventName, entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : ""));
         }
 
