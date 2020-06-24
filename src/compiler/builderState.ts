@@ -91,7 +91,7 @@ namespace ts {
         function getReferencedFileFromImportedModuleSymbol(symbol: Symbol) {
             if (symbol.declarations && symbol.declarations[0]) {
                 const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
-                return declarationSourceFile && declarationSo
+                return declarationSourceFile && declarationSourceFile.resolvedPath;
             }
         }
 
