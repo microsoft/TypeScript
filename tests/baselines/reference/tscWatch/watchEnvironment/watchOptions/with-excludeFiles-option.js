@@ -24,6 +24,9 @@ export function foo(): string;
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts]
 export function fooBar(): string;
 
+//// [/user/username/projects/myproject/node_modules/bar/temp/index.d.ts]
+export function temp(): string;
+
 //// [/user/username/projects/myproject/tsconfig.json]
 {"exclude":["node_modules"],"watchOptions":{"excludeFiles":["node_modules/*"]}}
 
@@ -31,10 +34,10 @@ export function fooBar(): string;
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:33 AM[0m] Starting compilation in watch mode...
+[[90m12:00:37 AM[0m] Starting compilation in watch mode...
 
 
-[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

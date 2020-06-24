@@ -24,13 +24,16 @@ export function foo(): string;
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts]
 export function fooBar(): string;
 
+//// [/user/username/projects/myproject/node_modules/bar/temp/index.d.ts]
+export function temp(): string;
+
 //// [/user/username/projects/myproject/tsconfig.json]
 {"exclude":["node_modules"],"watchOptions":{"excludeFiles":["node_modules/*"]}}
 
 
 /a/lib/tsc.js -w -extendedDiagnostics
 Output::
-[[90m12:00:33 AM[0m] Starting compilation in watch mode...
+[[90m12:00:37 AM[0m] Starting compilation in watch mode...
 
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
@@ -69,7 +72,7 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js 
 
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 
-[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Wild card directory
