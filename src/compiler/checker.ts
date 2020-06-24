@@ -28557,11 +28557,6 @@ namespace ts {
             return undefinedWideningType;
         }
 
-        function isInTopLevelContext(node: Node) {
-            const container = getThisContainer(node, /*includeArrowFunctions*/ true);
-            return isSourceFile(container);
-        }
-
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
@@ -35168,7 +35163,6 @@ namespace ts {
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
-            checkGrammarAwaitIdentifier(node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
             checkAliasSymbol(node);
@@ -37934,22 +37928,11 @@ namespace ts {
             return false;
         }
 
-        function checkGrammarAwaitIdentifier(name: Identifier | undefined): boolean {
-            if (name && isIdentifier(name) && name.originalKeywordKind === SyntaxKind.AwaitKeyword && isInTopLevelContext(name.parent)) {
-                const file = getSourceFileOfNode(name);
-                if (!file.isDeclarationFile && isExternalModule(file)) {
-                    return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module, idText(name));
-                }
-            }
-            return false;
-        }
-
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration | MethodSignature): boolean {
             // Prevent cascading error by short-circuit
             const file = getSourceFileOfNode(node);
             return checkGrammarDecoratorsAndModifiers(node) ||
                 checkGrammarTypeParameterList(node.typeParameters, file) ||
-                (isFunctionDeclaration(node) && checkGrammarAwaitIdentifier(node.name)) ||
                 checkGrammarParameterList(node.parameters) ||
                 checkGrammarArrowFunction(node, file) ||
                 (isFunctionLikeDeclaration(node) && checkGrammarForUseStrictSimpleParameterList(node));
@@ -37957,8 +37940,7 @@ namespace ts {
 
         function checkGrammarClassLikeDeclaration(node: ClassLikeDeclaration): boolean {
             const file = getSourceFileOfNode(node);
-            return (isClassDeclaration(node) && checkGrammarAwaitIdentifier(node.name)) ||
-                checkGrammarClassDeclarationHeritageClauses(node) ||
+            return checkGrammarClassDeclarationHeritageClauses(node) ||
                 checkGrammarTypeParameterList(node.typeParameters, file);
         }
 
@@ -38601,10 +38583,6 @@ namespace ts {
                 }
             }
 
-            if (isIdentifier(node.name) && checkGrammarAwaitIdentifier(node.name)) {
-                return true;
-            }
-
             if (node.dotDotDotToken && node.initializer) {
                 // Error on equals token which immediately precedes the initializer
                 return grammarErrorAtPos(node, node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
@@ -38667,9 +38645,6 @@ namespace ts {
                         return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
                     }
                 }
-            }
-            if (isIdentifier(node.name) && checkGrammarAwaitIdentifier(node.name)) {
-                return true;
             }
 
             if (node.exclamationToken && (node.parent.parent.kind !== SyntaxKind.VariableStatement || !node.type || node.initializer || node.flags & NodeFlags.Ambient)) {
