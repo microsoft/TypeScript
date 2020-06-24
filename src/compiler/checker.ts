@@ -13605,6 +13605,9 @@ namespace ts {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
+            if (objectType === erasedType || indexType === erasedType) {
+                return erasedType;
+            }
             // If the object type has a string index signature and no other members we know that the result will
             // always be the type of that index signature and we can simplify accordingly.
             if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
