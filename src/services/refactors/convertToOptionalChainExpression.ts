@@ -71,8 +71,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             const firstOccurrence = getFirstOccurrence(expression, lastPropertyAccessChain, checker);
             return firstOccurrence ? { lastPropertyAccessChain, firstOccurrence, expression } : undefined;
         }
-
-        if (isConditionalExpression(expression)) {
+        else if (isConditionalExpression(expression)) {
             const whenTrue = expression.whenTrue;
             const condition = expression.condition;
             if ((isIdentifier(condition) || isPropertyAccessExpression(condition)) &&
@@ -90,19 +89,20 @@ namespace ts.refactor.convertToOptionalChainExpression {
         // ensure that each sequential operand in range matches the longest access chain
         let checkNode = expression.left;
         let firstOccurrence: PropertyAccessExpression | Identifier = lastPropertyAccessChain;
-        while (isBinaryExpression(checkNode) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
-            (isPropertyAccessExpression(checkNode.right) || isIdentifier(checkNode.right))) {
-            const previousReference = isPropertyAccessExpression(firstOccurrence) ? firstOccurrence.expression : firstOccurrence;
-            if (!checker.isMatchingReference(previousReference, checkNode.right)) {
+        while (isBinaryExpression(checkNode) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+            const toCheck = isIdentifier(checkNode.right) ? checkNode.right : getRightHandSidePropertyAccess(checkNode.right);
+            // The right hand side may be a (recursive) call expression, so we need to call getRightHandSidePropertyAccess
+            const previousReference = isPropertyAccessExpression(firstOccurrence) ? getRightHandSidePropertyAccess(firstOccurrence.expression) : firstOccurrence;
+            if (!previousReference || !toCheck || !checker.isOrContainsMatchingReference(previousReference, toCheck)) {
                 break;
             }
-            firstOccurrence = checkNode.right;
+            firstOccurrence = toCheck;
             checkNode = checkNode.left;
         }
         // check final LHS node
         if (isIdentifier(checkNode) || isPropertyAccessExpression(checkNode)) {
-            const previousReference = isPropertyAccessExpression(firstOccurrence) ? firstOccurrence.expression : firstOccurrence;
-            if (isPropertyAccessExpression(firstOccurrence) && checker.isMatchingReference(previousReference, checkNode)) {
+            const previousReference = isIdentifier(firstOccurrence) ? firstOccurrence : getRightHandSidePropertyAccess(firstOccurrence.expression);
+            if (previousReference && isPropertyAccessExpression(firstOccurrence) && checker.isMatchingReference(previousReference, checkNode)) {
                 firstOccurrence = checkNode;
             }
         }
@@ -141,47 +141,61 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return node.expression && isValidExpression(node.expression) ? node.expression : undefined;
     }
 
-    function getRightHandSidePropertyAccess(node: BinaryExpression | CallExpression): PropertyAccessExpression | undefined {
+    function getRightHandSidePropertyAccess(node: Expression): PropertyAccessExpression | Identifier | undefined {
         // && binary expressions are left-heavy so for most cases we just need to check if the last property access chain is on the RHS of a
-        // binary expression with an operator if higher precedence. We may want to add recursion for more complex cases like a && a.b()()() == 1;
-        if (isCallExpression(node) && isPropertyAccessExpression(node.expression)) {
+        // binary expression with an operator if higher precedence.
+        if (isPropertyAccessExpression(node) || isIdentifier(node)) {
+            return node;
+        }
+        else if (isCallExpression(node)) {
+            // cases
             // a && a.b();
-            return node.expression;
+            // a && a.b()();
+            return getRightHandSidePropertyAccess(node.expression);
         }
         else if (isBinaryExpression(node)) {
-            if (isPropertyAccessExpression(node.left)) {
-                // a && a.b == 1;
-                return node.left;
-            }
-            else if (isCallExpression(node.left) && isPropertyAccessExpression(node.left.expression)) {
-                // a && a.b() == 1;
-                return node.left.expression;
-            }
+            // cases
+            // a && a.b == 1;
+            // a && a.b() == 1;
+            return getRightHandSidePropertyAccess(node.left);
         }
         return undefined;
     }
 
     function getLastPropertyAccessChain(node: Expression): PropertyAccessExpression | undefined {
-        return isBinaryExpression(node) || isCallExpression(node) ? getRightHandSidePropertyAccess(node)
-            : isPropertyAccessExpression(node) && !isOptionalChain(node) ? node
-            : undefined;
+        if (isBinaryExpression(node) || isCallExpression(node)) {
+            const rhs = getRightHandSidePropertyAccess(node);
+            return rhs && isPropertyAccessExpression(rhs) ? rhs : undefined;
+        }
+        else if (isPropertyAccessExpression(node) && !isOptionalChain(node)) {
+            return node;
+        }
+        return undefined;
     }
 
-    function convertPropertyAccessToOptionalChain(checker: TypeChecker, toConvert: PropertyAccessExpression, until: Identifier | PrivateIdentifier): PropertyAccessExpression {
-        if (isPropertyAccessExpression(toConvert.expression) && checker.getSymbolAtLocation(toConvert.expression.name) !== checker.getSymbolAtLocation(until)) {
-            return factory.createPropertyAccessChain(convertPropertyAccessToOptionalChain(checker, toConvert.expression, until), factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name);
+    function convertToOptionalChain(checker: TypeChecker, toConvert: Expression, until: Identifier | PrivateIdentifier): Expression {
+        if (isCallExpression(toConvert)) {
+            const chain = convertToOptionalChain(checker, toConvert.expression, until);
+            return factory.createCallExpression(chain, toConvert.typeArguments, toConvert.arguments);
         }
-        return factory.createPropertyAccessChain(toConvert.expression, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name);
+        else if (isPropertyAccessExpression(toConvert) && checker.getSymbolAtLocation(toConvert.name) !== checker.getSymbolAtLocation(until)) {
+            const chain = convertToOptionalChain(checker, toConvert.expression, until);
+            return factory.createPropertyAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name);
+        }
+        return toConvert;
     }
 
     function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: Info, _actionName: string): void {
         const { lastPropertyAccessChain, firstOccurrence, expression } = info;
         const until = isPropertyAccessExpression(firstOccurrence) ? firstOccurrence.name : isIdentifier(firstOccurrence) ? firstOccurrence : lastPropertyAccessChain.name;
-        if (isBinaryExpression(expression)) {
-            changes.replaceNodeRange(sourceFile, firstOccurrence, lastPropertyAccessChain, convertPropertyAccessToOptionalChain(checker, lastPropertyAccessChain, until));
-        }
-        else if (isConditionalExpression(expression)) {
-            changes.replaceNode(sourceFile, expression, factory.createBinaryExpression(convertPropertyAccessToOptionalChain(checker, lastPropertyAccessChain, until), factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse));
+        const convertedChain = convertToOptionalChain(checker, lastPropertyAccessChain, until);
+        if (convertedChain && isPropertyAccessExpression(convertedChain)) {
+            if (isBinaryExpression(expression)) {
+                changes.replaceNodeRange(sourceFile, firstOccurrence, lastPropertyAccessChain, convertedChain);
+            }
+            else if (isConditionalExpression(expression)) {
+                changes.replaceNode(sourceFile, expression, factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse));
+            }
         }
     }
 }
