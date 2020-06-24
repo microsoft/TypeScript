@@ -56,10 +56,10 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
         // selecting fo[|o && foo.ba|]r should be valid, so adjust span to fit start and end tokens
         const startToken = getTokenAtPosition(file, span.start);
-        const endToken = getTokenAtPosition(file, span.start + span.length);
-        const adjustedSpan = createTextSpanFromNode(startToken, file, endToken);
+        const endToken = findTokenOnLeftOfPosition(file, span.start + span.length);
+        const adjustedSpan = createTextSpanFromBounds(startToken.pos, endToken && endToken.end >= startToken.pos ? endToken.getEnd() : startToken.getEnd());
 
-        const parent = forEmptySpan ? getParentForEmptySpanStartToken(startToken) : getParentNodeInSpan(startToken, file, adjustedSpan);
+        const parent = forEmptySpan ? getParentNodeForEmptySpan(startToken) : getParentNodeContainingSpan(startToken, adjustedSpan);
         const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
         if (!expression) return undefined;
 
@@ -86,7 +86,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     function getFirstOccurrence(expression: BinaryExpression, lastPropertyAccessChain: PropertyAccessExpression, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
-        if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken && expression.operatorToken.pos <= lastPropertyAccessChain.pos) return undefined;
+        if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken) return undefined;
         // ensure that each sequential operand in range matches the longest access chain
         let checkNode = expression.left;
         let firstOccurrence: PropertyAccessExpression | Identifier = lastPropertyAccessChain;
@@ -94,7 +94,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             (isPropertyAccessExpression(checkNode.right) || isIdentifier(checkNode.right))) {
             const previousReference = isPropertyAccessExpression(firstOccurrence) ? firstOccurrence.expression : firstOccurrence;
             if (!checker.isMatchingReference(previousReference, checkNode.right)) {
-                return undefined;
+                break;
             }
             firstOccurrence = checkNode.right;
             checkNode = checkNode.left;
@@ -106,15 +106,27 @@ namespace ts.refactor.convertToOptionalChainExpression {
                 firstOccurrence = checkNode;
             }
         }
-        return firstOccurrence;
+        return firstOccurrence !== lastPropertyAccessChain ? firstOccurrence : undefined;
     }
 
-    function getParentForEmptySpanStartToken(start: Node): ValidExpressionOrStatement | undefined {
-        return findAncestor<ValidExpressionOrStatement>(start, (node): node is ValidExpressionOrStatement => {
-            return node.parent &&
-                (isValidExpression(node) && !isValidExpression(node.parent) ||
-                isValidStatement(node) && !isValidStatement(node.parent));
-        });
+    function getParentNodeContainingSpan(node: Node, span: TextSpan): ValidExpressionOrStatement | undefined {
+        while (node.parent) {
+            if (isValidExpressionOrStatement(node) && span.length !== 0 && node.end >= span.start + span.length) {
+                return node;
+            }
+            node = node.parent;
+        }
+        return undefined;
+    }
+
+    function getParentNodeForEmptySpan(node: Node): ValidExpressionOrStatement | undefined {
+        while (node.parent) {
+            if (isValidExpressionOrStatement(node) && !isValidExpressionOrStatement(node.parent)) {
+                return node;
+            }
+            node = node.parent;
+        }
+        return undefined;
     }
 
     function getExpression(node: ValidExpressionOrStatement): ValidExpression | undefined {

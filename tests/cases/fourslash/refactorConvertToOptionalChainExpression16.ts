@@ -2,8 +2,10 @@
 
 ////let a = { b: { c: 0 } };
 ////let foo;
-/////*a*/foo && a && a.b && a.b.c;/*b*/
+////let bar;
+////foo && bar && /*a*/a && a.b && a.b.c;/*b*/
 
+// verify that stop at prefix sequence.
 goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Convert to optional chain expression",
@@ -12,5 +14,6 @@ edit.applyRefactor({
     newContent:
 `let a = { b: { c: 0 } };
 let foo;
-foo && a?.b?.c;`
+let bar;
+foo && bar && a?.b?.c;`
 });

@@ -1,9 +1,17 @@
 /// <reference path='fourslash.ts' />
 
 ////let a = { b: 0 };
-////let x = { b: 0 };
-/////*a*/a && a.b && x && x.y;/*b*/
+////let x = { y: 0 };
+////a && a.b && /*a*/x && x.y;/*b*/
 
-// We don't currently offer a refactor for this case but should add it in the future.
+// Verify that we stop at suffix sequence that is otherwise valid for conversion.
 goTo.select("a", "b");
-verify.not.refactorAvailable("Convert to optional chain expression");
+edit.applyRefactor({
+    refactorName: "Convert to optional chain expression",
+    actionName: "Convert to optional chain expression",
+    actionDescription: "Convert to optional chain expression",
+    newContent:
+`let a = { b: 0 };
+let x = { y: 0 };
+a && a.b && x?.y;`
+});

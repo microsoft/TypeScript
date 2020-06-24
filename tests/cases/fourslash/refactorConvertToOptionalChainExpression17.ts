@@ -2,8 +2,10 @@
 
 ////let a = { b: { c: 0 } };
 ////let foo;
-/////*a*/a && a.b && a.b.c/*b*/ && foo;
+////let bar;
+/////*a*/a && a.b && a.b.c/*b*/ && foo && bar;
 
+// verify that we stop at suffix sequence.
 goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Convert to optional chain expression",
@@ -12,5 +14,6 @@ edit.applyRefactor({
     newContent:
 `let a = { b: { c: 0 } };
 let foo;
-a?.b?.c && foo;`
+let bar;
+a?.b?.c && foo && bar;`
 });
