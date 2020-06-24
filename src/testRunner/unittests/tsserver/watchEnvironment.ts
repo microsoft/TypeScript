@@ -565,6 +565,61 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
         });
+
+        describe("excludeDirectories", () => {
+            function setup(_configureHost?: boolean) {
+                const configFile: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({ include: ["src"], })
+                };
+                const main: File = {
+                    path: `${tscWatch.projectRoot}/src/main.ts`,
+                    content: `import { foo } from "bar"; foo();`
+                };
+                const bar: File = {
+                    path: `${tscWatch.projectRoot}/node_modules/bar/index.d.ts`,
+                    content: `export { foo } from "./foo";`
+                };
+                const foo: File = {
+                    path: `${tscWatch.projectRoot}/node_modules/bar/foo.d.ts`,
+                    content: `export function foo(): string;`
+                };
+                const files = [libFile, main, bar, foo, configFile];
+                const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
+                const service = createProjectService(host);
+                service.openClientFile(main.path);
+                return { host, configFile };
+            }
+            it("with excludeDirectories option in configFile", () => {
+                const { host, configFile } = setup();
+                checkWatchedFilesDetailed(host, [configFile.path, libFile.path], 1);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    arrayToMap(
+                        [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/node_modules/@types`],
+                        identity,
+                        f => f === `${tscWatch.projectRoot}/node_modules/@types` ? 1 : 2,
+                    ),
+                    /*recursive*/ true,
+                );
+            });
+
+            it("with excludeDirectories option in configuration", () => {
+                const { host, configFile } = setup(/*configureHost*/ true);
+                checkWatchedFilesDetailed(host, [configFile.path, libFile.path], 1);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(
+                    host,
+                    arrayToMap(
+                        [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/node_modules/@types`],
+                        identity,
+                        f => f === `${tscWatch.projectRoot}/node_modules/@types` ? 1 : 2,
+                    ),
+                    /*recursive*/ true,
+                );
+            });
+        });
     });
 
     describe("unittests:: tsserver:: watchEnvironment:: file names on case insensitive file system", () => {

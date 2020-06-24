@@ -251,7 +251,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         else {
             recursiveOrExpectedDetails = recursiveOrEachDirectoryWatchCount as boolean;
             checkMap(
-                `fsWatches{recursive ? " recursive" : ""}`,
+                `fsWatches${recursiveOrExpectedDetails ? " recursive" : ""}`,
                 recursiveOrExpectedDetails ? host.fsWatchesRecursive : host.fsWatches,
                 expectedDirectories,
                 [expectedDetails, ({ directoryName, fallbackPollingInterval, fallbackOptions }) => ({ directoryName, fallbackPollingInterval, fallbackOptions })]
