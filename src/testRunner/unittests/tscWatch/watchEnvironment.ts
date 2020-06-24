@@ -474,7 +474,7 @@ namespace ts.tscWatch {
                         scenario,
                         subScenario: `watchOptions/with excludeDirectories option with recursive directory watching${additionalFlags.join("")}`,
                         commandLineArgs: ["-w", ...additionalFlags],
-                        sys: () => sys({}, /*runWithoutRecursiveWatches*/ true),
+                        sys: () => sys({ excludeDirectories: ["**/temp"] }, /*runWithoutRecursiveWatches*/ true),
                         changes: [
                             {
                                 caption: "Directory watch updates because of main.js creation",
@@ -487,12 +487,7 @@ namespace ts.tscWatch {
                             {
                                 caption: "add new folder to temp",
                                 change: sys => sys.ensureFileOrFolder({ path: `${projectRoot}/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
-                                timeouts: sys => {
-                                    sys.checkTimeoutQueueLengthAndRun(1); // To update directory watchers
-                                    sys.checkTimeoutQueueLengthAndRun(2); // To Update program and failed lookup update
-                                    sys.checkTimeoutQueueLengthAndRun(1); // Actual program update
-                                    sys.checkTimeoutQueueLength(0);
-                                },
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),
                             }
                         ]
                     });

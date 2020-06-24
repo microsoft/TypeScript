@@ -28,7 +28,7 @@ export function fooBar(): string;
 export function temp(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"],"watchOptions":{}}
+{"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["**/temp"]}}
 
 
 /a/lib/tsc.js -w
@@ -72,8 +72,6 @@ FsWatches::
   {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/node_modules/bar:
   {"directoryName":"/user/username/projects/myproject/node_modules/bar","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/bar/temp:
-  {"directoryName":"/user/username/projects/myproject/node_modules/bar/temp","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/node_modules/@types:
@@ -116,8 +114,6 @@ FsWatches::
   {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/node_modules/bar:
   {"directoryName":"/user/username/projects/myproject/node_modules/bar","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/bar/temp:
-  {"directoryName":"/user/username/projects/myproject/node_modules/bar/temp","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/node_modules/@types:
@@ -138,23 +134,6 @@ export function temp(): string;
 
 
 Output::
->> Screen clear
-[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
-
-
-[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/src/main.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/node_modules/bar/foo.d.ts
-/user/username/projects/myproject/node_modules/bar/index.d.ts
-/user/username/projects/myproject/src/main.ts
-
-Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -173,16 +152,12 @@ FsWatches::
   {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/node_modules/bar:
   {"directoryName":"/user/username/projects/myproject/node_modules/bar","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/bar/temp:
-  {"directoryName":"/user/username/projects/myproject/node_modules/bar/temp","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/node_modules/@types:
   {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/bar/temp/foobar:
-  {"directoryName":"/user/username/projects/myproject/node_modules/bar/temp/fooBar","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 FsWatchesRecursive::
 
