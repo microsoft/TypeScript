@@ -411,6 +411,69 @@ namespace ts.tscWatch {
                 },
                 changes: emptyArray
             });
+
+            describe("exclude options", () => {
+                function sys(_watchOptions: WatchOptions): WatchedSystem {
+                    const configFile: File = {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify({ exclude: ["node_modules"] })
+                    };
+                    const main: File = {
+                        path: `${projectRoot}/src/main.ts`,
+                        content: `import { foo } from "bar"; foo();`
+                    };
+                    const bar: File = {
+                        path: `${projectRoot}/node_modules/bar/index.d.ts`,
+                        content: `export { foo } from "./foo";`
+                    };
+                    const foo: File = {
+                        path: `${projectRoot}/node_modules/bar/foo.d.ts`,
+                        content: `export function foo(): string;`
+                    };
+                    const fooBar: File = {
+                        path: `${projectRoot}/node_modules/bar/fooBar.d.ts`,
+                        content: `export function fooBar(): string;`
+                    };
+                    const files = [libFile, main, bar, foo, fooBar, configFile];
+                    return createWatchedSystem(files, { currentDirectory: projectRoot });
+                }
+
+                function verifyWorker(...additionalFlags: string[]) {
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: `watchOptions/with excludeFiles option${additionalFlags.join("")}`,
+                        commandLineArgs: ["-w", ...additionalFlags],
+                        sys: () => sys({ excludeFiles: ["node_modules/*"] }),
+                        changes: [
+                            {
+                                caption: "Change foo",
+                                change: sys => replaceFileText(sys, `${projectRoot}/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
+                                timeouts: checkSingleTimeoutQueueLengthAndRun,
+                            }
+                        ]
+                    });
+
+                    verifyTscWatch({
+                        scenario,
+                        subScenario: `watchOptions/with excludeDirectories option${additionalFlags.join("")}`,
+                        commandLineArgs: ["-w", ...additionalFlags],
+                        sys: () => sys({ excludeDirectories: ["node_modules"] }),
+                        changes: [
+                            {
+                                caption: "delete fooBar",
+                                change: sys => sys.deleteFile(`${projectRoot}/node_modules/bar/fooBar.d.ts`),
+                                timeouts: sys => {
+                                    sys.checkTimeoutQueueLength(1); // Failed lookup
+                                    sys.checkTimeoutQueueLength(1); // Actual update
+                                },
+                            }
+                        ]
+                    });
+                }
+
+                verifyWorker();
+                verifyWorker("-extendedDiagnostics");
+            });
         });
     });
 }
