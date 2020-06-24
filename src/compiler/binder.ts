@@ -548,7 +548,6 @@ namespace ts {
                 }
             }
             else if (hasDeprecated) {
-
                 symbol.flags |= SymbolFlags.Deprecated;
             }
 
