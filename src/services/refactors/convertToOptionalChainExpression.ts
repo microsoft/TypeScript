@@ -143,7 +143,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
     function getRightHandSidePropertyAccess(node: Expression): PropertyAccessExpression | Identifier | undefined {
         // && binary expressions are left-heavy so for most cases we just need to check if the last property access chain is on the RHS of a
-        // binary expression with an operator if higher precedence.
+        // binary expression with an operator of higher precedence.
         if (isPropertyAccessExpression(node) || isIdentifier(node)) {
             return node;
         }
