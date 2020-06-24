@@ -1113,7 +1113,7 @@ import b = require("./moduleB");
 
             function test(hasDirectoryExists: boolean) {
                 const file1: File = { name: "/root/folder1/file1.ts" };
-                const file1_1: File = { name: "/root/folder1/file1_1/index.d.ts" }; // eslint-disable-line @typescript-eslint/camelcase
+                const file1_1: File = { name: "/root/folder1/file1_1/index.d.ts" }; // eslint-disable-line @typescript-eslint/naming-convention
                 const file2: File = { name: "/root/generated/folder1/file2.ts" };
                 const file3: File = { name: "/root/generated/folder2/file3.ts" };
                 const host = createModuleResolutionHost(hasDirectoryExists, file1, file1_1, file2, file3);
