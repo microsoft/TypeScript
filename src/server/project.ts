@@ -189,6 +189,8 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
+        protected projectErrors: Diagnostic[] | undefined;
+
         protected isInitialLoadPending: () => boolean = returnFalse;
 
         /*@internal*/
@@ -565,11 +567,18 @@ namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[] {
-            return emptyArray;
+            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
         }
 
+        /**
+         * Get all the project errors
+         */
         getAllProjectErrors(): readonly Diagnostic[] {
-            return emptyArray;
+            return this.projectErrors || emptyArray;
+        }
+
+        setProjectErrors(projectErrors: Diagnostic[] | undefined) {
+            this.projectErrors = projectErrors;
         }
 
         getLanguageService(ensureSynchronized = true): LanguageService {
@@ -742,6 +751,7 @@ namespace ts.server {
             this.resolutionCache = undefined!;
             this.cachedUnresolvedImportsPerFile = undefined!;
             this.directoryStructureHost = undefined!;
+            this.projectErrors = undefined;
 
             // Clean up file watchers waiting for missing files
             if (this.missingFilesMap) {
@@ -1966,8 +1976,6 @@ namespace ts.server {
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount = 0;
 
-        private projectErrors: Diagnostic[] | undefined;
-
         private projectReferences: readonly ProjectReference[] | undefined;
 
         /** Potential project references before the project is actually loaded (read config file) */
@@ -2135,24 +2143,6 @@ namespace ts.server {
             this.enableGlobalPlugins(options, pluginConfigOverrides);
         }
 
-        /**
-         * Get the errors that dont have any file name associated
-         */
-        getGlobalProjectErrors(): readonly Diagnostic[] {
-            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
-        }
-
-        /**
-         * Get all the project errors
-         */
-        getAllProjectErrors(): readonly Diagnostic[] {
-            return this.projectErrors || emptyArray;
-        }
-
-        setProjectErrors(projectErrors: Diagnostic[]) {
-            this.projectErrors = projectErrors;
-        }
-
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
             this.typeAcquisition = this.removeLocalTypingsFromTypeAcquisition(newTypeAcquisition);
         }
@@ -2186,7 +2176,6 @@ namespace ts.server {
             }
 
             this.stopWatchingWildCards();
-            this.projectErrors = undefined;
             this.configFileSpecs = undefined;
             this.openFileWatchTriggered.clear();
             this.compilerHost = undefined;

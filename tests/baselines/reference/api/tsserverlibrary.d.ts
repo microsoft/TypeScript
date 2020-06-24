@@ -9109,6 +9109,7 @@ declare namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion;
+        protected projectErrors: Diagnostic[] | undefined;
         protected isInitialLoadPending: () => boolean;
         private readonly cancellationToken;
         isNonTsProject(): boolean;
@@ -9147,7 +9148,11 @@ declare namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[];
+        /**
+         * Get all the project errors
+         */
         getAllProjectErrors(): readonly Diagnostic[];
+        setProjectErrors(projectErrors: Diagnostic[] | undefined): void;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         /**
@@ -9243,7 +9248,6 @@ declare namespace ts.server {
         readonly canonicalConfigFilePath: NormalizedPath;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
-        private projectErrors;
         private projectReferences;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
@@ -9253,15 +9257,6 @@ declare namespace ts.server {
         getConfigFilePath(): NormalizedPath;
         getProjectReferences(): readonly ProjectReference[] | undefined;
         updateReferences(refs: readonly ProjectReference[] | undefined): void;
-        /**
-         * Get the errors that dont have any file name associated
-         */
-        getGlobalProjectErrors(): readonly Diagnostic[];
-        /**
-         * Get all the project errors
-         */
-        getAllProjectErrors(): readonly Diagnostic[];
-        setProjectErrors(projectErrors: Diagnostic[]): void;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
         getTypeAcquisition(): TypeAcquisition;
         close(): void;
@@ -9412,7 +9407,7 @@ declare namespace ts.server {
     }
     export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
-    export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): WatchOptions | undefined;
+    export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined;
     export function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
     export function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     export interface HostConfiguration {
@@ -9441,6 +9436,10 @@ declare namespace ts.server {
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
         syntaxOnly?: boolean;
+    }
+    export interface WatchOptionsAndErrors {
+        watchOptions: WatchOptions;
+        errors: Diagnostic[] | undefined;
     }
     export class ProjectService {
         private readonly scriptInfoInNodeModulesWatchers;
