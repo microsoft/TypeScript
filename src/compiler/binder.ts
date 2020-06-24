@@ -547,7 +547,8 @@ namespace ts {
                     symbol.flags &= ~SymbolFlags.Deprecated;
                 }
             }
-            else if(hasDeprecated) {
+            else if (hasDeprecated) {
+
                 symbol.flags |= SymbolFlags.Deprecated;
             }
 
