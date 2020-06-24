@@ -10195,8 +10195,8 @@ namespace ts {
                 return type;
             }
             if (type.flags & TypeFlags.Index) {
-                const t = (<IndexType>type).type;
-                return isTupleType(t) ? getKnownKeysOfTupleType(t) : getIndexType(getApparentType(t));
+                const t = getApparentType((<IndexType>type).type);
+                return isGenericTupleType(t) ? getKnownKeysOfTupleType(t) : getIndexType(t);
             }
             if (type.flags & TypeFlags.Conditional) {
                 if ((<ConditionalType>type).root.isDistributive) {
