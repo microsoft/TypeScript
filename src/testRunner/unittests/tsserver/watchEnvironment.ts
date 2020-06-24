@@ -570,7 +570,7 @@ namespace ts.projectSystem {
             function setup(_configureHost?: boolean) {
                 const configFile: File = {
                     path: `${tscWatch.projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ include: ["src"], })
+                    content: JSON.stringify({ include: ["src"], watchOptions: { excludeDirectories: ["node_modules"] } })
                 };
                 const main: File = {
                     path: `${tscWatch.projectRoot}/src/main.ts`,
@@ -597,9 +597,9 @@ namespace ts.projectSystem {
                 checkWatchedDirectoriesDetailed(
                     host,
                     arrayToMap(
-                        [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/node_modules/@types`],
+                        [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`],
                         identity,
-                        f => f === `${tscWatch.projectRoot}/node_modules/@types` ? 1 : 2,
+                        f => f === `${tscWatch.projectRoot}/node_modules` ? 1 : 2,
                     ),
                     /*recursive*/ true,
                 );
@@ -612,9 +612,9 @@ namespace ts.projectSystem {
                 checkWatchedDirectoriesDetailed(
                     host,
                     arrayToMap(
-                        [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/node_modules/@types`],
+                        [`${tscWatch.projectRoot}/src`, `${tscWatch.projectRoot}/node_modules`],
                         identity,
-                        f => f === `${tscWatch.projectRoot}/node_modules/@types` ? 1 : 2,
+                        f => f === `${tscWatch.projectRoot}/node_modules` ? 1 : 2,
                     ),
                     /*recursive*/ true,
                 );
