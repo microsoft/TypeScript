@@ -1525,6 +1525,15 @@ namespace ts {
         }
     }
 
+    export function isInTopLevelContext(node: Node) {
+        // The name of a class or function declaration is a BindingIdentifier in its surrounding scope.
+        if (isIdentifier(node) && (isClassDeclaration(node.parent) || isFunctionDeclaration(node.parent)) && node.parent.name === node) {
+            node = node.parent;
+        }
+        const container = getThisContainer(node, /*includeArrowFunctions*/ true);
+        return isSourceFile(container);
+    }
+
     export function getNewTargetContainer(node: Node) {
         const container = getThisContainer(node, /*includeArrowFunctions*/ false);
         if (container) {
@@ -2786,7 +2795,7 @@ namespace ts {
 
     // Return true if the given identifier is classified as an IdentifierName
     export function isIdentifierName(node: Identifier): boolean {
-        let parent = node.parent;
+        const parent = node.parent;
         switch (parent.kind) {
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -2801,13 +2810,7 @@ namespace ts {
                 return (<NamedDeclaration | PropertyAccessExpression>parent).name === node;
             case SyntaxKind.QualifiedName:
                 // Name on right hand side of dot in a type query or type reference
-                if ((<QualifiedName>parent).right === node) {
-                    while (parent.kind === SyntaxKind.QualifiedName) {
-                        parent = parent.parent;
-                    }
-                    return parent.kind === SyntaxKind.TypeQuery || parent.kind === SyntaxKind.TypeReference;
-                }
-                return false;
+                return (<QualifiedName>parent).right === node;
             case SyntaxKind.BindingElement:
             case SyntaxKind.ImportSpecifier:
                 // Property name in binding element or import specifier
