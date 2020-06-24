@@ -83,6 +83,7 @@ declare namespace ts.server {
         useCaseSensitiveFileNames: boolean;
         writeFile(path: string, content: string): void;
         createDirectory(path: string): void;
+        getCurrentDirectory?(): string;
         watchFile?(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
         watchDirectory?(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
     }

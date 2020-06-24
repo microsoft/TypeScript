@@ -423,6 +423,8 @@ namespace ts {
     export interface WatchFactoryHost {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
+        getCurrentDirectory?(): string;
+        useCaseSensitiveFileNames: boolean | (() => boolean);
     }
 
     export interface WatchFactory<X, Y = undefined> {
@@ -445,12 +447,52 @@ namespace ts {
                 watchDirectory: createTriggerLoggingAddWatch("watchDirectory")
             } :
             undefined;
-        return watchLogLevel === WatchLogLevel.Verbose ?
+        const factory = watchLogLevel === WatchLogLevel.Verbose ?
             {
                 watchFile: createFileWatcherWithLogging,
                 watchDirectory: createDirectoryWatcherWithLogging
             } :
             triggerInvokingFactory || plainInvokeFactory;
+        const excludeWatcherFactory = watchLogLevel === WatchLogLevel.Verbose ?
+            createExcludeWatcherWithLogging :
+            returnNoopFileWatcher;
+
+        return {
+            watchFile: createExcludeHandlingAddWatch("watchFile"),
+            watchDirectory: createExcludeHandlingAddWatch("watchDirectory")
+        };
+
+        function createExcludeHandlingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
+            return (
+                file: string,
+                cb: FileWatcherCallback | DirectoryWatcherCallback,
+                flags: PollingInterval | WatchDirectoryFlags,
+                options: WatchOptions | undefined,
+                detailInfo1: X,
+                detailInfo2?: Y
+            ) => !matchesExclude(file, key === "watchFile" ? options?.excludeFiles : options?.excludeDirectories, useCaseSensitiveFileNames(), host.getCurrentDirectory?.() || "") ?
+                    factory[key].call(/*thisArgs*/ undefined, file, cb, flags, options, detailInfo1, detailInfo2) :
+                    excludeWatcherFactory(file, flags, options, detailInfo1, detailInfo2);
+        }
+
+        function useCaseSensitiveFileNames() {
+            return typeof host.useCaseSensitiveFileNames === "boolean" ?
+                host.useCaseSensitiveFileNames :
+                host.useCaseSensitiveFileNames();
+        }
+
+        function createExcludeWatcherWithLogging(
+            file: string,
+            flags: PollingInterval | WatchDirectoryFlags,
+            options: WatchOptions | undefined,
+            detailInfo1: X,
+            detailInfo2?: Y
+        ) {
+            log(`ExcludeWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
+            return {
+                close: () => log(`ExcludeWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`)
+            };
+        }
 
         function createFileWatcherWithLogging(
             file: string,
@@ -496,7 +538,7 @@ namespace ts {
             };
         }
 
-        function createTriggerLoggingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T,): WatchFactory<X, Y>[T] {
+        function createTriggerLoggingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
             return (
                 file: string,
                 cb: FileWatcherCallback | DirectoryWatcherCallback,

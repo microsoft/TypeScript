@@ -3109,7 +3109,32 @@ namespace ts {
             }
         }
 
-        const excludePattern = getRegularExpressionForWildcard(validatedExcludeSpecs, combinePaths(normalizePath(currentDirectory), basePath), "exclude");
+        return matchesExcludeWorker(pathToCheck, validatedExcludeSpecs, useCaseSensitiveFileNames, currentDirectory, basePath);
+    }
+
+    /* @internal */
+    export function matchesExclude(
+        pathToCheck: string,
+        excludeSpecs: readonly string[] | undefined,
+        useCaseSensitiveFileNames: boolean,
+        currentDirectory: string
+    ) {
+        return matchesExcludeWorker(
+            pathToCheck,
+            filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcardPattern.test(spec)),
+            useCaseSensitiveFileNames,
+            currentDirectory
+        );
+    }
+
+    function matchesExcludeWorker(
+        pathToCheck: string,
+        excludeSpecs: readonly string[] | undefined,
+        useCaseSensitiveFileNames: boolean,
+        currentDirectory: string,
+        basePath?: string
+    ) {
+        const excludePattern = getRegularExpressionForWildcard(excludeSpecs, combinePaths(normalizePath(currentDirectory), basePath), "exclude");
         const excludeRegex = excludePattern && getRegexFromPattern(excludePattern, useCaseSensitiveFileNames);
         if (!excludeRegex) return false;
         if (excludeRegex.test(pathToCheck)) return true;
