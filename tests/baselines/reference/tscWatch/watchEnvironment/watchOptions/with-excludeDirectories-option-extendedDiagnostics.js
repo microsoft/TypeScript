@@ -123,12 +123,6 @@ Input::
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] deleted
 
 Output::
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/fooBar.d.ts :: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Wild card directory
-
-Project: /user/username/projects/myproject/tsconfig.json Detected excluded file: /user/username/projects/myproject/node_modules/bar/fooBar.d.ts
-
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/fooBar.d.ts :: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Wild card directory
-
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
