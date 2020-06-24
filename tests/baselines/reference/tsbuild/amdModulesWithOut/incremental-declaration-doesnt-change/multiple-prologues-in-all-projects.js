@@ -1,4 +1,10 @@
-//// [/lib/incremental-declaration-doesnt-changeOutput.txt]
+Input::
+//// [/src/lib/file1.ts]
+export const x = 10;console.log(x);
+
+
+
+Output::
 /lib/tsc --b /src/app --verbose
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
@@ -506,9 +512,6 @@ declare module "file3" {
 declare const myVar = 30;
 
 ======================================================================
-
-//// [/src/lib/file1.ts]
-export const x = 10;console.log(x);
 
 //// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents

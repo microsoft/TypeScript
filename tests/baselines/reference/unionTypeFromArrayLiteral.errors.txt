@@ -1,6 +1,5 @@
 tests/cases/conformance/types/union/unionTypeFromArrayLiteral.ts(9,5): error TS2322: Type '[number, string, string]' is not assignable to type '[number, string]'.
-  Types of property 'length' are incompatible.
-    Type '3' is not assignable to type '2'.
+  Source has 3 element(s) but target allows only 2.
 
 
 ==== tests/cases/conformance/types/union/unionTypeFromArrayLiteral.ts (1 errors) ====
@@ -15,8 +14,7 @@ tests/cases/conformance/types/union/unionTypeFromArrayLiteral.ts(9,5): error TS2
     var arr4Tuple: [number, string] = [3, "three", "hello"]; // [number, string, string]
         ~~~~~~~~~
 !!! error TS2322: Type '[number, string, string]' is not assignable to type '[number, string]'.
-!!! error TS2322:   Types of property 'length' are incompatible.
-!!! error TS2322:     Type '3' is not assignable to type '2'.
+!!! error TS2322:   Source has 3 element(s) but target allows only 2.
     var arrEmpty = [];
     var arr5Tuple: {
         0: string;

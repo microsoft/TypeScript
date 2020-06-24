@@ -1,4 +1,4 @@
-/a/lib/tsc.js --b -w
+Input::
 //// [/user/username/projects/myproject/a.ts]
 export function foo() { }
 
@@ -30,6 +30,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+/a/lib/tsc.js --b -w
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -68,8 +69,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: reports syntax errors after change to config file
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
     "compilerOptions": {
@@ -121,8 +124,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: reports syntax errors after change to ts file
 
+Input::
 //// [/user/username/projects/myproject/a.ts]
 export function fooBar() { }
 
@@ -165,8 +170,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: reports error when there is no change to tsconfig file
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json] file written with same contents
 
 Output::
@@ -207,10 +214,48 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: builds after fixing config file errors
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"composite":true,"declaration":true},"files":["a.ts","b.ts"]}
+
+
+Output::
+>> Screen clear
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+
+
+[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
+Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+
+WatchedFiles::
+/user/username/projects/myproject/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/a.ts:
+  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
+/user/username/projects/myproject/b.ts:
+  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
@@ -273,38 +318,3 @@ export declare function bar(): void;
   "version": "FakeTSVersion"
 }
 
-
-Output::
->> Screen clear
-[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
-
-
-[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.undefined

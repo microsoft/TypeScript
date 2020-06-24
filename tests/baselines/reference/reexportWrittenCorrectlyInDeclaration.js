@@ -49,6 +49,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports.ThingB = exports.ThingA = void 0;
 var ThingA_1 = require("./ThingA");
 __createBinding(exports, ThingA_1, "ThingA");
 var ThingB_1 = require("./ThingB");

@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/app.ts]
 let x = 10
 
@@ -26,11 +26,8 @@ interface Array<T> { length: number; [n: number]: T; }
     }
 }
 
-//// [/a/b/app.js]
-var x = 10;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYXBwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLElBQUksQ0FBQyxHQUFHLEVBQUUsQ0FBQSJ9
 
-
+/a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
@@ -84,8 +81,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/app.js]
+var x = 10;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYXBwLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLElBQUksQ0FBQyxHQUFHLEVBQUUsQ0FBQSJ9
+
+
 Change:: Remove the comment from config file
 
+Input::
 //// [/a/b/tsconfig.json]
 
 {
@@ -148,3 +151,4 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

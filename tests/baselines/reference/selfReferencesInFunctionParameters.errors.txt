@@ -1,28 +1,28 @@
-tests/cases/compiler/selfReferencesInFunctionParameters.ts(1,26): error TS2372: Parameter 'x' cannot be referenced in its initializer.
-tests/cases/compiler/selfReferencesInFunctionParameters.ts(4,35): error TS2372: Parameter 'x' cannot be referenced in its initializer.
-tests/cases/compiler/selfReferencesInFunctionParameters.ts(8,28): error TS2372: Parameter 'y' cannot be referenced in its initializer.
-tests/cases/compiler/selfReferencesInFunctionParameters.ts(11,29): error TS2372: Parameter 'b' cannot be referenced in its initializer.
+tests/cases/compiler/selfReferencesInFunctionParameters.ts(1,26): error TS2372: Parameter 'x' cannot reference itself.
+tests/cases/compiler/selfReferencesInFunctionParameters.ts(4,35): error TS2372: Parameter 'x' cannot reference itself.
+tests/cases/compiler/selfReferencesInFunctionParameters.ts(8,28): error TS2372: Parameter 'y' cannot reference itself.
+tests/cases/compiler/selfReferencesInFunctionParameters.ts(11,29): error TS2372: Parameter 'b' cannot reference itself.
 
 
 ==== tests/cases/compiler/selfReferencesInFunctionParameters.ts (4 errors) ====
     function foo(x: number = x) {
                              ~
-!!! error TS2372: Parameter 'x' cannot be referenced in its initializer.
+!!! error TS2372: Parameter 'x' cannot reference itself.
     }
     
     function bar(x0 = "", x: number = x) {
                                       ~
-!!! error TS2372: Parameter 'x' cannot be referenced in its initializer.
+!!! error TS2372: Parameter 'x' cannot reference itself.
     }
     
     class C {
         constructor(x = 1, y = y) {
                                ~
-!!! error TS2372: Parameter 'y' cannot be referenced in its initializer.
+!!! error TS2372: Parameter 'y' cannot reference itself.
         }
          
         bar(a = "", b: string = b.toString()) {
                                 ~
-!!! error TS2372: Parameter 'b' cannot be referenced in its initializer.
+!!! error TS2372: Parameter 'b' cannot reference itself.
         }
     }

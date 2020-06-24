@@ -1,28 +1,70 @@
-tests/cases/conformance/directives/ts-expect-error.ts(4,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(10,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(13,5): error TS2322: Type '"nope"' is not assignable to type 'number'.
+tests/cases/conformance/directives/ts-expect-error.ts(8,1): error TS2578: Unused '@ts-expect-error' directive.
+tests/cases/conformance/directives/ts-expect-error.ts(11,1): error TS2578: Unused '@ts-expect-error' directive.
+tests/cases/conformance/directives/ts-expect-error.ts(21,1): error TS2578: Unused '@ts-expect-error' directive.
+tests/cases/conformance/directives/ts-expect-error.ts(24,1): error TS2578: Unused '@ts-expect-error' directive.
+tests/cases/conformance/directives/ts-expect-error.ts(28,1): error TS2578: Unused '@ts-expect-error' directive.
+tests/cases/conformance/directives/ts-expect-error.ts(31,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/directives/ts-expect-error.ts(37,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(39,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(40,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
 
 
-==== tests/cases/conformance/directives/ts-expect-error.ts (3 errors) ====
+==== tests/cases/conformance/directives/ts-expect-error.ts (9 errors) ====
     // @ts-expect-error additional commenting
-    var invalidCommentedFancy: number = 'nope';
+    var invalidCommentedFancySingle: number = 'nope';
+    
+    /*
+     @ts-expect-error additional commenting */
+    var invalidCommentedFancyMulti: number = 'nope';
     
     // @ts-expect-error additional commenting
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2578: Unused '@ts-expect-error' directive.
-    var validCommentedFancy: string = 'nope';
+    var validCommentedFancySingle: string = 'nope';
+    
+    /* @ts-expect-error additional commenting */
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
+    var validCommentedFancyMulti: string = 'nope';
     
     // @ts-expect-error
-    var invalidCommentedPlain: number = 'nope';
+    var invalidCommentedPlainSingle: number = 'nope';
+    
+    /*
+     @ts-expect-error */
+    var invalidCommentedPlainMulti: number = 'nope';
     
     // @ts-expect-error
     ~~~~~~~~~~~~~~~~~~~
 !!! error TS2578: Unused '@ts-expect-error' directive.
-    var validCommentedPlain: string = 'nope';
+    var validCommentedPlainSingle: string = 'nope';
+    
+    /* @ts-expect-error */
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
+    var validCommentedPlainMulti1: string = 'nope';
+    
+    /*
+    @ts-expect-error */
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2578: Unused '@ts-expect-error' directive.
+    var validCommentedPlainMulti2: string = 'nope';
     
     var invalidPlain: number = 'nope';
         ~~~~~~~~~~~~
-!!! error TS2322: Type '"nope"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     var validPlain: string = 'nope';
     
+    // @ts-expect-error
+    (({ a: true } as const).a === false); // <-- compiles (as expected via comment)
+    (({ a: true } as const).a === false); // Should error
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+    
+    (({ a: true } as const).a === false); // error
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+    (({ a: true } as const).a === false); // error
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.

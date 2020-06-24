@@ -1,6 +1,10 @@
 /*@internal*/
 namespace ts {
     export function transformECMAScriptModule(context: TransformationContext) {
+        const {
+            factory,
+            getEmitHelperFactory: emitHelpers,
+        } = context;
         const compilerOptions = context.getCompilerOptions();
         const previousOnEmitNode = context.onEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
@@ -10,7 +14,7 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.Identifier);
 
         let helperNameSubstitutions: Map<Identifier> | undefined;
-        return chainBundle(transformSourceFile);
+        return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
@@ -18,23 +22,34 @@ namespace ts {
             }
 
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(node, compilerOptions);
-                if (externalHelpersImportDeclaration) {
-                    const statements: Statement[] = [];
-                    const statementOffset = addPrologue(statements, node.statements);
-                    append(statements, externalHelpersImportDeclaration);
-
-                    addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
-                    return updateSourceFileNode(
-                        node,
-                        setTextRange(createNodeArray(statements), node.statements));
+                const result = updateExternalModule(node);
+                if (!isExternalModule(node) || some(result.statements, isExternalModuleIndicator)) {
+                    return result;
                 }
-                else {
-                    return visitEachChild(node, visitor, context);
-                }
+                return factory.updateSourceFile(
+                    result,
+                    setTextRange(factory.createNodeArray([...result.statements, createEmptyExports(factory)]), result.statements),
+                );
             }
 
             return node;
+        }
+
+        function updateExternalModule(node: SourceFile) {
+            const externalHelpersImportDeclaration = createExternalHelpersImportDeclarationIfNeeded(factory, emitHelpers(), node, compilerOptions);
+            if (externalHelpersImportDeclaration) {
+                const statements: Statement[] = [];
+                const statementOffset = factory.copyPrologue(node.statements, statements);
+                append(statements, externalHelpersImportDeclaration);
+
+                addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
+                return factory.updateSourceFile(
+                    node,
+                    setTextRange(factory.createNodeArray(statements), node.statements));
+            }
+            else {
+                return visitEachChild(node, visitor, context);
+            }
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -69,12 +84,14 @@ namespace ts {
             }
 
             const oldIdentifier = node.exportClause.name;
-            const synthName = getGeneratedNameForNode(oldIdentifier);
-            const importDecl = createImportDeclaration(
+            const synthName = factory.getGeneratedNameForNode(oldIdentifier);
+            const importDecl = factory.createImportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                createImportClause(/*name*/ undefined,
-                    createNamespaceImport(
+                factory.createImportClause(
+                    /*isTypeOnly*/ false,
+                    /*name*/ undefined,
+                    factory.createNamespaceImport(
                         synthName
                     )
                 ),
@@ -82,10 +99,11 @@ namespace ts {
             );
             setOriginalNode(importDecl, node.exportClause);
 
-            const exportDecl = createExportDeclaration(
+            const exportDecl = factory.createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                createNamedExports([createExportSpecifier(synthName, oldIdentifier)]),
+                /*isTypeOnly*/ false,
+                factory.createNamedExports([factory.createExportSpecifier(synthName, oldIdentifier)]),
             );
             setOriginalNode(exportDecl, node);
 
@@ -139,7 +157,7 @@ namespace ts {
             const name = idText(node);
             let substitution = helperNameSubstitutions!.get(name);
             if (!substitution) {
-                helperNameSubstitutions!.set(name, substitution = createFileLevelUniqueName(name));
+                helperNameSubstitutions!.set(name, substitution = factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel));
             }
             return substitution;
         }

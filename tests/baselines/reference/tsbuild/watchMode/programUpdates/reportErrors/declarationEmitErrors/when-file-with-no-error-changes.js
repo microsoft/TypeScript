@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w app
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -25,6 +25,7 @@ export class myClass { }
 {"compilerOptions":{"composite":true}}
 
 
+/a/lib/tsc.js -b -w app
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
@@ -68,8 +69,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Change fileWithoutError
 
+Input::
 //// [/user/username/projects/solution/app/fileWithoutError.ts]
 export class myClass2 { }
 
@@ -114,3 +117,4 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/solution/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+

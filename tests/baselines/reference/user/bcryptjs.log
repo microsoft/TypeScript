@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/bcryptjs/scripts/build.js(1,26): error TS2307: Cannot find module 'metascript' or its corresponding type declarations.
 node_modules/bcryptjs/scripts/build.js(32,1): error TS2741: Property 'ISAAC' is missing in type '{ VERSION: any; }' but required in type '{ VERSION: any; ISAAC: boolean; }'.

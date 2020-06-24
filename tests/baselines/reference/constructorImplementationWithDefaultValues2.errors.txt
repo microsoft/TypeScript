@@ -1,6 +1,6 @@
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(3,17): error TS2322: Type '1' is not assignable to type 'string'.
-tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(10,17): error TS2322: Type '1' is not assignable to type 'T'.
-  'T' could be instantiated with an arbitrary type which could be unrelated to '1'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(3,17): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(10,17): error TS2322: Type 'number' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(10,27): error TS2322: Type 'T' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts(17,17): error TS2322: Type 'Date' is not assignable to type 'T'.
@@ -12,7 +12,7 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
         constructor(x);
         constructor(public x: string = 1) { // error
                     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '1' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
             var y = x;
         }
     }
@@ -21,8 +21,8 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
         constructor(x: T, y: U);
         constructor(x: T = 1, public y: U = x) { // error
                     ~~~~~~~~
-!!! error TS2322: Type '1' is not assignable to type 'T'.
-!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to '1'.
+!!! error TS2322: Type 'number' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
                               ~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.

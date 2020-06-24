@@ -2,7 +2,7 @@
 // Repro from #17456
 
 type StringContains<S extends string, L extends string> = (
->StringContains : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
+>StringContains : StringContains<S, L>
 
     { [K in S]:      'true' } &
     { [key: string]: 'false' }
@@ -11,10 +11,10 @@ type StringContains<S extends string, L extends string> = (
   )[L]
 
 type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>
->ObjectHasKey : ({ [K in Extract<keyof O, string>]: "true"; } & { [key: string]: "false"; })[L]
+>ObjectHasKey : StringContains<Extract<keyof O, string>, L>
 
 type First<T> = ObjectHasKey<T, '0'>;  // Should be deferred
->First : ({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["0"]
+>First : StringContains<Extract<keyof T, string>, "0">
 
 type T1 = ObjectHasKey<{ a: string }, 'a'>;  // 'true'
 >T1 : "true"

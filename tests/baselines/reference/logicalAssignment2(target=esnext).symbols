@@ -1,0 +1,142 @@
+=== tests/cases/conformance/esnext/logicalAssignment/logicalAssignment2.ts ===
+interface A {
+>A : Symbol(A, Decl(logicalAssignment2.ts, 0, 0))
+
+    foo: {
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+
+        bar(): {
+>bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+
+            baz: 0 | 1 | 42 | undefined | ''
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+        }
+        baz: 0 | 1 | 42 | undefined | ''
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+    }
+    baz: 0 | 1 | 42 | undefined | ''
+>baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+}
+
+declare const result: A
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>A : Symbol(A, Decl(logicalAssignment2.ts, 0, 0))
+
+declare const a: A
+>a : Symbol(a, Decl(logicalAssignment2.ts, 11, 13))
+>A : Symbol(A, Decl(logicalAssignment2.ts, 0, 0))
+
+declare const b: A
+>b : Symbol(b, Decl(logicalAssignment2.ts, 12, 13))
+>A : Symbol(A, Decl(logicalAssignment2.ts, 0, 0))
+
+declare const c: A
+>c : Symbol(c, Decl(logicalAssignment2.ts, 13, 13))
+>A : Symbol(A, Decl(logicalAssignment2.ts, 0, 0))
+
+a.baz &&= result.baz
+>a.baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+>a : Symbol(a, Decl(logicalAssignment2.ts, 11, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+>result.baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+
+b.baz ||= result.baz
+>b.baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+>b : Symbol(b, Decl(logicalAssignment2.ts, 12, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+>result.baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+
+c.baz ??= result.baz
+>c.baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+>c : Symbol(c, Decl(logicalAssignment2.ts, 13, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+>result.baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>baz : Symbol(A.baz, Decl(logicalAssignment2.ts, 6, 5))
+
+a.foo["baz"] &&= result.foo.baz
+>a.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>a : Symbol(a, Decl(logicalAssignment2.ts, 11, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>"baz" : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+>result.foo.baz : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+>result.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+
+b.foo["baz"] ||= result.foo.baz
+>b.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>b : Symbol(b, Decl(logicalAssignment2.ts, 12, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>"baz" : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+>result.foo.baz : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+>result.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+
+c.foo["baz"] ??= result.foo.baz
+>c.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>c : Symbol(c, Decl(logicalAssignment2.ts, 13, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>"baz" : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+>result.foo.baz : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+>result.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 4, 9))
+
+a.foo.bar().baz &&= result.foo.bar().baz
+>a.foo.bar().baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+>a.foo.bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>a.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>a : Symbol(a, Decl(logicalAssignment2.ts, 11, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+>result.foo.bar().baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+>result.foo.bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>result.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+
+b.foo.bar().baz ||= result.foo.bar().baz
+>b.foo.bar().baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+>b.foo.bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>b.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>b : Symbol(b, Decl(logicalAssignment2.ts, 12, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+>result.foo.bar().baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+>result.foo.bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>result.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+
+c.foo.bar().baz ??= result.foo.bar().baz
+>c.foo.bar().baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+>c.foo.bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>c.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>c : Symbol(c, Decl(logicalAssignment2.ts, 13, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+>result.foo.bar().baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+>result.foo.bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>result.foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>result : Symbol(result, Decl(logicalAssignment2.ts, 10, 13))
+>foo : Symbol(A.foo, Decl(logicalAssignment2.ts, 0, 13))
+>bar : Symbol(bar, Decl(logicalAssignment2.ts, 1, 10))
+>baz : Symbol(baz, Decl(logicalAssignment2.ts, 2, 16))
+
+

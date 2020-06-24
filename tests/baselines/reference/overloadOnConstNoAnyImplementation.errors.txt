@@ -1,5 +1,5 @@
 tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(1,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(9,8): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(9,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/compiler/overloadOnConstNoAnyImplementation.ts (2 errors) ====
@@ -16,7 +16,7 @@ tests/cases/compiler/overloadOnConstNoAnyImplementation.ts(9,8): error TS2345: A
         cb('uh');
         cb(1); // error
            ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     }
     
     var cb: (number) => number = (x: number) => 1;

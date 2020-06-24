@@ -588,6 +588,9 @@ namespace Harness.LanguageService {
         getProgram(): ts.Program {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
+        getAutoImportProvider(): ts.Program | undefined {
+            throw new Error("Program can not be marshaled across the shim layer.");
+        }
         getNonBoundSourceFile(): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }

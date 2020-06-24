@@ -46,6 +46,7 @@ namespace ts.Completions {
         kind: SymbolOriginInfoKind;
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
+        isFromPackageJson?: boolean;
     }
 
     function originIsThisType(origin: SymbolOriginInfo): boolean {
@@ -58,6 +59,10 @@ namespace ts.Completions {
 
     function originIsExport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport {
         return !!(origin && origin.kind & SymbolOriginInfoKind.Export);
+    }
+
+    function originIsPackageJsonImport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport {
+        return originIsExport(origin) && !!origin.isFromPackageJson;
     }
 
     function originIsPromise(origin: SymbolOriginInfo): boolean {
@@ -159,7 +164,7 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         position: number,
         preferences: UserPreferences,
-        triggerCharacter: CompletionsTriggerCharacter | undefined,
+        triggerCharacter: CompletionsTriggerCharacter | undefined
     ): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
@@ -437,6 +442,7 @@ namespace ts.Completions {
             isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
             replacementSpan,
+            isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         };
     }
 
@@ -834,7 +840,7 @@ namespace ts.Completions {
         position: number,
         preferences: Pick<UserPreferences, "includeCompletionsForModuleExports" | "includeCompletionsWithInsertText" | "includeAutomaticOptionalChainCompletions">,
         detailsEntryId: CompletionEntryIdentifier | undefined,
-        host: LanguageServiceHost,
+        host: LanguageServiceHost
     ): CompletionData | Request | undefined {
         const typeChecker = program.getTypeChecker();
 
@@ -875,7 +881,7 @@ namespace ts.Completions {
                     //    *         |c|
                     //    */
                     const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                    if (!(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/))) {
+                    if (!/[^\*|\s(/)]/.test(sourceFile.text.substring(lineStart, position))) {
                         return { kind: CompletionDataKind.JsDocTag };
                     }
                 }
@@ -1235,7 +1241,7 @@ namespace ts.Completions {
                 // each individual type has. This is because we're going to add all identifiers
                 // anyways. So we might as well elevate the members that were at least part
                 // of the individual types to a higher status since we know what they are.
-                symbols.push(...getPropertiesForCompletion(type, typeChecker));
+                symbols.push(...filter(getPropertiesForCompletion(type, typeChecker), s => typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, s)));
             }
             else {
                 for (const symbol of type.getApparentProperties()) {
@@ -1607,18 +1613,19 @@ namespace ts.Completions {
             /** Bucket B */
             const aliasesToAlreadyIncludedSymbols = createMap<true>();
             /** Bucket C */
-            const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol }>();
+            const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol, isFromPackageJson: boolean }>();
             /** Bucket A */
             const results: AutoImportSuggestion[] = [];
             /** Ids present in `results` for faster lookup */
             const resultSymbolIds = createMap<true>();
 
-            codefix.forEachExternalModuleToImportFrom(program, host, sourceFile, !detailsEntryId, moduleSymbol => {
+            codefix.forEachExternalModuleToImportFrom(program, host, sourceFile, !detailsEntryId, /*useAutoImportProvider*/ true, (moduleSymbol, _, program, isFromPackageJson) => {
                 // Perf -- ignore other modules if this is a request for details
                 if (detailsEntryId && detailsEntryId.source && stripQuotes(moduleSymbol.name) !== detailsEntryId.source) {
                     return;
                 }
 
+                const typeChecker = program.getTypeChecker();
                 const resolvedModuleSymbol = typeChecker.resolveExternalModuleSymbol(moduleSymbol);
                 // resolvedModuleSymbol may be a namespace. A namespace may be `export =` by multiple module declarations, but only keep the first one.
                 if (!addToSeen(seenResolvedModules, getSymbolId(resolvedModuleSymbol))) {
@@ -1628,7 +1635,7 @@ namespace ts.Completions {
                 // Don't add another completion for `export =` of a symbol that's already global.
                 // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
                 if (resolvedModuleSymbol !== moduleSymbol && every(resolvedModuleSymbol.declarations, isNonGlobalDeclaration)) {
-                    pushSymbol(resolvedModuleSymbol, moduleSymbol, /*skipFilter*/ true);
+                    pushSymbol(resolvedModuleSymbol, moduleSymbol, isFromPackageJson, /*skipFilter*/ true);
                 }
 
                 for (const symbol of typeChecker.getExportsAndPropertiesOfModule(moduleSymbol)) {
@@ -1653,7 +1660,7 @@ namespace ts.Completions {
                         const nearestExportSymbolId = getSymbolId(nearestExportSymbol).toString();
                         const symbolHasBeenSeen = resultSymbolIds.has(nearestExportSymbolId) || aliasesToAlreadyIncludedSymbols.has(nearestExportSymbolId);
                         if (!symbolHasBeenSeen) {
-                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId, { alias: symbol, moduleSymbol });
+                            aliasesToReturnIfOriginalsAreMissing.set(nearestExportSymbolId, { alias: symbol, moduleSymbol, isFromPackageJson });
                             aliasesToAlreadyIncludedSymbols.set(symbolId, true);
                         }
                         else {
@@ -1665,18 +1672,18 @@ namespace ts.Completions {
                     else {
                         // This is not a re-export, so see if we have any aliases pending and remove them (step 3 in diagrammed example)
                         aliasesToReturnIfOriginalsAreMissing.delete(symbolId);
-                        pushSymbol(symbol, moduleSymbol);
+                        pushSymbol(symbol, moduleSymbol, isFromPackageJson, /*skipFilter*/ false);
                     }
                 }
             });
 
             // By this point, any potential duplicates that were actually duplicates have been
             // removed, so the rest need to be added. (Step 4 in diagrammed example)
-            aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol }) => pushSymbol(alias, moduleSymbol));
+            aliasesToReturnIfOriginalsAreMissing.forEach(({ alias, moduleSymbol, isFromPackageJson }) => pushSymbol(alias, moduleSymbol, isFromPackageJson, /*skipFilter*/ false));
             log(`getSymbolsFromOtherSourceFileExports: ${timestamp() - startTime}`);
             return results;
 
-            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, skipFilter = false) {
+            function pushSymbol(symbol: Symbol, moduleSymbol: Symbol, isFromPackageJson: boolean, skipFilter: boolean) {
                 const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
                 if (isDefaultExport) {
                     symbol = getLocalSymbolForExportDefault(symbol) || symbol;
@@ -1685,7 +1692,7 @@ namespace ts.Completions {
                     return;
                 }
                 addToSeen(resultSymbolIds, getSymbolId(symbol));
-                const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport };
+                const origin: SymbolOriginInfoExport = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport, isFromPackageJson };
                 results.push({
                     symbol,
                     symbolName: getNameForExportedSymbol(symbol, target),
@@ -1990,7 +1997,7 @@ namespace ts.Completions {
             if (!isClassLike(decl)) return GlobalsSearch.Success;
 
             const classElement = contextToken.kind === SyntaxKind.SemicolonToken ? contextToken.parent.parent : contextToken.parent;
-            let classElementModifierFlags = isClassElement(classElement) ? getModifierFlags(classElement) : ModifierFlags.None;
+            let classElementModifierFlags = isClassElement(classElement) ? getEffectiveModifierFlags(classElement) : ModifierFlags.None;
             // If this is context token is not something we are editing now, consider if this would lead to be modifier
             if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
                 switch (contextToken.getText()) {
@@ -2409,12 +2416,12 @@ namespace ts.Completions {
                 }
 
                 // Dont filter member even if the name matches if it is declared private in the list
-                if (hasModifier(m, ModifierFlags.Private)) {
+                if (hasEffectiveModifier(m, ModifierFlags.Private)) {
                     continue;
                 }
 
                 // do not filter it out if the static presence doesnt match
-                if (hasModifier(m, ModifierFlags.Static) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
+                if (hasEffectiveModifier(m, ModifierFlags.Static) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
                     continue;
                 }
 
@@ -2427,7 +2434,8 @@ namespace ts.Completions {
             return baseSymbols.filter(propertySymbol =>
                 !existingMemberNames.has(propertySymbol.escapedName) &&
                 !!propertySymbol.declarations &&
-                !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private));
+                !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private) &&
+                !isPrivateIdentifierPropertyDeclaration(propertySymbol.valueDeclaration));
         }
 
         /**
@@ -2684,10 +2692,16 @@ namespace ts.Completions {
                     return cls;
                 }
                 break;
-            case SyntaxKind.Identifier: // class c extends React.Component { a: () => 1\n compon| }
+           case SyntaxKind.Identifier: {
+                // class c { public prop = c| }
+                if (isPropertyDeclaration(location.parent) && location.parent.initializer === location) {
+                    return undefined;
+                }
+                // class c extends React.Component { a: () => 1\n compon| }
                 if (isFromObjectTypeDeclaration(location)) {
                     return findAncestor(location, isObjectTypeDeclaration);
                 }
+            }
         }
 
         if (!contextToken) return undefined;

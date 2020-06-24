@@ -392,6 +392,9 @@ namespace ts {
             case SyntaxKind.EqualsToken:
             case SyntaxKind.CommaToken:
             case SyntaxKind.QuestionQuestionToken:
+            case SyntaxKind.BarBarEqualsToken:
+            case SyntaxKind.AmpersandAmpersandEqualsToken:
+            case SyntaxKind.QuestionQuestionEqualsToken:
                 return true;
             default:
                 return false;
@@ -682,7 +685,7 @@ namespace ts {
                 const docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
                 if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDoc) {
                     // TODO: This should be predicated on `token["kind"]` being compatible with `HasJSDoc["kind"]`
-                    docCommentAndDiagnostics.jsDoc.parent = token as HasJSDoc;
+                    setParent(docCommentAndDiagnostics.jsDoc, token as HasJSDoc);
                     classifyJSDocComment(docCommentAndDiagnostics.jsDoc);
                     return;
                 }

@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w sample1/tests
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -74,6 +74,85 @@ logic.getSecondsInDay();
 import * as mod from '../core/anotherModule';
 export const m = mod;
 
+
+
+/a/lib/tsc.js -b -w sample1/tests
+Output::
+>> Screen clear
+[[90m12:00:39 AM[0m] Starting compilation in watch mode...
+
+
+[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
+Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/anotherModule.ts
+/user/username/projects/sample1/core/index.ts
+
+Program root files: ["/user/username/projects/sample1/logic/index.ts"]
+Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.ts
+
+Program root files: ["/user/username/projects/sample1/tests/index.ts"]
+Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/sample1/core/index.d.ts
+/user/username/projects/sample1/core/anotherModule.d.ts
+/user/username/projects/sample1/logic/index.d.ts
+/user/username/projects/sample1/tests/index.ts
+
+WatchedFiles::
+/user/username/projects/sample1/core/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
+/user/username/projects/sample1/core/index.ts:
+  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/logic/index.ts:
+  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
+/user/username/projects/sample1/tests/index.ts:
+  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+/user/username/projects/sample1/logic:
+  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+
+exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
@@ -302,12 +381,20 @@ export declare const m: typeof mod;
 }
 
 
+Change:: Make local change to core
+
+Input::
+//// [/user/username/projects/sample1/core/index.ts]
+export const someString: string = "HELLO WORLD";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
+
+function foo() { }
+
+
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] Starting compilation in watch mode...
-
-
-[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -319,39 +406,7 @@ Program files::
 /user/username/projects/sample1/core/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
-
-Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.ts
-
-Program root files: ["/user/username/projects/sample1/tests/index.ts"]
-Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.d.ts
-/user/username/projects/sample1/tests/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/index.d.ts
-/user/username/projects/sample1/core/anotherModule.d.ts
-/user/username/projects/sample1/logic/index.d.ts
-/user/username/projects/sample1/tests/index.ts
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
@@ -378,15 +433,6 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Make local change to core
-
-//// [/user/username/projects/sample1/core/index.ts]
-export const someString: string = "HELLO WORLD";
-export function leftPad(s: string, n: number) { return s + n; }
-export function multiply(a: number, b: number) { return a * b; }
-
-function foo() { }
 
 //// [/user/username/projects/sample1/core/anotherModule.js] file changed its modified time
 //// [/user/username/projects/sample1/core/anotherModule.d.ts] file changed its modified time
@@ -441,21 +487,11 @@ function foo() { }
 }
 
 
+Change:: Build logic or update time stamps
+
+Input::
+
 Output::
->> Screen clear
-[[90m12:01:08 AM[0m] File change detected. Starting incremental compilation...
-
-
-
-Program root files: ["/user/username/projects/sample1/core/anotherModule.ts","/user/username/projects/sample1/core/index.ts"]
-Program options: {"composite":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/sample1/core/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/sample1/core/anotherModule.ts
-/user/username/projects/sample1/core/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/sample1/core/index.ts
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
@@ -482,47 +518,15 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
-
-Change:: Build logic or update time stamps
 
 //// [/user/username/projects/sample1/logic/index.js.map] file changed its modified time
 //// [/user/username/projects/sample1/logic/index.js] file changed its modified time
 //// [/user/username/projects/sample1/logic/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo] file changed its modified time
 
-Output::
-
-WatchedFiles::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/logic/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"fileName":"/user/username/projects/sample1/logic/index.ts","pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/tests/tsconfig.json","pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"fileName":"/user/username/projects/sample1/tests/index.ts","pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/sample1/logic:
-  {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined
-
 Change:: Build Tests
 
-//// [/user/username/projects/sample1/tests/index.js] file changed its modified time
-//// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
-//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time
+Input::
 
 Output::
 [[90m12:01:21 AM[0m] Found 0 errors. Watching for file changes.
@@ -554,3 +558,7 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/sample1/logic","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/sample1/tests/index.js] file changed its modified time
+//// [/user/username/projects/sample1/tests/index.d.ts] file changed its modified time
+//// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo] file changed its modified time

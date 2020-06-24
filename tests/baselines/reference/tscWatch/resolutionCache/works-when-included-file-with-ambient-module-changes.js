@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w /a/b/foo.ts /a/b/bar.d.ts
+Input::
 //// [/a/b/foo.ts]
 
 import * as fs from "fs";
@@ -27,12 +27,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/foo.js]
-"use strict";
-exports.__esModule = true;
 
-
-
+/a/lib/tsc.js --w /a/b/foo.ts /a/b/bar.d.ts
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
@@ -78,8 +74,15 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/foo.js]
+"use strict";
+exports.__esModule = true;
+
+
+
 Change:: Add fs definition
 
+Input::
 //// [/a/b/bar.d.ts]
 
 declare module "url" {
@@ -95,7 +98,6 @@ declare module "fs" {
 }
 
 
-//// [/a/b/foo.js] file written with same contents
 
 Output::
 >> Screen clear
@@ -134,3 +136,5 @@ FsWatchesRecursive::
   {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/foo.js] file written with same contents

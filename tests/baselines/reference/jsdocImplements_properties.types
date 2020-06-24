@@ -2,9 +2,9 @@
 class A { constructor() { this.x = 0; } }
 >A : A
 >this.x = 0 : 0
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >0 : 0
 
 /** @implements A*/
@@ -26,9 +26,9 @@ class B3 {
 
     constructor() { this.x = 10 }
 >this.x = 10 : 10
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >10 : 10
 }
 

@@ -42,9 +42,9 @@ class MW {
 
     this.compiler = compiler;
 >this.compiler = compiler : typeof MC
->this.compiler : typeof MC
+>this.compiler : any
 >this : this
->compiler : typeof MC
+>compiler : any
 >compiler : typeof MC
   }
 }

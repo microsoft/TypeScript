@@ -151,12 +151,6 @@ namespace ts.server {
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
     /*@internal*/
-    export interface PerformanceEvent {
-        kind: "UpdateGraph";
-        durationMs: number;
-    }
-
-    /*@internal*/
     export type PerformanceEventHandler = (event: PerformanceEvent) => void;
 
     export interface SafeList {
@@ -540,6 +534,7 @@ namespace ts.server {
 
     /*@internal*/
     export function updateProjectIfDirty(project: Project) {
+        project.invalidateResolutionsOfFailedLookupLocations();
         return project.dirty && project.updateGraph();
     }
 
@@ -634,7 +629,7 @@ namespace ts.server {
          *   In this case the exists property is always true
          */
         private readonly configFileExistenceInfoCache = createMap<ConfigFileExistenceInfo>();
-        private readonly throttledOperations: ThrottledOperations;
+        /*@internal*/ readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
@@ -672,6 +667,12 @@ namespace ts.server {
 
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
+
+        /*@internal*/
+        readonly packageJsonCache: PackageJsonCache;
+        /*@internal*/
+        private packageJsonFilesMap: Map<FileWatcher> | undefined;
+
 
         private performanceEventHandler?: PerformanceEventHandler;
 
@@ -724,7 +725,14 @@ namespace ts.server {
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
-            this.watchFactory = getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
+            this.packageJsonCache = createPackageJsonCache(this);
+            this.watchFactory = this.syntaxOnly ?
+                {
+                    watchFile: returnNoopFileWatcher,
+                    watchFilePath: returnNoopFileWatcher,
+                    watchDirectory: returnNoopFileWatcher,
+                } :
+                getWatchFactory(watchLogLevel, log, getDetailWatchInfo);
         }
 
         toPath(fileName: string) {
@@ -823,7 +831,8 @@ namespace ts.server {
             this.delayUpdateProjectGraphAndEnsureProjectStructureForOpenFiles(project);
         }
 
-        private delayEnsureProjectForOpenFiles() {
+        /*@internal*/
+        delayEnsureProjectForOpenFiles() {
             this.pendingEnsureProjectForOpenFiles = true;
             this.throttledOperations.schedule("*ensureProjectForOpenFiles*", /*delay*/ 2500, () => {
                 if (this.pendingProjectUpdates.size !== 0) {
@@ -913,9 +922,9 @@ namespace ts.server {
         }
 
         /* @internal */
-        sendUpdateGraphPerformanceEvent(durationMs: number) {
+        sendPerformanceEvent(kind: PerformanceEvent["kind"], durationMs: number) {
             if (this.performanceEventHandler) {
-                this.performanceEventHandler({ kind: "UpdateGraph", durationMs });
+                this.performanceEventHandler({ kind, durationMs });
             }
         }
 
@@ -1154,12 +1163,34 @@ namespace ts.server {
          */
         /*@internal*/
         watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject) {
+            const watchOptions = this.getWatchOptions(project);
             return this.watchFactory.watchDirectory(
                 this.host,
                 directory,
                 fileOrDirectory => {
-                    let fileOrDirectoryPath: Path | undefined = this.toPath(fileOrDirectory);
+                    const fileOrDirectoryPath = this.toPath(fileOrDirectory);
                     const fsResult = project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    const configFileName = project.getConfigFilePath();
+                    if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
+                        (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
+                    ) {
+                        this.logger.info(`Project: ${configFileName} Detected new package.json: ${fileOrDirectory}`);
+                        this.onAddPackageJson(fileOrDirectoryPath);
+                    }
+
+                    if (isIgnoredFileFromWildCardWatching({
+                        watchedDirPath: directory,
+                        fileOrDirectory,
+                        fileOrDirectoryPath,
+                        configFileName,
+                        configFileSpecs: project.configFileSpecs!,
+                        extraFileExtensions: this.hostConfiguration.extraFileExtensions,
+                        currentDirectory: this.currentDirectory,
+                        options: project.getCompilationSettings(),
+                        program: project.getCurrentProgram(),
+                        useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
+                        writeLog: s => this.logger.info(s)
+                    })) return;
 
                     // don't trigger callback on open, existing files
                     if (project.fileIsOpen(fileOrDirectoryPath)) {
@@ -1176,24 +1207,6 @@ namespace ts.server {
                         return;
                     }
 
-                    fileOrDirectoryPath = removeIgnoredPath(fileOrDirectoryPath);
-                    if (!fileOrDirectoryPath) return;
-                    const configFilename = project.getConfigFilePath();
-
-                    if (getBaseFileName(fileOrDirectoryPath) === "package.json" && !isInsideNodeModules(fileOrDirectoryPath) &&
-                        (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
-                    ) {
-                        this.logger.info(`Project: ${configFilename} Detected new package.json: ${fileOrDirectory}`);
-                        project.onAddPackageJson(fileOrDirectoryPath);
-                    }
-
-                    // If the the added or created file or directory is not supported file name, ignore the file
-                    // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrDirectoryPath !== directory && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, project.getCompilationSettings(), this.hostConfiguration.extraFileExtensions)) {
-                        this.logger.info(`Project: ${configFilename} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
-                        return;
-                    }
-
                     // Reload is pending, do the reload
                     if (project.pendingReload !== ConfigFileProgramReloadLevel.Full) {
                         project.pendingReload = ConfigFileProgramReloadLevel.Partial;
@@ -1201,7 +1214,7 @@ namespace ts.server {
                     }
                 },
                 flags,
-                this.getWatchOptions(project),
+                watchOptions,
                 WatchType.WildcardDirectory,
                 project
             );
@@ -1743,7 +1756,9 @@ namespace ts.server {
 
             return project?.isSolution() ?
                 project.getDefaultChildProjectFromSolution(info) :
-                project;
+                project && projectContainsInfoDirectly(project, info) ?
+                    project :
+                    undefined;
         }
 
         /**
@@ -1976,9 +1991,6 @@ namespace ts.server {
 
             const configFileContent = tryReadFile(configFilename, fileName => this.host.readFile(fileName));
             const result = parseJsonText(configFilename, isString(configFileContent) ? configFileContent : "");
-            if (!result.endOfFileToken) {
-                result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
-            }
             const configFileErrors = result.parseDiagnostics as Diagnostic[];
             if (!isString(configFileContent)) configFileErrors.push(configFileContent);
             const parsedCommandLine = parseJsonSourceFileConfigFileContent(
@@ -2015,7 +2027,7 @@ namespace ts.server {
                 };
             }
             project.configFileSpecs = parsedCommandLine.configFileSpecs;
-            project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInutFiles(parsedCommandLine.raw);
+            project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
             project.setProjectErrors(configFileErrors);
             project.updateReferences(parsedCommandLine.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
@@ -2034,7 +2046,7 @@ namespace ts.server {
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
         }
 
-        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {
+        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
             const newRootScriptInfoMap = createMap<true>();
 
@@ -2129,6 +2141,11 @@ namespace ts.server {
             project.updateErrorOnNoInputFiles(fileNamesResult);
             this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
+        }
+
+        /*@internal*/
+        setFileNamesOfAutoImportProviderProject(project: AutoImportProviderProject, fileNames: string[]) {
+            this.updateNonInferredProjectFiles(project, fileNames, fileNamePropertyReader);
         }
 
         /**
@@ -2675,7 +2692,7 @@ namespace ts.server {
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
-                    const { lazyConfiguredProjectsFromExternalProject } = this.hostConfiguration.preferences;
+                    const { lazyConfiguredProjectsFromExternalProject, includePackageJsonAutoImports } = this.hostConfiguration.preferences;
                     this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                     if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
                         // Load configured projects for external projects that are pending reload
@@ -2686,6 +2703,9 @@ namespace ts.server {
                                 project.updateGraph();
                             }
                         });
+                    }
+                    if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
+                        this.invalidateProjectAutoImports(/*packageJsonPath*/ undefined);
                     }
                 }
                 if (args.extraFileExtensions) {
@@ -3191,7 +3211,7 @@ namespace ts.server {
             const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
-                if (!info.isScriptOpen() && info.isOrphan()) {
+                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByAutoImportProvider()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
                     let sourceInfos: Map<true> | undefined;
@@ -3668,6 +3688,95 @@ namespace ts.server {
             // If a plugin is configured twice, only the latest configuration will be remembered.
             this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || createMap();
             this.currentPluginConfigOverrides.set(args.pluginName, args.configuration);
+        }
+
+        /*@internal*/
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+            const packageJsonCache = this.packageJsonCache;
+            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
+            const toPath = this.toPath.bind(this);
+            const rootPath = rootDir && toPath(rootDir);
+            const filePath = toPath(fileName);
+            const result: PackageJsonInfo[] = [];
+            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
+                switch (packageJsonCache.directoryHasPackageJson(directory)) {
+                    // Sync and check same directory again
+                    case Ternary.Maybe:
+                        packageJsonCache.searchDirectoryAndAncestors(directory);
+                        return processDirectory(directory);
+                    // Check package.json
+                    case Ternary.True:
+                        const packageJsonFileName = combinePaths(directory, "package.json");
+                        watchPackageJsonFile(packageJsonFileName);
+                        const info = packageJsonCache.getInDirectory(directory);
+                        if (info) result.push(info);
+                }
+                if (rootPath && rootPath === toPath(directory)) {
+                    return true;
+                }
+            });
+
+            return result;
+        }
+
+        /*@internal*/
+        private watchPackageJsonFile(path: Path) {
+            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
+            if (!watchers.has(path)) {
+                this.invalidateProjectAutoImports(path);
+                watchers.set(path, this.watchFactory.watchFile(
+                    this.host,
+                    path,
+                    (fileName, eventKind) => {
+                        const path = this.toPath(fileName);
+                        switch (eventKind) {
+                            case FileWatcherEventKind.Created:
+                                return Debug.fail();
+                            case FileWatcherEventKind.Changed:
+                                this.packageJsonCache.addOrUpdate(path);
+                                this.invalidateProjectAutoImports(path);
+                                break;
+                            case FileWatcherEventKind.Deleted:
+                                this.packageJsonCache.delete(path);
+                                this.invalidateProjectAutoImports(path);
+                                watchers.get(path)!.close();
+                                watchers.delete(path);
+                        }
+                    },
+                    PollingInterval.Low,
+                    this.hostConfiguration.watchOptions,
+                    WatchType.PackageJsonFile,
+                ));
+            }
+        }
+
+        /*@internal*/
+        private onAddPackageJson(path: Path) {
+            this.packageJsonCache.addOrUpdate(path);
+            this.watchPackageJsonFile(path);
+        }
+
+        /*@internal*/
+        includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
+            switch (this.hostConfiguration.preferences.includePackageJsonAutoImports) {
+                case "none": return PackageJsonAutoImportPreference.None;
+                case "all": return PackageJsonAutoImportPreference.All;
+                default: return PackageJsonAutoImportPreference.ExcludeDevDependencies;
+            }
+        }
+
+        /*@internal*/
+        private invalidateProjectAutoImports(packageJsonPath: Path | undefined) {
+            if (this.includePackageJsonAutoImports()) {
+                this.configuredProjects.forEach(invalidate);
+                this.inferredProjects.forEach(invalidate);
+                this.externalProjects.forEach(invalidate);
+            }
+            function invalidate(project: Project) {
+                if (!packageJsonPath || project.packageJsonsForAutoImport?.has(packageJsonPath)) {
+                    project.markAutoImportProviderAsDirty();
+                }
+            }
         }
     }
 

@@ -41,6 +41,8 @@ namespace ts {
         getName(): string;
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
+        /* @internal */
+        getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
         getJsDocTags(): JSDocTagInfo[];
     }
 
@@ -193,12 +195,30 @@ namespace ts {
     /* @internal */
     export interface PackageJsonInfo {
         fileName: string;
+        parseable: boolean;
         dependencies?: Map<string>;
         devDependencies?: Map<string>;
         peerDependencies?: Map<string>;
         optionalDependencies?: Map<string>;
         get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
+    }
+
+    /* @internal */
+    export interface FormattingHost {
+        getNewLine?(): string;
+    }
+
+    /* @internal */
+    export const enum PackageJsonAutoImportPreference {
+        None,
+        ExcludeDevDependencies,
+        All
+    }
+
+    export interface PerformanceEvent {
+        kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
+        durationMs: number;
     }
 
     //
@@ -247,7 +267,7 @@ namespace ts {
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
-        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */
@@ -275,11 +295,17 @@ namespace ts {
         /* @internal */
         getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
+        getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */
         getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
         /* @internal */
         setCompilerHost?(host: CompilerHost): void;
         /* @internal */
         useSourceOfProjectReferenceRedirect?(): boolean;
+        /* @internal */
+        getPackageJsonAutoImportProvider?(): Program | undefined;
+        /* @internal */
+        sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     }
 
     /* @internal */
@@ -468,7 +494,7 @@ namespace ts {
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
 
-        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
@@ -478,6 +504,7 @@ namespace ts {
         getProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
+        /* @internal */ getAutoImportProvider(): Program | undefined;
 
         dispose(): void;
     }
@@ -605,9 +632,11 @@ namespace ts {
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        containerName?: string;
     }
 
     export interface CallHierarchyIncomingCall {
@@ -721,6 +750,12 @@ namespace ts {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
+
+        /**
+         * A message to show to the user if the refactoring cannot be applied in
+         * the current context.
+         */
+        notApplicableReason?: string;
     }
 
     /**
@@ -733,6 +768,8 @@ namespace ts {
         renameLocation?: number;
         commands?: CodeActionCommand[];
     }
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     export interface TextInsertion {
         newText: string;
@@ -1064,6 +1101,7 @@ namespace ts {
         source?: string;
         isRecommended?: true;
         isFromUncheckedFile?: true;
+        isPackageJsonImport?: true;
     }
 
     export interface CompletionEntryDetails {
@@ -1288,6 +1326,8 @@ namespace ts {
         abstractModifier = "abstract",
         optionalModifier = "optional",
 
+        deprecatedModifier = "deprecated",
+
         dtsModifier = ".d.ts",
         tsModifier = ".ts",
         tsxModifier = ".tsx",
@@ -1397,5 +1437,6 @@ namespace ts {
         program: Program;
         cancellationToken?: CancellationToken;
         preferences: UserPreferences;
+        triggerReason?: RefactorTriggerReason;
     }
 }
