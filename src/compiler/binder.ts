@@ -537,7 +537,17 @@ namespace ts {
                 symbol.parent = parent;
             }
 
-            if (node.flags & NodeFlags.Deprecated) {
+            const hasDeprecated = !!(node.flags & NodeFlags.Deprecated);
+            if (symbol.flags & (SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method)) {
+                symbol.allSignatureDeprecated = hasDeprecated && (symbol.allSignatureDeprecated ?? true);
+                if (symbol.allSignatureDeprecated) {
+                    symbol.flags |= SymbolFlags.Deprecated;
+                }
+                else {
+                    symbol.flags &= ~SymbolFlags.Deprecated;
+                }
+            }
+            else if(hasDeprecated) {
                 symbol.flags |= SymbolFlags.Deprecated;
             }
 

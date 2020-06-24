@@ -27368,6 +27368,13 @@ namespace ts {
                 return nonInferrableType;
             }
 
+            if (signature.declaration && (
+                (isCallSignatureDeclaration(signature.declaration) || isConstructSignatureDeclaration(signature.declaration)) ||
+                !signature.declaration.symbol.allSignatureDeprecated
+            ) && (signature.declaration.flags & NodeFlags.Deprecated)) {
+                errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, signatureToString(signature));
+            }
+
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;
             }
