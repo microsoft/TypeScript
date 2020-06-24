@@ -25,7 +25,7 @@ export function foo(): string;
 export function fooBar(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"]}
+{"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["node_modules"]}}
 
 
 /a/lib/tsc.js -w
@@ -67,12 +67,8 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
@@ -108,12 +104,8 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 

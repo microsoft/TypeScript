@@ -413,10 +413,10 @@ namespace ts.tscWatch {
             });
 
             describe("exclude options", () => {
-                function sys(_watchOptions: WatchOptions): WatchedSystem {
+                function sys(watchOptions: WatchOptions): WatchedSystem {
                     const configFile: File = {
                         path: `${projectRoot}/tsconfig.json`,
-                        content: JSON.stringify({ exclude: ["node_modules"] })
+                        content: JSON.stringify({ exclude: ["node_modules"], watchOptions })
                     };
                     const main: File = {
                         path: `${projectRoot}/src/main.ts`,
@@ -448,7 +448,7 @@ namespace ts.tscWatch {
                             {
                                 caption: "Change foo",
                                 change: sys => replaceFileText(sys, `${projectRoot}/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
-                                timeouts: checkSingleTimeoutQueueLengthAndRun,
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),
                             }
                         ]
                     });
@@ -462,11 +462,7 @@ namespace ts.tscWatch {
                             {
                                 caption: "delete fooBar",
                                 change: sys => sys.deleteFile(`${projectRoot}/node_modules/bar/fooBar.d.ts`),
-                                timeouts: sys => {
-                                    sys.checkTimeoutQueueLength(1); // Failed lookup
-                                    sys.checkTimeoutQueueLength(1); // Actual update
-                                },
-                            }
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),                            }
                         ]
                     });
                 }

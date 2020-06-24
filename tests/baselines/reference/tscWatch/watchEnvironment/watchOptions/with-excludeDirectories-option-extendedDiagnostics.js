@@ -25,7 +25,7 @@ export function foo(): string;
 export function fooBar(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"]}
+{"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["node_modules"]}}
 
 
 /a/lib/tsc.js -w -extendedDiagnostics
@@ -35,7 +35,7 @@ Output::
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Config file
 
 Synchronizing program
 
@@ -45,36 +45,32 @@ CreatingProgramWith::
 
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Source file
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/index.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/index.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Source file
 
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Source file
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Source file
 
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Type roots
 
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
-
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Failed Lookup Locations
 
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Wild card directory
 
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Wild card directory
 
 
 Program root files: ["/user/username/projects/myproject/src/main.ts"]
@@ -106,12 +102,8 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
@@ -131,17 +123,11 @@ Input::
 //// [/user/username/projects/myproject/node_modules/bar/fooBar.d.ts] deleted
 
 Output::
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/fooBar.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-
-Scheduling invalidateFailedLookup
-
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/fooBar.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/fooBar.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/fooBar.d.ts :: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Wild card directory
 
 Project: /user/username/projects/myproject/tsconfig.json Detected excluded file: /user/username/projects/myproject/node_modules/bar/fooBar.d.ts
 
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/fooBar.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/fooBar.d.ts :: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/node_modules"]} Wild card directory
 
 
 WatchedFiles::
@@ -159,12 +145,8 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject/src:
   {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 

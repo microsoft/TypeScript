@@ -25,7 +25,7 @@ export function foo(): string;
 export function fooBar(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"]}
+{"exclude":["node_modules"],"watchOptions":{"excludeFiles":["node_modules/*"]}}
 
 
 /a/lib/tsc.js -w -extendedDiagnostics
@@ -35,7 +35,7 @@ Output::
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Config file
 
 Synchronizing program
 
@@ -45,36 +45,36 @@ CreatingProgramWith::
 
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/index.d.ts 250 undefined Source file
+ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/index.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
 
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 undefined Source file
+ExcludeWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
 
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Source file
 
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Type roots
 
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Type roots
 
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js :: WatchInfo: /user/username/projects/myproject/src 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Failed Lookup Locations
 
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Wild card directory
 
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 {"excludeFiles":["/user/username/projects/myproject/node_modules/*"]} Wild card directory
 
 
 Program root files: ["/user/username/projects/myproject/src/main.ts"]
@@ -96,10 +96,6 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/src/main.ts:
   {"fileName":"/user/username/projects/myproject/src/main.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/index.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
@@ -133,55 +129,12 @@ export function fooBar(): string;
 
 
 Output::
-FileWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/foo.d.ts 1:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 undefined Source file
-
-Scheduling update
-
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/node_modules/bar/foo.d.ts 1:: WatchInfo: /user/username/projects/myproject/node_modules/bar/foo.d.ts 250 undefined Source file
-
-[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
-
-
-Synchronizing program
-
-CreatingProgramWith::
-
-  roots: ["/user/username/projects/myproject/src/main.ts"]
-
-  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-
-[96mnode_modules/bar/index.d.ts[0m:[93m1[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"./foo"' has no exported member 'foo'.
-
-[7m1[0m export { foo } from "./foo";
-[7m [0m [91m         ~~~[0m
-
-
-[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/src/main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/node_modules/bar/foo.d.ts
-/user/username/projects/myproject/node_modules/bar/index.d.ts
-/user/username/projects/myproject/src/main.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/node_modules/bar/foo.d.ts
-/user/username/projects/myproject/node_modules/bar/index.d.ts
-/user/username/projects/myproject/src/main.ts
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/src/main.ts:
   {"fileName":"/user/username/projects/myproject/src/main.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/index.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
