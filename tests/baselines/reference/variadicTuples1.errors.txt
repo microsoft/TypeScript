@@ -20,10 +20,29 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(169,5): error TS2322: Typ
 tests/cases/conformance/types/tuple/variadicTuples1.ts(170,5): error TS2322: Type 'T' is not assignable to type '[...T]'.
   The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type '[...T]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(171,5): error TS4104: The type 'readonly [...T]' is 'readonly' and cannot be assigned to the mutable type '[...T]'.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(303,14): error TS7019: Rest parameter 'x' implicitly has an 'any[]' type.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(181,5): error TS2322: Type 'T' is not assignable to type '[...U]'.
+  Type 'string[]' is not assignable to type '[...U]'.
+    Target requires 1 element(s) but source may have fewer.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(182,5): error TS2322: Type '[...T]' is not assignable to type '[...U]'.
+  Type 'T' is not assignable to type 'U'.
+    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
+      Type 'string[]' is not assignable to type 'U'.
+        'U' could be instantiated with an arbitrary type which could be unrelated to 'string[]'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(188,5): error TS2322: Type 'T' is not assignable to type '[...T]'.
+  The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[...T]'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(190,5): error TS2322: Type 'T' is not assignable to type '[...U]'.
+  The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[...U]'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(191,5): error TS2322: Type '[...T]' is not assignable to type '[...U]'.
+  Type 'T' is not assignable to type 'U'.
+    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'readonly string[]'.
+      Type 'readonly string[]' is not assignable to type 'U'.
+        'U' could be instantiated with an arbitrary type which could be unrelated to 'readonly string[]'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(203,5): error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
+  Type '"2"' is not assignable to type 'number | "0" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight" | "1"'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(333,14): error TS7019: Rest parameter 'x' implicitly has an 'any[]' type.
 
 
-==== tests/cases/conformance/types/tuple/variadicTuples1.ts (13 errors) ====
+==== tests/cases/conformance/types/tuple/variadicTuples1.ts (19 errors) ====
     // Variadics in tuple types
     
     type TV0<T extends unknown[]> = [string, ...T];
@@ -232,6 +251,61 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(303,14): error TS7019: Re
 !!! error TS4104: The type 'readonly [...T]' is 'readonly' and cannot be assigned to the mutable type '[...T]'.
         r = t;
         r = m;
+    }
+    
+    function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+        t0 = t1;
+        t0 = t2;
+        t1 = t0;
+        t1 = t2;
+        t2 = t0;  // Error
+        ~~
+!!! error TS2322: Type 'T' is not assignable to type '[...U]'.
+!!! error TS2322:   Type 'string[]' is not assignable to type '[...U]'.
+!!! error TS2322:     Target requires 1 element(s) but source may have fewer.
+        t2 = t1;  // Error
+        ~~
+!!! error TS2322: Type '[...T]' is not assignable to type '[...U]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
+!!! error TS2322:       Type 'string[]' is not assignable to type 'U'.
+!!! error TS2322:         'U' could be instantiated with an arbitrary type which could be unrelated to 'string[]'.
+    }
+    
+    function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+        t0 = t1;
+        t0 = t2;
+        t1 = t0;  // Error
+        ~~
+!!! error TS2322: Type 'T' is not assignable to type '[...T]'.
+!!! error TS2322:   The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[...T]'.
+        t1 = t2;
+        t2 = t0;  // Error
+        ~~
+!!! error TS2322: Type 'T' is not assignable to type '[...U]'.
+!!! error TS2322:   The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[...U]'.
+        t2 = t1;  // Error
+        ~~
+!!! error TS2322: Type '[...T]' is not assignable to type '[...U]'.
+!!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'readonly string[]'.
+!!! error TS2322:       Type 'readonly string[]' is not assignable to type 'U'.
+!!! error TS2322:         'U' could be instantiated with an arbitrary type which could be unrelated to 'readonly string[]'.
+    }
+    
+    function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) {
+        k0 = 'length';
+        k1 = 'length';
+        k2 = 'length';
+        k0 = 'slice';
+        k1 = 'slice';
+        k2 = 'slice';
+        k3 = '0';
+        k3 = '1';
+        k3 = '2';  // Error
+        ~~
+!!! error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
+!!! error TS2322:   Type '"2"' is not assignable to type 'number | "0" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight" | "1"'.
     }
     
     // Inference between variadic tuple types
