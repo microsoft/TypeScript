@@ -52,333 +52,163 @@ namespace ts {
 
     interface MapData<K, V> {
         size: number;
-        strings?: Record<string, MapEntry<K, V>>;
-        numbers?: MapEntry<K, V>[];
-        nan?: MapEntry<K, V>;
-        positiveInfinity?: MapEntry<K, V>;
-        negativeInfinity?: MapEntry<K, V>;
-        list?: MapEntry<K, V>;
-        true?: MapEntry<K, V>;
-        false?: MapEntry<K, V>;
-        null?: MapEntry<K, V>;
-        undefined?: MapEntry<K, V>;
-
-        // Linked list references for iterators.
-        // See https://github.com/Microsoft/TypeScript/pull/27292
-        // for more information.
-
-        /**
-         * The first entry in the linked list.
-         * Note that this is only a stub that serves as starting point
-         * for iterators and doesn't contain a key and a value.
-         */
-        readonly first: MapEntry<K, V>;
-        last: MapEntry<K, V>;
+        readonly head: MapEntry<K, V>;
+        tail: MapEntry<K, V>;
     }
 
     interface MapEntry<K, V> {
         readonly key?: K;
         value?: V;
-
-        // Linked list references for non-primitive keys
-        next?: MapEntry<K, V>;
-
-        // Linked list references for iterators.
-        nextIterationEntry?: MapEntry<K, V>;
-        previousIterationEntry?: MapEntry<K, V>;
-
         /**
-         * Specifies if iterators should skip the next entry.
-         * This will be set when an entry is deleted.
+         * Specifies the next entry in the linked list.
+         */
+        next?: MapEntry<K, V>;
+        /**
+         * Specifies the previous entry in the linked list.
+         * Must be set when the entry is part of a Map/Set.
+         * When 'undefined', iterators should skip the next entry.
+         * This will be set to 'undefined' when an entry is deleted.
          * See https://github.com/Microsoft/TypeScript/pull/27292 for more information.
          */
-        skipNextIteration?: boolean;
+        prev?: MapEntry<K, V>;
     }
 
     interface IteratorData<K, V, U extends (K | V | [K, V])> {
-        currentEntry?: MapEntry<K, V>;
+        current?: MapEntry<K, V>;
         selector: (key: K, value: V) => U;
     }
 
-    function createDictionaryObject<T>(): Record<string, T> {
-        const map = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
-
-        // Using 'delete' on an object causes V8 to put the object in dictionary mode.
-        // This disables creation of hidden classes, which are expensive when an object is
-        // constantly changing shape.
-        map.__ = undefined;
-        delete map.__;
-        return map;
-    }
-
     function createMapData<K, V>(): MapData<K, V> {
-        const entry: MapEntry<K, V> = {};
-        return { first: entry, last: entry, size: 0 };
+        const sentinel: MapEntry<K, V> = {};
+        sentinel.prev = sentinel;
+        return { head: sentinel, tail: sentinel, size: 0 };
     }
 
     function createMapEntry<K, V>(key: K, value: V): MapEntry<K, V> {
-        return { key, value, nextIterationEntry: undefined, previousIterationEntry: undefined, skipNextIteration: false };
+        return { key, value, next: undefined, prev: undefined };
     }
 
-    function createListMapEntry<K, V>(key: K, value: V, next?: MapEntry<K, V>): MapEntry<K, V> {
-        const entry = createMapEntry(key, value);
-        entry.next = next;
-        return entry;
+    function sameValueZero(x: unknown, y: unknown) {
+        // Treats -0 === 0 and NaN === NaN
+        return x === y || x !== x && y !== y;
     }
 
-    function getSingletonBucket(key: unknown) {
-        /* eslint-disable no-null/no-null */
-        if (key === true) return "true";
-        if (key === false) return "false";
-        if (key === null) return "null";
-        if (key === undefined) return "undefined";
-        if (typeof key === "number") {
-            if (isNaN(key)) return "nan";
-            if (!isFinite(key)) return key < 0 ? "negativeInfinity" : "positiveInfinity";
+    function getPrev<K, V>(entry: MapEntry<K, V>) {
+        const prev = entry.prev;
+        // Entries without a 'prev' have been removed from the map.
+        // An entry whose 'prev' points to itself is the head of the list and is invalid here.
+        if (!prev || prev === entry) throw new Error("Illegal state");
+        return prev;
+    }
+
+    function getNext<K, V>(entry: MapEntry<K, V> | undefined) {
+        while (entry) {
+            // Entries without a 'prev' have been removed from the map. Their 'next'
+            // pointer should point to the previous entry prior to deletion and
+            // that entry should be skipped to resume iteration.
+            const skipNext = !entry.prev;
+            entry = entry.next;
+            if (skipNext) {
+                continue;
+            }
+            return entry;
         }
-        /* eslint-enable no-null/no-null */
     }
 
     function getEntry<K, V>(data: MapData<K, V>, key: K): MapEntry<K, V> | undefined {
-        const bucket = getSingletonBucket(key);
-        return bucket ? data[bucket] :
-            typeof key === "string" ? data.strings?.[key] :
-            typeof key === "number" ? data.numbers?.[key] :
-            getListEntry(data, key);
-    }
-
-    function getListEntry<K, V>(data: MapData<K, V>, key: K): MapEntry<K, V> | undefined {
-        for (let node = data.list; node; node = node.next) {
-            if (node.key === key) {
-                return node;
+        // We walk backwards from 'tail' to prioritize recently added entries.
+        // We skip 'head' because it is an empty entry used to track iteration start.
+        for (let entry = data.tail; entry !== data.head; entry = getPrev(entry)) {
+            if (sameValueZero(entry.key, key)) {
+                return entry;
             }
         }
     }
 
     function addOrUpdateEntry<K, V>(data: MapData<K, V>, key: K, value: V): MapEntry<K, V> | undefined {
-        const bucket = getSingletonBucket(key);
-        const entry = bucket ? addOrUpdateSingletonEntry(data, bucket, key, value) :
-            typeof key === "string" ? addOrUpdateStringsEntry(data, key, value) :
-            typeof key === "number" ? addOrUpdateNumbersEntry(data, key, value) :
-            addOrUpdateListEntry(data, key, value);
-        if (entry) {
-            addToIteration(data, entry);
-            data.size++;
+        const existing = getEntry(data, key);
+        if (existing) {
+            existing.value = value;
+            return;
         }
+
+        const entry = createMapEntry(key, value);
+        entry.prev = data.tail;
+        data.tail.next = entry;
+        data.tail = entry;
+        data.size++;
         return entry;
-    }
-
-    function addOrUpdateSingletonEntry<K, V>(data: MapData<K, V>, prop: "nan" | "negativeInfinity" | "positiveInfinity" | "true" | "false" | "null" | "undefined", key: K, value: V) {
-        const entry = data[prop];
-        if (!entry) {
-            return data[prop] = createMapEntry(key, value);
-        }
-        else {
-            entry.value = value;
-        }
-    }
-
-    function addOrUpdateStringsEntry<K, V>(data: MapData<K, V>, key: K & string, value: V) {
-        if (!data.strings) data.strings = createDictionaryObject();
-        if (!data.strings[key]) {
-            return data.strings[key] = createMapEntry(key, value);
-        }
-        else {
-            data.strings[key].value = value;
-        }
-    }
-
-    function addOrUpdateNumbersEntry<K, V>(data: MapData<K, V>, key: K & number, value: V) {
-        if (!data.numbers) data.numbers = [];
-        if (!data.numbers[key]) {
-            return data.numbers[key] = createMapEntry(key, value);
-        }
-        else {
-            data.numbers[key].value = value;
-        }
-    }
-
-    function addOrUpdateListEntry<K, V>(data: MapData<K, V>, key: K, value: V): MapEntry<K, V> | undefined {
-        if (!data.list) return data.list = createListMapEntry(key, value, /*next*/ undefined);
-        const existing = getListEntry(data, key);
-        if (!existing) return data.list = createListMapEntry(key, value, data.list);
-        existing.value = value;
     }
 
     function deleteEntry<K, V>(data: MapData<K, V>, key: K): MapEntry<K, V> | undefined {
-        const bucket = getSingletonBucket(key);
-        let entry: MapEntry<K, V> | undefined;
-        if (bucket) {
-            if (entry = data[bucket]) {
-                delete data[bucket];
-            }
-        }
-        else if (typeof key === "string") {
-            if (entry = data.strings?.[key]) {
-                delete data.strings[key];
-            }
-        }
-        else if (typeof key === "number") {
-            if (entry = data.numbers?.[key]) {
-                delete data.numbers[key];
-            }
-        }
-        else {
-            entry = deleteListEntry(data, key);
-        }
-        if (entry) {
-            removeFromIteration(data, entry);
-            data.size--;
-        }
-        return entry;
-    }
-
-    function deleteListEntry<K, V>(data: MapData<K, V>, key: K): MapEntry<K, V> | undefined {
-        let prev: MapEntry<K, V> | undefined;
-        for (let node = data.list; node; prev = node, node = node.next) {
-            if (node.key === key) {
-                if (prev) {
-                    prev.next = node.next;
+        // We walk backwards from 'tail' to prioritize recently added entries.
+        // We skip 'head' because it is an empty entry used to track iteration start.
+        for (let entry = data.tail; entry !== data.head; entry = getPrev(entry)) {
+            // all entries in the map should have a 'prev' pointer.
+            if (entry.prev === undefined) throw new Error("Illegal state");
+            if (sameValueZero(entry.key, key)) {
+                if (entry.next) {
+                    entry.next.prev = entry.prev;
                 }
                 else {
-                    data.list = node.next;
+                    // an entry in the map without a 'next' pointer must be the 'tail'.
+                    if (data.tail !== entry) throw new Error("Illegal state");
+                    data.tail = entry.prev;
                 }
-                node.next = undefined;
-                return node;
+
+                entry.prev.next = entry.next;
+                entry.next = entry.prev;
+                entry.prev = undefined;
+                data.size--;
+                return entry;
             }
         }
     }
 
     function clearEntries<K, V>(data: MapData<K, V>) {
-        if (data.strings) data.strings = undefined;
-        if (data.numbers) data.numbers = undefined;
-        if (data.true) data.true = undefined;
-        if (data.false) data.false = undefined;
-        if (data.null) data.null = undefined;
-        if (data.undefined) data.undefined = undefined;
-        clearListEntries(data);
-        removeAllFromIteration(data);
+        let node = data.tail;
+        while (node !== data.head) {
+            const prev = getPrev(node);
+            node.next = data.head;
+            node.prev = undefined;
+            node = prev;
+        }
+        data.head.next = undefined;
+        data.tail = data.head;
         data.size = 0;
     }
 
-    function clearListEntries<K, V>(data: MapData<K, V>) {
-        if (data.list) {
-            let node = data.list;
-            data.list = undefined;
-            while (node) {
-                const next = node.next!;
-                node.next = undefined;
-                node = next;
-            }
-        }
-    }
-
-    function addToIteration<K, V>(data: MapData<K, V>, newEntry: MapEntry<K, V>) {
-        // Adjust the references.
-        const previousLastEntry = data.last;
-        previousLastEntry.nextIterationEntry = newEntry;
-        newEntry.previousIterationEntry = previousLastEntry;
-        data.last = newEntry;
-    }
-
-    function removeFromIteration<K, V>(data: MapData<K, V>, entry: MapEntry<K, V>) {
-        // Adjust the linked list references of the neighbor entries.
-        const previousEntry = entry.previousIterationEntry!;
-        previousEntry.nextIterationEntry = entry.nextIterationEntry;
-        if (entry.nextIterationEntry) {
-            entry.nextIterationEntry.previousIterationEntry = previousEntry;
-        }
-
-        // When the deleted entry was the last one, we need to
-        // adjust the lastEntry reference.
-        if (data.last === entry) {
-            data.last = previousEntry;
-        }
-
-        // Adjust the forward reference of the deleted entry
-        // in case an iterator still references it. This allows us
-        // to throw away the entry, but when an active iterator
-        // (which points to the current entry) continues, it will
-        // navigate to the entry that originally came before the
-        // current one and skip it.
-        entry.previousIterationEntry = undefined;
-        entry.nextIterationEntry = previousEntry;
-        entry.skipNextIteration = true;
-    }
-
-    function removeAllFromIteration<K, V>(data: MapData<K, V>) {
-        // Reset the linked list. Note that we must adjust the forward
-        // references of the deleted entries to ensure iterators stuck
-        // in the middle of the list don't continue with deleted entries,
-        // but can continue with new entries added after the clear()
-        // operation.
-        const firstEntry = data.first;
-        let currentEntry = firstEntry.nextIterationEntry;
-        while (currentEntry) {
-            const nextEntry = currentEntry.nextIterationEntry;
-            currentEntry.previousIterationEntry = undefined;
-            currentEntry.nextIterationEntry = firstEntry;
-            currentEntry.skipNextIteration = true;
-            currentEntry = nextEntry;
-        }
-
-        firstEntry.nextIterationEntry = undefined;
-        data.last = firstEntry;
-    }
-
     function forEachEntry<K, V>(data: MapData<K, V>, action: (value: V, key: K) => void) {
-        let currentEntry: MapEntry<K, V> | undefined = data.first;
-        while (currentEntry) {
-            const skipNext = !!currentEntry.skipNextIteration;
-            currentEntry = currentEntry.nextIterationEntry;
-            if (skipNext) {
-                continue;
-            }
-            if (currentEntry) {
-                action(currentEntry.value!, currentEntry.key!);
+        let entry: MapEntry<K, V> | undefined = data.head;
+        while (entry) {
+            entry = getNext(entry);
+            if (entry) {
+                action(entry.value!, entry.key!);
             }
         }
     }
 
-    function fill<T, O extends ReadonlyMapShim<any, any> | ReadonlySetShim<any>>(object: O, iterator: Iterator<T> | undefined, add: (object: O, value: any) => void) {
+    function forEachIteration<T>(iterator: Iterator<T> | undefined, action: (value: any) => void) {
         if (iterator) {
             for (let step = iterator.next(); !step.done; step = iterator.next()) {
-                add(object, step.value);
+                action(step.value);
             }
         }
     }
 
     function createIteratorData<K, V, U extends (K | V | [K, V])>(data: MapData<K, V>, selector: (key: K, value: V) => U): IteratorData<K, V, U> {
-        return { currentEntry: data.first, selector };
+        return { current: data.head, selector };
     }
 
     function iteratorNext<K, V, U extends (K | V | [K, V])>(data: IteratorData<K, V, U>): IteratorResultShim<U> {
         // Navigate to the next entry.
-        while (data.currentEntry) {
-            const skipNext = !!data.currentEntry.skipNextIteration;
-            data.currentEntry = data.currentEntry.nextIterationEntry;
-            if (!skipNext) {
-                break;
-            }
-        }
-        if (data.currentEntry) {
-            return { value: data.selector(data.currentEntry.key!, data.currentEntry.value!), done: false };
+        data.current = getNext(data.current);
+        if (data.current) {
+            return { value: data.selector(data.current.key!, data.current.value!), done: false };
         }
         else {
             return { value: undefined as never, done: true };
         }
-    }
-
-    function pickKey<K, V>(key: K, _value: V) {
-        return key;
-    }
-
-    function pickValue<K, V>(_key: K, value: V) {
-        return value;
-    }
-
-    function pickEntry<K, V>(key: K, value: V) {
-        return [key, value] as [K, V];
     }
 
     /* @internal */
@@ -391,13 +221,10 @@ namespace ts {
                 }
                 next() { return iteratorNext(this._data); }
             }
-            function fillMap<K, V>(object: MapShim<K, V>, [key, value]: readonly [K, V]) {
-                object.set(key, value);
-            }
             return class Map<K, V> implements MapShim<K, V> {
                 private _mapData = createMapData<K, V>();
                 constructor(iterable?: readonly (readonly [K, V])[] | ReadonlyMapShim<K, V>) {
-                    fill(this, getIterator(iterable), fillMap);
+                    forEachIteration(getIterator(iterable), ([key, value]) => this.set(key, value));
                 }
                 get size() { return this._mapData.size; }
                 get(key: K): V | undefined { return getEntry(this._mapData, key)?.value; }
@@ -405,9 +232,9 @@ namespace ts {
                 has(key: K): boolean { return !!getEntry(this._mapData, key); }
                 delete(key: K): boolean { return !!deleteEntry(this._mapData, key); }
                 clear(): void { clearEntries(this._mapData); }
-                keys(): IteratorShim<K> { return new MapIterator(this._mapData, pickKey); }
-                values(): IteratorShim<V> { return new MapIterator(this._mapData, pickValue); }
-                entries(): IteratorShim<[K, V]> { return new MapIterator(this._mapData, pickEntry); }
+                keys(): IteratorShim<K> { return new MapIterator(this._mapData, (key, _value) => key); }
+                values(): IteratorShim<V> { return new MapIterator(this._mapData, (_key, value) => value); }
+                entries(): IteratorShim<[K, V]> { return new MapIterator(this._mapData, (key, value) => [key, value]); }
                 forEach(action: (value: V, key: K) => void): void { forEachEntry(this._mapData, action); }
             };
         }
@@ -420,22 +247,19 @@ namespace ts {
                 }
                 next() { return iteratorNext(this._data); }
             }
-            function fillSet<T>(object: SetShim<T>, value: T) {
-                object.add(value);
-            }
             return class Set<T> implements SetShim<T> {
                 private _mapData = createMapData<T, T>();
                 constructor(iterable?: readonly T[] | ReadonlySetShim<T>) {
-                    fill(this, getIterator(iterable), fillSet);
+                    forEachIteration(getIterator(iterable), value => this.add(value));
                 }
                 get size() { return this._mapData.size; }
                 add(value: T): this { return addOrUpdateEntry(this._mapData, value, value), this; }
                 has(value: T): boolean { return !!getEntry(this._mapData, value); }
                 delete(value: T): boolean { return !!deleteEntry(this._mapData, value); }
                 clear(): void { clearEntries(this._mapData); }
-                keys(): IteratorShim<T> { return new SetIterator(this._mapData, pickKey); }
-                values(): IteratorShim<T> { return new SetIterator(this._mapData, pickValue); }
-                entries(): IteratorShim<[T, T]> { return new SetIterator(this._mapData, pickEntry); }
+                keys(): IteratorShim<T> { return new SetIterator(this._mapData, (key, _value) => key); }
+                values(): IteratorShim<T> { return new SetIterator(this._mapData, (_key, value) => value); }
+                entries(): IteratorShim<[T, T]> { return new SetIterator(this._mapData, (key, value) => [key, value]); }
                 forEach(action: (value: T, key: T) => void): void { forEachEntry(this._mapData, action); }
             };
         }

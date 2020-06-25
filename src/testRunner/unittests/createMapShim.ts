@@ -115,6 +115,26 @@ namespace ts {
             return resultString;
         }
 
+        let MapShim!: MapConstructor;
+        beforeEach(() => {
+            function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
+                I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+                I extends ReadonlySet<infer T> ? T :
+                I extends readonly (infer T)[] ? T :
+                I extends undefined ? undefined :
+                never>;
+            function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
+                // override `ts.getIterator` with a version that allows us to iterate over a `MapShim` in an environment with a native `Map`.
+                if (iterable instanceof MapShim) return iterable.entries();
+                return ts.getIterator(iterable);
+            }
+
+            MapShim = ShimCollections.createMapShim(getIterator);
+            afterEach(() => {
+                MapShim = undefined!;
+            });
+        });
+
         it("iterates values in insertion order and handles changes with string keys", () => {
             const expectedResult = "1:1;3:3;2:Y2;4:X4;0:X0;3:Y3;999:999;A:A;Z:Z;X:X;Y:Y;";
 
@@ -128,7 +148,6 @@ namespace ts {
             assert.equal(nativeMapIteratorResult, expectedResult, "nativeMap-iterator");
 
             // Then, test the map shim.
-            const MapShim = ShimCollections.createMapShim(getIterator); // tslint:disable-line variable-name
             let localShimMap = new MapShim<string, string>();
             const shimMapForEachResult = testMapIterationAddedValues(stringKeys, localShimMap, /* useForEach */ true);
             assert.equal(shimMapForEachResult, expectedResult, "shimMap-forEach");
@@ -151,7 +170,6 @@ namespace ts {
             assert.equal(nativeMapIteratorResult, expectedResult, "nativeMap-iterator");
 
             // Then, test the map shim.
-            const MapShim = ShimCollections.createMapShim(getIterator); // tslint:disable-line variable-name
             let localShimMap = new MapShim<any, string>();
             const shimMapForEachResult = testMapIterationAddedValues(mixedKeys, localShimMap, /* useForEach */ true);
             assert.equal(shimMapForEachResult, expectedResult, "shimMap-forEach");
@@ -159,6 +177,150 @@ namespace ts {
             localShimMap = new MapShim<any, string>();
             const shimMapIteratorResult = testMapIterationAddedValues(mixedKeys, localShimMap, /* useForEach */ false);
             assert.equal(shimMapIteratorResult, expectedResult, "shimMap-iterator");
+        });
+
+        it("create from Array", () => {
+            const map = new MapShim([["a", "b"]]);
+            assert.equal(map.size, 1);
+            assert.isTrue(map.has("a"));
+            assert.equal(map.get("a"), "b");
+        });
+
+        it("create from Map", () => {
+            const map1 = new MapShim([["a", "b"]]);
+            const map2 = new MapShim(map1);
+            assert.equal(map1.size, 1);
+            assert.equal(map2.size, 1);
+            assert.isTrue(map2.has("a"));
+            assert.equal(map2.get("a"), "b");
+        });
+
+        it("set when not present", () => {
+            const map = new MapShim<string, string>();
+            const result = map.set("a", "b");
+            assert.equal(map.size, 1);
+            assert.strictEqual(result, map);
+            assert.isTrue(map.has("a"));
+            assert.equal(map.get("a"), "b");
+        });
+
+        it("set when present", () => {
+            const map = new MapShim<string, string>();
+            map.set("a", "z");
+            const result = map.set("a", "b");
+            assert.equal(map.size, 1);
+            assert.strictEqual(result, map);
+            assert.isTrue(map.has("a"));
+            assert.equal(map.get("a"), "b");
+        });
+
+        it("has when not present", () => {
+            const map = new MapShim<string, string>();
+            assert.isFalse(map.has("a"));
+        });
+
+        it("has when present", () => {
+            const map = new MapShim<string, string>();
+            map.set("a", "b");
+            assert.isTrue(map.has("a"));
+        });
+
+        it("get when not present", () => {
+            const map = new MapShim<string, string>();
+            assert.isUndefined(map.get("a"));
+        });
+
+        it("get when present", () => {
+            const map = new MapShim<string, string>();
+            map.set("a", "b");
+            assert.equal(map.get("a"), "b");
+        });
+
+        it("delete when not present", () => {
+            const map = new MapShim<string, string>();
+            assert.isFalse(map.delete("a"));
+        });
+
+        it("delete when present", () => {
+            const map = new MapShim<string, string>();
+            map.set("a", "b");
+            assert.isTrue(map.delete("a"));
+        });
+
+        it("delete twice when present", () => {
+            const map = new MapShim<string, string>();
+            map.set("a", "b");
+            assert.isTrue(map.delete("a"));
+            assert.isFalse(map.delete("a"));
+        });
+
+        it("remove only item and iterate", () => {
+            const map = new MapShim<string, string>();
+            map.set("a", "b");
+            map.delete("a");
+            const actual = arrayFrom(map.keys());
+            assert.deepEqual(actual, []);
+        });
+
+        it("remove first item and iterate", () => {
+            const map = new MapShim<string, string>();
+            map.set("a", "b");
+            map.set("c", "d");
+            map.delete("a");
+            assert.deepEqual(arrayFrom(map.keys()), ["c"]);
+            assert.deepEqual(arrayFrom(map.values()), ["d"]);
+            assert.deepEqual(arrayFrom(map.entries()), [["c", "d"]]);
+        });
+
+        it("remove last item and iterate", () => {
+            const map = new MapShim<string, string>();
+            map.set("a", "b");
+            map.set("c", "d");
+            map.delete("c");
+            assert.deepEqual(arrayFrom(map.keys()), ["a"]);
+            assert.deepEqual(arrayFrom(map.values()), ["b"]);
+            assert.deepEqual(arrayFrom(map.entries()), [["a", "b"]]);
+        });
+
+        it("remove middle item and iterate", () => {
+            const map = new MapShim<string, string>();
+            map.set("a", "b");
+            map.set("c", "d");
+            map.set("e", "f");
+            map.delete("c");
+            assert.deepEqual(arrayFrom(map.keys()), ["a", "e"]);
+            assert.deepEqual(arrayFrom(map.values()), ["b", "f"]);
+            assert.deepEqual(arrayFrom(map.entries()), [["a", "b"], ["e", "f"]]);
+        });
+
+        it("keys", () => {
+            const map = new MapShim<string, string>();
+            map.set("c", "d");
+            map.set("a", "b");
+            assert.deepEqual(arrayFrom(map.keys()), ["c", "a"]);
+        });
+
+        it("values", () => {
+            const map = new MapShim<string, string>();
+            map.set("c", "d");
+            map.set("a", "b");
+            assert.deepEqual(arrayFrom(map.values()), ["d", "b"]);
+        });
+
+        it("entries", () => {
+            const map = new MapShim<string, string>();
+            map.set("c", "d");
+            map.set("a", "b");
+            assert.deepEqual(arrayFrom(map.entries()), [["c", "d"], ["a", "b"]]);
+        });
+
+        it("forEach", () => {
+            const map = new MapShim<string, string>();
+            map.set("c", "d");
+            map.set("a", "b");
+            const actual: [string, string][] = [];
+            map.forEach((value, key) => { actual.push([key, value]); });
+            assert.deepEqual(actual, [["c", "d"], ["a", "b"]]);
         });
     });
 }
