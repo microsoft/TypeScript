@@ -3,6 +3,12 @@
 ////let a = { b: { c: 0 } };
 /////*a*/a && a.b ? a.b.c : "whenFalse";/*b*/
 
-// We do not combine condition and whenTrue to an optional chain but should in the future.
 goTo.select("a", "b");
-verify.not.refactorAvailable("Convert to optional chain expression");
+edit.applyRefactor({
+    refactorName: "Convert to optional chain expression",
+    actionName: "Convert to optional chain expression",
+    actionDescription: "Convert to optional chain expression",
+    newContent:
+`let a = { b: { c: 0 } };
+a?.b?.c ?? "whenFalse";`
+});
