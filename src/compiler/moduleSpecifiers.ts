@@ -202,7 +202,7 @@ namespace ts.moduleSpecifiers {
                 return undefined; // Don't want to a package to globally import from itself
             }
 
-            targets.forEach(target => {
+            return forEach(targets, target => {
                 if (compareStrings(target.slice(0, resolved.length + 1), resolved + "/") !== Comparison.EqualTo) {
                     return;
                 }
@@ -210,8 +210,7 @@ namespace ts.moduleSpecifiers {
                 const relative = getRelativePathFromDirectory(resolved, target, getCanonicalFileName);
                 const option = resolvePath(path, relative);
                 if (!host.fileExists || host.fileExists(option)) {
-                    const result = cb(option);
-                    if (result) return result;
+                    return cb(option);
                 }
             });
         });
