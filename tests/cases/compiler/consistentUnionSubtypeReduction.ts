@@ -1,3 +1,5 @@
+// https://github.com/microsoft/TypeScript/issues/31155
+
 declare const MyArray: {
     isArray<T>(arg: T | {}): arg is T extends readonly any[] ? readonly any[] : any[];
 };
@@ -7,23 +9,23 @@ declare const b: string[] | string;
 declare const c: unknown;
 
 if (MyArray.isArray(a)) {
-    a;
+    a; // readonly string[]
 }
 else {
-    a;
+    a;  // string
 }
-a;
+a; // readonly string[] | string;
 
 if (MyArray.isArray(b)) {
-    b;
+    b; // string[] | string;
 }
 else {
-    b;
+    b; // string
 }
-b;
+b; // string[] | string;
 
 if (MyArray.isArray(c)) {
-    c;
+    c; // any[]
 }
 
 
@@ -33,22 +35,22 @@ function f<T>(x: T) {
     const c: T = null!;
 
     if (MyArray.isArray(a)) {
-        a;
+        a; // readonly T[]
     }
     else {
-        a;
+        a; // string
     }
-    a;
+    a; // readonly T[] | string;
 
     if (MyArray.isArray(b)) {
-        b;
+        b; // T[]
     }
     else {
-        b;
+        b; // string
     }
     b;
 
     if (MyArray.isArray(c)) {
-        c;
+        c; // T & (T extends readonly any[] ? readonly any[] : any[])
     }
 }
