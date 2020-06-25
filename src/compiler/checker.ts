@@ -16873,7 +16873,7 @@ namespace ts {
                 else if (target.flags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to C, where C is the base
                     // constraint of T[K] for writing.
-                    if (relation !== identityRelation) {
+                    if (relation === assignableRelation || relation === comparableRelation) {
                         const objectType = (<IndexedAccessType>target).objectType;
                         const indexType = (<IndexedAccessType>target).indexType;
                         const baseObjectType = getBaseConstraintOfType(objectType) || objectType;
