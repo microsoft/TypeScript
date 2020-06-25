@@ -357,7 +357,7 @@ namespace ts.moduleSpecifiers {
         // returned just the package name as the module specifier. But since we cannot, it
         // is preferable to return nothing so a different module specifier, outside of outDir,
         // can be used instead.
-        if (projectReferenceOutDir && startsWith(moduleSpecifier, projectReferenceOutDir)) {
+        if (projectReferenceOutDir && isInProjectReferenceOutDir(moduleSpecifier, parts, projectReferenceOutDir, getCanonicalFileName, host)) {
             return undefined;
         }
 
@@ -420,6 +420,19 @@ namespace ts.moduleSpecifiers {
 
             return fullModulePathWithoutExtension;
         }
+    }
+
+    function isInProjectReferenceOutDir(absoluteModuleSpecifier: string, moduleSpecifierParts: NodeModulePathParts, projectReferenceOutDir: string, getCanonicalFileName: GetCanonicalFileName, host: ModuleSpecifierResolutionHost) {
+        if (startsWith(absoluteModuleSpecifier, projectReferenceOutDir)) return true;
+        const packagePath = absoluteModuleSpecifier.slice(0, moduleSpecifierParts.packageRootIndex);
+        const allSourceFiles = host.getSourceFiles();
+        const links = host.getProbableSymlinks?.(allSourceFiles) || discoverProbableSymlinks(allSourceFiles, getCanonicalFileName, host.getCurrentDirectory());
+        const sourcePackagePath = links.get(packagePath);
+        if (sourcePackagePath) {
+            const sourcePath = combinePaths(sourcePackagePath, absoluteModuleSpecifier.slice(moduleSpecifierParts.packageRootIndex + 1));
+            return startsWith(sourcePath, projectReferenceOutDir);
+        }
+        return false;
     }
 
     function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string) {

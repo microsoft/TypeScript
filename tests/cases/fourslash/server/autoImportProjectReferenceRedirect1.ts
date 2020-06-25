@@ -26,4 +26,4 @@
 //// A/**/
 
 goTo.marker("");
-verify.importFixAtPosition([`import { A } from "a/src/a";\n\nA`]);
+verify.importFixAtPosition([`import { A } from "a/src/a";\r\n\r\nA`]);
