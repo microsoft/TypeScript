@@ -71,7 +71,7 @@ namespace ts {
     /*@internal*/
     // TODO(shkamat): update this after reworking ts build API
     export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
-        const existingDirectories = createMap<boolean>();
+        const existingDirectories = new Map<string, boolean>();
         const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined {
             let text: string | undefined;
@@ -134,7 +134,7 @@ namespace ts {
             }
 
             if (!outputFingerprints) {
-                outputFingerprints = createMap<OutputFingerprint>();
+                outputFingerprints = new Map<string, OutputFingerprint>();
             }
 
             const hash = system.createHash(data);
@@ -211,10 +211,10 @@ namespace ts {
         const originalDirectoryExists = host.directoryExists;
         const originalCreateDirectory = host.createDirectory;
         const originalWriteFile = host.writeFile;
-        const readFileCache = createMap<string | false>();
-        const fileExistsCache = createMap<boolean>();
-        const directoryExistsCache = createMap<boolean>();
-        const sourceFileCache = createMap<SourceFile>();
+        const readFileCache = new Map<string, string | false>();
+        const fileExistsCache = new Map<string, boolean>();
+        const directoryExistsCache = new Map<string, boolean>();
+        const sourceFileCache = new Map<string, SourceFile>();
 
         const readFileWithCache = (fileName: string): string | undefined => {
             const key = toPath(fileName);
@@ -515,7 +515,7 @@ namespace ts {
             return [];
         }
         const resolutions: T[] = [];
-        const cache = createMap<T>();
+        const cache = new Map<string, T>();
         for (const name of names) {
             let result: T;
             if (cache.has(name)) {
@@ -706,15 +706,15 @@ namespace ts {
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
-        let classifiableNames: UnderscoreEscapedMap<true>;
-        const ambientModuleNameToUnmodifiedFileName = createMap<string>();
+        let classifiableNames: Set<__String>;
+        const ambientModuleNameToUnmodifiedFileName = new Map<string, string>();
         // Todo:: Use this to report why file was included in --extendedDiagnostics
         let refFileMap: MultiMap<Path, ts.RefFile> | undefined;
 
         const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
-        let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective | undefined>();
+        let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirective | undefined>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
 
         // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -729,10 +729,10 @@ namespace ts {
 
         // If a module has some of its imports skipped due to being at the depth limit under node_modules, then track
         // this, as it may be imported at a shallower depth later, and then it will need its skipped imports processed.
-        const modulesWithElidedImports = createMap<boolean>();
+        const modulesWithElidedImports = new Map<string, boolean>();
 
         // Track source files that are source files found by searching under node_modules, as these shouldn't be compiled.
-        const sourceFilesFoundSearchingNodeModules = createMap<boolean>();
+        const sourceFilesFoundSearchingNodeModules = new Map<string, boolean>();
 
         performance.mark("beforeProgram");
 
@@ -748,7 +748,7 @@ namespace ts {
         const supportedExtensionsWithJsonIfResolveJsonModule = getSuppoertedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
 
         // Map storing if there is emit blocking diagnostics for given input
-        const hasEmitBlockingDiagnostics = createMap<boolean>();
+        const hasEmitBlockingDiagnostics = new Map<string, boolean>();
         let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | null | undefined;
 
         let moduleResolutionCache: ModuleResolutionCache | undefined;
@@ -783,9 +783,9 @@ namespace ts {
         // Map from a stringified PackageId to the source file with that id.
         // Only one source file may have a given packageId. Others become redirects (see createRedirectSourceFile).
         // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageName` and `isSourceFileTargetOfRedirect` are kept around.
-        const packageIdToSourceFile = createMap<SourceFile>();
+        const packageIdToSourceFile = new Map<string, SourceFile>();
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
-        let sourceFileToPackageName = createMap<string>();
+        let sourceFileToPackageName = new Map<string, string>();
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
         let redirectTargetsMap = createMultiMap<string>();
 
@@ -795,11 +795,11 @@ namespace ts {
          * - false if sourceFile missing for source of project reference redirect
          * - undefined otherwise
          */
-        const filesByName = createMap<SourceFile | false | undefined>();
+        const filesByName = new Map<string, SourceFile | false | undefined>();
         let missingFilePaths: readonly Path[] | undefined;
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
-        const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
+        const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? new Map<string, SourceFile>() : undefined;
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
         let resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined;
@@ -1051,10 +1051,10 @@ namespace ts {
             if (!classifiableNames) {
                 // Initialize a checker so that all our files are bound.
                 getTypeChecker();
-                classifiableNames = createUnderscoreEscapedMap<true>();
+                classifiableNames = new Set();
 
                 for (const sourceFile of files) {
-                    copyEntries(sourceFile.classifiableNames!, classifiableNames);
+                    sourceFile.classifiableNames?.forEach(value => classifiableNames.add(value));
                 }
             }
 
@@ -1270,7 +1270,7 @@ namespace ts {
 
             const oldSourceFiles = oldProgram.getSourceFiles();
             const enum SeenPackageName { Exists, Modified }
-            const seenPackageNames = createMap<SeenPackageName>();
+            const seenPackageNames = new Map<string, SeenPackageName>();
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
@@ -2571,7 +2571,7 @@ namespace ts {
         function getSourceOfProjectReferenceRedirect(file: string) {
             if (!isDeclarationFileName(file)) return undefined;
             if (mapFromToProjectReferenceRedirectSource === undefined) {
-                mapFromToProjectReferenceRedirectSource = createMap();
+                mapFromToProjectReferenceRedirectSource = new Map();
                 forEachResolvedProjectReference(resolvedRef => {
                     if (resolvedRef) {
                         const out = outFile(resolvedRef.commandLine.options);

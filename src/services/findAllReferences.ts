@@ -229,7 +229,7 @@ namespace ts.FindAllReferences {
         }
         else {
             const queue = entries && [...entries];
-            const seenNodes = createMap<true>();
+            const seenNodes = new Map<string, true>();
             while (queue && queue.length) {
                 const entry = queue.shift() as NodeEntry;
                 if (!addToSeen(seenNodes, getNodeId(entry.node))) {
@@ -946,7 +946,7 @@ namespace ts.FindAllReferences {
          */
         class State {
             /** Cache for `explicitlyinheritsFrom`. */
-            readonly inheritsFromCache = createMap<boolean>();
+            readonly inheritsFromCache = new Map<string, boolean>();
 
             /**
              * Type nodes can contain multiple references to the same type. For example:

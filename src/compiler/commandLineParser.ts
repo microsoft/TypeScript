@@ -83,33 +83,33 @@ namespace ts {
     export const optionsForWatch: CommandLineOption[] = [
         {
             name: "watchFile",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 fixedpollinginterval: WatchFileKind.FixedPollingInterval,
                 prioritypollinginterval: WatchFileKind.PriorityPollingInterval,
                 dynamicprioritypolling: WatchFileKind.DynamicPriorityPolling,
                 usefsevents: WatchFileKind.UseFsEvents,
                 usefseventsonparentdirectory: WatchFileKind.UseFsEventsOnParentDirectory,
-            }),
+            })),
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_UseFsEvents_UseFsEventsOnParentDirectory,
         },
         {
             name: "watchDirectory",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 usefsevents: WatchDirectoryKind.UseFsEvents,
                 fixedpollinginterval: WatchDirectoryKind.FixedPollingInterval,
                 dynamicprioritypolling: WatchDirectoryKind.DynamicPriorityPolling,
-            }),
+            })),
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling,
         },
         {
             name: "fallbackPolling",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 fixedinterval: PollingWatchKind.FixedInterval,
                 priorityinterval: PollingWatchKind.PriorityInterval,
                 dynamicpriority: PollingWatchKind.DynamicPriority,
-            }),
+            })),
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority,
         },
@@ -286,7 +286,7 @@ namespace ts {
         {
             name: "target",
             shortName: "t",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 es3: ScriptTarget.ES3,
                 es5: ScriptTarget.ES5,
                 es6: ScriptTarget.ES2015,
@@ -297,7 +297,7 @@ namespace ts {
                 es2019: ScriptTarget.ES2019,
                 es2020: ScriptTarget.ES2020,
                 esnext: ScriptTarget.ESNext,
-            }),
+            })),
             affectsSourceFile: true,
             affectsModuleResolution: true,
             affectsEmit: true,
@@ -309,7 +309,7 @@ namespace ts {
         {
             name: "module",
             shortName: "m",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 none: ModuleKind.None,
                 commonjs: ModuleKind.CommonJS,
                 amd: ModuleKind.AMD,
@@ -319,7 +319,7 @@ namespace ts {
                 es2015: ModuleKind.ES2015,
                 es2020: ModuleKind.ES2020,
                 esnext: ModuleKind.ESNext
-            }),
+            })),
             affectsModuleResolution: true,
             affectsEmit: true,
             paramType: Diagnostics.KIND,
@@ -356,11 +356,11 @@ namespace ts {
         },
         {
             name: "jsx",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 "preserve": JsxEmit.Preserve,
                 "react-native": JsxEmit.ReactNative,
                 "react": JsxEmit.React
-            }),
+            })),
             affectsSourceFile: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
@@ -476,11 +476,11 @@ namespace ts {
         },
         {
             name: "importsNotUsedAsValues",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 remove: ImportsNotUsedAsValues.Remove,
                 preserve: ImportsNotUsedAsValues.Preserve,
                 error: ImportsNotUsedAsValues.Error
-            }),
+            })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
@@ -610,10 +610,10 @@ namespace ts {
         // Module Resolution
         {
             name: "moduleResolution",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 node: ModuleResolutionKind.NodeJs,
                 classic: ModuleResolutionKind.Classic,
-            }),
+            })),
             affectsModuleResolution: true,
             paramType: Diagnostics.STRATEGY,
             category: Diagnostics.Module_Resolution_Options,
@@ -818,10 +818,10 @@ namespace ts {
         },
         {
             name: "newLine",
-            type: createMapFromTemplate({
+            type: new Map(getEntries({
                 crlf: NewLineKind.CarriageReturnLineFeed,
                 lf: NewLineKind.LineFeed
-            }),
+            })),
             affectsEmit: true,
             paramType: Diagnostics.NEWLINE,
             category: Diagnostics.Advanced_Options,
@@ -1096,8 +1096,8 @@ namespace ts {
 
     /*@internal*/
     export function createOptionNameMap(optionDeclarations: readonly CommandLineOption[]): OptionsNameMap {
-        const optionsNameMap = createMap<CommandLineOption>();
-        const shortOptionNames = createMap<string>();
+        const optionsNameMap = new Map<string, CommandLineOption>();
+        const shortOptionNames = new Map<string, string>();
         forEach(optionDeclarations, option => {
             optionsNameMap.set(option.name.toLowerCase(), option);
             if (option.shortName) {
@@ -2032,7 +2032,7 @@ namespace ts {
         { optionsNameMap }: OptionsNameMap,
         pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
     ): Map<string, CompilerOptionsValue> {
-        const result = createMap<CompilerOptionsValue>();
+        const result = new Map<string, CompilerOptionsValue>();
         const getCanonicalFileName = pathOptions && createGetCanonicalFileName(pathOptions.useCaseSensitiveFileNames);
 
         for (const name in options) {
@@ -2962,17 +2962,17 @@ namespace ts {
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map later when when including
         // wildcard paths.
-        const literalFileMap = createMap<string>();
+        const literalFileMap = new Map<string, string>();
 
         // Wildcard paths (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard, and to handle extension priority.
-        const wildcardFileMap = createMap<string>();
+        const wildcardFileMap = new Map<string, string>();
 
         // Wildcard paths of json files (provided via the "includes" array in tsconfig.json) are stored in a
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard of *.json kind
-        const wildCardJsonFileMap = createMap<string>();
+        const wildCardJsonFileMap = new Map<string, string>();
         const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
 
         // Rather than requery this for each file and filespec, we query the supported extensions

@@ -2528,7 +2528,7 @@ namespace ts {
          */
         function recordEmittedDeclarationInScope(node: FunctionDeclaration | ClassDeclaration | ModuleDeclaration | EnumDeclaration) {
             if (!currentScopeFirstDeclarationsOfName) {
-                currentScopeFirstDeclarationsOfName = createUnderscoreEscapedMap<Node>();
+                currentScopeFirstDeclarationsOfName = new Map();
             }
 
             const name = declaredNameInScope(node);

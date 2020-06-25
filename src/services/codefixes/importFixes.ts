@@ -47,8 +47,8 @@ namespace ts.codefix {
         const addToNamespace: FixUseNamespaceImport[] = [];
         const importType: FixUseImportType[] = [];
         // Keys are import clause node IDs.
-        const addToExisting = createMap<{ readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern, defaultImport: string | undefined; readonly namedImports: string[], canUseTypeOnlyImport: boolean }>();
-        const newImports = createMap<Mutable<ImportsCollection & { useRequire: boolean }>>();
+        const addToExisting = new Map<string, { readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern, defaultImport: string | undefined; readonly namedImports: string[], canUseTypeOnlyImport: boolean }>();
+        const newImports = new Map<string, Mutable<ImportsCollection & { useRequire: boolean }>>();
         return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes };
 
         function addImportFromDiagnostic(diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) {

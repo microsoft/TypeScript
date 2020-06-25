@@ -250,7 +250,7 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly Statement[] }[] = [];
-        private readonly classesWithNodesInsertedAtStart = createMap<{ readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly classesWithNodesInsertedAtStart = new Map<string, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -824,7 +824,7 @@ namespace ts.textChanges {
         }
 
         private finishDeleteDeclarations(): void {
-            const deletedNodesInLists = new NodeSet(); // Stores nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
+            const deletedNodesInLists = new Set<Node>(); // Stores nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
             for (const { sourceFile, node } of this.deletedNodes) {
                 if (!this.deletedNodes.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
                     if (isArray(node)) {
@@ -1275,7 +1275,7 @@ namespace ts.textChanges {
     }
 
     namespace deleteDeclaration {
-        export function deleteDeclaration(changes: ChangeTracker, deletedNodesInLists: NodeSet<Node>, sourceFile: SourceFile, node: Node): void {
+        export function deleteDeclaration(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: Node): void {
             switch (node.kind) {
                 case SyntaxKind.Parameter: {
                     const oldFunction = node.parent;
@@ -1397,7 +1397,7 @@ namespace ts.textChanges {
             }
         }
 
-        function deleteVariableDeclaration(changes: ChangeTracker, deletedNodesInLists: NodeSet<Node>, sourceFile: SourceFile, node: VariableDeclaration): void {
+        function deleteVariableDeclaration(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: VariableDeclaration): void {
             const { parent } = node;
 
             if (parent.kind === SyntaxKind.CatchClause) {
@@ -1440,7 +1440,7 @@ namespace ts.textChanges {
         changes.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
     }
 
-    function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: NodeSet<Node>, sourceFile: SourceFile, node: Node): void {
+    function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: Node): void {
         const containingList = Debug.checkDefined(formatting.SmartIndenter.getContainingList(node, sourceFile));
         const index = indexOfNode(containingList, node);
         Debug.assert(index !== -1);

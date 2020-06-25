@@ -251,9 +251,9 @@ namespace Harness {
             }
 
             if (!libFileNameSourceFileMap) {
-                libFileNameSourceFileMap = ts.createMapFromTemplate({
+                libFileNameSourceFileMap = new ts.Map(ts.getEntries({
                     [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest)
-                });
+                }));
             }
 
             let sourceFile = libFileNameSourceFileMap.get(fileName);
@@ -316,7 +316,7 @@ namespace Harness {
         let optionsIndex: ts.Map<string, ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption | undefined {
             if (!optionsIndex) {
-                optionsIndex = ts.createMap<ts.CommandLineOption>();
+                optionsIndex = new ts.Map<string, ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
                 for (const option of optionDeclarations) {
                     optionsIndex.set(option.name.toLowerCase(), option);
@@ -595,7 +595,7 @@ namespace Harness {
             errorsReported = 0;
 
             // 'merge' the lines of each input file with any errors associated with it
-            const dupeCase = ts.createMap<number>();
+            const dupeCase = new ts.Map<string, number>();
             for (const inputFile of inputFiles.filter(f => f.content !== undefined)) {
                 // Filter down to the errors in the file
                 const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
@@ -775,7 +775,7 @@ namespace Harness {
                 if (skipBaseline) {
                     return;
                 }
-                const dupeCase = ts.createMap<number>();
+                const dupeCase = new ts.Map<string, number>();
 
                 for (const file of allFiles) {
                     const { unitName } = file;
@@ -946,7 +946,7 @@ namespace Harness {
             // Collect, test, and sort the fileNames
             const files = Array.from(outputFiles);
             files.slice().sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.file), cleanName(b.file)));
-            const dupeCase = ts.createMap<number>();
+            const dupeCase = new ts.Map<string, number>();
             // Yield them
             for (const outputFile of files) {
                 yield [checkDuplicatedFileName(outputFile.file, dupeCase), "/*====== " + outputFile.file + " ======*/\r\n" + Utils.removeByteOrderMark(outputFile.text)];
@@ -1075,10 +1075,10 @@ namespace Harness {
                 return option.type;
             }
             if (option.type === "boolean") {
-                return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = ts.createMapFromTemplate({
+                return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new ts.Map(ts.getEntries({
                     true: 1,
                     false: 0
-                }));
+                })));
             }
         }
     }
@@ -1403,7 +1403,7 @@ namespace Harness {
 
         export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void {
             const gen = generateContent();
-            const writtenFiles = ts.createMap<true>();
+            const writtenFiles = new ts.Map<string, true>();
             const errors: Error[] = [];
 
             // eslint-disable-next-line no-null/no-null

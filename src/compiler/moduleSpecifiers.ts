@@ -216,7 +216,7 @@ namespace ts.moduleSpecifiers {
     function getAllModulePaths(importingFileName: string, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly string[] {
         const cwd = host.getCurrentDirectory();
         const getCanonicalFileName = hostGetCanonicalFileName(host);
-        const allFileNames = createMap<string>();
+        const allFileNames = new Map<string, string>();
         let importedFileFromNodeModules = false;
         forEachFileNameOfModule(
             importingFileName,

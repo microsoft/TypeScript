@@ -501,7 +501,7 @@ namespace ts.codefix {
         }
 
         function combineUsages(usages: Usage[]): Usage {
-            const combinedProperties = createUnderscoreEscapedMap<Usage[]>();
+            const combinedProperties = new Map<__String, Usage[]>();
             for (const u of usages) {
                 if (u.properties) {
                     u.properties.forEach((p, name) => {
@@ -512,7 +512,7 @@ namespace ts.codefix {
                     });
                 }
             }
-            const properties = createUnderscoreEscapedMap<Usage>();
+            const properties = new Map<__String, Usage>();
             combinedProperties.forEach((ps, name) => {
                 properties.set(name, combineUsages(ps));
             });
@@ -821,7 +821,7 @@ namespace ts.codefix {
         function inferTypeFromPropertyAccessExpression(parent: PropertyAccessExpression, usage: Usage): void {
             const name = escapeLeadingUnderscores(parent.name.text);
             if (!usage.properties) {
-                usage.properties = createUnderscoreEscapedMap<Usage>();
+                usage.properties = new Map();
             }
             const propertyUsage = usage.properties.get(name) || createEmptyUsage();
             calculateUsageOfNode(parent, propertyUsage);
@@ -975,7 +975,7 @@ namespace ts.codefix {
         }
 
         function inferStructuralType(usage: Usage) {
-            const members = createUnderscoreEscapedMap<Symbol>();
+            const members = new Map<__String, Symbol>();
             if (usage.properties) {
                 usage.properties.forEach((u, name) => {
                     const symbol = checker.createSymbol(SymbolFlags.Property, name);

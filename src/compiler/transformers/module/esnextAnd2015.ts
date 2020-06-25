@@ -124,7 +124,7 @@ namespace ts {
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             if (isSourceFile(node)) {
                 if ((isExternalModule(node) || compilerOptions.isolatedModules) && compilerOptions.importHelpers) {
-                    helperNameSubstitutions = createMap<Identifier>();
+                    helperNameSubstitutions = new Map<string, Identifier>();
                 }
                 previousOnEmitNode(hint, node, emitCallback);
                 helperNameSubstitutions = undefined;

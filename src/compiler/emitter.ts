@@ -682,9 +682,9 @@ namespace ts {
 
     function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
         const jsBundle = Debug.checkDefined(bundle.js);
-        const prologueMap = jsBundle.sources?.prologues && arrayToMap(jsBundle.sources.prologues, prologueInfo => "" + prologueInfo.file);
+        const prologueMap = jsBundle.sources?.prologues && arrayToMap(jsBundle.sources.prologues, prologueInfo => prologueInfo.file);
         return bundle.sourceFiles.map((fileName, index) => {
-            const prologueInfo = prologueMap?.get("" + index);
+            const prologueInfo = prologueMap?.get(index);
             const statements = prologueInfo?.directives.map(directive => {
                 const literal = setTextRange(factory.createStringLiteral(directive.expression.text), directive.expression);
                 const statement = setTextRange(factory.createExpressionStatement(literal), directive);
@@ -834,7 +834,7 @@ namespace ts {
         const extendedDiagnostics = !!printerOptions.extendedDiagnostics;
         const newLine = getNewLineCharacter(printerOptions);
         const moduleKind = getEmitModuleKind(printerOptions);
-        const bundledHelpers = createMap<boolean>();
+        const bundledHelpers = new Map<string, boolean>();
 
         let currentSourceFile: SourceFile | undefined;
         let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
@@ -1682,7 +1682,7 @@ namespace ts {
             if (moduleKind === ModuleKind.None || printerOptions.noEmitHelpers) {
                 return undefined;
             }
-            const bundledHelpers = createMap<boolean>();
+            const bundledHelpers = new Map<string, boolean>();
             for (const sourceFile of bundle.sourceFiles) {
                 const shouldSkip = getExternalHelpersModuleName(sourceFile) !== undefined;
                 const helpers = getSortedEmitHelpers(sourceFile);

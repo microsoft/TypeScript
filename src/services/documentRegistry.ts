@@ -170,7 +170,7 @@ namespace ts {
             acquiring: boolean,
             scriptKind?: ScriptKind): SourceFile {
 
-            const bucket = getOrUpdate<Map<Path, DocumentRegistryEntry>>(buckets, key, createMap);
+            const bucket = getOrUpdate(buckets, key, () => new Map<Path, DocumentRegistryEntry>());
             let entry = bucket.get(path);
             const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target || ScriptTarget.ES5;
             if (!entry && externalCache) {

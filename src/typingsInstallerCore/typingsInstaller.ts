@@ -87,10 +87,10 @@ namespace ts.server.typingsInstaller {
     type ProjectWatchers = Map<string, FileWatcher> & { isInvoked?: boolean; };
 
     export abstract class TypingsInstaller {
-        private readonly packageNameToTypingLocation: Map<string, JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
+        private readonly packageNameToTypingLocation: Map<string, JsTyping.CachedTyping> = new Map<string, JsTyping.CachedTyping>();
         private readonly missingTypingsSet = new Set<string>();
         private readonly knownCachesSet = new Set<string>();
-        private readonly projectWatchers = createMap<ProjectWatchers>();
+        private readonly projectWatchers = new Map<string, ProjectWatchers>();
         private safeList: JsTyping.SafeList | undefined;
         readonly pendingRunRequests: PendingRequest[] = [];
         private readonly toCanonicalFileName: GetCanonicalFileName;
@@ -407,9 +407,9 @@ namespace ts.server.typingsInstaller {
             }
 
             let watchers = this.projectWatchers.get(projectName)!;
-            const toRemove = createMap<FileWatcher>();
+            const toRemove = new Map<string, FileWatcher>();
             if (!watchers) {
-                watchers = createMap();
+                watchers = new Map();
                 this.projectWatchers.set(projectName, watchers);
             }
             else {

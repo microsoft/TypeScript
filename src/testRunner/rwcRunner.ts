@@ -83,7 +83,7 @@ namespace RWC {
                     }
 
                     // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
-                    const uniqueNames = ts.createMap<true>();
+                    const uniqueNames = new ts.Map<string, true>();
                     for (const fileName of fileNames) {
                         // Must maintain order, build result list while checking map
                         const normalized = ts.normalizeSlashes(Harness.IO.resolvePath(fileName)!);

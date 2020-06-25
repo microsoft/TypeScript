@@ -621,7 +621,7 @@ namespace ts.server {
             private server: InProcSession | undefined;
             private seq = 0;
             private callbacks: ((resp: protocol.Response) => void)[] = [];
-            private eventHandlers = createMap<(args: any) => void>();
+            private eventHandlers = new Map<string, (args: any) => void>();
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {

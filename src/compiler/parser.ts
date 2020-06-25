@@ -820,7 +820,7 @@ namespace ts {
                 result.libReferenceDirectives = emptyArray;
                 result.amdDependencies = emptyArray;
                 result.hasNoDefaultLib = false;
-                result.pragmas = emptyMap;
+                result.pragmas = emptyMap as ReadonlyPragmaMap;
                 return result;
             }
 
@@ -929,8 +929,8 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = createMap<string>();
-            privateIdentifiers = createMap<string>();
+            identifiers = new Map<string, string>();
+            privateIdentifiers = new Map<string, string>();
             identifierCount = 0;
             nodeCount = 0;
             sourceFlags = 0;
@@ -8678,7 +8678,7 @@ namespace ts {
             extractPragmas(pragmas, range, comment);
         }
 
-        context.pragmas = createMap() as PragmaMap;
+        context.pragmas = new Map() as PragmaMap;
         for (const pragma of pragmas) {
             if (context.pragmas.has(pragma.name)) {
                 const currentValue = context.pragmas.get(pragma.name);
@@ -8776,7 +8776,7 @@ namespace ts {
         });
     }
 
-    const namedArgRegExCache = createMap<RegExp>();
+    const namedArgRegExCache = new Map<string, RegExp>();
     function getNamedArgRegEx(name: string): RegExp {
         if (namedArgRegExCache.has(name)) {
             return namedArgRegExCache.get(name)!;

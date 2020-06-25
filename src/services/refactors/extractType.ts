@@ -105,7 +105,7 @@ namespace ts.refactor {
         if (!node) return undefined;
         if (isIntersectionTypeNode(node)) {
             const result: TypeElement[] = [];
-            const seen = createMap<true>();
+            const seen = new Map<string, true>();
             for (const type of node.types) {
                 const flattenedTypeMembers = flattenTypeLiteralNodeReference(checker, type);
                 if (!flattenedTypeMembers || !flattenedTypeMembers.every(type => type.name && addToSeen(seen, getNameFromPropertyName(type.name) as string))) {

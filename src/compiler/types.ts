@@ -822,6 +822,9 @@ namespace ts {
         ReportsMask         = ReportsUnmeasurable | ReportsUnreliable
     }
 
+    /* @internal */
+    export type NodeId = number;
+
     export interface Node extends ReadonlyTextRange {
         readonly kind: SyntaxKind;
         readonly flags: NodeFlags;
@@ -829,7 +832,7 @@ namespace ts {
         /* @internal */ readonly transformFlags: TransformFlags; // Flags for transforms
         readonly decorators?: NodeArray<Decorator>;           // Array of decorators (in document order)
         readonly modifiers?: ModifiersArray;                  // Array of modifiers
-        /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
+        /* @internal */ id?: NodeId;                          // Unique id (used to look up NodeLinks)
         readonly parent: Node;                                // Parent node (initialized by binding)
         /* @internal */ original?: Node;                      // The original node if this is an updated node.
         /* @internal */ symbol: Symbol;                       // Symbol declared by node (initialized by binding)
@@ -3445,7 +3448,7 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: readonly number[];
-        /* @internal */ classifiableNames?: ReadonlyUnderscoreEscapedMap<true>;
+        /* @internal */ classifiableNames?: ReadonlySet<__String>;
         // Comments containing @ts-* directives, in order.
         /* @internal */ commentDirectives?: CommentDirective[];
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
@@ -3724,7 +3727,7 @@ namespace ts {
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
         /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
-        /* @internal */ getClassifiableNames(): UnderscoreEscapedMap<true>;
+        /* @internal */ getClassifiableNames(): Set<__String>;
 
         getNodeCount(): number;
         getIdentifierCount(): number;
@@ -4575,6 +4578,9 @@ namespace ts {
         LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function,
     }
 
+    /* @internal */
+    export type SymbolId = number;
+
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
         escapedName: __String;                  // Name of symbol
@@ -4583,7 +4589,7 @@ namespace ts {
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
-        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
+        /* @internal */ id?: SymbolId;          // Unique id (used to look up SymbolLinks)
         /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
         /* @internal */ parent?: Symbol;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
@@ -4604,8 +4610,8 @@ namespace ts {
         declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
-        instantiations?: Map<string, Type>;                 // Instantiations of generic type alias (undefined if non-generic)
-        inferredClassSymbol?: Map<string, TransientSymbol>; // Symbol of an inferred ES5 constructor function
+        instantiations?: Map<string, Type>;         // Instantiations of generic type alias (undefined if non-generic)
+        inferredClassSymbol?: Map<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
         mapper?: TypeMapper;                        // Type mapper for instantiation alias
         referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
         constEnumReferenced?: boolean;              // True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false)
@@ -4623,16 +4629,16 @@ namespace ts {
         exportsSomeValue?: boolean;                 // True if module exports some value (not just types)
         enumKind?: EnumKind;                        // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
-        lateSymbol?: Symbol;                // Late-bound symbol for a computed property
-        specifierCache?: Map<string, string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
-        extendedContainers?: Symbol[];      // Containers (other than the parent) which this symbol is aliased in
-        extendedContainersByFile?: Map<string, Symbol[]>;      // Containers (other than the parent) which this symbol is aliased in
-        variances?: VarianceFlags[];             // Alias symbol type argument variance cache
-        deferralConstituents?: Type[];      // Calculated list of constituents for a deferred type
-        deferralParent?: Type;              // Source union/intersection of a deferred type
-        cjsExportMerged?: Symbol;           // Version of the symbol with all non export= exports merged with the export= target
+        lateSymbol?: Symbol;                        // Late-bound symbol for a computed property
+        specifierCache?: Map<string, string>;       // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
+        extendedContainers?: Symbol[];              // Containers (other than the parent) which this symbol is aliased in
+        extendedContainersByFile?: Map<NodeId, Symbol[]>; // Containers (other than the parent) which this symbol is aliased in
+        variances?: VarianceFlags[];                // Alias symbol type argument variance cache
+        deferralConstituents?: Type[];              // Calculated list of constituents for a deferred type
+        deferralParent?: Type;                      // Source union/intersection of a deferred type
+        cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
-        isConstructorDeclaredProperty?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
+        isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
         tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     }
 
@@ -4715,15 +4721,13 @@ namespace ts {
      * with a normal string (which is good, it cannot be misused on assignment or on usage),
      * while still being comparable with a normal string via === (also good) and castable from a string.
      */
-    export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName;
+    export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName; // eslint-disable-line @typescript-eslint/naming-convention
 
     /** ReadonlyMap where keys are `__String`s. */
-    export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
-    }
+    export type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
 
     /** Map where keys are `__String`s. */
-    export interface UnderscoreEscapedMap<T> extends Map<__String, T>, ReadonlyUnderscoreEscapedMap<T> {
-    }
+    export type UnderscoreEscapedMap<T> = Map<__String, T>;
 
     /** SymbolTable based on ES6 Map interface. */
     export type SymbolTable = UnderscoreEscapedMap<Symbol>;
@@ -4764,31 +4768,31 @@ namespace ts {
 
     /* @internal */
     export interface NodeLinks {
-        flags: NodeCheckFlags;           // Set of flags specific to Node
-        resolvedType?: Type;              // Cached type of type node
-        resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
-        resolvedSignature?: Signature;    // Cached signature of signature node or call expression
-        resolvedSymbol?: Symbol;          // Cached name resolution result
-        resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
-        effectsSignature?: Signature;     // Signature with possible control flow effects
+        flags: NodeCheckFlags;              // Set of flags specific to Node
+        resolvedType?: Type;                // Cached type of type node
+        resolvedEnumType?: Type;            // Cached constraint type from enum jsdoc tag
+        resolvedSignature?: Signature;      // Cached signature of signature node or call expression
+        resolvedSymbol?: Symbol;            // Cached name resolution result
+        resolvedIndexInfo?: IndexInfo;      // Cached indexing info resolution result
+        effectsSignature?: Signature;       // Signature with possible control flow effects
         enumMemberValue?: string | number;  // Constant value of enum member
-        isVisible?: boolean;              // Is this node visible
+        isVisible?: boolean;                // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
-        hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
-        jsxFlags: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
-        resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
-        resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
-        resolvedJSDocType?: Type;                   // Resolved type of a JSDoc type reference
-        switchTypes?: Type[];             // Cached array of switch case expression types
-        jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
-        contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
-        deferredNodes?: Map<string, Node>; // Set of nodes whose checking has been deferred
+        hasReportedStatementInAmbientContext?: boolean; // Cache boolean if we report statements in ambient context
+        jsxFlags: JsxFlags;                 // flags for knowing what kind of element/attributes we're dealing with
+        resolvedJsxElementAttributesType?: Type; // resolved element attributes type of a JSX openinglike element
+        resolvedJsxElementAllAttributesType?: Type; // resolved all element attributes type of a JSX openinglike element
+        resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
+        switchTypes?: Type[];               // Cached array of switch case expression types
+        jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
+        contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
+        deferredNodes?: Map<NodeId, Node>;  // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
-        outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
-        instantiations?: Map<string, Type>;         // Instantiations of generic type alias (undefined if non-generic)
-        isExhaustive?: boolean;           // Is node an exhaustive switch statement
+        outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
+        instantiations?: Map<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
+        isExhaustive?: boolean;             // Is node an exhaustive switch statement
         skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
-        declarationRequiresScopeChange?: boolean;   // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
+        declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     }
 
     export const enum TypeFlags {
@@ -4880,16 +4884,19 @@ namespace ts {
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
 
+    /* @internal */
+    export type TypeId = number;
+
     // Properties common to all types
     export interface Type {
         flags: TypeFlags;                // Flags
-        /* @internal */ id: number;      // Unique ID
+        /* @internal */ id: TypeId;      // Unique ID
         /* @internal */ checker: TypeChecker;
         symbol: Symbol;                  // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
-        aliasTypeArguments?: readonly Type[];     // Alias type arguments (if any)
-        /* @internal */ aliasTypeArgumentsContainsMarker?: boolean;   // Alias type arguments (if any)
+        aliasTypeArguments?: readonly Type[]; // Alias type arguments (if any)
+        /* @internal */ aliasTypeArgumentsContainsMarker?: boolean; // Alias type arguments (if any)
         /* @internal */
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
         /* @internal */

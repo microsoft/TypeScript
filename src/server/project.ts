@@ -127,7 +127,7 @@ namespace ts.server {
 
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
-        private rootFilesMap = createMap<ProjectRootFile>();
+        private rootFilesMap = new Map<string, ProjectRootFile>();
         private program: Program | undefined;
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: Map<Path, FileWatcher> | undefined;
@@ -1281,7 +1281,7 @@ namespace ts.server {
                     if (this.generatedFilesMap.has(path)) return;
                 }
                 else {
-                    this.generatedFilesMap = createMap();
+                    this.generatedFilesMap = new Map();
                 }
                 this.generatedFilesMap.set(path, this.createGeneratedFileWatcher(generatedFile));
             }
@@ -1959,7 +1959,7 @@ namespace ts.server {
         pendingReloadReason: string | undefined;
 
         /* @internal */
-        openFileWatchTriggered = createMap<true>();
+        openFileWatchTriggered = new Map<string, true>();
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
@@ -2169,7 +2169,7 @@ namespace ts.server {
         /*@internal*/
         watchWildcards(wildcardDirectories: Map<string, WatchDirectoryFlags>) {
             updateWatchingWildcardDirectories(
-                this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = createMap()),
+                this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = new Map()),
                 wildcardDirectories,
                 // Create new directory watcher
                 (directory, flags) => this.projectService.watchWildcardDirectory(directory as Path, flags, this),

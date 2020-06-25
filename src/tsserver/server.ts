@@ -230,7 +230,7 @@ namespace ts.server {
         private projectService!: ProjectService;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
-        private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        private requestMap = new Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
         private requestedRegistry = false;
         private typesRegistryCache: Map<string, MapLike<string>> | undefined;
@@ -374,7 +374,7 @@ namespace ts.server {
 
             switch (response.kind) {
                 case EventTypesRegistry:
-                    this.typesRegistryCache = createMapFromTemplate(response.typesRegistry);
+                    this.typesRegistryCache = new Map(getEntries(response.typesRegistry));
                     break;
                 case ActionPackageInstalled: {
                     const { success, message } = response;
@@ -838,7 +838,7 @@ namespace ts.server {
 
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
-        const statusCache = createMap<boolean>();
+        const statusCache = new Map<string, boolean>();
         sys.watchDirectory = (path, callback, recursive, options) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);

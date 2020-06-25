@@ -204,7 +204,7 @@ namespace ts.projectSystem {
             }
 
             function getLocationsForDirectoryLookup() {
-                const result = createMap<number>();
+                const result = new Map<string, number>();
                 forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
                     // To resolve modules
                     result.set(ancestor, 2);

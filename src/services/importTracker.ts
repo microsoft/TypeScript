@@ -369,7 +369,7 @@ namespace ts.FindAllReferences {
 
     /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
     function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): Map<string, ImporterOrCallExpression[]> {
-        const map = createMap<ImporterOrCallExpression[]>();
+        const map = new Map<string, ImporterOrCallExpression[]>();
 
         for (const sourceFile of sourceFiles) {
             if (cancellationToken) cancellationToken.throwIfCancellationRequested();

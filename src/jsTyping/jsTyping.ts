@@ -68,7 +68,7 @@ namespace ts.JsTyping {
         "zlib"
     ];
 
-    export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
+    export const nodeCoreModules = new Set(nodeCoreModuleList);
 
     export function nonRelativeModuleNameForTypingCache(moduleName: string) {
         return nodeCoreModules.has(moduleName) ? "node" : moduleName;
@@ -81,13 +81,13 @@ namespace ts.JsTyping {
 
     export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
         const result = readConfigFile(safeListPath, path => host.readFile(path));
-        return createMapFromTemplate<string>(result.config);
+        return new Map(getEntries<string>(result.config));
     }
 
     export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
         const result = readConfigFile(typesMapPath, path => host.readFile(path));
         if (result.config) {
-            return createMapFromTemplate<string>(result.config.simpleMap);
+            return new Map(getEntries<string>(result.config.simpleMap));
         }
         return undefined;
     }
@@ -118,7 +118,7 @@ namespace ts.JsTyping {
         }
 
         // A typing name to typing file path mapping
-        const inferredTypings = createMap<string>();
+        const inferredTypings = new Map<string, string>();
 
         // Only infer typings for .js and .jsx files
         fileNames = mapDefined(fileNames, fileName => {
@@ -134,9 +134,9 @@ namespace ts.JsTyping {
         const exclude = typeAcquisition.exclude || [];
 
         // Directories to search for package.json, bower.json and other typing information
-        const possibleSearchDirs = arrayToSet(fileNames, getDirectoryPath);
-        possibleSearchDirs.set(projectRootPath, true);
-        possibleSearchDirs.forEach((_true, searchDir) => {
+        const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
+        possibleSearchDirs.add(projectRootPath);
+        possibleSearchDirs.forEach((searchDir) => {
             const packageJsonPath = combinePaths(searchDir, "package.json");
             getTypingNamesFromJson(packageJsonPath, filesToWatch);
 

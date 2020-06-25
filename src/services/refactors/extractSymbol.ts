@@ -43,11 +43,11 @@ namespace ts.refactor.extractSymbol {
         }
 
         const functionActions: RefactorActionInfo[] = [];
-        const usedFunctionNames: Map<string, boolean> = createMap();
+        const usedFunctionNames: Map<string, boolean> = new Map();
         let innermostErrorFunctionAction: RefactorActionInfo | undefined;
 
         const constantActions: RefactorActionInfo[] = [];
-        const usedConstantNames: Map<string, boolean> = createMap();
+        const usedConstantNames: Map<string, boolean> = new Map();
         let innermostErrorConstantAction: RefactorActionInfo | undefined;
 
         let i = 0;
@@ -1545,13 +1545,13 @@ namespace ts.refactor.extractSymbol {
         checker: TypeChecker,
         cancellationToken: CancellationToken): ReadsAndWrites {
 
-        const allTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
+        const allTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
         const usagesPerScope: ScopeUsages[] = [];
         const substitutionsPerScope: Map<string, Node>[] = [];
         const functionErrorsPerScope: Diagnostic[][] = [];
         const constantErrorsPerScope: Diagnostic[][] = [];
         const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];
-        const exposedVariableSymbolSet = createMap<true>(); // Key is symbol ID
+        const exposedVariableSymbolSet = new Map<string, true>(); // Key is symbol ID
         const exposedVariableDeclarations: VariableDeclaration[] = [];
         let firstExposedNonVariableDeclaration: NamedDeclaration | undefined;
 
@@ -1574,8 +1574,8 @@ namespace ts.refactor.extractSymbol {
 
         // initialize results
         for (const scope of scopes) {
-            usagesPerScope.push({ usages: createMap<UsageEntry>(), typeParameterUsages: createMap<TypeParameter>(), substitutions: createMap<Expression>() });
-            substitutionsPerScope.push(createMap<Expression>());
+            usagesPerScope.push({ usages: new Map<string, UsageEntry>(), typeParameterUsages: new Map<string, TypeParameter>(), substitutions: new Map<string, Expression>() });
+            substitutionsPerScope.push(new Map<string, Expression>());
 
             functionErrorsPerScope.push(
                 isFunctionLikeDeclaration(scope) && scope.kind !== SyntaxKind.FunctionDeclaration
@@ -1596,7 +1596,7 @@ namespace ts.refactor.extractSymbol {
             constantErrorsPerScope.push(constantErrors);
         }
 
-        const seenUsages = createMap<Usage>();
+        const seenUsages = new Map<string, Usage>();
         const target = isReadonlyArray(targetRange.range) ? factory.createBlock(targetRange.range) : targetRange.range;
 
         const unmodifiedNode = isReadonlyArray(targetRange.range) ? first(targetRange.range) : targetRange.range;
@@ -1613,7 +1613,7 @@ namespace ts.refactor.extractSymbol {
         }
 
         if (allTypeParameterUsages.size > 0) {
-            const seenTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
+            const seenTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
 
             let i = 0;
             for (let curr: Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent) {

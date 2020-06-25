@@ -218,7 +218,7 @@ namespace ts {
         let symbolCount = 0;
 
         let Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
-        let classifiableNames: UnderscoreEscapedMap<true>;
+        let classifiableNames: Set<__String>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -237,7 +237,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = bindInStrictMode(file, opts);
-            classifiableNames = createUnderscoreEscapedMap<true>();
+            classifiableNames = new Set();
             symbolCount = 0;
 
             Symbol = objectAllocator.getSymbolConstructor();
@@ -445,7 +445,7 @@ namespace ts {
                 symbol = symbolTable.get(name);
 
                 if (includes & SymbolFlags.Classifiable) {
-                    classifiableNames.set(name, true);
+                    classifiableNames.add(name);
                 }
 
                 if (!symbol) {
@@ -1964,7 +1964,7 @@ namespace ts {
             }
 
             if (inStrictMode && !isAssignmentTarget(node)) {
-                const seen = createUnderscoreEscapedMap<ElementKind>();
+                const seen = new Map<__String, ElementKind>();
 
                 for (const prop of node.properties) {
                     if (prop.kind === SyntaxKind.SpreadAssignment || prop.name.kind !== SyntaxKind.Identifier) {
@@ -3142,7 +3142,7 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
-                    classifiableNames.set(node.name.escapedText, true);
+                    classifiableNames.add(node.name.escapedText);
                 }
             }
 

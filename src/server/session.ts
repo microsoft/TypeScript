@@ -1434,7 +1434,7 @@ namespace ts.server {
         }
 
         private toSpanGroups(locations: readonly RenameLocation[]): readonly protocol.SpanGroup[] {
-            const map = createMap<protocol.SpanGroup>();
+            const map = new Map<string, protocol.SpanGroup>();
             for (const { fileName, textSpan, contextSpan, originalContextSpan: _2, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
                 let group = map.get(fileName);
                 if (!group) map.set(fileName, group = { file: fileName, locs: [] });
@@ -2338,7 +2338,7 @@ namespace ts.server {
             return { response, responseRequired: true };
         }
 
-        private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
+        private handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
             [CommandNames.Status]: () => {
                 const response: protocol.StatusResponseBody = { version: ts.version }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 return this.requiredResponse(response);
@@ -2697,7 +2697,7 @@ namespace ts.server {
             [CommandNames.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
                 return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
             },
-        });
+        }));
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {
             if (this.handlers.has(command)) {

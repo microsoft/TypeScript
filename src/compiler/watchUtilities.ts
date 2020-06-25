@@ -44,7 +44,7 @@ namespace ts {
             return undefined;
         }
 
-        const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
+        const cachedReadDirectoryResult = new Map<string, MutableFileSystemEntries>();
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         return {
             useCaseSensitiveFileNames,
@@ -266,7 +266,8 @@ namespace ts {
         createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
     ) {
         const missingFilePaths = program.getMissingFilePaths();
-        const newMissingFilePathMap = arrayToSet(missingFilePaths);
+        // TODO(rbuckton): Should be a `Set` but that requires changing the below code that uses `mutateMap`
+        const newMissingFilePathMap = arrayToMap(missingFilePaths, identity, returnTrue);
         // Update the missing file paths watcher
         mutateMap(
             missingFileWatches,

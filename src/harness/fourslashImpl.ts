@@ -177,7 +177,7 @@ namespace FourSlash {
 
         public formatCodeSettings: ts.FormatCodeSettings;
 
-        private inputFiles = ts.createMap<string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
+        private inputFiles = new ts.Map<string, string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
 
         private static getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[] | undefined) {
             let result = "";
@@ -830,7 +830,7 @@ namespace FourSlash {
                 this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
             }
 
-            const nameToEntries = ts.createMap<ts.CompletionEntry[]>();
+            const nameToEntries = new ts.Map<string, ts.CompletionEntry[]>();
             for (const entry of actualCompletions.entries) {
                 const entries = nameToEntries.get(entry.name);
                 if (!entries) {
@@ -995,7 +995,7 @@ namespace FourSlash {
         }
 
         public setTypesRegistry(map: ts.MapLike<void>): void {
-            this.languageServiceAdapterHost.typesRegistry = ts.createMapFromTemplate(map);
+            this.languageServiceAdapterHost.typesRegistry = new ts.Map(ts.getEntries(map));
         }
 
         public verifyTypeOfSymbolAtLocation(range: Range, symbol: ts.Symbol, expected: string): void {
@@ -2888,7 +2888,7 @@ namespace FourSlash {
 
         public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-            const openBraceMap = ts.createMapFromTemplate<ts.CharacterCodes>({
+            const openBraceMap = new ts.Map(ts.getEntries<ts.CharacterCodes>({
                 "(": ts.CharacterCodes.openParen,
                 "{": ts.CharacterCodes.openBrace,
                 "[": ts.CharacterCodes.openBracket,
@@ -2896,7 +2896,7 @@ namespace FourSlash {
                 '"': ts.CharacterCodes.doubleQuote,
                 "`": ts.CharacterCodes.backtick,
                 "<": ts.CharacterCodes.lessThan
-            });
+            }));
 
             const charCode = openBraceMap.get(openingBrace);
 
@@ -3509,7 +3509,7 @@ namespace FourSlash {
             let text = "";
             if (callHierarchyItem) {
                 const file = this.findFile(callHierarchyItem.file);
-                text += this.formatCallHierarchyItem(file, callHierarchyItem, CallHierarchyItemDirection.Root, ts.createMap(), "");
+                text += this.formatCallHierarchyItem(file, callHierarchyItem, CallHierarchyItemDirection.Root, new ts.Map(), "");
             }
             return text;
         }
@@ -3805,7 +3805,7 @@ namespace FourSlash {
         const lines = contents.split("\n");
         let i = 0;
 
-        const markerPositions = ts.createMap<Marker>();
+        const markerPositions = new ts.Map<string, Marker>();
         const markers: Marker[] = [];
         const ranges: Range[] = [];
 
@@ -4194,7 +4194,7 @@ namespace FourSlash {
 
     /** Collects an array of unique outputs. */
     function unique<T>(inputs: readonly T[], getOutput: (t: T) => string): string[] {
-        const set = ts.createMap<true>();
+        const set = new ts.Map<string, true>();
         for (const input of inputs) {
             const out = getOutput(input);
             set.set(out, true);

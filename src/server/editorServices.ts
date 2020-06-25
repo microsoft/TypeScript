@@ -158,7 +158,7 @@ namespace ts.server {
     }
 
     function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<string, Map<string, number>> {
-        const map: Map<string, Map<string, number>> = createMap<Map<string, number>>();
+        const map: Map<string, Map<string, number>> = new Map<string, Map<string, number>>();
         for (const option of commandLineOptions) {
             if (typeof option.type === "object") {
                 const optionMap = <Map<string, number>>option.type;
@@ -174,11 +174,11 @@ namespace ts.server {
 
     const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
     const watchOptionsConverters = prepareConvertersForEnumLikeCompilerOptions(optionsForWatch);
-    const indentStyle = createMapFromTemplate({
+    const indentStyle = new Map(getEntries({
         none: IndentStyle.None,
         block: IndentStyle.Block,
         smart: IndentStyle.Smart
-    });
+    }));
 
     export interface TypesMapFile {
         typesMap: SafeList;
@@ -571,16 +571,16 @@ namespace ts.server {
          * Container of all known scripts
          */
         /*@internal*/
-        readonly filenameToScriptInfo = createMap<ScriptInfo>();
-        private readonly scriptInfoInNodeModulesWatchers = createMap <ScriptInfoInNodeModulesWatcher>();
+        readonly filenameToScriptInfo = new Map<string, ScriptInfo>();
+        private readonly scriptInfoInNodeModulesWatchers = new Map<string, ScriptInfoInNodeModulesWatcher>();
         /**
          * Contains all the deleted script info's version information so that
          * it does not reset when creating script info again
          * (and could have potentially collided with version where contents mismatch)
          */
-        private readonly filenameToScriptInfoVersion = createMap<ScriptInfoVersion>();
+        private readonly filenameToScriptInfoVersion = new Map<string, ScriptInfoVersion>();
         // Set of all '.js' files ever opened.
-        private readonly allJsFilesForOpenFileTelemetry = createMap<true>();
+        private readonly allJsFilesForOpenFileTelemetry = new Map<string, true>();
 
         /**
          * Map to the real path of the infos
@@ -590,7 +590,7 @@ namespace ts.server {
         /**
          * maps external project file name to list of config files that were the part of this project
          */
-        private readonly externalProjectToConfiguredProjectMap: Map<string, NormalizedPath[]> = createMap<NormalizedPath[]>();
+        private readonly externalProjectToConfiguredProjectMap: Map<string, NormalizedPath[]> = new Map<string, NormalizedPath[]>();
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
@@ -603,7 +603,7 @@ namespace ts.server {
         /**
          * projects specified by a tsconfig.json file
          */
-        readonly configuredProjects = createMap<ConfiguredProject>();
+        readonly configuredProjects = new Map<string, ConfiguredProject>();
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
@@ -611,16 +611,16 @@ namespace ts.server {
         /**
          * Map of open files that are opened without complete path but have projectRoot as current directory
          */
-        private readonly openFilesWithNonRootedDiskPath = createMap<ScriptInfo>();
+        private readonly openFilesWithNonRootedDiskPath = new Map<string, ScriptInfo>();
 
         private compilerOptionsForInferredProjects: CompilerOptions | undefined;
-        private compilerOptionsForInferredProjectsPerProjectRoot = createMap<CompilerOptions>();
+        private compilerOptionsForInferredProjectsPerProjectRoot = new Map<string, CompilerOptions>();
         private watchOptionsForInferredProjects: WatchOptions | undefined;
-        private watchOptionsForInferredProjectsPerProjectRoot = createMap<WatchOptions | false>();
+        private watchOptionsForInferredProjectsPerProjectRoot = new Map<string, WatchOptions | false>();
         /**
          * Project size for configured or external projects
          */
-        private readonly projectToSizeMap: Map<string, number> = createMap<number>();
+        private readonly projectToSizeMap: Map<string, number> = new Map<string, number>();
         /**
          * This is a map of config file paths existence that doesnt need query to disk
          * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
@@ -628,14 +628,14 @@ namespace ts.server {
          * - Or it is present if we have configured project open with config file at that location
          *   In this case the exists property is always true
          */
-        private readonly configFileExistenceInfoCache = createMap<ConfigFileExistenceInfo>();
+        private readonly configFileExistenceInfoCache = new Map<string, ConfigFileExistenceInfo>();
         /*@internal*/ readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
-        private readonly legacySafelist = createMap<string>();
+        private readonly legacySafelist = new Map<string, string>();
 
-        private pendingProjectUpdates = createMap<Project>();
+        private pendingProjectUpdates = new Map<string, Project>();
         /* @internal */
         pendingEnsureProjectForOpenFiles = false;
 
@@ -663,7 +663,7 @@ namespace ts.server {
         public readonly syntaxOnly?: boolean;
 
         /** Tracks projects that we have already sent telemetry for. */
-        private readonly seenProjects = createMap<true>();
+        private readonly seenProjects = new Map<string, true>();
 
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
@@ -2039,7 +2039,7 @@ namespace ts.server {
                 project.setCompilerOptions(compilerOptions);
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
-                project.watchWildcards(createMapFromTemplate(parsedCommandLine.wildcardDirectories!)); // TODO: GH#18217
+                project.watchWildcards(new Map(getEntries(parsedCommandLine.wildcardDirectories!))); // TODO: GH#18217
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
@@ -2048,7 +2048,7 @@ namespace ts.server {
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
-            const newRootScriptInfoMap = createMap<true>();
+            const newRootScriptInfoMap = new Map<string, true>();
 
             for (const f of files) {
                 const newRootFile = propertyReader.getFileName(f);
@@ -2772,7 +2772,7 @@ namespace ts.server {
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
         private reloadConfiguredProjectForFiles<T>(openFiles: Map<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
-            const updatedProjects = createMap<true>();
+            const updatedProjects = new Map<string, true>();
             // try to reload config file for all open files
             openFiles.forEach((openFileValue, path) => {
                 // Filter out the files that need to be ignored
@@ -3153,7 +3153,7 @@ namespace ts.server {
         }
 
         private removeOrphanConfiguredProjects(toRetainConfiguredProjects: readonly ConfiguredProject[] | ConfiguredProject | undefined) {
-            const toRemoveConfiguredProjects = cloneMap(this.configuredProjects);
+            const toRemoveConfiguredProjects = new Map(this.configuredProjects);
             const markOriginalProjectsAsUsed = (project: Project) => {
                 if (!project.isOrphan() && project.originalConfiguredProjects) {
                     project.originalConfiguredProjects.forEach(
@@ -3208,7 +3208,7 @@ namespace ts.server {
         }
 
         private removeOrphanScriptInfos() {
-            const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
+            const toRemoveScriptInfos = new Map(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
                 if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByAutoImportProvider()) {
@@ -3686,7 +3686,7 @@ namespace ts.server {
 
             // Also save the current configuration to pass on to any projects that are yet to be loaded.
             // If a plugin is configured twice, only the latest configuration will be remembered.
-            this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || createMap();
+            this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || new Map();
             this.currentPluginConfigOverrides.set(args.pluginName, args.configuration);
         }
 
@@ -3721,7 +3721,7 @@ namespace ts.server {
 
         /*@internal*/
         private watchPackageJsonFile(path: Path) {
-            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
+            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = new Map());
             if (!watchers.has(path)) {
                 this.invalidateProjectAutoImports(path);
                 watchers.set(path, this.watchFactory.watchFile(

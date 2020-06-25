@@ -2111,7 +2111,7 @@ namespace ts {
                 const text = idText(<Identifier>variable.name);
                 name = declareLocal(text);
                 if (!renamedCatchVariables) {
-                    renamedCatchVariables = createMap<boolean>();
+                    renamedCatchVariables = new Map<string, boolean>();
                     renamedCatchVariableDeclarations = [];
                     context.enableSubstitution(SyntaxKind.Identifier);
                 }

@@ -137,7 +137,7 @@ namespace ts.projectSystem {
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [file1.path, tsconfig.path]);
 
-            const expectedWatchedFiles = createMap<number>();
+            const expectedWatchedFiles = new Map<string, number>();
             expectedWatchedFiles.set(tsconfig.path, 1); // tsserver
             expectedWatchedFiles.set(libFile.path, 1); // tsserver
             expectedWatchedFiles.set(packageJson.path, 1); // typing installer
@@ -145,7 +145,7 @@ namespace ts.projectSystem {
 
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
 
-            const expectedWatchedDirectoriesRecursive = createMap<number>();
+            const expectedWatchedDirectoriesRecursive = new Map<string, number>();
             expectedWatchedDirectoriesRecursive.set("/a/b", 1); // wild card
             expectedWatchedDirectoriesRecursive.set("/a/b/node_modules/@types", 1); // type root watch
             expectedWatchedDirectoriesRecursive.set("/a/b/node_modules", 1); // TypingInstaller
@@ -838,7 +838,7 @@ namespace ts.projectSystem {
             const p = configuredProjectAt(projectService, 0);
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
-            const watchedFilesExpected = createMap<number>();
+            const watchedFilesExpected = new Map<string, number>();
             watchedFilesExpected.set(jsconfig.path, 1); // project files
             watchedFilesExpected.set(libFile.path, 1); // project files
             watchedFilesExpected.set(combinePaths(installer.globalTypingsCacheLocation, "package.json"), 1);
@@ -1361,7 +1361,7 @@ namespace ts.projectSystem {
                 content: ""
             };
 
-            const safeList = createMapFromTemplate({ jquery: "jquery", chroma: "chroma-js" });
+            const safeList = new Map(getEntries({ jquery: "jquery", chroma: "chroma-js" }));
 
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
@@ -1381,7 +1381,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f]);
-            const cache = createMap<JsTyping.CachedTyping>();
+            const cache = new Map<string, JsTyping.CachedTyping>();
 
             for (const name of JsTyping.nodeCoreModuleList) {
                 const logger = trackingLogger();
@@ -1404,7 +1404,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } });
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
             const registry = createTypesRegistry("node");
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry);
@@ -1426,7 +1426,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } });
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } }));
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], emptyMap);
             assert.deepEqual(logger.finish(), [
@@ -1451,7 +1451,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ name: "b" }),
             };
             const host = createServerHost([app, a, b]);
-            const cache = createMap<JsTyping.CachedTyping>();
+            const cache = new Map<string, JsTyping.CachedTyping>();
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap);
             assert.deepEqual(logger.finish(), [
@@ -1482,10 +1482,10 @@ namespace ts.projectSystem {
                 content: "export let y: number"
             };
             const host = createServerHost([app]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({
                 node: { typingLocation: node.path, version: new Version("1.3.0") },
                 commander: { typingLocation: commander.path, version: new Version("1.0.0") }
-            });
+            }));
             const registry = createTypesRegistry("node", "commander");
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(<Path>app.path), emptySafeList, cache, { enable: true }, ["http", "commander"], registry);
@@ -1508,9 +1508,9 @@ namespace ts.projectSystem {
                 content: "export let y: number"
             };
             const host = createServerHost([app]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({
                 node: { typingLocation: node.path, version: new Version("1.0.0") }
-            });
+            }));
             const registry = createTypesRegistry("node");
             registry.delete(`ts${versionMajorMinor}`);
             const logger = trackingLogger();
@@ -1539,10 +1539,10 @@ namespace ts.projectSystem {
                 content: "export let y: number"
             };
             const host = createServerHost([app]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({
+            const cache = new Map(getEntries<JsTyping.CachedTyping>({
                 node: { typingLocation: node.path, version: new Version("1.3.0-next.0") },
                 commander: { typingLocation: commander.path, version: new Version("1.3.0-next.0") }
-            });
+            }));
             const registry = createTypesRegistry("node", "commander");
             registry.get("node")![`ts${versionMajorMinor}`] = "1.3.0-next.1";
             const logger = trackingLogger();

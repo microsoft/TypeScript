@@ -35,7 +35,7 @@ namespace ts {
     }
 
     function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[]): ModuleResolutionHost {
-        const map = createMap<File>();
+        const map = new Map<string, File>();
         for (const file of files) {
             map.set(file.name, file);
             if (file.symlinks) {
@@ -46,7 +46,7 @@ namespace ts {
         }
 
         if (hasDirectoryExists) {
-            const directories = createMap<string>();
+            const directories = new Map<string, string>();
             for (const f of files) {
                 let name = getDirectoryPath(f.name);
                 while (true) {
@@ -495,7 +495,7 @@ namespace ts {
         }
 
         it("should find all modules", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "/a/b/c/first/shared.ts": `
 class A {}
 export = A`,
@@ -509,23 +509,23 @@ import Shared = require('../first/shared');
 class C {}
 export = C;
                 `
-            });
+            }));
             test(files, "/a/b/c/first/second", ["class_a.ts"], 3, ["../../../c/third/class_c.ts"]);
         });
 
         it("should find modules in node_modules", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "/parent/node_modules/mod/index.d.ts": "export var x",
                 "/parent/app/myapp.ts": `import {x} from "mod"`
-            });
+            }));
             test(files, "/parent/app", ["myapp.ts"], 2, []);
         });
 
         it("should find file referenced via absolute and relative names", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "/a/b/c.ts": `/// <reference path="b.ts"/>`,
                 "/a/b/b.ts": "var x"
-            });
+            }));
             test(files, "/a/b", ["c.ts", "/a/b/b.ts"], 2, []);
         });
     });
@@ -543,7 +543,7 @@ export = C;
             const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
             if (!useCaseSensitiveFileNames) {
                 const oldFiles = files;
-                files = createMap<string>();
+                files = new Map<string, string>();
                 oldFiles.forEach((file, fileName) => {
                     files.set(getCanonicalFileName(fileName), file);
                 });
@@ -580,10 +580,10 @@ export = C;
         }
 
         it("should succeed when the same file is referenced using absolute and relative names", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "/a/b/c.ts": `/// <reference path="d.ts"/>`,
                 "/a/b/d.ts": "var x"
-            });
+            }));
             test(
                 files,
                 { module: ModuleKind.AMD },
@@ -595,10 +595,10 @@ export = C;
         });
 
         it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "/a/b/c.ts": `/// <reference path="D.ts"/>`,
                 "/a/b/d.ts": "var x"
-            });
+            }));
             test(
                 files,
                 { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true },
@@ -622,10 +622,10 @@ export = C;
         });
 
         it("should fail when two files used in program differ only in casing (imports)", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/d.ts": "export var x"
-            });
+            }));
             test(
                 files,
                 { module: ModuleKind.AMD, forceConsistentCasingInFileNames: true },
@@ -649,10 +649,10 @@ export = C;
         });
 
         it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "moduleA.ts": `import {x} from "./ModuleB"`,
                 "moduleB.ts": "export var x"
-            });
+            }));
             test(
                 files,
                 { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
@@ -676,11 +676,11 @@ export = C;
         });
 
         it("should fail when two files exist on disk that differs only in casing", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "/a/b/c.ts": `import {x} from "D"`,
                 "/a/b/D.ts": "export var x",
                 "/a/b/d.ts": "export var y"
-            });
+            }));
             test(
                 files,
                 { module: ModuleKind.AMD },
@@ -704,11 +704,11 @@ export = C;
         });
 
         it("should fail when module name in 'require' calls has inconsistent casing", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "moduleA.ts": `import a = require("./ModuleC")`,
                 "moduleB.ts": `import a = require("./moduleC")`,
                 "moduleC.ts": "export var x"
-            });
+            }));
             test(
                 files,
                 { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
@@ -747,7 +747,7 @@ export = C;
         });
 
         it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "/a/B/c/moduleA.ts": `import a = require("./ModuleC")`,
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",
@@ -755,7 +755,7 @@ export = C;
 import a = require("./moduleA");
 import b = require("./moduleB");
                 `
-            });
+            }));
             test(
                 files,
                 { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
@@ -778,7 +778,7 @@ import b = require("./moduleB");
             );
         });
         it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "/a/B/c/moduleA.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
                 "/a/B/c/moduleC.ts": "export var x",
@@ -786,7 +786,7 @@ import b = require("./moduleB");
 import a = require("./moduleA");
 import b = require("./moduleB");
                 `
-            });
+            }));
             test(
                 files,
                 { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
@@ -798,11 +798,11 @@ import b = require("./moduleB");
         });
 
         it("should succeed when the two files in program differ only in drive letter in their names", () => {
-            const files = createMapFromTemplate({
+            const files = new Map(getEntries({
                 "d:/someFolder/moduleA.ts": `import a = require("D:/someFolder/moduleC")`,
                 "d:/someFolder/moduleB.ts": `import a = require("./moduleC")`,
                 "D:/someFolder/moduleC.ts": "export const x = 10",
-            });
+            }));
             test(
                 files,
                 { module: ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },

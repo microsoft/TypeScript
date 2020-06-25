@@ -61,7 +61,7 @@ namespace ts.codefix {
             return;
         }
 
-        const synthNamesMap: Map<string, SynthIdentifier> = createMap();
+        const synthNamesMap: Map<string, SynthIdentifier> = new Map();
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context.sourceFile);
@@ -149,7 +149,7 @@ namespace ts.codefix {
         It then checks for any collisions and renames them through getSynthesizedDeepClone
     */
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<string, SynthIdentifier>, sourceFile: SourceFile): FunctionLikeDeclaration {
-        const identsToRenameMap = createMap<Identifier>(); // key is the symbol id
+        const identsToRenameMap = new Map<string, Identifier>(); // key is the symbol id
         const collidingSymbolMap = createMultiMap<Symbol>();
         forEachChild(nodeToRename, function visit(node: Node) {
             if (!isIdentifier(node)) {
