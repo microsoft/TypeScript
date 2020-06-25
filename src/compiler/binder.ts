@@ -2109,19 +2109,38 @@ namespace ts {
         }
 
         // The binder visits every node in the syntax tree so it is a convenient place to perform a single localized
-        // check for reserved words used as identifiers in strict mode code.
-        function checkStrictModeIdentifier(node: Identifier) {
-            if (inStrictMode &&
-                node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
-                node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord &&
-                !isIdentifierName(node) &&
+        // check for reserved words used as identifiers in strict mode code, as well as `yield` or `await` in
+        // [Yield] or [Await] contexts, respectively.
+        function checkContextualIdentifier(node: Identifier) {
+            // Report error only if there are no parse errors in file
+            if (!file.parseDiagnostics.length &&
                 !(node.flags & NodeFlags.Ambient) &&
-                !(node.flags & NodeFlags.JSDoc)) {
+                !(node.flags & NodeFlags.JSDoc) &&
+                !isIdentifierName(node)) {
 
-                // Report error only if there are no parse errors in file
-                if (!file.parseDiagnostics.length) {
+                // strict mode identifiers
+                if (inStrictMode &&
+                    node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
+                    node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node,
                         getStrictModeIdentifierMessage(node), declarationNameToString(node)));
+                }
+                else if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
+                    if (isExternalModule(file) && isInTopLevelContext(node)) {
+                        file.bindDiagnostics.push(createDiagnosticForNode(node,
+                            Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module,
+                            declarationNameToString(node)));
+                    }
+                    else if (node.flags & NodeFlags.AwaitContext) {
+                        file.bindDiagnostics.push(createDiagnosticForNode(node,
+                            Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
+                            declarationNameToString(node)));
+                    }
+                }
+                else if (node.originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node,
+                        Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
+                        declarationNameToString(node)));
                 }
             }
         }
@@ -2423,7 +2442,7 @@ namespace ts {
                     if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                         node.flowNode = currentFlow;
                     }
-                    return checkStrictModeIdentifier(<Identifier>node);
+                    return checkContextualIdentifier(<Identifier>node);
                 case SyntaxKind.SuperKeyword:
                     node.flowNode = currentFlow;
                     break;

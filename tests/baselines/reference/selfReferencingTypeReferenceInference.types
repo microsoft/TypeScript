@@ -1,0 +1,27 @@
+=== tests/cases/compiler/selfReferencingTypeReferenceInference.ts ===
+interface Box<T> {
+    __: T
+>__ : T
+}
+
+type Recursive<T> =
+>Recursive : Recursive<T>
+
+    | T
+    | Box<Recursive<T>>
+
+type InferRecursive<T> = T extends Recursive<infer R> ? R : "never!"
+>InferRecursive : InferRecursive<T>
+
+// the type we are testing with
+type t1 = Box<string | Box<number | boolean>>
+>t1 : t1
+
+type t2 = InferRecursive<t1>
+>t2 : string | number | boolean
+
+type t3 = InferRecursive<Box<string | Box<number | boolean>>> // write t1 explicitly
+>t3 : string | number | boolean
+
+  // Why is t2 and t3 different??
+  // They have same input type!

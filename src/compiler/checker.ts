@@ -16883,7 +16883,7 @@ namespace ts {
                 else if (target.flags & TypeFlags.IndexedAccess) {
                     // A type S is related to a type T[K] if S is related to C, where C is the base
                     // constraint of T[K] for writing.
-                    if (relation !== identityRelation) {
+                    if (relation === assignableRelation || relation === comparableRelation) {
                         const objectType = (<IndexedAccessType>target).objectType;
                         const indexType = (<IndexedAccessType>target).indexType;
                         const baseObjectType = getBaseConstraintOfType(objectType) || objectType;
@@ -18100,15 +18100,32 @@ namespace ts {
         // In addition, this will also detect when an indexed access has been chained off of 5 or more times (which is essentially
         // the dual of the structural comparison), and likewise mark the type as deeply nested, potentially adding false positives
         // for finite but deeply expanding indexed accesses (eg, for `Q[P1][P2][P3][P4][P5]`).
+        // It also detects when a recursive type reference has expanded 5 or more times, eg, if the true branch of
+        // `type A<T> = null extends T ? [A<NonNullable<T>>] : [T]`
+        // has expanded into `[A<NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<T>>>>>>]`
+        // in such cases we need to terminate the expansion, and we do so here.
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
             // We track all object types that have an associated symbol (representing the origin of the type)
-            if (depth >= 5 && type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
-                const symbol = type.symbol;
-                if (symbol) {
+            if (depth >= 5 && type.flags & TypeFlags.Object) {
+                if (!isObjectOrArrayLiteralType(type)) {
+                    const symbol = type.symbol;
+                    if (symbol) {
+                        let count = 0;
+                        for (let i = 0; i < depth; i++) {
+                            const t = stack[i];
+                            if (t.flags & TypeFlags.Object && t.symbol === symbol) {
+                                count++;
+                                if (count >= 5) return true;
+                            }
+                        }
+                    }
+                }
+                if (getObjectFlags(type) && ObjectFlags.Reference && !!(type as TypeReference).node) {
+                    const root = (type as TypeReference).target;
                     let count = 0;
                     for (let i = 0; i < depth; i++) {
                         const t = stack[i];
-                        if (t.flags & TypeFlags.Object && t.symbol === symbol) {
+                        if (getObjectFlags(t) && ObjectFlags.Reference && !!(t as TypeReference).node && (t as TypeReference).target === root) {
                             count++;
                             if (count >= 5) return true;
                         }
@@ -19200,6 +19217,8 @@ namespace ts {
             let propagationType: Type;
             let inferencePriority = InferencePriority.MaxValue;
             let allowComplexConstraintInference = true;
+            let objectTypeComparisonDepth = 0;
+            const targetStack: Type[] = [];
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type): void {
@@ -19633,15 +19652,27 @@ namespace ts {
                 // its symbol with the instance side which would lead to false positives.
                 const isNonConstructorObject = target.flags & TypeFlags.Object &&
                     !(getObjectFlags(target) & ObjectFlags.Anonymous && target.symbol && target.symbol.flags & SymbolFlags.Class);
-                const symbolOrType = isNonConstructorObject ? isTupleType(target) ? target.target : target.symbol : undefined;
+                const symbolOrType = getObjectFlags(target) & ObjectFlags.Reference && (target as TypeReference).node ? getNormalizedType(target, /*writing*/ false) : isNonConstructorObject ? isTupleType(target) ? target.target : target.symbol : undefined;
                 if (symbolOrType) {
                     if (contains(symbolOrTypeStack, symbolOrType)) {
+                        if (getObjectFlags(target) & ObjectFlags.Reference && (target as TypeReference).node) {
+                            // Don't set the circularity flag for re-encountered recursive type references just because we're already exploring them
+                            return;
+                        }
                         inferencePriority = InferencePriority.Circularity;
+                        return;
+                    }
+                    targetStack[objectTypeComparisonDepth] = target;
+                    objectTypeComparisonDepth++;
+                    if (isDeeplyNestedType(target, targetStack, objectTypeComparisonDepth)) {
+                        inferencePriority = InferencePriority.Circularity;
+                        objectTypeComparisonDepth--;
                         return;
                     }
                     (symbolOrTypeStack || (symbolOrTypeStack = [])).push(symbolOrType);
                     inferFromObjectTypesWorker(source, target);
                     symbolOrTypeStack.pop();
+                    objectTypeComparisonDepth--;
                 }
                 else {
                     inferFromObjectTypesWorker(source, target);
@@ -22865,14 +22896,14 @@ namespace ts {
         //   the contextual type of an initializer expression is the type implied by the binding pattern.
         // Otherwise, in a binding pattern inside a variable or parameter declaration,
         //   the contextual type of an initializer expression is the type annotation of the containing declaration, if present.
-        function getContextualTypeForInitializerExpression(node: Expression): Type | undefined {
+        function getContextualTypeForInitializerExpression(node: Expression, contextFlags?: ContextFlags): Type | undefined {
             const declaration = <VariableLikeDeclaration>node.parent;
             if (hasInitializer(declaration) && node === declaration.initializer) {
                 const result = getContextualTypeForVariableLikeDeclaration(declaration);
                 if (result) {
                     return result;
                 }
-                if (isBindingPattern(declaration.name)) { // This is less a contextual type and more an implied shape - in some cases, this may be undesirable
+                if (!(contextFlags! & ContextFlags.SkipBindingPatterns) && isBindingPattern(declaration.name)) { // This is less a contextual type and more an implied shape - in some cases, this may be undesirable
                     return getTypeFromBindingPattern(declaration.name, /*includePatternInType*/ true, /*reportErrors*/ false);
                 }
             }
@@ -22899,8 +22930,8 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualTypeForAwaitOperand(node: AwaitExpression): Type | undefined {
-            const contextualType = getContextualType(node);
+        function getContextualTypeForAwaitOperand(node: AwaitExpression, contextFlags?: ContextFlags): Type | undefined {
+            const contextualType = getContextualType(node, contextFlags);
             if (contextualType) {
                 const contextualAwaitedType = getAwaitedType(contextualType);
                 return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
@@ -23365,14 +23396,14 @@ namespace ts {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.BindingElement:
-                    return getContextualTypeForInitializerExpression(node);
+                    return getContextualTypeForInitializerExpression(node, contextFlags);
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ReturnStatement:
                     return getContextualTypeForReturnExpression(node);
                 case SyntaxKind.YieldExpression:
                     return getContextualTypeForYieldOperand(<YieldExpression>parent);
                 case SyntaxKind.AwaitExpression:
-                    return getContextualTypeForAwaitOperand(<AwaitExpression>parent);
+                    return getContextualTypeForAwaitOperand(<AwaitExpression>parent, contextFlags);
                 case SyntaxKind.CallExpression:
                     if ((<CallExpression>parent).expression.kind === SyntaxKind.ImportKeyword) {
                         return stringType;
@@ -25710,7 +25741,7 @@ namespace ts {
             // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
             // return type of 'wrap'.
             if (node.kind !== SyntaxKind.Decorator) {
-                const contextualType = getContextualType(node);
+                const contextualType = getContextualType(node, every(signature.typeParameters, p => !!getDefaultFromTypeParameter(p)) ? ContextFlags.SkipBindingPatterns : ContextFlags.None);
                 if (contextualType) {
                     // We clone the inference context to avoid disturbing a resolution in progress for an
                     // outer call expression. Effectively we just want a snapshot of whatever has been
@@ -28565,11 +28596,6 @@ namespace ts {
         function checkVoidExpression(node: VoidExpression): Type {
             checkExpression(node.expression);
             return undefinedWideningType;
-        }
-
-        function isInTopLevelContext(node: Node) {
-            const container = getThisContainer(node, /*includeArrowFunctions*/ true);
-            return isSourceFile(container);
         }
 
         function checkAwaitExpression(node: AwaitExpression): Type {
@@ -35178,7 +35204,6 @@ namespace ts {
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
-            checkGrammarAwaitIdentifier(node.name);
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
             checkAliasSymbol(node);
@@ -37944,22 +37969,11 @@ namespace ts {
             return false;
         }
 
-        function checkGrammarAwaitIdentifier(name: Identifier | undefined): boolean {
-            if (name && isIdentifier(name) && name.originalKeywordKind === SyntaxKind.AwaitKeyword && isInTopLevelContext(name.parent)) {
-                const file = getSourceFileOfNode(name);
-                if (!file.isDeclarationFile && isExternalModule(file)) {
-                    return grammarErrorOnNode(name, Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module, idText(name));
-                }
-            }
-            return false;
-        }
-
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration | MethodSignature): boolean {
             // Prevent cascading error by short-circuit
             const file = getSourceFileOfNode(node);
             return checkGrammarDecoratorsAndModifiers(node) ||
                 checkGrammarTypeParameterList(node.typeParameters, file) ||
-                (isFunctionDeclaration(node) && checkGrammarAwaitIdentifier(node.name)) ||
                 checkGrammarParameterList(node.parameters) ||
                 checkGrammarArrowFunction(node, file) ||
                 (isFunctionLikeDeclaration(node) && checkGrammarForUseStrictSimpleParameterList(node));
@@ -37967,8 +37981,7 @@ namespace ts {
 
         function checkGrammarClassLikeDeclaration(node: ClassLikeDeclaration): boolean {
             const file = getSourceFileOfNode(node);
-            return (isClassDeclaration(node) && checkGrammarAwaitIdentifier(node.name)) ||
-                checkGrammarClassDeclarationHeritageClauses(node) ||
+            return checkGrammarClassDeclarationHeritageClauses(node) ||
                 checkGrammarTypeParameterList(node.typeParameters, file);
         }
 
@@ -38611,10 +38624,6 @@ namespace ts {
                 }
             }
 
-            if (isIdentifier(node.name) && checkGrammarAwaitIdentifier(node.name)) {
-                return true;
-            }
-
             if (node.dotDotDotToken && node.initializer) {
                 // Error on equals token which immediately precedes the initializer
                 return grammarErrorAtPos(node, node.initializer.pos - 1, 1, Diagnostics.A_rest_element_cannot_have_an_initializer);
@@ -38677,9 +38686,6 @@ namespace ts {
                         return grammarErrorOnNode(node, Diagnostics.const_declarations_must_be_initialized);
                     }
                 }
-            }
-            if (isIdentifier(node.name) && checkGrammarAwaitIdentifier(node.name)) {
-                return true;
             }
 
             if (node.exclamationToken && (node.parent.parent.kind !== SyntaxKind.VariableStatement || !node.type || node.initializer || node.flags & NodeFlags.Ambient)) {

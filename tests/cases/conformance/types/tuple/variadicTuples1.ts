@@ -37,6 +37,12 @@ const tc2 = concat(['hello'], [42]);
 const tc3 = concat([1, 2, 3], sa);
 const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, number, number]
 
+function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) {
+    return [...t, ...u];  // (T[number] | U[number])[]
+}
+
+const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 | 5 | 6)[]
+
 // Spread arguments
 
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
