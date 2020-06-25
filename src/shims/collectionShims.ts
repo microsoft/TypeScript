@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts {
-    type GetIteratorCallback = <I extends readonly any[] | ReadonlySetShim<any> | ReadonlyMapShim<any, any> | undefined>(iterable: I) => Iterator<
+    type GetIteratorCallback = <I extends readonly any[] | ReadonlySetShim<any> | ReadonlyMapShim<any, any> | undefined>(iterable: I) => IteratorShim<
         I extends ReadonlyMapShim<infer K, infer V> ? [K, V] :
         I extends ReadonlySetShim<infer T> ? T :
         I extends readonly (infer T)[] ? T :
@@ -188,7 +188,7 @@ namespace ts {
         }
     }
 
-    function forEachIteration<T>(iterator: Iterator<T> | undefined, action: (value: any) => void) {
+    function forEachIteration<T>(iterator: IteratorShim<T> | undefined, action: (value: any) => void) {
         if (iterator) {
             for (let step = iterator.next(); !step.done; step = iterator.next()) {
                 action(step.value);
