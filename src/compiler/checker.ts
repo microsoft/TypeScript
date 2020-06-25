@@ -27370,7 +27370,7 @@ namespace ts {
 
             if (signature.declaration && (
                 (isCallSignatureDeclaration(signature.declaration) || isConstructSignatureDeclaration(signature.declaration)) ||
-                !signature.declaration.symbol.allSignatureDeprecated
+                !signature.declaration.symbol.allSignaturesDeprecated
             ) && (signature.declaration.flags & NodeFlags.Deprecated)) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, signatureToString(signature));
             }

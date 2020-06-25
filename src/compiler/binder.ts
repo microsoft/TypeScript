@@ -537,21 +537,30 @@ namespace ts {
                 symbol.parent = parent;
             }
 
+            checkDeprecatedForSymbol(node, symbol);
+            return symbol;
+        }
+
+        function checkDeprecatedForSymbol(node: Declaration, symbol: Symbol) {
             const hasDeprecated = !!(node.flags & NodeFlags.Deprecated);
-            if (symbol.flags & (SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method)) {
-                symbol.allSignatureDeprecated = hasDeprecated && (symbol.allSignatureDeprecated ?? true);
-                if (symbol.allSignatureDeprecated) {
-                    symbol.flags |= SymbolFlags.Deprecated;
+            const isSignatureLike = !!(symbol.flags & (SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method));
+            if (isSignatureLike) {
+                const hasSetDeprecated = symbol.allSignaturesDeprecated === undefined;
+                if (hasDeprecated && hasSetDeprecated) {
+                    const allSignaturesDeprecated = every(filter(symbol.declarations, isFunctionLike), decl => !!(decl.flags & NodeFlags.Deprecated));
+                    symbol.allSignaturesDeprecated = allSignaturesDeprecated;
+                    if (allSignaturesDeprecated) {
+                        symbol.flags |= SymbolFlags.Deprecated;
+                    }
                 }
-                else {
+                else if (!hasDeprecated && !hasSetDeprecated) {
+                    symbol.allSignaturesDeprecated = false;
                     symbol.flags &= ~SymbolFlags.Deprecated;
                 }
             }
             else if (hasDeprecated) {
                 symbol.flags |= SymbolFlags.Deprecated;
             }
-
-            return symbol;
         }
 
         function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
