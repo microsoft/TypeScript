@@ -2397,6 +2397,9 @@
       <Item ItemId=";Can_only_convert_property_with_modifier_95137" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Can only convert property with modifier]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只能轉換具有修飾元的屬性]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4437,6 +4440,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[等位型別 '{0}' 的每個成員都有簽章，但這些簽章都互不相容。]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Element_at_index_0_is_variadic_in_one_type_but_not_in_the_other_2622" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Element at index {0} is variadic in one type but not in the other.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9603,6 +9612,18 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Source_has_0_element_s_but_target_allows_only_1_2619" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Source has {0} element(s) but target allows only {1}.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Source_has_0_element_s_but_target_requires_1_2618" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Source has {0} element(s) but target requires {1}.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature_2382" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specialized overload signature is not assignable to any non-specialized signature.]]></Val>
@@ -10017,6 +10038,18 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[選擇性鏈結中不允許已標記的範本運算式。]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Target_allows_only_0_element_s_but_source_may_have_more_2621" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Target allows only {0} element(s) but source may have more.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Target_requires_0_element_s_but_source_may_have_fewer_2620" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Target requires {0} element(s) but source may have fewer.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>

@@ -35,6 +35,12 @@ const tc2 = concat(['hello'], [42]);
 const tc3 = concat([1, 2, 3], sa);
 const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, number, number]
 
+function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) {
+    return [...t, ...u];  // (T[number] | U[number])[]
+}
+
+const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 | 5 | 6)[]
+
 // Spread arguments
 
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
@@ -166,6 +172,36 @@ function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) 
     m = r;  // Error
     r = t;
     r = m;
+}
+
+function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+    t0 = t1;
+    t0 = t2;
+    t1 = t0;
+    t1 = t2;
+    t2 = t0;  // Error
+    t2 = t1;  // Error
+}
+
+function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+    t0 = t1;
+    t0 = t2;
+    t1 = t0;  // Error
+    t1 = t2;
+    t2 = t0;  // Error
+    t2 = t1;  // Error
+}
+
+function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) {
+    k0 = 'length';
+    k1 = 'length';
+    k2 = 'length';
+    k0 = 'slice';
+    k1 = 'slice';
+    k2 = 'slice';
+    k3 = '0';
+    k3 = '1';
+    k3 = '2';  // Error
 }
 
 // Inference between variadic tuple types
@@ -320,6 +356,10 @@ var tc1 = concat([], []);
 var tc2 = concat(['hello'], [42]);
 var tc3 = concat([1, 2, 3], sa);
 var tc4 = concat(sa, [1, 2, 3]); // Ideally would be [...string[], number, number, number]
+function concat2(t, u) {
+    return __spreadArrays(t, u); // (T[number] | U[number])[]
+}
+var tc5 = concat2([1, 2, 3], [4, 5, 6]); // (1 | 2 | 3 | 4 | 5 | 6)[]
 function foo2(t1, t2, a1) {
     foo1(1, 'abc', true, 42, 43, 44);
     foo1.apply(void 0, __spreadArrays(t1, [true, 42, 43, 44]));
@@ -404,6 +444,33 @@ function f12(t, m, r) {
     r = t;
     r = m;
 }
+function f13(t0, t1, t2) {
+    t0 = t1;
+    t0 = t2;
+    t1 = t0;
+    t1 = t2;
+    t2 = t0; // Error
+    t2 = t1; // Error
+}
+function f14(t0, t1, t2) {
+    t0 = t1;
+    t0 = t2;
+    t1 = t0; // Error
+    t1 = t2;
+    t2 = t0; // Error
+    t2 = t1; // Error
+}
+function f15(k0, k1, k2, k3) {
+    k0 = 'length';
+    k1 = 'length';
+    k2 = 'length';
+    k0 = 'slice';
+    k1 = 'slice';
+    k2 = 'slice';
+    k3 = '0';
+    k3 = '1';
+    k3 = '2'; // Error
+}
 // Inference to [...T, ...U] with implied arity for T
 function curry(f) {
     var a = [];
@@ -483,6 +550,8 @@ declare const tc1: [];
 declare const tc2: [string, number];
 declare const tc3: [number, number, number, ...string[]];
 declare const tc4: (string | number)[];
+declare function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U): (T[number] | U[number])[];
+declare const tc5: (2 | 4 | 1 | 3 | 6 | 5)[];
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
 declare function foo2(t1: [number, string], t2: [boolean], a1: number[]): void;
 declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): T;
@@ -510,6 +579,9 @@ declare function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v:
 declare function f10<T extends string[], U extends T>(x: [string, ...unknown[]], y: [string, ...T], z: [string, ...U]): void;
 declare function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]): void;
 declare function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]): void;
+declare function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
+declare function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
+declare function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]): void;
 declare type First<T extends readonly unknown[]> = T[0];
 declare type DropFirst<T extends readonly unknown[]> = T extends readonly [any, ...infer U] ? U : [...T];
 declare type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : undefined;
