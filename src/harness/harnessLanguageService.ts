@@ -154,14 +154,23 @@ namespace Harness.LanguageService {
             return fileNames;
         }
 
+        private tryRealpath(fileName: string): string {
+            try {
+                return this.vfs.realpathSync(fileName);
+            }
+            catch {
+                return fileName;
+            }
+        }
+
         public getScriptInfo(fileName: string): ScriptInfo | undefined {
-            return this.scriptInfos.get(vpath.resolve(this.vfs.cwd(), fileName));
+            return this.scriptInfos.get(this.tryRealpath(vpath.resolve(this.vfs.cwd(), fileName)));
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
             this.vfs.mkdirpSync(vpath.dirname(fileName));
             this.vfs.writeFileSync(fileName, content);
-            this.scriptInfos.set(vpath.resolve(this.vfs.cwd(), fileName), new ScriptInfo(fileName, content, isRootFile));
+            this.scriptInfos.set(this.tryRealpath(vpath.resolve(this.vfs.cwd(), fileName)), new ScriptInfo(fileName, content, isRootFile));
         }
 
         public renameFileOrDirectory(oldPath: string, newPath: string): void {
@@ -173,7 +182,7 @@ namespace Harness.LanguageService {
                 const newFileName = updater(key);
                 if (newFileName !== undefined) {
                     this.scriptInfos.delete(key);
-                    this.scriptInfos.set(newFileName, scriptInfo);
+                    this.scriptInfos.set(this.tryRealpath(newFileName), scriptInfo);
                     scriptInfo.fileName = newFileName;
                 }
             });

@@ -1736,6 +1736,7 @@ namespace ts {
             getSourceFiles: () => program.getSourceFiles(),
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
+            getResolvedProjectReferenceToRedirect: fileName => program.getResolvedProjectReferenceToRedirect(fileName),
             isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
         };
     }

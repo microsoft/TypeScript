@@ -4233,6 +4233,7 @@ namespace ts {
                         useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
                         redirectTargetsMap: host.redirectTargetsMap,
                         getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
+                        getResolvedProjectReferenceToRedirect: fileName => host.getResolvedProjectReferenceToRedirect(fileName),
                         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
                         fileExists: fileName => host.fileExists(fileName),
                     } : undefined },

@@ -69,7 +69,7 @@ namespace ts.moduleSpecifiers {
         const info = getInfo(importingSourceFileName, host);
         const modulePaths = getAllModulePaths(importingSourceFileName, nodeModulesFileName, host);
         return firstDefined(modulePaths,
-            moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions, /*packageNameOnly*/ true));
+            moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions, /*projectReferenceOutDir*/ undefined, /*packageNameOnly*/ true));
     }
 
     function getModuleSpecifierWorker(
@@ -81,7 +81,7 @@ namespace ts.moduleSpecifiers {
     ): string {
         const info = getInfo(importingSourceFileName, host);
         const modulePaths = getAllModulePaths(importingSourceFileName, toFileName, host);
-        return firstDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions)) ||
+        return firstDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions, /*projectReferenceOutDir*/ undefined)) ||
             getLocalModuleSpecifier(toFileName, info, compilerOptions, preferences);
     }
 
@@ -98,11 +98,18 @@ namespace ts.moduleSpecifiers {
 
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
-        const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
+        const importedFileName = moduleSourceFile.originalFileName;
+        const modulePaths = getAllModulePaths(importingSourceFile.path, importedFileName, host);
 
+        const projectReference = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getResolvedProjectReferenceToRedirect(importedFileName) : undefined;
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
-        const global = mapDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions));
-        return global.length ? global : modulePaths.map(moduleFileName => getLocalModuleSpecifier(moduleFileName, info, compilerOptions, preferences));
+        const projectReferenceOutDir = projectReference?.commandLine.options.outDir;
+        const global = mapDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions, projectReferenceOutDir));
+        return global.length ? global : mapDefined(modulePaths, moduleFileName => {
+            if (!projectReferenceOutDir || !startsWith(moduleFileName, projectReferenceOutDir)) {
+                return getLocalModuleSpecifier(moduleFileName, info, compilerOptions, preferences);
+            }
+        });
     }
 
     interface Info {
@@ -195,15 +202,18 @@ namespace ts.moduleSpecifiers {
                 return undefined; // Don't want to a package to globally import from itself
             }
 
-            const target = find(targets, t => compareStrings(t.slice(0, resolved.length + 1), resolved + "/") === Comparison.EqualTo);
-            if (target === undefined) return undefined;
+            targets.forEach(target => {
+                if (compareStrings(target.slice(0, resolved.length + 1), resolved + "/") !== Comparison.EqualTo) {
+                    return;
+                }
 
-            const relative = getRelativePathFromDirectory(resolved, target, getCanonicalFileName);
-            const option = resolvePath(path, relative);
-            if (!host.fileExists || host.fileExists(option)) {
-                const result = cb(option);
-                if (result) return result;
-            }
+                const relative = getRelativePathFromDirectory(resolved, target, getCanonicalFileName);
+                const option = resolvePath(path, relative);
+                if (!host.fileExists || host.fileExists(option)) {
+                    const result = cb(option);
+                    if (result) return result;
+                }
+            });
         });
         return result ||
             (preferSymlinks ? forEach(targets, cb) : undefined);
@@ -310,7 +320,7 @@ namespace ts.moduleSpecifiers {
             : removeFileExtension(relativePath);
     }
 
-    function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions, packageNameOnly?: boolean): string | undefined {
+    function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions, projectReferenceOutDir: string | undefined, packageNameOnly?: boolean): string | undefined {
         if (!host.fileExists || !host.readFile) {
             return undefined;
         }
@@ -341,6 +351,15 @@ namespace ts.moduleSpecifiers {
                     break;
                 }
             }
+        }
+
+        // If this path is in the outDir of a referenced project, ignore it. It was important
+        // to see if it was the `types` or `main` of the package.json so that we could have
+        // returned just the package name as the module specifier. But since we cannot, it
+        // is preferable to return nothing so a different module specifier, outside of outDir,
+        // can be used instead.
+        if (projectReferenceOutDir && startsWith(moduleSpecifier, projectReferenceOutDir)) {
+            return undefined;
         }
 
         const globalTypingsCacheLocation = host.getGlobalTypingsCacheLocation && host.getGlobalTypingsCacheLocation();

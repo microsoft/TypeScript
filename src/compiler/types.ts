@@ -7745,6 +7745,7 @@ namespace ts {
         getSourceFiles(): readonly SourceFile[];
         readonly redirectTargetsMap: RedirectTargetsMap;
         getProjectReferenceRedirect(fileName: string): string | undefined;
+        getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     }
 
