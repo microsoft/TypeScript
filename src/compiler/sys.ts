@@ -630,7 +630,7 @@ namespace ts {
                 invokeCallbacks(dirPath as Path, invokeMap, hasChanges ? undefined : fileNames);
             }
 
-            sysLog(`sysLog:: invokingWatchers:: ${timestamp() - start}ms:: ${cacheToUpdateChildWatches.size}`);
+            sysLog(`sysLog:: invokingWatchers:: Elapsed:: ${timestamp() - start}ms:: ${cacheToUpdateChildWatches.size}`);
             callbackCache.forEach((callbacks, rootDirName) => {
                 const existing = invokeMap.get(rootDirName);
                 if (existing) {
@@ -646,7 +646,7 @@ namespace ts {
             });
 
             const elapsed = timestamp() - start;
-            sysLog(`sysLog:: Elapsed ${elapsed}ms:: onTimerToUpdateChildWatches:: ${cacheToUpdateChildWatches.size} ${timerToUpdateChildWatches}`);
+            sysLog(`sysLog:: Elapsed:: ${elapsed}ms:: onTimerToUpdateChildWatches:: ${cacheToUpdateChildWatches.size} ${timerToUpdateChildWatches}`);
         }
 
         function removeChildWatches(parentWatcher: HostDirectoryWatcher | undefined) {

@@ -133,7 +133,7 @@ Input::
 Output::
 sysLog:: onTimerToUpdateChildWatches:: 1
 
-sysLog:: invokingWatchers:: 0ms:: 0
+sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
 
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js 0:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Failed Lookup Locations
 
@@ -145,7 +145,7 @@ Project: /user/username/projects/myproject/tsconfig.json Detected file add/remov
 
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/main.js 0:: WatchInfo: /user/username/projects/myproject 1 {"excludeDirectories":["/user/username/projects/myproject/**/temp"]} Wild card directory
 
-sysLog:: Elapsed 0ms:: onTimerToUpdateChildWatches:: 0 undefined
+sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
 WatchedFiles::
