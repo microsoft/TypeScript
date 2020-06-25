@@ -154,23 +154,23 @@ namespace Harness.LanguageService {
             return fileNames;
         }
 
-        private tryRealpath(fileName: string): string {
+        public realpath(path: string): string {
             try {
-                return this.vfs.realpathSync(fileName);
+                return this.vfs.realpathSync(path);
             }
             catch {
-                return fileName;
+                return path;
             }
         }
 
         public getScriptInfo(fileName: string): ScriptInfo | undefined {
-            return this.scriptInfos.get(this.tryRealpath(vpath.resolve(this.vfs.cwd(), fileName)));
+            return this.scriptInfos.get(this.realpath(vpath.resolve(this.vfs.cwd(), fileName)));
         }
 
         public addScript(fileName: string, content: string, isRootFile: boolean): void {
             this.vfs.mkdirpSync(vpath.dirname(fileName));
             this.vfs.writeFileSync(fileName, content);
-            this.scriptInfos.set(this.tryRealpath(vpath.resolve(this.vfs.cwd(), fileName)), new ScriptInfo(fileName, content, isRootFile));
+            this.scriptInfos.set(this.realpath(vpath.resolve(this.vfs.cwd(), fileName)), new ScriptInfo(fileName, content, isRootFile));
         }
 
         public renameFileOrDirectory(oldPath: string, newPath: string): void {
@@ -182,7 +182,7 @@ namespace Harness.LanguageService {
                 const newFileName = updater(key);
                 if (newFileName !== undefined) {
                     this.scriptInfos.delete(key);
-                    this.scriptInfos.set(this.tryRealpath(newFileName), scriptInfo);
+                    this.scriptInfos.set(this.realpath(newFileName), scriptInfo);
                     scriptInfo.fileName = newFileName;
                 }
             });
@@ -710,6 +710,10 @@ namespace Harness.LanguageService {
         writeMessage = ts.noop; // overridden
         write(message: string): void {
             this.writeMessage(message);
+        }
+
+        realpath(path: string) {
+            return this.host.realpath(path);
         }
 
         readFile(fileName: string): string | undefined {

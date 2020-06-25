@@ -1,29 +1,18 @@
 /// <reference path="../fourslash.ts" />
 
+// @link: /packages/a -> /node_modules/a
+
 // @Filename: /packages/a/tsconfig.json
-// @Symlink: /node_modules/a/tsconfig.json
 //// { "compilerOptions": { "module": "commonjs", "composite": true, "outDir": "dist", "rootDir": "src" } }
 
 // @Filename: /packages/a/package.json
-// @Symlink: /node_modules/a/package.json
 //// { "name": "a", "main": "dist/index.js", "typings": "dist/index.d.ts" }
 
 // @Filename: /packages/a/src/index.ts
-// @Symlink: /node_modules/a/src/index.ts
-//// import "./a";
-//// export class Index {}
-
-// @Filename: /packages/a/dist/index.d.ts
-// @Symlink: /node_modules/a/dist/index.d.ts
 //// import "./a";
 //// export class Index {}
 
 // @Filename: /packages/a/src/a.ts
-// @Symlink: /node_modules/a/src/a.ts
-//// export class A {}
-
-// @Filename: /packages/a/dist/a.d.ts
-// @Symlink: /node_modules/a/dist/a.d.ts
 //// export class A {}
 
 
