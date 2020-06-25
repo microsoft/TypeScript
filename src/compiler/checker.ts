@@ -7628,7 +7628,7 @@ namespace ts {
                 return addOptionality(type, isOptional);
             }
 
-            if (isPropertyDeclaration(declaration) && (noImplicitAny || isInJSFile(declaration))) {
+            if (isPropertyDeclaration(declaration) && !hasStaticModifier(declaration) && (noImplicitAny || isInJSFile(declaration)) ) {
                 // We have a property declaration with no type annotation or initializer, in noImplicitAny mode or a .js file.
                 // Use control flow analysis of this.xxx assignments in the constructor to determine the type of the property.
                 const constructor = findConstructorDeclaration(declaration.parent);
