@@ -544,22 +544,26 @@ namespace ts {
         function checkDeprecatedForSymbol(node: Declaration, symbol: Symbol) {
             const hasDeprecated = !!(node.flags & NodeFlags.Deprecated);
             const isSignatureLike = !!(symbol.flags & (SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method));
-            if (isSignatureLike) {
-                const hasSetDeprecated = symbol.allSignaturesDeprecated === undefined;
-                if (hasDeprecated && hasSetDeprecated) {
-                    const allSignaturesDeprecated = every(filter(symbol.declarations, isFunctionLike), decl => !!(decl.flags & NodeFlags.Deprecated));
-                    symbol.allSignaturesDeprecated = allSignaturesDeprecated;
-                    if (allSignaturesDeprecated) {
-                        symbol.flags |= SymbolFlags.Deprecated;
-                    }
+            if (hasDeprecated) {
+                symbol.flags |= SymbolFlags.Deprecated;
+
+                if (symbol.flags & SymbolFlags.Type) {
+                    symbol.typeDeprecated = true;
                 }
-                else if (!hasDeprecated && !hasSetDeprecated) {
-                    symbol.allSignaturesDeprecated = false;
-                    symbol.flags &= ~SymbolFlags.Deprecated;
+                if (!isSignatureLike && symbol.flags & SymbolFlags.Value) {
+                    symbol.valueDeprecated = true;
                 }
             }
-            else if (hasDeprecated) {
-                symbol.flags |= SymbolFlags.Deprecated;
+
+            if (isSignatureLike) {
+                const hasSetDeprecated = symbol.allSignaturesDeprecated !== undefined;
+                if (hasDeprecated && !hasSetDeprecated) {
+                    const allSignaturesDeprecated = every(filter(symbol.declarations, isFunctionLike), decl => !!(decl.flags & NodeFlags.Deprecated));
+                    symbol.allSignaturesDeprecated = allSignaturesDeprecated;
+                }
+                else if (!hasDeprecated && hasSetDeprecated) {
+                    symbol.allSignaturesDeprecated = false;
+                }
             }
         }
 

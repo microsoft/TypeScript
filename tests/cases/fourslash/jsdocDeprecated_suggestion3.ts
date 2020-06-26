@@ -3,7 +3,7 @@
 //// /** @deprecated */
 //// interface f { a: number }
 //// declare function f(): void
-//// declare const tf: f
+//// declare const tf: [|f|]
 //// f;
 //// f();
 
@@ -27,7 +27,7 @@
 //// interface d { }
 //// declare function d(): void
 //// declare function d(a: number): void
-//// declare const td: d;
+//// declare const td: [|d|];
 //// d;
 //// d();
 //// d(1);
@@ -35,7 +35,7 @@
 const ranges = test.ranges();
 verify.getSuggestionDiagnostics([
     {
-        message: "'(): void' is deprecated",
+        message: "'f' is deprecated",
         code: 6385,
         range: ranges[0],
         reportsDeprecated: true,
@@ -44,6 +44,18 @@ verify.getSuggestionDiagnostics([
         message: "'(): void' is deprecated",
         code: 6385,
         range: ranges[1],
+        reportsDeprecated: true,
+    },
+    {
+        message: "'(): void' is deprecated",
+        code: 6385,
+        range: ranges[2],
+        reportsDeprecated: true,
+    },
+    {
+        message: "'d' is deprecated",
+        code: 6385,
+        range: ranges[3],
         reportsDeprecated: true,
     }
 ])

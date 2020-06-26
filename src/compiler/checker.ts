@@ -13285,9 +13285,11 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (accessNode && prop.flags & SymbolFlags.Deprecated) {
-                        const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
-                        errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
+                    if (accessNode && (prop.flags & SymbolFlags.Deprecated)) {
+                        if (isIndexedAccessTypeNode(accessNode) && prop.typeDeprecated || allSignatureOrValueDeprecatedForSymbol(prop)) {
+                            const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
+                            errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
+                        }
                     }
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
@@ -22007,10 +22009,11 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
-            const target = (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-            if (target.flags & SymbolFlags.Deprecated) {
+            const target = (localOrExportSymbol.flags & SymbolFlags.Alias ? resolveAlias(localOrExportSymbol) : localOrExportSymbol);
+            if (allSignatureOrValueDeprecatedForSymbol(target)) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
             }
+
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
@@ -24977,7 +24980,7 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
-                if (prop.flags & SymbolFlags.Deprecated) {
+                if (allSignatureOrValueDeprecatedForSymbol(prop)) {
                     errorOrSuggestion(/* isError */ false, right, Diagnostics._0_is_deprecated, right.escapedText as string);
                 }
 
@@ -27368,10 +27371,10 @@ namespace ts {
                 return nonInferrableType;
             }
 
-            if (signature.declaration && (
-                (isCallSignatureDeclaration(signature.declaration) || isConstructSignatureDeclaration(signature.declaration)) ||
-                !signature.declaration.symbol.allSignaturesDeprecated
-            ) && (signature.declaration.flags & NodeFlags.Deprecated)) {
+            if (signature.declaration && (signature.declaration.flags & NodeFlags.Deprecated) && (
+                !signature.declaration.symbol.allSignaturesDeprecated ||
+                isCallSignatureDeclaration(signature.declaration) || isConstructSignatureDeclaration(signature.declaration)
+            )) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, signatureToString(signature));
             }
 
@@ -30818,7 +30821,7 @@ namespace ts {
                 }
                 const symbol = getNodeLinks(node).resolvedSymbol;
                 if (symbol) {
-                    if (symbol.flags & SymbolFlags.Deprecated) {
+                    if ((symbol.flags & SymbolFlags.Deprecated) && symbol.typeDeprecated) {
                         const diagLocation = isTypeReferenceNode(node) && isQualifiedName(node.typeName) ? node.typeName.right : node;
                         errorOrSuggestion(/* isError */ false, diagLocation, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                     }

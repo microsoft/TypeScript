@@ -918,6 +918,15 @@ namespace ts {
         }
     }
 
+
+    export function allSignatureOrValueDeprecatedForSymbol(symbol: Symbol) {
+        const functionLikeFlags = SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method;
+        return symbol.flags & SymbolFlags.Deprecated && (
+            (symbol.flags & functionLikeFlags) && symbol.allSignaturesDeprecated ||
+            (symbol.flags & ~functionLikeFlags) && symbol.valueDeprecated
+        );
+    }
+
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {
         const sourceFile = getSourceFileOfNode(node);
         return createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1, arg2, arg3);
