@@ -2667,7 +2667,7 @@ namespace ts {
             emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
             emitEmbeddedStatement(node, node.thenStatement);
             if (node.elseStatement) {
-                writeLineOrSpace(node);
+                writeLineOrSpace(node, node.thenStatement, node.elseStatement);
                 emitTokenWithComment(SyntaxKind.ElseKeyword, node.thenStatement.end, writeKeyword, node);
                 if (node.elseStatement.kind === SyntaxKind.IfStatement) {
                     writeSpace();
@@ -2690,11 +2690,11 @@ namespace ts {
         function emitDoStatement(node: DoStatement) {
             emitTokenWithComment(SyntaxKind.DoKeyword, node.pos, writeKeyword, node);
             emitEmbeddedStatement(node, node.statement);
-            if (isBlock(node.statement)) {
+            if (isBlock(node.statement) && !preserveSourceNewlines) {
                 writeSpace();
             }
             else {
-                writeLineOrSpace(node);
+                writeLineOrSpace(node, node.statement, node.expression);
             }
 
             emitWhileClause(node, node.statement.end);
@@ -2836,11 +2836,11 @@ namespace ts {
             writeSpace();
             emit(node.tryBlock);
             if (node.catchClause) {
-                writeLineOrSpace(node);
+                writeLineOrSpace(node, node.tryBlock, node.catchClause);
                 emit(node.catchClause);
             }
             if (node.finallyBlock) {
-                writeLineOrSpace(node);
+                writeLineOrSpace(node, node.catchClause || node.tryBlock, node.finallyBlock);
                 emitTokenWithComment(SyntaxKind.FinallyKeyword, (node.catchClause || node.tryBlock).end, writeKeyword, node);
                 writeSpace();
                 emit(node.finallyBlock);
@@ -4249,9 +4249,18 @@ namespace ts {
             return pos! < 0 ? pos! : pos! + tokenString.length;
         }
 
-        function writeLineOrSpace(node: Node) {
-            if (getEmitFlags(node) & EmitFlags.SingleLine) {
+        function writeLineOrSpace(parentNode: Node, prevChildNode: Node, nextChildNode: Node) {
+            if (getEmitFlags(parentNode) & EmitFlags.SingleLine) {
                 writeSpace();
+            }
+            else if (preserveSourceNewlines) {
+                const lines = getLinesBetweenNodes(parentNode, prevChildNode, nextChildNode);
+                if (lines) {
+                    writeLine(lines);
+                }
+                else {
+                    writeSpace();
+                }
             }
             else {
                 writeLine();
