@@ -4443,6 +4443,9 @@
       <Item ItemId=";Element_at_index_0_is_variadic_in_one_type_but_not_in_the_other_2622" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Element at index {0} is variadic in one type but not in the other.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Das Element bei Index {0} ist in einem Typ variadisch, aber nicht im anderen.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9609,12 +9612,18 @@
       <Item ItemId=";Source_has_0_element_s_but_target_allows_only_1_2619" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Source has {0} element(s) but target allows only {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Quelle weist {0} Element(e) auf, aber das Ziel lässt nur {1} zu.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Source_has_0_element_s_but_target_requires_1_2618" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Source has {0} element(s) but target requires {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Quelle weist {0} Element(e) auf, aber das Ziel erfordert {1}.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10038,12 +10047,18 @@
       <Item ItemId=";Target_allows_only_0_element_s_but_source_may_have_more_2621" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Target allows only {0} element(s) but source may have more.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Das Ziel erlaubt nur {0} Element(e), aber die Quelle kann mehr aufweisen.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Target_requires_0_element_s_but_source_may_have_fewer_2620" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Target requires {0} element(s) but source may have fewer.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Das Ziel erfordert {0} Element(e), aber die Quelle kann weniger aufweisen.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>

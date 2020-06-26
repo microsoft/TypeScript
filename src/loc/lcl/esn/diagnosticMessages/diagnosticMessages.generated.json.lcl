@@ -5734,7 +5734,7 @@
         <Str Cat="Text">
           <Val><![CDATA[If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Si el paquete "{0}" expone realmente este módulo, considere la posibilidad de enviar una solicitud de incorporación de cambios (pull request) para corregir "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}".]]></Val>
+            <Val><![CDATA[Si el paquete "{0}" expone realmente este módulo, considere la posibilidad de enviar una solicitud de incorporación de cambios para corregir "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
