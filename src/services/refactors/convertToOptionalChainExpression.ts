@@ -67,7 +67,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return getExpressionInfo(expression, checker);
     }
 
-    function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker) {
+    function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): Info | undefined {
         const whenTrue = expression.whenTrue;
         const condition = expression.condition;
         if((isIdentifier(condition) || isPropertyAccessExpression(condition)) &&
@@ -116,11 +116,9 @@ namespace ts.refactor.convertToOptionalChainExpression {
             // Recurse through the call expressions to match a.b to a.b()().
             return !isCallExpression(expression) ? checkMatch(expression, target.expression, checker) : undefined;
         }
-        else if (isPropertyAccessExpression(expression) && isPropertyAccessExpression(target)) {
+        else if ((isPropertyAccessExpression(expression) && isPropertyAccessExpression(target)) ||
+            (isIdentifier(expression) && isIdentifier(target))) {
             // we shouldn't offer a refactor for a.b && a.b().c && a.b.c().d so we need to check that the entire access chain matches.
-            return checker.isOrContainsMatchingReference(expression, target) ? expression : undefined;
-        }
-        else if (isIdentifier(expression) && isIdentifier(target)) {
             return checker.isMatchingReference(expression, target) ? expression : undefined;
         }
         return undefined;
