@@ -118,7 +118,7 @@ namespace ts {
     export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets = createMap<Map<DocumentRegistryEntry>>();
+        const buckets = new Map<string, Map<Path, DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function reportStats() {
@@ -170,7 +170,7 @@ namespace ts {
             acquiring: boolean,
             scriptKind?: ScriptKind): SourceFile {
 
-            const bucket = getOrUpdate<Map<DocumentRegistryEntry>>(buckets, key, createMap);
+            const bucket = getOrUpdate<Map<Path, DocumentRegistryEntry>>(buckets, key, createMap);
             let entry = bucket.get(path);
             const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target || ScriptTarget.ES5;
             if (!entry && externalCache) {

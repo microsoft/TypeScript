@@ -100,7 +100,7 @@ namespace ts {
             if (option.name === "lib") {
                 description = getDiagnosticText(option.description);
                 const element = (<CommandLineOptionOfListType>option).element;
-                const typeMap = <Map<number | string>>element.type;
+                const typeMap = <Map<string, number | string>>element.type;
                 optionsDescriptionMap.set(description, arrayFrom(typeMap.keys()).map(key => `'${key}'`));
             }
             else {

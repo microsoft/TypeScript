@@ -2315,7 +2315,7 @@ namespace ts.Completions {
                 return contextualMemberSymbols;
             }
 
-            const membersDeclaredBySpreadAssignment = createMap<true>();
+            const membersDeclaredBySpreadAssignment = new Set<string>();
             const existingMemberNames = createUnderscoreEscapedMap<boolean>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
@@ -2362,14 +2362,14 @@ namespace ts.Completions {
             return filteredSymbols;
         }
 
-        function setMembersDeclaredBySpreadAssignment(declaration: SpreadAssignment | JsxSpreadAttribute, membersDeclaredBySpreadAssignment: Map<true>) {
+        function setMembersDeclaredBySpreadAssignment(declaration: SpreadAssignment | JsxSpreadAttribute, membersDeclaredBySpreadAssignment: Set<string>) {
             const expression = declaration.expression;
             const symbol = typeChecker.getSymbolAtLocation(expression);
             const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
             const properties = type && (<ObjectType>type).properties;
             if (properties) {
                 properties.forEach(property => {
-                    membersDeclaredBySpreadAssignment.set(property.name, true);
+                    membersDeclaredBySpreadAssignment.add(property.name);
                 });
             }
         }
@@ -2384,7 +2384,7 @@ namespace ts.Completions {
         }
 
         // Set SortText to MemberDeclaredBySpreadAssignment if it is fulfilled by spread assignment
-        function setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment: Map<true>, contextualMemberSymbols: Symbol[]): void {
+        function setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment: Set<string>, contextualMemberSymbols: Symbol[]): void {
             if (membersDeclaredBySpreadAssignment.size === 0) {
                 return;
             }
@@ -2447,7 +2447,7 @@ namespace ts.Completions {
          */
         function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
             const seenNames = createUnderscoreEscapedMap<boolean>();
-            const membersDeclaredBySpreadAssignment = createMap<true>();
+            const membersDeclaredBySpreadAssignment = new Set<string>();
             for (const attr of attributes) {
                 // If this is the current item we are editing right now, do not filter it out
                 if (isCurrentlyEditingNode(attr)) {

@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts {
     export const resolvingEmptyArray: never[] = [] as never[];
-    export const emptyMap = createMap<never>() as ReadonlyMap<never> & ReadonlyPragmaMap;
+    export const emptyMap = createMap<never, never>() as ReadonlyMap<never, never> & ReadonlyPragmaMap;
     export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
 
     export const externalHelpersModuleNameText = "tslib";
@@ -24,7 +24,7 @@ namespace ts {
 
     /** Create a new escaped identifier map. */
     export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
-        return new Map<T>() as UnderscoreEscapedMap<T>;
+        return new Map<string, T>() as UnderscoreEscapedMap<T>;
     }
 
     export function hasEntries(map: ReadonlyUnderscoreEscapedMap<any> | undefined): map is ReadonlyUnderscoreEscapedMap<any> {
@@ -132,13 +132,11 @@ namespace ts {
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T>, callback: (value: T, key: __String) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: ReadonlyMap<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: ReadonlyUnderscoreEscapedMap<T> | ReadonlyMap<T>, callback: (value: T, key: (string & __String)) => U | undefined): U | undefined {
+    export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
             const [key, value] = iterResult.value;
-            const result = callback(value, key as (string & __String));
+            const result = callback(value, key);
             if (result) {
                 return result;
             }
@@ -147,12 +145,10 @@ namespace ts {
     }
 
     /** `forEachEntry` for just keys. */
-    export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}>, callback: (key: __String) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: ReadonlyMap<{}>, callback: (key: string) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: ReadonlyUnderscoreEscapedMap<{}> | ReadonlyMap<{}>, callback: (key: string & __String) => T | undefined): T | undefined {
+    export function forEachKey<K, T>(map: ReadonlyCollection<K>, callback: (key: K) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-            const result = callback(iterResult.value as string & __String);
+            const result = callback(iterResult.value);
             if (result) {
                 return result;
             }
@@ -161,11 +157,9 @@ namespace ts {
     }
 
     /** Copy entries from `source` to `target`. */
-    export function copyEntries<T>(source: ReadonlyUnderscoreEscapedMap<T>, target: UnderscoreEscapedMap<T>): void;
-    export function copyEntries<T>(source: ReadonlyMap<T>, target: Map<T>): void;
-    export function copyEntries<T, U extends UnderscoreEscapedMap<T> | Map<T>>(source: U, target: U): void {
-        (source as Map<T>).forEach((value, key) => {
-            (target as Map<T>).set(key, value);
+    export function copyEntries<K, V>(source: ReadonlyMap<K, V>, target: Map<K, V>): void {
+        source.forEach((value, key) => {
+            target.set(key, value);
         });
     }
 
@@ -174,19 +168,19 @@ namespace ts {
      *
      * @param array the array of input elements.
      */
-    export function arrayToSet(array: readonly string[]): Map<true>;
-    export function arrayToSet<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<true>;
+    export function arrayToSet(array: readonly string[]): Map<string, true>;
+    export function arrayToSet<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<string, true>;
     export function arrayToSet<T>(array: readonly T[], makeKey: (value: T) => __String | undefined): UnderscoreEscapedMap<true>;
-    export function arrayToSet(array: readonly any[], makeKey?: (value: any) => string | __String | undefined): Map<true> | UnderscoreEscapedMap<true> {
+    export function arrayToSet(array: readonly any[], makeKey?: (value: any) => string | __String | undefined): Map<string, true> | UnderscoreEscapedMap<true> {
         return arrayToMap<any, true>(array, makeKey || (s => s), returnTrue);
     }
 
     export function cloneMap(map: SymbolTable): SymbolTable;
-    export function cloneMap<T>(map: ReadonlyMap<T>): Map<T>;
     export function cloneMap<T>(map: ReadonlyUnderscoreEscapedMap<T>): UnderscoreEscapedMap<T>;
-    export function cloneMap<T>(map: ReadonlyMap<T> | ReadonlyUnderscoreEscapedMap<T> | SymbolTable): Map<T> | UnderscoreEscapedMap<T> | SymbolTable {
-        const clone = createMap<T>();
-        copyEntries(map as Map<T>, clone);
+    export function cloneMap<K, V>(map: ReadonlyMap<K, V>): Map<K, V>;
+    export function cloneMap<K, V>(map: ReadonlyMap<K, V>): Map<K, V> {
+        const clone = createMap<K, V>();
+        copyEntries(map, clone);
         return clone;
     }
 
@@ -256,7 +250,7 @@ namespace ts {
     export function hasChangesInResolutions<T>(
         names: readonly string[],
         newResolutions: readonly T[],
-        oldResolutions: ReadonlyMap<T> | undefined,
+        oldResolutions: ReadonlyMap<string, T> | undefined,
         comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         Debug.assert(names.length === newResolutions.length);
 
@@ -472,7 +466,7 @@ namespace ts {
     }
 
     export function createCommentDirectivesMap(sourceFile: SourceFile, commentDirectives: CommentDirective[]): CommentDirectivesMap {
-        const directivesByLine = createMapFromEntries(
+        const directivesByLine = new Map(
             commentDirectives.map(commentDirective => ([
                 `${getLineAndCharacterOfPosition(sourceFile, commentDirective.range.end).line}`,
                 commentDirective,
@@ -5267,7 +5261,7 @@ namespace ts {
     /**
      * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
      */
-    export function clearMap<T>(map: { forEach: Map<T>["forEach"]; clear: Map<T>["clear"]; }, onDeleteValue: (valueInMap: T, key: string) => void) {
+    export function clearMap<T>(map: { forEach: Map<string, T>["forEach"]; clear: Map<string, T>["clear"]; }, onDeleteValue: (valueInMap: T, key: string) => void) {
         // Remove all
         map.forEach(onDeleteValue);
         map.clear();
@@ -5289,8 +5283,8 @@ namespace ts {
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
     export function mutateMapSkippingNewValues<T, U>(
-        map: Map<T>,
-        newMap: ReadonlyMap<U>,
+        map: Map<string, T>,
+        newMap: ReadonlyMap<string, U>,
         options: MutateMapSkippingNewValuesOptions<T, U>
     ) {
         const { onDeleteValue, onExistingValue } = options;
@@ -5316,7 +5310,7 @@ namespace ts {
     /**
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
-    export function mutateMap<T, U>(map: Map<T>, newMap: ReadonlyMap<U>, options: MutateMapOptions<T, U>) {
+    export function mutateMap<T, U>(map: Map<string, T>, newMap: ReadonlyMap<string, U>, options: MutateMapOptions<T, U>) {
         // Needs update
         mutateMapSkippingNewValues(map, newMap, options);
 
@@ -5386,9 +5380,9 @@ namespace ts {
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: Map<true>, key: string | number): boolean;
-    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T): boolean;
-    export function addToSeen<T>(seen: Map<T>, key: string | number, value: T = true as any): boolean {
+    export function addToSeen(seen: Map<string, true>, key: string | number): boolean;
+    export function addToSeen<T>(seen: Map<string, T>, key: string | number, value: T): boolean;
+    export function addToSeen<T>(seen: Map<string, T>, key: string | number, value: T = true as any): boolean {
         key = String(key);
         if (seen.has(key)) {
             return false;
@@ -5943,7 +5937,7 @@ namespace ts {
         return true;
     }
 
-    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string> {
+    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string, string> {
         const result = createMap<string>();
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
@@ -6654,7 +6648,7 @@ namespace ts {
         return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
     }
 
-    export function getOrUpdate<T>(map: Map<T>, key: string, getDefault: () => T): T {
+    export function getOrUpdate<T>(map: Map<string, T>, key: string, getDefault: () => T): T {
         const got = map.get(key);
         if (got === undefined) {
             const value = getDefault();

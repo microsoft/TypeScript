@@ -38,8 +38,8 @@ namespace ts.codefix {
 
     interface Transformer {
         readonly checker: TypeChecker;
-        readonly synthNamesMap: Map<SynthIdentifier>; // keys are the symbol id of the identifier
-        readonly setOfExpressionsToReturn: ReadonlyMap<true>; // keys are the node ids of the expressions
+        readonly synthNamesMap: Map<string, SynthIdentifier>; // keys are the symbol id of the identifier
+        readonly setOfExpressionsToReturn: ReadonlySet<number>; // keys are the node ids of the expressions
         readonly isInJSFile: boolean;
     }
 
@@ -61,7 +61,7 @@ namespace ts.codefix {
             return;
         }
 
-        const synthNamesMap: Map<SynthIdentifier> = createMap();
+        const synthNamesMap: Map<string, SynthIdentifier> = createMap();
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context.sourceFile);
@@ -99,24 +99,24 @@ namespace ts.codefix {
     /*
         Finds all of the expressions of promise type that should not be saved in a variable during the refactor
     */
-    function getAllPromiseExpressionsToReturn(func: FunctionLikeDeclaration, checker: TypeChecker): Map<true> {
+    function getAllPromiseExpressionsToReturn(func: FunctionLikeDeclaration, checker: TypeChecker): Set<number> {
         if (!func.body) {
-            return createMap<true>();
+            return new Set();
         }
 
-        const setOfExpressionsToReturn: Map<true> = createMap<true>();
+        const setOfExpressionsToReturn = new Set<number>();
         forEachChild(func.body, function visit(node: Node) {
             if (isPromiseReturningCallExpression(node, checker, "then")) {
-                setOfExpressionsToReturn.set(getNodeId(node).toString(), true);
+                setOfExpressionsToReturn.add(getNodeId(node));
                 forEach(node.arguments, visit);
             }
             else if (isPromiseReturningCallExpression(node, checker, "catch")) {
-                setOfExpressionsToReturn.set(getNodeId(node).toString(), true);
+                setOfExpressionsToReturn.add(getNodeId(node));
                 // if .catch() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
                 forEachChild(node, visit);
             }
             else if (isPromiseTypedExpression(node, checker)) {
-                setOfExpressionsToReturn.set(getNodeId(node).toString(), true);
+                setOfExpressionsToReturn.add(getNodeId(node));
                 // don't recurse here, since we won't refactor any children or arguments of the expression
             }
             else {
@@ -148,7 +148,7 @@ namespace ts.codefix {
         This function collects all existing identifier names and names of identifiers that will be created in the refactor.
         It then checks for any collisions and renames them through getSynthesizedDeepClone
     */
-    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, sourceFile: SourceFile): FunctionLikeDeclaration {
+    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<string, SynthIdentifier>, sourceFile: SourceFile): FunctionLikeDeclaration {
         const identsToRenameMap = createMap<Identifier>(); // key is the symbol id
         const collidingSymbolMap = createMultiMap<Symbol>();
         forEachChild(nodeToRename, function visit(node: Node) {
@@ -202,7 +202,7 @@ namespace ts.codefix {
         return getSynthesizedDeepCloneWithRenames(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker);
     }
 
-    function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyMap<Symbol[]>): SynthIdentifier {
+    function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyMap<string, Symbol[]>): SynthIdentifier {
         const numVarsSameName = (originalNames.get(name.text) || emptyArray).length;
         const identifier = numVarsSameName === 0 ? name : factory.createIdentifier(name.text + "_" + numVarsSameName);
         return createSynthIdentifier(identifier);
@@ -593,6 +593,6 @@ namespace ts.codefix {
     }
 
     function shouldReturn(expression: Expression, transformer: Transformer): boolean {
-        return !!expression.original && transformer.setOfExpressionsToReturn.has(getNodeId(expression.original).toString());
+        return !!expression.original && transformer.setOfExpressionsToReturn.has(getNodeId(expression.original));
     }
 }

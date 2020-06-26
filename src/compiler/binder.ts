@@ -15,7 +15,7 @@ namespace ts {
         referenced: boolean;
     }
 
-    export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+    export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
         if (node.body && !node.body.parent) {
             // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
             setParent(node.body, node);
@@ -24,8 +24,8 @@ namespace ts {
         return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateCached(node: Node, visited = createMap<ModuleInstanceState | undefined>()) {
-        const nodeId = "" + getNodeId(node);
+    function getModuleInstanceStateCached(node: Node, visited = new Map<number, ModuleInstanceState | undefined>()) {
+        const nodeId = getNodeId(node);
         if (visited.has(nodeId)) {
             return visited.get(nodeId) || ModuleInstanceState.NonInstantiated;
         }
@@ -35,7 +35,7 @@ namespace ts {
         return result;
     }
 
-    function getModuleInstanceStateWorker(node: Node, visited: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+    function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         switch (node.kind) {
             // 1. interface declarations, type alias declarations
@@ -107,7 +107,7 @@ namespace ts {
         return ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<ModuleInstanceState | undefined>) {
+    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<number, ModuleInstanceState | undefined>) {
         const name = specifier.propertyName || specifier.name;
         let p: Node | undefined = specifier.parent;
         while (p) {
@@ -2884,8 +2884,7 @@ namespace ts {
 
         function addLateBoundAssignmentDeclarationToSymbol(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol | undefined) {
             if (symbol) {
-                const members = symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = createMap());
-                members.set("" + getNodeId(node), node);
+                (symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = new Map())).set(getNodeId(node), node);
             }
         }
 

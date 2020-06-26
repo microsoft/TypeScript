@@ -84,12 +84,12 @@ namespace ts.server.typingsInstaller {
         DirectoryWatcher = "DirectoryWatcher"
     }
 
-    type ProjectWatchers = Map<FileWatcher> & { isInvoked?: boolean; };
+    type ProjectWatchers = Map<string, FileWatcher> & { isInvoked?: boolean; };
 
     export abstract class TypingsInstaller {
-        private readonly packageNameToTypingLocation: Map<JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
-        private readonly missingTypingsSet: Map<true> = createMap<true>();
-        private readonly knownCachesSet: Map<true> = createMap<true>();
+        private readonly packageNameToTypingLocation: Map<string, JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
+        private readonly missingTypingsSet = new Set<string>();
+        private readonly knownCachesSet = new Set<string>();
         private readonly projectWatchers = createMap<ProjectWatchers>();
         private safeList: JsTyping.SafeList | undefined;
         readonly pendingRunRequests: PendingRequest[] = [];
@@ -99,7 +99,7 @@ namespace ts.server.typingsInstaller {
         private installRunCount = 1;
         private inFlightRequestCount = 0;
 
-        abstract readonly typesRegistry: Map<MapLike<string>>;
+        abstract readonly typesRegistry: Map<string, MapLike<string>>;
 
         constructor(
             protected readonly installTypingHost: InstallTypingHost,
@@ -234,7 +234,7 @@ namespace ts.server.typingsInstaller {
                         }
                         const typingFile = typingToFileName(cacheLocation, packageName, this.installTypingHost, this.log);
                         if (!typingFile) {
-                            this.missingTypingsSet.set(packageName, true);
+                            this.missingTypingsSet.add(packageName);
                             continue;
                         }
                         const existingTypingFile = this.packageNameToTypingLocation.get(packageName);
@@ -264,20 +264,20 @@ namespace ts.server.typingsInstaller {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Finished processing cache location '${cacheLocation}'`);
             }
-            this.knownCachesSet.set(cacheLocation, true);
+            this.knownCachesSet.add(cacheLocation);
         }
 
         private filterTypings(typingsToInstall: readonly string[]): readonly string[] {
             return mapDefined(typingsToInstall, typing => {
                 const typingKey = mangleScopedPackageName(typing);
-                if (this.missingTypingsSet.get(typingKey)) {
+                if (this.missingTypingsSet.has(typingKey)) {
                     if (this.log.isEnabled()) this.log.writeLine(`'${typing}':: '${typingKey}' is in missingTypingsSet - skipping...`);
                     return undefined;
                 }
                 const validationResult = JsTyping.validatePackageName(typing);
                 if (validationResult !== JsTyping.NameValidationResult.Ok) {
                     // add typing name to missing set so we won't process it again
-                    this.missingTypingsSet.set(typingKey, true);
+                    this.missingTypingsSet.add(typingKey);
                     if (this.log.isEnabled()) this.log.writeLine(JsTyping.renderPackageNameValidationFailure(validationResult, typing));
                     return undefined;
                 }
@@ -343,7 +343,7 @@ namespace ts.server.typingsInstaller {
                             this.log.writeLine(`install request failed, marking packages as missing to prevent repeated requests: ${JSON.stringify(filteredTypings)}`);
                         }
                         for (const typing of filteredTypings) {
-                            this.missingTypingsSet.set(typing, true);
+                            this.missingTypingsSet.add(typing);
                         }
                         return;
                     }
@@ -356,7 +356,7 @@ namespace ts.server.typingsInstaller {
                     for (const packageName of filteredTypings) {
                         const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost, this.log);
                         if (!typingFile) {
-                            this.missingTypingsSet.set(packageName, true);
+                            this.missingTypingsSet.add(packageName);
                             continue;
                         }
 

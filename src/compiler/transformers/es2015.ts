@@ -72,15 +72,15 @@ namespace ts {
          * set of labels that occurred inside the converted loop
          * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
          */
-        labels?: Map<boolean>;
+        labels?: Map<string, boolean>;
         /*
          * collection of labeled jumps that transfer control outside the converted loop.
          * maps store association 'label -> labelMarker' where
          * - label - value of label as it appear in code
          * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
          */
-        labeledNonLocalBreaks?: Map<string>;
-        labeledNonLocalContinues?: Map<string>;
+        labeledNonLocalBreaks?: Map<string, string>;
+        labeledNonLocalContinues?: Map<string, string>;
 
         /*
          * set of non-labeled jumps that transfer control outside the converted loop
@@ -3291,7 +3291,7 @@ namespace ts {
             }
         }
 
-        function processLabeledJumps(table: Map<string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState | undefined, caseClauses: CaseClause[]): void {
+        function processLabeledJumps(table: Map<string, string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState | undefined, caseClauses: CaseClause[]): void {
             if (!table) {
                 return;
             }
