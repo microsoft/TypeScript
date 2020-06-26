@@ -4443,6 +4443,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Element_at_index_0_is_variadic_in_one_type_but_not_in_the_other_2622" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Element at index {0} is variadic in one type but not in the other.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インデックス {0} の要素は、一方の型では引数が可変個ですが、他方の型では違います。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Element_implicitly_has_an_any_type_because_expression_of_type_0_can_t_be_used_to_index_type_1_7053" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Element implicitly has an 'any' type because expression of type '{0}' can't be used to index type '{1}'.]]></Val>
@@ -9606,6 +9615,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Source_has_0_element_s_but_target_allows_only_1_2619" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Source has {0} element(s) but target allows only {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ソースには {0} 個の要素がありますが、ターゲットで使用できるのは {1} 個のみです。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Source_has_0_element_s_but_target_requires_1_2618" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Source has {0} element(s) but target requires {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ソースには {0} 個の要素が含まれていますが、ターゲットには {1} 個が必要です。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature_2382" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Specialized overload signature is not assignable to any non-specialized signature.]]></Val>
@@ -10019,6 +10046,24 @@
           <Val><![CDATA[Tagged template expressions are not permitted in an optional chain.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[タグ付きテンプレート式は、省略可能なチェーンでは許可されていません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Target_allows_only_0_element_s_but_source_may_have_more_2621" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Target allows only {0} element(s) but source may have more.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ターゲットには {0} 個の要素のみを使用できますが、ソースにはそれより多くを指定できます。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Target_requires_0_element_s_but_source_may_have_fewer_2620" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Target requires {0} element(s) but source may have fewer.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ターゲットには {0} 個の要素が必要ですが、ソースに指定する数はそれより少なくても構いません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
