@@ -94,7 +94,8 @@ namespace ts.refactor.convertToOptionalChainExpression {
         let checkNode = isConditionalExpression(expression) ? expression.condition : expression.left;
         let firstOccurrence: Expression = lastPropertyAccessChain;
         let toCheck: Expression = lastPropertyAccessChain;
-        while (isBinaryExpression(checkNode) && toCheck && (isPropertyAccessExpression(toCheck) || isCallExpression(toCheck)) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
+        while (isBinaryExpression(checkNode) && toCheck && (isPropertyAccessExpression(toCheck) ||
+            isCallExpression(toCheck)) && checkNode.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
             const match = checkMatch(checkNode.right, toCheck.expression, checker);
             if (!match) {
                 break;
@@ -111,7 +112,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             { lastPropertyAccessChain, firstOccurrence, expression } : undefined;
     }
 
-    function checkMatch(expression: Expression, target: Expression, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
+    function checkMatch(expression: Expression | Identifier | PrivateIdentifier, target: Expression | Identifier | PrivateIdentifier, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
         if (isCallExpression(target)) {
             // Recurse through the call expressions to match a.b to a.b()().
             return !isCallExpression(expression) ? checkMatch(expression, target.expression, checker) : undefined;
@@ -188,12 +189,12 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return undefined;
     }
 
-    function convertToOptionalChain(checker: TypeChecker, toConvert: Expression, until: Identifier | PrivateIdentifier): Expression {
+    function convertToOptionalChain(checker: TypeChecker, toConvert: Expression, until: PropertyAccessExpression | Identifier | PrivateIdentifier): Expression {
         if (isCallExpression(toConvert)) {
             const chain = convertToOptionalChain(checker, toConvert.expression, until);
             return factory.createCallExpression(chain, toConvert.typeArguments, toConvert.arguments);
         }
-        else if (isPropertyAccessExpression(toConvert) && checker.getSymbolAtLocation(toConvert.name) !== checker.getSymbolAtLocation(until)) {
+        else if (isPropertyAccessExpression(toConvert) && !checkMatch(toConvert, until, checker)) {
             const chain = convertToOptionalChain(checker, toConvert.expression, until);
             return factory.createPropertyAccessChain(chain, factory.createToken(SyntaxKind.QuestionDotToken), toConvert.name);
         }
@@ -202,14 +203,15 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
     function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: Info, _actionName: string): void {
         const { lastPropertyAccessChain, firstOccurrence, expression } = info;
-        const until = isPropertyAccessExpression(firstOccurrence) ? firstOccurrence.name : isIdentifier(firstOccurrence) ? firstOccurrence : lastPropertyAccessChain.name;
-        const convertedChain = convertToOptionalChain(checker, lastPropertyAccessChain, until);
+        const convertedChain = convertToOptionalChain(checker, lastPropertyAccessChain, firstOccurrence);
         if (convertedChain && isPropertyAccessExpression(convertedChain)) {
             if (isBinaryExpression(expression)) {
                 changes.replaceNodeRange(sourceFile, firstOccurrence, lastPropertyAccessChain, convertedChain);
             }
             else if (isConditionalExpression(expression)) {
-                changes.replaceNode(sourceFile, expression, factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse));
+                changes.replaceNode(sourceFile, expression,
+                    factory.createBinaryExpression(convertedChain, factory.createToken(SyntaxKind.QuestionQuestionToken), expression.whenFalse)
+                );
             }
         }
     }
