@@ -16,7 +16,7 @@ namespace ts {
         let sourcesContent: (string | null)[] | undefined;
 
         const names: string[] = [];
-        let nameToNameIndexMap: Map<number> | undefined;
+        let nameToNameIndexMap: Map<string, number> | undefined;
         let mappings = "";
 
         // Last recorded and encoded mappings
@@ -622,7 +622,7 @@ namespace ts {
         const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
         const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
         const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
-        const sourceToSourceIndexMap = createMapFromEntries(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i] as [string, number]));
+        const sourceToSourceIndexMap = new Map(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i]));
         let decodedMappings: readonly MappedPosition[] | undefined;
         let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
         let sourceMappings: readonly SortedReadonlyArray<SourceMappedPosition>[] | undefined;

@@ -15,42 +15,42 @@ namespace ts {
         /**
          * Information of the file eg. its version, signature etc
          */
-        fileInfos: ReadonlyMap<BuilderState.FileInfo>;
+        fileInfos: ReadonlyMap<Path, BuilderState.FileInfo>;
         /**
          * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
          * Otherwise undefined
          * Thus non undefined value indicates, module emit
          */
-        readonly referencedMap?: ReadonlyMap<BuilderState.ReferencedSet> | undefined;
+        readonly referencedMap?: ReadonlyMap<Path, BuilderState.ReferencedSet> | undefined;
         /**
          * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
          */
-        readonly exportedModulesMap?: ReadonlyMap<BuilderState.ReferencedSet> | undefined;
+        readonly exportedModulesMap?: ReadonlyMap<Path, BuilderState.ReferencedSet> | undefined;
     }
 
     export interface BuilderState {
         /**
          * Information of the file eg. its version, signature etc
          */
-        fileInfos: Map<BuilderState.FileInfo>;
+        fileInfos: Map<Path, BuilderState.FileInfo>;
         /**
          * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
          * Otherwise undefined
          * Thus non undefined value indicates, module emit
          */
-        readonly referencedMap: ReadonlyMap<BuilderState.ReferencedSet> | undefined;
+        readonly referencedMap: ReadonlyMap<Path, BuilderState.ReferencedSet> | undefined;
         /**
          * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
          */
-        readonly exportedModulesMap: Map<BuilderState.ReferencedSet> | undefined;
+        readonly exportedModulesMap: Map<Path, BuilderState.ReferencedSet> | undefined;
         /**
          * Map of files that have already called update signature.
          * That means hence forth these files are assumed to have
          * no change in their signature for this version of the program
          */
-        hasCalledUpdateShapeSignature: Map<true>;
+        hasCalledUpdateShapeSignature: Set<Path>;
         /**
          * Cache of all files excluding default library file for the current program
          */
@@ -73,7 +73,7 @@ namespace ts {
         /**
          * Referenced files with values for the keys as referenced file's path to be true
          */
-        export type ReferencedSet = ReadonlyMap<true>;
+        export type ReferencedSet = ReadonlySet<Path>;
         /**
          * Compute the hash to store the shape of the file
          */
@@ -83,7 +83,7 @@ namespace ts {
          * Exported modules to from declaration emit being computed.
          * This can contain false in the affected file path to specify that there are no exported module(types from other modules) for this file
          */
-        export type ComputingExportedModulesMap = Map<ReferencedSet | false>;
+        export type ComputingExportedModulesMap = Map<Path, ReferencedSet | false>;
 
         /**
          * Get the referencedFile from the imported module symbol
@@ -113,8 +113,8 @@ namespace ts {
         /**
          * Gets the referenced files for a file from the program with values for the keys as referenced file's path to be true
          */
-        function getReferencedFiles(program: Program, sourceFile: SourceFile, getCanonicalFileName: GetCanonicalFileName): Map<true> | undefined {
-            let referencedFiles: Map<true> | undefined;
+        function getReferencedFiles(program: Program, sourceFile: SourceFile, getCanonicalFileName: GetCanonicalFileName): Set<Path> | undefined {
+            let referencedFiles: Set<Path> | undefined;
 
             // We need to use a set here since the code can contain the same import twice,
             // but that will only be one dependency.
@@ -185,17 +185,14 @@ namespace ts {
             }
 
             function addReferencedFile(referencedPath: Path) {
-                if (!referencedFiles) {
-                    referencedFiles = createMap<true>();
-                }
-                referencedFiles.set(referencedPath, true);
+                (referencedFiles || (referencedFiles = new Set())).add(referencedPath);
             }
         }
 
         /**
          * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
          */
-        export function canReuseOldState(newReferencedMap: ReadonlyMap<ReferencedSet> | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
+        export function canReuseOldState(newReferencedMap: ReadonlyMap<Path, ReferencedSet> | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
             return oldState && !oldState.referencedMap === !newReferencedMap;
         }
 
@@ -203,10 +200,10 @@ namespace ts {
          * Creates the state of file references and signature for the new program from oldState if it is safe
          */
         export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>): BuilderState {
-            const fileInfos = createMap<FileInfo>();
-            const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createMap<ReferencedSet>() : undefined;
-            const exportedModulesMap = referencedMap ? createMap<ReferencedSet>() : undefined;
-            const hasCalledUpdateShapeSignature = createMap<true>();
+            const fileInfos = new Map<Path, FileInfo>();
+            const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? new Map<Path, ReferencedSet>() : undefined;
+            const exportedModulesMap = referencedMap ? new Map<Path, ReferencedSet>() : undefined;
+            const hasCalledUpdateShapeSignature = new Set<Path>();
             const useOldState = canReuseOldState(referencedMap, oldState);
 
             // Create the reference map, and set the file infos
@@ -249,28 +246,24 @@ namespace ts {
          * Creates a clone of the state
          */
         export function clone(state: Readonly<BuilderState>): BuilderState {
-            const fileInfos = createMap<FileInfo>();
-            state.fileInfos.forEach((value, key) => {
-                fileInfos.set(key, { ...value });
-            });
             // Dont need to backup allFiles info since its cache anyway
             return {
-                fileInfos,
-                referencedMap: cloneMapOrUndefined(state.referencedMap),
-                exportedModulesMap: cloneMapOrUndefined(state.exportedModulesMap),
-                hasCalledUpdateShapeSignature: cloneMap(state.hasCalledUpdateShapeSignature),
+                fileInfos: new Map(state.fileInfos),
+                referencedMap: state.referencedMap && new Map(state.referencedMap),
+                exportedModulesMap: state.exportedModulesMap && new Map(state.exportedModulesMap),
+                hasCalledUpdateShapeSignature: new Set(state.hasCalledUpdateShapeSignature),
             };
         }
 
         /**
          * Gets the files affected by the path from the program
          */
-        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: Map<string>, exportedModulesMapCache?: ComputingExportedModulesMap): readonly SourceFile[] {
+        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: Map<Path, string>, exportedModulesMapCache?: ComputingExportedModulesMap): readonly SourceFile[] {
             // Since the operation could be cancelled, the signatures are always stored in the cache
             // They will be committed once it is safe to use them
             // eg when calling this api from tsserver, if there is no cancellation of the operation
             // In the other cases the affected files signatures are committed only after the iteration through the result is complete
-            const signatureCache = cacheToUpdateSignature || createMap();
+            const signatureCache = cacheToUpdateSignature || new Map();
             const sourceFile = programOfThisState.getSourceFileByPath(path);
             if (!sourceFile) {
                 return emptyArray;
@@ -292,19 +285,19 @@ namespace ts {
          * Updates the signatures from the cache into state's fileinfo signatures
          * This should be called whenever it is safe to commit the state of the builder
          */
-        export function updateSignaturesFromCache(state: BuilderState, signatureCache: Map<string>) {
-            signatureCache.forEach((signature, path) => updateSignatureOfFile(state, signature, path as Path));
+        export function updateSignaturesFromCache(state: BuilderState, signatureCache: Map<Path, string>) {
+            signatureCache.forEach((signature, path) => updateSignatureOfFile(state, signature, path));
         }
 
         export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
             state.fileInfos.get(path)!.signature = signature;
-            state.hasCalledUpdateShapeSignature.set(path, true);
+            state.hasCalledUpdateShapeSignature.add(path);
         }
 
         /**
          * Returns if the shape of the signature has changed since last emit
          */
-        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: Map<string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ComputingExportedModulesMap) {
+        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: Map<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ComputingExportedModulesMap) {
             Debug.assert(!!sourceFile);
             Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
 
@@ -365,16 +358,16 @@ namespace ts {
                 return;
             }
 
-            let exportedModules: Map<true> | undefined;
+            let exportedModules: Set<Path> | undefined;
             exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFileFromImportedModuleSymbol(symbol)));
             exportedModulesMapCache.set(sourceFile.resolvedPath, exportedModules || false);
 
             function addExportedModule(exportedModulePath: Path | undefined) {
                 if (exportedModulePath) {
                     if (!exportedModules) {
-                        exportedModules = createMap<true>();
+                        exportedModules = new Set();
                     }
-                    exportedModules.set(exportedModulePath, true);
+                    exportedModules.add(exportedModulePath);
                 }
             }
         }
@@ -413,26 +406,23 @@ namespace ts {
             }
 
             // Get the references, traversing deep from the referenceMap
-            const seenMap = createMap<true>();
+            const seenMap = new Set<Path>();
             const queue = [sourceFile.resolvedPath];
             while (queue.length) {
                 const path = queue.pop()!;
                 if (!seenMap.has(path)) {
-                    seenMap.set(path, true);
+                    seenMap.add(path);
                     const references = state.referencedMap.get(path);
                     if (references) {
                         const iterator = references.keys();
                         for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-                            queue.push(iterResult.value as Path);
+                            queue.push(iterResult.value);
                         }
                     }
                 }
             }
 
-            return arrayFrom(mapDefinedIterator(seenMap.keys(), path => {
-                const file = programOfThisState.getSourceFileByPath(path as Path);
-                return file ? file.fileName : path;
-            }));
+            return arrayFrom(mapDefinedIterator(seenMap.keys(), path => programOfThisState.getSourceFileByPath(path)?.fileName ?? path));
         }
 
         /**
@@ -451,7 +441,7 @@ namespace ts {
          */
         export function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
             return arrayFrom(mapDefinedIterator(state.referencedMap!.entries(), ([filePath, referencesInFile]) =>
-                referencesInFile.has(referencedFilePath) ? filePath as Path : undefined
+                referencesInFile.has(referencedFilePath) ? filePath : undefined
             ));
         }
 
@@ -528,7 +518,7 @@ namespace ts {
         /**
          * When program emits modular code, gets the files affected by the sourceFile whose shape has changed
          */
-        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: Map<string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash | undefined, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
+        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: Map<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash | undefined, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
             if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
                 return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
             }
@@ -541,7 +531,7 @@ namespace ts {
             // Now we need to if each file in the referencedBy list has a shape change as well.
             // Because if so, its own referencedBy files need to be saved as well to make the
             // emitting result consistent with files on disk.
-            const seenFileNamesMap = createMap<SourceFile>();
+            const seenFileNamesMap = new Map<Path, SourceFile>();
 
             // Start with the paths this file was referenced by
             seenFileNamesMap.set(sourceFileWithUpdatedShape.resolvedPath, sourceFileWithUpdatedShape);
@@ -561,9 +551,5 @@ namespace ts {
             // Return array of values that needs emit
             return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
         }
-    }
-
-    export function cloneMapOrUndefined<T>(map: ReadonlyMap<T> | undefined) {
-        return map ? cloneMap(map) : undefined;
     }
 }

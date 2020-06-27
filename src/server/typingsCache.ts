@@ -5,7 +5,7 @@ namespace ts.server {
     }
 
     // for backwards-compatibility
-    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface ITypingsInstaller {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
@@ -41,7 +41,7 @@ namespace ts.server {
         if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
             return true;
         }
-        const set: Map<boolean> = createMap<boolean>();
+        const set: Map<string, boolean> = createMap<boolean>();
         let unique = 0;
 
         for (const v of arr1!) {
@@ -83,7 +83,7 @@ namespace ts.server {
 
     /*@internal*/
     export class TypingsCache {
-        private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
+        private readonly perProjectCache: Map<string, TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
         constructor(private readonly installer: ITypingsInstaller) {
         }

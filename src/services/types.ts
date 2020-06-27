@@ -92,7 +92,7 @@ namespace ts {
         /* @internal */ scriptSnapshot: IScriptSnapshot | undefined;
         /* @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
 
-        /* @internal */ getNamedDeclarations(): Map<readonly Declaration[]>;
+        /* @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
@@ -116,7 +116,7 @@ namespace ts {
      * snapshot is observably immutable. i.e. the same calls with the same parameters will return
      * the same values.
      */
-    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface IScriptSnapshot {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
@@ -196,10 +196,10 @@ namespace ts {
     export interface PackageJsonInfo {
         fileName: string;
         parseable: boolean;
-        dependencies?: Map<string>;
-        devDependencies?: Map<string>;
-        peerDependencies?: Map<string>;
-        optionalDependencies?: Map<string>;
+        dependencies?: Map<string, string>;
+        devDependencies?: Map<string, string>;
+        peerDependencies?: Map<string, string>;
+        optionalDependencies?: Map<string, string>;
         get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
@@ -271,7 +271,7 @@ namespace ts {
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */
-        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string>;
+        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string, string>;
 
         /*
          * Required for full import and type reference completions.

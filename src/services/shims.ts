@@ -25,11 +25,11 @@ namespace ts {
         fileNames: string[];                            // The file names that belong to the same project.
         projectRootPath: string;                        // The path to the project root directory
         safeListPath: string;                           // The path used to retrieve the safe list
-        packageNameToTypingLocation: Map<JsTyping.CachedTyping>;       // The map of package names to their cached typing locations and installed versions
+        packageNameToTypingLocation: Map<string, JsTyping.CachedTyping>;       // The map of package names to their cached typing locations and installed versions
         typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
         compilerOptions: CompilerOptions;               // Used as a source for typing inference
         unresolvedImports: readonly string[];       // List of unresolved module ids from imports
-        typesRegistry: ReadonlyMap<MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
+        typesRegistry: ReadonlyMap<string, MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
     }
 
     export interface ScriptSnapshotShim {

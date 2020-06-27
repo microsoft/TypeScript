@@ -287,7 +287,7 @@ namespace ts.FindAllReferences {
         sourceFiles: readonly SourceFile[],
         cancellationToken: CancellationToken,
         options: Options = {},
-        sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName),
+        sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName)),
     ): readonly Entry[] | undefined {
         return flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options, sourceFilesSet));
     }
@@ -594,7 +594,7 @@ namespace ts.FindAllReferences {
     /** Encapsulates the core find-all-references algorithm. */
     export namespace Core {
         /** Core find-all-references algorithm. Handles special cases before delegating to `getReferencedSymbolsForSymbol`. */
-        export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): readonly SymbolAndEntries[] | undefined {
+        export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly SymbolAndEntries[] | undefined {
             if (options.use === FindReferencesUse.References) {
                 node = getAdjustedReferenceLocation(node);
             }
@@ -651,7 +651,7 @@ namespace ts.FindAllReferences {
             return undefined;
         }
 
-        function getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol: Symbol, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options, sourceFilesSet: ReadonlyMap<true>) {
+        function getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol: Symbol, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options, sourceFilesSet: ReadonlySet<string>) {
             const moduleSourceFile = (symbol.flags & SymbolFlags.Module) && symbol.declarations && find(symbol.declarations, isSourceFile);
             if (!moduleSourceFile) return undefined;
             const exportEquals = symbol.exports!.get(InternalSymbolName.ExportEquals);
@@ -718,7 +718,7 @@ namespace ts.FindAllReferences {
             return program.getSourceFiles().indexOf(sourceFile);
         }
 
-        function getReferencedSymbolsForModule(program: Program, symbol: Symbol, excludeImportTypeOfExportEquals: boolean, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlyMap<true>): SymbolAndEntries[] {
+        function getReferencedSymbolsForModule(program: Program, symbol: Symbol, excludeImportTypeOfExportEquals: boolean, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string>): SymbolAndEntries[] {
             Debug.assert(!!symbol.valueDeclaration);
 
             const references = mapDefined<ModuleReference, Entry>(findModuleReferences(program, sourceFiles, symbol), reference => {
@@ -830,7 +830,7 @@ namespace ts.FindAllReferences {
         }
 
         /** Core find-all-references algorithm for a normal symbol. */
-        function getReferencedSymbolsForSymbol(originalSymbol: Symbol, node: Node | undefined, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
+        function getReferencedSymbolsForSymbol(originalSymbol: Symbol, node: Node | undefined, sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
             const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText(options)) || originalSymbol;
 
             // Compute the meaning from the location and the symbol it references
@@ -972,7 +972,7 @@ namespace ts.FindAllReferences {
 
             constructor(
                 readonly sourceFiles: readonly SourceFile[],
-                readonly sourceFilesSet: ReadonlyMap<true>,
+                readonly sourceFilesSet: ReadonlySet<string>,
                 readonly specialSearchKind: SpecialSearchKind,
                 readonly checker: TypeChecker,
                 readonly cancellationToken: CancellationToken,
@@ -1031,15 +1031,15 @@ namespace ts.FindAllReferences {
             }
 
             // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
-            private readonly sourceFileToSeenSymbols: Map<true>[] = [];
+            private readonly sourceFileToSeenSymbols: Set<number>[] = [];
             /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
             markSearchedSymbols(sourceFile: SourceFile, symbols: readonly Symbol[]): boolean {
                 const sourceId = getNodeId(sourceFile);
-                const seenSymbols = this.sourceFileToSeenSymbols[sourceId] || (this.sourceFileToSeenSymbols[sourceId] = createMap<true>());
+                const seenSymbols = this.sourceFileToSeenSymbols[sourceId] || (this.sourceFileToSeenSymbols[sourceId] = new Set<number>());
 
                 let anyNewSymbols = false;
                 for (const sym of symbols) {
-                    anyNewSymbols = addToSeen(seenSymbols, getSymbolId(sym)) || anyNewSymbols;
+                    anyNewSymbols = tryAddToSet(seenSymbols, getSymbolId(sym)) || anyNewSymbols;
                 }
                 return anyNewSymbols;
             }
@@ -1093,7 +1093,7 @@ namespace ts.FindAllReferences {
             isDefaultExport: boolean,
             cb: (ref: Identifier) => void,
         ): void {
-            const importTracker = createImportTracker(sourceFiles, arrayToSet(sourceFiles, f => f.fileName), checker, cancellationToken);
+            const importTracker = createImportTracker(sourceFiles, new Set(sourceFiles.map(f => f.fileName)), checker, cancellationToken);
             const { importSearches, indirectUsers } = importTracker(exportSymbol, { exportKind: isDefaultExport ? ExportKind.Default : ExportKind.Named, exportingModuleSymbol }, /*isForRename*/ false);
             for (const [importLocation] of importSearches) {
                 cb(importLocation);
@@ -1754,7 +1754,7 @@ namespace ts.FindAllReferences {
          * @param parent        Another class or interface Symbol
          * @param cachedResults A map of symbol id pairs (i.e. "child,parent") to booleans indicating previous results
          */
-        function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: Map<boolean>, checker: TypeChecker): boolean {
+        function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: Map<string, boolean>, checker: TypeChecker): boolean {
             if (symbol === parent) {
                 return true;
             }

@@ -1,26 +1,56 @@
-
 /* @internal */
 namespace ts {
+    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I) => Iterator<
+        I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+        I extends ReadonlySet<infer T> ? T :
+        I extends readonly (infer T)[] ? T :
+        I extends undefined ? undefined :
+        never>;
+
+    function getCollectionImplementation<
+        K1 extends MatchingKeys<typeof NativeCollections, () => any>,
+        K2 extends MatchingKeys<typeof ShimCollections, (getIterator?: GetIteratorCallback) => ReturnType<(typeof NativeCollections)[K1]>>
+    >(name: string, nativeFactory: K1, shimFactory: K2): NonNullable<ReturnType<(typeof NativeCollections)[K1]>> {
+        // NOTE: ts.ShimCollections will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
+        const constructor = NativeCollections[nativeFactory]() ?? ShimCollections?.[shimFactory](getIterator);
+        if (constructor) return constructor as NonNullable<ReturnType<(typeof NativeCollections)[K1]>>;
+        throw new Error(`TypeScript requires an environment that provides a compatible native ${name} implementation.`);
+    }
+
+    export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "createMapShim");
+    export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
+
+    export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
+        I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+        I extends ReadonlySet<infer T> ? T :
+        I extends readonly (infer T)[] ? T :
+        I extends undefined ? undefined :
+        never>;
+    export function getIterator<K, V>(iterable: ReadonlyMap<K, V>): Iterator<[K, V]>;
+    export function getIterator<K, V>(iterable: ReadonlyMap<K, V> | undefined): Iterator<[K, V]> | undefined;
+    export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T>): Iterator<T>;
+    export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T> | undefined): Iterator<T> | undefined;
+    export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
+        if (iterable) {
+            if (isArray(iterable)) return arrayIterator(iterable);
+            if (iterable instanceof Map) return iterable.entries();
+            if (iterable instanceof Set) return iterable.values();
+            throw new Error("Iteration not supported.");
+        }
+    }
 
     export const emptyArray: never[] = [] as never[];
 
     /** Create a new map. */
-    export function createMap<T>(): Map<T> {
-        return new Map<T>();
-    }
-
-    /** Create a new map from an array of entries. */
-    export function createMapFromEntries<T>(entries: [string, T][]): Map<T> {
-        const map = createMap<T>();
-        for (const [key, value] of entries) {
-            map.set(key, value);
-        }
-        return map;
+    export function createMap<K, V>(): Map<K, V>;
+    export function createMap<T>(): Map<string, T>;
+    export function createMap<K, V>(): Map<K, V> {
+        return new Map<K, V>();
     }
 
     /** Create a new map from a template object is provided, the map will copy entries from it. */
-    export function createMapFromTemplate<T>(template: MapLike<T>): Map<T> {
-        const map: Map<T> = new Map<T>();
+    export function createMapFromTemplate<T>(template: MapLike<T>): Map<string, T> {
+        const map: Map<string, T> = new Map<string, T>();
 
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
@@ -97,6 +127,16 @@ namespace ts {
         }
     }
 
+    export function reduceLeftIterator<T, U>(iterator: Iterator<T> | undefined, f: (memo: U, value: T, i: number) => U, initial: U): U {
+        let result = initial;
+        if (iterator) {
+            for (let step = iterator.next(), pos = 0; !step.done; step = iterator.next(), pos++) {
+                result = f(result, step.value, pos);
+            }
+        }
+        return result;
+    }
+
     export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], callback: (a: T, b: U, index: number) => V): V[] {
         const result: V[] = [];
         Debug.assertEqual(arrayA.length, arrayB.length);
@@ -120,9 +160,9 @@ namespace ts {
         };
     }
 
-    export function zipToMap<T>(keys: readonly string[], values: readonly T[]): Map<T> {
+    export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
         Debug.assert(keys.length === values.length);
-        const map = createMap<T>();
+        const map = new Map<K, V>();
         for (let i = 0; i < keys.length; ++i) {
             map.set(keys[i], values[i]);
         }
@@ -514,15 +554,48 @@ namespace ts {
         };
     }
 
-    export function mapDefinedMap<T, U>(map: ReadonlyMap<T>, mapValue: (value: T, key: string) => U | undefined, mapKey: (key: string) => string = identity): Map<U> {
-        const result = createMap<U>();
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): Map<K2, V2>;
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined;
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined {
+        if (!map) {
+            return undefined;
+        }
+
+        const result = new Map<K2, V2>();
         map.forEach((value, key) => {
-            const mapped = mapValue(value, key);
-            if (mapped !== undefined) {
-                result.set(mapKey(key), mapped);
+            const entry = f(key, value);
+            if (entry !== undefined) {
+                const [newKey, newValue] = entry;
+                if (newKey !== undefined && newValue !== undefined) {
+                    result.set(newKey, newValue);
+                }
             }
         });
+
         return result;
+    }
+
+    export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1>, f: (value: V1) => V2 | undefined): Set<V2>;
+    export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): Set<V2> | undefined;
+    export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): Set<V2> | undefined {
+        if (set) {
+            const result = new Set<V2>();
+            set.forEach(value => {
+                const newValue = f(value);
+                if (newValue !== undefined) {
+                    result.add(newValue);
+                }
+            });
+            return result;
+        }
+    }
+
+    export function tryAddToSet<T>(set: Set<T>, value: T) {
+        if (!set.has(value)) {
+            set.add(value);
+            return true;
+        }
+        return false;
     }
 
     export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
@@ -587,20 +660,21 @@ namespace ts {
         return result;
     }
 
-    export function mapEntries<T, U>(map: ReadonlyMap<T>, f: (key: string, value: T) => [string, U]): Map<U>;
-    export function mapEntries<T, U>(map: ReadonlyMap<T> | undefined, f: (key: string, value: T) => [string, U]): Map<U> | undefined;
-    export function mapEntries<T, U>(map: ReadonlyMap<T> | undefined, f: (key: string, value: T) => [string, U]): Map<U> | undefined {
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2>;
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined;
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined {
         if (!map) {
             return undefined;
         }
 
-        const result = createMap<U>();
+        const result = new Map<K2, V2>();
         map.forEach((value, key) => {
             const [newKey, newValue] = f(key, value);
             result.set(newKey, newValue);
         });
         return result;
     }
+
     export function some<T>(array: readonly T[] | undefined): array is readonly T[];
     export function some<T>(array: readonly T[] | undefined, predicate: (value: T) => boolean): boolean;
     export function some<T>(array: readonly T[] | undefined, predicate?: (value: T) => boolean): boolean {
@@ -1268,10 +1342,12 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<T>;
-    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<U>;
-    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => T | U = identity): Map<T | U> {
-        const result = createMap<T | U>();
+    export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): Map<K, V>;
+    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): Map<K, V2>;
+    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<string, T>;
+    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<string, U>;
+    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): Map<K, V1 | V2> {
+        const result = new Map<K, V1 | V2>();
         for (const value of array) {
             const key = makeKey(value);
             if (key !== undefined) result.set(key, makeValue(value));
@@ -1289,10 +1365,10 @@ namespace ts {
         return result;
     }
 
-    export function arrayToMultiMap<T>(values: readonly T[], makeKey: (value: T) => string): MultiMap<T>;
-    export function arrayToMultiMap<T, U>(values: readonly T[], makeKey: (value: T) => string, makeValue: (value: T) => U): MultiMap<U>;
-    export function arrayToMultiMap<T, U>(values: readonly T[], makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): MultiMap<T | U> {
-        const result = createMultiMap<T | U>();
+    export function arrayToMultiMap<K, V>(values: readonly V[], makeKey: (value: V) => K): MultiMap<K, V>;
+    export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: V) => K, makeValue: (value: V) => U): MultiMap<K, U>;
+    export function arrayToMultiMap<K, V, U>(values: readonly V[], makeKey: (value: V) => K, makeValue: (value: V) => V | U = identity): MultiMap<K, V | U> {
+        const result = createMultiMap<K, V | U>();
         for (const value of values) {
             result.add(makeKey(value), makeValue(value));
         }
@@ -1349,35 +1425,29 @@ namespace ts {
         return fn ? fn.bind(obj) : undefined;
     }
 
-    export function mapMap<T, U>(map: Map<T>, f: (t: T, key: string) => [string, U]): Map<U>;
-    export function mapMap<T, U>(map: UnderscoreEscapedMap<T>, f: (t: T, key: __String) => [string, U]): Map<U>;
-    export function mapMap<T, U>(map: Map<T> | UnderscoreEscapedMap<T>, f: ((t: T, key: string) => [string, U]) | ((t: T, key: __String) => [string, U])): Map<U> {
-        const result = createMap<U>();
-        map.forEach((t: T, key: string & __String) => result.set(...(f(t, key))));
-        return result;
-    }
-
-    export interface MultiMap<T> extends Map<T[]> {
+    export interface MultiMap<K, V> extends Map<K, V[]> {
         /**
          * Adds the value to an array of values associated with the key, and returns the array.
          * Creates the array if it does not already exist.
          */
-        add(key: string, value: T): T[];
+        add(key: K, value: V): V[];
         /**
          * Removes a value from an array of values associated with the key.
          * Does not preserve the order of those values.
          * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
          */
-        remove(key: string, value: T): void;
+        remove(key: K, value: V): void;
     }
 
-    export function createMultiMap<T>(): MultiMap<T> {
-        const map = createMap<T[]>() as MultiMap<T>;
+    export function createMultiMap<K, V>(): MultiMap<K, V>;
+    export function createMultiMap<V>(): MultiMap<string, V>;
+    export function createMultiMap<K, V>(): MultiMap<K, V> {
+        const map = new Map<K, V[]>() as MultiMap<K, V>;
         map.add = multiMapAdd;
         map.remove = multiMapRemove;
         return map;
     }
-    function multiMapAdd<T>(this: MultiMap<T>, key: string, value: T) {
+    function multiMapAdd<K, V>(this: MultiMap<K, V>, key: K, value: V) {
         let values = this.get(key);
         if (values) {
             values.push(value);
@@ -1387,7 +1457,7 @@ namespace ts {
         }
         return values;
     }
-    function multiMapRemove<T>(this: MultiMap<T>, key: string, value: T) {
+    function multiMapRemove<K, V>(this: MultiMap<K, V>, key: K, value: V) {
         const values = this.get(key);
         if (values) {
             unorderedRemoveItem(values, value);
@@ -1412,7 +1482,7 @@ namespace ts {
     }
 
     export function createUnderscoreEscapedMultiMap<T>(): UnderscoreEscapedMultiMap<T> {
-        return createMultiMap<T>() as UnderscoreEscapedMultiMap<T>;
+        return createMultiMap() as UnderscoreEscapedMultiMap<T>;
     }
 
     /**
@@ -1653,7 +1723,7 @@ namespace ts {
      * Case-insensitive comparisons compare both strings one code-point at a time using the integer
      * value of each code-point after applying `toUpperCase` to each string. We always map both
      * strings to their upper-case form as some unicode characters do not properly round-trip to
-     * lowercase (such as `áºž` (German sharp capital s)).
+     * lowercase (such as `ẞ` (German sharp capital s)).
      */
     export function compareStringsCaseInsensitive(a: string, b: string) {
         if (a === b) return Comparison.EqualTo;
@@ -1725,7 +1795,7 @@ namespace ts {
             //
             // For case insensitive comparisons we always map both strings to their
             // upper-case form as some unicode characters do not properly round-trip to
-            // lowercase (such as `áºž` (German sharp capital s)).
+            // lowercase (such as `Ã¡ÂºÅ¾` (German sharp capital s)).
             return (a, b) => compareWithCallback(a, b, compareDictionaryOrder);
 
             function compareDictionaryOrder(a: string, b: string) {

@@ -150,7 +150,7 @@ node_modules/lodash/_createWrap.js(97,100): error TS2532: Object is possibly 'un
 node_modules/lodash/_createWrap.js(98,28): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
 node_modules/lodash/_createWrap.js(100,44): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[func: TimerHandler, bitmask: number, thisArg?: any, partials?: any[] | undefined, holders?: any[] | undefined, partialsRight?: any[] | undefined, holdersRight?: any[] | undefined, argPos?: any[] | undefined, ary?: number | undefined, arity?: number | undefined]'.
-  Type 'any[]' is missing the following properties from type '[func: TimerHandler, bitmask: number, thisArg?: any, partials?: any[] | undefined, holders?: any[] | undefined, partialsRight?: any[] | undefined, holdersRight?: any[] | undefined, argPos?: any[] | undefined, ary?: number | undefined, arity?: number | undefined]': 0, 1
+  Target requires 2 element(s) but source may have fewer.
 node_modules/lodash/_createWrap.js(103,51): error TS2345: Argument of type 'TimerHandler' is not assignable to parameter of type 'Function'.
   Type 'string' is not assignable to type 'Function'.
 node_modules/lodash/_customDefaultsMerge.js(22,35): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.

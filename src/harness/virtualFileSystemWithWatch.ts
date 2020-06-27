@@ -36,7 +36,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         currentDirectory?: string;
         newLine?: string;
         windowsStyleRoot?: string;
-        environmentVariables?: Map<string>;
+        environmentVariables?: Map<string, string>;
         runWithoutRecursiveWatches?: boolean;
         runWithFallbackPolling?: boolean;
     }
@@ -122,12 +122,12 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    function createWatcher<T>(map: MultiMap<T>, path: string, callback: T): FileWatcher {
+    function createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): FileWatcher {
         map.add(path, callback);
         return { close: () => map.remove(path, callback) };
     }
 
-    function getDiffInKeys<T>(map: Map<T>, expectedKeys: readonly string[]) {
+    function getDiffInKeys<T>(map: Map<string, T>, expectedKeys: readonly string[]) {
         if (map.size === expectedKeys.length) {
             return "";
         }
@@ -154,19 +154,19 @@ interface Array<T> { length: number; [n: number]: T; }`
         return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
     }
 
-    export function verifyMapSize(caption: string, map: Map<any>, expectedKeys: readonly string[]) {
+    export function verifyMapSize(caption: string, map: Map<string, any>, expectedKeys: readonly string[]) {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
     }
 
-    export type MapValueTester<T, U> = [Map<U[]> | undefined, (value: T) => U];
+    export type MapValueTester<T, U> = [Map<string, U[]> | undefined, (value: T) => U];
 
-    export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<T>, expectedKeys: ReadonlyMap<number>, valueTester?: MapValueTester<T,U>): void;
-    export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<T>, expectedKeys: readonly string[], eachKeyCount: number, valueTester?: MapValueTester<T, U>): void;
-    export function checkMap<T>(caption: string, actual: Map<T> | MultiMap<T>, expectedKeys: readonly string[], eachKeyCount: undefined): void;
+    export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: ReadonlyMap<string, number>, valueTester?: MapValueTester<T,U>): void;
+    export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: number, valueTester?: MapValueTester<T, U>): void;
+    export function checkMap<T>(caption: string, actual: Map<string, T> | MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: undefined): void;
     export function checkMap<T, U = undefined>(
         caption: string,
-        actual: Map<T> | MultiMap<T>,
-        expectedKeysMapOrArray: ReadonlyMap<number> | readonly string[],
+        actual: Map<string, T> | MultiMap<string, T>,
+        expectedKeysMapOrArray: ReadonlyMap<string, number> | readonly string[],
         eachKeyCountOrValueTester?: number | MapValueTester<T, U>,
         valueTester?: MapValueTester<T, U>) {
         const expectedKeys = isArray(expectedKeysMapOrArray) ? arrayToMap(expectedKeysMapOrArray, s => s, () => eachKeyCountOrValueTester as number) : expectedKeysMapOrArray;
@@ -179,10 +179,10 @@ interface Array<T> { length: number; [n: number]: T; }`
             assert.isTrue(actual.has(name), `${caption}: expected to contain ${name}, actual keys: ${arrayFrom(actual.keys())}`);
             // Check key information only if eachKeyCount is provided
             if (!isArray(expectedKeysMapOrArray) || eachKeyCountOrValueTester !== undefined) {
-                assert.equal((actual as MultiMap<T>).get(name)!.length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
+                assert.equal((actual as MultiMap<string, T>).get(name)!.length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
                 if (expectedValues) {
                     assert.deepEqual(
-                        (actual as MultiMap<T>).get(name)!.map(valueMapper),
+                        (actual as MultiMap<string, T>).get(name)!.map(valueMapper),
                         expectedValues.get(name),
                         `${caption}:: expected values mismatch for ${name}`
                     );
@@ -203,9 +203,9 @@ interface Array<T> { length: number; [n: number]: T; }`
         fileName: string;
         pollingInterval: PollingInterval;
     }
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number>, expectedDetails?: Map<WatchFileDetails[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedDetails?: Map<WatchFileDetails[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number> | readonly string[], eachFileWatchCountOrExpectedDetails?: number | Map<WatchFileDetails[]>, expectedDetails?: Map<WatchFileDetails[]>) {
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<string, number>, expectedDetails?: Map<string, WatchFileDetails[]>): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedDetails?: Map<string, WatchFileDetails[]>): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<string, number> | readonly string[], eachFileWatchCountOrExpectedDetails?: number | Map<string, WatchFileDetails[]>, expectedDetails?: Map<string, WatchFileDetails[]>) {
         if (!isNumber(eachFileWatchCountOrExpectedDetails)) expectedDetails = eachFileWatchCountOrExpectedDetails;
         if (isArray(expectedFiles)) {
             checkMap(
@@ -235,9 +235,9 @@ interface Array<T> { length: number; [n: number]: T; }`
         fallbackPollingInterval: PollingInterval;
         fallbackOptions: WatchOptions | undefined;
     }
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number>, recursive: boolean, expectedDetails?: Map<WatchDirectoryDetails[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedDetails?: Map<WatchDirectoryDetails[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedDetails?: boolean | Map<WatchDirectoryDetails[]>, expectedDetails?: Map<WatchDirectoryDetails[]>) {
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<string, number>, recursive: boolean, expectedDetails?: Map<string, WatchDirectoryDetails[]>): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedDetails?: Map<string, WatchDirectoryDetails[]>): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<string, number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedDetails?: boolean | Map<string, WatchDirectoryDetails[]>, expectedDetails?: Map<string, WatchDirectoryDetails[]>) {
         if (typeof recursiveOrExpectedDetails !== "boolean") expectedDetails = recursiveOrExpectedDetails;
         if (isArray(expectedDirectories)) {
             checkMap(
@@ -368,7 +368,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[];
         newLine?: string;
         useWindowsStylePaths?: boolean;
-        environmentVariables?: Map<string>;
+        environmentVariables?: Map<string, string>;
     }
 
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
@@ -376,7 +376,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         private readonly output: string[] = [];
 
-        private fs: Map<FSEntry> = createMap<FSEntry>();
+        private fs: Map<Path, FSEntry> = new Map();
         private time = timeIncrements;
         getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
@@ -384,14 +384,14 @@ interface Array<T> { length: number; [n: number]: T; }`
         private immediateCallbacks = new Callbacks();
         readonly screenClears: number[] = [];
 
-        readonly watchedFiles = createMultiMap<TestFileWatcher>();
-        readonly fsWatches = createMultiMap<TestFsWatcher>();
-        readonly fsWatchesRecursive = createMultiMap<TestFsWatcher>();
+        readonly watchedFiles = createMultiMap<Path, TestFileWatcher>();
+        readonly fsWatches = createMultiMap<Path, TestFsWatcher>();
+        readonly fsWatchesRecursive = createMultiMap<Path, TestFsWatcher>();
         runWithFallbackPolling: boolean;
         public readonly useCaseSensitiveFileNames: boolean;
         public readonly newLine: string;
         public readonly windowsStyleRoot?: string;
-        private readonly environmentVariables?: Map<string>;
+        private readonly environmentVariables?: Map<string, string>;
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
@@ -750,7 +750,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
         }
 
-        private fsWatchCallback(map: MultiMap<TestFsWatcher>, fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
+        private fsWatchCallback(map: MultiMap<Path, TestFsWatcher>, fullPath: string, eventName: "rename" | "change", entryFullPath?: string) {
             invokeWatcherCallbacks(map.get(this.toPath(fullPath)), ({ cb }) => cb(eventName, entryFullPath ? this.getRelativePathToDirectory(fullPath, entryFullPath) : ""));
         }
 
@@ -1042,8 +1042,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.clearOutput();
         }
 
-        snap(): Map<FSEntry> {
-            const result = new Map<FSEntry>();
+        snap(): Map<Path, FSEntry> {
+            const result = new Map<Path, FSEntry>();
             this.fs.forEach((value, key) => {
                 const cloneValue = clone(value);
                 if (isFsFolder(cloneValue)) {
@@ -1055,8 +1055,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             return result;
         }
 
-        writtenFiles?: Map<number>;
-        diff(baseline: string[], base: Map<FSEntry> = new Map()) {
+        writtenFiles?: Map<Path, number>;
+        diff(baseline: string[], base: Map<string, FSEntry> = new Map()) {
             this.fs.forEach(newFsEntry => {
                 diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, this.writtenFiles);
             });
@@ -1115,7 +1115,7 @@ interface Array<T> { length: number; [n: number]: T; }`
     function diffFsSymLink(baseline: string[], fsEntry: FsSymLink) {
         baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})`);
     }
-    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, writtenFiles: Map<any> | undefined): void {
+    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, writtenFiles: Map<string, any> | undefined): void {
         const file = newFsEntry && newFsEntry.fullPath;
         if (isFsFile(oldFsEntry)) {
             if (isFsFile(newFsEntry)) {
@@ -1192,7 +1192,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         };
     }
 
-    function serializeMultiMap<T, U>(baseline: string[], caption: string, multiMap: MultiMap<T>, valueMapper: (value: T) => U) {
+    function serializeMultiMap<T, U>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, valueMapper: (value: T) => U) {
         baseline.push(`${caption}::`);
         multiMap.forEach((values, key) => {
             baseline.push(`${key}:`);
@@ -1208,12 +1208,12 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: Map<number>; };
+    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: Map<Path, number>; };
 
     export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
         const host = inputHost as TestServerHostTrackingWrittenFiles;
         const originalWriteFile = host.writeFile;
-        host.writtenFiles = createMap<number>();
+        host.writtenFiles = new Map<Path, number>();
         host.writeFile = (fileName, content) => {
             originalWriteFile.call(host, fileName, content);
             const path = host.toFullPath(fileName);
