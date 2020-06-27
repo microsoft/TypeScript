@@ -4592,9 +4592,15 @@ namespace ts {
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
         /* @internal */ assignmentDeclarationMembers?: Map<Declaration>; // detected late-bound assignment declarations associated with the symbol
-        /* @internal */ allSignaturesDeprecated?: boolean; // All signatures have the deprecated tag
-        /* @internal */ typeDeprecated?: boolean;
-        /* @internal */ valueDeprecated?: boolean;
+        /* @internal */ deprecatedFlags?: DeprecatedFlags;
+    }
+
+    export enum DeprecatedFlags {
+        None = 0,
+        Value = 1 << 0,
+        Type = 1 << 1,
+        Signature = 1 << 2,
+        AllSignature = 1 << 3
     }
 
     /* @internal */

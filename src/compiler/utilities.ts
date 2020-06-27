@@ -918,13 +918,59 @@ namespace ts {
         }
     }
 
+    export function isTypeDeclaration(decl: Declaration): boolean {
+        switch (decl.kind) {
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.TypeParameter:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function getDeprecatedFlags(symbol: Symbol) {
+        if (symbol.flags & SymbolFlags.Deprecated) {
+            if (symbol.deprecatedFlags === undefined) {
+                let deprecatedFlags = DeprecatedFlags.None;
+                let allSignatureLikeDeprecated = true;
+                forEach(symbol.declarations, decl => {
+                    const isTypeDecl = isTypeDeclaration(decl);
+                    const hasDeprecated = decl.flags & NodeFlags.Deprecated;
+                    if (hasDeprecated && symbol.flags & SymbolFlags.Type && isTypeDecl) {
+                        deprecatedFlags |= DeprecatedFlags.Type;
+                    }
+
+                    if ((symbol.flags & (SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method)) && isFunctionLike(decl)) {
+                        if (hasDeprecated) {
+                            deprecatedFlags |= DeprecatedFlags.Signature;
+                        }
+                        else {
+                            allSignatureLikeDeprecated = false;
+                        }
+                    }
+                    else if (hasDeprecated && symbol.flags & SymbolFlags.Value && !isTypeDecl) {
+                        deprecatedFlags |= DeprecatedFlags.Value;
+                    }
+                });
+
+                if (deprecatedFlags & DeprecatedFlags.Signature && allSignatureLikeDeprecated) {
+                    deprecatedFlags |= DeprecatedFlags.AllSignature;
+                }
+
+                symbol.deprecatedFlags = deprecatedFlags;
+            }
+            return symbol.deprecatedFlags;
+        }
+        return DeprecatedFlags.None;
+    }
 
     export function allSignatureOrValueDeprecatedForSymbol(symbol: Symbol) {
-        const functionLikeFlags = SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method;
-        return symbol.flags & SymbolFlags.Deprecated && (
-            (symbol.flags & functionLikeFlags) && symbol.allSignaturesDeprecated ||
-            (symbol.flags & ~functionLikeFlags) && symbol.valueDeprecated
-        );
+        const deprecatedFlags = getDeprecatedFlags(symbol);
+        return deprecatedFlags & (DeprecatedFlags.Value | DeprecatedFlags.AllSignature);
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {

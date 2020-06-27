@@ -11,8 +11,8 @@
 //// /** @deprecated */
 //// declare function b(): void
 //// declare const tb: b;
-//// b
-//// [|b()|];
+//// [|b|]
+//// [|b|]();
 
 //// interface c { }
 //// /** @deprecated */
@@ -41,21 +41,27 @@ verify.getSuggestionDiagnostics([
         reportsDeprecated: true,
     },
     {
-        message: "'(): void' is deprecated",
+        message: "'b' is deprecated",
         code: 6385,
         range: ranges[1],
         reportsDeprecated: true,
     },
     {
-        message: "'(): void' is deprecated",
+        message: "'b' is deprecated",
         code: 6385,
         range: ranges[2],
         reportsDeprecated: true,
     },
     {
-        message: "'d' is deprecated",
+        message: "'(): void' is deprecated",
         code: 6385,
         range: ranges[3],
+        reportsDeprecated: true,
+    },
+    {
+        message: "'d' is deprecated",
+        code: 6385,
+        range: ranges[4],
         reportsDeprecated: true,
     }
 ])

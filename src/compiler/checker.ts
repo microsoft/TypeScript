@@ -13286,7 +13286,8 @@ namespace ts {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
                     if (accessNode && (prop.flags & SymbolFlags.Deprecated)) {
-                        if (isIndexedAccessTypeNode(accessNode) && prop.typeDeprecated || allSignatureOrValueDeprecatedForSymbol(prop)) {
+                        const deprecatedFlags = getDeprecatedFlags(prop);
+                        if (isIndexedAccessTypeNode(accessNode) && (deprecatedFlags & DeprecatedFlags.Type) || allSignatureOrValueDeprecatedForSymbol(prop)) {
                             const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                             errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                         }
@@ -27372,7 +27373,7 @@ namespace ts {
             }
 
             if (signature.declaration && (signature.declaration.flags & NodeFlags.Deprecated) && (
-                !signature.declaration.symbol.allSignaturesDeprecated ||
+                !(getDeprecatedFlags(signature.declaration.symbol) & DeprecatedFlags.AllSignature) ||
                 isCallSignatureDeclaration(signature.declaration) || isConstructSignatureDeclaration(signature.declaration)
             )) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, signatureToString(signature));
@@ -30821,7 +30822,7 @@ namespace ts {
                 }
                 const symbol = getNodeLinks(node).resolvedSymbol;
                 if (symbol) {
-                    if ((symbol.flags & SymbolFlags.Deprecated) && symbol.typeDeprecated) {
+                    if (getDeprecatedFlags(symbol) & DeprecatedFlags.Type) {
                         const diagLocation = isTypeReferenceNode(node) && isQualifiedName(node.typeName) ? node.typeName.right : node;
                         errorOrSuggestion(/* isError */ false, diagLocation, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                     }
