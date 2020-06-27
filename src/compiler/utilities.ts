@@ -952,7 +952,7 @@ namespace ts {
                 });
 
                 if (deprecatedFlags & DeprecatedFlags.Signature && allSignatureLikeDeprecated) {
-                    deprecatedFlags &= ~DeprecatedFlags.Signature;
+                    deprecatedFlags &= DeprecatedFlags.SignatureExcludes;
                     deprecatedFlags |= DeprecatedFlags.Value;
                 }
 
