@@ -442,8 +442,8 @@ namespace ts {
      * This assumes that any module id will have the same resolution for sibling files located in the same folder.
      */
     export interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
-        getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<ResolvedModuleWithFailedLookupLocations>;
-        /*@internal*/ directoryToModuleNameMap: CacheWithRedirects<Map<ResolvedModuleWithFailedLookupLocations>>;
+        getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<string, ResolvedModuleWithFailedLookupLocations>;
+        /*@internal*/ directoryToModuleNameMap: CacheWithRedirects<Map<string, ResolvedModuleWithFailedLookupLocations>>;
     }
 
     /**
@@ -472,18 +472,18 @@ namespace ts {
 
     /*@internal*/
     export interface CacheWithRedirects<T> {
-        ownMap: Map<T>;
-        redirectsMap: Map<Map<T>>;
-        getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<T>;
+        ownMap: Map<string, T>;
+        redirectsMap: Map<Path, Map<string, T>>;
+        getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<string, T>;
         clear(): void;
         setOwnOptions(newOptions: CompilerOptions): void;
-        setOwnMap(newOwnMap: Map<T>): void;
+        setOwnMap(newOwnMap: Map<string, T>): void;
     }
 
     /*@internal*/
     export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWithRedirects<T> {
-        let ownMap: Map<T> = createMap();
-        const redirectsMap: Map<Map<T>> = createMap();
+        let ownMap: Map<string, T> = createMap();
+        const redirectsMap = new Map<Path, Map<string, T>>();
         return {
             ownMap,
             redirectsMap,
@@ -497,7 +497,7 @@ namespace ts {
             options = newOptions;
         }
 
-        function setOwnMap(newOwnMap: Map<T>) {
+        function setOwnMap(newOwnMap: Map<string, T>) {
             ownMap = newOwnMap;
         }
 
@@ -523,7 +523,7 @@ namespace ts {
 
     /*@internal*/
     export function createModuleResolutionCacheWithMaps(
-        directoryToModuleNameMap: CacheWithRedirects<Map<ResolvedModuleWithFailedLookupLocations>>,
+        directoryToModuleNameMap: CacheWithRedirects<Map<string, ResolvedModuleWithFailedLookupLocations>>,
         moduleNameToDirectoryMap: CacheWithRedirects<PerModuleNameCache>,
         currentDirectory: string,
         getCanonicalFileName: GetCanonicalFileName): ModuleResolutionCache {
@@ -532,7 +532,7 @@ namespace ts {
 
         function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
             const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
-            return getOrCreateCache<Map<ResolvedModuleWithFailedLookupLocations>>(directoryToModuleNameMap, redirectedReference, path, createMap);
+            return getOrCreateCache<Map<string, ResolvedModuleWithFailedLookupLocations>>(directoryToModuleNameMap, redirectedReference, path, createMap);
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string, redirectedReference?: ResolvedProjectReference): PerModuleNameCache {

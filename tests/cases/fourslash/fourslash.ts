@@ -243,6 +243,7 @@ declare namespace FourSlashInterface {
         applicableRefactorAvailableForRange(): void;
 
         refactorAvailable(name: string, actionName?: string): void;
+        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -585,6 +586,7 @@ declare namespace FourSlashInterface {
         range?: Range;
         code: number;
         reportsUnnecessary?: true;
+        reportsDeprecated?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;
@@ -619,6 +621,7 @@ declare namespace FourSlashInterface {
         readonly kind?: string;
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;
+        readonly isPackageJsonImport?: boolean;
 
         // details
         readonly text?: string;
@@ -682,6 +685,8 @@ declare namespace FourSlashInterface {
          */
         triggerCharacter?: string,
     }
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     export interface VerifyCodeFixAvailableOptions {
         readonly description: string;

@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/discord.js/typings/index.d.ts(18,30): error TS7016: Could not find a declaration file for module 'ws'. '../../../tests/cases/user/discord.js/node_modules/ws/index.js' implicitly has an 'any' type.
   Try `npm install @types/ws` if it exists or add a new declaration (.d.ts) file containing `declare module 'ws';`

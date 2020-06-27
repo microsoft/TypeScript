@@ -261,4 +261,16 @@ declare namespace Intl {
             options?: RelativeTimeFormatOptions,
         ): BCP47LanguageTag[];
     };
+
+    interface NumberFormatOptions {
+        notation?: string;
+        unit?: string;
+        unitDisplay?: string;
+    }
+
+    interface ResolvedNumberFormatOptions {
+        notation?: string;
+        unit?: string;
+        unitDisplay?: string;
+    }
 }

@@ -92,39 +92,39 @@ void p3.result.three;
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.d.ts]
 export declare type Key<U> = keyof U;
 export declare type Value<K extends Key<U>, U> = U[K];
-export declare const updateIfChanged: <T>(t: T) => (<K extends keyof T>(key: K) => (<K_1 extends keyof T[K]>(key: K_1) => (<K_2 extends keyof T[K][K_1]>(key: K_2) => (<K_3 extends keyof T[K][K_1][K_2]>(key: K_3) => (<K_4 extends keyof T[K][K_1][K_2][K_3]>(key: K_4) => (<K_5 extends keyof T[K][K_1][K_2][K_3][K_4]>(key: K_5) => (<K_6 extends keyof T[K][K_1][K_2][K_3][K_4][K_5]>(key: K_6) => (<K_7 extends keyof T[K][K_1][K_2][K_3][K_4][K_5][K_6]>(key: K_7) => (<K_8 extends keyof T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7]>(key: K_8) => (<K_9 extends keyof T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8]>(key: K_9) => (<K_10 extends keyof T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8][K_9]>(key: K_10) => any & {
-    map: (updater: (u: T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8][K_9][K_10]) => T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8][K_9][K_10]) => T;
-    set: (newU: T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8][K_9][K_10]) => T;
+export declare const updateIfChanged: <T>(t: T) => (<K extends keyof T>(key: K) => (<K_1 extends keyof Value<K, T>>(key: K_1) => (<K_2 extends keyof Value<K_1, Value<K, T>>>(key: K_2) => (<K_3 extends keyof Value<K_2, Value<K_1, Value<K, T>>>>(key: K_3) => (<K_4 extends keyof Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>(key: K_4) => (<K_5 extends keyof Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>(key: K_5) => (<K_6 extends keyof Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>(key: K_6) => (<K_7 extends keyof Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>(key: K_7) => (<K_8 extends keyof Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>(key: K_8) => (<K_9 extends keyof Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>(key: K_9) => (<K_10 extends keyof Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>(key: K_10) => any & {
+    map: (updater: (u: Value<K_10, Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>) => Value<K_10, Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>) => T;
+    set: (newU: Value<K_10, Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>) => T;
 }) & {
-    map: (updater: (u: T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8][K_9]) => T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8][K_9]) => T;
-    set: (newU: T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8][K_9]) => T;
+    map: (updater: (u: Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>) => Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>) => T;
+    set: (newU: Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>) => T;
 }) & {
-    map: (updater: (u: T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8]) => T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8]) => T;
-    set: (newU: T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7][K_8]) => T;
+    map: (updater: (u: Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>) => Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>) => T;
+    set: (newU: Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>) => T;
 }) & {
-    map: (updater: (u: T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7]) => T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7]) => T;
-    set: (newU: T[K][K_1][K_2][K_3][K_4][K_5][K_6][K_7]) => T;
+    map: (updater: (u: Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>) => Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>) => T;
+    set: (newU: Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>) => T;
 }) & {
-    map: (updater: (u: T[K][K_1][K_2][K_3][K_4][K_5][K_6]) => T[K][K_1][K_2][K_3][K_4][K_5][K_6]) => T;
-    set: (newU: T[K][K_1][K_2][K_3][K_4][K_5][K_6]) => T;
+    map: (updater: (u: Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>) => Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>) => T;
+    set: (newU: Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>) => T;
 }) & {
-    map: (updater: (u: T[K][K_1][K_2][K_3][K_4][K_5]) => T[K][K_1][K_2][K_3][K_4][K_5]) => T;
-    set: (newU: T[K][K_1][K_2][K_3][K_4][K_5]) => T;
+    map: (updater: (u: Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>) => Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>) => T;
+    set: (newU: Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>) => T;
 }) & {
-    map: (updater: (u: T[K][K_1][K_2][K_3][K_4]) => T[K][K_1][K_2][K_3][K_4]) => T;
-    set: (newU: T[K][K_1][K_2][K_3][K_4]) => T;
+    map: (updater: (u: Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>) => Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>) => T;
+    set: (newU: Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>) => T;
 }) & {
-    map: (updater: (u: T[K][K_1][K_2][K_3]) => T[K][K_1][K_2][K_3]) => T;
-    set: (newU: T[K][K_1][K_2][K_3]) => T;
+    map: (updater: (u: Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>) => Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>) => T;
+    set: (newU: Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>) => T;
 }) & {
-    map: (updater: (u: T[K][K_1][K_2]) => T[K][K_1][K_2]) => T;
-    set: (newU: T[K][K_1][K_2]) => T;
+    map: (updater: (u: Value<K_2, Value<K_1, Value<K, T>>>) => Value<K_2, Value<K_1, Value<K, T>>>) => T;
+    set: (newU: Value<K_2, Value<K_1, Value<K, T>>>) => T;
 }) & {
-    map: (updater: (u: T[K][K_1]) => T[K][K_1]) => T;
-    set: (newU: T[K][K_1]) => T;
+    map: (updater: (u: Value<K_1, Value<K, T>>) => Value<K_1, Value<K, T>>) => T;
+    set: (newU: Value<K_1, Value<K, T>>) => T;
 }) & {
-    map: (updater: (u: T[K]) => T[K]) => T;
-    set: (newU: T[K]) => T;
+    map: (updater: (u: Value<K, T>) => Value<K, T>) => T;
+    set: (newU: Value<K, T>) => T;
 }) & {
     map: (updater: (u: T) => T) => T;
     set: (newU: T) => T;

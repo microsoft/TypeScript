@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w /a/app.ts
+Input::
 //// [/a/app.ts]
 var x = 1;
 var y = 2;
@@ -16,12 +16,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/app.js]
-var x = 1;
-var y = 2;
 
-
-
+/a/lib/tsc.js --w /a/app.ts
 Output::
 >> Screen clear
 [[90m12:00:11 AM[0m] Starting compilation in watch mode...
@@ -53,18 +49,19 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/app.js]
+var x = 1;
+var y = 2;
+
+
+
 Change:: Append a line
 
+Input::
 //// [/a/app.ts]
 var x = 1;
 var y = 2;
 var z = 3;
-
-//// [/a/app.js]
-var x = 1;
-var y = 2;
-var z = 3;
-
 
 
 Output::
@@ -97,3 +94,10 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/app.js]
+var x = 1;
+var y = 2;
+var z = 3;
+
+

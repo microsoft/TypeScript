@@ -1,5 +1,4 @@
 === tests/cases/compiler/awaitUnionPromise.ts ===
-/// @target: es2015
 // https://github.com/Microsoft/TypeScript/issues/18186
 
 class AsyncEnumeratorDone { };
@@ -59,3 +58,4 @@ async function main() {
 >x : IAsyncEnumerator<number>
 >next4 : () => Promise<number | { x: string; }>
 }
+

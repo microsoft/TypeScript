@@ -1,4 +1,4 @@
-/a/lib/tsc.js -i
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -22,6 +22,31 @@ console.log(Config.value);
 
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true}}
+
+
+/a/lib/tsc.js -i
+Output::
+
+
+Program root files: ["/users/username/projects/project/globals.d.ts","/users/username/projects/project/index.ts"]
+Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/globals.d.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/globals.d.ts
+/users/username/projects/project/index.ts
+
+WatchedFiles::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/index.js]
 console.log(Config.value);
@@ -63,19 +88,30 @@ console.log(Config.value);
 }
 
 
+Change::
+
+Input::
+//// [/users/username/projects/project/globals.d.ts] deleted
+
 Output::
+[96mindex.ts[0m:[93m1[0m:[93m13[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Config'.
+
+[7m1[0m console.log(Config.value);
+[7m [0m [91m            ~~~~~~[0m
 
 
-Program root files: ["/users/username/projects/project/globals.d.ts","/users/username/projects/project/index.ts"]
+
+Found 1 error.
+
+
+
+Program root files: ["/users/username/projects/project/index.ts"]
 Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/users/username/projects/project/globals.d.ts
 /users/username/projects/project/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/globals.d.ts
 /users/username/projects/project/index.ts
 
 WatchedFiles::
@@ -84,9 +120,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-exitCode:: ExitStatus.Success
-
-Change::
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/users/username/projects/project/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -130,33 +164,3 @@ Change::
   "version": "FakeTSVersion"
 }
 
-//// [/users/username/projects/project/globals.d.ts] deleted
-
-Output::
-[96mindex.ts[0m:[93m1[0m:[93m13[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Config'.
-
-[7m1[0m console.log(Config.value);
-[7m [0m [91m            ~~~~~~[0m
-
-
-
-Found 1 error.
-
-
-
-Program root files: ["/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/index.ts
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

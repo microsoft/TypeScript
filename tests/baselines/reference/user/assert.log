@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/assert/test.js(25,5): error TS2367: This condition will always return 'false' since the types 'string | undefined' and 'boolean' have no overlap.
 node_modules/assert/test.js(39,5): error TS2593: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.

@@ -5,7 +5,7 @@ namespace ts.projectSystem {
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
         throttleLimit?: number;
-        typesRegistry?: Map<MapLike<string>>;
+        typesRegistry?: Map<string, MapLike<string>>;
     }
 
     class Installer extends TestTypingsInstaller {
@@ -130,6 +130,7 @@ namespace ts.projectSystem {
             })();
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "none" } });
             projectService.openClientFile(file1.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -935,7 +936,7 @@ namespace ts.projectSystem {
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
-            host.reloadFS([f, fixedPackageJson]);
+            host.writeFile(fixedPackageJson.path, fixedPackageJson.content);
             host.checkTimeoutQueueLengthAndRun(2); // To refresh the project and refresh inferred projects
             // expected install request
             installer.installAll(/*expectedCount*/ 1);

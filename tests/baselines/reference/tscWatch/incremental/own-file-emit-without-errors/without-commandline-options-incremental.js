@@ -1,4 +1,4 @@
-/a/lib/tsc.js -i
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -20,6 +20,31 @@ const y = 20;
 
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true}}
+
+
+/a/lib/tsc.js -i
+Output::
+
+
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
+Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+WatchedFiles::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/file1.js]
 var x = 10;
@@ -65,6 +90,13 @@ var y = 20;
 }
 
 
+Change::
+
+Input::
+//// [/users/username/projects/project/file2.ts]
+const z = 10;
+
+
 Output::
 
 
@@ -87,11 +119,6 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.Success
-
-Change::
-
-//// [/users/username/projects/project/file2.ts]
-const z = 10;
 
 //// [/users/username/projects/project/file1.js] file written with same contents
 //// [/users/username/projects/project/file2.js]
@@ -133,26 +160,3 @@ var z = 10;
   "version": "FakeTSVersion"
 }
 
-
-Output::
-
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.Success

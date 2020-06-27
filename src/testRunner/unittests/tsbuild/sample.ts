@@ -65,12 +65,12 @@ namespace ts {
         });
 
         describe("clean builds", () => {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "removes all files it built",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--clean"],
-                incrementalScenarios: [noChangeRun]
+                incrementalScenarios: noChangeOnlyRuns
             });
 
             it("cleans till project specified", () => {
@@ -98,12 +98,12 @@ namespace ts {
         });
 
         describe("force builds", () => {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "always builds under with force option",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--force"],
-                incrementalScenarios: [noChangeRun]
+                incrementalScenarios: noChangeOnlyRuns
             });
         });
 
@@ -201,7 +201,7 @@ namespace ts {
                 );
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "rebuilds when extended config file changes",
                 fs: () => projFs,
@@ -367,19 +367,19 @@ export class someClass { }`),
             {
                 buildKind: BuildKind.IncrementalDtsUnchanged,
                 modifyFs: fs => appendText(fs, "/src/core/index.ts", `
-class someClass { }`),
+class someClass2 { }`),
             }
         ];
 
         describe("lists files", () => {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "listFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listFiles"],
                 incrementalScenarios: coreChanges
             });
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "listEmittedFiles",
                 fs: () => projFs,
@@ -389,7 +389,7 @@ class someClass { }`),
         });
 
         describe("emit output", () => {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "sample",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -419,7 +419,7 @@ class someClass { }`),
                 baselineReadFileCalls: true
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "when declaration option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -436,7 +436,7 @@ class someClass { }`),
                 }],
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "when target option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -462,7 +462,7 @@ class someClass { }`),
                 }],
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "when module option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -479,7 +479,7 @@ class someClass { }`),
                 }],
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "when esModuleInterop option changes",
                 fs: () => projFs,
                 scenario: "sample1",

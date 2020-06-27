@@ -1,5 +1,5 @@
-tests/cases/conformance/salsa/use.js(5,5): error TS2345: Argument of type '"nope"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/salsa/use.js(6,5): error TS2345: Argument of type '"not really"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/salsa/use.js(5,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/salsa/use.js(6,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
 ==== tests/cases/conformance/salsa/use.js (2 errors) ====
@@ -9,10 +9,10 @@ tests/cases/conformance/salsa/use.js(6,5): error TS2345: Argument of type '"not 
     var b = new mod.B()
     a.m('nope')
         ~~~~~~
-!!! error TS2345: Argument of type '"nope"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     b.m('not really')
         ~~~~~~~~~~~~
-!!! error TS2345: Argument of type '"not really"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
 ==== tests/cases/conformance/salsa/types.d.ts (0 errors) ====
     declare function require(name: string): any;

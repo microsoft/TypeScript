@@ -1,4 +1,4 @@
-/a/lib/tsc.js -i
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -41,6 +41,35 @@ export { C } from "./c";
 
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"target":"es5","module":"commonjs","declaration":true,"emitDeclarationOnly":true}}
+
+
+/a/lib/tsc.js -i
+Output::
+
+
+Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
+Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+WatchedFiles::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/c.d.ts]
 import { A } from "./a";
@@ -151,6 +180,18 @@ export { C } from "./c";
 }
 
 
+Change::
+
+Input::
+//// [/users/username/projects/project/a.ts]
+import { B } from "./b";
+export interface A {
+    b: B;
+    foo: any;
+}
+
+
+
 Output::
 
 
@@ -164,7 +205,6 @@ Program files::
 /users/username/projects/project/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
 /users/username/projects/project/c.ts
 /users/username/projects/project/b.ts
 /users/username/projects/project/a.ts
@@ -177,16 +217,6 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.Success
-
-Change::
-
-//// [/users/username/projects/project/a.ts]
-import { B } from "./b";
-export interface A {
-    b: B;
-    foo: any;
-}
-
 
 //// [/users/username/projects/project/c.d.ts] file written with same contents
 //// [/users/username/projects/project/b.d.ts] file written with same contents
@@ -280,29 +310,3 @@ export interface A {
   "version": "FakeTSVersion"
 }
 
-
-Output::
-
-
-Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.Success

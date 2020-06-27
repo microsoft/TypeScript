@@ -159,7 +159,7 @@ declare var React: any;
 > : any
 
 === tests/cases/conformance/jsx/18.tsx ===
-var x = <div>one</div><div>two</div>;;
+var x = /* Leading trivia */ <div>one</div><div>two</div>;;
 >x : any
 ><div>one</div><div>two</div> : any
 ><div>one</div> : any

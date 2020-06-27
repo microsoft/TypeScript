@@ -593,7 +593,7 @@ namespace ts.SignatureHelp {
         const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!] : [];
 
         return checker.getExpandedParameters(candidateSignature).map(paramList => {
-            const params = createNodeArray([...thisParameter, ...map(paramList, param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
+            const params = factory.createNodeArray([...thisParameter, ...map(paramList, param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
             const parameterParts = mapToDisplayParts(writer => {
                 printer.writeList(ListFormat.CallExpressionArguments, params, sourceFile, writer);
             });
@@ -605,8 +605,8 @@ namespace ts.SignatureHelp {
         const isVariadic = checker.hasEffectiveRestParameter(candidateSignature);
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
-            if (candidateSignature.typeParameters?.length) {
-                const args = createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));
+                const args = factory.createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));
+            if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
         });

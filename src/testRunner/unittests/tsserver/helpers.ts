@@ -165,7 +165,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies });
     }
 
-    export function createTypesRegistry(...list: string[]): Map<MapLike<string>> {
+    export function createTypesRegistry(...list: string[]): Map<string, MapLike<string>> {
         const versionMap = {
             "latest": "1.3.0",
             "ts2.0": "1.0.0",
@@ -204,6 +204,7 @@ namespace ts.projectSystem {
         category: DiagnosticCategory;
         code: number;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
@@ -488,7 +489,7 @@ namespace ts.projectSystem {
     }
 
     export function checkOpenFiles(projectService: server.ProjectService, expectedFiles: File[]) {
-        checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
+        checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path)!.fileName), expectedFiles.map(file => file.path));
     }
 
     export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[], additionInfo?: string) {
@@ -699,8 +700,8 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
-        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
+    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[], reportsDeprecated?: {}): protocol.Diagnostic {
+        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, reportsDeprecated, relatedInformation, source: undefined };
     }
 
     export function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {

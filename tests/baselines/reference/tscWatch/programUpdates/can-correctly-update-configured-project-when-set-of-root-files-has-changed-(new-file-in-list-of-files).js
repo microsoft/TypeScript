@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/f1.ts]
 let x = 1
 
@@ -21,11 +21,8 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/tsconfig.json]
 {"compilerOptions":{},"files":["f1.ts"]}
 
-//// [/a/b/f1.js]
-var x = 1;
 
-
-
+/a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
@@ -61,15 +58,16 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/f1.js]
+var x = 1;
+
+
+
 Change:: Modify config to make f2 as root too
 
+Input::
 //// [/a/b/tsconfig.json]
 {"compilerOptions":{},"files":["f1.ts","f2.ts"]}
-
-//// [/a/b/f1.js] file written with same contents
-//// [/a/b/f2.js]
-var y = 1;
-
 
 
 Output::
@@ -110,3 +108,9 @@ FsWatchesRecursive::
   {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/f1.js] file written with same contents
+//// [/a/b/f2.js]
+var y = 1;
+
+
