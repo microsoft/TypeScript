@@ -9782,10 +9782,10 @@ namespace ts {
                 const restParams = map(elementTypes, (t, i) => {
                     // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
                     const tupleLabelName = !!associatedNames && getTupleElementLabel(associatedNames[i]);
+                    const name = tupleLabelName || getParameterNameAtPosition(restType, i, defaultName);
                     const flags = restType.target.elementFlags[i];
                     const checkFlags = flags & ElementFlags.Variable ? CheckFlags.RestParameter :
                         flags & ElementFlags.Optional ? CheckFlags.OptionalParameter : 0;
-                    const name = tupleLabelName || getParameterNameAtPosition(restType, i, defaultName);
                     const symbol = createSymbol(SymbolFlags.FunctionScopedVariable, name, checkFlags);
                     symbol.type = flags & ElementFlags.Rest ? createArrayType(t) : t;
                     return symbol;

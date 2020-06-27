@@ -605,8 +605,8 @@ namespace ts.SignatureHelp {
         const isVariadic = checker.hasEffectiveRestParameter(candidateSignature);
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
+            if (candidateSignature.typeParameters?.length) {
                 const args = factory.createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));
-            if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
         });
