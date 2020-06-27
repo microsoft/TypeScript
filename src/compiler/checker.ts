@@ -9799,7 +9799,7 @@ namespace ts {
                     const associatedNames = (<TupleType>(<TypeReference>restType).target).labeledElementDeclarations;
                     return associatedNames && getTupleElementLabel(associatedNames[posInRest]) || defaultName + "_" + posInRest as __String;
                 }
-                return defaultName as __String;
+                return defaultName;
             }
         }
 
