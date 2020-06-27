@@ -4595,12 +4595,14 @@ namespace ts {
         /* @internal */ deprecatedFlags?: DeprecatedFlags;
     }
 
+    /* @internal */
     export enum DeprecatedFlags {
         None = 0,
         Value = 1 << 0,
         Type = 1 << 1,
         Signature = 1 << 2,
-        AllSignature = 1 << 3
+
+        SignatureExcludes = Value | Type
     }
 
     /* @internal */

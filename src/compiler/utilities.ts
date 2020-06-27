@@ -938,7 +938,7 @@ namespace ts {
                         deprecatedFlags |= DeprecatedFlags.Type;
                     }
 
-                    if ((symbol.flags & (SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method)) && isFunctionLike(decl)) {
+                    if ((symbol.flags & (SymbolFlags.Constructor | SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method)) && isFunctionLike(decl)) {
                         if (hasDeprecated) {
                             deprecatedFlags |= DeprecatedFlags.Signature;
                         }
@@ -952,7 +952,8 @@ namespace ts {
                 });
 
                 if (deprecatedFlags & DeprecatedFlags.Signature && allSignatureLikeDeprecated) {
-                    deprecatedFlags |= DeprecatedFlags.AllSignature;
+                    deprecatedFlags &= DeprecatedFlags.SignatureExcludes;
+                    deprecatedFlags |= DeprecatedFlags.Value;
                 }
 
                 symbol.deprecatedFlags = deprecatedFlags;
@@ -960,11 +961,6 @@ namespace ts {
             return symbol.deprecatedFlags;
         }
         return DeprecatedFlags.None;
-    }
-
-    export function allSignatureOrValueDeprecatedForSymbol(symbol: Symbol) {
-        const deprecatedFlags = getDeprecatedFlags(symbol);
-        return deprecatedFlags & (DeprecatedFlags.Value | DeprecatedFlags.AllSignature);
     }
 
     export function createDiagnosticForNode(node: Node, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): DiagnosticWithLocation {

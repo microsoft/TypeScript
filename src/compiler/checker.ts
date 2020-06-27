@@ -13280,9 +13280,8 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (accessNode && (prop.flags & SymbolFlags.Deprecated)) {
-                        const deprecatedFlags = getDeprecatedFlags(prop);
-                        if (isIndexedAccessTypeNode(accessNode) && (deprecatedFlags & DeprecatedFlags.Type) || allSignatureOrValueDeprecatedForSymbol(prop)) {
+                    if (accessNode && prop.flags & SymbolFlags.Deprecated) {
+                        if (getDeprecatedFlags(prop) & (DeprecatedFlags.Type | DeprecatedFlags.Value)) {
                             const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                             errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                         }
@@ -22047,7 +22046,7 @@ namespace ts {
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
             const target = (localOrExportSymbol.flags & SymbolFlags.Alias ? resolveAlias(localOrExportSymbol) : localOrExportSymbol);
-            if (allSignatureOrValueDeprecatedForSymbol(target)) {
+            if (getDeprecatedFlags(target) & DeprecatedFlags.Value) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);
             }
 
@@ -25017,7 +25016,7 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
-                if (allSignatureOrValueDeprecatedForSymbol(prop)) {
+                if (getDeprecatedFlags(prop) & DeprecatedFlags.Value) {
                     errorOrSuggestion(/* isError */ false, right, Diagnostics._0_is_deprecated, right.escapedText as string);
                 }
 
@@ -27408,8 +27407,8 @@ namespace ts {
                 return nonInferrableType;
             }
 
-            if (signature.declaration && (signature.declaration.flags & NodeFlags.Deprecated) && (
-                !(getDeprecatedFlags(signature.declaration.symbol) & DeprecatedFlags.AllSignature) ||
+            if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated && (
+                getDeprecatedFlags(signature.declaration.symbol) & DeprecatedFlags.Signature ||
                 isCallSignatureDeclaration(signature.declaration) || isConstructSignatureDeclaration(signature.declaration)
             )) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, signatureToString(signature));
@@ -35203,7 +35202,7 @@ namespace ts {
                     }
                 }
 
-                if (isImportSpecifier(node) && target.flags & SymbolFlags.Deprecated) {
+                if (isImportSpecifier(node) && getDeprecatedFlags(target) & (DeprecatedFlags.Type | DeprecatedFlags.Value)) {
                     errorOrSuggestion(/* isError */ false, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
             }
