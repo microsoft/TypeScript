@@ -7628,7 +7628,7 @@ namespace ts {
                 return addOptionality(type, isOptional);
             }
 
-            if (isPropertyDeclaration(declaration) && (noImplicitAny || isInJSFile(declaration))) {
+            if (isPropertyDeclaration(declaration) && !hasStaticModifier(declaration) && (noImplicitAny || isInJSFile(declaration)) ) {
                 // We have a property declaration with no type annotation or initializer, in noImplicitAny mode or a .js file.
                 // Use control flow analysis of this.xxx assignments in the constructor to determine the type of the property.
                 const constructor = findConstructorDeclaration(declaration.parent);
@@ -9559,17 +9559,18 @@ namespace ts {
         function getExpandedParameters(sig: Signature, skipUnionExpanding?: boolean): readonly (readonly Symbol[])[] {
             if (signatureHasRestParameter(sig)) {
                 const restIndex = sig.parameters.length - 1;
-                const restType = getTypeOfSymbol(sig.parameters[restIndex]);
+                const restParameter = sig.parameters[restIndex];
+                const restType = getTypeOfSymbol(restParameter);
                 if (isTupleType(restType)) {
-                    return [expandSignatureParametersWithTupleMembers(restType, restIndex)];
+                    return [expandSignatureParametersWithTupleMembers(restType, restIndex, restParameter.escapedName)];
                 }
                 else if (!skipUnionExpanding && restType.flags & TypeFlags.Union && every((restType as UnionType).types, isTupleType)) {
-                    return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex));
+                    return map((restType as UnionType).types, t => expandSignatureParametersWithTupleMembers(t as TupleTypeReference, restIndex, restParameter.escapedName));
                 }
             }
             return [sig.parameters];
 
-            function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number) {
+            function expandSignatureParametersWithTupleMembers(restType: TupleTypeReference, restIndex: number, defaultName: __String) {
                 const elementTypes = getTypeArguments(restType);
                 const minLength = restType.target.minLength;
                 const tupleRestIndex = restType.target.hasRestElement ? elementTypes.length - 1 : -1;
@@ -9577,7 +9578,7 @@ namespace ts {
                 const restParams = map(elementTypes, (t, i) => {
                     // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
                     const tupleLabelName = !!associatedNames && getTupleElementLabel(associatedNames[i]);
-                    const name = tupleLabelName || getParameterNameAtPosition(sig, restIndex + i);
+                    const name = tupleLabelName || getParameterNameAtPosition(restType, i, defaultName);
                     const checkFlags = i === tupleRestIndex ? CheckFlags.RestParameter :
                         i >= minLength ? CheckFlags.OptionalParameter : 0;
                     const symbol = createSymbol(SymbolFlags.FunctionScopedVariable, name, checkFlags);
@@ -9585,6 +9586,15 @@ namespace ts {
                     return symbol;
                 });
                 return concatenate(sig.parameters.slice(0, restIndex), restParams);
+            }
+
+            // overwrite function, for it could not handle rest type is union condition
+            function getParameterNameAtPosition(restType: Type, posInRest: number, defaultName: __String): __String {
+                if (isTupleType(restType)) {
+                    const associatedNames = (<TupleType>(<TypeReference>restType).target).labeledElementDeclarations;
+                    return associatedNames && getTupleElementLabel(associatedNames[posInRest]) || defaultName + "_" + posInRest as __String;
+                }
+                return defaultName as __String;
             }
         }
 
