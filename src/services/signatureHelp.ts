@@ -31,14 +31,14 @@ namespace ts.SignatureHelp {
         }
 
         // Only need to be careful if the user typed a character and signature help wasn't showing.
-        const onlyUseSyntacticOwners = !!triggerReason && triggerReason.kind === "characterTyped";
+        const onlyUseSyntacticOwners = triggerReason?.kind === "characterTyped";
 
         // Bail out quickly in the middle of a string or comment, don't provide signature help unless the user explicitly requested it.
         if (onlyUseSyntacticOwners && (isInString(sourceFile, position, startingToken) || isInComment(sourceFile, position))) {
             return undefined;
         }
 
-        const isManuallyInvoked = !!triggerReason && triggerReason.kind === "invoked";
+        const isManuallyInvoked = triggerReason?.kind === "invoked";
         const argumentInfo = getContainingArgumentInfo(startingToken, position, sourceFile, typeChecker, isManuallyInvoked);
         if (!argumentInfo) return undefined;
 
@@ -125,8 +125,8 @@ namespace ts.SignatureHelp {
         return name === undefined ? undefined : firstDefined(program.getSourceFiles(), sourceFile =>
             firstDefined(sourceFile.getNamedDeclarations().get(name), declaration => {
                 const type = declaration.symbol && typeChecker.getTypeOfSymbolAtLocation(declaration.symbol, declaration);
-                const callSignatures = type && type.getCallSignatures();
-                if (callSignatures && callSignatures.length) {
+                const callSignatures = type?.getCallSignatures();
+                if (callSignatures?.length) {
                     return typeChecker.runWithCancellationToken(cancellationToken, typeChecker => createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo, sourceFile, typeChecker));
                 }
             }));
@@ -217,7 +217,7 @@ namespace ts.SignatureHelp {
             const info = getArgumentOrParameterListInfo(node, sourceFile);
             if (!info) return undefined;
             const { list, argumentIndex, argumentCount, argumentsSpan } = info;
-            const isTypeParameterList = !!parent.typeArguments && parent.typeArguments.pos === list.pos;
+            const isTypeParameterList = parent.typeArguments?.pos === list.pos;
             return { isTypeParameterList, invocation: { kind: InvocationKind.Call, node: invocation }, argumentsSpan, argumentIndex, argumentCount };
         }
         else if (isNoSubstitutionTemplateLiteral(node) && isTaggedTemplateExpression(parent)) {
@@ -605,7 +605,7 @@ namespace ts.SignatureHelp {
         const isVariadic = checker.hasEffectiveRestParameter(candidateSignature);
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
-            if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
+            if (candidateSignature.typeParameters?.length) {
                 const args = createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
