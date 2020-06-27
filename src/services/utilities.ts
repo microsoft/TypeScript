@@ -771,6 +771,20 @@ namespace ts {
         }
     }
 
+    function getAncestorTypeNode(node: Node) {
+        return findAncestor(node, a => !isQualifiedName(a.parent) && !isTypeNode(a.parent) && !isTypeElement(a.parent));
+    }
+
+    export function getContextualTypeOrAtAncestorTypeNode(node: Expression, checker: TypeChecker) {
+        const contextualType = checker.getContextualType(node);
+        if (contextualType) {
+            return contextualType;
+        }
+
+        const ancestorTypeNode = getAncestorTypeNode(node);
+        return ancestorTypeNode && checker.getTypeAtLocation(ancestorTypeNode);
+    }
+
     function getAdjustedLocationForDeclaration(node: Node, forRename: boolean) {
         if (!forRename) {
             switch (node.kind) {

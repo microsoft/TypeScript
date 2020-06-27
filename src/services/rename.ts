@@ -13,7 +13,18 @@ namespace ts.Rename {
 
     function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean, options?: RenameInfoOptions): RenameInfo | undefined {
         const symbol = typeChecker.getSymbolAtLocation(node);
-        if (!symbol) return;
+        if (!symbol) {
+            if (isStringLiteralLike(node)) {
+                const type = getContextualTypeOrAtAncestorTypeNode(node, typeChecker);
+                if (type && ((type.flags & TypeFlags.StringLiteral) || (
+                    (type.flags & TypeFlags.Union) && every((type as UnionType).types, type => !!(type.flags & TypeFlags.StringLiteral))
+                ))) {
+                    return getRenameInfoSuccess(node.text, node.text, ScriptElementKind.string, "", node, sourceFile);
+                }
+            }
+            return;
+        };
+
         // Only allow a symbol to be renamed if it actually has at least one declaration.
         const { declarations } = symbol;
         if (!declarations || declarations.length === 0) return;
