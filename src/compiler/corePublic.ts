@@ -22,54 +22,57 @@ namespace ts {
         " __sortedArrayBrand": any;
     }
 
-    /** ES6 Map interface, only read methods included. */
-    export interface ReadonlyMap<T> {
-        get(key: string): T | undefined;
-        has(key: string): boolean;
-        forEach(action: (value: T, key: string) => void): void;
+    /** Common read methods for ES6 Map/Set. */
+    export interface ReadonlyCollection<K> {
         readonly size: number;
-        keys(): Iterator<string>;
-        values(): Iterator<T>;
-        entries(): Iterator<[string, T]>;
+        has(key: K): boolean;
+        keys(): Iterator<K>;
+    }
+
+    /** Common write methods for ES6 Map/Set. */
+    export interface Collection<K> extends ReadonlyCollection<K> {
+        delete(key: K): boolean;
+        clear(): void;
+    }
+
+    /** ES6 Map interface, only read methods included. */
+    export interface ReadonlyMap<K, V> extends ReadonlyCollection<K> {
+        get(key: K): V | undefined;
+        values(): Iterator<V>;
+        entries(): Iterator<[K, V]>;
+        forEach(action: (value: V, key: K) => void): void;
     }
 
     /** ES6 Map interface. */
-    export interface Map<T> extends ReadonlyMap<T> {
-        set(key: string, value: T): this;
-        delete(key: string): boolean;
-        clear(): void;
+    export interface Map<K, V> extends ReadonlyMap<K, V>, Collection<K> {
+        set(key: K, value: V): this;
     }
 
     /* @internal */
     export interface MapConstructor {
         // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <T>(): Map<T>;
+        new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyMap<K, V>): Map<K, V>;
     }
 
-    /**
-     * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
-     */
-    /* @internal */
-    export function tryGetNativeMap(): MapConstructor | undefined {
-        // Internet Explorer's Map doesn't support iteration, so don't use it.
-        // Natives
-        // NOTE: TS doesn't strictly allow in-line declares, but if we suppress the error, the declaration
-        // is still used for typechecking _and_ correctly elided, which is out goal, as this prevents us from
-        // needing to pollute an outer scope with a declaration of `Map` just to satisfy the checks in this function
-        //@ts-ignore
-        declare const Map: (new <T>() => Map<T>) | undefined;
-        // eslint-disable-next-line no-in-operator
-        return typeof Map !== "undefined" && "entries" in Map.prototype ? Map : undefined;
+    /** ES6 Set interface, only read methods included. */
+    export interface ReadonlySet<T> extends ReadonlyCollection<T> {
+        has(value: T): boolean;
+        values(): Iterator<T>;
+        entries(): Iterator<[T, T]>;
+        forEach(action: (value: T, key: T) => void): void;
+    }
+
+    /** ES6 Set interface. */
+    export interface Set<T> extends ReadonlySet<T>, Collection<T> {
+        add(value: T): this;
+        delete(value: T): boolean;
     }
 
     /* @internal */
-    export const Map: MapConstructor = tryGetNativeMap() || (() => {
-        // NOTE: createMapShim will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        if (typeof createMapShim === "function") {
-            return createMapShim();
-        }
-        throw new Error("TypeScript requires an environment that provides a compatible native Map implementation.");
-    })();
+    export interface SetConstructor {
+        // eslint-disable-next-line @typescript-eslint/prefer-function-type
+        new <T>(iterable?: readonly T[] | ReadonlySet<T>): Set<T>;
+    }
 
     /** ES6 Iterator type. */
     export interface Iterator<T> {
@@ -93,5 +96,29 @@ namespace ts {
         LessThan    = -1,
         EqualTo     = 0,
         GreaterThan = 1
+    }
+
+    /* @internal */
+    export namespace NativeCollections {
+        declare const Map: MapConstructor | undefined;
+        declare const Set: SetConstructor | undefined;
+
+        /**
+         * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
+         */
+        export function tryGetNativeMap(): MapConstructor | undefined {
+            // Internet Explorer's Map doesn't support iteration, so don't use it.
+            // eslint-disable-next-line no-in-operator
+            return typeof Map !== "undefined" && "entries" in Map.prototype && new Map([[0, 0]]).size === 1 ? Map : undefined;
+        }
+
+        /**
+         * Returns the native Set implementation if it is available and compatible (i.e. supports iteration).
+         */
+        export function tryGetNativeSet(): SetConstructor | undefined {
+            // Internet Explorer's Set doesn't support iteration, so don't use it.
+            // eslint-disable-next-line no-in-operator
+            return typeof Set !== "undefined" && "entries" in Set.prototype && new Set([0]).size === 1 ? Set : undefined;
+        }
     }
 }

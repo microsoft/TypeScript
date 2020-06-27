@@ -117,6 +117,34 @@ const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, nu
 >2 : 2
 >3 : 3
 
+function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) {
+>concat2 : <T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) => (T[number] | U[number])[]
+>t : T
+>u : U
+
+    return [...t, ...u];  // (T[number] | U[number])[]
+>[...t, ...u] : (T[number] | U[number])[]
+>...t : unknown
+>t : T
+>...u : unknown
+>u : U
+}
+
+const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 | 5 | 6)[]
+>tc5 : (2 | 4 | 1 | 3 | 6 | 5)[]
+>concat2([1, 2, 3] as const, [4, 5, 6] as const) : (2 | 4 | 1 | 3 | 6 | 5)[]
+>concat2 : <T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) => (T[number] | U[number])[]
+>[1, 2, 3] as const : readonly [1, 2, 3]
+>[1, 2, 3] : readonly [1, 2, 3]
+>1 : 1
+>2 : 2
+>3 : 3
+>[4, 5, 6] as const : readonly [4, 5, 6]
+>[4, 5, 6] : readonly [4, 5, 6]
+>4 : 4
+>5 : 5
+>6 : 6
+
 // Spread arguments
 
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
@@ -613,6 +641,133 @@ function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) 
 >r = m : [...T]
 >r : readonly [...T]
 >m : [...T]
+}
+
+function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+>f13 : <T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) => void
+>t0 : T
+>t1 : [...T]
+>t2 : [...U]
+
+    t0 = t1;
+>t0 = t1 : [...T]
+>t0 : T
+>t1 : [...T]
+
+    t0 = t2;
+>t0 = t2 : [...U]
+>t0 : T
+>t2 : [...U]
+
+    t1 = t0;
+>t1 = t0 : T
+>t1 : [...T]
+>t0 : T
+
+    t1 = t2;
+>t1 = t2 : [...U]
+>t1 : [...T]
+>t2 : [...U]
+
+    t2 = t0;  // Error
+>t2 = t0 : T
+>t2 : [...U]
+>t0 : T
+
+    t2 = t1;  // Error
+>t2 = t1 : [...T]
+>t2 : [...U]
+>t1 : [...T]
+}
+
+function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+>f14 : <T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) => void
+>t0 : T
+>t1 : [...T]
+>t2 : [...U]
+
+    t0 = t1;
+>t0 = t1 : [...T]
+>t0 : T
+>t1 : [...T]
+
+    t0 = t2;
+>t0 = t2 : [...U]
+>t0 : T
+>t2 : [...U]
+
+    t1 = t0;  // Error
+>t1 = t0 : T
+>t1 : [...T]
+>t0 : T
+
+    t1 = t2;
+>t1 = t2 : [...U]
+>t1 : [...T]
+>t2 : [...U]
+
+    t2 = t0;  // Error
+>t2 = t0 : T
+>t2 : [...U]
+>t0 : T
+
+    t2 = t1;  // Error
+>t2 = t1 : [...T]
+>t2 : [...U]
+>t1 : [...T]
+}
+
+function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) {
+>f15 : <T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) => void
+>k0 : keyof T
+>k1 : keyof [...T]
+>k2 : keyof [...U]
+>k3 : keyof [1, 2, ...T]
+
+    k0 = 'length';
+>k0 = 'length' : "length"
+>k0 : keyof T
+>'length' : "length"
+
+    k1 = 'length';
+>k1 = 'length' : "length"
+>k1 : keyof [...T]
+>'length' : "length"
+
+    k2 = 'length';
+>k2 = 'length' : "length"
+>k2 : keyof [...U]
+>'length' : "length"
+
+    k0 = 'slice';
+>k0 = 'slice' : "slice"
+>k0 : keyof T
+>'slice' : "slice"
+
+    k1 = 'slice';
+>k1 = 'slice' : "slice"
+>k1 : keyof [...T]
+>'slice' : "slice"
+
+    k2 = 'slice';
+>k2 = 'slice' : "slice"
+>k2 : keyof [...U]
+>'slice' : "slice"
+
+    k3 = '0';
+>k3 = '0' : "0"
+>k3 : keyof [1, 2, ...T]
+>'0' : "0"
+
+    k3 = '1';
+>k3 = '1' : "1"
+>k3 : keyof [1, 2, ...T]
+>'1' : "1"
+
+    k3 = '2';  // Error
+>k3 = '2' : "2"
+>k3 : keyof [1, 2, ...T]
+>'2' : "2"
 }
 
 // Inference between variadic tuple types

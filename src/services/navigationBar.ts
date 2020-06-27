@@ -33,8 +33,8 @@ namespace ts.NavigationBar {
     let parentsStack: NavigationBarNode[] = [];
     let parent: NavigationBarNode;
 
-    const trackedEs5ClassesStack: (Map<boolean> | undefined)[] = [];
-    let trackedEs5Classes: Map<boolean> | undefined;
+    const trackedEs5ClassesStack: (Map<string, boolean> | undefined)[] = [];
+    let trackedEs5Classes: Map<string, boolean> | undefined;
 
     // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
     let emptyChildItemArray: NavigationBarItem[] = [];
@@ -310,9 +310,11 @@ namespace ts.NavigationBar {
 
             case SyntaxKind.ExportAssignment: {
                 const expression = (<ExportAssignment>node).expression;
-                if (isObjectLiteralExpression(expression)) {
+                const child = isObjectLiteralExpression(expression) ? expression :
+                    isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
+                if (child) {
                     startNode(node);
-                    addChildrenRecursively(expression);
+                    addChildrenRecursively(child);
                     endNode();
                 }
                 else {

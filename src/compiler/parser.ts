@@ -722,13 +722,13 @@ namespace ts {
 
         let currentToken: SyntaxKind;
         let nodeCount: number;
-        let identifiers: Map<string>;
-        let privateIdentifiers: Map<string>;
+        let identifiers: Map<string, string>;
+        let privateIdentifiers: Map<string, string>;
         let identifierCount: number;
 
         let parsingContext: ParsingContext;
 
-        let notParenthesizedArrow: Map<true> | undefined;
+        let notParenthesizedArrow: Set<number> | undefined;
 
         // Flags that dictate what parsing context we're in.  For example:
         // Whether or not we are in strict parsing mode.  All that changes in strict parsing mode is
@@ -4121,13 +4121,13 @@ namespace ts {
 
         function parsePossibleParenthesizedArrowFunctionExpression(): ArrowFunction | undefined {
             const tokenPos = scanner.getTokenPos();
-            if (notParenthesizedArrow && notParenthesizedArrow.has(tokenPos.toString())) {
+            if (notParenthesizedArrow?.has(tokenPos)) {
                 return undefined;
             }
 
             const result = parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ false);
             if (!result) {
-                (notParenthesizedArrow || (notParenthesizedArrow = createMap())).set(tokenPos.toString(), true);
+                (notParenthesizedArrow || (notParenthesizedArrow = new Set())).add(tokenPos);
             }
 
             return result;

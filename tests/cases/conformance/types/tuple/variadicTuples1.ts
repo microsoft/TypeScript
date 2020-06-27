@@ -37,6 +37,12 @@ const tc2 = concat(['hello'], [42]);
 const tc3 = concat([1, 2, 3], sa);
 const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, number, number]
 
+function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) {
+    return [...t, ...u];  // (T[number] | U[number])[]
+}
+
+const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 | 5 | 6)[]
+
 // Spread arguments
 
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
@@ -168,6 +174,36 @@ function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) 
     m = r;  // Error
     r = t;
     r = m;
+}
+
+function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+    t0 = t1;
+    t0 = t2;
+    t1 = t0;
+    t1 = t2;
+    t2 = t0;  // Error
+    t2 = t1;  // Error
+}
+
+function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
+    t0 = t1;
+    t0 = t2;
+    t1 = t0;  // Error
+    t1 = t2;
+    t2 = t0;  // Error
+    t2 = t1;  // Error
+}
+
+function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) {
+    k0 = 'length';
+    k1 = 'length';
+    k2 = 'length';
+    k0 = 'slice';
+    k1 = 'slice';
+    k2 = 'slice';
+    k3 = '0';
+    k3 = '1';
+    k3 = '2';  // Error
 }
 
 // Inference between variadic tuple types

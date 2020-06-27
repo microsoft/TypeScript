@@ -13,7 +13,7 @@ namespace ts {
         context.enableEmitNotification(SyntaxKind.SourceFile);
         context.enableSubstitution(SyntaxKind.Identifier);
 
-        let helperNameSubstitutions: Map<Identifier> | undefined;
+        let helperNameSubstitutions: Map<string, Identifier> | undefined;
         return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {

@@ -115,7 +115,7 @@ namespace ts {
         };
     }
 
-    function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
+    function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
         // First, check that the last part of the dot separated pattern matches the name of the
         // candidate.  If not, then there's no point in proceeding and doing the more
         // expensive work.
@@ -141,7 +141,7 @@ namespace ts {
         return bestMatch;
     }
 
-    function getWordSpans(word: string, stringToWordSpans: Map<TextSpan[]>): TextSpan[] {
+    function getWordSpans(word: string, stringToWordSpans: Map<string, TextSpan[]>): TextSpan[] {
         let spans = stringToWordSpans.get(word);
         if (!spans) {
             stringToWordSpans.set(word, spans = breakIntoWordSpans(word));
@@ -149,7 +149,7 @@ namespace ts {
         return spans;
     }
 
-    function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
+    function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
         const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
         if (index === 0) {
             // a) Check if the word is a prefix of the candidate, in a case insensitive or
@@ -201,7 +201,7 @@ namespace ts {
         }
     }
 
-    function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<TextSpan[]>): PatternMatch | undefined {
+    function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
         // First check if the segment matches as is.  This is also useful if the segment contains
         // characters we would normally strip when splitting into parts that we also may want to
         // match in the candidate.  For example if the segment is "@int" and the candidate is

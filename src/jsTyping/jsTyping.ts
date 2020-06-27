@@ -77,7 +77,7 @@ namespace ts.JsTyping {
     /**
      * A map of loose file names to library names that we are confident require typings
      */
-    export type SafeList = ReadonlyMap<string>;
+    export type SafeList = ReadonlyMap<string, string>;
 
     export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
         const result = readConfigFile(safeListPath, path => host.readFile(path));
@@ -107,10 +107,10 @@ namespace ts.JsTyping {
         fileNames: string[],
         projectRootPath: Path,
         safeList: SafeList,
-        packageNameToTypingLocation: ReadonlyMap<CachedTyping>,
+        packageNameToTypingLocation: ReadonlyMap<string, CachedTyping>,
         typeAcquisition: TypeAcquisition,
         unresolvedImports: readonly string[],
-        typesRegistry: ReadonlyMap<MapLike<string>>):
+        typesRegistry: ReadonlyMap<string, MapLike<string>>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
         if (!typeAcquisition || !typeAcquisition.enable) {
