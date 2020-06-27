@@ -1,6 +1,6 @@
 {
-    "extends": "../tsconfig-noncomposite-base",
- 
+    "extends": "../tsconfig-library-base",
+
     "compilerOptions": {
         "outFile": "../../built/local/tsserver.js",
         "types": [
