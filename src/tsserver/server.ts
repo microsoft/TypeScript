@@ -19,7 +19,7 @@ namespace ts.server {
             connect(options: { port: number }, onConnect?: () => void): NodeSocket
         } = require("net");
 
-        const getGlobalTypingsCacheLocation = function () {
+        const getGlobalTypingsCacheLocation = () => {
             switch (process.platform) {
                 case "win32": {
                     const basePath = process.env.LOCALAPPDATA ||
@@ -42,9 +42,9 @@ namespace ts.server {
                 default:
                     return Debug.fail(`unsupported platform '${process.platform}'`);
             }
-        }
+        };
 
-        const getNonWindowsCacheLocation = function (platformIsDarwin: boolean) {
+        const getNonWindowsCacheLocation = (platformIsDarwin: boolean) => {
             if (process.env.XDG_CACHE_HOME) {
                 return process.env.XDG_CACHE_HOME;
             }
@@ -57,7 +57,7 @@ namespace ts.server {
                 ? "Library/Caches"
                 : ".cache";
             return combinePaths(normalizeSlashes(homePath), cacheFolder);
-        }
+        };
 
         interface NodeChildProcess {
             send(message: any, sendHandle?: any): void;
@@ -591,7 +591,7 @@ namespace ts.server {
             logToFile?: boolean;
         }
 
-        const parseLoggingEnvironmentString = function (logEnvStr: string | undefined): LogOptions {
+        const parseLoggingEnvironmentString = (logEnvStr: string | undefined): LogOptions => {
             if (!logEnvStr) {
                 return {};
             }
@@ -636,9 +636,9 @@ namespace ts.server {
                 }
                 return { value: stripQuotes(pathStart), extraPartCounter };
             }
-        }
+        };
 
-        const getLogLevel = function (level: string | undefined) {
+        const getLogLevel = (level: string | undefined) => {
             if (level) {
                 const l = level.toLowerCase();
                 for (const name in LogLevel) {
@@ -648,10 +648,10 @@ namespace ts.server {
                 }
             }
             return undefined;
-        }
+        };
 
         // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
-        const createLogger = function () {
+        const createLogger = () => {
             const cmdLineLogFileName = findArgument("--logFile");
             const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
             const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
@@ -668,13 +668,13 @@ namespace ts.server {
 
             const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
             return new Logger(substitutedLogFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
-        }
+        };
         // This places log file in the directory containing editorServices.js
         // TODO: check that this location is writable
 
         // average async stat takes about 30 microseconds
         // set chunk size to do 30 files in < 1 millisecond
-        const createPollingWatchedFileSet = function (interval = 2500, chunkSize = 30) {
+        const createPollingWatchedFileSet = (interval = 2500, chunkSize = 30) => {
             const watchedFiles: WatchedFile[] = [];
             let nextFileToCheck = 0;
             return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
@@ -750,7 +750,7 @@ namespace ts.server {
             function removeFile(file: WatchedFile) {
                 unorderedRemoveItem(watchedFiles, file);
             }
-        }
+        };
 
         // REVIEW: for now this implementation uses polling.
         // The advantage of polling is that it works reliably
@@ -770,7 +770,7 @@ namespace ts.server {
         const pending: Buffer[] = [];
         let canWrite = true;
 
-        const writeMessage = function (buf: Buffer) {
+        const writeMessage = (buf: Buffer) => {
             if (!canWrite) {
                 pending.push(buf);
             }
@@ -778,16 +778,16 @@ namespace ts.server {
                 canWrite = false;
                 process.stdout.write(buf, setCanWriteFlagAndWriteMessageIfNecessary);
             }
-        }
+        };
 
-        const setCanWriteFlagAndWriteMessageIfNecessary = function () {
+        const setCanWriteFlagAndWriteMessageIfNecessary = () => {
             canWrite = true;
             if (pending.length) {
                 writeMessage(pending.shift()!);
             }
-        }
+        };
 
-        const extractWatchDirectoryCacheKey = function (path: string, currentDriveKey: string | undefined) {
+        const extractWatchDirectoryCacheKey = (path: string, currentDriveKey: string | undefined) => {
             path = normalizeSlashes(path);
             if (isUNCPath(path)) {
                 // UNC path: extract server name
@@ -811,11 +811,11 @@ namespace ts.server {
             }
             // do not cache any other cases
             return undefined;
-        }
+        };
 
-        const isUNCPath = function (s: string): boolean {
+        const isUNCPath = (s: string): boolean => {
             return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
-        }
+        };
 
         const logger = createLogger();
 
@@ -827,7 +827,7 @@ namespace ts.server {
         const noopWatcher: FileWatcher = { close: noop };
         // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
         // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
-        const watchDirectorySwallowingException = function (path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher {
+        const watchDirectorySwallowingException = (path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher => {
             try {
                 return originalWatchDirectory(path, callback, recursive, options);
             }
@@ -835,7 +835,7 @@ namespace ts.server {
                 logger.info(`Exception when creating directory watcher: ${e.message}`);
                 return noopWatcher;
             }
-        }
+        };
 
         if (useWatchGuard) {
             const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
@@ -923,10 +923,10 @@ namespace ts.server {
             cancellationToken = nullCancellationToken;
         }
 
-        const parseEventPort = function (eventPortStr: string | undefined) {
+        const parseEventPort = (eventPortStr: string | undefined) => {
             const eventPort = eventPortStr === undefined ? undefined : parseInt(eventPortStr);
             return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
-        }
+        };
         const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
 
         const localeStr = findArgument("--locale");
@@ -941,13 +941,13 @@ namespace ts.server {
         const npmLocation = findArgument(Arguments.NpmLocation);
         const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
 
-        const parseStringArray = function (argName: string): readonly string[] {
+        const parseStringArray = (argName: string): readonly string[] => {
             const arg = findArgument(argName);
             if (arg === undefined) {
                 return emptyArray;
             }
             return arg.split(",").filter(name => name !== "");
-        }
+        };
 
         const globalPlugins = parseStringArray("--globalPlugins");
         const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
