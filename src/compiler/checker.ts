@@ -23889,7 +23889,10 @@ namespace ts {
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
                     let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, checkMode) :
-                        memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(memberDecl.name, checkMode) :
+                        // avoid resolving the left side of the ShorthandPropertyAssignment outside of the destructuring
+                        // for error recovery purposes. For example, if a user wrote `{ a = 100 }` instead of `{ a: 100 }`.
+                        // we don't want to say "could not find 'a'".
+                        memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(!inDestructuringPattern && memberDecl.objectAssignmentInitializer ? memberDecl.objectAssignmentInitializer : memberDecl.name, checkMode) :
                         checkObjectLiteralMethod(memberDecl, checkMode);
                     if (isInJavascript) {
                         const jsDocType = getTypeForDeclarationFromJSDocComment(memberDecl);
@@ -38218,7 +38221,7 @@ namespace ts {
                 if (prop.kind === SyntaxKind.ShorthandPropertyAssignment && !inDestructuring && prop.objectAssignmentInitializer) {
                     // having objectAssignmentInitializer is only valid in ObjectAssignmentPattern
                     // outside of destructuring it is a syntax error
-                    return grammarErrorOnNode(prop.equalsToken!, Diagnostics.can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment);
+                    return grammarErrorOnNode(prop.equalsToken!, Diagnostics.Did_you_mean_to_use_a_Colon_When_following_property_names_in_an_object_literal_implies_a_destructuring_assignment);
                 }
 
                 if (name.kind === SyntaxKind.PrivateIdentifier) {
