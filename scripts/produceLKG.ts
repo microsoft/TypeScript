@@ -15,6 +15,7 @@ async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
     await copyLibFiles();
     await copyLocalizedDiagnostics();
+    await copyTypesMap();
     await buildProtocol();
     await copyScriptOutputs();
     await copyDeclarationOutputs();
@@ -38,6 +39,10 @@ async function copyLocalizedDiagnostics() {
             await fs.copy(fileName, path.join(dest, d));
         }
     }
+}
+
+async function copyTypesMap() {
+    await copyFromBuiltLocal("typesMap.json"); // Cannot accommodate copyright header
 }
 
 async function buildProtocol() {
