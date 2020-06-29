@@ -22049,7 +22049,7 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
-            if (declaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, localOrExportSymbol) ) {
+            if (declaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, localOrExportSymbol)) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);;
             }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
