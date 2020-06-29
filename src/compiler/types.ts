@@ -4861,7 +4861,6 @@ namespace ts {
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
-        NotUnionOrUnit = Any | Unknown | ESSymbol | Object | NonPrimitive,
         /* @internal */
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         // The following flags are aggregated during union and intersection type construction

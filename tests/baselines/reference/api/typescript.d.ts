@@ -2459,7 +2459,6 @@ declare namespace ts {
         Instantiable = 63176704,
         StructuredOrInstantiable = 66846720,
         Narrowable = 133970943,
-        NotUnionOrUnit = 67637251,
     }
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     export interface Type {
