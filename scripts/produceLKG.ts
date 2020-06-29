@@ -3,7 +3,6 @@
 import childProcess = require("child_process");
 import fs = require("fs-extra");
 import path = require("path");
-import removeInternal = require("remove-internal");
 import glob = require("glob");
 
 const root = path.join(__dirname, "..");
