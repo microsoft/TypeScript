@@ -353,3 +353,13 @@ function f23<U extends string[]>(args: [...U, number]) {
     let v2 = f22(["foo", "bar"]);  // [string, string]
     let v3 = f22(["foo", 42]);  // [string]
 }
+
+// Repro from #39327
+
+interface Desc<A extends unknown[], T> {
+    readonly f: (...args: A) => T;
+    bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
+}
+
+declare const a: Desc<[string, number, boolean], object>;
+const b = a.bind("", 1);  // Desc<[boolean], object>

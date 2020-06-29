@@ -1204,3 +1204,43 @@ function f23<U extends string[]>(args: [...U, number]) {
 >f22 : Symbol(f22, Decl(variadicTuples1.ts, 342, 1), Decl(variadicTuples1.ts, 344, 72))
 }
 
+// Repro from #39327
+
+interface Desc<A extends unknown[], T> {
+>Desc : Symbol(Desc, Decl(variadicTuples1.ts, 351, 1))
+>A : Symbol(A, Decl(variadicTuples1.ts, 355, 15))
+>T : Symbol(T, Decl(variadicTuples1.ts, 355, 35))
+
+    readonly f: (...args: A) => T;
+>f : Symbol(Desc.f, Decl(variadicTuples1.ts, 355, 40))
+>args : Symbol(args, Decl(variadicTuples1.ts, 356, 17))
+>A : Symbol(A, Decl(variadicTuples1.ts, 355, 15))
+>T : Symbol(T, Decl(variadicTuples1.ts, 355, 35))
+
+    bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
+>bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 356, 34))
+>T : Symbol(T, Decl(variadicTuples1.ts, 357, 9))
+>U : Symbol(U, Decl(variadicTuples1.ts, 357, 29))
+>R : Symbol(R, Decl(variadicTuples1.ts, 357, 50))
+>this : Symbol(this, Decl(variadicTuples1.ts, 357, 54))
+>Desc : Symbol(Desc, Decl(variadicTuples1.ts, 351, 1))
+>T : Symbol(T, Decl(variadicTuples1.ts, 357, 9))
+>U : Symbol(U, Decl(variadicTuples1.ts, 357, 29))
+>R : Symbol(R, Decl(variadicTuples1.ts, 357, 50))
+>args : Symbol(args, Decl(variadicTuples1.ts, 357, 82))
+>T : Symbol(T, Decl(variadicTuples1.ts, 357, 9))
+>Desc : Symbol(Desc, Decl(variadicTuples1.ts, 351, 1))
+>U : Symbol(U, Decl(variadicTuples1.ts, 357, 29))
+>R : Symbol(R, Decl(variadicTuples1.ts, 357, 50))
+}
+
+declare const a: Desc<[string, number, boolean], object>;
+>a : Symbol(a, Decl(variadicTuples1.ts, 360, 13))
+>Desc : Symbol(Desc, Decl(variadicTuples1.ts, 351, 1))
+
+const b = a.bind("", 1);  // Desc<[boolean], object>
+>b : Symbol(b, Decl(variadicTuples1.ts, 361, 5))
+>a.bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 356, 34))
+>a : Symbol(a, Decl(variadicTuples1.ts, 360, 13))
+>bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 356, 34))
+

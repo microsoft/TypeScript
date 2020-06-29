@@ -352,6 +352,16 @@ function f23<U extends string[]>(args: [...U, number]) {
     let v3 = f22(["foo", 42]);  // [string]
 }
 
+// Repro from #39327
+
+interface Desc<A extends unknown[], T> {
+    readonly f: (...args: A) => T;
+    bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
+}
+
+declare const a: Desc<[string, number, boolean], object>;
+const b = a.bind("", 1);  // Desc<[boolean], object>
+
 
 //// [variadicTuples1.js]
 "use strict";
@@ -557,6 +567,7 @@ function f23(args) {
     var v2 = f22(["foo", "bar"]); // [string, string]
     var v3 = f22(["foo", 42]); // [string]
 }
+var b = a.bind("", 1); // Desc<[boolean], object>
 
 
 //// [variadicTuples1.d.ts]
@@ -703,3 +714,9 @@ declare function f21<U extends string[]>(args: [...U, number?]): void;
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
 declare function f22<T extends unknown[] = []>(args: [...T]): T;
 declare function f23<U extends string[]>(args: [...U, number]): void;
+interface Desc<A extends unknown[], T> {
+    readonly f: (...args: A) => T;
+    bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
+}
+declare const a: Desc<[string, number, boolean], object>;
+declare const b: Desc<[boolean], object>;
