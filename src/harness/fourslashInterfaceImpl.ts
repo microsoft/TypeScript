@@ -1533,6 +1533,7 @@ namespace FourSlashInterface {
         /** @default ts.emptyArray */
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly triggerReason?: ts.SignatureHelpTriggerReason;
+        readonly overrideSelectedItemIndex?: number;
     }
 
     export interface VerifyNavigateToOptions {

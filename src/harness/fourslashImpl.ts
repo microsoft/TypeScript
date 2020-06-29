@@ -1426,7 +1426,7 @@ namespace FourSlash {
                 this.raiseError("Could not get a help signature");
             }
 
-            const selectedItem = help.items[help.selectedItemIndex];
+            const selectedItem = help.items[options.overrideSelectedItemIndex ?? help.selectedItemIndex];
             // Argument index may exceed number of parameters
             const currentParameter = selectedItem.parameters[help.argumentIndex] as ts.SignatureHelpParameter | undefined;
 
@@ -1478,6 +1478,7 @@ namespace FourSlash {
                 "isVariadic",
                 "tags",
                 "argumentCount",
+                "overrideSelectedItemIndex"
             ];
             for (const key in options) {
                 if (!ts.contains(allKeys, key)) {
