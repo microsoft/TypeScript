@@ -915,6 +915,9 @@ namespace ts.refactor.extractSymbol {
         if (range.facts & RangeFacts.IsAsyncFunction) {
             call = factory.createAwaitExpression(call);
         }
+        if (isInJSXContent(node)) {
+            call = factory.createJsxExpression(/*dotDotDotToken*/ undefined, call);
+        }
 
         if (exposedVariableDeclarations.length && !writes) {
             // No need to mix declarations and writes.
@@ -1118,11 +1121,15 @@ namespace ts.refactor.extractSymbol {
                 variableType,
                 initializer);
 
-            const localReference = factory.createPropertyAccessExpression(
+            let localReference: Expression = factory.createPropertyAccessExpression(
                 rangeFacts & RangeFacts.InStaticRegion
                     ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
                     : factory.createThis(),
                     factory.createIdentifier(localNameText));
+
+            if (isInJSXContent(node)) {
+                localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+            }
 
             // Declare
             const maxInsertionPos = node.pos;
@@ -1193,12 +1200,6 @@ namespace ts.refactor.extractSymbol {
         const renameFilename = node.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
         return { renameFilename, renameLocation, edits };
-
-        function isInJSXContent(node: Node) {
-            if (!isJsxElement(node)) return false;
-            if (isJsxElement(node.parent)) return true;
-            return false;
-        }
 
         function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
             // If no contextual type exists there is nothing to transfer to the function signature
@@ -1952,5 +1953,9 @@ namespace ts.refactor.extractSymbol {
             default:
                 return false;
         }
+    }
+
+    function isInJSXContent(node: Node) {
+        return (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && isJsxElement(node.parent);
     }
 }
