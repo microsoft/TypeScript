@@ -78,17 +78,15 @@ namespace ts.refactor.convertToOptionalChainExpression {
     function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): Info | undefined {
         const condition = expression.condition;
         const lastPropertyAccessChain = getLastPropertyAccessChain(expression.whenTrue);
-        if (lastPropertyAccessChain &&  !checker.isNullableType(checker.getTypeAtLocation(lastPropertyAccessChain))) {
-            if (isBinaryExpression(condition)) {
-                const firstOccurrence = getFirstOccurrenceInBinary(condition, lastPropertyAccessChain.expression, checker);
-                return firstOccurrence && firstOccurrence !== lastPropertyAccessChain && (isPropertyAccessExpression(firstOccurrence) || isIdentifier(firstOccurrence)) ?
-                    { lastPropertyAccessChain, firstOccurrence, expression } : undefined;
-            }
-            else if ((isPropertyAccessExpression(condition) || isIdentifier(condition)) && checkMatch(condition, lastPropertyAccessChain.expression, checker)) {
-                return { firstOccurrence: condition, lastPropertyAccessChain, expression };
-            }
-        }
-        return undefined;
+        if (!lastPropertyAccessChain || checker.isNullableType(checker.getTypeAtLocation(lastPropertyAccessChain))) return undefined;
+
+        const firstOccurrence = (isPropertyAccessExpression(condition) || isIdentifier(condition))
+            && checkMatch(condition, lastPropertyAccessChain.expression, checker) ?
+            condition : isBinaryExpression(condition) ?
+            getFirstOccurrenceInExpression(condition, lastPropertyAccessChain.expression, checker): undefined;
+
+        return firstOccurrence && (isPropertyAccessExpression(firstOccurrence) || isIdentifier(firstOccurrence)) ?
+            { lastPropertyAccessChain, firstOccurrence, expression } : undefined;
     }
 
     function getBinaryInfo(expression: BinaryExpression, checker: TypeChecker): Info | undefined {
@@ -96,21 +94,21 @@ namespace ts.refactor.convertToOptionalChainExpression {
         const lastPropertyAccessChain = getLastPropertyAccessChain(expression.right);
         if (!lastPropertyAccessChain) return undefined;
 
-        const firstOccurrence = getFirstOccurrenceInBinary(expression.left, lastPropertyAccessChain.expression, checker);
-        return firstOccurrence && firstOccurrence !== lastPropertyAccessChain && (isPropertyAccessExpression(firstOccurrence) || isIdentifier(firstOccurrence)) ?
+        const firstOccurrence = getFirstOccurrenceInExpression(expression.left, lastPropertyAccessChain.expression, checker);
+        return firstOccurrence && (isPropertyAccessExpression(firstOccurrence) || isIdentifier(firstOccurrence)) ?
             { lastPropertyAccessChain, firstOccurrence, expression } : undefined;
-
     }
 
     /**
      * Gets the earliest expression or identifier in an && chain that matches the target access chain.
      * e.g. a && a.b is searched with target a.b and returns a.
      */
-    function getFirstOccurrenceInBinary(expression: Expression, target: Expression | Identifier, checker: TypeChecker): Expression | Identifier | undefined {
+    function getFirstOccurrenceInExpression(expression: Expression, target: Expression, checker: TypeChecker): Expression | Identifier | undefined {
         if (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-            const match = getFirstOccurrenceInBinary(expression.right, target, checker);
+            const match = getFirstOccurrenceInExpression(expression.right, target, checker);
             if (!match) return undefined;
-            return isPropertyAccessExpression(match) ? getFirstOccurrenceInBinary(expression.left, match.expression, checker) ?? expression.right : expression.right;
+            return isPropertyAccessExpression(match) ?
+                getFirstOccurrenceInExpression(expression.left, match.expression, checker) ?? expression.right : expression.right;
         }
         else {
             const match = checkMatch(expression, target, checker);
@@ -121,14 +119,13 @@ namespace ts.refactor.convertToOptionalChainExpression {
     /**
      * Checks that expression matches the final identifier in a property access expression or call expression.
      */
-    function checkMatch(expression: Expression | Identifier, target: Expression | Identifier, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
+    function checkMatch(expression: Expression, target: Expression, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
         if (isCallExpression(target)) {
             // Recurse through the call expressions to match a.b to a.b()().
             return !isCallExpression(expression) ? checkMatch(expression, target.expression, checker) : undefined;
         }
         else if ((isPropertyAccessExpression(expression) && isPropertyAccessExpression(target)) ||
             (isIdentifier(expression) && isIdentifier(target))) {
-            // we shouldn't offer a refactor for a.b && a.b().c && a.b.c().d so we need to check that the entire access chain matches.
             const symbol = checker.getSymbolAtLocation(expression);
             return symbol && !checker.isUnknownSymbol(symbol) && checker.isMatchingReference(expression, target) ? target : undefined;
         }
@@ -177,33 +174,16 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     /**
-     * && binary expressions are left-heavy so for most cases we just need to check if the last property access chain is on the RHS of a
-     * binary expression with an operator of higher precedence.
-     */
-    function getRightHandSidePropertyAccess(node: Expression): PropertyAccessExpression | Identifier | undefined {
-        if (isPropertyAccessExpression(node) || isIdentifier(node)) {
-            return node;
-        }
-        else if (isCallExpression(node)) {
-            // a && a.b()();
-            return getRightHandSidePropertyAccess(node.expression);
-        }
-        else if (isBinaryExpression(node)) {
-            // a && a.b == 1 is valid but a && 1 === a.b is not
-            return getRightHandSidePropertyAccess(node.left);
-        }
-        return undefined;
-    }
-
-    /**
      * Gets the right-most property access expression
      */
     function getLastPropertyAccessChain(node: Expression): PropertyAccessExpression | undefined {
-        if (isBinaryExpression(node) || isCallExpression(node)) {
-            const rhs = getRightHandSidePropertyAccess(node);
-            return rhs && isPropertyAccessExpression(rhs) ? rhs : undefined;
+        if (isBinaryExpression(node)) {
+            return getLastPropertyAccessChain(node.left);
         }
-        else if (isPropertyAccessExpression(node) && !isOptionalChain(node) /* don't include already converted chains */) {
+        else if (isCallExpression(node)) {
+            return getLastPropertyAccessChain(node.expression);
+        }
+        else if (isPropertyAccessExpression(node) && !isOptionalChain(node)) {
             return node;
         }
         return undefined;
