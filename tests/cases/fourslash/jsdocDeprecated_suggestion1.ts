@@ -1,19 +1,21 @@
+///<reference path="fourslash.ts" />
+
 // @Filename: a.ts
 //// export namespace foo {
 ////     /** @deprecated */
 ////     export function faff () { }
-////     [|faff|]()
+////     [|faff()|]
 //// }
-//// const [|a|] = foo.[|faff|]() 
+//// const [|a|] = [|foo.faff()|]
 //// foo[[|"faff"|]]
 //// const { [|faff|] } = foo
-//// faff()
+//// [|faff()|]
 //// /** @deprecated */
 //// export function bar () {
-////     foo?.[|faff|]()
+////     [|foo?.faff()|]
 //// }
-//// foo?.[[|"faff"|]]?.()
-//// [|bar|]();
+//// [|foo?.["faff"]?.()|]
+//// [|bar()|];
 //// /** @deprecated */
 //// export interface Foo {
 ////     /** @deprecated */
@@ -26,9 +28,9 @@
 // @Filename: b.ts
 //// import * as f from './a';
 //// import { [|bar|], [|QW|] } from './a';
-//// f.[|bar|]();
-//// f.foo.[|faff|]();
-//// [|bar|]();
+//// [|f.bar()|];
+//// [|f.foo.faff()|];
+//// [|bar()|];
 //// type Z = [|QW|];
 //// type A = f.[|Foo|];
 //// type B = f.[|QW|];
@@ -40,127 +42,133 @@ const ranges = test.ranges();
 
 verify.getSuggestionDiagnostics([
     {
-        message: "'faff' is deprecated",
-        code: 6385,
-        range: ranges[0],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'(): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[0]
     },
     {
-        message: "'a' is declared but its value is never read.",
-        code: 6133,
-        range: ranges[1],
-        reportsUnnecessary: true
+        "code": 6133,
+        "message": "'a' is declared but its value is never read.",
+        "reportsUnnecessary": true,
+        "range": ranges[1]
     },
     {
-        message: "'faff' is deprecated",
-        code: 6385,
-        range: ranges[2],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'(): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[2]
     },
     {
-        message: "'faff' is deprecated",
-        code: 6385,
-        range: ranges[3],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'faff' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[3]
     },
     {
-        message: "'faff' is deprecated",
-        code: 6385,
-        range: ranges[4],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'faff' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[4]
     },
     {
-        message: "'faff' is deprecated",
-        code: 6385,
-        range: ranges[5],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'(): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[5]
     },
     {
-        message: "'faff' is deprecated",
-        code: 6385,
-        range: ranges[6],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'(): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[6]
     },
     {
-        message: "'bar' is deprecated",
-        code: 6385,
-        range: ranges[7],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'(): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[7]
     },
     {
-        message: "'Foo' is deprecated",
-        code: 6385,
-        range: ranges[8],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'(): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[8]
     },
     {
-        message: "'zzz' is deprecated",
-        code: 6385,
-        range: ranges[9],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'Foo' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[9]
     },
     {
-        message: "'QW' is deprecated",
-        code: 6385,
-        range: ranges[10],
-        reportsDeprecated: true,
-    }
-])
+        "code": 6385,
+        "message": "'zzz' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[10]
+    },
+    {
+        "code": 6385,
+        "message": "'QW' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[11]
+    },
+]);
 
 goTo.file('b.ts')
 verify.getSuggestionDiagnostics([
     {
-        message: "'bar' is deprecated",
-        code: 6385,
-        range: ranges[11],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'bar' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[12]
     },
     {
-        message: "'QW' is deprecated",
-        code: 6385,
-        range: ranges[12],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'QW' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[13]
     },
     {
-        message: "'bar' is deprecated",
-        code: 6385,
-        range: ranges[13],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'(): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[14]
     },
     {
-        message: "'faff' is deprecated",
-        code: 6385,
-        range: ranges[14],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'(): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[15]
     },
     {
-        message: "'bar' is deprecated",
-        code: 6385,
-        range: ranges[15],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'(): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[16]
     },
     {
-        message: "'QW' is deprecated",
-        code: 6385,
-        range: ranges[16],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'QW' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[17]
     },
     {
-        message: "'Foo' is deprecated",
-        code: 6385,
-        range: ranges[17],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'Foo' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[18]
     },
     {
-        message: "'QW' is deprecated",
-        code: 6385,
-        range: ranges[18],
-        reportsDeprecated: true,
+        "code": 6385,
+        "message": "'QW' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[19]
     },
     {
-        message: "'O' is declared but never used.",
-        code: 6196,
-        range: ranges[19],
-        reportsUnnecessary: true
+        "code": 6196,
+        "message": "'O' is declared but never used.",
+        "reportsUnnecessary": true,
+        "range": ranges[20]
     }
 ])

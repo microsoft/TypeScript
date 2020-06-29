@@ -537,10 +537,6 @@ namespace ts {
                 symbol.parent = parent;
             }
 
-            if (node.flags & NodeFlags.Deprecated) {
-                symbol.flags |= SymbolFlags.Deprecated;
-            }
-
             return symbol;
         }
 
