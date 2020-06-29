@@ -135,7 +135,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             // finally, do a sanity check and build the compiler with the built version of itself
             log.info("Starting sanity check build...");
             // Cleanup everything except lint rules (we'll need those later and would rather not waste time rebuilding them)
-            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"], { cancelToken });
+            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-tests"], { cancelToken });
             const { exitCode } = await exec("gulp", ["local", "--lkg=false"], { cancelToken });
             if (exitCode !== 0) {
                 errorStatus = exitCode;
