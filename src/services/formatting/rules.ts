@@ -348,8 +348,8 @@ namespace ts.formatting {
                 anyToken,
                 [isNonJsxSameLineTokenContext, isNonJsxElementOrFragmentContext, isNotForContext],
                 RuleAction.InsertSpace),
-            // This low-pri rule takes care of "try {" and "finally {" in case the rule SpaceBeforeOpenBraceInControl didn't execute on FormatOnEnter.
-            rule("SpaceAfterTryFinally", [SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword], SyntaxKind.OpenBraceToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
+            // This low-pri rule takes care of "try {", "catch {" and "finally {" in case the rule SpaceBeforeOpenBraceInControl didn't execute on FormatOnEnter.
+            rule("SpaceAfterTryCatchFinally", [SyntaxKind.TryKeyword, SyntaxKind.CatchKeyword, SyntaxKind.FinallyKeyword], SyntaxKind.OpenBraceToken, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
         ];
 
         return [
