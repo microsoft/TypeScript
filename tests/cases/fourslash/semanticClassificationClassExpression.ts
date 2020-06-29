@@ -14,8 +14,8 @@ verify.semanticClassificationsAre("original",
 const c2 = classification("2020");
 verify.semanticClassificationsAre("2020",
     c2.semanticToken("class.declaration", "x"), 
-    c2.semanticToken("class", "C"), 
+    c2.semanticToken("class.declaration", "C"), 
     c2.semanticToken("class.declaration", "C"), 
     c2.semanticToken("class.declaration", "D"), 
-    c2.semanticToken("class", "B"), 
+    c2.semanticToken("class.declaration", "B"), 
 );

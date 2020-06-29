@@ -19,7 +19,7 @@ verify.syntacticClassificationsAre(
 
 const c2 = classification("2020");
 verify.semanticClassificationsAre("2020",
-    c2.semanticToken("variable.declaration", "of"), 
-    c2.semanticToken("variable", "of"), 
-    c2.semanticToken("variable", "of"), 
+    c2.semanticToken("variable.declaration.local", "of"), 
+    c2.semanticToken("variable.local", "of"), 
+    c2.semanticToken("variable.local", "of"), 
 );

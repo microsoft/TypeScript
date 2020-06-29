@@ -25,7 +25,7 @@ verify.semanticClassificationsAre("original",
 
 const c2 = classification("2020");
 verify.semanticClassificationsAre("2020",
-    c2.semanticToken("variable", "M"), 
+    c2.semanticToken("namespace.declaration", "M"), 
     c2.semanticToken("interface.declaration", "I"), 
     c2.semanticToken("interface.declaration", "I"), 
     c2.semanticToken("class.declaration", "C"), 
