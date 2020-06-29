@@ -16,7 +16,7 @@ import readline from "readline";
 import path from "path";
 import fs from "fs";
 
-const rootFolder = path.resolve(__dirname, "./example");
+const rootFolder = path.resolve(__dirname, "../src");
 
 function walkFolder(filePath: string, match: (s: string) => boolean, fileCallback: (s: string) => void) {
     const isDirectory = fs.lstatSync(filePath).isDirectory();
@@ -36,27 +36,27 @@ async function fileCB(filePath: string) {
 
     const rl = readline.createInterface({
         input: fileStream,
-        crlfDelay: Infinity
+        // crlfDelay: Infinity
     });
     let newFileContent = "";
     let namespaceFlag = false;
     for await (let line of rl) {
-        const namespaceRE = RegExp("^(declare )?namespace ts.*?\\{");
+        const namespaceRE = RegExp("^(declare )?namespace ts.*?\\{$");
         const namespaceEndRE = RegExp("^\\}");
         const tsdotRE = RegExp("(?<!namespace)(\\W)ts\\.");
         if (namespaceRE.test(line)) {
             //skip, not output
             namespaceFlag = true;
         }
-        else if(tsdotRE.test(line)){
-            line = line.replace(tsdotRE,"$1")
+        else if (tsdotRE.test(line)) {
+            line = line.replace(tsdotRE, "$1");
         }
-        else if(namespaceEndRE.test(line)){
-            if(!namespaceFlag){
+        else if (namespaceEndRE.test(line)) {
+            if (!namespaceFlag) {
                 newFileContent += line;
             }
         }
-        else{
+        else {
             newFileContent += line;
         }
         newFileContent += "\n";

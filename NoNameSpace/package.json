@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^14.0.14",
-    "ts-node": "^8.10.2"
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
   }
 }
