@@ -332,7 +332,7 @@ namespace ts.server {
             defaultProject,
             initialLocation,
             (project, location, tryAddToTodo) => {
-                for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, hostPreferences.providePrefixAndSuffixTextForRename) || emptyArray) {
+                for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, hostPreferences.providePrefixAndSuffixTextForRename) || emptyArray_Server) {
                     if (!contains(outputs, output, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(output))) {
                         outputs.push(output);
                     }
@@ -361,7 +361,7 @@ namespace ts.server {
             defaultProject,
             initialLocation,
             (project, location, getMappedLocation) => {
-                for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray) {
+                for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray_Server) {
                     const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(outputReferencedSymbol.definition));
                     const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ?
                         outputReferencedSymbol.definition :
@@ -912,7 +912,7 @@ namespace ts.server {
 
         private semanticCheck(file: NormalizedPath, project: Project) {
             const diags = isDeclarationFileInJSOnlyNonConfiguredProject(project, file)
-                ? emptyArray
+                ? emptyArray_Server
                 : project.getLanguageService().getSemanticDiagnostics(file).filter(d => !!d.file);
             this.sendDiagnosticsEvent(file, project, diags, "semanticDiag");
         }
@@ -1110,7 +1110,7 @@ namespace ts.server {
         ): readonly protocol.DiagnosticWithLinePosition[] | readonly protocol.Diagnostic[] {
             const { project, file } = this.getFileAndProject(args);
             if (isSemantic && isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
-                return emptyArray;
+                return emptyArray_Server;
             }
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const diagnostics = selector(project, file);
@@ -1122,7 +1122,7 @@ namespace ts.server {
         private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): readonly protocol.FileSpanWithContext[] | readonly DefinitionInfo[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getDefinitionAtPosition(file, position) || emptyArray, project);
+            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getDefinitionAtPosition(file, position) || emptyArray_Server, project);
             return simplifiedResult ? this.mapDefinitionInfo(definitions, project) : definitions.map(Session.mapToOriginalLocation);
         }
 
@@ -1148,7 +1148,7 @@ namespace ts.server {
 
             if (!unmappedDefinitionAndBoundSpan || !unmappedDefinitionAndBoundSpan.definitions) {
                 return {
-                    definitions: emptyArray,
+                    definitions: emptyArray_Server,
                     textSpan: undefined! // TODO: GH#18217
                 };
             }
@@ -1236,7 +1236,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
 
-            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getTypeDefinitionAtPosition(file, position) || emptyArray, project);
+            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getTypeDefinitionAtPosition(file, position) || emptyArray_Server, project);
             return this.mapDefinitionInfo(definitions, project);
         }
 
@@ -1254,7 +1254,7 @@ namespace ts.server {
         private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): readonly protocol.FileSpanWithContext[] | readonly ImplementationLocation[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
+            const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray_Server, project);
             return simplifiedResult ?
                 implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project)) :
                 implementations.map(Session.mapToOriginalLocation);
@@ -1275,14 +1275,14 @@ namespace ts.server {
                         ...(isInString ? { isInString } : undefined)
                     };
                 }) :
-                emptyArray;
+                emptyArray_Server;
         }
 
         private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): readonly protocol.Diagnostic[] | readonly protocol.DiagnosticWithLinePosition[] {
             const { configFile } = this.getConfigFileAndProject(args);
             if (configFile) {
                 // all the config file errors are reported as part of semantic check so nothing to report here
-                return emptyArray;
+                return emptyArray_Server;
             }
 
             return this.getDiagnosticsWorker(args, /*isSemantic*/ false, (project, file) => project.getLanguageService().getSyntacticDiagnostics(file), !!args.includeLinePosition);
@@ -1300,7 +1300,7 @@ namespace ts.server {
             const { configFile } = this.getConfigFileAndProject(args);
             if (configFile) {
                 // Currently there are no info diagnostics for config files.
-                return emptyArray;
+                return emptyArray_Server;
             }
             // isSemantic because we don't want to info diagnostics in declaration files for JS-only users
             return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSuggestionDiagnostics(file), !!args.includeLinePosition);
@@ -1318,7 +1318,7 @@ namespace ts.server {
             const position = this.getPositionInFile(args, file);
             const documentHighlights = project.getLanguageService().getDocumentHighlights(file, position, args.filesToSearch);
 
-            if (!documentHighlights) return emptyArray;
+            if (!documentHighlights) return emptyArray_Server;
             if (!simplifiedResult) return documentHighlights;
 
             return documentHighlights.map<protocol.DocumentHighlightsItem>(({ fileName, highlightSpans }) => {
@@ -1372,7 +1372,7 @@ namespace ts.server {
                     this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file) :
                     this.projectService.getScriptInfo(args.file);
                 if (!scriptInfo) {
-                    if (ignoreNoProjectError) return emptyArray;
+                    if (ignoreNoProjectError) return emptyArray_Server;
                     this.projectService.logErrorForScriptInfoNotFound(args.file);
                     return Errors.ThrowNoProject();
                 }
@@ -1753,7 +1753,7 @@ namespace ts.server {
             const projects = this.getProjects(args, /*getScriptInfoEnsuringProjectsUptoDate*/ true, /*ignoreNoProjectError*/ true);
             const info = this.projectService.getScriptInfo(args.file);
             if (!info) {
-                return emptyArray;
+                return emptyArray_Server;
             }
 
             return combineProjectOutput(
@@ -2340,7 +2340,7 @@ namespace ts.server {
 
         private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
             [CommandNames.Status]: () => {
-                const response: protocol.StatusResponseBody = { version: ts.version }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                const response: protocol.StatusResponseBody = { version};
                 return this.requiredResponse(response);
             },
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {

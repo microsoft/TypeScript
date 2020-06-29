@@ -338,8 +338,8 @@ namespace ts {
         return state;
     }
 
-    function toPath(state: SolutionBuilderState, fileName: string) {
-        return ts.toPath(fileName, state.currentDirectory, state.getCanonicalFileName);
+    function toPath_NameSpaceLocal(state: SolutionBuilderState, fileName: string) {
+        return toPath(fileName, state.currentDirectory, state.getCanonicalFileName);
     }
 
     function toResolvedConfigFilePath(state: SolutionBuilderState, fileName: ResolvedConfigFileName): ResolvedConfigFilePath {
@@ -347,7 +347,7 @@ namespace ts {
         const path = resolvedConfigFilePaths.get(fileName);
         if (path !== undefined) return path;
 
-        const resolvedPath = toPath(state, fileName) as ResolvedConfigFilePath;
+        const resolvedPath = toPath_NameSpaceLocal(state, fileName) as ResolvedConfigFilePath;
         resolvedConfigFilePaths.set(fileName, resolvedPath);
         return resolvedPath;
     }
@@ -512,7 +512,7 @@ namespace ts {
             getSourceFileWithCache, readFileWithCache
         } = changeCompilerHostLikeToUseCache(
             host,
-            fileName => toPath(state, fileName),
+            fileName => toPath_NameSpaceLocal(state, fileName),
             (...args) => originalGetSourceFile.call(compilerHost, ...args)
         );
         state.readFileWithCache = readFileWithCache;
@@ -938,7 +938,7 @@ namespace ts {
                     }
                 }
 
-                emittedOutputs.set(toPath(state, name), name);
+                emittedOutputs.set(toPath_NameSpaceLocal(state, name), name);
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
@@ -1059,7 +1059,7 @@ namespace ts {
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
-                emittedOutputs.set(toPath(state, name), name);
+                emittedOutputs.set(toPath_NameSpaceLocal(state, name), name);
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
 
@@ -1300,7 +1300,7 @@ namespace ts {
 
         // Update module resolution cache if needed
         const { moduleResolutionCache } = state;
-        const projPath = toPath(state, proj);
+        const projPath = toPath_NameSpaceLocal(state, proj);
         if (moduleResolutionCache.directoryToModuleNameMap.redirectsMap.size === 0) {
             // The own map will be for projectCompilerOptions
             Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size === 0);
@@ -1551,7 +1551,7 @@ namespace ts {
             let reportVerbose = !!state.options.verbose;
             const now = host.now ? host.now() : new Date();
             for (const file of outputs) {
-                if (skipOutputs && skipOutputs.has(toPath(state, file))) {
+                if (skipOutputs && skipOutputs.has(toPath_NameSpaceLocal(state, file))) {
                     continue;
                 }
 
@@ -1802,9 +1802,9 @@ namespace ts {
                 dir,
                 fileOrDirectory => {
                     if (isIgnoredFileFromWildCardWatching({
-                        watchedDirPath: toPath(state, dir),
+                        watchedDirPath: toPath_NameSpaceLocal(state, dir),
                         fileOrDirectory,
-                        fileOrDirectoryPath: toPath(state, fileOrDirectory),
+                        fileOrDirectoryPath: toPath_NameSpaceLocal(state, fileOrDirectory),
                         configFileName: resolved,
                         configFileSpecs: parsed.configFileSpecs!,
                         currentDirectory: state.currentDirectory,
@@ -1828,7 +1828,7 @@ namespace ts {
         if (!state.watch) return;
         mutateMap(
             getOrCreateValueMapFromConfigFileMap(state.allWatchedInputFiles, resolvedPath),
-            arrayToMap(parsed.fileNames, fileName => toPath(state, fileName)),
+            arrayToMap(parsed.fileNames, fileName => toPath_NameSpaceLocal(state, fileName)),
             {
                 createNewValue: (path, input) => state.watchFilePath(
                     state.hostWithWatch,

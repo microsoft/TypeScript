@@ -27,12 +27,12 @@ namespace ts {
         const documentPositionMappers = createMap<DocumentPositionMapper>();
         return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
 
-        function toPath(fileName: string) {
-            return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        function toPath_NameSpaceLocal(fileName: string) {
+            return toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
-        function getDocumentPositionMapper(generatedFileName: string, sourceFileName?: string) {
-            const path = toPath(generatedFileName);
+        function getDocumentPositionMapper_NameSpaceLocal(generatedFileName: string, sourceFileName?: string) {
+            const path = toPath_NameSpaceLocal(generatedFileName);
             const value = documentPositionMappers.get(path);
             if (value) return value;
 
@@ -42,7 +42,7 @@ namespace ts {
             }
             else if (host.readFile) {
                 const file = getSourceFileLike(generatedFileName);
-                mapper = file && ts.getDocumentPositionMapper(
+                mapper = file && getDocumentPositionMapper(
                     { getSourceFileLike, getCanonicalFileName, log: s => host.log(s) },
                     generatedFileName,
                     getLineInfo(file.text, getLineStarts(file)),
@@ -59,7 +59,7 @@ namespace ts {
             const file = getSourceFile(info.fileName);
             if (!file) return undefined;
 
-            const newLoc = getDocumentPositionMapper(info.fileName).getSourcePosition(info);
+            const newLoc = getDocumentPositionMapper_NameSpaceLocal(info.fileName).getSourcePosition(info);
             return !newLoc || newLoc === info ? undefined : tryGetSourcePosition(newLoc) || newLoc;
         }
 
@@ -83,7 +83,7 @@ namespace ts {
                 getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
             if (declarationPath === undefined) return undefined;
 
-            const newLoc = getDocumentPositionMapper(declarationPath, info.fileName).getGeneratedPosition(info);
+            const newLoc = getDocumentPositionMapper_NameSpaceLocal(declarationPath, info.fileName).getGeneratedPosition(info);
             return newLoc === info ? undefined : newLoc;
         }
 
@@ -91,14 +91,14 @@ namespace ts {
             const program = host.getProgram();
             if (!program) return undefined;
 
-            const path = toPath(fileName);
+            const path = toPath_NameSpaceLocal(fileName);
             // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
             const file = program.getSourceFileByPath(path);
             return file && file.resolvedPath === path ? file : undefined;
         }
 
         function getOrCreateSourceFileLike(fileName: string): SourceFileLike | undefined {
-            const path = toPath(fileName);
+            const path = toPath_NameSpaceLocal(fileName);
             const fileFromCache = sourceFileLike.get(path);
             if (fileFromCache !== undefined) return fileFromCache ? fileFromCache : undefined;
 

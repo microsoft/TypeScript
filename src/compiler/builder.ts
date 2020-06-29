@@ -265,7 +265,7 @@ namespace ts {
         if (!diagnostics.length) return emptyArray;
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
         return diagnostics.map(diagnostic => {
-            const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
+            const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath_NameSpaceLocal);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
             result.reportsDeprecated = diagnostic.reportDeprecated;
             result.source = diagnostic.source;
@@ -273,14 +273,14 @@ namespace ts {
             const { relatedInformation } = diagnostic;
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
-                    relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPath)) :
+                    relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPath_NameSpaceLocal)) :
                     emptyArray :
                 undefined;
             return result;
         });
 
-        function toPath(path: string) {
-            return ts.toPath(path, buildInfoDirectory, getCanonicalFileName);
+        function toPath_NameSpaceLocal(path: string) {
+            return toPath(path, buildInfoDirectory, getCanonicalFileName);
         }
     }
 
@@ -1160,19 +1160,19 @@ namespace ts {
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
         for (const key in program.fileInfos) {
             if (hasProperty(program.fileInfos, key)) {
-                fileInfos.set(toPath(key), program.fileInfos[key]);
+                fileInfos.set(toPath_NameSpaceLocal(key), program.fileInfos[key]);
             }
         }
 
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
-            referencedMap: getMapOfReferencedSet(program.referencedMap, toPath),
-            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath),
-            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toPath(isString(value) ? value : value[0]), value => isString(value) ? emptyArray : value[1]),
+            referencedMap: getMapOfReferencedSet(program.referencedMap, toPath_NameSpaceLocal),
+            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath_NameSpaceLocal),
+            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toPath_NameSpaceLocal(isString(value) ? value : value[0]), value => isString(value) ? emptyArray : value[1]),
             hasReusableDiagnostic: true,
-            affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toPath(value[0])),
-            affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toPath(value[0]), value => value[1]),
+            affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toPath_NameSpaceLocal(value[0])),
+            affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toPath_NameSpaceLocal(value[0]), value => value[1]),
             affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
         };
         return {
@@ -1200,8 +1200,8 @@ namespace ts {
             close: noop,
         };
 
-        function toPath(path: string) {
-            return ts.toPath(path, buildInfoDirectory, getCanonicalFileName);
+        function toPath_NameSpaceLocal(path: string) {
+            return toPath(path, buildInfoDirectory, getCanonicalFileName);
         }
 
         function toAbsolutePath(path: string) {

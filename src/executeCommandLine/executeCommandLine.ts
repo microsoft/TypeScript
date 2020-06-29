@@ -273,7 +273,7 @@ namespace ts {
                 );
             }
             else if (isIncrementalCompilation(configParseResult.options)) {
-                performIncrementalCompilation(
+                performIncrementalCompilation_NameSpaceLocal(
                     sys,
                     cb,
                     reportDiagnostic,
@@ -312,7 +312,7 @@ namespace ts {
                 );
             }
             else if (isIncrementalCompilation(commandLineOptions)) {
-                performIncrementalCompilation(
+                performIncrementalCompilation_NameSpaceLocal(
                     sys,
                     cb,
                     reportDiagnostic,
@@ -438,7 +438,7 @@ namespace ts {
                 /*createProgram*/ undefined,
                 reportDiagnostic,
                 createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
-                createWatchStatusReporter(sys, buildOptions)
+                createWatchStatusReporter_NameSpaceLocal(sys, buildOptions)
             );
             updateSolutionBuilderHost(sys, cb, buildHost);
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
@@ -497,7 +497,7 @@ namespace ts {
         return sys.exit(exitStatus);
     }
 
-    function performIncrementalCompilation(
+    function performIncrementalCompilation_NameSpaceLocal(
         sys: System,
         cb: ExecuteCommandLineCallbacks,
         reportDiagnostic: DiagnosticReporter,
@@ -506,7 +506,7 @@ namespace ts {
         const { options, fileNames, projectReferences } = config;
         enableStatistics(sys, options);
         const host = createIncrementalCompilerHost(options, sys);
-        const exitStatus = ts.performIncrementalCompilation({
+        const exitStatus = performIncrementalCompilation({
             host,
             system: sys,
             rootNames: fileNames,
@@ -561,8 +561,8 @@ namespace ts {
         };
     }
 
-    function createWatchStatusReporter(sys: System, options: CompilerOptions | BuildOptions) {
-        return ts.createWatchStatusReporter(sys, shouldBePretty(sys, options));
+    function createWatchStatusReporter_NameSpaceLocal(sys: System, options: CompilerOptions | BuildOptions) {
+        return createWatchStatusReporter(sys, shouldBePretty(sys, options));
     }
 
     function createWatchOfConfigFile(
@@ -579,7 +579,7 @@ namespace ts {
             watchOptionsToExtend,
             system,
             reportDiagnostic,
-            reportWatchStatus: createWatchStatusReporter(system, configParseResult.options)
+            reportWatchStatus: createWatchStatusReporter_NameSpaceLocal(system, configParseResult.options)
         });
         updateWatchCompilationHost(system, cb, watchCompilerHost);
         watchCompilerHost.configFileParsingResult = configParseResult;
@@ -600,7 +600,7 @@ namespace ts {
             watchOptions,
             system,
             reportDiagnostic,
-            reportWatchStatus: createWatchStatusReporter(system, options)
+            reportWatchStatus: createWatchStatusReporter_NameSpaceLocal(system, options)
         });
         updateWatchCompilationHost(system, cb, watchCompilerHost);
         return createWatchProgram(watchCompilerHost);

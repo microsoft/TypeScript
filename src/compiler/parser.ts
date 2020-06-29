@@ -1455,7 +1455,7 @@ namespace ts {
         }
 
         // Ignore strict mode flag because we will report an error in type checker instead.
-        function isIdentifier(): boolean {
+        function isIdentifier_NameSpaceLocal(): boolean {
             if (token() === SyntaxKind.Identifier) {
                 return true;
             }
@@ -1665,7 +1665,7 @@ namespace ts {
         }
 
         function parseIdentifier(diagnosticMessage?: DiagnosticMessage, privateIdentifierDiagnosticMessage?: DiagnosticMessage): Identifier {
-            return createIdentifier(isIdentifier(), diagnosticMessage, privateIdentifierDiagnosticMessage);
+            return createIdentifier(isIdentifier_NameSpaceLocal(), diagnosticMessage, privateIdentifierDiagnosticMessage);
         }
 
         function parseIdentifierName(diagnosticMessage?: DiagnosticMessage): Identifier {
@@ -1856,14 +1856,14 @@ namespace ts {
                         // If we're in error recovery we tighten up what we're willing to match.
                         // That way we don't treat something like "this" as a valid heritage clause
                         // element during recovery.
-                        return isIdentifier() && !isHeritageClauseExtendsOrImplementsKeyword();
+                        return isIdentifier_NameSpaceLocal() && !isHeritageClauseExtendsOrImplementsKeyword();
                     }
                 case ParsingContext.VariableDeclarations:
                     return isBindingIdentifierOrPrivateIdentifierOrPattern();
                 case ParsingContext.ArrayBindingElements:
                     return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isBindingIdentifierOrPrivateIdentifierOrPattern();
                 case ParsingContext.TypeParameters:
-                    return isIdentifier();
+                    return isIdentifier_NameSpaceLocal();
                 case ParsingContext.ArrayLiteralMembers:
                     switch (token()) {
                         case SyntaxKind.CommaToken:
@@ -1913,7 +1913,7 @@ namespace ts {
 
         function nextTokenIsIdentifier() {
             nextToken();
-            return isIdentifier();
+            return isIdentifier_NameSpaceLocal();
         }
 
         function nextTokenIsIdentifierOrKeyword() {
@@ -3073,11 +3073,11 @@ namespace ts {
 
             if (isModifierKind(token())) {
                 nextToken();
-                if (isIdentifier()) {
+                if (isIdentifier_NameSpaceLocal()) {
                     return true;
                 }
             }
-            else if (!isIdentifier()) {
+            else if (!isIdentifier_NameSpaceLocal()) {
                 return false;
             }
             else {
@@ -3494,7 +3494,7 @@ namespace ts {
                     // or something that starts a type. We don't want to consider things like '(1)' a type.
                     return !inStartOfParameter && lookAhead(isStartOfParenthesizedOrFunctionType);
                 default:
-                    return isIdentifier();
+                    return isIdentifier_NameSpaceLocal();
             }
         }
 
@@ -3614,7 +3614,7 @@ namespace ts {
                 // Skip modifiers
                 parseModifiers();
             }
-            if (isIdentifier() || token() === SyntaxKind.ThisKeyword) {
+            if (isIdentifier_NameSpaceLocal() || token() === SyntaxKind.ThisKeyword) {
                 nextToken();
                 return true;
             }
@@ -3658,7 +3658,7 @@ namespace ts {
 
         function parseTypeOrTypePredicate(): TypeNode {
             const pos = getNodePos();
-            const typePredicateVariable = isIdentifier() && tryParse(parseTypePredicatePrefix);
+            const typePredicateVariable = isIdentifier_NameSpaceLocal() && tryParse(parseTypePredicatePrefix);
             const type = parseType();
             if (typePredicateVariable) {
                 return finishNode(factory.createTypePredicateNode(/*assertsModifier*/ undefined, typePredicateVariable, type), pos);
@@ -3738,7 +3738,7 @@ namespace ts {
                 case SyntaxKind.ImportKeyword:
                     return lookAhead(nextTokenIsOpenParenOrLessThanOrDot);
                 default:
-                    return isIdentifier();
+                    return isIdentifier_NameSpaceLocal();
             }
         }
 
@@ -3774,7 +3774,7 @@ namespace ts {
                         return true;
                     }
 
-                    return isIdentifier();
+                    return isIdentifier_NameSpaceLocal();
             }
         }
 
@@ -3911,7 +3911,7 @@ namespace ts {
 
         function nextTokenIsIdentifierOnSameLine() {
             nextToken();
-            return !scanner.hasPrecedingLineBreak() && isIdentifier();
+            return !scanner.hasPrecedingLineBreak() && isIdentifier_NameSpaceLocal();
         }
 
         function parseYieldExpression(): YieldExpression {
@@ -4052,7 +4052,7 @@ namespace ts {
                 // If we had "(" followed by something that's not an identifier,
                 // then this definitely doesn't look like a lambda.  "this" is not
                 // valid, but we want to parse it and then give a semantic error.
-                if (!isIdentifier() && second !== SyntaxKind.ThisKeyword) {
+                if (!isIdentifier_NameSpaceLocal() && second !== SyntaxKind.ThisKeyword) {
                     return Tristate.False;
                 }
 
@@ -4083,7 +4083,7 @@ namespace ts {
 
                 // If we have "<" not followed by an identifier,
                 // then this definitely is not an arrow function.
-                if (!isIdentifier()) {
+                if (!isIdentifier_NameSpaceLocal()) {
                     return Tristate.False;
                 }
 
@@ -5304,7 +5304,7 @@ namespace ts {
             }
 
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
-            const tokenIsIdentifier = isIdentifier();
+            const tokenIsIdentifier = isIdentifier_NameSpaceLocal();
             const name = parsePropertyName();
 
             // Disallowing of optional property assignments and definite assignment assertion happens in the grammar checker.
@@ -5720,7 +5720,7 @@ namespace ts {
             let node: ExpressionStatement | LabeledStatement;
             const hasParen = token() === SyntaxKind.OpenParenToken;
             const expression = allowInAnd(parseExpression);
-            if (ts.isIdentifier(expression) && parseOptional(SyntaxKind.ColonToken)) {
+            if (isIdentifier(expression) && parseOptional(SyntaxKind.ColonToken)) {
                 node = factory.createLabeledStatement(expression, parseStatement());
             }
             else {
@@ -5901,7 +5901,7 @@ namespace ts {
 
         function nextTokenIsIdentifierOrStartOfDestructuring() {
             nextToken();
-            return isIdentifier() || token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.OpenBracketToken;
+            return isIdentifier_NameSpaceLocal() || token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.OpenBracketToken;
         }
 
         function isLetDeclaration() {
@@ -6074,7 +6074,7 @@ namespace ts {
 
         function nextTokenIsIdentifierOrStringLiteralOnSameLine() {
             nextToken();
-            return !scanner.hasPrecedingLineBreak() && (isIdentifier() || token() === SyntaxKind.StringLiteral);
+            return !scanner.hasPrecedingLineBreak() && (isIdentifier_NameSpaceLocal() || token() === SyntaxKind.StringLiteral);
         }
 
         function parseFunctionBlockOrSemicolon(flags: SignatureFlags, diagnosticMessage?: DiagnosticMessage): Block | undefined {
@@ -6763,7 +6763,7 @@ namespace ts {
             return parseModuleOrNamespaceDeclaration(pos, hasJSDoc, decorators, modifiers, flags);
         }
 
-        function isExternalModuleReference() {
+        function isExternalModuleReference_NameSpaceLocal() {
             return token() === SyntaxKind.RequireKeyword &&
                 lookAhead(nextTokenIsOpenParen);
         }
@@ -6795,17 +6795,17 @@ namespace ts {
 
             // We don't parse the identifier here in await context, instead we will report a grammar error in the checker.
             let identifier: Identifier | undefined;
-            if (isIdentifier()) {
+            if (isIdentifier_NameSpaceLocal()) {
                 identifier = parseIdentifier();
             }
 
             let isTypeOnly = false;
             if (token() !== SyntaxKind.FromKeyword &&
                 identifier?.escapedText === "type" &&
-                (isIdentifier() || tokenAfterImportDefinitelyProducesImportDeclaration())
+                (isIdentifier_NameSpaceLocal() || tokenAfterImportDefinitelyProducesImportDeclaration())
             ) {
                 isTypeOnly = true;
-                identifier = isIdentifier() ? parseIdentifier() : undefined;
+                identifier = isIdentifier_NameSpaceLocal() ? parseIdentifier() : undefined;
             }
 
             if (identifier && !tokenAfterImportedIdentifierDefinitelyProducesImportDeclaration()) {
@@ -6872,7 +6872,7 @@ namespace ts {
         }
 
         function parseModuleReference() {
-            return isExternalModuleReference()
+            return isExternalModuleReference_NameSpaceLocal()
                 ? parseExternalModuleReference()
                 : parseEntityName(/*allowReservedWords*/ false);
         }
@@ -6945,7 +6945,7 @@ namespace ts {
             // ExportSpecifier:
             //   IdentifierName
             //   IdentifierName as IdentifierName
-            let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
+            let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier_NameSpaceLocal();
             let checkIdentifierStart = scanner.getTokenPos();
             let checkIdentifierEnd = scanner.getTextPos();
             const identifierName = parseIdentifierName();
@@ -6954,7 +6954,7 @@ namespace ts {
             if (token() === SyntaxKind.AsKeyword) {
                 propertyName = identifierName;
                 parseExpected(SyntaxKind.AsKeyword);
-                checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
+                checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier_NameSpaceLocal();
                 checkIdentifierStart = scanner.getTokenPos();
                 checkIdentifierEnd = scanner.getTextPos();
                 name = parseIdentifierName();
@@ -7032,7 +7032,7 @@ namespace ts {
 
         function isAnExternalModuleIndicatorNode(node: Node) {
             return hasModifierOfKind(node, SyntaxKind.ExportKeyword)
-                || isImportEqualsDeclaration(node) && ts.isExternalModuleReference(node.moduleReference)
+                || isImportEqualsDeclaration(node) && isExternalModuleReference(node.moduleReference)
                 || isImportDeclaration(node)
                 || isExportAssignment(node)
                 || isExportDeclaration(node) ? node : undefined;
@@ -7569,7 +7569,7 @@ namespace ts {
                         case SyntaxKind.ArrayType:
                             return isObjectOrObjectArrayTypeReference((node as ArrayTypeNode).elementType);
                         default:
-                            return isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.escapedText === "Object" && !node.typeArguments;
+                            return isTypeReferenceNode(node) && isIdentifier(node.typeName) && node.typeName.escapedText === "Object" && !node.typeArguments;
                     }
                 }
 
@@ -7865,8 +7865,8 @@ namespace ts {
                 }
 
                 function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
-                    while (!ts.isIdentifier(a) || !ts.isIdentifier(b)) {
-                        if (!ts.isIdentifier(a) && !ts.isIdentifier(b) && a.right.escapedText === b.right.escapedText) {
+                    while (!isIdentifier(a) || !isIdentifier(b)) {
+                        if (!isIdentifier(a) && !isIdentifier(b) && a.right.escapedText === b.right.escapedText) {
                             a = a.left;
                             b = b.left;
                         }
@@ -7891,7 +7891,7 @@ namespace ts {
                                     const child = tryParseChildTag(target, indent);
                                     if (child && (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) &&
                                         target !== PropertyLikeParse.CallbackParameter &&
-                                        name && (ts.isIdentifier(child.name) || !escapedTextsEqual(name, child.name.left))) {
+                                        name && (isIdentifier(child.name) || !escapedTextsEqual(name, child.name.left))) {
                                         return false;
                                     }
                                     return child;

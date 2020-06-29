@@ -7454,7 +7454,7 @@ namespace ts {
 
         function findResolutionCycleStartIndex(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): number {
             for (let i = resolutionTargets.length - 1; i >= 0; i--) {
-                if (hasType(resolutionTargets[i], resolutionPropertyNames[i])) {
+                if (hasType_NameSpaceLocal(resolutionTargets[i], resolutionPropertyNames[i])) {
                     return -1;
                 }
                 if (resolutionTargets[i] === target && resolutionPropertyNames[i] === propertyName) {
@@ -7464,7 +7464,7 @@ namespace ts {
             return -1;
         }
 
-        function hasType(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
+        function hasType_NameSpaceLocal(target: TypeSystemEntity, propertyName: TypeSystemPropertyName): boolean {
             switch (propertyName) {
                 case TypeSystemPropertyName.Type:
                     return !!getSymbolLinks(<Symbol>target).type;
@@ -15164,7 +15164,7 @@ namespace ts {
                 return false;
             }
             // Or functions with annotated parameter types
-            if (some(node.parameters, ts.hasType)) {
+            if (some(node.parameters, hasType)) {
                 return false;
             }
             const sourceSig = getSingleCallSignature(source);
@@ -16280,7 +16280,7 @@ namespace ts {
                 const isPerformingCommonPropertyChecks = relation !== comparableRelation && !(intersectionState & IntersectionState.Target) &&
                     source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                     target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
-                    (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source));
+                    (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures_NameSpaceLocal(source));
                 if (isPerformingCommonPropertyChecks && !hasCommonProperties(source, target, isComparingJsxAttributes)) {
                     if (reportErrors) {
                         const calls = getSignaturesOfType(source, SignatureKind.Call);
@@ -18608,7 +18608,7 @@ namespace ts {
         function isObjectTypeWithInferableIndex(type: Type): boolean {
             return type.flags & TypeFlags.Intersection ? every((<IntersectionType>type).types, isObjectTypeWithInferableIndex) :
                 !!(type.symbol && (type.symbol.flags & (SymbolFlags.ObjectLiteral | SymbolFlags.TypeLiteral | SymbolFlags.Enum | SymbolFlags.ValueModule)) !== 0 &&
-                !typeHasCallOrConstructSignatures(type)) || !!(getObjectFlags(type) & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
+                !typeHasCallOrConstructSignatures_NameSpaceLocal(type)) || !!(getObjectFlags(type) & ObjectFlags.ReverseMapped && isObjectTypeWithInferableIndex((type as ReverseMappedType).source));
         }
 
         function createSymbolWithType(source: Symbol, type: Type | undefined) {
@@ -28796,7 +28796,7 @@ namespace ts {
                 error(left, Diagnostics.The_left_hand_side_of_an_instanceof_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             // NOTE: do not raise error if right is unknown as related error was already reported
-            if (!(isTypeAny(rightType) || typeHasCallOrConstructSignatures(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
+            if (!(isTypeAny(rightType) || typeHasCallOrConstructSignatures_NameSpaceLocal(rightType) || isTypeSubtypeOf(rightType, globalFunctionType))) {
                 error(right, Diagnostics.The_right_hand_side_of_an_instanceof_expression_must_be_of_type_any_or_of_a_type_assignable_to_the_Function_interface_type);
             }
             return booleanType;
@@ -36581,8 +36581,8 @@ namespace ts {
             return getNamedMembers(propsByName);
         }
 
-        function typeHasCallOrConstructSignatures(type: Type): boolean {
-            return ts.typeHasCallOrConstructSignatures(type, checker);
+        function typeHasCallOrConstructSignatures_NameSpaceLocal(type: Type): boolean {
+            return typeHasCallOrConstructSignatures(type, checker);
         }
 
         function getRootSymbols(symbol: Symbol): readonly Symbol[] {

@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.server {
+namespace ts.server { 
     export class ThrottledOperations {
         private readonly pendingTimeouts: Map<string, any> = createMap<any>();
         private readonly logger?: Logger | undefined;

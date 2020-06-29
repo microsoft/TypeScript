@@ -331,7 +331,7 @@ namespace ts.server.typingsInstaller {
                 eventId: requestId,
                 // qualified explicitly to prevent occasional shadowing
                 // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-                typingsInstallerVersion: ts.version,
+                typingsInstallerVersion: version,
                 projectName: req.projectName
             });
 
@@ -382,7 +382,7 @@ namespace ts.server.typingsInstaller {
                         installSuccess: ok,
                         // qualified explicitly to prevent occasional shadowing
                         // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-                        typingsInstallerVersion: ts.version
+                        typingsInstallerVersion: version
                     };
                     this.sendResponse(response);
                 }

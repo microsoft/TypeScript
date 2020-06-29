@@ -296,13 +296,13 @@ namespace ts {
         setGetSourceFileAsHashVersioned(compilerHost, host);
         // Members for CompilerHost
         const getNewSourceFile = compilerHost.getSourceFile;
-        compilerHost.getSourceFile = (fileName, ...args) => getVersionedSourceFileByPath(fileName, toPath(fileName), ...args);
+        compilerHost.getSourceFile = (fileName, ...args) => getVersionedSourceFileByPath(fileName, toPath_NameSpaceLocal(fileName), ...args);
         compilerHost.getSourceFileByPath = getVersionedSourceFileByPath;
         compilerHost.getNewLine = () => newLine;
         compilerHost.fileExists = fileExists;
         compilerHost.onReleaseOldSourceFile = onReleaseOldSourceFile;
         // Members for ResolutionCacheHost
-        compilerHost.toPath = toPath;
+        compilerHost.toPath = toPath_NameSpaceLocal;
         compilerHost.getCompilationSettings = () => compilerOptions;
         compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
         compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(host, dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
@@ -449,8 +449,8 @@ namespace ts {
             return getNewLineCharacter(compilerOptions || optionsToExtendForConfigFile, () => host.getNewLine());
         }
 
-        function toPath(fileName: string) {
-            return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        function toPath_NameSpaceLocal(fileName: string) {
+            return toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
         function isFileMissingOnHost(hostSourceFile: HostFileInfo | undefined): hostSourceFile is FileMissingOnHost {
@@ -462,7 +462,7 @@ namespace ts {
         }
 
         function fileExists(fileName: string) {
-            const path = toPath(fileName);
+            const path = toPath_NameSpaceLocal(fileName);
             // If file is missing on host from cache, we can definitely say file doesnt exist
             // otherwise we need to ensure from the disk
             if (isFileMissingOnHost(sourceFilesCache.get(path))) {
@@ -734,7 +734,7 @@ namespace ts {
                 fileOrDirectory => {
                     Debug.assert(!!configFileName);
 
-                    const fileOrDirectoryPath = toPath(fileOrDirectory);
+                    const fileOrDirectoryPath = toPath_NameSpaceLocal(fileOrDirectory);
 
                     // Since the file existence changed, update the sourceFiles cache
                     if (cachedDirectoryStructureHost) {
@@ -743,7 +743,7 @@ namespace ts {
                     nextSourceFileVersion(fileOrDirectoryPath);
 
                     if (isIgnoredFileFromWildCardWatching({
-                        watchedDirPath: toPath(directory),
+                        watchedDirPath: toPath_NameSpaceLocal(directory),
                         fileOrDirectory,
                         fileOrDirectoryPath,
                         configFileName,

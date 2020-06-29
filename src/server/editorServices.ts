@@ -686,8 +686,8 @@ namespace ts.server {
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
             this.suppressDiagnosticEvents = opts.suppressDiagnosticEvents;
-            this.globalPlugins = opts.globalPlugins || emptyArray;
-            this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
+            this.globalPlugins = opts.globalPlugins || emptyArray_Server;
+            this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray_Server;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
             this.syntaxOnly = opts.syntaxOnly;
@@ -1842,7 +1842,7 @@ namespace ts.server {
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
-                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension: ts.hasTSFileExtension, host: this.host }, totalNonTsFileSize)); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension, host: this.host }, totalNonTsFileSize));
                     // Keep the size as zero since it's disabled
                     return fileName;
                 }
@@ -1915,7 +1915,7 @@ namespace ts.server {
                 configFileName: configFileName(),
                 projectType: project instanceof ExternalProject ? "external" : "configured",
                 languageServiceEnabled: project.languageServiceEnabled,
-                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
 

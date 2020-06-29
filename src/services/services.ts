@@ -1797,32 +1797,32 @@ namespace ts {
             return kind === ScriptKind.TS || kind === ScriptKind.TSX;
         }
 
-        function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSemanticClassifications_NameSpaceLocal(fileName: string, span: TextSpan): ClassifiedSpan[] {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return [];
             }
             synchronizeHostData();
-            return ts.getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            return getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
 
-        function getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSemanticClassifications_NameSpaceLocal(fileName: string, span: TextSpan): Classifications {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return { spans: [], endOfLineState: EndOfLineState.None };
             }
             synchronizeHostData();
-            return ts.getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
+            return getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
 
-        function getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSyntacticClassifications_NameSpaceLocal(fileName: string, span: TextSpan): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
-            return ts.getSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
+            return getSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
         }
 
-        function getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSyntacticClassifications_NameSpaceLocal(fileName: string, span: TextSpan): Classifications {
             // doesn't use compiler - no need to synchronize with host
-            return ts.getEncodedSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
+            return getEncodedSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
         }
 
         function getOutliningSpans(fileName: string): OutliningSpan[] {
@@ -1921,8 +1921,8 @@ namespace ts {
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
-        function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
-            return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
+        function getEditsForFileRename_NameSpaceLocal(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
+            return getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
         }
 
         function applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
@@ -2222,10 +2222,10 @@ namespace ts {
             getSemanticDiagnostics,
             getSuggestionDiagnostics,
             getCompilerOptionsDiagnostics,
-            getSyntacticClassifications,
-            getSemanticClassifications,
-            getEncodedSyntacticClassifications,
-            getEncodedSemanticClassifications,
+            getSyntacticClassifications: getSyntacticClassifications_NameSpaceLocal,
+            getSemanticClassifications: getSemanticClassifications_NameSpaceLocal,
+            getEncodedSyntacticClassifications: getEncodedSyntacticClassifications_NameSpaceLocal,
+            getEncodedSemanticClassifications: getEncodedSemanticClassifications_NameSpaceLocal,
             getCompletionsAtPosition,
             getCompletionEntryDetails,
             getCompletionEntrySymbol,
@@ -2262,7 +2262,7 @@ namespace ts {
             getCombinedCodeFix,
             applyCodeActionCommand,
             organizeImports,
-            getEditsForFileRename,
+            getEditsForFileRename: getEditsForFileRename_NameSpaceLocal,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram,

@@ -210,7 +210,7 @@ namespace ts.server {
 
         private write(s: string) {
             if (this.fd >= 0) {
-                const buf = sys.bufferFrom!(s);
+                const buf = system.bufferFrom!(s);
                 // eslint-disable-next-line no-null/no-null
                 fs.writeSync(this.fd, buf as globalThis.Buffer, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
@@ -498,7 +498,7 @@ namespace ts.server {
                 }
             };
 
-            const host = sys;
+            const host = system;
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
@@ -734,7 +734,7 @@ namespace ts.server {
             const file: WatchedFile = {
                 fileName,
                 callback,
-                mtime: sys.fileExists(fileName)
+                mtime: system.fileExists(fileName)
                     ? getModifiedTime(fileName)
                     : missingFileModifiedTime // Any subsequent modification will occur after this time
             };
@@ -818,11 +818,11 @@ namespace ts.server {
 
     const logger = createLogger();
 
-    const sys = <ServerHost>ts.sys;
+    const system = <ServerHost>sys;
     const nodeVersion = getNodeMajorVersion();
     // use watchGuard process on Windows when node version is 4 or later
     const useWatchGuard = process.platform === "win32" && nodeVersion! >= 4;
-    const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
+    const originalWatchDirectory: ServerHost["watchDirectory"] = system.watchDirectory.bind(system);
     const noopWatcher: FileWatcher = { close: noop };
     // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
     // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
@@ -837,9 +837,9 @@ namespace ts.server {
     }
 
     if (useWatchGuard) {
-        const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
+        const currentDrive = extractWatchDirectoryCacheKey(system.resolvePath(system.getCurrentDirectory()), /*currentDriveKey*/ undefined);
         const statusCache = createMap<boolean>();
-        sys.watchDirectory = (path, callback, recursive, options) => {
+        system.watchDirectory = (path, callback, recursive, options) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
             if (status === undefined) {
@@ -881,12 +881,12 @@ namespace ts.server {
         };
     }
     else {
-        sys.watchDirectory = watchDirectorySwallowingException;
+        system.watchDirectory = watchDirectorySwallowingException;
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
-    sys.watchFile = (fileName, callback) => {
+    system.write = (s: string) => writeMessage(system.bufferFrom!(s, "utf8") as globalThis.Buffer);
+    system.watchFile = (fileName, callback) => {
         const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
         return {
             close: () => pollingWatchedFileSet.removeFile(watchedFile)
@@ -894,19 +894,19 @@ namespace ts.server {
     };
 
     /* eslint-disable no-restricted-globals */
-    sys.setTimeout = setTimeout;
-    sys.clearTimeout = clearTimeout;
-    sys.setImmediate = setImmediate;
-    sys.clearImmediate = clearImmediate;
+    system.setTimeout = setTimeout;
+    system.clearTimeout = clearTimeout;
+    system.setImmediate = setImmediate;
+    system.clearImmediate = clearImmediate;
     /* eslint-enable no-restricted-globals */
 
     if (typeof global !== "undefined" && global.gc) {
-        sys.gc = () => global.gc();
+        system.gc = () => global.gc();
     }
 
-    sys.require = (initialDir: string, moduleName: string): RequireResult => {
+    system.require = (initialDir: string, moduleName: string): RequireResult => {
         try {
-            return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
+            return { module: require(resolveJSModule(moduleName, initialDir, system)), error: undefined };
         }
         catch (error) {
             return { module: undefined, error };
@@ -916,7 +916,7 @@ namespace ts.server {
     let cancellationToken: ServerCancellationToken;
     try {
         const factory = require("./cancellationToken");
-        cancellationToken = factory(sys.args);
+        cancellationToken = factory(system.args);
     }
     catch (e) {
         cancellationToken = nullCancellationToken;
@@ -930,20 +930,20 @@ namespace ts.server {
 
     const localeStr = findArgument("--locale");
     if (localeStr) {
-        validateLocaleAndSetLanguage(localeStr, sys);
+        validateLocaleAndSetLanguage(localeStr, system);
     }
 
     setStackTraceLimit();
 
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(system.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
     const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
 
     function parseStringArray(argName: string): readonly string[] {
         const arg = findArgument(argName);
         if (arg === undefined) {
-            return emptyArray;
+            return emptyArray_Server;
         }
         return arg.split(",").filter(name => name !== "");
     }
@@ -963,7 +963,7 @@ namespace ts.server {
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${process.argv.join(" ")}`);
-    logger.info(`Platform: ${os.platform()} NodeVersion: ${nodeVersion} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
+    logger.info(`Platform: ${os.platform()} NodeVersion: ${nodeVersion} CaseSensitive: ${system.useCaseSensitiveFileNames}`);
 
     const ioSession = new IOSession();
     process.on("uncaughtException", err => {
@@ -978,8 +978,8 @@ namespace ts.server {
         Debug.enableDebugInfo();
     }
 
-    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
-        ts.sys.tryEnableSourceMapsForHost();
+    if (sys.tryEnableSourceMapsForHost && /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))) {
+        sys.tryEnableSourceMapsForHost();
     }
 
     // Overwrites the current console messages to instead write to

@@ -388,7 +388,7 @@ namespace ts.projectSystem {
                 installPackage: notImplemented,
                 enqueueInstallTypingsRequest: (proj, typeAcquisition, unresolvedImports) => {
                     assert.isUndefined(request);
-                    request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray, cachePath));
+                    request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray_Server, cachePath));
                 },
                 attach: noop,
                 onProjectClosed: noop,

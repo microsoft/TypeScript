@@ -39,14 +39,24 @@ async function fileCB(filePath: string) {
         crlfDelay: Infinity
     });
     let newFileContent = "";
-
-    for await (const line of rl) {
+    let namespaceFlag = false;
+    for await (let line of rl) {
         const namespaceRE = RegExp("^(declare )?namespace ts.*?\\{");
         const namespaceEndRE = RegExp("^\\}");
-        if (namespaceRE.test(line) || namespaceEndRE.test(line)) {
+        const tsdotRE = RegExp("(?<!namespace)(\\W)ts\\.");
+        if (namespaceRE.test(line)) {
             //skip, not output
+            namespaceFlag = true;
         }
-        else {
+        else if(tsdotRE.test(line)){
+            line = line.replace(tsdotRE,"$1")
+        }
+        else if(namespaceEndRE.test(line)){
+            if(!namespaceFlag){
+                newFileContent += line;
+            }
+        }
+        else{
             newFileContent += line;
         }
         newFileContent += "\n";

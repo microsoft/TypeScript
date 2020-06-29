@@ -337,8 +337,8 @@ namespace ts {
                 emitSkipped = true;
                 return;
             }
-            const version = ts.version; // Extracted into a const so the form is stable between namespace and module
-            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program, version }), /*writeByteOrderMark*/ false);
+            const buildVersion = version; // Extracted into a const so the form is stable between namespace and module
+            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program, version: buildVersion }), /*writeByteOrderMark*/ false);
         }
 
         function emitJsFileOrBundle(
@@ -4691,7 +4691,7 @@ namespace ts {
          * or within the NameGenerator.
          */
         function isUniqueName(name: string): boolean {
-            return isFileLevelUniqueName(name)
+            return isFileLevelUniqueName_NameSpaceLocal(name)
                 && !generatedNames.has(name)
                 && !(reservedNames && reservedNames.has(name));
         }
@@ -4699,8 +4699,8 @@ namespace ts {
         /**
          * Returns a value indicating whether a name is unique globally or within the current file.
          */
-        function isFileLevelUniqueName(name: string) {
-            return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
+        function isFileLevelUniqueName_NameSpaceLocal(name: string) {
+            return currentSourceFile ? isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
         }
 
         /**
@@ -4793,7 +4793,7 @@ namespace ts {
         }
 
         function makeFileLevelOptimisticUniqueName(name: string) {
-            return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true);
+            return makeUniqueName(name, isFileLevelUniqueName_NameSpaceLocal, /*optimistic*/ true);
         }
 
         /**
@@ -4883,7 +4883,7 @@ namespace ts {
                 case GeneratedIdentifierFlags.Unique:
                     return makeUniqueName(
                         idText(name),
-                        (name.autoGenerateFlags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
+                        (name.autoGenerateFlags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName_NameSpaceLocal : isUniqueName,
                         !!(name.autoGenerateFlags & GeneratedIdentifierFlags.Optimistic),
                         !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes)
                     );

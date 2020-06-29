@@ -266,14 +266,14 @@ namespace ts {
         TypeRoots: "Type roots"
     }
 
-    interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
+    interface WatchFactory_NameSpaceLocal<X, Y = undefined> extends WatchFactory<X, Y> {
         writeLog: (s: string) => void;
     }
 
     export function createWatchFactory<Y = undefined>(host: { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
         const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
         const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
-        const result = getWatchFactory<WatchType, Y>(watchLogLevel, writeLog) as WatchFactory<WatchType, Y>;
+        const result = getWatchFactory<WatchType, Y>(watchLogLevel, writeLog) as WatchFactory_NameSpaceLocal<WatchType, Y>;
         result.writeLog = writeLog;
         return result;
     }
