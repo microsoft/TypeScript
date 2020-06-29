@@ -23824,10 +23824,15 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function isSymbolWithNumericName(symbol: Symbol) {
+            const firstDecl = symbol.declarations?.[0];
+            return isNumericLiteralName(symbol.escapedName) || (firstDecl && isNamedDeclaration(firstDecl) && isNumericName(firstDecl.name));
+        }
+
         function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], kind: IndexKind): IndexInfo {
             const propTypes: Type[] = [];
             for (let i = offset; i < properties.length; i++) {
-                if (kind === IndexKind.String || isNumericName(node.properties[i].name!)) {
+                if (kind === IndexKind.String || isSymbolWithNumericName(properties[i])) {
                     propTypes.push(getTypeOfSymbol(properties[i]));
                 }
             }
@@ -23880,8 +23885,7 @@ namespace ts {
             }
 
             let offset = 0;
-            for (let i = 0; i < node.properties.length; i++) {
-                const memberDecl = node.properties[i];
+            for (const memberDecl of node.properties) {
                 let member = getSymbolOfNode(memberDecl);
                 const computedNameType = memberDecl.name && memberDecl.name.kind === SyntaxKind.ComputedPropertyName && !isWellKnownSymbolSyntactically(memberDecl.name.expression) ?
                     checkComputedPropertyName(memberDecl.name) : undefined;
@@ -23965,7 +23969,7 @@ namespace ts {
                         checkSpreadPropOverrides(type, allPropertiesTable, memberDecl);
                     }
                     spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
-                    offset = i + 1;
+                    offset = propertiesArray.length;
                     continue;
                 }
                 else {
