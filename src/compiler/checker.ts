@@ -13275,10 +13275,6 @@ namespace ts {
         }
 
         function isUncalledFunctionReference(node: Node, symbol: Symbol) {
-// (!(localOrExportSymbol.flags & SymbolFlags.Function)
-//                     || !isCallExpression(findAncestor(node.parent, n => !isPropertyAccessExpression(n)) ?? node.parent)
-//                         && localOrExportSymbol.declarations.every(d => !isFunctionLike(d) || d.flags & NodeFlags.Deprecated))
-            // TODO: Needs to use isELement or isProperty, variously
             return !(symbol.flags & SymbolFlags.Function)
                 || !isCallExpression(findAncestor(node, n => !isAccessExpression(n)) ?? node.parent)
                 && every(symbol.declarations, d => !isFunctionLike(d) || !!(d.flags & NodeFlags.Deprecated));
