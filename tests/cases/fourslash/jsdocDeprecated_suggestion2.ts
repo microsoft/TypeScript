@@ -1,6 +1,5 @@
 ///<reference path="fourslash.ts" />
 
-//// // overloads
 //// declare function foo(a: string): number;
 //// /** @deprecated */
 //// declare function foo(): undefined;

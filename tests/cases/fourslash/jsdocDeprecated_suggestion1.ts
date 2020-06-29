@@ -1,5 +1,4 @@
 ///<reference path="fourslash.ts" />
-// @experimentalDecorators: true
 
 // @Filename: a.ts
 //// export namespace foo {
@@ -153,36 +152,6 @@ verify.getSuggestionDiagnostics([
         "reportsDeprecated": true,
         "range": ranges[11]
     },
-    {
-        "code": 6385,
-        "message": "'(): C' is deprecated",
-        "reportsDeprecated": true,
-        "range": ranges[12]
-    },
-    {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
-        "reportsDeprecated": true,
-        "range": ranges[13]
-    },
-    {
-        "code": 6385,
-        "message": "'m' is deprecated",
-        "reportsDeprecated": true,
-        "range": ranges[14]
-    },
-    {
-        "code": 6385,
-        "message": "'D' is deprecated",
-        "reportsDeprecated": true,
-        "range": ranges[15]
-    },
-    {
-        "code": 6385,
-        "message": "'D' is deprecated",
-        "reportsDeprecated": true,
-        "range": ranges[16]
-    },
 ]);
 
 goTo.file('j.tsx')
@@ -242,54 +211,54 @@ verify.getSuggestionDiagnostics([
         "code": 6385,
         "message": "'bar' is deprecated",
         "reportsDeprecated": true,
-        "range": ranges[25]
+        "range": ranges[12]
     },
     {
         "code": 6385,
         "message": "'QW' is deprecated",
         "reportsDeprecated": true,
-        "range": ranges[26]
+        "range": ranges[13]
     },
     {
         "code": 6385,
         "message": "'(): void' is deprecated",
         "reportsDeprecated": true,
-        "range": ranges[27]
+        "range": ranges[14]
     },
     {
         "code": 6385,
         "message": "'(): void' is deprecated",
         "reportsDeprecated": true,
-        "range": ranges[28]
+        "range": ranges[15]
     },
     {
         "code": 6385,
         "message": "'(): void' is deprecated",
         "reportsDeprecated": true,
-        "range": ranges[29]
+        "range": ranges[16]
     },
     {
         "code": 6385,
         "message": "'QW' is deprecated",
         "reportsDeprecated": true,
-        "range": ranges[30]
+        "range": ranges[17]
     },
     {
         "code": 6385,
         "message": "'Foo' is deprecated",
         "reportsDeprecated": true,
-        "range": ranges[31]
+        "range": ranges[18]
     },
     {
         "code": 6385,
         "message": "'QW' is deprecated",
         "reportsDeprecated": true,
-        "range": ranges[32]
+        "range": ranges[19]
     },
     {
         "code": 6196,
         "message": "'O' is declared but never used.",
         "reportsUnnecessary": true,
-        "range": ranges[33]
+        "range": ranges[20]
     }
 ])

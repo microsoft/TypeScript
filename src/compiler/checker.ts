@@ -13285,8 +13285,12 @@ namespace ts {
         }
 
         function isUncalledFunctionReference(node: Node, symbol: Symbol) {
-            return !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Method))
-                || !isCallLikeExpression(findAncestor(node, n => !isAccessExpression(n)) || node.parent)
+// (!(localOrExportSymbol.flags & SymbolFlags.Function)
+//                     || !isCallExpression(findAncestor(node.parent, n => !isPropertyAccessExpression(n)) ?? node.parent)
+//                         && localOrExportSymbol.declarations.every(d => !isFunctionLike(d) || d.flags & NodeFlags.Deprecated))
+            // TODO: Needs to use isELement or isProperty, variously
+            return !(symbol.flags & SymbolFlags.Function)
+                || !isCallExpression(findAncestor(node, n => !isAccessExpression(n)) ?? node.parent)
                 && every(symbol.declarations, d => !isFunctionLike(d) || !!(d.flags & NodeFlags.Deprecated));
         }
 
@@ -22061,7 +22065,7 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
-            if (declaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, localOrExportSymbol)) {
+            if (declaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, localOrExportSymbol) ) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);;
             }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
@@ -27430,7 +27434,9 @@ namespace ts {
                 return nonInferrableType;
             }
 
-            checkDeprecatedSignature(signature, node);
+            if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
+                errorOrSuggestion(/*isError*/ false, node, Diagnostics._0_is_deprecated, signatureToString(signature));
+            }
 
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;

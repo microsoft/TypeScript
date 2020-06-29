@@ -1,6 +1,5 @@
 ///<reference path="fourslash.ts" />
 
-//// // merges
 //// /** @deprecated */
 //// interface a { a: number }
 //// declare function a(): void
