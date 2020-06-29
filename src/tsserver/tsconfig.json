@@ -2,7 +2,8 @@
     "extends": "../tsconfig-library-base",
 
     "compilerOptions": {
-        "outFile": "../../built/local/tsserver.js",
+        "outFile": "../../built/local/tsserver.out.js",
+        "sourceMap": true,
         "types": [
             "node"
         ]
@@ -11,6 +12,7 @@
         "server.ts"
     ],
     "references": [
+        { "path": "../shims", "prepend": true },
         { "path": "../compiler", "prepend": true },
         { "path": "../services", "prepend": true },
         { "path": "../jsTyping", "prepend": true },

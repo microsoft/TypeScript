@@ -45,13 +45,12 @@ function main(): void {
     const toRemove = [
         // JS Files
         "tsserver.js",
-        "tsserverlibrary.js",
         "typescriptServices.js",
         "typingsInstaller.js",
         "tsc.js",
         // DTS files
         "typescriptServices.d.ts",
-        "tsserverlibrary.d.ts"
+        "tsserver.d.ts"
     ];
 
     // Get a link to the main dependency JS file

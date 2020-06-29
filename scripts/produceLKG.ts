@@ -57,8 +57,7 @@ async function buildProtocol() {
 async function copyScriptOutputs() {
     await copyWithCopyright("cancellationToken.js");
     await copyWithCopyright("tsc.release.js", "tsc.js");
-    await copyWithCopyright("tsserver.js");
-    await copyFromBuiltLocal("tsserverlibrary.js"); // copyright added by build
+    await copyFromBuiltLocal("tsserver.js"); // copyright added by build
     await copyFromBuiltLocal("typescript.js"); // copyright added by build
     await copyFromBuiltLocal("typescriptServices.js"); // copyright added by build
     await copyWithCopyright("typingsInstaller.js");
@@ -66,7 +65,7 @@ async function copyScriptOutputs() {
 }
 
 async function copyDeclarationOutputs() {
-    await copyFromBuiltLocal("tsserverlibrary.d.ts"); // copyright added by build
+    await copyFromBuiltLocal("tsserver.d.ts"); // copyright added by build
     await copyFromBuiltLocal("typescript.d.ts"); // copyright added by build
     await copyFromBuiltLocal("typescriptServices.d.ts"); // copyright added by build
 }

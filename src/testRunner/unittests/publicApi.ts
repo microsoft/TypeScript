@@ -28,7 +28,7 @@ describe("unittests:: Public APIs", () => {
     });
 
     describe("for the language server", () => {
-        verifyApi("tsserverlibrary.d.ts");
+        verifyApi("tsserver.d.ts");
     });
 });
 
