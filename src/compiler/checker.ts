@@ -9781,7 +9781,7 @@ namespace ts {
                 const restParams = map(elementTypes, (t, i) => {
                     // Lookup the label from the individual tuple passed in before falling back to the signature `rest` parameter name
                     const tupleLabelName = !!associatedNames && getTupleElementLabel(associatedNames[i]);
-                    const name = tupleLabelName || getParameterNameAtPosition(sig, restIndex + i);
+                    const name = tupleLabelName || getParameterNameAtPosition(sig, restIndex + i, restType);
                     const flags = restType.target.elementFlags[i];
                     const checkFlags = flags & ElementFlags.Variable ? CheckFlags.RestParameter :
                         flags & ElementFlags.Optional ? CheckFlags.OptionalParameter : 0;
@@ -27698,13 +27698,13 @@ namespace ts {
             return d.name.escapedText;
         }
 
-        function getParameterNameAtPosition(signature: Signature, pos: number) {
+        function getParameterNameAtPosition(signature: Signature, pos: number, overrideRestType?: Type) {
             const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
             if (pos < paramCount) {
                 return signature.parameters[pos].escapedName;
             }
             const restParameter = signature.parameters[paramCount] || unknownSymbol;
-            const restType = getTypeOfSymbol(restParameter);
+            const restType = overrideRestType || getTypeOfSymbol(restParameter);
             if (isTupleType(restType)) {
                 const associatedNames = (<TupleType>(<TypeReference>restType).target).labeledElementDeclarations;
                 const index = pos - paramCount;
