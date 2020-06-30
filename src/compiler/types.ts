@@ -4592,7 +4592,6 @@ namespace ts {
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
         /* @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
-        /* @internal */ deprecatedFlags?: DeprecatedFlags;
     }
 
     /* @internal */
@@ -4645,6 +4644,7 @@ namespace ts {
         typeOnlyDeclaration?: TypeOnlyCompatibleAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
         isConstructorDeclaredProperty?: boolean;  // Property declared through 'this.x = ...' assignment in constructor
         tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
+        deprecatedFlags?: DeprecatedFlags;
     }
 
     /* @internal */

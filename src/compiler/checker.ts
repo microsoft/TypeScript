@@ -13274,6 +13274,45 @@ namespace ts {
                         undefined;
         }
 
+        function getDeprecatedFlags(symbol: Symbol) {
+            if (!(symbol.flags & SymbolFlags.Deprecated)) {
+                return DeprecatedFlags.None;
+            }
+
+            const symbolLinks = getSymbolLinks(symbol);
+            if (symbolLinks.deprecatedFlags === undefined) {
+                let deprecatedFlags = DeprecatedFlags.None;
+                let allSignatureLikeDeprecated = true;
+                forEach(symbol.declarations, decl => {
+                    const isTypeDecl = isTypeDeclaration(decl);
+                    const hasDeprecated = decl.flags & NodeFlags.Deprecated;
+                    if (hasDeprecated && symbol.flags & SymbolFlags.Type && isTypeDecl) {
+                        deprecatedFlags |= DeprecatedFlags.Type;
+                    }
+
+                    if ((symbol.flags & (SymbolFlags.Constructor | SymbolFlags.Signature | SymbolFlags.Function | SymbolFlags.Method)) && isFunctionLike(decl)) {
+                        if (hasDeprecated) {
+                            deprecatedFlags |= DeprecatedFlags.Signature;
+                        }
+                        else {
+                            allSignatureLikeDeprecated = false;
+                        }
+                    }
+                    else if (hasDeprecated && symbol.flags & SymbolFlags.Value && !isTypeDecl) {
+                        deprecatedFlags |= DeprecatedFlags.Value;
+                    }
+                });
+
+                if (deprecatedFlags & DeprecatedFlags.Signature && allSignatureLikeDeprecated) {
+                    deprecatedFlags &= DeprecatedFlags.SignatureExcludes;
+                    deprecatedFlags |= DeprecatedFlags.Value;
+                }
+
+                symbolLinks.deprecatedFlags = deprecatedFlags;
+            }
+            return symbolLinks.deprecatedFlags;
+        }
+
         function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);
