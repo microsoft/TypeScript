@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.Completions.StringCompletions {
+namespace ts.Completions {
     export function getStringLiteralCompletions(sourceFile: SourceFile, position: number, contextToken: Node | undefined, checker: TypeChecker, options: CompilerOptions, host: LanguageServiceHost, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
         if (isInReferenceComment(sourceFile, position)) {
             const entries = getTripleSlashReferenceCompletion(sourceFile, position, options, host);
