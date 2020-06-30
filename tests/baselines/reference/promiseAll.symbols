@@ -1,0 +1,14 @@
+=== tests/cases/compiler/promiseAll.ts ===
+// https://github.com/microsoft/TypeScript/issues/37856
+
+var p = Promise.all([Promise.reject()]).catch(() => [0]);
+>p : Symbol(p, Decl(promiseAll.ts, 2, 3))
+>Promise.all([Promise.reject()]).catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --) ... and 8 more)
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --) ... and 8 more)
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>catch : Symbol(Promise.catch, Decl(lib.es5.d.ts, --, --))
+
