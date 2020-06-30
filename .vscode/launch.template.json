@@ -19,8 +19,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
-      "protocol": "inspector",
+      "type": "pwa-node",
       "request": "launch",
       "name": "Mocha Tests (currently opened test)",
       "runtimeArgs": ["--nolazy"],
@@ -51,7 +50,7 @@
     },
     {
       // See: https://github.com/microsoft/TypeScript/wiki/Debugging-Language-Service-in-VS-Code
-      "type": "node",
+      "type": "pwa-node",
       "request": "attach",
       "name": "Attach to VS Code TS Server via Port",
       "processId": "${command:PickProcess}"
