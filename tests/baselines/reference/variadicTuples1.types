@@ -1254,3 +1254,28 @@ function f23<U extends string[]>(args: [...U, number]) {
 >42 : 42
 }
 
+// Repro from #39327
+
+interface Desc<A extends unknown[], T> {
+    readonly f: (...args: A) => T;
+>f : (...args: A) => T
+>args : A
+
+    bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
+>bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
+>this : Desc<[...T, ...U], R>
+>args : T
+}
+
+declare const a: Desc<[string, number, boolean], object>;
+>a : Desc<[string, number, boolean], object>
+
+const b = a.bind("", 1);  // Desc<[boolean], object>
+>b : Desc<[boolean], object>
+>a.bind("", 1) : Desc<[boolean], object>
+>a.bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
+>a : Desc<[string, number, boolean], object>
+>bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
+>"" : ""
+>1 : 1
+
