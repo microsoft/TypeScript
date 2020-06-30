@@ -1834,7 +1834,8 @@ namespace ts {
                 if (candidateName.length < 3 && candidateNameLowerCase !== nameLowerCase) {
                     continue;
                 }
-                // Only care about a result better or maybe better than the best so far.
+                // We only care about results that are clearly better, or which
+                // could be better when accounting for case-sensitivity.
                 const distance = levenshteinWithMax(nameLowerCase, candidateNameLowerCase, bestDistance);
                 if (distance === undefined) {
                     continue;
