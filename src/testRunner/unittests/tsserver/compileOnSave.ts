@@ -847,7 +847,7 @@ namespace ts.projectSystem {
                     arguments: { file: file1.path, richResponse }
                 }).response;
                 if (richResponse) {
-                    assert.deepEqual(file1SaveResponse, { emitSkipped: false, diagnostics: emptyArray });
+                    assert.deepEqual(file1SaveResponse, { emitSkipped: false, diagnostics: neverArray });
                 }
                 else {
                     assert.isTrue(file1SaveResponse);
@@ -931,7 +931,7 @@ function bar() {
                     path: `${tscWatch.projectRoot}/module.ts`,
                     content: "export const xyz = 4;"
                 };
-                const files = [file1, file2, file3, ...(hasModule ? [module] : emptyArray)];
+                const files = [file1, file2, file3, ...(hasModule ? [module] : neverArray)];
                 const host = createServerHost([...files, config, libFile]);
                 const session = createSession(host);
                 openFilesForSession([file1, file2], session);
@@ -998,7 +998,7 @@ function bar() {
                         arguments: { file: file.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(affectedFileResponse, [
-                        { fileNames: [file.path, ...(returnsAllFilesAsAffected ? files.filter(f => f !== file).map(f => f.path) : emptyArray)], projectFileName: config.path, projectUsesOutFile: false }
+                        { fileNames: [file.path, ...(returnsAllFilesAsAffected ? files.filter(f => f !== file).map(f => f.path) : neverArray)], projectFileName: config.path, projectUsesOutFile: false }
                     ]);
                     file.content = file.content.replace(oldText, newText);
                     verifyFileSave(file);

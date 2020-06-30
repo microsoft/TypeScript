@@ -61,7 +61,7 @@ namespace ts {
             realpath: host.realpath && realpath
         };
 
-        function toPath_NameSpaceLocal(fileName: string) {
+        function toPathNameSpaceLocal(fileName: string) {
             return toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
@@ -129,7 +129,7 @@ namespace ts {
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            const path = toPath_NameSpaceLocal(fileName);
+            const path = toPathNameSpaceLocal(fileName);
             const result = getCachedFileSystemEntriesForBaseDir(path);
             if (result) {
                 updateFilesOfFileSystemEntry(result, getBaseNameOfFileName(fileName), /*fileExists*/ true);
@@ -138,19 +138,19 @@ namespace ts {
         }
 
         function fileExists(fileName: string): boolean {
-            const path = toPath_NameSpaceLocal(fileName);
+            const path = toPathNameSpaceLocal(fileName);
             const result = getCachedFileSystemEntriesForBaseDir(path);
             return result && hasEntry(result.files, getBaseNameOfFileName(fileName)) ||
                 host.fileExists(fileName);
         }
 
         function directoryExists(dirPath: string): boolean {
-            const path = toPath_NameSpaceLocal(dirPath);
+            const path = toPathNameSpaceLocal(dirPath);
             return cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(path)) || host.directoryExists!(dirPath);
         }
 
         function createDirectory(dirPath: string) {
-            const path = toPath_NameSpaceLocal(dirPath);
+            const path = toPathNameSpaceLocal(dirPath);
             const result = getCachedFileSystemEntriesForBaseDir(path);
             const baseFileName = getBaseNameOfFileName(dirPath);
             if (result) {
@@ -160,7 +160,7 @@ namespace ts {
         }
 
         function getDirectories(rootDir: string): string[] {
-            const rootDirPath = toPath_NameSpaceLocal(rootDir);
+            const rootDirPath = toPathNameSpaceLocal(rootDir);
             const result = tryReadDirectory(rootDir, rootDirPath);
             if (result) {
                 return result.directories.slice();
@@ -169,7 +169,7 @@ namespace ts {
         }
 
         function readDirectory(rootDir: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
-            const rootDirPath = toPath_NameSpaceLocal(rootDir);
+            const rootDirPath = toPathNameSpaceLocal(rootDir);
             const result = tryReadDirectory(rootDir, rootDirPath);
             if (result) {
                 return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
@@ -177,7 +177,7 @@ namespace ts {
             return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
             function getFileSystemEntries(dir: string): FileSystemEntries {
-                const path = toPath_NameSpaceLocal(dir);
+                const path = toPathNameSpaceLocal(dir);
                 if (path === rootDirPath) {
                     return result!;
                 }

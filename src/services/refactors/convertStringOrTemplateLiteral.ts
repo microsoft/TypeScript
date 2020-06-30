@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.convertStringOrTemplateLiteral {
+namespace ts.refactor {
     const refactorName = "Convert to template string";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
 
@@ -15,7 +15,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             refactorInfo.actions.push({ name: refactorName, description: refactorDescription });
             return [refactorInfo];
         }
-        return emptyArray;
+        return neverArray;
     }
 
     function getNodeOrParentOfParentheses(file: SourceFile, startPosition: number) {

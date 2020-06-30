@@ -2085,8 +2085,8 @@ foo;`
                 const expectedReferences = expectedReferencesResponse();
                 verifySolutionScenario({
                     configRefs: ["./tsconfig-src.json"],
-                    additionalFiles: emptyArray,
-                    additionalProjects: emptyArray,
+                    additionalFiles: neverArray,
+                    additionalProjects: neverArray,
                     expectedOpenEvents: [
                         ...expectedSolutionLoadAndTelemetry(),
                         ...expectedProjectReferenceLoadAndTelemetry(tsconfigSrcPath),

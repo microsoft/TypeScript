@@ -26,7 +26,7 @@ namespace ts.projectSystem {
                 const project = service.configuredProjects.get(config.path)!;
                 if (lazyConfiguredProjectsFromExternalProject) {
                     assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.Full); // External project referenced configured project pending to be reloaded
-                    checkProjectActualFiles(project, emptyArray);
+                    checkProjectActualFiles(project, neverArray);
                 }
                 else {
                     assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded
@@ -525,7 +525,7 @@ namespace ts.projectSystem {
 
                 const configProject = configuredProjectAt(projectService, 0);
                 checkProjectActualFiles(configProject, lazyConfiguredProjectsFromExternalProject ?
-                    emptyArray : // Since no files opened from this project, its not loaded
+                    neverArray : // Since no files opened from this project, its not loaded
                     [configFile.path]);
 
                 host.deleteFile(configFile.path);
@@ -586,7 +586,7 @@ namespace ts.projectSystem {
                 });
                 projectService.checkNumberOfProjects({ configuredProjects: 1 });
                 if (lazyConfiguredProjectsFromExternalProject) {
-                    checkProjectActualFiles(configuredProjectAt(projectService, 0), emptyArray); // Configured project created but not loaded till actually needed
+                    checkProjectActualFiles(configuredProjectAt(projectService, 0), neverArray); // Configured project created but not loaded till actually needed
                     projectService.ensureInferredProjectsUpToDate_TestOnly();
                 }
                 checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, tsconfig.path]);
@@ -655,8 +655,8 @@ namespace ts.projectSystem {
                 });
                 projectService.checkNumberOfProjects({ configuredProjects: 2 });
                 if (lazyConfiguredProjectsFromExternalProject) {
-                    checkProjectActualFiles(configuredProjectAt(projectService, 0), emptyArray); // Configured project created but not loaded till actually needed
-                    checkProjectActualFiles(configuredProjectAt(projectService, 1), emptyArray); // Configured project created but not loaded till actually needed
+                    checkProjectActualFiles(configuredProjectAt(projectService, 0), neverArray); // Configured project created but not loaded till actually needed
+                    checkProjectActualFiles(configuredProjectAt(projectService, 1), neverArray); // Configured project created but not loaded till actually needed
                     projectService.ensureInferredProjectsUpToDate_TestOnly();
                 }
                 checkProjectActualFiles(configuredProjectAt(projectService, 0), [cLib.path, cTsconfig.path]);
@@ -691,8 +691,8 @@ namespace ts.projectSystem {
                 });
                 projectService.checkNumberOfProjects({ configuredProjects: 2 });
                 if (lazyConfiguredProjectsFromExternalProject) {
-                    checkProjectActualFiles(configuredProjectAt(projectService, 0), emptyArray); // Configured project created but not loaded till actually needed
-                    checkProjectActualFiles(configuredProjectAt(projectService, 1), emptyArray); // Configured project created but not loaded till actually needed
+                    checkProjectActualFiles(configuredProjectAt(projectService, 0), neverArray); // Configured project created but not loaded till actually needed
+                    checkProjectActualFiles(configuredProjectAt(projectService, 1), neverArray); // Configured project created but not loaded till actually needed
                     projectService.ensureInferredProjectsUpToDate_TestOnly();
                 }
                 checkProjectActualFiles(configuredProjectAt(projectService, 0), [cLib.path, cTsconfig.path]);
@@ -825,7 +825,7 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ configuredProjects: 1 });
             const project = service.configuredProjects.get(config.path)!;
             assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.Full); // External project referenced configured project pending to be reloaded
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, neverArray);
 
             service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject: false } });
             assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded

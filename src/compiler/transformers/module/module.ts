@@ -162,7 +162,7 @@ namespace ts {
                                     // Add the dependency array argument:
                                     //
                                     //     ["require", "exports", module1", "module2", ...]
-                                    factory.createArrayLiteralExpression(jsonSourceFile ? emptyArray : [
+                                    factory.createArrayLiteralExpression(jsonSourceFile ? neverArray : [
                                         factory.createStringLiteral("require"),
                                         factory.createStringLiteral("exports"),
                                         ...aliasedModuleNames,

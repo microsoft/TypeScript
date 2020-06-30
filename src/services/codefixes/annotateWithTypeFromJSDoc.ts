@@ -77,7 +77,7 @@ namespace ts.codefix {
         switch (node.kind) {
             case SyntaxKind.JSDocAllType:
             case SyntaxKind.JSDocUnknownType:
-                return factory.createTypeReferenceNode("any", emptyArray);
+                return factory.createTypeReferenceNode("any", neverArray);
             case SyntaxKind.JSDocOptionalType:
                 return transformJSDocOptionalType(node as JSDocOptionalType);
             case SyntaxKind.JSDocNonNullableType:
@@ -98,11 +98,11 @@ namespace ts.codefix {
     }
 
     function transformJSDocOptionalType(node: JSDocOptionalType) {
-        return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType), factory.createTypeReferenceNode("undefined", emptyArray)]);
+        return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType), factory.createTypeReferenceNode("undefined", neverArray)]);
     }
 
     function transformJSDocNullableType(node: JSDocNullableType) {
-        return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType), factory.createTypeReferenceNode("null", emptyArray)]);
+        return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType), factory.createTypeReferenceNode("null", neverArray)]);
     }
 
     function transformJSDocVariadicType(node: JSDocVariadicType) {
@@ -112,7 +112,7 @@ namespace ts.codefix {
     function transformJSDocFunctionType(node: JSDocFunctionType) {
         // TODO: This does not properly handle `function(new:C, string)` per https://github.com/google/closure-compiler/wiki/Types-in-the-Closure-Type-System#the-javascript-type-language
         //       however we do handle it correctly in `serializeTypeForDeclaration` in checker.ts
-        return factory.createFunctionTypeNode(emptyArray, node.parameters.map(transformJSDocParameter), node.type ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
+        return factory.createFunctionTypeNode(neverArray, node.parameters.map(transformJSDocParameter), node.type ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
     }
 
     function transformJSDocParameter(node: ParameterDeclaration) {
@@ -146,7 +146,7 @@ namespace ts.codefix {
             }
             name = factory.createIdentifier(text);
             if ((text === "Array" || text === "Promise") && !node.typeArguments) {
-                args = factory.createNodeArray([factory.createTypeReferenceNode("any", emptyArray)]);
+                args = factory.createNodeArray([factory.createTypeReferenceNode("any", neverArray)]);
             }
             else {
                 args = visitNodes(node.typeArguments, transformJSDocType);

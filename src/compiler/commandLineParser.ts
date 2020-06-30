@@ -2953,7 +2953,7 @@ namespace ts {
         basePath: string,
         options: CompilerOptions,
         host: ParseConfigHost,
-        extraFileExtensions: readonly FileExtensionInfo[] = emptyArray
+        extraFileExtensions: readonly FileExtensionInfo[] = neverArray
     ): ExpandResult {
         basePath = normalizePath(basePath);
 
@@ -2997,7 +2997,7 @@ namespace ts {
                     if (!jsonOnlyIncludeRegexes) {
                         const includes = validatedIncludeSpecs.filter(s => endsWith(s, Extension.Json));
                         const includeFilePatterns = map(getRegularExpressionsForWildcards(includes, basePath, "files"), pattern => `^${pattern}$`);
-                        jsonOnlyIncludeRegexes = includeFilePatterns ? includeFilePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames)) : emptyArray;
+                        jsonOnlyIncludeRegexes = includeFilePatterns ? includeFilePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames)) : neverArray;
                     }
                     const includeIndex = findIndex(jsonOnlyIncludeRegexes, re => re.test(file));
                     if (includeIndex !== -1) {

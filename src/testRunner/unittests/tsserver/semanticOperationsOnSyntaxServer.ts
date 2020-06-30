@@ -35,9 +35,9 @@ class c { prop = "hello"; foo() { return this.prop; } }`
 
             function verifyCompletions() {
                 assert.isTrue(project.languageServiceEnabled);
-                checkWatchedFiles(host, emptyArray);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedFiles(host, neverArray);
+                checkWatchedDirectories(host, neverArray, /*recursive*/ true);
+                checkWatchedDirectories(host, neverArray, /*recursive*/ false);
                 const response = session.executeCommandSeq<protocol.CompletionsRequest>({
                     command: protocol.CommandTypes.Completions,
                     arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })

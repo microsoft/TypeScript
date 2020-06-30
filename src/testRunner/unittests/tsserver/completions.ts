@@ -62,7 +62,7 @@ namespace ts.projectSystem {
                     spacePart(),
                     displayPart("0", SymbolDisplayPartKind.stringLiteral),
                 ],
-                documentation: emptyArray,
+                documentation: neverArray,
                 kind: ScriptElementKind.constElement,
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",

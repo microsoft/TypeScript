@@ -253,7 +253,7 @@ ${appendJs}`
                     writeByteOrderMark: false
                 })),
                 emitSkipped: false,
-                diagnostics: emptyArray
+                diagnostics: neverArray
             };
         }
 
@@ -264,7 +264,7 @@ ${appendJs}`
         function noEmit(): SingleScenarioExpectedEmit {
             return {
                 expectedEmitSuccess: false,
-                expectedFiles: emptyArray
+                expectedFiles: neverArray
             };
         }
 
@@ -272,7 +272,7 @@ ${appendJs}`
             return {
                 emitSkipped: true,
                 outputFiles: [],
-                diagnostics: emptyArray
+                diagnostics: neverArray
             };
         }
 

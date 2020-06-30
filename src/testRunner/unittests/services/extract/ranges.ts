@@ -7,7 +7,7 @@ namespace ts {
             if (!selectionRange) {
                 throw new Error(`Test ${s} does not specify selection range`);
             }
-            const result = refactor.extractSymbol.getRangeToExtract(file, createTextSpanFromRange(selectionRange), /*userRequested*/ false);
+            const result = refactor.getRangeToExtract(file, createTextSpanFromRange(selectionRange), /*userRequested*/ false);
             assert(result.targetRange === undefined, "failure expected");
             const sortedErrors = result.errors!.map(e => <string>e.messageText).sort();
             assert.deepEqual(sortedErrors, expectedErrors.sort(), "unexpected errors");
@@ -21,7 +21,7 @@ namespace ts {
         if (!selectionRange) {
             throw new Error(`Test ${s} does not specify selection range`);
         }
-        const result = refactor.extractSymbol.getRangeToExtract(f, createTextSpanFromRange(selectionRange));
+        const result = refactor.getRangeToExtract(f, createTextSpanFromRange(selectionRange));
         const expectedRange = t.ranges.get("extracted");
         if (expectedRange) {
             let pos: number, end: number;
@@ -189,7 +189,7 @@ function f() {
 }
 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
+            [refactor.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
 
         testExtractRangeFailed("extractRangeFailed2",
             `
@@ -206,7 +206,7 @@ function f() {
 }
 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+            [refactor.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
 
         testExtractRangeFailed("extractRangeFailed3",
             `
@@ -223,7 +223,7 @@ function f() {
 }
 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+            [refactor.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
 
         testExtractRangeFailed("extractRangeFailed4",
             `
@@ -240,7 +240,7 @@ function f() {
 }
 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange.message]);
+            [refactor.Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange.message]);
 
         testExtractRangeFailed("extractRangeFailed5",
             `
@@ -259,7 +259,7 @@ function f2() {
 }
 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
+            [refactor.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
 
         testExtractRangeFailed("extractRangeFailed6",
             `
@@ -278,7 +278,7 @@ function f2() {
 }
 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
+            [refactor.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
 
         testExtractRangeFailed("extractRangeFailed7",
             `
@@ -289,7 +289,7 @@ while (x) {
 }
 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+            [refactor.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
 
         testExtractRangeFailed("extractRangeFailed8",
             `
@@ -300,11 +300,11 @@ switch (x) {
 }
 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+            [refactor.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
 
         testExtractRangeFailed("extractRangeFailed9",
             `var x = ([#||]1 + 2);`,
-            [refactor.extractSymbol.Messages.cannotExtractEmpty.message]);
+            [refactor.Messages.cannotExtractEmpty.message]);
 
         testExtractRangeFailed("extractRangeFailed10",
             `
@@ -313,7 +313,7 @@ switch (x) {
                     }
                 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+            [refactor.Messages.cannotExtractRange.message]);
 
         testExtractRangeFailed("extractRangeFailed11",
             `
@@ -328,15 +328,15 @@ switch (x) {
                     }
                 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
+            [refactor.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
 
         testExtractRangeFailed("extractRangeFailed12",
             `let [#|x|];`,
-            [refactor.extractSymbol.Messages.statementOrExpressionExpected.message]);
+            [refactor.Messages.statementOrExpressionExpected.message]);
 
         testExtractRangeFailed("extractRangeFailed13",
             `[#|return;|]`,
-            [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+            [refactor.Messages.cannotExtractRange.message]);
 
         testExtractRangeFailed("extractRangeFailed14",
             `
@@ -345,7 +345,7 @@ switch (x) {
                         break;|]
                 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+            [refactor.Messages.cannotExtractRange.message]);
 
         testExtractRangeFailed("extractRangeFailed15",
             `
@@ -354,7 +354,7 @@ switch (x) {
                         break|];
                 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+            [refactor.Messages.cannotExtractRange.message]);
 
         // Documentation only - it would be nice if the result were [$|1|]
         testExtractRangeFailed("extractRangeFailed16",
@@ -364,7 +364,7 @@ switch (x) {
                         break;
                 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+            [refactor.Messages.cannotExtractRange.message]);
 
         // Documentation only - it would be nice if the result were [$|1|]
         testExtractRangeFailed("extractRangeFailed17",
@@ -374,16 +374,16 @@ switch (x) {
                         break;
                 }
             `,
-            [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+            [refactor.Messages.cannotExtractRange.message]);
 
         testExtractRangeFailed("extractRangeFailed18",
             `[#|{ 1;|] }`,
-            [refactor.extractSymbol.Messages.cannotExtractRange.message]);
+            [refactor.Messages.cannotExtractRange.message]);
 
         testExtractRangeFailed("extractRangeFailed19",
             `[#|/** @type {number} */|] const foo = 1;`,
-            [refactor.extractSymbol.Messages.cannotExtractJSDoc.message]);
+            [refactor.Messages.cannotExtractJSDoc.message]);
 
-        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.extractSymbol.Messages.cannotExtractIdentifier.message]);
+        testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.Messages.cannotExtractIdentifier.message]);
     });
 }

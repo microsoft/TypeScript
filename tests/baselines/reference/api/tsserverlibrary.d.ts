@@ -6361,7 +6361,7 @@ declare namespace ts.server {
         requestTime = 2,
         verbose = 3
     }
-    const emptyArray: SortedReadonlyArray<never>;
+    const emptyArray_Server: SortedReadonlyArray<never>;
     interface Logger {
         close(): void;
         hasLevel(level: LogLevel): boolean;

@@ -127,7 +127,7 @@ namespace ts.tscWatch {
             host.writeFile(imported.path, imported.content);
 
             host.runQueuedTimeoutCallbacks();
-            checkOutputErrorsIncremental(host, emptyArray);
+            checkOutputErrorsIncremental(host, neverArray);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
         });
 
@@ -158,7 +158,7 @@ namespace ts.tscWatch {
             const watch = createWatchOfFilesAndCompilerOptions([root.path], host, { module: ModuleKind.AMD });
 
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
-            checkOutputErrorsInitial(host, emptyArray);
+            checkOutputErrorsInitial(host, neverArray);
 
             fileExistsCalledForBar = false;
             host.deleteFile(imported.path);
@@ -172,7 +172,7 @@ namespace ts.tscWatch {
             host.writeFile(imported.path, imported.content);
             host.checkTimeoutQueueLengthAndRun(1); // Scheduled invalidation of resolutions
             host.checkTimeoutQueueLengthAndRun(1); // Actual update
-            checkOutputErrorsIncremental(host, emptyArray);
+            checkOutputErrorsIncremental(host, neverArray);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
         });
 
@@ -447,7 +447,7 @@ declare namespace myapp {
                 const files = [libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther];
                 return createWatchedSystem(files, { currentDirectory: mainPackageRoot });
             },
-            changes: emptyArray
+            changes: neverArray
         });
     });
 }

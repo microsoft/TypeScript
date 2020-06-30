@@ -3,7 +3,7 @@ namespace ts.refactor {
     const refactorName = "Move to a new file";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return emptyArray;
+            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return neverArray;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
         },
@@ -787,7 +787,7 @@ namespace ts.refactor {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ImportEqualsDeclaration:
-                return emptyArray;
+                return neverArray;
             case SyntaxKind.ExpressionStatement:
                 return Debug.fail("Can't export an ExpressionStatement"); // Shouldn't try to add 'export' keyword to `exports.x = ...`
             default:

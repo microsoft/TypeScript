@@ -138,7 +138,7 @@ namespace ts.tscWatch {
             subScenario: "creates solution in watch mode",
             commandLineArgs: ["-b", "-w", `${project}/${SubProject.tests}`],
             sys: () => createWatchedSystem(allFiles, { currentDirectory: projectsLocation }),
-            changes: emptyArray
+            changes: neverArray
         });
 
         it("verify building references watches only those projects", () => {
@@ -148,10 +148,10 @@ namespace ts.tscWatch {
             solutionBuilder.buildReferences(`${project}/${SubProject.tests}`);
 
             checkWatchedFiles(system, testProjectExpectedWatchedFiles.slice(0, testProjectExpectedWatchedFiles.length - tests.length));
-            checkWatchedDirectories(system, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(system, neverArray, /*recursive*/ false);
             checkWatchedDirectories(system, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
 
-            checkOutputErrorsInitial(system, emptyArray);
+            checkOutputErrorsInitial(system, neverArray);
             const testOutput = getOutputStamps(system, SubProject.tests, "index");
             const outputFileStamps = getOutputFileStamps(system);
             for (const stamp of outputFileStamps.slice(0, outputFileStamps.length - testOutput.length)) {
@@ -442,7 +442,7 @@ let x: string = 10;`),
                     ]
                 });
             }
-            verifyIncrementalErrors("when preserveWatchOutput is not used", emptyArray);
+            verifyIncrementalErrors("when preserveWatchOutput is not used", neverArray);
             verifyIncrementalErrors("when preserveWatchOutput is passed on command line", ["--preserveWatchOutput"]);
 
             describe("when declaration emit errors are present", () => {
@@ -555,7 +555,7 @@ let x: string = 10;`),
             describe("invoking when references are already built", () => {
                 function verifyWatchesOfProject(host: TsBuildWatchSystem, expectedWatchedFiles: readonly string[], expectedWatchedDirectoriesRecursive: readonly string[], expectedWatchedDirectories?: readonly string[]) {
                     checkWatchedFilesDetailed(host, expectedWatchedFiles, 1);
-                    checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories || emptyArray, 1, /*recursive*/ false);
+                    checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories || neverArray, 1, /*recursive*/ false);
                     checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, 1, /*recursive*/ true);
                 }
 
@@ -585,7 +585,7 @@ let x: string = 10;`),
 
                     // Build in watch mode
                     const watch = createWatchOfConfigFile(watchConfig, host);
-                    checkOutputErrorsInitial(host, emptyArray);
+                    checkOutputErrorsInitial(host, neverArray);
 
                     return { host, solutionBuilder, watch };
                 }
@@ -651,7 +651,7 @@ let x: string = 10;`),
                             edit(host, solutionBuilder);
 
                             host.checkTimeoutQueueLengthAndRun(1);
-                            checkOutputErrorsIncremental(host, emptyArray);
+                            checkOutputErrorsIncremental(host, neverArray);
                             checkProgramActualFiles(watch.getCurrentProgram().getProgram(), expectedProgramFilesAfterEdit());
 
                         });
@@ -808,7 +808,7 @@ export function gfoo() {
                         const expectedProjectWatchedFiles = expectedProjectFiles.concat(cTsconfig.path, bTsconfig.path, aTsconfig.path).map(s => s.toLowerCase());
                         const expectedWatchedDirectories = multiFolder ? [
                             getProjectPath(project).toLowerCase() // watches for directories created for resolution of b
-                        ] : emptyArray;
+                        ] : neverArray;
                         const nrefsPath = multiFolder ? ["../nrefs/*"] : ["./nrefs/*"];
                         const expectedWatchedDirectoriesRecursive = [
                             ...(multiFolder ? [
@@ -901,7 +901,7 @@ export function gfoo() {
                                     revert(host);
 
                                     host.checkTimeoutQueueLengthAndRun(schedulesFailedWatchUpdate ? 2 : 1);
-                                    checkOutputErrorsIncremental(host, emptyArray);
+                                    checkOutputErrorsIncremental(host, neverArray);
                                     verifyProgram(host, watch);
                                 }
                             });
@@ -946,7 +946,7 @@ export function gfoo() {
                                     solutionBuilder.invalidateProject((bTsconfig.path.toLowerCase() as ResolvedConfigFilePath));
                                     solutionBuilder.buildNextInvalidatedProject();
                                 },
-                                expectedEditErrors: emptyArray,
+                                expectedEditErrors: neverArray,
                                 expectedProgramFiles,
                                 expectedProjectFiles,
                                 expectedWatchedFiles,
@@ -969,7 +969,7 @@ export function gfoo() {
                                     cTsConfigJson.compilerOptions.paths = { "@ref/*": nrefsPath };
                                     host.writeFile(cTsconfig.path, JSON.stringify(cTsConfigJson));
                                 },
-                                expectedEditErrors: emptyArray,
+                                expectedEditErrors: neverArray,
                                 expectedProgramFiles: expectedProgramFiles.map(nrefReplacer),
                                 expectedProjectFiles: expectedProjectFiles.map(nrefReplacer),
                                 expectedWatchedFiles: expectedWatchedFiles.map(nrefReplacer),
@@ -1005,7 +1005,7 @@ export function gfoo() {
                                     bTsConfigJson.compilerOptions.paths = { "@ref/*": nrefsPath };
                                     host.writeFile(bTsconfig.path, JSON.stringify(bTsConfigJson));
                                 },
-                                expectedEditErrors: emptyArray,
+                                expectedEditErrors: neverArray,
                                 expectedProgramFiles,
                                 expectedProjectFiles,
                                 expectedWatchedFiles: expectedProgramFiles.concat(cTsconfig.path, bTsconfig.path, aTsconfig.path).map(s => s.toLowerCase()),

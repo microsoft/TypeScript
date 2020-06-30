@@ -187,7 +187,7 @@ namespace ts.JsDoc {
             kind: ScriptElementKind.unknown, // TODO: should have its own kind?
             kindModifiers: "",
             displayParts: [textPart(name)],
-            documentation: emptyArray,
+            documentation: neverArray,
             tags: undefined,
             codeActions: undefined,
         };
@@ -195,7 +195,7 @@ namespace ts.JsDoc {
 
     export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
         if (!isIdentifier(tag.name)) {
-            return emptyArray;
+            return neverArray;
         }
         const nameThusFar = tag.name.text;
         const jsdoc = tag.parent;
@@ -221,7 +221,7 @@ namespace ts.JsDoc {
             kind: ScriptElementKind.parameterElement,
             kindModifiers: "",
             displayParts: [textPart(name)],
-            documentation: emptyArray,
+            documentation: neverArray,
             tags: undefined,
             codeActions: undefined,
         };
@@ -367,7 +367,7 @@ namespace ts.JsDoc {
                 if (getAssignmentDeclarationKind(be) === AssignmentDeclarationKind.None) {
                     return "quit";
                 }
-                const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
+                const parameters = isFunctionLike(be.right) ? be.right.parameters : neverArray;
                 return { commentOwner, parameters };
             }
             case SyntaxKind.PropertyDeclaration:
@@ -397,10 +397,10 @@ namespace ts.JsDoc {
                 return (<FunctionExpression>rightHandSide).parameters;
             case SyntaxKind.ClassExpression: {
                 const ctr = find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
-                return ctr ? ctr.parameters : emptyArray;
+                return ctr ? ctr.parameters : neverArray;
             }
         }
 
-        return emptyArray;
+        return neverArray;
     }
 }

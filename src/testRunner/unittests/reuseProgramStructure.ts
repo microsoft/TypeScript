@@ -313,7 +313,7 @@ namespace ts {
             const options: CompilerOptions = { target, noLib: true };
 
             const program1 = newProgram(files, ["a.ts"], options);
-            assert.notDeepEqual(emptyArray, program1.getMissingFilePaths());
+            assert.notDeepEqual(neverArray, program1.getMissingFilePaths());
 
             const program2 = updateProgram(program1, ["a.ts"], options, noop);
             assert.deepEqual(program1.getMissingFilePaths(), program2.getMissingFilePaths());
@@ -325,7 +325,7 @@ namespace ts {
             const options: CompilerOptions = { target, noLib: true };
 
             const program1 = newProgram(files, ["a.ts"], options);
-            assert.notDeepEqual(emptyArray, program1.getMissingFilePaths());
+            assert.notDeepEqual(neverArray, program1.getMissingFilePaths());
 
             const newTexts: NamedSourceText[] = files.concat([{ name: "non-existing-file.ts", text: SourceText.New("", "", `var x = 1`) }]);
             const program2 = updateProgram(program1, ["a.ts"], options, noop, newTexts);

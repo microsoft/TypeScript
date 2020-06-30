@@ -30,7 +30,7 @@ namespace ts.tscWatch {
         ) {
             const { sys, baseline, oldSnap } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
             if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
-            const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || emptyArray)];
+            const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || neverArray)];
             baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
             const { cb, getPrograms } = commandLineCallbacks(sys);
             build(oldSnap);
@@ -183,8 +183,8 @@ namespace ts.tscWatch {
                     assert.equal(state.exportedModulesMap!.size, 0);
 
                     assert.equal(state.semanticDiagnosticsPerFile!.size, 3);
-                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path as Path), emptyArray);
-                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(file1.path as Path), emptyArray);
+                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path as Path), neverArray);
+                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(file1.path as Path), neverArray);
                     assert.deepEqual(state.semanticDiagnosticsPerFile!.get(file2.path as Path), [{
                         file: state.program!.getSourceFileByPath(file2.path as Path)!,
                         start: 13,

@@ -54,8 +54,8 @@ namespace ts {
             this.major = major;
             this.minor = minor;
             this.patch = patch;
-            this.prerelease = prerelease ? prerelease.split(".") : emptyArray;
-            this.build = build ? build.split(".") : emptyArray;
+            this.prerelease = prerelease ? prerelease.split(".") : neverArray;
+            this.build = build ? build.split(".") : neverArray;
         }
 
         static tryParse(text: string) {
@@ -171,7 +171,7 @@ namespace ts {
         private _alternatives: readonly (readonly Comparator[])[];
 
         constructor(spec: string) {
-            this._alternatives = spec ? Debug.checkDefined(parseRange(spec), "Invalid range spec.") : emptyArray;
+            this._alternatives = spec ? Debug.checkDefined(parseRange(spec), "Invalid range spec.") : neverArray;
         }
 
         static tryParse(text: string) {

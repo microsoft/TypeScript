@@ -7,7 +7,7 @@ namespace ts.refactor {
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context, context.triggerReason === "invoked");
-            if (!info) return emptyArray;
+            if (!info) return neverArray;
 
             if (info.error === undefined) {
                 const description = info.info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
@@ -22,7 +22,7 @@ namespace ts.refactor {
                 ];
             }
 
-            return emptyArray;
+            return neverArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameDefaultToNamed || actionName === actionNameNamedToDefault, "Unexpected action name");

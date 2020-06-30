@@ -174,7 +174,7 @@ namespace ts {
 
         // Emit and report any errors we ran into.
         const emitResult = isListFilesOnly
-            ? { emitSkipped: true, diagnostics: emptyArray }
+            ? { emitSkipped: true, diagnostics: neverArray }
             : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
         const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
         addRange(allDiagnostics, emitDiagnostics);
@@ -266,14 +266,14 @@ namespace ts {
         TypeRoots: "Type roots"
     }
 
-    interface WatchFactory_NameSpaceLocal<X, Y = undefined> extends WatchFactory<X, Y> {
+    interface WatchFactoryNameSpaceLocal<X, Y = undefined> extends WatchFactory<X, Y> {
         writeLog: (s: string) => void;
     }
 
     export function createWatchFactory<Y = undefined>(host: { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
         const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
         const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
-        const result = getWatchFactory<WatchType, Y>(watchLogLevel, writeLog) as WatchFactory_NameSpaceLocal<WatchType, Y>;
+        const result = getWatchFactory<WatchType, Y>(watchLogLevel, writeLog) as WatchFactoryNameSpaceLocal<WatchType, Y>;
         result.writeLog = writeLog;
         return result;
     }

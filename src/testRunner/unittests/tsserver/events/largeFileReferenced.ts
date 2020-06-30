@@ -25,7 +25,7 @@ namespace ts.projectSystem {
                 const info = service.getScriptInfo(largeFile.path)!;
                 assert.equal(info.cacheSourceFile!.sourceFile.text, useLargeTsFile ? largeFile.content : "");
 
-                assert.deepEqual(largeFileReferencedEvents, useLargeTsFile ? emptyArray : [{
+                assert.deepEqual(largeFileReferencedEvents, useLargeTsFile ? neverArray : [{
                     eventName: server.LargeFileReferencedEvent,
                     data: { file: largeFile.path, fileSize: largeFile.fileSize, maxFileSize: server.maxFileSize }
                 }]);

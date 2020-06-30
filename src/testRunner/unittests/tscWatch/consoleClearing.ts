@@ -16,7 +16,7 @@ namespace ts.tscWatch {
             verifyTscWatch({
                 scenario,
                 subScenario,
-                commandLineArgs: ["--w", file.path, ...commandLineOptions || emptyArray],
+                commandLineArgs: ["--w", file.path, ...commandLineOptions || neverArray],
                 sys: () => createWatchedSystem([file, libFile]),
                 changes: makeChangeToFile,
             });

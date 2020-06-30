@@ -25,7 +25,7 @@ namespace ts {
         EmitNotifications = 1 << 1,
     }
 
-    export const noTransformers: EmitTransformers = { scriptTransformers: emptyArray, declarationTransformers: emptyArray };
+    export const noTransformers: EmitTransformers = { scriptTransformers: neverArray, declarationTransformers: neverArray };
 
     export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean): EmitTransformers {
         return {
@@ -35,7 +35,7 @@ namespace ts {
     }
 
     function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean) {
-        if (emitOnlyDtsFiles) return emptyArray;
+        if (emitOnlyDtsFiles) return neverArray;
 
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);

@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.convertParamsToDestructuredObject {
+namespace ts.refactor {
     const refactorName = "Convert parameters to destructured object";
     const minimumParameterLength = 2;
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
@@ -8,9 +8,9 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
         const isJSFile = isSourceFileJS(file);
-        if (isJSFile) return emptyArray; // TODO: GH#30113
+        if (isJSFile) return neverArray; // TODO: GH#30113
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, context.program.getTypeChecker());
-        if (!functionDeclaration) return emptyArray;
+        if (!functionDeclaration) return neverArray;
 
         const description = getLocaleSpecificMessage(Diagnostics.Convert_parameters_to_destructured_object);
         return [{

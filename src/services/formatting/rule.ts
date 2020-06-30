@@ -9,7 +9,7 @@ namespace ts.formatting {
     }
 
     export type ContextPredicate = (context: FormattingContext) => boolean;
-    export const anyContext: readonly ContextPredicate[] = emptyArray;
+    export const anyContext: readonly ContextPredicate[] = neverArray;
 
     export const enum RuleAction {
         StopProcessingSpaceActions = 1 << 0,

@@ -259,9 +259,9 @@ namespace ts {
                 verifyBuildNextResult({
                     project: "/src/tests/tsconfig.json" as ResolvedConfigFileName,
                     result: ExitStatus.Success
-                }, allExpectedOutputs, emptyArray);
+                }, allExpectedOutputs, neverArray);
 
-                verifyBuildNextResult(/*expected*/ undefined, allExpectedOutputs, emptyArray);
+                verifyBuildNextResult(/*expected*/ undefined, allExpectedOutputs, neverArray);
 
                 function verifyBuildNextResult(
                     expected: SolutionBuilderResult<ExitStatus> | undefined,

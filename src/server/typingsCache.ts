@@ -38,7 +38,7 @@ namespace ts.server {
         if (arr1 === arr2) {
             return true;
         }
-        if ((arr1 || emptyArray_Server).length === 0 && (arr2 || emptyArray_Server).length === 0) {
+        if ((arr1 || emptyArray).length === 0 && (arr2 || emptyArray).length === 0) {
             return true;
         }
         const set: Map<string, boolean> = createMap<boolean>();
@@ -114,7 +114,7 @@ namespace ts.server {
                 this.perProjectCache.set(project.getProjectName(), {
                     compilerOptions: project.getCompilationSettings(),
                     typeAcquisition,
-                    typings: entry ? entry.typings : emptyArray_Server,
+                    typings: entry ? entry.typings : emptyArray,
                     unresolvedImports,
                     poisoned: true
                 });
@@ -132,7 +132,7 @@ namespace ts.server {
                 unresolvedImports,
                 poisoned: false
             });
-            return !typeAcquisition || !typeAcquisition.enable ? emptyArray_Server : typings;
+            return !typeAcquisition || !typeAcquisition.enable ? emptyArray : typings;
         }
 
         onProjectClosed(project: Project) {

@@ -190,10 +190,10 @@ new C();`
                     }
                     const watchedDirectoriesWithUnresolvedModule = cloneMap(watchedDirectoriesWithResolvedModule);
                     watchedDirectoriesWithUnresolvedModule.set(`${recognizersDateTime}/src`, 2); // wild card + failed lookups
-                    [`${recognizersDateTime}/node_modules`, ...(withPathMapping ? [recognizersText] : emptyArray), ...getNodeModuleDirectories(packages)].forEach(d => {
+                    [`${recognizersDateTime}/node_modules`, ...(withPathMapping ? [recognizersText] : neverArray), ...getNodeModuleDirectories(packages)].forEach(d => {
                         watchedDirectoriesWithUnresolvedModule.set(d, 1);
                     });
-                    const nonRecursiveWatchedDirectories = withPathMapping ? [packages] : emptyArray;
+                    const nonRecursiveWatchedDirectories = withPathMapping ? [packages] : neverArray;
 
                     function verifyProjectWithResolvedModule(session: TestSession) {
                         const projectService = session.getProjectService();

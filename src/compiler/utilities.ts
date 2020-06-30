@@ -1442,7 +1442,7 @@ namespace ts {
 
     export function getTsConfigPropArray(tsConfigSourceFile: TsConfigSourceFile | undefined, propKey: string): readonly PropertyAssignment[] {
         const jsonObjectLiteral = getTsConfigObjectLiteralExpression(tsConfigSourceFile);
-        return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : emptyArray;
+        return jsonObjectLiteral ? getPropertyAssignment(jsonObjectLiteral, propKey) : neverArray;
     }
 
     export function getContainingFunction(node: Node): SignatureDeclaration | undefined {
@@ -2498,7 +2498,7 @@ namespace ts {
             }
             node = getNextJSDocCommentLocation(node);
         }
-        return result || emptyArray;
+        return result || neverArray;
     }
 
     function getNextJSDocCommentLocation(node: Node) {
@@ -2908,9 +2908,9 @@ namespace ts {
 
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     export function getAllSuperTypeNodes(node: Node): readonly TypeNode[] {
-        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray :
-            isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getEffectiveImplementsTypeNodes(node)) || emptyArray :
-            emptyArray;
+        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || neverArray :
+            isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getEffectiveImplementsTypeNodes(node)) || neverArray :
+            neverArray;
     }
 
     export function getInterfaceBaseTypeNodes(node: InterfaceDeclaration) {
@@ -6498,8 +6498,8 @@ namespace ts {
     }
 
     export const emptyFileSystemEntries: FileSystemEntries = {
-        files: emptyArray,
-        directories: emptyArray
+        files: neverArray,
+        directories: neverArray
     };
 
 

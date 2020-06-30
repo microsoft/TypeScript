@@ -63,7 +63,7 @@ namespace ts {
                 }
             },
             getPrograms: () => {
-                const result = programs || emptyArray;
+                const result = programs || neverArray;
                 programs = undefined;
                 return result;
             }

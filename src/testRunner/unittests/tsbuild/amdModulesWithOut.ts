@@ -56,7 +56,7 @@ namespace ts {
                     ...(modifyAgainFs ? [{
                         buildKind: BuildKind.IncrementalHeadersChange,
                         modifyFs: modifyAgainFs
-                    }] : emptyArray),
+                    }] : neverArray),
                 ]
             });
         }

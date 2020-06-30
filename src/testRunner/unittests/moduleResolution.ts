@@ -590,7 +590,7 @@ export = C;
                 "/a/b",
                 /*useCaseSensitiveFileNames*/ false,
                 ["c.ts", "/a/b/d.ts"],
-                () => emptyArray
+                () => neverArray
             );
         });
 
@@ -793,7 +793,7 @@ import b = require("./moduleB");
                 "/a/B/c",
                 /*useCaseSensitiveFileNames*/ false,
                 ["moduleD.ts"],
-                () => emptyArray
+                () => neverArray
             );
         });
 
@@ -809,7 +809,7 @@ import b = require("./moduleB");
                 "d:/someFolder",
                 /*useCaseSensitiveFileNames*/ false,
                 ["d:/someFolder/moduleA.ts", "d:/someFolder/moduleB.ts"],
-                () => emptyArray
+                () => neverArray
             );
         });
     });

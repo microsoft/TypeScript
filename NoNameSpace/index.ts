@@ -16,19 +16,30 @@ import readline from "readline";
 import path from "path";
 import fs from "fs";
 
-const rootFolder = path.resolve(__dirname, "../src");
+export const srcFolder = path.resolve(__dirname, "../src");
 
-function walkFolder(filePath: string, match: (s: string) => boolean, fileCallback: (s: string) => void) {
-    const isDirectory = fs.lstatSync(filePath).isDirectory();
-    if (!isDirectory) {
-        if (match(filePath)) {
-            fileCallback(filePath);
+export async function walkFolder(filePath: string, match: (s: string) => boolean, fileCallback: (s: string) => void, finalCallback?: () => void) {
+    let counter = 0;
+    return (async function walker(filePath: string, match: (s: string) => boolean, fileCallback: (s: string) => void) {
+        counter = counter + 1;
+        const isDirectory = fs.lstatSync(filePath).isDirectory();
+        if (!isDirectory) {
+            if (match(filePath)) {
+                await fileCallback(filePath);
+            }
         }
-    }
-    else {
-        const subFileNames = fs.readdirSync(filePath);
-        subFileNames.forEach(subFileName => walkFolder(path.resolve(filePath, subFileName), match, fileCallback));
-    }
+        else {
+            const subFileNames = fs.readdirSync(filePath);
+            subFileNames.forEach(subFileName => walker(path.resolve(filePath, subFileName), match, fileCallback));
+        }
+        counter = counter - 1;
+        if (counter === 0) {
+            if (finalCallback){
+                finalCallback();
+            }
+        }
+
+    })(filePath, match, fileCallback);
 }
 
 async function fileCB(filePath: string) {
@@ -39,37 +50,40 @@ async function fileCB(filePath: string) {
         // crlfDelay: Infinity
     });
     let newFileContent = "";
-    let namespaceFlag = false;
-    for await (let line of rl) {
-        const namespaceRE = RegExp("^(declare )?namespace ts.*?\\{$");
+    let removeNamespaceFlag = false;
+    for await (const line of rl) {
+        // const namespaceRE = RegExp("^(declare )?namespace ts.*?\\{$");
+        const namespaceTsRE = RegExp("^(declare )?namespace ts \\{$");
         const namespaceEndRE = RegExp("^\\}");
-        const tsdotRE = RegExp("(?<!namespace)(\\W)ts\\.");
-        if (namespaceRE.test(line)) {
+        // const noNamespaceTsdotRE = /(?<!namespace)(\W)ts\./g;
+        const tsdotRE = /(\W)ts\./g;
+        if (namespaceTsRE.test(line)) {
             //skip, not output
-            namespaceFlag = true;
+            removeNamespaceFlag = true;
         }
         else if (tsdotRE.test(line)) {
-            line = line.replace(tsdotRE, "$1");
+            const newline = line.replace(tsdotRE, "$1");
+            newFileContent += newline;
         }
         else if (namespaceEndRE.test(line)) {
-            if (!namespaceFlag) {
+            if (!removeNamespaceFlag) {
                 newFileContent += line;
             }
         }
         else {
             newFileContent += line;
         }
-        newFileContent += "\n";
+        newFileContent += "\r\n";
     }
     fs.writeFile(filePath, newFileContent, () => { });
 }
 
-function match(filepath: string) {
-    const tsAndNotDeclaration = RegExp("(?!\\.d)\\.ts");
+export function tsMatch(filepath: string) {
+    const tsAndNotDeclaration = RegExp("(?<!\\.d)\\.ts");
     if (tsAndNotDeclaration.test(filepath)) {
         return true;
     }
     return false;
 }
 
-walkFolder(rootFolder, match, fileCB);
+walkFolder(srcFolder, tsMatch, fileCB);

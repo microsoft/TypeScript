@@ -388,7 +388,7 @@ namespace ts.projectSystem {
                 installPackage: notImplemented,
                 enqueueInstallTypingsRequest: (proj, typeAcquisition, unresolvedImports) => {
                     assert.isUndefined(request);
-                    request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray_Server, cachePath));
+                    request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray, cachePath));
                 },
                 attach: noop,
                 onProjectClosed: noop,
@@ -415,7 +415,7 @@ namespace ts.projectSystem {
                 projectName: response.projectName,
                 typeAcquisition: response.typeAcquisition,
                 compilerOptions: response.compilerOptions,
-                typings: emptyArray,
+                typings: neverArray,
                 unresolvedImports: response.unresolvedImports,
             });
 
@@ -1229,7 +1229,7 @@ namespace ts.projectSystem {
                 const configuredProject = configuredProjectAt(projectService, 0);
                 if (lazyConfiguredProjectsFromExternalProject) {
                     // configured project is just created and not yet loaded
-                    checkProjectActualFiles(configuredProject, emptyArray);
+                    checkProjectActualFiles(configuredProject, neverArray);
                     projectService.ensureInferredProjectsUpToDate_TestOnly();
                 }
                 checkProjectActualFiles(configuredProject, [file1.path, tsconfig.path]);

@@ -65,7 +65,7 @@ namespace ts.projectSystem {
                 const completions = project.getLanguageService().getCompletionsAtPosition(index.path, completionPosition, { includeExternalModuleExports: false, includeInsertTextCompletions: false })!;
                 checkArray("Completion Entries", completions.entries.map(e => e.name), expectedCompletions);
 
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+                checkWatchedDirectories(host, neverArray, /*recursive*/ true);
 
                 checkWatchedFilesDetailed(host, expectedWatchedFiles);
                 checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ false);
@@ -207,7 +207,7 @@ namespace ts.projectSystem {
         });
 
         function verifyProject() {
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, neverArray, /*recursive*/ true);
             checkWatchedFilesDetailed(host, expectedWatchedFiles);
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ false);
             checkProjectActualFiles(project, fileNames);
@@ -275,7 +275,7 @@ namespace ts.projectSystem {
             );
 
             // Instead of polling watch (= watchedFiles), uses fsWatch
-            checkWatchedFiles(host, emptyArray);
+            checkWatchedFiles(host, neverArray);
             checkWatchedDirectoriesDetailed(
                 host,
                 files.map(f => f.path.toLowerCase()),
@@ -359,7 +359,7 @@ namespace ts.projectSystem {
                     }]
                 )
             );
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, neverArray, /*recursive*/ true);
         });
 
         it("with fallbackPolling option as host configuration", () => {
@@ -400,8 +400,8 @@ namespace ts.projectSystem {
                     }]
                 )
             );
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, neverArray, /*recursive*/ false);
+            checkWatchedDirectories(host, neverArray, /*recursive*/ true);
         });
 
         it("with watchFile option in configFile", () => {
@@ -517,7 +517,7 @@ namespace ts.projectSystem {
                     }]
                 )
             );
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, neverArray, /*recursive*/ true);
         });
 
         it("with fallbackPolling option in configFile", () => {
@@ -562,8 +562,8 @@ namespace ts.projectSystem {
                     }]
                 )
             );
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedDirectories(host, neverArray, /*recursive*/ false);
+            checkWatchedDirectories(host, neverArray, /*recursive*/ true);
         });
     });
 

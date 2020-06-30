@@ -86,7 +86,7 @@ namespace ts.codefix {
                             /*decorators*/ undefined,
                             modifiers,
                             name,
-                            emptyArray,
+                            neverArray,
                             typeNode,
                             ambient ? undefined : createStubbedMethodBody(preferences)));
                     }

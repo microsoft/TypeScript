@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.extractSymbol {
+namespace ts.refactor {
     const refactorName = "Extract Symbol";
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
@@ -13,7 +13,7 @@ namespace ts.refactor.extractSymbol {
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
             if (!rangeToExtract.errors || rangeToExtract.errors.length === 0 || !context.preferences.provideRefactorNotApplicableReason) {
-                return emptyArray;
+                return neverArray;
             }
 
             return [{
@@ -39,7 +39,7 @@ namespace ts.refactor.extractSymbol {
         const extractions = getPossibleExtractions(targetRange, context);
         if (extractions === undefined) {
             // No extractions possible
-            return emptyArray;
+            return neverArray;
         }
 
         const functionActions: RefactorActionInfo[] = [];
@@ -132,7 +132,7 @@ namespace ts.refactor.extractSymbol {
             });
         }
 
-        return infos.length ? infos : emptyArray;
+        return infos.length ? infos : neverArray;
 
         function getStringError(errors: readonly Diagnostic[]) {
             let error = errors[0].messageText;
@@ -1405,7 +1405,7 @@ namespace ts.refactor.extractSymbol {
             assertType<never>(scope);
         }
 
-        return emptyArray;
+        return neverArray;
     }
 
     /**

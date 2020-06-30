@@ -27,7 +27,7 @@ namespace ts.tscWatch {
                 const host = createSolutionBuilderWithWatchHost(system);
                 const solutionBuilder = createSolutionBuilderWithWatch(host, ["tsconfig.json"], { watch: true, verbose: true });
                 solutionBuilder.build();
-                checkOutputErrorsInitial(system, emptyArray, /*disableConsoleClears*/ undefined, [
+                checkOutputErrorsInitial(system, neverArray, /*disableConsoleClears*/ undefined, [
                     `Projects in this build: \r\n${
                         concatenate(
                             pkgs(index => `    * pkg${index}/tsconfig.json`),
@@ -50,7 +50,7 @@ namespace ts.tscWatch {
                 maxPkgs--;
                 writePkgReferences();
                 system.checkTimeoutQueueLengthAndRun(1);
-                checkOutputErrorsIncremental(system, emptyArray);
+                checkOutputErrorsIncremental(system, neverArray);
                 const lastFiles = last(allPkgFiles);
                 lastFiles.forEach(f => watchFilesDetailed.delete(f.path));
                 watchFilesDetailed.set(typing.path, singleWatchPerFile ? 1 : maxPkgs);
@@ -110,7 +110,7 @@ namespace ts.tscWatch {
                 }
                 function verifyInvoke() {
                     pkgs(() => system.checkTimeoutQueueLengthAndRun(1));
-                    checkOutputErrorsIncremental(system, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
+                    checkOutputErrorsIncremental(system, neverArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
                         ...flatArray(pkgs(index => [
                             `Project 'pkg${index}/tsconfig.json' is out of date because oldest output 'pkg${index}/index.js' is older than newest input 'typings/xterm.d.ts'\n\n`,
                             `Building project '${project}/pkg${index}/tsconfig.json'...\n\n`,

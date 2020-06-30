@@ -538,7 +538,7 @@ namespace FourSlash {
             return [
                 ...this.languageService.getSyntacticDiagnostics(fileName),
                 ...this.languageService.getSemanticDiagnostics(fileName),
-                ...(includeSuggestions ? this.languageService.getSuggestionDiagnostics(fileName) : ts.emptyArray),
+                ...(includeSuggestions ? this.languageService.getSuggestionDiagnostics(fileName) : ts.neverArray),
             ];
         }
 
@@ -1391,7 +1391,7 @@ namespace FourSlash {
             if (markers.length) {
                 for (const marker of markers) {
                     this.goToMarker(marker);
-                    this.verifySignatureHelpPresence(expectPresent, triggerReason, ts.emptyArray);
+                    this.verifySignatureHelpPresence(expectPresent, triggerReason, ts.neverArray);
                 }
                 return;
             }
@@ -1459,8 +1459,8 @@ namespace FourSlash {
             assert.equal(selectedItem.isVariadic, !!options.isVariadic);
 
             const actualTags = selectedItem.tags;
-            assert.equal(actualTags.length, (options.tags || ts.emptyArray).length, this.assertionMessageAtLastKnownMarker("signature help tags"));
-            ts.zipWith((options.tags || ts.emptyArray), actualTags, (expectedTag, actualTag) => {
+            assert.equal(actualTags.length, (options.tags || ts.neverArray).length, this.assertionMessageAtLastKnownMarker("signature help tags"));
+            ts.zipWith((options.tags || ts.neverArray), actualTags, (expectedTag, actualTag) => {
                 assert.equal(actualTag.name, expectedTag.name);
                 assert.equal(actualTag.text, expectedTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
             });
@@ -3155,7 +3155,7 @@ namespace FourSlash {
             const codeFixes = this.getCodeFixes(this.activeFile.fileName);
             if (negative) {
                 if (typeof expected === "undefined") {
-                    this.assertObjectsEqual(codeFixes, ts.emptyArray);
+                    this.assertObjectsEqual(codeFixes, ts.neverArray);
                 }
                 else if (typeof expected === "string") {
                     if (codeFixes.some(fix => fix.fixName === expected)) {
@@ -3171,7 +3171,7 @@ namespace FourSlash {
             }
             else {
                 const actuals = codeFixes.map((fix): FourSlashInterface.VerifyCodeFixAvailableOptions => ({ description: fix.description, commands: fix.commands }));
-                this.assertObjectsEqual(actuals, negative ? ts.emptyArray : expected);
+                this.assertObjectsEqual(actuals, negative ? ts.neverArray : expected);
             }
         }
 
@@ -3652,7 +3652,7 @@ namespace FourSlash {
             return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason); // eslint-disable-line no-in-operator
         }
         private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason): readonly ts.ApplicableRefactorInfo[] {
-            return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason) || ts.emptyArray;
+            return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason) || ts.neverArray;
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {

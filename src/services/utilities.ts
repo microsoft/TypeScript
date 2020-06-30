@@ -2613,7 +2613,7 @@ namespace ts {
     }
 
     export function tryReadDirectory(host: Pick<LanguageServiceHost, "readDirectory">, path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[]): readonly string[] {
-        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || emptyArray;
+        return tryIOAndConsumeErrors(host, host.readDirectory, path, extensions, exclude, include) || neverArray;
     }
 
     export function tryFileExists(host: Pick<LanguageServiceHost, "fileExists">, path: string): boolean {

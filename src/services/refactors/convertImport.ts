@@ -15,7 +15,7 @@ namespace ts.refactor {
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const i = getImportToConvert(context, context.triggerReason === "invoked");
-            if (!i) return emptyArray;
+            if (!i) return neverArray;
 
             if (i.error === undefined) {
                 const description = i.info.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
@@ -30,7 +30,7 @@ namespace ts.refactor {
                 ];
             }
 
-            return emptyArray;
+            return neverArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace, "Unexpected action name");

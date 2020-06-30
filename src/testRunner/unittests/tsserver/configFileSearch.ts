@@ -121,7 +121,7 @@ namespace ts.projectSystem {
 
                 checkProjectActualFiles(project, [file.path, libFile.path, tsconfig.path]);
                 checkWatchedFiles(host, [libFile.path, tsconfig.path]);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, neverArray, /*recursive*/ false);
                 checkWatchedDirectories(host, (orphanInferredProject ? [projectRoot, `${dirOfFile}/node_modules/@types`] : [projectRoot]).concat(getTypeRootsFromLocation(projectRoot)), /*recursive*/ true);
             }
 
@@ -134,7 +134,7 @@ namespace ts.projectSystem {
 
                 checkProjectActualFiles(project, [file.path, libFile.path]);
                 checkWatchedFiles(host, filesToWatch);
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, neverArray, /*recursive*/ false);
                 checkWatchedDirectories(host, getTypeRootsFromLocation(dirOfFile), /*recursive*/ true);
             }
 

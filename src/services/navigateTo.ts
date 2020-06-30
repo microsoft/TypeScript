@@ -10,7 +10,7 @@ namespace ts.NavigateTo {
 
     export function getNavigateToItems(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
-        if (!patternMatcher) return emptyArray;
+        if (!patternMatcher) return neverArray;
         const rawItems: RawNavigateToItem[] = [];
 
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
@@ -91,7 +91,7 @@ namespace ts.NavigateTo {
         // portion into the container array.
         const name = getNameOfDeclaration(declaration);
         if (name && name.kind === SyntaxKind.ComputedPropertyName && !tryAddComputedPropertyName(name.expression, containers)) {
-            return emptyArray;
+            return neverArray;
         }
         // Don't include the last portion.
         containers.shift();
@@ -101,7 +101,7 @@ namespace ts.NavigateTo {
 
         while (container) {
             if (!tryAddSingleDeclarationName(container, containers)) {
-                return emptyArray;
+                return neverArray;
             }
 
             container = getContainerNode(container);

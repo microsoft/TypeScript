@@ -517,7 +517,7 @@ declare module '@custom/plugin' {
                 expectedConfigFileDiagEvents: () => [{
                     triggerFile: file.path,
                     configFileName: config.path,
-                    diagnostics: emptyArray
+                    diagnostics: neverArray
                 }]
             });
         });
@@ -590,7 +590,7 @@ declare module '@custom/plugin' {
             };
             const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
             openFilesForSession([file], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, emptyArray);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, neverArray);
         });
 
         it("are generated when the config file changes", () => {
@@ -608,7 +608,7 @@ declare module '@custom/plugin' {
             const files = [file, libFile, configFile];
             const serverEventManager = new TestServerEventManager(files);
             openFilesForSession([file], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, emptyArray);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, neverArray);
 
             configFile.content = `{
                 "compilerOptions": {
@@ -626,7 +626,7 @@ declare module '@custom/plugin' {
             }`;
             serverEventManager.host.writeFile(configFile.path, configFile.content);
             serverEventManager.host.runQueuedTimeoutCallbacks();
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, emptyArray);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, neverArray);
         });
 
         it("are not generated when the config file does not include file opened and config file has errors", () => {
@@ -709,12 +709,12 @@ declare module '@custom/plugin' {
 
             const serverEventManager = new TestServerEventManager([file, file2, file3, libFile, configFile]);
             openFilesForSession([file2], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file2.path, emptyArray);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file2.path, neverArray);
             openFilesForSession([file], serverEventManager.session);
             // We generate only if project is created when opening file from the project
             serverEventManager.hasZeroEvent("configFileDiag");
             openFilesForSession([file3], serverEventManager.session);
-            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file3.path, emptyArray);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file3.path, neverArray);
         });
 
         it("contains the project reference errors", () => {

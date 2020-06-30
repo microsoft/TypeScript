@@ -266,7 +266,7 @@ namespace ts {
             const signatureCache = cacheToUpdateSignature || new Map();
             const sourceFile = programOfThisState.getSourceFileByPath(path);
             if (!sourceFile) {
-                return emptyArray;
+                return neverArray;
             }
 
             if (!updateShapeSignature(state, programOfThisState, sourceFile, signatureCache, cancellationToken, computeHash, exportedModulesMapCache)) {
@@ -431,7 +431,7 @@ namespace ts {
         function getAllFileNames(state: BuilderState, programOfThisState: Program): readonly string[] {
             if (!state.allFileNames) {
                 const sourceFiles = programOfThisState.getSourceFiles();
-                state.allFileNames = sourceFiles === emptyArray ? emptyArray : sourceFiles.map(file => file.fileName);
+                state.allFileNames = sourceFiles === neverArray ? neverArray : sourceFiles.map(file => file.fileName);
             }
             return state.allFileNames;
         }
@@ -492,7 +492,7 @@ namespace ts {
                     addSourceFile(sourceFile);
                 }
             }
-            state.allFilesExcludingDefaultLibraryFile = result || emptyArray;
+            state.allFilesExcludingDefaultLibraryFile = result || neverArray;
             return state.allFilesExcludingDefaultLibraryFile;
 
             function addSourceFile(sourceFile: SourceFile) {

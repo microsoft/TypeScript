@@ -20,7 +20,7 @@ namespace ts {
                     subScenario,
                     sys: () => tscWatch.createWatchedSystem(files, { currentDirectory: tscWatch.projectRoot }),
                     commandLineArgs: ["-p", rootProject, "--listFiles"],
-                    changes: emptyArray
+                    changes: neverArray
                 });
             });
 
@@ -34,7 +34,7 @@ namespace ts {
                         { currentDirectory: tscWatch.projectRoot }
                     ),
                     commandLineArgs: ["-p", rootProject, "--listFiles"],
-                    changes: emptyArray
+                    changes: neverArray
                 });
             });
         }

@@ -6,8 +6,8 @@ namespace ts {
                 assert.strictEqual(version.major, major);
                 assert.strictEqual(version.minor, minor);
                 assert.strictEqual(version.patch, patch);
-                assert.deepEqual(version.prerelease, prerelease || emptyArray);
-                assert.deepEqual(version.build, build || emptyArray);
+                assert.deepEqual(version.prerelease, prerelease || neverArray);
+                assert.deepEqual(version.build, build || neverArray);
             }
             describe("new", () => {
                 it("text", () => {

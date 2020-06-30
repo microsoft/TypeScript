@@ -195,7 +195,7 @@ namespace ts.server {
         dirty = false;
 
         /*@internal*/
-        typingFiles: SortedReadonlyArray<string> = emptyArray_Server;
+        typingFiles: SortedReadonlyArray<string> = emptyArray;
 
         /*@internal*/
         originalConfiguredProjects: Set<NormalizedPath> | undefined;
@@ -354,7 +354,7 @@ namespace ts.server {
 
         getScriptFileNames() {
             if (!this.rootFiles) {
-                return emptyArray;
+                return neverArray;
             }
 
             let result: string[] | undefined;
@@ -365,7 +365,7 @@ namespace ts.server {
                 }
             });
 
-            return addRange(result, this.typingFiles) || emptyArray;
+            return addRange(result, this.typingFiles) || neverArray;
         }
 
         private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
@@ -567,11 +567,11 @@ namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[] {
-            return emptyArray_Server;
+            return emptyArray;
         }
 
         getAllProjectErrors(): readonly Diagnostic[] {
-            return emptyArray_Server;
+            return emptyArray;
         }
 
         getLanguageService(ensureSynchronized = true): LanguageService {
@@ -623,7 +623,7 @@ namespace ts.server {
          */
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): EmitResult {
             if (!this.languageServiceEnabled || !this.shouldEmitFile(scriptInfo)) {
-                return { emitSkipped: true, diagnostics: emptyArray_Server };
+                return { emitSkipped: true, diagnostics: emptyArray };
             }
             const { emitSkipped, diagnostics, outputFiles } = this.getLanguageService().getEmitOutput(scriptInfo.fileName);
             if (!emitSkipped) {
@@ -810,7 +810,7 @@ namespace ts.server {
         }
 
         getExcludedFiles(): readonly NormalizedPath[] {
-            return emptyArray_Server;
+            return emptyArray;
         }
 
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
@@ -978,7 +978,7 @@ namespace ts.server {
             const hasAddedorRemovedFiles = this.hasAddedorRemovedFiles;
             this.hasAddedorRemovedFiles = false;
 
-            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray_Server;
+            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
             for (const file of changedFiles) {
                 // delete cached information for changed files
@@ -1146,7 +1146,7 @@ namespace ts.server {
                 this.symlinks = undefined;
             }
 
-            const oldExternalFiles = this.externalFiles || emptyArray_Server as SortedReadonlyArray<string>;
+            const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
             enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
@@ -1670,7 +1670,7 @@ namespace ts.server {
     }
     function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: readonly string[], cachedUnresolvedImportsPerFile: Map<Path, readonly string[]>): readonly string[] {
         return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
-            if (!file.resolvedModules) return emptyArray_Server;
+            if (!file.resolvedModules) return emptyArray;
             let unresolvedImports: string[] | undefined;
             file.resolvedModules.forEach((resolvedModule, name) => {
                 // pick unresolved non-relative names
@@ -1680,7 +1680,7 @@ namespace ts.server {
                     unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
                 }
             });
-            return unresolvedImports || emptyArray_Server;
+            return unresolvedImports || emptyArray;
         });
     }
 
@@ -1796,8 +1796,8 @@ namespace ts.server {
         getTypeAcquisition(): TypeAcquisition {
             return {
                 enable: allRootFilesAreJsOrDts(this),
-                include: emptyArray,
-                exclude: emptyArray
+                include: neverArray,
+                exclude: neverArray
             };
         }
     }
@@ -1808,7 +1808,7 @@ namespace ts.server {
         /*@internal*/
         static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, compilerOptions: CompilerOptions): string[] {
             if (!dependencySelection) {
-                return emptyArray;
+                return neverArray;
             }
 
             let dependencyNames: Set<string> | undefined;
@@ -1837,7 +1837,7 @@ namespace ts.server {
                 }
             }
 
-            return rootNames || emptyArray;
+            return rootNames || neverArray;
 
             function addDependency(dependency: string) {
                 if (!startsWith(dependency, "@types/")) {
@@ -1857,8 +1857,8 @@ namespace ts.server {
                 noLib: true,
                 diagnostics: false,
                 skipLibCheck: true,
-                types: emptyArray,
-                lib: emptyArray,
+                types: neverArray,
+                lib: neverArray,
                 sourceMap: false
             };
 
@@ -1920,7 +1920,7 @@ namespace ts.server {
         }
 
         getScriptFileNames() {
-            return this.rootFileNames || emptyArray;
+            return this.rootFileNames || neverArray;
         }
 
         getLanguageService(): never {
@@ -2144,14 +2144,14 @@ namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[] {
-            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray_Server;
+            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
         }
 
         /**
          * Get all the project errors
          */
         getAllProjectErrors(): readonly Diagnostic[] {
-            return this.projectErrors || emptyArray_Server;
+            return this.projectErrors || emptyArray;
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {

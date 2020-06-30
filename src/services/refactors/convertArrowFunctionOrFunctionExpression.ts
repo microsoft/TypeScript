@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
+namespace ts.refactor {
     const refactorName = "Convert arrow function or function expression";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);
 
@@ -29,7 +29,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const { file, startPosition, program } = context;
         const info = getFunctionInfo(file, startPosition, program);
 
-        if (!info) return emptyArray;
+        if (!info) return neverArray;
         const { selectedVariableDeclaration, func } = info;
         const possibleActions: RefactorActionInfo[] = [];
 

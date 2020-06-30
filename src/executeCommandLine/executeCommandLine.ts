@@ -273,7 +273,7 @@ namespace ts {
                 );
             }
             else if (isIncrementalCompilation(configParseResult.options)) {
-                performIncrementalCompilation_NameSpaceLocal(
+                performIncrementalCompilationNameSpaceLocal(
                     sys,
                     cb,
                     reportDiagnostic,
@@ -312,7 +312,7 @@ namespace ts {
                 );
             }
             else if (isIncrementalCompilation(commandLineOptions)) {
-                performIncrementalCompilation_NameSpaceLocal(
+                performIncrementalCompilationNameSpaceLocal(
                     sys,
                     cb,
                     reportDiagnostic,
@@ -438,7 +438,7 @@ namespace ts {
                 /*createProgram*/ undefined,
                 reportDiagnostic,
                 createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
-                createWatchStatusReporter_NameSpaceLocal(sys, buildOptions)
+                createWatchStatusReporterNameSpaceLocal(sys, buildOptions)
             );
             updateSolutionBuilderHost(sys, cb, buildHost);
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
@@ -497,7 +497,7 @@ namespace ts {
         return sys.exit(exitStatus);
     }
 
-    function performIncrementalCompilation_NameSpaceLocal(
+    function performIncrementalCompilationNameSpaceLocal(
         sys: System,
         cb: ExecuteCommandLineCallbacks,
         reportDiagnostic: DiagnosticReporter,
@@ -561,7 +561,7 @@ namespace ts {
         };
     }
 
-    function createWatchStatusReporter_NameSpaceLocal(sys: System, options: CompilerOptions | BuildOptions) {
+    function createWatchStatusReporterNameSpaceLocal(sys: System, options: CompilerOptions | BuildOptions) {
         return createWatchStatusReporter(sys, shouldBePretty(sys, options));
     }
 
@@ -579,7 +579,7 @@ namespace ts {
             watchOptionsToExtend,
             system,
             reportDiagnostic,
-            reportWatchStatus: createWatchStatusReporter_NameSpaceLocal(system, configParseResult.options)
+            reportWatchStatus: createWatchStatusReporterNameSpaceLocal(system, configParseResult.options)
         });
         updateWatchCompilationHost(system, cb, watchCompilerHost);
         watchCompilerHost.configFileParsingResult = configParseResult;
@@ -600,7 +600,7 @@ namespace ts {
             watchOptions,
             system,
             reportDiagnostic,
-            reportWatchStatus: createWatchStatusReporter_NameSpaceLocal(system, options)
+            reportWatchStatus: createWatchStatusReporterNameSpaceLocal(system, options)
         });
         updateWatchCompilationHost(system, cb, watchCompilerHost);
         return createWatchProgram(watchCompilerHost);

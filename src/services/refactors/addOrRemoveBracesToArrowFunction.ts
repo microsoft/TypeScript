@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.addOrRemoveBracesToArrowFunction {
+namespace ts.refactor {
     const refactorName = "Add or remove braces in an arrow function";
     const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
     const addBracesActionName = "Add braces to arrow function";
@@ -26,7 +26,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, triggerReason } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition, triggerReason === "invoked");
-        if (!info) return emptyArray;
+        if (!info) return neverArray;
 
         if (info.error === undefined) {
             return [{
@@ -61,7 +61,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             }];
         }
 
-        return emptyArray;
+        return neverArray;
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {

@@ -177,7 +177,7 @@ namespace ts {
             }
         }
         function getOutputs(): readonly string[] {
-            return outputs || emptyArray;
+            return outputs || neverArray;
         }
     }
 
@@ -4691,7 +4691,7 @@ namespace ts {
          * or within the NameGenerator.
          */
         function isUniqueName(name: string): boolean {
-            return isFileLevelUniqueName_NameSpaceLocal(name)
+            return isFileLevelUniqueNameNameSpaceLocal(name)
                 && !generatedNames.has(name)
                 && !(reservedNames && reservedNames.has(name));
         }
@@ -4699,7 +4699,7 @@ namespace ts {
         /**
          * Returns a value indicating whether a name is unique globally or within the current file.
          */
-        function isFileLevelUniqueName_NameSpaceLocal(name: string) {
+        function isFileLevelUniqueNameNameSpaceLocal(name: string) {
             return currentSourceFile ? isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
         }
 
@@ -4793,7 +4793,7 @@ namespace ts {
         }
 
         function makeFileLevelOptimisticUniqueName(name: string) {
-            return makeUniqueName(name, isFileLevelUniqueName_NameSpaceLocal, /*optimistic*/ true);
+            return makeUniqueName(name, isFileLevelUniqueNameNameSpaceLocal, /*optimistic*/ true);
         }
 
         /**
@@ -4883,7 +4883,7 @@ namespace ts {
                 case GeneratedIdentifierFlags.Unique:
                     return makeUniqueName(
                         idText(name),
-                        (name.autoGenerateFlags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName_NameSpaceLocal : isUniqueName,
+                        (name.autoGenerateFlags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueNameNameSpaceLocal : isUniqueName,
                         !!(name.autoGenerateFlags & GeneratedIdentifierFlags.Optimistic),
                         !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes)
                     );

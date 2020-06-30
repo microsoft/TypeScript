@@ -40,7 +40,7 @@ namespace ts.GoToDefinition {
                 return [sigInfo];
             }
             else {
-                const defs = getDefinitionFromSymbol(typeChecker, symbol, node, calledDeclaration) || emptyArray;
+                const defs = getDefinitionFromSymbol(typeChecker, symbol, node, calledDeclaration) || neverArray;
                 // For a 'super()' call, put the signature first, else put the variable first.
                 return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
             }
@@ -71,7 +71,7 @@ namespace ts.GoToDefinition {
             (node === (parent.propertyName || parent.name))) {
             const name = getNameFromPropertyName(node);
             const type = typeChecker.getTypeAtLocation(parent.parent);
-            return name === undefined ? emptyArray : flatMap(type.isUnion() ? type.types : [type], t => {
+            return name === undefined ? neverArray : flatMap(type.isUnion() ? type.types : [type], t => {
                 const prop = t.getProperty(name);
                 return prop && getDefinitionFromSymbol(typeChecker, prop, node);
             });

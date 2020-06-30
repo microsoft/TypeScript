@@ -132,7 +132,7 @@ namespace ts {
 
     function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
         if (!isNodeKind(node.kind)) {
-            return emptyArray;
+            return neverArray;
         }
 
         const children: Node[] = [];
@@ -267,7 +267,7 @@ namespace ts {
         }
 
         public getChildren(): Node[] {
-            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || neverArray : neverArray;
         }
 
         public getFirstToken(): Node | undefined {
@@ -327,7 +327,7 @@ namespace ts {
 
         getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
             if (!this.documentationComment) {
-                this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
+                this.documentationComment = neverArray; // Set temporarily to avoid an infinite loop finding inherited docs
 
                 if (!this.declarations && (this as Symbol as TransientSymbol).target && ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
                     const labelDecl = ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
@@ -344,13 +344,13 @@ namespace ts {
             switch (context?.kind) {
                 case SyntaxKind.GetAccessor:
                     if (!this.contextualGetAccessorDocumentationComment) {
-                        this.contextualGetAccessorDocumentationComment = emptyArray;
+                        this.contextualGetAccessorDocumentationComment = neverArray;
                         this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                     }
                     return this.contextualGetAccessorDocumentationComment;
                 case SyntaxKind.SetAccessor:
                     if (!this.contextualSetAccessorDocumentationComment) {
-                        this.contextualSetAccessorDocumentationComment = emptyArray;
+                        this.contextualSetAccessorDocumentationComment = neverArray;
                         this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                     }
                     return this.contextualSetAccessorDocumentationComment;
@@ -567,7 +567,7 @@ namespace ts {
     }
 
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-        if (!declarations) return emptyArray;
+        if (!declarations) return neverArray;
 
         let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
         if (doc.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
@@ -589,7 +589,7 @@ namespace ts {
      * @returns A filled array of documentation comments if any were found, otherwise an empty array.
      */
     function findInheritedJSDocComments(declaration: Declaration, propertyName: string, typeChecker: TypeChecker): readonly SymbolDisplayPart[] | undefined {
-        return firstDefined(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
+        return firstDefined(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : neverArray, superTypeNode => {
             const superType = typeChecker.getTypeAtLocation(superTypeNode);
             const baseProperty = superType && typeChecker.getPropertyOfType(superType, propertyName);
             const inheritedDocs = baseProperty && baseProperty.getDocumentationComment(typeChecker);
@@ -1797,7 +1797,7 @@ namespace ts {
             return kind === ScriptKind.TS || kind === ScriptKind.TSX;
         }
 
-        function getSemanticClassifications_NameSpaceLocal(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSemanticClassificationsNameSpaceLocal(fileName: string, span: TextSpan): ClassifiedSpan[] {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return [];
@@ -1806,7 +1806,7 @@ namespace ts {
             return getSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
 
-        function getEncodedSemanticClassifications_NameSpaceLocal(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSemanticClassificationsNameSpaceLocal(fileName: string, span: TextSpan): Classifications {
             if (!isTsOrTsxFile(fileName)) {
                 // do not run semantic classification on non-ts-or-tsx files
                 return { spans: [], endOfLineState: EndOfLineState.None };
@@ -1815,12 +1815,12 @@ namespace ts {
             return getEncodedSemanticClassifications(program.getTypeChecker(), cancellationToken, getValidSourceFile(fileName), program.getClassifiableNames(), span);
         }
 
-        function getSyntacticClassifications_NameSpaceLocal(fileName: string, span: TextSpan): ClassifiedSpan[] {
+        function getSyntacticClassificationsNameSpaceLocal(fileName: string, span: TextSpan): ClassifiedSpan[] {
             // doesn't use compiler - no need to synchronize with host
             return getSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
         }
 
-        function getEncodedSyntacticClassifications_NameSpaceLocal(fileName: string, span: TextSpan): Classifications {
+        function getEncodedSyntacticClassificationsNameSpaceLocal(fileName: string, span: TextSpan): Classifications {
             // doesn't use compiler - no need to synchronize with host
             return getEncodedSyntacticClassifications(cancellationToken, syntaxTreeCache.getCurrentSourceFile(fileName), span);
         }
@@ -1845,7 +1845,7 @@ namespace ts {
             const matchKind = token.getStart(sourceFile) === position ? braceMatching.get(token.kind.toString()) : undefined;
             const match = matchKind && findChildOfKind(token.parent, matchKind, sourceFile);
             // We want to order the braces when we return the result.
-            return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start) : emptyArray;
+            return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start) : neverArray;
         }
 
         function getIndentationAtPosition(fileName: string, position: number, editorOptions: EditorOptions | EditorSettings) {
@@ -1921,7 +1921,7 @@ namespace ts {
             return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
         }
 
-        function getEditsForFileRename_NameSpaceLocal(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
+        function getEditsForFileRenameNameSpaceLocal(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
             return getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions, host), preferences, sourceMapper);
         }
 
@@ -2222,10 +2222,10 @@ namespace ts {
             getSemanticDiagnostics,
             getSuggestionDiagnostics,
             getCompilerOptionsDiagnostics,
-            getSyntacticClassifications: getSyntacticClassifications_NameSpaceLocal,
-            getSemanticClassifications: getSemanticClassifications_NameSpaceLocal,
-            getEncodedSyntacticClassifications: getEncodedSyntacticClassifications_NameSpaceLocal,
-            getEncodedSemanticClassifications: getEncodedSemanticClassifications_NameSpaceLocal,
+            getSyntacticClassifications: getSyntacticClassificationsNameSpaceLocal,
+            getSemanticClassifications: getSemanticClassificationsNameSpaceLocal,
+            getEncodedSyntacticClassifications: getEncodedSyntacticClassificationsNameSpaceLocal,
+            getEncodedSemanticClassifications: getEncodedSemanticClassificationsNameSpaceLocal,
             getCompletionsAtPosition,
             getCompletionEntryDetails,
             getCompletionEntrySymbol,
@@ -2262,7 +2262,7 @@ namespace ts {
             getCombinedCodeFix,
             applyCodeActionCommand,
             organizeImports,
-            getEditsForFileRename: getEditsForFileRename_NameSpaceLocal,
+            getEditsForFileRename: getEditsForFileRenameNameSpaceLocal,
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram,
@@ -2377,10 +2377,10 @@ namespace ts {
     /* @internal */
     export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): readonly Symbol[] {
         const name = getNameFromPropertyName(node.name);
-        if (!name) return emptyArray;
+        if (!name) return neverArray;
         if (!contextualType.isUnion()) {
             const symbol = contextualType.getProperty(name);
-            return symbol ? [symbol] : emptyArray;
+            return symbol ? [symbol] : neverArray;
         }
 
         const discriminatedPropertySymbols = mapDefined(contextualType.types, t => isObjectLiteralExpression(node.parent) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));

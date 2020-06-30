@@ -168,7 +168,7 @@ namespace ts.tscWatch {
             host,
             [
                 startingCompilationInWatchMode(),
-                ...map(logsBeforeErrors || emptyArray, expected => hostOutputLog(expected, "logBeforeError")),
+                ...map(logsBeforeErrors || neverArray, expected => hostOutputLog(expected, "logBeforeError")),
                 ...map(errors, hostOutputDiagnostic),
                 foundErrorsWatching(errors)
             ],
@@ -180,9 +180,9 @@ namespace ts.tscWatch {
         checkOutputErrors(
             host,
             [
-                ...map(logsBeforeWatchDiagnostic || emptyArray, expected => hostOutputLog(expected, "logsBeforeWatchDiagnostic")),
+                ...map(logsBeforeWatchDiagnostic || neverArray, expected => hostOutputLog(expected, "logsBeforeWatchDiagnostic")),
                 fileChangeDetected(),
-                ...map(logsBeforeErrors || emptyArray, expected => hostOutputLog(expected, "logBeforeError")),
+                ...map(logsBeforeErrors || neverArray, expected => hostOutputLog(expected, "logBeforeError")),
                 ...map(errors, hostOutputDiagnostic),
                 foundErrorsWatching(errors)
             ],
@@ -194,9 +194,9 @@ namespace ts.tscWatch {
         checkOutputErrors(
             host,
             [
-                ...map(logsBeforeWatchDiagnostic || emptyArray, expected => hostOutputLog(expected, "logsBeforeWatchDiagnostic")),
+                ...map(logsBeforeWatchDiagnostic || neverArray, expected => hostOutputLog(expected, "logsBeforeWatchDiagnostic")),
                 fileChangeDetected(),
-                ...map(logsBeforeErrors || emptyArray, expected => hostOutputLog(expected, "logBeforeError")),
+                ...map(logsBeforeErrors || neverArray, expected => hostOutputLog(expected, "logBeforeError")),
                 ...map(errors, hostOutputDiagnostic),
             ],
             disableConsoleClears
@@ -211,7 +211,7 @@ namespace ts.tscWatch {
                 ...map(errors, hostOutputDiagnostic),
                 ...reportErrorSummary ?
                     [hostOutputWatchDiagnostic(getErrorSummaryText(errors.length, host.newLine))] :
-                    emptyArray
+                    neverArray
             ]
         );
     }

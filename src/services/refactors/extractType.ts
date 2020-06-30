@@ -7,7 +7,7 @@ namespace ts.refactor {
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
-            if (!info) return emptyArray;
+            if (!info) return neverArray;
 
             if (info.error === undefined) {
                 return [{
@@ -35,7 +35,7 @@ namespace ts.refactor {
                 }];
             }
 
-            return emptyArray;
+            return neverArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             const { file, } = context;

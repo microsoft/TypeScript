@@ -65,7 +65,7 @@ namespace ts.codefix {
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context.sourceFile);
-        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body) : emptyArray;
+        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body) : neverArray;
         const transformer: Transformer = { checker, synthNamesMap, setOfExpressionsToReturn, isInJSFile: isInJavascript };
 
         if (!returnStatements.length) {
@@ -203,14 +203,14 @@ namespace ts.codefix {
     }
 
     function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyMap<string, Symbol[]>): SynthIdentifier {
-        const numVarsSameName = (originalNames.get(name.text) || emptyArray).length;
+        const numVarsSameName = (originalNames.get(name.text) || neverArray).length;
         const identifier = numVarsSameName === 0 ? name : factory.createIdentifier(name.text + "_" + numVarsSameName);
         return createSynthIdentifier(identifier);
     }
 
     function silentFail() {
         codeActionSucceeded = false;
-        return emptyArray;
+        return neverArray;
     }
 
     // dispatch function to recursively build the refactoring
@@ -424,7 +424,7 @@ namespace ts.codefix {
                             seenReturnStatement);
                 }
                 else {
-                    const innerRetStmts = isFixablePromiseHandler(funcBody) ? [factory.createReturnStatement(funcBody)] : emptyArray;
+                    const innerRetStmts = isFixablePromiseHandler(funcBody) ? [factory.createReturnStatement(funcBody)] : neverArray;
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
@@ -451,7 +451,7 @@ namespace ts.codefix {
                 // If no cases apply, we've found a transformation body we don't know how to handle, so the refactoring should no-op to avoid deleting code.
                 return silentFail();
         }
-        return emptyArray;
+        return neverArray;
     }
 
     function getLastCallSignature(type: Type, checker: TypeChecker): Signature | undefined {
@@ -580,7 +580,7 @@ namespace ts.codefix {
         return { kind: SynthBindingNameKind.Identifier, identifier, types, hasBeenDeclared: false };
     }
 
-    function createSynthBindingPattern(bindingPattern: BindingPattern, elements: readonly SynthBindingName[] = emptyArray, types: Type[] = []): SynthBindingPattern {
+    function createSynthBindingPattern(bindingPattern: BindingPattern, elements: readonly SynthBindingName[] = neverArray, types: Type[] = []): SynthBindingPattern {
         return { kind: SynthBindingNameKind.BindingPattern, bindingPattern, elements, types };
     }
 

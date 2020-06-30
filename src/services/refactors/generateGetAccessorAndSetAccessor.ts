@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.generateGetAccessorAndSetAccessor {
+namespace ts.refactor {
     const actionName = "Generate 'get' and 'set' accessors";
     const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
     registerRefactor(actionName, {
@@ -18,9 +18,9 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             return { renameFilename, renameLocation, edits };
         },
         getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-            if (!context.endPosition) return emptyArray;
+            if (!context.endPosition) return neverArray;
             const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.startPosition, context.endPosition, context.triggerReason === "invoked");
-            if (!info) return emptyArray;
+            if (!info) return neverArray;
 
             if (!info.error) {
                 return [{
@@ -47,7 +47,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
                 }];
             }
 
-            return emptyArray;
+            return neverArray;
         }
     });
 }

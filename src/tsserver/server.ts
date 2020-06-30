@@ -943,7 +943,7 @@ namespace ts.server {
     function parseStringArray(argName: string): readonly string[] {
         const arg = findArgument(argName);
         if (arg === undefined) {
-            return emptyArray_Server;
+            return emptyArray;
         }
         return arg.split(",").filter(name => name !== "");
     }

@@ -338,7 +338,7 @@ namespace ts {
         return state;
     }
 
-    function toPath_NameSpaceLocal(state: SolutionBuilderState, fileName: string) {
+    function toPathNameSpaceLocal(state: SolutionBuilderState, fileName: string) {
         return toPath(fileName, state.currentDirectory, state.getCanonicalFileName);
     }
 
@@ -347,7 +347,7 @@ namespace ts {
         const path = resolvedConfigFilePaths.get(fileName);
         if (path !== undefined) return path;
 
-        const resolvedPath = toPath_NameSpaceLocal(state, fileName) as ResolvedConfigFilePath;
+        const resolvedPath = toPathNameSpaceLocal(state, fileName) as ResolvedConfigFilePath;
         resolvedConfigFilePaths.set(fileName, resolvedPath);
         return resolvedPath;
     }
@@ -394,8 +394,8 @@ namespace ts {
         }
 
         return circularDiagnostics ?
-            { buildOrder: buildOrder || emptyArray, circularDiagnostics } :
-            buildOrder || emptyArray;
+            { buildOrder: buildOrder || neverArray, circularDiagnostics } :
+            buildOrder || neverArray;
 
         function visit(configFileName: ResolvedConfigFileName, inCircularContext?: boolean) {
             const projPath = toResolvedConfigFilePath(state, configFileName);
@@ -512,7 +512,7 @@ namespace ts {
             getSourceFileWithCache, readFileWithCache
         } = changeCompilerHostLikeToUseCache(
             host,
-            fileName => toPath_NameSpaceLocal(state, fileName),
+            fileName => toPathNameSpaceLocal(state, fileName),
             (...args) => originalGetSourceFile.call(compilerHost, ...args)
         );
         state.readFileWithCache = readFileWithCache;
@@ -800,7 +800,7 @@ namespace ts {
         }
 
         function withProgramOrEmptyArray<U>(action: (program: T) => readonly U[]): readonly U[] {
-            return withProgramOrUndefined(action) || emptyArray;
+            return withProgramOrUndefined(action) || neverArray;
         }
 
         function createProgram() {
@@ -938,7 +938,7 @@ namespace ts {
                     }
                 }
 
-                emittedOutputs.set(toPath_NameSpaceLocal(state, name), name);
+                emittedOutputs.set(toPathNameSpaceLocal(state, name), name);
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
@@ -1059,7 +1059,7 @@ namespace ts {
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
-                emittedOutputs.set(toPath_NameSpaceLocal(state, name), name);
+                emittedOutputs.set(toPathNameSpaceLocal(state, name), name);
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
 
@@ -1300,7 +1300,7 @@ namespace ts {
 
         // Update module resolution cache if needed
         const { moduleResolutionCache } = state;
-        const projPath = toPath_NameSpaceLocal(state, proj);
+        const projPath = toPathNameSpaceLocal(state, proj);
         if (moduleResolutionCache.directoryToModuleNameMap.redirectsMap.size === 0) {
             // The own map will be for projectCompilerOptions
             Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size === 0);
@@ -1490,7 +1490,7 @@ namespace ts {
             if (configStatus) return configStatus;
 
             // Check extended config time
-            const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
+            const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || neverArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
             if (extendedConfigStatus) return extendedConfigStatus;
         }
 
@@ -1551,7 +1551,7 @@ namespace ts {
             let reportVerbose = !!state.options.verbose;
             const now = host.now ? host.now() : new Date();
             for (const file of outputs) {
-                if (skipOutputs && skipOutputs.has(toPath_NameSpaceLocal(state, file))) {
+                if (skipOutputs && skipOutputs.has(toPathNameSpaceLocal(state, file))) {
                     continue;
                 }
 
@@ -1802,9 +1802,9 @@ namespace ts {
                 dir,
                 fileOrDirectory => {
                     if (isIgnoredFileFromWildCardWatching({
-                        watchedDirPath: toPath_NameSpaceLocal(state, dir),
+                        watchedDirPath: toPathNameSpaceLocal(state, dir),
                         fileOrDirectory,
-                        fileOrDirectoryPath: toPath_NameSpaceLocal(state, fileOrDirectory),
+                        fileOrDirectoryPath: toPathNameSpaceLocal(state, fileOrDirectory),
                         configFileName: resolved,
                         configFileSpecs: parsed.configFileSpecs!,
                         currentDirectory: state.currentDirectory,
@@ -1828,7 +1828,7 @@ namespace ts {
         if (!state.watch) return;
         mutateMap(
             getOrCreateValueMapFromConfigFileMap(state.allWatchedInputFiles, resolvedPath),
-            arrayToMap(parsed.fileNames, fileName => toPath_NameSpaceLocal(state, fileName)),
+            arrayToMap(parsed.fileNames, fileName => toPathNameSpaceLocal(state, fileName)),
             {
                 createNewValue: (path, input) => state.watchFilePath(
                     state.hostWithWatch,
@@ -1948,7 +1948,7 @@ namespace ts {
             buildOrder.forEach(project => {
                 const projectPath = toResolvedConfigFilePath(state, project);
                 if (!state.projectErrorsReported.has(projectPath)) {
-                    reportErrors(state, diagnostics.get(projectPath) || emptyArray);
+                    reportErrors(state, diagnostics.get(projectPath) || neverArray);
                 }
             });
             if (canReportSummary) diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));

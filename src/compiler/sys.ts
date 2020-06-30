@@ -131,26 +131,26 @@ namespace ts {
         getModifiedTime: NonNullable<System["getModifiedTime"]>;
         setTimeout: NonNullable<System["setTimeout"]>;
     }): HostWatchFile {
-        interface WatchedFile_NameSpaceLocal extends WatchedFile {
+        interface WatchedFileNameSpaceLocal extends WatchedFile {
             isClosed?: boolean;
             unchangedPolls: number;
         }
 
-        interface PollingIntervalQueue extends Array<WatchedFile_NameSpaceLocal> {
+        interface PollingIntervalQueue extends Array<WatchedFileNameSpaceLocal> {
             pollingInterval: PollingInterval;
             pollIndex: number;
             pollScheduled: boolean;
         }
 
-        const watchedFiles: WatchedFile_NameSpaceLocal[] = [];
-        const changedFilesInLastPoll: WatchedFile_NameSpaceLocal[] = [];
+        const watchedFiles: WatchedFileNameSpaceLocal[] = [];
+        const changedFilesInLastPoll: WatchedFileNameSpaceLocal[] = [];
         const lowPollingIntervalQueue = createPollingIntervalQueue(PollingInterval.Low);
         const mediumPollingIntervalQueue = createPollingIntervalQueue(PollingInterval.Medium);
         const highPollingIntervalQueue = createPollingIntervalQueue(PollingInterval.High);
         return watchFile;
 
         function watchFile(fileName: string, callback: FileWatcherCallback, defaultPollingInterval: PollingInterval): FileWatcher {
-            const file: WatchedFile_NameSpaceLocal = {
+            const file: WatchedFileNameSpaceLocal = {
                 fileName,
                 callback,
                 unchangedPolls: 0,
@@ -170,7 +170,7 @@ namespace ts {
         }
 
         function createPollingIntervalQueue(pollingInterval: PollingInterval): PollingIntervalQueue {
-            const queue = [] as WatchedFile_NameSpaceLocal[] as PollingIntervalQueue;
+            const queue = [] as WatchedFileNameSpaceLocal[] as PollingIntervalQueue;
             queue.pollingInterval = pollingInterval;
             queue.pollIndex = 0;
             queue.pollScheduled = false;
@@ -202,7 +202,7 @@ namespace ts {
             }
         }
 
-        function pollQueue(queue: (WatchedFile_NameSpaceLocal | undefined)[], pollingInterval: PollingInterval, pollIndex: number, chunkSize: number) {
+        function pollQueue(queue: (WatchedFileNameSpaceLocal | undefined)[], pollingInterval: PollingInterval, pollIndex: number, chunkSize: number) {
             // Max visit would be all elements of the queue
             let needsVisit = queue.length;
             let definedValueCopyToIndex = pollIndex;
@@ -282,12 +282,12 @@ namespace ts {
             }
         }
 
-        function addToPollingIntervalQueue(file: WatchedFile_NameSpaceLocal, pollingInterval: PollingInterval) {
+        function addToPollingIntervalQueue(file: WatchedFileNameSpaceLocal, pollingInterval: PollingInterval) {
             pollingIntervalQueue(pollingInterval).push(file);
             scheduleNextPollIfNotAlreadyScheduled(pollingInterval);
         }
 
-        function addChangedFileToLowPollingIntervalQueue(file: WatchedFile_NameSpaceLocal) {
+        function addChangedFileToLowPollingIntervalQueue(file: WatchedFileNameSpaceLocal) {
             changedFilesInLastPoll.push(file);
             scheduleNextPollIfNotAlreadyScheduled(PollingInterval.Low);
         }
@@ -511,7 +511,7 @@ namespace ts {
                         }
                     }, /*recursive*/ false, options),
                     refCount: 1,
-                    childWatches: emptyArray
+                    childWatches: neverArray
                 };
                 cache.set(dirPath, directoryWatcher);
                 updateChildWatches(dirName, dirPath, options);
@@ -642,7 +642,7 @@ namespace ts {
         function removeChildWatches(parentWatcher: HostDirectoryWatcher | undefined) {
             if (!parentWatcher) return;
             const existingChildWatches = parentWatcher.childWatches;
-            parentWatcher.childWatches = emptyArray;
+            parentWatcher.childWatches = neverArray;
             for (const childWatcher of existingChildWatches) {
                 childWatcher.close();
                 removeChildWatches(cache.get(toCanonicalFilePath(childWatcher.dirName)));
@@ -660,14 +660,14 @@ namespace ts {
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
                     return !isIgnoredPath(childFullName) && filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
-                }) : emptyArray,
+                }) : neverArray,
                 parentWatcher.childWatches,
                 (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
                 createAndAddChildDirectoryWatcher,
                 closeFileWatcher,
                 addChildDirectoryWatcher
             );
-            parentWatcher.childWatches = newChildWatches || emptyArray;
+            parentWatcher.childWatches = newChildWatches || neverArray;
             return hasChanges;
 
             /**

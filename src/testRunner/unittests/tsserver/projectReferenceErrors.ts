@@ -35,7 +35,7 @@ namespace ts.projectSystem {
                 return {
                     triggerFile: usageTs.path,
                     configFileName: usageConfig.path,
-                    diagnostics: emptyArray
+                    diagnostics: neverArray
                 };
             }
 
@@ -43,7 +43,7 @@ namespace ts.projectSystem {
                 return {
                     triggerFile: dependencyTs.path,
                     configFileName: dependencyConfig.path,
-                    diagnostics: emptyArray
+                    diagnostics: neverArray
                 };
             }
 
@@ -143,7 +143,7 @@ fnErr();
             function usageDiagnostics(): GetErrDiagnostics {
                 return {
                     file: usageTs,
-                    syntax: emptyArray,
+                    syntax: neverArray,
                     semantic: [
                         createDiagnostic(
                             { line: 4, offset: 5 },
@@ -153,14 +153,14 @@ fnErr();
                             "error",
                         )
                     ],
-                    suggestion: emptyArray
+                    suggestion: neverArray
                 };
             }
 
             function dependencyDiagnostics(): GetErrDiagnostics {
                 return {
                     file: dependencyTs,
-                    syntax: emptyArray,
+                    syntax: neverArray,
                     semantic: [
                         createDiagnostic(
                             { line: 6, offset: 12 },
@@ -170,7 +170,7 @@ fnErr();
                             "error",
                         )
                     ],
-                    suggestion: emptyArray
+                    suggestion: neverArray
                 };
             }
 
@@ -212,7 +212,7 @@ fnErr();
             function usageDiagnostics(): GetErrDiagnostics {
                 return {
                     file: usageTs,
-                    syntax: emptyArray,
+                    syntax: neverArray,
                     semantic: [
                         createDiagnostic(
                             { line: 3, offset: 1 },
@@ -222,14 +222,14 @@ fnErr();
                             "error",
                         )
                     ],
-                    suggestion: emptyArray
+                    suggestion: neverArray
                 };
             }
 
             function dependencyDiagnostics(): GetErrDiagnostics {
                 return {
                     file: dependencyTs,
-                    syntax: emptyArray,
+                    syntax: neverArray,
                     semantic: [
                         createDiagnostic(
                             { line: 6, offset: 5 },
@@ -239,7 +239,7 @@ fnErr();
                             "error",
                         )
                     ],
-                    suggestion: emptyArray
+                    suggestion: neverArray
                 };
             }
 

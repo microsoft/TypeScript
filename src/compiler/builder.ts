@@ -262,10 +262,10 @@ namespace ts {
     }
 
     function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program, getCanonicalFileName: GetCanonicalFileName): readonly Diagnostic[] {
-        if (!diagnostics.length) return emptyArray;
+        if (!diagnostics.length) return neverArray;
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
         return diagnostics.map(diagnostic => {
-            const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath_NameSpaceLocal);
+            const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPathNameSpaceLocal);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
             result.reportsDeprecated = diagnostic.reportDeprecated;
             result.source = diagnostic.source;
@@ -273,13 +273,13 @@ namespace ts {
             const { relatedInformation } = diagnostic;
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
-                    relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPath_NameSpaceLocal)) :
-                    emptyArray :
+                    relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPathNameSpaceLocal)) :
+                    neverArray :
                 undefined;
             return result;
         });
 
-        function toPath_NameSpaceLocal(path: string) {
+        function toPathNameSpaceLocal(path: string) {
             return toPath(path, buildInfoDirectory, getCanonicalFileName);
         }
     }
@@ -824,7 +824,7 @@ namespace ts {
             result.relatedInformation = relatedInformation ?
                 relatedInformation.length ?
                     relatedInformation.map(r => convertToReusableDiagnosticRelatedInformation(r, relativeToBuildInfo)) :
-                    emptyArray :
+                    neverArray :
                 undefined;
             return result;
         });
@@ -879,7 +879,7 @@ namespace ts {
             oldProgram = oldProgramOrHost as BuilderProgram;
             configFileParsingDiagnostics = configFileParsingDiagnosticsOrOldProgram as readonly Diagnostic[];
         }
-        return { host, newProgram, oldProgram, configFileParsingDiagnostics: configFileParsingDiagnostics || emptyArray };
+        return { host, newProgram, oldProgram, configFileParsingDiagnostics: configFileParsingDiagnostics || neverArray };
     }
 
     export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
@@ -1039,7 +1039,7 @@ namespace ts {
                     }
                     return {
                         emitSkipped,
-                        diagnostics: diagnostics || emptyArray,
+                        diagnostics: diagnostics || neverArray,
                         emittedFiles,
                         sourceMaps
                     };
@@ -1119,7 +1119,7 @@ namespace ts {
             for (const sourceFile of Debug.checkDefined(state.program).getSourceFiles()) {
                 diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken));
             }
-            return diagnostics || emptyArray;
+            return diagnostics || neverArray;
         }
     }
 
@@ -1160,19 +1160,19 @@ namespace ts {
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
         for (const key in program.fileInfos) {
             if (hasProperty(program.fileInfos, key)) {
-                fileInfos.set(toPath_NameSpaceLocal(key), program.fileInfos[key]);
+                fileInfos.set(toPathNameSpaceLocal(key), program.fileInfos[key]);
             }
         }
 
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
-            referencedMap: getMapOfReferencedSet(program.referencedMap, toPath_NameSpaceLocal),
-            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath_NameSpaceLocal),
-            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toPath_NameSpaceLocal(isString(value) ? value : value[0]), value => isString(value) ? emptyArray : value[1]),
+            referencedMap: getMapOfReferencedSet(program.referencedMap, toPathNameSpaceLocal),
+            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPathNameSpaceLocal),
+            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toPathNameSpaceLocal(isString(value) ? value : value[0]), value => isString(value) ? neverArray : value[1]),
             hasReusableDiagnostic: true,
-            affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toPath_NameSpaceLocal(value[0])),
-            affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toPath_NameSpaceLocal(value[0]), value => value[1]),
+            affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toPathNameSpaceLocal(value[0])),
+            affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toPathNameSpaceLocal(value[0]), value => value[1]),
             affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
         };
         return {
@@ -1200,7 +1200,7 @@ namespace ts {
             close: noop,
         };
 
-        function toPath_NameSpaceLocal(path: string) {
+        function toPathNameSpaceLocal(path: string) {
             return toPath(path, buildInfoDirectory, getCanonicalFileName);
         }
 

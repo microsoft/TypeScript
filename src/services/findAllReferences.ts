@@ -774,7 +774,7 @@ namespace ts.FindAllReferences {
                 }
             }
 
-            return references.length ? [{ definition: { type: DefinitionKind.Symbol, symbol }, references }] : emptyArray;
+            return references.length ? [{ definition: { type: DefinitionKind.Symbol, symbol }, references }] : neverArray;
         }
 
         /** As in a `readonly prop: any` or `constructor(readonly prop: any)`, not a `readonly any[]`. */

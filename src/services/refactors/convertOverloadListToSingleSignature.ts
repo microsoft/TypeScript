@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.addOrRemoveBracesToArrowFunction {
+namespace ts.refactor {
     const refactorName = "Convert overload list to single signature";
     const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
@@ -8,7 +8,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition, program } = context;
         const info = getConvertableOverloadListAtPosition(file, startPosition, program);
-        if (!info) return emptyArray;
+        if (!info) return neverArray;
 
         return [{
             name: refactorName,

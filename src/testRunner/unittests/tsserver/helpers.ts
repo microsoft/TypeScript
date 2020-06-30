@@ -1014,9 +1014,9 @@ namespace ts.projectSystem {
     export function emptyDiagnostics(file: File): GetErrDiagnostics {
         return {
             file,
-            syntax: emptyArray,
-            semantic: emptyArray,
-            suggestion: emptyArray
+            syntax: neverArray,
+            semantic: neverArray,
+            suggestion: neverArray
         };
     }
 

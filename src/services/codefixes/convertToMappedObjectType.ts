@@ -49,7 +49,7 @@ namespace ts.codefix {
         const intersectionType = factory.createIntersectionTypeNode([
             ...getAllSuperTypeNodes(container),
             mappedIntersectionType,
-            ...(otherMembers.length ? [factory.createTypeLiteralNode(otherMembers)] : emptyArray),
+            ...(otherMembers.length ? [factory.createTypeLiteralNode(otherMembers)] : neverArray),
         ]);
         changes.replaceNode(sourceFile, container, createTypeAliasFromInterface(container, intersectionType));
     }

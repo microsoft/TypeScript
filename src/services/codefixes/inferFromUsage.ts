@@ -359,7 +359,7 @@ namespace ts.codefix {
             if (merged) oldTags[i] = merged;
             return !!merged;
         }));
-        const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
+        const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || neverArray), ...unmergedNewTags]));
         const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
         jsDocNode.jsDoc = parent.jsDoc;
         jsDocNode.jsDocCache = parent.jsDocCache;
@@ -584,7 +584,7 @@ namespace ts.codefix {
                 calculateUsageOfNode(reference, usage);
             }
 
-            return combineTypes(usage.candidateThisTypes || emptyArray);
+            return combineTypes(usage.candidateThisTypes || neverArray);
         }
 
         function inferTypesFromReferencesSingle(references: readonly Identifier[]): Type[] {
@@ -1090,7 +1090,7 @@ namespace ts.codefix {
         }
 
         function getFunctionFromCalls(calls: CallUsage[]) {
-            return checker.createAnonymousType(/*symbol*/ undefined, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+            return checker.createAnonymousType(/*symbol*/ undefined, createSymbolTable(), [getSignatureFromCalls(calls)], neverArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
         }
 
         function getSignatureFromCalls(calls: CallUsage[]): Signature {
