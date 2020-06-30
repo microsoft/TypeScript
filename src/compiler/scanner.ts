@@ -2352,8 +2352,12 @@ namespace ts {
                     return token = SyntaxKind.WhitespaceTrivia;
                 case CharacterCodes.at:
                     return token = SyntaxKind.AtToken;
-                case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
+                    if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
+                        pos++;
+                    }
+                    // falls through
+                case CharacterCodes.lineFeed:
                     tokenFlags |= TokenFlags.PrecedingLineBreak;
                     return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:
