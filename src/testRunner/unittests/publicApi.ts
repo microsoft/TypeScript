@@ -63,7 +63,7 @@ describe("unittests:: Public APIs:: JSDoc newlines", () => {
 */
 function test() {}`;
 
-        const testSourceFile = ts.createSourceFile(testFilePath, testFileText, ts.ScriptTarget.Latest, true);
+        const testSourceFile = ts.createSourceFile(testFilePath, testFileText, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
         const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
         const tags = ts.getJSDocTags(funcDec);
         assert.isDefined(tags[0].comment);
