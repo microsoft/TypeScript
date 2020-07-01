@@ -1121,6 +1121,7 @@ namespace ts {
         target: ScriptTarget.ES5,
         strict: true,
         esModuleInterop: true,
+        useDefineForClassFields: true,
         forceConsistentCasingInFileNames: true,
         skipLibCheck: true
     };
