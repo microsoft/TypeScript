@@ -14381,11 +14381,12 @@ namespace ts {
                     return getTypeFromInferTypeNode(<InferTypeNode>node);
                 case SyntaxKind.ImportType:
                     return getTypeFromImportTypeNode(<ImportTypeNode>node);
-                // This function assumes that an identifier or qualified name is a type expression
+                // This function assumes that an identifier, qualified name, or proprety access expression is a type expression
                 // Callers should first ensure this by calling `isPartOfTypeNode`
                 // TODO(rbuckton): These aren't valid TypeNodes, but we treat them as such because of `isPartOfTypeNode`, which returns `true` for things that aren't `TypeNode`s.
                 case SyntaxKind.Identifier as TypeNodeSyntaxKind:
                 case SyntaxKind.QualifiedName as TypeNodeSyntaxKind:
+                case SyntaxKind.PropertyAccessExpression as TypeNodeSyntaxKind:
                     const symbol = getSymbolAtLocation(node);
                     return symbol ? getDeclaredTypeOfSymbol(symbol) : errorType;
                 default:
