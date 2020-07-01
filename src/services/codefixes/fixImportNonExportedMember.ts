@@ -51,8 +51,8 @@ namespace ts.codefix {
         let namedExport;
         forEach(moduleSymbol.exports, symbol => {
             const specifier = symbol.declarations[0];
-            if (specifier && isExportSpecifier(specifier)
-                && specifier.parent && isNamedExports(specifier.parent)) {
+            if (specifier && isExportSpecifier(specifier) && specifier.parent && isNamedExports(specifier.parent)) {
+
                 namedExport = specifier.parent?.parent;
             }
         });
