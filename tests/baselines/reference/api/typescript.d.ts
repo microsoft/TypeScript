@@ -43,15 +43,27 @@ declare namespace ts {
         clear(): void;
     }
     /** ES6 Map interface, only read methods included. */
-    interface ReadonlyMap<K, V> extends ReadonlyCollection<K> {
+    interface ReadonlyESMap<K, V> extends ReadonlyCollection<K> {
         get(key: K): V | undefined;
         values(): Iterator<V>;
         entries(): Iterator<[K, V]>;
         forEach(action: (value: V, key: K) => void): void;
     }
+    /**
+     * ES6 Map interface, only read methods included.
+     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
+     */
+    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    }
     /** ES6 Map interface. */
-    interface Map<K, V> extends ReadonlyMap<K, V>, Collection<K> {
+    interface ESMap<K, V> extends ReadonlyESMap<K, V>, Collection<K> {
         set(key: K, value: V): this;
+    }
+    /**
+     * ES6 Map interface.
+     * @deprecated Use `ts.ESMap<K, V>` instead.
+     */
+    interface Map<T> extends ESMap<string, T> {
     }
     /** ES6 Set interface, only read methods included. */
     interface ReadonlySet<T> extends ReadonlyCollection<T> {
@@ -2405,10 +2417,10 @@ declare namespace ts {
         __escapedIdentifier: void;
     }) | InternalSymbolName;
     /** ReadonlyMap where keys are `__String`s. */
-    export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
+    export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyESMap<__String, T> {
     }
     /** Map where keys are `__String`s. */
-    export interface UnderscoreEscapedMap<T> extends Map<__String, T>, ReadonlyUnderscoreEscapedMap<T> {
+    export interface UnderscoreEscapedMap<T> extends ESMap<__String, T>, ReadonlyUnderscoreEscapedMap<T> {
     }
     /** SymbolTable based on ES6 Map interface. */
     export type SymbolTable = UnderscoreEscapedMap<Symbol>;
@@ -2600,7 +2612,7 @@ declare namespace ts {
         isDistributive: boolean;
         inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
-        instantiations?: Map<string, Type>;
+        instantiations?: Map<Type>;
         aliasSymbol?: Symbol;
         aliasTypeArguments?: Type[];
     }
@@ -4492,7 +4504,7 @@ declare namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost, extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
+    export function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions, host: ParseConfigFileHost, extendedConfigCache?: Map<ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file
@@ -4526,7 +4538,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param jsonNode The contents of the config file to parse
@@ -4534,7 +4546,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
+    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
     export interface ParsedTsconfig {
         raw: any;
         options?: CompilerOptions;
@@ -4581,7 +4593,7 @@ declare namespace ts {
      * This assumes that any module id will have the same resolution for sibling files located in the same folder.
      */
     interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
-        getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<string, ResolvedModuleWithFailedLookupLocations>;
+        getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<ResolvedModuleWithFailedLookupLocations>;
     }
     /**
      * Stored map from non-relative module name to a table: directory -> result of module lookup in this directory

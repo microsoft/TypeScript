@@ -15,36 +15,36 @@ namespace ts {
         /**
          * Information of the file eg. its version, signature etc
          */
-        fileInfos: ReadonlyMap<Path, BuilderState.FileInfo>;
+        fileInfos: ReadonlyESMap<Path, BuilderState.FileInfo>;
         /**
          * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
          * Otherwise undefined
          * Thus non undefined value indicates, module emit
          */
-        readonly referencedMap?: ReadonlyMap<Path, BuilderState.ReferencedSet> | undefined;
+        readonly referencedMap?: ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined;
         /**
          * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
          */
-        readonly exportedModulesMap?: ReadonlyMap<Path, BuilderState.ReferencedSet> | undefined;
+        readonly exportedModulesMap?: ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined;
     }
 
     export interface BuilderState {
         /**
          * Information of the file eg. its version, signature etc
          */
-        fileInfos: Map<Path, BuilderState.FileInfo>;
+        fileInfos: ESMap<Path, BuilderState.FileInfo>;
         /**
          * Contains the map of ReferencedSet=Referenced files of the file if module emit is enabled
          * Otherwise undefined
          * Thus non undefined value indicates, module emit
          */
-        readonly referencedMap: ReadonlyMap<Path, BuilderState.ReferencedSet> | undefined;
+        readonly referencedMap: ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined;
         /**
          * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
          */
-        readonly exportedModulesMap: Map<Path, BuilderState.ReferencedSet> | undefined;
+        readonly exportedModulesMap: ESMap<Path, BuilderState.ReferencedSet> | undefined;
         /**
          * Map of files that have already called update signature.
          * That means hence forth these files are assumed to have
@@ -83,7 +83,7 @@ namespace ts {
          * Exported modules to from declaration emit being computed.
          * This can contain false in the affected file path to specify that there are no exported module(types from other modules) for this file
          */
-        export type ComputingExportedModulesMap = Map<Path, ReferencedSet | false>;
+        export type ComputingExportedModulesMap = ESMap<Path, ReferencedSet | false>;
 
         /**
          * Get the referencedFile from the imported module symbol
@@ -192,7 +192,7 @@ namespace ts {
         /**
          * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
          */
-        export function canReuseOldState(newReferencedMap: ReadonlyMap<Path, ReferencedSet> | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
+        export function canReuseOldState(newReferencedMap: ReadonlyESMap<Path, ReferencedSet> | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
             return oldState && !oldState.referencedMap === !newReferencedMap;
         }
 
@@ -258,7 +258,7 @@ namespace ts {
         /**
          * Gets the files affected by the path from the program
          */
-        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: Map<Path, string>, exportedModulesMapCache?: ComputingExportedModulesMap): readonly SourceFile[] {
+        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: ESMap<Path, string>, exportedModulesMapCache?: ComputingExportedModulesMap): readonly SourceFile[] {
             // Since the operation could be cancelled, the signatures are always stored in the cache
             // They will be committed once it is safe to use them
             // eg when calling this api from tsserver, if there is no cancellation of the operation
@@ -285,7 +285,7 @@ namespace ts {
          * Updates the signatures from the cache into state's fileinfo signatures
          * This should be called whenever it is safe to commit the state of the builder
          */
-        export function updateSignaturesFromCache(state: BuilderState, signatureCache: Map<Path, string>) {
+        export function updateSignaturesFromCache(state: BuilderState, signatureCache: ESMap<Path, string>) {
             signatureCache.forEach((signature, path) => updateSignatureOfFile(state, signature, path));
         }
 
@@ -297,7 +297,7 @@ namespace ts {
         /**
          * Returns if the shape of the signature has changed since last emit
          */
-        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: Map<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ComputingExportedModulesMap) {
+        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ComputingExportedModulesMap) {
             Debug.assert(!!sourceFile);
             Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
 
@@ -518,7 +518,7 @@ namespace ts {
         /**
          * When program emits modular code, gets the files affected by the sourceFile whose shape has changed
          */
-        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: Map<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash | undefined, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
+        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash | undefined, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
             if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
                 return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
             }

@@ -38,7 +38,7 @@ namespace ts.codefix {
 
     interface Transformer {
         readonly checker: TypeChecker;
-        readonly synthNamesMap: Map<string, SynthIdentifier>; // keys are the symbol id of the identifier
+        readonly synthNamesMap: ESMap<string, SynthIdentifier>; // keys are the symbol id of the identifier
         readonly setOfExpressionsToReturn: ReadonlySet<number>; // keys are the node ids of the expressions
         readonly isInJSFile: boolean;
     }
@@ -61,7 +61,7 @@ namespace ts.codefix {
             return;
         }
 
-        const synthNamesMap: Map<string, SynthIdentifier> = createMap();
+        const synthNamesMap: ESMap<string, SynthIdentifier> = createMap();
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context.sourceFile);
@@ -148,7 +148,7 @@ namespace ts.codefix {
         This function collects all existing identifier names and names of identifiers that will be created in the refactor.
         It then checks for any collisions and renames them through getSynthesizedDeepClone
     */
-    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<string, SynthIdentifier>, sourceFile: SourceFile): FunctionLikeDeclaration {
+    function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: ESMap<string, SynthIdentifier>, sourceFile: SourceFile): FunctionLikeDeclaration {
         const identsToRenameMap = createMap<Identifier>(); // key is the symbol id
         const collidingSymbolMap = createMultiMap<Symbol>();
         forEachChild(nodeToRename, function visit(node: Node) {
@@ -202,7 +202,7 @@ namespace ts.codefix {
         return getSynthesizedDeepCloneWithRenames(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker);
     }
 
-    function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyMap<string, Symbol[]>): SynthIdentifier {
+    function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyESMap<string, Symbol[]>): SynthIdentifier {
         const numVarsSameName = (originalNames.get(name.text) || emptyArray).length;
         const identifier = numVarsSameName === 0 ? name : factory.createIdentifier(name.text + "_" + numVarsSameName);
         return createSynthIdentifier(identifier);

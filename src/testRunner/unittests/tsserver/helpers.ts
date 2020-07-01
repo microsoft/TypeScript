@@ -165,7 +165,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies });
     }
 
-    export function createTypesRegistry(...list: string[]): Map<string, MapLike<string>> {
+    export function createTypesRegistry(...list: string[]): ESMap<string, MapLike<string>> {
         const versionMap = {
             "latest": "1.3.0",
             "ts2.0": "1.0.0",
@@ -489,7 +489,7 @@ namespace ts.projectSystem {
     }
 
     export function checkOpenFiles(projectService: server.ProjectService, expectedFiles: File[]) {
-        checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path)!.fileName), expectedFiles.map(file => file.path));
+        checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
     export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[], additionInfo?: string) {

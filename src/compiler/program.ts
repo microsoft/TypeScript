@@ -126,7 +126,7 @@ namespace ts {
             }
         }
 
-        let outputFingerprints: Map<string, OutputFingerprint>;
+        let outputFingerprints: ESMap<string, OutputFingerprint>;
         function writeFileWorker(fileName: string, data: string, writeByteOrderMark: boolean) {
             if (!isWatchSet(options) || !system.createHash || !system.getModifiedTime) {
                 system.writeFile(fileName, data, writeByteOrderMark);
@@ -533,7 +533,7 @@ namespace ts {
     export const inferredTypesContainingFile = "__inferred type names__.ts";
 
     interface DiagnosticCache<T extends Diagnostic> {
-        perFile?: Map<Path, readonly T[]>;
+        perFile?: ESMap<Path, readonly T[]>;
         allDiagnostics?: readonly T[];
     }
 
@@ -702,7 +702,7 @@ namespace ts {
         let processingDefaultLibFiles: SourceFile[] | undefined;
         let processingOtherFiles: SourceFile[] | undefined;
         let files: SourceFile[];
-        let symlinks: ReadonlyMap<string, string> | undefined;
+        let symlinks: ReadonlyESMap<string, string> | undefined;
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
@@ -803,9 +803,9 @@ namespace ts {
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
         let resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined;
-        let projectReferenceRedirects: Map<Path, ResolvedProjectReference | false> | undefined;
-        let mapFromFileToProjectReferenceRedirects: Map<Path, Path> | undefined;
-        let mapFromToProjectReferenceRedirectSource: Map<Path, SourceOfProjectReferenceRedirect> | undefined;
+        let projectReferenceRedirects: ESMap<Path, ResolvedProjectReference | false> | undefined;
+        let mapFromFileToProjectReferenceRedirects: ESMap<Path, Path> | undefined;
+        let mapFromToProjectReferenceRedirectSource: ESMap<Path, SourceOfProjectReferenceRedirect> | undefined;
 
         const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
             !options.disableSourceOfProjectReferenceRedirect;
@@ -3452,7 +3452,7 @@ namespace ts {
             return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
 
-        function getProbableSymlinks(): ReadonlyMap<string, string> {
+        function getProbableSymlinks(): ReadonlyESMap<string, string> {
             if (host.getSymlinks) {
                 return host.getSymlinks();
             }
@@ -3479,8 +3479,8 @@ namespace ts {
 
     function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSourceOfProjectReferenceRedirect) {
         let setOfDeclarationDirectories: Set<Path> | undefined;
-        let symlinkedDirectories: Map<Path, SymlinkedDirectory | false> | undefined;
-        let symlinkedFiles: Map<Path, string> | undefined;
+        let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
+        let symlinkedFiles: ESMap<Path, string> | undefined;
 
         const originalFileExists = host.compilerHost.fileExists;
         const originalDirectoryExists = host.compilerHost.directoryExists;
