@@ -1,4 +1,22 @@
 /* @internal */ // Don't expose that we use this
+
+import { Scanner, createScanner, getLineStarts, isWhiteSpaceLike, tokenToString, stringToToken, isWhiteSpaceSingleLine, forEachLeadingCommentRange, forEachTrailingCommentRange } from "../compiler/scanner";
+import { ScriptTarget, Node, SyntaxKind, JSDocTypedefTag, ModuleDeclaration, Identifier, QualifiedName, PropertyAccessExpression, HeritageClause, ImportTypeNode, ExpressionWithTypeArguments, CallExpression, NewExpression, Decorator, TaggedTemplateExpression, JsxOpeningLikeElement, Expression, LabeledStatement, BreakOrContinueStatement, StringLiteral, NumericLiteral, NoSubstitutionTemplateLiteral, Declaration, ElementAccessExpression, SourceFile, VariableDeclaration, PropertyAssignment, ModifierFlags, BinaryExpression, AssignmentDeclarationKind, ExportAssignment, SourceFileLike, TextRange, CatchClause, SignatureDeclaration, FunctionLikeDeclaration, IfStatement, ExpressionStatement, IndexSignatureDeclaration, IterationStatement, DoStatement, TypeQueryNode, TypeOfExpression, DeleteExpression, VoidExpression, YieldExpression, SpreadElement, TemplateExpression, TemplateSpan, ExportDeclaration, ImportDeclaration, PrefixUnaryExpression, ConditionalExpression, SyntaxList, ClassDeclaration, ClassExpression, FunctionDeclaration, FunctionExpression, LiteralExpression, Type, TypeChecker, Signature, CommentRange, EndOfFileToken, NodeFlags, NodeArray, TemplateLiteralToken, CompilerOptions, ForOfStatement, StringLiteralLike, TextSpan, Token, SymbolFlags, CharacterCodes, PropertyName, Program, ModuleSpecifierResolutionHost, SymbolTracker, ImportSpecifier, UserPreferences, __String, InternalSymbolName, BindingElement, Modifier, Statement, ImportClause, TypeFormatFlags, SymbolFormatFlags, ScriptKind, TransientSymbol, EmitFlags, CommentKind, CaseClause, EqualityOperator, TypeNode, SymbolAccessibility, Diagnostic, DiagnosticWithLocation } from "../compiler/types";
+import { isInJSFile, isAmbientModule, isDeclarationName, isInternalModuleImportEqualsDeclaration, isRightSideOfQualifiedNameOrPropertyAccess, isExpressionNode, isExpressionWithTypeArgumentsInClassExtendsClause, isExternalModuleImportEqualsDeclaration, getExternalModuleImportEqualsDeclarationExpression, isJSDocTypeAlias, getRootDeclaration, hasSyntacticModifier, getAssignmentDeclarationKind, isVarConst, isLet, identifierIsThisKeyword, nodeIsMissing, nodeIsPresent, indexOfNode, isPropertyNameLiteral, isKeyword, isPartOfTypeNode, findAncestor, createRange, isStringOrNumericLiteralLike, getTextOfIdentifierOrLiteral, isStringDoubleQuoted, addToSeen, getAllSuperTypeNodes, isRequireVariableDeclarationStatement, isAnyImportSyntax, defaultMaximumTruncationLength, getIndentString, ensureScriptKind, skipAlias, Mutable, getLastChild, isFileLevelUniqueName, stripQuotes, isFunctionBlock, directoryProbablyExists, isGlobalScopeAugmentation } from "../compiler/utilities";
+import { getJSDocEnumTag, isImportEqualsDeclaration, isTypeParameterDeclaration, isJSDocTemplateTag, isLiteralTypeNode, isQualifiedName, isCallExpression, isNewExpression, isCallOrNewExpression, isTaggedTemplateExpression, isDecorator, isJsxOpeningLikeElement, skipOuterExpressions, isPropertyAccessExpression, isIdentifier, isBreakOrContinueStatement, isLabeledStatement, isJSDocTag, isElementAccessExpression, isModuleDeclaration, isFunctionLike, getNameOfDeclaration, isFunctionExpression, isImportClause, isSyntaxList, isNamedDeclaration, isClassDeclaration, isClassExpression, isFunctionDeclaration, isNamedImports, isNamespaceImport, isNamedExports, isNamespaceExport, isModifier, isInterfaceDeclaration, isEnumDeclaration, isTypeAliasDeclaration, isGetAccessorDeclaration, isSetAccessorDeclaration, isVariableDeclarationList, isExportDeclaration, isImportSpecifier, isExportSpecifier, isImportDeclaration, isExportAssignment, isExternalModuleReference, isHeritageClause, isTypeReferenceNode, isConditionalTypeNode, isInferTypeNode, isMappedTypeNode, isTypeOperatorNode, isArrayTypeNode, isVoidExpression, isTypeOfExpression, isAwaitExpression, isYieldExpression, isDeleteExpression, isBinaryExpression, isAsExpression, isForInStatement, isForOfStatement, isPrivateIdentifier, isToken, isJSDocCommentContainingNode, isStringTextContainingNode, isJsxText, isTemplateLiteralKind, isJsxExpression, isJsxElement, isOptionalChain, isOptionalChainRoot, isTypeNode, isJSDoc, isDeclaration, getCombinedNodeFlagsAlwaysIncludeJSDoc, setConfigFileInOptions, createTextSpanFromBounds, createTextSpan, idText, factory, isStringLiteral, unescapeLeadingUnderscores, isBindingElement, isObjectBindingPattern, isSourceFile, textSpanContainsPosition, textSpanEnd, isImportOrExportSpecifier, setOriginalNode, isNumericLiteral, setTextRange, addEmitFlags, addSyntheticLeadingComment, addSyntheticTrailingComment, isObjectLiteralExpression, isModuleBlock, textSpanContainsTextSpan } from "../../built/local/compiler";
+import { getModuleInstanceState, ModuleInstanceState } from "../compiler/binder";
+import { Debug } from "../compiler/debug";
+import { tryCast, assertType, lastOrUndefined, last, find, contains, singleOrUndefined, firstDefined, clone, maybeBind, createMap, findLast, cast, notImplemented, noop, startsWith, or, neverArray, some, binarySearchKey, identity, compareTextSpans, compareValues, map, first } from "../compiler/core";
+import { ScriptElementKind, ScriptElementKindModifier, TextChange, IScriptSnapshot, LanguageServiceHost, DocumentSpan, SymbolDisplayPart, SymbolDisplayPartKind, FormattingHost, FormatCodeSettings, FileTextChanges, PackageJsonInfo, PackageJsonDependencyGroup, RefactorContext } from "./types";
+import { isExternalModule, forEachChild } from "../compiler/parser";
+import { getNodeId, getSymbolId } from "../compiler/checker";
+import { isArray } from "util";
+import { DisplayPartsSymbolWriter } from "./services";
+import { visitEachChild } from "../compiler/visitorPublic";
+import { nullTransformationContext } from "../compiler/transformer";
+import { forEachAncestorDirectory, combinePaths, getDirectoryPath, getPathComponents } from "../compiler/path";
+import { findConfigFile } from "../compiler/program";
+
 // Based on lib.es6.d.ts
 interface PromiseConstructor {
     new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
@@ -9,7 +27,7 @@ interface PromiseConstructor {
 declare var Promise: PromiseConstructor; // eslint-disable-line no-var
 
 /* @internal */
-namespace ts {
+
     // These utilities are common to multiple language service features.
     //#region
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -2870,4 +2888,4 @@ namespace ts {
     }
 
     // #endregion
-}
+

@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, ImportTypeNode, SyntaxKind } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { Debug } from "../../compiler/debug";
+import { factory } from "../../../built/local/compiler";
+
     const fixIdAddMissingTypeof = "fixAddModuleReferTypeMissingTypeof";
     const fixId = fixIdAddMissingTypeof;
     const errorCodes = [Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_typeof_import_0.code];
@@ -28,4 +34,4 @@ namespace ts.codefix {
         const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.qualifier, importType.typeArguments, /* isTypeOf */ true);
         changes.replaceNode(sourceFile, importType, newTypeNode);
     }
-}
+

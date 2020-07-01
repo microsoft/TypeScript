@@ -1,4 +1,8 @@
-namespace ts {
+import { WatchOptions, WatchFileKind, WatchDirectoryKind, PollingWatchKind } from "../../../compiler/types";
+import { parseJsonConfigFileContent, parseJsonSourceFileConfigFileContent } from "../../../../built/local/compiler";
+import { parseJsonText } from "../../../compiler/parser";
+import { assert } from "console";
+
     describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileTextToJson", () => {
         function createParseConfigHost(additionalFiles?: vfs.FileSet) {
             return new fakes.ParseConfigHost(
@@ -175,4 +179,4 @@ namespace ts {
             ]);
         });
     });
-}
+

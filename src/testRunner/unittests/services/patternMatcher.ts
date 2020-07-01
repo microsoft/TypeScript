@@ -1,3 +1,7 @@
+import { PatternMatchKind, PatternMatch, createPatternMatcher } from "../../../services/patternMatcher";
+import { assert } from "console";
+import { TextSpan } from "../../../compiler/types";
+
 describe("unittests:: services:: PatternMatcher", () => {
     describe("BreakIntoCharacterSpans", () => {
         it("EmptyIdentifier", () => {
@@ -93,27 +97,27 @@ describe("unittests:: services:: PatternMatcher", () => {
 
     describe("SingleWordPattern", () => {
         it("PreferCaseSensitiveExact", () => {
-            assertSegmentMatch("Foo", "Foo", { kind: ts.PatternMatchKind.exact, isCaseSensitive: true });
+            assertSegmentMatch("Foo", "Foo", { kind: PatternMatchKind.exact, isCaseSensitive: true });
         });
 
         it("PreferCaseSensitiveExactInsensitive", () => {
-            assertSegmentMatch("foo", "Foo", { kind: ts.PatternMatchKind.exact, isCaseSensitive: false });
+            assertSegmentMatch("foo", "Foo", { kind: PatternMatchKind.exact, isCaseSensitive: false });
         });
 
         it("PreferCaseSensitivePrefix", () => {
-            assertSegmentMatch("Foo", "Fo", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("Foo", "Fo", { kind: PatternMatchKind.prefix, isCaseSensitive: true });
         });
 
         it("PreferCaseSensitivePrefixCaseInsensitive", () => {
-            assertSegmentMatch("Foo", "fo", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: false });
+            assertSegmentMatch("Foo", "fo", { kind: PatternMatchKind.prefix, isCaseSensitive: false });
         });
 
         it("PreferCaseSensitiveCamelCaseMatchSimple", () => {
-            assertSegmentMatch("FogBar", "FB", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("FogBar", "FB", { kind: PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
         it("PreferCaseSensitiveCamelCaseMatchPartialPattern", () => {
-            assertSegmentMatch("FogBar", "FoB", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("FogBar", "FoB", { kind: PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
         it("PreferCaseSensitiveCamelCaseMatchToLongPattern1", () => {
@@ -133,35 +137,35 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("TwoUppercaseCharacters", () => {
-            assertSegmentMatch("SimpleUIElement", "SiUI", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("SimpleUIElement", "SiUI", { kind: PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
         it("PreferCaseSensitiveLowercasePattern", () => {
-            assertSegmentMatch("FogBar", "b", { kind: ts.PatternMatchKind.substring, isCaseSensitive: false });
+            assertSegmentMatch("FogBar", "b", { kind: PatternMatchKind.substring, isCaseSensitive: false });
         });
 
         it("PreferCaseSensitiveLowercasePattern2", () => {
-            assertSegmentMatch("FogBar", "fB", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: false });
+            assertSegmentMatch("FogBar", "fB", { kind: PatternMatchKind.camelCase, isCaseSensitive: false });
         });
 
         it("PreferCaseSensitiveTryUnderscoredName", () => {
-            assertSegmentMatch("_fogBar", "_fB", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("_fogBar", "_fB", { kind: PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
         it("PreferCaseSensitiveTryUnderscoredName2", () => {
-            assertSegmentMatch("_fogBar", "fB", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("_fogBar", "fB", { kind: PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
         it("PreferCaseSensitiveTryUnderscoredNameInsensitive", () => {
-            assertSegmentMatch("_FogBar", "_fB", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: false });
+            assertSegmentMatch("_FogBar", "_fB", { kind: PatternMatchKind.camelCase, isCaseSensitive: false });
         });
 
         it("PreferCaseSensitiveMiddleUnderscore", () => {
-            assertSegmentMatch("Fog_Bar", "FB", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("Fog_Bar", "FB", { kind: PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
         it("PreferCaseSensitiveMiddleUnderscore2", () => {
-            assertSegmentMatch("Fog_Bar", "F_B", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("Fog_Bar", "F_B", { kind: PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
         it("PreferCaseSensitiveMiddleUnderscore3", () => {
@@ -169,15 +173,15 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("PreferCaseSensitiveMiddleUnderscore4", () => {
-            assertSegmentMatch("Fog_Bar", "f_B", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: false });
+            assertSegmentMatch("Fog_Bar", "f_B", { kind: PatternMatchKind.camelCase, isCaseSensitive: false });
         });
 
         it("PreferCaseSensitiveMiddleUnderscore5", () => {
-            assertSegmentMatch("Fog_Bar", "F_b", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: false });
+            assertSegmentMatch("Fog_Bar", "F_b", { kind: PatternMatchKind.camelCase, isCaseSensitive: false });
         });
 
         it("AllLowerPattern1", () => {
-            assertSegmentMatch("FogBarChangedEventArgs", "changedeventargs", { kind: ts.PatternMatchKind.substring, isCaseSensitive: false });
+            assertSegmentMatch("FogBarChangedEventArgs", "changedeventargs", { kind: PatternMatchKind.substring, isCaseSensitive: false });
         });
 
         it("AllLowerPattern2", () => {
@@ -185,7 +189,7 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("AllLowerPattern3", () => {
-            assertSegmentMatch("ABCDEFGH", "bcd", { kind: ts.PatternMatchKind.substring, isCaseSensitive: false });
+            assertSegmentMatch("ABCDEFGH", "bcd", { kind: PatternMatchKind.substring, isCaseSensitive: false });
         });
 
         it("AllLowerPattern4", () => {
@@ -195,55 +199,55 @@ describe("unittests:: services:: PatternMatcher", () => {
 
     describe("MultiWordPattern", () => {
         it("ExactWithLowercase", () => {
-            assertSegmentMatch("AddMetadataReference", "addmetadatareference", { kind: ts.PatternMatchKind.exact, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "addmetadatareference", { kind: PatternMatchKind.exact, isCaseSensitive: false });
         });
 
         it("SingleLowercasedSearchWord1", () => {
-            assertSegmentMatch("AddMetadataReference", "add", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "add", { kind: PatternMatchKind.prefix, isCaseSensitive: false });
         });
 
         it("SingleLowercasedSearchWord2", () => {
-            assertSegmentMatch("AddMetadataReference", "metadata", { kind: ts.PatternMatchKind.substring, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "metadata", { kind: PatternMatchKind.substring, isCaseSensitive: false });
         });
 
         it("SingleUppercaseSearchWord1", () => {
-            assertSegmentMatch("AddMetadataReference", "Add", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "Add", { kind: PatternMatchKind.prefix, isCaseSensitive: true });
         });
 
         it("SingleUppercaseSearchWord2", () => {
-            assertSegmentMatch("AddMetadataReference", "Metadata", { kind: ts.PatternMatchKind.substring, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "Metadata", { kind: PatternMatchKind.substring, isCaseSensitive: true });
         });
 
         it("SingleUppercaseSearchLetter1", () => {
-            assertSegmentMatch("AddMetadataReference", "A", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "A", { kind: PatternMatchKind.prefix, isCaseSensitive: true });
         });
 
         it("SingleUppercaseSearchLetter2", () => {
-            assertSegmentMatch("AddMetadataReference", "M", { kind: ts.PatternMatchKind.substring, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "M", { kind: PatternMatchKind.substring, isCaseSensitive: true });
         });
 
         it("TwoLowercaseWords0", () => {
-            assertSegmentMatch("AddMetadataReference", "add metadata", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "add metadata", { kind: PatternMatchKind.prefix, isCaseSensitive: false });
         });
 
         it("TwoLowercaseWords1", () => {
-            assertSegmentMatch("AddMetadataReference", "A M", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "A M", { kind: PatternMatchKind.prefix, isCaseSensitive: true });
         });
 
         it("TwoLowercaseWords2", () => {
-            assertSegmentMatch("AddMetadataReference", "AM", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "AM", { kind: PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
         it("TwoLowercaseWords3", () => {
-            assertSegmentMatch("AddMetadataReference", "ref Metadata", { kind: ts.PatternMatchKind.substring, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "ref Metadata", { kind: PatternMatchKind.substring, isCaseSensitive: true });
         });
 
         it("TwoLowercaseWords4", () => {
-            assertSegmentMatch("AddMetadataReference", "ref M", { kind: ts.PatternMatchKind.substring, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "ref M", { kind: PatternMatchKind.substring, isCaseSensitive: true });
         });
 
         it("MixedCamelCase", () => {
-            assertSegmentMatch("AddMetadataReference", "AMRe", { kind: ts.PatternMatchKind.camelCase, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "AMRe", { kind: PatternMatchKind.camelCase, isCaseSensitive: true });
         });
 
         it("BlankPattern", () => {
@@ -255,15 +259,15 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("EachWordSeparately1", () => {
-            assertSegmentMatch("AddMetadataReference", "add Meta", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: false });
+            assertSegmentMatch("AddMetadataReference", "add Meta", { kind: PatternMatchKind.prefix, isCaseSensitive: false });
         });
 
         it("EachWordSeparately2", () => {
-            assertSegmentMatch("AddMetadataReference", "Add meta", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "Add meta", { kind: PatternMatchKind.prefix, isCaseSensitive: true });
         });
 
         it("EachWordSeparately3", () => {
-            assertSegmentMatch("AddMetadataReference", "Add Meta", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertSegmentMatch("AddMetadataReference", "Add Meta", { kind: PatternMatchKind.prefix, isCaseSensitive: true });
         });
 
         it("MixedCasing", () => {
@@ -275,7 +279,7 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("AsteriskSplit", () => {
-            assertSegmentMatch("GetKeyWord", "K*W", { kind: ts.PatternMatchKind.substring, isCaseSensitive: true });
+            assertSegmentMatch("GetKeyWord", "K*W", { kind: PatternMatchKind.substring, isCaseSensitive: true });
         });
 
         it("LowercaseSubstring1", () => {
@@ -283,13 +287,13 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("LowercaseSubstring2", () => {
-            assertSegmentMatch("FooAttribute", "a", { kind: ts.PatternMatchKind.substring, isCaseSensitive: false });
+            assertSegmentMatch("FooAttribute", "a", { kind: PatternMatchKind.substring, isCaseSensitive: false });
         });
     });
 
     describe("DottedPattern", () => {
         it("DottedPattern1", () => {
-            assertFullMatch("Foo.Bar.Baz", "Quux", "B.Q", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertFullMatch("Foo.Bar.Baz", "Quux", "B.Q", { kind: PatternMatchKind.prefix, isCaseSensitive: true });
         });
 
         it("DottedPattern2", () => {
@@ -297,15 +301,15 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("DottedPattern3", () => {
-            assertFullMatch("Foo.Bar.Baz", "Quux", "B.B.Q", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertFullMatch("Foo.Bar.Baz", "Quux", "B.B.Q", { kind: PatternMatchKind.prefix, isCaseSensitive: true });
         });
 
         it("DottedPattern4", () => {
-            assertFullMatch("Foo.Bar.Baz", "Quux", "Baz.Quux", { kind: ts.PatternMatchKind.exact, isCaseSensitive: true });
+            assertFullMatch("Foo.Bar.Baz", "Quux", "Baz.Quux", { kind: PatternMatchKind.exact, isCaseSensitive: true });
         });
 
         it("DottedPattern5", () => {
-            assertFullMatch("Foo.Bar.Baz", "Quux", "F.B.B.Quux", { kind: ts.PatternMatchKind.prefix, isCaseSensitive: true });
+            assertFullMatch("Foo.Bar.Baz", "Quux", "F.B.B.Quux", { kind: PatternMatchKind.prefix, isCaseSensitive: true });
         });
 
         it("DottedPattern6", () => {
@@ -313,33 +317,33 @@ describe("unittests:: services:: PatternMatcher", () => {
         });
 
         it("DottedPattern7", () => {
-            assertSegmentMatch("UIElement", "UIElement", { kind: ts.PatternMatchKind.exact, isCaseSensitive: true });
+            assertSegmentMatch("UIElement", "UIElement", { kind: PatternMatchKind.exact, isCaseSensitive: true });
             assertSegmentMatch("GetKeyword", "UIElement", undefined);
         });
     });
 
-    function assertSegmentMatch(candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {
-        assert.deepEqual(ts.createPatternMatcher(pattern)!.getMatchForLastSegmentOfPattern(candidate), expected);
+    function assertSegmentMatch(candidate: string, pattern: string, expected: PatternMatch | undefined): void {
+        assert.deepEqual(createPatternMatcher(pattern)!.getMatchForLastSegmentOfPattern(candidate), expected);
     }
 
     function assertInvalidPattern(pattern: string) {
-        assert.equal(ts.createPatternMatcher(pattern), undefined);
+        assert.equal(createPatternMatcher(pattern), undefined);
     }
 
-    function assertFullMatch(dottedContainer: string, candidate: string, pattern: string, expected: ts.PatternMatch | undefined): void {
-        assert.deepEqual(ts.createPatternMatcher(pattern)!.getFullMatch(dottedContainer.split("."), candidate), expected);
+    function assertFullMatch(dottedContainer: string, candidate: string, pattern: string, expected: PatternMatch | undefined): void {
+        assert.deepEqual(createPatternMatcher(pattern)!.getFullMatch(dottedContainer.split("."), candidate), expected);
     }
 
-    function spanListToSubstrings(identifier: string, spans: ts.TextSpan[]) {
+    function spanListToSubstrings(identifier: string, spans: TextSpan[]) {
         return spans.map(s => identifier.substr(s.start, s.length));
     }
 
     function breakIntoCharacterSpans(identifier: string) {
-        return spanListToSubstrings(identifier, ts.breakIntoCharacterSpans(identifier));
+        return spanListToSubstrings(identifier, breakIntoCharacterSpans(identifier));
     }
 
     function breakIntoWordSpans(identifier: string) {
-        return spanListToSubstrings(identifier, ts.breakIntoWordSpans(identifier));
+        return spanListToSubstrings(identifier, breakIntoWordSpans(identifier));
     }
 
     function verifyBreakIntoCharacterSpans(original: string, ...parts: string[]): void {

@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts {
+
+import { Node, ImportDeclaration, ImportEqualsDeclaration, ExportDeclaration, ExportSpecifier, Identifier, ExportAssignment, NamedImportBindings, ImportSpecifier, InternalSymbolName, CoreTransformationContext, SourceFile, Bundle, SyntaxKind, TransformationContext, EmitResolver, CompilerOptions, NamespaceExport, ModifierFlags, VariableStatement, FunctionDeclaration, ClassDeclaration, VariableDeclaration, BindingElement, Expression, BinaryOperator, CompoundAssignmentOperator, LogicalOperatorOrHigher, NodeFactory, ConstructorDeclaration, Statement, Visitor, ClassExpression, InitializedPropertyDeclaration, PropertyDeclaration, ClassElement } from "../types";
+import { getOriginalNode, idText, isBindingPattern, isGeneratedIdentifier, isStringLiteralLike, isStatement } from "../utilitiesPublic";
+import { getNodeId } from "../checker";
+import { isNamedImports, isNamedExports, isOmittedExpression, isIdentifier, isExpressionStatement, isPropertyDeclaration } from "../factory/nodeTests";
+import { some, map, createMultiMap, createMap, append, cast, findIndex, filter } from "../core";
+import { getNamespaceDeclarationNode, isDefaultImport, hasSyntacticModifier, isKeyword, isWellKnownSymbolSyntactically, isSuperCall, hasStaticModifier } from "../utilities";
+import { createExternalHelpersImportDeclarationIfNeeded } from "../factory/utilities";
+import { visitNode } from "../visitorPublic";
+
     export function getOriginalNodeId(node: Node) {
         node = getOriginalNode(node);
         return node ? getNodeId(node) : 0;
@@ -363,4 +372,4 @@ namespace ts {
         return member.kind === SyntaxKind.PropertyDeclaration
             && (<PropertyDeclaration>member).initializer !== undefined;
     }
-}
+

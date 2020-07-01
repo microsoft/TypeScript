@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.BreakpointResolver {
+
+import { SourceFile, NodeFlags, Node, TextSpan, NodeArray, SyntaxKind, VariableStatement, VariableDeclaration, PropertyDeclaration, PropertySignature, ParameterDeclaration, FunctionLikeDeclaration, Block, CatchClause, ExpressionStatement, ReturnStatement, WhileStatement, DoStatement, IfStatement, LabeledStatement, BreakOrContinueStatement, ForStatement, ForInStatement, ForOfStatement, SwitchStatement, CaseOrDefaultClause, TryStatement, ThrowStatement, ExportAssignment, ImportEqualsDeclaration, ImportDeclaration, ExportDeclaration, ModuleDeclaration, WithStatement, BindingPattern, DestructuringPattern, BinaryExpression, ArrayLiteralExpression, ObjectLiteralExpression, PropertyAssignment, TypeAssertion, ModifierFlags, VariableDeclarationList, Expression, ObjectLiteralElement, EnumDeclaration, ClassDeclaration, CaseBlock } from "../compiler/types";
+import { getTokenAtPosition, findPrecedingToken, findNextToken, isArrayLiteralOrObjectLiteralDestructuringPattern } from "./utilities";
+import { skipTrivia } from "../compiler/scanner";
+import { createTextSpanFromBounds, isFunctionLike, isVariableDeclarationList, isBindingPattern } from "../../built/local/compiler";
+import { isFunctionBlock, isExpressionNode, isAssignmentOperator, hasSyntacticModifier } from "../compiler/utilities";
+import { getModuleInstanceState, ModuleInstanceState } from "../compiler/binder";
+import { Debug } from "../compiler/debug";
+import { forEach, lastOrUndefined } from "../compiler/core";
+
     /**
      * Get the breakpoint span in given sourceFile
      */
@@ -720,4 +729,4 @@ namespace ts.BreakpointResolver {
             }
         }
     }
-}
+

@@ -1,4 +1,7 @@
-namespace Harness {
+import { FileBasedTest, IO, userSpecifiedRoot } from "./harnessIO";
+import { map } from "../compiler/core";
+import { normalizeSlashes, getBaseFileName } from "../compiler/path";
+
     export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "rwc" | "test262" | "user" | "dt" | "docker";
     export type CompilerTestKind = "conformance" | "compiler";
     export type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
@@ -26,7 +29,7 @@ namespace Harness {
         }
 
         public enumerateFiles(folder: string, regex?: RegExp, options?: { recursive: boolean }): string[] {
-            return ts.map(IO.listFiles(userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
+            return map(IO.listFiles(userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), normalizeSlashes);
         }
 
         abstract kind(): TestRunnerKind;
@@ -52,7 +55,7 @@ namespace Harness {
         /** Replaces instances of full paths with fileNames only */
         static removeFullPaths(path: string) {
             // If its a full path (starts with "C:" or "/") replace with just the filename
-            let fixedPath = /^(\w:|\/)/.test(path) ? ts.getBaseFileName(path) : path;
+            let fixedPath = /^(\w:|\/)/.test(path) ? getBaseFileName(path) : path;
 
             // when running in the browser the 'full path' is the host name, shows up in error baselines
             const localHost = /http:\/localhost:\d+/g;
@@ -60,4 +63,4 @@ namespace Harness {
             return fixedPath;
         }
     }
-}
+

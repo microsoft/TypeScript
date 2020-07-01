@@ -1,4 +1,9 @@
-namespace ts {
+import { PrinterOptions, Printer, NewLineKind, SourceFile, ScriptTarget, ScriptKind, Bundle, EmitHint, SyntaxKind, NodeFlags, EmitFlags } from "../../compiler/types";
+import { createPrinter } from "../../compiler/emitter";
+import { createSourceFile } from "../../compiler/parser";
+import { factory, setEmitFlags } from "../../../built/local/compiler";
+import { neverArray } from "../../compiler/core";
+
     describe("unittests:: PrinterAPI", () => {
         function makePrintsCorrectly(prefix: string) {
             return function printsCorrectly(name: string, options: PrinterOptions, printCallback: (printer: Printer) => string) {
@@ -297,4 +302,4 @@ namespace ts {
             ));
         });
     });
-}
+

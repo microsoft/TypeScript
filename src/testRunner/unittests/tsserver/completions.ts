@@ -1,4 +1,13 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createSession, openFilesForSession, protocol, executeSessionRequest, TestTypingsInstaller, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { ScriptElementKind, ScriptElementKindModifier, CompletionEntryDetails, SymbolDisplayPartKind } from "../../../services/types";
+import { assert } from "console";
+import { keywordPart, spacePart, displayPart, punctuationPart, createTextChange } from "../../../services/utilities";
+import { SyntaxKind } from "../../../compiler/types";
+import { neverArray } from "../../../compiler/core";
+import { createTextSpan } from "../../../../built/local/compiler";
+
     describe("unittests:: tsserver:: completions", () => {
         it("works", () => {
             const aTs: File = {
@@ -248,4 +257,4 @@ export interface BrowserRouterProps {
             });
         });
     });
-}
+

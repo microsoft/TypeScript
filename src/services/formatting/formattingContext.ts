@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.formatting {
+
+import { TextRangeWithKind } from "./formatting";
+import { Node, SourceFileLike, SyntaxKind } from "../../compiler/types";
+import { FormatCodeSettings } from "../types";
+import { Debug } from "../../compiler/debug";
+import { findChildOfKind } from "../utilities";
+
     export const enum FormattingRequestKind {
         FormatDocument,
         FormatSelection,
@@ -99,4 +105,4 @@ namespace ts.formatting {
             return false;
         }
     }
-}
+

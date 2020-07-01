@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts {
+
+import { NodeFactory, NodeConverters, ConciseBody, Block, FunctionDeclaration, ArrayBindingOrAssignmentElement, ObjectBindingOrAssignmentElement, BindingOrAssignmentPattern, AssignmentPattern, SyntaxKind, ObjectBindingOrAssignmentPattern, ArrayBindingOrAssignmentPattern, BindingOrAssignmentElementTarget, Expression } from "../types";
+import { isBlock, isBindingElement, isIdentifier, isObjectBindingPattern, isObjectLiteralExpression, isArrayBindingPattern, isArrayLiteralExpression } from "./nodeTests";
+import { setTextRange } from "./utilitiesPublic";
+import { Debug } from "../debug";
+import { setOriginalNode } from "./nodeFactory";
+import { getStartsOnNewLine, setStartsOnNewLine } from "./emitNode";
+import { cast, map, notImplemented } from "../core";
+import { isExpression, isObjectLiteralElementLike, isBindingPattern } from "../utilitiesPublic";
+
     export function createNodeConverters(factory: NodeFactory): NodeConverters {
         return {
             convertToFunctionBlock,
@@ -134,4 +143,4 @@ namespace ts {
         convertToArrayAssignmentPattern: notImplemented,
         convertToAssignmentElementTarget: notImplemented,
     };
-}
+

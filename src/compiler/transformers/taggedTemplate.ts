@@ -1,5 +1,14 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, TaggedTemplateExpression, Visitor, SourceFile, Identifier, Expression, TemplateHead, TemplateMiddle, TemplateTail, NoSubstitutionTemplateLiteral, TemplateLiteralLikeNode, SyntaxKind } from "../types";
+import { visitNode, visitEachChild } from "../visitorPublic";
+import { isExpression } from "../utilitiesPublic";
+import { hasInvalidEscape, getSourceTextOfNodeFromSourceFile } from "../utilities";
+import { isNoSubstitutionTemplateLiteral } from "../factory/nodeTests";
+import { factory } from "../factory/nodeFactory";
+import { isExternalModule } from "../parser";
+import { setTextRange } from "../factory/utilitiesPublic";
+
     export enum ProcessLevel {
         LiftRestriction,
         All
@@ -97,4 +106,4 @@ namespace ts {
         text = text.replace(/\r\n?/g, "\n");
         return setTextRange(factory.createStringLiteral(text), node);
     }
-}
+

@@ -1,4 +1,11 @@
-namespace Harness {
+import { Node, SourceFile, TypeChecker, Program, SyntaxKind, TypeFlags, IntrinsicType, TypeFormatFlags } from "../compiler/types";
+import { forEachChild } from "../compiler/parser";
+import { isExpressionNode, isDeclarationName, isIntrinsicJsxName, getSourceTextOfNodeFromSourceFile, isPartOfTypeNode, isExpressionWithTypeArgumentsInClassExtendsClause, isGlobalScopeAugmentation } from "../compiler/utilities";
+import { isImportSpecifier, isImportClause, isImportEqualsDeclaration, isExportAssignment, isExportSpecifier, isJsxOpeningElement, isJsxClosingElement, isJsxSelfClosingElement, isIdentifier, isTypeAliasDeclaration, isBindingElement, isPropertyAccessOrQualifiedName, isModuleDeclaration, isMetaProperty } from "../../built/local/compiler";
+import { skipTrivia } from "../compiler/scanner";
+import { getMeaningFromDeclaration, SemanticMeaning, isLabelName } from "../services/utilities";
+import { getBaseFileName } from "../compiler/path";
+
     export interface TypeWriterTypeResult {
         line: number;
         syntaxKind: number;
@@ -21,25 +28,25 @@ namespace Harness {
         type?: string;
     }
 
-    function* forEachASTNode(node: ts.Node) {
+    function* forEachASTNode(node: Node) {
         const work = [node];
         while (work.length) {
             const elem = work.pop()!;
             yield elem;
 
-            const resChildren: ts.Node[] = [];
+            const resChildren: Node[] = [];
             // push onto work queue in reverse order to maintain preorder traversal
-            ts.forEachChild(elem, c => { resChildren.unshift(c); });
+            forEachChild(elem, c => { resChildren.unshift(c); });
             work.push(...resChildren);
         }
     }
 
     export class TypeWriterWalker {
-        currentSourceFile!: ts.SourceFile;
+        currentSourceFile!: SourceFile;
 
-        private checker: ts.TypeChecker;
+        private checker: TypeChecker;
 
-        constructor(private program: ts.Program, fullTypeCheck: boolean, private hadErrorBaseline: boolean) {
+        constructor(private program: Program, fullTypeCheck: boolean, private hadErrorBaseline: boolean) {
             // Consider getting both the diagnostics checker and the non-diagnostics checker to verify
             // they are consistent.
             this.checker = fullTypeCheck
@@ -65,12 +72,12 @@ namespace Harness {
             }
         }
 
-        private *visitNode(node: ts.Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
+        private *visitNode(node: Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
             const gen = forEachASTNode(node);
             let res = gen.next();
             for (; !res.done; res = gen.next()) {
                 const {value: node} = res;
-                if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
+                if (isExpressionNode(node) || node.kind === SyntaxKind.Identifier || isDeclarationName(node)) {
                     const result = this.writeTypeOrSymbol(node, isSymbolWalk);
                     if (result) {
                         yield result;
@@ -79,42 +86,42 @@ namespace Harness {
             }
         }
 
-        private isImportStatementName(node: ts.Node) {
-            if (ts.isImportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) return true;
-            if (ts.isImportClause(node.parent) && node.parent.name === node) return true;
-            if (ts.isImportEqualsDeclaration(node.parent) && node.parent.name === node) return true;
+        private isImportStatementName(node: Node) {
+            if (isImportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) return true;
+            if (isImportClause(node.parent) && node.parent.name === node) return true;
+            if (isImportEqualsDeclaration(node.parent) && node.parent.name === node) return true;
             return false;
         }
 
-        private isExportStatementName(node: ts.Node) {
-            if (ts.isExportAssignment(node.parent) && node.parent.expression === node) return true;
-            if (ts.isExportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) return true;
+        private isExportStatementName(node: Node) {
+            if (isExportAssignment(node.parent) && node.parent.expression === node) return true;
+            if (isExportSpecifier(node.parent) && (node.parent.name === node || node.parent.propertyName === node)) return true;
             return false;
         }
 
-        private isIntrinsicJsxTag(node: ts.Node) {
+        private isIntrinsicJsxTag(node: Node) {
             const p = node.parent;
-            if (!(ts.isJsxOpeningElement(p) || ts.isJsxClosingElement(p) || ts.isJsxSelfClosingElement(p))) return false;
+            if (!(isJsxOpeningElement(p) || isJsxClosingElement(p) || isJsxSelfClosingElement(p))) return false;
             if (p.tagName !== node) return false;
-            return ts.isIntrinsicJsxName(node.getText());
+            return isIntrinsicJsxName(node.getText());
         }
 
-        private writeTypeOrSymbol(node: ts.Node, isSymbolWalk: boolean): TypeWriterResult | undefined {
-            const actualPos = ts.skipTrivia(this.currentSourceFile.text, node.pos);
+        private writeTypeOrSymbol(node: Node, isSymbolWalk: boolean): TypeWriterResult | undefined {
+            const actualPos = skipTrivia(this.currentSourceFile.text, node.pos);
             const lineAndCharacter = this.currentSourceFile.getLineAndCharacterOfPosition(actualPos);
-            const sourceText = ts.getSourceTextOfNodeFromSourceFile(this.currentSourceFile, node);
+            const sourceText = getSourceTextOfNodeFromSourceFile(this.currentSourceFile, node);
 
             if (!isSymbolWalk) {
                 // Don't try to get the type of something that's already a type.
                 // Exception for `T` in `type T = something` because that may evaluate to some interesting type.
-                if (ts.isPartOfTypeNode(node) || ts.isIdentifier(node) && !(ts.getMeaningFromDeclaration(node.parent) & ts.SemanticMeaning.Value) && !(ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node)) {
+                if (isPartOfTypeNode(node) || isIdentifier(node) && !(getMeaningFromDeclaration(node.parent) & SemanticMeaning.Value) && !(isTypeAliasDeclaration(node.parent) && node.parent.name === node)) {
                     return undefined;
                 }
 
                 // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
                 // let type = this.checker.getTypeAtLocation(node);
-                let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent) : undefined;
-                if (!type || type.flags & ts.TypeFlags.Any) type = this.checker.getTypeAtLocation(node);
+                let type = isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent) : undefined;
+                if (!type || type.flags & TypeFlags.Any) type = this.checker.getTypeAtLocation(node);
                 const typeString =
                     // Distinguish `errorType`s from `any`s; but only if the file has no errors.
                     // Additionally,
@@ -129,17 +136,17 @@ namespace Harness {
                     // return `error`s via `getTypeAtLocation`
                     // But this is generally expected, so we don't call those out, either
                     (!this.hadErrorBaseline &&
-                        type.flags & ts.TypeFlags.Any &&
-                        !ts.isBindingElement(node.parent) &&
-                        !ts.isPropertyAccessOrQualifiedName(node.parent) &&
-                        !ts.isLabelName(node) &&
-                        !(ts.isModuleDeclaration(node.parent) && ts.isGlobalScopeAugmentation(node.parent)) &&
-                        !ts.isMetaProperty(node.parent) &&
+                        type.flags & TypeFlags.Any &&
+                        !isBindingElement(node.parent) &&
+                        !isPropertyAccessOrQualifiedName(node.parent) &&
+                        !isLabelName(node) &&
+                        !(isModuleDeclaration(node.parent) && isGlobalScopeAugmentation(node.parent)) &&
+                        !isMetaProperty(node.parent) &&
                         !this.isImportStatementName(node) &&
                         !this.isExportStatementName(node) &&
                         !this.isIntrinsicJsxTag(node)) ?
-                        (type as ts.IntrinsicType).intrinsicName :
-                        this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
+                        (type as IntrinsicType).intrinsicName :
+                        this.checker.typeToString(type, node.parent, TypeFormatFlags.NoTruncation | TypeFormatFlags.AllowUniqueESSymbolType);
                 return {
                     line: lineAndCharacter.line,
                     syntaxKind: node.kind,
@@ -167,7 +174,7 @@ namespace Harness {
                     }
                     const declSourceFile = declaration.getSourceFile();
                     const declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
-                    const fileName = ts.getBaseFileName(declSourceFile.fileName);
+                    const fileName = getBaseFileName(declSourceFile.fileName);
                     const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
                     const declText = `Decl(${ fileName }, ${ isLibFile ? "--" : declLineAndCharacter.line }, ${ isLibFile ? "--" : declLineAndCharacter.character })`;
                     symbolString += declText;
@@ -183,4 +190,4 @@ namespace Harness {
             };
         }
     }
-}
+

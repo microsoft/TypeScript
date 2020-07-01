@@ -1,3 +1,6 @@
+import { assert } from "console";
+import { ScriptTarget } from "../../../compiler/types";
+
 describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
     it("return (es5)", async () => {
         const result = evaluator.evaluateTypeScript(`
@@ -21,7 +24,7 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
         export const output: any[] = [];
         export async function main() {
             output.push(await g().next());
-        }`, { target: ts.ScriptTarget.ES2015 });
+        }`, { target: ScriptTarget.ES2015 });
         await result.main();
         assert.deepEqual(result.output, [
             { value: 0, done: true }

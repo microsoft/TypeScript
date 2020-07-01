@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.refactor {
+
+import { getLocaleSpecificMessage, getContainingFunction, isVariableDeclarationInVariableStatement } from "../../compiler/utilities";
+import { registerRefactor } from "../refactorProvider";
+import { FunctionExpression, ArrowFunction, VariableDeclaration, VariableDeclarationList, VariableStatement, Identifier, Node, SourceFile, Program, ConciseBody, Block, SyntaxKind, Statement, ReturnStatement } from "../../compiler/types";
+import { RefactorContext, ApplicableRefactorInfo, RefactorActionInfo, RefactorEditInfo, FileTextChanges } from "../types";
+import { neverArray } from "../../compiler/core";
+import { isArrowFunction, isVariableDeclaration, isFunctionExpression, isClassLike, isFunctionDeclaration, isVariableDeclarationList, isExpression, factory, isVariableStatement, isIdentifier, isReturnStatement } from "../../../built/local/compiler";
+import { Debug } from "../../compiler/debug";
+import { isThis, getTokenAtPosition, rangeContainsRange, suppressLeadingTrivia, suppressLeadingAndTrailingTrivia, copyComments } from "../utilities";
+import { forEachChild } from "../../compiler/parser";
+
     const refactorName = "Convert arrow function or function expression";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);
 
@@ -213,4 +223,4 @@ namespace ts.refactor {
     function canBeConvertedToExpression(body: Block, head: Statement): head is ReturnStatement {
         return body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression));
     }
-}
+

@@ -1,5 +1,11 @@
-namespace ts.tscWatch {
+
     import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
+import { verifyTscWatch, checkSingleTimeoutQueueLengthAndRun, projectRoot, noopChange, commonFile1, commonFile2 } from "./helpers";
+import { File } from "../../../harness/vfsUtil";
+import { createMap, noop, neverArray } from "../../../compiler/core";
+import { createWatchedSystem, libFile, SymLink } from "../../../../built/local/harness";
+import { unchangedPollThresholds, PollingInterval } from "../../../compiler/sys";
+import { assert } from "console";
     describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
         const scenario = "watchEnvironment";
         verifyTscWatch({
@@ -413,4 +419,4 @@ namespace ts.tscWatch {
             });
         });
     });
-}
+

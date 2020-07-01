@@ -1,5 +1,8 @@
 /*@internal*/
-namespace ts {
+
+import { ResolvedConfigFileName, Extension } from "./types";
+import { fileExtensionIs, combinePaths } from "./path";
+
     export enum UpToDateStatusType {
         Unbuildable,
         UpToDate,
@@ -149,4 +152,4 @@ namespace ts {
 
         return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
     }
-}
+

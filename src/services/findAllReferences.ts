@@ -1,5 +1,19 @@
 /* @internal */
-namespace ts.FindAllReferences {
+
+import { Identifier, Node, StringLiteral, TextSpan, NamedDeclaration, AssignmentDeclarationKind, Statement, JSDocTag, SyntaxKind, ModifierFlags, BinaryExpression, ForInOrOfStatement, SourceFile, Program, CancellationToken, TypeChecker, Declaration, NodeFlags, PropertyAssignment, FunctionDeclaration, FunctionExpression, ConstructorDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, VariableDeclaration, PropertyDeclaration, InternalSymbolName, SymbolFlags, ModuleReference, ModuleDeclaration, __String, SignatureDeclaration, CallExpression, ScriptTarget, PrivateIdentifier, StringLiteralLike, NumericLiteral, ExportSpecifier, ClassLikeDeclaration, FunctionLikeDeclaration, Block, Expression, InterfaceDeclaration, ParenthesizedExpression, ParameterDeclaration, BindingElement, CheckFlags, PropertyAccessExpression } from "../compiler/types";
+import { isDeclaration, isExportAssignment, isBinaryExpression, isJsxOpeningElement, isJsxClosingElement, isJsxSelfClosingElement, isLabeledStatement, isBreakOrContinueStatement, isStringLiteralLike, isStatement, isJSDocTag, isComputedPropertyName, isConstructorDeclaration, isImportOrExportSpecifier, isBindingElement, isVariableDeclarationList, isVariableStatement, isForInOrOfStatement, isExpressionStatement, getNameOfDeclaration, isIdentifier, isShorthandPropertyAssignment, isObjectLiteralExpression, isImportSpecifier, isExportSpecifier, createTextSpanFromBounds, isCatchClause, isSourceFile, isStringLiteral, isNamespaceExportDeclaration, isLiteralTypeNode, isImportTypeNode, isPropertyAccessExpression, isTypeOperatorNode, isVoidExpression, isClassLike, isTypeLiteralNode, isUnionTypeNode, isModuleDeclaration, symbolName, escapeLeadingUnderscores, isPrivateIdentifierPropertyDeclaration, isParameterPropertyDeclaration, isCallExpression, createTextSpan, isMethodOrAccessor, isFunctionLike, isQualifiedName, isTypeNode, isTypeElement, hasType, hasInitializer, isAssertionExpression, isExpressionWithTypeArguments, isParameter, isInterfaceDeclaration, isTypeAliasDeclaration, isFunctionLikeDeclaration, isModuleOrEnumDeclaration } from "../../built/local/compiler";
+import { isInJSFile, isAccessExpression, getAssignmentDeclarationKind, tryGetImportFromModuleSpecifier, findAncestor, hasSyntacticModifier, addToSeen, isSuperProperty, getTextOfNode, isModuleExportsAccessExpression, getDeclarationFromName, isWriteAccess, isLiteralComputedPropertyDeclarationName, skipAlias, stripQuotes, getLocalSymbolForExportDefault, hasEffectiveModifier, getAncestor, isExternalOrCommonJsModule, isBindableObjectDefinePropertyCall, isDeclarationName, forEachReturnStatement, getAllSuperTypeNodes, getSuperContainer, getSyntacticModifierFlags, getThisContainer, isObjectLiteralMethod, getDeclarationOfKind, getCheckFlags, isVariableLike, tryGetClassExtendingExpressionWithTypeArguments } from "../compiler/utilities";
+import { isArrayLiteralOrObjectLiteralDestructuringPattern, getTouchingPropertyName, displayPart, getContainerNode, textPart, isObjectBindingElementWithoutPropertyName, punctuationPart, getNodeKind, getAdjustedReferenceLocation, getAdjustedRenameLocation, createTextSpanFromRange, findChildOfKind, isTypeKeyword, isJumpStatementTarget, getTargetLabel, isLabelOfLabeledStatement, isThis, SemanticMeaning, nodeSeenTracker, isExternalModuleSymbol, climbPastPropertyAccess, isLiteralNameOfPropertyDeclarationOrIndexAccess, isNameOfModuleDeclaration, isExpressionOfExternalModuleImportEqualsDeclaration, getMeaningFromLocation, isInString, isInNonReferenceComment, isNewExpressionTarget, isCallExpressionTarget, getPropertySymbolFromBindingElement, getPropertySymbolsFromBaseTypes, getMeaningFromDeclaration, isRightSideOfPropertyAccess } from "./utilities";
+import { ReferencedSymbol, ImplementationLocation, ReferencedSymbolDefinitionInfo, ScriptElementKind, SymbolDisplayPartKind, SymbolDisplayPart, RenameLocation, ReferenceEntry, DocumentSpan, emptyOptions, HighlightSpan, HighlightSpanKind } from "./types";
+import { mapDefined, createMap, append, map, flatMap, first, firstOrUndefined, contains, find, findIndex, compareValues, cast, neverArray, firstDefined, tryAddToSet, tryCast } from "../compiler/core";
+import { getNodeId, getSymbolId } from "../compiler/checker";
+import { tokenToString, isIdentifierPart } from "../compiler/scanner";
+import { Debug } from "../compiler/debug";
+import { findModuleReferences, ExportKind, ImportExport, ImportTracker, ExportInfo, ImportsResult, createImportTracker, getExportInfo, getImportOrExportSymbol } from "./importTracker";
+import { Push } from "../compiler/corePublic";
+import { getNameTable, getContainingObjectLiteralElement, getPropertySymbolsFromContextualType } from "./services";
+import { isExternalModule, forEachChild } from "../compiler/parser";
+
     export interface SymbolAndEntries {
         readonly definition: Definition | undefined;
         readonly references: readonly Entry[];
@@ -326,7 +340,7 @@ namespace ts.FindAllReferences {
                 case DefinitionKind.This: {
                     const { node } = def;
                     const symbol = checker.getSymbolAtLocation(node);
-                    const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
+                    const displayParts = symbol && getSymbolDisplayPartsDocumentationAndSymbolKind(
                         checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
                     return { node, name: "this", kind: ScriptElementKind.variableElement, displayParts };
                 }
@@ -358,7 +372,7 @@ namespace ts.FindAllReferences {
         const meaning = Core.getIntersectingMeaningFromDeclarations(node, symbol);
         const enclosingDeclaration = symbol.declarations && firstOrUndefined(symbol.declarations) || node;
         const { displayParts, symbolKind } =
-            SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, meaning);
+            getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, meaning);
         return { displayParts, kind: symbolKind };
     }
 
@@ -602,7 +616,7 @@ namespace ts.FindAllReferences {
                 node = getAdjustedRenameLocation(node);
             }
             if (isSourceFile(node)) {
-                const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
+                const reference = getReferenceAtPositionImpl(node, position, program);
                 const moduleSymbol = reference && program.getTypeChecker().getMergedSymbol(reference.file.symbol);
                 return moduleSymbol && getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
             }
@@ -2130,4 +2144,4 @@ namespace ts.FindAllReferences {
             return options.use === FindReferencesUse.Rename && options.providePrefixAndSuffixTextForRename;
         }
     }
-}
+

@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { createMap, first } from "../../compiler/core";
+import { addToSeen, getContainingFunction, getEntityNameFromTypeNode } from "../../compiler/utilities";
+import { getNodeId } from "../../compiler/checker";
+import { FunctionDeclaration, MethodDeclaration, FunctionExpression, ArrowFunction, SourceFile, Node, TypeNode, SyntaxKind } from "../../compiler/types";
+import { isVariableDeclaration, isFunctionTypeNode, factory } from "../../../built/local/compiler";
+import { getTokenAtPosition, findChildOfKind } from "../utilities";
+
     const fixId = "fixAwaitInSyncFunction";
     const errorCodes = [
         Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
@@ -78,4 +86,4 @@ namespace ts.codefix {
         }
         changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, insertBefore);
     }
-}
+

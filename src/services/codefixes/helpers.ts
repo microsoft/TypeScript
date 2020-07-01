@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.codefix {
+
+import { ClassLikeDeclaration, UserPreferences, ClassElement, SymbolTracker, Program, Node, PropertyName, SymbolFlags, NodeFlags, SyntaxKind, NodeBuilderFlags, AccessorDeclaration, SignatureKind, SignatureDeclaration, Signature, NodeArray, Modifier, Block, MethodDeclaration, CallExpression, ModifierFlags, CharacterCodes, TypeChecker, Type, ScriptTarget, TypeNode, ParameterDeclaration, TypeParameterDeclaration, TsConfigSourceFile, Expression, ObjectLiteralExpression, PropertyAssignment, EntityName, Identifier } from "../../compiler/types";
+import { ImportAdder } from "./importFixes";
+import { noop, neverArray, some, sameMap, map, find } from "../../compiler/core";
+import { getModuleSpecifierResolverHost, getSynthesizedDeepClone, getSynthesizedDeepClones, getNameForExportedSymbol } from "../utilities";
+import { LanguageServiceHost, CodeFixContextBase } from "../types";
+import { getEmitScriptTarget, getEffectiveModifierFlags, getAllAccessorDeclarations, getSetAccessorValueParameter, getTsConfigObjectLiteralExpression, isLiteralImportTypeNode, getFirstIdentifier } from "../../compiler/utilities";
+import { getNameOfDeclaration, factory, isGetAccessorDeclaration, isSetAccessorDeclaration, isIdentifier, idText, setTextRange, isInterfaceDeclaration, isPropertyAccessExpression, isYieldExpression, isImportTypeNode, isObjectLiteralExpression, isPropertyAssignment, isStringLiteral } from "../../../built/local/compiler";
+import { Debug } from "../../compiler/debug";
+import { signatureHasRestParameter } from "../../compiler/checker";
+
     /**
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
@@ -495,4 +505,4 @@ namespace ts.codefix {
     export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
         symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
     }
-}
+

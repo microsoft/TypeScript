@@ -1,5 +1,17 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { CodeFixContext, CodeFixContextBase } from "../types";
+import { BindingPattern, Type, Identifier, TypeChecker, SourceFile, FunctionLikeDeclaration, SyntaxKind, Block, ReturnStatement, Node, CallExpression, Expression, GeneratedIdentifierFlags, Statement, VariableStatement, UnionReduction, NodeFlags, TypeNode, SignatureKind, FunctionExpression, ArrowFunction, Signature, BindingName } from "../../compiler/types";
+import { getTokenAtPosition, hasPropertyAccessExpressionWithName, getSynthesizedDeepClone, getSynthesizedDeepCloneWithRenames } from "../utilities";
+import { isIdentifier, isVariableDeclaration, isFunctionLikeDeclaration, isBlock, isCallExpression, isFunctionLike, isExpression, isParameter, factory, isBindingElement, isPropertyAccessExpression, isReturnStatement, isOmittedExpression } from "../../../built/local/compiler";
+import { tryCast, createMap, neverArray, forEach, createMultiMap, firstOrUndefined, compact, lastOrUndefined, flatMap, every } from "../../compiler/core";
+import { getContainingFunction, isInJSFile, forEachReturnStatement } from "../../compiler/utilities";
+import { forEachChild } from "../../compiler/parser";
+import { isReturnStatementWithFixablePromiseHandler, isFixablePromiseHandler } from "../suggestionDiagnostics";
+import { getNodeId, getSymbolId } from "../../compiler/checker";
+import { Debug } from "../../compiler/debug";
+
     const fixId = "convertToAsyncFunction";
     const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];
     let codeActionSucceeded = true;
@@ -595,4 +607,4 @@ namespace ts.codefix {
     function shouldReturn(expression: Expression, transformer: Transformer): boolean {
         return !!expression.original && transformer.setOfExpressionsToReturn.has(getNodeId(expression.original));
     }
-}
+

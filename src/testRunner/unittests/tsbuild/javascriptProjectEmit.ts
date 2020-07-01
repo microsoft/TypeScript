@@ -1,4 +1,6 @@
-namespace ts {
+import { verifyTsc, BuildKind } from "../tsc/helpers";
+import { loadProjectFromFiles, symbolLibContent, verifyTscSerializedIncrementalEdits, replaceText } from "./helpers";
+
     describe("unittests:: tsbuild:: javascriptProjectEmit:: loads js-based projects and emits them correctly", () => {
         verifyTsc({
             scenario: "javascriptProjectEmit",
@@ -283,4 +285,4 @@ namespace ts {
             commandLineArgs: ["-b", "/src"]
         });
     });
-}
+

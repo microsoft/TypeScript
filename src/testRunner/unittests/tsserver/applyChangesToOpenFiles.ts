@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { assert } from "console";
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { commonFile1, commonFile2 } from "../tscWatch/helpers";
+import { createSession, protocol } from "./helpers";
+
     describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {
         const configFile: File = {
             path: "/a/b/tsconfig.json",
@@ -178,4 +183,4 @@ ${file.content}`;
             });
         });
     });
-}
+

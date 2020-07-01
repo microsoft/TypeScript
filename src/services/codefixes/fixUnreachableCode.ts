@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, SyntaxKind, IfStatement } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { findAncestor, sliceAfter } from "../../compiler/utilities";
+import { isStatement, isBlock, factory } from "../../../built/local/compiler";
+import { Debug } from "../../compiler/debug";
+import { first, neverArray } from "../../compiler/core";
+
     const fixId = "fixUnreachableCode";
     const errorCodes = [Diagnostics.Unreachable_code_detected.code];
     registerCodeFix({
@@ -65,4 +73,4 @@ namespace ts.codefix {
         }
         return last;
     }
-}
+

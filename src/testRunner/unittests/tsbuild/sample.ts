@@ -1,9 +1,18 @@
-namespace ts {
+import { loadProjectFromDisk, replaceText, verifyTscSerializedIncrementalEdits, verifyOutputsPresent, verifyOutputsAbsent, getFsWithTime, verifyTscIncrementalEdits, changeCompilerVersion, getExpectedDiagnosticForProjectsInBuild, appendText, TscIncremental, libContent } from "./helpers";
+import { createSolutionBuilder, BuildOptions, ResolvedConfigFilePath } from "../../../compiler/tsbuildPublic";
+import { verifyTsc, noChangeOnlyRuns, BuildKind, noChangeRun } from "../tsc/helpers";
+import { assert } from "console";
+import { ExitStatus, ResolvedConfigFileName } from "../../../compiler/types";
+import { noop, neverArray, createMap } from "../../../compiler/core";
+import { version } from "os";
+import { createAbstractBuilder } from "../../../compiler/builderPublic";
+import { UpToDateStatusType } from "../../../compiler/tsbuild";
+
     describe("unittests:: tsbuild:: on 'sample1' project", () => {
         let projFs: vfs.FileSystem;
         const testsOutputs = ["/src/tests/index.js", "/src/tests/index.d.ts", "/src/tests/tsconfig.tsbuildinfo"];
         const logicOutputs = ["/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts", "/src/logic/tsconfig.tsbuildinfo"];
-        const coreOutputs = ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map", "/src/core/tsconfig.tsbuildinfo"];
+        const coreOutputs = ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.map", "/src/core/tsconfig.tsbuildinfo"];
         const allExpectedOutputs = [...testsOutputs, ...logicOutputs, ...coreOutputs];
 
         before(() => {
@@ -505,4 +514,4 @@ class someClass2 { }`),
             });
         });
     });
-}
+

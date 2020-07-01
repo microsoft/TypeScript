@@ -1,4 +1,14 @@
-namespace ts {
+import { HighlightSpan, HighlightSpanKind } from "./types";
+import { Program, CancellationToken, SourceFile, Node, SyntaxKind, IterationStatement, ThrowStatement, BreakOrContinueStatement, Modifier, ModifierFlags, ModuleBlock, Block, CaseClause, DefaultClause, ConstructorDeclaration, MethodDeclaration, FunctionDeclaration, ObjectTypeDeclaration, SwitchStatement, TryStatement, ReturnStatement, FunctionLikeDeclaration, IfStatement, __String } from "../compiler/types";
+import { getTouchingPropertyName, createTextSpanFromNode, findModifier, findChildOfKind } from "./utilities";
+import { isJsxOpeningElement, isJsxClosingElement, isIfStatement, isReturnStatement, isThrowStatement, isTryStatement, isSwitchStatement, isDefaultClause, isCaseClause, isBreakOrContinueStatement, isIterationStatement, isConstructorDeclaration, isAccessor, isAwaitExpression, isModifierKind, isDeclaration, isVariableStatement, isFunctionLike, isClassDeclaration, isClassLike, isBlock, isYieldExpression, isInterfaceDeclaration, isModuleDeclaration, isTypeAliasDeclaration, isTypeNode, createTextSpanFromBounds, isLabeledStatement } from "../../built/local/compiler";
+import { arrayToMultiMap, arrayFrom, find, mapDefined, contains, concatenate, toArray, forEach, cast } from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import { isFunctionBlock, findAncestor, modifierToFlag, forEachReturnStatement, getContainingFunction } from "../compiler/utilities";
+import { Push } from "../compiler/corePublic";
+import { forEachChild } from "../compiler/parser";
+import { isWhiteSpaceSingleLine } from "../compiler/scanner";
+
     export interface DocumentHighlights {
         fileName: string;
         highlightSpans: HighlightSpan[];
@@ -508,4 +518,4 @@ namespace ts {
             return !!findAncestor(node.parent, owner => !isLabeledStatement(owner) ? "quit" : owner.label.escapedText === labelName);
         }
     }
-}
+

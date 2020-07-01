@@ -1,4 +1,9 @@
-namespace ts.tscWatch {
+import { arrayToMap, identity, neverArray, concatenate, last, flatMap } from "../../../compiler/core";
+import { File } from "../../../harness/vfsUtil";
+import { createWatchedSystem, libFile, checkWatchedFilesDetailed } from "../../../../built/local/harness";
+import { createSolutionBuilderWithWatchHost, createSolutionBuilderWithWatch } from "../../../compiler/tsbuildPublic";
+import { checkOutputErrorsInitial, checkOutputErrorsIncremental } from "../tscWatch/helpers";
+
     describe("unittests:: tsbuild:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
         describe("when watchFile can create multiple watchers per file", () => {
             verifyWatchFileOnMultipleProjects(/*singleWatchPerFile*/ false);
@@ -121,4 +126,4 @@ namespace ts.tscWatch {
             });
         }
     });
-}
+

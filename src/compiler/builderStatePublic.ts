@@ -1,4 +1,5 @@
-namespace ts {
+import { Diagnostic, ExportedModulesFromDeclarationEmit } from "./types";
+
     export interface EmitOutput {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
@@ -11,4 +12,4 @@ namespace ts {
         writeByteOrderMark: boolean;
         text: string;
     }
-}
+

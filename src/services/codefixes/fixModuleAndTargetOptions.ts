@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixActionWithoutFixAll } from "../codeFixProvider";
+import { CodeFixAction } from "../types";
+import { getEmitModuleKind, getEmitScriptTarget, getTsConfigObjectLiteralExpression } from "../../compiler/utilities";
+import { ModuleKind, ScriptTarget, Expression } from "../../compiler/types";
+import { setJsonCompilerOptionValue, setJsonCompilerOptionValues } from "./helpers";
+import { factory } from "../../../built/local/compiler";
+
     registerCodeFix({
         errorCodes: [Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_target_option_is_set_to_es2017_or_higher.code],
         getCodeActions: context => {
@@ -41,4 +48,4 @@ namespace ts.codefix {
             return codeFixes.length ? codeFixes : undefined;
         }
     });
-}
+

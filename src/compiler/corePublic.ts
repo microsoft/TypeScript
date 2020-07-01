@@ -1,4 +1,4 @@
-namespace ts {
+
     // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configurePrerelease` too.
     export const versionMajorMinor = "4.0";
@@ -121,4 +121,4 @@ namespace ts {
             return typeof Set !== "undefined" && "entries" in Set.prototype && new Set([0]).size === 1 ? Set : undefined;
         }
     }
-}
+

@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { Identifier, PrivateIdentifier, SourceFile } from "../../compiler/types";
+import { getTokenAtPosition, suppressLeadingAndTrailingTrivia } from "../utilities";
+import { isIdentifier, factory } from "../../../built/local/compiler";
+import { getContainingClass } from "../../compiler/utilities";
+
     const fixId = "forgottenThisPropertyAccess";
     const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;
     const errorCodes = [
@@ -42,4 +48,4 @@ namespace ts.codefix {
         suppressLeadingAndTrailingTrivia(node);
         changes.replaceNode(sourceFile, node, factory.createPropertyAccessExpression(className ? factory.createIdentifier(className) : factory.createThis(), node));
     }
-}
+

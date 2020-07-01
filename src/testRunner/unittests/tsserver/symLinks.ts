@@ -1,4 +1,11 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { SymLink, libFile, createServerHost, TestServerHost, checkWatchedFilesDetailed, checkWatchedDirectoriesDetailed } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, checkNumberOfProjects, executeSessionRequest, protocol, protocolLocationFromSubstring, protocolRenameSpanFromSubstring, protocolTextSpanFromSubstring, TestSession, verifyGetErrRequest, getTypeRootsFromLocation, getNodeModuleDirectories, checkProjectActualFiles, createDiagnostic } from "./helpers";
+import { assert } from "console";
+import { ScriptElementKind, ScriptElementKindModifier } from "../../../services/types";
+import { arrayToMap, neverArray } from "../../../compiler/core";
+import { cloneMap } from "../../../compiler/utilities";
+
     describe("unittests:: tsserver:: symLinks", () => {
         it("rename in common file renames all project", () => {
             const projects = "/users/username/projects";
@@ -276,4 +283,4 @@ new C();`
             verifyModuleResolution(/*withPathMapping*/ true);
         });
     });
-}
+

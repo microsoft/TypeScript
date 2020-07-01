@@ -1,4 +1,10 @@
-namespace ts.projectSystem {
+import { assert } from "console";
+import { createMap, forEach, contains, map, find } from "../../../../compiler/core";
+import { File } from "../../../../harness/vfsUtil";
+import { protocol, checkNumberOfProjects, checkProjectActualFiles, createSessionWithEventTracking, createSessionWithDefaultEventHandler } from "../helpers";
+import { TestServerHost, createServerHost, libFile, checkWatchedDirectories } from "../../../../../built/local/harness";
+import { CompilerOptions } from "../../../../compiler/types";
+
     describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
         function verifyFiles(caption: string, actual: readonly string[], expected: readonly string[]) {
             assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
@@ -575,4 +581,4 @@ namespace ts.projectSystem {
             }
         });
     });
-}
+

@@ -1,4 +1,15 @@
-namespace ts {
+import { ModuleResolutionHost, DiagnosticMessage, CompilerOptions, PackageId, Extension, ResolvedModuleWithFailedLookupLocations, MatchingKeys, GetEffectiveTypeRootsHost, ResolvedProjectReference, ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolvedTypeReferenceDirective, CharacterCodes, Path, ModuleKind, ModuleResolutionKind } from "./types";
+import { formatMessage, extensionIsTS, packageIdToString, directoryProbablyExists, readJson, optionsHaveModuleResolutionChanges, getEmitModuleKind, tryRemoveExtension, hasJSFileExtension, removeFileExtension, tryGetExtensionFromPath, matchPatternOrExact } from "./utilities";
+import { directorySeparator, normalizePath, combinePaths, getDirectoryPath, forEachAncestorDirectory, normalizePathAndParts, getBaseFileName, toPath, getRootLength, pathIsRelative, hasTrailingDirectorySeparator, containsPath, getRelativePathFromDirectory, normalizeSlashes } from "./path";
+import { Debug } from "./debug";
+import { Push, MapLike, versionMajorMinor } from "./corePublic";
+import { hasProperty, firstDefined, createMap, GetCanonicalFileName, endsWith, startsWith, forEach, contains, stringContains, getOwnKeys, matchedText, patternText, removePrefix } from "./core";
+import { VersionRange, Version } from "./semver";
+import { version } from "os";
+import { isExternalModuleNameRelative } from "./utilitiesPublic";
+import { perfLogger } from "./perfLogger";
+import { isString } from "util";
+
     /* @internal */
     export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
     export function trace(host: ModuleResolutionHost): void {
@@ -563,7 +574,7 @@ namespace ts {
              * At first this function add entry directory -> module resolution result to the table.
              * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
              * and for every parent folder in set it adds entry: parent -> module resolution. .
-             * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
+             * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.
              * Set of parent folders that should have the same result will be:
              * [
              *     /a/b/c/d, /a/b/c, /a/b
@@ -1517,4 +1528,4 @@ namespace ts {
     function toSearchResult<T>(value: T | undefined): SearchResult<T> {
         return value !== undefined ? { value } : undefined;
     }
-}
+

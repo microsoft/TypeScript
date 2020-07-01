@@ -1,5 +1,18 @@
 /* @internal */
-namespace ts.Completions {
+
+import { SourceFile, Node, TypeChecker, CompilerOptions, UserPreferences, ScriptTarget, CancellationToken, Extension, StringLiteralType, StringLiteralLike, SyntaxKind, LiteralTypeNode, IndexedAccessTypeNode, UnionTypeNode, PropertyAssignment, ElementAccessExpression, Signature, TypeFlags, Type, TextSpan, LiteralExpression, Path, ModuleResolutionKind, CharacterCodes } from "../compiler/types";
+import { LanguageServiceHost, CompletionInfo, CompletionEntry, ScriptElementKindModifier, ScriptElementKind, CompletionEntryDetails } from "./types";
+import { Log, getCompletionEntriesFromSymbols, CompletionKind, createCompletionDetails, createCompletionDetailsForSymbol, SortText } from "./completions";
+import { isInReferenceComment, isInString, getReplacementSpanForContextToken, textPart, getContextualTypeFromParent, hasIndexSignature, skipConstraint, tryDirectoryExists, tryReadDirectory, tryGetDirectories, findPackageJson, getTokenAtPosition, tryAndIgnoreErrors, findPackageJsons } from "./utilities";
+import { isStringLiteralLike, isTypeReferenceNode, isObjectLiteralExpression, isLiteralTypeNode, isStringLiteral, isPrivateIdentifierPropertyDeclaration, getPackageJsonTypesVersionsPaths, getEffectiveTypeRoots, unmangleScopedPackageName, createTextSpan } from "../../built/local/compiler";
+import { Debug } from "../compiler/debug";
+import { find, contains, mapDefined, createMap, flatMap, filter, neverArray, firstDefined, deduplicate, equateStringsCaseSensitive, compareStringsCaseSensitive, hasProperty, endsWith, stringContains, tryRemovePrefix, startsWith, removePrefix } from "../compiler/core";
+import { isRequireCall, isImportCall, addToSeen, getSupportedExtensions, getEmitModuleResolutionKind, removeFileExtension, tryGetExtensionFromPath, readJson, hasZeroOrOneAsteriskCharacter, tryParsePattern, stripQuotes, tryRemoveDirectoryPrefix, hostGetCanonicalFileName } from "../compiler/utilities";
+import { signatureHasRestParameter } from "../compiler/checker";
+import { normalizeSlashes, getDirectoryPath, isRootedDiskPath, isUrl, normalizePath, combinePaths, containsPath, hasTrailingDirectorySeparator, directorySeparator, ensureTrailingDirectorySeparator, resolvePath, comparePaths, fileExtensionIs, getBaseFileName, forEachAncestorDirectory } from "../compiler/path";
+import { Comparison, MapLike } from "../compiler/corePublic";
+import { getLeadingCommentRanges, isIdentifierText } from "../compiler/scanner";
+
     export function getStringLiteralCompletions(sourceFile: SourceFile, position: number, contextToken: Node | undefined, checker: TypeChecker, options: CompilerOptions, host: LanguageServiceHost, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
         if (isInReferenceComment(sourceFile, position)) {
             const entries = getTripleSlashReferenceCompletion(sourceFile, position, options, host);
@@ -169,7 +182,7 @@ namespace ts.Completions {
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 if (!isRequireCall(parent, /*checkArgumentIsStringLiteralLike*/ false) && !isImportCall(parent)) {
-                    const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(node, position, sourceFile);
+                    const argumentInfo = getArgumentInfoForCompletions(node, position, sourceFile);
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
@@ -693,4 +706,4 @@ namespace ts.Completions {
     function containsSlash(fragment: string) {
         return stringContains(fragment, directorySeparator);
     }
-}
+

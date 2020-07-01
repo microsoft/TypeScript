@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, ConstructorDeclaration } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { Debug } from "../../compiler/debug";
+import { isConstructorDeclaration, factory } from "../../../built/local/compiler";
+import { neverArray } from "../../compiler/core";
+
     const fixId = "constructorForDerivedNeedSuperCall";
     const errorCodes = [Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call.code];
     registerCodeFix({
@@ -25,4 +32,4 @@ namespace ts.codefix {
         const superCall = factory.createExpressionStatement(factory.createCallExpression(factory.createSuper(), /*typeArguments*/ undefined, /*argumentsArray*/ neverArray));
         changes.insertNodeAtConstructorStart(sourceFile, ctr, superCall);
     }
-}
+

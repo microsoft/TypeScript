@@ -1,4 +1,8 @@
-namespace ts {
+import { Node, SyntaxKind, Expression, ConciseBody, BinaryOperator } from "../../compiler/types";
+import { assert } from "console";
+import { Debug } from "../../compiler/debug";
+import { factory } from "../../../built/local/compiler";
+
     describe("unittests:: FactoryAPI", () => {
         function assertSyntaxKind(node: Node, expected: SyntaxKind) {
             assert.strictEqual(node.kind, expected, `Actual: ${Debug.formatSyntaxKind(node.kind)} Expected: ${Debug.formatSyntaxKind(expected)}`);
@@ -83,4 +87,4 @@ namespace ts {
             });
         });
     });
-}
+

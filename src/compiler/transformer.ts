@@ -1,5 +1,33 @@
 /* @internal */
-namespace ts {
+
+import { ModuleKind, TransformerFactory, SourceFile, Bundle, EmitTransformers, CompilerOptions, CustomTransformers, JsxEmit, ScriptTarget, CustomTransformer, Transformer, CustomTransformerFactory, TransformationContext, EmitHint, Node, EmitResolver, EmitHost, NodeFactory, TransformationResult, SyntaxKind, VariableDeclaration, FunctionDeclaration, Statement, LexicalEnvironmentFlags, EmitHelper, DiagnosticWithLocation, EmitFlags, Identifier } from "./types";
+import { transformECMAScriptModule } from "./transformers/module/esnextAnd2015";
+import { transformSystemModule } from "./transformers/module/system";
+import { transformModule } from "./transformers/module/module";
+import { neverArray, addRange, map, memoize, append, noop, returnUndefined, notImplemented } from "./core";
+import { getEmitScriptTarget, getEmitModuleKind, getSourceFileOfNode, getEmitFlags } from "./utilities";
+import { transformTypeScript } from "./transformers/ts";
+import { transformClassFields } from "./transformers/classFields";
+import { transformJsx } from "./transformers/jsx";
+import { transformESNext } from "./transformers/esnext";
+import { transformES2020 } from "./transformers/es2020";
+import { transformES2019 } from "./transformers/es2019";
+import { transformES2018 } from "./transformers/es2018";
+import { transformES2017 } from "./transformers/es2017";
+import { transformES2016 } from "./transformers/es2016";
+import { transformES2015 } from "./transformers/es2015";
+import { transformGenerators } from "./transformers/generators";
+import { transformES5 } from "./transformers/es5";
+import { transformDeclarations } from "./transformers/declarations";
+import { isBundle, isSourceFile } from "./factory/nodeTests";
+import { chainBundle } from "./transformers/utilities";
+import { createEmitHelperFactory } from "./factory/emitHelpers";
+import { Debug } from "./debug";
+import { disposeEmitNodes, setEmitFlags } from "./factory/emitNode";
+import { getParseTreeNode } from "./utilitiesPublic";
+import { performance } from "perf_hooks";
+import { factory } from "./factory/nodeFactory";
+
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
@@ -532,4 +560,4 @@ namespace ts {
         suspendLexicalEnvironment: noop,
         addDiagnostic: noop,
     };
-}
+

@@ -1,4 +1,12 @@
-namespace ts.projectSystem {
+import { Debug } from "../../../compiler/debug";
+import { arrayFrom } from "../../../compiler/core";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { createProjectService, checkProjectRootFiles, checkProjectActualFiles, createSession, openFilesForSession, executeSessionRequestNoResponse, protocol, executeSessionRequest, checkNumberOfProjects } from "./helpers";
+import { ModuleKind } from "../../../compiler/types";
+import { ScriptElementKind } from "../../../services/types";
+
     export function verifyDynamic(service: server.ProjectService, path: string) {
         const info = Debug.checkDefined(service.filenameToScriptInfo.get(path), `Expected ${path} in :: ${JSON.stringify(arrayFrom(service.filenameToScriptInfo.entries(), ([key, f]) => ({ key, fileName: f.fileName, path: f.path })))}`);
         assert.isTrue(info.isDynamic);
@@ -235,4 +243,4 @@ var x = 10;`
             });
         });
     });
-}
+

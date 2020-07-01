@@ -49,11 +49,11 @@ if (typeof process === "undefined" || process.browser) {
     //@ts-ignore
     globalThis.TypeScript.Services = globalThis.TypeScript.Services || {};
     //@ts-ignore
-    globalThis.TypeScript.Services.TypeScriptServicesFactory = ts.TypeScriptServicesFactory;
+    globalThis.TypeScript.Services.TypeScriptServicesFactory = TypeScriptServicesFactory;
 
     // 'toolsVersion' gets consumed by the managed side, so it's not unused.
     // TODO: it should be moved into a namespace though.
 
     //@ts-ignore
-    globalThis.toolsVersion = ts.versionMajorMinor;
+    globalThis.toolsVersion = versionMajorMinor;
 }

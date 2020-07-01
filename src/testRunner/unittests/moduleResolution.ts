@@ -1,4 +1,12 @@
-namespace ts {
+import { ResolvedModuleFull, ResolvedModuleWithFailedLookupLocations, ModuleResolutionHost, Extension, CompilerOptions, ModuleResolutionKind, ModuleKind, CompilerHost, ScriptTarget, SourceFile, Program, Diagnostic, JsxEmit, StructureIsReused } from "../../compiler/types";
+import { assert } from "console";
+import { extensionFromPath, supportedTSExtensions } from "../../compiler/utilities";
+import { createMap, notImplemented, createMapFromTemplate, createGetCanonicalFileName, neverArray, map, arrayToMap } from "../../compiler/core";
+import { getDirectoryPath, normalizePath, getRootLength, combinePaths } from "../../compiler/path";
+import { nodeModuleNameResolver, createModuleResolutionCache, resolveModuleName, sortAndDeduplicateDiagnostics, resolveTypeReferenceDirective } from "../../../built/local/compiler";
+import { createSourceFile } from "../../compiler/parser";
+import { createProgram } from "../../compiler/program";
+
     export function checkResolvedModule(actual: ResolvedModuleFull | undefined, expected: ResolvedModuleFull | undefined): boolean {
         if (!expected) {
             if (actual) {
@@ -1465,4 +1473,4 @@ import b = require("./moduleB");
             });
         });
     });
-}
+

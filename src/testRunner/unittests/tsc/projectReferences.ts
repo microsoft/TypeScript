@@ -1,4 +1,6 @@
-namespace ts {
+import { verifyTsc } from "./helpers";
+import { loadProjectFromFiles } from "../tsbuild/helpers";
+
     describe("unittests:: tsc:: projectReferences::", () => {
         verifyTsc({
             scenario: "projectReferences",
@@ -39,4 +41,4 @@ namespace ts {
             commandLineArgs: ["--p", "src/project"]
         });
     });
-}
+

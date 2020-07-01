@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.SignatureHelp {
+
+import { CallLikeExpression, Identifier, Signature, Node, TextSpan, Program, SourceFile, CancellationToken, TypeChecker, SyntaxKind, TemplateExpression, TaggedTemplateExpression, BinaryExpression, Type, ParenthesizedExpression, FunctionExpression, ArrowFunction, InternalSymbolName, Expression, NodeBuilderFlags, TypeParameter, ListFormat, TransientSymbol, CheckFlags, Printer, EmitHint, ParameterDeclaration } from "../compiler/types";
+import { SignatureHelpTriggerReason, SignatureHelpItems, SignatureHelpItem, SymbolDisplayPart, SignatureHelpParameter } from "./types";
+import { findTokenOnLeftOfPosition, isInString, isInComment, getPossibleGenericSignatures, findContainingList, findPrecedingToken, rangeContainsRange, isInsideTemplateLiteral, getPossibleTypeArgumentsInfo, createTextSpanFromNode, symbolToDisplayParts, punctuationPart, spacePart, mapToDisplayParts } from "./utilities";
+import { isSourceFileJS, getInvokedExpression } from "../compiler/utilities";
+import { isIdentifier, isCallOrNewExpression, isPropertyAccessExpression, isNoSubstitutionTemplateLiteral, isTaggedTemplateExpression, isTemplateHead, isTemplateSpan, isTemplateTail, isJsxOpeningLikeElement, createTextSpan, createTextSpanFromBounds, isBinaryExpression, isMethodDeclaration, isFunctionTypeNode, isTemplateLiteralToken, isSourceFile, isBlock, factory } from "../../built/local/compiler";
+import { first, contains, firstDefined, countWhere, last, neverArray, map, flatMapToMutable, identity } from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import { skipTrivia } from "../compiler/scanner";
+import { createPrinter } from "../compiler/emitter";
+
     const enum InvocationKind { Call, TypeArgs, Contextual }
     interface CallInvocation { readonly kind: InvocationKind.Call; readonly node: CallLikeExpression; }
     interface TypeArgsInvocation { readonly kind: InvocationKind.TypeArgs; readonly called: Identifier; }
@@ -637,4 +647,4 @@ namespace ts.SignatureHelp {
         });
         return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false };
     }
-}
+

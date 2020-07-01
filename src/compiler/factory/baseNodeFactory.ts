@@ -1,5 +1,8 @@
 /* @internal */
-namespace ts {
+
+import { SyntaxKind, Node } from "../types";
+import { objectAllocator } from "../utilities";
+
     /**
      * A `BaseNodeFactory` is an abstraction over an `ObjectAllocator` that handles caching `Node` constructors
      * and allocating `Node` instances based on a set of predefined types.
@@ -53,4 +56,4 @@ namespace ts {
             return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
         }
     }
-}
+

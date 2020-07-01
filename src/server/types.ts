@@ -1,4 +1,4 @@
-declare namespace ts.server {
+
     export interface CompressedData {
         length: number;
         compressionKind: string;
@@ -17,4 +17,4 @@ declare namespace ts.server {
         trace?(s: string): void;
         require?(initialPath: string, moduleName: string): RequireResult;
     }
-}
+

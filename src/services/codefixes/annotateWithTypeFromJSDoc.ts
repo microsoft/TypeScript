@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, FunctionLikeDeclaration, VariableDeclaration, PropertySignature, PropertyDeclaration, Node, ParameterDeclaration, SyntaxKind, TypeNode, JSDocOptionalType, JSDocNonNullableType, JSDocNullableType, JSDocVariadicType, JSDocFunctionType, TypeReferenceNode, EmitFlags } from "../../compiler/types";
+import { getTokenAtPosition, findChildOfKind } from "../utilities";
+import { tryCast, first, last, neverArray } from "../../compiler/core";
+import { isParameter, isFunctionLikeDeclaration, getJSDocReturnType, getJSDocType, isArrowFunction, factory, setEmitFlags, isIdentifier } from "../../../built/local/compiler";
+import { getJSDocTypeParameterDeclarations, isJSDocIndexSignature } from "../../compiler/utilities";
+import { Debug } from "../../compiler/debug";
+import { visitEachChild, visitNode, visitNodes } from "../../compiler/visitorPublic";
+import { nullTransformationContext } from "../../compiler/transformer";
+
     const fixId = "annotateWithTypeFromJSDoc";
     const errorCodes = [Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];
     registerCodeFix({
@@ -168,4 +178,4 @@ namespace ts.codefix {
         setEmitFlags(indexSignature, EmitFlags.SingleLine);
         return indexSignature;
     }
-}
+

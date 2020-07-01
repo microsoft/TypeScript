@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.refactor {
+
+import { NamedImportBindings, SyntaxKind, SourceFile, Program, TypeChecker, NamespaceImport, PropertyAccessExpression, SymbolFlags, ImportSpecifier, NamedImports, ScriptTarget, ImportDeclaration, Identifier } from "../../compiler/types";
+import { registerRefactor } from "../refactorProvider";
+import { ApplicableRefactorInfo, RefactorEditInfo, RefactorContext } from "../types";
+import { neverArray, createMap, cast } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { getRefactorContextSpan, getTokenAtPosition, getParentNodeInSpan, getUniqueName } from "../utilities";
+import { findAncestor, getLocaleSpecificMessage, getAllowSyntheticDefaultImports } from "../../compiler/utilities";
+import { isImportDeclaration, isPropertyAccessExpression, factory, isStringLiteral, isShorthandPropertyAssignment, isExportSpecifier } from "../../../built/local/compiler";
+
     const refactorName = "Convert import";
     const actionNameNamespaceToNamed = "Convert namespace import to named imports";
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
@@ -158,4 +167,4 @@ namespace ts.refactor {
         return factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
             factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier);
     }
-}
+

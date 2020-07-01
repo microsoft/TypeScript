@@ -1,4 +1,13 @@
-namespace ts {
+import { TransformationContext, SyntaxKind, EmitHint, SourceFile, Node, Visitor, Transformer, TransformerFactory, ScriptTarget, NewLineKind, VisitResult, ModuleBlock, ExportDeclaration, ModuleKind, EmitFlags } from "../../compiler/types";
+import { isIdentifier, factory, addSyntheticTrailingComment, setTextRange, isNumericLiteral, isSourceFile, setEmitFlags, setSyntheticLeadingComments, isVoidExpression, isVariableStatement, isImportDeclaration, isExportDeclaration, isImportSpecifier, isExportSpecifier, isPropertyDeclaration, isParameterPropertyDeclaration, isClassDeclaration, isConstructorDeclaration, isModuleDeclaration, isVariableDeclaration, isMethodDeclaration, isNoSubstitutionTemplateLiteral } from "../../../built/local/compiler";
+import { visitEachChild, visitNode } from "../../compiler/visitorPublic";
+import { transform } from "../../services/transform";
+import { createSourceFile } from "../../compiler/parser";
+import { createPrinter } from "../../compiler/emitter";
+import { transpileModule, TranspileOptions } from "../../services/transpile";
+import { createProgram } from "../../compiler/program";
+import { assert } from "console";
+
     describe("unittests:: TransformAPI", () => {
         function replaceUndefinedWithVoid0(context: TransformationContext) {
             const previousOnSubstituteNode = context.onSubstituteNode;
@@ -355,7 +364,7 @@ namespace ts {
                 };
                 function visitNode(sf: SourceFile) {
                     // produce `class Foo { constructor(@Dec private x) {} }`;
-                    // The decorator is required to trigger ts.ts transformations.
+                    // The decorator is required to trigger ts transformations.
                     const classDecl = factory.createClassDeclaration([], [], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
                         factory.createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, [
                             factory.createParameterDeclaration(/*decorators*/ [factory.createDecorator(factory.createIdentifier("Dec"))], /*modifiers*/ [factory.createModifier(SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], factory.createBlock([]))
@@ -451,7 +460,7 @@ class Clazz {
     instanceProp: number = 2;
     // original comment 3.
     constructor(readonly field = 1) {}
-}
+
 `, {
                 transformers: {
                     before: [addSyntheticComment(n => isPropertyDeclaration(n) || isParameterPropertyDeclaration(n, n.parent) || isClassDeclaration(n) || isConstructorDeclaration(n))],
@@ -489,7 +498,7 @@ class Clazz {
 module MyModule {
     const myVariable = 1;
     function foo(param: string) {}
-}
+
 `, {
                 transformers: {
                     before: [renameVariable],
@@ -578,5 +587,5 @@ module MyModule {
             assert.equal(exports.stringLength, 5);
         });
     });
-}
+
 

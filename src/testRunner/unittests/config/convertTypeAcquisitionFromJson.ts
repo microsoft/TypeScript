@@ -1,4 +1,9 @@
-namespace ts {
+import { TypeAcquisition, Diagnostic, ParseConfigHost } from "../../../compiler/types";
+import { assert } from "console";
+import { convertTypeAcquisitionFromJson, parseJsonSourceFileConfigFileContent } from "../../../../built/local/compiler";
+import { parseJsonText } from "../../../compiler/parser";
+import { filter } from "../../../compiler/core";
+
     interface ExpectedResult { typeAcquisition: TypeAcquisition; errors: Diagnostic[]; }
     describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
         function assertTypeAcquisition(json: any, configFileName: string, expectedResult: ExpectedResult) {
@@ -236,4 +241,4 @@ namespace ts {
                 });
         });
     });
-}
+

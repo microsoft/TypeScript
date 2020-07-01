@@ -1,4 +1,8 @@
-namespace Harness.Parallel.Worker {
+import { Task, TaskResult, UnitTestTask, RunnerTask, ErrorInfo, TestInfo, ParallelHostMessage, ParallelClientMessage, shimNoopTestInterface } from "./shared";
+import { createMap } from "../../compiler/core";
+import { globalTimeout, createRunner, runUnitTests } from "../runner";
+import { RunnerBase } from "../../harness/runnerbase";
+
     export function start() {
         function hookUncaughtExceptions() {
             if (!exceptionsHooked) {
@@ -146,13 +150,13 @@ namespace Harness.Parallel.Worker {
 
         function executeUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
             if (!unitTestSuiteMap && unitTestSuite.suites.length) {
-                unitTestSuiteMap = ts.createMap<Mocha.Suite>();
+                unitTestSuiteMap = createMap<Mocha.Suite>();
                 for (const suite of unitTestSuite.suites) {
                     unitTestSuiteMap.set(suite.title, suite);
                 }
             }
             if (!unitTestTestMap && unitTestSuite.tests.length) {
-                unitTestTestMap = ts.createMap<Mocha.Test>();
+                unitTestTestMap = createMap<Mocha.Test>();
                 for (const test of unitTestSuite.tests) {
                     unitTestTestMap.set(test.title, test);
                 }
@@ -297,13 +301,13 @@ namespace Harness.Parallel.Worker {
         }
 
         // A cache of test harness Runner instances.
-        const runners = ts.createMap<RunnerBase>();
+        const runners = createMap<RunnerBase>();
 
         // The root suite for all unit tests.
         let unitTestSuite: Suite;
-        let unitTestSuiteMap: ts.Map<string, Mocha.Suite>;
+        let unitTestSuiteMap: Map<string, Mocha.Suite>;
         // (Unit) Tests directly within the root suite
-        let unitTestTestMap: ts.Map<string, Mocha.Test>;
+        let unitTestTestMap: Map<string, Mocha.Test>;
 
         if (runUnitTests) {
             unitTestSuite = new Suite("", new Mocha.Context());
@@ -317,4 +321,4 @@ namespace Harness.Parallel.Worker {
 
         process.on("message", processHostMessage);
     }
-}
+

@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, Identifier, NamedImports, VariableStatement, StringLiteralLike, Program, ObjectBindingPattern, ImportSpecifier } from "../../compiler/types";
+import { factory, isVariableDeclaration, isIdentifier, isObjectBindingPattern, isVariableStatement } from "../../../built/local/compiler";
+import { getTokenAtPosition } from "../utilities";
+import { isRequireCall, getAllowSyntheticDefaultImports } from "../../compiler/utilities";
+import { Debug } from "../../compiler/debug";
+import { cast, tryCast, first } from "../../compiler/core";
+
     const fixId = "requireInTs";
     const errorCodes = [Diagnostics.require_call_may_be_converted_to_an_import.code];
     registerCodeFix({
@@ -69,4 +77,4 @@ namespace ts.codefix {
             return factory.createNamedImports(importSpecifiers);
         }
     }
-}
+

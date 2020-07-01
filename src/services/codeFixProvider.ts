@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.codefix {
+
+import { createMultiMap, createMap, arrayFrom, contains, flatMap, map, cast } from "../compiler/core";
+import { CodeFixRegistration, FileTextChanges, CodeActionCommand, CodeFixAction, CodeFixContext, CodeFixAllContext, CombinedCodeActions, TextChange, CodeFixContextBase } from "./types";
+import { DiagnosticMessage, Diagnostic, DiagnosticWithLocation } from "../compiler/types";
+import { isArray, isString } from "util";
+import { formatStringFromArgs, getLocaleSpecificMessage } from "../compiler/utilities";
+import { Debug } from "../compiler/debug";
+import { Push } from "../compiler/corePublic";
+import { computeSuggestionDiagnostics } from "./suggestionDiagnostics";
+
     const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
     const fixIdToRegistration = createMap<CodeFixRegistration>();
 
@@ -96,4 +105,4 @@ namespace ts.codefix {
             ...computeSuggestionDiagnostics(sourceFile, program, cancellationToken)
         ];
     }
-}
+

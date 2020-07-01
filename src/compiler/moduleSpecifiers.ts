@@ -1,6 +1,16 @@
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 /* @internal */
-namespace ts.moduleSpecifiers {
+
+import { UserPreferences, CompilerOptions, SourceFile, ModuleResolutionKind, Path, ModuleSpecifierResolutionHost, CharacterCodes, ModuleDeclaration, StringLiteral, ScriptKind, Extension, JsxEmit } from "./types";
+import { getEmitModuleResolutionKind, hasJSFileExtension, getSourceFileOfNode, getNonAugmentationDeclaration, removeFileExtension, hostGetCanonicalFileName, discoverProbableSymlinks, forEachEntry, isNonGlobalAmbientModule, isExternalModuleAugmentation, getTextOfIdentifierOrLiteral, getSupportedExtensions, extensionFromPath } from "./utilities";
+import { isExternalModuleNameRelative } from "./utilitiesPublic";
+import { endsWith, firstDefined, mapDefined, GetCanonicalFileName, createGetCanonicalFileName, startsWith, compareValues, neverArray, forEach, compareStringsCaseSensitive, compareStringsCaseInsensitive, find, createMap, arrayFrom, removeSuffix } from "./core";
+import { getDirectoryPath, ensurePathIsNonModuleName, getRelativePathFromDirectory, pathIsRelative, toPath, getNormalizedAbsolutePath, startsWithDirectory, resolvePath, ensureTrailingDirectorySeparator, normalizePath, removeTrailingDirectorySeparator, directorySeparator, combinePaths, fileExtensionIs, getRelativePathToDirectoryOrUrl, isRootedDiskPath } from "./path";
+import { Debug } from "./debug";
+import { Comparison, MapLike } from "./corePublic";
+import { pathContainsNodeModules, getPackageNameFromTypesPackageName, getPackageJsonTypesVersionsPaths, nodeModulesPathPart } from "./moduleNameResolver";
+import { isString } from "util";
+export namespace moduleSpecifiers {
     const enum RelativePreference { Relative, NonRelative, Auto }
     // See UserPreferences#importPathEnding
     const enum Ending { Minimal, Index, JsExtension }

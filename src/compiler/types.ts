@@ -1,5 +1,11 @@
-namespace ts {
+
     // branded string type used to store absolute, normalized and canonicalized paths
+
+import { MultiMap, Pattern } from "./core";
+import { ProgramBuildInfo } from "./builder";
+import { MapLike, Push } from "./corePublic";
+import { EmitHelperFactory } from "./factory/emitHelpers";
+
     // arbitrary file name can be converted to Path via toPath function
     export type Path = string & { __pathBrand: any };
 
@@ -3382,7 +3388,7 @@ namespace ts {
 
         /**
          * If two source files are for the same version of the same package, one will redirect to the other.
-         * (See `createRedirectSourceFile` in program.ts.)
+         * (See `createRedirectSourceFile` in program.)
          * The redirect will have this set. The redirected-to source file will be in `redirectTargetsMap`.
          */
         /* @internal */ redirectInfo?: RedirectInfo;
@@ -8036,4 +8042,4 @@ namespace ts {
         negative: boolean;
         base10Value: string;
     }
-}
+

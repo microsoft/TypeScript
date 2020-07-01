@@ -1,4 +1,13 @@
-namespace Harness {
+import { RunnerBase, TestRunnerKind, setShardId, setShards } from "../harness/runnerbase";
+import { forEach, getUILocale, setUILocale, noop } from "../compiler/core";
+import { CompilerBaselineRunner, CompilerTestType } from "./compilerRunner";
+import { FourSlashRunner, GeneratedFourslashRunner } from "./fourslashRunner";
+import { Test262BaselineRunner } from "./test262Runner";
+import { UserCodeRunner, DefinitelyTypedRunner, DockerfileRunner } from "./externalCompileRunner";
+import { Debug } from "../compiler/debug";
+import { IO, setLightMode } from "../harness/harnessIO";
+import { ProjectRunner } from "./projectsRunner";
+
     /* eslint-disable prefer-const */
     export let runners: RunnerBase[] = [];
     export let iterations = 1;
@@ -14,7 +23,7 @@ namespace Harness {
 
     function tryGetConfig(args: string[]) {
         const prefix = "--config=";
-        const configPath = ts.forEach(args, arg => arg.lastIndexOf(prefix, 0) === 0 && arg.substr(prefix.length));
+        const configPath = forEach(args, arg => arg.lastIndexOf(prefix, 0) === 0 && arg.substr(prefix.length));
         // strip leading and trailing quotes from the path (necessary on Windows since shell does not do it automatically)
         return configPath && configPath.replace(/(^[\"'])|([\"']$)/g, "");
     }
@@ -34,9 +43,9 @@ namespace Harness {
             case "fourslash-server":
                 return new FourSlashRunner(FourSlash.FourSlashTestType.Server);
             case "project":
-                return new project.ProjectRunner();
+                return new ProjectRunner();
             case "rwc":
-                return new RWC.RWCRunner();
+                return new RWCRunner();
             case "test262":
                 return new Test262BaselineRunner();
             case "user":
@@ -46,7 +55,7 @@ namespace Harness {
             case "docker":
                 return new DockerfileRunner();
         }
-        return ts.Debug.fail(`Unknown runner kind ${kind}`);
+        return Debug.fail(`Unknown runner kind ${kind}`);
     }
 
     // users can define tests to run in mytest.config that will override cmd line args, otherwise use cmd line args (test.config), otherwise no options
@@ -159,7 +168,7 @@ namespace Harness {
                             runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                             break;
                         case "project":
-                            runners.push(new project.ProjectRunner());
+                            runners.push(new ProjectRunner());
                             break;
                         case "fourslash":
                             runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
@@ -177,7 +186,7 @@ namespace Harness {
                             runners.push(new GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
                             break;
                         case "rwc":
-                            runners.push(new RWC.RWCRunner());
+                            runners.push(new RWCRunner());
                             break;
                         case "test262":
                             runners.push(new Test262BaselineRunner());
@@ -201,7 +210,7 @@ namespace Harness {
             runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
             runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
 
-            runners.push(new project.ProjectRunner());
+            runners.push(new ProjectRunner());
 
             // language services
             runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
@@ -223,29 +232,29 @@ namespace Harness {
     }
 
     function beginTests() {
-        ts.Debug.loggingHost = {
+        Debug.loggingHost = {
             log(_level, s) {
                 console.log(s || "");
             }
         };
 
-        if (ts.Debug.isDebugging) {
-            ts.Debug.enableDebugInfo();
+        if (Debug.isDebugging) {
+            Debug.enableDebugInfo();
         }
 
         // run tests in en-US by default.
         let savedUILocale: string | undefined;
         beforeEach(() => {
-            savedUILocale = ts.getUILocale();
-            ts.setUILocale("en-US");
+            savedUILocale = getUILocale();
+            setUILocale("en-US");
         });
-        afterEach(() => ts.setUILocale(savedUILocale));
+        afterEach(() => setUILocale(savedUILocale));
 
         runTests(runners);
 
         if (!runUnitTests) {
             // patch `describe` to skip unit tests
-            (global as any).describe = ts.noop;
+            (global as any).describe = noop;
         }
     }
 
@@ -262,4 +271,4 @@ namespace Harness {
     }
 
     startTestEnvironment();
-}
+

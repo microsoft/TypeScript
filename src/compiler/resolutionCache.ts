@@ -1,5 +1,16 @@
 /*@internal*/
-namespace ts {
+
+import { Path, ResolvedProjectReference, ResolvedModuleFull, ResolvedTypeReferenceDirective, HasInvalidatedResolution, ResolvedModuleWithFailedLookupLocations, ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ModuleResolutionHost, CompilerOptions, WatchDirectoryFlags, Program, CompilerHost, CharacterCodes, Extension } from "./types";
+import { GetCanonicalFileName, endsWith, removeSuffix, some, stringContains, createMultiMap, memoize, createMap, startsWith, returnTrue, contains, unorderedRemoveItem, arrayToMap } from "./core";
+import { DirectoryWatcherCallback, FileWatcher, ignoredPaths } from "./sys";
+import { CachedDirectoryStructureHost, closeFileWatcherOf, isEmittedFileOfProgram } from "./watchUtilities";
+import { getRootLength, directorySeparator, removeTrailingDirectorySeparator, getNormalizedAbsolutePath, getDirectoryPath, isRootedDiskPath, normalizePath, isNodeModulesDirectory, fileExtensionIsOneOf, fileExtensionIs } from "./path";
+import { CacheWithRedirects, createCacheWithRedirects, PerModuleNameCache, createModuleResolutionCacheWithMaps, resolveModuleName, loadModuleFromGlobalCache, resolveTypeReferenceDirective, pathContainsNodeModules, getEffectiveTypeRoots } from "./moduleNameResolver";
+import { clearMap, extensionIsTS, resolutionExtensionIsTSOrJson, closeFileWatcher, mutateMap } from "./utilities";
+import { isExternalModuleNameRelative } from "./utilitiesPublic";
+import { Debug } from "./debug";
+import { inferredTypesContainingFile } from "./program";
+
     /** This is the cache of module/typedirectives resolution that can be retained across program */
     export interface ResolutionCache {
         startRecordingFilesWithChangedResolutions(): void;
@@ -886,4 +897,4 @@ namespace ts {
             return dirPath === rootPath || canWatchDirectory(dirPath);
         }
     }
-}
+

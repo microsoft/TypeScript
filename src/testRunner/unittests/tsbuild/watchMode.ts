@@ -1,7 +1,19 @@
-namespace ts.tscWatch {
+
     import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
     import getFilePathInProject = TestFSWithWatch.getTsBuildProjectFilePath;
     import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
+import { createWatchedSystem, libFile, checkWatchedFiles, checkWatchedDirectories, checkWatchedFilesDetailed, checkWatchedDirectoriesDetailed, checkArray } from "../../../../built/local/harness";
+import { WatchedSystem, TscWatchCompileChange, checkSingleTimeoutQueueLengthAndRun, verifyTscWatch, checkOutputErrorsInitial, checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout, createWatchOfConfigFile, checkOutputErrorsIncremental, checkProgramActualFiles, projectRoot, runQueuedTimeoutCallbacks, noopChange, replaceFileText } from "../tscWatch/helpers";
+import { BuildOptions, createSolutionBuilderHost, createSolutionBuilderWithWatchHost, createSolutionBuilderWithWatch, SolutionBuilder, ResolvedConfigFilePath } from "../../../compiler/tsbuildPublic";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+import { isString } from "util";
+import { neverArray, noop, arrayFrom, mapDefinedIterator } from "../../../compiler/core";
+import { Watch } from "../../../compiler/watchPublic";
+import { EmitAndSemanticDiagnosticsBuilderProgram } from "../../../compiler/builderPublic";
+import { ConfigFileProgramReloadLevel } from "../../../compiler/watchUtilities";
+import { Path } from "../../../compiler/types";
+import { libContent } from "./helpers";
     type TsBuildWatchSystem = TestFSWithWatch.TestServerHostTrackingWrittenFiles;
 
     function createTsBuildWatchSystem(fileOrFolderList: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
@@ -12,7 +24,7 @@ namespace ts.tscWatch {
 
     export function createSolutionBuilder(system: WatchedSystem, rootNames: readonly string[], defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderHost(system);
-        return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
+        return createSolutionBuilder(host, rootNames, defaultOptions || {});
     }
 
     export function ensureErrorFreeBuild(host: WatchedSystem, rootNames: readonly string[]) {
@@ -361,7 +373,7 @@ function myFunc() { return 100; }`, "Make local change and build core"),
 interface SomeObject
 {
     message: string;
-}
+
 
 export function createSomeObject(): SomeObject
 {
@@ -1451,4 +1463,4 @@ const a: string = "hello";`),
             ]
         });
     });
-}
+

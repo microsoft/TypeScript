@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { File } from "../../../../harness/vfsUtil";
+import { libFile, TestServerHost, createServerHost } from "../../../../../built/local/harness";
+import { assert } from "console";
+import { openFilesForSession, checkNumberOfProjects, protocol, protocolLocationFromSubstring, toExternalFiles, createSessionWithEventTracking, createSessionWithDefaultEventHandler } from "../helpers";
+
     describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
         const aTs: File = {
             path: `${tscWatch.projects}/a/a.ts`,
@@ -85,12 +89,12 @@ namespace ts.projectSystem {
                     const aDTs: File = {
                         path: `${tscWatch.projects}/a/a.d.ts`,
                         content: `export declare class A {
-}
-//# sourceMappingURL=a.d.ts.map
+
+//# sourceMappingURL=a.d.map
 `
                     };
                     const aDTsMap: File = {
-                        path: `${tscWatch.projects}/a/a.d.ts.map`,
+                        path: `${tscWatch.projects}/a/a.d.map`,
                         content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`
                     };
                     const bTs: File = {
@@ -209,4 +213,4 @@ namespace ts.projectSystem {
             });
         });
     });
-}
+

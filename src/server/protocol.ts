@@ -1,9 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-qualifier */
 
+import { TextInsertion, TodoCommentDescriptor, TodoComment, OutliningSpanKind, HighlightSpanKind, RenameLocation, ScriptElementKind, TextChange, JSDocTagInfo } from "../services/types";
+import { OutputFile } from "../../built/local/compiler";
+import { ScriptKind, TypeAcquisition, FileExtensionInfo, CompilerOptionsValue, PluginImport, ProjectReference } from "../compiler/types";
+import { MapLike } from "../compiler/corePublic";
+
 /**
  * Declaration module describing the TypeScript Server protocol
  */
-namespace ts.server.protocol {
+
     // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
     export const enum CommandTypes {
         JsxClosingTag = "jsxClosingTag",
@@ -275,7 +280,7 @@ namespace ts.server.protocol {
 
     export interface StatusResponseBody {
         /**
-         * The TypeScript version (`ts.version`).
+         * The TypeScript version (`version`).
          */
         version: string;
     }
@@ -390,7 +395,7 @@ namespace ts.server.protocol {
      */
     /* @internal */
     export interface OutliningSpansResponseFull extends Response {
-        body?: ts.OutliningSpan[];
+        body?: OutliningSpan[];
     }
 
     /**
@@ -878,7 +883,7 @@ namespace ts.server.protocol {
     }
     /** @internal */
     export interface EmitOutputResponse extends Response {
-        readonly body: EmitOutput | ts.EmitOutput;
+        readonly body: EmitOutput | EmitOutput;
     }
     /** @internal */
     export interface EmitOutput {
@@ -1268,7 +1273,7 @@ namespace ts.server.protocol {
         /**
          * Script kind of the file
          */
-        scriptKind?: ScriptKindName | ts.ScriptKind;
+        scriptKind?: ScriptKindName | ScriptKind;
         /**
          * Whether file has mixed content (i.e. .cshtml file that combines html markup with C#/JavaScript)
          */
@@ -1338,7 +1343,7 @@ namespace ts.server.protocol {
         /**
          * Current set of compiler options for project
          */
-        options: ts.CompilerOptions;
+        options: CompilerOptions;
         /**
          * true if project language service is disabled
          */
@@ -1432,7 +1437,7 @@ namespace ts.server.protocol {
         /**
          * List of changes that should be applied to known open file
          */
-        changes: ts.TextChange[];
+        changes: TextChange[];
     }
 
 
@@ -1488,9 +1493,9 @@ namespace ts.server.protocol {
     }
 
     export interface WatchOptions {
-        watchFile?: WatchFileKind | ts.WatchFileKind;
-        watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
-        fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
+        watchFile?: WatchFileKind | WatchFileKind;
+        watchDirectory?: WatchDirectoryKind | WatchDirectoryKind;
+        fallbackPolling?: PollingWatchKind | PollingWatchKind;
         synchronousWatchDirectory?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -2968,7 +2973,7 @@ namespace ts.server.protocol {
         indent: number;
     }
 
-    /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
+    /** protocol.NavigationTree is identical to NavigationTree, except using protocol.TextSpan instead of TextSpan */
     export interface NavigationTree {
         text: string;
         kind: ScriptElementKind;
@@ -3137,7 +3142,7 @@ namespace ts.server.protocol {
         tabSize?: number;
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
-        indentStyle?: IndentStyle | ts.IndentStyle;
+        indentStyle?: IndentStyle | IndentStyle;
         trimTrailingWhitespace?: boolean;
     }
 
@@ -3211,14 +3216,14 @@ namespace ts.server.protocol {
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
-        jsx?: JsxEmit | ts.JsxEmit;
+        jsx?: JsxEmit | JsxEmit;
         lib?: string[];
         locale?: string;
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
-        module?: ModuleKind | ts.ModuleKind;
-        moduleResolution?: ModuleResolutionKind | ts.ModuleResolutionKind;
-        newLine?: NewLineKind | ts.NewLineKind;
+        module?: ModuleKind | ModuleKind;
+        moduleResolution?: ModuleResolutionKind | ModuleResolutionKind;
+        newLine?: NewLineKind | NewLineKind;
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
@@ -3254,7 +3259,7 @@ namespace ts.server.protocol {
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         useDefineForClassFields?: boolean;
-        target?: ScriptTarget | ts.ScriptTarget;
+        target?: ScriptTarget | ScriptTarget;
         traceResolution?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
@@ -3303,4 +3308,4 @@ namespace ts.server.protocol {
         ES2020 = "ES2020",
         ESNext = "ESNext"
     }
-}
+

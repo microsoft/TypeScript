@@ -1,5 +1,10 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { AnyImportSyntax, Identifier, Expression, SourceFile, UserPreferences } from "../../compiler/types";
+import { getTokenAtPosition, makeImport, getQuotePreference } from "../utilities";
+import { isIdentifier, isImportEqualsDeclaration, isExternalModuleReference, isNamespaceImport } from "../../../built/local/compiler";
+
     const fixId = "useDefaultImport";
     const errorCodes = [Diagnostics.Import_may_be_converted_to_a_default_import.code];
     registerCodeFix({
@@ -39,4 +44,4 @@ namespace ts.codefix {
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info, preferences: UserPreferences): void {
         changes.replaceNode(sourceFile, info.importNode, makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, getQuotePreference(sourceFile, preferences)));
     }
-}
+

@@ -1,3 +1,6 @@
+import { assert } from "console";
+import { ScriptTarget } from "../../../compiler/types";
+
 describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
     it("sync (es5)", async () => {
         const result = evaluator.evaluateTypeScript(`
@@ -44,7 +47,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
             for await (const item of iterator) {
                 output.push(item);
             }
-        }`, { target: ts.ScriptTarget.ES2015 });
+        }`, { target: ScriptTarget.ES2015 });
         await result.main();
         assert.strictEqual(result.output[0], 1);
         assert.strictEqual(result.output[1], 2);
@@ -96,7 +99,7 @@ describe("unittests:: evaluation:: forAwaitOfEvaluation", () => {
             for await (const item of iterator) {
                 output.push(item);
             }
-        }`, { target: ts.ScriptTarget.ES2015 });
+        }`, { target: ScriptTarget.ES2015 });
         await result.main();
         assert.strictEqual(result.output[0], 1);
         assert.instanceOf(result.output[1], Promise);

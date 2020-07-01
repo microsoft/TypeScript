@@ -1,5 +1,19 @@
 /* @internal */
-namespace ts.refactor {
+
+import { registerRefactor } from "../refactorProvider";
+import { RefactorContext, ApplicableRefactorInfo, RefactorActionInfo, RefactorEditInfo } from "../types";
+import { getRefactorContextSpan, getTokenAtPosition, getParentNodeInSpan, findTokenOnLeftOfPosition, isThis, ANONYMOUS, getUniqueName, suppressLeadingAndTrailingTrivia, getSynthesizedDeepClone, getRenameLocation, rangeContainsStartEnd } from "../utilities";
+import { neverArray, createMap, contains, first, arrayFrom, last, find, singleOrUndefined, firstOrUndefined, compareProperties, compareValues, compareStringsCaseSensitive, assertType, map } from "../../compiler/core";
+import { getLocaleSpecificMessage, createFileDiagnostic, createDiagnosticForNode, hasSyntacticModifier, getContainingFunction, positionIsSynthesized, isExpressionNode, getContainingClass, findAncestor, formatStringFromArgs, getEmitScriptTarget, isInJSFile, isDeclarationWithTypeParameters, isBlockScope, getEnclosingBlockScopeContainer, hasEffectiveModifier, isAssignmentExpression, isPartOfTypeNode } from "../../compiler/utilities";
+import { Diagnostic, DiagnosticMessage, DiagnosticCategory, Expression, Statement, FunctionLikeDeclaration, SourceFile, ModuleBlock, ClassLikeDeclaration, TextSpan, BlockLike, Node, SyntaxKind, ModifierFlags, NodeFlags, __String, TryStatement, LabeledStatement, BreakStatement, ContinueStatement, ExpressionStatement, Block, VariableDeclaration, TypeNode, ParameterDeclaration, Identifier, NodeBuilderFlags, TypeParameterDeclaration, MethodDeclaration, FunctionDeclaration, Modifier, BindingElement, TypeElement, TypeLiteralNode, EmitFlags, SignatureKind, Type, Declaration, VisitResult, ObjectLiteralElementLike, ClassElement, ShorthandPropertyAssignment, TextRange, TypeParameter, TypeChecker, CancellationToken, NamedDeclaration, TypeFlags, SymbolFlags, PropertyAccessExpression, EntityName } from "../../compiler/types";
+import { Debug } from "../../compiler/debug";
+import { textSpanEnd, isJSDoc, isReturnStatement, isVariableStatement, isVariableDeclaration, isIdentifier, isExpressionStatement, isStatement, isDeclaration, isClassLike, isFunctionLike, isArrowFunction, isSourceFile, isIterationStatement, isFunctionLikeDeclaration, isModuleBlock, isExpression, factory, setEmitFlags, isParenthesizedTypeNode, isUnionTypeNode, isJsxElement, isFunctionExpression, isVariableDeclarationList, isBlock, isConstructorDeclaration, isPropertyDeclaration, isCaseClause, isSwitchStatement, getEffectiveTypeParameterDeclarations, isUnaryExpressionWithWrite, isPropertyAccessExpression, isElementAccessExpression, isQualifiedName, isShorthandPropertyAssignment, isBinaryExpression } from "../../../built/local/compiler";
+import { forEachChild } from "../../compiler/parser";
+import { visitNodes, visitNode, visitEachChild } from "../../compiler/visitorPublic";
+import { getNodeId, getSymbolId } from "../../compiler/checker";
+import { nullTransformationContext } from "../../compiler/transformer";
+import { isArray } from "util";
+
     const refactorName = "Extract Symbol";
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
@@ -1953,4 +1967,4 @@ namespace ts.refactor {
                 return false;
         }
     }
-}
+

@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.codefix {
+
+import { FileTextChanges, CodeFixContext, CodeFixAllContext } from "../types";
+import { registerCodeFix, codeFixAll, createCodeFixAction } from "../codeFixProvider";
+import { find, some } from "../../compiler/core";
+import { TextSpan, ArrowFunction, FunctionDeclaration, FunctionExpression, MethodDeclaration, SourceFile, ModifierFlags, Diagnostic } from "../../compiler/types";
+import { getNodeId } from "../../compiler/checker";
+import { factory, textSpanEnd, isArrowFunction, isMethodDeclaration, isFunctionExpression, isFunctionDeclaration } from "../../../built/local/compiler";
+import { getSynthesizedDeepClone, getTokenAtPosition, textSpansEqual, createTextSpanFromNode } from "../utilities";
+import { getSyntacticModifierFlags, findAncestor } from "../../compiler/utilities";
+import { isNumber } from "util";
+
     type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
     const fixId = "addMissingAsync";
     const errorCodes = [
@@ -84,4 +94,4 @@ namespace ts.codefix {
             !!relatedInformation &&
             some(relatedInformation, related => related.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code);
     }
-}
+

@@ -1,5 +1,20 @@
 /*@internal*/
-namespace ts {
+
+import { CompilerOptions, DiagnosticCategory, DiagnosticMessageChain, Path, Diagnostic, SourceFile, Program, DiagnosticRelatedInformation, CancellationToken, EmitResult, CompilerOptionsValue, CommandLineOption, CompilerHost, ProjectReference, WriteFileCallback, CustomTransformers, SourceMapEmitResult } from "./types";
+import { ReusableBuilderState, BuilderState } from "./builderState";
+import { ReadonlyCollection, MapLike } from "./corePublic";
+import { forEachKey, outFile, compilerOptionsAffectSemanticDiagnostics, forEachEntry, compilerOptionsAffectEmit, skipTypeChecking, getEmitDeclarations } from "./utilities";
+import { GetCanonicalFileName, neverArray, forEach, tryAddToSet, concatenate, arrayFrom, compareStringsCaseSensitive, hasProperty, createGetCanonicalFileName, notImplemented, maybeBind, addRange, arrayToMap, map, noop, returnUndefined } from "./core";
+import { Debug } from "./debug";
+import { getDirectoryPath, getNormalizedAbsolutePath, toPath, ensurePathIsNonModuleName, getRelativePathFromDirectory } from "./path";
+import { getTsBuildInfoEmitOutputFilePath } from "./emitter";
+import { AffectedFileResult, BuilderProgramHost, BuilderProgram, SemanticDiagnosticsBuilderProgram, EmitAndSemanticDiagnosticsBuilderProgram } from "./builderPublic";
+import { filterSemanticDiagnotics, createProgram, emitSkippedWithNoDiagnostics, handleNoEmitOptions } from "./program";
+import { getOptionsNameMap, convertToOptionsWithAbsolutePaths } from "./commandLineParser";
+import { isArray, isString } from "util";
+import { generateDjb2Hash } from "./sys";
+import { ReadBuildProgramHost } from "./watchPublic";
+
     export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
@@ -1237,4 +1252,4 @@ namespace ts {
             return Debug.checkDefined(state.program);
         }
     }
-}
+

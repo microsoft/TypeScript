@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.refactor {
+
+import { registerRefactor } from "../refactorProvider";
+import { RefactorContext, ApplicableRefactorInfo, RefactorEditInfo, LanguageServiceHost } from "../types";
+import { isSourceFileJS, getLocaleSpecificMessage, getSourceFileOfNode, isExpressionWithTypeArgumentsInClassExtendsClause, getContainingFunctionDeclaration, findAncestor, isRestParameter, isVarConst, getTextOfIdentifierOrLiteral } from "../../compiler/utilities";
+import { neverArray, map, first, last, sortAndDeduplicate, compareValues, deduplicate, equateValues, flatMap, every, contains, tryCast } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { SourceFile, Program, CancellationToken, Node, CallExpression, NewExpression, SyntaxKind, ElementAccessExpression, PropertyAccessExpression, TypeChecker, FunctionLikeDeclaration, FunctionDeclaration, ClassDeclaration, NodeArray, ParameterDeclaration, Expression, PropertyAssignment, ShorthandPropertyAssignment, ObjectLiteralExpression, BindingElement, TypeLiteralNode, EmitFlags, PropertySignature, TypeNode, Identifier, Modifier, VariableDeclaration, ConstructorDeclaration, ClassExpression, FunctionBody, MethodDeclaration, FunctionExpression, ArrowFunction } from "../../compiler/types";
+import { getSynthesizedDeepClone, isNewExpressionTarget, getSymbolTarget, getMeaningFromLocation, SemanticMeaning, getTouchingToken, rangeContainsRange, findModifier, isThis, suppressLeadingAndTrailingTrivia, copyComments, getTypeNodeIfAccessible, findChildOfKind } from "../utilities";
+import { isConstructorDeclaration, isClassDeclaration, isImportSpecifier, isImportClause, isImportEqualsDeclaration, isNamespaceImport, isExportSpecifier, isExportAssignment, isDeclaration, isCallOrNewExpression, isPropertyAccessExpression, isElementAccessExpression, isJSDocNode, isFunctionLikeDeclaration, isIdentifier, isVariableDeclaration, factory, isPropertyAssignment, addEmitFlags } from "../../../built/local/compiler";
+
     const refactorName = "Convert parameters to destructured object";
     const minimumParameterLength = 2;
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
@@ -596,4 +605,4 @@ namespace ts.refactor {
         accessExpressions: Node[];
         typeUsages: Node[];
     }
-}
+

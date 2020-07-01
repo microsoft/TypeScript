@@ -1,4 +1,10 @@
-namespace ts {
+import { FormatDiagnosticsHost, formatDiagnostic } from "../../../compiler/program";
+import { createGetCanonicalFileName } from "../../../compiler/core";
+import { CompilerOptions, Diagnostic, ParseConfigHost, ModuleKind, ScriptTarget } from "../../../compiler/types";
+import { convertCompilerOptionsFromJson, parseJsonSourceFileConfigFileContent } from "../../../../built/local/compiler";
+import { assert } from "console";
+import { parseJsonText } from "../../../compiler/parser";
+
     describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
         const formatDiagnosticHost: FormatDiagnosticsHost = {
             getCurrentDirectory: () => "/apath/",
@@ -591,7 +597,7 @@ namespace ts {
       <%_ } _%>
     ]
   }
-}
+
 `,
             "tsconfig.json",
             {
@@ -604,4 +610,4 @@ namespace ts {
             });
         });
     });
-}
+

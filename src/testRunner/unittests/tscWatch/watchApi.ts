@@ -1,4 +1,12 @@
-namespace ts.tscWatch {
+import { File } from "../../../harness/vfsUtil";
+import { projectRoot, checkProgramActualFiles } from "./helpers";
+import { libFile, createWatchedSystem } from "../../../../built/local/harness";
+import { createWatchCompilerHostOfConfigFile } from "../../../compiler/watch";
+import { parseJsonConfigFileContent, resolveModuleName } from "../../../../built/local/compiler";
+import { createWatchProgram, WatchStatusReporter, createWatchCompilerHost } from "../../../compiler/watchPublic";
+import { assert } from "console";
+import { ScriptKind } from "../../../compiler/types";
+
     describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
         const configFileJson: any = {
             compilerOptions: { module: "commonjs", resolveJsonModule: true },
@@ -123,4 +131,4 @@ namespace ts.tscWatch {
             checkProgramActualFiles(watch.getProgram().getProgram(), [mainFile.path, otherFile.path, libFile.path]);
         });
     });
-}
+

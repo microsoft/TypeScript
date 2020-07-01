@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, codeFixAll, createCodeFixAction } from "../codeFixProvider";
+import { append, cast, firstDefined } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { SourceFile, PropertyDeclaration, SyntaxKind, Expression, TypeChecker, Type, TypeFlags, BigIntLiteralType, ModifierFlags } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { isIdentifier, isPropertyDeclaration, factory, isUnionTypeNode } from "../../../built/local/compiler";
+import { CodeFixContext, CodeFixAction } from "../types";
+import { getClassLikeDeclarationOfSymbol, hasSyntacticModifier, getFirstConstructorWithBody } from "../../compiler/utilities";
+
     const fixName = "strictClassInitialization";
     const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";
     const fixIdAddUndefinedType = "addMissingPropertyUndefinedType";
@@ -138,4 +147,4 @@ namespace ts.codefix {
         }
         return undefined;
     }
-}
+

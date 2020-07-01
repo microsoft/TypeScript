@@ -1,3 +1,6 @@
+import { ScriptTarget } from "../../../compiler/types";
+import { assert } from "console";
+
 describe("unittests:: evaluation:: forOfEvaluation", () => {
     it("es5 over a array with no Symbol", () => {
         const result = evaluator.evaluateTypeScript(`
@@ -10,7 +13,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
                     output.push(value);
                 }
             }
-        `, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
+        `, { downlevelIteration: true, target: ScriptTarget.ES5 });
 
         result.main();
 
@@ -31,7 +34,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
                     output.push(value);
                 }
             }
-        `, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
+        `, { downlevelIteration: true, target: ScriptTarget.ES5 });
 
         result.main();
 
@@ -51,7 +54,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
             for (let value of x) {
             }
         }
-        `, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
+        `, { downlevelIteration: true, target: ScriptTarget.ES5 });
 
         assert.throws(() => result.main(), "Symbol.iterator is not defined");
     });
@@ -64,7 +67,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
             for (let value of x) {
             }
         }
-        `, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
+        `, { downlevelIteration: true, target: ScriptTarget.ES5 });
 
         assert.throws(() => result.main(), /cannot read property.*Symbol\(Symbol\.iterator\).*/i);
     });
@@ -78,7 +81,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
             for (let value of x) {
             }
         }
-        `, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
+        `, { downlevelIteration: true, target: ScriptTarget.ES5 });
 
         assert.throws(() => result.main(), "Symbol.iterator is not defined");
     });
@@ -91,7 +94,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
             for (let value of x) {
             }
         }
-        `, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
+        `, { downlevelIteration: true, target: ScriptTarget.ES5 });
 
         assert.throws(() => result.main(), "Object is not iterable");
     });
@@ -111,7 +114,7 @@ describe("unittests:: evaluation:: forOfEvaluation", () => {
                     output.push(value)
                 }
 
-            }`, { downlevelIteration: true, target: ts.ScriptTarget.ES5 });
+            }`, { downlevelIteration: true, target: ScriptTarget.ES5 });
 
         result.main();
     });

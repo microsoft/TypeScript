@@ -1,4 +1,9 @@
-namespace Harness {
+import { RunnerBase, TestRunnerKind } from "../harness/runnerbase";
+import { Debug } from "../compiler/debug";
+import { IO } from "../harness/harnessIO";
+import { normalizeSlashes } from "../compiler/path";
+import { FourSlash } from "../harness/fourslashImpl";
+
     export class FourSlashRunner extends RunnerBase {
         protected basePath: string;
         protected testSuiteName: TestRunnerKind;
@@ -23,7 +28,7 @@ namespace Harness {
                     this.testSuiteName = "fourslash-server";
                     break;
                 default:
-                    throw ts.Debug.assertNever(testType);
+                    throw Debug.assertNever(testType);
             }
         }
 
@@ -45,7 +50,7 @@ namespace Harness {
                 this.tests.forEach(test => {
                     const file = typeof test === "string" ? test : test.file;
                     describe(file, () => {
-                        let fn = ts.normalizeSlashes(file);
+                        let fn = normalizeSlashes(file);
                         const justName = fn.replace(/^.*[\\\/]/, "");
 
                         // Convert to relative path
@@ -69,4 +74,4 @@ namespace Harness {
             this.basePath += "/generated/";
         }
     }
-}
+

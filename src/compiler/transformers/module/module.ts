@@ -1,5 +1,23 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, Expression, ParameterDeclaration, ModuleKind, SourceFile, SyntaxKind, Statement, TransformFlags, EmitFlags, ImportDeclaration, ExportDeclaration, ImportEqualsDeclaration, Node, VisitResult, ExportAssignment, VariableStatement, FunctionDeclaration, ClassDeclaration, MergeDeclarationMarker, EndOfDeclarationMarker, DestructuringAssignment, ImportCall, FunctionExpression, ArrowFunction, ScriptTarget, VariableDeclaration, NodeFlags, ModifierFlags, NodeArray, Modifier, InitializedVariableDeclaration, Identifier, TextRange, BindingElement, Declaration, EmitHint, ShorthandPropertyAssignment, ObjectLiteralElementLike, BinaryExpression, PrefixUnaryExpression, PostfixUnaryExpression, UnscopedEmitHelper, EmitHelper } from "../../types";
+import { getEmitScriptTarget, getEmitModuleKind, isEffectiveExternalModule, isJsonSourceFile, hasJsonModuleEmitEnabled, outFile, getStrictOptionValue, insertStatementsAfterStandardPrologue, isImportCall, isDestructuringAssignment, getEmitFlags, getNamespaceDeclarationNode, isDefaultImport, isExternalModuleImportEqualsDeclaration, hasSyntacticModifier, isAssignmentOperator, isDeclarationNameOfEnumOrNamespace } from "../../utilities";
+import { ExternalModuleInfo, chainBundle, collectExternalModuleInfo, getOriginalNodeId, isSimpleCopiableExpression, getExportNeedsImportStarHelper, getImportNeedsImportStarHelper, getImportNeedsImportDefaultHelper } from "../utilities";
+import { isExternalModule } from "../../parser";
+import { append, reduceLeft, addRange, neverArray, mapDefined, firstOrUndefined, singleOrMany } from "../../core";
+import { length } from "module";
+import { idText, isStatement, isGeneratedIdentifier, isModifier, isBindingPattern } from "../../utilitiesPublic";
+import { visitNode, visitNodes, visitEachChild } from "../../visitorPublic";
+import { setTextRange } from "../../factory/utilitiesPublic";
+import { addEmitHelpers, setEmitFlags, addEmitHelper } from "../../factory/emitNode";
+import { tryGetModuleNameFromFile, getExternalModuleNameLiteral, getLocalNameForExternalImport, isExportName, isLocalName, startOnNewLine, getExternalHelpersModuleName } from "../../factory/utilities";
+import { isImportEqualsDeclaration, isExportDeclaration, isObjectLiteralExpression, isArrayLiteralExpression, isSpreadElement, isIdentifier, isStringLiteral, isNamedExports, isOmittedExpression, isShorthandPropertyAssignment, isImportClause, isImportSpecifier } from "../../factory/nodeTests";
+import { Debug } from "../../debug";
+import { flattenDestructuringAssignment, FlattenLevel } from "../destructuring";
+import { importStarHelper, importDefaultHelper, createBindingHelper } from "../../factory/emitHelpers";
+import { setOriginalNode } from "../../factory/nodeFactory";
+import { getNodeId } from "../../checker";
+
     export function transformModule(context: TransformationContext) {
         interface AsynchronousDependencies {
             aliasedModuleNames: Expression[];
@@ -1882,4 +1900,4 @@ namespace ts {
         text: `
             var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
     };
-}
+

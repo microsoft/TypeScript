@@ -1,4 +1,7 @@
-namespace ts.tscWatch {
+import { File } from "../../../harness/vfsUtil";
+import { projectRoot, TscWatchCompileChange, verifyTscWatch, runQueuedTimeoutCallbacks } from "./helpers";
+import { createWatchedSystem, libFile } from "../../../../built/local/harness";
+
     describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         const loggerFile: File = {
             path: `${projectRoot}/logger.ts`,
@@ -47,4 +50,4 @@ namespace ts.tscWatch {
             ]
         });
     });
-}
+

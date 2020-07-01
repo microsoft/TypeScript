@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.OrganizeImports {
+
+import { SourceFile, Program, UserPreferences, ImportDeclaration, ExportDeclaration, TransformFlags, Identifier, Expression, NamespaceImport, ImportSpecifier, NamedImports, ExportSpecifier, NamedImportBindings, ImportOrExportSpecifier } from "../compiler/types";
+import { LanguageServiceHost } from "./types";
+import { isImportDeclaration, isExportDeclaration, isNamespaceImport, factory, isStringLiteral, isStringLiteralLike, isNamedExports, isExternalModuleNameRelative } from "../../built/local/compiler";
+import { isAmbientModule } from "../compiler/utilities";
+import { suppressLeadingTrivia, getNewLineOrDefaultFromHost } from "./utilities";
+import { stableSort, flatMap, some, neverArray, compareBooleans, compareStringsCaseInsensitive, length, group, isString } from "../compiler/core";
+import { textChanges } from "./textChanges";
+export namespace OrganizeImports {
 
     /**
      * Organize imports by:

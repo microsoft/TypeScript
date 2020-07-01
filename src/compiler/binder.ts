@@ -1,6 +1,17 @@
 
 /* @internal */
-namespace ts {
+
+import { __String, Symbol, FlowLabel, ModuleDeclaration, Node, SyntaxKind, EnumDeclaration, ModifierFlags, ExportDeclaration, Identifier, ExportSpecifier, FlowNode, SourceFile, CompilerOptions, ScriptTarget, JSDocTypedefTag, JSDocCallbackTag, JSDocEnumTag, NodeFlags, SymbolFlags, UnderscoreEscapedMap, FlowFlags, DiagnosticMessage, DiagnosticWithLocation, Declaration, ExportAssignment, InternalSymbolName, StringLiteral, PropertyAccessExpression, BinaryExpression, AssignmentDeclarationKind, JSDocFunctionType, ParameterDeclaration, SymbolTable, DiagnosticRelatedInformation, FunctionLikeDeclaration, FunctionExpression, ArrowFunction, MethodDeclaration, NodeArray, WhileStatement, DoStatement, ForStatement, ForInOrOfStatement, IfStatement, ReturnStatement, ThrowStatement, BreakOrContinueStatement, TryStatement, SwitchStatement, CaseBlock, CaseClause, ExpressionStatement, LabeledStatement, PrefixUnaryExpression, PostfixUnaryExpression, DeleteExpression, ConditionalExpression, VariableDeclaration, AccessExpression, CallExpression, NonNullExpression, Block, Expression, ParenthesizedExpression, TypeOfExpression, FlowReduceLabel, ArrayBindingElement, Statement, ArrayLiteralExpression, SpreadElement, ObjectLiteralExpression, ElementAccessExpression, JSDocClassTag, OptionalChain, NonNullChain, PropertyAccessChain, ElementAccessChain, CallChain, PropertyDeclaration, PatternAmbientModule, SignatureDeclaration, JSDocSignature, JsxAttributes, JsxAttribute, PrivateIdentifier, CatchClause, FunctionDeclaration, NumericLiteral, TokenFlags, WithStatement, TextRange, DiagnosticCategory, BindableStaticPropertyAssignmentExpression, BindablePropertyAssignmentExpression, TypeParameterDeclaration, BindingElement, PropertySignature, TypeLiteralNode, MappedTypeNode, JSDocTypeLiteral, BindableObjectDefinePropertyCall, ClassLikeDeclaration, NamespaceExportDeclaration, ImportClause, ModuleBlock, JSDocParameterTag, JSDocPropertyLikeTag, LiteralLikeElementAccessExpression, DynamicNamedDeclaration, EntityNameExpression, BindableStaticAccessExpression, BindableStaticNameExpression, BindableAccessExpression, ConditionalTypeNode, JSDoc } from "./types";
+import { setParent, setParentRecursive, isEnumConst, hasSyntacticModifier, createDiagnosticForNodeInSourceFile, getSourceFileOfNode, getEmitScriptTarget, createUnderscoreEscapedMap, objectAllocator, getStrictOptionValue, createSymbolTable, setValueDeclaration, isAmbientModule, getTextOfIdentifierOrLiteral, isGlobalScopeAugmentation, isStringOrNumericLiteralLike, isSignedNumericLiteral, isWellKnownSymbolSyntactically, getPropertyNameForKnownSymbolName, getContainingClass, getSymbolNameForPrivateIdentifier, isPropertyNameLiteral, getEscapedTextOfIdentifierOrLiteral, getAssignmentDeclarationKind, isJSDocConstructSignature, declarationNameToString, hasDynamicName, nodeIsMissing, addRelatedInfo, isJSDocTypeAlias, isInJSFile, Mutable, getImmediatelyInvokedFunctionExpression, nodeIsPresent, skipParentheses, isLogicalOrCoalescingAssignmentOperator, isDottedName, unusedLabelIsError, isAssignmentOperator, isAssignmentTarget, getHostSignatureFromJSDoc, isPushOrUnshiftIdentifier, isObjectLiteralOrClassExpressionMethod, isModuleAugmentationExternal, hasZeroOrOneAsteriskCharacter, tryParsePattern, getErrorSpanForNode, createFileDiagnostic, isExternalOrCommonJsModule, getJSDocHost, findAncestor, getEnclosingBlockScopeContainer, isPropertyAccessEntityNameExpression, getAssignmentDeclarationPropertyAccessKind, isIdentifierName, isInTopLevelContext, getSpanOfTokenAtPosition, getTokenPosOfNode, isPrologueDirective, getSourceTextOfNodeFromSourceFile, isSpecialPropertyDeclaration, isModuleExportsAccessExpression, isObjectLiteralMethod, isJsonSourceFile, removeFileExtension, exportAssignmentIsAlias, getRightMostAssignedExpression, isEmptyObjectLiteral, getThisContainer, isBindableStaticAccessExpression, isPrototypeAccess, isFunctionSymbol, isBindableStaticNameExpression, getAssignedExpandoInitializer, isBindableObjectDefinePropertyCall, getExpandoInitializer, getElementOrPropertyAccessName, getNameOrArgument, isRequireCall, isBlockOrCatchScoped, isParameterDeclaration, isAsyncFunction, unreachableCodeIsError, sliceAfter, isExportsIdentifier, isAssignmentExpression } from "./utilities";
+import { getNodeId } from "./checker";
+import { forEachChild, isExternalModule } from "./parser";
+import { Debug } from "./debug";
+import { isBlock, isModuleBlock, isSourceFile, isPrivateIdentifier, isExportSpecifier, isTypeAliasDeclaration, isPropertyAccessExpression, isNonNullExpression, isParenthesizedExpression, isElementAccessExpression, isTypeOfExpression, isBinaryExpression, isPrefixUnaryExpression, isOmittedExpression, isIdentifier, isExportDeclaration, isExportAssignment, isJSDocEnumTag, isVariableStatement, isNamespaceExport, isClassExpression, isCallExpression, isVariableDeclaration, isConditionalTypeNode, isJSDocTemplateTag, isFunctionDeclaration, isEnumDeclaration } from "./factory/nodeTests";
+import { nodeHasName, getNameOfDeclaration, escapeLeadingUnderscores, idText, isNamedDeclaration, unescapeLeadingUnderscores, getCombinedModifierFlags, isOptionalChain, isStringLiteralLike, isExpressionOfOptionalChainRoot, isNullishCoalesce, isOutermostOptionalChain, isBindingPattern, isForInOrOfStatement, isOptionalChainRoot, isFunctionLike, isLeftHandSideExpression, isDeclarationStatement, hasJSDocNodes, isExpression, isFunctionLikeDeclaration, symbolName, isParameterPropertyDeclaration, isStatementButNotDeclaration, getCombinedNodeFlags, isStatement } from "./utilitiesPublic";
+import { perfLogger } from "./perfLogger";
+import { appendIfUnique, forEach, contains, concatenate, tryCast, Pattern, append, cast, some, find, getRangesWhere, length } from "./core";
+import { tokenToString } from "./scanner";
+import { performance } from "perf_hooks";
     export const enum ModuleInstanceState {
         NonInstantiated = 0,
         Instantiated = 1,
@@ -217,7 +228,7 @@ namespace ts {
 
         let symbolCount = 0;
 
-        let Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
+        let SymbolConstructor: new (flags: SymbolFlags, name: __String) => Symbol;
         let classifiableNames: UnderscoreEscapedMap<true>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -240,7 +251,7 @@ namespace ts {
             classifiableNames = createUnderscoreEscapedMap<true>();
             symbolCount = 0;
 
-            Symbol = objectAllocator.getSymbolConstructor();
+            SymbolConstructor = objectAllocator.getSymbolConstructor();
 
             // Attach debugging information if necessary
             Debug.attachFlowNodeDebugInfo(unreachableFlow);
@@ -289,7 +300,7 @@ namespace ts {
 
         function createSymbol(flags: SymbolFlags, name: __String): Symbol {
             symbolCount++;
-            return new Symbol(flags, name);
+            return new SymbolConstructor(flags, name);
         }
 
         function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolFlags: SymbolFlags) {
@@ -3423,4 +3434,4 @@ namespace ts {
         }
         return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
     }
-}
+

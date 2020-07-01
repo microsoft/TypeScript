@@ -1,5 +1,16 @@
 /* @internal */
-namespace ts.refactor {
+
+import { registerRefactor } from "../refactorProvider";
+import { RefactorContext, ApplicableRefactorInfo, RefactorEditInfo } from "../types";
+import { neverArray, map, some, every, mapDefined } from "../../compiler/core";
+import { SyntaxKind, MethodSignature, MethodDeclaration, CallSignatureDeclaration, ConstructorDeclaration, ConstructSignatureDeclaration, FunctionDeclaration, NodeArray, ParameterDeclaration, TupleTypeNode, EmitFlags, NamedTupleMember, Node, SourceFile, Program } from "../../compiler/types";
+import { factory, isFunctionLikeDeclaration, setEmitFlags, getSyntheticLeadingComments, isIdentifier, setTextRange, setSyntheticLeadingComments } from "../../../built/local/compiler";
+import { Debug } from "../../compiler/debug";
+import { length } from "module";
+import { displayPartsToString } from "../services";
+import { getTokenAtPosition } from "../utilities";
+import { findAncestor, getSourceFileOfNode } from "../../compiler/utilities";
+
     const refactorName = "Convert overload list to single signature";
     const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
@@ -217,4 +228,4 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
 
         return signatureDecls;
     }
-}
+

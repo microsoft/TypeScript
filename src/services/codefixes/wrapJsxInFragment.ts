@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { JsxEmit, SourceFile, BinaryExpression, Node, JsxChild, SyntaxKind } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { isBinaryExpression, factory, isJsxChild } from "../../../built/local/compiler";
+import { nodeIsMissing } from "../../compiler/utilities";
+
     const fixID = "wrapJsxInFragment";
     const errorCodes = [Diagnostics.JSX_expressions_must_have_one_parent_element.code];
     registerCodeFix({
@@ -68,4 +74,4 @@ namespace ts.codefix {
             else return undefined;
         }
     }
-}
+

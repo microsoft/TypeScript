@@ -1,4 +1,10 @@
-namespace ts {
+import { ProjectReference, CompilerOptions, Diagnostic, DiagnosticMessage, Program } from "../../../compiler/types";
+import { assert } from "console";
+import { combinePaths, getDirectoryPath } from "../../../compiler/path";
+import { createMap } from "../../../compiler/core";
+import { readConfigFile, parseJsonConfigFileContent } from "../../../../built/local/compiler";
+import { flattenDiagnosticMessageText, parseConfigHostFromCompilerHostLike, createProgram } from "../../../compiler/program";
+
     interface TestProjectSpecification {
         configFileName?: string;
         references?: readonly (string | ProjectReference)[];
@@ -349,4 +355,4 @@ namespace ts {
             });
         });
     });
-}
+

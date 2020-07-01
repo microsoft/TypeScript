@@ -1,5 +1,16 @@
 /* @internal */
-namespace ts.refactor {
+
+import { registerRefactor } from "../refactorProvider";
+import { ApplicableRefactorInfo, RefactorEditInfo, RefactorContext, LanguageServiceHost } from "../types";
+import { neverArray, findIndex, getRangesWhere, GetCanonicalFileName, tryCast, find, last, contains, flatMap, append, some, createMap, firstDefined, cast, concatenate, mapDefined } from "../../compiler/core";
+import { getLocaleSpecificMessage, extensionFromPath, hostGetCanonicalFileName, hasSyntacticModifier, isRequireCall, skipAlias, removeFileExtension, isDeclarationName, forEachEntry, copyEntries, getAssignmentDeclarationKind } from "../../compiler/utilities";
+import { Debug } from "../../compiler/debug";
+import { Statement, SourceFile, Program, UserPreferences, Node, SyntaxKind, ModifierFlags, VariableStatement, PropertyAssignment, TypeChecker, Identifier, ScriptTarget, SymbolFlags, StringLiteralLike, ImportDeclaration, ImportEqualsDeclaration, ExternalModuleReference, VariableDeclaration, RequireOrImportCall, InternalSymbolName, BindingName, TypeNode, Expression, NodeFlags, CallExpression, TransformFlags, Declaration, NamedImportBindings, ExpressionStatement, BinaryExpression, PropertyAccessExpression, FunctionDeclaration, ClassDeclaration, EnumDeclaration, TypeAliasDeclaration, InterfaceDeclaration, ModuleDeclaration, VariableDeclarationList, BindingElement, AssignmentDeclarationKind, DeclarationStatement } from "../../compiler/types";
+import { createTextRangeFromSpan, getRefactorContextSpan, rangeContainsRange, getQuotePreference, insertImports, getPropertySymbolFromBindingElement, ObjectBindingElementWithoutPropertyName, getUniqueName, QuotePreference, symbolNameNoDefault, makeImportIfNecessary, nodeSeenTracker } from "../utilities";
+import { isNamedDeclaration, isObjectLiteralExpression, isPropertyAssignment, isStringLiteral, isArrayLiteralExpression, factory, isBindingElement, isIdentifier, isPropertyAccessExpression, isImportDeclaration, isImportEqualsDeclaration, isExternalModuleReference, isStringLiteralLike, isVariableStatement, isVariableDeclarationList, isExpressionStatement, isVariableDeclaration, isSourceFile, isBinaryExpression, isOmittedExpression, escapeLeadingUnderscores } from "../../../built/local/compiler";
+import { getDirectoryPath, combinePaths, normalizePath, getRelativePathFromFile, ensurePathIsNonModuleName, getBaseFileName } from "../../compiler/path";
+import { getSymbolId } from "../../compiler/checker";
+
     const refactorName = "Move to a new file";
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
@@ -803,4 +814,4 @@ namespace ts.refactor {
                 SyntaxKind.EqualsToken,
                 factory.createIdentifier(name)));
     }
-}
+

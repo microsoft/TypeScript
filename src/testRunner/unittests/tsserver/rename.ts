@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createSession, openFilesForSession, executeSessionRequest, protocol, protocolFileLocationFromSubstring, protocolRenameSpanFromSubstring, protocolTextSpanFromSubstring } from "./helpers";
+import { createServerHost } from "../../../../built/local/harness";
+import { assert } from "console";
+import { ScriptElementKind, ScriptElementKindModifier } from "../../../services/types";
+
     describe("unittests:: tsserver:: rename", () => {
         it("works with fileToRename", () => {
             const aTs: File = { path: "/a.ts", content: "export const a = 0;" };
@@ -272,4 +277,4 @@ namespace ts.projectSystem {
             });
         });
     });
-}
+

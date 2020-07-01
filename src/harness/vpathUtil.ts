@@ -1,28 +1,30 @@
-namespace vpath {
-    export import sep = ts.directorySeparator;
-    export import normalizeSeparators = ts.normalizeSlashes;
-    export import isAbsolute = ts.isRootedDiskPath;
-    export import isRoot = ts.isDiskPathRoot;
-    export import hasTrailingSeparator = ts.hasTrailingDirectorySeparator;
-    export import addTrailingSeparator = ts.ensureTrailingDirectorySeparator;
-    export import removeTrailingSeparator = ts.removeTrailingDirectorySeparator;
-    export import normalize = ts.normalizePath;
-    export import combine = ts.combinePaths;
-    export import parse = ts.getPathComponents;
-    export import reduce = ts.reducePathComponents;
-    export import format = ts.getPathFromPathComponents;
-    export import resolve = ts.resolvePath;
-    export import compare = ts.comparePaths;
-    export import compareCaseSensitive = ts.comparePathsCaseSensitive;
-    export import compareCaseInsensitive = ts.comparePathsCaseInsensitive;
-    export import dirname = ts.getDirectoryPath;
-    export import basename = ts.getBaseFileName;
-    export import extname = ts.getAnyExtensionFromPath;
-    export import relative = ts.getRelativePathFromDirectory;
-    export import beneath = ts.containsPath;
-    export import changeExtension = ts.changeAnyExtension;
-    export import isTypeScript = ts.hasTSFileExtension;
-    export import isJavaScript = ts.hasJSFileExtension;
+import { directorySeparator, normalizeSlashes, isRootedDiskPath, isDiskPathRoot, hasTrailingDirectorySeparator, ensureTrailingDirectorySeparator, removeTrailingDirectorySeparator, normalizePath, combinePaths, getPathComponents, reducePathComponents, getPathFromPathComponents, resolvePath, comparePaths, comparePathsCaseSensitive, comparePathsCaseInsensitive, getDirectoryPath, getBaseFileName, getAnyExtensionFromPath, getRelativePathFromDirectory, containsPath, changeAnyExtension } from "../compiler/path";
+import { hasTSFileExtension, hasJSFileExtension } from "../compiler/utilities";
+
+    export {directorySeparator as sep}  ;
+    export {normalizeSlashes as normalizeSeparators}  ;
+    export {isRootedDiskPath as isAbsolute}  ;
+    export {isDiskPathRoot as isRoot}  ;
+    export {hasTrailingDirectorySeparator as hasTrailingSeparator}  ;
+    export {ensureTrailingDirectorySeparator as addTrailingSeparator}  ;
+    export {removeTrailingDirectorySeparator as removeTrailingSeparator}  ;
+    export {normalizePath as normalize}  ;
+    export {combinePaths as combine}  ;
+    export {getPathComponents as parse}  ;
+    export {reducePathComponents as reduce}  ;
+    export {getPathFromPathComponents as format}  ;
+    export {resolvePath as resolve}  ;
+    export {comparePaths as compare}  ;
+    export {comparePathsCaseSensitive as compareCaseSensitive}  ;
+    export {comparePathsCaseInsensitive as compareCaseInsensitive}  ;
+    export {getDirectoryPath as dirname}  ;
+    export {getBaseFileName as basename}  ;
+    export {getAnyExtensionFromPath as extname}  ;
+    export {getRelativePathFromDirectory as relative}  ;
+    export {containsPath as beneath}  ;
+    export {changeAnyExtension as changeExtension}  ;
+    export {hasTSFileExtension as isTypeScript}  ;
+    export {hasJSFileExtension as isJavaScript}  ;
 
     const invalidRootComponentRegExp = /^(?!(\/|\/\/\w+\/|[a-zA-Z]:\/?|)$)/;
     const invalidNavigableComponentRegExp = /[:*?"<>|]/;
@@ -101,36 +103,36 @@ namespace vpath {
     }
 
     export function validate(path: string, flags: ValidationFlags = ValidationFlags.RelativeOrAbsolute) {
-        const components = parse(path);
-        const trailing = hasTrailingSeparator(path);
+        const components = getPathComponents(path);
+        const trailing = hasTrailingDirectorySeparator(path);
         if (!validateComponents(components, flags, trailing)) throw vfs.createIOError("ENOENT");
-        return components.length > 1 && trailing ? format(reduce(components)) + sep : format(reduce(components));
+        return components.length > 1 && trailing ? getPathFromPathComponents(reducePathComponents(components)) + directorySeparator : getPathFromPathComponents(reducePathComponents(components));
     }
 
     export function isDeclaration(path: string) {
-        return extname(path, ".d.ts", /*ignoreCase*/ false).length > 0;
+        return getAnyExtensionFromPath(path, ".d.ts", /*ignoreCase*/ false).length > 0;
     }
 
     export function isSourceMap(path: string) {
-        return extname(path, ".map", /*ignoreCase*/ false).length > 0;
+        return getAnyExtensionFromPath(path, ".map", /*ignoreCase*/ false).length > 0;
     }
 
     const javaScriptSourceMapExtensions: readonly string[] = [".js.map", ".jsx.map"];
 
     export function isJavaScriptSourceMap(path: string) {
-        return extname(path, javaScriptSourceMapExtensions, /*ignoreCase*/ false).length > 0;
+        return getAnyExtensionFromPath(path, javaScriptSourceMapExtensions, /*ignoreCase*/ false).length > 0;
     }
 
     export function isJson(path: string) {
-        return extname(path, ".json", /*ignoreCase*/ false).length > 0;
+        return getAnyExtensionFromPath(path, ".json", /*ignoreCase*/ false).length > 0;
     }
 
     export function isDefaultLibrary(path: string) {
         return isDeclaration(path)
-            && basename(path).startsWith("lib.");
+            && getBaseFileName(path).startsWith("lib.");
     }
 
     export function isTsConfigFile(path: string): boolean {
         return path.indexOf("tsconfig") !== -1 && path.indexOf("json") !== -1;
     }
-}
+

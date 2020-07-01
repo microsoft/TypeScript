@@ -1,4 +1,12 @@
-namespace project {
+import { SourceFile, ModuleKind, Program, CompilerOptions, Diagnostic, SourceMapEmitResult, CharacterCodes, CompilerHost, Extension, ModuleResolutionKind, NewLineKind } from "../compiler/types";
+import { normalizePath, combinePaths, getDirectoryPath, normalizeSlashes, getNormalizedAbsolutePath, isRootedDiskPath } from "../compiler/path";
+import { assert } from "console";
+import { findConfigFile, createProgram, getPreEmitDiagnostics } from "../compiler/program";
+import { readJsonConfigFile, parseJsonSourceFileConfigFileContent, optionDeclarations } from "../../built/local/compiler";
+import { concatenate, forEach, contains, arrayToMap } from "../compiler/core";
+import { removeFileExtension } from "../compiler/utilities";
+import { isString } from "util";
+
     // Test case is json of below type in tests/cases/project/
     interface ProjectRunnerTestCase {
         scenario: string;
@@ -18,12 +26,12 @@ namespace project {
     }
 
     interface CompileProjectFilesResult {
-        configFileSourceFiles: readonly ts.SourceFile[];
-        moduleKind: ts.ModuleKind;
-        program?: ts.Program;
-        compilerOptions?: ts.CompilerOptions;
-        errors: readonly ts.Diagnostic[];
-        sourceMapData?: readonly ts.SourceMapEmitResult[];
+        configFileSourceFiles: readonly SourceFile[];
+        moduleKind: ModuleKind;
+        program?: Program;
+        compilerOptions?: CompilerOptions;
+        errors: readonly Diagnostic[];
+        sourceMapData?: readonly SourceMapEmitResult[];
     }
 
     interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
@@ -70,10 +78,10 @@ namespace project {
     }
 
     class ProjectCompilerHost extends fakes.CompilerHost {
-        private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
+        private _testCase: ProjectRunnerTestCase & CompilerOptions;
         private _projectParseConfigHost: ProjectParseConfigHost | undefined;
 
-        constructor(sys: fakes.System | vfs.FileSystem, compilerOptions: ts.CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & ts.CompilerOptions, _moduleKind: ts.ModuleKind) {
+        constructor(sys: fakes.System | vfs.FileSystem, compilerOptions: CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & CompilerOptions, _moduleKind: ModuleKind) {
             super(sys, compilerOptions);
             this._testCase = testCase;
         }
@@ -82,15 +90,15 @@ namespace project {
             return this._projectParseConfigHost || (this._projectParseConfigHost = new ProjectParseConfigHost(this.sys, this._testCase));
         }
 
-        public getDefaultLibFileName(_options: ts.CompilerOptions) {
+        public getDefaultLibFileName(_options: CompilerOptions) {
             return vpath.resolve(this.getDefaultLibLocation(), "lib.es5.d.ts");
         }
     }
 
     class ProjectParseConfigHost extends fakes.ParseConfigHost {
-        private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
+        private _testCase: ProjectRunnerTestCase & CompilerOptions;
 
-        constructor(sys: fakes.System, testCase: ProjectRunnerTestCase & ts.CompilerOptions) {
+        constructor(sys: fakes.System, testCase: ProjectRunnerTestCase & CompilerOptions) {
             super(sys);
             this._testCase = testCase;
         }
@@ -112,16 +120,16 @@ namespace project {
     }
 
     interface ProjectTestPayload {
-        testCase: ProjectRunnerTestCase & ts.CompilerOptions;
-        moduleKind: ts.ModuleKind;
+        testCase: ProjectRunnerTestCase & CompilerOptions;
+        moduleKind: ModuleKind;
         vfs: vfs.FileSystem;
     }
 
     class ProjectTestCase {
-        private testCase: ProjectRunnerTestCase & ts.CompilerOptions;
+        private testCase: ProjectRunnerTestCase & CompilerOptions;
         private testCaseJustName: string;
         private sys: fakes.System;
-        private compilerOptions: ts.CompilerOptions;
+        private compilerOptions: CompilerOptions;
         private compilerResult: BatchCompileProjectTestCaseResult;
 
         constructor(testCaseFileName: string, { testCase, moduleKind, vfs }: ProjectTestPayload) {
@@ -134,20 +142,20 @@ namespace project {
             let inputFiles = testCase.inputFiles;
             if (this.compilerOptions.project) {
                 // Parse project
-                configFileName = ts.normalizePath(ts.combinePaths(this.compilerOptions.project, "tsconfig.json"));
+                configFileName = normalizePath(combinePaths(this.compilerOptions.project, "tsconfig.json"));
                 assert(!inputFiles || inputFiles.length === 0, "cannot specify input files and project option together");
             }
             else if (!inputFiles || inputFiles.length === 0) {
-                configFileName = ts.findConfigFile("", path => this.sys.fileExists(path));
+                configFileName = findConfigFile("", path => this.sys.fileExists(path));
             }
 
-            let errors: ts.Diagnostic[] | undefined;
-            const configFileSourceFiles: ts.SourceFile[] = [];
+            let errors: Diagnostic[] | undefined;
+            const configFileSourceFiles: SourceFile[] = [];
             if (configFileName) {
-                const result = ts.readJsonConfigFile(configFileName, path => this.sys.readFile(path));
+                const result = readJsonConfigFile(configFileName, path => this.sys.readFile(path));
                 configFileSourceFiles.push(result);
                 const configParseHost = new ProjectParseConfigHost(this.sys, this.testCase);
-                const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), this.compilerOptions);
+                const configParseResult = parseJsonSourceFileConfigFileContent(result, configParseHost, getDirectoryPath(configFileName), this.compilerOptions);
                 inputFiles = configParseResult.fileNames;
                 this.compilerOptions = configParseResult.options;
                 errors = [...result.parseDiagnostics, ...configParseResult.errors];
@@ -163,7 +171,7 @@ namespace project {
                 compilerOptions: this.compilerOptions,
                 sourceMapData: projectCompilerResult.sourceMapData,
                 outputFiles: compilerHost.outputs,
-                errors: errors ? ts.concatenate(errors, projectCompilerResult.errors) : projectCompilerResult.errors,
+                errors: errors ? concatenate(errors, projectCompilerResult.errors) : projectCompilerResult.errors,
             };
         }
 
@@ -172,7 +180,7 @@ namespace project {
         }
 
         public static getConfigurations(testCaseFileName: string): ProjectTestConfiguration[] {
-            let testCase: ProjectRunnerTestCase & ts.CompilerOptions;
+            let testCase: ProjectRunnerTestCase & CompilerOptions;
 
             let testFileText: string | undefined;
             try {
@@ -183,7 +191,7 @@ namespace project {
             }
 
             try {
-                testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText!);
+                testCase = <ProjectRunnerTestCase & CompilerOptions>JSON.parse(testFileText!);
             }
             catch (e) {
                 throw assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
@@ -196,15 +204,15 @@ namespace project {
             fs.makeReadonly();
 
             return [
-                { name: `@module: commonjs`, payload: { testCase, moduleKind: ts.ModuleKind.CommonJS, vfs: fs } },
-                { name: `@module: amd`, payload: { testCase, moduleKind: ts.ModuleKind.AMD, vfs: fs } }
+                { name: `@module: commonjs`, payload: { testCase, moduleKind: ModuleKind.CommonJS, vfs: fs } },
+                { name: `@module: amd`, payload: { testCase, moduleKind: ModuleKind.AMD, vfs: fs } }
             ];
         }
 
         public verifyResolution() {
             const cwd = this.vfs.cwd();
             const ignoreCase = this.vfs.ignoreCase;
-            const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & ts.CompilerOptions = JSON.parse(JSON.stringify(this.testCase));
+            const resolutionInfo: ProjectRunnerTestCaseResolutionInfo & CompilerOptions = JSON.parse(JSON.stringify(this.testCase));
             resolutionInfo.resolvedInputFiles = this.compilerResult.program!.getSourceFiles()
                 .map(({ fileName: input }) =>
                     vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? Utils.removeTestPathPrefixes(input) :
@@ -265,7 +273,7 @@ namespace project {
             // if (compilerResult.sourceMapData) {
             //     Harness.Baseline.runBaseline(getBaselineFolder(compilerResult.moduleKind) + testCaseJustName + ".sourcemap.txt", () => {
             //         return Harness.SourceMapRecorder.getSourceMapRecord(compilerResult.sourceMapData, compilerResult.program,
-            //             ts.filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
+            //             filter(compilerResult.outputFiles, outputFile => Harness.Compiler.isJS(outputFile.emittedFileName)));
             //     });
             // }
         }
@@ -280,14 +288,14 @@ namespace project {
         }
 
         // Project baselines verified go in project/testCaseName/moduleKind/
-        private getBaselineFolder(moduleKind: ts.ModuleKind) {
+        private getBaselineFolder(moduleKind: ModuleKind) {
             return "project/" + this.testCaseJustName + "/" + moduleNameToString(moduleKind) + "/";
         }
 
         private cleanProjectUrl(url: string) {
-            let diskProjectPath = ts.normalizeSlashes(Harness.IO.resolvePath(this.testCase.projectRoot)!);
+            let diskProjectPath = normalizeSlashes(Harness.IO.resolvePath(this.testCase.projectRoot)!);
             let projectRootUrl = "file:///" + diskProjectPath;
-            const normalizedProjectRoot = ts.normalizeSlashes(this.testCase.projectRoot);
+            const normalizedProjectRoot = normalizeSlashes(this.testCase.projectRoot);
             diskProjectPath = diskProjectPath.substr(0, diskProjectPath.lastIndexOf(normalizedProjectRoot));
             projectRootUrl = projectRootUrl.substr(0, projectRootUrl.lastIndexOf(normalizedProjectRoot));
             if (url && url.length) {
@@ -298,7 +306,7 @@ namespace project {
                 else if (url.indexOf(diskProjectPath) === 0) {
                     // Replace the disk specific path into the project root path
                     url = url.substr(diskProjectPath.length);
-                    if (url.charCodeAt(0) !== ts.CharacterCodes.slash) {
+                    if (url.charCodeAt(0) !== CharacterCodes.slash) {
                         url = "/" + url;
                     }
                 }
@@ -307,13 +315,13 @@ namespace project {
             return url;
         }
 
-        private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[],
+        private compileProjectFiles(moduleKind: ModuleKind, configFileSourceFiles: readonly SourceFile[],
             getInputFiles: () => readonly string[],
-            compilerHost: ts.CompilerHost,
-            compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
+            compilerHost: CompilerHost,
+            compilerOptions: CompilerOptions): CompileProjectFilesResult {
 
-            const program = ts.createProgram(getInputFiles(), compilerOptions, compilerHost);
-            const errors = ts.getPreEmitDiagnostics(program);
+            const program = createProgram(getInputFiles(), compilerOptions, compilerHost);
+            const errors = getPreEmitDiagnostics(program);
 
             const { sourceMaps: sourceMapData, diagnostics: emitDiagnostics } = program.emit();
 
@@ -332,7 +340,7 @@ namespace project {
                 configFileSourceFiles,
                 moduleKind,
                 program,
-                errors: ts.concatenate(errors, emitDiagnostics),
+                errors: concatenate(errors, emitDiagnostics),
                 sourceMapData
             };
         }
@@ -345,7 +353,7 @@ namespace project {
             const compilerOptions = compilerResult.program.getCompilerOptions();
             const allInputFiles: documents.TextDocument[] = [];
             const rootFiles: string[] = [];
-            ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
+            forEach(compilerResult.program.getSourceFiles(), sourceFile => {
                 if (sourceFile.isDeclarationFile) {
                     if (!vpath.isDefaultLibrary(sourceFile.fileName)) {
                         allInputFiles.unshift(new documents.TextDocument(sourceFile.fileName, sourceFile.text));
@@ -355,15 +363,15 @@ namespace project {
                 else if (!(compilerOptions.outFile || compilerOptions.out)) {
                     let emitOutputFilePathWithoutExtension: string | undefined;
                     if (compilerOptions.outDir) {
-                        let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program!.getCurrentDirectory());
+                        let sourceFilePath = getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program!.getCurrentDirectory());
                         sourceFilePath = sourceFilePath.replace(compilerResult.program!.getCommonSourceDirectory(), "");
-                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(ts.combinePaths(compilerOptions.outDir, sourceFilePath));
+                        emitOutputFilePathWithoutExtension = removeFileExtension(combinePaths(compilerOptions.outDir, sourceFilePath));
                     }
                     else {
-                        emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName);
+                        emitOutputFilePathWithoutExtension = removeFileExtension(sourceFile.fileName);
                     }
 
-                    const outputDtsFileName = emitOutputFilePathWithoutExtension + ts.Extension.Dts;
+                    const outputDtsFileName = emitOutputFilePathWithoutExtension + Extension.Dts;
                     const file = findOutputDtsFile(outputDtsFileName);
                     if (file) {
                         allInputFiles.unshift(file);
@@ -371,9 +379,9 @@ namespace project {
                     }
                 }
                 else {
-                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out!) + ts.Extension.Dts;
+                    const outputDtsFileName = removeFileExtension(compilerOptions.outFile || compilerOptions.out!) + Extension.Dts;
                     const outputDtsFile = findOutputDtsFile(outputDtsFileName)!;
-                    if (!ts.contains(allInputFiles, outputDtsFile)) {
+                    if (!contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);
                         rootFiles.unshift(outputDtsFile.meta.get("fileName") || outputDtsFile.file);
                     }
@@ -390,14 +398,14 @@ namespace project {
             return this.compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, () => rootFiles, compilerHost, compilerResult.compilerOptions!);
 
             function findOutputDtsFile(fileName: string) {
-                return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.meta.get("fileName") === fileName ? outputFile : undefined);
+                return forEach(compilerResult.outputFiles, outputFile => outputFile.meta.get("fileName") === fileName ? outputFile : undefined);
             }
         }
     }
 
-    function moduleNameToString(moduleKind: ts.ModuleKind) {
-        return moduleKind === ts.ModuleKind.AMD ? "amd" :
-            moduleKind === ts.ModuleKind.CommonJS ? "node" : "none";
+    function moduleNameToString(moduleKind: ModuleKind) {
+        return moduleKind === ModuleKind.AMD ? "amd" :
+            moduleKind === ModuleKind.CommonJS ? "node" : "none";
     }
 
     function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
@@ -411,7 +419,7 @@ namespace project {
         }
 
         const inputFiles = inputSourceFiles.map<Harness.Compiler.TestFile>(sourceFile => ({
-            unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
+            unitName: isRootedDiskPath(sourceFile.fileName) ?
                 Harness.RunnerBase.removeFullPaths(sourceFile.fileName) :
                 sourceFile.fileName,
             content: sourceFile.text
@@ -420,14 +428,14 @@ namespace project {
         return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
     }
 
-    function createCompilerOptions(testCase: ProjectRunnerTestCase & ts.CompilerOptions, moduleKind: ts.ModuleKind) {
+    function createCompilerOptions(testCase: ProjectRunnerTestCase & CompilerOptions, moduleKind: ModuleKind) {
         // Set the special options that depend on other testcase options
-        const compilerOptions: ts.CompilerOptions = {
+        const compilerOptions: CompilerOptions = {
             noErrorTruncation: false,
             skipDefaultLibCheck: false,
-            moduleResolution: ts.ModuleResolutionKind.Classic,
+            moduleResolution: ModuleResolutionKind.Classic,
             module: moduleKind,
-            newLine: ts.NewLineKind.CarriageReturnLineFeed,
+            newLine: NewLineKind.CarriageReturnLineFeed,
             mapRoot: testCase.resolveMapRoot && testCase.mapRoot
                 ? vpath.resolve(vfs.srcFolder, testCase.mapRoot)
                 : testCase.mapRoot,
@@ -438,14 +446,14 @@ namespace project {
         };
 
         // Set the values specified using json
-        const optionNameMap = ts.arrayToMap(ts.optionDeclarations, option => option.name);
+        const optionNameMap = arrayToMap(optionDeclarations, option => option.name);
         for (const name in testCase) {
             if (name !== "mapRoot" && name !== "sourceRoot") {
                 const option = optionNameMap.get(name);
                 if (option) {
                     const optType = option.type;
                     let value = <any>testCase[name];
-                    if (!ts.isString(optType)) {
+                    if (!isString(optType)) {
                         const key = value.toLowerCase();
                         const optTypeValue = optType.get(key);
                         if (optTypeValue) {
@@ -459,4 +467,4 @@ namespace project {
 
         return compilerOptions;
     }
-}
+

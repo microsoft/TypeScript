@@ -1,15 +1,21 @@
-namespace evaluator {
+import { CompilerOptions, ScriptTarget, ModuleKind } from "../compiler/types";
+import { hasProperty, some } from "../compiler/core";
+import { formatDiagnostics } from "../compiler/program";
+import { fakes } from "./fakesHosts";
+import { compiler } from "./compilerImpl";
+import { assert } from "chai";
+export namespace evaluator {
     declare let Symbol: SymbolConstructor;
 
     const sourceFile = vpath.combine(vfs.srcFolder, "source.ts");
     const sourceFileJs = vpath.combine(vfs.srcFolder, "source.js");
 
-    function compile(sourceText: string, options?: ts.CompilerOptions) {
+    function compile(sourceText: string, options?: CompilerOptions) {
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
         fs.writeFileSync(sourceFile, sourceText);
-        const compilerOptions: ts.CompilerOptions = {
-            target: ts.ScriptTarget.ES5,
-            module: ts.ModuleKind.CommonJS,
+        const compilerOptions: CompilerOptions = {
+            target: ScriptTarget.ES5,
+            module: ModuleKind.CommonJS,
             lib: ["lib.esnext.d.ts", "lib.dom.d.ts"],
             ...options
         };
@@ -30,12 +36,12 @@ namespace evaluator {
     }
 
     // Add "asyncIterator" if missing
-    if (!ts.hasProperty(FakeSymbol, "asyncIterator")) Object.defineProperty(FakeSymbol, "asyncIterator", { value: Symbol.for("Symbol.asyncIterator"), configurable: true });
+    if (!hasProperty(FakeSymbol, "asyncIterator")) Object.defineProperty(FakeSymbol, "asyncIterator", { value: Symbol.for("Symbol.asyncIterator"), configurable: true });
 
-    export function evaluateTypeScript(sourceText: string, options?: ts.CompilerOptions, globals?: Record<string, any>) {
+    export function evaluateTypeScript(sourceText: string, options?: CompilerOptions, globals?: Record<string, any>) {
         const result = compile(sourceText, options);
-        if (ts.some(result.diagnostics)) {
-            assert.ok(/*value*/ false, "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
+        if (some(result.diagnostics)) {
+            assert.ok(/*value*/ false, "Syntax error in evaluation source text:\n" + formatDiagnostics(result.diagnostics, {
                 getCanonicalFileName: file => file,
                 getCurrentDirectory: () => "",
                 getNewLine: () => "\n"
@@ -54,7 +60,7 @@ namespace evaluator {
         const globalNames: string[] = [];
         const globalArgs: any[] = [];
         for (const name in globals) {
-            if (ts.hasProperty(globals, name)) {
+            if (hasProperty(globals, name)) {
                 globalNames.push(name);
                 globalArgs.push(globals[name]);
             }

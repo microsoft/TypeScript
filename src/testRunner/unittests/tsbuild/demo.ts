@@ -1,4 +1,6 @@
-namespace ts {
+import { loadProjectFromDisk, replaceText, prependText } from "./helpers";
+import { verifyTsc } from "../tsc/helpers";
+
     describe("unittests:: tsbuild:: on demo project", () => {
         let projFs: vfs.FileSystem;
         before(() => {
@@ -46,4 +48,4 @@ namespace ts {
             )
         });
     });
-}
+

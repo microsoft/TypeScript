@@ -1,4 +1,13 @@
-namespace ts {
+import { IScriptSnapshot, ScriptSnapshot } from "../../services/types";
+import { TextChangeRange, ScriptTarget, SourceFile, Node } from "../../compiler/types";
+import { getSnapshotText } from "../../services/utilities";
+import { createTextChangeRange, createTextSpan } from "../../../built/local/compiler";
+import { createLanguageServiceSourceFile, updateLanguageServiceSourceFile } from "../../services/services";
+import { assert } from "console";
+import { filter, contains } from "../../compiler/core";
+import { forEachChild } from "../../compiler/parser";
+import { bindSourceFile } from "../../compiler/binder";
+
     function withChange(text: IScriptSnapshot, start: number, length: number, newText: string): { text: IScriptSnapshot; textChangeRange: TextChangeRange; } {
         const contents = getSnapshotText(text);
         const newContents = contents.substr(0, start) + newText + contents.substring(start + length);
@@ -990,4 +999,4 @@ module m3 { }\
             });
         }
     });
-}
+

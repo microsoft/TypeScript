@@ -1,4 +1,6 @@
-namespace ts {
+import { TranspileOptions, TranspileOutput, transpileModule, transpile } from "../../../services/transpile";
+import { Diagnostic, ScriptTarget, NewLineKind, Extension, ModuleKind, JsxEmit, ModuleResolutionKind } from "../../../compiler/types";
+
     describe("unittests:: services:: Transpile", () => {
 
         interface TranspileTestSettings {
@@ -486,4 +488,4 @@ export * as alias from './file';`, {
             noSetFileName: true
         });
     });
-}
+

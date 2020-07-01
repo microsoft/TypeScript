@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts {
+
+import { createMap, addRange, some } from "../compiler/core";
+import { SourceFile, Program, CancellationToken, DiagnosticWithLocation, Node, NodeFlags, SyntaxKind, VariableStatement, ExpressionStatement, AssignmentDeclarationKind, Expression, AnyValidImportOrReExport, Identifier, FunctionLikeDeclaration, TypeChecker, SignatureKind, Block, ReturnStatement, CallExpression } from "../compiler/types";
+import { programContainsEs6Modules, compilerOptionsIndicateEs6Modules, hasPropertyAccessExpressionWithName } from "./utilities";
+import { createDiagnosticForNode, isSourceFileJS, getAllowSyntheticDefaultImports, importFromModuleSpecifier, getResolvedModule, isRequireCall, getAssignmentDeclarationKind, isAsyncFunction, forEachReturnStatement, getDeclarationOfExpando } from "../compiler/utilities";
+import { isExportAssignment, isVariableDeclaration, isVariableStatement, isFunctionLikeDeclaration, isBinaryExpression, isPropertyAccessExpression, isStringLiteral, isIdentifier, isBlock, isReturnStatement, isCallExpression } from "../../built/local/compiler";
+import { Push } from "../compiler/corePublic";
+
     const visitedNestedConvertibleFunctions = createMap<true>();
 
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
@@ -207,4 +214,4 @@ namespace ts {
 
         return false;
     }
-}
+

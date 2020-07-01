@@ -1,4 +1,6 @@
-namespace ts {
+import { loadProjectFromDisk } from "./helpers";
+import { verifyTsc } from "../tsc/helpers";
+
     describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
         let projFs: vfs.FileSystem;
         before(() => {
@@ -44,4 +46,4 @@ export const b = new A();`);
             modifyFs: fs => modifyFsBTsToNonRelativeImport(fs, "node"),
         });
     });
-}
+

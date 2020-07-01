@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { AnyFunction, noop } from "../../../compiler/core";
+import { createServerHost } from "../../../../built/local/harness";
+import { assert } from "console";
+import { createSession, TestServerCancellationToken, protocol } from "./helpers";
+import { OperationCanceledException } from "../../../compiler/types";
+
     describe("unittests:: tsserver:: cancellationToken", () => {
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
         let oldPrepare: AnyFunction;
@@ -271,4 +276,4 @@ namespace ts.projectSystem {
             }
         });
     });
-}
+

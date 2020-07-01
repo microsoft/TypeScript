@@ -1,4 +1,30 @@
-namespace ts {
+import { forEachAncestorDirectory, combinePaths, getDirectoryPath, isRootedDiskPath, normalizePath, getNormalizedPathComponents, getPathFromPathComponents, fileExtensionIs, convertToRelativePath, containsPath, getBaseFileName, toPath, getNormalizedAbsolutePath, normalizeSlashes, directorySeparator, hasExtension, getNormalizedAbsolutePathWithoutRoot, getRootLength, fileExtensionIsOneOf, comparePaths, ensureTrailingDirectorySeparator } from "./path";
+import { GetCanonicalFileName, forEach, createMap, createGetCanonicalFileName, memoize, maybeBind, addRange, neverArray, padLeft, arrayIsEqualTo, contains, MultiMap, returnFalse, clone, createMultiMap, arrayFrom, mapDefinedIterator, stableSort, compareValues, removeSuffix, removePrefix, filter, zipToMap, map, toFileNameLowerCase, equateStringsCaseSensitive, equateStringsCaseInsensitive, some, flatMap, flatten, concatenate, noop, append, find, stringContains, getSpellingSuggestion, identity, mapDefined, hasProperty, elementAt, firstDefined, startsWith, firstDefinedIterator, returnUndefined } from "./core";
+import { CompilerOptions, CompilerHost, ScriptTarget, SourceFile, WriteFileCallback, Path, Extension, Program, CancellationToken, Diagnostic, diagnosticCategoryName, DiagnosticCategory, DiagnosticMessageChain, ResolvedProjectReference, TextRange, RefFileKind, HasInvalidatedResolution, HasChangedAutomaticTypeDirectiveNames, ProjectReference, ParsedCommandLine, CreateProgramOptions, TypeChecker, UnderscoreEscapedMap, RefFile, DiagnosticWithLocation, ResolvedTypeReferenceDirective, ObjectLiteralExpression, ResolvedModuleFull, SourceOfProjectReferenceRedirect, StructureIsReused, ModuleKind, ResolvedModuleWithFailedLookupLocations, NodeFlags, EmitHost, EmitResult, CustomTransformers, OperationCanceledException, ScriptKind, CommentDirective, CommentDirectivesMap, Node, SyntaxKind, ParameterDeclaration, PropertyDeclaration, MethodDeclaration, FunctionLikeDeclaration, VariableDeclaration, ImportClause, ExportDeclaration, ExportAssignment, HeritageClause, AsExpression, NodeArray, DeclarationWithTypeParameterChildren, Modifier, NodeWithTypeArguments, DiagnosticMessage, FileReference, StringLiteralLike, Identifier, StringLiteral, EmitFlags, Statement, ModifierFlags, ModuleBlock, ModuleDeclaration, UnparsedSource, PackageId, JsonSourceFile, ModuleResolutionKind, PropertyAssignment, InputFiles, ResolvedConfigFileName } from "./types";
+import { sys, missingFileModifiedTime } from "./sys";
+import { performance } from "perf_hooks";
+import { createSourceFile, isDeclarationFileName, forEachChildRecursively, isExternalModule, forEachChild, parseIsolatedEntityName } from "./parser";
+import { writeFileEnsuringDirectories, isWatchSet, getNewLineCharacter, getEmitDeclarations, compareDataObjects, projectReferenceIsEqualTo, isJsonEqual, getCompilerOptionValue, createDiagnosticCollection, getSupportedExtensions, getSuppoertedExtensionsWithJsonIfResolveJsonModule, extensionFromPath, outFile, getEmitModuleKind, changeExtension, sourceFileMayBeEmitted, createUnderscoreEscapedMap, copyEntries, getResolvedModule, changesAffectModuleResolution, hasChangesInResolutions, moduleResolutionIsEqualTo, typeDirectiveIsEqualTo, skipTypeChecking, isSourceFileJS, isCheckJsEnabledForFile, createDiagnosticForRange, createCommentDirectivesMap, createFileDiagnostic, createDiagnosticForNodeInSourceFile, externalHelpersModuleNameText, setParent, isAnyImportOrReExport, getExternalModuleName, isAmbientModule, hasSyntacticModifier, getTextOfIdentifierOrLiteral, isRequireCall, isImportCall, isLiteralImportTypeNode, hasJSFileExtension, packageIdToString, setResolvedTypeReferenceDirective, createCompilerDiagnostic, setResolvedModule, resolutionExtensionIsTSOrJson, isInJSFile, getStrictOptionValue, isIncrementalCompilation, hasZeroOrOneAsteriskCharacter, getErrorSpanForNode, getEmitModuleResolutionKind, hasJsonModuleEmitEnabled, chainDiagnosticMessages, createCompilerDiagnosticFromMessageChain, getPropertyAssignment, getTsConfigPropArray, getTsConfigObjectLiteralExpression, removeFileExtension, supportedJSExtensions, discoverProbableSymlinks, forEachKey } from "./utilities";
+import { getDefaultLibFileName, sortAndDeduplicateDiagnostics, isExternalModuleNameRelative, isStringLiteralLike, hasJSDocNodes } from "./utilitiesPublic";
+import { isBuildInfoFile, getOutputDeclarationFileName, emitFiles, notImplementedResolver, forEachEmittedFile, getTsBuildInfoEmitOutputFilePath, getOutputPathsForBundle } from "./emitter";
+import { BuilderProgram } from "./builderPublic";
+import { getLineAndCharacterOfPosition, getPositionOfLineAndCharacter, getLineStarts, computeLineAndCharacterOfPosition, tokenToString, skipTrivia, isIdentifierText } from "./scanner";
+import { Debug } from "./debug";
+import { isString, isArray } from "util";
+import { sourceFileAffectingCompilerOptions, libs, libMap, parseJsonSourceFileConfigFileContent, DiagnosticReporter, ParseConfigFileHost } from "./commandLineParser";
+import { ModuleResolutionCache, createModuleResolutionCache, resolveModuleName, resolveTypeReferenceDirective, getAutomaticTypeDirectiveNames, resolveModuleNameFromCache, isTraceEnabled, nodeModulesPathPart } from "./moduleNameResolver";
+import { trace } from "console";
+import { noTransformers, getTransformers } from "./transformer";
+import { createTypeChecker } from "./checker";
+import { getDeclarationDiagnostics } from "./transformers/declarations";
+import { SortedReadonlyArray, Comparison } from "./corePublic";
+import { factory, createInputFiles } from "./factory/nodeFactory";
+import { addEmitFlags } from "./factory/emitNode";
+import { isStringLiteral, isModuleDeclaration, isObjectLiteralExpression, isArrayLiteralExpression } from "./factory/nodeTests";
+import { ProgramToEmitFilesAndReportErrors } from "./watch";
+import { DirectoryStructureHost } from "./watchUtilities";
+import { resolveConfigFileProjectName } from "./tsbuild";
+
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
         return forEachAncestorDirectory(searchPath, ancestor => {
             const fileName = combinePaths(ancestor, configName);
@@ -3794,4 +3820,4 @@ namespace ts {
         }
         return res;
     }
-}
+

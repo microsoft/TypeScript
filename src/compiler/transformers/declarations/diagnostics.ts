@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts {
+
     export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => (SymbolAccessibilityDiagnostic | undefined);
 
     export interface SymbolAccessibilityDiagnostic {
@@ -481,4 +481,4 @@ namespace ts {
             };
         }
     }
-}
+

@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.codefix {
+
+import { FileTextChanges, CodeFixContext, CodeFixAllContext } from "../types";
+import { registerCodeFix, codeFixAll, createCodeFixActionWithoutFixAll, createCodeFixAction } from "../codeFixProvider";
+import { compact, forEach, some, tryCast, find, contains, tryAddToSet } from "../../compiler/core";
+import { Expression, TypeChecker, SourceFile, TextSpan, CancellationToken, Program, Node, SyntaxKind, ModifierFlags, Identifier, Diagnostic, TypeFlags, NodeFlags } from "../../compiler/types";
+import { isNumber } from "util";
+import { textSpansEqual, getTokenAtPosition, createTextSpanFromNode, findPrecedingToken, positionIsASICandidate } from "../utilities";
+import { findAncestor, getAncestor, hasSyntacticModifier } from "../../compiler/utilities";
+import { textSpanEnd, isExpression, isVariableDeclaration, isIdentifier, isPropertyAccessExpression, isBinaryExpression, isArrowFunction, isBlock, factory, isCallOrNewExpression } from "../../../built/local/compiler";
+import { getSymbolId } from "../../compiler/checker";
+
     type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
     const fixId = "addMissingAwait";
     const propertyAccessCode = Diagnostics.Property_0_does_not_exist_on_type_1.code;
@@ -288,4 +298,4 @@ namespace ts.codefix {
             changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");
         }
     }
-}
+

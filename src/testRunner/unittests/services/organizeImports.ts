@@ -1,4 +1,12 @@
-namespace ts {
+import { assert } from "console";
+import { Comparison } from "../../../compiler/corePublic";
+import { testFormatSettings, emptyOptions } from "../../../services/types";
+import { newLineCharacter } from "./extract/helpers";
+import { JsxEmit, ImportDeclaration, ScriptTarget, ScriptKind, ExportDeclaration, Node, SyntaxKind, ImportClause, NamespaceImport, NamedImports, ImportSpecifier, NamedExports, ExportSpecifier, Identifier, LiteralLikeNode } from "../../../compiler/types";
+import { createSourceFile } from "../../../compiler/parser";
+import { filter } from "../../../compiler/core";
+import { isImportDeclaration, isExportDeclaration } from "../../../../built/local/compiler";
+
     describe("unittests:: services:: organizeImports", () => {
         describe("Sort imports", () => {
             it("Sort - non-relative vs non-relative", () => {
@@ -618,7 +626,7 @@ declare module "mod" {
     import { F2 } from "lib";
 
     function F(f1: {} = F1, f2: {} = F2) {}
-}
+
 `,
                 },
                 libFile);
@@ -635,7 +643,7 @@ declare module "mod" {
     import { F2 } from "lib";
 
     function F(f1: {} = F1, f2: {} = F2) {}
-}
+
 
 import E from "lib";
 import "lib";
@@ -752,7 +760,7 @@ export function Global(props: any): ReactElement<any>;`
 export namespace React {
     interface FunctionComponent {
     }
-}
+
 `
                 }
             );
@@ -877,7 +885,7 @@ declare module "mod" {
     export { F1 } from "lib";
     export * from "lib";
     export { F2 } from "lib";
-}
+
     `,
                     },
                     libFile);
@@ -892,7 +900,7 @@ declare module "mod" {
     export { F1 } from "lib";
     export * from "lib";
     export { F2 } from "lib";
-}
+
 
 export { E } from "lib";
 export * from "lib";
@@ -1036,4 +1044,4 @@ export * from "lib";
             }
         }
     });
-}
+

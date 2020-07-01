@@ -1,4 +1,29 @@
-namespace ts.server {
+import { Project, ConfiguredProject, isConfiguredProject, InferredProject, ProjectKind, isInferredProject, ExternalProject, countEachFileTypes, AutoImportProviderProject, ProjectFilesWithTSDiagnostics, hasNoTypeScriptSource } from "./project";
+import { Diagnostic, CompilerOptions, CommandLineOption, WatchOptions, ScriptKind, UserPreferences, FileExtensionInfo, Path, ResolvedProjectReference, ProjectReference, SourceFile, WatchDirectoryFlags, TypeAcquisition, DocumentPositionMapper, DocumentPosition, Ternary, TsConfigSourceFile } from "../compiler/types";
+import { PerformanceEvent, IndentStyle, FormatCodeSettings, HostCancellationToken, TextChange, getDefaultFormatCodeSettings, emptyOptions, PackageJsonInfo, PackageJsonAutoImportPreference } from "../services/types";
+import { createMap, createMapFromTemplate, some, forEach, MultiMap, createMultiMap, createGetCanonicalFileName, noop, arrayFrom, AssertionLevel, mapDefinedIterator, unorderedRemoveItem, contains, startsWith, returnTrue, find, mapDefinedEntries, tryAddToSet, flatMap, arrayToMap, toFileNameLowerCase, removeMinAndVersionNumbers } from "../compiler/core";
+import { Debug, LogLevel } from "../compiler/debug";
+import { optionDeclarations, optionsForWatch, canWatchDirectory, convertCompilerOptionsForTelemetry, tryReadFile, parseJsonSourceFileConfigFileContent, canJsonReportNoInputFiles, getFileNamesFromConfigSpecs, removeIgnoredPath, convertEnableAutoDiscoveryToEnable } from "../../built/local/compiler";
+import { NormalizedPath, toNormalizedPath, emptyArray, isInferredProjectName, Errors, normalizedPathToPath, asNormalizedPath, ProjectOptions, Msg } from "./utilitiesPublic";
+import { getAnyExtensionFromPath, fileExtensionIs, combinePaths, getDirectoryPath, ensureTrailingDirectorySeparator, toPath, getNormalizedAbsolutePath, getBaseFileName, isRootedDiskPath, containsPath, isNodeModulesDirectory, normalizePath, hasExtension, directorySeparator, normalizeSlashes, forEachAncestorDirectory } from "../compiler/path";
+import { FileWatcher, FileWatcherEventKind, PollingInterval, missingFileModifiedTime, getFileWatcherEventKind } from "../compiler/sys";
+import { ServerHost } from "./types";
+import { Logger } from "../services/shims";
+import { ITypingsInstaller, TypingsCache, nullTypingsInstaller } from "./typingsCache";
+import { ScriptInfo, ScriptInfoVersion, isDynamicFileName } from "./scriptInfo";
+import { forEachKey, forEachEntry, hasTSFileExtension, cloneMap, addToSeen, removeFileExtension } from "../compiler/utilities";
+import { WatchType, returnNoopFileWatcher, noopFileWatcher } from "../compiler/watch";
+import { ExternalProject } from "./protocol";
+import { DocumentRegistry, createDocumentRegistryInternal, DocumentRegistryBucketKey } from "../../built/local/services";
+import { WatchFactory, WatchLogLevel, getWatchFactory, isIgnoredFileFromWildCardWatching, ConfigFileProgramReloadLevel, createCachedDirectoryStructureHost, DirectoryStructureHost } from "../compiler/watchUtilities";
+import { PackageJsonCache, createPackageJsonCache } from "./packageJsonCache";
+import { SetTypings, InvalidateCachedTypings, PackageInstalledResponse, BeginInstallTypes, EndInstallTypes } from "../jsTyping/types";
+import { ActionSet, ActionInvalidate } from "../jsTyping/shared";
+import { isInsideNodeModules } from "../services/utilities";
+import { parseJsonText } from "../compiler/parser";
+import { ReadMapFile, getDocumentPositionMapper } from "../services/sourcemaps";
+import { ReadonlyCollection } from "../compiler/corePublic";
+
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
     /*@internal*/
     export const maxFileSize = 4 * 1024 * 1024;
@@ -3790,4 +3815,4 @@ namespace ts.server {
     function printProjectWithoutFileNames(project: Project) {
         project.print(/*writeProjectFileNames*/ false);
     }
-}
+

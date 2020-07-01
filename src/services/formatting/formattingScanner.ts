@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.formatting {
+
+import { createScanner } from "../../compiler/scanner";
+import { ScriptTarget, LanguageVariant, Node, SyntaxKind } from "../../compiler/types";
+import { TokenInfo, TextRangeWithKind, TextRangeWithTriviaKind, createTextRangeWithKind } from "./formatting";
+import { last, append } from "../../compiler/core";
+import { isTrivia, isKeyword, findAncestor } from "../../compiler/utilities";
+import { isJsxText, isJsxElement, isParenthesizedExpression, isJsxAttribute, isToken } from "../../../built/local/compiler";
+import { Debug } from "../../compiler/debug";
+
     const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
     const jsxScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.JSX);
 
@@ -299,4 +307,4 @@ namespace ts.formatting {
             trailingTrivia = undefined;
         }
     }
-}
+

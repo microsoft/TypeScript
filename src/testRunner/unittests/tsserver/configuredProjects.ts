@@ -1,4 +1,14 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile, checkWatchedFiles, checkWatchedDirectories, SymLink, checkWatchedDirectoriesDetailed } from "../../../../built/local/harness";
+import { createProjectService, checkNumberOfInferredProjects, checkNumberOfConfiguredProjects, configuredProjectAt, checkProjectActualFiles, checkProjectRootFiles, nodeModulesAtTypes, getConfigFilesToWatch, checkNumberOfProjects, checkOpenFiles, createSessionWithEventTracking, protocol, createSession, openFilesForSession, verifyGetErrRequestNoErrors, getTypeRootsFromLocation } from "./helpers";
+import { assert } from "console";
+import { getDirectoryPath, combinePaths } from "../../../compiler/path";
+import { commonFile1, commonFile2 } from "../tscWatch/helpers";
+import { Path } from "../../../compiler/types";
+import { find, map, mapDefined, neverArray } from "../../../compiler/core";
+import { createTextSpan } from "../../../../built/local/compiler";
+import { createCompilerDiagnostic } from "../../../compiler/utilities";
+
     describe("unittests:: tsserver:: ConfiguredProjects", () => {
         it("create configured project without file list", () => {
             const configFile: File = {
@@ -1298,4 +1308,4 @@ foo();`
             }]);
         });
     });
-}
+

@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { TestProjectService, checkProjectActualFiles, createProjectService } from "./helpers";
+import { libFile, createServerHost } from "../../../../built/local/harness";
+import { assert } from "console";
+import { singleIterator } from "../../../compiler/core";
+
     describe("unittests:: tsserver:: document registry in project service", () => {
         const importModuleContent = `import {a} from "./module1"`;
         const file: File = {
@@ -90,4 +95,4 @@ namespace ts.projectSystem {
             assert.equal(moduleInfo.cacheSourceFile!.sourceFile.text, updatedModuleContent);
         });
     });
-}
+

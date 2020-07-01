@@ -1,5 +1,12 @@
 /*@internal*/
-namespace ts.server {
+
+import { Path, Ternary } from "../compiler/types";
+import { PackageJsonInfo } from "../services/types";
+import { ProjectService } from "./editorServices";
+import { createMap } from "../compiler/core";
+import { getDirectoryPath, combinePaths, forEachAncestorDirectory } from "../compiler/path";
+import { tryFileExists, createPackageJsonInfo } from "../services/utilities";
+
     export interface PackageJsonCache {
         addOrUpdate(fileName: Path): void;
         forEach(action: (info: PackageJsonInfo, fileName: Path) => void): void;
@@ -55,4 +62,4 @@ namespace ts.server {
                 Ternary.Maybe;
         }
     }
-}
+

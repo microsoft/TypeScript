@@ -1,4 +1,15 @@
-namespace ts {
+import { Classifier, EndOfLineState, ClassificationResult, Classifications, ClassificationType, ClassificationInfo, TokenClass, ClassifiedSpan, ClassificationTypeNames } from "./types";
+import { createScanner, Scanner, couldStartTrivia, isLineBreak } from "../compiler/scanner";
+import { ScriptTarget, SyntaxKind, CharacterCodes, TypeChecker, CancellationToken, SourceFile, UnderscoreEscapedMap, TextSpan, Node, SymbolFlags, HasJSDoc, JSDoc, JSDocParameterTag, JSDocTemplateTag, JSDocTypeTag, JSDocReturnTag, commentPragmas, JsxOpeningElement, JsxClosingElement, JsxSelfClosingElement, JsxAttribute, ClassDeclaration, TypeParameterDeclaration, InterfaceDeclaration, EnumDeclaration, ModuleDeclaration, ParameterDeclaration } from "../compiler/types";
+import { isTrivia, isKeyword, nodeIsMissing, setParent, isThisIdentifier } from "../compiler/utilities";
+import { lastOrUndefined, arrayToNumericMap, some } from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import { isTemplateLiteralKind, textSpanIntersectsWith, isIdentifier, isModuleDeclaration, createTextSpan, isJSDoc, isToken, decodedTextSpanIntersectsWith } from "../../built/local/compiler";
+import { Push } from "../compiler/corePublic";
+import { isAccessibilityModifier, getMeaningFromLocation, SemanticMeaning, getTypeArgumentOrTypeParameterList, isPunctuation } from "./utilities";
+import { getModuleInstanceState, ModuleInstanceState } from "../compiler/binder";
+import { parseIsolatedJSDocComment } from "../compiler/parser";
+
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
     export function createClassifier(): Classifier {
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false);
@@ -778,7 +789,7 @@ namespace ts {
             }
 
             // Limiting classification to exactly the elements and attributes
-            // defined in `ts.commentPragmas` would be excessive, but we can avoid
+            // defined in `commentPragmas` would be excessive, but we can avoid
             // some obvious false positives (e.g. in XML-like doc comments) by
             // checking the element name.
             // eslint-disable-next-line no-in-operator
@@ -1060,4 +1071,4 @@ namespace ts {
             }
         }
     }
-}
+

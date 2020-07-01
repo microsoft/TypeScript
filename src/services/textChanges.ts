@@ -1,5 +1,22 @@
 /* @internal */
-namespace ts.textChanges {
+
+import { TextRange, CharacterCodes, SourceFile, Node, Token, SyntaxKind, UserPreferences, SignatureDeclaration, VariableDeclaration, ParameterDeclaration, PropertyDeclaration, PropertySignature, FunctionDeclaration, FunctionExpression, FunctionLike, Statement, ClassDeclaration, InterfaceDeclaration, ObjectLiteralExpression, NodeArray, TypeParameterDeclaration, Modifier, PropertyAssignment, HasJSDoc, JSDoc, TypeNode, ConstructorDeclaration, ClassLikeDeclaration, ClassElement, ObjectLiteralElementLike, ClassExpression, ArrowFunction, DeclarationStatement, VariableStatement, Expression, ScriptKind, ScriptTarget, SourceFileLike, NewLineKind, EmitHint, Visitor, EmitTextWriter, PrintHandlers, PrologueDirective, CommentRange, BindingElement, ImportSpecifier, NamespaceImport, ImportClause, NamedImportBindings } from "../compiler/types";
+import { Debug } from "../compiler/debug";
+import { skipTrivia, isWhiteSpaceSingleLine, isLineBreak, getLineAndCharacterOfPosition, tokenToString, isWhiteSpaceLike, getShebang, getLeadingCommentRanges } from "../compiler/scanner";
+import { getLineStartPositionForPosition, getNewLineOrDefaultFromHost, createTextRangeFromSpan, findNextToken, getFirstNonSpaceCharacterPosition, getTouchingToken, getPrecedingNonSpaceCharacterPosition, findChildOfKind, getTokenAtPosition, findPrecedingToken, rangeContainsRangeExclusive, createTextSpanFromRange, stringContainsAt, createTextChange, probablyUsesSemicolons, isInComment, isInString, isInTemplateString, isInJSXText } from "./utilities";
+import { getJSDocCommentRanges, getStartPositionOfLine, getLineOfLocalPosition, createRange, rangeStartPositionsAreOnSameLine, addToSeen, isJsonSourceFile, indexOfNode, rangeOfNode, positionsAreOnSameLine, NodeSet, rangeOfTypeParameters, getScriptKindFromFileName, nodeIsSynthesized, setTextRangePosEnd, createTextWriter, isPrologueDirective, isPinnedComment, isRecognizedTripleSlashComment, isAnyImportSyntax, getAncestor } from "../compiler/utilities";
+import { isExpression, isFunctionExpression, isFunctionDeclaration, factory, isFunctionLike, isArrowFunction, isStatement, isClassElement, isVariableDeclaration, isParameter, isStringLiteral, isImportDeclaration, isNamedImports, isObjectLiteralExpression, isClassOrTypeElement, createTextSpan, textSpanEnd, isPropertySignature, isPropertyDeclaration, isStatementButNotDeclaration, hasJSDocNodes, isImportClause, isCallExpression } from "../../built/local/compiler";
+import { LanguageServiceHost, FileTextChanges, FormatCodeSettings, SemicolonPreference, TextChange } from "./types";
+import { createMap, firstOrUndefined, first, lastOrUndefined, last, findLastIndex, mapDefined, stableSort, removeSuffix, endsWith, find, contains } from "../compiler/core";
+import { isArray } from "util";
+import { getNodeId } from "../compiler/checker";
+import { group } from "console";
+import { createSourceFile } from "../compiler/parser";
+import { createPrinter } from "../compiler/emitter";
+import { visitEachChild, visitNodes } from "../compiler/visitorPublic";
+import { nullTransformationContext } from "../compiler/transformer";
+
+export namespace textChanges {
 
     /**
      * Currently for simplicity we store recovered positions on the node itself.

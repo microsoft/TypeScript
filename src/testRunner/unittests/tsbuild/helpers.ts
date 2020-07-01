@@ -1,4 +1,15 @@
-namespace ts {
+import { isBuildInfoFile, getBuildInfo, getBuildInfoText, getOutputPathsForBundle } from "../../../compiler/emitter";
+import { notImplemented, mapDefinedIterator, neverArray, first, last, arrayFrom, findIndex } from "../../../compiler/core";
+import { assert } from "console";
+import { System } from "../../../compiler/sys";
+import { ReadonlyCollection } from "../../../compiler/corePublic";
+import { BundleFileInfo, BundleFileSectionKind, BundleFileSection, CompilerOptions, BuildInfo } from "../../../compiler/types";
+import { length } from "ms";
+import { Debug } from "../../../compiler/debug";
+import { outFile } from "../../../compiler/utilities";
+import { TscCompile, TscCompileSystem, tscCompile, BuildKind, verifyTscBaseline } from "../tsc/helpers";
+import { ProgramBuildInfo } from "../../../compiler/builder";
+
     export function errorDiagnostic(message: fakes.ExpectedDiagnosticMessage): fakes.ExpectedErrorDiagnostic {
         return { message };
     }
@@ -106,11 +117,11 @@ declare const console: { log(msg: any): void; };`;
 interface SymbolConstructor {
     readonly species: symbol;
     readonly toStringTag: symbol;
-}
+
 declare var Symbol: SymbolConstructor;
 interface Symbol {
     readonly [Symbol.toStringTag]: string;
-}
+
 `;
 
     /**
@@ -598,4 +609,4 @@ ${project}${file}Spread(...[10, 20, 30]);`);
 const ${file}Const = new ${project}${file}();
 `);
     }
-}
+

@@ -1,5 +1,18 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, SourceFile, Node, VisitResult, TransformFlags, SyntaxKind, JsxElement, JsxSelfClosingElement, JsxFragment, JsxExpression, JsxChild, Expression, JsxOpeningLikeElement, TextRange, ObjectLiteralExpression, JsxOpeningFragment, JsxSpreadAttribute, JsxAttribute, StringLiteral, JsxText, Identifier } from "../types";
+import { chainBundle } from "./utilities";
+import { visitEachChild, visitNode } from "../visitorPublic";
+import { addEmitHelpers } from "../factory/emitNode";
+import { Debug } from "../debug";
+import { flatten, spanMap, map, singleOrUndefined, mapDefined, createMapFromTemplate } from "../core";
+import { isJsxSpreadAttribute, isIdentifier } from "../factory/nodeTests";
+import { createExpressionForJsxElement, startOnNewLine, createExpressionForJsxFragment, createExpressionFromEntityName } from "../factory/utilities";
+import { isExpression, idText } from "../utilitiesPublic";
+import { isStringDoubleQuoted, isIntrinsicJsxName } from "../utilities";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { isLineBreak, isWhiteSpaceSingleLine, utf16EncodeAsString } from "../scanner";
+
     export function transformJsx(context: TransformationContext) {
         const {
             factory,
@@ -570,4 +583,4 @@ namespace ts {
         hearts: 0x2665,
         diams: 0x2666
     });
-}
+

@@ -1,5 +1,12 @@
-namespace ts.projectSystem {
+
     import CommandNames = server.CommandNames;
+import { TestTypingsInstaller, createHasErrorMessageLogger, makeSessionRequest, openFilesForSession, protocol, checkNumberOfProjects, checkProjectRootFiles, createSession, toExternalFiles, protocolTextSpanFromSubstring, checkProjectActualFiles } from "./helpers";
+import { File } from "../../../harness/vfsUtil";
+import { compareStringsCaseSensitive, map, arrayIsEqualTo, stringContains, neverArray } from "../../../compiler/core";
+import { assert } from "console";
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { CompilerOptions, Extension, diagnosticCategoryName } from "../../../compiler/types";
+import { formatStringFromArgs, changeExtension } from "../../../compiler/utilities";
     const nullCancellationToken = server.nullCancellationToken;
 
     function createTestTypingsInstaller(host: server.ServerHost) {
@@ -1101,4 +1108,4 @@ function bar() {
             assert.equal(session.getProjectService().configuredProjects.get(app2Config.path)!.dirty, false);
         });
     });
-}
+

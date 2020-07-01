@@ -1,4 +1,9 @@
-namespace ts.tscWatch {
+import { File } from "../../../harness/vfsUtil";
+import { TscWatchCompileChange, runQueuedTimeoutCallbacks, verifyTscWatch, createBaseline, createWatchOfConfigFile, runWatchBaseline } from "./helpers";
+import { neverArray } from "../../../compiler/core";
+import { createWatchedSystem, libFile } from "../../../../built/local/harness";
+import { CompilerOptions } from "../../../compiler/types";
+
     describe("unittests:: tsc-watch:: console clearing", () => {
         const scenario = "consoleClearing";
         const file: File = {
@@ -59,4 +64,4 @@ namespace ts.tscWatch {
             });
         });
     });
-}
+

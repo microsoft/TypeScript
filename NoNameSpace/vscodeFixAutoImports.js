@@ -16,8 +16,9 @@ var triggerEvent = new KeyboardEvent("keydown", {
 // ATTENTION!!!!!!
 // this event could not be triggered normally
 // you need to copy one global event and rename it to arrowDownEvent
-// document.addEventListener('keydown',function(e){console.log(e)})
-// arrowDownEvent = temp1
+//
+// function l(e){console.log(e)};document.addEventListener('keydown',l);
+// arrowDownEvent = temp1;document.removeEventListener('keydown',l);
 var arrowDownEventFALSE = new KeyboardEvent("keyDown", {
     altKey: false,
     bubbles: true,

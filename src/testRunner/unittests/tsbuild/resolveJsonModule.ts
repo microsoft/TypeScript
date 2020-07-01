@@ -1,4 +1,6 @@
-namespace ts {
+import { loadProjectFromDisk, verifyTscSerializedIncrementalEdits, replaceText } from "./helpers";
+import { verifyTsc, noChangeOnlyRuns } from "../tsc/helpers";
+
     describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
         let projFs: vfs.FileSystem;
         before(() => {
@@ -79,4 +81,4 @@ export default hello.hello`);
             incrementalScenarios: noChangeOnlyRuns
         });
     });
-}
+

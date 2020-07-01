@@ -1,4 +1,10 @@
-namespace Harness {
+import { RunnerBase, TestRunnerKind } from "../harness/runnerbase";
+import { IO, Baseline } from "../harness/harnessIO";
+import { isWorker } from "cluster";
+import { Debug } from "../compiler/debug";
+import { flatten, compareValues, compareStringsCaseSensitive, stringContains } from "../compiler/core";
+import { comparePathsCaseSensitive } from "../compiler/path";
+
     const fs: typeof import("fs") = require("fs");
     const path: typeof import("path") = require("path");
     const del: typeof import("del") = require("del");
@@ -52,8 +58,8 @@ namespace Harness {
                     let types: string[] | undefined;
                     if (fs.existsSync(path.join(cwd, "test.json"))) {
                         const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
-                        ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
-                        ts.Debug.assert(!!config.cloneUrl, "Bad format from test.json: cloneUrl field must be present.");
+                        Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
+                        Debug.assert(!!config.cloneUrl, "Bad format from test.json: cloneUrl field must be present.");
                         const submoduleDir = path.join(cwd, directoryName);
                         if (!fs.existsSync(submoduleDir)) {
                             exec("git", ["--work-tree", submoduleDir, "clone", config.cloneUrl, path.join(submoduleDir, ".git")], { cwd });
@@ -245,13 +251,13 @@ ${sanitizeDockerfileOutput(result.stderr.toString())}`;
     }
 
     function sortErrors(result: string) {
-        return ts.flatten(splitBy(result.split("\n"), s => /^\S+/.test(s)).sort(compareErrorStrings)).join("\n");
+        return flatten(splitBy(result.split("\n"), s => /^\S+/.test(s)).sort(compareErrorStrings)).join("\n");
     }
 
     const errorRegexp = /^(.+\.[tj]sx?)\((\d+),(\d+)\)(: error TS.*)/;
     function compareErrorStrings(a: string[], b: string[]) {
-        ts.Debug.assertGreaterThanOrEqual(a.length, 1);
-        ts.Debug.assertGreaterThanOrEqual(b.length, 1);
+        Debug.assertGreaterThanOrEqual(a.length, 1);
+        Debug.assertGreaterThanOrEqual(b.length, 1);
         const matchA = a[0].match(errorRegexp);
         if (!matchA) {
             return -1;
@@ -262,11 +268,11 @@ ${sanitizeDockerfileOutput(result.stderr.toString())}`;
         }
         const [, errorFileA, lineNumberStringA, columnNumberStringA, remainderA] = matchA;
         const [, errorFileB, lineNumberStringB, columnNumberStringB, remainderB] = matchB;
-        return ts.comparePathsCaseSensitive(errorFileA, errorFileB) ||
-            ts.compareValues(parseInt(lineNumberStringA), parseInt(lineNumberStringB)) ||
-            ts.compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB)) ||
-            ts.compareStringsCaseSensitive(remainderA, remainderB) ||
-            ts.compareStringsCaseSensitive(a.slice(1).join("\n"), b.slice(1).join("\n"));
+        return comparePathsCaseSensitive(errorFileA, errorFileB) ||
+            compareValues(parseInt(lineNumberStringA), parseInt(lineNumberStringB)) ||
+            compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB)) ||
+            compareStringsCaseSensitive(remainderA, remainderB) ||
+            compareStringsCaseSensitive(a.slice(1).join("\n"), b.slice(1).join("\n"));
     }
 
     export class DefinitelyTypedRunner extends ExternalCompileRunnerBase {
@@ -291,7 +297,7 @@ ${stderr.replace(/\r\n/g, "\n")}`;
     }
 
     function removeExpectedErrors(errors: string, cwd: string): string {
-        return ts.flatten(splitBy(errors.split("\n"), s => /^\S+/.test(s)).filter(isUnexpectedError(cwd))).join("\n");
+        return flatten(splitBy(errors.split("\n"), s => /^\S+/.test(s)).filter(isUnexpectedError(cwd))).join("\n");
     }
     /**
      * Returns true if the line that caused the error contains '$ExpectError',
@@ -301,7 +307,7 @@ ${stderr.replace(/\r\n/g, "\n")}`;
      */
     function isUnexpectedError(cwd: string) {
         return (error: string[]) => {
-            ts.Debug.assertGreaterThanOrEqual(error.length, 1);
+            Debug.assertGreaterThanOrEqual(error.length, 1);
             const match = error[0].match(/(.+\.tsx?)\((\d+),\d+\): error TS/);
             if (!match) {
                 return true;
@@ -309,10 +315,10 @@ ${stderr.replace(/\r\n/g, "\n")}`;
             const [, errorFile, lineNumberString] = match;
             const lines = fs.readFileSync(path.join(cwd, errorFile), { encoding: "utf8" }).split("\n");
             const lineNumber = parseInt(lineNumberString) - 1;
-            ts.Debug.assertGreaterThanOrEqual(lineNumber, 0);
-            ts.Debug.assertLessThan(lineNumber, lines.length);
+            Debug.assertGreaterThanOrEqual(lineNumber, 0);
+            Debug.assertLessThan(lineNumber, lines.length);
             const previousLine = lineNumber - 1 > 0 ? lines[lineNumber - 1] : "";
-            return !ts.stringContains(lines[lineNumber], "$ExpectError") && !ts.stringContains(previousLine, "$ExpectError");
+            return !stringContains(lines[lineNumber], "$ExpectError") && !stringContains(previousLine, "$ExpectError");
         };
     }
     /**
@@ -342,4 +348,4 @@ ${stderr.replace(/\r\n/g, "\n")}`;
         }
         return result;
     }
-}
+

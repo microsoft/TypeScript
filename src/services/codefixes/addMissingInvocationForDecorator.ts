@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { findAncestor } from "../../compiler/utilities";
+import { isDecorator, factory } from "../../../built/local/compiler";
+import { Debug } from "../../compiler/debug";
+
     const fixId = "addMissingInvocationForDecorator";
     const errorCodes = [Diagnostics._0_accepts_too_few_arguments_to_be_used_as_a_decorator_here_Did_you_mean_to_call_it_first_and_write_0.code];
     registerCodeFix({
@@ -19,4 +26,4 @@ namespace ts.codefix {
         const replacement = factory.createCallExpression(decorator.expression, /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
         changeTracker.replaceNode(sourceFile, decorator.expression, replacement);
     }
-}
+

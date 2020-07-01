@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.formatting {
+
+import { FormatCodeSettings, FormattingHost } from "../types";
+import { FormatContext } from "./formatting";
+import { getAllRules, RuleSpec } from "./rules";
+import { RuleAction, Rule, anyContext } from "./rule";
+import { FormattingContext } from "./formattingContext";
+import { every } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { SyntaxKind } from "../../compiler/types";
+
     export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {
         return { options, getRules: getRulesMap(), host };
     }
@@ -137,4 +146,4 @@ namespace ts.formatting {
         Debug.assert((value & mask) === value, "Adding more rules into the sub-bucket than allowed. Maximum allowed is 32 rules.");
         return (indexBitmap & ~(mask << maskPosition)) | (value << maskPosition);
     }
-}
+

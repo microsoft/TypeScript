@@ -1,4 +1,12 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, protocol, protocolToLocation } from "./helpers";
+import { Path } from "../../../compiler/types";
+import { assert } from "console";
+import { EmitOutput } from "../../../../built/local/compiler";
+import { neverArray } from "../../../compiler/core";
+import { changeExtension } from "../../../compiler/utilities";
+
     describe("unittests:: tsserver:: with project references and compile on save", () => {
         const dependecyLocation = `${tscWatch.projectRoot}/dependency`;
         const usageLocation = `${tscWatch.projectRoot}/usage`;
@@ -486,4 +494,4 @@ ${appendDts}`
             assert.equal(host.readFile(sourceJs), expectedSiblingJs);
         });
     });
-}
+

@@ -1,5 +1,19 @@
 /*@internal*/
-namespace ts {
+
+import { FormatDiagnosticsHost, formatDiagnostic, formatDiagnosticsWithColorAndContext, formatColorAndReset, ForegroundColorEscapeSequences, flattenDiagnosticMessageText } from "./program";
+import { sys, System, FileWatcher, generateDjb2Hash } from "./sys";
+import { createGetCanonicalFileName, contains, countWhere, forEach, addRange, neverArray, noop, maybeBind, memoize, copyProperties } from "./core";
+import { DiagnosticReporter, ParseConfigFileHost, getParsedCommandLineOfConfigFile } from "./commandLineParser";
+import { Diagnostic, CompilerOptions, WatchOptions, DiagnosticCategory, SourceFile, CancellationToken, DiagnosticWithLocation, WriteFileCallback, CustomTransformers, EmitResult, ExitStatus, CompilerHost, FileExtensionInfo, ProjectReference } from "./types";
+import { WatchStatusReporter, WatchHost, ProgramHost, CreateProgram, WatchCompilerHost, WatchCompilerHostOfConfigFile, WatchCompilerHostOfFilesAndCompilerOptions, createIncrementalCompilerHost, createIncrementalProgram } from "./watchPublic";
+import { createCompilerDiagnostic, getNewLineCharacter, writeFileEnsuringDirectories } from "./utilities";
+import { ReportEmitErrorSummary } from "./tsbuildPublic";
+import { sortAndDeduplicateDiagnostics, getDefaultLibFileName } from "./utilitiesPublic";
+import { getNormalizedAbsolutePath, getDirectoryPath, normalizePath, combinePaths } from "./path";
+import { WatchFactory, WatchLogLevel, getWatchFactory, DirectoryStructureHost } from "./watchUtilities";
+import { createSourceFile } from "./parser";
+import { BuilderProgram, EmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram } from "./builderPublic";
+
     const sysFormatDiagnosticsHost: FormatDiagnosticsHost = sys ? {
         getCurrentDirectory: () => sys.getCurrentDirectory(),
         getNewLine: () => sys.newLine,
@@ -490,4 +504,4 @@ namespace ts {
         if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
         return exitStatus;
     }
-}
+

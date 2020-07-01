@@ -1,4 +1,9 @@
-namespace ts {
+import { ParsedCommandLine, ParseConfigHost, CompilerOptions, Path, Diagnostic, DiagnosticMessage, SourceFile, SyntaxKind, WatchDirectoryFlags, JsxEmit } from "../../../compiler/types";
+import { assert } from "console";
+import { parseJsonText } from "../../../compiler/parser";
+import { parseJsonSourceFileConfigFileContent, parseJsonConfigFileContent } from "../../../../built/local/compiler";
+import { createFileDiagnostic, createCompilerDiagnostic } from "../../../compiler/utilities";
+
     const caseInsensitiveBasePath = "c:/dev/";
     const caseInsensitiveTsconfigPath = "c:/dev/tsconfig.json";
     const caseInsensitiveHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: caseInsensitiveBasePath, files: {
@@ -1539,4 +1544,4 @@ namespace ts {
             validateMatches(expected, json, host, caseInsensitiveBasePath);
         });
     });
-}
+

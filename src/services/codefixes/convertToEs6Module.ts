@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixActionWithoutFixAll } from "../codeFixProvider";
+import { getQuotePreference, QuotePreference, makeImport, getSynthesizedDeepClone, findChildOfKind, getSynthesizedDeepClones } from "../utilities";
+import { SourceFile, SyntaxKind, TypeChecker, ScriptTarget, SymbolFlags, PropertyAccessExpression, Identifier, Statement, VariableStatement, ExpressionStatement, BinaryExpression, BindingName, StringLiteralLike, Node, ObjectLiteralExpression, ObjectLiteralElementLike, __String, ExportDeclaration, Expression, FunctionExpression, ArrowFunction, ClassExpression, BindingElement, ImportSpecifier, Modifier, MethodDeclaration, FunctionDeclaration, ClassDeclaration, ImportDeclaration, NodeFlags, ExportSpecifier } from "../../compiler/types";
+import { getResolvedModule, importFromModuleSpecifier, isRequireCall, isNonContextualKeyword, createRange, emptyUnderscoreEscapedMap } from "../../compiler/utilities";
+import { factory, isPropertyAccessExpression, isIdentifier, isBinaryExpression, isObjectLiteralExpression, isFunctionExpression, isArrowFunction, isClassExpression } from "../../../built/local/compiler";
+import { createMap, flatMap, mapAllOrFail, arrayFrom, mapIterator, createMultiMap, concatenate } from "../../compiler/core";
+import { isExportsOrModuleExportsOrAlias } from "../../compiler/binder";
+import { Debug } from "../../compiler/debug";
+import { moduleSpecifierToValidIdentifier } from "./importFixes";
+
     registerCodeFix({
         errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module.code],
         getCodeActions(context) {
@@ -524,4 +534,4 @@ namespace ts.codefix {
             exportSpecifiers && factory.createNamedExports(exportSpecifiers),
             moduleSpecifier === undefined ? undefined : factory.createStringLiteral(moduleSpecifier));
     }
-}
+

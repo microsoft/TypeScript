@@ -1,4 +1,12 @@
-namespace ts {
+import { Path, CompilerOptions, NewLineKind, CompilerHost, ScriptTarget, ModuleKind, Program, ScriptKind, ExpressionStatement, AsExpression, ImportDeclaration } from "../../compiler/types";
+import { assert } from "console";
+import { arrayToSet } from "../../compiler/utilities";
+import { arrayFrom, mapDefinedIterator } from "../../compiler/core";
+import { createProgram } from "../../compiler/program";
+import { createSourceFile } from "../../compiler/parser";
+import { sys } from "../../compiler/sys";
+import { emptyOptions } from "../../services/types";
+
     function verifyMissingFilePaths(missingPaths: readonly Path[], expected: readonly string[]) {
         assert.isDefined(missingPaths);
         const map = arrayToSet(expected) as Map<string, boolean>;
@@ -204,4 +212,4 @@ namespace ts {
             assert.isEmpty(program.getSemanticDiagnostics());
         });
     });
-}
+

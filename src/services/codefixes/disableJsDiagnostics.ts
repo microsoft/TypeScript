@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.codefix {
+
+import { mapDefined, tryAddToSet } from "../../compiler/core";
+import { DiagnosticCategory, SourceFile } from "../../compiler/types";
+import { registerCodeFix, createCodeFixActionWithoutFixAll, createFileTextChanges, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { isInJSFile, isCheckJsEnabledForFile } from "../../compiler/utilities";
+import { getNewLineOrDefaultFromHost, createTextChange } from "../utilities";
+import { CodeFixAction } from "../types";
+import { createTextSpanFromBounds, createTextSpan } from "../../../built/local/compiler";
+import { getLineAndCharacterOfPosition } from "../../compiler/scanner";
+
     const fixName = "disableJsDiagnostics";
     const fixId = "disableJsDiagnostics";
     const errorCodes = mapDefined(Object.keys(Diagnostics) as readonly (keyof typeof Diagnostics)[], key => {
@@ -53,4 +62,4 @@ namespace ts.codefix {
             changes.insertCommentBeforeLine(sourceFile, lineNumber, position, " @ts-ignore");
         }
     }
-}
+

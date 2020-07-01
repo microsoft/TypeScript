@@ -1,5 +1,19 @@
 /* @internal */
-namespace ts.CallHierarchy {
+
+import { ClassExpression, Identifier, FunctionExpression, Node, VariableDeclaration, ArrowFunction, NodeFlags, SourceFile, ModuleDeclaration, FunctionDeclaration, ClassDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, SyntaxKind, TypeChecker, Program, EmitHint, FunctionLikeDeclaration, SymbolFlags, TextRange, TextSpan, CancellationToken, CallExpression, NewExpression, TaggedTemplateExpression, PropertyAccessExpression, ElementAccessExpression, Decorator, JsxOpeningLikeElement, TypeAssertion, AsExpression, ParameterDeclaration, AccessExpression, ModifierFlags, ClassLikeDeclaration } from "../compiler/types";
+import { isFunctionExpression, isClassExpression, isNamedDeclaration, isArrowFunction, isVariableDeclaration, isIdentifier, getCombinedNodeFlags, isSourceFile, isModuleDeclaration, isFunctionDeclaration, isClassDeclaration, isMethodDeclaration, isMethodSignature, isGetAccessorDeclaration, isSetAccessorDeclaration, getNameOfDeclaration, idText, isComputedPropertyName, isModuleBlock, getAssignedName, isConstructorDeclaration, isFunctionLikeDeclaration, createTextSpanFromBounds, isTaggedTemplateExpression, isJsxOpeningLikeElement, isClassLike, isPropertyDeclaration } from "../../built/local/compiler";
+import { Debug } from "../compiler/debug";
+import { find, indicesOf, map, compareStringsCaseSensitive, append, filter, forEach } from "../compiler/core";
+import { isStringOrNumericLiteralLike, usingSingleLineStringWriter, getFirstConstructorWithBody, findAncestor, isDeclarationName, isAccessExpression, isPartOfTypeNode, hasSyntacticModifier, getClassExtendsHeritageElement } from "../compiler/utilities";
+import { createPrinter } from "../compiler/emitter";
+import { CallHierarchyItem, CallHierarchyIncomingCall, CallHierarchyOutgoingCall } from "./types";
+import { getNodeKind, getNodeModifiers, isCallOrNewExpressionTarget, isTaggedTemplateTag, isDecoratorTarget, isJsxOpeningLikeElementTagName, isRightSideOfPropertyAccess, isArgumentExpressionOfElementAccess, createTextRangeFromNode, createTextSpanFromRange } from "./utilities";
+import { skipTrivia } from "../compiler/scanner";
+import { getNodeId } from "../compiler/checker";
+import { group } from "console";
+import { isArray } from "util";
+import { forEachChild } from "../compiler/parser";
+
     export type NamedExpression =
         | ClassExpression & { name: Identifier }
         | FunctionExpression & { name: Identifier }
@@ -511,4 +525,4 @@ namespace ts.CallHierarchy {
         }
         return group(collectCallSites(program, declaration), getCallSiteGroupKey, entries => convertCallSiteGroupToOutgoingCall(program, entries));
     }
-}
+

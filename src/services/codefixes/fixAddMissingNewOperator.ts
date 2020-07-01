@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, TextSpan, Node } from "../../compiler/types";
+import { cast } from "../../compiler/core";
+import { isCallExpression, factory, textSpanEnd } from "../../../built/local/compiler";
+import { getTokenAtPosition } from "../utilities";
+
     const fixId = "addMissingNewOperator";
     const errorCodes = [Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new.code];
     registerCodeFix({
@@ -29,4 +35,4 @@ namespace ts.codefix {
         }
         return token;
     }
-}
+

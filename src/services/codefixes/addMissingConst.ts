@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { NodeSet, findAncestor, isAssignmentExpression } from "../../compiler/utilities";
+import { SourceFile, Program, Node, SyntaxKind, Expression, TypeChecker } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { isForInOrOfStatement, isBinaryExpression, isExpressionStatement, isArrayLiteralExpression, isIdentifier } from "../../../built/local/compiler";
+import { every } from "../../compiler/core";
+
     const fixId = "addMissingConst";
     const errorCodes = [
         Diagnostics.Cannot_find_name_0.code,
@@ -108,4 +115,4 @@ namespace ts.codefix {
             && isIdentifier(expression.left)
             && !checker.getSymbolAtLocation(expression.left);
     }
-}
+

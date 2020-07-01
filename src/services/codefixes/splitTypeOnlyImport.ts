@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, TextSpan, ImportDeclaration } from "../../compiler/types";
+import { findAncestor } from "../../compiler/utilities";
+import { getTokenAtPosition } from "../utilities";
+import { isImportDeclaration, factory } from "../../../built/local/compiler";
+import { CodeFixContextBase } from "../types";
+import { Debug } from "../../compiler/debug";
+
     const errorCodes = [Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code];
     const fixId = "splitTypeOnlyImport";
     registerCodeFix({
@@ -40,4 +48,4 @@ namespace ts.codefix {
             factory.updateImportClause(importClause, importClause.isTypeOnly, /*name*/ undefined, importClause.namedBindings),
             importDeclaration.moduleSpecifier));
     }
-}
+

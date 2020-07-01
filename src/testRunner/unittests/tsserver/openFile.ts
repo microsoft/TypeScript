@@ -1,4 +1,10 @@
-namespace ts.projectSystem {
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { createProjectService, toExternalFile, checkProjectActualFiles, createSession, openFilesForSession, verifyGetErrRequestNoErrors, protocolTextSpanFromSubstring, protocol, verifyGetErrRequest, createDiagnostic } from "./helpers";
+import { IScriptSnapshot } from "../../../services/types";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+import { ScriptKind } from "../../../compiler/types";
+
     describe("unittests:: tsserver:: Open-file", () => {
         it("can be reloaded with empty content", () => {
             const f = {
@@ -137,12 +143,12 @@ function foo() {
     // @ts-ignore
     let y: string = x;
     return y;
-}
+
 function bar() {
     // @ts-ignore
     let z : string = x;
     return z;
-}
+
 foo();
 bar();`
             };
@@ -198,4 +204,4 @@ bar();`
             verifyGetErrRequestNoErrors({ session, host, files: [file] });
         });
     });
-}
+

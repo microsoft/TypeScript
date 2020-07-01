@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { TestServerHost, createServerHost } from "../../../../built/local/harness";
+import { protocol, mapOutputToJson, createSession, openFilesForSession } from "./helpers";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+import { ScriptElementKind } from "../../../services/types";
+
     describe("unittests:: tsserver:: with metadata in response", () => {
         const metadata = "Extra Info";
         function verifyOutput(host: TestServerHost, expectedResponse: protocol.Response) {
@@ -96,4 +101,4 @@ namespace ts.projectSystem {
             });
         });
     });
-}
+

@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, checkNumberOfProjects, configuredProjectAt, checkProjectActualFiles, verifyGetErrRequestNoErrors, closeFilesForSession, protocol, protocolTextSpanFromSubstring, verifyGetErrRequest, createDiagnostic } from "./helpers";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         it("works when extends is specified with a case insensitive file system", () => {
             const rootPath = "/Users/username/dev/project";
@@ -154,4 +158,4 @@ namespace ts.projectSystem {
             });
         });
     });
-}
+

@@ -1,5 +1,18 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, eachDiagnostic, createCombinedCodeActions, DiagnosticAndArguments, createCodeFixAction } from "../codeFixProvider";
+import { getQuotePreference, getNameForExportedSymbol, insertImports, getTokenAtPosition, createModuleSpecifierResolutionHost, getMeaningFromLocation, SemanticMeaning, getUniqueSymbolId, QuotePreference, getTypeKeywordOfTypeOnlyImport, getQuoteFromPreference, makeStringLiteral, makeImport, getMeaningFromDeclaration, getPackageJsonsVisibleToFile, consumesNodeCoreModules } from "../utilities";
+import { DiagnosticWithLocation, SourceFile, Program, UserPreferences, ImportClause, ObjectBindingPattern, ImportsNotUsedAsValues, Statement, AnyImportOrRequire, TypeChecker, SymbolFlags, SyntaxKind, CompilerOptions, ModuleKind, Node, Identifier, InternalSymbolName, CancellationToken, StringLiteral, VariableStatement, NodeFlags, ModuleSpecifierResolutionHost, ScriptTarget } from "../../compiler/types";
+import { CodeFixContextBase, LanguageServiceHost, CodeAction, CodeFixAction } from "../types";
+import { createMap, first, pushIfUnique, combine, startsWith, flatMap, neverArray, firstDefined, tryCast, mapDefined, sort, arrayFrom, flatMapIterator, createMultiMap, cast, last, some, GetCanonicalFileName, removeSuffix, stringContains } from "../../compiler/core";
+import { Mutable, getEmitScriptTarget, skipAlias, isSourceFileJS, isValidTypeOnlyAliasUseSite, importFromModuleSpecifier, isRequireVariableDeclaration, getEmitModuleKind, isUMDExportSymbol, getAllowSyntheticDefaultImports, isInJSFile, isIntrinsicJsxName, getLocalSymbolForExportDefault, stripQuotes, isExternalOrCommonJsModule, hostGetCanonicalFileName, removeFileExtension, isStringANonContextualKeyword } from "../../compiler/utilities";
+import { Debug } from "../../compiler/debug";
+import { getNodeId } from "../../compiler/checker";
+import { getDirectoryPath, forEachAncestorDirectory, getBaseFileName, pathIsRelative, isRootedDiskPath, getPathComponents } from "../../compiler/path";
+import { escapeLeadingUnderscores, isNamespaceImport, isIdentifier, isStringLiteral, isJsxOpeningLikeElement, isJsxOpeningFragment, isImportEqualsDeclaration, isExportAssignment, isExportSpecifier, factory, isNamedImports, timestamp, getTypesPackageName, getPackageNameFromTypesPackageName } from "../../../built/local/compiler";
+import { isExternalModule } from "../../compiler/parser";
+import { isIdentifierStart, isIdentifierPart } from "../../compiler/scanner";
+
     export const importFixName = "import";
     const importFixId = "fixMissingImport";
     const errorCodes: readonly number[] = [
@@ -1033,4 +1046,4 @@ namespace ts.codefix {
             return components[0];
         }
     }
-}
+

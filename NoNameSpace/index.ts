@@ -52,12 +52,12 @@ async function fileCB(filePath: string) {
     let newFileContent = "";
     let removeNamespaceFlag = false;
     for await (const line of rl) {
-        // const namespaceRE = RegExp("^(declare )?namespace ts.*?\\{$");
-        const namespaceTsRE = RegExp("^(declare )?namespace ts \\{$");
+        const namespaceRE = RegExp("^(declare )?namespace .*?\\{$");
+        // const namespaceTsRE = RegExp("^(declare )?namespace ts \\{$");
         const namespaceEndRE = RegExp("^\\}$");
         // const noNamespaceTsdotRE = /(?<!namespace)(\W)ts\./g;
         const tsdotRE = /(\W)ts\./g;
-        if (namespaceTsRE.test(line)) {
+        if (namespaceRE.test(line)) {
             //skip, not output
             removeNamespaceFlag = true;
         }

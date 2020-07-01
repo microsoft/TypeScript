@@ -1,5 +1,20 @@
 /* @internal */
-namespace ts.formatting {
+
+import { FormatCodeSettings, FormattingHost, TextChange, EditorSettings } from "../types";
+import { RulesMap } from "./rulesMap";
+import { SyntaxKind, TextRange, Node, SourceFile, InterfaceDeclaration, ModuleDeclaration, Block, CatchClause, Diagnostic, SourceFileLike, LanguageVariant, MethodDeclaration, Declaration, NodeArray, LineAndCharacter, CharacterCodes, CommentRange, FunctionDeclaration, CallExpression, TypeReferenceNode } from "../../compiler/types";
+import { TriviaKind, getEndLinePosition, getStartPositionOfLine, getNonDecoratorTokenPosOfNode, findAncestor, getLeadingCommentRangesOfNode } from "../../compiler/utilities";
+import { Debug } from "../../compiler/debug";
+import { isWhiteSpaceSingleLine, isLineBreak, getTrailingCommentRanges } from "../../compiler/scanner";
+import { FormattingRequestKind, FormattingContext } from "./formattingContext";
+import { getLineStartPositionForPosition, findPrecedingToken, rangeContainsRange, startEndContainsRange, rangeOverlapsWithStartEnd, startEndOverlapsWithStartEnd, rangeContainsStartEnd, isComment, isStringOrRegularExpressionOrTemplateLiteral, createTextChangeFromStartLength, getNewLineOrDefaultFromHost, getTokenAtPosition, rangeContainsPositionExclusive, repeatString } from "../utilities";
+import { forEachChild } from "../../compiler/parser";
+import { SmartIndenter } from "./smartIndenter";
+import { getFormattingScanner, FormattingScanner } from "./formattingScanner";
+import { getNameOfDeclaration, isToken, isNodeArray, isCallLikeExpression, isJSDoc } from "../../../built/local/compiler";
+import { findIndex, forEachRight, concatenate, find } from "../../compiler/core";
+import { RuleAction, RuleFlags, Rule } from "./rule";
+
     export interface FormatContext {
         readonly options: FormatCodeSettings;
         readonly getRules: RulesMap;
@@ -1388,4 +1403,4 @@ namespace ts.formatting {
             return remainder ? spacesString + repeatString(" ", remainder) : spacesString;
         }
     }
-}
+

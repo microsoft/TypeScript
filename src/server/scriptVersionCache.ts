@@ -1,5 +1,12 @@
 /*@internal*/
-namespace ts.server {
+
+import { createTextChangeRange, createTextSpan, collapseTextChangeRangesAcrossMultipleVersions, unchangedTextChangeRange } from "../../built/local/compiler";
+import { IScriptSnapshot } from "../services/types";
+import { TextSpan, TextChangeRange } from "../compiler/types";
+import { emptyArray } from "./utilitiesPublic";
+import { Debug } from "../compiler/debug";
+import { computeLineStarts } from "../compiler/scanner";
+
     const lineCollectionCapacity = 4;
 
     interface LineCollection {
@@ -830,4 +837,4 @@ namespace ts.server {
             return 1;
         }
     }
-}
+

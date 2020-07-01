@@ -1,4 +1,7 @@
-namespace vfs {
+import { sys } from "../compiler/sys";
+import { FileSystemEntries } from "../compiler/utilities";
+import { arrayFrom } from "../compiler/core";
+
     /**
      * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
      */
@@ -49,9 +52,9 @@ namespace vfs {
 
         // lazy-initialized state that should be mutable even if the FileSystem is frozen.
         private _lazy: {
-            links?: collections.SortedMap<string, Inode>;
+            links?: SortedMap<string, Inode>;
             shadows?: Map<number, Inode>;
-            meta?: collections.Metadata;
+            meta?: Metadata;
         } = {};
 
         private _cwd: string; // current working directory
@@ -77,16 +80,16 @@ namespace vfs {
 
             let cwd = options.cwd;
             if ((!cwd || !vpath.isRoot(cwd)) && this._lazy.links) {
-                const iterator = collections.getIterator(this._lazy.links.keys());
+                const iterator = getIterator(this._lazy.links.keys());
                 try {
-                    for (let i = collections.nextResult(iterator); i; i = collections.nextResult(iterator)) {
+                    for (let i = nextResult(iterator); i; i = nextResult(iterator)) {
                         const name = i.value;
                         cwd = cwd ? vpath.resolve(name, cwd) : name;
                         break;
                     }
                 }
                 finally {
-                    collections.closeIterator(iterator);
+                    closeIterator(iterator);
                 }
             }
 
@@ -101,9 +104,9 @@ namespace vfs {
         /**
          * Gets metadata for this `FileSystem`.
          */
-        public get meta(): collections.Metadata {
+        public get meta(): Metadata {
             if (!this._lazy.meta) {
-                this._lazy.meta = new collections.Metadata(this._shadowRoot ? this._shadowRoot.meta : undefined);
+                this._lazy.meta = new Metadata(this._shadowRoot ? this._shadowRoot.meta : undefined);
             }
             return this._lazy.meta;
         }
@@ -183,16 +186,16 @@ namespace vfs {
          * Gets the metadata object for a path.
          * @param path
          */
-        public filemeta(path: string): collections.Metadata {
+        public filemeta(path: string): Metadata {
             const { node } = this._walk(this._resolve(path));
             if (!node) throw createIOError("ENOENT");
             return this._filemeta(node);
         }
 
-        private _filemeta(node: Inode): collections.Metadata {
+        private _filemeta(node: Inode): Metadata {
             if (!node.meta) {
                 const parentMeta = node.shadowRoot && this._shadowRoot && this._shadowRoot._filemeta(node.shadowRoot);
-                node.meta = new collections.Metadata(parentMeta);
+                node.meta = new Metadata(parentMeta);
             }
             return node.meta;
         }
@@ -377,10 +380,10 @@ namespace vfs {
 
         public getFileListing(): string {
             let result = "";
-            const printLinks = (dirname: string | undefined, links: collections.SortedMap<string, Inode>) => {
-                const iterator = collections.getIterator(links);
+            const printLinks = (dirname: string | undefined, links: SortedMap<string, Inode>) => {
+                const iterator = getIterator(links);
                 try {
-                    for (let i = collections.nextResult(iterator); i; i = collections.nextResult(iterator)) {
+                    for (let i = nextResult(iterator); i; i = nextResult(iterator)) {
                         const [name, node] = i.value;
                         const path = dirname ? vpath.combine(dirname, name) : name;
                         const marker = vpath.compare(this._cwd, path, this.ignoreCase) === 0 ? "*" : " ";
@@ -399,7 +402,7 @@ namespace vfs {
                     }
                 }
                 finally {
-                    collections.closeIterator(iterator);
+                    closeIterator(iterator);
                 }
             };
             printLinks(/*dirname*/ undefined, this._getRootLinks());
@@ -690,7 +693,7 @@ namespace vfs {
 
             if (isDirectory(node)) throw createIOError("EISDIR");
             if (!isFile(node)) throw createIOError("EBADF");
-            node.buffer = Buffer.isBuffer(data) ? data.slice() : ts.sys.bufferFrom!("" + data, encoding || "utf8") as Buffer;
+            node.buffer = Buffer.isBuffer(data) ? data.slice() : sys.bufferFrom!("" + data, encoding || "utf8") as Buffer;
             node.size = node.buffer.byteLength;
             node.mtimeMs = time;
             node.ctimeMs = time;
@@ -875,7 +878,7 @@ namespace vfs {
             };
         }
 
-        private _addLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
+        private _addLink(parent: DirectoryInode | undefined, links: SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
             links.set(name, node);
             node.nlink++;
             node.ctimeMs = time;
@@ -883,14 +886,14 @@ namespace vfs {
             if (!parent && !this._cwd) this._cwd = name;
         }
 
-        private _removeLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
+        private _removeLink(parent: DirectoryInode | undefined, links: SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
             links.delete(name);
             node.nlink--;
             node.ctimeMs = time;
             if (parent) parent.mtimeMs = time;
         }
 
-        private _replaceLink(oldParent: DirectoryInode, oldLinks: collections.SortedMap<string, Inode>, oldName: string, newParent: DirectoryInode, newLinks: collections.SortedMap<string, Inode>, newName: string, node: Inode, time: number) {
+        private _replaceLink(oldParent: DirectoryInode, oldLinks: SortedMap<string, Inode>, oldName: string, newParent: DirectoryInode, newLinks: SortedMap<string, Inode>, newName: string, node: Inode, time: number) {
             if (oldParent !== newParent) {
                 this._removeLink(oldParent, oldLinks, oldName, node, time);
                 this._addLink(newParent, newLinks, newName, node, time);
@@ -905,7 +908,7 @@ namespace vfs {
 
         private _getRootLinks() {
             if (!this._lazy.links) {
-                this._lazy.links = new collections.SortedMap<string, Inode>(this.stringComparer);
+                this._lazy.links = new SortedMap<string, Inode>(this.stringComparer);
                 if (this._shadowRoot) {
                     this._copyShadowLinks(this._shadowRoot._getRootLinks(), this._lazy.links);
                 }
@@ -916,7 +919,7 @@ namespace vfs {
 
         private _getLinks(node: DirectoryInode) {
             if (!node.links) {
-                const links = new collections.SortedMap<string, Inode>(this.stringComparer);
+                const links = new SortedMap<string, Inode>(this.stringComparer);
                 const { source, resolver } = node;
                 if (source && resolver) {
                     node.source = undefined;
@@ -975,16 +978,16 @@ namespace vfs {
             return shadow;
         }
 
-        private _copyShadowLinks(source: ReadonlyMap<string, Inode>, target: collections.SortedMap<string, Inode>) {
-            const iterator = collections.getIterator(source);
+        private _copyShadowLinks(source: ReadonlyMap<string, Inode>, target: SortedMap<string, Inode>) {
+            const iterator = getIterator(source);
             try {
-                for (let i = collections.nextResult(iterator); i; i = collections.nextResult(iterator)) {
+                for (let i = nextResult(iterator); i; i = nextResult(iterator)) {
                     const [name, root] = i.value;
                     target.set(name, this._getShadow(root));
                 }
             }
             finally {
-                collections.closeIterator(iterator);
+                closeIterator(iterator);
             }
         }
 
@@ -1196,7 +1199,7 @@ namespace vfs {
 
     export interface FileSystemResolverHost {
         useCaseSensitiveFileNames(): boolean;
-        getAccessibleFileSystemEntries(path: string): ts.FileSystemEntries;
+        getAccessibleFileSystemEntries(path: string): FileSystemEntries;
         directoryExists(path: string): boolean;
         fileExists(path: string): boolean;
         getFileSize(path: string): number;
@@ -1222,7 +1225,7 @@ namespace vfs {
                 }
             },
             readFileSync(path: string): Buffer {
-                return ts.sys.bufferFrom!(host.readFile(path)!, "utf8") as Buffer; // TODO: GH#18217
+                return sys.bufferFrom!(host.readFile(path)!, "utf8") as Buffer; // TODO: GH#18217
             }
         };
     }
@@ -1440,7 +1443,7 @@ namespace vfs {
         source?: string;
         resolver?: FileSystemResolver;
         shadowRoot?: FileInode;
-        meta?: collections.Metadata;
+        meta?: Metadata;
     }
 
     interface DirectoryInode {
@@ -1452,11 +1455,11 @@ namespace vfs {
         ctimeMs: number; // status change time
         birthtimeMs: number; // creation time
         nlink: number; // number of hard links
-        links?: collections.SortedMap<string, Inode>;
+        links?: SortedMap<string, Inode>;
         source?: string;
         resolver?: FileSystemResolver;
         shadowRoot?: DirectoryInode;
-        meta?: collections.Metadata;
+        meta?: Metadata;
     }
 
     interface SymlinkInode {
@@ -1470,7 +1473,7 @@ namespace vfs {
         nlink: number; // number of hard links
         symlink: string;
         shadowRoot?: SymlinkInode;
-        meta?: collections.Metadata;
+        meta?: Metadata;
     }
 
     function isEmptyNonShadowedDirectory(node: DirectoryInode) {
@@ -1497,7 +1500,7 @@ namespace vfs {
         realpath: string;
         basename: string;
         parent: DirectoryInode | undefined;
-        links: collections.SortedMap<string, Inode>;
+        links: SortedMap<string, Inode>;
         node: Inode | undefined;
     }
 
@@ -1601,7 +1604,7 @@ namespace vfs {
             const entry = normalizeFileSetEntry(container[name]);
             const file = dirname ? vpath.combine(dirname, name) : name;
             if (entry instanceof Directory) {
-                yield* ts.arrayFrom(iteratePatchWorker(file, entry.files));
+                yield* arrayFrom(iteratePatchWorker(file, entry.files));
             }
             else if (entry instanceof File) {
                 const content = typeof entry.data === "string" ? entry.data : entry.data.toString("utf8");
@@ -1609,4 +1612,4 @@ namespace vfs {
             }
         }
     }
-}
+

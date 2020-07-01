@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { NodeSet } from "../../compiler/utilities";
+import { SourceFile, Node, SyntaxKind } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { isIdentifier } from "../../../built/local/compiler";
+
     const fixId = "addMissingDeclareProperty";
     const errorCodes = [
         Diagnostics.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration.code,
@@ -31,4 +37,4 @@ namespace ts.codefix {
             changeTracker.insertModifierBefore(sourceFile, SyntaxKind.DeclareKeyword, declaration);
         }
     }
-}
+

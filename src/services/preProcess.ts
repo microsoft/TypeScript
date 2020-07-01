@@ -1,4 +1,10 @@
-namespace ts {
+import { PreProcessedFileInfo } from "./types";
+import { PragmaContext, processCommentPragmas, processPragmasIntoFields } from "../compiler/parser";
+import { ScriptTarget, FileReference, SyntaxKind } from "../compiler/types";
+import { scanner } from "./utilities";
+import { isKeyword } from "../compiler/utilities";
+import { noop } from "../compiler/core";
+
     export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
         const pragmaContext: PragmaContext = {
             languageVersion: ScriptTarget.ES5, // controls whether the token scanner considers unicode identifiers or not - shouldn't matter, since we're only using it for trivia
@@ -397,4 +403,4 @@ namespace ts {
             return { referencedFiles: pragmaContext.referencedFiles, typeReferenceDirectives: pragmaContext.typeReferenceDirectives, libReferenceDirectives: pragmaContext.libReferenceDirectives, importedFiles, isLibFile: !!pragmaContext.hasNoDefaultLib, ambientExternalModules: ambientModuleNames };
         }
     }
-}
+

@@ -1,9 +1,13 @@
 /*@internal*/
 /** Performance measurements for the compiler. */
-namespace ts.performance {
+
+import { Debug } from "./debug";
+import { noop, createMap } from "./core";
+import { timestamp } from "./performanceTimestamp";
+export namespace performance {
     declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
 
-    // NOTE: cannot use ts.noop as core.ts loads after this
+    // NOTE: cannot use noop as core.ts loads after this
     const profilerEvent: (markName: string) => void = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true ? onProfilerEvent : () => { /*empty*/ };
 
     let enabled = false;

@@ -1,4 +1,12 @@
-namespace ts.projectSystem {
+import { countWhere, startsWith, MultiMap, createMultiMap, arrayFrom, returnTrue, createMap, map, mapDefined, last, forEach, find, filter } from "../../../compiler/core";
+import { directorySeparator, getDirectoryPath, forEachAncestorDirectory, combinePaths } from "../../../compiler/path";
+import { TestServerHost, createServerHost, libFile, checkWatchedFiles, checkWatchedDirectories } from "../../../../built/local/harness";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+import { createProjectService, checkNumberOfProjects, mapCombinedPathsInAncestor, nodeModulesAtTypes, nodeModules, createSession, checkNumberOfConfiguredProjects, checkProjectActualFiles, makeSessionRequest, protocol, getNodeModuleDirectories, getTypeRootsFromLocation } from "./helpers";
+import { ModuleKind, ScriptTarget, Path } from "../../../compiler/types";
+import { flattenDiagnosticMessageText } from "../../../compiler/program";
+
     function getNumberOfWatchesInvokedForRecursiveWatches(recursiveWatchedDirs: string[], file: string) {
         return countWhere(recursiveWatchedDirs, dir => file.length > dir.length && startsWith(file, dir) && file[dir.length] === directorySeparator);
     }
@@ -535,7 +543,7 @@ namespace ts.projectSystem {
   "keywords": [],
   "author": "",
   "license": "ISC"
-}
+
 `
                 });
                 const appFolder = getDirectoryPath(app.path);
@@ -714,4 +722,4 @@ namespace ts.projectSystem {
             assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);
         });
     });
-}
+

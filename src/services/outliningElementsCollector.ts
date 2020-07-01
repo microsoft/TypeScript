@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.OutliningElementsCollector {
+
+import { SourceFile, CancellationToken, SyntaxKind, Node, Block, TryStatement, CaseClause, DefaultClause, JsxElement, JsxFragment, JsxOpeningLikeElement, TemplateExpression, NoSubstitutionTemplateLiteral, JsxAttributes, NodeArray, FunctionLike, TextSpan } from "../compiler/types";
+import { OutliningSpan, OutliningSpanKind } from "./types";
+import { Push } from "../compiler/corePublic";
+import { isAnyImportSyntax, findAncestor, getSingleInitializerOfVariableStatementOrPropertyDeclaration, getLeadingCommentRangesOfNode, isNodeArrayMultiLine } from "../compiler/utilities";
+import { findChildOfKind, isInComment, createTextSpanFromNode, createTextSpanFromRange } from "./utilities";
+import { isDeclaration, isFunctionLike, isBinaryExpression, isPropertyAccessExpression, isCallExpression, isIfStatement, isFunctionExpression, isArrowFunction, isVariableStatement, createTextSpanFromBounds, isTupleTypeNode, isBindingElement, isArrayLiteralExpression } from "../../built/local/compiler";
+import { Debug } from "../compiler/debug";
+
     export function collectElements(sourceFile: SourceFile, cancellationToken: CancellationToken): OutliningSpan[] {
         const res: OutliningSpan[] = [];
         addNodeOutliningSpans(sourceFile, cancellationToken, res);
@@ -299,4 +307,4 @@ namespace ts.OutliningElementsCollector {
         }
         return findChildOfKind(body, SyntaxKind.OpenBraceToken, sourceFile);
     }
-}
+

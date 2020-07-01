@@ -1,4 +1,6 @@
-namespace ts {
+import { verifyTsc } from "./helpers";
+import { loadProjectFromFiles } from "../tsbuild/helpers";
+
     describe("unittests:: tsc:: listFilesOnly::", () => {
         verifyTsc({
             scenario: "listFilesOnly",
@@ -20,4 +22,4 @@ namespace ts {
             commandLineArgs: ["/src/test.ts", "--listFilesOnly"]
         });
     });
-}
+

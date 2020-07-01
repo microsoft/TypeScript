@@ -1,5 +1,13 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, EmitHint, Node, JsxEmit, SyntaxKind, SourceFile, JsxOpeningElement, JsxClosingElement, JsxSelfClosingElement, PropertyAccessExpression, Expression, PropertyAssignment, Identifier } from "../types";
+import { chainBundle, getOriginalNodeId } from "./utilities";
+import { isPropertyAccessExpression, isPropertyAssignment, isPrivateIdentifier, isIdentifier } from "../factory/nodeTests";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { nodeIsSynthesized } from "../utilities";
+import { stringToToken } from "../scanner";
+import { idText } from "../utilitiesPublic";
+
     /**
      * Transforms ES5 syntax into ES3 syntax.
      *
@@ -119,4 +127,4 @@ namespace ts {
             return undefined;
         }
     }
-}
+

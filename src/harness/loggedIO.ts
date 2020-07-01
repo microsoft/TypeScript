@@ -1,4 +1,9 @@
-namespace Playback {
+import { System } from "../compiler/sys";
+import { combinePaths, toPath, normalizeSlashes, isRootedDiskPath, normalizePath } from "../compiler/path";
+import { createGetCanonicalFileName, startsWith, forEach, createMap, flatMap, AnyFunction } from "../compiler/core";
+import { CompilerOptions } from "../compiler/types";
+import { parseCommandLine } from "../../built/local/compiler";
+export namespace Playback {
     interface FileInformation {
         contents?: string;
         contentsPath?: string;
@@ -83,7 +88,7 @@ namespace Playback {
 
     let recordLog: IoLog | undefined;
     let replayLog: IoLog | undefined;
-    let replayFilesRead: ts.Map<string, IoLogFile> | undefined;
+    let replayFilesRead: Map<string, IoLogFile> | undefined;
     let recordLogFileNameBase = "";
 
     interface Memoized<T> {
@@ -106,7 +111,7 @@ namespace Playback {
 
     export interface PlaybackIO extends Harness.IO, PlaybackControl { }
 
-    export interface PlaybackSystem extends ts.System, PlaybackControl { }
+    export interface PlaybackSystem extends System, PlaybackControl { }
 
     function createEmptyLog(): IoLog {
         return {
@@ -128,16 +133,16 @@ namespace Playback {
         };
     }
 
-    export function newStyleLogIntoOldStyleLog(log: IoLog, host: ts.System | Harness.IO, baseName: string) {
+    export function newStyleLogIntoOldStyleLog(log: IoLog, host: System | Harness.IO, baseName: string) {
         for (const file of log.filesAppended) {
             if (file.contentsPath) {
-                file.contents = host.readFile(ts.combinePaths(baseName, file.contentsPath));
+                file.contents = host.readFile(combinePaths(baseName, file.contentsPath));
                 delete file.contentsPath;
             }
         }
         for (const file of log.filesWritten) {
             if (file.contentsPath) {
-                file.contents = host.readFile(ts.combinePaths(baseName, file.contentsPath));
+                file.contents = host.readFile(combinePaths(baseName, file.contentsPath));
                 delete file.contentsPath;
             }
         }
@@ -146,17 +151,17 @@ namespace Playback {
             if (result.contentsPath) {
                 // `readFile` strips away a BOM (and actually reinerprets the file contents according to the correct encoding)
                 // - but this has the unfortunate sideeffect of removing the BOM from any outputs based on the file, so we readd it here.
-                result.contents = (result.bom || "") + host.readFile(ts.combinePaths(baseName, result.contentsPath));
+                result.contents = (result.bom || "") + host.readFile(combinePaths(baseName, result.contentsPath));
                 delete result.contentsPath;
             }
         }
         return log;
     }
 
-    const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
+    const canonicalizeForHarness = createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
     function sanitizeTestFilePath(name: string) {
-        const path = ts.toPath(ts.normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", canonicalizeForHarness);
-        if (ts.startsWith(path, "/")) {
+        const path = toPath(normalizeSlashes(name.replace(/[\^<>:"|?*%]/g, "_")).replace(/\.\.\//g, "__dotdot/"), "", canonicalizeForHarness);
+        if (startsWith(path, "/")) {
             return path.substring(1);
         }
         return path;
@@ -166,8 +171,8 @@ namespace Playback {
         if (log.filesAppended) {
             for (const file of log.filesAppended) {
                 if (file.contents !== undefined) {
-                    file.contentsPath = ts.combinePaths("appended", sanitizeTestFilePath(file.path));
-                    writeFile(ts.combinePaths(baseTestName, file.contentsPath), file.contents);
+                    file.contentsPath = combinePaths("appended", sanitizeTestFilePath(file.path));
+                    writeFile(combinePaths(baseTestName, file.contentsPath), file.contents);
                     delete file.contents;
                 }
             }
@@ -175,8 +180,8 @@ namespace Playback {
         if (log.filesWritten) {
             for (const file of log.filesWritten) {
                 if (file.contents !== undefined) {
-                    file.contentsPath = ts.combinePaths("written", sanitizeTestFilePath(file.path));
-                    writeFile(ts.combinePaths(baseTestName, file.contentsPath), file.contents);
+                    file.contentsPath = combinePaths("written", sanitizeTestFilePath(file.path));
+                    writeFile(combinePaths(baseTestName, file.contentsPath), file.contents);
                     delete file.contents;
                 }
             }
@@ -186,8 +191,8 @@ namespace Playback {
                 const result = file.result!; // TODO: GH#18217
                 const { contents } = result;
                 if (contents !== undefined) {
-                    result.contentsPath = ts.combinePaths("read", sanitizeTestFilePath(file.path));
-                    writeFile(ts.combinePaths(baseTestName, result.contentsPath), contents);
+                    result.contentsPath = combinePaths("read", sanitizeTestFilePath(file.path));
+                    writeFile(combinePaths(baseTestName, result.contentsPath), contents);
                     const len = contents.length;
                     if (len >= 2 && contents.charCodeAt(0) === 0xfeff) {
                         result.bom = "\ufeff";
@@ -205,10 +210,10 @@ namespace Playback {
         return log;
     }
 
-    function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
+    function initWrapper(wrapper: PlaybackSystem, underlying: System): void;
     function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
-    function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
-        ts.forEach(Object.keys(underlying), prop => {
+    function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: System | Harness.IO): void {
+        forEach(Object.keys(underlying), prop => {
             (<any>wrapper)[prop] = (<any>underlying)[prop];
         });
 
@@ -219,9 +224,9 @@ namespace Playback {
             replayLog = log;
             // Remove non-found files from the log (shouldn't really need them, but we still record them for diagnostic purposes)
             replayLog.filesRead = replayLog.filesRead.filter(f => f.result!.contents !== undefined);
-            replayFilesRead = ts.createMap();
+            replayFilesRead = createMap();
             for (const file of replayLog.filesRead) {
-                replayFilesRead.set(ts.normalizeSlashes(file.path).toLowerCase(), file);
+                replayFilesRead.set(normalizeSlashes(file.path).toLowerCase(), file);
             }
         };
 
@@ -246,18 +251,18 @@ namespace Playback {
             if (recordLog !== undefined) {
                 let i = 0;
                 const getBase = () => recordLogFileNameBase + i;
-                while (underlying.fileExists(ts.combinePaths(getBase(), "test.json"))) i++;
+                while (underlying.fileExists(combinePaths(getBase(), "test.json"))) i++;
                 const newLog = oldStyleLogIntoNewStyleLog(recordLog, (path, str) => underlying.writeFile(path, str), getBase());
-                underlying.writeFile(ts.combinePaths(getBase(), "test.json"), JSON.stringify(newLog, null, 4)); // eslint-disable-line no-null/no-null
+                underlying.writeFile(combinePaths(getBase(), "test.json"), JSON.stringify(newLog, null, 4)); // eslint-disable-line no-null/no-null
                 const syntheticTsconfig = generateTsconfig(newLog);
                 if (syntheticTsconfig) {
-                    underlying.writeFile(ts.combinePaths(getBase(), "tsconfig.json"), JSON.stringify(syntheticTsconfig, null, 4)); // eslint-disable-line no-null/no-null
+                    underlying.writeFile(combinePaths(getBase(), "tsconfig.json"), JSON.stringify(syntheticTsconfig, null, 4)); // eslint-disable-line no-null/no-null
                 }
                 recordLog = undefined;
             }
         };
 
-        function generateTsconfig(newLog: IoLog): undefined | { compilerOptions: ts.CompilerOptions, files: string[] } {
+        function generateTsconfig(newLog: IoLog): undefined | { compilerOptions: CompilerOptions, files: string[] } {
             if (newLog.filesRead.some(file => /tsconfig.+json$/.test(file.path))) {
                 return;
             }
@@ -270,7 +275,7 @@ namespace Playback {
                     files.push(result.contentsPath);
                 }
             }
-            return { compilerOptions: ts.parseCommandLine(newLog.arguments).options, files };
+            return { compilerOptions: parseCommandLine(newLog.arguments).options, files };
         }
 
         wrapper.fileExists = recordReplay(wrapper.fileExists, underlying)(
@@ -312,7 +317,7 @@ namespace Playback {
 
         wrapper.resolvePath = recordReplay(wrapper.resolvePath, underlying)(
             path => callAndRecord(underlying.resolvePath(path), recordLog!.pathsResolved, { path }),
-            memoize(path => findResultByFields(replayLog!.pathsResolved, { path }, !ts.isRootedDiskPath(ts.normalizeSlashes(path)) && replayLog!.currentDirectory ? replayLog!.currentDirectory + "/" + path : ts.normalizeSlashes(path))));
+            memoize(path => findResultByFields(replayLog!.pathsResolved, { path }, !isRootedDiskPath(normalizeSlashes(path)) && replayLog!.currentDirectory ? replayLog!.currentDirectory + "/" + path : normalizeSlashes(path))));
 
         wrapper.readFile = recordReplay(wrapper.readFile, underlying)(
             (path: string) => {
@@ -325,7 +330,7 @@ namespace Playback {
 
         wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
             (path, extensions, exclude, include, depth) => {
-                const result = (<ts.System>underlying).readDirectory(path, extensions, exclude, include, depth);
+                const result = (<System>underlying).readDirectory(path, extensions, exclude, include, depth);
                 recordLog!.directoriesRead.push({ path, extensions, exclude, include, depth, result });
                 return result;
             },
@@ -334,9 +339,9 @@ namespace Playback {
                 // if each of the directoriesRead has matched path with the given path (directory with same path but different extension will considered
                 // different entry).
                 // TODO (yuisu): We can certainly remove these once we recapture the RWC using new API
-                const normalizedPath = ts.normalizePath(path).toLowerCase();
-                return ts.flatMap(replayLog!.directoriesRead, directory => {
-                    if (ts.normalizeSlashes(directory.path).toLowerCase() === normalizedPath) {
+                const normalizedPath = normalizePath(path).toLowerCase();
+                return flatMap(replayLog!.directoriesRead, directory => {
+                    if (normalizeSlashes(directory.path).toLowerCase() === normalizedPath) {
                         return directory.result;
                     }
                 });
@@ -361,7 +366,7 @@ namespace Playback {
         };
     }
 
-    function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
+    function recordReplay<T extends AnyFunction>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
             // eslint-disable-next-line only-arrow-functions
             return <any>(function () {
@@ -404,7 +409,7 @@ namespace Playback {
     }
 
     function findFileByPath(expectedPath: string, throwFileNotFoundError: boolean): FileInformation | undefined {
-        const normalizedName = ts.normalizePath(expectedPath).toLowerCase();
+        const normalizedName = normalizePath(expectedPath).toLowerCase();
         // Try to find the result through normal fileName
         const result = replayFilesRead!.get(normalizedName);
         if (result) {
@@ -441,7 +446,7 @@ namespace Playback {
         }
     }
 
-    export function wrapSystem(underlying: ts.System): PlaybackSystem {
+    export function wrapSystem(underlying: System): PlaybackSystem {
         const wrapper: PlaybackSystem = <any>{};
         initWrapper(wrapper, underlying);
         return wrapper;

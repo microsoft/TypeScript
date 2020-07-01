@@ -1,5 +1,17 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, createCombinedCodeActions, eachDiagnostic, createCodeFixActionWithoutFixAll } from "../codeFixProvider";
+import { concatenate, createMap, find, tryCast, singleElementArray, some } from "../../compiler/core";
+import { NodeMap, addToSeen, isSourceFileJS, getFirstConstructorWithBody, findAncestor } from "../../compiler/utilities";
+import { ClassOrInterface, getAllSupers } from "./generateAccessors";
+import { getNodeId } from "../../compiler/checker";
+import { isPrivateIdentifier, isInterfaceDeclaration, isIdentifier, isPropertyAccessExpression, isClassLike, isCallExpression, isEnumDeclaration, factory, isPropertyDeclaration, isMethodDeclaration, isConstructorDeclaration } from "../../../built/local/compiler";
+import { ModifierFlags, Identifier, EnumDeclaration, CallExpression, PrivateIdentifier, SourceFile, TypeChecker, Program, TypeReference, ClassLikeDeclaration, SyntaxKind, Expression, Node, TypeNode, BinaryExpression, PropertyDeclaration, TypeFlags } from "../../compiler/types";
+import { getTokenAtPosition, skipConstraint, startsWithUnderscore } from "../utilities";
+import { CodeFixContext, CodeFixAction, CodeFixContextBase } from "../types";
+import { createImportAdder } from "./importFixes";
+import { createMethodFromCallExpression } from "./helpers";
+
     const fixName = "addMissingMember";
     const errorCodes = [
         Diagnostics.Property_0_does_not_exist_on_type_1.code,
@@ -350,4 +362,4 @@ namespace ts.codefix {
             trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
         });
     }
-}
+

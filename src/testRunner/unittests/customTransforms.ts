@@ -1,4 +1,11 @@
-namespace ts {
+import { CustomTransformers, CompilerOptions, ScriptTarget, CompilerHost, NewLineKind, TransformerFactory, SourceFile, Node, VisitResult, SyntaxKind, FunctionDeclaration, VariableStatement, ModuleKind, Transformer } from "../../compiler/types";
+import { createSourceFile } from "../../compiler/parser";
+import { arrayToMap, createMap, arrayFrom, map } from "../../compiler/core";
+import { createProgram } from "../../compiler/program";
+import { visitEachChild, visitNode } from "../../compiler/visitorPublic";
+import { addSyntheticLeadingComment, isStringLiteral, factory, setSourceMapRange, isIdentifier, createSourceMapSource } from "../../../built/local/compiler";
+import { computeLineStarts, computeLineAndCharacterOfPosition } from "../../compiler/scanner";
+
     describe("unittests:: customTransforms", () => {
         function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: CustomTransformers, options: CompilerOptions = {}) {
             it(name, () => {
@@ -165,4 +172,4 @@ namespace ts {
         );
 
     });
-}
+

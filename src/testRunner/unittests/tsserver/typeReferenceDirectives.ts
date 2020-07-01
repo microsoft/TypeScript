@@ -1,4 +1,7 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { libFile, createServerHost } from "../../../../built/local/harness";
+import { createProjectService, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
+
     describe("unittests:: tsserver:: typeReferenceDirectives", () => {
         it("when typeReferenceDirective contains UpperCasePackage", () => {
             const libProjectLocation = `${tscWatch.projectRoot}/lib`;
@@ -82,4 +85,4 @@ declare class TestLib {
             service.openClientFile(file.path);
         });
     });
-}
+

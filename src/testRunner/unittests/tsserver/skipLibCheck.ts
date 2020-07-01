@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { createServerHost } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, makeSessionRequest, protocol, toExternalFiles } from "./helpers";
+import { CommandNames } from "../../../server/session";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: with skipLibCheck", () => {
         it("should be turned on for js-only inferred projects", () => {
             const file1 = {
@@ -226,4 +230,4 @@ namespace ts.projectSystem {
             assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });
     });
-}
+

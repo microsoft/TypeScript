@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts {
+
+import { LineAndCharacter, DocumentPosition, Program, SourceFileLike, DocumentPositionMapper, Extension, DocumentPositionMapperHost } from "../compiler/types";
+import { createGetCanonicalFileName, createMap } from "../compiler/core";
+import { toPath, getNormalizedAbsolutePath, getDirectoryPath } from "../compiler/path";
+import { getLineInfo, identitySourceMapConsumer, LineInfo, tryGetSourceMappingURL, tryParseRawSourceMap, createDocumentPositionMapper } from "../compiler/sourcemap";
+import { getLineStarts, computeLineAndCharacterOfPosition } from "../compiler/scanner";
+import { isDeclarationFileName } from "../compiler/parser";
+import { outFile, removeFileExtension, getDeclarationEmitOutputFilePathWorker, base64decode } from "../compiler/utilities";
+import { sys } from "../compiler/sys";
+import { isString } from "util";
+
     const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
 
     export interface SourceMapper {
@@ -196,4 +206,4 @@ namespace ts {
             }
         };
     }
-}
+

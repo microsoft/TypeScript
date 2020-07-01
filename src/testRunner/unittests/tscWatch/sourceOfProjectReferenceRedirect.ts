@@ -1,5 +1,14 @@
-namespace ts.tscWatch {
+
     import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
+import { createWatchedSystem, libFile, SymLink } from "../../../../built/local/harness";
+import { createSolutionBuilder } from "../../../compiler/tsbuildPublic";
+import { createWatchCompilerHostOfConfigFile } from "../../../compiler/watch";
+import { returnTrue } from "../../../compiler/core";
+import { createWatchProgram } from "../../../compiler/watchPublic";
+import { checkProgramActualFiles, projectRoot } from "./helpers";
+import { libContent } from "../tsbuild/helpers";
+import { File } from "../../../harness/vfsUtil";
+import { CompilerOptions } from "../../../compiler/types";
     describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
         interface VerifyWatchInput {
             files: readonly TestFSWithWatch.FileOrFolderOrSymLink[];
@@ -158,4 +167,4 @@ bar();
             });
         });
     });
-}
+

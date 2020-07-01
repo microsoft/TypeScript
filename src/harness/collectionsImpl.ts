@@ -1,4 +1,5 @@
-namespace collections {
+import { binarySearch, identity, orderedRemoveItemAt } from "../compiler/core";
+
     export interface SortOptions<T> {
         comparer: (a: T, b: T) => number;
         sort: "insertion" | "comparison";
@@ -42,16 +43,16 @@ namespace collections {
         }
 
         public has(key: K) {
-            return ts.binarySearch(this._keys, key, ts.identity, this._comparer) >= 0;
+            return binarySearch(this._keys, key, identity, this._comparer) >= 0;
         }
 
         public get(key: K) {
-            const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
+            const index = binarySearch(this._keys, key, identity, this._comparer);
             return index >= 0 ? this._values[index] : undefined;
         }
 
         public set(key: K, value: V) {
-            const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
+            const index = binarySearch(this._keys, key, identity, this._comparer);
             if (index >= 0) {
                 this._values[index] = value;
             }
@@ -66,12 +67,12 @@ namespace collections {
         }
 
         public delete(key: K) {
-            const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
+            const index = binarySearch(this._keys, key, identity, this._comparer);
             if (index >= 0) {
                 this.writePreamble();
-                ts.orderedRemoveItemAt(this._keys, index);
-                ts.orderedRemoveItemAt(this._values, index);
-                if (this._order) ts.orderedRemoveItemAt(this._order, index);
+                orderedRemoveItemAt(this._keys, index);
+                orderedRemoveItemAt(this._values, index);
+                if (this._order) orderedRemoveItemAt(this._order, index);
                 this.writePostScript();
                 return true;
             }
@@ -318,4 +319,4 @@ namespace collections {
             return (text.length >= 3 && text.charAt(0) === "_" && text.charAt(1) === "_" && text.charAt(2) === "_" ? text.slice(1) : text);
         }
     }
-}
+

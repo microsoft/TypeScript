@@ -1,4 +1,8 @@
-namespace ts {
+import { parseJSDocTypeExpressionForTests, parseIsolatedJSDocComment, createSourceFile } from "../../compiler/parser";
+import { assert } from "console";
+import { Debug } from "../../compiler/debug";
+import { ScriptTarget, SyntaxKind } from "../../compiler/types";
+
     describe("unittests:: JSDocParsing", () => {
         describe("TypeExpressions", () => {
             function parsesCorrectly(name: string, content: string) {
@@ -347,4 +351,4 @@ namespace ts {
             root.statements[0].getStart(root, /*includeJsdocComment*/ true);
         });
     });
-}
+

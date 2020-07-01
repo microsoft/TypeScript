@@ -1,5 +1,9 @@
 /* @internal */
-namespace ts {
+
+import { Debug, Debug } from "./debug";
+import { neverArray, compareValues, some, compareStringsCaseSensitive, map } from "./core";
+import { Comparison } from "./corePublic";
+
     // https://semver.org/#spec-item-2
     // > A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative
     // > integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor
@@ -388,4 +392,4 @@ namespace ts {
     function formatComparator(comparator: Comparator) {
         return `${comparator.operator}${comparator.operand}`;
     }
-}
+

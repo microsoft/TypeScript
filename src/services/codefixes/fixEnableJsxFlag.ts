@@ -1,5 +1,10 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixActionWithoutFixAll, codeFixAll } from "../codeFixProvider";
+import { TsConfigSourceFile } from "../../compiler/types";
+import { setJsonCompilerOptionValue } from "./helpers";
+import { factory } from "../../../built/local/compiler";
+
     const fixID = "fixEnableJsxFlag";
     const errorCodes = [Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided.code];
     registerCodeFix({
@@ -32,4 +37,4 @@ namespace ts.codefix {
     function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
         setJsonCompilerOptionValue(changeTracker, configFile, "jsx", factory.createStringLiteral("react"));
     }
-}
+

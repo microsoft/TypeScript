@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.SymbolDisplay {
+
+import { NodeBuilderFlags, TypeChecker, Node, SymbolFlags, SyntaxKind, VariableDeclaration, TransientSymbol, CheckFlags, SourceFile, Type, Printer, Signature, PropertyAccessExpression, CallExpression, NewExpression, JsxOpeningLikeElement, TaggedTemplateExpression, ObjectFlags, SymbolFormatFlags, TypeFormatFlags, FunctionLike, ModuleDeclaration, SignatureDeclaration, EnumMember, ModifierFlags, ExportAssignment, ImportEqualsDeclaration, TypeParameter, EmitHint, BinaryExpression, ListFormat } from "../compiler/types";
+import { ScriptElementKind, ScriptElementKindModifier, SymbolDisplayPart, JSDocTagInfo, SymbolDisplayPartKind } from "./types";
+import { getCombinedLocalAndExportSymbolFlags, getDeclarationOfKind, isVarConst, isLet, isInExpressionContext, getObjectFlags, isEnumConst, getTextOfConstantValue, isModuleWithStringLiteralName, hasSyntacticModifier, getSourceFileOfNode, isExternalModuleImportEqualsDeclaration, getTextOfNode, getExternalModuleImportEqualsDeclarationExpression, isFunctionBlock } from "../compiler/utilities";
+import { first, forEach, contains, addRange, find, some } from "../compiler/core";
+import { isExpression, isCallOrNewExpression, isJsxOpeningLikeElement, isTaggedTemplateExpression, isFunctionLike, isCallExpression, isEnumDeclaration, isFunctionLikeKind, getNameOfDeclaration, getParseTreeNode, isIdentifier, idText, isArrowFunction, isFunctionExpression, isClassExpression } from "../../built/local/compiler";
+import { isFirstDeclarationOfSymbolParameter, getNodeModifiers, getMeaningFromLocation, SemanticMeaning, keywordPart, isCallExpressionTarget, isNewExpressionTarget, spacePart, punctuationPart, symbolToDisplayParts, lineBreakPart, isNameOfFunctionDeclaration, operatorPart, typeToDisplayParts, textPart, signatureToDisplayParts, displayPart, mapToDisplayParts, textOrKeywordPart } from "./utilities";
+import { Debug } from "../compiler/debug";
+import { createPrinter } from "../compiler/emitter";
+
     const symbolDisplayNodeBuilderFlags = NodeBuilderFlags.OmitParameterModifiers | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
 
     // TODO(drosen): use contextual SemanticMeaning.
@@ -676,4 +685,4 @@ namespace ts.SymbolDisplay {
             return true;
         });
     }
-}
+

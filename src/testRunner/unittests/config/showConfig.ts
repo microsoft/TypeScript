@@ -1,4 +1,10 @@
-namespace ts {
+import { combinePaths, comparePaths, getNormalizedAbsolutePath } from "../../../compiler/path";
+import { ParseConfigFileHost, parseCommandLine, getParsedCommandLineOfConfigFile, convertToTSConfig, optionDeclarations, optionsForWatch } from "../../../../built/local/compiler";
+import { Comparison } from "../../../compiler/corePublic";
+import { flattenDiagnosticMessageText } from "../../../compiler/program";
+import { CommandLineOption } from "../../../compiler/types";
+import { Debug } from "../../../compiler/debug";
+
     describe("unittests:: config:: showConfig", () => {
         function showTSConfigCorrectly(name: string, commandLinesArgs: string[], configJson?: object) {
             describe(name, () => {
@@ -190,4 +196,4 @@ namespace ts {
             showTSConfigCorrectly(`Shows tsconfig for single option/${option.name}`, args, configObject);
         }
     });
-}
+

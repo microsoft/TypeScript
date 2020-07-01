@@ -1,4 +1,5 @@
-namespace ts.server {
+import { sys } from "../compiler/sys";
+
     export type ActionSet = "action::set";
     export type ActionInvalidate = "action::invalidate";
     export type ActionPackageInstalled = "action::packageInstalled";
@@ -59,4 +60,4 @@ namespace ts.server {
         const d = new Date();
         return `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
     }
-}
+

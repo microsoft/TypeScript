@@ -1,4 +1,23 @@
-namespace ts {
+import { CompilerOptionsValue, ResolvedConfigFileName, Path, Extension, ParsedCommandLine, Diagnostic, CancellationToken, ExitStatus, CompilerOptions, WatchOptions, CompilerHost, ResolvedProjectReference, ResolvedModuleFull, WriteFileCallback, CustomTransformers, Program, SourceFile, EmitResult, DiagnosticCollection, DiagnosticMessage } from "./types";
+import { createMap, returnUndefined, noop, maybeBind, copyProperties, hasProperty, GetCanonicalFileName, createGetCanonicalFileName, neverArray, findIndex, identity, assertType, arrayIsEqualTo, forEach, createMapFromTemplate, arrayToMap, arrayFrom, mapDefinedIterator } from "./core";
+import { fileExtensionIs, toPath, resolvePath, getDirectoryPath, convertToRelativePath } from "./path";
+import { BuilderProgram, EmitAndSemanticDiagnosticsBuilderProgram, AffectedFileResult, SemanticDiagnosticsBuilderProgram } from "./builderPublic";
+import { ProgramHost, WatchHost, CreateProgram, WatchStatusReporter, readBuilderProgram } from "./watchPublic";
+import { DiagnosticReporter, commonOptionsWithBuild, ParseConfigFileHost, ExtendedConfigCacheEntry, getParsedCommandLineOfConfigFile, getFileNamesFromConfigSpecs, updateErrorForNoInputFiles, canJsonReportNoInputFiles } from "./commandLineParser";
+import { UpToDateStatus, resolveConfigFileProjectName, UpToDateStatusType, Status } from "./tsbuild";
+import { ConfigFileProgramReloadLevel, WildcardDirectoryWatcher, WatchFile, WatchFilePath, WatchDirectory, closeFileWatcherOf, updateWatchingWildcardDirectories, isIgnoredFileFromWildCardWatching } from "./watchUtilities";
+import { System, sys, FileWatcher, missingFileModifiedTime, PollingInterval } from "./sys";
+import { formatColorAndReset, ForegroundColorEscapeSequences, flattenDiagnosticMessageText, loadWithLocalCache, parseConfigHostFromCompilerHostLike, changeCompilerHostLikeToUseCache, getConfigFileParsingDiagnostics, resolveProjectReferencePath } from "./program";
+import { getLocaleTimeString, createProgramHost, createDiagnosticReporter, createWatchHost, WatchType, createCompilerHostFromProgramHost, setGetSourceFileAsHashVersioned, createWatchFactory, emitFilesAndReportErrors, listFiles, getErrorCountForSummary, getWatchErrorSummaryDiagnosticMessage } from "./watch";
+import { ModuleResolutionCache, createModuleResolutionCache, resolveModuleName } from "./moduleNameResolver";
+import { Debug } from "./debug";
+import { createCompilerDiagnostic, arrayToSet, mutateMapSkippingNewValues, closeFileWatcher, createDiagnosticCollection, isIncrementalCompilation, outFile, mutateMap, clearMap } from "./utilities";
+import { OutputFile } from "./builderStatePublic";
+import { writeFile } from "fs";
+import { getFirstProjectOutput, emitUsingBuildInfo, getAllProjectOutputs, getTsBuildInfoEmitOutputFilePath, getBuildInfo } from "./emitter";
+import { isString } from "util";
+import { version } from "os";
+
     const minimumDate = new Date(-8640000000000000);
     const maximumDate = new Date(8640000000000000);
 
@@ -2071,4 +2090,4 @@ namespace ts {
             reportUpToDateStatus(state, configFileName, status);
         }
     }
-}
+

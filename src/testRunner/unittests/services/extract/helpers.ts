@@ -1,4 +1,11 @@
-namespace ts {
+import { createMap, hasProperty, notImplemented, noop, returnFalse, find } from "../../../../compiler/core";
+import { CharacterCodes, ScriptTarget, DiagnosticMessage, Extension, Program } from "../../../../compiler/types";
+import { isIdentifierPart } from "../../../../compiler/scanner";
+import { LanguageServiceHost, RefactorContext, testFormatSettings, emptyOptions } from "../../../../services/types";
+import { assert } from "console";
+import { createTextSpanFromRange } from "../../../../services/utilities";
+import { length } from "ms";
+
     interface Range {
         pos: number;
         end: number;
@@ -174,4 +181,4 @@ namespace ts {
             assert.isUndefined(find(infos, info => info.description === description.message));
         });
     }
-}
+

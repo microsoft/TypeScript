@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.NavigationBar {
+
+import { CancellationToken, SourceFile, Node, DeclarationName, SyntaxKind, BindableStaticNameExpression, PropertyNameLiteral, WellKnownSymbolExpression, ConstructorDeclaration, ClassElement, TypeElement, FunctionLikeDeclaration, ImportClause, ShorthandPropertyAssignment, SpreadAssignment, VariableDeclaration, PropertyAssignment, BindingElement, EnumDeclaration, InterfaceDeclaration, ModuleDeclaration, ExportAssignment, BinaryExpression, AssignmentDeclarationKind, PropertyAccessExpression, EntityNameExpression, BindableObjectDefinePropertyCall, CallExpression, BindableElementAccessExpression, Declaration, Identifier, ModifierFlags, FunctionExpression, ArrowFunction, ClassExpression, InternalSymbolName, FunctionDeclaration, TextSpan, EnumMember, ClassLikeDeclaration, Expression } from "../compiler/types";
+import { NavigationBarItem, NavigationTree } from "./types";
+import { map, createMap, forEach, filterMutate, lastOrUndefined, concatenate, contains, compareStringsCaseSensitiveUI, compareValues, mapDefined } from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import { isDeclaration, isExpression, getNameOfDeclaration, isPrivateIdentifier, isToken, isParameterPropertyDeclaration, isIdentifier, isBindingPattern, isObjectLiteralExpression, isArrowFunction, isFunctionExpression, setTextRange, factory, hasJSDocNodes, isFunctionDeclaration, isVariableDeclaration, isBinaryExpression, isCallExpression, isClassDeclaration, isModuleBlock, isPropertyName, unescapeLeadingUnderscores, isElementAccessExpression, isExportAssignment, isModuleDeclaration, isPropertyAssignment, isClassLike, isStringLiteralLike, isPropertyAccessExpression } from "../../built/local/compiler";
+import { isPropertyNameLiteral, getNameOrArgument, getElementOrPropertyAccessName, hasDynamicName, getAssignmentDeclarationKind, isBindableStaticAccessExpression, isJSDocTypeAlias, hasSyntacticModifier, getPropertyNameForPropertyNameNode, escapeString, removeFileExtension, getSyntacticModifierFlags, isAmbientModule, getTextOfNode, getTextOfIdentifierOrLiteral, getFullWidth, declarationNameToString } from "../compiler/utilities";
+import { forEachChild, isExternalModule } from "../compiler/parser";
+import { getBaseFileName, normalizePath } from "../compiler/path";
+import { getNodeKind, getNodeModifiers, createTextSpanFromRange, createTextSpanFromNode } from "./utilities";
+
     /**
      * Matches all whitespace characters in a string. Eg:
      *
@@ -52,7 +62,7 @@ namespace ts.NavigationBar {
         indent: number; // # of parents
     }
 
-    export function getNavigationBarItems(sourceFile: SourceFile, cancellationToken: CancellationToken): NavigationBarItem[] {
+    export function getNavigationBarItemsImpl(sourceFile: SourceFile, cancellationToken: CancellationToken): NavigationBarItem[] {
         curCancellationToken = cancellationToken;
         curSourceFile = sourceFile;
         try {
@@ -63,7 +73,7 @@ namespace ts.NavigationBar {
         }
     }
 
-    export function getNavigationTree(sourceFile: SourceFile, cancellationToken: CancellationToken): NavigationTree {
+    export function getNavigationTreeImpl(sourceFile: SourceFile, cancellationToken: CancellationToken): NavigationTree {
         curCancellationToken = cancellationToken;
         curSourceFile = sourceFile;
         try {
@@ -956,4 +966,4 @@ namespace ts.NavigationBar {
         // \u2029 - Paragraph separator
         return text.replace(/\\?(\r?\n|\r|\u2028|\u2029)/g, "");
     }
-}
+

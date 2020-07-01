@@ -1,4 +1,6 @@
-namespace ts {
+import { loadProjectFromDisk, replaceText } from "./helpers";
+import { verifyTsc } from "../tsc/helpers";
+
     describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
         let projFs: vfs.FileSystem;
         before(() => {
@@ -58,4 +60,4 @@ namespace ts {
             },
         });
     });
-}
+

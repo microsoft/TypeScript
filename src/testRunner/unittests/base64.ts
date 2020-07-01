@@ -1,4 +1,6 @@
-namespace ts {
+import { assert } from "console";
+import { base64decode, convertToBase64 } from "../../compiler/utilities";
+
     describe("unittests:: base64", () => {
         describe("base64decode", () => {
             it("can decode input strings correctly without needing a host implementation", () => {
@@ -19,4 +21,4 @@ namespace ts {
             });
         });
     });
-}
+

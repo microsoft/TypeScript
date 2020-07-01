@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createSession, openFilesForSession, executeSessionRequest, protocol } from "./helpers";
+import { createServerHost } from "../../../../built/local/harness";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: getApplicableRefactors", () => {
         it("works when taking position", () => {
             const aTs: File = { path: "/a.ts", content: "" };
@@ -9,4 +13,4 @@ namespace ts.projectSystem {
             assert.deepEqual<readonly protocol.ApplicableRefactorInfo[] | undefined>(response, []);
         });
     });
-}
+

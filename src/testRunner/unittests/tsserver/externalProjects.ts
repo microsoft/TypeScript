@@ -1,4 +1,13 @@
-namespace ts.projectSystem {
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { createProjectService, protocol, toExternalFiles, checkProjectActualFiles, toExternalFile, createSession, checkNumberOfProjects, checkNumberOfExternalProjects, checkNumberOfInferredProjects, checkProjectRootFiles, configuredProjectAt } from "./helpers";
+import { combinePaths, getDirectoryPath, getBaseFileName, toPath } from "../../../compiler/path";
+import { assert } from "console";
+import { ConfigFileProgramReloadLevel } from "../../../compiler/watchUtilities";
+import { neverArray, createGetCanonicalFileName, arrayIterator, map, singleIterator } from "../../../compiler/core";
+import { SourceFile, DiagnosticCategory, ModuleResolutionKind, ScriptKind } from "../../../compiler/types";
+import { File } from "../../../harness/vfsUtil";
+import { verifyDynamic } from "./dynamicFiles";
+
     describe("unittests:: tsserver:: ExternalProjects", () => {
         describe("can handle tsconfig file name with difference casing", () => {
             function verifyConfigFileCasing(lazyConfiguredProjectsFromExternalProject: boolean) {
@@ -900,4 +909,4 @@ namespace ts.projectSystem {
             checkProjectActualFiles(jsConfigProject, [jsConfig.path, jsFilePath, libFile.path]);
         });
     });
-}
+

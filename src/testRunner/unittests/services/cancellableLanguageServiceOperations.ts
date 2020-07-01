@@ -1,4 +1,7 @@
-namespace ts {
+import { emptyOptions, FormatCodeSettings, IndentStyle, LanguageService, HostCancellationToken } from "../../../services/types";
+import { assert } from "console";
+import { CompilerOptions, OperationCanceledException } from "../../../compiler/types";
+
     describe("unittests:: services:: cancellableLanguageServiceOperations", () => {
         const file = `
         function foo(): void;
@@ -92,4 +95,4 @@ namespace ts {
         assert.exists(caught, "Expected operation to be cancelled, but was not");
         assert.instanceOf(caught, OperationCanceledException);
     }
-}
+

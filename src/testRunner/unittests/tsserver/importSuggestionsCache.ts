@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { assert } from "console";
+import { createServerHost } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, configuredProjectAt, protocol, executeSessionRequest } from "./helpers";
+
     const packageJson: File = {
         path: "/package.json",
         content: `{ "dependencies": { "mobx": "*" } }`
@@ -72,4 +76,4 @@ namespace ts.projectSystem {
         const checker = project.getLanguageService().getProgram()!.getTypeChecker();
         return { host, project, projectService, importSuggestionsCache: project.getImportSuggestionsCache(), checker };
     }
-}
+

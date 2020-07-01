@@ -1,4 +1,4 @@
-namespace ts {
+
     describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
         verifyTsc({
             scenario: "configFileErrors",
@@ -54,4 +54,4 @@ namespace ts {
             ]
         });
     });
-}
+

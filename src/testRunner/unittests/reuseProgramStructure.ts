@@ -1,4 +1,4 @@
-namespace ts {
+
 
     const enum ChangedPart {
         references = 1 << 0,
@@ -904,6 +904,20 @@ namespace ts {
     type File = TestFSWithWatch.File;
     import createTestSystem = TestFSWithWatch.createWatchedSystem;
     import libFile = TestFSWithWatch.libFile;
+import { SourceFile, Program, CompilerHost, TextChangeRange, TextSpan, ScriptTarget, CompilerOptions, ResolvedTypeReferenceDirective, ResolvedModule, StructureIsReused, ModuleKind, ModuleResolutionKind } from "../../compiler/types";
+import { IScriptSnapshot } from "../../services/types";
+import { Debug } from "../../compiler/debug";
+import { createTextSpan, createTextChangeRange } from "../../../built/local/compiler";
+import { createSourceFile, updateSourceFile } from "../../compiler/parser";
+import { arrayToMap, createGetCanonicalFileName, notImplemented, mapEntries, find, noop, neverArray, createMapFromTemplate, returnFalse } from "../../compiler/core";
+import { sys, System } from "../../compiler/sys";
+import { toPath } from "../../compiler/path";
+import { createProgram, isProgramUptoDate } from "../../compiler/program";
+import { assert } from "console";
+import { forEachEntry, forEachKey } from "../../compiler/utilities";
+import { checkResolvedModule, createResolvedModule } from "./moduleResolution";
+import { createWatchProgram } from "../../compiler/watchPublic";
+import { createWatchCompilerHostOfFilesAndCompilerOptions, createWatchCompilerHostOfConfigFile, parseConfigFileWithSystem } from "../../compiler/watch";
 
     describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
         function getWhetherProgramIsUptoDate(
@@ -1160,4 +1174,4 @@ namespace ts {
             });
         });
     });
-}
+

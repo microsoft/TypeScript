@@ -1,4 +1,24 @@
-namespace ts.server {
+import { HostCancellationToken, TextChange, RenameLocation, ReferencedSymbol, ReferencedSymbolDefinitionInfo, DocumentSpan, PerformanceEvent, WithMetadata, DefinitionInfo, DefinitionInfoAndBoundSpan, ImplementationLocation, TextInsertion, RenameInfo, OutliningSpan, QuickInfo, CompletionInfo, CompletionEntry, CompletionEntryDetails, SignatureHelpItems, NavigationBarItem, NavigationTree, NavigateToItem, RefactorEditInfo, FileTextChanges, CodeFixAction, CombinedCodeActions, CodeActionCommand, CodeAction, SelectionRange, CallHierarchyItem, CallHierarchyIncomingCall, CallHierarchyOutgoingCall, FormatCodeSettings } from "../services/types";
+import { Project, isInferredProject, isExternalProject, isConfiguredProject, ProjectKind } from "./project";
+import { NormalizedPath, emptyArray, toNormalizedPath, Msg, Errors } from "./utilitiesPublic";
+import { CompilerOptions, Diagnostic, diagnosticCategoryName, DiagnosticRelatedInformation, LineAndCharacter, OperationCanceledException, Path, DocumentPosition, UserPreferences, TextSpan, ScriptKind, Extension, EmitResult, TextRange } from "../compiler/types";
+import { getEmitDeclarations, outFile } from "../compiler/utilities";
+import { flattenDiagnosticMessageText } from "../compiler/program";
+import { map, MultiMap, flatMapToMutable, flatMap, deduplicate, equateValues, contains, firstOrUndefined, find, memoize, tryAddToSet, arrayFrom, filter, concatenate, identity, createMap, mapDefined, startsWith, compareStringsCaseSensitiveUI, singleIterator, toArray, stringContains, toFileNameLowerCase, createMapFromTemplate, mapIterator, arrayIterator, mapDefinedIterator, arrayReverseIterator, first, isArray, isString } from "../compiler/core";
+import { getLineAndCharacterOfPosition, computeLineAndCharacterOfPosition, computeLineStarts } from "../compiler/scanner";
+import { textSpanEnd, createTextSpan, EmitOutput, createTextSpanFromBounds } from "../../built/local/compiler";
+import { Logger } from "../services/shims";
+import { LogLevel, Debug } from "../compiler/debug";
+import { ServerHost } from "./types";
+import { ProjectService, ProjectServiceEventHandler, ProjectServiceOptions, ProjectServiceEvent, ProjectsUpdatedInBackgroundEvent, ProjectLoadingStartEvent, ProjectLoadingFinishEvent, LargeFileReferencedEvent, ConfigFileDiagEvent, ProjectLanguageServiceStateEvent, ProjectInfoTelemetryEvent, updateProjectIfDirty, convertFormatOptions, convertUserPreferences, convertScriptKindName, ScriptInfoOrConfig, isConfigFile } from "./editorServices";
+import { documentSpansEqual, PossibleProgramFileInfo, getSnapshotText, mapOneOrMany } from "../services/utilities";
+import { Push } from "../compiler/corePublic";
+import { ITypingsInstaller } from "./typingsCache";
+import { perfLogger } from "../compiler/perfLogger";
+import { ScriptInfo } from "./scriptInfo";
+import { displayPartsToString, getSupportedCodeFixes } from "../services/services";
+import { fileExtensionIs, normalizePath } from "../compiler/path";
+
     interface StackTraceError extends Error {
         stack?: string;
     }
@@ -2883,4 +2903,4 @@ namespace ts.server {
 
         return text;
     }
-}
+

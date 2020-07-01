@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { createMap, cast, first } from "../../compiler/core";
+import { addToSeen, getEffectiveBaseTypeNode, getSyntacticModifierFlags } from "../../compiler/utilities";
+import { getNodeId } from "../../compiler/checker";
+import { SourceFile, ClassLikeDeclaration, UserPreferences, ModifierFlags } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { isClassLike } from "../../../built/local/compiler";
+import { TypeConstructionContext, createMissingMemberNodes } from "./helpers";
+import { createImportAdder } from "./importFixes";
+
     const errorCodes = [
         Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
         Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1.code,
@@ -52,4 +62,4 @@ namespace ts.codefix {
         const flags = getSyntacticModifierFlags(first(symbol.getDeclarations()!));
         return !(flags & ModifierFlags.Private) && !!(flags & ModifierFlags.Abstract);
     }
-}
+

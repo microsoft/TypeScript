@@ -1,5 +1,24 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, SyntaxKind, SourceFile, ModuleDeclaration, Identifier, Block, ModuleBlock, CaseBlock, ClassDeclaration, UnderscoreEscapedMap, Node, Bundle, ModifierFlags, FunctionDeclaration, VisitResult, TransformFlags, ImportDeclaration, ImportEqualsDeclaration, ExportAssignment, ExportDeclaration, ConstructorDeclaration, PropertyDeclaration, ClassExpression, HeritageClause, ExpressionWithTypeArguments, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, FunctionExpression, ArrowFunction, ParameterDeclaration, ParenthesizedExpression, AssertionExpression, CallExpression, NewExpression, TaggedTemplateExpression, NonNullExpression, EnumDeclaration, VariableStatement, VariableDeclaration, JsxSelfClosingElement, JsxOpeningElement, ModuleKind, ScriptTarget, ClassLikeDeclaration, Statement, EmitFlags, NodeFlags, Expression, ClassElement, Decorator, FunctionLikeDeclaration, AccessorDeclaration, Declaration, ObjectLiteralElementLike, BinaryExpression, PropertyAccessExpression, VoidExpression, ConditionalExpression, ArrayLiteralExpression, SignatureDeclaration, TypeNode, ParenthesizedTypeNode, LiteralTypeNode, TypeReferenceNode, UnionOrIntersectionTypeNode, ConditionalTypeNode, TypeOperatorNode, JSDocNullableType, JSDocNonNullableType, JSDocOptionalType, TypeReferenceSerializationKind, EntityName, QualifiedName, EnumMember, PropertyName, InitializedVariableDeclaration, OuterExpressionKinds, __String, TextRange, ImportsNotUsedAsValues, ImportClause, NamedImportBindings, ImportSpecifier, NamedExports, NamespaceExport, NamedExportBindings, ExportSpecifier, NodeCheckFlags, EmitHint, ShorthandPropertyAssignment, ElementAccessExpression, LeftHandSideExpression } from "../types";
+import { getStrictOptionValue, getEmitScriptTarget, getEmitModuleKind, hasSyntacticModifier, modifierToFlag, isJsonSourceFile, getFirstConstructorWithBody, getEffectiveBaseTypeNode, childIsDecorated, createTokenRange, setTextRangeEnd, setTextRangePos, insertStatementsAfterStandardPrologue, moveRangePastDecorators, getEmitFlags, nodeOrChildIsDecorated, parameterIsThisKeyword, getAllAccessorDeclarations, getSetAccessorTypeAnnotationNode, getEffectiveReturnTypeNode, nodeIsPresent, getRestParameterElementType, isAsyncFunction, findAncestor, setParent, hasStaticModifier, nodeIsMissing, moveRangePos, moveRangePastModifiers, getInitializedVariables, getLeadingCommentRangesOfNode, isEnumConst, createUnderscoreEscapedMap, isExternalModuleImportEqualsDeclaration, createRange, isAccessExpression, declarationNameToString, getTextOfNode } from "../utilities";
+import { mapDefined, forEach, some, singleOrMany, filter, addRange, map, flatMap } from "../core";
+import { createUnparsedSourceFile, setOriginalNode } from "../factory/nodeFactory";
+import { addEmitHelpers, setEmitFlags, setCommentRange, setSourceMapRange, removeAllComments, setSyntheticLeadingComments, setSyntheticTrailingComments, addEmitFlags, setConstantValue, addSyntheticTrailingComment } from "../factory/emitNode";
+import { Debug } from "../debug";
+import { isClassDeclaration, isHeritageClause, isIdentifier, isConditionalTypeNode, isPrivateIdentifier, isComputedPropertyName, isJsxAttributes, isModuleDeclaration, isImportClause, isImportSpecifier, isNamespaceExport, isExportSpecifier, isSourceFile, isShorthandPropertyAssignment, isPropertyAccessExpression, isElementAccessExpression } from "../factory/nodeTests";
+import { getParseTreeNode, isStatement, isModifier, isParameterPropertyDeclaration, isClassElement, isExpression, isClassLike, isFunctionLike, idText, skipPartiallyEmittedExpressions, isPropertyName, isLeftHandSideExpression, ParameterPropertyDeclaration, isBindingName, isBindingPattern, isAssertionExpression, isJsxTagNameExpression, isNamedImportBindings, isNamedExportBindings, isGeneratedIdentifier, getOriginalNode } from "../utilitiesPublic";
+import { visitEachChild, visitLexicalEnvironment, visitNodes, visitNode, visitParameterList, visitFunctionBody } from "../visitorPublic";
+import { isExternalModule, parseNodeFactory } from "../parser";
+import { skipOuterExpressions, startOnNewLine, createExpressionFromEntityName, isLocalName } from "../factory/utilities";
+import { getProperties, getOriginalNodeId, isSimpleInlineableExpression, addPrologueDirectivesAndInitialSuperCall } from "./utilities";
+import { skipTrivia } from "../scanner";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { flattenDestructuringAssignment, FlattenLevel } from "./destructuring";
+import { length } from "module";
+import { isInstantiatedModule } from "../checker";
+import { isArray } from "util";
+
     /**
      * Indicates whether to emit type metadata in the new format.
      */
@@ -2751,6 +2770,7 @@ namespace ts {
 
                     const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node)!.body;
                     statementsLocation = moveRangePos(moduleBlock.statements, -1);
+
                 }
             }
 
@@ -3365,4 +3385,4 @@ namespace ts {
             return isPropertyAccessExpression(node) || isElementAccessExpression(node) ? resolver.getConstantValue(node) : undefined;
         }
     }
-}
+

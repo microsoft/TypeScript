@@ -1,4 +1,25 @@
-namespace ts.server {
+import { ScriptVersionCache, AbsolutePositionAndLineText } from "./scriptVersionCache";
+import { ServerHost } from "./types";
+import { Debug } from "../compiler/debug";
+import { IScriptSnapshot, ScriptSnapshot, FormatCodeSettings, getDefaultFormatCodeSettings, emptyOptions } from "../services/types";
+import { TextSpan, SourceFile, Path, SourceFileLike, DocumentPositionMapper, ScriptKind } from "../compiler/types";
+import { createTextSpanFromBounds } from "../../built/local/compiler";
+import { computePositionOfLineAndCharacter, computeLineAndCharacterOfPosition, computeLineStarts } from "../compiler/scanner";
+import { hasTSFileExtension, getScriptKindFromFileName } from "../compiler/utilities";
+import { maxFileSize } from "./editorServices";
+import { LineInfo, getLineInfo } from "../compiler/sourcemap";
+import { NormalizedPath, Errors } from "./utilitiesPublic";
+import { stringContains, contains, unorderedRemoveItem, assign, forEach, some } from "../compiler/core";
+import { getBaseFileName, directorySeparator } from "../compiler/path";
+import { DocumentRegistryBucketKey } from "../../built/local/services";
+import { FileWatcher, FileWatcherEventKind } from "../compiler/sys";
+import { Project, isConfiguredProject, isInferredProject, ConfiguredProject, InferredProject, isExternalProject, ProjectKind } from "./project";
+import { clear } from "console";
+import { ExternalProject } from "./protocol";
+import { getSnapshotText } from "../services/utilities";
+import { isString } from "util";
+import { closeFileWatcherOf } from "../compiler/watchUtilities";
+
     export interface ScriptInfoVersion {
         svc: number;
         text: number;
@@ -678,4 +699,4 @@ namespace ts.server {
         Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
         Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
     }
-}
+

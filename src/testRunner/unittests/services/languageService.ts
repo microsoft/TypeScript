@@ -1,4 +1,9 @@
-namespace ts {
+import { ScriptSnapshot, LanguageServiceHost } from "../../../services/types";
+import { getDefaultLibFilePath, getDefaultCompilerOptions } from "../../../services/services";
+import { assert } from "console";
+import { neverArray, createMap, returnTrue } from "../../../compiler/core";
+import { Program } from "../../../compiler/types";
+
     const _chai: typeof import("chai") = require("chai");
     const expect: typeof _chai.expect = _chai.expect;
     describe("unittests:: services:: languageService", () => {
@@ -19,7 +24,7 @@ export function Component(x: Config): any;`
         };
 
         function createLanguageService() {
-            return ts.createLanguageService({
+            return createLanguageService({
                 getCompilationSettings() {
                     return {};
                 },
@@ -104,7 +109,7 @@ export function Component(x: Config): any;`
                     getCurrentDirectory: () => "/project",
                     getDefaultLibFileName: () => "/lib/lib.d.ts"
                 };
-                const ls = ts.createLanguageService(host);
+                const ls = createLanguageService(host);
                 const program1 = ls.getProgram()!;
                 const program2 = ls.getProgram()!;
                 assert.strictEqual(program1, program2);
@@ -139,4 +144,4 @@ export function Component(x: Config): any;`
             });
         });
     });
-}
+

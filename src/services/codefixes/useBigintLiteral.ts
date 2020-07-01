@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, TextSpan } from "../../compiler/types";
+import { tryCast } from "../../compiler/core";
+import { getTokenAtPosition } from "../utilities";
+import { isNumericLiteral, factory } from "../../../built/local/compiler";
+
     const fixId = "useBigintLiteral";
     const errorCodes = [
         Diagnostics.Numeric_literals_with_absolute_values_equal_to_2_53_or_greater_are_too_large_to_be_represented_accurately_as_integers.code,
@@ -30,4 +36,4 @@ namespace ts.codefix {
 
         changeTracker.replaceNode(sourceFile, numericLiteral, factory.createBigIntLiteral(newText));
     }
-}
+

@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts {
+
+import { EmitHost, SourceMapGenerator, RawSourceMap, LineAndCharacter, CharacterCodes, DocumentPositionMapperHost, DocumentPositionMapper, DocumentPosition } from "./types";
+import { performance } from "perf_hooks";
+import { createMap, every, compareValues, arrayFrom, neverArray, sortAndDeduplicate, some, binarySearchKey, identity } from "./core";
+import { getRelativePathToDirectoryOrUrl, combinePaths, getDirectoryPath, getNormalizedAbsolutePath } from "./path";
+import { Debug } from "./debug";
+import { isArray, isString } from "util";
+import { SortedReadonlyArray } from "./corePublic";
+import { getPositionOfLineAndCharacter } from "./scanner";
+
     export interface SourceMapGeneratorOptions {
         extendedDiagnostics?: boolean;
     }
@@ -740,4 +749,4 @@ namespace ts {
         getSourcePosition: identity,
         getGeneratedPosition: identity
     };
-}
+

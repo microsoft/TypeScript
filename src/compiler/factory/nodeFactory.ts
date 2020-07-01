@@ -1,4 +1,23 @@
-namespace ts {
+import { BaseNodeFactory, createBaseNodeFactory } from "./baseNodeFactory";
+import { NodeFactory, BinaryOperator, Expression, PrefixUnaryOperator, PostfixUnaryOperator, JSDocType, TypeNode, JSDocTag, Identifier, JSDocTypeExpression, EmitFlags, JSDocAllType, SyntaxKind, JSDocUnknownType, JSDocNonNullableType, JSDocNullableType, JSDocOptionalType, JSDocVariadicType, JSDocNamepathType, JSDocTypeTag, JSDocReturnTag, JSDocThisTag, JSDocEnumTag, JSDocAuthorTag, JSDocClassTag, JSDocPublicTag, JSDocPrivateTag, JSDocProtectedTag, JSDocReadonlyTag, JSDocDeprecatedTag, Node, NodeArray, MutableNodeArray, Declaration, VariableStatement, ImportDeclaration, Decorator, Modifier, NamedDeclaration, PrivateIdentifier, StringLiteralLike, NumericLiteral, ComputedPropertyName, BindingPattern, TypeParameterDeclaration, TransformFlags, SignatureDeclarationBase, ParameterDeclaration, FunctionLikeDeclaration, InterfaceDeclaration, ClassLikeDeclaration, HeritageClause, ClassElement, PropertyDeclaration, VariableDeclaration, BindingElement, LiteralToken, TokenFlags, PseudoBigInt, BigIntLiteral, StringLiteral, PropertyNameLiteral, RegularExpressionLiteral, NoSubstitutionTemplateLiteral, GeneratedIdentifierFlags, GeneratedIdentifier, SuperExpression, ThisExpression, NullLiteral, TrueLiteral, FalseLiteral, PunctuationSyntaxKind, PunctuationToken, KeywordTypeSyntaxKind, KeywordTypeNode, ModifierSyntaxKind, ModifierToken, KeywordSyntaxKind, KeywordToken, Token, ModifierFlags, EntityName, QualifiedName, DotDotDotToken, BindingName, QuestionToken, PropertyName, PropertySignature, ExclamationToken, MethodSignature, AsteriskToken, Block, MethodDeclaration, ConstructorDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, CallSignatureDeclaration, ConstructSignatureDeclaration, IndexSignatureDeclaration, AssertsKeyword, ThisTypeNode, TypePredicateNode, TypeReferenceNode, FunctionTypeNode, ConstructorTypeNode, TypeQueryNode, TypeElement, TypeLiteralNode, ArrayTypeNode, NamedTupleMember, TupleTypeNode, OptionalTypeNode, RestTypeNode, UnionTypeNode, IntersectionTypeNode, UnionOrIntersectionTypeNode, ConditionalTypeNode, InferTypeNode, ImportTypeNode, ParenthesizedTypeNode, TypeOperatorNode, IndexedAccessTypeNode, ReadonlyKeyword, PlusToken, MinusToken, MappedTypeNode, LiteralTypeNode, ObjectBindingPattern, ArrayBindingElement, ArrayBindingPattern, ArrayLiteralExpression, ObjectLiteralElementLike, ObjectLiteralExpression, PropertyAccessExpression, QuestionDotToken, PropertyAccessChain, NodeFlags, ElementAccessExpression, ElementAccessChain, CallExpression, CallChain, NewExpression, TemplateLiteral, TaggedTemplateExpression, TypeAssertion, ParenthesizedExpression, FunctionExpression, EqualsGreaterThanToken, ConciseBody, ArrowFunction, DeleteExpression, TypeOfExpression, VoidExpression, AwaitExpression, PrefixUnaryExpression, PostfixUnaryExpression, BinaryOperatorToken, BinaryExpression, ColonToken, ConditionalExpression, TemplateHead, TemplateSpan, TemplateExpression, TemplateLiteralToken, TemplateLiteralLikeNode, TemplateMiddle, TemplateTail, YieldExpression, SpreadElement, ClassExpression, OmittedExpression, ExpressionWithTypeArguments, AsExpression, NonNullExpression, NonNullChain, MetaProperty, SemicolonClassElement, Statement, VariableDeclarationList, EmptyStatement, ExpressionStatement, IfStatement, DoStatement, WhileStatement, ForInitializer, ForStatement, ForInStatement, AwaitKeyword, ForOfStatement, ContinueStatement, BreakStatement, ReturnStatement, WithStatement, CaseBlock, SwitchStatement, LabeledStatement, ThrowStatement, CatchClause, TryStatement, DebuggerStatement, FunctionDeclaration, ClassDeclaration, TypeAliasDeclaration, EnumMember, EnumDeclaration, ModuleName, ModuleBody, ModuleDeclaration, ModuleBlock, CaseOrDefaultClause, NamespaceExportDeclaration, ModuleReference, ImportEqualsDeclaration, ImportClause, NamedImportBindings, NamespaceImport, NamespaceExport, ImportSpecifier, NamedImports, ExportAssignment, NamedExportBindings, ExportDeclaration, ExportSpecifier, NamedExports, MissingDeclaration, ExternalModuleReference, JSDocFunctionType, JSDocPropertyLikeTag, JSDocTypeLiteral, JSDocTemplateTag, JSDocParameterTag, JSDocSignature, JSDocNamespaceDeclaration, JSDocTypedefTag, JSDocPropertyTag, JSDocCallbackTag, JSDocAugmentsTag, JSDocImplementsTag, JSDocUnknownTag, JSDoc, JsxOpeningElement, JsxChild, JsxClosingElement, JsxElement, JsxTagNameExpression, JsxAttributes, JsxSelfClosingElement, JsxOpeningFragment, JsxClosingFragment, JsxFragment, JsxText, JsxExpression, JsxAttribute, JsxAttributeLike, JsxSpreadAttribute, CaseClause, DefaultClause, PropertyAssignment, ShorthandPropertyAssignment, SpreadAssignment, EndOfFileToken, SourceFile, FileReference, UnparsedSource, InputFiles, Bundle, UnparsedPrologue, UnparsedSyntheticReference, UnparsedSourceText, UnparsedNode, UnparsedTextLike, UnparsedPrepend, BundleFileHasNoDefaultLib, BundleFileReference, Type, SyntheticExpression, SyntaxList, NotEmittedStatement, PartiallyEmittedExpression, CommaListExpression, EndOfDeclarationMarker, EmitNode, MergeDeclarationMarker, SyntheticReferenceExpression, TypeOfTag, PropertyDescriptorAttributes, OuterExpression, OuterExpressionKinds, ScriptTarget, CallBinding, LeftHandSideExpression, PrimaryExpression, VisitResult, PrologueDirective, HasModifiers, DeclarationName, BooleanLiteral, LanguageVariant, BundleFileInfo, UnscopedEmitHelper, BundleFileSectionKind, BuildInfo, TextRange, SourceMapSource } from "../types";
+import { memoize, memoizeOne, neverArray, startsWith, cast, hasProperty, sameFlatMap, some, reduceLeft, returnTrue, append, every, singleOrUndefined, createMap, addRange, map, appendIfUnique } from "../core";
+import { nullParenthesizerRules, createParenthesizerRules } from "./parenthesizerRules";
+import { nullNodeConverters, createNodeConverters } from "./nodeConverters";
+import { setEmitFlags, getSourceMapRange, getCommentRange, getSyntheticLeadingComments, getSyntheticTrailingComments } from "./emitNode";
+import { isNodeArray, escapeLeadingUnderscores, idText, isPropertyAccessChain, isElementAccessChain, isCallChain, isNonNullChain, isParseTreeNode, isNodeKind, getNameOfDeclaration, isGeneratedIdentifier, isStatement, isStatementOrBlock, isNamedDeclaration, isPropertyName } from "../utilitiesPublic";
+import { setTextRangePosEnd, Mutable, pseudoBigIntToString, getTextOfIdentifierOrLiteral, isThisIdentifier, modifiersToFlags, hasStaticModifier, isSuperProperty, hasInvalidEscape, isLogicalOrCoalescingAssignmentOperator, nodeIsSynthesized, skipParentheses, getEmitFlags, setParent, hasSyntacticModifier, isPrologueDirective, isHoistedFunction, isHoistedVariableStatement, isCustomPrologue, setTextRangePosWidth, setEachParent, objectAllocator } from "../utilities";
+import { isIdentifier, isQuestionToken, isExclamationToken, isComputedPropertyName, isSuperKeyword, isImportKeyword, isObjectLiteralExpression, isArrayLiteralExpression, isExternalModuleReference, isCommaListExpression, isBinaryExpression, isCommaToken, isSourceFile, isPrivateIdentifier, isParenthesizedExpression, isLabeledStatement, isPropertyAccessExpression, isElementAccessExpression, isStringLiteral, isParameter, isPropertySignature, isPropertyDeclaration, isMethodSignature, isMethodDeclaration, isConstructorDeclaration, isGetAccessorDeclaration, isSetAccessorDeclaration, isIndexSignatureDeclaration, isFunctionExpression, isArrowFunction, isClassExpression, isVariableStatement, isFunctionDeclaration, isClassDeclaration, isInterfaceDeclaration, isTypeAliasDeclaration, isEnumDeclaration, isModuleDeclaration, isImportEqualsDeclaration, isImportDeclaration, isExportAssignment, isExportDeclaration, isNotEmittedStatement } from "./nodeTests";
+import { stringToToken, getLineAndCharacterOfPosition, Scanner, createScanner } from "../scanner";
+import { Debug } from "../debug";
+import { isArray, isString } from "util";
+import { getJSDocTypeAliasName, isOuterExpression, skipOuterExpressions, startOnNewLine, findUseStrictPrologue } from "./utilities";
+import { setTextRange } from "./utilitiesPublic";
+import { Push } from "../corePublic";
+import { visitNode } from "../visitorPublic";
+import { getAllUnscopedEmitHelpers } from "./emitHelpers";
+import { parseNodeFactory } from "../parser";
+import { getBuildInfo } from "../emitter";
+
     let nextAutoGenerateId = 0;
 
     /* @internal */
@@ -2738,6 +2757,7 @@ namespace ts {
         function createTemplateHead(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
             return <TemplateHead>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateHead, text, rawText, templateFlags);
         }
+
 
         // @api
         function createTemplateMiddle(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
@@ -6211,13 +6231,13 @@ namespace ts {
     }
 
     // tslint:disable-next-line variable-name
-    let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
+    let sourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 
     /**
      * Create an external source map source file reference
      */
     export function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource {
-        return new (SourceMapSource || (SourceMapSource = objectAllocator.getSourceMapSourceConstructor()))(fileName, text, skipTrivia);
+        return new (sourceMapSource || (sourceMapSource = objectAllocator.getSourceMapSourceConstructor()))(fileName, text, skipTrivia);
     }
 
     // Utilities
@@ -6268,4 +6288,4 @@ namespace ts {
         }
         return destRanges;
     }
-}
+

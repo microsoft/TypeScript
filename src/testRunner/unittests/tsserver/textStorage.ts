@@ -1,4 +1,7 @@
-namespace ts.textStorage {
+import { noop } from "../../../compiler/core";
+import { computeLineStarts } from "../../../compiler/scanner";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: Text storage", () => {
         const f = {
             path: "/a/app.ts",
@@ -145,4 +148,4 @@ namespace ts.textStorage {
             assert.strictEqual(newText.length, ts1.getTelemetryFileSize());
         });
     });
-}
+

@@ -1,5 +1,15 @@
-namespace ts.projectSystem {
+
     import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
+import { File } from "../../../harness/vfsUtil";
+import { libFile, createServerHost, checkArray, checkWatchedDirectories, checkWatchedFilesDetailed, checkWatchedDirectoriesDetailed, checkWatchedFiles } from "../../../../built/local/harness";
+import { arrayToMap, createMap, neverArray, mapDefined, identity, toLowerCase, contains } from "../../../compiler/core";
+import { nodeModulesAtTypes, createProjectService, checkProjectActualFiles, nodeModules, checkNumberOfProjects, createSession, protocol, openFilesForSession } from "./helpers";
+import { Debug } from "../../../compiler/debug";
+import { assert } from "console";
+import { getRootLength, getDirectoryPath } from "../../../compiler/path";
+import { commonFile2, commonFile1 } from "../tscWatch/helpers";
+import { PollingInterval } from "../../../compiler/sys";
+import { WatchFileKind } from "../../../compiler/types";
     describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchDirectories implementation", () => {
         function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: Tsc_WatchDirectory) {
             const projectFolder = "/a/username/project";
@@ -622,4 +632,4 @@ namespace ts.projectSystem {
             verifyFileNames("/User/userName/Projects/İ", "/user/username/projects/İ");
         });
     });
-}
+

@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts {
+
     type GetIteratorCallback = <I extends readonly any[] | ReadonlySetShim<any> | ReadonlyMapShim<any, any> | undefined>(iterable: I) => IteratorShim<
         I extends ReadonlyMapShim<infer K, infer V> ? [K, V] :
         I extends ReadonlySetShim<infer T> ? T :
@@ -264,4 +264,4 @@ namespace ts {
             };
         }
     }
-}
+

@@ -1,5 +1,7 @@
 /* @internal */
-namespace ts {
+
+import { WatchType } from "../compiler/watch";
+
     // Additional tsserver specific watch information
     export interface WatchTypeRegistry {
         ClosedScriptInfo: "Closed Script info",
@@ -17,4 +19,4 @@ namespace ts {
     WatchType.NoopConfigFileForInferredRoot = "Noop Config file for the inferred project root";
     WatchType.MissingGeneratedFile = "Missing generated file";
     WatchType.PackageJsonFile = "package.json file for import suggestions";
-}
+

@@ -1,4 +1,9 @@
-namespace ts.tscWatch {
+import { File } from "../../../harness/vfsUtil";
+import { projectRoot, verifyTscWatch, TscWatchCompileChange, runQueuedTimeoutCallbacks, checkSingleTimeoutQueueLengthAndRun } from "./helpers";
+import { createWatchedSystem, libFile } from "../../../../built/local/harness";
+import { CompilerOptions } from "../../../compiler/types";
+import { libContent } from "../tsbuild/helpers";
+
     describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
         const config: File = {
             path: `${projectRoot}/tsconfig.json`,
@@ -159,7 +164,7 @@ export class B
                 content: `export interface Point {
     name: string;
     c: Coords;
-}
+
 export interface Coords {
     x2: number;
     y: number;
@@ -341,4 +346,4 @@ const a: string = "hello";`),
             });
         });
     });
-}
+

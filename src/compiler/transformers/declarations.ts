@@ -1,5 +1,27 @@
 /*@internal*/
-namespace ts {
+
+import { EmitHost, EmitResolver, SourceFile, DiagnosticWithLocation, CommentRange, Node, SyntaxKind, FunctionLike, ParameterDeclaration, NodeBuilderFlags, TransformationContext, LateVisibilityPaintedStatement, VisitResult, ExportAssignment, SymbolTracker, DeclarationName, AnyImportSyntax, ModuleDeclaration, SymbolFlags, SymbolAccessibilityResult, SymbolAccessibility, Bundle, FileReference, NodeArray, Statement, UnparsedSource, BindingName, ArrayBindingElement, ModifierFlags, TypeNode, FunctionDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, BindingElement, ConstructSignatureDeclaration, VariableDeclaration, MethodSignature, CallSignatureDeclaration, PropertyDeclaration, PropertySignature, NamedDeclaration, OmittedExpression, AccessorDeclaration, TypeParameterDeclaration, EntityNameOrEntityNameExpression, ImportEqualsDeclaration, ImportDeclaration, ExportDeclaration, ImportTypeNode, StringLiteral, Declaration, EmitFlags, GeneratedIdentifierFlags, NodeFlags, NamespaceDeclaration, Identifier, VariableStatement, ModuleBody, BindingPattern, LateBoundDeclaration, Modifier, AllAccessorDeclarations, HeritageClause, InterfaceDeclaration, ClassDeclaration, TypeAliasDeclaration, EnumDeclaration, ConstructorDeclaration, IndexSignatureDeclaration, ExpressionWithTypeArguments, TypeReferenceNode, ConditionalTypeNode, FunctionTypeNode, ConstructorTypeNode } from "../types";
+import { transformNodes } from "../transformer";
+import { factory, createUnparsedSourceFile, setOriginalNode } from "../factory/nodeFactory";
+import { filter, stringContains, concatenate, last, forEach, pushIfUnique, find, createMap, map, mapDefined, arrayFrom, contains, startsWith, toFileNameLowerCase, some, append, neverArray, compact, flatMap, flatten } from "../core";
+import { isSourceFileNotJson, getLeadingCommentRangesOfNode, getSourceFileOfNode, createDiagnosticForNode, getTextOfNode, declarationNameToString, addRelatedInfo, isExternalOrCommonJsModule, isJsonSourceFile, isSourceFileJS, getResolvedExternalModuleName, isAnyImportSyntax, hasEffectiveModifier, getThisParameter, getSetAccessorValueParameter, getExternalModuleNameFromDeclaration, getExternalModuleImportEqualsDeclarationExpression, isLateVisibilityPaintedStatement, hasDynamicName, isEntityNameExpression, isLiteralImportTypeNode, getEffectiveModifierFlags, setParent, createSymbolTable, isStringANonContextualKeyword, isGlobalScopeAugmentation, isExternalModuleAugmentation, getFirstConstructorWithBody, hasSyntacticModifier, getEffectiveBaseTypeNode } from "../utilities";
+import { getParseTreeNode, isStringLiteralLike, isBindingPattern, isFunctionLike, hasJSDocNodes, needsScopeMarker, isExternalModuleIndicator, isDeclaration, isEntityName, isTypeNode, unescapeLeadingUnderscores } from "../utilitiesPublic";
+import { getTrailingCommentRanges, skipTrivia, getLeadingCommentRanges, getLineAndCharacterOfPosition } from "../scanner";
+import { Debug } from "../debug";
+import { GetSymbolAccessibilityDiagnostic, createGetSymbolAccessibilityDiagnosticForNode, canProduceDiagnostics, DeclarationDiagnosticProducing, createGetSymbolAccessibilityDiagnosticForNodeName } from "./declarations/diagnostics";
+import { length } from "module";
+import { getOriginalNodeId } from "./utilities";
+import { visitNodes, visitNode, visitEachChild } from "../visitorPublic";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { getDirectoryPath, normalizeSlashes, toPath, pathIsRelative, getRelativePathToDirectoryOrUrl, hasExtension } from "../path";
+import { getOutputPathsFor } from "../emitter";
+import { isExternalModule, parseNodeFactory } from "../parser";
+import { createEmptyExports, canHaveModifiers } from "../factory/utilities";
+import { isImportEqualsDeclaration, isExternalModuleReference, isImportDeclaration, isStringLiteral, isUnparsedSource, isOmittedExpression, isSetAccessorDeclaration, isSourceFile, isTypeAliasDeclaration, isModuleDeclaration, isClassDeclaration, isInterfaceDeclaration, isIndexSignatureDeclaration, isMappedTypeNode, isSemicolonClassElement, isMethodDeclaration, isMethodSignature, isTypeQueryNode, isPrivateIdentifier, isTupleTypeNode, isTypeParameterDeclaration, isPropertyAccessExpression, isExportAssignment, isExportDeclaration } from "../factory/nodeTests";
+import { pathContainsNodeModules } from "../moduleNameResolver";
+import { setCommentRange, getCommentRange, setEmitFlags } from "../factory/emitNode";
+import { isArray } from "util";
+
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
         const compilerOptions = host.getCompilerOptions();
         const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
@@ -1676,4 +1698,4 @@ namespace ts {
         }
         return false;
     }
-}
+

@@ -1,5 +1,14 @@
 /*@internal*/
-namespace ts {
+
+import { Program, SourceFile, CancellationToken, CustomTransformers, Path, TypeChecker, StringLiteralLike, ModuleKind, Extension, ExportedModulesFromDeclarationEmit, ModuleDeclaration } from "./types";
+import { EmitOutput, OutputFile } from "./builderStatePublic";
+import { getSourceFileOfNode, outFile, isModuleWithStringLiteralName, isGlobalScopeAugmentation } from "./utilities";
+import { GetCanonicalFileName, neverArray, arrayFrom, mapDefinedIterator, some } from "./core";
+import { toPath, getDirectoryPath, fileExtensionIs, getAnyExtensionFromPath } from "./path";
+import { isStringLiteral } from "./factory/nodeTests";
+import { Debug } from "./debug";
+import { isExternalModule } from "./parser";
+
     export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
         cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
         const outputFiles: OutputFile[] = [];
@@ -552,4 +561,4 @@ namespace ts {
             return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
         }
     }
-}
+

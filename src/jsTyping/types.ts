@@ -1,4 +1,8 @@
-declare namespace ts.server {
+import { ActionSet, ActionInvalidate, EventTypesRegistry, ActionPackageInstalled, EventBeginInstallTypes, EventEndInstallTypes, EventInitializationFailed } from "./shared";
+import { Path, CompilerOptions, WatchOptions, TypeAcquisition } from "../compiler/types";
+import { SortedReadonlyArray, MapLike } from "../compiler/corePublic";
+import { FileWatcherCallback, FileWatcher, DirectoryWatcherCallback } from "../compiler/sys";
+
     export interface TypingInstallerResponse {
         readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
@@ -97,4 +101,4 @@ declare namespace ts.server {
 
     /* @internal */
     export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InstallTypes | InitializationFailedResponse;
-}
+

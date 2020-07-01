@@ -1,5 +1,16 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { getTokenAtPosition, nodeSeenTracker, NodeSeenTracker, getTypeNodeIfAccessible, findChildOfKind } from "../utilities";
+import { Declaration, Node, DiagnosticMessage, SourceFile, Program, CancellationToken, UserPreferences, SyntaxKind, VariableDeclaration, PropertyDeclaration, PropertySignature, ParameterDeclaration, FunctionLike, TypeNode, SetAccessorDeclaration, Type, ScriptTarget, EmitFlags, HasJSDoc, JSDocTag, ArrowFunction, JSDocParameterTag, JSDocReturnTag, PropertyName, Token, Identifier, PrivateIdentifier, SignatureDeclaration, UnderscoreEscapedMap, Expression, PrefixUnaryExpression, BinaryExpression, CaseOrDefaultClause, CallExpression, NewExpression, PropertyAccessExpression, ElementAccessExpression, PropertyAssignment, ShorthandPropertyAssignment, TypeFlags, ObjectFlags, AnonymousType, UnionReduction, SignatureKind, SymbolFlags, __String, TransientSymbol, Signature, TypeReference, UnionOrIntersectionType, SymbolLinks, SignatureFlags } from "../../compiler/types";
+import { returnTrue, cast, first, last, firstOrUndefined, tryCast, forEach, mapDefined, flatMapToMutable, neverArray, flatMap, createMultiMap, mapEntries, singleOrUndefined } from "../../compiler/core";
+import { getNameOfDeclaration, isSetAccessorDeclaration, isParameterPropertyModifier, isVariableDeclaration, isPropertyDeclaration, isPropertySignature, isPropertyAccessExpression, factory, isExpressionStatement, isParameter, isGetAccessorDeclaration, isIdentifier, isArrowFunction, isVariableStatement, getJSDocType, setEmitFlags, isCallExpression, escapeLeadingUnderscores } from "../../../built/local/compiler";
+import { getContainingFunction, isInJSFile, getEmitScriptTarget, createUnderscoreEscapedMap, isRestParameter, isRightSideOfQualifiedNameOrPropertyAccess, isExpressionNode, isAssignmentExpression, getObjectFlags, forEachEntry, createSymbolTable } from "../../compiler/utilities";
+import { LanguageServiceHost } from "../types";
+import { createImportAdder, ImportAdder } from "./importFixes";
+import { Debug } from "../../compiler/debug";
+import { tryGetAutoImportableReferenceFromImportTypeNode } from "./helpers";
+
     const fixId = "inferFromUsage";
     const errorCodes = [
         // Variable declarations
@@ -1121,4 +1132,4 @@ namespace ts.codefix {
             }
         }
     }
-}
+

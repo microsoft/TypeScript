@@ -1,4 +1,7 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { GetErrDiagnostics, GetErrForProjectDiagnostics, emptyDiagnostics, verifyGetErrScenario, syncDiagnostics, createDiagnostic } from "./helpers";
+import { neverArray } from "../../../compiler/core";
+
     describe("unittests:: tsserver:: with project references and error reporting", () => {
         const dependecyLocation = `${tscWatch.projectRoot}/dependency`;
         const usageLocation = `${tscWatch.projectRoot}/usage`;
@@ -250,4 +253,4 @@ fnErr();
             });
         });
     });
-}
+

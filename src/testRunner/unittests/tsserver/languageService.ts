@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { createServerHost } from "../../../../built/local/harness";
+import { createProjectService } from "./helpers";
+
     describe("unittests:: tsserver:: Language service", () => {
         it("should work correctly on case-sensitive file systems", () => {
             const lib = {
@@ -16,4 +18,4 @@ namespace ts.projectSystem {
             projectService.inferredProjects[0].getLanguageService().getProgram();
         });
     });
-}
+

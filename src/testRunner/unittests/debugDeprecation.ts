@@ -1,4 +1,8 @@
-namespace ts {
+import { Debug } from "../../compiler/debug";
+import { noop } from "../../compiler/core";
+import { assert } from "console";
+import { expect } from "chai";
+
     describe("unittests:: debugDeprecation", () => {
         beforeEach(() => {
             const loggingHost = Debug.loggingHost;
@@ -68,4 +72,4 @@ namespace ts {
             });
         });
     });
-}
+

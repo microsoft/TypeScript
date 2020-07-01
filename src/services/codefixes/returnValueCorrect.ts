@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.codefix {
+
+import { FunctionLikeDeclaration, Expression, Statement, Node, ArrowFunction, TypeChecker, Identifier, SymbolFlags, Type, ModifierFlags, SourceFile, VariableLikeDeclaration, SyntaxKind } from "../../compiler/types";
+import { registerCodeFix, codeFixAll, createCodeFixAction } from "../codeFixProvider";
+import { append, first } from "../../compiler/core";
+import { isArrowFunction, isBlock, isExpressionStatement, isLabeledStatement, factory, isFunctionLikeDeclaration, isCallExpression, isJsxAttribute, isJsxExpression } from "../../../built/local/compiler";
+import { Debug } from "../../compiler/debug";
+import { createSymbolTable, hasSyntacticModifier, findAncestor, isDeclarationName, isVariableLike } from "../../compiler/utilities";
+import { length } from "module";
+import { getTokenAtPosition, rangeContainsRange, suppressLeadingAndTrailingTrivia, probablyUsesSemicolons, needsParentheses, copyComments } from "../utilities";
+import { CodeFixContext } from "../types";
+
     const fixId = "returnValueCorrect";
     const fixIdAddReturnStatement = "fixAddReturnStatement";
     const fixRemoveBracesFromArrowFunctionBody = "fixRemoveBracesFromArrowFunctionBody";
@@ -241,4 +251,4 @@ namespace ts.codefix {
         const changes = textChanges.ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration, expression));
         return createCodeFixAction(fixId, changes, Diagnostics.Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal, fixIdWrapTheBlockWithParen, Diagnostics.Wrap_all_object_literal_with_parentheses);
     }
-}
+

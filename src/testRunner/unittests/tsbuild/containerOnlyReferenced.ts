@@ -1,4 +1,4 @@
-namespace ts {
+
     describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
         verifyTscSerializedIncrementalEdits({
             scenario: "containerOnlyReferenced",
@@ -8,4 +8,4 @@ namespace ts {
             incrementalScenarios: noChangeOnlyRuns
         });
     });
-}
+

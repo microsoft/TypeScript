@@ -1,4 +1,14 @@
-namespace ts {
+import { or, some, singleOrUndefined } from "./core";
+import { isTypeNode, isStatement, isBindingPattern, isConciseBody, isEntityName, isExpression, isModifier, isToken, isBindingName, isPropertyName, isTypeElement, isArrayBindingElement, isObjectLiteralElementLike, isIdentifierOrPrivateIdentifier, isTemplateLiteral, isClassElement, isTemplateMiddleOrTemplateTail, isForInitializer, isModuleBody, isCaseOrDefaultClause, isModuleReference, isNamedImportBindings, isNamedExportBindings, isJsxChild, isJsxTagNameExpression, isStringLiteralOrJsxExpression, isJsxAttributeLike } from "./utilitiesPublic";
+import { isTypeParameterDeclaration, isIdentifier, isDecorator, isBindingElement, isTemplateHead, isTemplateSpan, isHeritageClause, isVariableDeclarationList, isCaseBlock, isBlock, isCatchClause, isVariableDeclaration, isEnumMember, isImportClause, isImportSpecifier, isExportSpecifier, isJsxOpeningElement, isJsxClosingElement, isJsxAttributes, isJsxOpeningFragment, isJsxClosingFragment, isExpressionWithTypeArguments } from "./factory/nodeTests";
+import { Node, Visitor, NodeArray, Statement, TransformationContext, NodesVisitor, ParameterDeclaration, LexicalEnvironmentFlags, ScriptTarget, Identifier, Expression, EmitFlags, FunctionBody, ConciseBody, NodeVisitor, SyntaxKind, QualifiedName, ComputedPropertyName, TypeParameterDeclaration, Decorator, PropertySignature, PropertyDeclaration, MethodSignature, MethodDeclaration, ConstructorDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, CallSignatureDeclaration, ConstructSignatureDeclaration, IndexSignatureDeclaration, TypePredicateNode, TypeReferenceNode, FunctionTypeNode, ConstructorTypeNode, TypeQueryNode, TypeLiteralNode, ArrayTypeNode, TupleTypeNode, OptionalTypeNode, RestTypeNode, UnionTypeNode, IntersectionTypeNode, ConditionalTypeNode, InferTypeNode, ImportTypeNode, NamedTupleMember, ParenthesizedTypeNode, TypeOperatorNode, IndexedAccessTypeNode, MappedTypeNode, LiteralTypeNode, ObjectBindingPattern, ArrayBindingPattern, BindingElement, ArrayLiteralExpression, ObjectLiteralExpression, NodeFlags, PropertyAccessChain, PropertyAccessExpression, ElementAccessChain, ElementAccessExpression, CallChain, CallExpression, NewExpression, TaggedTemplateExpression, TypeAssertion, ParenthesizedExpression, FunctionExpression, ArrowFunction, DeleteExpression, TypeOfExpression, VoidExpression, AwaitExpression, PrefixUnaryExpression, PostfixUnaryExpression, BinaryExpression, ConditionalExpression, TemplateExpression, YieldExpression, SpreadElement, ClassExpression, ExpressionWithTypeArguments, AsExpression, NonNullChain, NonNullExpression, MetaProperty, TemplateSpan, Block, VariableStatement, ExpressionStatement, IfStatement, DoStatement, WhileStatement, ForStatement, ForInStatement, ForOfStatement, ContinueStatement, BreakStatement, ReturnStatement, WithStatement, SwitchStatement, LabeledStatement, ThrowStatement, TryStatement, VariableDeclaration, VariableDeclarationList, FunctionDeclaration, ClassDeclaration, InterfaceDeclaration, TypeAliasDeclaration, EnumDeclaration, ModuleDeclaration, ModuleBlock, CaseBlock, NamespaceExportDeclaration, ImportEqualsDeclaration, ImportDeclaration, ImportClause, NamespaceImport, NamespaceExport, NamedImports, ImportSpecifier, ExportAssignment, ExportDeclaration, NamedExports, ExportSpecifier, ExternalModuleReference, JsxElement, JsxSelfClosingElement, JsxOpeningElement, JsxClosingElement, JsxFragment, JsxAttribute, JsxAttributes, JsxSpreadAttribute, JsxExpression, CaseClause, DefaultClause, HeritageClause, CatchClause, PropertyAssignment, ShorthandPropertyAssignment, SpreadAssignment, EnumMember, SourceFile, PartiallyEmittedExpression, CommaListExpression } from "./types";
+import { isArray } from "util";
+import { Debug } from "./debug";
+import { factory } from "./factory/nodeFactory";
+import { setTextRangePosEnd, isParameterDeclaration, getEmitScriptTarget, getEmitFlags } from "./utilities";
+import { setTextRange } from "./factory/utilitiesPublic";
+import { setEmitFlags } from "./factory/emitNode";
+
     const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration);
 
     /**
@@ -133,7 +143,7 @@ namespace ts {
         }
 
         if (updated) {
-            // TODO(rbuckton): Remove dependency on `ts.factory` in favor of a provided factory.
+            // TODO(rbuckton): Remove dependency on `factory` in favor of a provided factory.
             const updatedArray = factory.createNodeArray(updated, hasTrailingComma);
             setTextRangePosEnd(updatedArray, pos, end);
             return updatedArray;
@@ -1103,4 +1113,4 @@ namespace ts {
         Debug.assert(nodes.length <= 1, "Too many nodes written to output.");
         return singleOrUndefined(nodes);
     }
-}
+

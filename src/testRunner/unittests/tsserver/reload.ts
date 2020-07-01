@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { createSession, checkNumberOfProjects } from "./helpers";
+import { assert } from "console";
+import { getSnapshotText } from "../../../services/utilities";
+
     describe("unittests:: tsserver:: reload", () => {
         it("should work with temp file", () => {
             const f1 = {
@@ -148,4 +152,4 @@ namespace ts.projectSystem {
             }
         });
     });
-}
+

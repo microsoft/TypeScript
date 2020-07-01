@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, DiagnosticAndArguments, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { neverArray } from "../../compiler/core";
+import { SourceFile, TypeChecker, SyntaxKind } from "../../compiler/types";
+import { getTokenAtPosition, findChildOfKind, ANONYMOUS } from "../utilities";
+import { Debug } from "../../compiler/debug";
+import { getThisContainer, isSourceFileJS, isAssignmentExpression } from "../../compiler/utilities";
+import { isFunctionDeclaration, isFunctionExpression, isSourceFile, factory, isPropertyAccessExpression } from "../../../built/local/compiler";
+import { addJSDocTags } from "./inferFromUsage";
+
     const fixId = "fixImplicitThis";
     const errorCodes = [Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code];
     registerCodeFix({
@@ -58,4 +67,4 @@ namespace ts.codefix {
             return Diagnostics.Add_class_tag;
         }
     }
-}
+

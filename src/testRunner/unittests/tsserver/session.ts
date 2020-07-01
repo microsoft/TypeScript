@@ -1,4 +1,18 @@
-namespace ts.server {
+import { FileWatcher } from "../../../compiler/sys";
+import { noop, returnUndefined, AnyFunction, createMap } from "../../../compiler/core";
+import { ServerHost } from "../../../server/types";
+import { Session } from "inspector";
+import { protocol } from "./helpers";
+import { SessionOptions } from "http2";
+import { nullCancellationToken, CommandNames, HandlerResponse, getLocationInNewDocument } from "../../../server/session";
+import { assert } from "console";
+import { NormalizedPath } from "../../../../built/local/server";
+import { IndentStyle, FileTextChanges } from "../../../services/types";
+import { CompilerOptions, ModuleKind, ScriptTarget, JsxEmit, NewLineKind, ModuleResolutionKind } from "../../../compiler/types";
+import { version } from "os";
+import { Debug } from "../../../compiler/debug";
+import { ProjectService } from "../../../server/editorServices";
+
     const _chai: typeof import("chai") = require("chai");
     const expect: typeof _chai.expect = _chai.expect;
     let lastWrittenToHost: string;
@@ -174,7 +188,7 @@ namespace ts.server {
                     });
             });
 
-            it("Status request gives ts.version", () => {
+            it("Status request gives version", () => {
                 const req: protocol.StatusRequest = {
                     command: CommandNames.Status,
                     seq: 0,
@@ -182,7 +196,7 @@ namespace ts.server {
                 };
 
                 const expected: protocol.StatusResponseBody = {
-                    version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                    version: version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 };
                 assert.deepEqual(session.executeCommand(req).response, expected);
             });
@@ -741,4 +755,4 @@ namespace ts.server {
             assert.deepEqual(res, { line: 4, offset: 11 });
         });
     });
-}
+

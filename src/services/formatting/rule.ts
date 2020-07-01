@@ -1,5 +1,9 @@
 /* @internal */
-namespace ts.formatting {
+
+import { FormattingContext } from "./formattingContext";
+import { neverArray } from "../../compiler/core";
+import { SyntaxKind } from "../../compiler/types";
+
     export interface Rule {
         // Used for debugging to identify each rule based on the property name it's assigned to.
         readonly debugName: string;
@@ -34,4 +38,4 @@ namespace ts.formatting {
         readonly tokens: readonly SyntaxKind[];
         readonly isSpecific: boolean;
     }
-}
+

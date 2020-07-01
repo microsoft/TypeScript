@@ -1,4 +1,27 @@
-namespace ts.server {
+import { ScriptInfo } from "./scriptInfo";
+import { FileStats, updateProjectIfDirty, ProjectService, forEachResolvedProjectReferenceProject, projectContainsInfoDirectly, ProjectReferenceProjectLoadKind } from "./editorServices";
+import { ScriptKind, Extension, Diagnostic, Path, ModuleResolutionHost, Program, HasInvalidatedResolution, ResolvedProjectReference, CompilerOptions, WatchOptions, SourceFile, ProjectReference, ResolvedModuleFull, ResolvedModuleWithFailedLookupLocations, ResolvedTypeReferenceDirective, WatchDirectoryFlags, DocumentPositionMapper, TypeAcquisition, StructureIsReused, Statement, PluginImport, ConfigFileSpecs, CompilerHost, ExpandResult } from "../compiler/types";
+import { fileExtensionIs, normalizeSlashes, combinePaths, getDirectoryPath, normalizePath, toPath, getNormalizedAbsolutePath } from "../compiler/path";
+import { LanguageService, LanguageServiceHost, InstallPackageOptions, ApplyCodeActionCommandResult, IScriptSnapshot, HostCancellationToken, PerformanceEvent, PackageJsonInfo, PackageJsonAutoImportPreference } from "../services/types";
+import { ServerHost } from "./types";
+import { NormalizedPath, emptyArray, Msg, asNormalizedPath, Errors, toNormalizedPath, makeInferredProjectName, makeAutoImportProviderProjectName, ProjectOptions } from "./utilitiesPublic";
+import { FileWatcher, DirectoryWatcherCallback, FileWatcherEventKind, PollingInterval } from "../compiler/sys";
+import { createMap, returnFalse, GetCanonicalFileName, maybeBind, neverArray, addRange, mapDefined, sort, flatMap, forEach, map, enumerateInsertsAndDeletes, getStringComparer, noop, arrayIsEqualTo, findIndex, arrayFrom, arrayToMap, orderedRemoveItem, firstDefined, sortAndDeduplicate, append, every, startsWith, returnTrue, filter } from "../compiler/core";
+import { SortedReadonlyArray } from "../compiler/corePublic";
+import { ResolutionCache, createResolutionCache, getDefaultLibFileName, getAutomaticTypeDirectiveNames, timestamp, isExternalModuleNameRelative, parsePackageName, resolveTypeReferenceDirective, getEffectiveTypeRoots, updateErrorForNoInputFiles } from "../../built/local/compiler";
+import { BuilderState } from "../compiler/builderState";
+import { ThrottledCancellationToken, getDefaultCompilerOptions, createLanguageService, getDefaultLibFilePath } from "../services/services";
+import { DirectoryStructureHost, CachedDirectoryStructureHost, updateMissingFilePathsWatch, closeFileWatcherOf, WildcardDirectoryWatcher, ConfigFileProgramReloadLevel, updateWatchingWildcardDirectories } from "../compiler/watchUtilities";
+import { DocumentRegistry } from "../../built/local/services";
+import { TypingsCache } from "./typingsCache";
+import { discoverProbableSymlinks, getEmitDeclarations, clearMap, closeFileWatcher, outFile, removeFileExtension, getDeclarationEmitOutputFilePathWorker, forEachKey, isNonGlobalAmbientModule, changesAffectModuleResolution, forEachEntry, stripQuotes, getOrUpdate, resolutionExtensionIsTSOrJson, isJsonEqual } from "../compiler/utilities";
+import { WatchType } from "../compiler/watch";
+import { SourceMapper } from "../services/sourcemaps";
+import { Debug, LogLevel } from "../compiler/debug";
+import { perfLogger } from "../compiler/perfLogger";
+import { consumesNodeCoreModules, isInsideNodeModules, cloneCompilerOptions } from "../services/utilities";
+import { inferredTypesContainingFile } from "../compiler/program";
+
 
     export enum ProjectKind {
         Inferred,
@@ -2343,4 +2366,4 @@ namespace ts.server {
     export function isExternalProject(project: Project): project is ExternalProject {
         return project.projectKind === ProjectKind.External;
     }
-}
+

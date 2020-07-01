@@ -1,4 +1,11 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost } from "../../../../built/local/harness";
+import { createProjectService, textSpanFromSubstring, createSession, openFilesForSession, executeSessionRequest, protocol, protocolTextSpanFromSubstring } from "./helpers";
+import { Debug } from "../../../compiler/debug";
+import { testFormatSettings, emptyOptions, FileTextChanges } from "../../../services/types";
+import { assert } from "console";
+import { CommandNames } from "../../../server/session";
+
     describe("unittests:: tsserver:: getEditsForFileRename", () => {
         it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {
             const userTs: File = {
@@ -102,4 +109,4 @@ namespace ts.projectSystem {
             ]);
         });
     });
-}
+

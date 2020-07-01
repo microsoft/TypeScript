@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts {
+
+import { Identifier, Expression, FunctionExpression, BindingOrAssignmentElement, TextRange, EntityName, Block, ArrayLiteralExpression, TransformationContext, EmitFlags, ScriptTarget, EmitNode, SyntaxKind, GeneratedIdentifierFlags, EmitHelper, EmitHelperUniqueNameCallback, UnscopedEmitHelper } from "../types";
+import { setEmitFlags } from "./emitNode";
+import { setTextRange } from "./utilitiesPublic";
+import { getPropertyNameOfBindingOrAssignmentElement, createExpressionFromEntityName } from "./utilities";
+import { isComputedPropertyName } from "./nodeTests";
+import { Debug } from "../debug";
+import { Comparison } from "../corePublic";
+import { compareValues, arrayToMap } from "../core";
+
     export interface EmitHelperFactory {
         getUnscopedHelperName(name: string): Identifier;
         // TypeScript Helpers
@@ -887,4 +896,4 @@ namespace ts {
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
             })(name => super[name], (name, value) => super[name] = value);`
     };
-}
+

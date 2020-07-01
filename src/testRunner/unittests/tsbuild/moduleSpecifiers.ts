@@ -1,4 +1,6 @@
-namespace ts {
+import { verifyTsc } from "../tsc/helpers";
+import { loadProjectFromFiles, symbolLibContent } from "./helpers";
+
     // https://github.com/microsoft/TypeScript/issues/31696
     describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {
         verifyTsc({
@@ -88,4 +90,4 @@ namespace ts {
             commandLineArgs: ["-b", "/src", "--verbose"]
         });
     });
-}
+

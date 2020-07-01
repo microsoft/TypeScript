@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { createServerHost } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, executeSessionRequest, protocol } from "./helpers";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+
     describe("unittests:: tsserver:: refactors", () => {
         it("use formatting options", () => {
             const file = {
@@ -152,4 +156,4 @@ namespace ts.projectSystem {
             });
         });
     });
-}
+

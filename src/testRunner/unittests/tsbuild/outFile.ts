@@ -1,4 +1,10 @@
-namespace ts {
+import { getExpectedDiagnosticForProjectsInBuild, loadProjectFromDisk, TscIncremental, replaceText, appendText, VerifyTsBuildInput, verifyTscIncrementalEdits, verifyTscSerializedIncrementalEdits, getFsWithTime, changeCompilerVersion, verifyOutputsAbsent, verifyOutputsPresent, enableStrict, addTestPrologue, addShebang, addRest, removeRest, addStubFoo, changeStubToRest, addSpread, addTripleSlashRef, prependText } from "./helpers";
+import { BuildOptions } from "../../../compiler/tsbuildPublic";
+import { BuildKind, verifyTsc, noChangeOnlyRuns } from "../tsc/helpers";
+import { version } from "os";
+import { assert } from "console";
+import { ExitStatus } from "../../../compiler/types";
+
     describe("unittests:: tsbuild:: outFile::", () => {
         let outFileFs: vfs.FileSystem;
         const enum Ext { js, jsmap, dts, dtsmap, buildinfo }
@@ -10,21 +16,21 @@ namespace ts {
                 "/src/first/bin/first-output.js",
                 "/src/first/bin/first-output.js.map",
                 "/src/first/bin/first-output.d.ts",
-                "/src/first/bin/first-output.d.ts.map",
+                "/src/first/bin/first-output.d.map",
                 "/src/first/bin/first-output.tsbuildinfo"
             ],
             [
                 "/src/2/second-output.js",
                 "/src/2/second-output.js.map",
                 "/src/2/second-output.d.ts",
-                "/src/2/second-output.d.ts.map",
+                "/src/2/second-output.d.map",
                 "/src/2/second-output.tsbuildinfo"
             ],
             [
                 "/src/third/thirdjs/output/third-output.js",
                 "/src/third/thirdjs/output/third-output.js.map",
                 "/src/third/thirdjs/output/third-output.d.ts",
-                "/src/third/thirdjs/output/third-output.d.ts.map",
+                "/src/third/thirdjs/output/third-output.d.map",
                 "/src/third/thirdjs/output/third-output.tsbuildinfo"
             ]
         ];
@@ -74,7 +80,7 @@ namespace ts {
         });
 
         function createSolutionBuilder(host: fakes.SolutionBuilderHost, baseOptions?: BuildOptions) {
-            return ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true, ...(baseOptions || {}) });
+            return createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true, ...(baseOptions || {}) });
         }
 
         interface VerifyOutFileScenarioInput {
@@ -635,7 +641,7 @@ namespace ts {
     BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
     /* @internal */
     NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
-}
+
 `);
                     },
                     ignoreDtsChanged: true,
@@ -729,4 +735,4 @@ namespace ts {
             },
         });
     });
-}
+

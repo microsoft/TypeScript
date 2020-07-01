@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+
     import validatePackageName = JsTyping.validatePackageName;
     import NameValidationResult = JsTyping.NameValidationResult;
 
@@ -46,6 +46,16 @@ namespace ts.projectSystem {
     }
 
     import typingsName = TI.typingsName;
+import { MapLike, SortedReadonlyArray, versionMajorMinor } from "../../../compiler/corePublic";
+import { TestTypingsInstaller, TI, createTypesRegistry, createProjectService, checkProjectActualFiles, configuredProjectAt, checkNumberOfProjects, toExternalFile, customTypesMap, getConfigFilesToWatch, createSession } from "./helpers";
+import { TestServerHost, createServerHost, libFile, checkWatchedFilesDetailed, checkWatchedDirectories, checkWatchedDirectoriesDetailed, checkWatchedFiles } from "../../../../built/local/harness";
+import { File } from "../../../harness/vfsUtil";
+import { assert } from "console";
+import { createMap, neverArray, createMapFromTemplate, arrayIterator } from "../../../compiler/core";
+import { TypeAcquisition, ModuleResolutionKind, Path, ModuleKind, ScriptTarget, JsxEmit, ScriptKind } from "../../../compiler/types";
+import { combinePaths, getDirectoryPath } from "../../../compiler/path";
+import { emptyMap } from "../../../compiler/utilities";
+import { Version } from "../../../compiler/semver";
 
     describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
         it("should not be picked up", () => {
@@ -1826,7 +1836,7 @@ const stream = require("stream");`
                 content: `
 declare module "net" {
     export type n = number;
-}
+
 declare module "stream" {
     export type s = string;
 }`,
@@ -1955,4 +1965,4 @@ declare module "stream" {
             checkProjectActualFiles(project, [file.path]);
         });
     });
-}
+

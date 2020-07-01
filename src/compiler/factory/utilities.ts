@@ -1,5 +1,17 @@
 /* @internal */
-namespace ts {
+
+import { NodeFactory, Expression, PropertyName, TextRange, MemberExpression, EmitFlags, JsxOpeningLikeElement, JsxOpeningFragment, EntityName, Identifier, LeftHandSideExpression, ForInitializer, Statement, PrivateIdentifier, NodeArray, Declaration, AccessorDeclaration, PropertyAssignment, ShorthandPropertyAssignment, MethodDeclaration, ObjectLiteralExpression, ObjectLiteralElementLike, SyntaxKind, ExpressionStatement, BinaryExpression, Token, CommaListExpression, Node, OuterExpressionKinds, OuterExpression, SourceFile, CompilerOptions, NamedImportBindings, ModuleKind, UnscopedEmitHelper, ImportDeclaration, ExportDeclaration, ImportEqualsDeclaration, EmitHost, EmitResolver, StringLiteral, LiteralExpression, BindingOrAssignmentElement, BindingOrAssignmentElementTarget, BindingOrAssignmentElementRestIndicator, NumericLiteral, BindingOrAssignmentPattern, JSDocNamespaceBody, HasModifiers, Modifier, ExportKeyword, AsyncKeyword, StaticKeyword } from "../types";
+import { isComputedPropertyName, isQualifiedName, isVariableDeclarationList, isBlock, isIdentifier, isPrivateIdentifier, isStringLiteral, isSourceFile, isPropertyAssignment, isShorthandPropertyAssignment, isSpreadElement, isSpreadAssignment } from "./nodeTests";
+import { setTextRange } from "./utilitiesPublic";
+import { isIdentifierOrPrivateIdentifier, getParseTreeNode, idText, getOriginalNode, isGeneratedIdentifier, isDeclarationBindingElement, isObjectLiteralElementLike, isPropertyName } from "../utilitiesPublic";
+import { getOrCreateEmitNode, setStartsOnNewLine, getEmitHelpers, addEmitFlags } from "./emitNode";
+import { parseNodeFactory } from "../parser";
+import { setParent, Mutable, getAllAccessorDeclarations, getEmitFlags, isPrologueDirective, isEffectiveExternalModule, getEmitModuleKind, isFileLevelUniqueName, externalHelpersModuleNameText, getNamespaceDeclarationNode, isDefaultImport, getSourceTextOfNodeFromSourceFile, getExternalModuleName, outFile, getExternalModuleNameFromPath, isAssignmentExpression } from "../utilities";
+import { first, firstOrUndefined, pushIfUnique, some, compareStringsCaseSensitive, map } from "../core";
+import { setOriginalNode } from "./nodeFactory";
+import { Debug } from "../debug";
+import { EmitHelperFactory } from "./emitHelpers";
+
 
     // Compound nodes
 
@@ -829,4 +841,4 @@ namespace ts {
     export function isStaticModifier(node: Modifier): node is StaticKeyword {
         return node.kind === SyntaxKind.StaticKeyword;
     }
-}
+

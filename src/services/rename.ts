@@ -1,6 +1,13 @@
 /* @internal */
-namespace ts.Rename {
-    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, options?: RenameInfoOptions): RenameInfo {
+
+import { Program, SourceFile, Node, TypeChecker, SyntaxKind, SymbolFlags, StringLiteralLike, DiagnosticMessage, NumericLiteral } from "../compiler/types";
+import { RenameInfoOptions, RenameInfo, ScriptElementKind, ScriptElementKindModifier, RenameInfoSuccess, RenameInfoFailure } from "./types";
+import { getAdjustedRenameLocation, getTouchingPropertyName, isImportOrExportSpecifierName, isLiteralNameOfPropertyDeclarationOrIndexAccess } from "./utilities";
+import { isIdentifier, isStringLiteralLike, isExternalModuleNameRelative, isSourceFile, createTextSpan } from "../../built/local/compiler";
+import { tryGetImportFromModuleSpecifier, isStringOrNumericLiteralLike, stripQuotes, getTextOfIdentifierOrLiteral, removeFileExtension, getLocaleSpecificMessage } from "../compiler/utilities";
+import { find, endsWith, tryRemoveSuffix } from "../compiler/core";
+
+    export function getRenameInfoImpl(program: Program, sourceFile: SourceFile, position: number, options?: RenameInfoOptions): RenameInfo {
         const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
         if (nodeIsEligibleForRename(node)) {
             const renameInfo = getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()), options);
@@ -32,13 +39,13 @@ namespace ts.Rename {
             return options && options.allowRenameOfImportPath ? getRenameInfoForModule(node, sourceFile, symbol) : undefined;
         }
 
-        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
+        const kind = getSymbolKind(typeChecker, symbol, node);
         const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
             ? stripQuotes(getTextOfIdentifierOrLiteral(node))
             : undefined;
         const displayName = specifierName || typeChecker.symbolToString(symbol);
         const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
-        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
+        return getRenameInfoSuccess(displayName, fullDisplayName, kind, getSymbolModifiers(symbol), node, sourceFile);
     }
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
@@ -106,4 +113,4 @@ namespace ts.Rename {
                 return false;
         }
     }
-}
+

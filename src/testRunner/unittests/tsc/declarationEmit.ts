@@ -1,4 +1,5 @@
-namespace ts {
+import { neverArray, stringContains } from "../../../compiler/core";
+
     describe("unittests:: tsc:: declarationEmit::", () => {
         interface VerifyDeclarationEmitInput {
             subScenario: string;
@@ -247,4 +248,4 @@ ${pluginOneAction()}`
             changeCaseFileTestPath: str => stringContains(str, "/pkg1"),
         });
     });
-}
+

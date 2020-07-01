@@ -1,4 +1,6 @@
-namespace Harness.Parallel {
+import { TestRunnerKind } from "../../harness/runnerbase";
+import { noop } from "../../compiler/core";
+
     export interface RunnerTask {
         runner: TestRunnerKind;
         file: string;
@@ -74,15 +76,15 @@ namespace Harness.Parallel {
     export type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage | ParallelBatchProgressMessage | ParallelTimeoutChangeMessage;
 
     export function shimNoopTestInterface(global: Mocha.MochaGlobals) {
-        global.before = ts.noop;
-        global.after = ts.noop;
-        global.beforeEach = ts.noop;
-        global.afterEach = ts.noop;
+        global.before = noop;
+        global.after = noop;
+        global.beforeEach = noop;
+        global.afterEach = noop;
         global.describe = global.context = ((_: any, __: any) => { /*empty*/ }) as Mocha.SuiteFunction;
-        global.describe.skip = global.xdescribe = global.xcontext = ts.noop as Mocha.PendingSuiteFunction;
-        global.describe.only = ts.noop as Mocha.ExclusiveSuiteFunction;
+        global.describe.skip = global.xdescribe = global.xcontext = noop as Mocha.PendingSuiteFunction;
+        global.describe.only = noop as Mocha.ExclusiveSuiteFunction;
         global.it = global.specify = ((_: any, __: any) => { /*empty*/ }) as Mocha.TestFunction;
-        global.it.skip = global.xit = global.xspecify = ts.noop as Mocha.PendingTestFunction;
-        global.it.only = ts.noop as Mocha.ExclusiveTestFunction;
+        global.it.skip = global.xit = global.xspecify = noop as Mocha.PendingTestFunction;
+        global.it.only = noop as Mocha.ExclusiveTestFunction;
     }
-}
+

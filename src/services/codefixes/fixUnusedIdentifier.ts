@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll, DiagnosticAndArguments } from "../codeFixProvider";
+import { getTokenAtPosition, isMemberSymbolInBaseType } from "../utilities";
+import { isJSDocTemplateTag, isInferTypeNode, isComputedPropertyName, factory, isImportDeclaration, isObjectBindingPattern, isVariableDeclarationList, isIdentifier, isParameter, getJSDocParameterTags, isPropertyAccessExpression, isBinaryExpression, isExpressionStatement, isImportClause } from "../../../built/local/compiler";
+import { SyntaxKind, SourceFile, Node, ImportDeclaration, TypeChecker, Identifier, VariableDeclaration, ParameterDeclaration } from "../../compiler/types";
+import { showModuleSpecifier, isDeclarationWithTypeParameterChildren } from "../../compiler/utilities";
+import { CodeFixAction, FileTextChanges } from "../types";
+import { cast, tryCast } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+
     const fixName = "unusedIdentifier";
     const fixIdPrefix = "unusedIdentifier_prefix";
     const fixIdDelete = "unusedIdentifier_delete";
@@ -261,4 +270,4 @@ namespace ts.codefix {
             }
         });
     }
-}
+

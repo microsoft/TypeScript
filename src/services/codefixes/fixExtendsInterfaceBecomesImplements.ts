@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, SyntaxKind, Node, HeritageClause } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { getContainingClass } from "../../compiler/utilities";
+import { factory } from "../../../built/local/compiler";
+import { isWhiteSpaceSingleLine } from "../../compiler/scanner";
+
     const fixId = "extendsInterfaceBecomesImplements";
     const errorCodes = [Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code];
     registerCodeFix({
@@ -49,4 +56,4 @@ namespace ts.codefix {
             changes.deleteRange(sourceFile, { pos: implementsToken.getStart(), end });
         }
     }
-}
+

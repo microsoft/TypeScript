@@ -1,4 +1,7 @@
-namespace ts.projectSystem {
+import { createServerHost } from "../../../../built/local/harness";
+import { createProjectService } from "./helpers";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: format settings", () => {
         it("can be set globally", () => {
             const f1 = {
@@ -36,4 +39,4 @@ namespace ts.projectSystem {
             assert.deepEqual(s3, newPerFileSettings, "file settings should still be the same with per-file settings");
         });
     });
-}
+

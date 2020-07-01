@@ -1,0 +1,18 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/namespaceLike.js"
+    },
+    "references": [
+        { "path": "../compiler" },
+        { "path": "../harness" },
+        { "path": "../jsTyping" },
+        { "path": "../server" },
+        { "path": "../testRunner" },
+        { "path": "../tsserver" },
+        { "path": "../services" },
+        { "path": "../typingsInstaller" },
+        { "path": "../typingsInstallerCore" },
+    ],
+    "include": ["*.ts"],
+}

@@ -1,4 +1,18 @@
-namespace ts {
+import { CommandLineOption, WatchFileKind, WatchDirectoryKind, PollingWatchKind, ScriptTarget, ModuleKind, JsxEmit, ImportsNotUsedAsValues, ModuleResolutionKind, NewLineKind, CompilerOptions, TypeAcquisition, CommandLineOptionOfCustomType, Diagnostic, DiagnosticMessage, CommandLineOptionOfListType, CompilerOptionsValue, TsConfigSourceFile, DidYouMeanOptionsDiagnostics, WatchOptions, CharacterCodes, ParsedCommandLine, ParseConfigHost, FileExtensionInfo, TsConfigOnlyOption, PropertyName, Expression, JsonSourceFile, ObjectLiteralExpression, SyntaxKind, NodeArray, StringLiteral, NumericLiteral, PrefixUnaryExpression, ArrayLiteralExpression, Node, ProjectReference, Path, ExpandResult, ConfigFileSpecs, Extension, WatchDirectoryFlags } from "./types";
+import { createMapFromTemplate, hasProperty, createMap, forEach, arrayFrom, startsWith, map, mapDefined, getSpellingSuggestion, createGetCanonicalFileName, arrayToMap, filter, extend, createMultiMap, firstDefined, filterMutate, assign, endsWith, toFileNameLowerCase, identity, neverArray, findIndex } from "./core";
+import { createCompilerDiagnostic, createDiagnosticForNodeInSourceFile, isComputedNonLiteralName, getTextOfPropertyName, isStringDoubleQuoted, getFileMatcherPatterns, getRegexFromPattern, forEachEntry, getLocaleSpecificMessage, getTsConfigPropArray, getSupportedExtensions, getSuppoertedExtensionsWithJsonIfResolveJsonModule, getRegularExpressionsForWildcards, getRegularExpressionForWildcard, getTsConfigPropArrayElementValue, isImplicitGlob, getExtensionPriority, adjustExtensionPriority, ExtensionPriority, changeExtension, getNextLowestExtensionPriority } from "./utilities";
+import { Push, MapLike } from "./corePublic";
+import { sys } from "./sys";
+import { isString, isArray } from "util";
+import { BuildOptions } from "./tsbuildPublic";
+import { parseJsonText } from "./parser";
+import { toPath, getNormalizedAbsolutePath, getDirectoryPath, getRelativePathFromFile, normalizeSlashes, isRootedDiskPath, combinePaths, getBaseFileName, convertToRelativePath, normalizePath, fileExtensionIs, hasExtension, ensureTrailingDirectorySeparator, containsPath } from "./path";
+import { unescapeLeadingUnderscores } from "./utilitiesPublic";
+import { isStringLiteral } from "./factory/nodeTests";
+import { length } from "module";
+import { Debug } from "./debug";
+import { nodeModuleNameResolver } from "./moduleNameResolver";
+
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
 
@@ -3245,4 +3259,4 @@ namespace ts {
                 })!; // TODO: GH#18217
         }
     }
-}
+

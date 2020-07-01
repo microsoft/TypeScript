@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { createMap, tryCast, filter, contains } from "../../compiler/core";
+import { addToSeen } from "../../compiler/utilities";
+import { getNodeId } from "../../compiler/checker";
+import { TextSpan, SourceFile, ExportSpecifier } from "../../compiler/types";
+import { getTokenAtPosition, getDiagnosticsWithinSpan, createTextSpanFromNode, findDiagnosticForNode } from "../utilities";
+import { isExportSpecifier, factory } from "../../../built/local/compiler";
+import { CodeFixContextBase } from "../types";
+
     const errorCodes = [Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type.code];
     const fixId = "convertToTypeOnlyExport";
     registerCodeFix({
@@ -80,4 +89,4 @@ namespace ts.codefix {
             return element === originExportSpecifier || findDiagnosticForNode(element, diagnostics)?.code === errorCodes[0];
         });
     }
-}
+

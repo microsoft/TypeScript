@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { TestServerEventManager, checkNumberOfProjects, fileStats, toExternalFiles } from "./helpers";
+import { CompilerOptions } from "../../../compiler/types";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+import { isString } from "util";
+
     describe("unittests:: tsserver:: project telemetry", () => {
         it("does nothing for inferred project", () => {
             const file = makeFile("/a.js");
@@ -31,8 +36,8 @@ namespace ts.projectSystem {
         });
 
         it("counts files by extension", () => {
-            const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f => makeFile(`/src/${f}`));
-            const notIncludedFile = makeFile("/bin/ts.js");
+            const files = ["ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f => makeFile(`/src/${f}`));
+            const notIncludedFile = makeFile("/bin/js");
             const compilerOptions: CompilerOptions = { allowJs: true };
             const tsconfig = makeFile("/tsconfig.json", { compilerOptions, include: ["src"] });
 
@@ -291,4 +296,4 @@ namespace ts.projectSystem {
     function makeFile(path: string, content: {} = ""): File {
         return { path, content: isString(content) ? content : JSON.stringify(content) };
     }
-}
+

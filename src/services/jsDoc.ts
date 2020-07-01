@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.JsDoc {
+
+import { CompletionEntry, SymbolDisplayPart, JSDocTagInfo, ScriptElementKind, CompletionEntryDetails, TextInsertion } from "./types";
+import { Declaration, JSDoc, JSDocTag, SyntaxKind, JSDocPropertyTag, JSDocTypedefTag, JSDocImplementsTag, JSDocAugmentsTag, JSDocTemplateTag, JSDocTypeTag, JSDocParameterTag, Node, NodeArray, SourceFile, ParameterDeclaration, FunctionDeclaration, MethodDeclaration, ConstructorDeclaration, MethodSignature, PropertyAssignment, VariableStatement, ExpressionStatement, BinaryExpression, AssignmentDeclarationKind, PropertyDeclaration, Expression, ParenthesizedExpression, FunctionExpression, ClassExpression } from "../compiler/types";
+import { forEachUnique, textPart, lineBreakPart, getTokenAtPosition, getLineStartPositionForPosition } from "./utilities";
+import { pushIfUnique, intersperse, map, neverArray, mapDefined, startsWith, find } from "../compiler/core";
+import { getJSDocCommentsAndTags, findAncestor, hasJSFileExtension, forEachAncestor, getAssignmentDeclarationKind } from "../compiler/utilities";
+import { getJSDocTags, isIdentifier, isFunctionLike, isJSDocParameterTag, isJSDoc, isFunctionExpression, isArrowFunction, isConstructorDeclaration } from "../../built/local/compiler";
+import { length } from "module";
+import { isWhiteSpaceSingleLine } from "../compiler/scanner";
+
     const jsDocTagNames = [
         "abstract",
         "access",
@@ -403,4 +412,4 @@ namespace ts.JsDoc {
 
         return neverArray;
     }
-}
+

@@ -1,4 +1,7 @@
-namespace ts.projectSystem {
+import { createServerHost } from "../../../../../built/local/harness";
+import { createSessionWithEventTracking, protocol, checkNumberOfProjects, configuredProjectAt } from "../helpers";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
         it("language service disabled events are triggered", () => {
             const f1 = {
@@ -48,4 +51,4 @@ namespace ts.projectSystem {
             assert.isTrue(events[1].data.languageServiceEnabled, "Language service state");
         });
     });
-}
+

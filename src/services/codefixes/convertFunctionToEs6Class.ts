@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { CodeFixContext } from "../types";
+import { SourceFile, TypeChecker, SymbolFlags, Node, ClassDeclaration, SyntaxKind, FunctionDeclaration, VariableDeclaration, VariableDeclarationList, ClassElement, PropertyAccessExpression, ObjectLiteralExpression, Expression, Modifier, BinaryExpression, FunctionExpression, ArrowFunction, Block, ObjectLiteralElementLike } from "../../compiler/types";
+import { getTokenAtPosition, copyLeadingComments } from "../utilities";
+import { hasJSDocNodes, isPropertyAccessExpression, isBinaryExpression, isObjectLiteralExpression, factory, isFunctionLike, isMethodDeclaration, isGetOrSetAccessorDeclaration, isPropertyAssignment, isFunctionExpression, isArrowFunction, isIdentifier } from "../../../built/local/compiler";
+import { every, flatMap, concatenate, filter } from "../../compiler/core";
+import { isSourceFileJS } from "../../compiler/utilities";
+
     const fixId = "convertFunctionToEs6Class";
     const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration.code];
     registerCodeFix({
@@ -264,4 +272,4 @@ namespace ts.codefix {
         if (isIdentifier(x.name) && x.name.text === "constructor") return true;
         return false;
     }
-}
+

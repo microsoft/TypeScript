@@ -1,5 +1,10 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, Identifier, PrivateIdentifier, PropertyAccessExpression } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { isPropertyAccessExpression, isIdentifier } from "../../../built/local/compiler";
+
     const fixId = "fixMissingCallParentheses";
     const errorCodes = [
         Diagnostics.This_condition_will_always_return_true_since_the_function_is_always_defined_Did_you_mean_to_call_it_instead.code,
@@ -42,4 +47,4 @@ namespace ts.codefix {
 
         return undefined;
     }
-}
+

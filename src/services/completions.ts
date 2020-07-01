@@ -1,5 +1,19 @@
 /* @internal */
-namespace ts.Completions {
+
+import { TypeChecker, Program, SourceFile, UserPreferences, SyntaxKind, CompilerOptions, ScriptTarget, PseudoBigInt, Node, PropertyAccessExpression, SymbolFlags, BreakOrContinueStatement, CancellationToken, Identifier, JSDocParameterTag, Type, VariableDeclaration, BinaryExpression, JsxAttribute, Expression, CharacterCodes, JSDocPropertyTag, QualifiedName, ModuleDeclaration, LanguageVariant, JsxElement, JSDocReturnTag, JSDocTypeTag, JSDocTypedefTag, JSDocTag, ImportTypeNode, NodeFlags, ContextFlags, InternalSymbolName, Declaration, ModifierFlags, ImportOrExportSpecifier, ObjectLiteralExpression, ObjectBindingPattern, ConstructorDeclaration, FunctionLikeDeclaration, JsxOpeningLikeElement, __String, SpreadAssignment, JsxSpreadAttribute, ObjectType, ClassElement, NodeArray, JsxAttributes, TypeFlags, ObjectTypeDeclaration, TypeElement } from "../compiler/types";
+import { forEach, startsWith, createMap, some, find, firstDefined, cast, first, last, mapDefined, filter, tryCast, filterMutate, every, contains, or, flatMap, memoize, findLast, lastOrUndefined } from "../compiler/core";
+import { LanguageServiceHost, CompletionsTriggerCharacter, CompletionInfo, CompletionEntry, ScriptElementKind, ScriptElementKindModifier, CompletionEntryDetails, SymbolDisplayPartKind, CodeAction, SymbolDisplayPart, JSDocTagInfo } from "./types";
+import { findPrecedingToken, isInString, findChildOfKind, quote, getReplacementSpanForContextToken, createTextSpanFromNode, positionIsASICandidate, displayPart, SemanticMeaning, getNameForExportedSymbol, textPart, getContextualTypeFromParent, getSwitchedType, isEqualityOperatorKind, getTokenAtPosition, isInComment, hasDocComment, getLineStartPositionForPosition, getTouchingPropertyName, isPossiblyTypeArgumentPosition, isInRightSideOfInternalImportEqualsDeclaration, isExternalModuleSymbol, compilerOptionsIndicateEs6Modules, programContainsModules, isNonGlobalDeclaration, positionBelongsToNode, rangeContainsPositionExclusive, createTextRangeFromSpan, hasIndexSignature, isTypeKeyword, rangeContainsPosition, isStringLiteralOrTemplate } from "./utilities";
+import { getStringLiteralCompletions, getStringLiteralCompletionDetails } from "./stringCompletions";
+import { isBreakOrContinueStatement, isJsxClosingElement, unescapeLeadingUnderscores, createTextSpanFromBounds, timestamp, isFunctionLike, isLabeledStatement, isIdentifier, isCaseClause, isJsxExpression, isBinaryExpression, isJSDocParameterTag, isIdentifierOrPrivateIdentifier, isCallExpression, isEntityName, isModuleDeclaration, isMetaProperty, escapeLeadingUnderscores, getNameOfDeclaration, isComputedPropertyName, isPropertyAccessExpression, isStatement, isSourceFile, isExportAssignment, isAssertionExpression, isTypeOfExpression, isFunctionLikeKind, isExportSpecifier, isRegularExpressionLiteral, isStringTextContainingNode, hasInitializer, hasType, isExpression, isNamedExports, isClassLike, isClassElement, isObjectLiteralExpression, isObjectBindingPattern, isMethodDeclaration, isShorthandPropertyAssignment, isParameter, isConstructorDeclaration, isParameterPropertyModifier, isFunctionLikeDeclaration, isPropertyDeclaration, isJsxAttribute, isSpreadAssignment, isBindingElement, isPrivateIdentifierPropertyDeclaration, isJsxSpreadAttribute, isClassMemberModifier, isJSDoc, isClassOrTypeElement, isPrivateIdentifier, isStringLiteralLike } from "../../built/local/compiler";
+import { Debug } from "../compiler/debug";
+import { arrayToSet, isSourceFileJS, isCheckJsEnabledForFile, pseudoBigIntToString, stripQuotes, skipAlias, isAbstractConstructorSymbol, isDeclarationName, nodeIsMissing, isKeyword, isLiteralImportTypeNode, isPartOfTypeNode, getCombinedLocalAndExportSymbolFlags, addToSeen, isIdentifierANonContextualKeyword, getLocalSymbolForExportDefault, getRootDeclaration, isVariableLike, getContainingClass, getDeclarationModifierFlagsFromSymbol, isNamedImportsOrExports, findAncestor, getEffectiveModifierFlags, getAllSuperTypeNodes, createUnderscoreEscapedMap, isPropertyNameLiteral, getEscapedTextOfIdentifierOrLiteral, hasEffectiveModifier, getPropertyNameForPropertyNameNode, isSingleOrDoubleQuote, isKnownSymbol, isContextualKeyword, typeHasCallOrConstructSignatures, isObjectTypeDeclaration, tryGetImportFromModuleSpecifier } from "../compiler/utilities";
+import { Push } from "../compiler/corePublic";
+import { getNameTable } from "./services";
+import { isIdentifierText, tokenToString, stringToToken, getLineAndCharacterOfPosition } from "../compiler/scanner";
+import { isString } from "util";
+import { getSymbolId } from "../compiler/checker";
+
     export enum SortText {
         LocationPriority = "0",
         OptionalMember = "1",
@@ -194,12 +208,12 @@ namespace ts.Completions {
                 return completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData, preferences);
             case CompletionDataKind.JsDocTagName:
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
-                return jsdocCompletionInfo(JsDoc.getJSDocTagNameCompletions());
+                return jsdocCompletionInfo(getJSDocTagNameCompletions());
             case CompletionDataKind.JsDocTag:
                 // If the current position is a jsDoc tag, only tags should be provided for completion
-                return jsdocCompletionInfo(JsDoc.getJSDocTagCompletions());
+                return jsdocCompletionInfo(getJSDocTagCompletions());
             case CompletionDataKind.JsDocParameterName:
-                return jsdocCompletionInfo(JsDoc.getJSDocParameterNameCompletions(completionData.tag));
+                return jsdocCompletionInfo(getJSDocParameterNameCompletions(completionData.tag));
             default:
                 return Debug.assertNever(completionData);
         }
@@ -434,8 +448,8 @@ namespace ts.Completions {
         // entries (like JavaScript identifier entries).
         return {
             name,
-            kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location!), // TODO: GH#18217
-            kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
+            kind: getSymbolKind(typeChecker, symbol, location!), // TODO: GH#18217
+            kindModifiers: getSymbolModifiers(symbol),
             sortText,
             source: getSourceFromOrigin(origin),
             hasAction: origin && originIsExport(origin) || undefined,
@@ -650,11 +664,11 @@ namespace ts.Completions {
                 const { request } = symbolCompletion;
                 switch (request.kind) {
                     case CompletionDataKind.JsDocTagName:
-                        return JsDoc.getJSDocTagNameCompletionDetails(name);
+                        return getJSDocTagNameCompletionDetails(name);
                     case CompletionDataKind.JsDocTag:
-                        return JsDoc.getJSDocTagCompletionDetails(name);
+                        return getJSDocTagCompletionDetails(name);
                     case CompletionDataKind.JsDocParameterName:
-                        return JsDoc.getJSDocParameterNameCompletionDetails(name);
+                        return getJSDocParameterNameCompletionDetails(name);
                     default:
                         return Debug.assertNever(request);
                 }
@@ -683,9 +697,9 @@ namespace ts.Completions {
     export function createCompletionDetailsForSymbol(symbol: Symbol, checker: TypeChecker, sourceFile: SourceFile, location: Node, cancellationToken: CancellationToken, codeActions?: CodeAction[], sourceDisplay?: SymbolDisplayPart[]): CompletionEntryDetails {
         const { displayParts, documentation, symbolKind, tags } =
             checker.runWithCancellationToken(cancellationToken, checker =>
-                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All)
+                getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, sourceFile, location, location, SemanticMeaning.All)
             );
-        return createCompletionDetails(symbol.name, SymbolDisplay.getSymbolModifiers(symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
+        return createCompletionDetails(symbol.name, getSymbolModifiers(symbol), symbolKind, displayParts, documentation, tags, codeActions, sourceDisplay);
     }
 
     export function createCompletionDetails(name: string, kindModifiers: string, kind: ScriptElementKind, displayParts: SymbolDisplayPart[], documentation?: SymbolDisplayPart[], tags?: JSDocTagInfo[], codeActions?: CodeAction[], source?: SymbolDisplayPart[]): CompletionEntryDetails {
@@ -811,7 +825,7 @@ namespace ts.Completions {
             case SyntaxKind.OpenBraceToken:
                 return isJsxExpression(parent) && parent.parent.kind !== SyntaxKind.JsxElement ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
             default:
-                const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile);
+                const argInfo = getArgumentInfoForCompletions(previousToken, position, sourceFile);
                 return argInfo ?
                     // At `,`, treat this as the next argument after the comma.
                     checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (previousToken.kind === SyntaxKind.CommaToken ? 1 : 0)) :
@@ -2638,7 +2652,7 @@ namespace ts.Completions {
     /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
     function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefined {
         const jsdoc = findAncestor(node, isJSDoc);
-        return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
+        return jsdoc && jsdoc?.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
     function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
@@ -2794,4 +2808,4 @@ namespace ts.Completions {
         }
         return false;
     }
-}
+

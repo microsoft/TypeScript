@@ -1,4 +1,11 @@
-namespace ts.tscWatch {
+import { libFile, createWatchedSystem, SymLink } from "../../../../built/local/harness";
+import { createWatchOfFilesAndCompilerOptions, getDiagnosticOfFileFromProgram, checkOutputErrorsInitial, checkOutputErrorsIncremental, getDiagnosticModuleNotFoundOfFile, verifyTscWatch, runQueuedTimeoutCallbacks, projectRoot } from "./helpers";
+import { ModuleKind } from "../../../compiler/types";
+import { notImplemented, neverArray, noop } from "../../../compiler/core";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+import { Watch } from "../../../compiler/watchPublic";
+
     describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
         const scenario = "resolutionCache";
         it("works", () => {
@@ -193,7 +200,7 @@ namespace ts.tscWatch {
                             content: `
 {
   "main": ""
-}
+
 `
                         });
                         sys.ensureFileOrFolder({
@@ -231,7 +238,7 @@ declare module "url" {
     export interface Url {
         href?: string;
     }
-}
+
 `
                 };
                 return createWatchedSystem([root, file, libFile], { currentDirectory: "/a/b" });
@@ -244,7 +251,7 @@ declare module "fs" {
     export interface Stats {
         isFile(): boolean;
     }
-}
+
 `),
                     timeouts: runQueuedTimeoutCallbacks,
                 }
@@ -450,4 +457,4 @@ declare module "fs" {
             changes: neverArray
         });
     });
-}
+

@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { openFilesForSession, checkNumberOfInferredProjects, checkNumberOfConfiguredProjects, createSession, protocol } from "./helpers";
+import { assert } from "console";
+import { createServerHost } from "../../../../built/local/harness";
+import { Debug } from "../../../compiler/debug";
+
     const angularFormsDts: File = {
         path: "/node_modules/@angular/forms/forms.d.ts",
         content: "export declare class PatternValidator {}",
@@ -302,4 +307,4 @@ namespace ts.projectSystem {
             });
         }
     }
-}
+

@@ -1,5 +1,9 @@
-namespace ts {
+
     import theory = Utils.theory;
+import { Version, VersionRange } from "../../compiler/semver";
+import { assert } from "console";
+import { neverArray } from "../../compiler/core";
+import { Comparison } from "../../compiler/corePublic";
     describe("unittests:: semver", () => {
         describe("Version", () => {
             function assertVersion(version: Version, [major, minor, patch, prerelease, build]: [number, number, number, string[]?, string[]?]) {
@@ -225,4 +229,4 @@ namespace ts {
             ]);
         });
     });
-}
+

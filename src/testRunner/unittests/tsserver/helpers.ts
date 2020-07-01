@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+
     export import TI = server.typingsInstaller;
     export import protocol = server.protocol;
     export import CommandNames = server.CommandNames;
@@ -17,6 +17,21 @@ namespace ts.projectSystem {
 
     export import commonFile1 = tscWatch.commonFile1;
     export import commonFile2 = tscWatch.commonFile2;
+import { convertToObject, textSpanEnd, createTextSpan } from "../../../../built/local/compiler";
+import { parseJsonText } from "../../../compiler/parser";
+import { Path, TypeAcquisition, DiagnosticCategory, DiagnosticRelatedInformation, TextSpan, DiagnosticMessage, diagnosticCategoryName } from "../../../compiler/types";
+import { noop, returnFalse, returnUndefined, returnTrue, createMap, notImplemented, map, filterMutate, mapDefined, arrayFrom, neverArray } from "../../../compiler/core";
+import { Debug } from "../../../compiler/debug";
+import { MapLike, SortedReadonlyArray } from "../../../compiler/corePublic";
+import { assert, clear } from "console";
+import { isString, isArray } from "util";
+import { sys } from "../../../compiler/sys";
+import { version } from "os";
+import { HostCancellationToken } from "../../../services/types";
+import { normalizePath, forEachAncestorDirectory, combinePaths, directorySeparator } from "../../../compiler/path";
+import { computeLineStarts, computeLineAndCharacterOfPosition } from "../../../compiler/scanner";
+import { formatStringFromArgs } from "../../../compiler/utilities";
+import { flattenDiagnosticMessageText } from "../../../compiler/program";
 
     const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
     export function mapOutputToJson(s: string) {
@@ -277,7 +292,7 @@ namespace ts.projectSystem {
                 configFileName: "tsconfig.json",
                 projectType: "configured",
                 languageServiceEnabled: true,
-                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                version: version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 ...partial,
             });
         }
@@ -1023,4 +1038,4 @@ namespace ts.projectSystem {
     export function syncDiagnostics(diagnostics: GetErrDiagnostics, project: string): SyncDiagnostics {
         return { project, ...diagnostics };
     }
-}
+

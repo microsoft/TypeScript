@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SyntaxKind, TypeFlags, Type, DiagnosticMessage, SourceFile, TypeNode, TypeChecker, AsExpression, CallSignatureDeclaration, ConstructSignatureDeclaration, FunctionDeclaration, GetAccessorDeclaration, IndexSignatureDeclaration, MappedTypeNode, MethodDeclaration, MethodSignature, ParameterDeclaration, PropertyDeclaration, PropertySignature, SetAccessorDeclaration, TypeAliasDeclaration, TypeAssertion, VariableDeclaration, Node } from "../../compiler/types";
+import { CodeFixAction } from "../types";
+import { findAncestor } from "../../compiler/utilities";
+import { getTokenAtPosition } from "../utilities";
+
     const fixIdPlain = "fixJSDocTypes_plain";
     const fixIdNullable = "fixJSDocTypes_nullable";
     const errorCodes = [Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code];
@@ -80,4 +86,4 @@ namespace ts.codefix {
                 return false;
         }
     }
-}
+

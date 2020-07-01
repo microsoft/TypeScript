@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.codefix {
+
+import { CodeFixContext, CodeFixAction } from "../types";
+import { ImportDeclaration, NamespaceImport, ModuleKind, SourceFile, Node, SyntaxKind, CallExpression, NewExpression, TransientSymbol } from "../../compiler/types";
+import { getSourceFileOfNode, getNamespaceDeclarationNode, getEmitModuleKind, findAncestor, isImportCall } from "../../compiler/utilities";
+import { makeImport, getQuotePreference, getTokenAtPosition } from "../utilities";
+import { factory, isExpression, isNamedDeclaration } from "../../../built/local/compiler";
+import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../codeFixProvider";
+import { addRange } from "../../compiler/core";
+
     const fixName = "invalidImportSyntax";
 
     function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportDeclaration): CodeFixAction[] {
@@ -93,4 +101,4 @@ namespace ts.codefix {
         }
         return fixes;
     }
-}
+

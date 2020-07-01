@@ -1,4 +1,9 @@
-namespace ts {
+import { NamedSourceText, SourceText, newProgram, ProgramWithSourceTexts, updateProgram, updateProgramText } from "./reuseProgramStructure";
+import { Program, CancellationToken, OperationCanceledException } from "../../compiler/types";
+import { BuilderProgramHost, EmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram } from "../../compiler/builderPublic";
+import { returnTrue } from "../../compiler/core";
+import { assert } from "console";
+
     describe("unittests:: builder", () => {
         it("emits dependent files", () => {
             const files: NamedSourceText[] = [
@@ -127,4 +132,4 @@ namespace ts {
             updateProgramText(files, fileName, fileContent);
         });
     }
-}
+

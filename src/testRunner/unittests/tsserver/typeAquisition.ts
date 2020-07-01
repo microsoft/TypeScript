@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { createServerHost } from "../../../../built/local/harness";
+import { createProjectService, toExternalFile, TestTypingsInstaller, checkProjectActualFiles, configuredProjectAt } from "./helpers";
+import { ScriptKind } from "../../../compiler/types";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: autoDiscovery", () => {
         it("does not depend on extension", () => {
             const file1 = {
@@ -49,4 +53,4 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, barTypings.path, config.path]);
         });
     });
-}
+

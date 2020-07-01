@@ -1,5 +1,8 @@
 /* @internal */
-namespace ts.refactor {
+
+import { Refactor, RefactorContext, ApplicableRefactorInfo, RefactorEditInfo } from "./types";
+import { createMap, arrayFrom, flatMapIterator } from "../compiler/core";
+
     // A map with the refactor code as key, the refactor itself as value
     // e.g.  nonSuggestableRefactors[refactorCode] -> the refactor you want
     const refactors: Map<string, Refactor> = createMap<Refactor>();
@@ -18,4 +21,4 @@ namespace ts.refactor {
         const refactor = refactors.get(refactorName);
         return refactor && refactor.getEditsForAction(context, actionName);
     }
-}
+

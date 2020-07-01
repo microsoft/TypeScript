@@ -5,7 +5,8 @@
     },
 
     "references": [
-        { "path": "../shims" }
+        { "path": "../shims" },
+        { "path": "../namespaceLike" }
     ],
 
     "files": [
@@ -18,6 +19,7 @@
         "semver.ts",
 
         "types.ts",
+        "types.generated.ts",
         "sys.ts",
         "path.ts",
         "diagnosticInformationMap.generated.ts",

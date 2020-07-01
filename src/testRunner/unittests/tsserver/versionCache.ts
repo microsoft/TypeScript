@@ -1,4 +1,7 @@
-namespace ts {
+import { assert } from "console";
+import { getSnapshotText } from "../../../services/utilities";
+import { computeLineAndCharacterOfPosition } from "../../../compiler/scanner";
+
     function editFlat(position: number, deletedLength: number, newText: string, source: string) {
         return source.substring(0, position) + newText + source.substring(position + deletedLength, source.length);
     }
@@ -25,7 +28,7 @@ var y = { zebra: 12, giraffe: "ell" };
 z.a;
 class Point {
     x: number;
-}
+
 k=y;
 var p:Point=new Point();
 var q:Point=<Point>p;`;
@@ -313,4 +316,4 @@ and grew 1cm per day`;
             }
         });
     });
-}
+

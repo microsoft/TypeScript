@@ -1,5 +1,10 @@
 /* @internal */
-namespace ts {
+
+import { CharacterCodes, Path } from "./types";
+import { stringContains, endsWith, startsWith, equateStringsCaseInsensitive, equateStringsCaseSensitive, lastOrUndefined, some, compareStringsCaseInsensitive, compareValues, compareStringsCaseSensitive, getStringComparer, GetCanonicalFileName, identity } from "./core";
+import { Comparison } from "./corePublic";
+import { Debug } from "./debug";
+
     /**
      * Internally, we represent paths as strings with '/' as the directory separator.
      * When we make system calls (eg: LanguageServiceHost.getDirectory()),
@@ -857,4 +862,4 @@ namespace ts {
     export function isNodeModulesDirectory(dirPath: Path) {
         return endsWith(dirPath, "/node_modules");
     }
-}
+

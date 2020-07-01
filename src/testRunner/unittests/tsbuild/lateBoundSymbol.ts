@@ -1,4 +1,6 @@
-namespace ts {
+import { verifyTscSerializedIncrementalEdits, loadProjectFromDisk, replaceText } from "./helpers";
+import { BuildKind } from "../tsc/helpers";
+
     describe("unittests:: tsbuild:: lateBoundSymbol:: interface is merged and contains late bound member", () => {
         verifyTscSerializedIncrementalEdits({
             subScenario: "interface is merged and contains late bound member",
@@ -11,4 +13,4 @@ namespace ts {
             }]
         });
     });
-}
+

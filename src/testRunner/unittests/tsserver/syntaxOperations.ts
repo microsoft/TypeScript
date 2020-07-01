@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { TestSession, protocol, createSession, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
+import { File } from "../../../harness/vfsUtil";
+import { libFile, createServerHost } from "../../../../built/local/harness";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: syntax operations", () => {
         function navBarFull(session: TestSession, file: File) {
             return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
@@ -95,4 +99,4 @@ export function Test2() {
             assert.notStrictEqual(navBarResultUnitTest1WithChangedContent, navBarResultUnitTest1, "With changes in contents of unitTest file, we should see changed naviagation bar item result");
         });
     });
-}
+

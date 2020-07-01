@@ -1,4 +1,7 @@
-namespace ts {
+import { createSolutionBuilder, isCircularBuildOrder, getBuildOrderFromAnyBuildOrder } from "../../../compiler/tsbuildPublic";
+import { assert } from "console";
+import { ResolvedConfigFileName } from "../../../compiler/types";
+
     describe("unittests:: tsbuild - graph-ordering", () => {
         let host: fakes.SolutionBuilderHost | undefined;
         const deps: [string, string][] = [
@@ -88,4 +91,4 @@ namespace ts {
             return projFileNames;
         }
     });
-}
+

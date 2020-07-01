@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts {
+
+import { TextSpan, CharacterCodes, ScriptTarget } from "../compiler/types";
+import { createMap, last, startsWith, min, compareValues, compareBooleans } from "../compiler/core";
+import { Comparison } from "../compiler/corePublic";
+import { createTextSpan } from "../../built/local/compiler";
+import { isUnicodeIdentifierStart } from "../compiler/scanner";
+
     // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
     export enum PatternMatchKind {
         exact,
@@ -29,10 +35,10 @@ namespace ts {
         // is useful as a quick check to prevent having to compute a container before calling
         // "getMatches".
         //
-        // For example, if the search pattern is "ts.c.SK" and the candidate is "SyntaxKind", then
+        // For example, if the search pattern is "c.SK" and the candidate is "SyntaxKind", then
         // this will return a successful match, having only tested "SK" against "SyntaxKind".  At
-        // that point a call can be made to 'getMatches("SyntaxKind", "ts.compiler")', with the
-        // work to create 'ts.compiler' only being done once the first match succeeded.
+        // that point a call can be made to 'getMatches("SyntaxKind", "compiler")', with the
+        // work to create 'compiler' only being done once the first match succeeded.
         getMatchForLastSegmentOfPattern(candidate: string): PatternMatch | undefined;
 
         // Fully checks a candidate, with an dotted container, against the search pattern.
@@ -590,4 +596,4 @@ namespace ts {
     function every(s: string, pred: (ch: number, index: number) => boolean, start = 0, end = s.length): boolean {
         return everyInRange(start, end, i => pred(s.charCodeAt(i), i));
     }
-}
+

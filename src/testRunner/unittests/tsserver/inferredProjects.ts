@@ -1,4 +1,12 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile, checkArray, checkWatchedFiles, checkWatchedDirectories } from "../../../../built/local/harness";
+import { createProjectService, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, getConfigFilesToWatch, nodeModulesAtTypes, checkProjectActualFiles, checkNumberOfProjects, createSession } from "./helpers";
+import { assert } from "console";
+import { combinePaths } from "../../../compiler/path";
+import { ModuleResolutionKind, ScriptTarget, ScriptKind } from "../../../compiler/types";
+import { CommandNames } from "../../../server/session";
+import { createMap } from "../../../compiler/core";
+
     describe("unittests:: tsserver:: Inferred projects", () => {
         it("create inferred project", () => {
             const appFile: File = {
@@ -430,4 +438,4 @@ namespace ts.projectSystem {
             }
         });
     });
-}
+

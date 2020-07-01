@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.SmartSelectionRange {
+
+import { SourceFile, Node, SyntaxKind, SyntaxList } from "../compiler/types";
+import { SelectionRange } from "./types";
+import { createTextSpanFromBounds, isBlock, isTemplateSpan, isTemplateHead, isTemplateTail, isVariableDeclarationList, isVariableStatement, isSyntaxList, isVariableDeclaration, isTemplateMiddleOrTemplateTail, hasJSDocNodes, isStringLiteral, isTemplateLiteral, textSpanIntersectsWithPosition, isImportDeclaration, isImportEqualsDeclaration, isSourceFile, isMappedTypeNode, isPropertySignature, isParameter, isBindingElement } from "../../built/local/compiler";
+import { positionsAreOnSameLine, setTextRangePosEnd } from "../compiler/utilities";
+import { isNumber } from "util";
+import { textSpansEqual, getTouchingPropertyName } from "./utilities";
+import { Debug } from "../compiler/debug";
+import { or, contains, findIndex, last, compact } from "../compiler/core";
+import { parseNodeFactory } from "../compiler/parser";
+
     export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {
         let selectionRange: SelectionRange = {
             textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd())
@@ -93,7 +103,7 @@ namespace ts.SmartSelectionRange {
     }
 
     /**
-     * Like `ts.positionBelongsToNode`, except positions immediately after nodes
+     * Like `positionBelongsToNode`, except positions immediately after nodes
      * count too, unless that position belongs to the next node. In effect, makes
      * selections able to snap to preceding tokens when the cursor is on the tail
      * end of them with only whitespace ahead.
@@ -102,7 +112,7 @@ namespace ts.SmartSelectionRange {
      * @param node The candidate node to snap to.
      */
     function positionShouldSnapToNode(sourceFile: SourceFile, pos: number, node: Node) {
-        // Can’t use 'ts.positionBelongsToNode()' here because it cleverly accounts
+        // Can’t use 'positionBelongsToNode()' here because it cleverly accounts
         // for missing nodes, which can’t really be considered when deciding what
         // to select.
         Debug.assert(node.pos <= pos);
@@ -270,4 +280,4 @@ namespace ts.SmartSelectionRange {
             || kind === SyntaxKind.CloseParenToken
             || kind === SyntaxKind.JsxClosingElement;
     }
-}
+

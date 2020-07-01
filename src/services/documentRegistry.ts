@@ -1,4 +1,12 @@
-namespace ts {
+import { CompilerOptions, ScriptKind, SourceFile, Path, ScriptTarget } from "../compiler/types";
+import { IScriptSnapshot } from "./types";
+import { createGetCanonicalFileName, arrayFrom, createMap } from "../compiler/core";
+import { toPath } from "../compiler/path";
+import { getOrUpdate, getCompilerOptionValue } from "../compiler/utilities";
+import { Debug } from "../compiler/debug";
+import { createLanguageServiceSourceFile, updateLanguageServiceSourceFile } from "./services";
+import { sourceFileAffectingCompilerOptions } from "../../built/local/compiler";
+
     /**
      * The document registry represents a store of SourceFile objects that can be shared between
      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
@@ -263,4 +271,4 @@ namespace ts {
     function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
         return sourceFileAffectingCompilerOptions.map(option => getCompilerOptionValue(settings, option)).join("|") as DocumentRegistryBucketKey;
     }
-}
+

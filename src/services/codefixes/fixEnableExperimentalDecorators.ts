@@ -1,5 +1,10 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixActionWithoutFixAll, codeFixAll } from "../codeFixProvider";
+import { TsConfigSourceFile } from "../../compiler/types";
+import { setJsonCompilerOptionValue } from "./helpers";
+import { factory } from "../../../built/local/compiler";
+
     const fixId = "enableExperimentalDecorators";
     const errorCodes = [
         Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning.code
@@ -28,4 +33,4 @@ namespace ts.codefix {
     function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
         setJsonCompilerOptionValue(changeTracker, configFile, "experimentalDecorators", factory.createTrue());
     }
-}
+

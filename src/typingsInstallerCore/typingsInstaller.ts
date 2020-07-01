@@ -1,4 +1,14 @@
-namespace ts.server.typingsInstaller {
+import { MapLike, Comparison, versionMajorMinor, version } from "../compiler/corePublic";
+import { noop, compareStringsCaseInsensitive, createMap, GetCanonicalFileName, createGetCanonicalFileName, hasProperty, getProperty, mapDefined } from "../compiler/core";
+import { InstallTypingHost, CloseProject, DiscoverTypings, BeginInstallTypes, EndInstallTypes, SetTypings, InvalidateCachedTypings } from "../jsTyping/types";
+import { resolveModuleName, mangleScopedPackageName } from "../../built/local/compiler";
+import { combinePaths, getBaseFileName, getDirectoryPath, fileExtensionIs, containsPath, directorySeparator } from "../compiler/path";
+import { ModuleResolutionKind, Path, WatchOptions, Extension } from "../compiler/types";
+import { FileWatcher, FileWatcherEventKind } from "../compiler/sys";
+import { clearMap, closeFileWatcher, copyEntries } from "../compiler/utilities";
+import { Version } from "../compiler/semver";
+import { EventBeginInstallTypes, EventEndInstallTypes, ActionInvalidate, ActionSet } from "../jsTyping/shared";
+
     interface NpmConfig {
         devDependencies: MapLike<any>;
     }
@@ -540,4 +550,4 @@ namespace ts.server.typingsInstaller {
     export function typingsName(packageName: string): string {
         return `@types/${packageName}@ts${versionMajorMinor}`;
     }
-}
+

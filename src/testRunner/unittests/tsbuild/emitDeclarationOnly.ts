@@ -1,4 +1,6 @@
-namespace ts {
+import { loadProjectFromDisk, verifyTscSerializedIncrementalEdits, replaceText } from "./helpers";
+import { BuildKind } from "../tsc/helpers";
+
     describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
         let projFs: vfs.FileSystem;
         before(() => {
@@ -50,4 +52,4 @@ export interface A {`),
             ],
         });
     });
-}
+

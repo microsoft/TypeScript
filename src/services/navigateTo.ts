@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.NavigateTo {
+
+import { PatternMatchKind, createPatternMatcher, PatternMatcher } from "./patternMatcher";
+import { Declaration, SourceFile, TypeChecker, CancellationToken, SyntaxKind, ImportClause, ImportSpecifier, ImportEqualsDeclaration, Expression, Node, Identifier } from "../compiler/types";
+import { NavigateToItem, ScriptElementKind } from "./types";
+import { neverArray, compareValues, compareStringsCaseSensitiveUI } from "../compiler/core";
+import { Push } from "../compiler/corePublic";
+import { getNameOfDeclaration, isPropertyAccessExpression } from "../../built/local/compiler";
+import { isPropertyNameLiteral, getTextOfIdentifierOrLiteral } from "../compiler/utilities";
+import { getContainerNode, getNodeKind, getNodeModifiers, createTextSpanFromNode } from "./utilities";
+
     interface RawNavigateToItem {
         readonly name: string;
         readonly fileName: string;
@@ -133,4 +142,4 @@ namespace ts.NavigateTo {
             containerKind: containerName ? getNodeKind(container!) : ScriptElementKind.unknown, // TODO: GH#18217 Just use `container ? ...`
         };
     }
-}
+

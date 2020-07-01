@@ -1,4 +1,12 @@
-namespace ts {
+import { TscIncremental, baselineBuildInfo, generateSourceMapBaselineFiles, getFsWithTime } from "../tsbuild/helpers";
+import { noop, neverArray, getProperty } from "../../../compiler/core";
+import { Program, ParsedCommandLine, ExitStatus } from "../../../compiler/types";
+import { EmitAndSemanticDiagnosticsBuilderProgram, BuilderProgram } from "../../../compiler/builderPublic";
+import { ExecuteCommandLineCallbacks, executeCommandLine, isBuild } from "../../../../built/local/executeCommandLine";
+import { System } from "../../../compiler/sys";
+import { ReadonlyCollection, MapLike } from "../../../compiler/corePublic";
+import { assert } from "console";
+
     export type TscCompileSystem = fakes.System & {
         writtenFiles: Set<string>;
         baseLine(): { file: string; text: string; };
@@ -168,4 +176,4 @@ ${patch ? vfs.formatPatch(patch) : ""}`
             });
         });
     }
-}
+

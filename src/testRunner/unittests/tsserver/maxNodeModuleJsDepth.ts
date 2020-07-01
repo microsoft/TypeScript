@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { createProjectService, checkNumberOfInferredProjects } from "./helpers";
+import { assert } from "console";
+import { ScriptTarget } from "../../../compiler/types";
+
     describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", () => {
         it("should be set to 2 if the project has js root files", () => {
             const file1: File = {
@@ -52,4 +57,4 @@ namespace ts.projectSystem {
             assert.isUndefined(project.getCompilationSettings().maxNodeModuleJsDepth);
         });
     });
-}
+

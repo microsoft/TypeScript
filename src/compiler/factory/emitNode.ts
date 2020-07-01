@@ -1,4 +1,9 @@
-namespace ts {
+import { Node, EmitNode, SyntaxKind, SourceFile, EmitFlags, SourceMapRange, TextRange, SynthesizedComment, AccessExpression, EmitHelper } from "../types";
+import { isParseTreeNode, getParseTreeNode } from "../utilitiesPublic";
+import { getSourceFileOfNode } from "../utilities";
+import { Debug } from "../debug";
+import { append, some, appendIfUnique, orderedRemoveItem } from "../core";
+
     /**
      * Associates a node with the current transformation, initializing
      * various transient transformation properties.
@@ -259,4 +264,4 @@ namespace ts {
         getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;
         return node;
     }
-}
+

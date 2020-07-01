@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts.codefix {
+
+import { InterfaceDeclaration, TypeAliasDeclaration, IndexSignatureDeclaration, SourceFile, TypeNode, TypeLiteralNode, SyntaxKind } from "../../compiler/types";
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { idText, isIndexSignatureDeclaration, isClassDeclaration, isInterfaceDeclaration, isTypeAliasDeclaration, factory, isIdentifier } from "../../../built/local/compiler";
+import { getTokenAtPosition } from "../utilities";
+import { cast, first, neverArray } from "../../compiler/core";
+import { hasEffectiveReadonlyModifier, getAllSuperTypeNodes } from "../../compiler/utilities";
+
     const fixIdAddMissingTypeof = "fixConvertToMappedObjectType";
     const fixId = fixIdAddMissingTypeof;
     const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead.code];
@@ -53,4 +60,4 @@ namespace ts.codefix {
         ]);
         changes.replaceNode(sourceFile, container, createTypeAliasFromInterface(container, intersectionType));
     }
-}
+

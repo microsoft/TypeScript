@@ -1,4 +1,14 @@
-namespace ts.TestFSWithWatch {
+import { Path, WatchOptions, ModuleResolutionHost, RequireResult, WatchFileKind, WatchDirectoryKind, PollingWatchKind } from "../compiler/types";
+import { combinePaths, getDirectoryPath, toPath, getNormalizedAbsolutePath, directorySeparator, getBaseFileName, getRelativePathToDirectoryOrUrl } from "../compiler/path";
+import { patchWriteFileEnsuringDirectory, FileWatcher, PollingInterval, FileWatcherCallback, FsWatchCallback, HostWatchFile, HostWatchDirectory, createSystemWatchFunctions, createSingleFileWatcherPerName, FileWatcherEventKind, FileSystemEntryKind, createFileWatcherCallback, generateDjb2Hash, sys } from "../compiler/sys";
+import { isString, isArray, isNumber } from "util";
+import { SortedArray } from "../compiler/corePublic";
+import { MultiMap, createMap, forEach, arrayFrom, arrayToMap, identity, createMultiMap, createGetCanonicalFileName, clone, returnFalse, insertSorted, compareStringsCaseSensitive, filterMutate, mapDefined } from "../compiler/core";
+import { assert, clear } from "console";
+import { arrayToSet, matchFiles } from "../compiler/utilities";
+import { FormatDiagnosticsHost } from "../compiler/program";
+import { Debug } from "../compiler/debug";
+export namespace TestFSWithWatch {
     export const libFile: File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>

@@ -491,7 +491,6 @@ namespace Debug {
             return s;
         }
     }
-
     // Export as a module. NOTE: Can't use module exports as this is built using --outFile
     declare const module: { exports: {} };
     if (typeof module !== "undefined" && module.exports) {

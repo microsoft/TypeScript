@@ -1,6 +1,9 @@
 // NOTE: The contents of this file are all exported from the namespace 'documents'. This is to
 //       support the eventual conversion of harness into a modular system.
 
+import { computeLineStarts } from "../compiler/scanner";
+import { sys } from "../compiler/sys";
+
 namespace documents {
     export class TextDocument {
         public readonly meta: Map<string, string>;
@@ -17,7 +20,7 @@ namespace documents {
         }
 
         public get lineStarts(): readonly number[] {
-            return this._lineStarts || (this._lineStarts = ts.computeLineStarts(this.text));
+            return this._lineStarts || (this._lineStarts = computeLineStarts(this.text));
         }
 
         public static fromTestFile(file: Harness.Compiler.TestFile) {
@@ -148,7 +151,7 @@ namespace documents {
 
         public static fromUrl(url: string) {
             const match = SourceMap._dataURLRegExp.exec(url);
-            return match ? new SourceMap(/*mapFile*/ undefined, ts.sys.base64decode!(match[1])) : undefined;
+            return match ? new SourceMap(/*mapFile*/ undefined, sys.base64decode!(match[1])) : undefined;
         }
 
         public static fromSource(text: string): SourceMap | undefined {

@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts {
+
+import { Program, UserPreferences, PropertyAssignment, Expression, ModuleResolutionHost, Path, StringLiteralLike, SourceFile, ResolvedModuleWithFailedLookupLocations, SourceFileLike, TextRange } from "../compiler/types";
+import { LanguageServiceHost, FileTextChanges } from "./types";
+import { SourceMapper } from "./sourcemaps";
+import { hostUsesCaseSensitiveFileNames, tryRemoveDirectoryPrefix, getTsConfigObjectLiteralExpression, getFileMatcherPatterns, getRegexFromPattern, isAmbientModule, createRange } from "../compiler/utilities";
+import { createGetCanonicalFileName, GetCanonicalFileName, mapDefined, last, find, forEach, endsWith, neverArray } from "../compiler/core";
+import { getRelativePathFromFile, getDirectoryPath, getRelativePathFromDirectory, pathIsRelative, ensurePathIsNonModuleName, normalizePath, combinePaths } from "../compiler/path";
+import { isArrayLiteralExpression, isStringLiteral, factory, getOptionFromName, resolveModuleName, isSourceFile, isObjectLiteralExpression, isPropertyAssignment } from "../../built/local/compiler";
+import { Debug } from "../compiler/debug";
+import { createModuleSpecifierResolutionHost } from "./utilities";
+
     export function getEditsForFileRename(
         program: Program,
         oldFileOrDirPath: string,
@@ -257,4 +267,4 @@ namespace ts {
             }
         }
     }
-}
+

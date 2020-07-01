@@ -1,4 +1,11 @@
-namespace ts {
+import { Diagnostic, ParseConfigHost } from "../../../compiler/types";
+import { parseConfigFileTextToJson, parseJsonConfigFileContent, parseJsonSourceFileConfigFileContent, convertToObject } from "../../../../built/local/compiler";
+import { assert } from "console";
+import { sys } from "../../../compiler/sys";
+import { parseJsonText } from "../../../compiler/parser";
+import { arrayIsEqualTo } from "../../../compiler/core";
+import { createCompilerDiagnostic } from "../../../compiler/utilities";
+
     describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () => {
         function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: Diagnostic[] }) {
             const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
@@ -382,4 +389,4 @@ namespace ts {
             assert.isTrue(parsed.errors.length >= 0);
         });
     });
-}
+

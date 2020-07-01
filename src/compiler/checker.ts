@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts {
+
     const ambientModuleSymbolRegex = /^".+"$/;
     const anon = "(anonymous)" as __String & string;
 
@@ -20112,6 +20112,7 @@ namespace ts {
                             ((<TransientSymbol>prop).checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant &&
                             !maybeTypeOfKind(getTypeOfSymbol(prop), TypeFlags.Instantiable);
                     }
+
                     return !!(<TransientSymbol>prop).isDiscriminantProperty;
                 }
             }
@@ -30615,6 +30616,7 @@ namespace ts {
 
             // Private class fields transformation relies on WeakMaps.
             if (isPrivateIdentifier(node.name) && languageVersion < ScriptTarget.ESNext) {
+
                 for (let lexicalScope = getEnclosingBlockScopeContainer(node); !!lexicalScope; lexicalScope = getEnclosingBlockScopeContainer(lexicalScope)) {
                     getNodeLinks(lexicalScope).flags |= NodeCheckFlags.ContainsClassWithPrivateIdentifiers;
                 }
@@ -39224,4 +39226,4 @@ namespace ts {
         return !!(s.flags & SignatureFlags.HasLiteralTypes);
     }
 
-}
+

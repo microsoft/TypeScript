@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.refactor {
+
+import { registerRefactor } from "../refactorProvider";
+import { ApplicableRefactorInfo, RefactorEditInfo, RefactorContext } from "../types";
+import { neverArray, first } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { FunctionDeclaration, ClassDeclaration, InterfaceDeclaration, EnumDeclaration, NamespaceDeclaration, TypeAliasDeclaration, VariableStatement, Identifier, ModifierFlags, InternalSymbolName, SyntaxKind, NodeFlags, SourceFile, Program, CancellationToken, TypeChecker, ImportSpecifier, ExportSpecifier, ImportClause, PropertyAccessExpression, Node } from "../../compiler/types";
+import { getRefactorContextSpan, getTokenAtPosition, getParentNodeInSpan, findModifier, quotePreferenceFromString, QuotePreference, makeImport } from "../utilities";
+import { getSyntacticModifierFlags, isAmbientModule, getLocaleSpecificMessage } from "../../compiler/utilities";
+import { isSourceFile, isModuleBlock, isIdentifier, factory, isStringLiteral } from "../../../built/local/compiler";
+
     const refactorName = "Convert export";
     const actionNameDefaultToNamed = "Convert default export to named export";
     const actionNameNamedToDefault = "Convert named export to default export";
@@ -227,4 +236,4 @@ namespace ts.refactor {
     function makeExportSpecifier(propertyName: string, name: string): ExportSpecifier {
         return factory.createExportSpecifier(propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
     }
-}
+

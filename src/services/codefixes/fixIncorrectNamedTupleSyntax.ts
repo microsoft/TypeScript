@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction } from "../codeFixProvider";
+import { SourceFile, SyntaxKind, NamedTupleMember, OptionalTypeNode, RestTypeNode, ParenthesizedTypeNode } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { findAncestor } from "../../compiler/utilities";
+import { factory } from "../../../built/local/compiler";
+
     const fixId = "fixIncorrectNamedTupleSyntax";
     const errorCodes = [
         Diagnostics.A_labeled_tuple_element_is_declared_as_optional_with_a_question_mark_after_the_name_and_before_the_colon_rather_than_after_the_type.code,
@@ -49,4 +55,4 @@ namespace ts.codefix {
         }
         changes.replaceNode(sourceFile, namedTupleMember, updated);
     }
-}
+

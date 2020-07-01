@@ -1,4 +1,8 @@
-namespace ts {
+import { verifyTscSerializedIncrementalEdits, loadProjectFromFiles, appendText, loadProjectFromDisk, TscIncremental, replaceText } from "../tsbuild/helpers";
+import { noChangeOnlyRuns, noChangeRun, BuildKind } from "./helpers";
+import { CompilerOptions } from "../../../compiler/types";
+import { hasProperty } from "../../../compiler/core";
+
     describe("unittests:: tsc:: incremental::", () => {
         verifyTscSerializedIncrementalEdits({
             scenario: "incremental",
@@ -236,4 +240,4 @@ const a: string = 10;`, "utf-8"),
             }
         });
     });
-}
+

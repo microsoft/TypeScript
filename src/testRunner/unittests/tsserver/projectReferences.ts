@@ -1,4 +1,12 @@
-namespace ts.projectSystem {
+import { createServerHost, libFile, TestServerHost, checkWatchedFiles, SymLink } from "../../../../built/local/harness";
+import { File } from "../../../harness/vfsUtil";
+import { createSession, checkNumberOfProjects, protocol, checkProjectActualFiles, openFilesForSession, protocolFileSpanFromSubstring, protocolFileSpanWithContextFromSubstring, protocolLocationFromSubstring, checkScriptInfos, closeFilesForSession, protocolFileLocationFromSubstring, makeReferenceItem, createProjectService, verifyGetErrRequestNoErrors, checkEvents, projectLoadingStartEvent, projectLoadingFinishEvent, projectInfoTelemetryEvent, configFileDiagEvent } from "./helpers";
+import { endsWith, last, contains, neverArray } from "../../../compiler/core";
+import { assert } from "console";
+import { Path, CompilerOptions } from "../../../compiler/types";
+import { ScriptElementKind } from "../../../services/types";
+import { isString, isArray } from "util";
+
     describe("unittests:: tsserver:: with project references and tsbuild", () => {
         function createHost(files: readonly TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
             const host = createServerHost(files);
@@ -194,7 +202,7 @@ fn5();
             };
             const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
             const dtsPath = dtsLocation.toLowerCase() as Path;
-            const dtsMapLocation = `${dependecyDeclsLocation}/FnS.d.ts.map`;
+            const dtsMapLocation = `${dependecyDeclsLocation}/FnS.d.map`;
             const dtsMapPath = dtsMapLocation.toLowerCase() as Path;
 
             const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
@@ -888,9 +896,9 @@ fn5();
                     change: host => host.writeFile(
                         dtsLocation,
                         host.readFile(dtsLocation)!.replace(
-                            "//# sourceMappingURL=FnS.d.ts.map",
+                            "//# sourceMappingURL=FnS.d.map",
                             `export declare function fn6(): void;
-//# sourceMappingURL=FnS.d.ts.map`
+//# sourceMappingURL=FnS.d.map`
                         )
                     ),
                     afterChangeActionKey: "dtsChange"
@@ -1253,6 +1261,7 @@ ${dependencyTs.content}`);
                             disableSourceOfProjectReferenceRedirect
                         },
                         include: ["./**/*"]
+
                     })
                 };
                 const keyboardTs: File = {
@@ -1265,7 +1274,7 @@ export function evaluateKeyboardEvent() { }`
                     content: `import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function testEvaluateKeyboardEvent() {
     return evaluateKeyboardEvent();
-}
+
 `
                 };
                 const srcConfig: File = {
@@ -1293,7 +1302,7 @@ function testEvaluateKeyboardEvent() {
                     content: `import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function foo() {
     return evaluateKeyboardEvent();
-}
+
 `
                 };
                 const host = createHost(
@@ -1710,7 +1719,7 @@ bar();
                 ],
                 symbolName: "getSourceFiles",
                 symbolStartOffset: protocolLocationFromSubstring(typesFile.content, "getSourceFiles").offset,
-                symbolDisplayString: "(method) ts.Program.getSourceFiles(): string[]"
+                symbolDisplayString: "(method) Program.getSourceFiles(): string[]"
             });
 
             // Should load more projects
@@ -1817,7 +1826,7 @@ bar();
                 ],
                 symbolName: "getSourceFiles",
                 symbolStartOffset: protocolLocationFromSubstring(typesFile.content, "getSourceFiles").offset,
-                symbolDisplayString: "(method) ts.Program.getSourceFiles(): string[]"
+                symbolDisplayString: "(method) Program.getSourceFiles(): string[]"
             });
 
             // No new solutions/projects loaded
@@ -1847,19 +1856,19 @@ export { foo };`
                 path: `${tscWatch.projectRoot}/target/src/main.d.ts`,
                 content: `import { foo } from 'helpers/functions';
 export { foo };
-//# sourceMappingURL=main.d.ts.map`
+//# sourceMappingURL=main.d.map`
             };
             const mainDtsMap: File = {
-                path: `${tscWatch.projectRoot}/target/src/main.d.ts.map`,
+                path: `${tscWatch.projectRoot}/target/src/main.d.map`,
                 content: `{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"}`
             };
             const helperDts: File = {
                 path: `${tscWatch.projectRoot}/target/src/helpers/functions.d.ts`,
                 content: `export declare const foo = 1;
-//# sourceMappingURL=functions.d.ts.map`
+//# sourceMappingURL=functions.d.map`
             };
             const helperDtsMap: File = {
-                path: `${tscWatch.projectRoot}/target/src/helpers/functions.d.ts.map`,
+                path: `${tscWatch.projectRoot}/target/src/helpers/functions.d.map`,
                 content: `{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"}`
             };
             const tsconfigIndirect3: File = {
@@ -2261,4 +2270,4 @@ foo;`
             });
         });
     });
-}
+

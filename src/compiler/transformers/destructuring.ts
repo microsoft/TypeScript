@@ -1,5 +1,16 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, Expression, BindingOrAssignmentElementTarget, TextRange, Node, BindingOrAssignmentElement, ArrayBindingOrAssignmentPattern, ObjectBindingOrAssignmentPattern, Identifier, VisitResult, VariableDeclaration, DestructuringAssignment, __String, BindingOrAssignmentPattern, ParameterDeclaration, BindingName, TransformFlags, ElementAccessExpression, PropertyName, LeftHandSideExpression, NodeFactory, ArrayBindingElement, BindingElement } from "../types";
+import { isDestructuringAssignment, isEmptyArrayLiteral, isEmptyObjectLiteral, nodeIsSynthesized, isStringOrNumericLiteralLike } from "../utilities";
+import { visitNode } from "../visitorPublic";
+import { isExpression, isBindingOrAssignmentPattern, isLiteralExpression, isBindingName, isObjectBindingOrAssignmentPattern, isArrayBindingOrAssignmentPattern, isDeclarationBindingElement, idText, isArrayBindingElement } from "../utilitiesPublic";
+import { isIdentifier, isComputedPropertyName, isVariableDeclaration, isOmittedExpression, isBindingElement } from "../factory/nodeTests";
+import { some, append, forEach, last, addRange, every, map } from "../core";
+import { Debug } from "../debug";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { getTargetOfBindingOrAssignmentElement, getElementsOfBindingOrAssignmentPattern, tryGetPropertyNameOfBindingOrAssignmentElement, getInitializerOfBindingOrAssignmentElement, getRestIndicatorOfBindingOrAssignmentElement, getPropertyNameOfBindingOrAssignmentElement } from "../factory/utilities";
+import { factory } from "../factory/nodeFactory";
+
     interface FlattenContext {
         context: TransformationContext;
         level: FlattenLevel;
@@ -519,4 +530,4 @@ namespace ts {
     function makeAssignmentElement(name: Identifier) {
         return name;
     }
-}
+

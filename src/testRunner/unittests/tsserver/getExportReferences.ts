@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, protocol, makeReferenceItem, MakeReferenceItem, executeSessionRequest, protocolFileLocationFromSubstring, protocolLocationFromSubstring } from "./helpers";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: getExportReferences", () => {
         const exportVariable = "export const value = 0;";
         const exportArrayDestructured = "export const [valueA, valueB] = [0, 1];";
@@ -182,4 +186,4 @@ ${exportNestedObject}
             assert.deepEqual(response, expectResponse);
         });
     });
-}
+

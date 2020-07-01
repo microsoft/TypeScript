@@ -1,5 +1,10 @@
 /** @internal */
-namespace ts {
+
+import { Signature, Type, TypePredicate, ObjectType, ResolvedType, Node, IndexKind, TypeParameter, EntityNameOrEntityNameExpression, Identifier, TypeReference, SymbolWalker, TypeFlags, ObjectFlags, MappedType, InterfaceType, UnionOrIntersectionType, IndexType, IndexedAccessType, SyntaxKind, TypeQueryNode } from "./types";
+import { getOwnValues, forEach } from "./core";
+import { clear } from "console";
+import { getSymbolId } from "./checker";
+
     export function createGetSymbolWalker(
         getRestTypeOfSignature: (sig: Signature) => Type,
         getTypePredicateOfSignature: (sig: Signature) => TypePredicate | undefined,
@@ -190,4 +195,4 @@ namespace ts {
             }
         }
     }
-}
+

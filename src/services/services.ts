@@ -1,4 +1,27 @@
-namespace ts {
+import { SyntaxKind, Node, NodeFlags, ModifierFlags, TransformFlags, JSDoc, SourceFile, SourceFileLike, NodeArray, JSDocContainer, SyntaxList, EndOfFileToken, SymbolFlags, __String, Declaration, TypeChecker, TransientSymbol, Token, Identifier, GeneratedIdentifierFlags, TypeNode, PrivateIdentifier, Type, TypeFlags, ObjectFlags, Signature, SignatureKind, IndexKind, BaseType, UnionType, IntersectionType, UnionOrIntersectionType, LiteralType, StringLiteralType, NumberLiteralType, TypeParameter, InterfaceType, TypeReference, SignatureFlags, SignatureDeclaration, TypePredicate, Path, Statement, FileReference, DiagnosticWithLocation, ScriptKind, ScriptTarget, LanguageVariant, UnderscoreEscapedMap, ResolvedModuleFull, ResolvedTypeReferenceDirective, StringLiteralLike, StringLiteral, CheckJsDirective, TextRange, PragmaMap, EntityName, TextChangeRange, LineAndCharacter, FunctionLikeDeclaration, VariableDeclaration, ExportDeclaration, ImportDeclaration, BinaryExpression, AssignmentDeclarationKind, SourceMapSource, EmitTextWriter, CompilerOptions, JsxEmit, ProjectReference, CancellationToken, OperationCanceledException, Program, HasInvalidatedResolution, CompilerHost, CreateProgramOptions, Diagnostic, UserPreferences, TextSpan, ModuleDeclaration, CharacterCodes, JsxElement, NumericLiteral, ObjectLiteralElement, PropertyName, ObjectLiteralExpression, JsxAttributes, ElementAccessExpression } from "../compiler/types";
+import { isNodeKind, isJSDocCommentContainingNode, symbolName, isGetAccessor, isSetAccessor, idText, getJSDocTags, getNonAssignedNameOfDeclaration, isComputedPropertyName, isPropertyAccessExpression, isPropertyName, isBindingPattern, isNamedExports, textSpanEnd, timestamp, isNewExpression, isIdentifier, isJsxOpeningElement, isJsxClosingElement, createTextSpanFromBounds, isJsxText, isJsxElement, isPrivateIdentifier, hasJSDocNodes, isObjectLiteralExpression, isJsxAttributes, isObjectLiteralElement, getDefaultLibFileName } from "../../built/local/compiler";
+import { Debug } from "../compiler/debug";
+import { positionIsSynthesized, getSourceFileOfNode, getTokenPosOfNode, getObjectFlags, getAllSuperTypeNodes, hasSyntacticModifier, getAssignmentDeclarationKind, ObjectAllocator, localizedDiagnosticMessages, setLocalizedDiagnosticMessages, hostUsesCaseSensitiveFileNames, getNewLineCharacter, directoryProbablyExists, getEmitDeclarations, isIntrinsicJsxName, createUnderscoreEscapedMap, isStringOrNumericLiteralLike, getEscapedTextOfIdentifierOrLiteral, isDeclarationName, isLiteralComputedPropertyDeclarationName, setObjectAllocator } from "../compiler/utilities";
+import { find, lastOrUndefined, neverArray, forEach, filter, singleElementArray, firstDefined, createMultiMap, hasProperty, map, GetCanonicalFileName, createGetCanonicalFileName, maybeBind, returnFalse, noop, identity, flatMap, mapDefined, createMapFromTemplate, deduplicate, equateValues, compareValues, stringContains, first, isString, isArray } from "../compiler/core";
+import { forEachChild, updateSourceFile, createSourceFile, tagNamesAreEquivalent } from "../compiler/parser";
+import { scanner, forEachUnique, lineBreakPart, getNameFromPropertyName, getScriptKind, getSnapshotText, PossibleProgramFileInfo, getNewLineOrDefaultFromHost, getTouchingPropertyName, createTextSpanFromNode, typeToDisplayParts, getContainerNode, isLabelName, isTagName, isInComment, getAdjustedRenameLocation, isRightSideOfPropertyAccess, isRightSideOfQualifiedName, isNameOfModuleDeclaration, getTouchingToken, findChildOfKind, isInString, isInsideJsxElementOrAttribute, isInTemplateString, findPrecedingToken, createTextSpanFromRange, mapOneOrMany, firstOrOnly } from "./utilities";
+import { Push, MapLike } from "../compiler/corePublic";
+import { SymbolDisplayPart, JSDocTagInfo, IScriptSnapshot, FormatCodeOptions, FormatCodeSettings, EditorOptions, EditorSettings, LanguageServiceHost, HostCancellationToken, LanguageService, GetCompletionsAtPositionOptions, emptyOptions, CompletionInfo, CompletionEntryDetails, QuickInfo, ScriptElementKind, ScriptElementKindModifier, DefinitionInfo, DefinitionInfoAndBoundSpan, ImplementationLocation, ReferenceEntry, HighlightSpanKind, RenameLocation, ReferencedSymbol, NavigateToItem, SignatureHelpItemsOptions, SignatureHelpItems, NavigationBarItem, NavigationTree, ClassifiedSpan, Classifications, EndOfLineState, OutliningSpan, TextChange, CodeFixAction, CombinedCodeFixScope, CombinedCodeActions, OrganizeImportsScope, FileTextChanges, CodeActionCommand, ApplyCodeActionCommandResult, TextInsertion, JsxClosingTagInfo, TodoCommentDescriptor, TodoComment, RenameInfoOptions, RenameInfo, RefactorTriggerReason, RefactorContext, SelectionRange, ApplicableRefactorInfo, RefactorEditInfo, CallHierarchyItem, CallHierarchyIncomingCall, CallHierarchyOutgoingCall } from "./types";
+import { getLineAndCharacterOfPosition, getLineStarts, computePositionOfLineAndCharacter } from "../compiler/scanner";
+import { toPath, normalizePath, directorySeparator } from "../compiler/path";
+import { DocumentRegistry, createDocumentRegistry } from "./documentRegistry";
+import { getSourceMapper } from "./sourcemaps";
+import { isProgramUptoDate, createProgram } from "../compiler/program";
+import { computeSuggestionDiagnostics } from "./suggestionDiagnostics";
+import { DocumentHighlights } from "./documentHighlights";
+import { getFileEmitOutput } from "../compiler/builderState";
+import { getSemanticClassifications, getEncodedSemanticClassifications, getSyntacticClassifications, getEncodedSyntacticClassifications } from "./classifier";
+import { getEditsForFileRename } from "./getEditsForFileRename";
+import { spanInSourceFileAtLocation } from "./breakpoints";
+import { resolveCallHierarchyDeclaration, createCallHierarchyItem, getIncomingCalls, getOutgoingCalls } from "./callHierarchy";
+import { getJsDocTagsFromDeclarations, getJsDocCommentsFromDeclarations } from "./jsDoc";
+import { getSymbolDisplayPartsDocumentationAndSymbolKind, getSymbolModifiers } from "./symbolDisplay";
+
     /** The version of the language service API */
     export const servicesVersion = "0.8";
 
@@ -361,7 +384,7 @@ namespace ts {
 
         getJsDocTags(): JSDocTagInfo[] {
             if (this.tags === undefined) {
-                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations);
+                this.tags = getJsDocTagsFromDeclarations(this.declarations);
             }
 
             return this.tags;
@@ -550,7 +573,7 @@ namespace ts {
 
         getJsDocTags(): JSDocTagInfo[] {
             if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? JsDoc.getJsDocTagsFromDeclarations([this.declaration]) : [];
+                this.jsDocTags = this.declaration ? getJsDocTagsFromDeclarations([this.declaration]) : [];
             }
 
             return this.jsDocTags;
@@ -569,7 +592,7 @@ namespace ts {
     function getDocumentationComment(declarations: readonly Declaration[] | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (!declarations) return neverArray;
 
-        let doc = JsDoc.getJsDocCommentsFromDeclarations(declarations);
+        let doc = getJsDocCommentsFromDeclarations(declarations);
         if (doc.length === 0 || declarations.some(hasJSDocInheritDocTag)) {
             forEachUnique(declarations, declaration => {
                 const inheritedDocs = findInheritedJSDocComments(declaration, declaration.symbol.name, checker!); // TODO: GH#18217
@@ -1564,11 +1587,11 @@ namespace ts {
             }
 
             const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
-                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo)
+                getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo)
             );
             return {
                 kind: symbolKind,
-                kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
+                kindModifiers: getSymbolModifiers(symbol),
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                 displayParts,
                 documentation,
@@ -1603,17 +1626,17 @@ namespace ts {
         /// Goto definition
         function getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
+            return getDefinitionAtPositionImpl(program, getValidSourceFile(fileName), position);
         }
 
         function getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined {
             synchronizeHostData();
-            return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
+            return getDefinitionAndBoundSpanImpl(program, getValidSourceFile(fileName), position);
         }
 
         function getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined {
             synchronizeHostData();
-            return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
+            return getTypeDefinitionAtPositionImpl(program.getTypeChecker(), getValidSourceFile(fileName), position);
         }
 
         /// Goto implementation
@@ -1712,7 +1735,7 @@ namespace ts {
 
             const sourceFile = getValidSourceFile(fileName);
 
-            return SignatureHelp.getSignatureHelpItems(program, sourceFile, position, triggerReason, cancellationToken);
+            return getSignatureHelpItems(program, sourceFile, position, triggerReason, cancellationToken);
         }
 
         /// Syntactic features
@@ -1781,15 +1804,15 @@ namespace ts {
             // doesn't use compiler - no need to synchronize with host
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
-            return BreakpointResolver.spanInSourceFileAtLocation(sourceFile, position);
+            return spanInSourceFileAtLocation(sourceFile, position);
         }
 
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
+            return getNavigationBarItemsImpl(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
         function getNavigationTree(fileName: string): NavigationTree {
-            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
+            return getNavigationTreeImpl(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
         function isTsOrTsxFile(fileName: string): boolean {
@@ -1828,7 +1851,7 @@ namespace ts {
         function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
+            return collectElements(sourceFile, cancellationToken);
         }
 
         const braceMatching = createMapFromTemplate({
@@ -1944,7 +1967,7 @@ namespace ts {
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {
-            return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
+            return getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
 
         function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
@@ -2154,7 +2177,7 @@ namespace ts {
 
         function getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo {
             synchronizeHostData();
-            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, options);
+            return getRenameInfoImpl(program, getValidSourceFile(fileName), position, options);
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings, triggerReason?: RefactorTriggerReason): RefactorContext {
@@ -2173,7 +2196,7 @@ namespace ts {
         }
 
         function getSmartSelectionRange(fileName: string, position: number): SelectionRange {
-            return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
+            return getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
         }
 
         function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions, triggerReason: RefactorTriggerReason): ApplicableRefactorInfo[] {
@@ -2197,22 +2220,22 @@ namespace ts {
 
         function prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined {
             synchronizeHostData();
-            const declarations = CallHierarchy.resolveCallHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
-            return declarations && mapOneOrMany(declarations, declaration => CallHierarchy.createCallHierarchyItem(program, declaration));
+            const declarations = resolveCallHierarchyDeclaration(program, getTouchingPropertyName(getValidSourceFile(fileName), position));
+            return declarations && mapOneOrMany(declarations, declaration => createCallHierarchyItem(program, declaration));
         }
 
         function provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
-            return declaration ? CallHierarchy.getIncomingCalls(program, declaration, cancellationToken) : [];
+            const declaration = firstOrOnly(resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+            return declaration ? getIncomingCalls(program, declaration, cancellationToken) : [];
         }
 
         function provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
-            return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
+            const declaration = firstOrOnly(resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
+            return declaration ? getOutgoingCalls(program, declaration) : [];
         }
 
         const ls: LanguageService = {
@@ -2420,4 +2443,4 @@ namespace ts {
     }
 
     setObjectAllocator(getServicesObjectAllocator());
-}
+

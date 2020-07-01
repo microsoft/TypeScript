@@ -1,4 +1,12 @@
-namespace FourSlashInterface {
+import { TextSpan, LineAndCharacter, UserPreferences, SyntaxKind } from "../compiler/types";
+import { MapLike } from "../compiler/corePublic";
+import { SignatureHelpTriggerReason, JsxClosingTagInfo, RefactorTriggerReason, IndentStyle, ReferenceEntry, SymbolDisplayPart, FormatCodeSettings, RenameInfoOptions, JSDocTagInfo, FormatCodeOptions, ClassificationTypeNames, CompletionsTriggerCharacter, ScriptElementKind, CodeActionCommand, ApplicableRefactorInfo } from "../services/types";
+import { tokenToString } from "../compiler/scanner";
+import { contains } from "../compiler/core";
+import { PatternMatchKind } from "../services/patternMatcher";
+import { FourSlash } from "./fourslashImpl";
+import { assert } from "chai";
+export namespace FourSlashInterface {
     export class Test {
         constructor(private state: FourSlash.TestState) {
         }
@@ -23,11 +31,11 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
-        public spans(): ts.TextSpan[] {
-            return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
+        public spans(): TextSpan[] {
+            return this.ranges().map(r => createTextSpan(r.pos, r.end - r.pos));
         }
 
-        public rangesByText(): ts.Map<string, FourSlash.Range[]> {
+        public rangesByText(): Map<string, FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 
@@ -35,11 +43,11 @@ namespace FourSlashInterface {
             return this.state.getMarkerByName(s);
         }
 
-        public symbolsInScope(range: FourSlash.Range): ts.Symbol[] {
+        public symbolsInScope(range: FourSlash.Range): Symbol[] {
             return this.state.symbolsInScope(range);
         }
 
-        public setTypesRegistry(map: ts.MapLike<void>): void {
+        public setTypesRegistry(map: MapLike<void>): void {
             this.state.setTypesRegistry(map);
         }
     }
@@ -91,7 +99,7 @@ namespace FourSlashInterface {
             this.state.goToImplementation();
         }
 
-        public position(positionOrLineAndCharacter: number | ts.LineAndCharacter, fileNameOrIndex?: string | number): void {
+        public position(positionOrLineAndCharacter: number | LineAndCharacter, fileNameOrIndex?: string | number): void {
             if (fileNameOrIndex !== undefined) {
                 this.file(fileNameOrIndex);
             }
@@ -135,11 +143,11 @@ namespace FourSlashInterface {
             this.state.verifySignatureHelpPresence(/*expectPresent*/ false, /*triggerReason*/ undefined, markers);
         }
 
-        public noSignatureHelpForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: (string | FourSlash.Marker)[]): void {
+        public noSignatureHelpForTriggerReason(reason: SignatureHelpTriggerReason, ...markers: (string | FourSlash.Marker)[]): void {
             this.state.verifySignatureHelpPresence(/*expectPresent*/ false, reason, markers);
         }
 
-        public signatureHelpPresentForTriggerReason(reason: ts.SignatureHelpTriggerReason, ...markers: (string | FourSlash.Marker)[]): void {
+        public signatureHelpPresentForTriggerReason(reason: SignatureHelpTriggerReason, ...markers: (string | FourSlash.Marker)[]): void {
             this.state.verifySignatureHelpPresence(/*expectPresent*/ true, reason, markers);
         }
 
@@ -175,7 +183,7 @@ namespace FourSlashInterface {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
         }
 
-        public jsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
+        public jsxClosingTag(map: { [markerName: string]: JsxClosingTagInfo | undefined }): void {
             this.state.verifyJsxClosingTag(map);
         }
 
@@ -211,7 +219,7 @@ namespace FourSlashInterface {
             this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName);
         }
 
-        public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
+        public refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, actionName?: string) {
             this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
         }
     }
@@ -247,7 +255,7 @@ namespace FourSlashInterface {
             this.state.verifyIndentationAtCurrentPosition(numberOfSpaces);
         }
 
-        public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle = ts.IndentStyle.Smart, baseIndentSize = 0) {
+        public indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle = IndentStyle.Smart, baseIndentSize = 0) {
             this.state.verifyIndentationAtPosition(fileName, position, numberOfSpaces, indentStyle, baseIndentSize);
         }
 
@@ -304,7 +312,7 @@ namespace FourSlashInterface {
             this.state.verifyGetEmitOutputForCurrentFile(expected);
         }
 
-        public verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void {
+        public verifyGetEmitOutputContentsForCurrentFile(expected: OutputFile[]): void {
             this.state.verifyGetEmitOutputContentsForCurrentFile(expected);
         }
 
@@ -312,7 +320,7 @@ namespace FourSlashInterface {
             this.state.verifySymbolAtLocation(startRange, declarationRanges);
         }
 
-        public typeOfSymbolAtLocation(range: FourSlash.Range, symbol: ts.Symbol, expected: string) {
+        public typeOfSymbolAtLocation(range: FourSlash.Range, symbol: Symbol, expected: string) {
             this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
         }
 
@@ -324,7 +332,7 @@ namespace FourSlashInterface {
             this.state.verifyNoReferences(markerNameOrRange);
         }
 
-        public getReferencesForServerTest(expected: readonly ts.ReferenceEntry[]) {
+        public getReferencesForServerTest(expected: readonly ReferenceEntry[]) {
             this.state.verifyGetReferencesForServerTest(expected);
         }
 
@@ -332,7 +340,7 @@ namespace FourSlashInterface {
             this.state.verifySingleReferenceGroup(definition, ranges);
         }
 
-        public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {
+        public findReferencesDefinitionDisplayPartsAtCaretAre(expected: SymbolDisplayPart[]) {
             this.state.verifyDisplayPartsOfReferencedSymbol(expected);
         }
 
@@ -422,7 +430,7 @@ namespace FourSlashInterface {
             this.state.verifyCodeFixAll(options);
         }
 
-        public fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: ts.FormatCodeSettings): void {
+        public fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeSettings): void {
             this.state.verifyFileAfterApplyingRefactorAtMarker(markerName, expectedContent, refactorNameToApply, actionName, formattingOptions);
         }
 
@@ -438,7 +446,7 @@ namespace FourSlashInterface {
             this.state.applyCodeActionFromCompletion(markerName, options);
         }
 
-        public importFixAtPosition(expectedTextArray: string[], errorCode?: number, preferences?: ts.UserPreferences): void {
+        public importFixAtPosition(expectedTextArray: string[], errorCode?: number, preferences?: UserPreferences): void {
             this.state.verifyImportFixAtPosition(expectedTextArray, errorCode, preferences);
         }
 
@@ -508,7 +516,7 @@ namespace FourSlashInterface {
             this.state.verifySemanticClassifications(classifications);
         }
 
-        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, expectedRange?: FourSlash.Range, options?: ts.RenameInfoOptions) {
+        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, expectedRange?: FourSlash.Range, options?: RenameInfoOptions) {
             this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, options);
         }
 
@@ -525,7 +533,7 @@ namespace FourSlashInterface {
         }
 
         public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan,
-            displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
+            displayParts: SymbolDisplayPart[], documentation: SymbolDisplayPart[], tags: JSDocTagInfo[]) {
             this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
         }
 
@@ -666,7 +674,7 @@ namespace FourSlashInterface {
             this.state.printCurrentSignatureHelp();
         }
 
-        public printCompletionListMembers(options: ts.UserPreferences | undefined) {
+        public printCompletionListMembers(options: UserPreferences | undefined) {
             this.state.printCompletionListMembers(options);
         }
 
@@ -714,11 +722,11 @@ namespace FourSlashInterface {
             this.state.formatDocument();
         }
 
-        public copyFormatOptions(): ts.FormatCodeSettings {
+        public copyFormatOptions(): FormatCodeSettings {
             return this.state.copyFormatOptions();
         }
 
-        public setFormatOptions(options: ts.FormatCodeOptions) {
+        public setFormatOptions(options: FormatCodeOptions) {
             return this.state.setFormatOptions(options);
         }
 
@@ -730,7 +738,7 @@ namespace FourSlashInterface {
             this.state.formatOnType(this.state.getMarkerByName(posMarker).position, key);
         }
 
-        public setOption(name: keyof ts.FormatCodeSettings, value: number | string | boolean): void {
+        public setOption(name: keyof FormatCodeSettings, value: number | string | boolean): void {
             this.state.setFormatOptions({ ...this.state.formatCodeSettings, [name]: value });
         }
     }
@@ -749,111 +757,111 @@ namespace FourSlashInterface {
     }
 
     interface Classification {
-        classificationType: ts.ClassificationTypeNames;
+        classificationType: ClassificationTypeNames;
         text: string;
         textSpan?: FourSlash.TextSpan;
     }
     export namespace Classification {
         export function comment(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.comment, text, position);
+            return getClassification(ClassificationTypeNames.comment, text, position);
         }
 
         export function identifier(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.identifier, text, position);
+            return getClassification(ClassificationTypeNames.identifier, text, position);
         }
 
         export function keyword(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.keyword, text, position);
+            return getClassification(ClassificationTypeNames.keyword, text, position);
         }
 
         export function numericLiteral(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.numericLiteral, text, position);
+            return getClassification(ClassificationTypeNames.numericLiteral, text, position);
         }
 
         export function operator(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.operator, text, position);
+            return getClassification(ClassificationTypeNames.operator, text, position);
         }
 
         export function stringLiteral(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.stringLiteral, text, position);
+            return getClassification(ClassificationTypeNames.stringLiteral, text, position);
         }
 
         export function whiteSpace(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.whiteSpace, text, position);
+            return getClassification(ClassificationTypeNames.whiteSpace, text, position);
         }
 
         export function text(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.text, text, position);
+            return getClassification(ClassificationTypeNames.text, text, position);
         }
 
         export function punctuation(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.punctuation, text, position);
+            return getClassification(ClassificationTypeNames.punctuation, text, position);
         }
 
         export function docCommentTagName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.docCommentTagName, text, position);
+            return getClassification(ClassificationTypeNames.docCommentTagName, text, position);
         }
 
         export function className(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.className, text, position);
+            return getClassification(ClassificationTypeNames.className, text, position);
         }
 
         export function enumName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.enumName, text, position);
+            return getClassification(ClassificationTypeNames.enumName, text, position);
         }
 
         export function interfaceName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.interfaceName, text, position);
+            return getClassification(ClassificationTypeNames.interfaceName, text, position);
         }
 
         export function moduleName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.moduleName, text, position);
+            return getClassification(ClassificationTypeNames.moduleName, text, position);
         }
 
         export function typeParameterName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.typeParameterName, text, position);
+            return getClassification(ClassificationTypeNames.typeParameterName, text, position);
         }
 
         export function parameterName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.parameterName, text, position);
+            return getClassification(ClassificationTypeNames.parameterName, text, position);
         }
 
         export function typeAliasName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.typeAliasName, text, position);
+            return getClassification(ClassificationTypeNames.typeAliasName, text, position);
         }
 
         export function jsxOpenTagName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.jsxOpenTagName, text, position);
+            return getClassification(ClassificationTypeNames.jsxOpenTagName, text, position);
         }
 
         export function jsxCloseTagName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.jsxCloseTagName, text, position);
+            return getClassification(ClassificationTypeNames.jsxCloseTagName, text, position);
         }
 
         export function jsxSelfClosingTagName(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.jsxSelfClosingTagName, text, position);
+            return getClassification(ClassificationTypeNames.jsxSelfClosingTagName, text, position);
         }
 
         export function jsxAttribute(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.jsxAttribute, text, position);
+            return getClassification(ClassificationTypeNames.jsxAttribute, text, position);
         }
 
         export function jsxText(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.jsxText, text, position);
+            return getClassification(ClassificationTypeNames.jsxText, text, position);
         }
 
         export function jsxAttributeStringLiteralValue(text: string, position?: number): Classification {
-            return getClassification(ts.ClassificationTypeNames.jsxAttributeStringLiteralValue, text, position);
+            return getClassification(ClassificationTypeNames.jsxAttributeStringLiteralValue, text, position);
         }
 
-        function getClassification(classificationType: ts.ClassificationTypeNames, text: string, position?: number): Classification {
+        function getClassification(classificationType: ClassificationTypeNames, text: string, position?: number): Classification {
             const textSpan = position === undefined ? undefined : { start: position, end: position + text.length };
             return { classificationType, text, textSpan };
         }
     }
     export namespace Completion {
-        export import SortText = ts.Completions.SortText;
-        export import CompletionSource = ts.Completions.CompletionSource;
+        export import SortText = Completions.SortText;
+        export import CompletionSource = Completions.CompletionSource;
 
         const functionEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -904,9 +912,9 @@ namespace FourSlashInterface {
         });
 
         const res: ExpectedCompletionEntryObject[] = [];
-        for (let i = ts.SyntaxKind.FirstKeyword; i <= ts.SyntaxKind.LastKeyword; i++) {
+        for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
             res.push({
-                name: ts.Debug.checkDefined(ts.tokenToString(i)),
+                name: Debug.checkDefined(tokenToString(i)),
                 kind: "keyword",
                 sortText: SortText.GlobalsOrKeywords
             });
@@ -1199,7 +1207,7 @@ namespace FourSlashInterface {
                 case "module":
                     return false;
                 default:
-                    return !ts.contains(typeKeywords, k);
+                    return !contains(typeKeywords, k);
             }
         });
 
@@ -1500,8 +1508,8 @@ namespace FourSlashInterface {
         readonly text?: string;
         readonly documentation?: string;
         readonly sourceDisplay?: string;
-        readonly tags?: readonly ts.JSDocTagInfo[];
-        readonly sortText?: ts.Completions.SortText;
+        readonly tags?: readonly JSDocTagInfo[];
+        readonly sortText?: Completions.SortText;
     }
 
     export interface VerifyCompletionsOptions {
@@ -1511,8 +1519,8 @@ namespace FourSlashInterface {
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly excludes?: ArrayOrSingle<string>;
-        readonly preferences?: ts.UserPreferences;
-        readonly triggerCharacter?: ts.CompletionsTriggerCharacter;
+        readonly preferences?: UserPreferences;
+        readonly triggerCharacter?: CompletionsTriggerCharacter;
     }
 
     export interface VerifySignatureHelpOptions {
@@ -1530,9 +1538,9 @@ namespace FourSlashInterface {
         readonly argumentCount?: number;
         /** @default false */
         readonly isVariadic?: boolean;
-        /** @default ts.emptyArray */
-        readonly tags?: readonly ts.JSDocTagInfo[];
-        readonly triggerReason?: ts.SignatureHelpTriggerReason;
+        /** @default emptyArray */
+        readonly tags?: readonly JSDocTagInfo[];
+        readonly triggerReason?: SignatureHelpTriggerReason;
     }
 
     export interface VerifyNavigateToOptions {
@@ -1543,19 +1551,19 @@ namespace FourSlashInterface {
 
     export interface ExpectedNavigateToItem {
         readonly name: string;
-        readonly kind: ts.ScriptElementKind;
+        readonly kind: ScriptElementKind;
         readonly kindModifiers?: string;
-        readonly matchKind?: keyof typeof ts.PatternMatchKind;
+        readonly matchKind?: keyof typeof PatternMatchKind;
         readonly isCaseSensitive?: boolean;
         readonly range: FourSlash.Range;
         readonly containerName?: string;
-        readonly containerKind?: ts.ScriptElementKind;
+        readonly containerKind?: ScriptElementKind;
     }
 
     export type ArrayOrSingle<T> = T | readonly T[];
 
-    export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
-        triggerCharacter?: ts.CompletionsTriggerCharacter;
+    export interface VerifyCompletionListContainsOptions extends UserPreferences {
+        triggerCharacter?: CompletionsTriggerCharacter;
         sourceDisplay: string;
         isRecommended?: true;
         insertText?: string;
@@ -1578,14 +1586,14 @@ namespace FourSlashInterface {
         readonly description: string | [string, ...(string | number)[]] | DiagnosticIgnoredInterpolations;
         readonly errorCode?: number;
         readonly index?: number;
-        readonly preferences?: ts.UserPreferences;
+        readonly preferences?: UserPreferences;
         readonly applyChanges?: boolean;
-        readonly commands?: readonly ts.CodeActionCommand[];
+        readonly commands?: readonly CodeActionCommand[];
     }
 
     export interface VerifyCodeFixAvailableOptions {
         description: string;
-        commands?: ts.CodeActionCommand[];
+        commands?: CodeActionCommand[];
     }
 
     export interface VerifyCodeFixAllOptions {
@@ -1598,14 +1606,14 @@ namespace FourSlashInterface {
     export interface VerifyRefactorOptions {
         name: string;
         actionName: string;
-        refactors: readonly ts.ApplicableRefactorInfo[];
+        refactors: readonly ApplicableRefactorInfo[];
     }
 
     export interface VerifyCompletionActionOptions extends NewContentOptions {
         name: string;
         source?: string;
         description: string;
-        preferences?: ts.UserPreferences;
+        preferences?: UserPreferences;
     }
 
     export interface Diagnostic {
@@ -1620,12 +1628,12 @@ namespace FourSlashInterface {
         readonly oldPath: string;
         readonly newPath: string;
         readonly newFileContents: { readonly [fileName: string]: string };
-        readonly preferences?: ts.UserPreferences;
+        readonly preferences?: UserPreferences;
     }
 
     export interface MoveToNewFileOptions {
         readonly newFileContents: { readonly [fileName: string]: string };
-        readonly preferences?: ts.UserPreferences;
+        readonly preferences?: UserPreferences;
     }
 
     export type RenameLocationsOptions = readonly RenameLocationOptions[] | {

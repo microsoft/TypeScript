@@ -1,5 +1,16 @@
 /* @internal */
-namespace ts {
+
+import { Path, Program, WatchDirectoryFlags, CompilerOptions, ConfigFileSpecs, FileExtensionInfo, Extension, WatchOptions, WatchFileKind } from "./types";
+import { FileWatcherEventKind, FileWatcher, FileWatcherCallback, DirectoryWatcherCallback, PollingInterval, sysLog, setSysLog } from "./sys";
+import { createMap, createGetCanonicalFileName, map, some, filterMutate, noop } from "./core";
+import { toPath, ensureTrailingDirectorySeparator, getDirectoryPath, getBaseFileName, normalizePath, hasExtension, getNormalizedAbsolutePath, fileExtensionIs, fileExtensionIsOneOf } from "./path";
+import { Debug } from "./debug";
+import { matchFiles, FileSystemEntries, emptyFileSystemEntries, arrayToSet, mutateMap, closeFileWatcher, isSupportedSourceFileName, supportedJSExtensions, removeFileExtension } from "./utilities";
+import { BuilderProgram } from "./builderPublic";
+import { removeIgnoredPath } from "./resolutionCache";
+import { isExcludedFile } from "./commandLineParser";
+import { timestamp } from "./performanceTimestamp";
+
     /**
      * Partial interface of the System thats needed to support the caching of directory structure
      */
@@ -549,4 +560,4 @@ namespace ts {
     export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {
         objWithWatcher.watcher.close();
     }
-}
+

@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { DiagnosticMessage } from "../../../compiler/types";
+import { createServerHost } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, makeSessionRequest, protocol } from "./helpers";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: typeOnlyImportChains", () => {
         it("named export -> type-only namespace import -> named export -> named import", () => {
             const a = {
@@ -161,4 +165,4 @@ namespace ts.projectSystem {
         assert.lengthOf(diagnostics, 1);
         assert.equal(diagnostics[0].code, diagnostic.code);
     }
-}
+

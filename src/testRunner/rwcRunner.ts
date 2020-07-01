@@ -1,5 +1,12 @@
 // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
-namespace RWC {
+
+import { CompilerOptions, ParsedCommandLine, ParseConfigHost } from "../compiler/types";
+import { getBaseFileName, getDirectoryPath, normalizeSlashes } from "../compiler/path";
+import { parseCommandLine, parseJsonSourceFileConfigFileContent, setConfigFileInOptions } from "../../built/local/compiler";
+import { forEach, extend, createMap } from "../compiler/core";
+import { parseJsonText } from "../compiler/parser";
+import { assert } from "console";
+
     function runWithIOLog(ioLog: Playback.IoLog, fn: (oldIO: Harness.IO) => void) {
         const oldIO = Harness.IO;
 
@@ -22,12 +29,12 @@ namespace RWC {
             let otherFiles: Harness.Compiler.TestFile[] = [];
             let tsconfigFiles: Harness.Compiler.TestFile[] = [];
             let compilerResult: compiler.CompilationResult;
-            let compilerOptions: ts.CompilerOptions;
+            let compilerOptions: CompilerOptions;
             const baselineOpts: Harness.Baseline.BaselineOptions = {
                 Subfolder: "rwc",
                 Baselinefolder: "internal/baselines"
             };
-            const baseName = ts.getBaseFileName(jsonPath);
+            const baseName = getBaseFileName(jsonPath);
             let currentDirectory: string;
             let useCustomLibraryFile: boolean;
             let caseSensitive: boolean;
@@ -49,13 +56,13 @@ namespace RWC {
 
             it("can compile", function (this: Mocha.ITestCallbackContext) {
                 this.timeout(800_000); // Allow long timeouts for RWC compilations
-                let opts!: ts.ParsedCommandLine;
+                let opts!: ParsedCommandLine;
 
                 const ioLog: Playback.IoLog = Playback.newStyleLogIntoOldStyleLog(JSON.parse(Harness.IO.readFile(`internal/cases/rwc/${jsonPath}/test.json`)!), Harness.IO, `internal/cases/rwc/${baseName}`);
                 currentDirectory = ioLog.currentDirectory;
                 useCustomLibraryFile = !!ioLog.useCustomLibraryFile;
                 runWithIOLog(ioLog, () => {
-                    opts = ts.parseCommandLine(ioLog.arguments, fileName => Harness.IO.readFile(fileName));
+                    opts = parseCommandLine(ioLog.arguments, fileName => Harness.IO.readFile(fileName));
                     assert.equal(opts.errors.length, 0);
 
                     // To provide test coverage of output javascript file,
@@ -65,28 +72,28 @@ namespace RWC {
                 let fileNames = opts.fileNames;
 
                 runWithIOLog(ioLog, () => {
-                    const tsconfigFile = ts.forEach(ioLog.filesRead, f => vpath.isTsConfigFile(f.path) ? f : undefined);
+                    const tsconfigFile = forEach(ioLog.filesRead, f => vpath.isTsConfigFile(f.path) ? f : undefined);
                     if (tsconfigFile) {
                         const tsconfigFileContents = getHarnessCompilerInputUnit(tsconfigFile.path);
                         tsconfigFiles.push({ unitName: tsconfigFile.path, content: tsconfigFileContents.content });
-                        const parsedTsconfigFileContents = ts.parseJsonText(tsconfigFile.path, tsconfigFileContents.content);
-                        const configParseHost: ts.ParseConfigHost = {
+                        const parsedTsconfigFileContents = parseJsonText(tsconfigFile.path, tsconfigFileContents.content);
+                        const configParseHost: ParseConfigHost = {
                             useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
                             fileExists: Harness.IO.fileExists,
                             readDirectory: Harness.IO.readDirectory,
                             readFile: Harness.IO.readFile
                         };
-                        const configParseResult = ts.parseJsonSourceFileConfigFileContent(parsedTsconfigFileContents, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
+                        const configParseResult = parseJsonSourceFileConfigFileContent(parsedTsconfigFileContents, configParseHost, getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
-                        opts.options = ts.extend(opts.options, configParseResult.options);
-                        ts.setConfigFileInOptions(opts.options, configParseResult.options.configFile);
+                        opts.options = extend(opts.options, configParseResult.options);
+                        setConfigFileInOptions(opts.options, configParseResult.options.configFile);
                     }
 
                     // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
-                    const uniqueNames = ts.createMap<true>();
+                    const uniqueNames = createMap<true>();
                     for (const fileName of fileNames) {
                         // Must maintain order, build result list while checking map
-                        const normalized = ts.normalizeSlashes(Harness.IO.resolvePath(fileName)!);
+                        const normalized = normalizeSlashes(Harness.IO.resolvePath(fileName)!);
                         if (!uniqueNames.has(normalized)) {
                             uniqueNames.set(normalized, true);
                             // Load the file
@@ -96,7 +103,7 @@ namespace RWC {
 
                     // Add files to compilation
                     for (const fileRead of ioLog.filesRead) {
-                        const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileRead.path)!);
+                        const unitName = normalizeSlashes(Harness.IO.resolvePath(fileRead.path)!);
                         if (!uniqueNames.has(unitName) && !Harness.isDefaultLibraryFile(fileRead.path)) {
                             uniqueNames.set(unitName, true);
                             otherFiles.push(getHarnessCompilerInputUnit(fileRead.path));
@@ -132,7 +139,7 @@ namespace RWC {
                 compilerOptions = compilerResult.options;
 
                 function getHarnessCompilerInputUnit(fileName: string): Harness.Compiler.TestFile {
-                    const unitName = ts.normalizeSlashes(Harness.IO.resolvePath(fileName)!);
+                    const unitName = normalizeSlashes(Harness.IO.resolvePath(fileName)!);
                     let content: string;
                     try {
                         content = Harness.IO.readFile(unitName)!;
@@ -232,4 +239,4 @@ namespace RWC {
             runRWCTest(jsonFileName);
         }
     }
-}
+

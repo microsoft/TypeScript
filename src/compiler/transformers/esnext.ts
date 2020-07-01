@@ -1,5 +1,12 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, SourceFile, Node, VisitResult, TransformFlags, SyntaxKind, BinaryExpression, AssignmentExpression, Token, LogicalOrCoalescingAssignmentOperator } from "../types";
+import { chainBundle, getNonAssignmentOperatorForCompoundAssignment, isSimpleCopiableExpression } from "./utilities";
+import { visitEachChild, visitNode } from "../visitorPublic";
+import { isLogicalOrCoalescingAssignmentExpression, skipParentheses, isAccessExpression } from "../utilities";
+import { isLeftHandSideExpression, isExpression } from "../utilitiesPublic";
+import { isPropertyAccessExpression } from "../factory/nodeTests";
+
     export function transformESNext(context: TransformationContext) {
         const {
             hoistVariableDeclaration,
@@ -88,4 +95,4 @@ namespace ts {
             );
         }
     }
-}
+

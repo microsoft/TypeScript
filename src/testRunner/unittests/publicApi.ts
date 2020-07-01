@@ -1,3 +1,9 @@
+import { assert } from "console";
+import { SyntaxKind } from "../../compiler/types";
+import { tokenToString } from "../../compiler/scanner";
+import { Debug } from "../../compiler/debug";
+import { factory, isPropertyName } from "../../../built/local/compiler";
+
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
         const builtFile = `built/local/${fileName}`;
@@ -33,29 +39,29 @@ describe("unittests:: Public APIs", () => {
 });
 
 describe("unittests:: Public APIs:: token to string", () => {
-    function assertDefinedTokenToString(initial: ts.SyntaxKind, last: ts.SyntaxKind) {
+    function assertDefinedTokenToString(initial: SyntaxKind, last: SyntaxKind) {
         for (let t = initial; t <= last; t++) {
-            assert.isDefined(ts.tokenToString(t), `Expected tokenToString defined for ${ts.Debug.formatSyntaxKind(t)}`);
+            assert.isDefined(tokenToString(t), `Expected tokenToString defined for ${Debug.formatSyntaxKind(t)}`);
         }
     }
 
     it("for punctuations", () => {
-        assertDefinedTokenToString(ts.SyntaxKind.FirstPunctuation, ts.SyntaxKind.LastPunctuation);
+        assertDefinedTokenToString(SyntaxKind.FirstPunctuation, SyntaxKind.LastPunctuation);
     });
     it("for keywords", () => {
-        assertDefinedTokenToString(ts.SyntaxKind.FirstKeyword, ts.SyntaxKind.LastKeyword);
+        assertDefinedTokenToString(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
     });
 });
 
 describe("unittests:: Public APIs:: createPrivateIdentifier", () => {
     it("throws when name doesn't start with #", () => {
-        assert.throw(() => ts.factory.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
+        assert.throw(() => factory.createPrivateIdentifier("not"), "Debug Failure. First character of private identifier must be #: not");
     });
 });
 
 describe("unittests:: Public APIs:: isPropertyName", () => {
     it("checks if a PrivateIdentifier is a valid property name", () => {
-        const prop = ts.factory.createPrivateIdentifier("#foo");
-        assert.isTrue(ts.isPropertyName(prop), "PrivateIdentifier must be a valid property name.");
+        const prop = factory.createPrivateIdentifier("#foo");
+        assert.isTrue(isPropertyName(prop), "PrivateIdentifier must be a valid property name.");
     });
 });

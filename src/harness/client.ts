@@ -1,4 +1,15 @@
-namespace ts.server {
+import { LanguageServiceHost, RenameInfo, RenameLocation, LanguageService, TextChange, FormatCodeSettings, QuickInfo, CompletionInfo, CompletionEntry, ScriptElementKind, FormatCodeOptions, CompletionEntryDetails, NavigateToItem, DefinitionInfo, DefinitionInfoAndBoundSpan, ImplementationLocation, ReferencedSymbol, ReferenceEntry, RenameInfoOptions, RenameInfoSuccess, RenameInfoFailure, NavigationBarItem, NavigationTree, SignatureHelpItems, OutliningSpan, TodoCommentDescriptor, TodoComment, TextInsertion, CodeFixAction, CodeActionCommand, ApplicableRefactorInfo, RefactorEditInfo, FileTextChanges, OrganizeImportsScope, EditorOptions, ClassifiedSpan, Classifications, CallHierarchyItem, CallHierarchyIncomingCall, CallHierarchyOutgoingCall } from "../services/types";
+import { Debug } from "../compiler/debug";
+import { createMap, map, notImplemented, firstDefined, identity } from "../compiler/core";
+import { computeLineStarts, computePositionOfLineAndCharacter, computeLineAndCharacterOfPosition } from "../compiler/scanner";
+import { getSnapshotText, mapOneOrMany } from "../services/utilities";
+import { UserPreferences, DiagnosticWithLocation, Diagnostic, SourceFile, DiagnosticCategory, TextSpan, TextRange, Program } from "../compiler/types";
+import { CommandNames } from "../server/session";
+import { PatternMatchKind } from "../services/patternMatcher";
+import { EmitOutput, createTextSpanFromBounds } from "../../built/local/compiler";
+import { isString } from "util";
+import { DocumentHighlights } from "../../built/local/services";
+
     export interface SessionClientHost extends LanguageServiceHost {
         writeMessage(message: string): void;
     }
@@ -829,4 +840,4 @@ namespace ts.server {
             throw new Error("dispose is not available through the server layer.");
         }
     }
-}
+

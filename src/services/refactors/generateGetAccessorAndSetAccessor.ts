@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.refactor {
+
+import { registerRefactor } from "../refactorProvider";
+import { isIdentifier, isParameter } from "../../../built/local/compiler";
+import { getRenameLocation } from "../utilities";
+import { RefactorContext, ApplicableRefactorInfo } from "../types";
+import { neverArray } from "../../compiler/core";
+
     const actionName = "Generate 'get' and 'set' accessors";
     const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;
     registerRefactor(actionName, {
@@ -50,4 +56,4 @@ namespace ts.refactor {
             return neverArray;
         }
     });
-}
+

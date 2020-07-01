@@ -1,4 +1,10 @@
-namespace ts {
+import { Node, TransformerFactory, CompilerOptions, DiagnosticWithLocation } from "../compiler/types";
+import { fixupCompilerOptions } from "./transpile";
+import { isArray } from "util";
+import { transformNodes } from "../compiler/transformer";
+import { factory } from "../../built/local/compiler";
+import { concatenate } from "../compiler/core";
+
     /**
      * Transform one or more nodes using the supplied transformers.
      * @param source A single `Node` or an array of `Node` objects.
@@ -13,4 +19,4 @@ namespace ts {
         result.diagnostics = concatenate(result.diagnostics, diagnostics);
         return result;
     }
-}
+

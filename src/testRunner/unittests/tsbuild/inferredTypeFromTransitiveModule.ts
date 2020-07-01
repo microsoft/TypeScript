@@ -1,4 +1,6 @@
-namespace ts {
+import { loadProjectFromDisk, verifyTscSerializedIncrementalEdits, appendText, replaceText } from "./helpers";
+import { BuildKind } from "../tsc/helpers";
+
     describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         let projFs: vfs.FileSystem;
         before(() => {
@@ -63,4 +65,4 @@ bar("hello");`);
     function changeBarParam(fs: vfs.FileSystem) {
         replaceText(fs, "/src/bar.ts", "param: string", "");
     }
-}
+

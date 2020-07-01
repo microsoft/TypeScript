@@ -1,4 +1,6 @@
-namespace ts {
+import { assert } from "console";
+import { parsePseudoBigInt } from "../../compiler/utilities";
+
     describe("unittests:: BigInt literal base conversions", () => {
         describe("parsePseudoBigInt", () => {
             const testNumbers: number[] = [];
@@ -68,4 +70,4 @@ namespace ts {
             });
         });
     });
-}
+

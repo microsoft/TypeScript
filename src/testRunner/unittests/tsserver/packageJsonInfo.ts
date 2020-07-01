@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { assert } from "console";
+import { Path } from "../../../compiler/types";
+import { createServerHost } from "../../../../built/local/harness";
+import { createSession, configuredProjectAt } from "./helpers";
+
     const tsConfig: File = {
         path: "/tsconfig.json",
         content: "{}"
@@ -92,4 +97,4 @@ namespace ts.projectSystem {
         const project = configuredProjectAt(projectService, 0);
         return { host, session, project, projectService };
     }
-}
+

@@ -3,13 +3,13 @@ import path = require("path");
 
 function instrumentForRecording(fn: string, tscPath: string) {
     instrument(tscPath, `
-ts.sys = Playback.wrapSystem(ts.sys);
-ts.sys.startRecord("${ fn }");`, `ts.sys.endRecord();`);
+ts.sys = Playback.wrapSystem(sys);
+ts.sys.startRecord("${ fn }");`, `sys.endRecord();`);
 }
 
 function instrumentForReplay(logFilename: string, tscPath: string) {
     instrument(tscPath, `
-ts.sys = Playback.wrapSystem(ts.sys);
+ts.sys = Playback.wrapSystem(sys);
 ts.sys.startReplay("${ logFilename }");`);
 }
 
@@ -30,7 +30,7 @@ function instrument(tscPath: string, prepareCode: string, cleanupCode = "") {
                 fs.readFile(path.resolve(path.dirname(tscPath) + "/loggedIO.js"), "utf-8", (err: any, loggerContent: string) => {
                     if (err) throw err;
 
-                    const invocationLine = "ts.executeCommandLine(ts.sys.args);";
+                    const invocationLine = "executeCommandLine(sys.args);";
                     const index1 = tscContent.indexOf(invocationLine);
                     if (index1 < 0) {
                         throw new Error(`Could not find ${invocationLine}`);

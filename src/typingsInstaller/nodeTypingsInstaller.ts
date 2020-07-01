@@ -1,4 +1,12 @@
-namespace ts.server.typingsInstaller {
+import { Log, TypingsInstaller, RequestCompletedAction, installNpmPackages } from "../../built/local/typingsInstallerCore";
+import { nowString, Arguments, EventTypesRegistry, ActionPackageInstalled, findArgument, hasArgument } from "../jsTyping/shared";
+import { sys } from "../compiler/sys";
+import { InstallTypingHost, InitializationFailedResponse, TypingInstallerRequestUnion, TypesRegistryResponse, PackageInstalledResponse, TypingInstallerResponseUnion } from "../jsTyping/types";
+import { MapLike } from "../compiler/corePublic";
+import { createMap, createMapFromTemplate, createGetCanonicalFileName, stringContains } from "../compiler/core";
+import { combinePaths, normalizeSlashes, toPath, forEachAncestorDirectory, getDirectoryPath } from "../compiler/path";
+import { Debug } from "../compiler/debug";
+
     const fs: {
         appendFileSync(file: string, content: string): void
     } = require("fs");
@@ -252,4 +260,4 @@ namespace ts.server.typingsInstaller {
             ? `${newline}    ` + str.replace(/\r?\n/, `${newline}    `)
             : "";
     }
-}
+

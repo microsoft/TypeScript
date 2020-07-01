@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile } from "../../compiler/types";
+import { CodeFixContext, CodeFixAllContext } from "../types";
+import { getTokenAtPosition } from "../utilities";
+import { Debug } from "../../compiler/debug";
+import { isAccessor, isClassLike, unescapeLeadingUnderscores } from "../../../built/local/compiler";
+import { singleOrUndefined } from "../../compiler/core";
+import { getAllSupers, generateAccessorFromProperty } from "./generateAccessors";
+import { getTextOfPropertyName, getSourceFileOfNode } from "../../compiler/utilities";
+
     const errorCodes = [
         Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property.code,
         Diagnostics._0_is_defined_as_a_property_in_class_1_but_is_overridden_here_in_2_as_an_accessor.code,
@@ -54,4 +64,4 @@ namespace ts.codefix {
         }
         return generateAccessorFromProperty(file, startPosition, endPosition, context, Diagnostics.Generate_get_and_set_accessors.message);
     }
-}
+

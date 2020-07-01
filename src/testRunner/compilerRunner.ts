@@ -1,4 +1,11 @@
-namespace Harness {
+import { FileBasedTest, IO, getFileBasedTestConfigurationDescription, FileBasedTestConfiguration, TestCaseParser, Compiler, getFileBasedTestConfigurations, Baseline } from "../harness/harnessIO";
+import { RunnerBase, TestRunnerKind } from "../harness/runnerbase";
+import { some, identity, length } from "../compiler/core";
+import { getDirectoryPath, combinePaths, isRootedDiskPath, getNormalizedAbsolutePath, fileExtensionIs, toPath } from "../compiler/path";
+import { CompilerOptions, Extension } from "../compiler/types";
+import { cloneCompilerOptions } from "../services/utilities";
+import { assert } from "console";
+
     export const enum CompilerTestType {
         Conformance,
         Regressions,
@@ -59,7 +66,7 @@ namespace Harness {
         }
 
         public checkTestCodeOutput(fileName: string, test?: CompilerFileBasedTest) {
-            if (test && ts.some(test.configurations)) {
+            if (test && some(test.configurations)) {
                 test.configurations.forEach(configuration => {
                     describe(`${this.testSuiteName} tests for ${fileName}${configuration ? ` (${getFileBasedTestConfigurationDescription(configuration)})` : ``}`, () => {
                         this.runSuite(fileName, test, configuration);
@@ -80,7 +87,7 @@ namespace Harness {
             before(() => {
                 let payload;
                 if (test && test.content) {
-                    const rootDir = test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(test.file) + "/";
+                    const rootDir = test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : getDirectoryPath(test.file) + "/";
                     payload = TestCaseParser.makeUnitsFromTest(test.content, test.file, rootDir);
                 }
                 compilerTest = new CompilerTest(fileName, payload, configuration);
@@ -144,7 +151,7 @@ namespace Harness {
         private harnessSettings: TestCaseParser.CompilerSettings;
         private hasNonDtsFiles: boolean;
         private result: compiler.CompilationResult;
-        private options: ts.CompilerOptions;
+        private options: CompilerOptions;
         private tsConfigFiles: Compiler.TestFile[];
         // equivalent to the files that will be passed on the command line
         private toBeCompiled: Compiler.TestFile[];
@@ -174,7 +181,7 @@ namespace Harness {
                 }
             }
 
-            const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(fileName) + "/";
+            const rootDir = fileName.indexOf("conformance") === -1 ? "tests/cases/compiler/" : getDirectoryPath(fileName) + "/";
 
             if (testCaseContent === undefined) {
                 testCaseContent = TestCaseParser.makeUnitsFromTest(IO.readFile(fileName)!, fileName, rootDir);
@@ -186,24 +193,24 @@ namespace Harness {
 
             const units = testCaseContent.testUnitData;
             this.harnessSettings = testCaseContent.settings;
-            let tsConfigOptions: ts.CompilerOptions | undefined;
+            let tsConfigOptions: CompilerOptions | undefined;
             this.tsConfigFiles = [];
             if (testCaseContent.tsConfig) {
                 assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
                 assert.equal(testCaseContent.tsConfig.raw.exclude, undefined, `exclude in tsconfig is not currently supported`);
 
-                tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
-                this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath)));
+                tsConfigOptions = cloneCompilerOptions(testCaseContent.tsConfig.options);
+                this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, combinePaths(rootDir, tsConfigOptions.configFilePath)));
             }
             else {
                 const baseUrl = this.harnessSettings.baseUrl;
-                if (baseUrl !== undefined && !ts.isRootedDiskPath(baseUrl)) {
-                    this.harnessSettings.baseUrl = ts.getNormalizedAbsolutePath(baseUrl, rootDir);
+                if (baseUrl !== undefined && !isRootedDiskPath(baseUrl)) {
+                    this.harnessSettings.baseUrl = getNormalizedAbsolutePath(baseUrl, rootDir);
                 }
             }
 
             this.lastUnit = units[units.length - 1];
-            this.hasNonDtsFiles = units.some(unit => !ts.fileExtensionIs(unit.name, ts.Extension.Dts));
+            this.hasNonDtsFiles = units.some(unit => !fileExtensionIs(unit.name, Extension.Dts));
             // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
             // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
             // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.
@@ -225,7 +232,7 @@ namespace Harness {
             }
 
             if (tsConfigOptions && tsConfigOptions.configFilePath !== undefined) {
-                tsConfigOptions.configFilePath = ts.combinePaths(rootDir, tsConfigOptions.configFilePath);
+                tsConfigOptions.configFilePath = combinePaths(rootDir, tsConfigOptions.configFilePath);
                 tsConfigOptions.configFile!.fileName = tsConfigOptions.configFilePath;
             }
 
@@ -318,13 +325,13 @@ namespace Harness {
                 /*multifile*/ undefined,
                 /*skipTypeBaselines*/ undefined,
                 /*skipSymbolBaselines*/ undefined,
-                !!ts.length(this.result.diagnostics)
+                !!length(this.result.diagnostics)
             );
         }
 
         private makeUnitName(name: string, root: string) {
-            const path = ts.toPath(name, root, ts.identity);
-            const pathStart = ts.toPath(IO.getCurrentDirectory(), "", ts.identity);
+            const path = toPath(name, root, identity);
+            const pathStart = toPath(IO.getCurrentDirectory(), "", identity);
             return pathStart ? path.replace(pathStart, "/") : path;
         }
 
@@ -332,4 +339,4 @@ namespace Harness {
             return { unitName: unitName || this.makeUnitName(lastUnit.name, rootDir), content: lastUnit.content, fileOptions: lastUnit.fileOptions };
         }
     }
-}
+

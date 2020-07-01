@@ -1,4 +1,15 @@
-namespace ts.projectSystem {
+import { DocumentSpanFromSubstring, textSpanFromSubstring, openFilesForSession, closeFilesForSession, createSession, checkNumberOfProjects, checkProjectActualFiles, executeSessionRequest, protocol, protocolFileLocationFromSubstring, protocolFileSpanWithContextFromSubstring, protocolTextSpanFromSubstring, protocolFileSpanFromSubstring, makeReferenceItem, protocolLocationFromSubstring, protocolRenameSpanFromSubstring } from "./helpers";
+import { DocumentSpan, RenameLocation, ReferenceEntry, ScriptElementKind, ReferencedSymbol, SymbolDisplayPartKind, ScriptElementKindModifier } from "../../../services/types";
+import { File } from "../../../harness/vfsUtil";
+import { Debug } from "../../../compiler/debug";
+import { getFileEmitOutput } from "../../../compiler/builderState";
+import { assert } from "console";
+import { OutputFile } from "../../../../built/local/compiler";
+import { CompilerOptions, RawSourceMap, SyntaxKind } from "../../../compiler/types";
+import { createServerHost } from "../../../../built/local/harness";
+import { CommandNames } from "../../../server/session";
+import { keywordPart, spacePart, displayPart, punctuationPart } from "../../../services/utilities";
+
     function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: DocumentSpanFromSubstring): DocumentSpan {
         const contextSpan = contextText !== undefined ? documentSpanFromSubstring({ file, text: contextText, options: contextOptions }) : undefined;
         return {
@@ -58,13 +69,13 @@ namespace ts.projectSystem {
             mappings: "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC"
         };
         const aDtsMap: File = {
-            path: "/a/bin/a.d.ts.map",
+            path: "/a/bin/a.d.map",
             content: JSON.stringify(aDtsMapContent),
         };
         const aDts: File = {
             path: "/a/bin/a.d.ts",
             // ${""} is needed to mangle the sourceMappingURL part or it breaks the build
-            content: `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
+            content: `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.map`,
         };
 
         const bTs: File = {
@@ -82,13 +93,13 @@ namespace ts.projectSystem {
             mappings: "AAAA,wBAAgB,GAAG,SAAK",
         };
         const bDtsMap: File = {
-            path: "/b/bin/b.d.ts.map",
+            path: "/b/bin/b.d.map",
             content: JSON.stringify(bDtsMapContent),
         };
         const bDts: File = {
             // ${""} is need to mangle the sourceMappingURL part so it doesn't break the build
             path: "/b/bin/b.d.ts",
-            content: `export declare function fnB(): void;\n//# source${""}MappingURL=b.d.ts.map`,
+            content: `export declare function fnB(): void;\n//# source${""}MappingURL=b.d.map`,
         };
 
         const dummyFile: File = {
@@ -473,9 +484,9 @@ namespace ts.projectSystem {
             };
             const bTs: File = { path: "/b/b.ts", content: `f();` };
             const bTsconfig: File = { path: "/b/tsconfig.json", content: JSON.stringify({ references: [{ path: "../a" }] }) };
-            const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
+            const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.map` };
             const aDtsMap: File = {
-                path: "/bin/a.d.ts.map",
+                path: "/bin/a.d.map",
                 content: JSON.stringify({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
             };
 
@@ -773,4 +784,4 @@ namespace ts.projectSystem {
             verifySingleInferredProject(session);
         });
     });
-}
+

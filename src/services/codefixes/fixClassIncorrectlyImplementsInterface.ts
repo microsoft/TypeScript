@@ -1,5 +1,17 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { mapDefined, createMap, and, find } from "../../compiler/core";
+import { ExpressionWithTypeArguments, SourceFile, ClassLikeDeclaration, ModifierFlags, UserPreferences, InterfaceType, IndexKind, InterfaceDeclaration, ClassElement, TypeChecker, SymbolTable } from "../../compiler/types";
+import { CodeFixAction } from "../types";
+import { getEffectiveImplementsTypeNodes, addToSeen, getContainingClass, getEffectiveModifierFlags, getEffectiveBaseTypeNode, createSymbolTable } from "../../compiler/utilities";
+import { getNodeId } from "../../compiler/checker";
+import { Debug } from "../../compiler/debug";
+import { getTokenAtPosition } from "../utilities";
+import { TypeConstructionContext, createMissingMemberNodes, getNoopSymbolTrackerWithResolver } from "./helpers";
+import { isConstructorDeclaration } from "../../../built/local/compiler";
+import { createImportAdder } from "./importFixes";
+
     const errorCodes = [
         Diagnostics.Class_0_incorrectly_implements_interface_1.code,
         Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code
@@ -92,4 +104,4 @@ namespace ts.codefix {
         const heritageClauseTypeSymbols = checker.getPropertiesOfType(heritageClauseType);
         return createSymbolTable(heritageClauseTypeSymbols.filter(symbolPointsToNonPrivateMember));
     }
-}
+

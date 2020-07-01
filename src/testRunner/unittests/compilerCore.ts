@@ -1,4 +1,6 @@
-namespace ts {
+import { assert } from "console";
+import { equalOwnProperties } from "../../compiler/core";
+
     describe("unittests:: compilerCore", () => {
         describe("equalOwnProperties", () => {
             it("correctly equates objects", () => {
@@ -30,4 +32,4 @@ namespace ts {
             });
         });
     });
-}
+

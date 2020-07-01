@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.refactor {
+
+import { getLocaleSpecificMessage } from "../../compiler/utilities";
+import { registerRefactor } from "../refactorProvider";
+import { RefactorContext, ApplicableRefactorInfo, RefactorEditInfo } from "../types";
+import { isBinaryExpression, isParenthesizedExpression, isStringLiteral, factory } from "../../../built/local/compiler";
+import { neverArray } from "../../compiler/core";
+import { SourceFile, Node, BinaryExpression, SyntaxKind, Expression, Token, BinaryOperator, StringLiteral, TemplateSpan, ParenthesizedExpression } from "../../compiler/types";
+import { getTokenAtPosition, copyTrailingComments, copyTrailingAsLeadingComments } from "../utilities";
+import { Debug } from "../../compiler/debug";
+import { getTrailingCommentRanges } from "../../compiler/scanner";
+
     const refactorName = "Convert to template string";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
 
@@ -182,4 +192,4 @@ namespace ts.refactor {
         }
         return node;
     }
-}
+

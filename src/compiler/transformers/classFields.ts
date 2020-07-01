@@ -1,5 +1,18 @@
 /*@internal*/
-namespace ts {
+
+import { Identifier, UnderscoreEscapedMap, TransformationContext, ScriptTarget, Expression, Statement, SourceFile, Node, VisitResult, TransformFlags, SyntaxKind, ClassLikeDeclaration, PropertyDeclaration, VariableStatement, ComputedPropertyName, PropertyAccessExpression, PrefixUnaryExpression, PostfixUnaryExpression, CallExpression, BinaryExpression, PrivateIdentifier, ExpressionStatement, ForStatement, TaggedTemplateExpression, AssignmentPattern, AssignmentOperator, ClassElement, ClassDeclaration, ClassExpression, NodeCheckFlags, GeneratedIdentifier, GeneratedIdentifierFlags, EmitFlags, ConstructorDeclaration, LeftHandSideExpression, EmitHint, PropertyName, PrivateIdentifierPropertyAccessExpression, BindingOrAssignmentElement, ObjectLiteralElementLike } from "../types";
+import { getEmitScriptTarget, nodeIsSynthesized, isDestructuringAssignment, isAssignmentExpression, getEffectiveBaseTypeNode, getEmitFlags, hasStaticModifier, getFirstConstructorWithBody, moveRangePastModifiers, createUnderscoreEscapedMap, getTextOfPropertyName, isThisProperty, isSuperProperty } from "../utilities";
+import { chainBundle, isSimpleInlineableExpression, isCompoundAssignment, getNonAssignmentOperatorForCompoundAssignment, getProperties, getOriginalNodeId, isInitializedProperty, addPrologueDirectivesAndInitialSuperCall, isSimpleCopiableExpression } from "./utilities";
+import { visitEachChild, visitNodes, visitNode, visitParameterList, visitFunctionBody } from "../visitorPublic";
+import { addEmitHelpers, setEmitFlags, setSourceMapRange, setCommentRange } from "../factory/emitNode";
+import { setOriginalNode, factory } from "../factory/nodeFactory";
+import { some, compact, forEach, addRange, map, filter, findIndex } from "../core";
+import { Debug } from "../debug";
+import { isPrivateIdentifier, isPostfixUnaryExpression, isClassDeclaration, isPropertyDeclaration, isHeritageClause, isDecorator, isConstructorDeclaration, isComputedPropertyName, isIdentifier, isSpreadElement, isPropertyAssignment, isArrayLiteralExpression } from "../factory/nodeTests";
+import { isModifier, isExpression, isPrivateIdentifierPropertyAccessExpression, isForInitializer, isStatement, isTemplateLiteral, getOriginalNode, isPrivateIdentifierPropertyDeclaration, isClassElement, isParameterPropertyDeclaration, unescapeLeadingUnderscores, skipPartiallyEmittedExpressions, isGeneratedIdentifier, isObjectLiteralElementLike } from "../utilitiesPublic";
+import { skipOuterExpressions, startOnNewLine, createMemberAccessForPropertyName, getTargetOfBindingOrAssignmentElement, getInitializerOfBindingOrAssignmentElement } from "../factory/utilities";
+import { setTextRange } from "../factory/utilitiesPublic";
+
     const enum ClassPropertySubstitutionFlags {
         /**
          * Enables substitutions for class expressions with static fields
@@ -1063,4 +1076,4 @@ namespace ts {
             [receiver, initializer || factory.createVoidZero()]
         );
     }
-}
+

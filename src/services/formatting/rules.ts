@@ -1,5 +1,16 @@
 /* @internal */
-namespace ts.formatting {
+
+import { TokenRange, Rule, anyContext, RuleAction, RuleFlags, ContextPredicate } from "./rule";
+import { SyntaxKind, BinaryExpression, Node, YieldExpression } from "../../compiler/types";
+import { typeKeywords, findNextToken, positionIsASICandidate } from "../utilities";
+import { SemicolonPreference, FormatCodeSettings } from "../types";
+import { isArray } from "util";
+import { contains } from "../../compiler/core";
+import { FormattingContext, FormattingRequestKind } from "./formattingContext";
+import { isFunctionLikeKind, isPropertySignature, isPropertyDeclaration } from "../../../built/local/compiler";
+import { isExpressionNode, isTrivia, findAncestor } from "../../compiler/utilities";
+import { TextRangeWithKind } from "./formatting";
+
     export interface RuleSpec {
         readonly leftTokenRange: TokenRange;
         readonly rightTokenRange: TokenRange;
@@ -888,4 +899,4 @@ namespace ts.formatting {
     function isSemicolonInsertionContext(context: FormattingContext): boolean {
         return positionIsASICandidate(context.currentTokenSpan.end, context.currentTokenParent, context.sourceFile);
     }
-}
+

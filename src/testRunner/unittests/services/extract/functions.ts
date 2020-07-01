@@ -1,4 +1,5 @@
-namespace ts {
+import { testExtractSymbol } from "./helpers";
+
     describe("unittests:: services:: extract:: extractFunctions", () => {
         testExtractFunction("extractFunction1",
             `namespace A {
@@ -265,7 +266,7 @@ namespace ts {
             `function M1() { }
 function M2() {
     [#|return 1;|]
-}
+
 function M3() { }`);
         // Extraction position - class without ctor
         testExtractFunction("extractFunction26",
@@ -302,7 +303,7 @@ function M3() { }`);
     kind: "Unary";
     operator: string;
     operand: any;
-}
+
 
 function parseUnaryExpression(operator: string): UnaryExpression {
     [#|return {
@@ -310,7 +311,7 @@ function parseUnaryExpression(operator: string): UnaryExpression {
         operator,
         operand: parsePrimaryExpression(),
     };|]
-}
+
 
 function parsePrimaryExpression(): any {
     throw "Not implemented";
@@ -561,4 +562,4 @@ function F() {
     function testExtractFunction(caption: string, text: string, includeLib?: boolean) {
         testExtractSymbol(caption, text, "extractFunction", Diagnostics.Extract_function, includeLib);
     }
-}
+

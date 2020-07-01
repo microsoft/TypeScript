@@ -1,7 +1,19 @@
+import { WatchOptions, Path, WatchFileKind, PollingWatchKind, WatchDirectoryKind, RequireResult } from "./types";
+import { unorderedRemoveItem, createMultiMap, createGetCanonicalFileName, forEach, noop, getStringComparer, neverArray, startsWith, enumerateInsertsAndDeletes, mapDefined, some, stringContains, AssertionLevel } from "./core";
+import { Debug } from "./debug";
+import { getDirectoryPath, getNormalizedAbsolutePath, directorySeparator, normalizePath, combinePaths, normalizeSlashes, getRootLength, containsPath, getRelativePathToDirectoryOrUrl } from "./path";
+import { isString, isArray } from "util";
+import { closeFileWatcherOf, getFallbackOptions } from "./watchUtilities";
+import { closeFileWatcher, writeFileEnsuringDirectories, FileSystemEntries, emptyFileSystemEntries, matchFiles } from "./utilities";
+import { timestamp } from "./performanceTimestamp";
+import { Comparison } from "./corePublic";
+import { resolveJSModule } from "./moduleNameResolver";
+import { perfLogger } from "./perfLogger";
+
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
 
-namespace ts {
+
     /**
      * djb2 hashing algorithm
      * http://www.cse.yorku.ca/~oz/hash.html
@@ -1752,4 +1764,4 @@ namespace ts {
     if (sys && sys.debugMode) {
         Debug.isDebugging = true;
     }
-}
+

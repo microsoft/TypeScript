@@ -1,4 +1,10 @@
-namespace ts {
+import { ParsedCommandLine, ScriptTarget, ModuleKind, DiagnosticMessage, ModuleResolutionKind, WatchFileKind, WatchDirectoryKind, PollingWatchKind } from "../../../compiler/types";
+import { ParseCommandLineWorkerDiagnostics, parseCommandLineWorker, compilerOptionsDidYouMeanDiagnostics, createOptionNameMap, ParsedBuildCommand, parseBuildCommand } from "../../../../built/local/compiler";
+import { formatStringFromArgs } from "../../../compiler/utilities";
+import { createMapFromTemplate } from "../../../compiler/core";
+import { BuildOptions } from "../../../compiler/tsbuildPublic";
+import { assert } from "chai";
+
     describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
         function assertParseResult(commandLine: string[], expectedParsedCommandLine: ParsedCommandLine, workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics) {
@@ -907,4 +913,4 @@ namespace ts {
             });
         });
     });
-}
+

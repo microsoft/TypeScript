@@ -1,5 +1,10 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { Node, SourceFile, SyntaxKind } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { isObjectLiteralExpression, isArrayLiteralExpression, factory } from "../../../built/local/compiler";
+
     const fixId = "fixExpectedComma";
     const expectedErrorCode = Diagnostics._0_expected.code;
     const errorCodes = [expectedErrorCode];
@@ -43,4 +48,4 @@ namespace ts.codefix {
         const newNode = factory.createToken(SyntaxKind.CommaToken);
         changes.replaceNode(sourceFile, node, newNode);
     }
-}
+

@@ -1,4 +1,10 @@
-namespace ts {
+import { Diagnostic, DiagnosticCategory, CompilerOptions, ModuleKind } from "../../../compiler/types";
+import { assert } from "console";
+import { flattenDiagnosticMessageText } from "../../../compiler/program";
+import { forEach } from "../../../compiler/core";
+import { readConfigFile, parseJsonConfigFileContent, readJsonConfigFile, parseJsonSourceFileConfigFileContent } from "../../../../built/local/compiler";
+import { combinePaths } from "../../../compiler/path";
+
     function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
         return new vfs.FileSystem(ignoreCase, {
             cwd,
@@ -351,4 +357,4 @@ namespace ts {
             });
         });
     });
-}
+

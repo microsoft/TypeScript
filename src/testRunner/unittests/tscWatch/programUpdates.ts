@@ -1,4 +1,11 @@
-namespace ts.tscWatch {
+import { File } from "../../../harness/vfsUtil";
+import { verifyTscWatch, commonFile1, commonFile2, checkSingleTimeoutQueueLengthAndRun, createWatchOfFilesAndCompilerOptions, checkProgramActualFiles, projectRoot, WatchedSystem, TscWatchCompileChange, runQueuedTimeoutCallbacks, noopChange, replaceFileText } from "./helpers";
+import { createWatchedSystem, libFile } from "../../../../built/local/harness";
+import { neverArray } from "../../../compiler/core";
+import { getDirectoryPath } from "../../../compiler/path";
+import { CompilerOptions, ModuleKind } from "../../../compiler/types";
+import { generateTSConfig } from "../../../../built/local/compiler";
+
     describe("unittests:: tsc-watch:: program updates", () => {
         const scenario = "programUpdates";
         const configFilePath = "/a/b/tsconfig.json";
@@ -1152,7 +1159,7 @@ test(4, 5);`
                     path: `${projectRoot}/b.ts`,
                     content: `function test(x: number, y: number) {
     return x + y / 5;
-}
+
 export default test;`
                 };
                 const tsconfigFile: File = {
@@ -1579,4 +1586,4 @@ import { x } from "../b";`),
             ]
         });
     });
-}
+

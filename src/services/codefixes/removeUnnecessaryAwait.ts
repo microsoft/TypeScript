@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, TextSpan, AwaitKeywordToken, SyntaxKind, Node } from "../../compiler/types";
+import { tryCast } from "../../compiler/core";
+import { getTokenAtPosition, findPrecedingToken } from "../utilities";
+import { isAwaitExpression, isParenthesizedExpression, isIdentifier } from "../../../built/local/compiler";
+import { getLeftmostExpression } from "../../compiler/utilities";
+
     const fixId = "removeUnnecessaryAwait";
     const errorCodes = [
         Diagnostics.await_has_no_effect_on_the_type_of_this_expression.code,
@@ -40,4 +47,4 @@ namespace ts.codefix {
 
         changeTracker.replaceNode(sourceFile, expressionToReplace, awaitExpression.expression);
     }
-}
+

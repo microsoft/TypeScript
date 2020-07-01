@@ -1,4 +1,6 @@
-namespace ts.projectSystem {
+import { createServerHost } from "../../../../built/local/harness";
+import { createProjectService, toExternalFile } from "./helpers";
+
     describe("unittests:: tsserver:: import helpers", () => {
         it("should not crash in tsserver", () => {
             const f1 = {
@@ -15,4 +17,4 @@ namespace ts.projectSystem {
             service.checkNumberOfProjects({ externalProjects: 1 });
         });
     });
-}
+

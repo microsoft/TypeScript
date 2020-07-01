@@ -13,6 +13,23 @@
 // limitations under the License.
 //
 
+import { TypeAcquisition, CompilerOptions, ScriptKind, UserPreferences, TextChangeRange, ResolvedModuleFull, ResolvedTypeReferenceDirective, ParseConfigHost, ModuleResolutionHost, OperationCanceledException, Diagnostic, diagnosticCategoryName, Extension, FileReference } from "../compiler/types";
+import { MapLike } from "../compiler/corePublic";
+import { HostCancellationToken, LanguageService, SignatureHelpItemsOptions, RenameInfoOptions, EndOfLineState, IScriptSnapshot, LanguageServiceHost, EditorOptions, GetCompletionsAtPositionOptions, FormatCodeOptions, Classifications, Classifier } from "./types";
+import { EmitOutput, createTextChangeRange, createTextSpan, timestamp, resolveModuleName, resolveTypeReferenceDirective, getAutomaticTypeDirectiveNames, parseJsonSourceFileConfigFileContent } from "../../built/local/compiler";
+import { map, getProperty, toFileNameLowerCase, filter, createGetCanonicalFileName } from "../compiler/core";
+import { extensionFromPath, getFileMatcherPatterns } from "../compiler/utilities";
+import { ThrottledCancellationToken, getDefaultCompilerOptions, servicesVersion, createLanguageService } from "./services";
+import { isString } from "util";
+import { flattenDiagnosticMessageText } from "../compiler/program";
+import { getNewLineOrDefaultFromHost, getSnapshotText } from "./utilities";
+import { normalizeSlashes, getDirectoryPath, toPath } from "../compiler/path";
+import { createClassifier } from "./classifier";
+import { preProcessFile } from "./preProcess";
+import { parseJsonText } from "../compiler/parser";
+import { DocumentRegistry, createDocumentRegistry } from "./documentRegistry";
+import { clear } from "console";
+
 /* @internal */
 let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })(); // eslint-disable-line prefer-const
 
@@ -20,7 +37,7 @@ let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return
 /* eslint-disable no-in-operator */
 
 /* @internal */
-namespace ts {
+
     interface DiscoverTypingsInfo {
         fileNames: string[];                            // The file names that belong to the same project.
         projectRootPath: string;                        // The path to the project root directory
@@ -236,7 +253,7 @@ namespace ts {
          */
         getNavigationBarItems(fileName: string): string;
 
-        /** Returns a JSON-encoded value of the type ts.NavigationTree. */
+        /** Returns a JSON-encoded value of the type NavigationTree. */
         getNavigationTree(fileName: string): string;
 
         /**
@@ -1298,6 +1315,6 @@ namespace ts {
             throw new Error("Invalid operation");
         }
     }
-}
+
 
 /* eslint-enable no-in-operator */

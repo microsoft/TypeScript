@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost } from "../../../../built/local/harness";
+import { createSession, makeSessionRequest, protocol } from "./helpers";
+import { CommandNames } from "../../../server/session";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: occurrence highlight on string", () => {
         it("should be marked if only on string values", () => {
             const file1: File = {
@@ -44,4 +49,4 @@ namespace ts.projectSystem {
             }
         });
     });
-}
+

@@ -1,4 +1,8 @@
-namespace ts.tscWatch {
+import { verifyTscWatch, runQueuedTimeoutCallbacks, TscWatchCompileChange, WatchedSystem, checkSingleTimeoutQueueLengthAndRun } from "./helpers";
+import { File } from "../../../harness/vfsUtil";
+import { createWatchedSystem, libFile } from "../../../../built/local/harness";
+import { neverArray, map, find } from "../../../compiler/core";
+
     const scenario = "emit";
     describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
         function verifyOutAndOutFileSetting(subScenario: string, out?: string, outFile?: string) {
@@ -516,4 +520,4 @@ export var x = Foo();`
             ],
         });
     });
-}
+

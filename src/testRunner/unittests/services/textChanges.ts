@@ -1,6 +1,17 @@
 // Some tests have trailing whitespace
 
-namespace ts {
+import { Node, NewLineKind, ScriptTarget, NodeArray, SourceFile, FunctionDeclaration, SyntaxKind, VariableStatement, VariableDeclaration, ConstructorDeclaration, ClassDeclaration, ClassElement } from "../../../compiler/types";
+import { isDeclaration, isIdentifier, factory, isVariableStatement, isVariableDeclaration, isConstructorDeclaration } from "../../../../built/local/compiler";
+import { forEachChild, createSourceFile } from "../../../compiler/parser";
+import { getNewLineCharacter } from "../../../compiler/utilities";
+import { testFormatSettings } from "../../../services/types";
+import { notImplementedHost } from "./extract/helpers";
+import { zipWith, forEach, neverArray, last, cast, find } from "../../../compiler/core";
+import { Debug } from "../../../compiler/debug";
+import { isArray } from "util";
+import { assert } from "console";
+
+
     describe("unittests:: services:: textChanges", () => {
         function findChild(name: string, n: Node) {
             return find(n)!;
@@ -109,11 +120,11 @@ namespace ts {
             const text = `
 function foo() {
     return 1;
-}
+
 
 function bar() {
     return 2;
-}
+
 `;
             runSingleFileTest("deleteRange1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.deleteRange(sourceFile, { pos: text.indexOf("function foo"), end: text.indexOf("function bar") });
@@ -345,7 +356,7 @@ var a = 4; // comment 7`;
 class A {
     constructor() {
     }
-}
+
 `;
             runSingleFileTest("insertNodeAtConstructorStart", /*placeOpenBraceOnNewLineForFunctions*/ false, text1, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeAtConstructorStart(sourceFile, findConstructor(sourceFile), createTestSuperCall());
@@ -355,7 +366,7 @@ class A {
     constructor() {
         var x = 1;
     }
-}
+
 `;
             runSingleFileTest("insertNodeAfter4", /*placeOpenBraceOnNewLineForFunctions*/ false, text2, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeAfter(sourceFile, findVariableStatementContaining("x", sourceFile), createTestSuperCall());
@@ -365,7 +376,7 @@ class A {
     constructor() {
 
     }
-}
+
 `;
             runSingleFileTest("insertNodeAtConstructorStart-block with newline", /*placeOpenBraceOnNewLineForFunctions*/ false, text3, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeAtConstructorStart(sourceFile, findConstructor(sourceFile), createTestSuperCall());
@@ -640,7 +651,7 @@ class A {
             const text = `
 class A {
     x
-}
+
 `;
             runSingleFileTest("insertNodeAfterInClass1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 // eslint-disable-next-line boolean-trivia
@@ -651,7 +662,7 @@ class A {
             const text = `
 class A {
     x;
-}
+
 `;
             runSingleFileTest("insertNodeAfterInClass2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 // eslint-disable-next-line boolean-trivia
@@ -663,7 +674,7 @@ class A {
 class A {
     x;
     y = 1;
-}
+
 `;
             runSingleFileTest("deleteNodeAfterInClass1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 deleteNode(changeTracker, sourceFile, findChild("x", sourceFile));
@@ -674,7 +685,7 @@ class A {
 class A {
     x
     y = 1;
-}
+
 `;
             runSingleFileTest("deleteNodeAfterInClass2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 deleteNode(changeTracker, sourceFile, findChild("x", sourceFile));
@@ -684,7 +695,7 @@ class A {
             const text = `
 class A {
     x = foo
-}
+
 `;
             runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = factory.createPropertyDeclaration(
@@ -702,7 +713,7 @@ class A {
 class A {
     x() {
     }
-}
+
 `;
             runSingleFileTest("insertNodeInClassAfterNodeWithoutSeparator2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = factory.createPropertyDeclaration(
@@ -719,7 +730,7 @@ class A {
             const text = `
 interface A {
     x
-}
+
 `;
             runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator1", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = factory.createPropertyDeclaration(
@@ -736,7 +747,7 @@ interface A {
             const text = `
 interface A {
     x()
-}
+
 `;
             runSingleFileTest("insertNodeInInterfaceAfterNodeWithoutSeparator2", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = factory.createPropertyDeclaration(
@@ -759,4 +770,4 @@ let x = foo
             });
         }
     });
-}
+

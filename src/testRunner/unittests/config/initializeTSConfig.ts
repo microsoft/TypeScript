@@ -1,4 +1,5 @@
-namespace ts {
+import { parseCommandLine, generateTSConfig } from "../../../../built/local/compiler";
+
     describe("unittests:: config:: initTSConfig", () => {
         function initTSConfigCorrectly(name: string, commandLinesArgs: string[]) {
             describe(name, () => {
@@ -30,4 +31,4 @@ namespace ts {
 
         initTSConfigCorrectly("Initialized TSConfig with advanced options", ["--init", "--declaration", "--declarationDir", "lib", "--skipLibCheck", "--noErrorTruncation"]);
     });
-}
+

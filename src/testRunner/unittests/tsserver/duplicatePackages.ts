@@ -1,4 +1,8 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, executeSessionRequest, protocol } from "./helpers";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: duplicate packages", () => {
         // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
         it("works with import fixes", () => {
@@ -51,4 +55,4 @@ namespace ts.projectSystem {
             }
         });
     });
-}
+

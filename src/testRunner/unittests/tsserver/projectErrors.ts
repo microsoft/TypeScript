@@ -1,4 +1,13 @@
-namespace ts.projectSystem {
+import { assert } from "console";
+import { Diagnostic, Path, ModuleKind } from "../../../compiler/types";
+import { flattenDiagnosticMessageText } from "../../../compiler/program";
+import { zipWith, startsWith, find, noop, returnUndefined, neverArray, arrayToMap, identity, map, mapDefined } from "../../../compiler/core";
+import { createServerHost, libFile, Folder, checkWatchedFilesDetailed, checkWatchedDirectoriesDetailed, checkWatchedDirectories } from "../../../../built/local/harness";
+import { createSession, toExternalFiles, checkNumberOfProjects, openFilesForSession, configuredProjectAt, createProjectService, checkProjectRootFiles, protocol, verifyGetErrRequest, createDiagnostic, verifyGetErrRequestNoErrors, checkCompleteEvent, checkProjectActualFiles, closeFilesForSession, GetErrDiagnostics, protocolTextSpanFromSubstring, verifyGetErrScenario, syncDiagnostics, ConfigFileDiagnostic, TestServerEventManager, executeSessionRequest, checkNumberOfConfiguredProjects } from "./helpers";
+import { getBaseFileName, getDirectoryPath } from "../../../compiler/path";
+import { File } from "../../../harness/vfsUtil";
+import { formatStringFromArgs } from "../../../compiler/utilities";
+
     describe("unittests:: tsserver:: Project Errors", () => {
         function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: readonly string[]): void {
             assert.isTrue(projectFiles !== undefined, "missing project files");
@@ -1094,4 +1103,4 @@ console.log(blabla);`
             verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
         });
     });
-}
+

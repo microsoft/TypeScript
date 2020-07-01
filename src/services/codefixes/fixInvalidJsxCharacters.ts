@@ -1,5 +1,10 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { hasProperty } from "../../compiler/core";
+import { UserPreferences, SourceFile } from "../../compiler/types";
+import { quote } from "../utilities";
+
     const fixIdExpression = "fixInvalidJsxCharacters_expression";
     const fixIdHtmlEntity = "fixInvalidJsxCharacters_htmlEntity";
 
@@ -45,4 +50,4 @@ namespace ts.codefix {
         const replacement = useHtmlEntity ? htmlEntity[character] : `{${quote(character, preferences)}}`;
         changes.replaceRangeWithText(sourceFile, { pos: start, end: start + 1 }, replacement);
     }
-}
+

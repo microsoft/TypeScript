@@ -1,5 +1,23 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, NodeCheckFlags, SourceFile, VariableDeclaration, UnderscoreEscapedMap, Identifier, Node, VisitResult, SyntaxKind, TransformFlags, AwaitExpression, YieldExpression, ReturnStatement, LabeledStatement, ObjectLiteralExpression, BinaryExpression, CatchClause, VariableStatement, ForOfStatement, ForStatement, VoidExpression, ConstructorDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, FunctionDeclaration, FunctionExpression, ArrowFunction, ParameterDeclaration, ExpressionStatement, ParenthesizedExpression, TaggedTemplateExpression, ElementAccessExpression, Expression, ObjectLiteralElementLike, ModifierFlags, Statement, ForInitializer, TextRange, NodeFlags, EmitFlags, Token, AccessorDeclaration, FunctionBody, ScriptTarget, ConciseBody, FunctionLikeDeclaration, EmitHint, PropertyAccessExpression, CallExpression, GeneratedIdentifierFlags, LeftHandSideExpression } from "../types";
+import { getEmitScriptTarget, FunctionFlags, unwrapInnermostStatementOfLabel, isEffectiveStrictModeSourceFile, isDestructuringAssignment, hasSyntacticModifier, skipParentheses, getFunctionFlags, createUnderscoreEscapedMap, insertStatementsAfterStandardPrologue, isSuperProperty } from "../utilities";
+import { chainBundle } from "./utilities";
+import { append, concatenate, some, addRange } from "../core";
+import { addEmitHelpers, setEmitFlags, addEmitHelper } from "../factory/emitNode";
+import { visitEachChild, visitNode, visitParameterList, visitNodes, visitLexicalEnvironment } from "../visitorPublic";
+import { isPropertyAccessExpression, isBlock, isVariableDeclarationList, isIdentifier } from "../factory/nodeTests";
+import { setOriginalNode } from "../factory/nodeFactory";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { isExpression, isStatement, isObjectLiteralElementLike, isBindingPattern, isForInitializer, isAssignmentPattern, isPropertyName, isModifier, isToken, isConciseBody } from "../utilitiesPublic";
+import { Debug } from "../debug";
+import { processTaggedTemplateExpression, ProcessLevel } from "./taggedTemplate";
+import { flattenDestructuringAssignment, FlattenLevel, flattenDestructuringBinding } from "./destructuring";
+import { createForOfBindingStatement } from "../factory/utilities";
+import { createSuperAccessVariableStatement } from "./es2017";
+import { getNodeId } from "../checker";
+import { advancedAsyncSuperHelper, asyncSuperHelper } from "../factory/emitHelpers";
+
     const enum ESNextSubstitutionFlags {
         /** Enables substitutions for async methods with `super` calls. */
         AsyncMethodsWithSuper = 1 << 0
@@ -1166,4 +1184,4 @@ namespace ts {
             }
         }
     }
-}
+

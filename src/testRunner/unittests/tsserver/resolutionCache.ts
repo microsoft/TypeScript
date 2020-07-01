@@ -1,4 +1,13 @@
-namespace ts.projectSystem {
+import { TestServerHost, createServerHost, libFile, checkWatchedFiles, checkWatchedDirectories, checkWatchedFilesDetailed, checkWatchedDirectoriesDetailed } from "../../../../built/local/harness";
+import { ModuleResolutionHost, ScriptKind } from "../../../compiler/types";
+import { createProjectService, TestTypingsInstaller, checkProjectActualFiles, configuredProjectAt, createSession, openFilesForSession, makeSessionRequest, verifyDiagnostics, verifyNoDiagnostics, protocol, checkNumberOfProjects, verifyGetErrRequest, createDiagnostic, checkProjectUpdatedInBackgroundEvent, checkErrorMessage, checkNoDiagnosticEvents, checkCompleteEvent, toExternalFiles, nodeModules, nodeModulesAtTypes, getConfigFilesToWatch, getTypeRootsFromLocation } from "./helpers";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+import { combinePaths, getDirectoryPath, forEachAncestorDirectory, normalizePath } from "../../../compiler/path";
+import { removeFileExtension, arrayToSet } from "../../../compiler/utilities";
+import { neverArray, mapDefined, arrayFrom, createMap } from "../../../compiler/core";
+import { Debug } from "../../../compiler/debug";
+
     function createHostModuleResolutionTrace(host: TestServerHost & ModuleResolutionHost) {
         const resolutionTrace: string[] = [];
         host.trace = resolutionTrace.push.bind(resolutionTrace);
@@ -941,4 +950,4 @@ export const x = 10;`
             });
         });
     });
-}
+

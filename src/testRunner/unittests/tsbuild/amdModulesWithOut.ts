@@ -1,4 +1,4 @@
-namespace ts {
+
     describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         let outFileFs: vfs.FileSystem;
         const enum Project { lib, app }
@@ -135,7 +135,7 @@ export class normalC {
     ${internal} method() { }
     ${internal} get c() { return 10; }
     ${internal} set c(val: number) { }
-}
+
 export namespace normalN {
     ${internal} export class C { }
     ${internal} export function foo() {}
@@ -145,7 +145,7 @@ export namespace normalN {
     ${internal} export type internalType = internalC;
     ${internal} export const internalConst = 10;
     ${internal} export enum internalEnum { a, b, c }
-}
+
 ${internal} export class internalC {}
 ${internal} export function internalfoo() {}
 ${internal} export namespace internalNamespace { export class someClass {} }
@@ -183,4 +183,4 @@ ${internal} export enum internalEnum { a, b, c }`);
             });
         });
     });
-}
+

@@ -1,5 +1,15 @@
 /* @internal */
-namespace ts.formatting {
+
+import { SourceFile, SyntaxKind, CommentRange, CharacterCodes, Node, TextRange, LineAndCharacter, SourceFileLike, IfStatement, NodeArray, TypeReferenceNode, ObjectLiteralExpression, ArrayLiteralExpression, TypeLiteralNode, SignatureDeclaration, ClassDeclaration, ClassExpression, InterfaceDeclaration, TypeAliasDeclaration, JSDocTemplateTag, CallExpression, VariableDeclarationList, NamedImportsOrExports, ObjectBindingPattern, ArrayBindingPattern, ImportClause } from "../../compiler/types";
+import { EditorSettings, IndentStyle, FormatCodeSettings } from "../types";
+import { findPrecedingToken, isStringOrRegularExpressionOrTemplateLiteral, rangeContainsRange, getLineStartPositionForPosition, positionBelongsToNode, findListItemInfo, findNextToken, findChildOfKind, rangeContainsStartEnd } from "../utilities";
+import { getRangeOfEnclosingComment, TextRangeWithKind } from "./formatting";
+import { getLineAndCharacterOfPosition, isWhiteSpaceLike, isWhiteSpaceSingleLine, skipTrivia } from "../../compiler/scanner";
+import { Debug } from "../../compiler/debug";
+import { getStartPositionOfLine } from "../../compiler/utilities";
+import { isDeclaration, isStatementButNotDeclaration, isCallExpression, isCallOrNewExpression } from "../../../built/local/compiler";
+import { contains, find } from "../../compiler/core";
+
     export namespace SmartIndenter {
 
         const enum Value {
@@ -611,4 +621,4 @@ namespace ts.formatting {
             return startLine === endLine;
         }
     }
-}
+

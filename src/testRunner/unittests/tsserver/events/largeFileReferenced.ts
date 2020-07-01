@@ -1,4 +1,4 @@
-namespace ts.projectSystem {
+
     describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large file", () => {
 
         function getLargeFile(useLargeTsFile: boolean) {
@@ -72,4 +72,4 @@ namespace ts.projectSystem {
             verifyLargeFile(/*useLargeTsFile*/ false);
         });
     });
-}
+

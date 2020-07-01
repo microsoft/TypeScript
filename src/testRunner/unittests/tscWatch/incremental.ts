@@ -1,4 +1,16 @@
-namespace ts.tscWatch {
+import { File } from "../../../harness/vfsUtil";
+import { WatchedSystem, createBaseline, applyChange, SystemSnap, watchBaseline } from "./helpers";
+import { createWatchedSystem, libFile } from "../../../../built/local/harness";
+import { neverArray, noop } from "../../../compiler/core";
+import { commandLineCallbacks } from "../tsc/helpers";
+import { isBuild, executeCommandLine } from "../../../../built/local/executeCommandLine";
+import { createDiagnosticReporter, parseConfigFileWithSystem, performIncrementalCompilation } from "../../../compiler/watch";
+import { getConfigFileParsingDiagnostics } from "../../../compiler/program";
+import { createIncrementalProgram, createIncrementalCompilerHost } from "../../../compiler/watchPublic";
+import { assert } from "console";
+import { Path, ModuleKind } from "../../../compiler/types";
+import { libContent } from "../tsbuild/helpers";
+
     describe("unittests:: tsc-watch:: emit file --incremental", () => {
         const project = "/users/username/projects/project";
 
@@ -229,7 +241,7 @@ namespace ts.tscWatch {
                     content: `import { B } from "./b";
 export interface A {
     b: B;
-}
+
 `
                 };
                 const bTs: File = {
@@ -237,7 +249,7 @@ export interface A {
                     content: `import { C } from "./c";
 export interface B {
     b: C;
-}
+
 `
                 };
                 const cTs: File = {
@@ -245,7 +257,7 @@ export interface B {
                     content: `import { A } from "./a";
 export interface C {
     a: A;
-}
+
 `
                 };
                 const indexTs: File = {
@@ -262,7 +274,7 @@ export { C } from "./c";
 export interface A {
     b: B;
     foo: any;
-}
+
 `)
         });
 
@@ -277,4 +289,4 @@ export interface A {
             modifyFs: host => host.deleteFile(`${project}/globals.d.ts`)
         });
     });
-}
+

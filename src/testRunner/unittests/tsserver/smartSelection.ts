@@ -1,4 +1,9 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, protocol, executeSessionRequest } from "./helpers";
+import { CommandNames } from "../../../server/session";
+import { assert } from "console";
+
     function setup(fileName: string, content: string) {
         const file: File = { path: fileName, content };
         const host = createServerHost([file, libFile]);
@@ -63,4 +68,4 @@ class Foo {
                                                 end: { line: 9, offset: 2 }, } } } } } } } } }]);
         });
     });
-}
+

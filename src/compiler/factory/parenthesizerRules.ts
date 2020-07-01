@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts {
+
+import { NodeFactory, ParenthesizerRules, BinaryExpression, SyntaxKind, Expression, LeftHandSideExpression, NewExpression, UnaryExpression, NodeArray, OuterExpressionKinds, ConciseBody, TypeNode } from "../types";
+import { getOperatorPrecedence, getOperatorAssociativity, OperatorPrecedence, getExpressionPrecedence, Associativity, getExpressionAssociativity, getLeftmostExpression } from "../utilities";
+import { skipPartiallyEmittedExpressions, isLiteralKind, isLeftHandSideExpression, isUnaryExpression, isFunctionOrConstructorTypeNode, isNodeArray } from "../utilitiesPublic";
+import { compareValues, sameMap, some, identity, cast } from "../core";
+import { Comparison } from "../corePublic";
+import { isBinaryExpression, isCallExpression, isBlock } from "./nodeTests";
+import { isCommaSequence } from "./utilities";
+import { setTextRange } from "./utilitiesPublic";
+
     export function createParenthesizerRules(factory: NodeFactory): ParenthesizerRules {
         interface BinaryPlusExpression extends BinaryExpression {
             cachedLiteralKind: SyntaxKind;
@@ -423,4 +432,4 @@ namespace ts {
         parenthesizeConstituentTypesOfUnionOrIntersectionType: nodes => cast(nodes, isNodeArray),
         parenthesizeTypeArguments: nodes => nodes && cast(nodes, isNodeArray),
     };
-}
+

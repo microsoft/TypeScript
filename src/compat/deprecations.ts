@@ -1,4 +1,4 @@
-namespace ts {
+
     // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
     // and compatible implementations are added here, along with an appropriate deprecation warning using
     // the `@deprecated` JSDoc tag as well as the `Debug.deprecate` API.
@@ -9,6 +9,14 @@ namespace ts {
     //   * "warn" - Warning deprecations are indicated with the `@deprecated` JSDoc Tag and a diagnostic message (assuming a compatible host)
     //   * "error" - Error deprecations are indicated with the `@deprecated` JSDoc tag and will throw a `TypeError` when invoked.
 
+import { Debug, DeprecationOptions } from "../compiler/debug";
+import { SyntaxKind, Token, Identifier, Node, GeneratedIdentifierFlags, Decorator, Modifier, ParameterDeclaration, TypeNode, IndexSignatureDeclaration, ThisTypeNode, TypePredicateNode, PseudoBigInt, StringLiteral, NoSubstitutionTemplateLiteral, NumericLiteral, PrimaryExpression, BooleanLiteral, TypeParameterDeclaration, PropertyName, QuestionToken, MethodSignature, NodeArray, TypeOperatorNode, Expression, TemplateLiteral, TaggedTemplateExpression, BinaryExpression, BinaryOperator, BinaryOperatorToken, ColonToken, ConditionalExpression, AsteriskToken, YieldExpression, HeritageClause, ClassElement, ClassExpression, PropertySignature, ExpressionWithTypeArguments, ConciseBody, EqualsGreaterThanToken, ArrowFunction, BindingName, ExclamationToken, VariableDeclaration, NamedImportBindings, ImportClause, NamedExportBindings, ExportDeclaration, EntityName, JSDocTypeExpression, JSDocParameterTag, PostfixUnaryExpression, PrefixUnaryExpression, TypeAssertion } from "../compiler/types";
+import { setTextRangePosEnd, setParent } from "../compiler/utilities";
+import { parseBaseNodeFactory } from "../compiler/parser";
+import { factory } from "../compiler/factory/nodeFactory";
+import { setTextRange } from "../compiler/factory/utilitiesPublic";
+import { isNodeKind } from "../compiler/utilitiesPublic";
+
     // DEPRECATION: Node factory top-level exports
     // DEPRECATION PLAN:
     //     - soft: 4.0
@@ -17,7 +25,7 @@ namespace ts {
     // #region Node factory top-level exports
 
     // NOTE: These exports are deprecated in favor of using a `NodeFactory` instance and exist here purely for backwards compatibility reasons.
-    const factoryDeprecation: DeprecationOptions = { since: "4.0", warnAfter: "4.1", message: "Use the appropriate method on 'ts.factory' or the 'factory' supplied by your transformation context instead." };
+    const factoryDeprecation: DeprecationOptions = { since: "4.0", warnAfter: "4.1", message: "Use the appropriate method on 'factory' or the 'factory' supplied by your transformation context instead." };
 
     /** @deprecated Use `factory.createNodeArray` or the factory supplied by your transformation context instead. */
     export const createNodeArray = Debug.deprecate(factory.createNodeArray, factoryDeprecation);
@@ -1321,4 +1329,4 @@ namespace ts {
     });
 
     // #endregion Renamed node Tests
-}
+

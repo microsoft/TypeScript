@@ -1,5 +1,16 @@
 /* @internal */
-namespace ts.refactor {
+
+import { registerRefactor } from "../refactorProvider";
+import { ApplicableRefactorInfo, RefactorEditInfo, RefactorContext } from "../types";
+import { neverArray, append, createMap, addRange, cast, first, forEach, concatenate } from "../../compiler/core";
+import { getLocaleSpecificMessage, isSourceFileJS, findAncestor, addToSeen, isThisIdentifier } from "../../compiler/utilities";
+import { Debug } from "../../compiler/debug";
+import { getUniqueName, getRenameLocation, getTokenAtPosition, createTextRangeFromSpan, getRefactorContextSpan, nodeOverlapsWithStartEnd, getNameFromPropertyName, rangeContainsStartEnd } from "../utilities";
+import { TypeNode, Statement, TypeParameterDeclaration, TypeElement, TypeChecker, TextRange, Node, SourceFile, SymbolFlags, EmitFlags, JSDocTemplateTag, JSDocTag } from "../../compiler/types";
+import { isTypeNode, isStatement, isIntersectionTypeNode, isParenthesizedTypeNode, isTypeLiteralNode, isTypeReferenceNode, isIdentifier, isTypeParameterDeclaration, isInferTypeNode, isConditionalTypeNode, isTypePredicateNode, isThisTypeNode, isFunctionLike, isTypeQueryNode, isTupleTypeNode, setEmitFlags, factory, ignoreSourceNewlines, getEffectiveConstraintOfTypeParameter, isJSDocTypeExpression } from "../../../built/local/compiler";
+import { skipTrivia, getLineAndCharacterOfPosition } from "../../compiler/scanner";
+import { forEachChild } from "../../compiler/parser";
+
     const refactorName = "Extract type";
     const extractToTypeAlias = "Extract to type alias";
     const extractToInterface = "Extract to interface";
@@ -231,4 +242,4 @@ namespace ts.refactor {
         changes.insertNodeBefore(file, firstStatement, factory.createJSDocComment(/* comment */ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
         changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
-}
+

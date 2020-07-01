@@ -1,5 +1,5 @@
 /*@internal*/
-namespace ts {
+
     export function transformECMAScriptModule(context: TransformationContext) {
         const {
             factory,
@@ -162,4 +162,4 @@ namespace ts {
             return substitution;
         }
     }
-}
+

@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, AsExpression, TypeAssertion, SyntaxKind } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { Debug } from "../../compiler/debug";
+import { findAncestor } from "../../compiler/utilities";
+import { isAsExpression, isTypeAssertionExpression, factory } from "../../../built/local/compiler";
+
     const fixId = "addConvertToUnknownForNonOverlappingTypes";
     const errorCodes = [Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first.code];
     registerCodeFix({
@@ -20,4 +27,4 @@ namespace ts.codefix {
             : factory.createTypeAssertion(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword), assertion.expression);
         changeTracker.replaceNode(sourceFile, assertion.expression, replacement);
     }
-}
+

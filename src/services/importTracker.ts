@@ -1,6 +1,14 @@
 /* Code for finding imports of an exported symbol. Used only by FindAllReferences. */
 /* @internal */
-namespace ts.FindAllReferences {
+
+import { Identifier, StringLiteral, SourceFile, TypeChecker, CancellationToken, ModuleDeclaration, ModuleBlock, AnyImportOrReExport, ValidImportTypeNode, CallExpression, SyntaxKind, VariableDeclaration, ModifierFlags, ImportEqualsDeclaration, ImportDeclaration, SymbolFlags, NamedImportsOrExports, __String, InternalSymbolName, StringLiteralLike, FileReference, Program, Statement, ExportDeclaration, Node, ExportAssignment, BinaryExpression, AssignmentDeclarationKind, BindingElement, ImportSpecifier, ImportClause, NamespaceImport } from "../compiler/types";
+import { nodeSeenTracker, symbolEscapedNameNoDefault, isExternalModuleSymbol } from "./utilities";
+import { isExternalModuleAugmentation, getSourceFileOfNode, hasSyntacticModifier, isDefaultImport, getFirstIdentifier, importFromModuleSpecifier, getAssignmentDeclarationKind, getNameOfAccessExpression, isAccessExpression } from "../compiler/utilities";
+import { Debug } from "../compiler/debug";
+import { isImportTypeNode, symbolName, isNamedExports, isExportDeclaration, isStringLiteral, isBinaryExpression, isImportEqualsDeclaration, isExportAssignment, isJSDocTypedefTag, isSourceFile, isVariableDeclaration, isBindingElement, walkUpBindingElementsAndPatterns, isCatchClause, isVariableStatement, isExportSpecifier } from "../../built/local/compiler";
+import { getSymbolId } from "../compiler/checker";
+import { createMap, forEach, cast } from "../compiler/core";
+
     export interface ImportsResult {
         /** For every import of the symbol, the location and local symbol for the import. */
         importSearches: readonly [Identifier, Symbol][];
@@ -650,4 +658,4 @@ namespace ts.FindAllReferences {
     function isExternalModuleImportEquals(eq: ImportEqualsDeclaration): eq is ImportEqualsDeclaration & { moduleReference: { expression: StringLiteral } } {
         return eq.moduleReference.kind === SyntaxKind.ExternalModuleReference && eq.moduleReference.expression.kind === SyntaxKind.StringLiteral;
     }
-}
+

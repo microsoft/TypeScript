@@ -1,5 +1,16 @@
 /* @internal */
-namespace ts {
+
+import { Version } from "./semver";
+import { AssertionLevel, AnyFunction, getOwnKeys, noop, hasProperty, every, map, stableSort, compareValues } from "./core";
+import { MatchingKeys, Node, NodeArray, SyntaxKind, NodeFlags, ModifierFlags, TransformFlags, EmitFlags, SymbolFlags, TypeFlags, ObjectFlags, FlowNode, Type, ObjectType, RequireResult, Symbol } from "./types";
+import { unescapeLeadingUnderscores, isParseTreeNode, getParseTreeNode } from "./utilitiesPublic";
+import { objectAllocator, getEffectiveModifierFlagsNoCache, getEmitFlags, nodeIsSynthesized, getSourceFileOfNode, getSourceTextOfNodeFromSourceFile, formatStringFromArgs } from "./utilities";
+import { sys } from "./sys";
+import { getDirectoryPath, resolvePath } from "./path";
+import { version } from "./corePublic";
+import { EnumType } from "./types.generated";
+import { DeprecationOptions } from "../compat/types";
+
     export enum LogLevel {
         Off,
         Error,
@@ -95,7 +106,7 @@ namespace ts {
         }
 
         /**
-         * Tests whether an assertion function should be executed. If it shouldn't, it is cached and replaced with `ts.noop`.
+         * Tests whether an assertion function should be executed. If it shouldn't, it is cached and replaced with `noop`.
          * Replaced assertion functions are restored when `Debug.setAssertionLevel` is set to a high enough level.
          * @param level The minimum assertion level required.
          * @param name The name of the current assertion function.
@@ -340,35 +351,35 @@ namespace ts {
         }
 
         export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
-            return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false);
+            return formatEnum(kind, EnumType.SyntaxKind, /*isFlags*/ false);
         }
 
         export function formatNodeFlags(flags: NodeFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).NodeFlags, /*isFlags*/ true);
+            return formatEnum(flags, EnumType.NodeFlags, /*isFlags*/ true);
         }
 
         export function formatModifierFlags(flags: ModifierFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true);
+            return formatEnum(flags, EnumType.ModifierFlags, /*isFlags*/ true);
         }
 
         export function formatTransformFlags(flags: TransformFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true);
+            return formatEnum(flags, EnumType.TransformFlags, /*isFlags*/ true);
         }
 
         export function formatEmitFlags(flags: EmitFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true);
+            return formatEnum(flags, EnumType.EmitFlags, /*isFlags*/ true);
         }
 
         export function formatSymbolFlags(flags: SymbolFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true);
+            return formatEnum(flags, EnumType.SymbolFlags, /*isFlags*/ true);
         }
 
         export function formatTypeFlags(flags: TypeFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
+            return formatEnum(flags, EnumType.TypeFlags, /*isFlags*/ true);
         }
 
         export function formatObjectFlags(flags: ObjectFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
+            return formatEnum(flags, EnumType.ObjectFlags, /*isFlags*/ true);
         }
 
         let isDebugInfoEnabled = false;
@@ -522,4 +533,4 @@ namespace ts {
             return wrapFunction(deprecation, func);
         }
     }
-}
+

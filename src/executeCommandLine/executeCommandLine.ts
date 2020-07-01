@@ -1,4 +1,4 @@
-namespace ts {
+
     interface Statistic {
         name: string;
         value: string;
@@ -713,4 +713,4 @@ namespace ts {
 
         return;
     }
-}
+

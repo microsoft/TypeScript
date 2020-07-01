@@ -1,5 +1,10 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, SourceFile, Node, VisitResult, TransformFlags, SyntaxKind, CatchClause } from "../types";
+import { chainBundle } from "./utilities";
+import { visitEachChild, visitNode } from "../visitorPublic";
+import { isBlock } from "../factory/nodeTests";
+
     export function transformES2019(context: TransformationContext) {
         const factory = context.factory;
         return chainBundle(context, transformSourceFile);
@@ -35,4 +40,4 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
     }
-}
+

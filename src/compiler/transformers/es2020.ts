@@ -1,5 +1,15 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, SourceFile, Node, VisitResult, TransformFlags, SyntaxKind, NodeFlags, OptionalChain, BinaryExpression, DeleteExpression, ParenthesizedExpression, Expression, AccessExpression, CallExpression } from "../types";
+import { chainBundle, isSimpleCopiableExpression } from "./utilities";
+import { visitEachChild, visitNode, visitNodes } from "../visitorPublic";
+import { Debug } from "../debug";
+import { isSyntheticReference, isTaggedTemplateExpression, isIdentifier } from "../factory/nodeTests";
+import { isNonNullChain, skipPartiallyEmittedExpressions, isOptionalChain, isExpression, isCallChain } from "../utilitiesPublic";
+import { cast } from "../core";
+import { setOriginalNode } from "../factory/nodeFactory";
+import { skipParentheses } from "../utilities";
+
     export function transformES2020(context: TransformationContext) {
         const {
             factory,
@@ -205,4 +215,4 @@ namespace ts {
                 : factory.updateDeleteExpression(node, visitNode(node.expression, visitor, isExpression));
         }
     }
-}
+

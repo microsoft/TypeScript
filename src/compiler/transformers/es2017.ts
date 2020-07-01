@@ -1,5 +1,19 @@
 /*@internal*/
-namespace ts {
+
+import { ClassDeclaration, MethodDeclaration, GetAccessorDeclaration, SetAccessorDeclaration, ConstructorDeclaration, TransformationContext, NodeCheckFlags, UnderscoreEscapedMap, SourceFile, Node, VisitResult, TransformFlags, SyntaxKind, AwaitExpression, FunctionDeclaration, FunctionExpression, ArrowFunction, ElementAccessExpression, CatchClause, VariableStatement, ForInStatement, ForOfStatement, ForStatement, Expression, Statement, ParameterDeclaration, VariableDeclaration, BindingElement, ForInitializer, VariableDeclarationList, NodeFlags, AccessorDeclaration, FunctionBody, ConciseBody, FunctionLikeDeclaration, ScriptTarget, Block, TypeNode, TypeReferenceSerializationKind, EmitHint, PropertyAccessExpression, CallExpression, GeneratedIdentifierFlags, TextRange, LeftHandSideExpression, NodeFactory, EmitResolver, PropertyAssignment, EmitFlags } from "../types";
+import { getEmitScriptTarget, isEffectiveStrictModeSourceFile, isNodeWithPossibleHoistedDeclaration, createUnderscoreEscapedMap, cloneMap, getFunctionFlags, FunctionFlags, getInitializedVariables, insertStatementsAfterStandardPrologue, hasEntries, getEntityNameFromTypeNode, isSuperProperty } from "../utilities";
+import { chainBundle } from "./utilities";
+import { visitEachChild, visitNode, visitNodes, visitParameterList, visitFunctionBody } from "../visitorPublic";
+import { addEmitHelpers, setSourceMapRange, addEmitHelper, setEmitFlags } from "../factory/emitNode";
+import { isPropertyAccessExpression, isIdentifier, isOmittedExpression, isVariableDeclarationList, isBlock } from "../factory/nodeTests";
+import { Debug } from "../debug";
+import { isForInitializer, isExpression, isStatement, isToken, isModifier, getOriginalNode, isFunctionLike, isConciseBody, isEntityName, unescapeLeadingUnderscores } from "../utilitiesPublic";
+import { setOriginalNode } from "../factory/nodeFactory";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { map, forEach, some, concatenate } from "../core";
+import { getNodeId } from "../checker";
+import { advancedAsyncSuperHelper, asyncSuperHelper } from "../factory/emitHelpers";
+
     type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 
     const enum ES2017SubstitutionFlags {
@@ -822,4 +836,4 @@ namespace ts {
                 ],
                 NodeFlags.Const));
     }
-}
+

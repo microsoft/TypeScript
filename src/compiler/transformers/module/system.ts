@@ -1,5 +1,20 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, StringLiteral, ImportDeclaration, ImportEqualsDeclaration, ExportDeclaration, SyntaxKind, Statement, Identifier, SourceFile, Node, TransformFlags, EmitFlags, ModifierFlags, ObjectLiteralElementLike, Expression, PropertyAssignment, VisitResult, ExportAssignment, FunctionDeclaration, ClassDeclaration, VariableStatement, VariableDeclaration, BindingElement, VariableDeclarationList, NodeFlags, TextRange, MergeDeclarationMarker, EndOfDeclarationMarker, Declaration, ForStatement, ForInStatement, ForOfStatement, DoStatement, WhileStatement, LabeledStatement, WithStatement, SwitchStatement, CaseBlock, CaseClause, DefaultClause, TryStatement, CatchClause, Block, ForInitializer, CaseOrDefaultClause, ImportCall, DestructuringAssignment, EmitHint, ShorthandPropertyAssignment, BinaryExpression, PrefixUnaryExpression, PostfixUnaryExpression, MetaProperty } from "../../types";
+import { ExternalModuleInfo, chainBundle, getOriginalNodeId, collectExternalModuleInfo } from "../utilities";
+import { isEffectiveExternalModule, outFile, getStrictOptionValue, insertStatementsAfterStandardPrologue, isExternalModuleImportEqualsDeclaration, hasSyntacticModifier, isParameterDeclaration, getEmitFlags, getTextOfIdentifierOrLiteral, isDestructuringAssignment, isImportCall, isAssignmentExpression, isAssignmentOperator, isDeclarationNameOfEnumOrNamespace, isImportMeta } from "../../utilities";
+import { tryGetModuleNameFromFile, getExternalModuleNameLiteral, getLocalNameForExternalImport, startOnNewLine, isLocalName, getExternalHelpersModuleName } from "../../factory/utilities";
+import { map, createMap, addRange, forEach, singleOrMany, append, some } from "../../core";
+import { setEmitFlags, moveEmitHelpers, setCommentRange } from "../../factory/emitNode";
+import { setTextRange } from "../../factory/utilitiesPublic";
+import { isExternalModule } from "../../parser";
+import { visitNode, visitNodes, visitEachChild } from "../../visitorPublic";
+import { isStatement, idText, isExpression, isModifier, isClassElement, isBindingPattern, getOriginalNode, isModuleOrEnumDeclaration, isGeneratedIdentifier, isCaseOrDefaultClause } from "../../utilitiesPublic";
+import { Debug } from "../../debug";
+import { isNamedExports, isBlock, isDecorator, isHeritageClause, isOmittedExpression, isIdentifier, isVariableDeclarationList, isCaseBlock, isSpreadElement, isObjectLiteralExpression, isArrayLiteralExpression, isShorthandPropertyAssignment, isPropertyAssignment, isImportClause, isImportSpecifier } from "../../factory/nodeTests";
+import { flattenDestructuringAssignment, FlattenLevel } from "../destructuring";
+import { getNodeId } from "../../checker";
+
     export function transformSystemModule(context: TransformationContext) {
         interface DependencyGroup {
             name: StringLiteral;
@@ -1386,6 +1401,7 @@ namespace ts {
             const savedEnclosingBlockScopedContainer = enclosingBlockScopedContainer;
             enclosingBlockScopedContainer = node;
 
+
             node = factory.updateCaseBlock(
                 node,
                 visitNodes(node.clauses, nestedElementVisitor, isCaseOrDefaultClause)
@@ -1893,4 +1909,4 @@ namespace ts {
             return noSubstitution && node.id && noSubstitution[node.id];
         }
     }
-}
+

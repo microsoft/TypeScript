@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { createMap } from "../../compiler/core";
+import { addToSeen, getContainingFunction, isSuperCall } from "../../compiler/utilities";
+import { getNodeId } from "../../compiler/checker";
+import { SourceFile, ConstructorDeclaration, ExpressionStatement, SyntaxKind, Node, CallExpression } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { isPropertyAccessExpression, isExpressionStatement, isFunctionLike } from "../../../built/local/compiler";
+import { forEachChild } from "../../compiler/parser";
+
     const fixId = "classSuperMustPrecedeThisAccess";
     const errorCodes = [Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];
     registerCodeFix({
@@ -49,4 +58,4 @@ namespace ts.codefix {
                 ? undefined
                 : forEachChild(n, findSuperCall);
     }
-}
+

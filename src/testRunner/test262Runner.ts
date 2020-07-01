@@ -1,4 +1,10 @@
-namespace Harness {
+import { RunnerBase, TestRunnerKind } from "../harness/runnerbase";
+import { Compiler, IO, Baseline, TestCaseParser } from "../harness/harnessIO";
+import { CompilerOptions, ScriptTarget, ModuleKind } from "../compiler/types";
+import { removeFileExtension } from "../compiler/utilities";
+import { map } from "../compiler/core";
+import { normalizePath } from "../compiler/path";
+
     // In harness baselines, null is different than undefined. See `generateActual` in `harness.ts`.
     export class Test262BaselineRunner extends RunnerBase {
         private static readonly basePath = "internal/cases/test262";
@@ -8,10 +14,10 @@ namespace Harness {
             content: IO.readFile(Test262BaselineRunner.helpersFilePath)!,
         };
         private static readonly testFileExtensionRegex = /\.js$/;
-        private static readonly options: ts.CompilerOptions = {
+        private static readonly options: CompilerOptions = {
             allowNonTsExtensions: true,
-            target: ts.ScriptTarget.Latest,
-            module: ts.ModuleKind.CommonJS
+            target: ScriptTarget.Latest,
+            module: ModuleKind.CommonJS
         };
         private static readonly baselineOptions: Baseline.BaselineOptions = {
             Subfolder: "test262",
@@ -34,7 +40,7 @@ namespace Harness {
 
                 before(() => {
                     const content = IO.readFile(filePath)!;
-                    const testFilename = ts.removeFileExtension(filePath).replace(/\//g, "_") + ".test";
+                    const testFilename = removeFileExtension(filePath).replace(/\//g, "_") + ".test";
                     const testCaseContent = TestCaseParser.makeUnitsFromTest(content, testFilename);
 
                     const inputFiles: Compiler.TestFile[] = testCaseContent.testUnitData.map(unit => {
@@ -91,7 +97,7 @@ namespace Harness {
 
         public enumerateTestFiles() {
             // see also: `enumerateTestFiles` in tests/webTestServer.ts
-            return ts.map(this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true }), ts.normalizePath);
+            return map(this.enumerateFiles(Test262BaselineRunner.basePath, Test262BaselineRunner.testFileExtensionRegex, { recursive: true }), normalizePath);
         }
 
         public initializeTests() {
@@ -107,4 +113,4 @@ namespace Harness {
             }
         }
     }
-}
+

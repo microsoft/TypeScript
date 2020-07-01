@@ -1,4 +1,6 @@
-namespace ts {
+import { verifyTsc } from "./helpers";
+import { loadProjectFromFiles } from "../tsbuild/helpers";
+
     describe("unittests:: tsc:: composite::", () => {
         verifyTsc({
             scenario: "composite",
@@ -82,4 +84,4 @@ namespace ts {
             commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "null"],
         });
     });
-}
+

@@ -1,4 +1,16 @@
-namespace ts {
+import { CompilerOptions, CustomTransformers, Diagnostic, CompilerHost, CommandLineOptionOfCustomType } from "../compiler/types";
+import { MapLike } from "../compiler/corePublic";
+import { getDefaultCompilerOptions } from "./services";
+import { hasProperty, createMapFromTemplate, addRange, filter } from "../compiler/core";
+import { transpileOptionValueCompilerOptions, optionDeclarations, parseCustomTypeOption, createCompilerDiagnosticForInvalidCustomType } from "../../built/local/compiler";
+import { createSourceFile } from "../compiler/parser";
+import { getNewLineCharacter, forEachEntry } from "../compiler/utilities";
+import { normalizePath, fileExtensionIs } from "../compiler/path";
+import { Debug } from "../compiler/debug";
+import { createProgram } from "../compiler/program";
+import { cloneCompilerOptions } from "./utilities";
+import { isString } from "util";
+
     export interface TranspileOptions {
         compilerOptions?: CompilerOptions;
         fileName?: string;
@@ -143,4 +155,4 @@ namespace ts {
 
         return options;
     }
-}
+

@@ -1,6 +1,16 @@
 /* @internal */
-namespace ts.GoToDefinition {
-    export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
+
+import { Program, SourceFile, SyntaxKind, SignatureDeclaration, TypeChecker, Type, Node, TypeFlags, IndexKind, SymbolFlags, Declaration, FunctionLikeDeclaration, FileReference, CallLikeExpression } from "../compiler/types";
+import { DefinitionInfo, ScriptElementKind, DefinitionInfoAndBoundSpan } from "./types";
+import { getTouchingPropertyName, isJumpStatementTarget, getTargetLabel, getNameFromPropertyName, createTextSpanFromRange, isNewExpressionTarget, isCallOrNewExpressionTarget, isNameOfFunctionDeclaration, createTextSpanFromNode, isRightSideOfPropertyAccess } from "./utilities";
+import { isJsxOpeningLikeElement, isVariableDeclaration, isPropertyName, isBindingElement, isObjectBindingPattern, isCallLikeExpression, createTextSpan, isPropertyAccessExpression, isClassLike, isConstructorDeclaration, isFunctionLike, getNameOfDeclaration, textRangeContainsPositionInclusive, createTextSpanFromBounds, isFunctionTypeNode } from "../../built/local/compiler";
+import { isRequireCall, isAssignmentExpression, isInJSFile, isAssignmentDeclaration, findAncestor, getInvokedExpression } from "../compiler/utilities";
+import { neverArray, flatMap, first, mapDefined, forEach, filter, map, find, last, tryCast } from "../compiler/core";
+import { getContainingObjectLiteralElement, getPropertySymbolsFromContextualType } from "./services";
+import { Debug } from "../compiler/debug";
+import { getSymbolKind } from "./symbolDisplay";
+
+    export function getDefinitionAtPositionImpl(program: Program, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const reference = getReferenceAtPosition(sourceFile, position, program);
         if (reference) {
             return [getDefinitionInfoForFileReference(reference.fileName, reference.file.fileName)];
@@ -109,7 +119,7 @@ namespace ts.GoToDefinition {
             || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
     }
 
-    export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
+    export function getReferenceAtPositionImpl(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
         const referencePath = findReferenceInPosition(sourceFile.referencedFiles, position);
         if (referencePath) {
             const file = program.getSourceFileFromReference(sourceFile, referencePath);
@@ -133,7 +143,7 @@ namespace ts.GoToDefinition {
     }
 
     /// Goto type
-    export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
+    export function getTypeDefinitionAtPositionImpl(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): readonly DefinitionInfo[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
         if (node === sourceFile) {
             return undefined;
@@ -288,7 +298,7 @@ namespace ts.GoToDefinition {
     /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
     function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo {
         const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-        const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
+        const symbolKind = getSymbolKind(checker, symbol, node);
         const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
         return createDefinitionInfoFromName(checker, declaration, symbolKind, symbolName, containerName);
     }
@@ -357,4 +367,4 @@ namespace ts.GoToDefinition {
                 return false;
         }
     }
-}
+

@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile, SyntaxKind } from "../../compiler/types";
+import { getTokenAtPosition, findChildOfKind } from "../utilities";
+import { cast } from "../../compiler/core";
+import { isLabeledStatement } from "../../../built/local/compiler";
+import { positionsAreOnSameLine } from "../../compiler/utilities";
+import { skipTrivia } from "../../compiler/scanner";
+
     const fixId = "fixUnusedLabel";
     const errorCodes = [Diagnostics.Unused_label.code];
     registerCodeFix({
@@ -22,4 +30,4 @@ namespace ts.codefix {
             : skipTrivia(sourceFile.text, findChildOfKind(labeledStatement, SyntaxKind.ColonToken, sourceFile)!.end, /*stopAfterLineBreak*/ true);
         changes.deleteRange(sourceFile, { pos, end });
     }
-}
+

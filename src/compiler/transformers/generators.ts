@@ -117,8 +117,21 @@
 //  .endtry                       |
 //  .mark END                     | case END:
 
+import { Expression, Statement, Identifier, TransformationContext, LiteralExpression, TextRange, CaseClause, SourceFile, TransformFlags, Node, VisitResult, SyntaxKind, DoStatement, WhileStatement, SwitchStatement, LabeledStatement, FunctionDeclaration, FunctionExpression, AccessorDeclaration, VariableStatement, ForStatement, ForInStatement, BreakStatement, ContinueStatement, ReturnStatement, BinaryExpression, ConditionalExpression, YieldExpression, ArrayLiteralExpression, ObjectLiteralExpression, ElementAccessExpression, CallExpression, NewExpression, Block, EmitFlags, PropertyAccessExpression, LeftHandSideExpression, NodeArray, ObjectLiteralElementLike, ExpressionStatement, IfStatement, WithStatement, ThrowStatement, TryStatement, VariableDeclarationList, InitializedVariableDeclaration, EmitHint, VariableDeclaration, NumericLiteral } from "../types";
+import { getEmitScriptTarget, Mutable, insertStatementsAfterStandardPrologue, getEmitFlags, getInitializedVariables, getExpressionAssociativity, Associativity, isLogicalOperator, setParent, isImportCall } from "../utilities";
+import { chainBundle, isCompoundAssignment, getNonAssignmentOperatorForCompoundAssignment, getOriginalNodeId } from "./utilities";
+import { visitEachChild, visitParameterList, visitNode, visitNodes } from "../visitorPublic";
+import { addEmitHelpers, setSourceMapRange, setCommentRange, addSyntheticTrailingComment, setEmitFlags } from "../factory/emitNode";
+import { isFunctionLikeDeclaration, isLeftHandSideExpression, isExpression, isObjectLiteralElementLike, isStatement, idText, isGeneratedIdentifier, getOriginalNode } from "../utilitiesPublic";
+import { Debug } from "../debug";
+import { setOriginalNode } from "../factory/nodeFactory";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { map, reduceLeft, forEach, lastOrUndefined, createMap } from "../core";
+import { isBinaryExpression, isBlock, isVariableDeclarationList, isIdentifier } from "../factory/nodeTests";
+import { startOnNewLine, createExpressionForObjectLiteralElementLike } from "../factory/utilities";
+
 /*@internal*/
-namespace ts {
+
     type Label = number;
 
     const enum OpCode {
@@ -3155,4 +3168,4 @@ namespace ts {
             );
         }
     }
-}
+

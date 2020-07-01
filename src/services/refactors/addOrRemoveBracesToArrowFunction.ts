@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.refactor {
+
+import { registerRefactor } from "../refactorProvider";
+import { ArrowFunction, Expression, ReturnStatement, ConciseBody, SyntaxKind, SourceFile } from "../../compiler/types";
+import { RefactorContext, ApplicableRefactorInfo, RefactorEditInfo } from "../types";
+import { neverArray, first } from "../../compiler/core";
+import { factory, isArrowFunction, isExpression, isReturnStatement } from "../../../built/local/compiler";
+import { suppressLeadingAndTrailingTrivia, copyLeadingComments, needsParentheses, copyTrailingAsLeadingComments, copyTrailingComments, getTokenAtPosition, rangeContainsRange } from "../utilities";
+import { Debug } from "../../compiler/debug";
+import { getContainingFunction, getLocaleSpecificMessage } from "../../compiler/utilities";
+
     const refactorName = "Add or remove braces in an arrow function";
     const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
     const addBracesActionName = "Add braces to arrow function";
@@ -142,4 +151,4 @@ namespace ts.refactor {
         }
         return undefined;
     }
-}
+

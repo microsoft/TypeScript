@@ -1,4 +1,11 @@
-namespace Harness.Parallel.Host {
+import { configOption, runners, workerCount, TestConfig, globalTimeout, taskConfigsFolder, noColors, runUnitTests } from "../runner";
+import { Task, ErrorInfo, TestInfo, TaskTimeout, ParallelClientMessage, ParallelHostMessage, shimNoopTestInterface } from "./shared";
+import { createMap } from "../../compiler/core";
+import { IO, lightMode } from "../../harness/harnessIO";
+import { TestRunnerKind } from "../../harness/runnerbase";
+import { combinePaths } from "../../compiler/path";
+import { Debug } from "../../compiler/debug";
+
     export function start() {
         const Mocha = require("mocha") as typeof import("mocha");
         const Base = Mocha.reporters.Base;
@@ -24,7 +31,7 @@ namespace Harness.Parallel.Host {
         let totalCost = 0;
 
         class RemoteSuite extends Mocha.Suite {
-            suiteMap = ts.createMap<RemoteSuite>();
+            suiteMap = createMap<RemoteSuite>();
             constructor(title: string) {
                 super(title);
                 this.pending = false;
@@ -251,7 +258,7 @@ namespace Harness.Parallel.Host {
             for (let i = 0; i < workerCount; i++) {
                 // TODO: Just send the config over the IPC channel or in the command line arguments
                 const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests: Harness.runUnitTests, stackTraceLimit: Harness.stackTraceLimit, timeout: globalTimeout }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
-                const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
+                const configPath = combinePaths(taskConfigsFolder, `task-config${i}.json`);
                 IO.writeFile(configPath, JSON.stringify(config));
                 const worker: Worker = {
                     process: fork(__filename, [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] }),
@@ -407,7 +414,7 @@ namespace Harness.Parallel.Host {
                     }
                     else { // Out of batches, send off just one test
                         const payload = tasks.pop()!;
-                        ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
+                        Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
                         worker.currentTasks = [payload];
                         worker.process.send({ type: "test", payload });
                     }
@@ -626,4 +633,4 @@ namespace Harness.Parallel.Host {
         // eslint-disable-next-line no-restricted-globals
         setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
     }
-}
+

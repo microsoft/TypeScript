@@ -1,14 +1,20 @@
 /**
  * Test harness compiler functionality.
  */
-namespace compiler {
+
+import { ParsedCommandLine, Diagnostic, CompilerOptions, Program, EmitResult, Extension, ScriptTarget, NewLineKind } from "../compiler/types";
+import { readConfigFile, parseJsonConfigFileContent } from "../../built/local/compiler";
+import { fileExtensionIs } from "../compiler/path";
+import { getOutputExtension } from "../compiler/emitter";
+import { createProgram, getPreEmitDiagnostics } from "../compiler/program";
+export namespace compiler {
     export interface Project {
         file: string;
-        config?: ts.ParsedCommandLine;
-        errors?: ts.Diagnostic[];
+        config?: ParsedCommandLine;
+        errors?: Diagnostic[];
     }
 
-    export function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: ts.CompilerOptions): Project | undefined {
+    export function readProject(host: fakes.ParseConfigHost, project: string | undefined, existingOptions?: CompilerOptions): Project | undefined {
         if (project) {
             project = vpath.isTsConfigFile(project) ? project : vpath.combine(project, "tsconfig.json");
         }
@@ -23,13 +29,13 @@ namespace compiler {
             // project = vpath.resolve(host.vfs.currentDirectory, project);
 
             // read the config file
-            const readResult = ts.readConfigFile(project, path => host.readFile(path));
+            const readResult = readConfigFile(project, path => host.readFile(path));
             if (readResult.error) {
                 return { file: project, errors: [readResult.error] };
             }
 
             // parse the config file
-            const config = ts.parseJsonConfigFileContent(readResult.config, host, vpath.dirname(project), existingOptions);
+            const config = parseJsonConfigFileContent(readResult.config, host, vpath.dirname(project), existingOptions);
             return { file: project, errors: config.errors, config };
         }
     }
@@ -46,10 +52,10 @@ namespace compiler {
 
     export class CompilationResult {
         public readonly host: fakes.CompilerHost;
-        public readonly program: ts.Program | undefined;
-        public readonly result: ts.EmitResult | undefined;
-        public readonly options: ts.CompilerOptions;
-        public readonly diagnostics: readonly ts.Diagnostic[];
+        public readonly program: Program | undefined;
+        public readonly result: EmitResult | undefined;
+        public readonly options: CompilerOptions;
+        public readonly diagnostics: readonly Diagnostic[];
         public readonly js: ReadonlyMap<string, documents.TextDocument>;
         public readonly dts: ReadonlyMap<string, documents.TextDocument>;
         public readonly maps: ReadonlyMap<string, documents.TextDocument>;
@@ -58,7 +64,7 @@ namespace compiler {
         private _inputs: documents.TextDocument[] = [];
         private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
 
-        constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: readonly ts.Diagnostic[]) {
+        constructor(host: fakes.CompilerHost, options: CompilerOptions, program: Program | undefined, result: EmitResult | undefined, diagnostics: readonly Diagnostic[]) {
             this.host = host;
             this.program = program;
             this.result = result;
@@ -70,7 +76,7 @@ namespace compiler {
             const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             for (const document of this.host.outputs) {
-                if (vpath.isJavaScript(document.file) || ts.fileExtensionIs(document.file, ts.Extension.Json)) {
+                if (vpath.isJavaScript(document.file) || fileExtensionIs(document.file, Extension.Json)) {
                     js.set(document.file, document);
                 }
                 else if (vpath.isDeclaration(document.file)) {
@@ -118,7 +124,7 @@ namespace compiler {
                             const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
                             this._inputs.push(input);
                             if (!vpath.isDeclaration(sourceFile.fileName)) {
-                                const extname = ts.getOutputExtension(sourceFile, this.options);
+                                const extname = getOutputExtension(sourceFile, this.options);
                                 const outputs: CompilationOutput = {
                                     inputs: [input],
                                     js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
@@ -185,7 +191,7 @@ namespace compiler {
         public getSourceMapRecord(): string | undefined {
             const maps = this.result!.sourceMaps;
             if (maps && maps.length > 0) {
-                return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
+                return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, Array.from(this.js.values()).filter(d => !fileExtensionIs(d.file, Extension.Json)), Array.from(this.dts.values()));
             }
         }
 
@@ -226,7 +232,7 @@ namespace compiler {
             else {
                 let count = this.js.size;
                 this.js.forEach(document => {
-                    if (ts.fileExtensionIs(document.file, ts.Extension.Json)) {
+                    if (fileExtensionIs(document.file, Extension.Json)) {
                         count--;
                     }
                 });
@@ -235,7 +241,7 @@ namespace compiler {
         }
     }
 
-    export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions): CompilationResult {
+    export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: CompilerOptions): CompilationResult {
         if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
             const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
             if (project) {
@@ -251,14 +257,14 @@ namespace compiler {
         }
 
         // establish defaults (aligns with old harness)
-        if (compilerOptions.target === undefined) compilerOptions.target = ts.ScriptTarget.ES3;
-        if (compilerOptions.newLine === undefined) compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+        if (compilerOptions.target === undefined) compilerOptions.target = ScriptTarget.ES3;
+        if (compilerOptions.newLine === undefined) compilerOptions.newLine = NewLineKind.CarriageReturnLineFeed;
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
-        const program = ts.createProgram(rootFiles || [], compilerOptions, host);
+        const program = createProgram(rootFiles || [], compilerOptions, host);
         const emitResult = program.emit();
-        const errors = ts.getPreEmitDiagnostics(program);
+        const errors = getPreEmitDiagnostics(program);
         return new CompilationResult(host, compilerOptions, program, emitResult, errors);
     }
 }

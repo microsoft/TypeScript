@@ -1,4 +1,6 @@
-namespace ts {
+import { loadProjectFromDisk, TscIncremental, verifyTscSerializedIncrementalEdits } from "./helpers";
+import { noChangeRun, BuildKind } from "../tsc/helpers";
+
     describe("unittests:: tsbuild - with noEmitOnError", () => {
         let projFs: vfs.FileSystem;
         before(() => {
@@ -45,4 +47,4 @@ const a: string = "hello";`, "utf-8"),
 const a: string = 10;`, "utf-8")
         );
     });
-}
+

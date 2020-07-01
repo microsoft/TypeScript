@@ -1,4 +1,6 @@
-namespace ts {
+import { SourceFile, Program, WriteFileCallback, CompilerOptions, CancellationToken, Diagnostic, DiagnosticWithLocation, CustomTransformers, EmitResult, CompilerHost, ProjectReference } from "./types";
+import { ReusableBuilderProgramState, createBuilderProgram, BuilderProgramKind, getBuilderCreationParameters, createRedirectedBuilderProgram } from "./builder";
+
     export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
 
     export interface BuilderProgramHost {
@@ -161,4 +163,4 @@ namespace ts {
         const { newProgram, configFileParsingDiagnostics: newConfigFileParsingDiagnostics } = getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences);
         return createRedirectedBuilderProgram({ program: newProgram, compilerOptions: newProgram.getCompilerOptions() }, newConfigFileParsingDiagnostics);
     }
-}
+

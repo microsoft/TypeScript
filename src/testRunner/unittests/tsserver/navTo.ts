@@ -1,4 +1,10 @@
-namespace ts.projectSystem {
+import { protocol, createSession, openFilesForSession, makeSessionRequest } from "./helpers";
+import { find } from "../../../compiler/core";
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile } from "../../../../built/local/harness";
+import { CommandNames } from "../../../server/session";
+import { assert } from "console";
+
     describe("unittests:: tsserver:: navigate-to for javascript project", () => {
         function findNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
             return find(items, item => item.name === itemName && item.kind === itemKind);
@@ -93,4 +99,4 @@ export const ghijkl = a.abcdef;`
             assert.isTrue(fooItem?.kindModifiers?.includes("deprecated"));
         });
     });
-}
+

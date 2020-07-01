@@ -1,4 +1,11 @@
-namespace ts.server {
+import { InstallPackageOptions, ApplyCodeActionCommandResult } from "../services/types";
+import { Path, TypeAcquisition, CompilerOptions } from "../compiler/types";
+import { Project } from "./project";
+import { SortedReadonlyArray } from "../compiler/corePublic";
+import { ProjectService } from "./editorServices";
+import { returnFalse, notImplemented, noop, createMap, arrayIsEqualTo, sort } from "../compiler/core";
+import { emptyArray } from "./utilitiesPublic";
+
     export interface InstallPackageOptionsWithProject extends InstallPackageOptions {
         projectName: string;
         projectRootPath: Path;
@@ -140,4 +147,4 @@ namespace ts.server {
             this.installer.onProjectClosed(project);
         }
     }
-}
+

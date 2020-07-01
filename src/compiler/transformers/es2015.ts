@@ -1,5 +1,21 @@
 /*@internal*/
-namespace ts {
+
+import { Identifier, ParameterDeclaration, IterationStatement, LabeledStatement, Statement, TransformationContext, SourceFile, VariableDeclaration, Node, SyntaxKind, ReturnStatement, TransformFlags, EmitFlags, VisitResult, ClassDeclaration, ClassExpression, FunctionDeclaration, ArrowFunction, FunctionExpression, VariableDeclarationList, SwitchStatement, CaseBlock, Block, BreakOrContinueStatement, DoStatement, WhileStatement, ForStatement, ForInStatement, ForOfStatement, ExpressionStatement, ObjectLiteralExpression, CatchClause, ShorthandPropertyAssignment, ComputedPropertyName, ArrayLiteralExpression, CallExpression, NewExpression, ParenthesizedExpression, BinaryExpression, LiteralExpression, StringLiteral, NumericLiteral, TaggedTemplateExpression, TemplateExpression, YieldExpression, SpreadElement, MetaProperty, MethodDeclaration, AccessorDeclaration, VariableStatement, GeneratedIdentifierFlags, Expression, ModifierFlags, ExpressionWithTypeArguments, ConstructorDeclaration, FunctionBody, IfStatement, FunctionLikeDeclaration, BindingPattern, SemicolonClassElement, LeftHandSideExpression, AllAccessorDeclarations, ObjectLiteralElementLike, TextRange, NodeFlags, NodeCheckFlags, CaseClause, BindingElement, PropertyAssignment, NodeArray, __String, TokenFlags, EmitHint, NamedDeclaration, Declaration, PrimaryExpression, ClassLikeDeclaration, ClassElement } from "../types";
+import { append, addRange, concatenate, singleOrMany, cast, lastOrUndefined, some, arrayIsEqualTo, flatMap, last, createMap, firstOrUndefined, map, first, filter, tryCast, elementAt, flatten, spanMap, every, reduceLeft, singleOrUndefined } from "../core";
+import { chainBundle } from "./utilities";
+import { addEmitHelpers, setEmitFlags, addSyntheticLeadingComment, setCommentRange, getCommentRange, setSourceMapRange, getSourceMapRange, moveSyntheticComments, setTokenSourceMapRange } from "../factory/emitNode";
+import { isReturnStatement, isIfStatement, isWithStatement, isSwitchStatement, isCaseBlock, isCaseClause, isDefaultClause, isTryStatement, isCatchClause, isLabeledStatement, isBlock, isExpressionStatement, isBinaryExpression, isCallExpression, isPrivateIdentifier, isComputedPropertyName, isIdentifier, isVariableDeclarationList, isForStatement, isOmittedExpression, isSpreadElement, isArrowFunction, isVariableStatement, isFunctionExpression, isArrayLiteralExpression } from "../factory/nodeTests";
+import { isIterationStatement, isStatement, isExpression, idText, isBindingPattern, isPropertyName, unescapeLeadingUnderscores, isModifier, isClassLike, isObjectLiteralElementLike, isForInitializer, getCombinedNodeFlags, isFunctionLike, getParseTreeNode, getNameOfDeclaration, isClassElement } from "../utilitiesPublic";
+import { getEmitFlags, hasSyntacticModifier, getClassExtendsHeritageElement, setTextRangeEnd, createTokenRange, setTextRangePos, insertStatementsAfterStandardPrologue, getFirstConstructorWithBody, isSuperCall, insertStatementAfterCustomPrologue, setParent, insertStatementsAfterCustomPrologue, getAllAccessorDeclarations, isHoistedFunction, isHoistedVariableStatement, moveRangeEnd, nodeIsSynthesized, rangeEndIsOnSameLineAsRangeStart, isDestructuringAssignment, createRange, unwrapInnermostStatementOfLabel, moveRangePos, isSuperProperty, isAssignmentExpression, getEnclosingBlockScopeContainer } from "../utilities";
+import { visitEachChild, visitNodes, visitNode, visitParameterList } from "../visitorPublic";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { setOriginalNode } from "../factory/nodeFactory";
+import { startOnNewLine, skipOuterExpressions, createMemberAccessForPropertyName, createExpressionForPropertyName, isInternalName } from "../factory/utilities";
+import { skipTrivia } from "../scanner";
+import { flattenDestructuringBinding, FlattenLevel, flattenDestructuringAssignment } from "./destructuring";
+import { Debug } from "../debug";
+import { processTaggedTemplateExpression, ProcessLevel } from "./taggedTemplate";
+
     const enum ES2015SubstitutionFlags {
         /** Enables substitutions for captured `this` */
         CapturedThis = 1 << 0,
@@ -4319,4 +4335,4 @@ namespace ts {
             return isIdentifier(expression) && expression.escapedText === "arguments";
         }
     }
-}
+

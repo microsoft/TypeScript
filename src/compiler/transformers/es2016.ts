@@ -1,5 +1,12 @@
 /*@internal*/
-namespace ts {
+
+import { TransformationContext, SourceFile, Node, VisitResult, TransformFlags, SyntaxKind, BinaryExpression, Expression } from "../types";
+import { chainBundle } from "./utilities";
+import { visitEachChild, visitNode } from "../visitorPublic";
+import { isExpression } from "../utilitiesPublic";
+import { isElementAccessExpression, isPropertyAccessExpression } from "../factory/nodeTests";
+import { setTextRange } from "../factory/utilitiesPublic";
+
     export function transformES2016(context: TransformationContext) {
         const {
             factory,
@@ -102,4 +109,4 @@ namespace ts {
             return setTextRange(factory.createGlobalMethodCall("Math", "pow", [left, right]), node);
         }
     }
-}
+

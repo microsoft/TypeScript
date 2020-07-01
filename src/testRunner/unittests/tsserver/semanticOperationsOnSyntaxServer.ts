@@ -1,4 +1,10 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile, checkWatchedFiles, checkWatchedDirectories } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, checkNumberOfProjects, checkProjectActualFiles, protocol, protocolFileLocationFromSubstring } from "./helpers";
+import { assert } from "console";
+import { neverArray } from "../../../compiler/core";
+import { ScriptElementKind } from "../../../services/types";
+
     describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
         function setup() {
             const file1: File = {
@@ -96,4 +102,4 @@ class c { prop = "hello"; foo() { return this.prop; } }`
             assert.isTrue(hasException);
         });
     });
-}
+

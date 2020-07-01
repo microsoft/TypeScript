@@ -1,5 +1,9 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction } from "../codeFixProvider";
+import { SourceFile, Program, VariableStatement } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+
     const fixId = "fixConvertConstToLet";
     const errorCodes = [Diagnostics.Cannot_assign_to_0_because_it_is_a_constant.code];
 
@@ -29,4 +33,4 @@ namespace ts.codefix {
         const start = variableStatement.getStart();
         changes.replaceRangeWithText(sourceFile, { pos: start, end: start + 5 }, "let");
     }
-}
+

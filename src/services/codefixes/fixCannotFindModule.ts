@@ -1,5 +1,13 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { Debug } from "../../compiler/debug";
+import { InstallPackageAction, LanguageServiceHost } from "../types";
+import { SourceFile } from "../../compiler/types";
+import { cast } from "../../compiler/core";
+import { getTokenAtPosition } from "../utilities";
+import { isStringLiteral, parsePackageName, isExternalModuleNameRelative, getTypesPackageName } from "../../../built/local/compiler";
+
     const fixName = "fixCannotFindModule";
     const fixIdInstallTypesPackage = "installTypesPackage";
 
@@ -54,4 +62,4 @@ namespace ts.codefix {
             ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
             : (host.isKnownTypesPackageName!(packageName) ? getTypesPackageName(packageName) : undefined); // TODO: GH#18217
     }
-}
+

@@ -1,5 +1,14 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { symbolName, isJsxAttribute, isPropertyAccessExpression, isIdentifierOrPrivateIdentifier, isImportSpecifier, isIdentifier, isImportDeclaration, isJsxOpeningLikeElement, isNamedDeclaration, isPrivateIdentifier, factory, isStringLiteralLike } from "../../../built/local/compiler";
+import { SourceFile, Node, NodeFlags, ScriptTarget, SymbolFlags, ImportDeclaration } from "../../compiler/types";
+import { CodeFixContextBase } from "../types";
+import { getTokenAtPosition, getMeaningFromLocation, SemanticMeaning } from "../utilities";
+import { Debug } from "../../compiler/debug";
+import { findAncestor, getTextOfNode, getResolvedModule } from "../../compiler/utilities";
+import { isIdentifierText } from "../../compiler/scanner";
+
     const fixId = "fixSpelling";
     const errorCodes = [
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
@@ -115,4 +124,4 @@ namespace ts.codefix {
 
         return context.program.getSourceFile(resolvedModule.resolvedFileName);
     }
-}
+

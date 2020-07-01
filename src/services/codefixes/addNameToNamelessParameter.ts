@@ -1,5 +1,11 @@
 /* @internal */
-namespace ts.codefix {
+
+import { registerCodeFix, createCodeFixAction, codeFixAll } from "../codeFixProvider";
+import { SourceFile } from "../../compiler/types";
+import { getTokenAtPosition } from "../utilities";
+import { isIdentifier, isParameter, factory } from "../../../built/local/compiler";
+import { Debug } from "../../compiler/debug";
+
     const fixId = "addNameToNamelessParameter";
     const errorCodes = [Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1.code];
     registerCodeFix({
@@ -34,4 +40,4 @@ namespace ts.codefix {
             param.initializer);
         changeTracker.replaceNode(sourceFile, token, replacement);
     }
-}
+

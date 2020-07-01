@@ -1,4 +1,7 @@
-namespace ts {
+import { ShimCollections } from "../../../built/local/shims";
+import { assert } from "console";
+import { arrayFrom } from "../../compiler/core";
+
     describe("unittests:: createSetShim", () => {
         const stringKeys = [
             "1",
@@ -122,9 +125,9 @@ namespace ts {
                 I extends undefined ? undefined :
                 never>;
             function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
-                // override `ts.getIterator` with a version that allows us to iterate over a `SetShim` in an environment with a native `Set`.
+                // override `getIterator` with a version that allows us to iterate over a `SetShim` in an environment with a native `Set`.
                 if (iterable instanceof SetShim) return iterable.values();
-                return ts.getIterator(iterable);
+                return getIterator(iterable);
             }
 
             SetShim = ShimCollections.createSetShim(getIterator);
@@ -306,4 +309,4 @@ namespace ts {
             assert.deepEqual(actual, [["c", "c"], ["a", "a"]]);
         });
     });
-}
+

@@ -1,4 +1,6 @@
-namespace ts {
+import { loadProjectFromDisk } from "./helpers";
+import { verifyTsc } from "../tsc/helpers";
+
     describe("unittests:: tsbuild - empty files option in tsconfig", () => {
         let projFs: vfs.FileSystem;
         before(() => {
@@ -22,4 +24,4 @@ namespace ts {
             commandLineArgs: ["--b", "/src/with-references"],
         });
     });
-}
+

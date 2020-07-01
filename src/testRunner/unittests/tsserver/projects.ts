@@ -1,4 +1,17 @@
-namespace ts.projectSystem {
+import { File } from "../../../harness/vfsUtil";
+import { createServerHost, libFile, checkWatchedFiles } from "../../../../built/local/harness";
+import { createSession, openFilesForSession, checkNumberOfInferredProjects, checkProjectRootFiles, checkProjectActualFiles, makeSessionRequest, verifyDiagnostics, verifyNoDiagnostics, createProjectService, configuredProjectAt, checkNumberOfConfiguredProjects, toExternalFiles, checkNumberOfProjects, customTypesMap, protocol, toExternalFile, createHasErrorMessageLogger, closeFilesForSession, verifyGetErrRequestNoErrors } from "./helpers";
+import { commonFile2, commonFile1 } from "../tscWatch/helpers";
+import { assert } from "console";
+import { noop, singleIterator, returnFalse, notImplemented, neverArray, removeMinAndVersionNumbers, mapDefined } from "../../../compiler/core";
+import { emptyOptions, ScriptElementKind } from "../../../services/types";
+import { ScriptKind, ScriptTarget, Path } from "../../../compiler/types";
+import { CommandNames } from "../../../server/session";
+import { combinePaths, getDirectoryPath, normalizePath } from "../../../compiler/path";
+import { createTextSpan } from "../../../../built/local/compiler";
+import { getSnapshotText } from "../../../services/utilities";
+import { Debug } from "../../../compiler/debug";
+
     describe("unittests:: tsserver:: Projects", () => {
         it("handles the missing files - that were added to program because they were added with ///<ref", () => {
             const file1: File = {
@@ -1615,4 +1628,4 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 0);
         });
     });
-}
+

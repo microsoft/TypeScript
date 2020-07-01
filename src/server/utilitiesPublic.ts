@@ -1,4 +1,10 @@
-namespace ts.server {
+import { SortedReadonlyArray, SortedArray } from "../compiler/corePublic";
+import { Project } from "./project";
+import { TypeAcquisition, Path } from "../compiler/types";
+import { DiscoverTypings } from "../jsTyping/types";
+import { normalizePath, isRootedDiskPath, getNormalizedAbsolutePath } from "../compiler/path";
+import { createMap } from "../compiler/core";
+
     export enum LogLevel {
         terse,
         normal,
@@ -125,4 +131,4 @@ namespace ts.server {
     export function createSortedArray<T>(): SortedArray<T> {
         return [] as any as SortedArray<T>; // TODO: GH#19873
     }
-}
+

@@ -1,5 +1,12 @@
 /* @internal */
-namespace ts.codefix {
+
+import { ParameterPropertyDeclaration, isClassLike, isIdentifier, isStringLiteral, isParameterPropertyDeclaration, isPropertyDeclaration, isPropertyAssignment, factory, isElementAccessExpression, isPropertyAccessExpression, isFunctionLike } from "../../../built/local/compiler";
+import { PropertyDeclaration, PropertyAssignment, Identifier, StringLiteral, ClassLikeDeclaration, ObjectLiteralExpression, TypeNode, SourceFile, ModifiersArray, DeclarationName, Node, ModifierFlags, SyntaxKind, AccessorDeclaration, ConstructorDeclaration, TypeChecker, SymbolFlags, InterfaceDeclaration } from "../../compiler/types";
+import { FileTextChanges } from "../types";
+import { suppressLeadingAndTrailingTrivia, getTokenAtPosition, nodeOverlapsWithStartEnd, startsWithUnderscore, getUniqueName } from "../utilities";
+import { getEffectiveModifierFlags, isSourceFileJS, getFirstConstructorWithBody, findAncestor, getLocaleSpecificMessage, hasStaticModifier, hasEffectiveReadonlyModifier, getTypeAnnotationNode, isWriteAccess, getClassExtendsHeritageElement } from "../../compiler/utilities";
+import { cast, find } from "../../compiler/core";
+
     type AcceptedDeclaration = ParameterPropertyDeclaration | PropertyDeclaration | PropertyAssignment;
     type AcceptedNameType = Identifier | StringLiteral;
     type ContainerDeclaration = ClassLikeDeclaration | ObjectLiteralExpression;
@@ -267,4 +274,4 @@ namespace ts.codefix {
     }
 
     export type ClassOrInterface = ClassLikeDeclaration | InterfaceDeclaration;
-}
+

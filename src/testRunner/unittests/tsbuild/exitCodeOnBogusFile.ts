@@ -1,4 +1,6 @@
-namespace ts {
+import { verifyTsc } from "../tsc/helpers";
+import { loadProjectFromFiles } from "./helpers";
+
     // https://github.com/microsoft/TypeScript/issues/33849
     describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {
         verifyTsc({
@@ -8,4 +10,4 @@ namespace ts {
             commandLineArgs: ["-b", "bogus.json"]
         });
     });
-}
+

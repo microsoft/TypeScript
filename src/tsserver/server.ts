@@ -1,4 +1,23 @@
-namespace ts.server {
+import { MapLike, versionMajorMinor, SortedReadonlyArray, version } from "../compiler/corePublic";
+import { normalizeSlashes, combinePaths, getDirectoryPath, directorySeparator, getRootLength } from "../compiler/path";
+import { Debug, LogLevel } from "../compiler/debug";
+import { noop, createMap, createMapFromTemplate, assertType, unorderedRemoveItem, toFileNameLowerCase } from "../compiler/core";
+import { Msg, createInstallTypingsRequest, emptyArray } from "../../built/local/server";
+import { perfLogger } from "../compiler/perfLogger";
+import { nowString, Arguments, EventTypesRegistry, ActionPackageInstalled, EventInitializationFailed, EventBeginInstallTypes, EventEndInstallTypes, ActionInvalidate, ActionSet, findArgument, hasArgument } from "../jsTyping/shared";
+import { ITypingsInstaller, InstallPackageOptionsWithProject, nullTypingsInstaller } from "../server/typingsCache";
+import { ProjectService } from "../server/editorServices";
+import { ApplyCodeActionCommandResult } from "../services/types";
+import { ServerHost } from "../server/types";
+import { Event } from "../server/protocol";
+import { InstallPackageRequest, TypingInstallerRequestUnion, TypesRegistryResponse, PackageInstalledResponse, SetTypings, InvalidateCachedTypings, BeginInstallTypes, EndInstallTypes, InitializationFailedResponse } from "../jsTyping/types";
+import { Project } from "../server/project";
+import { TypeAcquisition, CharacterCodes, WatchOptions, RequireResult } from "../compiler/types";
+import { formatMessage, stripQuotes } from "../compiler/utilities";
+import { toEvent, ServerCancellationToken, nullCancellationToken, Session } from "../server/session";
+import { WatchedFile, missingFileModifiedTime, FileWatcherEventKind, onWatchedFileStat, FileWatcherCallback, sys, getNodeMajorVersion, FileWatcher, DirectoryWatcherCallback, setStackTraceLimit } from "../compiler/sys";
+import { resolveJSModule, validateLocaleAndSetLanguage } from "../../built/local/compiler";
+
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
         execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
@@ -989,4 +1008,4 @@ namespace ts.server {
     console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Info);
     console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
     console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
-}
+

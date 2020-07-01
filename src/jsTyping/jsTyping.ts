@@ -1,6 +1,15 @@
 /* @internal */
-namespace ts.JsTyping {
 
+import { MapLike, versionMajorMinor, Push } from "../compiler/corePublic";
+import { Version } from "../compiler/semver";
+import { getProperty, createMapFromTemplate, createMap, mapDefined, deduplicate, equateStringsCaseSensitive, compareStringsCaseSensitive, forEach, flatMap, getOwnKeys, removeMinAndVersionNumbers, some, filter } from "../compiler/core";
+import { arrayToSet, hasJSFileExtension, removeFileExtension } from "../compiler/utilities";
+import { Path, TypeAcquisition, Extension, CharacterCodes } from "../compiler/types";
+import { readConfigFile } from "../../built/local/compiler";
+import { normalizePath, getDirectoryPath, combinePaths, getBaseFileName, fileExtensionIs, getNormalizedAbsolutePath } from "../compiler/path";
+import { Debug } from "../compiler/debug";
+
+export namespace JsTyping {
     export interface TypingResolutionHost {
         directoryExists(path: string): boolean;
         fileExists(fileName: string): boolean;

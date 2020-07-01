@@ -1,4 +1,9 @@
-namespace ts {
+import { CompilerOptions, NewLineKind } from "../../../compiler/types";
+import { IScriptSnapshot, ScriptSnapshot, LanguageServiceHost } from "../../../services/types";
+import { find, map } from "../../../compiler/core";
+import { createLanguageService } from "../../../services/services";
+import { assert } from "console";
+
     describe("unittests:: services:: hostNewLineSupport", () => {
         function testLSWithFiles(settings: CompilerOptions, files: Harness.Compiler.TestFile[]) {
             function snapFor(path: string): IScriptSnapshot | undefined {
@@ -68,4 +73,4 @@ namespace ts {
                 { newLine: NewLineKind.LineFeed });
         });
     });
-}
+

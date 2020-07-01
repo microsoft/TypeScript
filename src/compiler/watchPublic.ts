@@ -1,4 +1,19 @@
-namespace ts {
+import { CompilerOptions, CompilerHost, Diagnostic, ProjectReference, ResolvedProjectReference, ResolvedModule, ResolvedTypeReferenceDirective, WatchOptions, FileExtensionInfo, ParsedCommandLine, SourceFile, Path, ConfigFileSpecs, HasInvalidatedResolution, ScriptTarget, DiagnosticMessage, WatchDirectoryFlags } from "./types";
+import { outFile, getNewLineCharacter, clearMap, closeFileWatcher, changesAffectModuleResolution, createCompilerDiagnostic } from "./utilities";
+import { getTsBuildInfoEmitOutputFilePath, getBuildInfo } from "./emitter";
+import { createBuildProgramUsingProgramBuildInfo } from "./builder";
+import { sys, FileWatcherCallback, FileWatcher, DirectoryWatcherCallback, System, PollingInterval, FileWatcherEventKind } from "./sys";
+import { createCompilerHostWorker, changeCompilerHostLikeToUseCache, parseConfigHostFromCompilerHostLike, isProgramUptoDate, getConfigFileParsingDiagnostics } from "./program";
+import { maybeBind, createMap, createGetCanonicalFileName, returnFalse, createMapFromTemplate } from "./core";
+import { setGetSourceFileAsHashVersioned, createWatchCompilerHostOfFilesAndCompilerOptions, createWatchCompilerHostOfConfigFile, createWatchFactory, WatchType, createCompilerHostFromProgramHost } from "./watch";
+import { toPath, getDirectoryPath, getNormalizedAbsolutePath } from "./path";
+import { BuilderProgram, EmitAndSemanticDiagnosticsBuilderProgram, createEmitAndSemanticDiagnosticsBuilderProgram } from "./builderPublic";
+import { ConfigFileDiagnosticsReporter, DiagnosticReporter, getFileNamesFromConfigSpecs, updateErrorForNoInputFiles, getParsedCommandLineOfConfigFile, canJsonReportNoInputFiles } from "./commandLineParser";
+import { ConfigFileProgramReloadLevel, WildcardDirectoryWatcher, createCachedDirectoryStructureHost, DirectoryStructureHost, closeFileWatcherOf, updateMissingFilePathsWatch, updateWatchingWildcardDirectories, isIgnoredFileFromWildCardWatching } from "./watchUtilities";
+import { Debug } from "./debug";
+import { ResolutionCacheHost, createResolutionCache } from "./resolutionCache";
+import { perfLogger } from "./perfLogger";
+
     export interface ReadBuildProgramHost {
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
@@ -769,4 +784,4 @@ namespace ts {
             );
         }
     }
-}
+

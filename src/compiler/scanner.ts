@@ -1,4 +1,9 @@
-namespace ts {
+import { DiagnosticMessage, SyntaxKind, TokenFlags, CommentDirective, JsxTokenSyntaxKind, JSDocSyntaxKind, ScriptTarget, LanguageVariant, KeywordSyntaxKind, CharacterCodes, SourceFileLike, LineAndCharacter, CommentKind, CommentRange, CommentDirectiveType } from "./types";
+import { MapLike } from "./corePublic";
+import { createMapFromTemplate, arraysEqual, binarySearch, identity, compareValues, append } from "./core";
+import { Debug } from "./debug";
+import { positionIsSynthesized, parsePseudoBigInt } from "./utilities";
+
     export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
     /* @internal */
@@ -2558,4 +2563,4 @@ namespace ts {
     export function utf16EncodeAsString(codePoint: number) {
         return utf16EncodeAsStringWorker(codePoint);
     }
-}
+

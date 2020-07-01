@@ -1,4 +1,11 @@
-namespace ts.projectSystem {
+import { createServerHost, libFile, checkWatchedFiles, checkWatchedDirectories, TestServerHost, checkWatchedFilesDetailed } from "../../../../built/local/harness";
+import { createProjectService, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, checkNumberOfProjects, getTypeRootsFromLocation, TestProjectService, checkProjectActualFiles, getConfigFilesToWatch } from "./helpers";
+import { assert } from "console";
+import { File } from "../../../harness/vfsUtil";
+import { getDirectoryPath } from "../../../compiler/path";
+import { Debug } from "../../../compiler/debug";
+import { neverArray } from "../../../compiler/core";
+
     describe("unittests:: tsserver:: searching for config file", () => {
         it("should stop at projectRootPath if given", () => {
             const f1 = {
@@ -185,4 +192,4 @@ namespace ts.projectSystem {
             });
         });
     });
-}
+

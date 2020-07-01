@@ -1,4 +1,11 @@
-namespace ts {
+import { extractTest } from "./helpers";
+import { createSourceFile } from "../../../../compiler/parser";
+import { ScriptTarget } from "../../../../compiler/types";
+import { createTextSpanFromRange } from "../../../../services/utilities";
+import { assert } from "console";
+import { isArray } from "util";
+import { last } from "../../../../compiler/core";
+
     function testExtractRangeFailed(caption: string, s: string, expectedErrors: string[]) {
         return it(caption, () => {
             const t = extractTest(s);
@@ -370,4 +377,4 @@ namespace ts {
 
         testExtractRangeFailed("extract-method-not-for-token-expression-statement", `[#|a|]`, [refactor.Messages.cannotExtractIdentifier.message]);
     });
-}
+

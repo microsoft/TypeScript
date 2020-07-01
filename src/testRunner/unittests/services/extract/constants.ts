@@ -1,4 +1,4 @@
-namespace ts {
+
     describe("unittests:: services:: extract:: extractConstants", () => {
         testExtractConstant("extractConstant_TopLevel",
             `let x = [#|1|];`);
@@ -35,14 +35,14 @@ namespace ts {
 let i = 0;
 function F() {
     [#|i++|];
-}
+
         `);
 
         testExtractConstant("extractConstant_ExpressionStatementConsumesLocal", `
 function F() {
     let i = 0;
     [#|i++|];
-}
+
         `);
 
         testExtractConstant("extractConstant_BlockScopes_NoDependencies",
@@ -119,14 +119,14 @@ for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
         const x = [#|i + 1|];
     }
-}
+
         `);
 
         testExtractConstant("extractConstant_StatementInsertionPosition1", `
 const i = 0;
 for (let j = 0; j < 10; j++) {
     const x = [#|i + 1|];
-}
+
         `);
 
         testExtractConstant("extractConstant_StatementInsertionPosition2", `
@@ -135,13 +135,13 @@ function F() {
     for (let j = 0; j < 10; j++) {
         const x = [#|i + 1|];
     }
-}
+
         `);
 
         testExtractConstant("extractConstant_StatementInsertionPosition3", `
 for (let j = 0; j < 10; j++) {
     const x = [#|2 + 1|];
-}
+
         `);
 
         testExtractConstant("extractConstant_StatementInsertionPosition4", `
@@ -149,7 +149,7 @@ function F() {
     for (let j = 0; j < 10; j++) {
         const x = [#|2 + 1|];
     }
-}
+
         `);
 
         testExtractConstant("extractConstant_StatementInsertionPosition5", `
@@ -158,13 +158,13 @@ function F0() {
         function F2(x = [#|2 + 1|]) {
         }
     }
-}
+
         `);
 
         testExtractConstant("extractConstant_StatementInsertionPosition6", `
 class C {
     x = [#|2 + 1|];
-}
+
         `);
 
         testExtractConstant("extractConstant_StatementInsertionPosition7", `
@@ -175,7 +175,7 @@ class C {
             x = [#|i + 1|];
         }
     }
-}
+
         `);
 
         testExtractConstant("extractConstant_TripleSlash", `
@@ -270,14 +270,14 @@ let i: I = [#|{ a: 1 }|];
         testExtractConstant("extractConstant_ContextualType_Lambda", `
 const myObj: { member(x: number, y: string): void } = {
     member: [#|(x, y) => x + y|],
-}
+
 `);
 
         testExtractConstant("extractConstant_CaseClauseExpression", `
 switch (1) {
     case [#|1|]:
         break;
-}
+
 `);
     });
 
@@ -288,4 +288,4 @@ switch (1) {
     function testExtractConstantFailed(caption: string, text: string) {
         testExtractSymbolFailed(caption, text, Diagnostics.Extract_constant);
     }
-}
+

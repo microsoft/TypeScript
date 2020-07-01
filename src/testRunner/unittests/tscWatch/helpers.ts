@@ -1,4 +1,4 @@
-namespace ts.tscWatch {
+
     export const projects = `/user/username/projects`;
     export const projectRoot = `${projects}/myproject`;
     export import WatchedSystem = TestFSWithWatch.TestServerHost;
@@ -13,6 +13,20 @@ namespace ts.tscWatch {
     export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
     export import checkOutputContains = TestFSWithWatch.checkOutputContains;
     export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
+import { Program, CompilerOptions, WatchOptions, Diagnostic, ExitStatus, DiagnosticMessage, DiagnosticMessageChain, SourceFile, CharacterCodes } from "../../../compiler/types";
+import { WatchOfConfigFile, WatchOfFilesAndCompilerOptions, createWatchProgram } from "../../../compiler/watchPublic";
+import { EmitAndSemanticDiagnosticsBuilderProgram } from "../../../compiler/builderPublic";
+import { createWatchCompilerHostOfConfigFile, createWatchCompilerHostOfFilesAndCompilerOptions, screenStartingMessageCodes, getErrorSummaryText } from "../../../compiler/watch";
+import { assert } from "console";
+import { forEach, contains, endsWith, map, neverArray, noop } from "../../../compiler/core";
+import { Debug } from "../../../compiler/debug";
+import { formatDiagnostic, flattenDiagnosticMessageText } from "../../../compiler/program";
+import { isString } from "util";
+import { createCompilerDiagnostic, getLocaleSpecificMessage, formatStringFromArgs } from "../../../compiler/utilities";
+import { toPath } from "../../../compiler/path";
+import { CommandLineProgram, commandLineCallbacks } from "../tsc/helpers";
+import { executeCommandLine, isBuild } from "../../../../built/local/executeCommandLine";
+import { generateSourceMapBaselineFiles } from "../tsbuild/helpers";
 
     export const commonFile1: File = {
         path: "/a/b/commonFile1.ts",
@@ -486,4 +500,4 @@ namespace ts.tscWatch {
         const content = Debug.checkDefined(sys.readFile(file));
         sys.writeFile(file, content.replace(searchValue, replaceValue));
     }
-}
+

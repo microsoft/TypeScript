@@ -1,4 +1,8 @@
-namespace ts {
+import { NodeArray, SymbolFlags, __String, Declaration, TypeChecker, TypeFlags, BaseType, UnionType, IntersectionType, UnionOrIntersectionType, LiteralType, StringLiteralType, NumberLiteralType, TypeParameter, InterfaceType, SignatureDeclaration, UnderscoreEscapedMap, LineAndCharacter, TextChangeRange, DocumentPositionMapper, FileReference, Path, GetEffectiveTypeRootsHost, CompilerOptions, ScriptKind, ProjectReference, ResolvedProjectReference, ResolvedModule, ResolvedModuleWithFailedLookupLocations, ResolvedTypeReferenceDirective, HasInvalidatedResolution, HasChangedAutomaticTypeDirectiveNames, CustomTransformers, CompilerHost, Program, DiagnosticWithLocation, Diagnostic, TextSpan, UserPreferences, TextRange, CancellationToken } from "../compiler/types";
+import { DocumentHighlights } from "./documentHighlights";
+import { SourceMapper } from "./sourcemaps";
+import { EmitOutput } from "../../built/local/compiler";
+
     export interface Node {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
@@ -22,7 +26,7 @@ namespace ts {
         getLastToken(sourceFile?: SourceFile): Node | undefined;
         /* @internal */
         getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-        // See ts.forEachChild for documentation.
+        // See forEachChild for documentation.
         forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }
 
@@ -782,7 +786,7 @@ namespace ts {
         fileName: string;
 
         /**
-         * If the span represents a location that was remapped (e.g. via a .d.ts.map file),
+         * If the span represents a location that was remapped (e.g. via a .d.map file),
          * then the original filename and span will be specified here
          */
         originalTextSpan?: TextSpan;
@@ -1439,4 +1443,4 @@ namespace ts {
         preferences: UserPreferences;
         triggerReason?: RefactorTriggerReason;
     }
-}
+
