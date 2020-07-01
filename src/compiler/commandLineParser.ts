@@ -994,6 +994,14 @@ namespace ts {
             description: Diagnostics.Emit_class_fields_with_Define_instead_of_Set,
         },
         {
+            name: "bundledPackageName",
+            type: "string",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Provides_a_root_package_name_when_using_outFile_with_declarations,
+        },
+
+        {
             name: "keyofStringsOnly",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
