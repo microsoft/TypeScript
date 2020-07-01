@@ -200,14 +200,6 @@ interface PromiseConstructor {
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
      * resolve, or rejected when any Promise is rejected.
-     * @param values An array of Promises.
-     * @returns A new Promise.
-     */
-    all(values: Iterable<never | PromiseLike<never>>): Promise<never>;
-
-    /**
-     * Creates a Promise that is resolved with an array of results when all of the provided Promises
-     * resolve, or rejected when any Promise is rejected.
      * @param values An iterable of Promises.
      * @returns A new Promise.
      */

@@ -18,7 +18,7 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    all(values: readonly (never | PromiseLike<never>)[]): Promise<never>;
+    all<A extends any[]>(values: readonly [...{ [P in keyof A]: A[P] | PromiseLike<A[P]> }]): Promise<A extends never[] ? never : A>;
 
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
