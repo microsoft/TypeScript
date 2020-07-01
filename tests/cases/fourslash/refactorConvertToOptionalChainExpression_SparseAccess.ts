@@ -1,19 +1,15 @@
 /// <reference path='fourslash.ts' />
 
-////let a = { b: { c: 0 } };
-////let foo;
-////let bar;
-////foo && bar && /*a*/a && a.b && a.b.c;/*b*/
+////let a = { b: { c: { d: { e: {f: 0} } } } };
+/////*a*/a.b && a.b.c.d && a.b.c.d.e.f;/*b*/
 
-// verify that stop at prefix sequence.
+// Only convert the accesses for which existence is checked.
 goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Convert to optional chain expression",
     actionName: "Convert to optional chain expression",
     actionDescription: "Convert to optional chain expression",
     newContent:
-`let a = { b: { c: 0 } };
-let foo;
-let bar;
-foo && bar && a?.b?.c;`
+`let a = { b: { c: { d: { e: {f: 0} } } } };
+a.b?.c.d?.e.f;`
 });

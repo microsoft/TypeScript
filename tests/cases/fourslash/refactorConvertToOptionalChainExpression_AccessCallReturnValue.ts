@@ -10,5 +10,5 @@ edit.applyRefactor({
     actionDescription: "Convert to optional chain expression",
     newContent:
 `let a = { b: () => { return { c: 0 } } }
-a?.b()?.c;`
+a?.b?.().c;`
 });

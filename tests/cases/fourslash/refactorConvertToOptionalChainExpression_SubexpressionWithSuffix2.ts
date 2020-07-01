@@ -2,9 +2,9 @@
 
 ////let a = { b: 0 };
 ////let x = { y: 0 };
-////a && a.b && /*a*/x && x.y;/*b*/
+/////*a*/a && a.b()/*b*/ && x && x.y();
 
-// Verify that we stop at suffix sequence that is otherwise valid for conversion.
+// verify that we stop at a suffix sequence which is otherwise valid.
 goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Convert to optional chain expression",
@@ -13,5 +13,5 @@ edit.applyRefactor({
     newContent:
 `let a = { b: 0 };
 let x = { y: 0 };
-a && a.b && x?.y;`
+a?.b() && x && x.y();`
 });
