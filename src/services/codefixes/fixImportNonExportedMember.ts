@@ -49,7 +49,7 @@ namespace ts.codefix {
 
     function getNamedExportDeclaration(moduleSymbol: Symbol): ExportDeclaration | undefined {
         let namedExport;
-        moduleSymbol.exports?.forEach((symbol) => {
+        forEach(moduleSymbol.exports, symbol => {
             const specifier = symbol.declarations[0];
             if (specifier && isExportSpecifier(specifier)
                 && specifier.parent && isNamedExports(specifier.parent)) {
