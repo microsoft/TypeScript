@@ -19,8 +19,8 @@ function getRelativePathFromAbsolutePath(filePath: string) {
 }
 
 /**
- * 
- * @param filePath 
+ *
+ * @param filePath
  * @param rename rename is for optimise
  */
 function createFirstLevel(relativePath: string, rename?: string) {
@@ -39,11 +39,11 @@ function createSecondLevel(relativePath: string, rename: string) {
     return result;
 }
 
-delete namespaceInfo.A;
-delete namespaceInfo.Foo;
-delete namespaceInfo.normalN;
-delete namespaceInfo.M;
-delete namespaceInfo.myapp;
+// delete namespaceInfo.A;
+// delete namespaceInfo.Foo;
+// delete namespaceInfo.normalN;
+// delete namespaceInfo.M;
+// delete namespaceInfo.myapp;
 
 function main(namespaceInfo: { [namespacePath: string]: { [filePath: string]: number } }) {
     const namespaceNames = Object.keys(namespaceInfo);

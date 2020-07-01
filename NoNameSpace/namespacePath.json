@@ -1,325 +1,309 @@
 {
     "moduleSpecifiers": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\compiler\\moduleSpecifiers.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\compiler\\moduleSpecifiers.ts": 1
     },
     "performance": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\compiler\\performance.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\compiler\\performance.ts": 1
     },
     "Debug": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\debug\\dbg.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\debug\\dbg.ts": 1
     },
     "server": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\client.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\jsTyping\\shared.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\jsTyping\\types.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\editorServices.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\packageJsonCache.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\project.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\scriptInfo.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\scriptVersionCache.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\session.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\types.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\typingsCache.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\utilitiesPublic.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\session.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\tsserver\\server.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\client.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\jsTyping\\shared.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\jsTyping\\types.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\editorServices.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\packageJsonCache.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\project.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\scriptInfo.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\scriptVersionCache.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\session.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\types.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\typingsCache.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\utilitiesPublic.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\session.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\tsserver\\server.ts": 1
     },
     "collections": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\collectionsImpl.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\collectionsImpl.ts": 1
     },
     "compiler": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\compilerImpl.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\compilerImpl.ts": 1
     },
     "documents": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\documentsUtil.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\documentsUtil.ts": 1
     },
     "evaluator": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\evaluatorImpl.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\evaluatorImpl.ts": 1
     },
     "fakes": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\fakesHosts.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\fakesHosts.ts": 1
     },
     "FourSlash": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\fourslashImpl.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\fourslashImpl.ts": 1
     },
     "FourSlashInterface": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\fourslashInterfaceImpl.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\fourslashInterfaceImpl.ts": 1
     },
     "Harness": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\harnessIO.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\runnerbase.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\typeWriter.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\compilerRunner.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\externalCompileRunner.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\fourslashRunner.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\runner.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\test262Runner.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\harnessIO.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\runnerbase.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\typeWriter.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\compilerRunner.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\externalCompileRunner.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\fourslashRunner.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\runner.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\test262Runner.ts": 1
     },
     "Harness.LanguageService": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\harnessLanguageService.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\harnessLanguageService.ts": 1
     },
     "Utils": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\harnessUtils.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\util.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\harnessUtils.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\util.ts": 1
     },
     "Playback": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\loggedIO.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\loggedIO.ts": 1
     },
     "Harness.SourceMapRecorder": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\sourceMapRecorder.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\sourceMapRecorder.ts": 1
     },
     "vfs": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\vfsUtil.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\vfsUtil.ts": 1
     },
     "TestFSWithWatch": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\virtualFileSystemWithWatch.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\virtualFileSystemWithWatch.ts": 1
     },
     "vpath": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\vpathUtil.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\harness\\vpathUtil.ts": 1
     },
     "JsTyping": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\jsTyping\\jsTyping.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\jsTyping\\jsTyping.ts": 1
     },
     "server.protocol": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\server\\protocol.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\server\\protocol.ts": 1
     },
     "BreakpointResolver": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\breakpoints.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\breakpoints.ts": 1
     },
     "CallHierarchy": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\callHierarchy.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\callHierarchy.ts": 1
     },
     "codefix": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addConvertToUnknownForNonOverlappingTypes.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addEmptyExportDeclaration.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingAsync.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingAwait.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingConst.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingDeclareProperty.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingInvocationForDecorator.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addNameToNamelessParameter.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\annotateWithTypeFromJSDoc.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertConstToLet.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertFunctionToEs6Class.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToAsyncFunction.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToEs6Module.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToMappedObjectType.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToTypeOnlyExport.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToTypeOnlyImport.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\correctQualifiedNameToIndexedAccessType.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\disableJsDiagnostics.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixAddMissingMember.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixAddMissingNewOperator.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixAddModuleReferTypeMissingTypeof.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixAwaitInSyncFunction.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixCannotFindModule.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixClassDoesntImplementInheritedAbstractMember.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixClassIncorrectlyImplementsInterface.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixClassSuperMustPrecedeThisAccess.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixConstructorForDerivedNeedSuperCall.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixEnableExperimentalDecorators.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixEnableJsxFlag.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixExpectedComma.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixExtendsInterfaceBecomesImplements.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixForgottenThisPropertyAccess.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixImplicitThis.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixIncorrectNamedTupleSyntax.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixInvalidImportSyntax.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixInvalidJsxCharacters.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixJSDocTypes.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixMissingCallParentheses.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixModuleAndTargetOptions.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixPropertyOverrideAccessor.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixReturnTypeInAsyncFunction.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixSpelling.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixStrictClassInitialization.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixUnreachableCode.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixUnusedIdentifier.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixUnusedLabel.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\generateAccessors.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\helpers.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\importFixes.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\inferFromUsage.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\removeAccidentalCallParentheses.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\removeUnnecessaryAwait.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\requireInTs.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\returnValueCorrect.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\splitTypeOnlyImport.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\useBigintLiteral.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\useDefaultImport.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\wrapJsxInFragment.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codeFixProvider.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addConvertToUnknownForNonOverlappingTypes.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addEmptyExportDeclaration.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingAsync.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingAwait.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingConst.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingDeclareProperty.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addMissingInvocationForDecorator.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\addNameToNamelessParameter.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\annotateWithTypeFromJSDoc.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertConstToLet.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertFunctionToEs6Class.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToAsyncFunction.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToEs6Module.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToMappedObjectType.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToTypeOnlyExport.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\convertToTypeOnlyImport.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\correctQualifiedNameToIndexedAccessType.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\disableJsDiagnostics.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixAddMissingMember.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixAddMissingNewOperator.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixAddModuleReferTypeMissingTypeof.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixAwaitInSyncFunction.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixCannotFindModule.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixClassDoesntImplementInheritedAbstractMember.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixClassIncorrectlyImplementsInterface.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixClassSuperMustPrecedeThisAccess.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixConstructorForDerivedNeedSuperCall.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixEnableExperimentalDecorators.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixEnableJsxFlag.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixExpectedComma.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixExtendsInterfaceBecomesImplements.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixForgottenThisPropertyAccess.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixImplicitThis.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixIncorrectNamedTupleSyntax.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixInvalidImportSyntax.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixInvalidJsxCharacters.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixJSDocTypes.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixMissingCallParentheses.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixModuleAndTargetOptions.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixPropertyOverrideAccessor.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixReturnTypeInAsyncFunction.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixSpelling.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixStrictClassInitialization.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixUnreachableCode.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixUnusedIdentifier.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\fixUnusedLabel.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\generateAccessors.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\helpers.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\importFixes.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\removeAccidentalCallParentheses.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\inferFromUsage.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\removeUnnecessaryAwait.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\requireInTs.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\returnValueCorrect.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\splitTypeOnlyImport.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\useBigintLiteral.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\useDefaultImport.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codefixes\\wrapJsxInFragment.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\codeFixProvider.ts": 1
     },
     "Completions": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\completions.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\stringCompletions.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\completions.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\stringCompletions.ts": 1
     },
     "FindAllReferences": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\findAllReferences.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\importTracker.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\findAllReferences.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\importTracker.ts": 1
     },
     "formatting": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\formatting.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\formattingContext.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\formattingScanner.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\rule.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\rules.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\rulesMap.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\smartIndenter.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\formatting.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\formattingContext.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\formattingScanner.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\rule.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\rules.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\rulesMap.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\formatting\\smartIndenter.ts": 1
     },
     "GoToDefinition": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\goToDefinition.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\goToDefinition.ts": 1
     },
     "JsDoc": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\jsDoc.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\jsDoc.ts": 1
     },
     "NavigateTo": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\navigateTo.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\navigateTo.ts": 1
     },
     "NavigationBar": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\navigationBar.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\navigationBar.ts": 1
     },
     "OrganizeImports": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\organizeImports.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\organizeImports.ts": 1
     },
     "OutliningElementsCollector": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\outliningElementsCollector.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\outliningElementsCollector.ts": 1
     },
     "refactor": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactorProvider.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\addOrRemoveBracesToArrowFunction.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertArrowFunctionOrFunctionExpression.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertExport.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertImport.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertOverloadListToSingleSignature.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertParamsToDestructuredObject.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertStringOrTemplateLiteral.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\extractSymbol.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\extractType.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\generateGetAccessorAndSetAccessor.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\moveToNewFile.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactorProvider.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\addOrRemoveBracesToArrowFunction.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertArrowFunctionOrFunctionExpression.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertExport.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertImport.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertOverloadListToSingleSignature.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertParamsToDestructuredObject.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\convertStringOrTemplateLiteral.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\extractSymbol.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\extractType.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\generateGetAccessorAndSetAccessor.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\refactors\\moveToNewFile.ts": 1
     },
     "Rename": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\rename.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\rename.ts": 1
     },
     "SignatureHelp": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\signatureHelp.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\signatureHelp.ts": 1
     },
     "SmartSelectionRange": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\smartSelection.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\smartSelection.ts": 1
     },
     "SymbolDisplay": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\symbolDisplay.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\symbolDisplay.ts": 1
     },
     "textChanges": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\services\\textChanges.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\services\\textChanges.ts": 1
     },
     "Harness.Parallel.Host": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\parallel\\host.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\parallel\\host.ts": 1
     },
     "Harness.Parallel": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\parallel\\shared.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\parallel\\shared.ts": 1
     },
     "Harness.Parallel.Worker": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\parallel\\worker.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\parallel\\worker.ts": 1
     },
     "project": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\projectsRunner.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\projectsRunner.ts": 1
     },
     "RWC": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\rwcRunner.ts": 1
-    },
-    "A": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\services\\extract\\ranges.ts": 6,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\services\\textChanges.ts": 1
-    },
-    "M": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\services\\textChanges.ts": 3
-    },
-    "Foo": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\transform.ts": 2
-    },
-    "normalN": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsbuild\\outFile.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\rwcRunner.ts": 1
     },
     "tscWatch": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsbuild\\watchEnvironment.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsbuild\\watchMode.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\consoleClearing.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\emit.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\emitAndErrorUpdates.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\forceConsistentCasingInFileNames.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\helpers.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\incremental.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\programUpdates.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\resolutionCache.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\sourceOfProjectReferenceRedirect.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\watchApi.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\watchEnvironment.ts": 1
-    },
-    "myapp": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\resolutionCache.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsbuild\\watchEnvironment.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsbuild\\watchMode.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\consoleClearing.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\emit.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\emitAndErrorUpdates.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\forceConsistentCasingInFileNames.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\helpers.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\incremental.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\programUpdates.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\resolutionCache.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\sourceOfProjectReferenceRedirect.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\watchApi.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tscWatch\\watchEnvironment.ts": 1
     },
     "projectSystem": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\applyChangesToOpenFiles.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\autoImportProvider.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\cachingFileSystemInformation.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\cancellationToken.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\compileOnSave.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\completions.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\configFileSearch.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\configuredProjects.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\declarationFileMaps.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\documentRegistry.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\duplicatePackages.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\dynamicFiles.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\events\\largeFileReferenced.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\events\\projectLanguageServiceState.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\events\\projectLoading.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\events\\projectUpdatedInBackground.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\externalProjects.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\forceConsistentCasingInFileNames.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\formatSettings.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\getApplicableRefactors.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\getEditsForFileRename.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\getExportReferences.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\helpers.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\importHelpers.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\importSuggestionsCache.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\inferredProjects.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\languageService.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\maxNodeModuleJsDepth.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\metadataInResponse.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\navTo.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\occurences.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\openFile.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\packageJsonInfo.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projectErrors.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projectReferenceCompileOnSave.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projectReferenceErrors.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projectReferences.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projects.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\refactors.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\reload.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\rename.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\resolutionCache.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\semanticOperationsOnSyntaxServer.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\skipLibCheck.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\smartSelection.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\symLinks.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\syntaxOperations.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\telemetry.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\typeAquisition.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\typeOnlyImportChains.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\typeReferenceDirectives.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\typingsInstaller.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\watchEnvironment.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\applyChangesToOpenFiles.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\autoImportProvider.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\cachingFileSystemInformation.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\cancellationToken.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\compileOnSave.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\completions.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\configFileSearch.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\configuredProjects.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\declarationFileMaps.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\documentRegistry.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\duplicatePackages.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\dynamicFiles.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\events\\largeFileReferenced.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\events\\projectLanguageServiceState.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\events\\projectLoading.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\events\\projectUpdatedInBackground.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\externalProjects.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\forceConsistentCasingInFileNames.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\formatSettings.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\getApplicableRefactors.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\getEditsForFileRename.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\getExportReferences.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\helpers.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\importHelpers.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\importSuggestionsCache.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\inferredProjects.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\languageService.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\maxNodeModuleJsDepth.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\metadataInResponse.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\navTo.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\occurences.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\openFile.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\packageJsonInfo.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projectErrors.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projectReferenceCompileOnSave.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projectReferenceErrors.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projectReferences.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\projects.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\refactors.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\reload.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\rename.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\resolutionCache.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\semanticOperationsOnSyntaxServer.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\skipLibCheck.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\smartSelection.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\symLinks.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\syntaxOperations.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\telemetry.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\typeAquisition.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\typeOnlyImportChains.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\typeReferenceDirectives.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\typingsInstaller.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\watchEnvironment.ts": 1
     },
     "textStorage": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\textStorage.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\testRunner\\unittests\\tsserver\\textStorage.ts": 1
     },
     "server.typingsInstaller": {
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\typingsInstaller\\nodeTypingsInstaller.ts": 1,
-        "C:\\Users\\15898\\Desktop\\Code\\fork\\TypeScript\\src\\typingsInstallerCore\\typingsInstaller.ts": 1
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\typingsInstaller\\nodeTypingsInstaller.ts": 1,
+        "C:\\Users\\song.gao\\Desktop\\Code\\fork\\TypeScript\\src\\typingsInstallerCore\\typingsInstaller.ts": 1
     }
 }
