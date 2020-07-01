@@ -177,129 +177,113 @@ namespace ts {
         });
 
         testExtractRangeFailed("extractRangeFailed1",
-            `
-namespace A {
-function f() {
-    [#|
-    let x = 1
-    if (x) {
-        return 10;
+`namespace A {
+    function f() {
+        [#|
+        let x = 1
+        if (x) {
+            return 10;
+        }
+        |]
     }
-    |]
-}
-}
-            `,
+}`,
             [refactor.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
 
         testExtractRangeFailed("extractRangeFailed2",
-            `
-namespace A {
-function f() {
-    while (true) {
-    [#|
-        let x = 1
-        if (x) {
-            break;
+`namespace A {
+    function f() {
+        while (true) {
+        [#|
+            let x = 1
+            if (x) {
+                break;
+            }
+        |]
         }
-    |]
     }
-}
-}
-            `,
+}`,
             [refactor.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
 
         testExtractRangeFailed("extractRangeFailed3",
-            `
-namespace A {
-function f() {
-    while (true) {
-    [#|
-        let x = 1
-        if (x) {
-            continue;
+`namespace A {
+    function f() {
+        while (true) {
+        [#|
+            let x = 1
+            if (x) {
+                continue;
+            }
+        |]
         }
-    |]
     }
-}
-}
-            `,
+}`,
             [refactor.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
 
         testExtractRangeFailed("extractRangeFailed4",
-            `
-namespace A {
-function f() {
-    l1: {
-    [#|
-        let x = 1
-        if (x) {
-            break l1;
+`namespace A {
+    function f() {
+        l1: {
+        [#|
+            let x = 1
+            if (x) {
+                break l1;
+            }
+        |]
         }
-    |]
     }
-}
-}
-            `,
+}`,
             [refactor.Messages.cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange.message]);
 
         testExtractRangeFailed("extractRangeFailed5",
-            `
-namespace A {
-function f() {
-    [#|
-    try {
-        f2()
-        return 10;
+`namespace A {
+    function f() {
+        [#|
+        try {
+            f2()
+            return 10;
+        }
+        catch (e) {
+        }
+        |]
     }
-    catch (e) {
+    function f2() {
     }
-    |]
-}
-function f2() {
-}
-}
-            `,
+}`,
             [refactor.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
 
         testExtractRangeFailed("extractRangeFailed6",
-            `
-namespace A {
-function f() {
-    [#|
-    try {
-        f2()
+`namespace A {
+    function f() {
+        [#|
+        try {
+            f2()
+        }
+        catch (e) {
+            return 10;
+        }
+        |]
     }
-    catch (e) {
-        return 10;
+    function f2() {
     }
-    |]
-}
-function f2() {
-}
-}
-            `,
+}`,
             [refactor.Messages.cannotExtractRangeContainingConditionalReturnStatement.message]);
 
         testExtractRangeFailed("extractRangeFailed7",
-            `
-function test(x: number) {
-while (x) {
-    x--;
-    [#|break;|]
-}
-}
-            `,
+`function test(x: number) {
+    while (x) {
+        x--;
+        [#|break;|]
+    }
+}`,
             [refactor.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
 
         testExtractRangeFailed("extractRangeFailed8",
-            `
-function test(x: number) {
-switch (x) {
-    case 1:
-        [#|break;|]
-}
-}
-            `,
+`function test(x: number) {
+    switch (x) {
+        case 1:
+            [#|break;|]
+    }
+}`,
             [refactor.Messages.cannotExtractRangeContainingConditionalBreakOrContinueStatements.message]);
 
         testExtractRangeFailed("extractRangeFailed9",

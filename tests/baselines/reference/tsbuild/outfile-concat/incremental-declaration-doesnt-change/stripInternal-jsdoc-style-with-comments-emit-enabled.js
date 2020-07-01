@@ -407,7 +407,7 @@ c.doSomething();
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"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"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"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"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -723,20 +723,20 @@ sourceFile:../../../second/second_part1.ts
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-  >
-1->Emitted(15, 1) Source(13, 1) + SourceIndex(3)
+  >    
+1->Emitted(15, 1) Source(13, 5) + SourceIndex(3)
 ---
 >>>    /**@internal*/ function normalC() {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^
 3 >                  ^
 1->class normalC {
-  >    
+  >        
 2 >    /**@internal*/
 3 >                   
-1->Emitted(16, 5) Source(14, 5) + SourceIndex(3)
-2 >Emitted(16, 19) Source(14, 19) + SourceIndex(3)
-3 >Emitted(16, 20) Source(14, 20) + SourceIndex(3)
+1->Emitted(16, 5) Source(14, 9) + SourceIndex(3)
+2 >Emitted(16, 19) Source(14, 23) + SourceIndex(3)
+3 >Emitted(16, 20) Source(14, 24) + SourceIndex(3)
 ---
 >>>    }
 1 >^^^^
@@ -744,8 +744,8 @@ sourceFile:../../../second/second_part1.ts
 3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >constructor() { 
 2 >    }
-1 >Emitted(17, 5) Source(14, 36) + SourceIndex(3)
-2 >Emitted(17, 6) Source(14, 37) + SourceIndex(3)
+1 >Emitted(17, 5) Source(14, 40) + SourceIndex(3)
+2 >Emitted(17, 6) Source(14, 41) + SourceIndex(3)
 ---
 >>>    /**@internal*/ normalC.prototype.method = function () { };
 1->^^^^
@@ -756,21 +756,21 @@ sourceFile:../../../second/second_part1.ts
 6 >                                              ^^^^^^^^^^^^^^
 7 >                                                            ^
 1->
-  >    /**@internal*/ prop: string;
-  >    
+  >        /**@internal*/ prop: string;
+  >        
 2 >    /**@internal*/
 3 >                   
 4 >                   method
 5 >                                           
 6 >                                              method() { 
 7 >                                                            }
-1->Emitted(18, 5) Source(16, 5) + SourceIndex(3)
-2 >Emitted(18, 19) Source(16, 19) + SourceIndex(3)
-3 >Emitted(18, 20) Source(16, 20) + SourceIndex(3)
-4 >Emitted(18, 44) Source(16, 26) + SourceIndex(3)
-5 >Emitted(18, 47) Source(16, 20) + SourceIndex(3)
-6 >Emitted(18, 61) Source(16, 31) + SourceIndex(3)
-7 >Emitted(18, 62) Source(16, 32) + SourceIndex(3)
+1->Emitted(18, 5) Source(16, 9) + SourceIndex(3)
+2 >Emitted(18, 19) Source(16, 23) + SourceIndex(3)
+3 >Emitted(18, 20) Source(16, 24) + SourceIndex(3)
+4 >Emitted(18, 44) Source(16, 30) + SourceIndex(3)
+5 >Emitted(18, 47) Source(16, 24) + SourceIndex(3)
+6 >Emitted(18, 61) Source(16, 35) + SourceIndex(3)
+7 >Emitted(18, 62) Source(16, 36) + SourceIndex(3)
 ---
 >>>    Object.defineProperty(normalC.prototype, "c", {
 1 >^^^^
@@ -778,12 +778,12 @@ sourceFile:../../../second/second_part1.ts
 3 >                          ^^^^^^^^^^^^^^^^^^^^^^
 4 >                                                ^^^^^^^^->
 1 >
-  >    /**@internal*/ 
+  >        /**@internal*/ 
 2 >    get 
 3 >                          c
-1 >Emitted(19, 5) Source(17, 20) + SourceIndex(3)
-2 >Emitted(19, 27) Source(17, 24) + SourceIndex(3)
-3 >Emitted(19, 49) Source(17, 25) + SourceIndex(3)
+1 >Emitted(19, 5) Source(17, 24) + SourceIndex(3)
+2 >Emitted(19, 27) Source(17, 28) + SourceIndex(3)
+3 >Emitted(19, 49) Source(17, 29) + SourceIndex(3)
 ---
 >>>        /**@internal*/ get: function () { return 10; },
 1->^^^^^^^^
@@ -804,15 +804,15 @@ sourceFile:../../../second/second_part1.ts
 7 >                                                   ;
 8 >                                                     
 9 >                                                     }
-1->Emitted(20, 9) Source(17, 5) + SourceIndex(3)
-2 >Emitted(20, 23) Source(17, 19) + SourceIndex(3)
-3 >Emitted(20, 29) Source(17, 20) + SourceIndex(3)
-4 >Emitted(20, 43) Source(17, 30) + SourceIndex(3)
-5 >Emitted(20, 50) Source(17, 37) + SourceIndex(3)
-6 >Emitted(20, 52) Source(17, 39) + SourceIndex(3)
-7 >Emitted(20, 53) Source(17, 40) + SourceIndex(3)
-8 >Emitted(20, 54) Source(17, 41) + SourceIndex(3)
-9 >Emitted(20, 55) Source(17, 42) + SourceIndex(3)
+1->Emitted(20, 9) Source(17, 9) + SourceIndex(3)
+2 >Emitted(20, 23) Source(17, 23) + SourceIndex(3)
+3 >Emitted(20, 29) Source(17, 24) + SourceIndex(3)
+4 >Emitted(20, 43) Source(17, 34) + SourceIndex(3)
+5 >Emitted(20, 50) Source(17, 41) + SourceIndex(3)
+6 >Emitted(20, 52) Source(17, 43) + SourceIndex(3)
+7 >Emitted(20, 53) Source(17, 44) + SourceIndex(3)
+8 >Emitted(20, 54) Source(17, 45) + SourceIndex(3)
+9 >Emitted(20, 55) Source(17, 46) + SourceIndex(3)
 ---
 >>>        /**@internal*/ set: function (val) { },
 1 >^^^^^^^^
@@ -823,20 +823,20 @@ sourceFile:../../../second/second_part1.ts
 6 >                                         ^^^^
 7 >                                             ^
 1 >
-  >    
+  >        
 2 >        /**@internal*/
 3 >                       
 4 >                            set c(
 5 >                                      val: number
 6 >                                         ) { 
 7 >                                             }
-1 >Emitted(21, 9) Source(18, 5) + SourceIndex(3)
-2 >Emitted(21, 23) Source(18, 19) + SourceIndex(3)
-3 >Emitted(21, 29) Source(18, 20) + SourceIndex(3)
-4 >Emitted(21, 39) Source(18, 26) + SourceIndex(3)
-5 >Emitted(21, 42) Source(18, 37) + SourceIndex(3)
-6 >Emitted(21, 46) Source(18, 41) + SourceIndex(3)
-7 >Emitted(21, 47) Source(18, 42) + SourceIndex(3)
+1 >Emitted(21, 9) Source(18, 9) + SourceIndex(3)
+2 >Emitted(21, 23) Source(18, 23) + SourceIndex(3)
+3 >Emitted(21, 29) Source(18, 24) + SourceIndex(3)
+4 >Emitted(21, 39) Source(18, 30) + SourceIndex(3)
+5 >Emitted(21, 42) Source(18, 41) + SourceIndex(3)
+6 >Emitted(21, 46) Source(18, 45) + SourceIndex(3)
+7 >Emitted(21, 47) Source(18, 46) + SourceIndex(3)
 ---
 >>>        enumerable: false,
 >>>        configurable: true
@@ -844,17 +844,17 @@ sourceFile:../../../second/second_part1.ts
 1 >^^^^^^^
 2 >       ^^^^^^^^^^^^^->
 1 >
-1 >Emitted(24, 8) Source(17, 42) + SourceIndex(3)
+1 >Emitted(24, 8) Source(17, 46) + SourceIndex(3)
 ---
 >>>    return normalC;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^
 1->
-  >    /**@internal*/ set c(val: number) { }
-  >
+  >        /**@internal*/ set c(val: number) { }
+  >    
 2 >    }
-1->Emitted(25, 5) Source(19, 1) + SourceIndex(3)
-2 >Emitted(25, 19) Source(19, 2) + SourceIndex(3)
+1->Emitted(25, 5) Source(19, 5) + SourceIndex(3)
+2 >Emitted(25, 19) Source(19, 6) + SourceIndex(3)
 ---
 >>>}());
 1 >
@@ -866,16 +866,16 @@ sourceFile:../../../second/second_part1.ts
 2 >}
 3 > 
 4 > class normalC {
-  >     /**@internal*/ constructor() { }
-  >     /**@internal*/ prop: string;
-  >     /**@internal*/ method() { }
-  >     /**@internal*/ get c() { return 10; }
-  >     /**@internal*/ set c(val: number) { }
-  > }
-1 >Emitted(26, 1) Source(19, 1) + SourceIndex(3)
-2 >Emitted(26, 2) Source(19, 2) + SourceIndex(3)
-3 >Emitted(26, 2) Source(13, 1) + SourceIndex(3)
-4 >Emitted(26, 6) Source(19, 2) + SourceIndex(3)
+  >         /**@internal*/ constructor() { }
+  >         /**@internal*/ prop: string;
+  >         /**@internal*/ method() { }
+  >         /**@internal*/ get c() { return 10; }
+  >         /**@internal*/ set c(val: number) { }
+  >     }
+1 >Emitted(26, 1) Source(19, 5) + SourceIndex(3)
+2 >Emitted(26, 2) Source(19, 6) + SourceIndex(3)
+3 >Emitted(26, 2) Source(13, 5) + SourceIndex(3)
+4 >Emitted(26, 6) Source(19, 6) + SourceIndex(3)
 ---
 >>>var normalN;
 1->
@@ -884,23 +884,23 @@ sourceFile:../../../second/second_part1.ts
 4 >           ^
 5 >            ^^^^^^^^^^->
 1->
-  >
+  >    
 2 >namespace 
 3 >    normalN
 4 >            {
-  >               /**@internal*/ export class C { }
-  >               /**@internal*/ export function foo() {}
-  >               /**@internal*/ export namespace someNamespace { export class C {} }
-  >               /**@internal*/ export namespace someOther.something { export class someClass {} }
-  >               /**@internal*/ export import someImport = someNamespace.C;
-  >               /**@internal*/ export type internalType = internalC;
-  >               /**@internal*/ export const internalConst = 10;
-  >               /**@internal*/ export enum internalEnum { a, b, c }
-  >           }
-1->Emitted(27, 1) Source(20, 1) + SourceIndex(3)
-2 >Emitted(27, 5) Source(20, 11) + SourceIndex(3)
-3 >Emitted(27, 12) Source(20, 18) + SourceIndex(3)
-4 >Emitted(27, 13) Source(29, 2) + SourceIndex(3)
+  >                   /**@internal*/ export class C { }
+  >                   /**@internal*/ export function foo() {}
+  >                   /**@internal*/ export namespace someNamespace { export class C {} }
+  >                   /**@internal*/ export namespace someOther.something { export class someClass {} }
+  >                   /**@internal*/ export import someImport = someNamespace.C;
+  >                   /**@internal*/ export type internalType = internalC;
+  >                   /**@internal*/ export const internalConst = 10;
+  >                   /**@internal*/ export enum internalEnum { a, b, c }
+  >               }
+1->Emitted(27, 1) Source(20, 5) + SourceIndex(3)
+2 >Emitted(27, 5) Source(20, 15) + SourceIndex(3)
+3 >Emitted(27, 12) Source(20, 22) + SourceIndex(3)
+4 >Emitted(27, 13) Source(29, 6) + SourceIndex(3)
 ---
 >>>(function (normalN) {
 1->
@@ -910,9 +910,9 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >namespace 
 3 >           normalN
-1->Emitted(28, 1) Source(20, 1) + SourceIndex(3)
-2 >Emitted(28, 12) Source(20, 11) + SourceIndex(3)
-3 >Emitted(28, 19) Source(20, 18) + SourceIndex(3)
+1->Emitted(28, 1) Source(20, 5) + SourceIndex(3)
+2 >Emitted(28, 12) Source(20, 15) + SourceIndex(3)
+3 >Emitted(28, 19) Source(20, 22) + SourceIndex(3)
 ---
 >>>    /**@internal*/ var C = /** @class */ (function () {
 1->^^^^
@@ -920,18 +920,18 @@ sourceFile:../../../second/second_part1.ts
 3 >                  ^
 4 >                   ^^^^->
 1-> {
-  >    
+  >        
 2 >    /**@internal*/
 3 >                   
-1->Emitted(29, 5) Source(21, 5) + SourceIndex(3)
-2 >Emitted(29, 19) Source(21, 19) + SourceIndex(3)
-3 >Emitted(29, 20) Source(21, 20) + SourceIndex(3)
+1->Emitted(29, 5) Source(21, 9) + SourceIndex(3)
+2 >Emitted(29, 19) Source(21, 23) + SourceIndex(3)
+3 >Emitted(29, 20) Source(21, 24) + SourceIndex(3)
 ---
 >>>        function C() {
 1->^^^^^^^^
 2 >        ^^->
 1->
-1->Emitted(30, 9) Source(21, 20) + SourceIndex(3)
+1->Emitted(30, 9) Source(21, 24) + SourceIndex(3)
 ---
 >>>        }
 1->^^^^^^^^
@@ -939,16 +939,16 @@ sourceFile:../../../second/second_part1.ts
 3 >         ^^^^^^^^^->
 1->export class C { 
 2 >        }
-1->Emitted(31, 9) Source(21, 37) + SourceIndex(3)
-2 >Emitted(31, 10) Source(21, 38) + SourceIndex(3)
+1->Emitted(31, 9) Source(21, 41) + SourceIndex(3)
+2 >Emitted(31, 10) Source(21, 42) + SourceIndex(3)
 ---
 >>>        return C;
 1->^^^^^^^^
 2 >        ^^^^^^^^
 1->
 2 >        }
-1->Emitted(32, 9) Source(21, 37) + SourceIndex(3)
-2 >Emitted(32, 17) Source(21, 38) + SourceIndex(3)
+1->Emitted(32, 9) Source(21, 41) + SourceIndex(3)
+2 >Emitted(32, 17) Source(21, 42) + SourceIndex(3)
 ---
 >>>    }());
 1 >^^^^
@@ -960,10 +960,10 @@ sourceFile:../../../second/second_part1.ts
 2 >    }
 3 >     
 4 >     export class C { }
-1 >Emitted(33, 5) Source(21, 37) + SourceIndex(3)
-2 >Emitted(33, 6) Source(21, 38) + SourceIndex(3)
-3 >Emitted(33, 6) Source(21, 20) + SourceIndex(3)
-4 >Emitted(33, 10) Source(21, 38) + SourceIndex(3)
+1 >Emitted(33, 5) Source(21, 41) + SourceIndex(3)
+2 >Emitted(33, 6) Source(21, 42) + SourceIndex(3)
+3 >Emitted(33, 6) Source(21, 24) + SourceIndex(3)
+4 >Emitted(33, 10) Source(21, 42) + SourceIndex(3)
 ---
 >>>    normalN.C = C;
 1->^^^^
@@ -975,10 +975,10 @@ sourceFile:../../../second/second_part1.ts
 2 >    C
 3 >              { }
 4 >                 
-1->Emitted(34, 5) Source(21, 33) + SourceIndex(3)
-2 >Emitted(34, 14) Source(21, 34) + SourceIndex(3)
-3 >Emitted(34, 18) Source(21, 38) + SourceIndex(3)
-4 >Emitted(34, 19) Source(21, 38) + SourceIndex(3)
+1->Emitted(34, 5) Source(21, 37) + SourceIndex(3)
+2 >Emitted(34, 14) Source(21, 38) + SourceIndex(3)
+3 >Emitted(34, 18) Source(21, 42) + SourceIndex(3)
+4 >Emitted(34, 19) Source(21, 42) + SourceIndex(3)
 ---
 >>>    /**@internal*/ function foo() { }
 1->^^^^
@@ -989,20 +989,20 @@ sourceFile:../../../second/second_part1.ts
 6 >                               ^^^^^
 7 >                                    ^
 1->
-  >    
+  >        
 2 >    /**@internal*/
 3 >                   
 4 >                   export function 
 5 >                            foo
 6 >                               () {
 7 >                                    }
-1->Emitted(35, 5) Source(22, 5) + SourceIndex(3)
-2 >Emitted(35, 19) Source(22, 19) + SourceIndex(3)
-3 >Emitted(35, 20) Source(22, 20) + SourceIndex(3)
-4 >Emitted(35, 29) Source(22, 36) + SourceIndex(3)
-5 >Emitted(35, 32) Source(22, 39) + SourceIndex(3)
-6 >Emitted(35, 37) Source(22, 43) + SourceIndex(3)
-7 >Emitted(35, 38) Source(22, 44) + SourceIndex(3)
+1->Emitted(35, 5) Source(22, 9) + SourceIndex(3)
+2 >Emitted(35, 19) Source(22, 23) + SourceIndex(3)
+3 >Emitted(35, 20) Source(22, 24) + SourceIndex(3)
+4 >Emitted(35, 29) Source(22, 40) + SourceIndex(3)
+5 >Emitted(35, 32) Source(22, 43) + SourceIndex(3)
+6 >Emitted(35, 37) Source(22, 47) + SourceIndex(3)
+7 >Emitted(35, 38) Source(22, 48) + SourceIndex(3)
 ---
 >>>    normalN.foo = foo;
 1 >^^^^
@@ -1014,10 +1014,10 @@ sourceFile:../../../second/second_part1.ts
 2 >    foo
 3 >               () {}
 4 >                     
-1 >Emitted(36, 5) Source(22, 36) + SourceIndex(3)
-2 >Emitted(36, 16) Source(22, 39) + SourceIndex(3)
-3 >Emitted(36, 22) Source(22, 44) + SourceIndex(3)
-4 >Emitted(36, 23) Source(22, 44) + SourceIndex(3)
+1 >Emitted(36, 5) Source(22, 40) + SourceIndex(3)
+2 >Emitted(36, 16) Source(22, 43) + SourceIndex(3)
+3 >Emitted(36, 22) Source(22, 48) + SourceIndex(3)
+4 >Emitted(36, 23) Source(22, 48) + SourceIndex(3)
 ---
 >>>    /**@internal*/ var someNamespace;
 1->^^^^
@@ -1027,18 +1027,18 @@ sourceFile:../../../second/second_part1.ts
 5 >                       ^^^^^^^^^^^^^
 6 >                                    ^
 1->
-  >    
+  >        
 2 >    /**@internal*/
 3 >                   
 4 >                   export namespace 
 5 >                       someNamespace
 6 >                                     { export class C {} }
-1->Emitted(37, 5) Source(23, 5) + SourceIndex(3)
-2 >Emitted(37, 19) Source(23, 19) + SourceIndex(3)
-3 >Emitted(37, 20) Source(23, 20) + SourceIndex(3)
-4 >Emitted(37, 24) Source(23, 37) + SourceIndex(3)
-5 >Emitted(37, 37) Source(23, 50) + SourceIndex(3)
-6 >Emitted(37, 38) Source(23, 72) + SourceIndex(3)
+1->Emitted(37, 5) Source(23, 9) + SourceIndex(3)
+2 >Emitted(37, 19) Source(23, 23) + SourceIndex(3)
+3 >Emitted(37, 20) Source(23, 24) + SourceIndex(3)
+4 >Emitted(37, 24) Source(23, 41) + SourceIndex(3)
+5 >Emitted(37, 37) Source(23, 54) + SourceIndex(3)
+6 >Emitted(37, 38) Source(23, 76) + SourceIndex(3)
 ---
 >>>    (function (someNamespace) {
 1 >^^^^
@@ -1048,21 +1048,21 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >    export namespace 
 3 >               someNamespace
-1 >Emitted(38, 5) Source(23, 20) + SourceIndex(3)
-2 >Emitted(38, 16) Source(23, 37) + SourceIndex(3)
-3 >Emitted(38, 29) Source(23, 50) + SourceIndex(3)
+1 >Emitted(38, 5) Source(23, 24) + SourceIndex(3)
+2 >Emitted(38, 16) Source(23, 41) + SourceIndex(3)
+3 >Emitted(38, 29) Source(23, 54) + SourceIndex(3)
 ---
 >>>        var C = /** @class */ (function () {
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^->
 1-> { 
-1->Emitted(39, 9) Source(23, 53) + SourceIndex(3)
+1->Emitted(39, 9) Source(23, 57) + SourceIndex(3)
 ---
 >>>            function C() {
 1->^^^^^^^^^^^^
 2 >            ^^->
 1->
-1->Emitted(40, 13) Source(23, 53) + SourceIndex(3)
+1->Emitted(40, 13) Source(23, 57) + SourceIndex(3)
 ---
 >>>            }
 1->^^^^^^^^^^^^
@@ -1070,16 +1070,16 @@ sourceFile:../../../second/second_part1.ts
 3 >             ^^^^^^^^^->
 1->export class C {
 2 >            }
-1->Emitted(41, 13) Source(23, 69) + SourceIndex(3)
-2 >Emitted(41, 14) Source(23, 70) + SourceIndex(3)
+1->Emitted(41, 13) Source(23, 73) + SourceIndex(3)
+2 >Emitted(41, 14) Source(23, 74) + SourceIndex(3)
 ---
 >>>            return C;
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^
 1->
 2 >            }
-1->Emitted(42, 13) Source(23, 69) + SourceIndex(3)
-2 >Emitted(42, 21) Source(23, 70) + SourceIndex(3)
+1->Emitted(42, 13) Source(23, 73) + SourceIndex(3)
+2 >Emitted(42, 21) Source(23, 74) + SourceIndex(3)
 ---
 >>>        }());
 1 >^^^^^^^^
@@ -1091,10 +1091,10 @@ sourceFile:../../../second/second_part1.ts
 2 >        }
 3 >         
 4 >         export class C {}
-1 >Emitted(43, 9) Source(23, 69) + SourceIndex(3)
-2 >Emitted(43, 10) Source(23, 70) + SourceIndex(3)
-3 >Emitted(43, 10) Source(23, 53) + SourceIndex(3)
-4 >Emitted(43, 14) Source(23, 70) + SourceIndex(3)
+1 >Emitted(43, 9) Source(23, 73) + SourceIndex(3)
+2 >Emitted(43, 10) Source(23, 74) + SourceIndex(3)
+3 >Emitted(43, 10) Source(23, 57) + SourceIndex(3)
+4 >Emitted(43, 14) Source(23, 74) + SourceIndex(3)
 ---
 >>>        someNamespace.C = C;
 1->^^^^^^^^
@@ -1106,10 +1106,10 @@ sourceFile:../../../second/second_part1.ts
 2 >        C
 3 >                        {}
 4 >                           
-1->Emitted(44, 9) Source(23, 66) + SourceIndex(3)
-2 >Emitted(44, 24) Source(23, 67) + SourceIndex(3)
-3 >Emitted(44, 28) Source(23, 70) + SourceIndex(3)
-4 >Emitted(44, 29) Source(23, 70) + SourceIndex(3)
+1->Emitted(44, 9) Source(23, 70) + SourceIndex(3)
+2 >Emitted(44, 24) Source(23, 71) + SourceIndex(3)
+3 >Emitted(44, 28) Source(23, 74) + SourceIndex(3)
+4 >Emitted(44, 29) Source(23, 74) + SourceIndex(3)
 ---
 >>>    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));
 1->^^^^
@@ -1130,15 +1130,15 @@ sourceFile:../../../second/second_part1.ts
 7 >                                            
 8 >                                                 someNamespace
 9 >                                                                       { export class C {} }
-1->Emitted(45, 5) Source(23, 71) + SourceIndex(3)
-2 >Emitted(45, 6) Source(23, 72) + SourceIndex(3)
-3 >Emitted(45, 8) Source(23, 37) + SourceIndex(3)
-4 >Emitted(45, 21) Source(23, 50) + SourceIndex(3)
-5 >Emitted(45, 24) Source(23, 37) + SourceIndex(3)
-6 >Emitted(45, 45) Source(23, 50) + SourceIndex(3)
-7 >Emitted(45, 50) Source(23, 37) + SourceIndex(3)
-8 >Emitted(45, 71) Source(23, 50) + SourceIndex(3)
-9 >Emitted(45, 79) Source(23, 72) + SourceIndex(3)
+1->Emitted(45, 5) Source(23, 75) + SourceIndex(3)
+2 >Emitted(45, 6) Source(23, 76) + SourceIndex(3)
+3 >Emitted(45, 8) Source(23, 41) + SourceIndex(3)
+4 >Emitted(45, 21) Source(23, 54) + SourceIndex(3)
+5 >Emitted(45, 24) Source(23, 41) + SourceIndex(3)
+6 >Emitted(45, 45) Source(23, 54) + SourceIndex(3)
+7 >Emitted(45, 50) Source(23, 41) + SourceIndex(3)
+8 >Emitted(45, 71) Source(23, 54) + SourceIndex(3)
+9 >Emitted(45, 79) Source(23, 76) + SourceIndex(3)
 ---
 >>>    /**@internal*/ var someOther;
 1 >^^^^
@@ -1148,18 +1148,18 @@ sourceFile:../../../second/second_part1.ts
 5 >                       ^^^^^^^^^
 6 >                                ^
 1 >
-  >    
+  >        
 2 >    /**@internal*/
 3 >                   
 4 >                   export namespace 
 5 >                       someOther
 6 >                                .something { export class someClass {} }
-1 >Emitted(46, 5) Source(24, 5) + SourceIndex(3)
-2 >Emitted(46, 19) Source(24, 19) + SourceIndex(3)
-3 >Emitted(46, 20) Source(24, 20) + SourceIndex(3)
-4 >Emitted(46, 24) Source(24, 37) + SourceIndex(3)
-5 >Emitted(46, 33) Source(24, 46) + SourceIndex(3)
-6 >Emitted(46, 34) Source(24, 86) + SourceIndex(3)
+1 >Emitted(46, 5) Source(24, 9) + SourceIndex(3)
+2 >Emitted(46, 19) Source(24, 23) + SourceIndex(3)
+3 >Emitted(46, 20) Source(24, 24) + SourceIndex(3)
+4 >Emitted(46, 24) Source(24, 41) + SourceIndex(3)
+5 >Emitted(46, 33) Source(24, 50) + SourceIndex(3)
+6 >Emitted(46, 34) Source(24, 90) + SourceIndex(3)
 ---
 >>>    (function (someOther) {
 1 >^^^^
@@ -1168,9 +1168,9 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >    export namespace 
 3 >               someOther
-1 >Emitted(47, 5) Source(24, 20) + SourceIndex(3)
-2 >Emitted(47, 16) Source(24, 37) + SourceIndex(3)
-3 >Emitted(47, 25) Source(24, 46) + SourceIndex(3)
+1 >Emitted(47, 5) Source(24, 24) + SourceIndex(3)
+2 >Emitted(47, 16) Source(24, 41) + SourceIndex(3)
+3 >Emitted(47, 25) Source(24, 50) + SourceIndex(3)
 ---
 >>>        var something;
 1 >^^^^^^^^
@@ -1182,10 +1182,10 @@ sourceFile:../../../second/second_part1.ts
 2 >        
 3 >            something
 4 >                      { export class someClass {} }
-1 >Emitted(48, 9) Source(24, 47) + SourceIndex(3)
-2 >Emitted(48, 13) Source(24, 47) + SourceIndex(3)
-3 >Emitted(48, 22) Source(24, 56) + SourceIndex(3)
-4 >Emitted(48, 23) Source(24, 86) + SourceIndex(3)
+1 >Emitted(48, 9) Source(24, 51) + SourceIndex(3)
+2 >Emitted(48, 13) Source(24, 51) + SourceIndex(3)
+3 >Emitted(48, 22) Source(24, 60) + SourceIndex(3)
+4 >Emitted(48, 23) Source(24, 90) + SourceIndex(3)
 ---
 >>>        (function (something) {
 1->^^^^^^^^
@@ -1195,21 +1195,21 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >        
 3 >                   something
-1->Emitted(49, 9) Source(24, 47) + SourceIndex(3)
-2 >Emitted(49, 20) Source(24, 47) + SourceIndex(3)
-3 >Emitted(49, 29) Source(24, 56) + SourceIndex(3)
+1->Emitted(49, 9) Source(24, 51) + SourceIndex(3)
+2 >Emitted(49, 20) Source(24, 51) + SourceIndex(3)
+3 >Emitted(49, 29) Source(24, 60) + SourceIndex(3)
 ---
 >>>            var someClass = /** @class */ (function () {
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
-1->Emitted(50, 13) Source(24, 59) + SourceIndex(3)
+1->Emitted(50, 13) Source(24, 63) + SourceIndex(3)
 ---
 >>>                function someClass() {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^->
 1->
-1->Emitted(51, 17) Source(24, 59) + SourceIndex(3)
+1->Emitted(51, 17) Source(24, 63) + SourceIndex(3)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
@@ -1217,16 +1217,16 @@ sourceFile:../../../second/second_part1.ts
 3 >                 ^^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >                }
-1->Emitted(52, 17) Source(24, 83) + SourceIndex(3)
-2 >Emitted(52, 18) Source(24, 84) + SourceIndex(3)
+1->Emitted(52, 17) Source(24, 87) + SourceIndex(3)
+2 >Emitted(52, 18) Source(24, 88) + SourceIndex(3)
 ---
 >>>                return someClass;
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^
 1->
 2 >                }
-1->Emitted(53, 17) Source(24, 83) + SourceIndex(3)
-2 >Emitted(53, 33) Source(24, 84) + SourceIndex(3)
+1->Emitted(53, 17) Source(24, 87) + SourceIndex(3)
+2 >Emitted(53, 33) Source(24, 88) + SourceIndex(3)
 ---
 >>>            }());
 1 >^^^^^^^^^^^^
@@ -1238,10 +1238,10 @@ sourceFile:../../../second/second_part1.ts
 2 >            }
 3 >             
 4 >             export class someClass {}
-1 >Emitted(54, 13) Source(24, 83) + SourceIndex(3)
-2 >Emitted(54, 14) Source(24, 84) + SourceIndex(3)
-3 >Emitted(54, 14) Source(24, 59) + SourceIndex(3)
-4 >Emitted(54, 18) Source(24, 84) + SourceIndex(3)
+1 >Emitted(54, 13) Source(24, 87) + SourceIndex(3)
+2 >Emitted(54, 14) Source(24, 88) + SourceIndex(3)
+3 >Emitted(54, 14) Source(24, 63) + SourceIndex(3)
+4 >Emitted(54, 18) Source(24, 88) + SourceIndex(3)
 ---
 >>>            something.someClass = someClass;
 1->^^^^^^^^^^^^
@@ -1253,10 +1253,10 @@ sourceFile:../../../second/second_part1.ts
 2 >            someClass
 3 >                                {}
 4 >                                           
-1->Emitted(55, 13) Source(24, 72) + SourceIndex(3)
-2 >Emitted(55, 32) Source(24, 81) + SourceIndex(3)
-3 >Emitted(55, 44) Source(24, 84) + SourceIndex(3)
-4 >Emitted(55, 45) Source(24, 84) + SourceIndex(3)
+1->Emitted(55, 13) Source(24, 76) + SourceIndex(3)
+2 >Emitted(55, 32) Source(24, 85) + SourceIndex(3)
+3 >Emitted(55, 44) Source(24, 88) + SourceIndex(3)
+4 >Emitted(55, 45) Source(24, 88) + SourceIndex(3)
 ---
 >>>        })(something = someOther.something || (someOther.something = {}));
 1->^^^^^^^^
@@ -1277,15 +1277,15 @@ sourceFile:../../../second/second_part1.ts
 7 >                                          
 8 >                                               something
 9 >                                                                   { export class someClass {} }
-1->Emitted(56, 9) Source(24, 85) + SourceIndex(3)
-2 >Emitted(56, 10) Source(24, 86) + SourceIndex(3)
-3 >Emitted(56, 12) Source(24, 47) + SourceIndex(3)
-4 >Emitted(56, 21) Source(24, 56) + SourceIndex(3)
-5 >Emitted(56, 24) Source(24, 47) + SourceIndex(3)
-6 >Emitted(56, 43) Source(24, 56) + SourceIndex(3)
-7 >Emitted(56, 48) Source(24, 47) + SourceIndex(3)
-8 >Emitted(56, 67) Source(24, 56) + SourceIndex(3)
-9 >Emitted(56, 75) Source(24, 86) + SourceIndex(3)
+1->Emitted(56, 9) Source(24, 89) + SourceIndex(3)
+2 >Emitted(56, 10) Source(24, 90) + SourceIndex(3)
+3 >Emitted(56, 12) Source(24, 51) + SourceIndex(3)
+4 >Emitted(56, 21) Source(24, 60) + SourceIndex(3)
+5 >Emitted(56, 24) Source(24, 51) + SourceIndex(3)
+6 >Emitted(56, 43) Source(24, 60) + SourceIndex(3)
+7 >Emitted(56, 48) Source(24, 51) + SourceIndex(3)
+8 >Emitted(56, 67) Source(24, 60) + SourceIndex(3)
+9 >Emitted(56, 75) Source(24, 90) + SourceIndex(3)
 ---
 >>>    })(someOther = normalN.someOther || (normalN.someOther = {}));
 1 >^^^^
@@ -1306,15 +1306,15 @@ sourceFile:../../../second/second_part1.ts
 7 >                                    
 8 >                                         someOther
 9 >                                                          .something { export class someClass {} }
-1 >Emitted(57, 5) Source(24, 85) + SourceIndex(3)
-2 >Emitted(57, 6) Source(24, 86) + SourceIndex(3)
-3 >Emitted(57, 8) Source(24, 37) + SourceIndex(3)
-4 >Emitted(57, 17) Source(24, 46) + SourceIndex(3)
-5 >Emitted(57, 20) Source(24, 37) + SourceIndex(3)
-6 >Emitted(57, 37) Source(24, 46) + SourceIndex(3)
-7 >Emitted(57, 42) Source(24, 37) + SourceIndex(3)
-8 >Emitted(57, 59) Source(24, 46) + SourceIndex(3)
-9 >Emitted(57, 67) Source(24, 86) + SourceIndex(3)
+1 >Emitted(57, 5) Source(24, 89) + SourceIndex(3)
+2 >Emitted(57, 6) Source(24, 90) + SourceIndex(3)
+3 >Emitted(57, 8) Source(24, 41) + SourceIndex(3)
+4 >Emitted(57, 17) Source(24, 50) + SourceIndex(3)
+5 >Emitted(57, 20) Source(24, 41) + SourceIndex(3)
+6 >Emitted(57, 37) Source(24, 50) + SourceIndex(3)
+7 >Emitted(57, 42) Source(24, 41) + SourceIndex(3)
+8 >Emitted(57, 59) Source(24, 50) + SourceIndex(3)
+9 >Emitted(57, 67) Source(24, 90) + SourceIndex(3)
 ---
 >>>    /**@internal*/ normalN.someImport = someNamespace.C;
 1 >^^^^
@@ -1327,7 +1327,7 @@ sourceFile:../../../second/second_part1.ts
 8 >                                                      ^
 9 >                                                       ^
 1 >
-  >    
+  >        
 2 >    /**@internal*/
 3 >                   export import 
 4 >                   someImport
@@ -1336,15 +1336,15 @@ sourceFile:../../../second/second_part1.ts
 7 >                                                     .
 8 >                                                      C
 9 >                                                       ;
-1 >Emitted(58, 5) Source(25, 5) + SourceIndex(3)
-2 >Emitted(58, 19) Source(25, 19) + SourceIndex(3)
-3 >Emitted(58, 20) Source(25, 34) + SourceIndex(3)
-4 >Emitted(58, 38) Source(25, 44) + SourceIndex(3)
-5 >Emitted(58, 41) Source(25, 47) + SourceIndex(3)
-6 >Emitted(58, 54) Source(25, 60) + SourceIndex(3)
-7 >Emitted(58, 55) Source(25, 61) + SourceIndex(3)
-8 >Emitted(58, 56) Source(25, 62) + SourceIndex(3)
-9 >Emitted(58, 57) Source(25, 63) + SourceIndex(3)
+1 >Emitted(58, 5) Source(25, 9) + SourceIndex(3)
+2 >Emitted(58, 19) Source(25, 23) + SourceIndex(3)
+3 >Emitted(58, 20) Source(25, 38) + SourceIndex(3)
+4 >Emitted(58, 38) Source(25, 48) + SourceIndex(3)
+5 >Emitted(58, 41) Source(25, 51) + SourceIndex(3)
+6 >Emitted(58, 54) Source(25, 64) + SourceIndex(3)
+7 >Emitted(58, 55) Source(25, 65) + SourceIndex(3)
+8 >Emitted(58, 56) Source(25, 66) + SourceIndex(3)
+9 >Emitted(58, 57) Source(25, 67) + SourceIndex(3)
 ---
 >>>    /**@internal*/ normalN.internalConst = 10;
 1 >^^^^
@@ -1355,21 +1355,21 @@ sourceFile:../../../second/second_part1.ts
 6 >                                           ^^
 7 >                                             ^
 1 >
-  >    /**@internal*/ export type internalType = internalC;
-  >    
+  >        /**@internal*/ export type internalType = internalC;
+  >        
 2 >    /**@internal*/
 3 >                   export const 
 4 >                   internalConst
 5 >                                         = 
 6 >                                           10
 7 >                                             ;
-1 >Emitted(59, 5) Source(27, 5) + SourceIndex(3)
-2 >Emitted(59, 19) Source(27, 19) + SourceIndex(3)
-3 >Emitted(59, 20) Source(27, 33) + SourceIndex(3)
-4 >Emitted(59, 41) Source(27, 46) + SourceIndex(3)
-5 >Emitted(59, 44) Source(27, 49) + SourceIndex(3)
-6 >Emitted(59, 46) Source(27, 51) + SourceIndex(3)
-7 >Emitted(59, 47) Source(27, 52) + SourceIndex(3)
+1 >Emitted(59, 5) Source(27, 9) + SourceIndex(3)
+2 >Emitted(59, 19) Source(27, 23) + SourceIndex(3)
+3 >Emitted(59, 20) Source(27, 37) + SourceIndex(3)
+4 >Emitted(59, 41) Source(27, 50) + SourceIndex(3)
+5 >Emitted(59, 44) Source(27, 53) + SourceIndex(3)
+6 >Emitted(59, 46) Source(27, 55) + SourceIndex(3)
+7 >Emitted(59, 47) Source(27, 56) + SourceIndex(3)
 ---
 >>>    /**@internal*/ var internalEnum;
 1 >^^^^
@@ -1378,16 +1378,16 @@ sourceFile:../../../second/second_part1.ts
 4 >                   ^^^^
 5 >                       ^^^^^^^^^^^^
 1 >
-  >    
+  >        
 2 >    /**@internal*/
 3 >                   
 4 >                   export enum 
 5 >                       internalEnum { a, b, c }
-1 >Emitted(60, 5) Source(28, 5) + SourceIndex(3)
-2 >Emitted(60, 19) Source(28, 19) + SourceIndex(3)
-3 >Emitted(60, 20) Source(28, 20) + SourceIndex(3)
-4 >Emitted(60, 24) Source(28, 32) + SourceIndex(3)
-5 >Emitted(60, 36) Source(28, 56) + SourceIndex(3)
+1 >Emitted(60, 5) Source(28, 9) + SourceIndex(3)
+2 >Emitted(60, 19) Source(28, 23) + SourceIndex(3)
+3 >Emitted(60, 20) Source(28, 24) + SourceIndex(3)
+4 >Emitted(60, 24) Source(28, 36) + SourceIndex(3)
+5 >Emitted(60, 36) Source(28, 60) + SourceIndex(3)
 ---
 >>>    (function (internalEnum) {
 1 >^^^^
@@ -1397,9 +1397,9 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >    export enum 
 3 >               internalEnum
-1 >Emitted(61, 5) Source(28, 20) + SourceIndex(3)
-2 >Emitted(61, 16) Source(28, 32) + SourceIndex(3)
-3 >Emitted(61, 28) Source(28, 44) + SourceIndex(3)
+1 >Emitted(61, 5) Source(28, 24) + SourceIndex(3)
+2 >Emitted(61, 16) Source(28, 36) + SourceIndex(3)
+3 >Emitted(61, 28) Source(28, 48) + SourceIndex(3)
 ---
 >>>        internalEnum[internalEnum["a"] = 0] = "a";
 1->^^^^^^^^
@@ -1409,9 +1409,9 @@ sourceFile:../../../second/second_part1.ts
 1-> { 
 2 >        a
 3 >                                                 
-1->Emitted(62, 9) Source(28, 47) + SourceIndex(3)
-2 >Emitted(62, 50) Source(28, 48) + SourceIndex(3)
-3 >Emitted(62, 51) Source(28, 48) + SourceIndex(3)
+1->Emitted(62, 9) Source(28, 51) + SourceIndex(3)
+2 >Emitted(62, 50) Source(28, 52) + SourceIndex(3)
+3 >Emitted(62, 51) Source(28, 52) + SourceIndex(3)
 ---
 >>>        internalEnum[internalEnum["b"] = 1] = "b";
 1->^^^^^^^^
@@ -1421,9 +1421,9 @@ sourceFile:../../../second/second_part1.ts
 1->, 
 2 >        b
 3 >                                                 
-1->Emitted(63, 9) Source(28, 50) + SourceIndex(3)
-2 >Emitted(63, 50) Source(28, 51) + SourceIndex(3)
-3 >Emitted(63, 51) Source(28, 51) + SourceIndex(3)
+1->Emitted(63, 9) Source(28, 54) + SourceIndex(3)
+2 >Emitted(63, 50) Source(28, 55) + SourceIndex(3)
+3 >Emitted(63, 51) Source(28, 55) + SourceIndex(3)
 ---
 >>>        internalEnum[internalEnum["c"] = 2] = "c";
 1->^^^^^^^^
@@ -1433,9 +1433,9 @@ sourceFile:../../../second/second_part1.ts
 1->, 
 2 >        c
 3 >                                                 
-1->Emitted(64, 9) Source(28, 53) + SourceIndex(3)
-2 >Emitted(64, 50) Source(28, 54) + SourceIndex(3)
-3 >Emitted(64, 51) Source(28, 54) + SourceIndex(3)
+1->Emitted(64, 9) Source(28, 57) + SourceIndex(3)
+2 >Emitted(64, 50) Source(28, 58) + SourceIndex(3)
+3 >Emitted(64, 51) Source(28, 58) + SourceIndex(3)
 ---
 >>>    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));
 1->^^^^
@@ -1456,15 +1456,15 @@ sourceFile:../../../second/second_part1.ts
 7 >                                          
 8 >                                               internalEnum
 9 >                                                                    { a, b, c }
-1->Emitted(65, 5) Source(28, 55) + SourceIndex(3)
-2 >Emitted(65, 6) Source(28, 56) + SourceIndex(3)
-3 >Emitted(65, 8) Source(28, 32) + SourceIndex(3)
-4 >Emitted(65, 20) Source(28, 44) + SourceIndex(3)
-5 >Emitted(65, 23) Source(28, 32) + SourceIndex(3)
-6 >Emitted(65, 43) Source(28, 44) + SourceIndex(3)
-7 >Emitted(65, 48) Source(28, 32) + SourceIndex(3)
-8 >Emitted(65, 68) Source(28, 44) + SourceIndex(3)
-9 >Emitted(65, 76) Source(28, 56) + SourceIndex(3)
+1->Emitted(65, 5) Source(28, 59) + SourceIndex(3)
+2 >Emitted(65, 6) Source(28, 60) + SourceIndex(3)
+3 >Emitted(65, 8) Source(28, 36) + SourceIndex(3)
+4 >Emitted(65, 20) Source(28, 48) + SourceIndex(3)
+5 >Emitted(65, 23) Source(28, 36) + SourceIndex(3)
+6 >Emitted(65, 43) Source(28, 48) + SourceIndex(3)
+7 >Emitted(65, 48) Source(28, 36) + SourceIndex(3)
+8 >Emitted(65, 68) Source(28, 48) + SourceIndex(3)
+9 >Emitted(65, 76) Source(28, 60) + SourceIndex(3)
 ---
 >>>})(normalN || (normalN = {}));
 1 >
@@ -1476,29 +1476,29 @@ sourceFile:../../../second/second_part1.ts
 7 >                      ^^^^^^^^
 8 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >
+  >    
 2 >}
 3 > 
 4 >   normalN
 5 >          
 6 >               normalN
 7 >                       {
-  >                          /**@internal*/ export class C { }
-  >                          /**@internal*/ export function foo() {}
-  >                          /**@internal*/ export namespace someNamespace { export class C {} }
-  >                          /**@internal*/ export namespace someOther.something { export class someClass {} }
-  >                          /**@internal*/ export import someImport = someNamespace.C;
-  >                          /**@internal*/ export type internalType = internalC;
-  >                          /**@internal*/ export const internalConst = 10;
-  >                          /**@internal*/ export enum internalEnum { a, b, c }
-  >                      }
-1 >Emitted(66, 1) Source(29, 1) + SourceIndex(3)
-2 >Emitted(66, 2) Source(29, 2) + SourceIndex(3)
-3 >Emitted(66, 4) Source(20, 11) + SourceIndex(3)
-4 >Emitted(66, 11) Source(20, 18) + SourceIndex(3)
-5 >Emitted(66, 16) Source(20, 11) + SourceIndex(3)
-6 >Emitted(66, 23) Source(20, 18) + SourceIndex(3)
-7 >Emitted(66, 31) Source(29, 2) + SourceIndex(3)
+  >                              /**@internal*/ export class C { }
+  >                              /**@internal*/ export function foo() {}
+  >                              /**@internal*/ export namespace someNamespace { export class C {} }
+  >                              /**@internal*/ export namespace someOther.something { export class someClass {} }
+  >                              /**@internal*/ export import someImport = someNamespace.C;
+  >                              /**@internal*/ export type internalType = internalC;
+  >                              /**@internal*/ export const internalConst = 10;
+  >                              /**@internal*/ export enum internalEnum { a, b, c }
+  >                          }
+1 >Emitted(66, 1) Source(29, 5) + SourceIndex(3)
+2 >Emitted(66, 2) Source(29, 6) + SourceIndex(3)
+3 >Emitted(66, 4) Source(20, 15) + SourceIndex(3)
+4 >Emitted(66, 11) Source(20, 22) + SourceIndex(3)
+5 >Emitted(66, 16) Source(20, 15) + SourceIndex(3)
+6 >Emitted(66, 23) Source(20, 22) + SourceIndex(3)
+7 >Emitted(66, 31) Source(29, 6) + SourceIndex(3)
 ---
 >>>/**@internal*/ var internalC = /** @class */ (function () {
 1->
@@ -1506,18 +1506,18 @@ sourceFile:../../../second/second_part1.ts
 3 >              ^
 4 >               ^^^^^^^^^^^^->
 1->
-  >
+  >    
 2 >/**@internal*/
 3 >               
-1->Emitted(67, 1) Source(30, 1) + SourceIndex(3)
-2 >Emitted(67, 15) Source(30, 15) + SourceIndex(3)
-3 >Emitted(67, 16) Source(30, 16) + SourceIndex(3)
+1->Emitted(67, 1) Source(30, 5) + SourceIndex(3)
+2 >Emitted(67, 15) Source(30, 19) + SourceIndex(3)
+3 >Emitted(67, 16) Source(30, 20) + SourceIndex(3)
 ---
 >>>    function internalC() {
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(68, 5) Source(30, 16) + SourceIndex(3)
+1->Emitted(68, 5) Source(30, 20) + SourceIndex(3)
 ---
 >>>    }
 1->^^^^
@@ -1525,16 +1525,16 @@ sourceFile:../../../second/second_part1.ts
 3 >     ^^^^^^^^^^^^^^^^^->
 1->class internalC {
 2 >    }
-1->Emitted(69, 5) Source(30, 33) + SourceIndex(3)
-2 >Emitted(69, 6) Source(30, 34) + SourceIndex(3)
+1->Emitted(69, 5) Source(30, 37) + SourceIndex(3)
+2 >Emitted(69, 6) Source(30, 38) + SourceIndex(3)
 ---
 >>>    return internalC;
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^
 1->
 2 >    }
-1->Emitted(70, 5) Source(30, 33) + SourceIndex(3)
-2 >Emitted(70, 21) Source(30, 34) + SourceIndex(3)
+1->Emitted(70, 5) Source(30, 37) + SourceIndex(3)
+2 >Emitted(70, 21) Source(30, 38) + SourceIndex(3)
 ---
 >>>}());
 1 >
@@ -1546,10 +1546,10 @@ sourceFile:../../../second/second_part1.ts
 2 >}
 3 > 
 4 > class internalC {}
-1 >Emitted(71, 1) Source(30, 33) + SourceIndex(3)
-2 >Emitted(71, 2) Source(30, 34) + SourceIndex(3)
-3 >Emitted(71, 2) Source(30, 16) + SourceIndex(3)
-4 >Emitted(71, 6) Source(30, 34) + SourceIndex(3)
+1 >Emitted(71, 1) Source(30, 37) + SourceIndex(3)
+2 >Emitted(71, 2) Source(30, 38) + SourceIndex(3)
+3 >Emitted(71, 2) Source(30, 20) + SourceIndex(3)
+4 >Emitted(71, 6) Source(30, 38) + SourceIndex(3)
 ---
 >>>/**@internal*/ function internalfoo() { }
 1->
@@ -1560,20 +1560,20 @@ sourceFile:../../../second/second_part1.ts
 6 >                                   ^^^^^
 7 >                                        ^
 1->
-  >
+  >    
 2 >/**@internal*/
 3 >               
 4 >               function 
 5 >                        internalfoo
 6 >                                   () {
 7 >                                        }
-1->Emitted(72, 1) Source(31, 1) + SourceIndex(3)
-2 >Emitted(72, 15) Source(31, 15) + SourceIndex(3)
-3 >Emitted(72, 16) Source(31, 16) + SourceIndex(3)
-4 >Emitted(72, 25) Source(31, 25) + SourceIndex(3)
-5 >Emitted(72, 36) Source(31, 36) + SourceIndex(3)
-6 >Emitted(72, 41) Source(31, 40) + SourceIndex(3)
-7 >Emitted(72, 42) Source(31, 41) + SourceIndex(3)
+1->Emitted(72, 1) Source(31, 5) + SourceIndex(3)
+2 >Emitted(72, 15) Source(31, 19) + SourceIndex(3)
+3 >Emitted(72, 16) Source(31, 20) + SourceIndex(3)
+4 >Emitted(72, 25) Source(31, 29) + SourceIndex(3)
+5 >Emitted(72, 36) Source(31, 40) + SourceIndex(3)
+6 >Emitted(72, 41) Source(31, 44) + SourceIndex(3)
+7 >Emitted(72, 42) Source(31, 45) + SourceIndex(3)
 ---
 >>>/**@internal*/ var internalNamespace;
 1 >
@@ -1583,18 +1583,18 @@ sourceFile:../../../second/second_part1.ts
 5 >                   ^^^^^^^^^^^^^^^^^
 6 >                                    ^
 1 >
-  >
+  >    
 2 >/**@internal*/
 3 >               
 4 >               namespace 
 5 >                   internalNamespace
 6 >                                     { export class someClass {} }
-1 >Emitted(73, 1) Source(32, 1) + SourceIndex(3)
-2 >Emitted(73, 15) Source(32, 15) + SourceIndex(3)
-3 >Emitted(73, 16) Source(32, 16) + SourceIndex(3)
-4 >Emitted(73, 20) Source(32, 26) + SourceIndex(3)
-5 >Emitted(73, 37) Source(32, 43) + SourceIndex(3)
-6 >Emitted(73, 38) Source(32, 73) + SourceIndex(3)
+1 >Emitted(73, 1) Source(32, 5) + SourceIndex(3)
+2 >Emitted(73, 15) Source(32, 19) + SourceIndex(3)
+3 >Emitted(73, 16) Source(32, 20) + SourceIndex(3)
+4 >Emitted(73, 20) Source(32, 30) + SourceIndex(3)
+5 >Emitted(73, 37) Source(32, 47) + SourceIndex(3)
+6 >Emitted(73, 38) Source(32, 77) + SourceIndex(3)
 ---
 >>>(function (internalNamespace) {
 1 >
@@ -1604,21 +1604,21 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >namespace 
 3 >           internalNamespace
-1 >Emitted(74, 1) Source(32, 16) + SourceIndex(3)
-2 >Emitted(74, 12) Source(32, 26) + SourceIndex(3)
-3 >Emitted(74, 29) Source(32, 43) + SourceIndex(3)
+1 >Emitted(74, 1) Source(32, 20) + SourceIndex(3)
+2 >Emitted(74, 12) Source(32, 30) + SourceIndex(3)
+3 >Emitted(74, 29) Source(32, 47) + SourceIndex(3)
 ---
 >>>    var someClass = /** @class */ (function () {
 1->^^^^
 2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
-1->Emitted(75, 5) Source(32, 46) + SourceIndex(3)
+1->Emitted(75, 5) Source(32, 50) + SourceIndex(3)
 ---
 >>>        function someClass() {
 1->^^^^^^^^
 2 >        ^^->
 1->
-1->Emitted(76, 9) Source(32, 46) + SourceIndex(3)
+1->Emitted(76, 9) Source(32, 50) + SourceIndex(3)
 ---
 >>>        }
 1->^^^^^^^^
@@ -1626,16 +1626,16 @@ sourceFile:../../../second/second_part1.ts
 3 >         ^^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >        }
-1->Emitted(77, 9) Source(32, 70) + SourceIndex(3)
-2 >Emitted(77, 10) Source(32, 71) + SourceIndex(3)
+1->Emitted(77, 9) Source(32, 74) + SourceIndex(3)
+2 >Emitted(77, 10) Source(32, 75) + SourceIndex(3)
 ---
 >>>        return someClass;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^
 1->
 2 >        }
-1->Emitted(78, 9) Source(32, 70) + SourceIndex(3)
-2 >Emitted(78, 25) Source(32, 71) + SourceIndex(3)
+1->Emitted(78, 9) Source(32, 74) + SourceIndex(3)
+2 >Emitted(78, 25) Source(32, 75) + SourceIndex(3)
 ---
 >>>    }());
 1 >^^^^
@@ -1647,10 +1647,10 @@ sourceFile:../../../second/second_part1.ts
 2 >    }
 3 >     
 4 >     export class someClass {}
-1 >Emitted(79, 5) Source(32, 70) + SourceIndex(3)
-2 >Emitted(79, 6) Source(32, 71) + SourceIndex(3)
-3 >Emitted(79, 6) Source(32, 46) + SourceIndex(3)
-4 >Emitted(79, 10) Source(32, 71) + SourceIndex(3)
+1 >Emitted(79, 5) Source(32, 74) + SourceIndex(3)
+2 >Emitted(79, 6) Source(32, 75) + SourceIndex(3)
+3 >Emitted(79, 6) Source(32, 50) + SourceIndex(3)
+4 >Emitted(79, 10) Source(32, 75) + SourceIndex(3)
 ---
 >>>    internalNamespace.someClass = someClass;
 1->^^^^
@@ -1662,10 +1662,10 @@ sourceFile:../../../second/second_part1.ts
 2 >    someClass
 3 >                                {}
 4 >                                           
-1->Emitted(80, 5) Source(32, 59) + SourceIndex(3)
-2 >Emitted(80, 32) Source(32, 68) + SourceIndex(3)
-3 >Emitted(80, 44) Source(32, 71) + SourceIndex(3)
-4 >Emitted(80, 45) Source(32, 71) + SourceIndex(3)
+1->Emitted(80, 5) Source(32, 63) + SourceIndex(3)
+2 >Emitted(80, 32) Source(32, 72) + SourceIndex(3)
+3 >Emitted(80, 44) Source(32, 75) + SourceIndex(3)
+4 >Emitted(80, 45) Source(32, 75) + SourceIndex(3)
 ---
 >>>})(internalNamespace || (internalNamespace = {}));
 1->
@@ -1682,13 +1682,13 @@ sourceFile:../../../second/second_part1.ts
 5 >                    
 6 >                         internalNamespace
 7 >                                           { export class someClass {} }
-1->Emitted(81, 1) Source(32, 72) + SourceIndex(3)
-2 >Emitted(81, 2) Source(32, 73) + SourceIndex(3)
-3 >Emitted(81, 4) Source(32, 26) + SourceIndex(3)
-4 >Emitted(81, 21) Source(32, 43) + SourceIndex(3)
-5 >Emitted(81, 26) Source(32, 26) + SourceIndex(3)
-6 >Emitted(81, 43) Source(32, 43) + SourceIndex(3)
-7 >Emitted(81, 51) Source(32, 73) + SourceIndex(3)
+1->Emitted(81, 1) Source(32, 76) + SourceIndex(3)
+2 >Emitted(81, 2) Source(32, 77) + SourceIndex(3)
+3 >Emitted(81, 4) Source(32, 30) + SourceIndex(3)
+4 >Emitted(81, 21) Source(32, 47) + SourceIndex(3)
+5 >Emitted(81, 26) Source(32, 30) + SourceIndex(3)
+6 >Emitted(81, 43) Source(32, 47) + SourceIndex(3)
+7 >Emitted(81, 51) Source(32, 77) + SourceIndex(3)
 ---
 >>>/**@internal*/ var internalOther;
 1 >
@@ -1698,18 +1698,18 @@ sourceFile:../../../second/second_part1.ts
 5 >                   ^^^^^^^^^^^^^
 6 >                                ^
 1 >
-  >
+  >    
 2 >/**@internal*/
 3 >               
 4 >               namespace 
 5 >                   internalOther
 6 >                                .something { export class someClass {} }
-1 >Emitted(82, 1) Source(33, 1) + SourceIndex(3)
-2 >Emitted(82, 15) Source(33, 15) + SourceIndex(3)
-3 >Emitted(82, 16) Source(33, 16) + SourceIndex(3)
-4 >Emitted(82, 20) Source(33, 26) + SourceIndex(3)
-5 >Emitted(82, 33) Source(33, 39) + SourceIndex(3)
-6 >Emitted(82, 34) Source(33, 79) + SourceIndex(3)
+1 >Emitted(82, 1) Source(33, 5) + SourceIndex(3)
+2 >Emitted(82, 15) Source(33, 19) + SourceIndex(3)
+3 >Emitted(82, 16) Source(33, 20) + SourceIndex(3)
+4 >Emitted(82, 20) Source(33, 30) + SourceIndex(3)
+5 >Emitted(82, 33) Source(33, 43) + SourceIndex(3)
+6 >Emitted(82, 34) Source(33, 83) + SourceIndex(3)
 ---
 >>>(function (internalOther) {
 1 >
@@ -1718,9 +1718,9 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >namespace 
 3 >           internalOther
-1 >Emitted(83, 1) Source(33, 16) + SourceIndex(3)
-2 >Emitted(83, 12) Source(33, 26) + SourceIndex(3)
-3 >Emitted(83, 25) Source(33, 39) + SourceIndex(3)
+1 >Emitted(83, 1) Source(33, 20) + SourceIndex(3)
+2 >Emitted(83, 12) Source(33, 30) + SourceIndex(3)
+3 >Emitted(83, 25) Source(33, 43) + SourceIndex(3)
 ---
 >>>    var something;
 1 >^^^^
@@ -1732,10 +1732,10 @@ sourceFile:../../../second/second_part1.ts
 2 >    
 3 >        something
 4 >                  { export class someClass {} }
-1 >Emitted(84, 5) Source(33, 40) + SourceIndex(3)
-2 >Emitted(84, 9) Source(33, 40) + SourceIndex(3)
-3 >Emitted(84, 18) Source(33, 49) + SourceIndex(3)
-4 >Emitted(84, 19) Source(33, 79) + SourceIndex(3)
+1 >Emitted(84, 5) Source(33, 44) + SourceIndex(3)
+2 >Emitted(84, 9) Source(33, 44) + SourceIndex(3)
+3 >Emitted(84, 18) Source(33, 53) + SourceIndex(3)
+4 >Emitted(84, 19) Source(33, 83) + SourceIndex(3)
 ---
 >>>    (function (something) {
 1->^^^^
@@ -1745,21 +1745,21 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >    
 3 >               something
-1->Emitted(85, 5) Source(33, 40) + SourceIndex(3)
-2 >Emitted(85, 16) Source(33, 40) + SourceIndex(3)
-3 >Emitted(85, 25) Source(33, 49) + SourceIndex(3)
+1->Emitted(85, 5) Source(33, 44) + SourceIndex(3)
+2 >Emitted(85, 16) Source(33, 44) + SourceIndex(3)
+3 >Emitted(85, 25) Source(33, 53) + SourceIndex(3)
 ---
 >>>        var someClass = /** @class */ (function () {
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> { 
-1->Emitted(86, 9) Source(33, 52) + SourceIndex(3)
+1->Emitted(86, 9) Source(33, 56) + SourceIndex(3)
 ---
 >>>            function someClass() {
 1->^^^^^^^^^^^^
 2 >            ^^->
 1->
-1->Emitted(87, 13) Source(33, 52) + SourceIndex(3)
+1->Emitted(87, 13) Source(33, 56) + SourceIndex(3)
 ---
 >>>            }
 1->^^^^^^^^^^^^
@@ -1767,16 +1767,16 @@ sourceFile:../../../second/second_part1.ts
 3 >             ^^^^^^^^^^^^^^^^^->
 1->export class someClass {
 2 >            }
-1->Emitted(88, 13) Source(33, 76) + SourceIndex(3)
-2 >Emitted(88, 14) Source(33, 77) + SourceIndex(3)
+1->Emitted(88, 13) Source(33, 80) + SourceIndex(3)
+2 >Emitted(88, 14) Source(33, 81) + SourceIndex(3)
 ---
 >>>            return someClass;
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^
 1->
 2 >            }
-1->Emitted(89, 13) Source(33, 76) + SourceIndex(3)
-2 >Emitted(89, 29) Source(33, 77) + SourceIndex(3)
+1->Emitted(89, 13) Source(33, 80) + SourceIndex(3)
+2 >Emitted(89, 29) Source(33, 81) + SourceIndex(3)
 ---
 >>>        }());
 1 >^^^^^^^^
@@ -1788,10 +1788,10 @@ sourceFile:../../../second/second_part1.ts
 2 >        }
 3 >         
 4 >         export class someClass {}
-1 >Emitted(90, 9) Source(33, 76) + SourceIndex(3)
-2 >Emitted(90, 10) Source(33, 77) + SourceIndex(3)
-3 >Emitted(90, 10) Source(33, 52) + SourceIndex(3)
-4 >Emitted(90, 14) Source(33, 77) + SourceIndex(3)
+1 >Emitted(90, 9) Source(33, 80) + SourceIndex(3)
+2 >Emitted(90, 10) Source(33, 81) + SourceIndex(3)
+3 >Emitted(90, 10) Source(33, 56) + SourceIndex(3)
+4 >Emitted(90, 14) Source(33, 81) + SourceIndex(3)
 ---
 >>>        something.someClass = someClass;
 1->^^^^^^^^
@@ -1803,10 +1803,10 @@ sourceFile:../../../second/second_part1.ts
 2 >        someClass
 3 >                            {}
 4 >                                       
-1->Emitted(91, 9) Source(33, 65) + SourceIndex(3)
-2 >Emitted(91, 28) Source(33, 74) + SourceIndex(3)
-3 >Emitted(91, 40) Source(33, 77) + SourceIndex(3)
-4 >Emitted(91, 41) Source(33, 77) + SourceIndex(3)
+1->Emitted(91, 9) Source(33, 69) + SourceIndex(3)
+2 >Emitted(91, 28) Source(33, 78) + SourceIndex(3)
+3 >Emitted(91, 40) Source(33, 81) + SourceIndex(3)
+4 >Emitted(91, 41) Source(33, 81) + SourceIndex(3)
 ---
 >>>    })(something = internalOther.something || (internalOther.something = {}));
 1->^^^^
@@ -1827,15 +1827,15 @@ sourceFile:../../../second/second_part1.ts
 7 >                                          
 8 >                                               something
 9 >                                                                       { export class someClass {} }
-1->Emitted(92, 5) Source(33, 78) + SourceIndex(3)
-2 >Emitted(92, 6) Source(33, 79) + SourceIndex(3)
-3 >Emitted(92, 8) Source(33, 40) + SourceIndex(3)
-4 >Emitted(92, 17) Source(33, 49) + SourceIndex(3)
-5 >Emitted(92, 20) Source(33, 40) + SourceIndex(3)
-6 >Emitted(92, 43) Source(33, 49) + SourceIndex(3)
-7 >Emitted(92, 48) Source(33, 40) + SourceIndex(3)
-8 >Emitted(92, 71) Source(33, 49) + SourceIndex(3)
-9 >Emitted(92, 79) Source(33, 79) + SourceIndex(3)
+1->Emitted(92, 5) Source(33, 82) + SourceIndex(3)
+2 >Emitted(92, 6) Source(33, 83) + SourceIndex(3)
+3 >Emitted(92, 8) Source(33, 44) + SourceIndex(3)
+4 >Emitted(92, 17) Source(33, 53) + SourceIndex(3)
+5 >Emitted(92, 20) Source(33, 44) + SourceIndex(3)
+6 >Emitted(92, 43) Source(33, 53) + SourceIndex(3)
+7 >Emitted(92, 48) Source(33, 44) + SourceIndex(3)
+8 >Emitted(92, 71) Source(33, 53) + SourceIndex(3)
+9 >Emitted(92, 79) Source(33, 83) + SourceIndex(3)
 ---
 >>>})(internalOther || (internalOther = {}));
 1 >
@@ -1853,13 +1853,13 @@ sourceFile:../../../second/second_part1.ts
 5 >                
 6 >                     internalOther
 7 >                                  .something { export class someClass {} }
-1 >Emitted(93, 1) Source(33, 78) + SourceIndex(3)
-2 >Emitted(93, 2) Source(33, 79) + SourceIndex(3)
-3 >Emitted(93, 4) Source(33, 26) + SourceIndex(3)
-4 >Emitted(93, 17) Source(33, 39) + SourceIndex(3)
-5 >Emitted(93, 22) Source(33, 26) + SourceIndex(3)
-6 >Emitted(93, 35) Source(33, 39) + SourceIndex(3)
-7 >Emitted(93, 43) Source(33, 79) + SourceIndex(3)
+1 >Emitted(93, 1) Source(33, 82) + SourceIndex(3)
+2 >Emitted(93, 2) Source(33, 83) + SourceIndex(3)
+3 >Emitted(93, 4) Source(33, 30) + SourceIndex(3)
+4 >Emitted(93, 17) Source(33, 43) + SourceIndex(3)
+5 >Emitted(93, 22) Source(33, 30) + SourceIndex(3)
+6 >Emitted(93, 35) Source(33, 43) + SourceIndex(3)
+7 >Emitted(93, 43) Source(33, 83) + SourceIndex(3)
 ---
 >>>/**@internal*/ var internalImport = internalNamespace.someClass;
 1->
@@ -1873,7 +1873,7 @@ sourceFile:../../../second/second_part1.ts
 9 >                                                      ^^^^^^^^^
 10>                                                               ^
 1->
-  >
+  >    
 2 >/**@internal*/
 3 >               
 4 >               import 
@@ -1883,16 +1883,16 @@ sourceFile:../../../second/second_part1.ts
 8 >                                                     .
 9 >                                                      someClass
 10>                                                               ;
-1->Emitted(94, 1) Source(34, 1) + SourceIndex(3)
-2 >Emitted(94, 15) Source(34, 15) + SourceIndex(3)
-3 >Emitted(94, 16) Source(34, 16) + SourceIndex(3)
-4 >Emitted(94, 20) Source(34, 23) + SourceIndex(3)
-5 >Emitted(94, 34) Source(34, 37) + SourceIndex(3)
-6 >Emitted(94, 37) Source(34, 40) + SourceIndex(3)
-7 >Emitted(94, 54) Source(34, 57) + SourceIndex(3)
-8 >Emitted(94, 55) Source(34, 58) + SourceIndex(3)
-9 >Emitted(94, 64) Source(34, 67) + SourceIndex(3)
-10>Emitted(94, 65) Source(34, 68) + SourceIndex(3)
+1->Emitted(94, 1) Source(34, 5) + SourceIndex(3)
+2 >Emitted(94, 15) Source(34, 19) + SourceIndex(3)
+3 >Emitted(94, 16) Source(34, 20) + SourceIndex(3)
+4 >Emitted(94, 20) Source(34, 27) + SourceIndex(3)
+5 >Emitted(94, 34) Source(34, 41) + SourceIndex(3)
+6 >Emitted(94, 37) Source(34, 44) + SourceIndex(3)
+7 >Emitted(94, 54) Source(34, 61) + SourceIndex(3)
+8 >Emitted(94, 55) Source(34, 62) + SourceIndex(3)
+9 >Emitted(94, 64) Source(34, 71) + SourceIndex(3)
+10>Emitted(94, 65) Source(34, 72) + SourceIndex(3)
 ---
 >>>/**@internal*/ var internalConst = 10;
 1 >
@@ -1904,8 +1904,8 @@ sourceFile:../../../second/second_part1.ts
 7 >                                   ^^
 8 >                                     ^
 1 >
-  >/**@internal*/ type internalType = internalC;
-  >
+  >    /**@internal*/ type internalType = internalC;
+  >    
 2 >/**@internal*/
 3 >               
 4 >               const 
@@ -1913,14 +1913,14 @@ sourceFile:../../../second/second_part1.ts
 6 >                                 = 
 7 >                                   10
 8 >                                     ;
-1 >Emitted(95, 1) Source(36, 1) + SourceIndex(3)
-2 >Emitted(95, 15) Source(36, 15) + SourceIndex(3)
-3 >Emitted(95, 16) Source(36, 16) + SourceIndex(3)
-4 >Emitted(95, 20) Source(36, 22) + SourceIndex(3)
-5 >Emitted(95, 33) Source(36, 35) + SourceIndex(3)
-6 >Emitted(95, 36) Source(36, 38) + SourceIndex(3)
-7 >Emitted(95, 38) Source(36, 40) + SourceIndex(3)
-8 >Emitted(95, 39) Source(36, 41) + SourceIndex(3)
+1 >Emitted(95, 1) Source(36, 5) + SourceIndex(3)
+2 >Emitted(95, 15) Source(36, 19) + SourceIndex(3)
+3 >Emitted(95, 16) Source(36, 20) + SourceIndex(3)
+4 >Emitted(95, 20) Source(36, 26) + SourceIndex(3)
+5 >Emitted(95, 33) Source(36, 39) + SourceIndex(3)
+6 >Emitted(95, 36) Source(36, 42) + SourceIndex(3)
+7 >Emitted(95, 38) Source(36, 44) + SourceIndex(3)
+8 >Emitted(95, 39) Source(36, 45) + SourceIndex(3)
 ---
 >>>/**@internal*/ var internalEnum;
 1 >
@@ -1929,16 +1929,16 @@ sourceFile:../../../second/second_part1.ts
 4 >               ^^^^
 5 >                   ^^^^^^^^^^^^
 1 >
-  >
+  >    
 2 >/**@internal*/
 3 >               
 4 >               enum 
 5 >                   internalEnum { a, b, c }
-1 >Emitted(96, 1) Source(37, 1) + SourceIndex(3)
-2 >Emitted(96, 15) Source(37, 15) + SourceIndex(3)
-3 >Emitted(96, 16) Source(37, 16) + SourceIndex(3)
-4 >Emitted(96, 20) Source(37, 21) + SourceIndex(3)
-5 >Emitted(96, 32) Source(37, 45) + SourceIndex(3)
+1 >Emitted(96, 1) Source(37, 5) + SourceIndex(3)
+2 >Emitted(96, 15) Source(37, 19) + SourceIndex(3)
+3 >Emitted(96, 16) Source(37, 20) + SourceIndex(3)
+4 >Emitted(96, 20) Source(37, 25) + SourceIndex(3)
+5 >Emitted(96, 32) Source(37, 49) + SourceIndex(3)
 ---
 >>>(function (internalEnum) {
 1 >
@@ -1948,9 +1948,9 @@ sourceFile:../../../second/second_part1.ts
 1 >
 2 >enum 
 3 >           internalEnum
-1 >Emitted(97, 1) Source(37, 16) + SourceIndex(3)
-2 >Emitted(97, 12) Source(37, 21) + SourceIndex(3)
-3 >Emitted(97, 24) Source(37, 33) + SourceIndex(3)
+1 >Emitted(97, 1) Source(37, 20) + SourceIndex(3)
+2 >Emitted(97, 12) Source(37, 25) + SourceIndex(3)
+3 >Emitted(97, 24) Source(37, 37) + SourceIndex(3)
 ---
 >>>    internalEnum[internalEnum["a"] = 0] = "a";
 1->^^^^
@@ -1960,9 +1960,9 @@ sourceFile:../../../second/second_part1.ts
 1-> { 
 2 >    a
 3 >                                             
-1->Emitted(98, 5) Source(37, 36) + SourceIndex(3)
-2 >Emitted(98, 46) Source(37, 37) + SourceIndex(3)
-3 >Emitted(98, 47) Source(37, 37) + SourceIndex(3)
+1->Emitted(98, 5) Source(37, 40) + SourceIndex(3)
+2 >Emitted(98, 46) Source(37, 41) + SourceIndex(3)
+3 >Emitted(98, 47) Source(37, 41) + SourceIndex(3)
 ---
 >>>    internalEnum[internalEnum["b"] = 1] = "b";
 1->^^^^
@@ -1972,9 +1972,9 @@ sourceFile:../../../second/second_part1.ts
 1->, 
 2 >    b
 3 >                                             
-1->Emitted(99, 5) Source(37, 39) + SourceIndex(3)
-2 >Emitted(99, 46) Source(37, 40) + SourceIndex(3)
-3 >Emitted(99, 47) Source(37, 40) + SourceIndex(3)
+1->Emitted(99, 5) Source(37, 43) + SourceIndex(3)
+2 >Emitted(99, 46) Source(37, 44) + SourceIndex(3)
+3 >Emitted(99, 47) Source(37, 44) + SourceIndex(3)
 ---
 >>>    internalEnum[internalEnum["c"] = 2] = "c";
 1->^^^^
@@ -1983,9 +1983,9 @@ sourceFile:../../../second/second_part1.ts
 1->, 
 2 >    c
 3 >                                             
-1->Emitted(100, 5) Source(37, 42) + SourceIndex(3)
-2 >Emitted(100, 46) Source(37, 43) + SourceIndex(3)
-3 >Emitted(100, 47) Source(37, 43) + SourceIndex(3)
+1->Emitted(100, 5) Source(37, 46) + SourceIndex(3)
+2 >Emitted(100, 46) Source(37, 47) + SourceIndex(3)
+3 >Emitted(100, 47) Source(37, 47) + SourceIndex(3)
 ---
 >>>})(internalEnum || (internalEnum = {}));
 1 >
@@ -2002,13 +2002,13 @@ sourceFile:../../../second/second_part1.ts
 5 >               
 6 >                    internalEnum
 7 >                                 { a, b, c }
-1 >Emitted(101, 1) Source(37, 44) + SourceIndex(3)
-2 >Emitted(101, 2) Source(37, 45) + SourceIndex(3)
-3 >Emitted(101, 4) Source(37, 21) + SourceIndex(3)
-4 >Emitted(101, 16) Source(37, 33) + SourceIndex(3)
-5 >Emitted(101, 21) Source(37, 21) + SourceIndex(3)
-6 >Emitted(101, 33) Source(37, 33) + SourceIndex(3)
-7 >Emitted(101, 41) Source(37, 45) + SourceIndex(3)
+1 >Emitted(101, 1) Source(37, 48) + SourceIndex(3)
+2 >Emitted(101, 2) Source(37, 49) + SourceIndex(3)
+3 >Emitted(101, 4) Source(37, 25) + SourceIndex(3)
+4 >Emitted(101, 16) Source(37, 37) + SourceIndex(3)
+5 >Emitted(101, 21) Source(37, 25) + SourceIndex(3)
+6 >Emitted(101, 33) Source(37, 37) + SourceIndex(3)
+7 >Emitted(101, 41) Source(37, 49) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js

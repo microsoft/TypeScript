@@ -465,14 +465,14 @@ class Clazz {
 
         testBaseline("transformAddCommentToNamespace", () => {
             return transpileModule(`
-// namespace comment.
-namespace Foo {
-    export const x = 1;
-}
-// another comment.
-namespace Foo {
-    export const y = 1;
-}
+    // namespace comment.
+    namespace Foo {
+        export const x = 1;
+    }
+    // another comment.
+    namespace Foo {
+        export const y = 1;
+    }
 `, {
                 transformers: {
                     before: [addSyntheticComment(n => isModuleDeclaration(n))],

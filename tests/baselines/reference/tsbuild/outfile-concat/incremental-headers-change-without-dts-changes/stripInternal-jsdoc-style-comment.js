@@ -400,7 +400,7 @@ declare var c: C;
 //# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAEG,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BL,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -589,24 +589,24 @@ sourceFile:../../../second/second_part1.ts
 3 >              ^^^^^^^
 1->
   >
-  >
+  >    
 2 >class 
 3 >              normalC
-1->Emitted(13, 1) Source(13, 1) + SourceIndex(2)
-2 >Emitted(13, 15) Source(13, 7) + SourceIndex(2)
-3 >Emitted(13, 22) Source(13, 14) + SourceIndex(2)
+1->Emitted(13, 1) Source(13, 5) + SourceIndex(2)
+2 >Emitted(13, 15) Source(13, 11) + SourceIndex(2)
+3 >Emitted(13, 22) Source(13, 18) + SourceIndex(2)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 > {
-  >    /**@internal*/ constructor() { }
-  >    /**@internal*/ prop: string;
-  >    /**@internal*/ method() { }
-  >    /**@internal*/ get c() { return 10; }
-  >    /**@internal*/ set c(val: number) { }
-  >}
-1 >Emitted(14, 2) Source(19, 2) + SourceIndex(2)
+  >        /**@internal*/ constructor() { }
+  >        /**@internal*/ prop: string;
+  >        /**@internal*/ method() { }
+  >        /**@internal*/ get c() { return 10; }
+  >        /**@internal*/ set c(val: number) { }
+  >    }
+1 >Emitted(14, 2) Source(19, 6) + SourceIndex(2)
 ---
 >>>declare namespace normalN {
 1->
@@ -614,29 +614,29 @@ sourceFile:../../../second/second_part1.ts
 3 >                  ^^^^^^^
 4 >                         ^
 1->
-  >
+  >    
 2 >namespace 
 3 >                  normalN
 4 >                          
-1->Emitted(15, 1) Source(20, 1) + SourceIndex(2)
-2 >Emitted(15, 19) Source(20, 11) + SourceIndex(2)
-3 >Emitted(15, 26) Source(20, 18) + SourceIndex(2)
-4 >Emitted(15, 27) Source(20, 19) + SourceIndex(2)
+1->Emitted(15, 1) Source(20, 5) + SourceIndex(2)
+2 >Emitted(15, 19) Source(20, 15) + SourceIndex(2)
+3 >Emitted(15, 26) Source(20, 22) + SourceIndex(2)
+4 >Emitted(15, 27) Source(20, 23) + SourceIndex(2)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^->
 1 >{
-  >    /**@internal*/ export class C { }
-  >    /**@internal*/ export function foo() {}
-  >    /**@internal*/ export namespace someNamespace { export class C {} }
-  >    /**@internal*/ export namespace someOther.something { export class someClass {} }
-  >    /**@internal*/ export import someImport = someNamespace.C;
-  >    /**@internal*/ export type internalType = internalC;
-  >    /**@internal*/ export const internalConst = 10;
-  >    /**@internal*/ export enum internalEnum { a, b, c }
-  >}
-1 >Emitted(16, 2) Source(29, 2) + SourceIndex(2)
+  >        /**@internal*/ export class C { }
+  >        /**@internal*/ export function foo() {}
+  >        /**@internal*/ export namespace someNamespace { export class C {} }
+  >        /**@internal*/ export namespace someOther.something { export class someClass {} }
+  >        /**@internal*/ export import someImport = someNamespace.C;
+  >        /**@internal*/ export type internalType = internalC;
+  >        /**@internal*/ export const internalConst = 10;
+  >        /**@internal*/ export enum internalEnum { a, b, c }
+  >    }
+1 >Emitted(16, 2) Source(29, 6) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts

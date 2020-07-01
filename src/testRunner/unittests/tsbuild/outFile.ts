@@ -464,31 +464,31 @@ namespace ts {
                     stripInternalOfThird(fs);
                     replaceText(fs, sources[Project.first][Source.ts][Part.one], "interface", `${internal} interface`);
                     appendText(fs, sources[Project.second][Source.ts][Part.one], `
-class normalC {
-    ${internal} constructor() { }
-    ${internal} prop: string;
-    ${internal} method() { }
-    ${internal} get c() { return 10; }
-    ${internal} set c(val: number) { }
-}
-namespace normalN {
-    ${internal} export class C { }
-    ${internal} export function foo() {}
-    ${internal} export namespace someNamespace { export class C {} }
-    ${internal} export namespace someOther.something { export class someClass {} }
-    ${internal} export import someImport = someNamespace.C;
-    ${internal} export type internalType = internalC;
-    ${internal} export const internalConst = 10;
-    ${internal} export enum internalEnum { a, b, c }
-}
-${internal} class internalC {}
-${internal} function internalfoo() {}
-${internal} namespace internalNamespace { export class someClass {} }
-${internal} namespace internalOther.something { export class someClass {} }
-${internal} import internalImport = internalNamespace.someClass;
-${internal} type internalType = internalC;
-${internal} const internalConst = 10;
-${internal} enum internalEnum { a, b, c }`);
+    class normalC {
+        ${internal} constructor() { }
+        ${internal} prop: string;
+        ${internal} method() { }
+        ${internal} get c() { return 10; }
+        ${internal} set c(val: number) { }
+    }
+    namespace normalN {
+        ${internal} export class C { }
+        ${internal} export function foo() {}
+        ${internal} export namespace someNamespace { export class C {} }
+        ${internal} export namespace someOther.something { export class someClass {} }
+        ${internal} export import someImport = someNamespace.C;
+        ${internal} export type internalType = internalC;
+        ${internal} export const internalConst = 10;
+        ${internal} export enum internalEnum { a, b, c }
+    }
+    ${internal} class internalC {}
+    ${internal} function internalfoo() {}
+    ${internal} namespace internalNamespace { export class someClass {} }
+    ${internal} namespace internalOther.something { export class someClass {} }
+    ${internal} import internalImport = internalNamespace.someClass;
+    ${internal} type internalType = internalC;
+    ${internal} const internalConst = 10;
+    ${internal} enum internalEnum { a, b, c }`);
                 }
 
                 // Verify initial + incremental edits

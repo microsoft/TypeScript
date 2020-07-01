@@ -59,8 +59,8 @@ namespace ts {
         }
 
         {
-            const text = `
-namespace M
+            const text =
+`namespace M
 {
     namespace M2
     {
@@ -230,11 +230,10 @@ var a = 4; // comment 7`;
             });
         }
         {
-            const text = `
-namespace A {
+            const text =
+`namespace A {
     const x = 1, y = "2";
-}
-`;
+}`;
             runSingleFileTest("replaceNode1NoLineBreakBefore", /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 const newNode = createTestVariableDeclaration("z1");
                 changeTracker.replaceNode(sourceFile, findChild("y", sourceFile), newNode);
@@ -304,8 +303,8 @@ var a = 4; // comment 7`;
             });
         }
         {
-            const text = `
-namespace M {
+            const text =
+`namespace M {
     // comment 1
     var x = 1; // comment 2
     // comment 3
@@ -397,8 +396,8 @@ class A {
             });
         }
         {
-            const text = `
-namespace M {
+            const text =
+`namespace M {
     var a = 1,
         b = 2,
         c = 3;
@@ -414,8 +413,8 @@ namespace M {
             });
         }
         {
-            const text = `
-namespace M {
+            const text =
+`namespace M {
     var a = 1, // comment 1
         // comment 2
         b = 2, // comment 3

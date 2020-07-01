@@ -70,7 +70,6 @@ Input::
 {"version":"1.65.1","types":"types/somefile.define.d.ts"}
 
 //// [/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts]
-
 declare namespace myapp {
     function component(str: string): number;
 }

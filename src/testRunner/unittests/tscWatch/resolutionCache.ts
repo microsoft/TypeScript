@@ -386,8 +386,8 @@ declare module "fs" {
                         });
                         sys.ensureFileOrFolder({
                             path: `${projectRoot}/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
-                            content: `
-declare namespace myapp {
+                            content:
+`declare namespace myapp {
     function component(str: string): number;
 }`
                         });

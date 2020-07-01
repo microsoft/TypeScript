@@ -1,5 +1,4 @@
 ===ORIGINAL===
-
 namespace M {
     // comment 1
     var x = 1; // comment 2
@@ -10,7 +9,6 @@ namespace M {
     var a = 4; // comment 7
 }
 ===MODIFIED===
-
 namespace M {
     // comment 1
     var x = 1; // comment 2

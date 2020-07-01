@@ -1,5 +1,4 @@
 ===ORIGINAL===
-
 namespace M
 {
     namespace M2
@@ -21,7 +20,6 @@ namespace M
     }
 }
 ===MODIFIED===
-
 namespace M
 {
     function bar(): any
