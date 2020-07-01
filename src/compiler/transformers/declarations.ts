@@ -58,9 +58,9 @@ namespace ts {
         let needsScopeFixMarker = false;
         let resultHasScopeMarker = false;
         let enclosingDeclaration: Node;
-        let necessaryTypeReferences: Map<true> | undefined;
+        let necessaryTypeReferences: Set<string> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
+        let lateStatementReplacementMap: Map<string, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
         let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -81,8 +81,8 @@ namespace ts {
         let errorNameNode: DeclarationName | undefined;
 
         let currentSourceFile: SourceFile;
-        let refs: Map<SourceFile>;
-        let libs: Map<boolean>;
+        let refs: Map<string, SourceFile>;
+        let libs: Map<string, boolean>;
         let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
@@ -93,9 +93,9 @@ namespace ts {
             if (!typeReferenceDirectives) {
                 return;
             }
-            necessaryTypeReferences = necessaryTypeReferences || createMap<true>();
+            necessaryTypeReferences = necessaryTypeReferences || new Set();
             for (const ref of typeReferenceDirectives) {
-                necessaryTypeReferences.set(ref, true);
+                necessaryTypeReferences.add(ref);
             }
         }
 
@@ -402,7 +402,7 @@ namespace ts {
             }
         }
 
-        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<SourceFile>) {
+        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<string, SourceFile>) {
             if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = host.getSourceFileFromReference(sourceFile, f);
@@ -413,7 +413,7 @@ namespace ts {
             return ret;
         }
 
-        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<boolean>) {
+        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<string, boolean>) {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {

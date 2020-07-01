@@ -26,7 +26,7 @@ namespace ts.codefix {
         },
         getAllCodeActions: context => {
             const { sourceFile } = context;
-            const fixedDeclarations = createMap<true>();
+            const fixedDeclarations = new Set<number>();
             return codeFixAll(context, errorCodes, (t, diagnostic) => {
                 const span = diagnostic.relatedInformation && find(diagnostic.relatedInformation, r => r.code === Diagnostics.Did_you_mean_to_mark_this_function_as_async.code) as TextSpan | undefined;
                 const decl = getFixableErrorSpanDeclaration(sourceFile, span);
@@ -40,18 +40,18 @@ namespace ts.codefix {
     });
 
     type FixableDeclaration = ArrowFunction | FunctionDeclaration | FunctionExpression | MethodDeclaration;
-    function getFix(context: CodeFixContext | CodeFixAllContext, decl: FixableDeclaration, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
+    function getFix(context: CodeFixContext | CodeFixAllContext, decl: FixableDeclaration, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
         const changes = trackChanges(t => makeChange(t, context.sourceFile, decl, fixedDeclarations));
         return createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers);
     }
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, insertionSite: FixableDeclaration, fixedDeclarations?: Map<true>) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, insertionSite: FixableDeclaration, fixedDeclarations?: Set<number>) {
         if (fixedDeclarations) {
-            if (fixedDeclarations.has(getNodeId(insertionSite).toString())) {
+            if (fixedDeclarations.has(getNodeId(insertionSite))) {
                 return;
             }
         }
-        fixedDeclarations?.set(getNodeId(insertionSite).toString(), true);
+        fixedDeclarations?.add(getNodeId(insertionSite));
         const cloneWithModifier = factory.updateModifiers(
             getSynthesizedDeepClone(insertionSite, /*includeTrivia*/ true),
             factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)));

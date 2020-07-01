@@ -15,7 +15,7 @@ namespace ts {
         referenced: boolean;
     }
 
-    export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+    export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
         if (node.body && !node.body.parent) {
             // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
             setParent(node.body, node);
@@ -24,8 +24,8 @@ namespace ts {
         return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateCached(node: Node, visited = createMap<ModuleInstanceState | undefined>()) {
-        const nodeId = "" + getNodeId(node);
+    function getModuleInstanceStateCached(node: Node, visited = new Map<number, ModuleInstanceState | undefined>()) {
+        const nodeId = getNodeId(node);
         if (visited.has(nodeId)) {
             return visited.get(nodeId) || ModuleInstanceState.NonInstantiated;
         }
@@ -35,7 +35,7 @@ namespace ts {
         return result;
     }
 
-    function getModuleInstanceStateWorker(node: Node, visited: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+    function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         switch (node.kind) {
             // 1. interface declarations, type alias declarations
@@ -107,7 +107,7 @@ namespace ts {
         return ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<ModuleInstanceState | undefined>) {
+    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<number, ModuleInstanceState | undefined>) {
         const name = specifier.propertyName || specifier.name;
         let p: Node | undefined = specifier.parent;
         while (p) {
@@ -2109,19 +2109,38 @@ namespace ts {
         }
 
         // The binder visits every node in the syntax tree so it is a convenient place to perform a single localized
-        // check for reserved words used as identifiers in strict mode code.
-        function checkStrictModeIdentifier(node: Identifier) {
-            if (inStrictMode &&
-                node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
-                node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord &&
-                !isIdentifierName(node) &&
+        // check for reserved words used as identifiers in strict mode code, as well as `yield` or `await` in
+        // [Yield] or [Await] contexts, respectively.
+        function checkContextualIdentifier(node: Identifier) {
+            // Report error only if there are no parse errors in file
+            if (!file.parseDiagnostics.length &&
                 !(node.flags & NodeFlags.Ambient) &&
-                !(node.flags & NodeFlags.JSDoc)) {
+                !(node.flags & NodeFlags.JSDoc) &&
+                !isIdentifierName(node)) {
 
-                // Report error only if there are no parse errors in file
-                if (!file.parseDiagnostics.length) {
+                // strict mode identifiers
+                if (inStrictMode &&
+                    node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
+                    node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node,
                         getStrictModeIdentifierMessage(node), declarationNameToString(node)));
+                }
+                else if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
+                    if (isExternalModule(file) && isInTopLevelContext(node)) {
+                        file.bindDiagnostics.push(createDiagnosticForNode(node,
+                            Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module,
+                            declarationNameToString(node)));
+                    }
+                    else if (node.flags & NodeFlags.AwaitContext) {
+                        file.bindDiagnostics.push(createDiagnosticForNode(node,
+                            Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
+                            declarationNameToString(node)));
+                    }
+                }
+                else if (node.originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node,
+                        Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
+                        declarationNameToString(node)));
                 }
             }
         }
@@ -2423,7 +2442,7 @@ namespace ts {
                     if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                         node.flowNode = currentFlow;
                     }
-                    return checkStrictModeIdentifier(<Identifier>node);
+                    return checkContextualIdentifier(<Identifier>node);
                 case SyntaxKind.SuperKeyword:
                     node.flowNode = currentFlow;
                     break;
@@ -2865,8 +2884,7 @@ namespace ts {
 
         function addLateBoundAssignmentDeclarationToSymbol(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol | undefined) {
             if (symbol) {
-                const members = symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = createMap());
-                members.set("" + getNodeId(node), node);
+                (symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = new Map())).set(getNodeId(node), node);
             }
         }
 

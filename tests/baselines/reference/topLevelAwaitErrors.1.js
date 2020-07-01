@@ -51,7 +51,7 @@ await , string > (1);
 // reparse tagged template as invalid await should error
 await , string > ``;
 // reparse class extends clause should fail
-class C extends  {
+class C extends string {
 }
 // await in class decorators should fail
 let C1 = class C1 {
@@ -62,6 +62,7 @@ C1 = __decorate([
 let C2 = class C2 {
 };
 C2 = __decorate([
+    (x)
 ], C2);
 let C3 = class C3 {
 };
@@ -77,6 +78,7 @@ class C5 {
     ["foo"]() { }
 }
 __decorate([
+    (1)
 ], C5.prototype, "foo", null);
 class C6 {
     ["foo"]() { }
@@ -94,7 +96,7 @@ __decorate([
     __param(0, )
 ], C7.prototype, "method1", null);
 __decorate([
-    __param(0, )
+    __param(0, (1))
 ], C7.prototype, "method2", null);
 __decorate([
     __param(0, (await ))

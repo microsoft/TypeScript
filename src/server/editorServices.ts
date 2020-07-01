@@ -151,23 +151,17 @@ namespace ts.server {
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
     /*@internal*/
-    export interface PerformanceEvent {
-        kind: "UpdateGraph";
-        durationMs: number;
-    }
-
-    /*@internal*/
     export type PerformanceEventHandler = (event: PerformanceEvent) => void;
 
     export interface SafeList {
         [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
     }
 
-    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<Map<number>> {
-        const map: Map<Map<number>> = createMap<Map<number>>();
+    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<string, Map<string, number>> {
+        const map: Map<string, Map<string, number>> = createMap<Map<string, number>>();
         for (const option of commandLineOptions) {
             if (typeof option.type === "object") {
-                const optionMap = <Map<number>>option.type;
+                const optionMap = <Map<string, number>>option.type;
                 // verify that map contains only numbers
                 optionMap.forEach(value => {
                     Debug.assert(typeof value === "number");
@@ -379,7 +373,7 @@ namespace ts.server {
          * It is false when the open file that would still be impacted by existence of
          *   this config file but it is not the root of inferred project
          */
-        openFilesImpactedByConfigFile: Map<boolean>;
+        openFilesImpactedByConfigFile: Map<Path, boolean>;
         /**
          * The file watcher watching the config file because there is open script info that is root of
          * inferred project and will be impacted by change in the status of the config file
@@ -592,11 +586,11 @@ namespace ts.server {
          * Map to the real path of the infos
          */
         /* @internal */
-        readonly realpathToScriptInfos: MultiMap<ScriptInfo> | undefined;
+        readonly realpathToScriptInfos: MultiMap<Path, ScriptInfo> | undefined;
         /**
          * maps external project file name to list of config files that were the part of this project
          */
-        private readonly externalProjectToConfiguredProjectMap: Map<NormalizedPath[]> = createMap<NormalizedPath[]>();
+        private readonly externalProjectToConfiguredProjectMap: Map<string, NormalizedPath[]> = createMap<NormalizedPath[]>();
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
@@ -613,7 +607,7 @@ namespace ts.server {
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
-        readonly openFiles = createMap<NormalizedPath | undefined>();
+        readonly openFiles = new Map<Path, NormalizedPath | undefined>();
         /**
          * Map of open files that are opened without complete path but have projectRoot as current directory
          */
@@ -626,7 +620,7 @@ namespace ts.server {
         /**
          * Project size for configured or external projects
          */
-        private readonly projectToSizeMap: Map<number> = createMap<number>();
+        private readonly projectToSizeMap: Map<string, number> = createMap<number>();
         /**
          * This is a map of config file paths existence that doesnt need query to disk
          * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
@@ -662,7 +656,7 @@ namespace ts.server {
         public readonly globalPlugins: readonly string[];
         public readonly pluginProbeLocations: readonly string[];
         public readonly allowLocalPluginLoads: boolean;
-        private currentPluginConfigOverrides: Map<any> | undefined;
+        private currentPluginConfigOverrides: Map<string, any> | undefined;
 
         public readonly typesMapLocation: string | undefined;
 
@@ -673,6 +667,12 @@ namespace ts.server {
 
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
+
+        /*@internal*/
+        readonly packageJsonCache: PackageJsonCache;
+        /*@internal*/
+        private packageJsonFilesMap: Map<Path, FileWatcher> | undefined;
+
 
         private performanceEventHandler?: PerformanceEventHandler;
 
@@ -725,6 +725,7 @@ namespace ts.server {
             const watchLogLevel = this.logger.hasLevel(LogLevel.verbose) ? WatchLogLevel.Verbose :
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
+            this.packageJsonCache = createPackageJsonCache(this);
             this.watchFactory = this.syntaxOnly ?
                 {
                     watchFile: returnNoopFileWatcher,
@@ -874,7 +875,7 @@ namespace ts.server {
             const event: ProjectsUpdatedInBackgroundEvent = {
                 eventName: ProjectsUpdatedInBackgroundEvent,
                 data: {
-                    openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
+                    openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path)!.fileName)
                 }
             };
             this.eventHandler(event);
@@ -921,9 +922,9 @@ namespace ts.server {
         }
 
         /* @internal */
-        sendUpdateGraphPerformanceEvent(durationMs: number) {
+        sendPerformanceEvent(kind: PerformanceEvent["kind"], durationMs: number) {
             if (this.performanceEventHandler) {
-                this.performanceEventHandler({ kind: "UpdateGraph", durationMs });
+                this.performanceEventHandler({ kind, durationMs });
             }
         }
 
@@ -1119,9 +1120,9 @@ namespace ts.server {
             }
         }
 
-        private delayUpdateSourceInfoProjects(sourceInfos: Map<true> | undefined) {
+        private delayUpdateSourceInfoProjects(sourceInfos: Set<Path> | undefined) {
             if (sourceInfos) {
-                sourceInfos.forEach((_value, path) => this.delayUpdateProjectsOfScriptInfoPath(path as Path));
+                sourceInfos.forEach((_value, path) => this.delayUpdateProjectsOfScriptInfoPath(path));
             }
         }
 
@@ -1162,6 +1163,7 @@ namespace ts.server {
          */
         /*@internal*/
         watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, project: ConfiguredProject) {
+            const watchOptions = this.getWatchOptions(project);
             return this.watchFactory.watchDirectory(
                 this.host,
                 directory,
@@ -1173,7 +1175,7 @@ namespace ts.server {
                         (fsResult && fsResult.fileExists || !fsResult && this.host.fileExists(fileOrDirectoryPath))
                     ) {
                         this.logger.info(`Project: ${configFileName} Detected new package.json: ${fileOrDirectory}`);
-                        project.onAddPackageJson(fileOrDirectoryPath);
+                        this.onAddPackageJson(fileOrDirectoryPath);
                     }
 
                     if (isIgnoredFileFromWildCardWatching({
@@ -1212,7 +1214,7 @@ namespace ts.server {
                     }
                 },
                 flags,
-                this.getWatchOptions(project),
+                watchOptions,
                 WatchType.WildcardDirectory,
                 project
             );
@@ -1373,7 +1375,7 @@ namespace ts.server {
         private assignOrphanScriptInfosToInferredProject() {
             // collect orphaned files and assign them to inferred project just like we treat open of a file
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path as Path)!;
+                const info = this.getScriptInfoForPath(path)!;
                 // collect all orphaned script infos from open files
                 if (info.isOrphan()) {
                     this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
@@ -1491,7 +1493,7 @@ namespace ts.server {
 
             // Cache the host value of file exists and add the info to map of open files impacted by this config file
             const exists = this.host.fileExists(configFileName);
-            const openFilesImpactedByConfigFile = createMap<boolean>();
+            const openFilesImpactedByConfigFile = new Map<Path, boolean>();
             if (isOpenScriptInfo(info)) {
                 openFilesImpactedByConfigFile.set(info.path, false);
             }
@@ -1519,7 +1521,7 @@ namespace ts.server {
                 // Since that route doesnt check if the config file is present or not
                 this.configFileExistenceInfoCache.set(project.canonicalConfigFilePath, {
                     exists: true,
-                    openFilesImpactedByConfigFile: createMap<boolean>()
+                    openFilesImpactedByConfigFile: new Map<Path, boolean>()
                 });
             }
         }
@@ -1557,7 +1559,7 @@ namespace ts.server {
             const inferredRoots: string[] = [];
             const otherFiles: string[] = [];
             configFileExistenceInfo.openFilesImpactedByConfigFile.forEach((isRootOfInferredProject, key) => {
-                const info = this.getScriptInfoForPath(key as Path)!;
+                const info = this.getScriptInfoForPath(key)!;
                 (isRootOfInferredProject ? inferredRoots : otherFiles).push(info.fileName);
             });
 
@@ -1655,7 +1657,7 @@ namespace ts.server {
                     // Create the cache
                     configFileExistenceInfo = {
                         exists: this.host.fileExists(configFileName),
-                        openFilesImpactedByConfigFile: createMap<boolean>()
+                        openFilesImpactedByConfigFile: new Map<Path, boolean>()
                     };
                     this.configFileExistenceInfoCache.set(canonicalConfigFilePath, configFileExistenceInfo);
                 }
@@ -1796,7 +1798,7 @@ namespace ts.server {
 
             this.logger.info("Open files: ");
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path as Path)!;
+                const info = this.getScriptInfoForPath(path)!;
                 this.logger.info(`\tFileName: ${info.fileName} ProjectRootPath: ${projectRootPath}`);
                 this.logger.info(`\t\tProjects: ${info.containingProjects.map(p => p.getProjectName())}`);
             });
@@ -2025,7 +2027,7 @@ namespace ts.server {
                 };
             }
             project.configFileSpecs = parsedCommandLine.configFileSpecs;
-            project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInutFiles(parsedCommandLine.raw);
+            project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
             project.setProjectErrors(configFileErrors);
             project.updateReferences(parsedCommandLine.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
@@ -2044,7 +2046,7 @@ namespace ts.server {
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave, parsedCommandLine.watchOptions);
         }
 
-        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject, files: T[], propertyReader: FilePropertyReader<T>) {
+        private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
             const newRootScriptInfoMap = createMap<true>();
 
@@ -2139,6 +2141,11 @@ namespace ts.server {
             project.updateErrorOnNoInputFiles(fileNamesResult);
             this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
+        }
+
+        /*@internal*/
+        setFileNamesOfAutoImportProviderProject(project: AutoImportProviderProject, fileNames: string[]) {
+            this.updateNonInferredProjectFiles(project, fileNames, fileNamePropertyReader);
         }
 
         /**
@@ -2296,8 +2303,8 @@ namespace ts.server {
          * Note that this does not return projects in info.containingProjects
          */
         /*@internal*/
-        getSymlinkedProjects(info: ScriptInfo): MultiMap<Project> | undefined {
-            let projects: MultiMap<Project> | undefined;
+        getSymlinkedProjects(info: ScriptInfo): MultiMap<Path, Project> | undefined {
+            let projects: MultiMap<Path, Project> | undefined;
             if (this.realpathToScriptInfos) {
                 const realpath = info.getRealpathIfDifferent();
                 if (realpath) {
@@ -2592,11 +2599,11 @@ namespace ts.server {
             return documentPositionMapper;
         }
 
-        private addSourceInfoToSourceMap(sourceFileName: string | undefined, project: Project, sourceInfos?: Map<true>) {
+        private addSourceInfoToSourceMap(sourceFileName: string | undefined, project: Project, sourceInfos?: Set<Path>) {
             if (sourceFileName) {
                 // Attach as source
                 const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
-                (sourceInfos || (sourceInfos = createMap())).set(sourceInfo.path, true);
+                (sourceInfos || (sourceInfos = new Set())).add(sourceInfo.path);
             }
             return sourceInfos;
         }
@@ -2638,7 +2645,7 @@ namespace ts.server {
             if (declarationInfo && isString(declarationInfo.sourceMapFilePath) && info !== declarationInfo) {
                 const sourceMapInfo = this.getScriptInfoForPath(declarationInfo.sourceMapFilePath);
                 if (sourceMapInfo) {
-                    (sourceMapInfo.sourceInfos || (sourceMapInfo.sourceInfos = createMap())).set(info.path, true);
+                    (sourceMapInfo.sourceInfos || (sourceMapInfo.sourceInfos = new Set())).add(info.path);
                 }
             }
 
@@ -2685,7 +2692,7 @@ namespace ts.server {
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
-                    const { lazyConfiguredProjectsFromExternalProject } = this.hostConfiguration.preferences;
+                    const { lazyConfiguredProjectsFromExternalProject, includePackageJsonAutoImports } = this.hostConfiguration.preferences;
                     this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                     if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
                         // Load configured projects for external projects that are pending reload
@@ -2696,6 +2703,9 @@ namespace ts.server {
                                 project.updateGraph();
                             }
                         });
+                    }
+                    if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
+                        this.invalidateProjectAutoImports(/*packageJsonPath*/ undefined);
                     }
                 }
                 if (args.extraFileExtensions) {
@@ -2761,7 +2771,7 @@ namespace ts.server {
          * If the there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles<T>(openFiles: Map<T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
+        private reloadConfiguredProjectForFiles<T>(openFiles: Map<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
             const updatedProjects = createMap<true>();
             // try to reload config file for all open files
             openFiles.forEach((openFileValue, path) => {
@@ -2770,7 +2780,7 @@ namespace ts.server {
                     return;
                 }
 
-                const info = this.getScriptInfoForPath(path as Path)!; // TODO: GH#18217
+                const info = this.getScriptInfoForPath(path)!; // TODO: GH#18217
                 Debug.assert(info.isScriptOpen());
                 // This tries to search for a tsconfig.json for the given file. If we found it,
                 // we first detect if there is already a configured project created for it: if so,
@@ -2850,7 +2860,7 @@ namespace ts.server {
             this.printProjects();
 
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path as Path)!;
+                const info = this.getScriptInfoForPath(path)!;
                 // collect all orphaned script infos from open files
                 if (info.isOrphan()) {
                     this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
@@ -2926,9 +2936,9 @@ namespace ts.server {
 
             function addOriginalConfiguredProject(originalProject: ConfiguredProject) {
                 if (!project.originalConfiguredProjects) {
-                    project.originalConfiguredProjects = createMap<true>();
+                    project.originalConfiguredProjects = new Set();
                 }
-                project.originalConfiguredProjects.set(originalProject.canonicalConfigFilePath, true);
+                project.originalConfiguredProjects.add(originalProject.canonicalConfigFilePath);
             }
         }
 
@@ -3075,13 +3085,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        loadAncestorProjectTree(forProjects?: ReadonlyMap<true>) {
-            forProjects = forProjects || mapDefinedMap(
+        loadAncestorProjectTree(forProjects?: ReadonlyCollection<string>) {
+            forProjects = forProjects || mapDefinedEntries(
                 this.configuredProjects,
-                project => !project.isInitialLoadPending() || undefined
+                (key, project) => !project.isInitialLoadPending() ? [key, true] : undefined
             );
 
-            const seenProjects = createMap<true>();
+            const seenProjects = new Set<NormalizedPath>();
             // Work on array copy as we could add more projects as part of callback
             for (const project of arrayFrom(this.configuredProjects.values())) {
                 // If this project has potential project reference for any of the project we are loading ancestor tree for
@@ -3099,8 +3109,8 @@ namespace ts.server {
             }
         }
 
-        private ensureProjectChildren(project: ConfiguredProject, seenProjects: Map<true>) {
-            if (!addToSeen(seenProjects, project.canonicalConfigFilePath)) return;
+        private ensureProjectChildren(project: ConfiguredProject, seenProjects: Set<NormalizedPath>) {
+            if (!tryAddToSet(seenProjects, project.canonicalConfigFilePath)) return;
             // Update the project
             updateProjectIfDirty(project);
 
@@ -3201,10 +3211,10 @@ namespace ts.server {
             const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
-                if (!info.isScriptOpen() && info.isOrphan()) {
+                if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByAutoImportProvider()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
-                    let sourceInfos: Map<true> | undefined;
+                    let sourceInfos: Set<Path> | undefined;
                     if (isString(info.sourceMapFilePath)) {
                         const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
                         sourceInfos = sourceMapInfo && sourceMapInfo.sourceInfos;
@@ -3214,7 +3224,7 @@ namespace ts.server {
                     }
                     if (!sourceInfos) return;
                     if (!forEachKey(sourceInfos, path => {
-                        const info = this.getScriptInfoForPath(path as Path);
+                        const info = this.getScriptInfoForPath(path);
                         return !!info && (info.isScriptOpen() || !info.isOrphan());
                     })) {
                         return;
@@ -3224,7 +3234,7 @@ namespace ts.server {
                 // Retain this script info
                 toRemoveScriptInfos.delete(info.path);
                 if (info.sourceMapFilePath) {
-                    let sourceInfos: Map<true> | undefined;
+                    let sourceInfos: Set<Path> | undefined;
                     if (isString(info.sourceMapFilePath)) {
                         // And map file info and source infos
                         toRemoveScriptInfos.delete(info.sourceMapFilePath);
@@ -3678,6 +3688,95 @@ namespace ts.server {
             // If a plugin is configured twice, only the latest configuration will be remembered.
             this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || createMap();
             this.currentPluginConfigOverrides.set(args.pluginName, args.configuration);
+        }
+
+        /*@internal*/
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+            const packageJsonCache = this.packageJsonCache;
+            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
+            const toPath = this.toPath.bind(this);
+            const rootPath = rootDir && toPath(rootDir);
+            const filePath = toPath(fileName);
+            const result: PackageJsonInfo[] = [];
+            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
+                switch (packageJsonCache.directoryHasPackageJson(directory)) {
+                    // Sync and check same directory again
+                    case Ternary.Maybe:
+                        packageJsonCache.searchDirectoryAndAncestors(directory);
+                        return processDirectory(directory);
+                    // Check package.json
+                    case Ternary.True:
+                        const packageJsonFileName = combinePaths(directory, "package.json");
+                        watchPackageJsonFile(packageJsonFileName);
+                        const info = packageJsonCache.getInDirectory(directory);
+                        if (info) result.push(info);
+                }
+                if (rootPath && rootPath === toPath(directory)) {
+                    return true;
+                }
+            });
+
+            return result;
+        }
+
+        /*@internal*/
+        private watchPackageJsonFile(path: Path) {
+            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
+            if (!watchers.has(path)) {
+                this.invalidateProjectAutoImports(path);
+                watchers.set(path, this.watchFactory.watchFile(
+                    this.host,
+                    path,
+                    (fileName, eventKind) => {
+                        const path = this.toPath(fileName);
+                        switch (eventKind) {
+                            case FileWatcherEventKind.Created:
+                                return Debug.fail();
+                            case FileWatcherEventKind.Changed:
+                                this.packageJsonCache.addOrUpdate(path);
+                                this.invalidateProjectAutoImports(path);
+                                break;
+                            case FileWatcherEventKind.Deleted:
+                                this.packageJsonCache.delete(path);
+                                this.invalidateProjectAutoImports(path);
+                                watchers.get(path)!.close();
+                                watchers.delete(path);
+                        }
+                    },
+                    PollingInterval.Low,
+                    this.hostConfiguration.watchOptions,
+                    WatchType.PackageJsonFile,
+                ));
+            }
+        }
+
+        /*@internal*/
+        private onAddPackageJson(path: Path) {
+            this.packageJsonCache.addOrUpdate(path);
+            this.watchPackageJsonFile(path);
+        }
+
+        /*@internal*/
+        includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
+            switch (this.hostConfiguration.preferences.includePackageJsonAutoImports) {
+                case "none": return PackageJsonAutoImportPreference.None;
+                case "all": return PackageJsonAutoImportPreference.All;
+                default: return PackageJsonAutoImportPreference.ExcludeDevDependencies;
+            }
+        }
+
+        /*@internal*/
+        private invalidateProjectAutoImports(packageJsonPath: Path | undefined) {
+            if (this.includePackageJsonAutoImports()) {
+                this.configuredProjects.forEach(invalidate);
+                this.inferredProjects.forEach(invalidate);
+                this.externalProjects.forEach(invalidate);
+            }
+            function invalidate(project: Project) {
+                if (!packageJsonPath || project.packageJsonsForAutoImport?.has(packageJsonPath)) {
+                    project.markAutoImportProviderAsDirty();
+                }
+            }
         }
     }
 

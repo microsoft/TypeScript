@@ -16,7 +16,7 @@ namespace ts.projectSystem {
         type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
         type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
         function createCallsTrackingHost(host: TestServerHost) {
-            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<CalledWithFiveArgs>> = {
+            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<string, true>> & Record<CalledMapsWithFiveArgs, MultiMap<string, CalledWithFiveArgs>> = {
                 fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
                 directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
                 getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
@@ -65,7 +65,7 @@ namespace ts.projectSystem {
                 assert.equal(calledMap.size, 0, `${callback} shouldn't be called: ${arrayFrom(calledMap.keys())}`);
             }
 
-            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
+            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<string, number>) {
                 TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
             }
 
@@ -544,6 +544,7 @@ namespace ts.projectSystem {
                 const otherFiles = [packageJson];
                 const host = createServerHost(projectFiles.concat(otherFiles));
                 const projectService = createProjectService(host);
+                projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "none" } });
                 const { configFileName } = projectService.openClientFile(app.path);
                 assert.equal(configFileName, tsconfigJson.path as server.NormalizedPath, `should find config`); // TODO: GH#18217
                 const recursiveWatchedDirectories: string[] = [`${appFolder}`, `${appFolder}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));

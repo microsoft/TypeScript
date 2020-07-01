@@ -157,17 +157,17 @@ namespace ts.tscWatch {
                     assert.equal(state.changedFilesSet!.size, 0, "changes");
 
                     assert.equal(state.fileInfos.size, 3, "FileInfo size");
-                    assert.deepEqual(state.fileInfos.get(libFile.path), {
+                    assert.deepEqual(state.fileInfos.get(libFile.path as Path), {
                         version: system.createHash(libFile.content),
                         signature: system.createHash(libFile.content),
                         affectsGlobalScope: true,
                     });
-                    assert.deepEqual(state.fileInfos.get(file1.path), {
+                    assert.deepEqual(state.fileInfos.get(file1.path as Path), {
                         version: system.createHash(file1.content),
                         signature: system.createHash(`${file1.content.replace("export ", "export declare ")}\n`),
                         affectsGlobalScope: false,
                     });
-                    assert.deepEqual(state.fileInfos.get(file2.path), {
+                    assert.deepEqual(state.fileInfos.get(file2.path as Path), {
                         version: system.createHash(fileModified.content),
                         signature: system.createHash("export declare const y: string;\n"),
                         affectsGlobalScope: false,
@@ -183,9 +183,9 @@ namespace ts.tscWatch {
                     assert.equal(state.exportedModulesMap!.size, 0);
 
                     assert.equal(state.semanticDiagnosticsPerFile!.size, 3);
-                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path), emptyArray);
-                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(file1.path), emptyArray);
-                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(file2.path), [{
+                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path as Path), emptyArray);
+                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(file1.path as Path), emptyArray);
+                    assert.deepEqual(state.semanticDiagnosticsPerFile!.get(file2.path as Path), [{
                         file: state.program!.getSourceFileByPath(file2.path as Path)!,
                         start: 13,
                         length: 1,

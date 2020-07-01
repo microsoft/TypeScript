@@ -35,7 +35,7 @@ namespace ts.server {
 
     export class SessionClient implements LanguageService {
         private sequence = 0;
-        private lineMaps: Map<number[]> = createMap<number[]>();
+        private lineMaps: Map<string, number[]> = createMap<number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry | undefined;
 
@@ -127,6 +127,13 @@ namespace ts.server {
         /*@internal*/
         configure(preferences: UserPreferences) {
             const args: protocol.ConfigureRequestArguments = { preferences };
+            const request = this.processRequest(CommandNames.Configure, args);
+            this.processResponse(request, /*expectEmptyBody*/ true);
+        }
+
+        /*@internal*/
+        setFormattingOptions(formatOptions: FormatCodeSettings) {
+            const args: protocol.ConfigureRequestArguments = { formatOptions };
             const request = this.processRequest(CommandNames.Configure, args);
             this.processResponse(request, /*expectEmptyBody*/ true);
         }
@@ -791,7 +798,11 @@ namespace ts.server {
         }
 
         getProgram(): Program {
-            throw new Error("SourceFile objects are not serializable through the server protocol.");
+            throw new Error("Program objects are not serializable through the server protocol.");
+        }
+
+        getAutoImportProvider(): Program | undefined {
+            throw new Error("Program objects are not serializable through the server protocol.");
         }
 
         getNonBoundSourceFile(_fileName: string): SourceFile {

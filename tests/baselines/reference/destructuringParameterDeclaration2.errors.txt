@@ -1,8 +1,7 @@
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(7,8): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(7,29): error TS1005: ',' expected.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(8,4): error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
-  Types of property 'length' are incompatible.
-    Type '4' is not assignable to type '3'.
+  Source has 4 element(s) but target allows only 3.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,8): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,16): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(23,16): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -43,8 +42,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     a0([1, 2, [["world"]], "string"]);  // Error
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
-!!! error TS2345:   Types of property 'length' are incompatible.
-!!! error TS2345:     Type '4' is not assignable to type '3'.
+!!! error TS2345:   Source has 4 element(s) but target allows only 3.
     
     
     // If the declaration includes an initializer expression (which is permitted only

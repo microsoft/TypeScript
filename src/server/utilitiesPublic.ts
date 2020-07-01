@@ -117,6 +117,11 @@ namespace ts.server {
         return `/dev/null/inferredProject${counter}*`;
     }
 
+    /*@internal*/
+    export function makeAutoImportProviderProjectName(counter: number) {
+        return `/dev/null/autoImportProviderProject${counter}*`;
+    }
+
     export function createSortedArray<T>(): SortedArray<T> {
         return [] as any as SortedArray<T>; // TODO: GH#19873
     }

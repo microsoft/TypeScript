@@ -76,6 +76,7 @@
         "codefixes/fixEnableExperimentalDecorators.ts",
         "codefixes/fixEnableJsxFlag.ts",
         "codefixes/fixModuleAndTargetOptions.ts",
+        "codefixes/fixPropertyAssignment.ts",
         "codefixes/fixExtendsInterfaceBecomesImplements.ts",
         "codefixes/fixForgottenThisPropertyAccess.ts",
         "codefixes/fixInvalidJsxCharacters.ts",
