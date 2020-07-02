@@ -34744,6 +34744,9 @@ namespace ts {
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value);
                 }
             }
+            else if (initializer.kind === SyntaxKind.Identifier && (initializer as Identifier).escapedText === 'undefined') {
+                return undefined;
+            }
             else if (enumKind === EnumKind.Literal) {
                 error(initializer, Diagnostics.Computed_values_are_not_permitted_in_an_enum_with_string_valued_members);
                 return 0;

@@ -1,0 +1,150 @@
+=== tests/cases/conformance/enums/enumUndefinedLike.ts ===
+enum SomeCombinations {
+>SomeCombinations : SomeCombinations
+
+    G = 1,
+>G : SomeCombinations
+>1 : 1
+
+    r = window,
+>r : SomeCombinations
+>window : Window & typeof globalThis
+
+    e = undefined,
+>e : SomeCombinations
+>undefined : undefined
+
+    g = "a" - "a"
+>g : SomeCombinations
+>"a" - "a" : number
+>"a" : "a"
+>"a" : "a"
+}
+
+enum TeNormal {
+>TeNormal : TeNormal
+
+    Something = 4
+>Something : TeNormal.Something
+>4 : 4
+}
+
+enum TeInf {
+>TeInf : TeInf
+
+    "Infinity" = Infinity
+>"Infinity" : TeInf.Infinity
+>Infinity : TeInf
+}
+
+enum TeNegInf {
+>TeNegInf : TeNegInf
+
+    "-Infinity" = -Infinity
+>"-Infinity" : TeNegInf
+>-Infinity : number
+>Infinity : number
+}
+
+enum TeUndefined {
+>TeUndefined : TeUndefined
+
+    "undefined" = undefined
+>"undefined" : TeUndefined.undefined
+>undefined : TeUndefined
+}
+
+enum TeNaN {
+>TeNaN : TeNaN
+
+    "NaN" = NaN
+>"NaN" : TeNaN.NaN
+>NaN : TeNaN
+}
+
+enum TeCornerValues {
+>TeCornerValues : TeCornerValues
+
+    "undefined" = undefined,
+>"undefined" : TeCornerValues
+>undefined : TeCornerValues
+
+    "NaN" = NaN,
+>"NaN" : TeCornerValues
+>NaN : TeCornerValues
+
+    "Infinity" = Infinity,
+>"Infinity" : TeCornerValues
+>Infinity : TeCornerValues
+
+    "-Infinity" = -Infinity,
+>"-Infinity" : TeCornerValues
+>-Infinity : number
+>Infinity : TeCornerValues
+}
+
+enum TeJoiningAltogether {
+>TeJoiningAltogether : TeJoiningAltogether
+
+    "undefined" = NaN + Infinity - Infinity,
+>"undefined" : TeJoiningAltogether
+>NaN + Infinity - Infinity : number
+>NaN + Infinity : number
+>NaN : number
+>Infinity : number
+>Infinity : number
+}
+
+enum TeJoiningAltogetherWithMemberNameOverlap {
+>TeJoiningAltogetherWithMemberNameOverlap : TeJoiningAltogetherWithMemberNameOverlap
+
+    "NaN" = NaN,
+>"NaN" : TeJoiningAltogetherWithMemberNameOverlap
+>NaN : TeJoiningAltogetherWithMemberNameOverlap
+
+    "Infinity" = Infinity,
+>"Infinity" : TeJoiningAltogetherWithMemberNameOverlap
+>Infinity : TeJoiningAltogetherWithMemberNameOverlap
+
+    "-Infinity" = -Infinity,
+>"-Infinity" : TeJoiningAltogetherWithMemberNameOverlap
+>-Infinity : number
+>Infinity : TeJoiningAltogetherWithMemberNameOverlap
+
+    "undefined" = NaN + Infinity - Infinity + undefined,
+>"undefined" : TeJoiningAltogetherWithMemberNameOverlap
+>NaN + Infinity - Infinity + undefined : number
+>NaN + Infinity - Infinity : number
+>NaN + Infinity : number
+>NaN : TeJoiningAltogetherWithMemberNameOverlap
+>Infinity : TeJoiningAltogetherWithMemberNameOverlap
+>Infinity : TeJoiningAltogetherWithMemberNameOverlap
+>undefined : TeJoiningAltogetherWithMemberNameOverlap
+}
+
+enum TeJoiningAltogetherWithMemberNameOverlapReverseOrder {
+>TeJoiningAltogetherWithMemberNameOverlapReverseOrder : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+
+    "undefined" = undefined + NaN + Infinity - Infinity,
+>"undefined" : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+>undefined + NaN + Infinity - Infinity : number
+>undefined + NaN + Infinity : number
+>undefined + NaN : number
+>undefined : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+>NaN : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+>Infinity : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+>Infinity : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+
+    "NaN" = NaN,
+>"NaN" : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+>NaN : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+
+    "Infinity" = Infinity,
+>"Infinity" : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+>Infinity : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+
+    "-Infinity" = -Infinity,
+>"-Infinity" : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+>-Infinity : number
+>Infinity : TeJoiningAltogetherWithMemberNameOverlapReverseOrder
+}

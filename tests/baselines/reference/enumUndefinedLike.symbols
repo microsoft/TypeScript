@@ -1,0 +1,133 @@
+=== tests/cases/conformance/enums/enumUndefinedLike.ts ===
+enum SomeCombinations {
+>SomeCombinations : Symbol(SomeCombinations, Decl(enumUndefinedLike.ts, 0, 0))
+
+    G = 1,
+>G : Symbol(SomeCombinations.G, Decl(enumUndefinedLike.ts, 0, 23))
+
+    r = window,
+>r : Symbol(SomeCombinations.r, Decl(enumUndefinedLike.ts, 1, 10))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+    e = undefined,
+>e : Symbol(SomeCombinations.e, Decl(enumUndefinedLike.ts, 2, 15))
+>undefined : Symbol(undefined)
+
+    g = "a" - "a"
+>g : Symbol(SomeCombinations.g, Decl(enumUndefinedLike.ts, 3, 18))
+}
+
+enum TeNormal {
+>TeNormal : Symbol(TeNormal, Decl(enumUndefinedLike.ts, 5, 1))
+
+    Something = 4
+>Something : Symbol(TeNormal.Something, Decl(enumUndefinedLike.ts, 7, 15))
+}
+
+enum TeInf {
+>TeInf : Symbol(TeInf, Decl(enumUndefinedLike.ts, 9, 1))
+
+    "Infinity" = Infinity
+>"Infinity" : Symbol(TeInf["Infinity"], Decl(enumUndefinedLike.ts, 11, 12))
+>Infinity : Symbol(TeInf["Infinity"], Decl(enumUndefinedLike.ts, 11, 12))
+}
+
+enum TeNegInf {
+>TeNegInf : Symbol(TeNegInf, Decl(enumUndefinedLike.ts, 13, 1))
+
+    "-Infinity" = -Infinity
+>"-Infinity" : Symbol(TeNegInf["-Infinity"], Decl(enumUndefinedLike.ts, 15, 15))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+}
+
+enum TeUndefined {
+>TeUndefined : Symbol(TeUndefined, Decl(enumUndefinedLike.ts, 17, 1))
+
+    "undefined" = undefined
+>"undefined" : Symbol(TeUndefined["undefined"], Decl(enumUndefinedLike.ts, 19, 18))
+>undefined : Symbol(TeUndefined["undefined"], Decl(enumUndefinedLike.ts, 19, 18))
+}
+
+enum TeNaN {
+>TeNaN : Symbol(TeNaN, Decl(enumUndefinedLike.ts, 21, 1))
+
+    "NaN" = NaN
+>"NaN" : Symbol(TeNaN["NaN"], Decl(enumUndefinedLike.ts, 23, 12))
+>NaN : Symbol(TeNaN["NaN"], Decl(enumUndefinedLike.ts, 23, 12))
+}
+
+enum TeCornerValues {
+>TeCornerValues : Symbol(TeCornerValues, Decl(enumUndefinedLike.ts, 25, 1))
+
+    "undefined" = undefined,
+>"undefined" : Symbol(TeCornerValues["undefined"], Decl(enumUndefinedLike.ts, 27, 21))
+>undefined : Symbol(TeCornerValues["undefined"], Decl(enumUndefinedLike.ts, 27, 21))
+
+    "NaN" = NaN,
+>"NaN" : Symbol(TeCornerValues["NaN"], Decl(enumUndefinedLike.ts, 28, 28))
+>NaN : Symbol(TeCornerValues["NaN"], Decl(enumUndefinedLike.ts, 28, 28))
+
+    "Infinity" = Infinity,
+>"Infinity" : Symbol(TeCornerValues["Infinity"], Decl(enumUndefinedLike.ts, 29, 16))
+>Infinity : Symbol(TeCornerValues["Infinity"], Decl(enumUndefinedLike.ts, 29, 16))
+
+    "-Infinity" = -Infinity,
+>"-Infinity" : Symbol(TeCornerValues["-Infinity"], Decl(enumUndefinedLike.ts, 30, 26))
+>Infinity : Symbol(TeCornerValues["Infinity"], Decl(enumUndefinedLike.ts, 29, 16))
+}
+
+enum TeJoiningAltogether {
+>TeJoiningAltogether : Symbol(TeJoiningAltogether, Decl(enumUndefinedLike.ts, 32, 1))
+
+    "undefined" = NaN + Infinity - Infinity,
+>"undefined" : Symbol(TeJoiningAltogether["undefined"], Decl(enumUndefinedLike.ts, 34, 26))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+}
+
+enum TeJoiningAltogetherWithMemberNameOverlap {
+>TeJoiningAltogetherWithMemberNameOverlap : Symbol(TeJoiningAltogetherWithMemberNameOverlap, Decl(enumUndefinedLike.ts, 36, 1))
+
+    "NaN" = NaN,
+>"NaN" : Symbol(TeJoiningAltogetherWithMemberNameOverlap["NaN"], Decl(enumUndefinedLike.ts, 38, 47))
+>NaN : Symbol(TeJoiningAltogetherWithMemberNameOverlap["NaN"], Decl(enumUndefinedLike.ts, 38, 47))
+
+    "Infinity" = Infinity,
+>"Infinity" : Symbol(TeJoiningAltogetherWithMemberNameOverlap["Infinity"], Decl(enumUndefinedLike.ts, 39, 16))
+>Infinity : Symbol(TeJoiningAltogetherWithMemberNameOverlap["Infinity"], Decl(enumUndefinedLike.ts, 39, 16))
+
+    "-Infinity" = -Infinity,
+>"-Infinity" : Symbol(TeJoiningAltogetherWithMemberNameOverlap["-Infinity"], Decl(enumUndefinedLike.ts, 40, 26))
+>Infinity : Symbol(TeJoiningAltogetherWithMemberNameOverlap["Infinity"], Decl(enumUndefinedLike.ts, 39, 16))
+
+    "undefined" = NaN + Infinity - Infinity + undefined,
+>"undefined" : Symbol(TeJoiningAltogetherWithMemberNameOverlap["undefined"], Decl(enumUndefinedLike.ts, 41, 28))
+>NaN : Symbol(TeJoiningAltogetherWithMemberNameOverlap["NaN"], Decl(enumUndefinedLike.ts, 38, 47))
+>Infinity : Symbol(TeJoiningAltogetherWithMemberNameOverlap["Infinity"], Decl(enumUndefinedLike.ts, 39, 16))
+>Infinity : Symbol(TeJoiningAltogetherWithMemberNameOverlap["Infinity"], Decl(enumUndefinedLike.ts, 39, 16))
+>undefined : Symbol(TeJoiningAltogetherWithMemberNameOverlap["undefined"], Decl(enumUndefinedLike.ts, 41, 28))
+}
+
+enum TeJoiningAltogetherWithMemberNameOverlapReverseOrder {
+>TeJoiningAltogetherWithMemberNameOverlapReverseOrder : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder, Decl(enumUndefinedLike.ts, 43, 1))
+
+    "undefined" = undefined + NaN + Infinity - Infinity,
+>"undefined" : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["undefined"], Decl(enumUndefinedLike.ts, 45, 59))
+>undefined : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["undefined"], Decl(enumUndefinedLike.ts, 45, 59))
+>NaN : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["NaN"], Decl(enumUndefinedLike.ts, 46, 56))
+>Infinity : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["Infinity"], Decl(enumUndefinedLike.ts, 47, 16))
+>Infinity : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["Infinity"], Decl(enumUndefinedLike.ts, 47, 16))
+
+    "NaN" = NaN,
+>"NaN" : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["NaN"], Decl(enumUndefinedLike.ts, 46, 56))
+>NaN : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["NaN"], Decl(enumUndefinedLike.ts, 46, 56))
+
+    "Infinity" = Infinity,
+>"Infinity" : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["Infinity"], Decl(enumUndefinedLike.ts, 47, 16))
+>Infinity : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["Infinity"], Decl(enumUndefinedLike.ts, 47, 16))
+
+    "-Infinity" = -Infinity,
+>"-Infinity" : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["-Infinity"], Decl(enumUndefinedLike.ts, 48, 26))
+>Infinity : Symbol(TeJoiningAltogetherWithMemberNameOverlapReverseOrder["Infinity"], Decl(enumUndefinedLike.ts, 47, 16))
+}

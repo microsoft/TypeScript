@@ -1,0 +1,75 @@
+tests/cases/conformance/enums/enumUndefinedLike.ts(3,9): error TS18033: Only numeric enums can have computed members, but this expression has type 'Window & typeof globalThis'. If you do not need exhaustiveness checks, consider using an object literal instead.
+tests/cases/conformance/enums/enumUndefinedLike.ts(5,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/enums/enumUndefinedLike.ts(5,15): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/enums/enumUndefinedLike.ts(21,19): error TS2565: Property '"undefined"' is used before being assigned.
+tests/cases/conformance/enums/enumUndefinedLike.ts(29,19): error TS2565: Property '"undefined"' is used before being assigned.
+tests/cases/conformance/enums/enumUndefinedLike.ts(43,47): error TS2565: Property '"undefined"' is used before being assigned.
+tests/cases/conformance/enums/enumUndefinedLike.ts(47,19): error TS2565: Property '"undefined"' is used before being assigned.
+
+
+==== tests/cases/conformance/enums/enumUndefinedLike.ts (7 errors) ====
+    enum SomeCombinations {
+        G = 1,
+        r = window,
+            ~~~~~~
+!!! error TS18033: Only numeric enums can have computed members, but this expression has type 'Window & typeof globalThis'. If you do not need exhaustiveness checks, consider using an object literal instead.
+        e = undefined,
+        g = "a" - "a"
+            ~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+                  ~~~
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    }
+    
+    enum TeNormal {
+        Something = 4
+    }
+    
+    enum TeInf {
+        "Infinity" = Infinity
+    }
+    
+    enum TeNegInf {
+        "-Infinity" = -Infinity
+    }
+    
+    enum TeUndefined {
+        "undefined" = undefined
+                      ~~~~~~~~~
+!!! error TS2565: Property '"undefined"' is used before being assigned.
+    }
+    
+    enum TeNaN {
+        "NaN" = NaN
+    }
+    
+    enum TeCornerValues {
+        "undefined" = undefined,
+                      ~~~~~~~~~
+!!! error TS2565: Property '"undefined"' is used before being assigned.
+        "NaN" = NaN,
+        "Infinity" = Infinity,
+        "-Infinity" = -Infinity,
+    }
+    
+    enum TeJoiningAltogether {
+        "undefined" = NaN + Infinity - Infinity,
+    }
+    
+    enum TeJoiningAltogetherWithMemberNameOverlap {
+        "NaN" = NaN,
+        "Infinity" = Infinity,
+        "-Infinity" = -Infinity,
+        "undefined" = NaN + Infinity - Infinity + undefined,
+                                                  ~~~~~~~~~
+!!! error TS2565: Property '"undefined"' is used before being assigned.
+    }
+    
+    enum TeJoiningAltogetherWithMemberNameOverlapReverseOrder {
+        "undefined" = undefined + NaN + Infinity - Infinity,
+                      ~~~~~~~~~
+!!! error TS2565: Property '"undefined"' is used before being assigned.
+        "NaN" = NaN,
+        "Infinity" = Infinity,
+        "-Infinity" = -Infinity,
+    }
