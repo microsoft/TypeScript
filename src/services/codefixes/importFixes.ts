@@ -676,7 +676,7 @@ namespace ts.codefix {
                 namedImports.map(name => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(name))),
                 OrganizeImports.compareImportOrExportSpecifiers);
 
-            if (existingSpecifiers?.length) {
+            if (existingSpecifiers?.length && OrganizeImports.importSpecifiersAreSorted(existingSpecifiers)) {
                 for (const spec of newSpecifiers) {
                     const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec);
                     const prevSpecifier = (clause.namedBindings as NamedImports).elements[insertionIndex - 1];
@@ -690,6 +690,11 @@ namespace ts.codefix {
                             spec,
                             !positionsAreOnSameLine(existingSpecifiers[0].getStart(), clause.parent.getStart(), sourceFile));
                     }
+                }
+            }
+            else if (existingSpecifiers?.length) {
+                for (const spec of newSpecifiers) {
+                    changes.insertNodeAtEndOfList(sourceFile, existingSpecifiers, spec);
                 }
             }
             else {

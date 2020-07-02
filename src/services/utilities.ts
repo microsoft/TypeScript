@@ -1876,12 +1876,11 @@ namespace ts {
         const decl = isArray(imports) ? imports[0] : imports;
         const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
         const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-        const isSorted = existingImportStatements && OrganizeImports.importsAreSorted(existingImportStatements);
         const sortedNewImports = isArray(imports) ? stableSort(imports, OrganizeImports.compareImportsOrRequireStatements) : [imports];
         if (!existingImportStatements.length) {
             changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
         }
-        else if (isSorted) {
+        else if (existingImportStatements && OrganizeImports.importsAreSorted(existingImportStatements)) {
             for (const newImport of sortedNewImports) {
                 const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
                 if (insertionIndex === 0) {

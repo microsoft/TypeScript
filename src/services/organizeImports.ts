@@ -429,23 +429,21 @@ namespace ts.OrganizeImports {
         }
     }
 
-    export function importsAreSorted(imports: readonly AnyImportOrRequireStatement[]) {
+    export function importsAreSorted(imports: readonly AnyImportOrRequireStatement[]): imports is SortedReadonlyArray<AnyImportOrRequireStatement> {
         return arrayIsSorted(imports, compareImportsOrRequireStatements);
     }
 
-    export function importSpecifiersAreSorted(imports: readonly ImportSpecifier[]) {
+    export function importSpecifiersAreSorted(imports: readonly ImportSpecifier[]): imports is SortedReadonlyArray<ImportSpecifier> {
         return arrayIsSorted(imports, compareImportOrExportSpecifiers);
     }
 
-    export function getImportDeclarationInsertionIndex(imports: readonly AnyImportOrRequireStatement[], newImport: AnyImportOrRequireStatement) {
-        if (!importsAreSorted(imports)) return imports.length;
-        const index = binarySearch(imports, newImport, identity, compareImportsOrRequireStatements);
+    export function getImportDeclarationInsertionIndex(sortedImports: SortedReadonlyArray<AnyImportOrRequireStatement>, newImport: AnyImportOrRequireStatement) {
+        const index = binarySearch(sortedImports, newImport, identity, compareImportsOrRequireStatements);
         return index < 0 ? ~index : index;
     }
 
-    export function getImportSpecifierInsertionIndex(imports: readonly ImportSpecifier[], newImport: ImportSpecifier) {
-        if (!importSpecifiersAreSorted(imports)) return imports.length;
-        const index = binarySearch(imports, newImport, identity, compareImportOrExportSpecifiers);
+    export function getImportSpecifierInsertionIndex(sortedImports: SortedReadonlyArray<ImportSpecifier>, newImport: ImportSpecifier) {
+        const index = binarySearch(sortedImports, newImport, identity, compareImportOrExportSpecifiers);
         return index < 0 ? ~index : index;
     }
 
