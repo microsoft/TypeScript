@@ -287,15 +287,15 @@ declare namespace Intl {
 
     interface LocaleOptions {
         baseName?: string;
-        calendar?: LDMLCalendarKey;
-        caseFirst?: LDMLCollationCaseFirst;
-        collation?: LDMLCollationKey;
-        hourCycle?: LDMLHourCycleKey;
+        calendar?: LDMLCalendarKey | string;
+        caseFirst?: LDMLCollationCaseFirst | string;
+        collation?: LDMLCollationKey | string;
+        hourCycle?: LDMLHourCycleKey | string;
         language?: string;
-        numberingSystem?: LDMLNumberingSystemKey;
+        numberingSystem?: LDMLNumberingSystemKey | string;
         numeric?: boolean;
         region?: string;
-        script?: ScriptCode;
+        script?: ScriptCode | string;
     }
 
     interface Locale extends LocaleOptions {
