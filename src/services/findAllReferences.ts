@@ -2059,7 +2059,7 @@ namespace ts.FindAllReferences {
                 };
             };
             const allowBaseTypes = (rootSymbol: Symbol) =>
-            !every(search.parents, parent => !explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker));
+                !every(search.parents, parent => !explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker));
 
             return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
                 /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
