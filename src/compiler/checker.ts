@@ -13285,8 +13285,8 @@ namespace ts {
         }
 
         function isUncalledFunctionReference(node: Node, symbol: Symbol) {
-            return !(symbol.flags & SymbolFlags.Function)
-                || !isCallExpression(findAncestor(node, n => !isAccessExpression(n)) ?? node.parent)
+            return !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Method))
+                || !isCallLikeExpression(findAncestor(node, n => !isAccessExpression(n)) || node.parent)
                 && every(symbol.declarations, d => !isFunctionLike(d) || !!(d.flags & NodeFlags.Deprecated));
         }
 
@@ -24609,6 +24609,7 @@ namespace ts {
             if (isNodeOpeningLikeElement) {
                 const jsxOpeningLikeNode = node as JsxOpeningLikeElement;
                 const sig = getResolvedSignature(jsxOpeningLikeNode);
+                checkDeprecatedSignature(sig, node);
                 checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(jsxOpeningLikeNode), getReturnTypeOfSignature(sig), jsxOpeningLikeNode);
             }
         }
@@ -27429,9 +27430,7 @@ namespace ts {
                 return nonInferrableType;
             }
 
-            if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
-                errorOrSuggestion(/*isError*/ false, node, Diagnostics._0_is_deprecated, signatureToString(signature));
-            }
+            checkDeprecatedSignature(signature, node);
 
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return voidType;
@@ -27490,6 +27489,12 @@ namespace ts {
             }
 
             return returnType;
+        }
+
+        function checkDeprecatedSignature(signature: Signature, node: Node) {
+            if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
+                errorOrSuggestion(/*isError*/ false, node, Diagnostics._0_is_deprecated, signatureToString(signature));
+            }
         }
 
         function isSymbolOrSymbolForCall(node: Node) {
@@ -27600,7 +27605,9 @@ namespace ts {
             if (languageVersion < ScriptTarget.ES2015) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.MakeTemplateObject);
             }
-            return getReturnTypeOfSignature(getResolvedSignature(node));
+            const signature = getResolvedSignature(node)
+            checkDeprecatedSignature(signature, node);
+            return getReturnTypeOfSignature(signature);
         }
 
         function checkAssertion(node: AssertionExpression) {
