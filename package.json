@@ -22,8 +22,8 @@
     "main": "./lib/typescript.js",
     "typings": "./lib/typescript.d.ts",
     "bin": {
-        "tsc": "./bin/tsc",
-        "tsserver": "./bin/tsserver"
+        "tsc": "./bin/tsc.js",
+        "tsserver": "./bin/tsserver.js"
     },
     "engines": {
         "node": ">=4.2.0"
