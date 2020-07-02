@@ -2343,7 +2343,6 @@ declare namespace ts {
         Transient = 33554432,
         Assignment = 67108864,
         ModuleExports = 134217728,
-        Deprecated = 268435456,
         Enum = 384,
         Variable = 3,
         Value = 111551,
