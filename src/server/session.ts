@@ -2756,7 +2756,7 @@ namespace ts.server {
             let request: protocol.Request | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
             try {
-                request = <protocol.Request>JSON.parse(message);
+                request = JSON.parse<protocol.Request>(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
                 perfLogger.logStartCommand("" + request.command, message.substring(0, 100));

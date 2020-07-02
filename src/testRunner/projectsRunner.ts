@@ -183,7 +183,7 @@ namespace project {
             }
 
             try {
-                testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText!);
+                testCase = JSON.parse(testFileText!);
             }
             catch (e) {
                 throw assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);

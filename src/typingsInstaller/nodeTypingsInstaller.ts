@@ -54,7 +54,7 @@ namespace ts.server.typingsInstaller {
             return createMap<MapLike<string>>();
         }
         try {
-            const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath)!);
+            const content = JSON.parse<TypesRegistryFile>(host.readFile(typesRegistryFilePath)!);
             return createMapFromTemplate(content.entries);
         }
         catch (e) {

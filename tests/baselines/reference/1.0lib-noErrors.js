@@ -936,7 +936,7 @@ interface JSON {
       * @param reviver A function that transforms the results. This function is called for each member of the object. 
       * If a member contains nested objects, the nested objects are transformed before the parent object is. 
       */
-    parse(text: string, reviver?: (key: any, value: any) => any): any;
+    Wparse<T = any>(text: string, reviver?: (this: any, key: string, value: any) => any): T;
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
@@ -1141,7 +1141,8 @@ declare var Array: {
     <T>(...items: T[]): T[];
     isArray(arg: any): boolean;
     prototype: Array<any>;
-}
+}
+
 
 //// [1.0lib-noErrors.js]
 /* *****************************************************************************

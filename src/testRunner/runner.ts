@@ -94,7 +94,7 @@ namespace Harness {
     export let globalTimeout: number;
     function handleTestConfig() {
         if (testConfigContent !== "") {
-            const testConfig = <TestConfig>JSON.parse(testConfigContent);
+            const testConfig = JSON.parse<TestConfig>(testConfigContent);
             if (testConfig.light) {
                 setLightMode(true);
             }

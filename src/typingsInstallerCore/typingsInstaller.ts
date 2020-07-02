@@ -215,8 +215,8 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Trying to find '${packageJson}'...`);
             }
             if (this.installTypingHost.fileExists(packageJson) && this.installTypingHost.fileExists(packageLockJson)) {
-                const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson)!); // TODO: GH#18217
-                const npmLock = <NpmLock>JSON.parse(this.installTypingHost.readFile(packageLockJson)!); // TODO: GH#18217
+                const npmConfig = JSON.parse<NpmConfig>(this.installTypingHost.readFile(packageJson)!); // TODO: GH#18217
+                const npmLock = JSON.parse<NpmLock>(this.installTypingHost.readFile(packageLockJson)!); // TODO: GH#18217
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
                     this.log.writeLine(`Loaded content of '${packageLockJson}'`);

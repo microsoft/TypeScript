@@ -620,7 +620,7 @@ namespace ts {
 
     /*@internal*/
     export function getBuildInfo(buildInfoText: string) {
-        return JSON.parse(buildInfoText) as BuildInfo;
+        return JSON.parse<BuildInfo>(buildInfoText);
     }
 
     /*@internal*/

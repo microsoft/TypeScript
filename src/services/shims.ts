@@ -346,7 +346,7 @@ namespace ts {
             // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
                 this.resolveModuleNames = (moduleNames, containingFile) => {
-                    const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile!(containingFile)); // TODO: GH#18217
+                    const resolutionsInFile = JSON.parse<MapLike<string>>(this.shimHost.getModuleResolutionsForFile!(containingFile)); // TODO: GH#18217
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
                         return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined;
@@ -358,7 +358,7 @@ namespace ts {
             }
             if ("getTypeReferenceDirectiveResolutionsForFile" in this.shimHost) {
                 this.resolveTypeReferenceDirectives = (typeDirectiveNames, containingFile) => {
-                    const typeDirectivesForFile = <MapLike<ResolvedTypeReferenceDirective>>JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile!(containingFile)); // TODO: GH#18217
+                    const typeDirectivesForFile = JSON.parse<MapLike<ResolvedTypeReferenceDirective>>(this.shimHost.getTypeReferenceDirectiveResolutionsForFile!(containingFile)); // TODO: GH#18217
                     return map(typeDirectiveNames, name => getProperty(typeDirectivesForFile, name));
                 };
             }
@@ -406,7 +406,7 @@ namespace ts {
             if (settingsJson === null || settingsJson === "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
             }
-            const compilerOptions = <CompilerOptions>JSON.parse(settingsJson);
+            const compilerOptions = JSON.parse<CompilerOptions>(settingsJson);
             // permit language service to handle all files (filtering should be performed on the host side)
             compilerOptions.allowNonTsExtensions = true;
             return compilerOptions;
@@ -1116,7 +1116,7 @@ namespace ts {
 
         public resolveModuleName(fileName: string, moduleName: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveModuleName('${fileName}')`, () => {
-                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                const compilerOptions = JSON.parse<CompilerOptions>(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
                 let resolvedFileName = result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined;
                 if (result.resolvedModule && result.resolvedModule.extension !== Extension.Ts && result.resolvedModule.extension !== Extension.Tsx && result.resolvedModule.extension !== Extension.Dts) {
@@ -1132,7 +1132,7 @@ namespace ts {
 
         public resolveTypeReferenceDirective(fileName: string, typeReferenceDirective: string, compilerOptionsJson: string): string {
             return this.forwardJSONCall(`resolveTypeReferenceDirective(${fileName})`, () => {
-                const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                const compilerOptions = JSON.parse<CompilerOptions>(compilerOptionsJson);
                 const result = resolveTypeReferenceDirective(typeReferenceDirective, normalizeSlashes(fileName), compilerOptions, this.host);
                 return {
                     resolvedFileName: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.resolvedFileName : undefined,
@@ -1163,7 +1163,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getAutomaticTypeDirectiveNames('${compilerOptionsJson}')`,
                 () => {
-                    const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
+                    const compilerOptions = JSON.parse<CompilerOptions>(compilerOptionsJson);
                     return getAutomaticTypeDirectiveNames(compilerOptions, this.host);
                 }
             );
@@ -1212,7 +1212,7 @@ namespace ts {
         public discoverTypings(discoverTypingsJson: string): string {
             const getCanonicalFileName = createGetCanonicalFileName(/*useCaseSensitivefileNames:*/ false);
             return this.forwardJSONCall("discoverTypings()", () => {
-                const info = <DiscoverTypingsInfo>JSON.parse(discoverTypingsJson);
+                const info = JSON.parse<DiscoverTypingsInfo>(discoverTypingsJson);
                 if (this.safeList === undefined) {
                     this.safeList = JsTyping.loadSafeList(this.host, toPath(info.safeListPath, info.safeListPath, getCanonicalFileName));
                 }

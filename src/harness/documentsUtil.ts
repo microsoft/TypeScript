@@ -78,7 +78,7 @@ namespace documents {
         private _sourceLineMappings: Mapping[][][] = [];
 
         constructor(mapFile: string | undefined, data: string | RawSourceMap) {
-            this.raw = typeof data === "string" ? JSON.parse(data) as RawSourceMap : data;
+            this.raw = typeof data === "string" ? JSON.parse<RawSourceMap>(data) : data;
             this.mapFile = mapFile;
             this.version = this.raw.version;
             this.file = this.raw.file;
