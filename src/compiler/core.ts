@@ -158,7 +158,9 @@ namespace ts {
                 }
             }
         }
-
+        if(!array){
+            return false;
+        }
         return true;
     }
 
