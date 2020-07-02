@@ -60,7 +60,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let necessaryTypeReferences: Set<string> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-        let lateStatementReplacementMap: Map<string, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
+        let lateStatementReplacementMap: ESMap<string, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
         let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -81,8 +81,8 @@ namespace ts {
         let errorNameNode: DeclarationName | undefined;
 
         let currentSourceFile: SourceFile;
-        let refs: Map<string, SourceFile>;
-        let libs: Map<string, boolean>;
+        let refs: ESMap<string, SourceFile>;
+        let libs: ESMap<string, boolean>;
         let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
@@ -402,7 +402,7 @@ namespace ts {
             }
         }
 
-        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<string, SourceFile>) {
+        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: ESMap<string, SourceFile>) {
             if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = host.getSourceFileFromReference(sourceFile, f);
@@ -413,7 +413,7 @@ namespace ts {
             return ret;
         }
 
-        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<string, boolean>) {
+        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: ESMap<string, boolean>) {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {

@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts {
-    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I) => Iterator<
-        I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I) => Iterator<
+        I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
         I extends ReadonlySet<infer T> ? T :
         I extends readonly (infer T)[] ? T :
         I extends undefined ? undefined :
@@ -20,17 +20,17 @@ namespace ts {
     export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "createMapShim");
     export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
 
-    export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
-        I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+    export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<
+        I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
         I extends ReadonlySet<infer T> ? T :
         I extends readonly (infer T)[] ? T :
         I extends undefined ? undefined :
         never>;
-    export function getIterator<K, V>(iterable: ReadonlyMap<K, V>): Iterator<[K, V]>;
-    export function getIterator<K, V>(iterable: ReadonlyMap<K, V> | undefined): Iterator<[K, V]> | undefined;
+    export function getIterator<K, V>(iterable: ReadonlyESMap<K, V>): Iterator<[K, V]>;
+    export function getIterator<K, V>(iterable: ReadonlyESMap<K, V> | undefined): Iterator<[K, V]> | undefined;
     export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T>): Iterator<T>;
     export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T> | undefined): Iterator<T> | undefined;
-    export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
+    export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined): Iterator<any> | undefined {
         if (iterable) {
             if (isArray(iterable)) return arrayIterator(iterable);
             if (iterable instanceof Map) return iterable.entries();
@@ -42,15 +42,15 @@ namespace ts {
     export const emptyArray: never[] = [] as never[];
 
     /** Create a new map. */
-    export function createMap<K, V>(): Map<K, V>;
-    export function createMap<T>(): Map<string, T>;
-    export function createMap<K, V>(): Map<K, V> {
+    export function createMap<K, V>(): ESMap<K, V>;
+    export function createMap<T>(): ESMap<string, T>;
+    export function createMap<K, V>(): ESMap<K, V> {
         return new Map<K, V>();
     }
 
     /** Create a new map from a template object is provided, the map will copy entries from it. */
-    export function createMapFromTemplate<T>(template: MapLike<T>): Map<string, T> {
-        const map: Map<string, T> = new Map<string, T>();
+    export function createMapFromTemplate<T>(template: MapLike<T>): ESMap<string, T> {
+        const map: ESMap<string, T> = new Map<string, T>();
 
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
@@ -160,7 +160,7 @@ namespace ts {
         };
     }
 
-    export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
+    export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): ESMap<K, V> {
         Debug.assert(keys.length === values.length);
         const map = new Map<K, V>();
         for (let i = 0; i < keys.length; ++i) {
@@ -554,9 +554,9 @@ namespace ts {
         };
     }
 
-    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): Map<K2, V2>;
-    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined;
-    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined {
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): ESMap<K2, V2>;
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): ESMap<K2, V2> | undefined;
+    export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): ESMap<K2, V2> | undefined {
         if (!map) {
             return undefined;
         }
@@ -660,9 +660,9 @@ namespace ts {
         return result;
     }
 
-    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2>;
-    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined;
-    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined {
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): ESMap<K2, V2>;
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): ESMap<K2, V2> | undefined;
+    export function mapEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): ESMap<K2, V2> | undefined {
         if (!map) {
             return undefined;
         }
@@ -1342,11 +1342,11 @@ namespace ts {
      * the same key with the given 'makeKey' function, then the element with the higher
      * index in the array will be the one associated with the produced key.
      */
-    export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): Map<K, V>;
-    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): Map<K, V2>;
-    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<string, T>;
-    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<string, U>;
-    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): Map<K, V1 | V2> {
+    export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): ESMap<K, V>;
+    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): ESMap<K, V2>;
+    export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): ESMap<string, T>;
+    export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): ESMap<string, U>;
+    export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): ESMap<K, V1 | V2> {
         const result = new Map<K, V1 | V2>();
         for (const value of array) {
             const key = makeKey(value);
@@ -1425,7 +1425,7 @@ namespace ts {
         return fn ? fn.bind(obj) : undefined;
     }
 
-    export interface MultiMap<K, V> extends Map<K, V[]> {
+    export interface MultiMap<K, V> extends ESMap<K, V[]> {
         /**
          * Adds the value to an array of values associated with the key, and returns the array.
          * Creates the array if it does not already exist.

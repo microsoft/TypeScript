@@ -262,7 +262,7 @@ namespace ts {
      */
     export function updateMissingFilePathsWatch(
         program: Program,
-        missingFileWatches: Map<Path, FileWatcher>,
+        missingFileWatches: ESMap<Path, FileWatcher>,
         createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
     ) {
         const missingFilePaths = program.getMissingFilePaths();
@@ -293,8 +293,8 @@ namespace ts {
      * as wildcard directories wont change unless reloading config file
      */
     export function updateWatchingWildcardDirectories(
-        existingWatchedForWildcards: Map<string, WildcardDirectoryWatcher>,
-        wildcardDirectories: Map<string, WatchDirectoryFlags>,
+        existingWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher>,
+        wildcardDirectories: ESMap<string, WatchDirectoryFlags>,
         watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher
     ) {
         mutateMap(

@@ -1464,7 +1464,7 @@ namespace ts.Completions {
         function filterGlobalCompletion(symbols: Symbol[]): void {
             const isTypeOnly = isTypeOnlyCompletion();
             if (isTypeOnly) {
-                keywordFilters = isTypeAssertion()
+                keywordFilters = contextToken && isAssertionExpression(contextToken.parent)
                     ? KeywordCompletionFilters.TypeAssertionKeywords
                     : KeywordCompletionFilters.TypeKeywords;
             }
@@ -1492,10 +1492,6 @@ namespace ts.Completions {
                 // expressions are value space (which includes the value namespaces)
                 return !!(getCombinedLocalAndExportSymbolFlags(symbol) & SymbolFlags.Value);
             });
-        }
-
-        function isTypeAssertion(): boolean {
-            return isAssertionExpression(contextToken.parent);
         }
 
         function isTypeOnlyCompletion(): boolean {

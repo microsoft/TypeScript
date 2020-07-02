@@ -65,7 +65,7 @@ namespace ts.projectSystem {
                 assert.equal(calledMap.size, 0, `${callback} shouldn't be called: ${arrayFrom(calledMap.keys())}`);
             }
 
-            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<string, number>) {
+            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: ESMap<string, number>) {
                 TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
             }
 

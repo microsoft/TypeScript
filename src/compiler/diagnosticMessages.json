@@ -880,7 +880,7 @@
         "category": "Error",
         "code": 1308
     },
-    "'=' can only be used in an object literal property inside a destructuring assignment.": {
+    "Did you mean to use a ':'? When following property names in an object literal, '=' implies a destructuring assignment.": {
         "category": "Error",
         "code": 1312
     },
@@ -5155,10 +5155,6 @@
         "category": "Message",
         "code": 90008
     },
-    "Remove destructuring": {
-        "category": "Message",
-        "code": 90009
-    },
     "Remove variable statement": {
         "category": "Message",
         "code": 90010
@@ -5274,6 +5270,14 @@
     "Declare private method '{0}'": {
         "category": "Message",
         "code": 90038
+    },
+    "Remove unused destructuring declaration": {
+        "category": "Message",
+        "code": 90039
+    },
+    "Remove unused declarations for: '{0}'": {
+        "category": "Message",
+        "code": 90041
     },
     "Declare a private field named '{0}'.": {
         "category": "Message",
@@ -5818,6 +5822,10 @@
     "Can only convert property with modifier": {
         "category": "Message",
         "code": 95137
+    },
+    "Switch each misused '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95138
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

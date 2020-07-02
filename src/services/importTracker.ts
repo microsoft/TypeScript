@@ -40,7 +40,7 @@ namespace ts.FindAllReferences {
     function getImportersForExport(
         sourceFiles: readonly SourceFile[],
         sourceFilesSet: ReadonlySet<string>,
-        allDirectImports: Map<string, ImporterOrCallExpression[]>,
+        allDirectImports: ESMap<string, ImporterOrCallExpression[]>,
         { exportingModuleSymbol, exportKind }: ExportInfo,
         checker: TypeChecker,
         cancellationToken: CancellationToken | undefined,
@@ -368,7 +368,7 @@ namespace ts.FindAllReferences {
     }
 
     /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
-    function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): Map<string, ImporterOrCallExpression[]> {
+    function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): ESMap<string, ImporterOrCallExpression[]> {
         const map = createMap<ImporterOrCallExpression[]>();
 
         for (const sourceFile of sourceFiles) {

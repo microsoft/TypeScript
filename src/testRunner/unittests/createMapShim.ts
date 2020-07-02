@@ -35,7 +35,7 @@ namespace ts {
             "Y"
         ];
 
-        function testMapIterationAddedValues<K>(keys: K[], map: Map<K, string>, useForEach: boolean): string {
+        function testMapIterationAddedValues<K>(keys: K[], map: ESMap<K, string>, useForEach: boolean): string {
             let resultString = "";
 
             map.set(keys[0], "1");
@@ -117,13 +117,13 @@ namespace ts {
 
         let MapShim!: MapConstructor;
         beforeEach(() => {
-            function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
-                I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+            function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<
+                I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
                 I extends ReadonlySet<infer T> ? T :
                 I extends readonly (infer T)[] ? T :
                 I extends undefined ? undefined :
                 never>;
-            function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
+            function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined): Iterator<any> | undefined {
                 // override `ts.getIterator` with a version that allows us to iterate over a `MapShim` in an environment with a native `Map`.
                 if (iterable instanceof MapShim) return iterable.entries();
                 return ts.getIterator(iterable);

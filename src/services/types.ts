@@ -92,7 +92,7 @@ namespace ts {
         /* @internal */ scriptSnapshot: IScriptSnapshot | undefined;
         /* @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
 
-        /* @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
+        /* @internal */ getNamedDeclarations(): ESMap<string, readonly Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
@@ -196,10 +196,10 @@ namespace ts {
     export interface PackageJsonInfo {
         fileName: string;
         parseable: boolean;
-        dependencies?: Map<string, string>;
-        devDependencies?: Map<string, string>;
-        peerDependencies?: Map<string, string>;
-        optionalDependencies?: Map<string, string>;
+        dependencies?: ESMap<string, string>;
+        devDependencies?: ESMap<string, string>;
+        peerDependencies?: ESMap<string, string>;
+        optionalDependencies?: ESMap<string, string>;
         get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
@@ -271,7 +271,7 @@ namespace ts {
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */
-        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string, string>;
+        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyESMap<string, string>;
 
         /*
          * Required for full import and type reference completions.

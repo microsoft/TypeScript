@@ -36,22 +36,36 @@ namespace ts {
     }
 
     /** ES6 Map interface, only read methods included. */
-    export interface ReadonlyMap<K, V> extends ReadonlyCollection<K> {
+    export interface ReadonlyESMap<K, V> extends ReadonlyCollection<K> {
         get(key: K): V | undefined;
         values(): Iterator<V>;
         entries(): Iterator<[K, V]>;
         forEach(action: (value: V, key: K) => void): void;
     }
 
+    /**
+     * ES6 Map interface, only read methods included.
+     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
+     */
+    export interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    }
+
     /** ES6 Map interface. */
-    export interface Map<K, V> extends ReadonlyMap<K, V>, Collection<K> {
+    export interface ESMap<K, V> extends ReadonlyESMap<K, V>, Collection<K> {
         set(key: K, value: V): this;
+    }
+
+    /**
+     * ES6 Map interface.
+     * @deprecated Use `ts.ESMap<K, V>` instead.
+     */
+    export interface Map<T> extends ESMap<string, T> {
     }
 
     /* @internal */
     export interface MapConstructor {
         // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyMap<K, V>): Map<K, V>;
+        new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyESMap<K, V>): ESMap<K, V>;
     }
 
     /** ES6 Set interface, only read methods included. */

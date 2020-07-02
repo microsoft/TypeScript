@@ -11,11 +11,10 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(85,19): 
   Types of property 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(85,26): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(111,12): error TS18004: No value exists in scope for the shorthand property 's'. Either declare one or provide an initializer.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(111,14): error TS1312: '=' can only be used in an object literal property inside a destructuring assignment.
+tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(111,14): error TS1312: Did you mean to use a ':'? When following property names in an object literal, '=' implies a destructuring assignment.
 
 
-==== tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts (13 errors) ====
+==== tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts (12 errors) ====
     (function() {
     	var s0;
     	for ({ s0 = 5 } of [{ s0: 1 }]) {
@@ -153,10 +152,8 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(111,14):
     
     (function() {
     	let a = { s = 5 };
-    	          ~
-!!! error TS18004: No value exists in scope for the shorthand property 's'. Either declare one or provide an initializer.
     	            ~
-!!! error TS1312: '=' can only be used in an object literal property inside a destructuring assignment.
+!!! error TS1312: Did you mean to use a ':'? When following property names in an object literal, '=' implies a destructuring assignment.
     });
     
     function foo({a = 4, b = { x: 5 }}) {

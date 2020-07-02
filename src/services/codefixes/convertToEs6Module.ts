@@ -60,7 +60,7 @@ namespace ts.codefix {
      *     export { _x as x };
      * This conversion also must place if the exported name is not a valid identifier, e.g. `exports.class = 0;`.
      */
-    type ExportRenames = ReadonlyMap<string, string>;
+    type ExportRenames = ReadonlyESMap<string, string>;
 
     function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, identifiers: Identifiers): ExportRenames {
         const res = createMap<string>();
@@ -444,7 +444,7 @@ namespace ts.codefix {
         readonly additional: Set<string>;
     }
 
-    type FreeIdentifiers = ReadonlyMap<string, readonly Identifier[]>;
+    type FreeIdentifiers = ReadonlyESMap<string, readonly Identifier[]>;
     function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
         const map = createMultiMap<Identifier>();
         forEachFreeIdentifier(file, id => map.add(id.text, id));

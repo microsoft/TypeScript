@@ -246,8 +246,8 @@ namespace ts {
 
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
-        let missingFilesMap: Map<Path, FileWatcher>;                        // Map of file watchers for the missing files
-        let watchedWildcardDirectories: Map<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
+        let missingFilesMap: ESMap<Path, FileWatcher>;                        // Map of file watchers for the missing files
+        let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
         let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
 

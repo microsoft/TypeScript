@@ -83,7 +83,7 @@ namespace Playback {
 
     let recordLog: IoLog | undefined;
     let replayLog: IoLog | undefined;
-    let replayFilesRead: ts.Map<string, IoLogFile> | undefined;
+    let replayFilesRead: ts.ESMap<string, IoLogFile> | undefined;
     let recordLogFileNameBase = "";
 
     interface Memoized<T> {
