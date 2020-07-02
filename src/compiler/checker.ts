@@ -13287,7 +13287,7 @@ namespace ts {
         function isUncalledFunctionReference(node: Node, symbol: Symbol) {
             return !(symbol.flags & SymbolFlags.Function)
                 || !isCallExpression(findAncestor(node, n => !isAccessExpression(n)) ?? node.parent)
-                && every(symbol.declarations, d => !isFunctionLike(d) || !!(d.flags & NodeFlags.Deprecated));
+                && every(symbol.declarations, d => !isFunctionLike(d) || !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated));
         }
 
         function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
@@ -13296,7 +13296,7 @@ namespace ts {
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (accessNode && prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
+                    if (accessNode && prop.valueDeclaration && getCombinedNodeFlags(prop.valueDeclaration) & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                         errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                     }
@@ -22061,7 +22061,7 @@ namespace ts {
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
             let declaration: Declaration | undefined = localOrExportSymbol.valueDeclaration;
 
-            if (declaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, localOrExportSymbol)) {
+            if (declaration && getCombinedNodeFlags(declaration) & NodeFlags.Deprecated && isUncalledFunctionReference(node.parent, localOrExportSymbol)) {
                 errorOrSuggestion(/* isError */ false, node, Diagnostics._0_is_deprecated, node.escapedText as string);;
             }
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
@@ -25037,7 +25037,7 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
-                if (prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {
+                if (prop.valueDeclaration && getCombinedNodeFlags(prop.valueDeclaration) & NodeFlags.Deprecated && isUncalledFunctionReference(node, prop)) {
                     errorOrSuggestion(/* isError */ false, right, Diagnostics._0_is_deprecated, right.escapedText as string);
                 }
 
@@ -27429,7 +27429,7 @@ namespace ts {
                 return nonInferrableType;
             }
 
-            if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
+            if (signature.declaration && getCombinedNodeFlags(signature.declaration) & NodeFlags.Deprecated) {
                 errorOrSuggestion(/*isError*/ false, node, Diagnostics._0_is_deprecated, signatureToString(signature));
             }
 
@@ -30876,7 +30876,7 @@ namespace ts {
                 }
                 const symbol = getNodeLinks(node).resolvedSymbol;
                 if (symbol) {
-                    if (every(symbol.declarations, d => !isTypeDeclaration(d) || !!(d.flags & NodeFlags.Deprecated))) {
+                    if (every(symbol.declarations, d => !isTypeDeclaration(d) || !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated))) {
                         const diagLocation = isTypeReferenceNode(node) && isQualifiedName(node.typeName) ? node.typeName.right : node;
                         errorOrSuggestion(/* isError */ false, diagLocation, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                     }
@@ -35222,8 +35222,8 @@ namespace ts {
                 }
 
                 if (isImportSpecifier(node) &&
-                    (target.valueDeclaration && target.valueDeclaration.flags & NodeFlags.Deprecated
-                     || every(target.declarations, d => !!(d.flags & NodeFlags.Deprecated)))) {
+                    (target.valueDeclaration && getCombinedNodeFlags(target.valueDeclaration) & NodeFlags.Deprecated
+                     || every(target.declarations, d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated)))) {
                     errorOrSuggestion(/* isError */ false, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
             }
