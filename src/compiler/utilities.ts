@@ -1934,8 +1934,10 @@ namespace ts {
         return isVariableDeclaration(node) && !!node.initializer && isRequireCall(node.initializer, requireStringLiteralLikeArgument);
     }
 
-    export function isRequireVariableDeclarationStatement(node: Node, requireStringLiteralLikeArgument = true): node is VariableStatement {
-        return isVariableStatement(node) && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl, requireStringLiteralLikeArgument));
+    export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
+        return isVariableStatement(node)
+            && node.declarationList.declarations.length > 0
+            && every(node.declarationList.declarations, decl => isRequireVariableDeclaration(decl, requireStringLiteralLikeArgument));
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
