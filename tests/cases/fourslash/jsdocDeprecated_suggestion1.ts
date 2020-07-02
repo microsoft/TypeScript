@@ -1,4 +1,5 @@
 ///<reference path="fourslash.ts" />
+// @experimentalDecorators: true
 
 // @Filename: a.ts
 //// export namespace foo {
@@ -57,6 +58,12 @@
 //// }
 //// [|ttf``|]
 //// [|ttf|]
+//// /** @deprecated */
+//// function dec(_c: unknown) { }
+//// [|dec|]
+//// [|@dec|]
+//// class K { }
+
 // @Filename: b.ts
 //// // imports and aliases
 //// import * as f from './a';
@@ -216,6 +223,18 @@ verify.getSuggestionDiagnostics([
         "reportsDeprecated": true,
         "range": ranges[22]
     },
+    {
+        "code": 6385,
+        "message": "'dec' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[23]
+    },
+    {
+        "code": 6385,
+        "message": "'(_c: unknown): void' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[24]
+    },
 ]);
 goTo.file('b.ts')
 verify.getSuggestionDiagnostics([
@@ -223,23 +242,11 @@ verify.getSuggestionDiagnostics([
         "code": 6385,
         "message": "'bar' is deprecated",
         "reportsDeprecated": true,
-        "range": ranges[23]
-    },
-    {
-        "code": 6385,
-        "message": "'QW' is deprecated",
-        "reportsDeprecated": true,
-        "range": ranges[24]
-    },
-    {
-        "code": 6385,
-        "message": "'(): void' is deprecated",
-        "reportsDeprecated": true,
         "range": ranges[25]
     },
     {
         "code": 6385,
-        "message": "'(): void' is deprecated",
+        "message": "'QW' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[26]
     },
@@ -251,13 +258,13 @@ verify.getSuggestionDiagnostics([
     },
     {
         "code": 6385,
-        "message": "'QW' is deprecated",
+        "message": "'(): void' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[28]
     },
     {
         "code": 6385,
-        "message": "'Foo' is deprecated",
+        "message": "'(): void' is deprecated",
         "reportsDeprecated": true,
         "range": ranges[29]
     },
@@ -268,9 +275,21 @@ verify.getSuggestionDiagnostics([
         "range": ranges[30]
     },
     {
+        "code": 6385,
+        "message": "'Foo' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[31]
+    },
+    {
+        "code": 6385,
+        "message": "'QW' is deprecated",
+        "reportsDeprecated": true,
+        "range": ranges[32]
+    },
+    {
         "code": 6196,
         "message": "'O' is declared but never used.",
         "reportsUnnecessary": true,
-        "range": ranges[31]
+        "range": ranges[33]
     }
 ])

@@ -27605,7 +27605,7 @@ namespace ts {
             if (languageVersion < ScriptTarget.ES2015) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.MakeTemplateObject);
             }
-            const signature = getResolvedSignature(node)
+            const signature = getResolvedSignature(node);
             checkDeprecatedSignature(signature, node);
             return getReturnTypeOfSignature(signature);
         }
@@ -31735,6 +31735,7 @@ namespace ts {
         /** Check a decorator */
         function checkDecorator(node: Decorator): void {
             const signature = getResolvedSignature(node);
+            checkDeprecatedSignature(signature, node);
             const returnType = getReturnTypeOfSignature(signature);
             if (returnType.flags & TypeFlags.Any) {
                 return;
