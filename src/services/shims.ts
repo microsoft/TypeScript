@@ -948,7 +948,7 @@ namespace ts {
             return this.forwardJSONCall(
                 `getCompletionEntryDetails('${fileName}', ${position}, '${entryName}')`,
                 () => {
-                    const localOptions: FormatCodeOptions = formatOptions === undefined ? undefined : JSON.parse(formatOptions);
+                    const localOptions: FormatCodeOptions | undefined = formatOptions === undefined ? undefined : JSON.parse(formatOptions);
                     return this.languageService.getCompletionEntryDetails(fileName, position, entryName, localOptions, source, preferences);
                 }
             );

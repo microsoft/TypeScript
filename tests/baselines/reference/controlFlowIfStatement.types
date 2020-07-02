@@ -100,10 +100,10 @@ function c<T>(data: string | T): T {
 >'string' : "string"
 
         return JSON.parse(data);
->JSON.parse(data) : any
->JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>JSON.parse(data) : T
+>JSON.parse : <T = any>(text: string, reviver?: (this: any, key: string, value: any) => any) => T
 >JSON : JSON
->parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>parse : <T = any>(text: string, reviver?: (this: any, key: string, value: any) => any) => T
 >data : string | (T & string)
     }
     else {
