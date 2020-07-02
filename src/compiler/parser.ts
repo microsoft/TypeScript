@@ -7440,11 +7440,9 @@ namespace ts {
                     loop: while (true) {
                         switch (tok) {
                             case SyntaxKind.NewLineTrivia:
-                                if (state >= JSDocState.SawAsterisk) {
-                                    state = JSDocState.BeginningOfLine;
-                                    // don't use pushComment here because we want to keep the margin unchanged
-                                    comments.push(scanner.getTokenText());
-                                }
+                                state = JSDocState.BeginningOfLine;
+                                // don't use pushComment here because we want to keep the margin unchanged
+                                comments.push(scanner.getTokenText());
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
