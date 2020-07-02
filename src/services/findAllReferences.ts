@@ -2040,7 +2040,7 @@ namespace ts.FindAllReferences {
         function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
             const { checker } = state;
             const isReferenceSymbolStatic = isStatic(referenceSymbol);
-            const cbSymbol = (sym: Symbol, rootSymbol: Symbol, baseSymbol: Symbol | undefined, kind: NodeEntryKind): RelatedSymbol | undefined => {
+            function cbSymbol(sym: Symbol, rootSymbol: Symbol, baseSymbol: Symbol | undefined, kind: NodeEntryKind): RelatedSymbol | undefined {
                 // check whether the symbol used to search itself is just the searched one.
                 if (baseSymbol) {
                     // static method/property and instance method/property might have the same name. Only check static or only check instance.
@@ -2059,7 +2059,7 @@ namespace ts.FindAllReferences {
                 };
             };
             const allowBaseTypes = (rootSymbol: Symbol) =>
-                !(search.parents?.every(parent => !explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker)));
+            !forEach(search.parents, parent => !explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker));
 
             return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
                 /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
