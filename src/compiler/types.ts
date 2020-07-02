@@ -4121,8 +4121,6 @@ namespace ts {
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): readonly TypeParameter[] | undefined;
         /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
-        /* @internal */ isMatchingReference(node: Node, target: Node): boolean;
-        /* @internal */ isOrContainsMatchingReference(node: Node, target: Node): boolean;
     }
 
     /* @internal */

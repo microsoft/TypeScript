@@ -80,11 +80,9 @@ namespace ts.refactor.convertToOptionalChainExpression {
         const lastPropertyAccessChain = getLastPropertyAccessChain(expression.whenTrue);
 
         if (!lastPropertyAccessChain || checker.isNullableType(checker.getTypeAtLocation(lastPropertyAccessChain))) return undefined;
-        const first = lastPropertyAccessChain?.getFirstToken();
-        if (!first || !checker.getSymbolAtLocation(first)) return undefined;
 
         if ((isPropertyAccessExpression(condition) || isIdentifier(condition))
-            && checkMatch(condition, lastPropertyAccessChain.expression, checker)) {
+            && getMatchingSubexpression(condition, lastPropertyAccessChain.expression, checker)) {
             return { lastPropertyAccessChain, occurrences:[condition], expression };
         }
         else if (isBinaryExpression(condition)) {
@@ -98,8 +96,6 @@ namespace ts.refactor.convertToOptionalChainExpression {
         const lastPropertyAccessChain = getLastPropertyAccessChain(expression.right);
 
         if (!lastPropertyAccessChain) return undefined;
-        const first = lastPropertyAccessChain?.getFirstToken();
-        if (!first || !checker.getSymbolAtLocation(first)) return undefined;
 
         const occurrences = getOccurrencesInExpression(lastPropertyAccessChain.expression, expression.left, checker);
         return occurrences ? { lastPropertyAccessChain, occurrences, expression } : undefined;
@@ -111,7 +107,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
     function getOccurrencesInExpression(matchTo: Expression, expression: Expression, checker: TypeChecker): (PropertyAccessExpression | Identifier)[] | undefined {
         const occurrences: (PropertyAccessExpression | Identifier)[] = [];
         while (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-            const match = checkMatch(matchTo, expression.right, checker);
+            const match = getMatchingSubexpression(matchTo, expression.right, checker);
             if (!match) {
                 break;
             }
@@ -119,7 +115,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             matchTo = match;
             expression = expression.left;
         }
-        const finalMatch = checkMatch(matchTo, expression, checker);
+        const finalMatch = getMatchingSubexpression(matchTo, expression, checker);
         if (finalMatch) {
             occurrences.push(finalMatch);
         }
@@ -127,17 +123,45 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     /**
-     * Checks that expression is a subchain of matchTo.
+     * Checks that expression is a syntactic subexpression of matchTo.
      */
-    function checkMatch(matchTo: Expression, expression: Expression, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
+    function getMatchingSubexpression(matchTo: Expression, expression: Expression, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
         if (isCallExpression(matchTo)) {
-            // Recurse through the call expressions to match a.b to a.b()().
-            return !isCallExpression(expression) ? checkMatch(matchTo.expression, expression, checker) : undefined;
+            return !isCallExpression(expression) ? getMatchingSubexpression(matchTo.expression, expression, checker) : undefined;
         }
         else if ((isPropertyAccessExpression(expression) || isIdentifier(expression)) && (isPropertyAccessExpression(matchTo) || isIdentifier(matchTo))) {
-            return checker.isOrContainsMatchingReference(matchTo, expression) ? expression : undefined;
+            return containsSyntacticSubchain(matchTo, expression, checker) ? expression : undefined;
         }
         return undefined;
+    }
+
+    /**
+     * Returns true if target is a syntactic subchain of source.
+     */
+    function containsSyntacticSubchain(source: Node, target: Node, checker: TypeChecker): boolean {
+        while (isPropertyAccessExpression(source) && !isSyntacticMatch(source, target)) {
+            source = source.expression;
+        }
+        while (isPropertyAccessExpression(source) && isPropertyAccessExpression(target)) {
+            if (!isSyntacticMatch(source, target)) return false;
+            source = source.expression;
+            target = target.expression;
+        }
+        const fullMatch = isSyntacticMatch(source, target);
+        if (fullMatch && !isInJSFile(source)) {
+            Debug.assert(checker.getSymbolAtLocation(source) === checker.getSymbolAtLocation(target));
+        }
+        return fullMatch;
+    }
+
+    function isSyntacticMatch(source: Node, target: Node): boolean {
+        if (isIdentifier(source) && isIdentifier(target)) {
+            return source.getText() === target.getText();
+        }
+        else if (isPropertyAccessExpression(source) && isPropertyAccessExpression(target)) {
+            return source.name.getText() === target.name.getText();
+        }
+        return false;
     }
 
     /**
@@ -182,12 +206,18 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     /**
-     * Gets the right-most property access expression.
+     * Gets a property access expression which may be nested inside of a call expression or binary expression. The final
+     * expression in an && chain will occur as the right child of the parent binary expression, unless it is a call expression
+     * or is followed by a different binary operator.
+     * @param node the right child of a binary expression or a call expression.
      */
     function getLastPropertyAccessChain(node: Expression): PropertyAccessExpression | undefined {
+        // foo && |foo.bar === 1|; - here the right child of the && binary expression is another binary expression.
+        // the rightmost member of the && chain should be the leftmost child of that expression.
         if (isBinaryExpression(node)) {
             return getLastPropertyAccessChain(node.left);
         }
+        // foo && |foo.bar()()| - if the right child is a call expression, simply search its expression.
         else if (isCallExpression(node)) {
             return getLastPropertyAccessChain(node.expression);
         }
@@ -204,7 +234,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (isPropertyAccessExpression(toConvert) || isCallExpression(toConvert)) {
             const chain = convertOccurrences(checker, toConvert.expression, occurrences);
             const lastOccurrence = occurrences.length > 0 ? occurrences[occurrences.length - 1] : undefined;
-            const isOccurrence = lastOccurrence && checker.isMatchingReference(lastOccurrence, toConvert.expression);
+            const isOccurrence = lastOccurrence && isSyntacticMatch(lastOccurrence, toConvert.expression);
             if (isOccurrence) occurrences.pop();
             if (isCallExpression(toConvert)) {
                 return isOccurrence ?
