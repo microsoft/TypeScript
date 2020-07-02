@@ -1090,8 +1090,8 @@ namespace ts {
 
     /* @internal */
     export interface OptionsNameMap {
-        optionsNameMap: Map<string, CommandLineOption>;
-        shortOptionNames: Map<string, string>;
+        optionsNameMap: ESMap<string, CommandLineOption>;
+        shortOptionNames: ESMap<string, string>;
     }
 
     /*@internal*/
@@ -1469,7 +1469,7 @@ namespace ts {
         configFileName: string,
         optionsToExtend: CompilerOptions,
         host: ParseConfigFileHost,
-        extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
+        extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
         watchOptionsToExtend?: WatchOptions,
         extraFileExtensions?: readonly FileExtensionInfo[],
     ): ParsedCommandLine | undefined {
@@ -1562,15 +1562,15 @@ namespace ts {
         optionTypeMismatchDiagnostic: Diagnostics.Watch_option_0_requires_a_value_of_type_1
     };
 
-    let commandLineCompilerOptionsMapCache: Map<string, CommandLineOption>;
+    let commandLineCompilerOptionsMapCache: ESMap<string, CommandLineOption>;
     function getCommandLineCompilerOptionsMap() {
         return commandLineCompilerOptionsMapCache || (commandLineCompilerOptionsMapCache = commandLineOptionsToMap(optionDeclarations));
     }
-    let commandLineWatchOptionsMapCache: Map<string, CommandLineOption>;
+    let commandLineWatchOptionsMapCache: ESMap<string, CommandLineOption>;
     function getCommandLineWatchOptionsMap() {
         return commandLineWatchOptionsMapCache || (commandLineWatchOptionsMapCache = commandLineOptionsToMap(optionsForWatch));
     }
-    let commandLineTypeAcquisitionMapCache: Map<string, CommandLineOption>;
+    let commandLineTypeAcquisitionMapCache: ESMap<string, CommandLineOption>;
     function getCommandLineTypeAcquisitionMap() {
         return commandLineTypeAcquisitionMapCache || (commandLineTypeAcquisitionMapCache = commandLineOptionsToMap(typeAcquisitionDeclarations));
     }
@@ -1703,13 +1703,13 @@ namespace ts {
 
         return convertPropertyValueToJson(sourceFile.statements[0].expression, knownRootOptions);
 
-        function isRootOptionMap(knownOptions: Map<string, CommandLineOption> | undefined) {
+        function isRootOptionMap(knownOptions: ESMap<string, CommandLineOption> | undefined) {
             return knownRootOptions && (knownRootOptions as TsConfigOnlyOption).elementOptions === knownOptions;
         }
 
         function convertObjectLiteralExpressionToJson(
             node: ObjectLiteralExpression,
-            knownOptions: Map<string, CommandLineOption> | undefined,
+            knownOptions: ESMap<string, CommandLineOption> | undefined,
             extraKeyDiagnostics: DidYouMeanOptionsDiagnostics | undefined,
             parentOption: string | undefined
         ): any {
@@ -1964,7 +1964,7 @@ namespace ts {
         return config;
     }
 
-    function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>): object {
+    function optionMapToObject(optionMap: ESMap<string, CompilerOptionsValue>): object {
         return {
             ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
         };
@@ -1994,7 +1994,7 @@ namespace ts {
         return _ => true;
     }
 
-    function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string, string | number> | undefined {
+    function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): ESMap<string, string | number> | undefined {
         if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean" || optionDefinition.type === "object") {
             // this is of a type CommandLineOptionOfPrimitiveType
             return undefined;
@@ -2007,7 +2007,7 @@ namespace ts {
         }
     }
 
-    function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string, string | number>): string | undefined {
+    function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: ESMap<string, string | number>): string | undefined {
         // There is a typeMap associated with this command-line option so use it to map value back to its name
         return forEachEntry(customTypeMap, (mapValue, key) => {
             if (mapValue === value) {
@@ -2019,7 +2019,7 @@ namespace ts {
     function serializeCompilerOptions(
         options: CompilerOptions,
         pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
-    ): Map<string, CompilerOptionsValue> {
+    ): ESMap<string, CompilerOptionsValue> {
         return serializeOptionBaseObject(options, getOptionsNameMap(), pathOptions);
     }
 
@@ -2031,7 +2031,7 @@ namespace ts {
         options: OptionsBase,
         { optionsNameMap }: OptionsNameMap,
         pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
-    ): Map<string, CompilerOptionsValue> {
+    ): ESMap<string, CompilerOptionsValue> {
         const result = createMap<CompilerOptionsValue>();
         const getCanonicalFileName = pathOptions && createGetCanonicalFileName(pathOptions.useCaseSensitiveFileNames);
 
@@ -2220,7 +2220,7 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
+    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
         return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     }
 
@@ -2231,7 +2231,7 @@ namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
+    export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
         return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     }
 
@@ -2271,7 +2271,7 @@ namespace ts {
         configFileName?: string,
         resolutionStack: Path[] = [],
         extraFileExtensions: readonly FileExtensionInfo[] = [],
-        extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>
+        extendedConfigCache?: ESMap<string, ExtendedConfigCacheEntry>
     ): ParsedCommandLine {
         Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
         const errors: Diagnostic[] = [];
@@ -2456,7 +2456,7 @@ namespace ts {
         configFileName: string | undefined,
         resolutionStack: string[],
         errors: Push<Diagnostic>,
-        extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>
+        extendedConfigCache?: ESMap<string, ExtendedConfigCacheEntry>
     ): ParsedTsconfig {
         basePath = normalizeSlashes(basePath);
         const resolvedPath = getNormalizedAbsolutePath(configFileName || "", basePath);
@@ -2645,7 +2645,7 @@ namespace ts {
         basePath: string,
         resolutionStack: string[],
         errors: Push<Diagnostic>,
-        extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>
+        extendedConfigCache?: ESMap<string, ExtendedConfigCacheEntry>
     ): ParsedTsconfig | undefined {
         const path = host.useCaseSensitiveFileNames ? extendedConfigPath : toFileNameLowerCase(extendedConfigPath);
         let value: ExtendedConfigCacheEntry | undefined;
@@ -2750,11 +2750,11 @@ namespace ts {
         return convertOptionsFromJson(getCommandLineWatchOptionsMap(), jsonOptions, basePath, /*defaultOptions*/ undefined, watchOptionsDidYouMeanDiagnostics, errors);
     }
 
-    function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string,
+    function convertOptionsFromJson(optionsNameMap: ESMap<string, CommandLineOption>, jsonOptions: any, basePath: string,
         defaultOptions: undefined, diagnostics: DidYouMeanOptionsDiagnostics, errors: Push<Diagnostic>): WatchOptions | undefined;
-    function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string,
+    function convertOptionsFromJson(optionsNameMap: ESMap<string, CommandLineOption>, jsonOptions: any, basePath: string,
         defaultOptions: CompilerOptions | TypeAcquisition, diagnostics: DidYouMeanOptionsDiagnostics, errors: Push<Diagnostic>): CompilerOptions | TypeAcquisition;
-    function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string,
+    function convertOptionsFromJson(optionsNameMap: ESMap<string, CommandLineOption>, jsonOptions: any, basePath: string,
         defaultOptions: CompilerOptions | TypeAcquisition | WatchOptions | undefined, diagnostics: DidYouMeanOptionsDiagnostics, errors: Push<Diagnostic>) {
 
         if (!jsonOptions) {
@@ -3174,7 +3174,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string, string>, wildcardFiles: Map<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<string, string>, wildcardFiles: ESMap<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority, extensions);
         for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
@@ -3196,7 +3196,7 @@ namespace ts {
      * @param extensionPriority The priority of the extension.
      * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: ESMap<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
         const extensionPriority = getExtensionPriority(file, extensions);
         const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority, extensions);
         for (let i = nextExtensionPriority; i < extensions.length; i++) {

@@ -5,7 +5,7 @@ namespace ts.projectSystem {
     interface InstallerParams {
         globalTypingsCacheLocation?: string;
         throttleLimit?: number;
-        typesRegistry?: Map<string, MapLike<string>>;
+        typesRegistry?: ESMap<string, MapLike<string>>;
     }
 
     class Installer extends TestTypingsInstaller {

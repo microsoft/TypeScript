@@ -722,8 +722,8 @@ namespace ts {
 
         let currentToken: SyntaxKind;
         let nodeCount: number;
-        let identifiers: Map<string, string>;
-        let privateIdentifiers: Map<string, string>;
+        let identifiers: ESMap<string, string>;
+        let privateIdentifiers: ESMap<string, string>;
         let identifierCount: number;
 
         let parsingContext: ParsingContext;

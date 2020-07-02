@@ -29,7 +29,7 @@ namespace FourSlash {
         symlinks: vfs.FileSet | undefined;
 
         // A mapping from marker names to name/position pairs
-        markerPositions: ts.Map<string, Marker>;
+        markerPositions: ts.ESMap<string, Marker>;
 
         markers: Marker[];
 
@@ -2341,7 +2341,7 @@ namespace FourSlash {
             return this.getRanges().filter(r => r.fileName === fileName);
         }
 
-        public rangesByText(): ts.Map<string, Range[]> {
+        public rangesByText(): ts.ESMap<string, Range[]> {
             if (this.testData.rangesByText) return this.testData.rangesByText;
             const result = ts.createMultiMap<Range>();
             this.testData.rangesByText = result;
@@ -3421,7 +3421,7 @@ namespace FourSlash {
             return text;
         }
 
-        private formatCallHierarchyItem(file: FourSlashFile, callHierarchyItem: ts.CallHierarchyItem, direction: CallHierarchyItemDirection, seen: ts.Map<string, boolean>, prefix: string, trailingPrefix: string = prefix) {
+        private formatCallHierarchyItem(file: FourSlashFile, callHierarchyItem: ts.CallHierarchyItem, direction: CallHierarchyItemDirection, seen: ts.ESMap<string, boolean>, prefix: string, trailingPrefix: string = prefix) {
             const key = `${callHierarchyItem.file}|${JSON.stringify(callHierarchyItem.span)}|${direction}`;
             const alreadySeen = seen.has(key);
             seen.set(key, true);
@@ -3945,7 +3945,7 @@ namespace FourSlash {
         throw new Error(errorMessage);
     }
 
-    function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: ts.Map<string, Marker>, markers: Marker[]): Marker | undefined {
+    function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: ts.ESMap<string, Marker>, markers: Marker[]): Marker | undefined {
         let markerValue: any;
         try {
             // Attempt to parse the marker value as JSON
@@ -3976,7 +3976,7 @@ namespace FourSlash {
         return marker;
     }
 
-    function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: ts.Map<string, Marker>, markers: Marker[]): Marker | undefined {
+    function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: ts.ESMap<string, Marker>, markers: Marker[]): Marker | undefined {
         const marker: Marker = {
             fileName,
             position: location.position
@@ -3995,7 +3995,7 @@ namespace FourSlash {
         }
     }
 
-    function parseFileContent(content: string, fileName: string, markerMap: ts.Map<string, Marker>, markers: Marker[], ranges: Range[]): FourSlashFile {
+    function parseFileContent(content: string, fileName: string, markerMap: ts.ESMap<string, Marker>, markers: Marker[], ranges: Range[]): FourSlashFile {
         content = chompLeadingSpace(content);
 
         // Any slash-star comment with a character not in this string is not a marker.

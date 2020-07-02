@@ -24,7 +24,7 @@ namespace ts {
         /**
          * Cache of bind and check diagnostics for files with their Path being the key
          */
-        semanticDiagnosticsPerFile?: ReadonlyMap<Path, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
+        semanticDiagnosticsPerFile?: ReadonlyESMap<Path, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
         /**
          * The map has key by source file's path that has been changed
          */
@@ -41,7 +41,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures?: ReadonlyMap<Path, string> | undefined;
+        currentAffectedFilesSignatures?: ReadonlyESMap<Path, string> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -65,7 +65,7 @@ namespace ts {
         /**
          * Files pending to be emitted kind.
          */
-        affectedFilesPendingEmitKind?: ReadonlyMap<Path, BuilderFileEmit> | undefined;
+        affectedFilesPendingEmitKind?: ReadonlyESMap<Path, BuilderFileEmit> | undefined;
         /**
          * Current index to retrieve pending affected file
          */
@@ -89,7 +89,7 @@ namespace ts {
         /**
          * Cache of bind and check diagnostics for files with their Path being the key
          */
-        semanticDiagnosticsPerFile: Map<Path, readonly Diagnostic[]> | undefined;
+        semanticDiagnosticsPerFile: ESMap<Path, readonly Diagnostic[]> | undefined;
         /**
          * The map has key by source file's path that has been changed
          */
@@ -110,7 +110,7 @@ namespace ts {
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
          * These will be committed whenever the iteration through affected files of current changed file is complete
          */
-        currentAffectedFilesSignatures: Map<Path, string> | undefined;
+        currentAffectedFilesSignatures: ESMap<Path, string> | undefined;
         /**
          * Newly computed visible to outside referencedSet
          */
@@ -142,7 +142,7 @@ namespace ts {
         /**
          * Files pending to be emitted kind.
          */
-        affectedFilesPendingEmitKind: Map<Path, BuilderFileEmit> | undefined;
+        affectedFilesPendingEmitKind: ESMap<Path, BuilderFileEmit> | undefined;
         /**
          * Current index to retrieve pending affected file
          */
@@ -154,7 +154,7 @@ namespace ts {
         /**
          * Already seen emitted files
          */
-        seenEmittedFiles: Map<Path, BuilderFileEmit> | undefined;
+        seenEmittedFiles: ESMap<Path, BuilderFileEmit> | undefined;
         /**
          * true if program has been emitted
          */
@@ -1140,7 +1140,7 @@ namespace ts {
         }
     }
 
-    function getMapOfReferencedSet(mapLike: MapLike<readonly string[]> | undefined, toPath: (path: string) => Path): ReadonlyMap<Path, BuilderState.ReferencedSet> | undefined {
+    function getMapOfReferencedSet(mapLike: MapLike<readonly string[]> | undefined, toPath: (path: string) => Path): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {
         if (!mapLike) return undefined;
         const map = new Map<Path, BuilderState.ReferencedSet>();
         // Copies keys/values from template. Note that for..in will not throw if
