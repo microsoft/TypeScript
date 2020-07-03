@@ -8952,6 +8952,9 @@
       <Item ItemId=";Remove_unused_destructuring_declaration_90039" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove unused destructuring declaration]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[移除未使用的解構宣告]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
