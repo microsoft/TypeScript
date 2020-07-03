@@ -644,6 +644,7 @@ declare namespace FourSlashInterface {
         isVariadic?: boolean;
         tags?: ReadonlyArray<JSDocTagInfo>;
         triggerReason?: SignatureHelpTriggerReason;
+        overrideSelectedItemIndex?: number;
     }
 
     export type SignatureHelpTriggerReason =

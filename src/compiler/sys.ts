@@ -538,7 +538,7 @@ namespace ts {
             };
         }
 
-        type InvokeMap = Map<Path, string[] | true>;
+        type InvokeMap = ESMap<Path, string[] | true>;
         function invokeCallbacks(dirPath: Path, fileName: string): void;
         function invokeCallbacks(dirPath: Path, invokeMap: InvokeMap, fileNames: string[] | undefined): void;
         function invokeCallbacks(dirPath: Path, fileNameOrInvokeMap: string | InvokeMap, fileNames?: string[]) {

@@ -243,7 +243,7 @@ namespace Harness {
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
         // Cache of lib files from "built/local"
-        let libFileNameSourceFileMap: ts.Map<string, ts.SourceFile> | undefined;
+        let libFileNameSourceFileMap: ts.ESMap<string, ts.SourceFile> | undefined;
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile | undefined {
             if (!isDefaultLibraryFile(fileName)) {
@@ -313,7 +313,7 @@ namespace Harness {
             { name: "fullEmitPaths", type: "boolean" }
         ];
 
-        let optionsIndex: ts.Map<string, ts.CommandLineOption>;
+        let optionsIndex: ts.ESMap<string, ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption | undefined {
             if (!optionsIndex) {
                 optionsIndex = ts.createMap<ts.CommandLineOption>();
@@ -958,7 +958,7 @@ namespace Harness {
             }
         }
 
-        function checkDuplicatedFileName(resultName: string, dupeCase: ts.Map<string, number>): string {
+        function checkDuplicatedFileName(resultName: string, dupeCase: ts.ESMap<string, number>): string {
             resultName = sanitizeTestFilePath(resultName);
             if (dupeCase.has(resultName)) {
                 // A different baseline filename should be manufactured if the names differ only in case, for windows compat
@@ -1066,9 +1066,9 @@ namespace Harness {
         }
     }
 
-    let booleanVaryByStarSettingValues: ts.Map<string, string | number> | undefined;
+    let booleanVaryByStarSettingValues: ts.ESMap<string, string | number> | undefined;
 
-    function getVaryByStarSettingValues(varyBy: string): ts.ReadonlyMap<string, string | number> | undefined {
+    function getVaryByStarSettingValues(varyBy: string): ts.ReadonlyESMap<string, string | number> | undefined {
         const option = ts.forEach(ts.optionDeclarations, decl => ts.equateStringsCaseInsensitive(decl.name, varyBy) ? decl : undefined);
         if (option) {
             if (typeof option.type === "object") {

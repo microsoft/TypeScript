@@ -157,11 +157,11 @@ namespace ts.server {
         [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
     }
 
-    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<string, Map<string, number>> {
-        const map: Map<string, Map<string, number>> = createMap<Map<string, number>>();
+    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): ESMap<string, ESMap<string, number>> {
+        const map: ESMap<string, ESMap<string, number>> = createMap<ESMap<string, number>>();
         for (const option of commandLineOptions) {
             if (typeof option.type === "object") {
-                const optionMap = <Map<string, number>>option.type;
+                const optionMap = <ESMap<string, number>>option.type;
                 // verify that map contains only numbers
                 optionMap.forEach(value => {
                     Debug.assert(typeof value === "number");
@@ -373,7 +373,7 @@ namespace ts.server {
          * It is false when the open file that would still be impacted by existence of
          *   this config file but it is not the root of inferred project
          */
-        openFilesImpactedByConfigFile: Map<Path, boolean>;
+        openFilesImpactedByConfigFile: ESMap<Path, boolean>;
         /**
          * The file watcher watching the config file because there is open script info that is root of
          * inferred project and will be impacted by change in the status of the config file
@@ -590,7 +590,7 @@ namespace ts.server {
         /**
          * maps external project file name to list of config files that were the part of this project
          */
-        private readonly externalProjectToConfiguredProjectMap: Map<string, NormalizedPath[]> = createMap<NormalizedPath[]>();
+        private readonly externalProjectToConfiguredProjectMap: ESMap<string, NormalizedPath[]> = createMap<NormalizedPath[]>();
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
@@ -603,11 +603,11 @@ namespace ts.server {
         /**
          * projects specified by a tsconfig.json file
          */
-        readonly configuredProjects = createMap<ConfiguredProject>();
+        readonly configuredProjects: Map<ConfiguredProject> = createMap<ConfiguredProject>();
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
-        readonly openFiles = new Map<Path, NormalizedPath | undefined>();
+        readonly openFiles: Map<NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
         /**
          * Map of open files that are opened without complete path but have projectRoot as current directory
          */
@@ -620,7 +620,7 @@ namespace ts.server {
         /**
          * Project size for configured or external projects
          */
-        private readonly projectToSizeMap: Map<string, number> = createMap<number>();
+        private readonly projectToSizeMap: ESMap<string, number> = createMap<number>();
         /**
          * This is a map of config file paths existence that doesnt need query to disk
          * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
@@ -656,7 +656,7 @@ namespace ts.server {
         public readonly globalPlugins: readonly string[];
         public readonly pluginProbeLocations: readonly string[];
         public readonly allowLocalPluginLoads: boolean;
-        private currentPluginConfigOverrides: Map<string, any> | undefined;
+        private currentPluginConfigOverrides: ESMap<string, any> | undefined;
 
         public readonly typesMapLocation: string | undefined;
 
@@ -671,7 +671,7 @@ namespace ts.server {
         /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
-        private packageJsonFilesMap: Map<Path, FileWatcher> | undefined;
+        private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
 
 
         private performanceEventHandler?: PerformanceEventHandler;
@@ -875,7 +875,7 @@ namespace ts.server {
             const event: ProjectsUpdatedInBackgroundEvent = {
                 eventName: ProjectsUpdatedInBackgroundEvent,
                 data: {
-                    openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path)!.fileName)
+                    openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
                 }
             };
             this.eventHandler(event);
@@ -1375,7 +1375,7 @@ namespace ts.server {
         private assignOrphanScriptInfosToInferredProject() {
             // collect orphaned files and assign them to inferred project just like we treat open of a file
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path)!;
+                const info = this.getScriptInfoForPath(path as Path)!;
                 // collect all orphaned script infos from open files
                 if (info.isOrphan()) {
                     this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
@@ -1798,7 +1798,7 @@ namespace ts.server {
 
             this.logger.info("Open files: ");
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path)!;
+                const info = this.getScriptInfoForPath(path as Path)!;
                 this.logger.info(`\tFileName: ${info.fileName} ProjectRootPath: ${projectRootPath}`);
                 this.logger.info(`\t\tProjects: ${info.containingProjects.map(p => p.getProjectName())}`);
             });
@@ -2747,7 +2747,7 @@ namespace ts.server {
             // as there is no need to load contents of the files from the disk
 
             // Reload Projects
-            this.reloadConfiguredProjectForFiles(this.openFiles, /*delayReload*/ false, returnTrue, "User requested reload projects");
+            this.reloadConfiguredProjectForFiles(this.openFiles as ESMap<Path, NormalizedPath | undefined>, /*delayReload*/ false, returnTrue, "User requested reload projects");
             this.ensureProjectForOpenFiles();
         }
 
@@ -2771,7 +2771,7 @@ namespace ts.server {
          * If the there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles<T>(openFiles: Map<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
+        private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
             const updatedProjects = createMap<true>();
             // try to reload config file for all open files
             openFiles.forEach((openFileValue, path) => {
@@ -2860,7 +2860,7 @@ namespace ts.server {
             this.printProjects();
 
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path)!;
+                const info = this.getScriptInfoForPath(path as Path)!;
                 // collect all orphaned script infos from open files
                 if (info.isOrphan()) {
                     this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);

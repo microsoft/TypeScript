@@ -4077,6 +4077,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Did_you_mean_to_use_a_Colon_When_following_property_names_in_an_object_literal_implies_a_destructuri_1312" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Did you mean to use a ':'? When following property names in an object literal, '=' implies a destructuring assignment.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Did_you_mean_to_use_new_with_this_expression_6213" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to use 'new' with this expression?]]></Val>
@@ -8883,15 +8889,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_destructuring_90009" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Remove destructuring]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Odebrat destrukci]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Remove_import_from_0_90005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove import from '{0}']]></Val>
@@ -8952,6 +8949,18 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Odebrat nepoužívané deklarace pro {0}]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_declarations_for_Colon_0_90041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused declarations for: '{0}']]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_destructuring_declaration_90039" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused destructuring declaration]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10014,6 +10023,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Switch_each_misused_0_to_1_95138" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object_2470" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['Symbol' reference does not refer to the global Symbol constructor object.]]></Val>
@@ -10045,7 +10060,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Značka {0} očekává nejmíň {1} argumentů, ale objekt pro vytváření JSX {2} poskytuje maximálně {3}.]]></Val>
+            <Val><![CDATA[Značka {0} očekává určitý minimální počet argumentů ({1}), ale objekt pro vytváření JSX {2} jich poskytuje maximálně {3}.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12896,15 +12911,6 @@
           <Val><![CDATA['#!' can only be used at the start of a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[#! se dá použít jen na začátku souboru.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment_1312" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['=' can only be used in an object literal property inside a destructuring assignment.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[= jde použít jenom ve vlastnosti literálu objektu uvnitř destrukturujícího přiřazení.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

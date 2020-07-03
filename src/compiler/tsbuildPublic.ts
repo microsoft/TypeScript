@@ -52,7 +52,7 @@ namespace ts {
     /*@internal*/
     export type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
 
-    function getOrCreateValueFromConfigFileMap<T>(configFileMap: Map<ResolvedConfigFilePath, T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
+    function getOrCreateValueFromConfigFileMap<T>(configFileMap: ESMap<ResolvedConfigFilePath, T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
         const existingValue = configFileMap.get(resolved);
         let newValue: T | undefined;
         if (!existingValue) {
@@ -62,8 +62,8 @@ namespace ts {
         return existingValue || newValue!;
     }
 
-    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: Map<ResolvedConfigFilePath, Map<string, T>>, resolved: ResolvedConfigFilePath): Map<string, T> {
-        return getOrCreateValueFromConfigFileMap<Map<string, T>>(configFileMap, resolved, createMap);
+    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ESMap<ResolvedConfigFilePath, ESMap<string, T>>, resolved: ResolvedConfigFilePath): ESMap<string, T> {
+        return getOrCreateValueFromConfigFileMap<ESMap<string, T>>(configFileMap, resolved, createMap);
     }
 
     function newer(date1: Date, date2: Date): Date {
@@ -222,17 +222,17 @@ namespace ts {
         readonly rootNames: readonly string[];
         readonly baseWatchOptions: WatchOptions | undefined;
 
-        readonly resolvedConfigFilePaths: Map<string, ResolvedConfigFilePath>;
-        readonly configFileCache: Map<ResolvedConfigFilePath, ConfigFileCacheEntry>;
+        readonly resolvedConfigFilePaths: ESMap<string, ResolvedConfigFilePath>;
+        readonly configFileCache: ESMap<ResolvedConfigFilePath, ConfigFileCacheEntry>;
         /** Map from config file name to up-to-date status */
-        readonly projectStatus: Map<ResolvedConfigFilePath, UpToDateStatus>;
-        readonly buildInfoChecked: Map<ResolvedConfigFilePath, true>;
-        readonly extendedConfigCache: Map<string, ExtendedConfigCacheEntry>;
+        readonly projectStatus: ESMap<ResolvedConfigFilePath, UpToDateStatus>;
+        readonly buildInfoChecked: ESMap<ResolvedConfigFilePath, true>;
+        readonly extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>;
 
-        readonly builderPrograms: Map<ResolvedConfigFilePath, T>;
-        readonly diagnostics: Map<ResolvedConfigFilePath, readonly Diagnostic[]>;
-        readonly projectPendingBuild: Map<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
-        readonly projectErrorsReported: Map<ResolvedConfigFilePath, true>;
+        readonly builderPrograms: ESMap<ResolvedConfigFilePath, T>;
+        readonly diagnostics: ESMap<ResolvedConfigFilePath, readonly Diagnostic[]>;
+        readonly projectPendingBuild: ESMap<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
+        readonly projectErrorsReported: ESMap<ResolvedConfigFilePath, true>;
 
         readonly compilerHost: CompilerHost;
         readonly moduleResolutionCache: ModuleResolutionCache | undefined;
@@ -249,9 +249,9 @@ namespace ts {
 
         // Watch state
         readonly watch: boolean;
-        readonly allWatchedWildcardDirectories: Map<ResolvedConfigFilePath, Map<string, WildcardDirectoryWatcher>>;
-        readonly allWatchedInputFiles: Map<ResolvedConfigFilePath, Map<Path, FileWatcher>>;
-        readonly allWatchedConfigFiles: Map<ResolvedConfigFilePath, FileWatcher>;
+        readonly allWatchedWildcardDirectories: ESMap<ResolvedConfigFilePath, ESMap<string, WildcardDirectoryWatcher>>;
+        readonly allWatchedInputFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
+        readonly allWatchedConfigFiles: ESMap<ResolvedConfigFilePath, FileWatcher>;
 
         timerToBuildInvalidatedProject: any;
         reportFileChangeDetected: boolean;
@@ -442,7 +442,7 @@ namespace ts {
         const currentProjects = arrayToSet(
             getBuildOrderFromAnyBuildOrder(buildOrder),
             resolved => toResolvedConfigFilePath(state, resolved)
-        ) as Map<ResolvedConfigFilePath, true>;
+        ) as ESMap<ResolvedConfigFilePath, true>;
 
         const noopOnDelete = { onDeleteValue: noop };
         // Config file cache
@@ -976,7 +976,7 @@ namespace ts {
 
         function finishEmit(
             emitterDiagnostics: DiagnosticCollection,
-            emittedOutputs: Map<Path, string>,
+            emittedOutputs: ESMap<Path, string>,
             priorNewestUpdateTime: Date,
             newestDeclarationFileContentChangedTimeIsMaximumDate: boolean,
             oldestOutputFileName: string,
@@ -1544,7 +1544,7 @@ namespace ts {
         return actual;
     }
 
-    function updateOutputTimestampsWorker(state: SolutionBuilderState, proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: Map<Path, string>) {
+    function updateOutputTimestampsWorker(state: SolutionBuilderState, proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: ESMap<Path, string>) {
         const { host } = state;
         const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
         if (!skipOutputs || outputs.length !== skipOutputs.size) {
