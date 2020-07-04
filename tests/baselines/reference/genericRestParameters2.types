@@ -408,7 +408,7 @@ f20(42, "hello", ...t3);
 >t3 : boolean[]
 
 f20(42, "hello", ...t2, true);
->f20(42, "hello", ...t2, true) : [number, string, ...(string | boolean)[]]
+>f20(42, "hello", ...t2, true) : [number, string, string, ...boolean[]]
 >f20 : <T extends unknown[]>(...args: T) => T
 >42 : 42
 >"hello" : "hello"
@@ -437,7 +437,7 @@ type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) =
 >args : [number, string, ...boolean[]]
 
 type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
->T05 : Parameters<(x: string, ...args: T) => void>
+>T05 : [x: string, ...args: T]
 >x : string
 >args : T
 

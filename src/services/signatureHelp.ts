@@ -120,14 +120,22 @@ namespace ts.SignatureHelp {
         if (argumentInfo.invocation.kind === InvocationKind.Contextual) return undefined;
         // See if we can find some symbol with the call expression name that has call signatures.
         const expression = getExpressionFromInvocation(argumentInfo.invocation);
-        const name = isIdentifier(expression) ? expression.text : isPropertyAccessExpression(expression) ? expression.name.text : undefined;
+        const name = isPropertyAccessExpression(expression) ? expression.name.text : undefined;
         const typeChecker = program.getTypeChecker();
         return name === undefined ? undefined : firstDefined(program.getSourceFiles(), sourceFile =>
             firstDefined(sourceFile.getNamedDeclarations().get(name), declaration => {
                 const type = declaration.symbol && typeChecker.getTypeOfSymbolAtLocation(declaration.symbol, declaration);
                 const callSignatures = type && type.getCallSignatures();
                 if (callSignatures && callSignatures.length) {
-                    return typeChecker.runWithCancellationToken(cancellationToken, typeChecker => createSignatureHelpItems(callSignatures, callSignatures[0], argumentInfo, sourceFile, typeChecker));
+                    return typeChecker.runWithCancellationToken(
+                        cancellationToken,
+                        typeChecker => createSignatureHelpItems(
+                            callSignatures,
+                            callSignatures[0],
+                            argumentInfo,
+                            sourceFile,
+                            typeChecker,
+                            /*useFullPrefix*/ true));
                 }
             }));
     }
@@ -496,10 +504,11 @@ namespace ts.SignatureHelp {
         { isTypeParameterList, argumentCount, argumentsSpan: applicableSpan, invocation, argumentIndex }: ArgumentListInfo,
         sourceFile: SourceFile,
         typeChecker: TypeChecker,
+        useFullPrefix?: boolean,
     ): SignatureHelpItems {
         const enclosingDeclaration = getEnclosingDeclarationFromInvocation(invocation);
-        const callTargetSymbol = invocation.kind === InvocationKind.Contextual ? invocation.symbol : typeChecker.getSymbolAtLocation(getExpressionFromInvocation(invocation));
-        const callTargetDisplayParts = callTargetSymbol ? symbolToDisplayParts(typeChecker, callTargetSymbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined) : emptyArray;
+        const callTargetSymbol = invocation.kind === InvocationKind.Contextual ? invocation.symbol : (typeChecker.getSymbolAtLocation(getExpressionFromInvocation(invocation)) || useFullPrefix && resolvedSignature.declaration?.symbol);
+        const callTargetDisplayParts = callTargetSymbol ? symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined) : emptyArray;
         const items = map(candidates, candidateSignature => getSignatureHelpItem(candidateSignature, callTargetDisplayParts, isTypeParameterList, typeChecker, enclosingDeclaration, sourceFile));
 
         if (argumentIndex !== 0) {
@@ -593,7 +602,7 @@ namespace ts.SignatureHelp {
         const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!] : [];
 
         return checker.getExpandedParameters(candidateSignature).map(paramList => {
-            const params = createNodeArray([...thisParameter, ...map(paramList, param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
+            const params = factory.createNodeArray([...thisParameter, ...map(paramList, param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
             const parameterParts = mapToDisplayParts(writer => {
                 printer.writeList(ListFormat.CallExpressionArguments, params, sourceFile, writer);
             });
@@ -606,7 +615,7 @@ namespace ts.SignatureHelp {
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
             if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
-                const args = createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));
+                const args = factory.createNodeArray(candidateSignature.typeParameters.map(p => checker.typeParameterToDeclaration(p, enclosingDeclaration, signatureHelpNodeBuilderFlags)!));
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
         });

@@ -248,6 +248,10 @@ namespace ts.server.protocol {
          * Time spent updating the program graph, in milliseconds.
          */
         updateGraphDurationMs?: number;
+        /**
+         * The time spent creating or updating the auto-import program, in milliseconds.
+         */
+        createAutoImportProviderProgramDurationMs?: number;
     }
 
     /**
@@ -498,6 +502,7 @@ namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
     }
 
@@ -2158,6 +2163,11 @@ namespace ts.server.protocol {
          * and therefore may not be accurate.
          */
         isFromUncheckedFile?: true;
+        /**
+         * If true, this completion was for an auto-import of a module not yet in the program, but listed
+         * in the project package.json.
+         */
+        isPackageJsonImport?: true;
     }
 
     /**
@@ -2534,6 +2544,8 @@ namespace ts.server.protocol {
         category: string;
 
         reportsUnnecessary?: {};
+
+        reportsDeprecated?: {};
 
         /**
          * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
@@ -3066,6 +3078,7 @@ namespace ts.server.protocol {
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
@@ -3174,6 +3187,7 @@ namespace ts.server.protocol {
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
+        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
     }
 
     export interface CompilerOptions {

@@ -246,8 +246,8 @@ namespace ts {
 
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
-        let missingFilesMap: Map<FileWatcher>;                              // Map of file watchers for the missing files
-        let watchedWildcardDirectories: Map<WildcardDirectoryWatcher>;      // map of watchers for the wild card directories in the config file
+        let missingFilesMap: ESMap<Path, FileWatcher>;                        // Map of file watchers for the missing files
+        let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
         let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
 
@@ -419,7 +419,7 @@ namespace ts {
             resolutionCache.finishCachingPerDirectoryResolution();
 
             // Update watches
-            updateMissingFilePathsWatch(builderProgram.getProgram(), missingFilesMap || (missingFilesMap = createMap()), watchMissingFilePath);
+            updateMissingFilePathsWatch(builderProgram.getProgram(), missingFilesMap || (missingFilesMap = new Map()), watchMissingFilePath);
             if (needsUpdateInTypeRootWatch) {
                 resolutionCache.updateTypeRootsWatch();
             }
@@ -671,7 +671,7 @@ namespace ts {
             configFileSpecs = configFileParseResult.configFileSpecs!; // TODO: GH#18217
             projectReferences = configFileParseResult.projectReferences;
             configFileParsingDiagnostics = getConfigFileParsingDiagnostics(configFileParseResult).slice();
-            canConfigFileJsonReportNoInputFiles = canJsonReportNoInutFiles(configFileParseResult.raw);
+            canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(configFileParseResult.raw);
             hasChangedConfigFileParsingErrors = true;
         }
 
@@ -734,7 +734,7 @@ namespace ts {
                 fileOrDirectory => {
                     Debug.assert(!!configFileName);
 
-                    let fileOrDirectoryPath: Path | undefined = toPath(fileOrDirectory);
+                    const fileOrDirectoryPath = toPath(fileOrDirectory);
 
                     // Since the file existence changed, update the sourceFiles cache
                     if (cachedDirectoryStructureHost) {
@@ -742,15 +742,18 @@ namespace ts {
                     }
                     nextSourceFileVersion(fileOrDirectoryPath);
 
-                    fileOrDirectoryPath = removeIgnoredPath(fileOrDirectoryPath);
-                    if (!fileOrDirectoryPath) return;
-
-                    // If the the added or created file or directory is not supported file name, ignore the file
-                    // But when watched directory is added/removed, we need to reload the file list
-                    if (fileOrDirectoryPath !== directory && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, compilerOptions)) {
-                        writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
-                        return;
-                    }
+                    if (isIgnoredFileFromWildCardWatching({
+                        watchedDirPath: toPath(directory),
+                        fileOrDirectory,
+                        fileOrDirectoryPath,
+                        configFileName,
+                        configFileSpecs,
+                        options: compilerOptions,
+                        program: getCurrentBuilderProgram(),
+                        currentDirectory,
+                        useCaseSensitiveFileNames,
+                        writeLog
+                    })) return;
 
                     // Reload is pending, do the reload
                     if (reloadLevel !== ConfigFileProgramReloadLevel.Full) {

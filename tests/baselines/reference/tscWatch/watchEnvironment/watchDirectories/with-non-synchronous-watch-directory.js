@@ -76,27 +76,11 @@ exports.__esModule = true;
 
 
 
-Change:: Pending updates because of file1.js creation
+Change:: Directory watch updates because of file1.js creation
 
 Input::
 
 Output::
->> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
-
-
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/src/file1.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/node_modules/file2/index.d.ts
-/user/username/projects/myproject/src/file1.ts
-
-Semantic diagnostics in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -132,7 +116,7 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
 
 [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
@@ -141,7 +125,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~[0m
 
 
-[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -184,7 +168,7 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 
 [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'file2' or its corresponding type declarations.
@@ -193,7 +177,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~[0m
 
 
-[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -386,10 +370,10 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:51 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
 
 
-[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

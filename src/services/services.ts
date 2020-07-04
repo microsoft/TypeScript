@@ -634,13 +634,13 @@ namespace ts {
         public scriptKind!: ScriptKind;
         public languageVersion!: ScriptTarget;
         public languageVariant!: LanguageVariant;
-        public identifiers!: Map<string>;
+        public identifiers!: ESMap<string, string>;
         public nameTable: UnderscoreEscapedMap<number> | undefined;
-        public resolvedModules: Map<ResolvedModuleFull> | undefined;
-        public resolvedTypeReferenceDirectiveNames!: Map<ResolvedTypeReferenceDirective>;
+        public resolvedModules: ESMap<string, ResolvedModuleFull> | undefined;
+        public resolvedTypeReferenceDirectiveNames!: ESMap<string, ResolvedTypeReferenceDirective>;
         public imports!: readonly StringLiteralLike[];
         public moduleAugmentations!: StringLiteral[];
-        private namedDeclarations: Map<Declaration[]> | undefined;
+        private namedDeclarations: ESMap<string, Declaration[]> | undefined;
         public ambientModuleNames!: string[];
         public checkJsDirective: CheckJsDirective | undefined;
         public errorExpectations: TextRange[] | undefined;
@@ -686,7 +686,7 @@ namespace ts {
             return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
         }
 
-        public getNamedDeclarations(): Map<Declaration[]> {
+        public getNamedDeclarations(): ESMap<string, Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
             }
@@ -694,7 +694,7 @@ namespace ts {
             return this.namedDeclarations;
         }
 
-        private computeNamedDeclarations(): Map<Declaration[]> {
+        private computeNamedDeclarations(): ESMap<string, Declaration[]> {
             const result = createMultiMap<Declaration>();
 
             this.forEachChild(visit);
@@ -937,14 +937,14 @@ namespace ts {
     // at each language service public entry point, since we don't know when
     // the set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: Map<CachedHostFileInformation>;
+        private fileNameToEntry: ESMap<Path, CachedHostFileInformation>;
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
         constructor(private host: LanguageServiceHost, getCanonicalFileName: GetCanonicalFileName) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
-            this.fileNameToEntry = createMap<CachedHostFileInformation>();
+            this.fileNameToEntry = new Map();
 
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
@@ -1171,6 +1171,26 @@ namespace ts {
         }
     }
 
+    const invalidOperationsOnSyntaxOnly: readonly (keyof LanguageService)[] = [
+        "getSyntacticDiagnostics",
+        "getSemanticDiagnostics",
+        "getSuggestionDiagnostics",
+        "getCompilerOptionsDiagnostics",
+        "getSemanticClassifications",
+        "getEncodedSemanticClassifications",
+        "getCodeFixesAtPosition",
+        "getCombinedCodeFix",
+        "applyCodeActionCommand",
+        "organizeImports",
+        "getEditsForFileRename",
+        "getEmitOutput",
+        "getApplicableRefactors",
+        "getEditsForRefactor",
+        "prepareCallHierarchy",
+        "provideCallHierarchyIncomingCalls",
+        "provideCallHierarchyOutgoingCalls",
+    ];
+
     export function createLanguageService(
         host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
@@ -1224,8 +1244,6 @@ namespace ts {
         }
 
         function synchronizeHostData(): void {
-            Debug.assert(!syntaxOnly);
-
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1248,7 +1266,6 @@ namespace ts {
             // Get a fresh cache of the host information
             let hostCache: HostCache | undefined = new HostCache(host, getCanonicalFileName);
             const rootFileNames = hostCache.getRootFileNames();
-
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
             const projectReferences = hostCache.getProjectReferences();
@@ -1419,14 +1436,13 @@ namespace ts {
 
         // TODO: GH#18217 frequently asserted as defined
         function getProgram(): Program | undefined {
-            if (syntaxOnly) {
-                Debug.assert(program === undefined);
-                return undefined;
-            }
-
             synchronizeHostData();
 
             return program;
+        }
+
+        function getAutoImportProvider(): Program | undefined {
+            return host.getPackageJsonAutoImportProvider?.();
         }
 
         function cleanupSemanticCache(): void {
@@ -2199,7 +2215,7 @@ namespace ts {
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
         }
 
-        return {
+        const ls: LanguageService = {
             dispose,
             cleanupSemanticCache,
             getSyntacticDiagnostics,
@@ -2250,6 +2266,7 @@ namespace ts {
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram,
+            getAutoImportProvider,
             getApplicableRefactors,
             getEditsForRefactor,
             toLineColumnOffset: sourceMapper.toLineColumnOffset,
@@ -2259,6 +2276,16 @@ namespace ts {
             provideCallHierarchyIncomingCalls,
             provideCallHierarchyOutgoingCalls
         };
+
+        if (syntaxOnly) {
+            invalidOperationsOnSyntaxOnly.forEach(key =>
+                ls[key] = () => {
+                    throw new Error(`LanguageService Operation: ${key} not allowed on syntaxServer`);
+                }
+            );
+        }
+
+        return ls;
     }
 
     /* @internal */

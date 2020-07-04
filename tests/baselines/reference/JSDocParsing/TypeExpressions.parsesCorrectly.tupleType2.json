@@ -4,7 +4,7 @@
     "end": 16,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
-    "transformFlags": 0,
+    "transformFlags": 1,
     "elements": {
         "0": {
             "kind": "NumberKeyword",
@@ -12,7 +12,7 @@
             "end": 8,
             "flags": "JSDoc",
             "modifierFlagsCache": 0,
-            "transformFlags": 0
+            "transformFlags": 1
         },
         "1": {
             "kind": "StringKeyword",
@@ -20,10 +20,12 @@
             "end": 15,
             "flags": "JSDoc",
             "modifierFlagsCache": 0,
-            "transformFlags": 0
+            "transformFlags": 1
         },
         "length": 2,
         "pos": 2,
-        "end": 15
+        "end": 15,
+        "hasTrailingComma": false,
+        "transformFlags": 1
     }
 }

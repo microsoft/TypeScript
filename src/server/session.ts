@@ -56,6 +56,7 @@ namespace ts.server {
             code: diag.code,
             category: diagnosticCategoryName(diag),
             reportsUnnecessary: diag.reportsUnnecessary,
+            reportsDeprecated: diag.reportsDeprecated,
             source: diag.source,
             relatedInformation: map(diag.relatedInformation, formatRelatedInformation),
         };
@@ -100,6 +101,7 @@ namespace ts.server {
             code,
             category,
             reportsUnnecessary: diag.reportsUnnecessary,
+            reportsDeprecated: diag.reportsDeprecated,
             source,
             relatedInformation: map(diag.relatedInformation, formatRelatedInformation),
         };
@@ -260,7 +262,7 @@ namespace ts.server {
 
     type Projects = readonly Project[] | {
         readonly projects: readonly Project[];
-        readonly symLinkedProjects: MultiMap<Project>;
+        readonly symLinkedProjects: MultiMap<Path, Project>;
     };
 
     /**
@@ -275,7 +277,7 @@ namespace ts.server {
         const outputs = flatMapToMutable(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
         if (!isArray(projects) && projects.symLinkedProjects) {
             projects.symLinkedProjects.forEach((projects, path) => {
-                const value = getValue(path as Path);
+                const value = getValue(path);
                 outputs.push(...flatMap(projects, project => action(project, value)));
             });
         }
@@ -421,7 +423,7 @@ namespace ts.server {
     ): void {
         const projectService = defaultProject.projectService;
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
-        const seenProjects = createMap<true>();
+        const seenProjects = new Set<string>();
         forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
             // TLocation should be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
             const location = (initialLocation ? { fileName: path, pos: initialLocation.pos } : undefined) as TLocation;
@@ -494,7 +496,7 @@ namespace ts.server {
         location: TLocation,
         projectService: ProjectService,
         toDo: ProjectAndLocation<TLocation>[] | undefined,
-        seenProjects: Map<true>,
+        seenProjects: Set<string>,
         cb: CombineProjectOutputCallback<TLocation>,
     ): ProjectAndLocation<TLocation>[] | undefined {
         if (project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
@@ -515,7 +517,7 @@ namespace ts.server {
             if (symlinkedProjectsMap) {
                 symlinkedProjectsMap.forEach((symlinkedProjects, symlinkedPath) => {
                     for (const symlinkedProject of symlinkedProjects) {
-                        addToTodo(symlinkedProject, { fileName: symlinkedPath, pos: originalLocation.pos } as TLocation, toDo!, seenProjects);
+                        addToTodo(symlinkedProject, { fileName: symlinkedPath as string, pos: originalLocation.pos } as TLocation, toDo!, seenProjects);
                     }
                 });
             }
@@ -524,12 +526,12 @@ namespace ts.server {
         return toDo;
     }
 
-    function addToTodo<TLocation extends DocumentPosition | undefined>(project: Project, location: TLocation, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
+    function addToTodo<TLocation extends DocumentPosition | undefined>(project: Project, location: TLocation, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Set<string>): void {
         if (addToSeen(seenProjects, project)) toDo.push({ project, location });
     }
 
-    function addToSeen(seenProjects: Map<true>, project: Project) {
-        return ts.addToSeen(seenProjects, getProjectKey(project));
+    function addToSeen(seenProjects: Set<string>, project: Project) {
+        return tryAddToSet(seenProjects, getProjectKey(project));
     }
 
     function getProjectKey(project: Project) {
@@ -575,6 +577,42 @@ namespace ts.server {
             undefined;
     }
 
+    const invalidSyntaxOnlyCommands: readonly CommandNames[] = [
+        CommandNames.OpenExternalProject,
+        CommandNames.OpenExternalProjects,
+        CommandNames.CloseExternalProject,
+        CommandNames.SynchronizeProjectList,
+        CommandNames.EmitOutput,
+        CommandNames.CompileOnSaveAffectedFileList,
+        CommandNames.CompileOnSaveEmitFile,
+        CommandNames.CompilerOptionsDiagnosticsFull,
+        CommandNames.EncodedSemanticClassificationsFull,
+        CommandNames.SemanticDiagnosticsSync,
+        CommandNames.SyntacticDiagnosticsSync,
+        CommandNames.SuggestionDiagnosticsSync,
+        CommandNames.Geterr,
+        CommandNames.GeterrForProject,
+        CommandNames.Reload,
+        CommandNames.ReloadProjects,
+        CommandNames.GetCodeFixes,
+        CommandNames.GetCodeFixesFull,
+        CommandNames.GetCombinedCodeFix,
+        CommandNames.GetCombinedCodeFixFull,
+        CommandNames.ApplyCodeActionCommand,
+        CommandNames.GetSupportedCodeFixes,
+        CommandNames.GetApplicableRefactors,
+        CommandNames.GetEditsForRefactor,
+        CommandNames.GetEditsForRefactorFull,
+        CommandNames.OrganizeImports,
+        CommandNames.OrganizeImportsFull,
+        CommandNames.GetEditsForFileRename,
+        CommandNames.GetEditsForFileRenameFull,
+        CommandNames.ConfigurePlugin,
+        CommandNames.PrepareCallHierarchy,
+        CommandNames.ProvideCallHierarchyIncomingCalls,
+        CommandNames.ProvideCallHierarchyOutgoingCalls,
+    ];
+
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -606,7 +644,7 @@ namespace ts.server {
         protected projectService: ProjectService;
         private changeSeq = 0;
 
-        private updateGraphDurationMs: number | undefined;
+        private performanceData: protocol.PerformanceData | undefined;
 
         private currentRequestId!: number;
         private errorCheck: MultistepOperation;
@@ -667,18 +705,36 @@ namespace ts.server {
             this.projectService = new ProjectService(settings);
             this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
+
+            // Make sure to setup handlers to throw error for not allowed commands on syntax server;
+            if (this.projectService.syntaxOnly) {
+                invalidSyntaxOnlyCommands.forEach(commandName =>
+                    this.handlers.set(commandName, request => {
+                        throw new Error(`Request: ${request.command} not allowed on syntaxServer`);
+                    })
+                );
+            }
         }
 
         private sendRequestCompletedEvent(requestId: number): void {
             this.event<protocol.RequestCompletedEventBody>({ request_seq: requestId }, "requestCompleted");
         }
 
+        private addPerformanceData(key: keyof protocol.PerformanceData, value: number) {
+            if (!this.performanceData) {
+                this.performanceData = {};
+            }
+            this.performanceData[key] = (this.performanceData[key] ?? 0) + value;
+        }
+
         private performanceEventHandler(event: PerformanceEvent) {
             switch (event.kind) {
-                case "UpdateGraph": {
-                    this.updateGraphDurationMs = (this.updateGraphDurationMs || 0) + event.durationMs;
+                case "UpdateGraph":
+                    this.addPerformanceData("updateGraphDurationMs", event.durationMs);
                     break;
-                }
+                case "CreatePackageJsonAutoImportProvider":
+                    this.addPerformanceData("createAutoImportProviderProgramDurationMs", event.durationMs);
+                    break;
             }
         }
 
@@ -820,11 +876,7 @@ namespace ts.server {
                 command: cmdName,
                 request_seq: reqSeq,
                 success,
-                performanceData: !this.updateGraphDurationMs
-                    ? undefined
-                    : {
-                        updateGraphDurationMs: this.updateGraphDurationMs,
-                    },
+                performanceData: this.performanceData
             };
 
             if (success) {
@@ -1018,6 +1070,7 @@ namespace ts.server {
                 startLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start!)))!, // TODO: GH#18217
                 endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
                 reportsUnnecessary: d.reportsUnnecessary,
+                reportsDeprecated: d.reportsDeprecated,
                 relatedInformation: map(d.relatedInformation, formatRelatedInformation)
             }));
         }
@@ -1047,6 +1100,7 @@ namespace ts.server {
                 startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start!), // TODO: GH#18217
                 endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start! + d.length!),
                 reportsUnnecessary: d.reportsUnnecessary,
+                reportsDeprecated: d.reportsDeprecated,
                 relatedInformation: map(d.relatedInformation, formatRelatedInformation),
             });
         }
@@ -1253,9 +1307,9 @@ namespace ts.server {
         }
 
         private getJsxClosingTag(args: protocol.JsxClosingTagRequestArgs): TextInsertion | undefined {
-            const { file, project } = this.getFileAndProject(args);
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const position = this.getPositionInFile(args, file);
-            const tag = project.getLanguageService().getJsxClosingTagAtPosition(file, position);
+            const tag = languageService.getJsxClosingTagAtPosition(file, position);
             return tag === undefined ? undefined : { newText: tag.newText, caretOffset: 0 };
         }
 
@@ -1306,7 +1360,7 @@ namespace ts.server {
 
         private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
             let projects: readonly Project[] | undefined;
-            let symLinkedProjects: MultiMap<Project> | undefined;
+            let symLinkedProjects: MultiMap<Path, Project> | undefined;
             if (args.projectFileName) {
                 const project = this.getProject(args.projectFileName);
                 if (project) {
@@ -1661,10 +1715,10 @@ namespace ts.server {
             const prefix = args.prefix || "";
             const entries = mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended } = entry;
+                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, isRecommended, isPackageJsonImport } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
-                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended };
+                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, hasAction: hasAction || undefined, source, isRecommended, isPackageJsonImport };
                 }
             }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
 
@@ -1882,6 +1936,7 @@ namespace ts.server {
                 const bakedItem: protocol.NavtoItem = {
                     name: navItem.name,
                     kind: navItem.kind,
+                    kindModifiers: navItem.kindModifiers,
                     isCaseSensitive: navItem.isCaseSensitive,
                     matchKind: navItem.matchKind,
                     file: navItem.fileName,
@@ -2221,6 +2276,7 @@ namespace ts.server {
             return {
                 name: item.name,
                 kind: item.kind,
+                kindModifiers: item.kindModifiers,
                 file: item.file,
                 span: toProtocolTextSpan(item.span, scriptInfo),
                 selectionSpan: toProtocolTextSpan(item.selectionSpan, scriptInfo)
@@ -2687,7 +2743,7 @@ namespace ts.server {
         public onMessage(message: string) {
             this.gcTimer.scheduleCollect();
 
-            this.updateGraphDurationMs = undefined;
+            this.performanceData = undefined;
 
             let start: number[] | undefined;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
