@@ -537,8 +537,11 @@ namespace ts.projectSystem {
     export function protocolFileSpanWithContextFromSubstring({ contextText, contextOptions, ...rest }: FileSpanWithContextFromSubString): protocol.FileSpanWithContext {
         const result = protocolFileSpanFromSubstring(rest);
         const contextSpan = contextText !== undefined ?
-            protocolFileSpanFromSubstring({ file: rest.file, text: contextText, options: contextOptions }) :
-            undefined;
+          protocolFileSpanFromSubstring({
+          file: rest.file,
+          text: contextText,
+          options: contextOptions
+        }) : undefined;
         return contextSpan ?
             {
                 ...result,
