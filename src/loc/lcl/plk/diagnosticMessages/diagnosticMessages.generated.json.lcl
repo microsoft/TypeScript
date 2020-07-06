@@ -4058,6 +4058,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Did_you_mean_to_use_a_Colon_When_following_property_names_in_an_object_literal_implies_a_destructuri_1312" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Did you mean to use a ':'? When following property names in an object literal, '=' implies a destructuring assignment.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Czy chodziło o użycie znaku „:”? Jeśli występuje po nazwie właściwości w literale obiektu, znak „=” oznacza przypisanie usuwające strukturę.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Did_you_mean_to_use_new_with_this_expression_6213" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to use 'new' with this expression?]]></Val>
@@ -8861,15 +8870,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Remove_destructuring_90009" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Remove destructuring]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Usuń usuwanie struktury]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Remove_import_from_0_90005" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Remove import from '{0}']]></Val>
@@ -8929,6 +8929,24 @@
           <Val><![CDATA[Remove unused declaration for: '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Usuń nieużywaną deklarację dla: „{0}”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_declarations_for_Colon_0_90041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused declarations for: '{0}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Usuń nieużywane deklaracje dla: „{0}”]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Remove_unused_destructuring_declaration_90039" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Remove unused destructuring declaration]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Usuń nieużywaną deklarację usuwania struktury]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9988,6 +10006,15 @@
           <Val><![CDATA[Suppress noImplicitAny errors for indexing objects lacking index signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Pomiń błędy noImplicitAny dotyczące obiektów indeksowania bez sygnatur indeksów.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Switch_each_misused_0_to_1_95138" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Switch each misused '{0}' to '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Zmień każdy niepoprawnie użyty element „{0}” na „{1}”]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12874,15 +12901,6 @@
           <Val><![CDATA['#!' can only be used at the start of a file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Elementu „#!” można użyć tylko na początku pliku.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment_1312" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['=' can only be used in an object literal property inside a destructuring assignment.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Znaku „=” można użyć tylko we właściwości literału obiektu wewnątrz przypisania usuwającego strukturę.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
