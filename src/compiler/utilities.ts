@@ -2220,7 +2220,7 @@ namespace ts {
             }
             return AssignmentDeclarationKind.ObjectDefinePropertyValue;
         }
-        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left)) {
+        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left) || isVoidZero(getRightMostAssignedExpression(expr))) {
             return AssignmentDeclarationKind.None;
         }
         if (isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
@@ -2228,6 +2228,10 @@ namespace ts {
             return AssignmentDeclarationKind.Prototype;
         }
         return getAssignmentDeclarationPropertyAccessKind(expr.left);
+    }
+
+    function isVoidZero(node: Node) {
+        return isVoidExpression(node) && isNumericLiteral(node.expression) && node.expression.text === "0";
     }
 
     /**
