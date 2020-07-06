@@ -2581,7 +2581,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find lib definition for '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到“{0}”的 LIB 定义。]]></Val>
+            <Val><![CDATA[找不到“{0}”的库定义。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2590,7 +2590,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find lib definition for '{0}'. Did you mean '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到“{0}”的 LIB 定义。你是指“{1}”?]]></Val>
+            <Val><![CDATA[找不到“{0}”的库定义。你是指“{1}”?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
