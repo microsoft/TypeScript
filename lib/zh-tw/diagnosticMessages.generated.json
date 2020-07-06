@@ -1169,7 +1169,7 @@
   "This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233": "此宣告正在增加中。請考慮將正在增加的宣告移至相同的檔案中。",
   "This_may_be_converted_to_an_async_function_80006": "這可以轉換為非同步函式。",
   "This_module_can_only_be_referenced_with_ECMAScript_imports_Slashexports_by_turning_on_the_0_flag_and_2497": "只能以 ECMAScript 匯入/匯出來參考此模組，方法為開啟 '{0}' 旗標並參考其預設匯出。",
-  "This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the__2594": "此模組使用 'export =' 宣告，而且在使用 '{0}' 旗標時，只能搭配預設匯入使用。",
+  "This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the__2594": "此模組使用 'export =' 宣告，只能在使用 '{0}' 旗標時搭配預設匯入使用。",
   "This_overload_signature_is_not_compatible_with_its_implementation_signature_2394": "此多載簽章與其實作簽章不相容。",
   "This_parameter_is_not_allowed_with_use_strict_directive_1346": "不允許此參數搭配 'use strict' 指示詞使用。",
   "This_spread_always_overwrites_this_property_2785": "此展開會永遠覆寫此屬性。",
