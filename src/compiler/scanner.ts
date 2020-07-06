@@ -34,6 +34,7 @@ namespace ts {
         getTokenFlags(): TokenFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
+        reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
@@ -954,6 +955,7 @@ namespace ts {
             getNumericLiteralFlags: () => tokenFlags & TokenFlags.NumericLiteralFlags,
             getTokenFlags: () => tokenFlags,
             reScanGreaterToken,
+            reScanAsteriskEqualsToken,
             reScanSlashToken,
             reScanTemplateToken,
             reScanTemplateHeadOrNoSubstitutionTemplate,
@@ -2084,6 +2086,12 @@ namespace ts {
                 }
             }
             return token;
+        }
+
+        function reScanAsteriskEqualsToken(): SyntaxKind {
+            Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
+            pos = tokenPos + 1;
+            return token = SyntaxKind.EqualsToken;
         }
 
         function reScanSlashToken(): SyntaxKind {
