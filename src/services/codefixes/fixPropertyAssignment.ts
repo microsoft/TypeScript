@@ -2,7 +2,7 @@
 namespace ts.codefix {
     const fixId = "fixPropertyAssignment";
     const errorCodes = [
-        Diagnostics.Did_you_mean_to_use_a_Colon_When_following_property_names_in_an_object_literal_implies_a_destructuring_assignment.code
+        Diagnostics.Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_part_of_a_destructuring_pattern.code
     ];
 
     registerCodeFix({

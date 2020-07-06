@@ -2432,7 +2432,7 @@ namespace ts.Completions {
                 !existingMemberNames.has(propertySymbol.escapedName) &&
                 !!propertySymbol.declarations &&
                 !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & ModifierFlags.Private) &&
-                !isPrivateIdentifierPropertyDeclaration(propertySymbol.valueDeclaration));
+                !(propertySymbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(propertySymbol.valueDeclaration)));
         }
 
         /**

@@ -11,7 +11,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(85,19): 
   Types of property 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(85,26): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(111,14): error TS1312: Did you mean to use a ':'? When following property names in an object literal, '=' implies a destructuring assignment.
+tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(111,14): error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
 
 
 ==== tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts (12 errors) ====
@@ -153,7 +153,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring_ES6.ts(111,14):
     (function() {
     	let a = { s = 5 };
     	            ~
-!!! error TS1312: Did you mean to use a ':'? When following property names in an object literal, '=' implies a destructuring assignment.
+!!! error TS1312: Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.
     });
     
     function foo({a = 4, b = { x: 5 }}) {
