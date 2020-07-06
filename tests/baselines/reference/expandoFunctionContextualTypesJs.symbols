@@ -58,11 +58,14 @@ function foo() {
      * @type {MyComponentProps}
      */
     this.props = { color: "red" };
+>this.props : Symbol(foo.props, Decl(input.js, 35, 16))
+>this : Symbol(foo, Decl(input.js, 33, 28))
 >props : Symbol(foo.props, Decl(input.js, 35, 16))
 >color : Symbol(color, Decl(input.js, 39, 18))
 
     expectLiteral(this);
 >expectLiteral : Symbol(expectLiteral, Decl(input.js, 27, 27))
+>this : Symbol(foo, Decl(input.js, 33, 28))
 }
 
 /**
