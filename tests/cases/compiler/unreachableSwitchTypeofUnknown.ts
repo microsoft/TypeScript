@@ -1,5 +1,4 @@
 // @Filename: unreachable.ts
-// @outDir: out
 // @allowUnreachableCode: false
 const unreachable = (x: unknown): number => {
     switch (typeof x) {
