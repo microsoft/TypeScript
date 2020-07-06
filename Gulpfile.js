@@ -354,7 +354,6 @@ const eslint = (folder) => async () => {
         "node_modules/eslint/bin/eslint",
         "--cache",
         "--cache-location", `${folder}/.eslintcache`,
-        "--format", "autolinkable-stylish",
         "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",
     ];
@@ -363,11 +362,19 @@ const eslint = (folder) => async () => {
         args.push("--fix");
     }
 
+    // Use stylish format on CI, so that it can be picked up by GH Action's rule matchers
+    if (cmdLineOptions.ci) {
+        args.push("--format", "stylish");
+    }
+    else {
+        args.push("--format", "autolinkable-stylish");
+    }
+
     args.push(folder);
 
     log(`Linting: ${args.join(" ")}`);
     return exec(process.execPath, args);
-}
+};
 
 const lintScripts = eslint("scripts");
 lintScripts.displayName = "lint-scripts";
