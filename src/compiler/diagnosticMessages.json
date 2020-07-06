@@ -880,7 +880,7 @@
         "category": "Error",
         "code": 1308
     },
-    "Did you mean to use a ':'? When following property names in an object literal, '=' implies a destructuring assignment.": {
+    "Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.": {
         "category": "Error",
         "code": 1312
     },
