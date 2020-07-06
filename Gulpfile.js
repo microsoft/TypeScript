@@ -350,24 +350,18 @@ const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lin
 /** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
 const eslint = (folder) => async () => {
 
+    const formatter = cmdLineOptions.ci ? "stylish" : "autolinkable-stylish";
     const args = [
         "node_modules/eslint/bin/eslint",
         "--cache",
         "--cache-location", `${folder}/.eslintcache`,
+        "--format", formatter,
         "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",
     ];
 
     if (cmdLineOptions.fix) {
         args.push("--fix");
-    }
-
-    // Use stylish format on CI, so that it can be picked up by GH Action's rule matchers
-    if (cmdLineOptions.ci) {
-        args.push("--format", "stylish");
-    }
-    else {
-        args.push("--format", "autolinkable-stylish");
     }
 
     args.push(folder);
