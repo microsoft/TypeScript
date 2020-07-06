@@ -2451,37 +2451,37 @@ namespace FourSlash {
         private classificationToIdentifier(classification: number){
 
             const tokenTypes: string[] = [];
-            tokenTypes[ts.classifier.modern.TokenType.class] = "class";
-            tokenTypes[ts.classifier.modern.TokenType.enum] = "enum";
-            tokenTypes[ts.classifier.modern.TokenType.interface] = "interface";
-            tokenTypes[ts.classifier.modern.TokenType.namespace] = "namespace";
-            tokenTypes[ts.classifier.modern.TokenType.typeParameter] = "typeParameter";
-            tokenTypes[ts.classifier.modern.TokenType.type] = "type";
-            tokenTypes[ts.classifier.modern.TokenType.parameter] = "parameter";
-            tokenTypes[ts.classifier.modern.TokenType.variable] = "variable";
-            tokenTypes[ts.classifier.modern.TokenType.enumMember] = "enumMember";
-            tokenTypes[ts.classifier.modern.TokenType.property] = "property";
-            tokenTypes[ts.classifier.modern.TokenType.function] = "function";
-            tokenTypes[ts.classifier.modern.TokenType.member] = "member";
+            tokenTypes[ts.classifier.v2020.TokenType.class] = "class";
+            tokenTypes[ts.classifier.v2020.TokenType.enum] = "enum";
+            tokenTypes[ts.classifier.v2020.TokenType.interface] = "interface";
+            tokenTypes[ts.classifier.v2020.TokenType.namespace] = "namespace";
+            tokenTypes[ts.classifier.v2020.TokenType.typeParameter] = "typeParameter";
+            tokenTypes[ts.classifier.v2020.TokenType.type] = "type";
+            tokenTypes[ts.classifier.v2020.TokenType.parameter] = "parameter";
+            tokenTypes[ts.classifier.v2020.TokenType.variable] = "variable";
+            tokenTypes[ts.classifier.v2020.TokenType.enumMember] = "enumMember";
+            tokenTypes[ts.classifier.v2020.TokenType.property] = "property";
+            tokenTypes[ts.classifier.v2020.TokenType.function] = "function";
+            tokenTypes[ts.classifier.v2020.TokenType.member] = "member";
 
             const tokenModifiers: string[] = [];
-            tokenModifiers[ts.classifier.modern.TokenModifier.async] = "async";
-            tokenModifiers[ts.classifier.modern.TokenModifier.declaration] = "declaration";
-            tokenModifiers[ts.classifier.modern.TokenModifier.readonly] = "readonly";
-            tokenModifiers[ts.classifier.modern.TokenModifier.static] = "static";
-            tokenModifiers[ts.classifier.modern.TokenModifier.local] = "local";
-            tokenModifiers[ts.classifier.modern.TokenModifier.defaultLibrary] = "defaultLibrary";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.async] = "async";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.declaration] = "declaration";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.readonly] = "readonly";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.static] = "static";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.local] = "local";
+            tokenModifiers[ts.classifier.v2020.TokenModifier.defaultLibrary] = "defaultLibrary";
 
 
             function getTokenTypeFromClassification(tsClassification: number): number | undefined {
-                if (tsClassification > ts.classifier.modern.TokenEncodingConsts.modifierMask) {
-                    return (tsClassification >> ts.classifier.modern.TokenEncodingConsts.typeOffset) - 1;
+                if (tsClassification > ts.classifier.v2020.TokenEncodingConsts.modifierMask) {
+                    return (tsClassification >> ts.classifier.v2020.TokenEncodingConsts.typeOffset) - 1;
                 }
                 return undefined;
             }
 
             function getTokenModifierFromClassification(tsClassification: number) {
-                return tsClassification & ts.classifier.modern.TokenEncodingConsts.modifierMask;
+                return tsClassification & ts.classifier.v2020.TokenEncodingConsts.modifierMask;
             }
 
             const typeIdx = getTokenTypeFromClassification(classification) || 0;

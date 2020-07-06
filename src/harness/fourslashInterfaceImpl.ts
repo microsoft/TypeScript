@@ -752,12 +752,20 @@ namespace FourSlashInterface {
         }
     }
 
-    interface Classification {
-        classificationType: ts.ClassificationTypeNames | string;
+    interface OlderClassification {
+        classificationType: ts.ClassificationTypeNames;
+        text: string;
+        textSpan?: FourSlash.TextSpan;
+    }
+
+    // The VS Code LSP
+    interface ModernClassification {
+        classificationType: string;
         text?: string;
         textSpan?: FourSlash.TextSpan;
     }
 
+    type Classification = OlderClassification | ModernClassification;
 
     export function classification(format: ts.SemanticClassificationFormat) {
 
@@ -773,6 +781,8 @@ namespace FourSlashInterface {
                 semanticToken
             };
         }
+
+        // Defaults to the previous semantic classifier factory functions
 
         function comment(text: string, position?: number): Classification {
             return getClassification(ts.ClassificationTypeNames.comment, text, position);

@@ -1,5 +1,5 @@
 /** @internal */
-namespace ts.classifier.modern {
+namespace ts.classifier.v2020 {
 
     /** @internal */
     export const enum TokenEncodingConsts {
