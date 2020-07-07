@@ -3389,7 +3389,7 @@ namespace ts {
                     return tryParse(parseKeywordAndNoDot) || parseTypeReference();
                 case SyntaxKind.AsteriskEqualsToken:
                     // If there is '*=', treat it as * followed by postfix =
-                    scanner.reScanAsteriskEqualsToken()
+                    scanner.reScanAsteriskEqualsToken();
                     // falls through
                 case SyntaxKind.AsteriskToken:
                     return parseJSDocAllType();
