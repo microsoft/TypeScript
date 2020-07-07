@@ -7759,7 +7759,7 @@ namespace ts {
 
             const isOptional = includeOptionality && (
                 isParameter(declaration) && isJSDocOptionalParameter(declaration)
-                || isOptionalJSDocParameterTag(declaration)
+                || isOptionalJSDocPropertyLikeTag(declaration)
                 || !isBindingElement(declaration) && !isVariableDeclaration(declaration) && !!declaration.questionToken);
 
             // Use type from type annotation if one is present
@@ -11170,7 +11170,7 @@ namespace ts {
         }
 
         function isOptionalParameter(node: ParameterDeclaration | JSDocParameterTag | JSDocPropertyTag) {
-            if (hasQuestionToken(node) || isOptionalJSDocParameterTag(node) || isJSDocOptionalParameter(node)) {
+            if (hasQuestionToken(node) || isOptionalJSDocPropertyLikeTag(node) || isJSDocOptionalParameter(node)) {
                 return true;
             }
 
@@ -11190,7 +11190,7 @@ namespace ts {
             return false;
         }
 
-        function isOptionalJSDocParameterTag(node: Node): node is JSDocPropertyLikeTag {
+        function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
             if (!isJSDocPropertyLikeTag(node)) {
                 return false;
             }
@@ -11299,7 +11299,7 @@ namespace ts {
                     }
 
                     // Record a new minimum argument count if this is not an optional parameter
-                    const isOptionalParameter = isOptionalJSDocParameterTag(param) ||
+                    const isOptionalParameter = isOptionalJSDocPropertyLikeTag(param) ||
                         param.initializer || param.questionToken || param.dotDotDotToken ||
                         iife && parameters.length > iife.arguments.length && !type ||
                         isJSDocOptionalParameter(param);
