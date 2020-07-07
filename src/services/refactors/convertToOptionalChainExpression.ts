@@ -82,7 +82,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (!finalExpression || checker.isNullableType(checker.getTypeAtLocation(finalExpression))) return undefined;
 
         if ((isPropertyAccessExpression(condition) || isIdentifier(condition))
-            && getMatchingSubexpression(condition, finalExpression.expression, checker)) {
+            && getMatchingStart(condition, finalExpression.expression, checker)) {
             return { finalExpression, occurrences:[condition], expression };
         }
         else if (isBinaryExpression(condition)) {
@@ -107,7 +107,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
     function getOccurrencesInExpression(matchTo: Expression, expression: Expression, checker: TypeChecker): (PropertyAccessExpression | Identifier)[] | undefined {
         const occurrences: (PropertyAccessExpression | Identifier)[] = [];
         while (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-            const match = getMatchingSubexpression(matchTo, expression.right, checker);
+            const match = getMatchingStart(matchTo, expression.right, checker);
             if (!match) {
                 break;
             }
@@ -115,7 +115,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
             matchTo = match;
             expression = expression.left;
         }
-        const finalMatch = getMatchingSubexpression(matchTo, expression, checker);
+        const finalMatch = getMatchingStart(matchTo, expression, checker);
         if (finalMatch) {
             occurrences.push(finalMatch);
         }
@@ -123,38 +123,41 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     /**
-     * Checks that expression is a syntactic subexpression of matchTo.
+     * Returns subchain if chain begins with subchain syntactically.
      */
-    function getMatchingSubexpression(matchTo: Expression, expression: Expression, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
-        if (isCallExpression(matchTo)) {
-            return !isCallExpression(expression) ? getMatchingSubexpression(matchTo.expression, expression, checker) : undefined;
+    function getMatchingStart(chain: Expression, subchain: Expression, checker: TypeChecker): PropertyAccessExpression | Identifier | undefined {
+        if (isCallExpression(chain)) {
+            return !isCallExpression(subchain) ? getMatchingStart(chain.expression, subchain, checker) : undefined;
         }
-        else if ((isPropertyAccessExpression(expression) || isIdentifier(expression)) && (isPropertyAccessExpression(matchTo) || isIdentifier(matchTo))) {
-            return containsSyntacticSubchain(matchTo, expression, checker) ? expression : undefined;
+        else if ((isPropertyAccessExpression(subchain) || isIdentifier(subchain)) && (isPropertyAccessExpression(chain) || isIdentifier(chain))) {
+            return chainStartsWith(chain, subchain, checker) ? subchain : undefined;
         }
         return undefined;
     }
 
     /**
-     * Returns true if target is a syntactic subchain of source.
+     * Returns true if chain begins with subchain syntactically.
      */
-    function containsSyntacticSubchain(source: Node, target: Node, checker: TypeChecker): boolean {
-        while ((isPropertyAccessExpression(source) || isCallExpression(source)) && !isSyntacticMatch(source, target)) {
-            source = source.expression;
+    function chainStartsWith(chain: Node, subchain: Node, checker: TypeChecker): boolean {
+        while ((isPropertyAccessExpression(chain) || isCallExpression(chain)) && !finalIdentifierMatches(chain, subchain)) {
+            chain = chain.expression;
         }
-        while (isPropertyAccessExpression(source) && isPropertyAccessExpression(target)) {
-            if (!isSyntacticMatch(source, target)) return false;
-            source = source.expression;
-            target = target.expression;
+        while (isPropertyAccessExpression(chain) && isPropertyAccessExpression(subchain)) {
+            if (!finalIdentifierMatches(chain, subchain)) return false;
+            chain = chain.expression;
+            subchain = subchain.expression;
         }
-        const fullMatch = isSyntacticMatch(source, target);
-        if (fullMatch && !isInJSFile(source)) {
-            Debug.assert(checker.getSymbolAtLocation(source) === checker.getSymbolAtLocation(target));
+        const fullMatch = finalIdentifierMatches(chain, subchain);
+        if (fullMatch && !isInJSFile(chain)) {
+            Debug.assert(checker.getSymbolAtLocation(chain) === checker.getSymbolAtLocation(subchain));
         }
         return fullMatch;
     }
 
-    function isSyntacticMatch(source: Node, target: Node): boolean {
+    /**
+     * Returns true if the identifier or final identifier in two access chains matches syntactically.
+     */
+    function finalIdentifierMatches(source: Node, target: Node): boolean {
         if (isIdentifier(source) && isIdentifier(target)) {
             return source.getText() === target.getText();
         }
@@ -231,7 +234,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         if (isPropertyAccessExpression(toConvert) || isCallExpression(toConvert)) {
             const chain = convertOccurrences(checker, toConvert.expression, occurrences);
             const lastOccurrence = occurrences.length > 0 ? occurrences[occurrences.length - 1] : undefined;
-            const isOccurrence = lastOccurrence && isSyntacticMatch(lastOccurrence, toConvert.expression);
+            const isOccurrence = lastOccurrence && finalIdentifierMatches(lastOccurrence, toConvert.expression);
             if (isOccurrence) occurrences.pop();
             if (isCallExpression(toConvert)) {
                 return isOccurrence ?
