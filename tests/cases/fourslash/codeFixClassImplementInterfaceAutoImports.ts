@@ -32,7 +32,7 @@ import A from './types1';
 import { B, C, D } from './types2';
 
 export class C implements Base {
-    a: Readonly<A> & { kind: "a"; };
+    a: Readonly<A> & { kind: 'a'; };
     b<T extends B = B>(p1: C): D<C> {
         throw new Error('Method not implemented.');
     }
