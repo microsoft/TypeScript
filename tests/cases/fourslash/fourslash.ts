@@ -592,7 +592,7 @@ declare namespace FourSlashInterface {
         filesToSearch?: ReadonlyArray<string>;
     }
     interface UserPreferences {
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
