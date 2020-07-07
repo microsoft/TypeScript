@@ -841,7 +841,7 @@ namespace ts {
             };`
     };
 
-    let allUnscopedEmitHelpers: ReadonlyMap<string, UnscopedEmitHelper> | undefined;
+    let allUnscopedEmitHelpers: ReadonlyESMap<string, UnscopedEmitHelper> | undefined;
 
     export function getAllUnscopedEmitHelpers() {
         return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([

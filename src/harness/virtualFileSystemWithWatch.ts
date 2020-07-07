@@ -36,7 +36,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         currentDirectory?: string;
         newLine?: string;
         windowsStyleRoot?: string;
-        environmentVariables?: Map<string, string>;
+        environmentVariables?: ESMap<string, string>;
         runWithoutRecursiveWatches?: boolean;
         runWithFallbackPolling?: boolean;
     }
@@ -127,7 +127,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         return { close: () => map.remove(path, callback) };
     }
 
-    function getDiffInKeys<T>(map: Map<string, T>, expectedKeys: readonly string[]) {
+    function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
         if (map.size === expectedKeys.length) {
             return "";
         }
@@ -154,19 +154,19 @@ interface Array<T> { length: number; [n: number]: T; }`
         return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
     }
 
-    export function verifyMapSize(caption: string, map: Map<string, any>, expectedKeys: readonly string[]) {
+    export function verifyMapSize(caption: string, map: ESMap<string, any>, expectedKeys: readonly string[]) {
         assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
     }
 
-    export type MapValueTester<T, U> = [Map<string, U[]> | undefined, (value: T) => U];
+    export type MapValueTester<T, U> = [ESMap<string, U[]> | undefined, (value: T) => U];
 
-    export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: ReadonlyMap<string, number>, valueTester?: MapValueTester<T,U>): void;
+    export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: ReadonlyESMap<string, number>, valueTester?: MapValueTester<T,U>): void;
     export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: number, valueTester?: MapValueTester<T, U>): void;
-    export function checkMap<T>(caption: string, actual: Map<string, T> | MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: undefined): void;
+    export function checkMap<T>(caption: string, actual: ESMap<string, T> | MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: undefined): void;
     export function checkMap<T, U = undefined>(
         caption: string,
-        actual: Map<string, T> | MultiMap<string, T>,
-        expectedKeysMapOrArray: ReadonlyMap<string, number> | readonly string[],
+        actual: ESMap<string, T> | MultiMap<string, T>,
+        expectedKeysMapOrArray: ReadonlyESMap<string, number> | readonly string[],
         eachKeyCountOrValueTester?: number | MapValueTester<T, U>,
         valueTester?: MapValueTester<T, U>) {
         const expectedKeys = isArray(expectedKeysMapOrArray) ? arrayToMap(expectedKeysMapOrArray, s => s, () => eachKeyCountOrValueTester as number) : expectedKeysMapOrArray;
@@ -203,9 +203,9 @@ interface Array<T> { length: number; [n: number]: T; }`
         fileName: string;
         pollingInterval: PollingInterval;
     }
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<string, number>, expectedDetails?: Map<string, WatchFileDetails[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedDetails?: Map<string, WatchFileDetails[]>): void;
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<string, number> | readonly string[], eachFileWatchCountOrExpectedDetails?: number | Map<string, WatchFileDetails[]>, expectedDetails?: Map<string, WatchFileDetails[]>) {
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyESMap<string, number>, expectedDetails?: ESMap<string, WatchFileDetails[]>): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: readonly string[], eachFileWatchCount: number, expectedDetails?: ESMap<string, WatchFileDetails[]>): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyESMap<string, number> | readonly string[], eachFileWatchCountOrExpectedDetails?: number | ESMap<string, WatchFileDetails[]>, expectedDetails?: ESMap<string, WatchFileDetails[]>) {
         if (!isNumber(eachFileWatchCountOrExpectedDetails)) expectedDetails = eachFileWatchCountOrExpectedDetails;
         if (isArray(expectedFiles)) {
             checkMap(
@@ -235,9 +235,9 @@ interface Array<T> { length: number; [n: number]: T; }`
         fallbackPollingInterval: PollingInterval;
         fallbackOptions: WatchOptions | undefined;
     }
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<string, number>, recursive: boolean, expectedDetails?: Map<string, WatchDirectoryDetails[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedDetails?: Map<string, WatchDirectoryDetails[]>): void;
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<string, number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedDetails?: boolean | Map<string, WatchDirectoryDetails[]>, expectedDetails?: Map<string, WatchDirectoryDetails[]>) {
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyESMap<string, number>, recursive: boolean, expectedDetails?: ESMap<string, WatchDirectoryDetails[]>): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: readonly string[], eachDirectoryWatchCount: number, recursive: boolean, expectedDetails?: ESMap<string, WatchDirectoryDetails[]>): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyESMap<string, number> | readonly string[], recursiveOrEachDirectoryWatchCount: boolean | number, recursiveOrExpectedDetails?: boolean | ESMap<string, WatchDirectoryDetails[]>, expectedDetails?: ESMap<string, WatchDirectoryDetails[]>) {
         if (typeof recursiveOrExpectedDetails !== "boolean") expectedDetails = recursiveOrExpectedDetails;
         if (isArray(expectedDirectories)) {
             checkMap(
@@ -368,7 +368,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         fileOrFolderorSymLinkList: readonly FileOrFolderOrSymLink[];
         newLine?: string;
         useWindowsStylePaths?: boolean;
-        environmentVariables?: Map<string, string>;
+        environmentVariables?: ESMap<string, string>;
     }
 
     export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
@@ -376,7 +376,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         private readonly output: string[] = [];
 
-        private fs: Map<Path, FSEntry> = new Map();
+        private fs: ESMap<Path, FSEntry> = new Map();
         private time = timeIncrements;
         getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
@@ -391,7 +391,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         public readonly useCaseSensitiveFileNames: boolean;
         public readonly newLine: string;
         public readonly windowsStyleRoot?: string;
-        private readonly environmentVariables?: Map<string, string>;
+        private readonly environmentVariables?: ESMap<string, string>;
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
         public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
@@ -1042,7 +1042,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.clearOutput();
         }
 
-        snap(): Map<Path, FSEntry> {
+        snap(): ESMap<Path, FSEntry> {
             const result = new Map<Path, FSEntry>();
             this.fs.forEach((value, key) => {
                 const cloneValue = clone(value);
@@ -1055,8 +1055,8 @@ interface Array<T> { length: number; [n: number]: T; }`
             return result;
         }
 
-        writtenFiles?: Map<Path, number>;
-        diff(baseline: string[], base: Map<string, FSEntry> = new Map()) {
+        writtenFiles?: ESMap<Path, number>;
+        diff(baseline: string[], base: ESMap<string, FSEntry> = new Map()) {
             this.fs.forEach(newFsEntry => {
                 diffFsEntry(baseline, base.get(newFsEntry.path), newFsEntry, this.writtenFiles);
             });
@@ -1115,7 +1115,7 @@ interface Array<T> { length: number; [n: number]: T; }`
     function diffFsSymLink(baseline: string[], fsEntry: FsSymLink) {
         baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})`);
     }
-    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, writtenFiles: Map<string, any> | undefined): void {
+    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, writtenFiles: ESMap<string, any> | undefined): void {
         const file = newFsEntry && newFsEntry.fullPath;
         if (isFsFile(oldFsEntry)) {
             if (isFsFile(newFsEntry)) {
@@ -1208,7 +1208,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: Map<Path, number>; };
+    export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: ESMap<Path, number>; };
 
     export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
         const host = inputHost as TestServerHostTrackingWrittenFiles;

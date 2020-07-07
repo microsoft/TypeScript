@@ -84,10 +84,10 @@ namespace ts.server.typingsInstaller {
         DirectoryWatcher = "DirectoryWatcher"
     }
 
-    type ProjectWatchers = Map<string, FileWatcher> & { isInvoked?: boolean; };
+    type ProjectWatchers = ESMap<string, FileWatcher> & { isInvoked?: boolean; };
 
     export abstract class TypingsInstaller {
-        private readonly packageNameToTypingLocation: Map<string, JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
+        private readonly packageNameToTypingLocation: ESMap<string, JsTyping.CachedTyping> = createMap<JsTyping.CachedTyping>();
         private readonly missingTypingsSet = new Set<string>();
         private readonly knownCachesSet = new Set<string>();
         private readonly projectWatchers = createMap<ProjectWatchers>();
@@ -99,7 +99,7 @@ namespace ts.server.typingsInstaller {
         private installRunCount = 1;
         private inFlightRequestCount = 0;
 
-        abstract readonly typesRegistry: Map<string, MapLike<string>>;
+        abstract readonly typesRegistry: ESMap<string, MapLike<string>>;
 
         constructor(
             protected readonly installTypingHost: InstallTypingHost,

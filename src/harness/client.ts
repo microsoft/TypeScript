@@ -35,7 +35,7 @@ namespace ts.server {
 
     export class SessionClient implements LanguageService {
         private sequence = 0;
-        private lineMaps: Map<string, number[]> = createMap<number[]>();
+        private lineMaps: ESMap<string, number[]> = createMap<number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry | undefined;
 

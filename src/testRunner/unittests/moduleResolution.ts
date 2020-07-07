@@ -458,7 +458,7 @@ namespace ts {
     });
 
     describe("unittests:: moduleResolution:: Relative imports", () => {
-        function test(files: Map<string, string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
+        function test(files: ESMap<string, string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
             const options: CompilerOptions = { module: ModuleKind.CommonJS };
             const host: CompilerHost = {
                 getSourceFile: (fileName: string, languageVersion: ScriptTarget) => {
@@ -533,7 +533,7 @@ export = C;
     describe("unittests:: moduleResolution:: Files with different casing with forceConsistentCasingInFileNames", () => {
         let library: SourceFile;
         function test(
-            files: Map<string, string>,
+            files: ESMap<string, string>,
             options: CompilerOptions,
             currentDirectory: string,
             useCaseSensitiveFileNames: boolean,

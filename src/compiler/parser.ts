@@ -722,8 +722,8 @@ namespace ts {
 
         let currentToken: SyntaxKind;
         let nodeCount: number;
-        let identifiers: Map<string, string>;
-        let privateIdentifiers: Map<string, string>;
+        let identifiers: ESMap<string, string>;
+        let privateIdentifiers: ESMap<string, string>;
         let identifierCount: number;
 
         let parsingContext: ParsingContext;
@@ -7440,11 +7440,9 @@ namespace ts {
                     loop: while (true) {
                         switch (tok) {
                             case SyntaxKind.NewLineTrivia:
-                                if (state >= JSDocState.SawAsterisk) {
-                                    state = JSDocState.BeginningOfLine;
-                                    // don't use pushComment here because we want to keep the margin unchanged
-                                    comments.push(scanner.getTokenText());
-                                }
+                                state = JSDocState.BeginningOfLine;
+                                // don't use pushComment here because we want to keep the margin unchanged
+                                comments.push(scanner.getTokenText());
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:

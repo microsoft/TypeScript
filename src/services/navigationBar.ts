@@ -33,8 +33,8 @@ namespace ts.NavigationBar {
     let parentsStack: NavigationBarNode[] = [];
     let parent: NavigationBarNode;
 
-    const trackedEs5ClassesStack: (Map<string, boolean> | undefined)[] = [];
-    let trackedEs5Classes: Map<string, boolean> | undefined;
+    const trackedEs5ClassesStack: (ESMap<string, boolean> | undefined)[] = [];
+    let trackedEs5Classes: ESMap<string, boolean> | undefined;
 
     // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
     let emptyChildItemArray: NavigationBarItem[] = [];

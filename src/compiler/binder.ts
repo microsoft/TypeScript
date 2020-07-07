@@ -15,7 +15,7 @@ namespace ts {
         referenced: boolean;
     }
 
-    export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
+    export function getModuleInstanceState(node: ModuleDeclaration, visited?: ESMap<number, ModuleInstanceState | undefined>): ModuleInstanceState {
         if (node.body && !node.body.parent) {
             // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
             setParent(node.body, node);
@@ -35,7 +35,7 @@ namespace ts {
         return result;
     }
 
-    function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
+    function getModuleInstanceStateWorker(node: Node, visited: ESMap<number, ModuleInstanceState | undefined>): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         switch (node.kind) {
             // 1. interface declarations, type alias declarations
@@ -107,7 +107,7 @@ namespace ts {
         return ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<number, ModuleInstanceState | undefined>) {
+    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: ESMap<number, ModuleInstanceState | undefined>) {
         const name = specifier.propertyName || specifier.name;
         let p: Node | undefined = specifier.parent;
         while (p) {
@@ -535,10 +535,6 @@ namespace ts {
             }
             else {
                 symbol.parent = parent;
-            }
-
-            if (node.flags & NodeFlags.Deprecated) {
-                symbol.flags |= SymbolFlags.Deprecated;
             }
 
             return symbol;
@@ -1244,6 +1240,11 @@ namespace ts {
                     // flow that goes back through the finally block and back through only the return statements.
                     if (currentReturnTarget && returnLabel.antecedents) {
                         addAntecedent(currentReturnTarget, createReduceLabel(finallyLabel, returnLabel.antecedents, currentFlow));
+                    }
+                    // If we have an outer exception target (i.e. a containing try-finally or try-catch-finally), add a
+                    // control flow that goes back through the finally blok and back through each possible exception source.
+                    if (currentExceptionTarget && exceptionLabel.antecedents) {
+                        addAntecedent(currentExceptionTarget, createReduceLabel(finallyLabel, exceptionLabel.antecedents, currentFlow));
                     }
                     // If the end of the finally block is reachable, but the end of the try and catch blocks are not,
                     // convert the current flow to unreachable. For example, 'try { return 1; } finally { ... }' should
