@@ -27,7 +27,7 @@ namespace FourSlashInterface {
             return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
         }
 
-        public rangesByText(): ts.Map<string, FourSlash.Range[]> {
+        public rangesByText(): ts.ESMap<string, FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 
@@ -1533,6 +1533,7 @@ namespace FourSlashInterface {
         /** @default ts.emptyArray */
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly triggerReason?: ts.SignatureHelpTriggerReason;
+        readonly overrideSelectedItemIndex?: number;
     }
 
     export interface VerifyNavigateToOptions {

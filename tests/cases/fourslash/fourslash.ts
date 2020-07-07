@@ -592,7 +592,7 @@ declare namespace FourSlashInterface {
         filesToSearch?: ReadonlyArray<string>;
     }
     interface UserPreferences {
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
@@ -644,6 +644,7 @@ declare namespace FourSlashInterface {
         isVariadic?: boolean;
         tags?: ReadonlyArray<JSDocTagInfo>;
         triggerReason?: SignatureHelpTriggerReason;
+        overrideSelectedItemIndex?: number;
     }
 
     export type SignatureHelpTriggerReason =

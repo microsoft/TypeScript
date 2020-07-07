@@ -54,7 +54,7 @@
         "@types/through2": "latest",
         "@types/travis-fold": "latest",
         "@types/xml2js": "^0.4.0",
-        "@typescript-eslint/eslint-plugin": "^3.4.1-alpha.1",
+        "@typescript-eslint/eslint-plugin": "^3.6.1-alpha.1",
         "@typescript-eslint/experimental-utils": "^3.4.1-alpha.1",
         "@typescript-eslint/parser": "^3.4.1-alpha.1",
         "async": "latest",

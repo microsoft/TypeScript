@@ -126,7 +126,7 @@ namespace Harness.LanguageService {
 
     export abstract class LanguageServiceAdapterHost {
         public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
-        public typesRegistry: ts.Map<string, void> | undefined;
+        public typesRegistry: ts.ESMap<string, void> | undefined;
         private scriptInfos: collections.SortedMap<string, ScriptInfo>;
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.instance,

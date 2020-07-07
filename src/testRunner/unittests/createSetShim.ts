@@ -115,13 +115,13 @@ namespace ts {
 
         let SetShim!: SetConstructor;
         beforeEach(() => {
-            function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
-                I extends ReadonlyMap<infer K, infer V> ? [K, V] :
+            function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<
+                I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
                 I extends ReadonlySet<infer T> ? T :
                 I extends readonly (infer T)[] ? T :
                 I extends undefined ? undefined :
                 never>;
-            function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
+            function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined): Iterator<any> | undefined {
                 // override `ts.getIterator` with a version that allows us to iterate over a `SetShim` in an environment with a native `Set`.
                 if (iterable instanceof SetShim) return iterable.values();
                 return ts.getIterator(iterable);

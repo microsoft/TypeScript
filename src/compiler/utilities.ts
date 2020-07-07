@@ -136,7 +136,7 @@ namespace ts {
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
+    export function forEachEntry<K, V, U>(map: ReadonlyESMap<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
             const [key, value] = iterResult.value;
@@ -161,7 +161,7 @@ namespace ts {
     }
 
     /** Copy entries from `source` to `target`. */
-    export function copyEntries<K, V>(source: ReadonlyMap<K, V>, target: Map<K, V>): void {
+    export function copyEntries<K, V>(source: ReadonlyESMap<K, V>, target: ESMap<K, V>): void {
         source.forEach((value, key) => {
             target.set(key, value);
         });
@@ -233,7 +233,7 @@ namespace ts {
     export function hasChangesInResolutions<T>(
         names: readonly string[],
         newResolutions: readonly T[],
-        oldResolutions: ReadonlyMap<string, T> | undefined,
+        oldResolutions: ReadonlyESMap<string, T> | undefined,
         comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         Debug.assert(names.length === newResolutions.length);
 
@@ -2203,7 +2203,7 @@ namespace ts {
             }
             return AssignmentDeclarationKind.ObjectDefinePropertyValue;
         }
-        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left)) {
+        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken || !isAccessExpression(expr.left) || isVoidZero(getRightMostAssignedExpression(expr))) {
             return AssignmentDeclarationKind.None;
         }
         if (isBindableStaticNameExpression(expr.left.expression, /*excludeThisKeyword*/ true) && getElementOrPropertyAccessName(expr.left) === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
@@ -2211,6 +2211,10 @@ namespace ts {
             return AssignmentDeclarationKind.Prototype;
         }
         return getAssignmentDeclarationPropertyAccessKind(expr.left);
+    }
+
+    function isVoidZero(node: Node) {
+        return isVoidExpression(node) && isNumericLiteral(node.expression) && node.expression.text === "0";
     }
 
     /**
@@ -5244,7 +5248,7 @@ namespace ts {
     /**
      * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
      */
-    export function clearMap<T>(map: { forEach: Map<string, T>["forEach"]; clear: Map<string, T>["clear"]; }, onDeleteValue: (valueInMap: T, key: string) => void) {
+    export function clearMap<T>(map: { forEach: ESMap<string, T>["forEach"]; clear: ESMap<string, T>["clear"]; }, onDeleteValue: (valueInMap: T, key: string) => void) {
         // Remove all
         map.forEach(onDeleteValue);
         map.clear();
@@ -5266,8 +5270,8 @@ namespace ts {
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
     export function mutateMapSkippingNewValues<T, U>(
-        map: Map<string, T>,
-        newMap: ReadonlyMap<string, U>,
+        map: ESMap<string, T>,
+        newMap: ReadonlyESMap<string, U>,
         options: MutateMapSkippingNewValuesOptions<T, U>
     ) {
         const { onDeleteValue, onExistingValue } = options;
@@ -5293,7 +5297,7 @@ namespace ts {
     /**
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
-    export function mutateMap<T, U>(map: Map<string, T>, newMap: ReadonlyMap<string, U>, options: MutateMapOptions<T, U>) {
+    export function mutateMap<T, U>(map: ESMap<string, T>, newMap: ReadonlyESMap<string, U>, options: MutateMapOptions<T, U>) {
         // Needs update
         mutateMapSkippingNewValues(map, newMap, options);
 
@@ -5363,9 +5367,9 @@ namespace ts {
     }
 
     /** Add a value to a set, and return true if it wasn't already present. */
-    export function addToSeen(seen: Map<string, true>, key: string | number): boolean;
-    export function addToSeen<T>(seen: Map<string, T>, key: string | number, value: T): boolean;
-    export function addToSeen<T>(seen: Map<string, T>, key: string | number, value: T = true as any): boolean {
+    export function addToSeen(seen: ESMap<string, true>, key: string | number): boolean;
+    export function addToSeen<T>(seen: ESMap<string, T>, key: string | number, value: T): boolean;
+    export function addToSeen<T>(seen: ESMap<string, T>, key: string | number, value: T = true as any): boolean {
         key = String(key);
         if (seen.has(key)) {
             return false;
@@ -5920,7 +5924,7 @@ namespace ts {
         return true;
     }
 
-    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyMap<string, string> {
+    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): ReadonlyESMap<string, string> {
         const result = new Map<string, string>();
         const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
             sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
@@ -6550,10 +6554,10 @@ namespace ts {
     export type NodeSet<TNode extends Node> = Set<TNode>;
 
     /** @deprecated Use `ReadonlyMap<TNode, TValue>` instead. */
-    export type ReadonlyNodeMap<TNode extends Node, TValue> = ReadonlyMap<TNode, TValue>;
+    export type ReadonlyNodeMap<TNode extends Node, TValue> = ReadonlyESMap<TNode, TValue>;
 
     /** @deprecated Use `Map<TNode, TValue>` instead. */
-    export type NodeMap<TNode extends Node, TValue> = Map<TNode, TValue>;
+    export type NodeMap<TNode extends Node, TValue> = ESMap<TNode, TValue>;
 
     export function rangeOfNode(node: Node): TextRange {
         return { pos: getTokenPosOfNode(node), end: node.end };

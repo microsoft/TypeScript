@@ -16,7 +16,7 @@ namespace ts {
         let sourcesContent: (string | null)[] | undefined;
 
         const names: string[] = [];
-        let nameToNameIndexMap: Map<string, number> | undefined;
+        let nameToNameIndexMap: ESMap<string, number> | undefined;
         let mappings = "";
 
         // Last recorded and encoded mappings

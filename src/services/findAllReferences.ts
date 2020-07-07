@@ -1754,7 +1754,7 @@ namespace ts.FindAllReferences {
          * @param parent        Another class or interface Symbol
          * @param cachedResults A map of symbol id pairs (i.e. "child,parent") to booleans indicating previous results
          */
-        function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: Map<string, boolean>, checker: TypeChecker): boolean {
+        function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: ESMap<string, boolean>, checker: TypeChecker): boolean {
             if (symbol === parent) {
                 return true;
             }

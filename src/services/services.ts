@@ -634,13 +634,13 @@ namespace ts {
         public scriptKind!: ScriptKind;
         public languageVersion!: ScriptTarget;
         public languageVariant!: LanguageVariant;
-        public identifiers!: Map<string, string>;
+        public identifiers!: ESMap<string, string>;
         public nameTable: UnderscoreEscapedMap<number> | undefined;
-        public resolvedModules: Map<string, ResolvedModuleFull> | undefined;
-        public resolvedTypeReferenceDirectiveNames!: Map<string, ResolvedTypeReferenceDirective>;
+        public resolvedModules: ESMap<string, ResolvedModuleFull> | undefined;
+        public resolvedTypeReferenceDirectiveNames!: ESMap<string, ResolvedTypeReferenceDirective>;
         public imports!: readonly StringLiteralLike[];
         public moduleAugmentations!: StringLiteral[];
-        private namedDeclarations: Map<string, Declaration[]> | undefined;
+        private namedDeclarations: ESMap<string, Declaration[]> | undefined;
         public ambientModuleNames!: string[];
         public checkJsDirective: CheckJsDirective | undefined;
         public errorExpectations: TextRange[] | undefined;
@@ -686,7 +686,7 @@ namespace ts {
             return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
         }
 
-        public getNamedDeclarations(): Map<string, Declaration[]> {
+        public getNamedDeclarations(): ESMap<string, Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
             }
@@ -694,7 +694,7 @@ namespace ts {
             return this.namedDeclarations;
         }
 
-        private computeNamedDeclarations(): Map<string, Declaration[]> {
+        private computeNamedDeclarations(): ESMap<string, Declaration[]> {
             const result = createMultiMap<Declaration>();
 
             this.forEachChild(visit);
@@ -937,7 +937,7 @@ namespace ts {
     // at each language service public entry point, since we don't know when
     // the set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: Map<Path, CachedHostFileInformation>;
+        private fileNameToEntry: ESMap<Path, CachedHostFileInformation>;
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 

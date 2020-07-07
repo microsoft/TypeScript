@@ -13,7 +13,7 @@ namespace ts {
         invalidateResolutionOfFile(filePath: Path): void;
         removeResolutionsOfFile(filePath: Path): void;
         removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
-        setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<Path, readonly string[]>): void;
+        setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: ESMap<Path, readonly string[]>): void;
         createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
         hasChangedAutomaticTypeDirectiveNames(): boolean;
 
@@ -144,7 +144,7 @@ namespace ts {
     export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
         let filesWithInvalidatedResolutions: Set<Path> | undefined;
-        let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<Path, readonly string[]> | undefined;
+        let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyESMap<Path, readonly string[]> | undefined;
         const nonRelativeExternalModuleResolutions = createMultiMap<ResolutionWithFailedLookupLocations>();
 
         const resolutionsWithFailedLookups: ResolutionWithFailedLookupLocations[] = [];
@@ -161,8 +161,8 @@ namespace ts {
         // The resolvedModuleNames and resolvedTypeReferenceDirectives are the cache of resolutions per file.
         // The key in the map is source file's path.
         // The values are Map of resolutions with key being name lookedup.
-        const resolvedModuleNames = new Map<Path, Map<string, CachedResolvedModuleWithFailedLookupLocations>>();
-        const perDirectoryResolvedModuleNames: CacheWithRedirects<Map<string, CachedResolvedModuleWithFailedLookupLocations>> = createCacheWithRedirects();
+        const resolvedModuleNames = new Map<Path, ESMap<string, CachedResolvedModuleWithFailedLookupLocations>>();
+        const perDirectoryResolvedModuleNames: CacheWithRedirects<ESMap<string, CachedResolvedModuleWithFailedLookupLocations>> = createCacheWithRedirects();
         const nonRelativeModuleNameCache: CacheWithRedirects<PerModuleNameCache> = createCacheWithRedirects();
         const moduleResolutionCache = createModuleResolutionCacheWithMaps(
             perDirectoryResolvedModuleNames,
@@ -171,8 +171,8 @@ namespace ts {
             resolutionHost.getCanonicalFileName
         );
 
-        const resolvedTypeReferenceDirectives = new Map<Path, Map<string, CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
-        const perDirectoryResolvedTypeReferenceDirectives: CacheWithRedirects<Map<string, CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>> = createCacheWithRedirects();
+        const resolvedTypeReferenceDirectives = new Map<Path, ESMap<string, CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+        const perDirectoryResolvedTypeReferenceDirectives: CacheWithRedirects<ESMap<string, CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>> = createCacheWithRedirects();
 
         /**
          * These are the extensions that failed lookup files will have by default,
@@ -334,8 +334,8 @@ namespace ts {
             names: readonly string[];
             containingFile: string;
             redirectedReference: ResolvedProjectReference | undefined;
-            cache: Map<Path, Map<string, T>>;
-            perDirectoryCacheWithRedirects: CacheWithRedirects<Map<string, T>>;
+            cache: ESMap<Path, ESMap<string, T>>;
+            perDirectoryCacheWithRedirects: CacheWithRedirects<ESMap<string, T>>;
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference) => T;
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
             shouldRetryResolution: (t: T) => boolean;
@@ -684,7 +684,7 @@ namespace ts {
         }
 
         function removeResolutionsOfFileFromCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
-            cache: Map<string, Map<string, T>>,
+            cache: ESMap<string, ESMap<string, T>>,
             filePath: Path,
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
         ) {
@@ -741,7 +741,7 @@ namespace ts {
             }
         }
 
-        function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyMap<Path, readonly string[]>) {
+        function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyESMap<Path, readonly string[]>) {
             Debug.assert(filesWithInvalidatedNonRelativeUnresolvedImports === filesMap || filesWithInvalidatedNonRelativeUnresolvedImports === undefined);
             filesWithInvalidatedNonRelativeUnresolvedImports = filesMap;
         }

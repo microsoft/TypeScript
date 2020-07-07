@@ -493,7 +493,7 @@ namespace ts {
             }
 
             interface VerifyNullNonIncludedOption {
-                type: () => "string" | "number" | Map<string, number | string>;
+                type: () => "string" | "number" | ESMap<string, number | string>;
                 nonNullValue?: string;
             }
             function verifyNullNonIncludedOption({ type, nonNullValue }: VerifyNullNonIncludedOption) {

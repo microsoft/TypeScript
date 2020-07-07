@@ -244,7 +244,7 @@ namespace ts {
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
 
-        let renamedCatchVariables: Map<string, boolean>;
+        let renamedCatchVariables: ESMap<string, boolean>;
         let renamedCatchVariableDeclarations: Identifier[];
 
         let inGeneratorFunctionBody: boolean;

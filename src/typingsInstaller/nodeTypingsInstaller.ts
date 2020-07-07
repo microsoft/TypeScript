@@ -46,7 +46,7 @@ namespace ts.server.typingsInstaller {
         entries: MapLike<MapLike<string>>;
     }
 
-    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<string, MapLike<string>> {
+    function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): ESMap<string, MapLike<string>> {
         if (!host.fileExists(typesRegistryFilePath)) {
             if (log.isEnabled()) {
                 log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
@@ -79,7 +79,7 @@ namespace ts.server.typingsInstaller {
     export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly nodeExecSync: ExecSync;
         private readonly npmPath: string;
-        readonly typesRegistry: Map<string, MapLike<string>>;
+        readonly typesRegistry: ESMap<string, MapLike<string>>;
 
         private delayedInitializationError: InitializationFailedResponse | undefined;
 

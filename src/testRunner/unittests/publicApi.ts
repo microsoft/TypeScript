@@ -53,6 +53,24 @@ describe("unittests:: Public APIs:: createPrivateIdentifier", () => {
     });
 });
 
+describe("unittests:: Public APIs:: JSDoc newlines", () => {
+    it("are preserved verbatim", () => {
+        const testFilePath = "/file.ts";
+        const testFileText = `
+/**
+* @example
+* Some\n * text\r\n * with newlines.
+*/
+function test() {}`;
+
+        const testSourceFile = ts.createSourceFile(testFilePath, testFileText, ts.ScriptTarget.Latest, /*setParentNodes*/ true);
+        const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
+        const tags = ts.getJSDocTags(funcDec);
+        assert.isDefined(tags[0].comment);
+        assert.equal(tags[0].comment, "Some\n text\r\n with newlines.");
+    });
+});
+
 describe("unittests:: Public APIs:: isPropertyName", () => {
     it("checks if a PrivateIdentifier is a valid property name", () => {
         const prop = ts.factory.createPrivateIdentifier("#foo");

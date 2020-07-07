@@ -3400,7 +3400,7 @@ namespace ts {
 
         // this map is used by transpiler to supply alternative names for dependencies (i.e. in case of bundling)
         /* @internal */
-        renamedDependencies?: ReadonlyMap<string, string>;
+        renamedDependencies?: ReadonlyESMap<string, string>;
 
         /**
          * lib.d.ts should have a reference comment like
@@ -3426,7 +3426,7 @@ namespace ts {
         // JS identifier-declarations that are intended to merge with globals
         /* @internal */ jsGlobalAugmentations?: SymbolTable;
 
-        /* @internal */ identifiers: Map<string, string>; // Map from a string to an interned string
+        /* @internal */ identifiers: ESMap<string, string>; // Map from a string to an interned string
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -3454,8 +3454,8 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules?: Map<string, ResolvedModuleFull | undefined>;
-        /* @internal */ resolvedTypeReferenceDirectiveNames: Map<string, ResolvedTypeReferenceDirective | undefined>;
+        /* @internal */ resolvedModules?: ESMap<string, ResolvedModuleFull | undefined>;
+        /* @internal */ resolvedTypeReferenceDirectiveNames: ESMap<string, ResolvedTypeReferenceDirective | undefined>;
         /* @internal */ imports: readonly StringLiteralLike[];
         // Identifier only if `declare global`
         /* @internal */ moduleAugmentations: readonly (StringLiteral | Identifier)[];
@@ -3687,7 +3687,7 @@ namespace ts {
         /* @internal */
         getRefFileMap(): MultiMap<Path, RefFile> | undefined;
         /* @internal */
-        getFilesByNameMap(): Map<string, SourceFile | false | undefined>;
+        getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
         /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
@@ -3737,7 +3737,7 @@ namespace ts {
         getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
-        /* @internal */ getResolvedTypeReferenceDirectives(): Map<string, ResolvedTypeReferenceDirective | undefined>;
+        /* @internal */ getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirective | undefined>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
@@ -3748,7 +3748,7 @@ namespace ts {
         /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         /** Given a source file, get the name of the package it was imported from. */
-        /* @internal */ sourceFileToPackageName: Map<string, string>;
+        /* @internal */ sourceFileToPackageName: ESMap<string, string>;
         /** Set of all source files that some other source file redirects to. */
         /* @internal */ redirectTargetsMap: MultiMap<string, string>;
         /** Is the file emitted file */
@@ -3765,7 +3765,7 @@ namespace ts {
         /*@internal*/ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
-        /*@internal*/ getProbableSymlinks(): ReadonlyMap<string, string>;
+        /*@internal*/ getProbableSymlinks(): ReadonlyESMap<string, string>;
         /**
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
@@ -3777,7 +3777,7 @@ namespace ts {
     }
 
     /* @internal */
-    export type RedirectTargetsMap = ReadonlyMap<string, readonly string[]>;
+    export type RedirectTargetsMap = ReadonlyESMap<string, readonly string[]>;
 
     export interface ResolvedProjectReference {
         commandLine: ParsedCommandLine;
@@ -3873,7 +3873,7 @@ namespace ts {
 
         getSourceFiles(): readonly SourceFile[];
         getSourceFile(fileName: string): SourceFile | undefined;
-        getResolvedTypeReferenceDirectives(): ReadonlyMap<string, ResolvedTypeReferenceDirective | undefined>;
+        getResolvedTypeReferenceDirectives(): ReadonlyESMap<string, ResolvedTypeReferenceDirective | undefined>;
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
@@ -4515,10 +4515,9 @@ namespace ts {
         Transient               = 1 << 25,  // Transient symbol (created during type check)
         Assignment              = 1 << 26,  // Assignment treated as declaration (eg `this.prop = 1`)
         ModuleExports           = 1 << 27,  // Symbol for CommonJS `module` of `module.exports`
-        Deprecated              = 1 << 28,  // Symbol has Deprecated declaration tag (eg `@deprecated`)
         /* @internal */
         All = FunctionScopedVariable | BlockScopedVariable | Property | EnumMember | Function | Class | Interface | ConstEnum | RegularEnum | ValueModule | NamespaceModule | TypeLiteral
-            | ObjectLiteral | Method | Constructor | GetAccessor | SetAccessor | Signature | TypeParameter | TypeAlias | ExportValue | Alias | Prototype | ExportStar | Optional | Transient | Deprecated,
+            | ObjectLiteral | Method | Constructor | GetAccessor | SetAccessor | Signature | TypeParameter | TypeAlias | ExportValue | Alias | Prototype | ExportStar | Optional | Transient,
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -4597,7 +4596,7 @@ namespace ts {
         /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
-        /* @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
+        /* @internal */ assignmentDeclarationMembers?: ESMap<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
     }
 
     /* @internal */
@@ -4610,8 +4609,8 @@ namespace ts {
         declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
         typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
-        instantiations?: Map<string, Type>;         // Instantiations of generic type alias (undefined if non-generic)
-        inferredClassSymbol?: Map<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
+        instantiations?: ESMap<string, Type>;       // Instantiations of generic type alias (undefined if non-generic)
+        inferredClassSymbol?: ESMap<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
         mapper?: TypeMapper;                        // Type mapper for instantiation alias
         referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
         constEnumReferenced?: boolean;              // True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false)
@@ -4630,9 +4629,9 @@ namespace ts {
         enumKind?: EnumKind;                        // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                        // Late-bound symbol for a computed property
-        specifierCache?: Map<string, string>;       // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
+        specifierCache?: ESMap<string, string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
         extendedContainers?: Symbol[];              // Containers (other than the parent) which this symbol is aliased in
-        extendedContainersByFile?: Map<NodeId, Symbol[]>; // Containers (other than the parent) which this symbol is aliased in
+        extendedContainersByFile?: ESMap<NodeId, Symbol[]>; // Containers (other than the parent) which this symbol is aliased in
         variances?: VarianceFlags[];                // Alias symbol type argument variance cache
         deferralConstituents?: Type[];              // Calculated list of constituents for a deferred type
         deferralParent?: Type;                      // Source union/intersection of a deferred type
@@ -4724,10 +4723,12 @@ namespace ts {
     export type __String = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void }) | InternalSymbolName; // eslint-disable-line @typescript-eslint/naming-convention
 
     /** ReadonlyMap where keys are `__String`s. */
-    export type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
+    export interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyESMap<__String, T> {
+    }
 
     /** Map where keys are `__String`s. */
-    export type UnderscoreEscapedMap<T> = Map<__String, T>;
+    export interface UnderscoreEscapedMap<T> extends ESMap<__String, T>, ReadonlyUnderscoreEscapedMap<T> {
+    }
 
     /** SymbolTable based on ES6 Map interface. */
     export type SymbolTable = UnderscoreEscapedMap<Symbol>;
@@ -4786,10 +4787,10 @@ namespace ts {
         switchTypes?: Type[];               // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
-        deferredNodes?: Map<NodeId, Node>;  // Set of nodes whose checking has been deferred
+        deferredNodes?: ESMap<NodeId, Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
         outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
-        instantiations?: Map<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
+        instantiations?: ESMap<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
         isExhaustive?: boolean;             // Is node an exhaustive switch statement
         skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
         declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
@@ -4865,7 +4866,6 @@ namespace ts {
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
-        NotUnionOrUnit = Any | Unknown | ESSymbol | Object | NonPrimitive,
         /* @internal */
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
         // The following flags are aggregated during union and intersection type construction
@@ -5092,7 +5092,7 @@ namespace ts {
     // Generic class and interface types
     export interface GenericType extends InterfaceType, TypeReference {
         /* @internal */
-        instantiations: Map<string, TypeReference>;  // Generic instantiation cache
+        instantiations: ESMap<string, TypeReference>;  // Generic instantiation cache
         /* @internal */
         variances?: VarianceFlags[];  // Variance of each type parameter
     }
@@ -5280,7 +5280,7 @@ namespace ts {
         isDistributive: boolean;
         inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
-        instantiations?: Map<string, Type>;
+        instantiations?: Map<Type>;
         aliasSymbol?: Symbol;
         aliasTypeArguments?: Type[];
     }
@@ -5375,7 +5375,7 @@ namespace ts {
         /* @internal */
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
-        instantiations?: Map<string, Signature>;    // Generic signature instantiation cache
+        instantiations?: ESMap<string, Signature>;    // Generic signature instantiation cache
     }
 
     export const enum IndexKind {
@@ -5896,7 +5896,7 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | "list" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | "list" | ESMap<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
@@ -5921,7 +5921,7 @@ namespace ts {
 
     /* @internal */
     export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
-        type: Map<string, number | string>;  // an object literal mapping named values to actual values
+        type: ESMap<string, number | string>;  // an object literal mapping named values to actual values
     }
 
     /* @internal */
@@ -5934,7 +5934,7 @@ namespace ts {
     /* @internal */
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
-        elementOptions?: Map<string, CommandLineOption>;
+        elementOptions?: ESMap<string, CommandLineOption>;
         extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
     }
 
@@ -6223,7 +6223,7 @@ namespace ts {
 
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;
-        /*@internal*/getSymlinks?(): ReadonlyMap<string, string>;
+        /*@internal*/getSymlinks?(): ReadonlyESMap<string, string>;
     }
 
     /** true if --out otherwise source file name */
@@ -7736,7 +7736,7 @@ namespace ts {
         fileExists(path: string): boolean;
         getCurrentDirectory(): string;
         readFile?(path: string): string | undefined;
-        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string, string>;
+        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyESMap<string, string>;
         getGlobalTypingsCacheLocation?(): string | undefined;
 
         getSourceFiles(): readonly SourceFile[];
@@ -8000,7 +8000,7 @@ namespace ts {
     export type PragmaPseudoMapEntry = {[K in keyof PragmaPseudoMap]: {name: K, args: PragmaPseudoMap[K]}}[keyof PragmaPseudoMap];
 
     /* @internal */
-    export interface ReadonlyPragmaMap extends ReadonlyMap<string, PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]> {
+    export interface ReadonlyPragmaMap extends ReadonlyESMap<string, PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]> {
         get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
         forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;
     }
@@ -8011,7 +8011,7 @@ namespace ts {
      * in multiple places
      */
     /* @internal */
-    export interface PragmaMap extends Map<string, PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]>, ReadonlyPragmaMap {
+    export interface PragmaMap extends ESMap<string, PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]>, ReadonlyPragmaMap {
         set<TKey extends keyof PragmaPseudoMap>(key: TKey, value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][]): this;
         get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
         forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;

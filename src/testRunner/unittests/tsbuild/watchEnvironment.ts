@@ -11,7 +11,7 @@ namespace ts.tscWatch {
             );
         });
 
-        function verifyWatchFileOnMultipleProjects(singleWatchPerFile: boolean, environmentVariables?: Map<string, string>) {
+        function verifyWatchFileOnMultipleProjects(singleWatchPerFile: boolean, environmentVariables?: ESMap<string, string>) {
             it("watchFile on same file multiple times because file is part of multiple projects", () => {
                 const project = `${TestFSWithWatch.tsbuildProjectsLocation}/myproject`;
                 let maxPkgs = 4;
