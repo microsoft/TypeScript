@@ -6510,7 +6510,8 @@ namespace ts {
                 }
 
                 function isNamespaceMember(p: Symbol) {
-                    return !!(p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias)) || !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && isClassLike(p.valueDeclaration.parent));
+                    return !!(p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias)) ||
+                        !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && isClassLike(p.valueDeclaration.parent));
                 }
 
                 function serializeAsClass(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
