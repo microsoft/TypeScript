@@ -2967,7 +2967,15 @@ namespace ts.server {
             let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
             let defaultConfigProject: ConfiguredProject | undefined;
             let retainProjects: ConfiguredProject[] | ConfiguredProject | undefined;
-            if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
+            if (this.syntaxOnly) {
+                // Invalidate resolutions in the file since this file is now open
+                info.containingProjects.forEach(project => {
+                    if (project.resolutionCache.removeRelativeNoResolveResolutionsOfFile(info.path)) {
+                        project.markAsDirty();
+                    }
+                });
+            }
+            else if (!project) { // Checking syntaxOnly is an optimization
                 configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
