@@ -281,10 +281,8 @@ namespace ts.server {
 
             this.languageServiceEnabled = true;
             if (projectService.syntaxOnly) {
-                this.compilerOptions.noResolve = true;
                 this.compilerOptions.types = [];
             }
-
             this.setInternalCompilerOptionsForEmittingJsFiles();
             const host = this.projectService.host;
             if (this.projectService.logger.loggingEnabled()) {
@@ -296,7 +294,12 @@ namespace ts.server {
             this.realpath = maybeBind(host, host.realpath);
 
             // Use the current directory as resolution root only if the project created using current directory string
-            this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory, /*logChangesWhenResolvingModule*/ true);
+            this.resolutionCache = createResolutionCache(
+                this,
+                currentDirectory && this.currentDirectory,
+                projectService.syntaxOnly ? ResolutionKind.RelativeReferences : ResolutionKind.All,
+                /*logChangesWhenResolvingModule*/ true
+            );
             this.languageService = createLanguageService(this, this.documentRegistry, this.projectService.syntaxOnly);
             if (lastFileExceededProgramSize) {
                 this.disableLanguageService(lastFileExceededProgramSize);
