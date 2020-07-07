@@ -51,7 +51,6 @@ declare namespace ts {
     }
     /**
      * ES6 Map interface, only read methods included.
-     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
      */
     interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
     }
@@ -61,7 +60,6 @@ declare namespace ts {
     }
     /**
      * ES6 Map interface.
-     * @deprecated Use `ts.ESMap<K, V>` instead.
      */
     interface Map<T> extends ESMap<string, T> {
     }
@@ -10672,6 +10670,16 @@ declare namespace ts {
     const getMutableClone: <T extends Node>(node: T) => T;
     /** @deprecated Use `isTypeAssertionExpression` instead. */
     const isTypeAssertion: (node: Node) => node is TypeAssertion;
+    /**
+     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
+     */
+    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    }
+    /**
+     * @deprecated Use `ts.ESMap<K, V>` instead.
+     */
+    interface Map<T> extends ESMap<string, T> {
+    }
 }
 
 export = ts;
