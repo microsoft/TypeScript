@@ -53,9 +53,9 @@ namespace ts.codefix {
                 const flags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
                 let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
                 if (importAdder) {
-                    const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+                    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
                     if (importableReference) {
-                        typeNode = importableReference.typeReference;
+                        typeNode = importableReference.typeNode;
                         importSymbols(importAdder, importableReference.symbols);
                     }
                 }
@@ -75,9 +75,9 @@ namespace ts.codefix {
                     ? [allAccessors.firstAccessor, allAccessors.secondAccessor]
                     : [allAccessors.firstAccessor];
                 if (importAdder) {
-                    const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+                    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
                     if (importableReference) {
-                        typeNode = importableReference.typeReference;
+                        typeNode = importableReference.typeNode;
                         importSymbols(importAdder, importableReference.symbols);
                     }
                 }
@@ -175,21 +175,20 @@ namespace ts.codefix {
         let type = signatureDeclaration.type;
         if (importAdder) {
             if (typeParameters) {
-                const newTypeParameters = sameMap(typeParameters, (typeParameterDecl, i) => {
-                    const typeParameter = signature.typeParameters![i];
+                const newTypeParameters = sameMap(typeParameters, typeParameterDecl => {
                     let constraint = typeParameterDecl.constraint;
                     let defaultType = typeParameterDecl.default;
                     if (constraint) {
-                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(constraint, typeParameter.constraint, scriptTarget);
+                        const importableReference = tryGetAutoImportableReferenceFromTypeNode(constraint, scriptTarget);
                         if (importableReference) {
-                            constraint = importableReference.typeReference;
+                            constraint = importableReference.typeNode;
                             importSymbols(importAdder, importableReference.symbols);
                         }
                     }
                     if (defaultType) {
-                        const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(defaultType, typeParameter.default, scriptTarget);
+                        const importableReference = tryGetAutoImportableReferenceFromTypeNode(defaultType, scriptTarget);
                         if (importableReference) {
-                            defaultType = importableReference.typeReference;
+                            defaultType = importableReference.typeNode;
                             importSymbols(importAdder, importableReference.symbols);
                         }
                     }
@@ -204,12 +203,11 @@ namespace ts.codefix {
                     typeParameters = setTextRange(factory.createNodeArray(newTypeParameters, typeParameters.hasTrailingComma), typeParameters);
                 }
             }
-            const newParameters = sameMap(parameters, (parameterDecl, i) => {
-                const parameter = signature.parameters[i];
-                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(parameterDecl.type, checker.getTypeAtLocation(parameter.valueDeclaration), scriptTarget);
+            const newParameters = sameMap(parameters, parameterDecl => {
+                const importableReference = tryGetAutoImportableReferenceFromTypeNode(parameterDecl.type, scriptTarget);
                 let type = parameterDecl.type;
                 if (importableReference) {
-                    type = importableReference.typeReference;
+                    type = importableReference.typeNode;
                     importSymbols(importAdder, importableReference.symbols);
                 }
                 return factory.updateParameterDeclaration(
@@ -227,9 +225,9 @@ namespace ts.codefix {
                 parameters = setTextRange(factory.createNodeArray(newParameters, parameters.hasTrailingComma), parameters);
             }
             if (type) {
-                const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(type, signature.resolvedReturnType, scriptTarget);
+                const importableReference = tryGetAutoImportableReferenceFromTypeNode(type, scriptTarget);
                 if (importableReference) {
-                    type = importableReference.typeReference;
+                    type = importableReference.typeNode;
                     importSymbols(importAdder, importableReference.symbols);
                 }
             }
@@ -286,10 +284,10 @@ namespace ts.codefix {
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
         const typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
         if (typeNode && isImportTypeNode(typeNode)) {
-            const importableReference = tryGetAutoImportableReferenceFromImportTypeNode(typeNode, type, scriptTarget);
+            const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
             if (importableReference) {
                 importSymbols(importAdder, importableReference.symbols);
-                return importableReference.typeReference;
+                return importableReference.typeNode;
             }
         }
         return typeNode;
@@ -454,38 +452,32 @@ namespace ts.codefix {
     }
 
     /**
-     * Given an ImportTypeNode 'import("./a").SomeType<import("./b").OtherType<...>>',
+     * Given a type node containing 'import("./a").SomeType<import("./b").OtherType<...>>',
      * returns an equivalent type reference node with any nested ImportTypeNodes also replaced
      * with type references, and a list of symbols that must be imported to use the type reference.
      */
-    export function tryGetAutoImportableReferenceFromImportTypeNode(importTypeNode: TypeNode | undefined, type: Type | undefined, scriptTarget: ScriptTarget) {
-        if (importTypeNode && isLiteralImportTypeNode(importTypeNode) && importTypeNode.qualifier && (!type || type.symbol)) {
-            // Symbol for the left-most thing after the dot
-            const firstIdentifier = getFirstIdentifier(importTypeNode.qualifier);
-            const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
-            const qualifier = name !== firstIdentifier.text
-                ? replaceFirstIdentifierOfEntityName(importTypeNode.qualifier, factory.createIdentifier(name))
-                : importTypeNode.qualifier;
+    export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
+        let symbols: Symbol[] | undefined;
+        const typeNode = visitNode(importTypeNode, visit);
+        if (symbols && typeNode) {
+            return { typeNode, symbols };
+        }
 
-            const symbols = [firstIdentifier.symbol];
-            const typeArguments: TypeNode[] = [];
-            if (importTypeNode.typeArguments) {
-                importTypeNode.typeArguments.forEach(arg => {
-                    const ref = tryGetAutoImportableReferenceFromImportTypeNode(arg, /*undefined*/ type, scriptTarget);
-                    if (ref) {
-                        symbols.push(...ref.symbols);
-                        typeArguments.push(ref.typeReference);
-                    }
-                    else {
-                        typeArguments.push(arg);
-                    }
-                });
+        function visit(node: TypeNode): TypeNode;
+        function visit(node: Node): Node {
+            if (isLiteralImportTypeNode(node) && node.qualifier) {
+                // Symbol for the left-most thing after the dot
+                const firstIdentifier = getFirstIdentifier(node.qualifier);
+                const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
+                const qualifier = name !== firstIdentifier.text
+                    ? replaceFirstIdentifierOfEntityName(node.qualifier, factory.createIdentifier(name))
+                    : node.qualifier;
+
+                symbols = append(symbols, firstIdentifier.symbol);
+                const typeArguments = node.typeArguments?.map(visit);
+                return factory.createTypeReferenceNode(qualifier, typeArguments);
             }
-
-            return {
-                symbols,
-                typeReference: factory.createTypeReferenceNode(qualifier, typeArguments)
-            };
+            return visitEachChild(node, visit, nullTransformationContext);
         }
     }
 
