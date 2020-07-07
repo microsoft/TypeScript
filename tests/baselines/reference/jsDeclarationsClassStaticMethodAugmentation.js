@@ -23,8 +23,8 @@ Clazz.method.prop = 5;
 export class Clazz {
 }
 export namespace Clazz {
-    export function method(): void;
-    export namespace method {
-        export const prop: number;
+    function method(): void;
+    namespace method {
+        const prop: number;
     }
 }
