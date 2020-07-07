@@ -20,6 +20,7 @@
                 "transformFlags": 0,
                 "escapedText": "param"
             },
+            "comment": "Doc doc",
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 34,
@@ -32,8 +33,8 @@
                     "end": 64,
                     "modifierFlagsCache": 0,
                     "transformFlags": 0,
-                    "jsDocPropertyTags": [
-                        {
+                    "jsDocPropertyTags": {
+                        "0": {
                             "kind": "JSDocParameterTag",
                             "pos": 34,
                             "end": 64,
@@ -47,6 +48,7 @@
                                 "transformFlags": 0,
                                 "escapedText": "param"
                             },
+                            "comment": "Doc for f",
                             "typeExpression": {
                                 "kind": "JSDocTypeExpression",
                                 "pos": 41,
@@ -58,7 +60,7 @@
                                     "pos": 42,
                                     "end": 48,
                                     "modifierFlagsCache": 0,
-                                    "transformFlags": 0
+                                    "transformFlags": 1
                                 }
                             },
                             "name": {
@@ -85,10 +87,15 @@
                                 }
                             },
                             "isNameFirst": false,
-                            "isBracketed": false,
-                            "comment": "Doc for f"
-                        }
-                    ]
+                            "isBracketed": false
+                        },
+                        "length": 1,
+                        "pos": -1,
+                        "end": -1,
+                        "hasTrailingComma": false,
+                        "transformFlags": 0
+                    },
+                    "isArrayType": false
                 }
             },
             "name": {
@@ -100,11 +107,12 @@
                 "escapedText": "o"
             },
             "isNameFirst": true,
-            "isBracketed": false,
-            "comment": "Doc doc"
+            "isBracketed": false
         },
         "length": 1,
         "pos": 6,
-        "end": 64
+        "end": 64,
+        "hasTrailingComma": false,
+        "transformFlags": 0
     }
 }

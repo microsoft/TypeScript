@@ -1,4 +1,4 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(120,20): error TS2532: Object is possibly 'undefined'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(123,17): error TS2532: Object is possibly 'undefined'.

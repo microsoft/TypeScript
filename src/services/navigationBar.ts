@@ -33,8 +33,8 @@ namespace ts.NavigationBar {
     let parentsStack: NavigationBarNode[] = [];
     let parent: NavigationBarNode;
 
-    const trackedEs5ClassesStack: (Map<boolean> | undefined)[] = [];
-    let trackedEs5Classes: Map<boolean> | undefined;
+    const trackedEs5ClassesStack: (ESMap<string, boolean> | undefined)[] = [];
+    let trackedEs5Classes: ESMap<string, boolean> | undefined;
 
     // NavigationBarItem requires an array, but will not mutate it, so just give it this for performance.
     let emptyChildItemArray: NavigationBarItem[] = [];
@@ -310,9 +310,11 @@ namespace ts.NavigationBar {
 
             case SyntaxKind.ExportAssignment: {
                 const expression = (<ExportAssignment>node).expression;
-                if (isObjectLiteralExpression(expression)) {
+                const child = isObjectLiteralExpression(expression) ? expression :
+                    isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
+                if (child) {
                     startNode(node);
-                    addChildrenRecursively(expression);
+                    addChildrenRecursively(child);
                     endNode();
                 }
                 else {
@@ -389,7 +391,7 @@ namespace ts.NavigationBar {
                         const memberName = defineCall.arguments[1];
                         const [depth, classNameIdentifier] = startNestedNodes(node, className);
                             startNode(node, classNameIdentifier);
-                                startNode(node, setTextRange(createIdentifier(memberName.text), memberName));
+                                startNode(node, setTextRange(factory.createIdentifier(memberName.text), memberName));
                                     addChildrenRecursively((node as CallExpression).arguments[2]);
                                 endNode();
                             endNode();
@@ -521,7 +523,7 @@ namespace ts.NavigationBar {
 
                 if (ctorFunction !== undefined) {
                     const ctorNode = setTextRange(
-                        createConstructor(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined),
+                        factory.createConstructorDeclaration(/* decorators */ undefined, /* modifiers */ undefined, [], /* body */ undefined),
                         ctorFunction);
                     const ctor = emptyNavigationBarNode(ctorNode);
                     ctor.indent = a.indent + 1;
@@ -538,10 +540,10 @@ namespace ts.NavigationBar {
                     }
                 }
 
-                lastANode = a.node = setTextRange(createClassDeclaration(
+                lastANode = a.node = setTextRange(factory.createClassDeclaration(
                     /* decorators */ undefined,
                     /* modifiers */ undefined,
-                    a.name as Identifier || createIdentifier("__class__"),
+                    a.name as Identifier || factory.createIdentifier("__class__"),
                     /* typeParameters */ undefined,
                     /* heritageClauses */ undefined,
                     []
@@ -566,10 +568,10 @@ namespace ts.NavigationBar {
             }
             else {
                 if (!a.additionalNodes) a.additionalNodes = [];
-                a.additionalNodes.push(setTextRange(createClassDeclaration(
+                a.additionalNodes.push(setTextRange(factory.createClassDeclaration(
                     /* decorators */ undefined,
                     /* modifiers */ undefined,
-                    a.name as Identifier || createIdentifier("__class__"),
+                    a.name as Identifier || factory.createIdentifier("__class__"),
                     /* typeParameters */ undefined,
                     /* heritageClauses */ undefined,
                     []

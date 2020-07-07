@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.server {
     export class ThrottledOperations {
-        private readonly pendingTimeouts: Map<any> = createMap<any>();
+        private readonly pendingTimeouts: ESMap<string, any> = createMap<any>();
         private readonly logger?: Logger | undefined;
         constructor(private readonly host: ServerHost, logger: Logger) {
             this.logger = logger.hasLevel(LogLevel.verbose) ? logger : undefined;
@@ -24,6 +24,13 @@ namespace ts.server {
             if (this.logger) {
                 this.logger.info(`Scheduled: ${operationId}${pendingTimeout ? ", Cancelled earlier one" : ""}`);
             }
+        }
+
+        public cancel(operationId: string) {
+            const pendingTimeout = this.pendingTimeouts.get(operationId);
+            if (!pendingTimeout) return false;
+            this.host.clearTimeout(pendingTimeout);
+            return this.pendingTimeouts.delete(operationId);
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {

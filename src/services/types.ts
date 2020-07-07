@@ -92,7 +92,7 @@ namespace ts {
         /* @internal */ scriptSnapshot: IScriptSnapshot | undefined;
         /* @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
 
-        /* @internal */ getNamedDeclarations(): Map<readonly Declaration[]>;
+        /* @internal */ getNamedDeclarations(): ESMap<string, readonly Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
@@ -116,7 +116,7 @@ namespace ts {
      * snapshot is observably immutable. i.e. the same calls with the same parameters will return
      * the same values.
      */
-    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface IScriptSnapshot {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
@@ -195,17 +195,30 @@ namespace ts {
     /* @internal */
     export interface PackageJsonInfo {
         fileName: string;
-        dependencies?: Map<string>;
-        devDependencies?: Map<string>;
-        peerDependencies?: Map<string>;
-        optionalDependencies?: Map<string>;
+        parseable: boolean;
+        dependencies?: ESMap<string, string>;
+        devDependencies?: ESMap<string, string>;
+        peerDependencies?: ESMap<string, string>;
+        optionalDependencies?: ESMap<string, string>;
         get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
     }
 
-    /** @internal */
+    /* @internal */
     export interface FormattingHost {
         getNewLine?(): string;
+    }
+
+    /* @internal */
+    export const enum PackageJsonAutoImportPreference {
+        None,
+        ExcludeDevDependencies,
+        All
+    }
+
+    export interface PerformanceEvent {
+        kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
+        durationMs: number;
     }
 
     //
@@ -254,11 +267,11 @@ namespace ts {
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
-        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */
-        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyMap<string>;
+        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyESMap<string, string>;
 
         /*
          * Required for full import and type reference completions.
@@ -282,11 +295,17 @@ namespace ts {
         /* @internal */
         getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
+        getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */
         getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
         /* @internal */
         setCompilerHost?(host: CompilerHost): void;
         /* @internal */
         useSourceOfProjectReferenceRedirect?(): boolean;
+        /* @internal */
+        getPackageJsonAutoImportProvider?(): Program | undefined;
+        /* @internal */
+        sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     }
 
     /* @internal */
@@ -485,6 +504,7 @@ namespace ts {
         getProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
+        /* @internal */ getAutoImportProvider(): Program | undefined;
 
         dispose(): void;
     }
@@ -612,9 +632,11 @@ namespace ts {
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        containerName?: string;
     }
 
     export interface CallHierarchyIncomingCall {
@@ -728,6 +750,12 @@ namespace ts {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
+
+        /**
+         * A message to show to the user if the refactoring cannot be applied in
+         * the current context.
+         */
+        notApplicableReason?: string;
     }
 
     /**
@@ -1073,6 +1101,7 @@ namespace ts {
         source?: string;
         isRecommended?: true;
         isFromUncheckedFile?: true;
+        isPackageJsonImport?: true;
     }
 
     export interface CompletionEntryDetails {
@@ -1296,6 +1325,8 @@ namespace ts {
         staticModifier = "static",
         abstractModifier = "abstract",
         optionalModifier = "optional",
+
+        deprecatedModifier = "deprecated",
 
         dtsModifier = ".d.ts",
         tsModifier = ".ts",

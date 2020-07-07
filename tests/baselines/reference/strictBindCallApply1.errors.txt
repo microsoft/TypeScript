@@ -10,11 +10,10 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(17,15): error TS2554: 
 tests/cases/conformance/functions/strictBindCallApply1.ts(18,35): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(19,44): error TS2554: Expected 3 arguments, but got 4.
 tests/cases/conformance/functions/strictBindCallApply1.ts(22,32): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
-  Property '1' is missing in type '[number]' but required in type '[a: number, b: string]'.
+  Source has 1 element(s) but target requires 2.
 tests/cases/conformance/functions/strictBindCallApply1.ts(23,37): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(24,32): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
-  Types of property 'length' are incompatible.
-    Type '3' is not assignable to type '2'.
+  Source has 3 element(s) but target allows only 2.
 tests/cases/conformance/functions/strictBindCallApply1.ts(41,11): error TS2769: No overload matches this call.
   Overload 1 of 6, '(this: (this: C, arg0: 10, arg1: string) => string, thisArg: C, arg0: 10, arg1: string): () => string', gave the following error.
     Argument of type 'number' is not assignable to parameter of type 'string'.
@@ -36,11 +35,10 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(49,29): error TS2345: 
 tests/cases/conformance/functions/strictBindCallApply1.ts(50,38): error TS2554: Expected 3 arguments, but got 4.
 tests/cases/conformance/functions/strictBindCallApply1.ts(51,22): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(54,26): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
-  Property '1' is missing in type '[number]' but required in type '[a: number, b: string]'.
+  Source has 1 element(s) but target requires 2.
 tests/cases/conformance/functions/strictBindCallApply1.ts(55,31): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(56,26): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
-  Types of property 'length' are incompatible.
-    Type '3' is not assignable to type '2'.
+  Source has 3 element(s) but target allows only 2.
 tests/cases/conformance/functions/strictBindCallApply1.ts(57,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(62,11): error TS2769: No overload matches this call.
   Overload 1 of 6, '(this: new (arg0: 10, arg1: string) => C, thisArg: any, arg0: 10, arg1: string): new () => C', gave the following error.
@@ -54,11 +52,10 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(65,3): error TS2554: E
 tests/cases/conformance/functions/strictBindCallApply1.ts(66,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(67,24): error TS2554: Expected 3 arguments, but got 4.
 tests/cases/conformance/functions/strictBindCallApply1.ts(70,12): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
-  Property '1' is missing in type '[number]' but required in type '[a: number, b: string]'.
+  Source has 1 element(s) but target requires 2.
 tests/cases/conformance/functions/strictBindCallApply1.ts(71,17): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
-  Types of property 'length' are incompatible.
-    Type '3' is not assignable to type '2'.
+  Source has 3 element(s) but target allows only 2.
 
 
 ==== tests/cases/conformance/functions/strictBindCallApply1.ts (24 errors) ====
@@ -101,15 +98,14 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
     let a01 = foo.apply(undefined, [10]);  // Error
                                    ~~~~
 !!! error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
-!!! error TS2345:   Property '1' is missing in type '[number]' but required in type '[a: number, b: string]'.
+!!! error TS2345:   Source has 1 element(s) but target requires 2.
     let a02 = foo.apply(undefined, [10, 20]);  // Error
                                         ~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     let a03 = foo.apply(undefined, [10, "hello", 30]);  // Error
                                    ~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
-!!! error TS2345:   Types of property 'length' are incompatible.
-!!! error TS2345:     Type '3' is not assignable to type '2'.
+!!! error TS2345:   Source has 3 element(s) but target allows only 2.
     
     class C {
         constructor(a: number, b: string) {}
@@ -168,15 +164,14 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
     let a11 = c.foo.apply(c, [10]);  // Error
                              ~~~~
 !!! error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
-!!! error TS2345:   Property '1' is missing in type '[number]' but required in type '[a: number, b: string]'.
+!!! error TS2345:   Source has 1 element(s) but target requires 2.
     let a12 = c.foo.apply(c, [10, 20]);  // Error
                                   ~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     let a13 = c.foo.apply(c, [10, "hello", 30]);  // Error
                              ~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
-!!! error TS2345:   Types of property 'length' are incompatible.
-!!! error TS2345:     Type '3' is not assignable to type '2'.
+!!! error TS2345:   Source has 3 element(s) but target allows only 2.
     let a14 = c.foo.apply(undefined, [10, "hello"]);  // Error
                           ~~~~~~~~~
 !!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
@@ -210,13 +205,12 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
     C.apply(c, [10]);  // Error
                ~~~~
 !!! error TS2345: Argument of type '[number]' is not assignable to parameter of type '[a: number, b: string]'.
-!!! error TS2345:   Property '1' is missing in type '[number]' but required in type '[a: number, b: string]'.
+!!! error TS2345:   Source has 1 element(s) but target requires 2.
     C.apply(c, [10, 20]);  // Error
                     ~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     C.apply(c, [10, "hello", 30]);  // Error
                ~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[a: number, b: string]'.
-!!! error TS2345:   Types of property 'length' are incompatible.
-!!! error TS2345:     Type '3' is not assignable to type '2'.
+!!! error TS2345:   Source has 3 element(s) but target allows only 2.
     

@@ -1,0 +1,71 @@
+=== tests/cases/conformance/externalModules/topLevelAwaitErrors.1.ts ===
+export {};
+
+// reparse call as invalid await should error
+await (1,);
+await <number, string>(1);
+
+// reparse tagged template as invalid await should error
+await <number, string> ``;
+
+// reparse class extends clause should fail
+class C extends await<string> {
+>C : Symbol(C, Decl(topLevelAwaitErrors.1.ts, 7, 26))
+}
+
+// await in class decorators should fail
+@(await)
+class C1 {}
+>C1 : Symbol(C1, Decl(topLevelAwaitErrors.1.ts, 11, 1))
+
+@await(x)
+class C2 {}
+>C2 : Symbol(C2, Decl(topLevelAwaitErrors.1.ts, 15, 11))
+
+@await
+class C3 {}
+>C3 : Symbol(C3, Decl(topLevelAwaitErrors.1.ts, 18, 11))
+
+// await in member decorators should fail
+class C4 {
+>C4 : Symbol(C4, Decl(topLevelAwaitErrors.1.ts, 21, 11))
+
+    @await
+    ["foo"]() {}
+>["foo"] : Symbol(C4["foo"], Decl(topLevelAwaitErrors.1.ts, 24, 10))
+>"foo" : Symbol(C4["foo"], Decl(topLevelAwaitErrors.1.ts, 24, 10))
+}
+class C5 {
+>C5 : Symbol(C5, Decl(topLevelAwaitErrors.1.ts, 27, 1))
+
+    @await(1)
+    ["foo"]() {}
+>["foo"] : Symbol(C5["foo"], Decl(topLevelAwaitErrors.1.ts, 28, 10))
+>"foo" : Symbol(C5["foo"], Decl(topLevelAwaitErrors.1.ts, 28, 10))
+}
+class C6 {
+>C6 : Symbol(C6, Decl(topLevelAwaitErrors.1.ts, 31, 1))
+
+    @(await)
+    ["foo"]() {}
+>["foo"] : Symbol(C6["foo"], Decl(topLevelAwaitErrors.1.ts, 32, 10))
+>"foo" : Symbol(C6["foo"], Decl(topLevelAwaitErrors.1.ts, 32, 10))
+}
+
+// await in parameter decorators should fail
+class C7 {
+>C7 : Symbol(C7, Decl(topLevelAwaitErrors.1.ts, 35, 1))
+
+    method1(@await [x]) {}
+>method1 : Symbol(C7.method1, Decl(topLevelAwaitErrors.1.ts, 38, 10))
+>x : Symbol(x, Decl(topLevelAwaitErrors.1.ts, 39, 20))
+
+    method2(@await(1) [x]) {}
+>method2 : Symbol(C7.method2, Decl(topLevelAwaitErrors.1.ts, 39, 26))
+>x : Symbol(x, Decl(topLevelAwaitErrors.1.ts, 40, 23))
+
+    method3(@(await) [x]) {}
+>method3 : Symbol(C7.method3, Decl(topLevelAwaitErrors.1.ts, 40, 29))
+>x : Symbol(x, Decl(topLevelAwaitErrors.1.ts, 41, 22))
+}
+

@@ -8,9 +8,9 @@ namespace ts.performance {
 
     let enabled = false;
     let profilerStart = 0;
-    let counts: Map<number>;
-    let marks: Map<number>;
-    let measures: Map<number>;
+    let counts: ESMap<string, number>;
+    let marks: ESMap<string, number>;
+    let measures: ESMap<string, number>;
 
     export interface Timer {
         enter(): void;

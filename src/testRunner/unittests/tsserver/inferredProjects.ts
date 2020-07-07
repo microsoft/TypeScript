@@ -64,7 +64,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path, libFile.path]);
 
 
-            host.reloadFS([file1, configFile, file2, file3, libFile]);
+            host.writeFile(configFile.path, configFile.content);
             host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 1);
@@ -86,7 +86,7 @@ namespace ts.projectSystem {
             const proj = projectService.inferredProjects[0];
             assert.isDefined(proj);
 
-            assert.isFalse(proj.languageServiceEnabled);
+            assert.isTrue(proj.languageServiceEnabled);
         });
 
         it("project settings for inferred projects", () => {

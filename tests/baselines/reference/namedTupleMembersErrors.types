@@ -3,7 +3,7 @@ export type Segment1 = [length: number, number]; // partially named, disallowed
 >Segment1 : Segment1
 
 export type List = [item: any, ...any];  // partially named, disallowed
->List : List
+>List : [any, ...any[]]
 
 export type Pair = [item: any, any?];  // partially named, disallowed
 >Pair : Pair
@@ -21,11 +21,11 @@ export type OptRest = [first: string, ...rest?: string[]]; // rest+optional disa
 >OptRest : OptRest
 
 export type NonArrayRest = [first: string, ...rest: number]; // non-arraylike rest, disallowed
->NonArrayRest : NonArrayRest
+>NonArrayRest : [first: string, ...rest: any[]]
 
 export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
->RecusiveRestUnlabeled : RecusiveRestUnlabeled
+>RecusiveRestUnlabeled : any
 
 export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
->RecusiveRest : RecusiveRest
+>RecusiveRest : any
 

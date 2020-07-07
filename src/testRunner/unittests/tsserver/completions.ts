@@ -36,6 +36,7 @@ namespace ts.projectSystem {
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 replacementSpan: undefined,
+                isPackageJsonImport: undefined,
                 sortText: Completions.SortText.AutoImportSuggestions,
                 source: "/a",
             };
