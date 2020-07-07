@@ -13290,13 +13290,13 @@ namespace ts {
                 && every(symbol.declarations, d => !isFunctionLike(d) || !!(d.flags & NodeFlags.Deprecated));
         }
 
-        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
+        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags, reportDeprecated?: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (accessNode && prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
+                    if (reportDeprecated && accessNode && prop.valueDeclaration?.flags & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                         errorOrSuggestion(/* isError */ false, deprecatedNode, Diagnostics._0_is_deprecated, propName as string);
                     }
@@ -13666,7 +13666,7 @@ namespace ts {
                 }
                 return accessFlags & AccessFlags.Writing ? getIntersectionType(propTypes, aliasSymbol, aliasTypeArguments) : getUnionType(propTypes, UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
             }
-            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, /* supressNoImplicitAnyError */ false, accessNode, accessFlags | AccessFlags.CacheSymbol);
+            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, /* supressNoImplicitAnyError */ false, accessNode, accessFlags | AccessFlags.CacheSymbol, /* reportDeprecated */ true);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -17279,7 +17279,11 @@ namespace ts {
                             result &= signaturesRelatedTo(source, type, SignatureKind.Construct, /*reportStructuralErrors*/ false);
                             if (result) {
                                 result &= indexTypesRelatedTo(source, type, IndexKind.String, /*sourceIsPrimitive*/ false, /*reportStructuralErrors*/ false, IntersectionState.None);
-                                if (result) {
+                                // Comparing numeric index types when both `source` and `type` are tuples is unnecessary as the
+                                // element types should be sufficiently covered by `propertiesRelatedTo`. It also causes problems
+                                // with index type assignability as the types for the excluded discriminants are still included
+                                // in the index type.
+                                if (result && !(isTupleType(source) && isTupleType(type))) {
                                     result &= indexTypesRelatedTo(source, type, IndexKind.Number, /*sourceIsPrimitive*/ false, /*reportStructuralErrors*/ false, IntersectionState.None);
                                 }
                             }
@@ -17504,6 +17508,7 @@ namespace ts {
                         for (let i = 0; i < maxArity; i++) {
                             const targetFlags = i < targetArity ? target.target.elementFlags[i] : targetRestFlag;
                             const sourceFlags = isTupleType(source) && i < sourceArity ? source.target.elementFlags[i] : sourceRestFlag;
+                            let canExcludeDiscriminants = !!excludedProperties;
                             if (sourceFlags && targetFlags) {
                                 if (targetFlags & ElementFlags.Variadic && !(sourceFlags & ElementFlags.Variadic) ||
                                    (sourceFlags & ElementFlags.Variadic && !(targetFlags & ElementFlags.Variable))) {
@@ -17518,6 +17523,15 @@ namespace ts {
                                             reportError(Diagnostics.Property_0_is_optional_in_type_1_but_required_in_type_2, i, typeToString(source), typeToString(target));
                                         }
                                         return Ternary.False;
+                                    }
+                                }
+                                // We can only exclude discriminant properties if we have not yet encountered a variable-length element.
+                                if (canExcludeDiscriminants) {
+                                    if (sourceFlags & ElementFlags.Variable || targetFlags & ElementFlags.Variable) {
+                                        canExcludeDiscriminants = false;
+                                    }
+                                    if (canExcludeDiscriminants && excludedProperties?.has(("" + i) as __String)) {
+                                        continue;
                                     }
                                 }
                                 const sourceType = getTypeArguments(source)[Math.min(i, sourceArity - 1)];
@@ -21798,6 +21812,12 @@ namespace ts {
                     targetType = constructSignatures.length ?
                         getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature)))) :
                         emptyObjectType;
+                }
+
+                // We can't narrow a union based off instanceof without negated types see #31576 for more info
+                if (!assumeTrue && rightType.flags & TypeFlags.Union) {
+                    const nonConstructorTypeInUnion = find((<UnionType>rightType).types, (t) => !isConstructorType(t));
+                    if (!nonConstructorTypeInUnion) return type;
                 }
 
                 return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
@@ -36092,16 +36112,19 @@ namespace ts {
         function isTypeDeclarationName(name: Node): boolean {
             return name.kind === SyntaxKind.Identifier &&
                 isTypeDeclaration(name.parent) &&
-                name.parent.name === name;
+                getNameOfDeclaration(name.parent) === name;
         }
 
-        function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
+        function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.JSDocEnumTag:
                     return true;
                 case SyntaxKind.ImportClause:
                     return (node as ImportClause).isTypeOnly;

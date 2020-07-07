@@ -282,6 +282,7 @@ namespace ts.server {
             this.languageServiceEnabled = true;
             if (projectService.syntaxOnly) {
                 this.compilerOptions.noResolve = true;
+                this.compilerOptions.types = [];
             }
 
             this.setInternalCompilerOptionsForEmittingJsFiles();

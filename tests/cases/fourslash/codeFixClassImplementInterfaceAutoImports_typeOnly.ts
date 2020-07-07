@@ -36,7 +36,7 @@ import type { B, C, D } from './types2';
 export class C implements Base {
     a: A;
     b<T extends B = B>(p1: C): D<C> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 }`,
 });

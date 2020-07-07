@@ -1531,6 +1531,7 @@ namespace ts {
                 case SyntaxKind.LiteralType:
                     switch ((<LiteralTypeNode>node).literal.kind) {
                         case SyntaxKind.StringLiteral:
+                        case SyntaxKind.NoSubstitutionTemplateLiteral:
                             return factory.createIdentifier("String");
 
                         case SyntaxKind.PrefixUnaryExpression:
