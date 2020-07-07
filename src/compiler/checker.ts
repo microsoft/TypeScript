@@ -7803,7 +7803,9 @@ namespace ts {
                 if (isInJSFile(declaration)) {
                     const typeTag = getJSDocType(func);
                     if (typeTag && isFunctionTypeNode(typeTag)) {
-                        return getTypeAtPosition(getSignatureFromDeclaration(typeTag), func.parameters.indexOf(declaration));
+                        const signature = getSignatureFromDeclaration(typeTag);
+                        const pos = func.parameters.indexOf(declaration);
+                        return declaration.dotDotDotToken ? getRestTypeAtPosition(signature, pos) : getTypeAtPosition(signature, pos);
                     }
                 }
                 // Use contextual parameter type if one is available
