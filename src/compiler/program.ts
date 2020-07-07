@@ -1110,7 +1110,7 @@ namespace ts {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
                 if (file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
-                    const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules!.get(moduleName);
+                    const oldResolvedModule = getResolvedModule(oldSourceFile, moduleName);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
                             trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, containingFile);
