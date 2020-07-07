@@ -4132,7 +4132,8 @@ namespace ts {
 
             function symbolToStringWorker(writer: EmitTextWriter) {
                 const entity = builder(symbol, meaning!, enclosingDeclaration, nodeFlags)!; // TODO: GH#18217
-                const printer = createPrinter({ removeComments: true });
+                // add neverAsciiEscape for GH#39027
+                const printer = enclosingDeclaration?.kind === SyntaxKind.SourceFile ? createPrinter({ removeComments: true, neverAsciiEscape: true }) : createPrinter({ removeComments: true });
                 const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
                 printer.writeNode(EmitHint.Unspecified, entity, /*sourceFile*/ sourceFile, writer);
                 return writer;
