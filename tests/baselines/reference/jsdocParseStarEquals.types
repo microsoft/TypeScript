@@ -13,3 +13,10 @@ function f(...args) {
 var x;
 >x : any
 
+
+/** @param {function():*=} f */
+function cbf(f) {
+>cbf : (f?: (() => any) | undefined) => void
+>f : (() => any) | undefined
+}
+
