@@ -1236,8 +1236,6 @@ namespace ts {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
-            Debug.assert(!(oldProgram.structureIsReused! & (StructureIsReused.Completely | StructureIsReused.SafeModules)));
-
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
