@@ -17,8 +17,8 @@ type X<T extends A> = [T["a"], (T | B)["a"]];
 >X : X<T>
 
 type Y<T extends A | B> = T["a"];
->Y : Y<T>
+>Y : T["a"]
 
 type Z<T extends A & B> = T["a"];
->Z : Z<T>
+>Z : T["a"]
 

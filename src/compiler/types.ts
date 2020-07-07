@@ -6479,7 +6479,6 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
-        reportCyclicStructureError?(): void;
         reportLikelyUnsafeImportRequiredError?(specifier: string): void;
         moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string };
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;

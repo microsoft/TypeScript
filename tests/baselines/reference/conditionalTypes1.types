@@ -227,95 +227,95 @@ interface Part {
 }
 
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
->FunctionPropertyNames : FunctionPropertyNames<T>
+>FunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
 
 type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
->FunctionProperties : Pick<T, FunctionPropertyNames<T>>
+>FunctionProperties : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
 
 type NonFunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T];
->NonFunctionPropertyNames : NonFunctionPropertyNames<T>
+>NonFunctionPropertyNames : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
 
 type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;
->NonFunctionProperties : Pick<T, NonFunctionPropertyNames<T>>
+>NonFunctionProperties : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
 
 type T30 = FunctionProperties<Part>;
 >T30 : Pick<Part, "updatePart">
 
 type T31 = NonFunctionProperties<Part>;
->T31 : Pick<Part, NonFunctionPropertyNames<Part>>
+>T31 : Pick<Part, "id" | "name" | "subparts">
 
 function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
 >f7 : <T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) => void
 >x : T
->y : Pick<T, FunctionPropertyNames<T>>
->z : Pick<T, NonFunctionPropertyNames<T>>
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
 
     x = y;  // Error
->x = y : Pick<T, FunctionPropertyNames<T>>
+>x = y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
 >x : T
->y : Pick<T, FunctionPropertyNames<T>>
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
 
     x = z;  // Error
->x = z : Pick<T, NonFunctionPropertyNames<T>>
+>x = z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
 >x : T
->z : Pick<T, NonFunctionPropertyNames<T>>
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
 
     y = x;
 >y = x : T
->y : Pick<T, FunctionPropertyNames<T>>
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
 >x : T
 
     y = z;  // Error
->y = z : Pick<T, NonFunctionPropertyNames<T>>
->y : Pick<T, FunctionPropertyNames<T>>
->z : Pick<T, NonFunctionPropertyNames<T>>
+>y = z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
 
     z = x;
 >z = x : T
->z : Pick<T, NonFunctionPropertyNames<T>>
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
 >x : T
 
     z = y;  // Error
->z = y : Pick<T, FunctionPropertyNames<T>>
->z : Pick<T, NonFunctionPropertyNames<T>>
->y : Pick<T, FunctionPropertyNames<T>>
+>z = y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
+>z : Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>
+>y : Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>
 }
 
 function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {
 >f8 : <T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) => void
 >x : keyof T
->y : FunctionPropertyNames<T>
->z : NonFunctionPropertyNames<T>
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
 
     x = y;
->x = y : FunctionPropertyNames<T>
+>x = y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
 >x : keyof T
->y : FunctionPropertyNames<T>
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
 
     x = z;
->x = z : NonFunctionPropertyNames<T>
+>x = z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
 >x : keyof T
->z : NonFunctionPropertyNames<T>
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
 
     y = x;  // Error
 >y = x : keyof T
->y : FunctionPropertyNames<T>
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
 >x : keyof T
 
     y = z;  // Error
->y = z : NonFunctionPropertyNames<T>
->y : FunctionPropertyNames<T>
->z : NonFunctionPropertyNames<T>
+>y = z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
 
     z = x;  // Error
 >z = x : keyof T
->z : NonFunctionPropertyNames<T>
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
 >x : keyof T
 
     z = y;  // Error
->z = y : FunctionPropertyNames<T>
->z : NonFunctionPropertyNames<T>
->y : FunctionPropertyNames<T>
+>z = y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
+>z : { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]
+>y : { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]
 }
 
 type DeepReadonly<T> =
@@ -933,7 +933,7 @@ function f50() {
 // Repro from #21862
 
 type OldDiff<T extends keyof any, U extends keyof any> = (
->OldDiff : OldDiff<T, U>
+>OldDiff : ({ [P in T]: P; } & { [P in U]: never; } & { [x: string]: never; })[T]
 
     & { [P in T]: P; }
     & { [P in U]: never; }
@@ -953,7 +953,7 @@ interface B1 extends A {
 >b : "b"
 
     c: OldDiff<keyof this, keyof A>;
->c : OldDiff<keyof this, "a">
+>c : ({ [P in keyof this]: P; } & { a: never; } & { [x: string]: never; })[keyof this]
 }
 interface B2 extends A {
     b: 'b';
@@ -963,27 +963,27 @@ interface B2 extends A {
 >c : NewDiff<keyof this, "a">
 }
 type c1 = B1['c']; // 'c' | 'b'
->c1 : OldDiff<"a" | "b" | "c", "a">
+>c1 : "b" | "c"
 
 type c2 = B2['c']; // 'c' | 'b'
->c2 : OldDiff<"a" | "b" | "c", "a">
+>c2 : "b" | "c"
 
 // Repro from #21929
 
 type NonFooKeys1<T extends object> = OldDiff<keyof T, 'foo'>;
->NonFooKeys1 : OldDiff<keyof T, "foo">
+>NonFooKeys1 : ({ [P in keyof T]: P; } & { foo: never; } & { [x: string]: never; })[keyof T]
 
 type NonFooKeys2<T extends object> = Exclude<keyof T, 'foo'>;
 >NonFooKeys2 : Exclude<keyof T, "foo">
 
 type Test1 = NonFooKeys1<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
->Test1 : OldDiff<"foo" | "bar" | "baz", "foo">
+>Test1 : "bar" | "baz"
 >foo : 1
 >bar : 2
 >baz : 3
 
 type Test2 = NonFooKeys2<{foo: 1, bar: 2, baz: 3}>;  // "bar" | "baz"
->Test2 : OldDiff<"foo" | "bar" | "baz", "foo">
+>Test2 : "bar" | "baz"
 >foo : 1
 >bar : 2
 >baz : 3

@@ -72,7 +72,6 @@ namespace ts {
             trackSymbol,
             reportInaccessibleThisError,
             reportInaccessibleUniqueSymbolError,
-            reportCyclicStructureError,
             reportPrivateInBaseOfClassExpression,
             reportLikelyUnsafeImportRequiredError,
             moduleResolverHost: host,
@@ -173,13 +172,6 @@ namespace ts {
                 context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode),
                     "unique symbol"));
-            }
-        }
-
-        function reportCyclicStructureError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode)));
             }
         }
 

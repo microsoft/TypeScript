@@ -4397,8 +4397,8 @@ namespace ts {
                     context.inferTypeParameters = (<ConditionalType>type).root.inferTypeParameters;
                     const extendsTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
                     context.inferTypeParameters = saveInferTypeParameters;
-                    const trueTypeNode = typeToTypeNodeOrCircularityElision(getTrueTypeFromConditionalType(<ConditionalType>type));
-                    const falseTypeNode = typeToTypeNodeOrCircularityElision(getFalseTypeFromConditionalType(<ConditionalType>type));
+                    const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context);
+                    const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
                     context.approximateLength += 15;
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
@@ -4407,21 +4407,6 @@ namespace ts {
                 }
 
                 return Debug.fail("Should be unreachable.");
-
-
-                function typeToTypeNodeOrCircularityElision(type: Type) {
-                    if (type.flags & TypeFlags.Union) {
-                        if (context.visitedTypes && context.visitedTypes.has("" + getTypeId(type))) {
-                            if (!(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
-                                context.encounteredError = true;
-                                context.tracker?.reportCyclicStructureError?.();
-                            }
-                            return createElidedInformationPlaceholder(context);
-                        }
-                        return visitAndTransformType(type, type => typeToTypeNodeHelper(type, context));
-                    }
-                    return typeToTypeNodeHelper(type, context);
-                }
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
@@ -12809,12 +12794,10 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function createIndexedAccessType(objectType: Type, indexType: Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
+        function createIndexedAccessType(objectType: Type, indexType: Type) {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
             type.indexType = indexType;
-            type.aliasSymbol = aliasSymbol;
-            type.aliasTypeArguments = aliasTypeArguments;
             return type;
         }
 
@@ -13146,11 +13129,11 @@ namespace ts {
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
-            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, AccessFlags.None, aliasSymbol, aliasTypeArguments) || (accessNode ? errorType : unknownType);
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression): Type {
+            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, AccessFlags.None) || (accessNode ? errorType : unknownType);
         }
 
-        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined {
+        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None): Type | undefined {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -13172,7 +13155,7 @@ namespace ts {
                 const id = objectType.id + "," + indexType.id;
                 let type = indexedAccessTypes.get(id);
                 if (!type) {
-                    indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType, aliasSymbol, aliasTypeArguments));
+                    indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType));
                 }
                 return type;
             }
@@ -13200,7 +13183,7 @@ namespace ts {
                 if (wasMissingProp) {
                     return undefined;
                 }
-                return accessFlags & AccessFlags.Writing ? getIntersectionType(propTypes, aliasSymbol, aliasTypeArguments) : getUnionType(propTypes, UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                return accessFlags & AccessFlags.Writing ? getIntersectionType(propTypes) : getUnionType(propTypes);
             }
             return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, /* supressNoImplicitAnyError */ false, accessNode, accessFlags | AccessFlags.CacheSymbol);
         }
@@ -13210,8 +13193,7 @@ namespace ts {
             if (!links.resolvedType) {
                 const objectType = getTypeFromTypeNode(node.objectType);
                 const indexType = getTypeFromTypeNode(node.indexType);
-                const potentialAlias = getAliasSymbolForTypeNode(node);
-                const resolved = getIndexedAccessType(objectType, indexType, node, potentialAlias, getTypeArgumentsForAliasSymbol(potentialAlias));
+                const resolved = getIndexedAccessType(objectType, indexType, node);
                 links.resolvedType = resolved.flags & TypeFlags.IndexedAccess &&
                     (<IndexedAccessType>resolved).objectType === objectType &&
                     (<IndexedAccessType>resolved).indexType === indexType ?
@@ -14359,7 +14341,7 @@ namespace ts {
                 return getIndexType(instantiateType((<IndexType>type).type, mapper));
             }
             if (flags & TypeFlags.IndexedAccess) {
-                return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper), /*accessNode*/ undefined, type.aliasSymbol, instantiateTypes(type.aliasTypeArguments, mapper));
+                return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
             }
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));

@@ -8,15 +8,15 @@ type B = { b: number };
 >b : number
 
 type X<T> = ({ [K in keyof T]: T[K] } & Record<string, void>)[keyof T];
->X : X<T>
+>X : ({ [K in keyof T]: T[K]; } & Record<string, void>)[keyof T]
 
 type P1<T> = { data: X<T> };
 >P1 : P1<T>
->data : X<T>
+>data : ({ [K in keyof T]: T[K]; } & Record<string, void>)[keyof T]
 
 type P2<T> = { data: X<T> };
 >P2 : P2<T>
->data : X<T>
+>data : ({ [K in keyof T]: T[K]; } & Record<string, void>)[keyof T]
 
 interface I<T> {
     fn<K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>): void;
