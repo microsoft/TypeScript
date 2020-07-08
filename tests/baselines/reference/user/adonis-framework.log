@@ -77,8 +77,8 @@ node_modules/adonis-framework/src/Exceptions/index.js(178,21): error TS2554: Exp
 node_modules/adonis-framework/src/Exceptions/index.js(191,21): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/Exceptions/index.js(205,21): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/File/index.js(175,5): error TS2322: Type 'Promise<any>' is not assignable to type 'boolean'.
-node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'boolean | ""' is not assignable to type 'boolean'.
-  Type '""' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'string | boolean' is not assignable to type 'boolean'.
+  Type 'string' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Helpers/index.js(105,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(106,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(164,18): error TS2554: Expected 3 arguments, but got 2.
