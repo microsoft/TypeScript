@@ -4,12 +4,13 @@
 declare const MyArray: {
 >MyArray : Symbol(MyArray, Decl(consistentUnionSubtypeReduction.ts, 2, 13))
 
-    isArray<T>(arg: T | {}): arg is T extends readonly any[] ? readonly any[] : any[];
+    isArray<T>(arg: T | {}): arg is T extends readonly any[] ? (unknown extends T ? never : readonly any[]) : any[];
 >isArray : Symbol(isArray, Decl(consistentUnionSubtypeReduction.ts, 2, 24))
 >T : Symbol(T, Decl(consistentUnionSubtypeReduction.ts, 3, 12))
 >arg : Symbol(arg, Decl(consistentUnionSubtypeReduction.ts, 3, 15))
 >T : Symbol(T, Decl(consistentUnionSubtypeReduction.ts, 3, 12))
 >arg : Symbol(arg, Decl(consistentUnionSubtypeReduction.ts, 3, 15))
+>T : Symbol(T, Decl(consistentUnionSubtypeReduction.ts, 3, 12))
 >T : Symbol(T, Decl(consistentUnionSubtypeReduction.ts, 3, 12))
 
 };

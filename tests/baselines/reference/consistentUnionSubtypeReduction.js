@@ -2,7 +2,7 @@
 // https://github.com/microsoft/TypeScript/issues/31155
 
 declare const MyArray: {
-    isArray<T>(arg: T | {}): arg is T extends readonly any[] ? readonly any[] : any[];
+    isArray<T>(arg: T | {}): arg is T extends readonly any[] ? (unknown extends T ? never : readonly any[]) : any[];
 };
 
 declare const a: readonly string[] | string;

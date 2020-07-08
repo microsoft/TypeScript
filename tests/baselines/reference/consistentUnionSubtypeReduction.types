@@ -2,10 +2,10 @@
 // https://github.com/microsoft/TypeScript/issues/31155
 
 declare const MyArray: {
->MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? readonly any[] : any[]; }
+>MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]; }
 
-    isArray<T>(arg: T | {}): arg is T extends readonly any[] ? readonly any[] : any[];
->isArray : <T>(arg: T | {}) => arg is T extends readonly any[] ? readonly any[] : any[]
+    isArray<T>(arg: T | {}): arg is T extends readonly any[] ? (unknown extends T ? never : readonly any[]) : any[];
+>isArray : <T>(arg: T | {}) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >arg : {} | T
 
 };
@@ -21,9 +21,9 @@ declare const c: unknown;
 
 if (MyArray.isArray(a)) {
 >MyArray.isArray(a) : boolean
->MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
->MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? readonly any[] : any[]; }
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
+>MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]; }
+>isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >a : string | readonly string[]
 
     a; // readonly string[]
@@ -38,9 +38,9 @@ a; // readonly string[] | string;
 
 if (MyArray.isArray(b)) {
 >MyArray.isArray(b) : boolean
->MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
->MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? readonly any[] : any[]; }
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
+>MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]; }
+>isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >b : string | string[]
 
     b; // string[] | string;
@@ -55,9 +55,9 @@ b; // string[] | string;
 
 if (MyArray.isArray(c)) {
 >MyArray.isArray(c) : boolean
->MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
->MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? readonly any[] : any[]; }
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
+>MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]; }
+>isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >c : unknown
 
     c; // any[]
@@ -86,9 +86,9 @@ function f<T>(x: T) {
 
     if (MyArray.isArray(a)) {
 >MyArray.isArray(a) : boolean
->MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
->MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? readonly any[] : any[]; }
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
+>MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]; }
+>isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >a : string | readonly T[]
 
         a; // readonly T[]
@@ -103,9 +103,9 @@ function f<T>(x: T) {
 
     if (MyArray.isArray(b)) {
 >MyArray.isArray(b) : boolean
->MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
->MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? readonly any[] : any[]; }
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
+>MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]; }
+>isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >b : string | T[]
 
         b; // T[]
@@ -120,13 +120,13 @@ function f<T>(x: T) {
 
     if (MyArray.isArray(c)) {
 >MyArray.isArray(c) : boolean
->MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
->MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? readonly any[] : any[]; }
->isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? readonly any[] : any[]
+>MyArray.isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
+>MyArray : { isArray<T>(arg: {} | T): arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]; }
+>isArray : <T>(arg: {} | T) => arg is T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[]
 >c : T
 
         c; // T & (T extends readonly any[] ? readonly any[] : any[])
->c : T & (T extends readonly any[] ? readonly any[] : any[])
+>c : T & (T extends readonly any[] ? unknown extends T ? never : readonly any[] : any[])
     }
 }
 
