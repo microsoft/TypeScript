@@ -109,7 +109,7 @@ namespace ts.refactor {
 
     function getNewStatementsAndRemoveFromOldFile(
         oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, newModuleName: string, preferences: UserPreferences,
-    ): readonly Statement[] {
+    ) {
         const checker = program.getTypeChecker();
 
         if (!oldFile.externalModuleIndicator && !oldFile.commonJsModuleIndicator) {
@@ -129,9 +129,19 @@ namespace ts.refactor {
 
         updateImportsInOtherFiles(changes, program, oldFile, usage.movedSymbols, newModuleName);
 
+        const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference);
+        const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax);
+        if (imports.length && body.length) {
+            return [
+                ...imports,
+                SyntaxKind.NewLineTrivia as const,
+                ...body
+            ];
+        }
+
         return [
-            ...getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, useEs6ModuleSyntax, quotePreference),
-            ...addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEs6ModuleSyntax),
+            ...imports,
+            ...body,
         ];
     }
 

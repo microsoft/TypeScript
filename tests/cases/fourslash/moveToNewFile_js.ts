@@ -26,6 +26,7 @@ a; y; z;`,
         "/y.js":
 `const { b } = require("./other");
 const { p } = require("./a");
+
 const y = p + b;
 exports.y = y;
 const z = 0;
