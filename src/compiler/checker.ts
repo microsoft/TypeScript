@@ -22436,21 +22436,23 @@ namespace ts {
             const isInJS = isInJSFile(node);
             if (isFunctionLike(container) &&
                 (!isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container))) {
-                let thisType: Type | undefined;
+                let thisType = getThisTypeOfDeclaration(container) || isInJS && getTypeForThisExpressionFromJSDoc(container);
                 // Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
                 // If this is a function in a JS file, it might be a class method.
-                const className = getClassNameFromPrototypeMethod(container);
-                if (isInJS && className) {
-                    const classSymbol = checkExpression(className).symbol;
-                    if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        thisType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType;
+                if (!thisType) {
+                    const className = getClassNameFromPrototypeMethod(container);
+                    if (isInJS && className) {
+                        const classSymbol = checkExpression(className).symbol;
+                        if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
+                            thisType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType;
+                        }
                     }
-                }
-                else if (isJSConstructor(container)) {
-                    thisType = (getDeclaredTypeOfSymbol(getMergedSymbol(container.symbol)) as InterfaceType).thisType;
+                    else if (isJSConstructor(container)) {
+                        thisType = (getDeclaredTypeOfSymbol(getMergedSymbol(container.symbol)) as InterfaceType).thisType;
+                    }
+                    thisType ||= getContextualThisParameterType(container);
                 }
 
-                thisType ||= getThisTypeOfDeclaration(container) || getContextualThisParameterType(container);
                 if (thisType) {
                     return getFlowTypeOfReference(node, thisType);
                 }
@@ -22462,12 +22464,6 @@ namespace ts {
                 return getFlowTypeOfReference(node, type);
             }
 
-            if (isInJS) {
-                const type = getTypeForThisExpressionFromJSDoc(container);
-                if (type && type !== errorType) {
-                    return getFlowTypeOfReference(node, type);
-                }
-            }
             if (isSourceFile(container)) {
                 // look up in the source file's locals or exports
                 if (container.commonJsModuleIndicator) {
