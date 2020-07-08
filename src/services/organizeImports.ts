@@ -455,6 +455,13 @@ namespace ts.OrganizeImports {
         return compareValues(getImportKindOrder(s1), getImportKindOrder(s2));
     }
 
+    // 1. Side-effect imports
+    // 2. Type-only imports
+    // 3. Namespace imports
+    // 4. Default imports
+    // 5. Named imports
+    // 6. ImportEqualsDeclarations
+    // 7. Require variable statements
     function getImportKindOrder(s1: AnyImportOrRequireStatement) {
         switch (s1.kind) {
             case SyntaxKind.ImportDeclaration:
