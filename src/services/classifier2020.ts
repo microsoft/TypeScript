@@ -18,12 +18,12 @@ namespace ts.classifier.v2020 {
     }
 
     /** This is mainly used internally for testing */
-    export function getSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan[] {
+    export function getSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan2020[] {
         const classifications = getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
 
         Debug.assert(classifications.spans.length % 3 === 0);
         const dense = classifications.spans;
-        const result: ClassifiedSpan[] = [];
+        const result: ClassifiedSpan2020[] = [];
         for (let i = 0; i < dense.length; i += 3) {
             result.push({
                 textSpan: createTextSpan(dense[i], dense[i + 1]),
