@@ -18,8 +18,8 @@ namespace ts.classifier.v2020 {
     }
 
     /** This is mainly used internally for testing */
-    export function getSemanticClassifications(program: Program, _cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan[] {
-        const classifications = getEncodedSemanticClassifications(program, _cancellationToken, sourceFile, span);
+    export function getSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): ClassifiedSpan[] {
+        const classifications = getEncodedSemanticClassifications(program, cancellationToken, sourceFile, span);
 
         Debug.assert(classifications.spans.length % 3 === 0);
         const dense = classifications.spans;
@@ -34,14 +34,14 @@ namespace ts.classifier.v2020 {
         return result;
     }
 
-    export function getEncodedSemanticClassifications(program: Program, _cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
+    export function getEncodedSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
         return {
-            spans: getSemanticTokens(program, sourceFile, span),
+            spans: getSemanticTokens(program, sourceFile, span, cancellationToken),
             endOfLineState: EndOfLineState.None
         };
     }
 
-    function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextSpan): number[] {
+    function getSemanticTokens(program: Program, sourceFile: SourceFile, span: TextSpan, cancellationToken: CancellationToken): number[] {
         const resultTokens: number[] = [];
 
         const collector = (node: Node, typeIdx: number, modifierSet: number) => {
@@ -49,17 +49,28 @@ namespace ts.classifier.v2020 {
         };
 
         if (program && sourceFile) {
-            collectTokens(program, sourceFile, span, collector);
+            collectTokens(program, sourceFile, span, collector, cancellationToken);
         }
         return resultTokens;
     }
 
-    function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan, collector: (node: Node, tokenType: number, tokenModifier: number) => void) {
+    function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan, collector: (node: Node, tokenType: number, tokenModifier: number) => void, cancellationToken: CancellationToken) {
         const typeChecker = program.getTypeChecker();
 
         let inJSXElement = false;
 
         function visit(node: Node) {
+            switch(node.kind) {
+                case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                    if (cancellationToken.isCancellationRequested()) return;
+            }
+
             if (!node || !textSpanIntersectsWith(span, node.pos, node.getFullWidth()) || node.getFullWidth() === 0) {
                 return;
             }
@@ -215,22 +226,6 @@ namespace ts.classifier.v2020 {
 
     function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean {
         return (isQualifiedName(node.parent) && node.parent.right === node) || (isPropertyAccessExpression(node.parent) && node.parent.name === node);
-    }
-
-    const enum SemanticMeaning {
-        None = 0x0,
-        Value = 0x1,
-        Type = 0x2,
-        Namespace = 0x4,
-        All = Value | Type | Namespace
-    }
-
-    function getMeaningFromLocation(node: Node): SemanticMeaning {
-        const f = (<any>ts).getMeaningFromLocation;
-        if (typeof f === "function") {
-            return f(node);
-        }
-        return SemanticMeaning.All;
     }
 
     const tokenFromDeclarationMapping: { [name: string]: TokenType } = {
