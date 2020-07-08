@@ -402,7 +402,7 @@ namespace ts.FindAllReferences {
             const parent = node.parent;
             const name = originalNode.text;
             const isShorthandAssignment = isShorthandPropertyAssignment(parent);
-            if (isShorthandAssignment || isObjectBindingElementWithoutPropertyName(parent) && parent.name === node) {
+            if (isShorthandAssignment || (isObjectBindingElementWithoutPropertyName(parent) && parent.name === node && parent.dotDotDotToken === undefined)) {
                 const prefixColon: PrefixAndSuffix = { prefixText: name + ": " };
                 const suffixColon: PrefixAndSuffix = { suffixText: ": " + name };
                 if (kind === EntryKind.SearchedLocalFoundProperty) {
