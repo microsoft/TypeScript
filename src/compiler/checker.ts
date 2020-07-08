@@ -5094,6 +5094,9 @@ namespace ts {
                 if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
                     parameterType = getOptionalType(parameterType);
                 }
+                if ((context.flags & NodeBuilderFlags.NoUndefinedOptionalParameterType) && parameterDeclaration && !isJSDocParameterTag(parameterDeclaration) && isOptionalUninitializedParameter(parameterDeclaration)) {
+                    parameterType = removeUndefinedType(parameterType);
+                }
                 const parameterTypeNode = serializeTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
 
                 const modifiers = !(context.flags & NodeBuilderFlags.OmitParameterModifiers) && preserveModifierFlags && parameterDeclaration && parameterDeclaration.modifiers ? parameterDeclaration.modifiers.map(factory.cloneNode) : undefined;
@@ -18544,6 +18547,12 @@ namespace ts {
         function removeDefinitelyFalsyTypes(type: Type): Type {
             return getFalsyFlags(type) & TypeFlags.DefinitelyFalsy ?
                 filterType(type, t => !(getFalsyFlags(t) & TypeFlags.DefinitelyFalsy)) :
+                type;
+        }
+
+        function removeUndefinedType(type: Type): Type {
+            return getFalsyFlags(type) & TypeFlags.Undefined ?
+                filterType(type, t => !(getFalsyFlags(t) & TypeFlags.Undefined)) :
                 type;
         }
 
@@ -36956,6 +36965,12 @@ namespace ts {
                 isOptionalParameter(parameter) &&
                 !parameter.initializer &&
                 hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
+        }
+
+        function isOptionalUninitializedParameter(parameter: ParameterDeclaration) {
+            return !!strictNullChecks &&
+                isOptionalParameter(parameter) &&
+                !parameter.initializer;
         }
 
         function isExpandoFunctionDeclaration(node: Declaration): boolean {
