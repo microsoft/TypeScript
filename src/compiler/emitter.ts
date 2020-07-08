@@ -4399,9 +4399,10 @@ namespace ts {
                 }
                 if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
                     if (preserveSourceNewlines) {
+                        const end = isNodeArray(children) && !positionIsSynthesized(children.end) ? children.end : lastChild.end;
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(
-                                lastChild.end,
+                                end,
                                 parentNode.end,
                                 currentSourceFile!,
                                 includeComments));

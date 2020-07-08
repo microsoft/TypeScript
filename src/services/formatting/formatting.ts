@@ -1092,10 +1092,6 @@ namespace ts.formatting {
             const nonWhitespaceColumnInFirstPart =
                 SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(startLinePos, parts[0].pos, sourceFile, options);
 
-            if (indentation === nonWhitespaceColumnInFirstPart.column && !jsxTextStyleIndent) {
-                return;
-            }
-
             let startIndex = 0;
             if (firstLineIsIndented) {
                 startIndex = 1;
