@@ -23,7 +23,7 @@ edit.applyRefactor({
   actionName: "function_scope_1",
   actionDescription: "Extract to method in class 'Foo'",
   newContent:
-`import { a, A } from "./a";
+`import { A, a } from "./a";
 
 class Foo {
     foo() {

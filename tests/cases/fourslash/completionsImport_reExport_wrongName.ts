@@ -46,8 +46,8 @@ verify.applyCodeActionFromCompletion("", {
     name: "y",
     source: "/index",
     description: `Import 'y' from module "."`,
-    newFileContent: `import { x } from "./a";
-import { y } from ".";
+    newFileContent: `import { y } from ".";
+import { x } from "./a";
 
 `,
 });
