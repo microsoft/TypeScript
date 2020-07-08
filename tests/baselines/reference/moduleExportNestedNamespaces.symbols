@@ -17,7 +17,8 @@ module.exports.n.K = function C() {
 >C : Symbol(C, Decl(mod.js, 1, 20))
 
     this.x = 10;
->this : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 15))
+>this.x : Symbol(C.x, Decl(mod.js, 1, 35))
+>this : Symbol(C, Decl(mod.js, 1, 20))
 >x : Symbol(C.x, Decl(mod.js, 1, 35))
 }
 module.exports.Classic = class {
