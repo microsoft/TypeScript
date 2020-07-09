@@ -1912,11 +1912,8 @@ namespace ts {
                         if (lastLocation && (
                             lastLocation === (location as BindingElement).initializer ||
                             lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation))) {
-                            const root = getRootDeclaration(location);
-                            if (root.kind === SyntaxKind.Parameter) {
-                                if (!associatedDeclarationForContainingInitializerOrBindingName) {
-                                    associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
-                                }
+                            if (isParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
+                                associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
                             }
                         }
                         break;
@@ -2380,7 +2377,8 @@ namespace ts {
                     && node.parent.operatorToken.kind === SyntaxKind.EqualsToken
                     && isAliasableOrJsExpression(node.parent.right) ||
                 node.kind === SyntaxKind.ShorthandPropertyAssignment ||
-                node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer);
+                node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer) ||
+                isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true);
         }
 
         function isAliasableOrJsExpression(e: Expression) {
@@ -2578,9 +2576,9 @@ namespace ts {
             return result;
         }
 
-        function getExportOfModule(symbol: Symbol, specifier: ImportOrExportSpecifier, dontResolveAlias: boolean): Symbol | undefined {
+        function getExportOfModule(symbol: Symbol, specifier: ImportOrExportSpecifier | BindingElement, dontResolveAlias: boolean): Symbol | undefined {
             if (symbol.flags & SymbolFlags.Module) {
-                const name = (specifier.propertyName ?? specifier.name).escapedText;
+                const name = ((specifier.propertyName ?? specifier.name) as Identifier).escapedText;
                 const exportSymbol = getExportsOfSymbol(symbol).get(name);
                 const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
                 markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false);
@@ -2597,11 +2595,13 @@ namespace ts {
             }
         }
 
-        function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration, specifier: ImportOrExportSpecifier, dontResolveAlias = false): Symbol | undefined {
-            const moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier!)!; // TODO: GH#18217
+        function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, specifier: ImportOrExportSpecifier | BindingElement, dontResolveAlias = false): Symbol | undefined {
+            const moduleSpecifier = isVariableDeclaration(node) ? (getFirstPropertyAccessExpression(node.initializer!) as CallExpression).arguments[0] : node.moduleSpecifier!;
+            const moduleSymbol = resolveExternalModuleName(node, moduleSpecifier)!; // TODO: GH#18217
             const name = specifier.propertyName || specifier.name;
+            Debug.assert(isIdentifier(name)); // :eyes:
             const suppressInteropError = name.escapedText === InternalSymbolName.Default && !!(compilerOptions.allowSyntheticDefaultImports || compilerOptions.esModuleInterop);
-            const targetSymbol = resolveESModuleSymbol(moduleSymbol, node.moduleSpecifier!, dontResolveAlias, suppressInteropError);
+            const targetSymbol = resolveESModuleSymbol(moduleSymbol, moduleSpecifier, dontResolveAlias, suppressInteropError);
             if (targetSymbol) {
                 if (name.escapedText) {
                     if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
@@ -2662,7 +2662,7 @@ namespace ts {
             }
         }
 
-        function reportNonExportedMember(node: ImportDeclaration | ExportDeclaration, name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
+        function reportNonExportedMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
             const localSymbol = moduleSymbol.valueDeclaration.locals?.get(name.escapedText);
             const exports = moduleSymbol.exports;
             if (localSymbol) {
@@ -2686,7 +2686,7 @@ namespace ts {
             }
         }
 
-        function reportInvalidImportEqualsExportMember(node: ImportDeclaration | ExportDeclaration, name: Identifier, declarationName: string, moduleName: string) {
+        function reportInvalidImportEqualsExportMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, name: Identifier, declarationName: string, moduleName: string) {
             if (moduleKind >= ModuleKind.ES2015) {
                 const message = compilerOptions.esModuleInterop ? Diagnostics._0_can_only_be_imported_by_using_a_default_import :
                     Diagnostics._0_can_only_be_imported_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import;
@@ -2706,8 +2706,8 @@ namespace ts {
             }
         }
 
-        function getTargetOfImportSpecifier(node: ImportSpecifier, dontResolveAlias: boolean): Symbol | undefined {
-            const resolved = getExternalModuleMember(node.parent.parent.parent, node, dontResolveAlias);
+        function getTargetOfImportSpecifier(node: ImportSpecifier | BindingElement, dontResolveAlias: boolean): Symbol | undefined {
+            const resolved = getExternalModuleMember(isBindingElement(node) ? getRootDeclaration(node) as VariableDeclaration : node.parent.parent.parent, node, dontResolveAlias);
             markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
             return resolved;
         }
@@ -2766,13 +2766,14 @@ namespace ts {
                 case SyntaxKind.ImportEqualsDeclaration:
                     return getTargetOfImportEqualsDeclaration(<ImportEqualsDeclaration>node, dontRecursivelyResolve);
                 case SyntaxKind.ImportClause:
-                    return getTargetOfImportClause(<ImportClause>node, dontRecursivelyResolve);
+                    return getTargetOfImportClause(node as ImportClause, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceImport:
                     return getTargetOfNamespaceImport(<NamespaceImport>node, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceExport:
                     return getTargetOfNamespaceExport(<NamespaceExport>node, dontRecursivelyResolve);
                 case SyntaxKind.ImportSpecifier:
-                    return getTargetOfImportSpecifier(<ImportSpecifier>node, dontRecursivelyResolve);
+                case SyntaxKind.BindingElement:
+                    return getTargetOfImportSpecifier(node as ImportSpecifier | BindingElement, dontRecursivelyResolve);
                 case SyntaxKind.ExportSpecifier:
                     return getTargetOfExportSpecifier(<ExportSpecifier>node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, dontRecursivelyResolve);
                 case SyntaxKind.ExportAssignment:
@@ -2786,6 +2787,8 @@ namespace ts {
                     return getTargetOfPropertyAssignment(node as PropertyAssignment, dontRecursivelyResolve);
                 case SyntaxKind.PropertyAccessExpression:
                     return getTargetOfPropertyAccessExpression(node as PropertyAccessExpression, dontRecursivelyResolve);
+                case SyntaxKind.VariableDeclaration:
+                    return Debug.fail('second time around'); //getTargetOfRequireClause(node as VariableDeclaration, dontRecursivelyResolve);
                 default:
                     return Debug.fail();
             }
@@ -12014,16 +12017,7 @@ namespace ts {
                 const valueType = getTypeOfSymbol(symbol);
                 let typeType = valueType;
                 if (symbol.valueDeclaration) {
-                    const decl = getRootDeclaration(symbol.valueDeclaration);
-                    let isRequireAlias = false;
-                    if (isVariableDeclaration(decl) && decl.initializer) {
-                        let expr = decl.initializer;
-                        // skip past entity names, eg `require("x").a.b.c`
-                        while (isPropertyAccessExpression(expr)) {
-                            expr = expr.expression;
-                        }
-                        isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
-                    }
+                    const isRequireAlias = isRequireVariableDeclaration(symbol.valueDeclaration, /*requireStringLiteralLikeArgument*/ true);
                     const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
                     // valueType might not have a symbol, eg, {import('./b').STRING_LITERAL}
                     if (valueType.symbol && (isRequireAlias || isImportTypeWithQualifier)) {
@@ -32734,7 +32728,7 @@ namespace ts {
                 forEach(node.name.elements, checkSourceElement);
             }
             // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
-            if (node.initializer && getRootDeclaration(node).kind === SyntaxKind.Parameter && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
+            if (node.initializer && isParameterDeclaration(node) && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
                 error(node, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
                 return;
             }
@@ -32764,6 +32758,12 @@ namespace ts {
                         }
                     }
                 }
+                return;
+            }
+            // For a require binding element, validate the alias and exit
+            // TODO: Probably should mark the symbol so I don't have to keep rescanning this
+            if (isBindingElement(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
+                checkAliasSymbol(node);
                 return;
             }
             const symbol = getSymbolOfNode(node);

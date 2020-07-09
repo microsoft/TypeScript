@@ -543,6 +543,7 @@ namespace ts {
         function declareModuleMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags): Symbol {
             const hasExportModifier = getCombinedModifierFlags(node) & ModifierFlags.Export;
             if (symbolFlags & SymbolFlags.Alias) {
+                // TODO: handle non-destructuring const x=require here (after altering flags from bindVariableDeclaration)
                 if (node.kind === SyntaxKind.ExportSpecifier || (node.kind === SyntaxKind.ImportEqualsDeclaration && hasExportModifier)) {
                     return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
                 }
@@ -3183,7 +3184,12 @@ namespace ts {
 
             if (!isBindingPattern(node.name)) {
                 if (isBlockOrCatchScoped(node)) {
-                    bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+                    if (isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
+                        declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                    }
+                    else {
+                        bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
+                    }
                 }
                 else if (isParameterDeclaration(node)) {
                     // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration

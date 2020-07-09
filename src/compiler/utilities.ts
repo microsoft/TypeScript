@@ -1927,11 +1927,13 @@ namespace ts {
     /**
      * Returns true if the node is a VariableDeclaration initialized to a require call (see `isRequireCall`).
      * This function does not test if the node is in a JavaScript file or not.
+     * TODO: But probably should???!
      */
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(node.initializer, requireStringLiteralLikeArgument);
+        node = getRootDeclaration(node);
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getFirstPropertyAccessExpression(node.initializer), requireStringLiteralLikeArgument);
     }
 
     export function isRequireVariableDeclarationStatement(node: Node, requireStringLiteralLikeArgument = true): node is VariableStatement {
@@ -4739,6 +4741,13 @@ namespace ts {
                 } while (node.kind !== SyntaxKind.Identifier);
                 return node;
         }
+    }
+
+    export function getFirstPropertyAccessExpression(expr: Expression): Expression {
+        while (isPropertyAccessExpression(expr)) {
+            expr = expr.expression;
+        }
+        return expr;
     }
 
     export function isDottedName(node: Expression): boolean {
