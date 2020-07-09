@@ -2051,7 +2051,7 @@ namespace ts.FindAllReferences {
                     return search.includes(baseSymbol || rootSymbol || sym)
                         // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
                         ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }
-                        : undefined
+                        : undefined;
                 },
                 /*allowBaseTypes*/ rootSymbol =>
                     !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker)))
