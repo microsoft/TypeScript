@@ -28195,7 +28195,7 @@ namespace ts {
                 // notEqualFacts states that the type of the switched value is not equal to every type in the switch.
                 const notEqualFacts = getFactsFromTypeofSwitch(0, 0, witnesses, /*hasDefault*/ true);
                 const type = getBaseConstraintOfType(operandType) || operandType;
-                // Take any as a specail condition. Maybe we could change type to a union containing all primitive types.
+                // Take any/unknown as a special condition. Or maybe we could change `type` to a union containing all primitive types.
                 if (type.flags & TypeFlags.AnyOrUnknown) {
                     return (TypeFacts.AllTypeofNE & notEqualFacts) === TypeFacts.AllTypeofNE;
                 }
