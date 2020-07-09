@@ -21,7 +21,7 @@
 
 goTo.file("/c/foo.ts");
 verify.importFixAtPosition([
-`import { b } from "b";
-import { a } from "a";
+`import { a } from "a";
+import { b } from "b";
 a;`,
 ]);

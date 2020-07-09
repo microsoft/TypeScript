@@ -52,7 +52,7 @@ namespace ts.formatting {
 
             rule("NotSpaceBeforeColon", anyToken, SyntaxKind.ColonToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNotTypeAnnotationContext], RuleAction.DeleteSpace),
             rule("SpaceAfterColon", SyntaxKind.ColonToken, anyToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.InsertSpace),
-            rule("NoSpaceBeforeQuestionMark", anyToken, SyntaxKind.QuestionToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeQuestionMark", anyToken, SyntaxKind.QuestionToken, [isNonJsxSameLineTokenContext, isNotBinaryOpContext, isNotTypeAnnotationContext], RuleAction.DeleteSpace),
             // insert space after '?' only when it is used in conditional operator
             rule("SpaceAfterQuestionMarkInConditionalOperator", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext, isConditionalOperatorContext], RuleAction.InsertSpace),
 
@@ -315,8 +315,9 @@ namespace ts.formatting {
             rule("SpaceAfterTypeAssertion", SyntaxKind.GreaterThanToken, anyToken, [isOptionEnabled("insertSpaceAfterTypeAssertion"), isNonJsxSameLineTokenContext, isTypeAssertionContext], RuleAction.InsertSpace),
             rule("NoSpaceAfterTypeAssertion", SyntaxKind.GreaterThanToken, anyToken, [isOptionDisabledOrUndefined("insertSpaceAfterTypeAssertion"), isNonJsxSameLineTokenContext, isTypeAssertionContext], RuleAction.DeleteSpace),
 
-            rule("SpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionEnabled("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.InsertSpace),
-            rule("NoSpaceBeforeTypeAnnotation", anyToken, SyntaxKind.ColonToken, [isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.DeleteSpace),
+            rule("SpaceBeforeTypeAnnotation", anyToken, [SyntaxKind.QuestionToken, SyntaxKind.ColonToken], [isOptionEnabled("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.InsertSpace),
+            rule("NoSpaceBeforeTypeAnnotation", anyToken, [SyntaxKind.QuestionToken, SyntaxKind.ColonToken], [isOptionDisabledOrUndefined("insertSpaceBeforeTypeAnnotation"), isNonJsxSameLineTokenContext, isTypeAnnotationContext], RuleAction.DeleteSpace),
+
             rule("NoOptionalSemicolon", SyntaxKind.SemicolonToken, anyTokenIncludingEOF, [optionEquals("semicolons", SemicolonPreference.Remove), isSemicolonDeletionContext], RuleAction.DeleteToken),
             rule("OptionalSemicolon", anyToken, anyTokenIncludingEOF, [optionEquals("semicolons", SemicolonPreference.Insert), isSemicolonInsertionContext], RuleAction.InsertTrailingSemicolon),
         ];

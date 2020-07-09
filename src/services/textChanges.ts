@@ -472,9 +472,9 @@ namespace ts.textChanges {
             this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
         }
 
-        private getOptionsForInsertNodeBefore(before: Node, inserted: Node, doubleNewlines: boolean): InsertNodeOptions {
+        private getOptionsForInsertNodeBefore(before: Node, inserted: Node, blankLineBetween: boolean): InsertNodeOptions {
             if (isStatement(before) || isClassElement(before)) {
-                return { suffix: doubleNewlines ? this.newLineCharacter + this.newLineCharacter : this.newLineCharacter };
+                return { suffix: blankLineBetween ? this.newLineCharacter + this.newLineCharacter : this.newLineCharacter };
             }
             else if (isVariableDeclaration(before)) { // insert `x = 1, ` into `const x = 1, y = 2;
                 return { suffix: ", " };
@@ -484,6 +484,9 @@ namespace ts.textChanges {
             }
             else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
                 return { suffix: ", " };
+            }
+            else if (isImportSpecifier(before)) {
+                return { suffix: "," + (blankLineBetween ? this.newLineCharacter : " ") };
             }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }

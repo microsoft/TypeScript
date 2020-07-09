@@ -819,6 +819,18 @@ namespace ts {
         return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
     }
 
+    export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
+        if (array.length < 2) return true;
+        let prevElement = array[0];
+        for (const element of array.slice(1)) {
+            if (comparer(prevElement, element) === Comparison.GreaterThan) {
+                return false;
+            }
+            prevElement = element;
+        }
+        return true;
+    }
+
     export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
