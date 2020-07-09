@@ -1892,7 +1892,7 @@ namespace ts.FindAllReferences {
                 (sym, root, base) => {
                     // static method/property and instance method/property might have the same name. Only include static or only include instance.
                     if (base) {
-                        if (isSymbolStatic !== isStatic(base)) {
+                        if (isStatic(symbol) !== isStatic(base)) {
                             base = undefined;
                         }
                     }
