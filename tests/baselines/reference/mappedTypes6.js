@@ -52,7 +52,6 @@ function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
     z = z;
 }
 
-
 function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
     w = {};  // Error
     x = {};  // Error
@@ -71,6 +70,27 @@ function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>) {
     y = x;
     y = y;
     y = z;
+    z = x;
+    z = y;
+    z = z;
+}
+
+type Nullified<T> = { [P in keyof T]?: Nullable<T[P]> };
+
+function f11<T>(w: Nullified<T>, x: Required<T>, y: T, z: Partial<T>) {
+    w = w;
+    w = x;
+    w = y;
+    w = z;
+    x = w;  // Error
+    x = x;
+    x = y;  // Error
+    x = z;  // Error
+    y = w;  // Error
+    y = x;
+    y = y;
+    y = z;  // Error
+    z = w;
     z = x;
     z = y;
     z = z;
@@ -173,6 +193,24 @@ function f10(x, y, z) {
     z = y;
     z = z;
 }
+function f11(w, x, y, z) {
+    w = w;
+    w = x;
+    w = y;
+    w = z;
+    x = w; // Error
+    x = x;
+    x = y; // Error
+    x = z; // Error
+    y = w; // Error
+    y = x;
+    y = y;
+    y = z; // Error
+    z = w;
+    z = x;
+    z = y;
+    z = z;
+}
 x1.a; // number
 x1.b; // number | undefined
 x1.c; // number | undefined
@@ -256,6 +294,10 @@ declare type Readwrite<T> = {
     -readonly [P in keyof T]: T[P];
 };
 declare function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>): void;
+declare type Nullified<T> = {
+    [P in keyof T]?: Nullable<T[P]>;
+};
+declare function f11<T>(w: Nullified<T>, x: Required<T>, y: T, z: Partial<T>): void;
 declare type Foo = {
     a: number;
     b: number | undefined;

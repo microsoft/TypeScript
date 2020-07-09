@@ -190,7 +190,6 @@ function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 >z : Partial<T>
 }
 
-
 function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 >f3 : <T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) => void
 >w : Denullified<T>
@@ -275,6 +274,97 @@ function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>) {
 >z = z : Readwrite<T>
 >z : Readwrite<T>
 >z : Readwrite<T>
+}
+
+type Nullified<T> = { [P in keyof T]?: Nullable<T[P]> };
+>Nullified : Nullified<T>
+
+function f11<T>(w: Nullified<T>, x: Required<T>, y: T, z: Partial<T>) {
+>f11 : <T>(w: Nullified<T>, x: Required<T>, y: T, z: Partial<T>) => void
+>w : Nullified<T>
+>x : Required<T>
+>y : T
+>z : Partial<T>
+
+    w = w;
+>w = w : Nullified<T>
+>w : Nullified<T>
+>w : Nullified<T>
+
+    w = x;
+>w = x : Required<T>
+>w : Nullified<T>
+>x : Required<T>
+
+    w = y;
+>w = y : T
+>w : Nullified<T>
+>y : T
+
+    w = z;
+>w = z : Partial<T>
+>w : Nullified<T>
+>z : Partial<T>
+
+    x = w;  // Error
+>x = w : Nullified<T>
+>x : Required<T>
+>w : Nullified<T>
+
+    x = x;
+>x = x : Required<T>
+>x : Required<T>
+>x : Required<T>
+
+    x = y;  // Error
+>x = y : T
+>x : Required<T>
+>y : T
+
+    x = z;  // Error
+>x = z : Partial<T>
+>x : Required<T>
+>z : Partial<T>
+
+    y = w;  // Error
+>y = w : Nullified<T>
+>y : T
+>w : Nullified<T>
+
+    y = x;
+>y = x : Required<T>
+>y : T
+>x : Required<T>
+
+    y = y;
+>y = y : T
+>y : T
+>y : T
+
+    y = z;  // Error
+>y = z : Partial<T>
+>y : T
+>z : Partial<T>
+
+    z = w;
+>z = w : Nullified<T>
+>z : Partial<T>
+>w : Nullified<T>
+
+    z = x;
+>z = x : Required<T>
+>z : Partial<T>
+>x : Required<T>
+
+    z = y;
+>z = y : T
+>z : Partial<T>
+>y : T
+
+    z = z;
+>z = z : Partial<T>
+>z : Partial<T>
+>z : Partial<T>
 }
 
 type Foo = {

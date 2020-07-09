@@ -54,7 +54,6 @@ function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
     z = z;
 }
 
-
 function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
     w = {};  // Error
     x = {};  // Error
@@ -73,6 +72,27 @@ function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>) {
     y = x;
     y = y;
     y = z;
+    z = x;
+    z = y;
+    z = z;
+}
+
+type Nullified<T> = { [P in keyof T]?: Nullable<T[P]> };
+
+function f11<T>(w: Nullified<T>, x: Required<T>, y: T, z: Partial<T>) {
+    w = w;
+    w = x;
+    w = y;
+    w = z;
+    x = w;  // Error
+    x = x;
+    x = y;  // Error
+    x = z;  // Error
+    y = w;  // Error
+    y = x;
+    y = y;
+    y = z;  // Error
+    z = w;
     z = x;
     z = y;
     z = z;

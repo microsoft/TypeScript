@@ -13,20 +13,30 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(42,5): error TS2322: Type '
 tests/cases/conformance/types/mapped/mappedTypes6.ts(43,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(47,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(56,5): error TS2322: Type '{}' is not assignable to type 'Denullified<T>'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(57,5): error TS2322: Type '{}' is not assignable to type 'Required<T>'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(58,5): error TS2322: Type '{}' is not assignable to type 'T'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(55,5): error TS2322: Type '{}' is not assignable to type 'Denullified<T>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(56,5): error TS2322: Type '{}' is not assignable to type 'Required<T>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(57,5): error TS2322: Type '{}' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to '{}'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(92,1): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Foo'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(104,1): error TS2739: Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
-tests/cases/conformance/types/mapped/mappedTypes6.ts(105,1): error TS2739: Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
-tests/cases/conformance/types/mapped/mappedTypes6.ts(106,1): error TS2741: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but required in type 'Required<Foo>'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(116,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(119,4): error TS2540: Cannot assign to 'a' because it is a read-only property.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(84,5): error TS2322: Type 'Nullified<T>' is not assignable to type 'Required<T>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(86,5): error TS2322: Type 'T' is not assignable to type 'Required<T>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(87,5): error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(88,5): error TS2322: Type 'Nullified<T>' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Nullified<T>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(91,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(92,5): error TS2322: Type 'Nullified<T>' is not assignable to type 'Partial<T>'.
+  Type 'Nullable<T[P]>' is not assignable to type 'T[P] | undefined'.
+    Type 'null' is not assignable to type 'T[P] | undefined'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(112,1): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Foo'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(124,1): error TS2739: Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
+tests/cases/conformance/types/mapped/mappedTypes6.ts(125,1): error TS2739: Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
+tests/cases/conformance/types/mapped/mappedTypes6.ts(126,1): error TS2741: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but required in type 'Required<Foo>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(136,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(139,4): error TS2540: Cannot assign to 'a' because it is a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(140,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypes6.ts (19 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypes6.ts (25 errors) ====
     type T00<T> = { [P in keyof T]: T[P] };
     type T01<T> = { [P in keyof T]?: T[P] };
     type T02<T> = { [P in keyof T]+?: T[P] };
@@ -104,7 +114,6 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
         z = z;
     }
     
-    
     function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
         w = {};  // Error
         ~
@@ -135,6 +144,43 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
         z = z;
     }
     
+    type Nullified<T> = { [P in keyof T]?: Nullable<T[P]> };
+    
+    function f11<T>(w: Nullified<T>, x: Required<T>, y: T, z: Partial<T>) {
+        w = w;
+        w = x;
+        w = y;
+        w = z;
+        x = w;  // Error
+        ~
+!!! error TS2322: Type 'Nullified<T>' is not assignable to type 'Required<T>'.
+        x = x;
+        x = y;  // Error
+        ~
+!!! error TS2322: Type 'T' is not assignable to type 'Required<T>'.
+        x = z;  // Error
+        ~
+!!! error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
+        y = w;  // Error
+        ~
+!!! error TS2322: Type 'Nullified<T>' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Nullified<T>'.
+        y = x;
+        y = y;
+        y = z;  // Error
+        ~
+!!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Partial<T>'.
+        z = w;
+        ~
+!!! error TS2322: Type 'Nullified<T>' is not assignable to type 'Partial<T>'.
+!!! error TS2322:   Type 'Nullable<T[P]>' is not assignable to type 'T[P] | undefined'.
+!!! error TS2322:     Type 'null' is not assignable to type 'T[P] | undefined'.
+        z = x;
+        z = y;
+        z = z;
+    }
+    
     type Foo = {
         a: number;
         b: number | undefined;
@@ -152,7 +198,7 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     x1 = { a: 1 };  // Error
     ~~
 !!! error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Foo'.
-!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:80:5: 'b' is declared here.
+!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:100:5: 'b' is declared here.
     x1 = { a: 1, b: 1 };
     x1 = { a: 1, b: 1, c: 1 };
     x1 = { a: 1, b: 1, c: 1, d: 1 };
@@ -173,7 +219,7 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     x2 = { a: 1, b: 1, c: 1 };  // Error
     ~~
 !!! error TS2741: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but required in type 'Required<Foo>'.
-!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:82:5: 'd' is declared here.
+!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:102:5: 'd' is declared here.
     x2 = { a: 1, b: 1, c: 1, d: 1 };
     
     type Bar = {

@@ -265,255 +265,343 @@ function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 >z : Symbol(z, Decl(mappedTypes6.ts, 34, 55))
 }
 
-
 function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 >f3 : Symbol(f3, Decl(mappedTypes6.ts, 51, 1))
->T : Symbol(T, Decl(mappedTypes6.ts, 54, 12))
->w : Symbol(w, Decl(mappedTypes6.ts, 54, 15))
+>T : Symbol(T, Decl(mappedTypes6.ts, 53, 12))
+>w : Symbol(w, Decl(mappedTypes6.ts, 53, 15))
 >Denullified : Symbol(Denullified, Decl(mappedTypes6.ts, 30, 1))
->T : Symbol(T, Decl(mappedTypes6.ts, 54, 12))
->x : Symbol(x, Decl(mappedTypes6.ts, 54, 33))
+>T : Symbol(T, Decl(mappedTypes6.ts, 53, 12))
+>x : Symbol(x, Decl(mappedTypes6.ts, 53, 33))
 >Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(mappedTypes6.ts, 54, 12))
->y : Symbol(y, Decl(mappedTypes6.ts, 54, 49))
->T : Symbol(T, Decl(mappedTypes6.ts, 54, 12))
->z : Symbol(z, Decl(mappedTypes6.ts, 54, 55))
+>T : Symbol(T, Decl(mappedTypes6.ts, 53, 12))
+>y : Symbol(y, Decl(mappedTypes6.ts, 53, 49))
+>T : Symbol(T, Decl(mappedTypes6.ts, 53, 12))
+>z : Symbol(z, Decl(mappedTypes6.ts, 53, 55))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(mappedTypes6.ts, 54, 12))
+>T : Symbol(T, Decl(mappedTypes6.ts, 53, 12))
 
     w = {};  // Error
->w : Symbol(w, Decl(mappedTypes6.ts, 54, 15))
+>w : Symbol(w, Decl(mappedTypes6.ts, 53, 15))
 
     x = {};  // Error
->x : Symbol(x, Decl(mappedTypes6.ts, 54, 33))
+>x : Symbol(x, Decl(mappedTypes6.ts, 53, 33))
 
     y = {};  // Error
->y : Symbol(y, Decl(mappedTypes6.ts, 54, 49))
+>y : Symbol(y, Decl(mappedTypes6.ts, 53, 49))
 
     z = {};
->z : Symbol(z, Decl(mappedTypes6.ts, 54, 55))
+>z : Symbol(z, Decl(mappedTypes6.ts, 53, 55))
 }
 
 type Readwrite<T> = {
->Readwrite : Symbol(Readwrite, Decl(mappedTypes6.ts, 59, 1))
->T : Symbol(T, Decl(mappedTypes6.ts, 61, 15))
+>Readwrite : Symbol(Readwrite, Decl(mappedTypes6.ts, 58, 1))
+>T : Symbol(T, Decl(mappedTypes6.ts, 60, 15))
 
     -readonly [P in keyof T]: T[P];
->P : Symbol(P, Decl(mappedTypes6.ts, 62, 15))
->T : Symbol(T, Decl(mappedTypes6.ts, 61, 15))
->T : Symbol(T, Decl(mappedTypes6.ts, 61, 15))
->P : Symbol(P, Decl(mappedTypes6.ts, 62, 15))
+>P : Symbol(P, Decl(mappedTypes6.ts, 61, 15))
+>T : Symbol(T, Decl(mappedTypes6.ts, 60, 15))
+>T : Symbol(T, Decl(mappedTypes6.ts, 60, 15))
+>P : Symbol(P, Decl(mappedTypes6.ts, 61, 15))
 }
 
 function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>) {
->f10 : Symbol(f10, Decl(mappedTypes6.ts, 63, 1))
->T : Symbol(T, Decl(mappedTypes6.ts, 65, 13))
->x : Symbol(x, Decl(mappedTypes6.ts, 65, 16))
+>f10 : Symbol(f10, Decl(mappedTypes6.ts, 62, 1))
+>T : Symbol(T, Decl(mappedTypes6.ts, 64, 13))
+>x : Symbol(x, Decl(mappedTypes6.ts, 64, 16))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(mappedTypes6.ts, 65, 13))
->y : Symbol(y, Decl(mappedTypes6.ts, 65, 31))
->T : Symbol(T, Decl(mappedTypes6.ts, 65, 13))
->z : Symbol(z, Decl(mappedTypes6.ts, 65, 37))
->Readwrite : Symbol(Readwrite, Decl(mappedTypes6.ts, 59, 1))
->T : Symbol(T, Decl(mappedTypes6.ts, 65, 13))
+>T : Symbol(T, Decl(mappedTypes6.ts, 64, 13))
+>y : Symbol(y, Decl(mappedTypes6.ts, 64, 31))
+>T : Symbol(T, Decl(mappedTypes6.ts, 64, 13))
+>z : Symbol(z, Decl(mappedTypes6.ts, 64, 37))
+>Readwrite : Symbol(Readwrite, Decl(mappedTypes6.ts, 58, 1))
+>T : Symbol(T, Decl(mappedTypes6.ts, 64, 13))
 
     x = x;
->x : Symbol(x, Decl(mappedTypes6.ts, 65, 16))
->x : Symbol(x, Decl(mappedTypes6.ts, 65, 16))
+>x : Symbol(x, Decl(mappedTypes6.ts, 64, 16))
+>x : Symbol(x, Decl(mappedTypes6.ts, 64, 16))
 
     x = y;
->x : Symbol(x, Decl(mappedTypes6.ts, 65, 16))
->y : Symbol(y, Decl(mappedTypes6.ts, 65, 31))
+>x : Symbol(x, Decl(mappedTypes6.ts, 64, 16))
+>y : Symbol(y, Decl(mappedTypes6.ts, 64, 31))
 
     x = z;
->x : Symbol(x, Decl(mappedTypes6.ts, 65, 16))
->z : Symbol(z, Decl(mappedTypes6.ts, 65, 37))
+>x : Symbol(x, Decl(mappedTypes6.ts, 64, 16))
+>z : Symbol(z, Decl(mappedTypes6.ts, 64, 37))
 
     y = x;
->y : Symbol(y, Decl(mappedTypes6.ts, 65, 31))
->x : Symbol(x, Decl(mappedTypes6.ts, 65, 16))
+>y : Symbol(y, Decl(mappedTypes6.ts, 64, 31))
+>x : Symbol(x, Decl(mappedTypes6.ts, 64, 16))
 
     y = y;
->y : Symbol(y, Decl(mappedTypes6.ts, 65, 31))
->y : Symbol(y, Decl(mappedTypes6.ts, 65, 31))
+>y : Symbol(y, Decl(mappedTypes6.ts, 64, 31))
+>y : Symbol(y, Decl(mappedTypes6.ts, 64, 31))
 
     y = z;
->y : Symbol(y, Decl(mappedTypes6.ts, 65, 31))
->z : Symbol(z, Decl(mappedTypes6.ts, 65, 37))
+>y : Symbol(y, Decl(mappedTypes6.ts, 64, 31))
+>z : Symbol(z, Decl(mappedTypes6.ts, 64, 37))
 
     z = x;
->z : Symbol(z, Decl(mappedTypes6.ts, 65, 37))
->x : Symbol(x, Decl(mappedTypes6.ts, 65, 16))
+>z : Symbol(z, Decl(mappedTypes6.ts, 64, 37))
+>x : Symbol(x, Decl(mappedTypes6.ts, 64, 16))
 
     z = y;
->z : Symbol(z, Decl(mappedTypes6.ts, 65, 37))
->y : Symbol(y, Decl(mappedTypes6.ts, 65, 31))
+>z : Symbol(z, Decl(mappedTypes6.ts, 64, 37))
+>y : Symbol(y, Decl(mappedTypes6.ts, 64, 31))
 
     z = z;
->z : Symbol(z, Decl(mappedTypes6.ts, 65, 37))
->z : Symbol(z, Decl(mappedTypes6.ts, 65, 37))
+>z : Symbol(z, Decl(mappedTypes6.ts, 64, 37))
+>z : Symbol(z, Decl(mappedTypes6.ts, 64, 37))
+}
+
+type Nullified<T> = { [P in keyof T]?: Nullable<T[P]> };
+>Nullified : Symbol(Nullified, Decl(mappedTypes6.ts, 74, 1))
+>T : Symbol(T, Decl(mappedTypes6.ts, 76, 15))
+>P : Symbol(P, Decl(mappedTypes6.ts, 76, 23))
+>T : Symbol(T, Decl(mappedTypes6.ts, 76, 15))
+>Nullable : Symbol(Nullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes6.ts, 76, 15))
+>P : Symbol(P, Decl(mappedTypes6.ts, 76, 23))
+
+function f11<T>(w: Nullified<T>, x: Required<T>, y: T, z: Partial<T>) {
+>f11 : Symbol(f11, Decl(mappedTypes6.ts, 76, 56))
+>T : Symbol(T, Decl(mappedTypes6.ts, 78, 13))
+>w : Symbol(w, Decl(mappedTypes6.ts, 78, 16))
+>Nullified : Symbol(Nullified, Decl(mappedTypes6.ts, 74, 1))
+>T : Symbol(T, Decl(mappedTypes6.ts, 78, 13))
+>x : Symbol(x, Decl(mappedTypes6.ts, 78, 32))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes6.ts, 78, 13))
+>y : Symbol(y, Decl(mappedTypes6.ts, 78, 48))
+>T : Symbol(T, Decl(mappedTypes6.ts, 78, 13))
+>z : Symbol(z, Decl(mappedTypes6.ts, 78, 54))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes6.ts, 78, 13))
+
+    w = w;
+>w : Symbol(w, Decl(mappedTypes6.ts, 78, 16))
+>w : Symbol(w, Decl(mappedTypes6.ts, 78, 16))
+
+    w = x;
+>w : Symbol(w, Decl(mappedTypes6.ts, 78, 16))
+>x : Symbol(x, Decl(mappedTypes6.ts, 78, 32))
+
+    w = y;
+>w : Symbol(w, Decl(mappedTypes6.ts, 78, 16))
+>y : Symbol(y, Decl(mappedTypes6.ts, 78, 48))
+
+    w = z;
+>w : Symbol(w, Decl(mappedTypes6.ts, 78, 16))
+>z : Symbol(z, Decl(mappedTypes6.ts, 78, 54))
+
+    x = w;  // Error
+>x : Symbol(x, Decl(mappedTypes6.ts, 78, 32))
+>w : Symbol(w, Decl(mappedTypes6.ts, 78, 16))
+
+    x = x;
+>x : Symbol(x, Decl(mappedTypes6.ts, 78, 32))
+>x : Symbol(x, Decl(mappedTypes6.ts, 78, 32))
+
+    x = y;  // Error
+>x : Symbol(x, Decl(mappedTypes6.ts, 78, 32))
+>y : Symbol(y, Decl(mappedTypes6.ts, 78, 48))
+
+    x = z;  // Error
+>x : Symbol(x, Decl(mappedTypes6.ts, 78, 32))
+>z : Symbol(z, Decl(mappedTypes6.ts, 78, 54))
+
+    y = w;  // Error
+>y : Symbol(y, Decl(mappedTypes6.ts, 78, 48))
+>w : Symbol(w, Decl(mappedTypes6.ts, 78, 16))
+
+    y = x;
+>y : Symbol(y, Decl(mappedTypes6.ts, 78, 48))
+>x : Symbol(x, Decl(mappedTypes6.ts, 78, 32))
+
+    y = y;
+>y : Symbol(y, Decl(mappedTypes6.ts, 78, 48))
+>y : Symbol(y, Decl(mappedTypes6.ts, 78, 48))
+
+    y = z;  // Error
+>y : Symbol(y, Decl(mappedTypes6.ts, 78, 48))
+>z : Symbol(z, Decl(mappedTypes6.ts, 78, 54))
+
+    z = w;
+>z : Symbol(z, Decl(mappedTypes6.ts, 78, 54))
+>w : Symbol(w, Decl(mappedTypes6.ts, 78, 16))
+
+    z = x;
+>z : Symbol(z, Decl(mappedTypes6.ts, 78, 54))
+>x : Symbol(x, Decl(mappedTypes6.ts, 78, 32))
+
+    z = y;
+>z : Symbol(z, Decl(mappedTypes6.ts, 78, 54))
+>y : Symbol(y, Decl(mappedTypes6.ts, 78, 48))
+
+    z = z;
+>z : Symbol(z, Decl(mappedTypes6.ts, 78, 54))
+>z : Symbol(z, Decl(mappedTypes6.ts, 78, 54))
 }
 
 type Foo = {
->Foo : Symbol(Foo, Decl(mappedTypes6.ts, 75, 1))
+>Foo : Symbol(Foo, Decl(mappedTypes6.ts, 95, 1))
 
     a: number;
->a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
+>a : Symbol(a, Decl(mappedTypes6.ts, 97, 12))
 
     b: number | undefined;
->b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
+>b : Symbol(b, Decl(mappedTypes6.ts, 98, 14))
 
     c?: number;
->c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
+>c : Symbol(c, Decl(mappedTypes6.ts, 99, 26))
 
     d?: number | undefined;
->d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
+>d : Symbol(d, Decl(mappedTypes6.ts, 100, 15))
 }
 
 declare let x1: Foo;
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->Foo : Symbol(Foo, Decl(mappedTypes6.ts, 75, 1))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>Foo : Symbol(Foo, Decl(mappedTypes6.ts, 95, 1))
 
 x1.a;  // number
->x1.a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
+>x1.a : Symbol(a, Decl(mappedTypes6.ts, 97, 12))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 97, 12))
 
 x1.b;  // number | undefined
->x1.b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
+>x1.b : Symbol(b, Decl(mappedTypes6.ts, 98, 14))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>b : Symbol(b, Decl(mappedTypes6.ts, 98, 14))
 
 x1.c;  // number | undefined
->x1.c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
+>x1.c : Symbol(c, Decl(mappedTypes6.ts, 99, 26))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>c : Symbol(c, Decl(mappedTypes6.ts, 99, 26))
 
 x1.d;  // number | undefined
->x1.d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
+>x1.d : Symbol(d, Decl(mappedTypes6.ts, 100, 15))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>d : Symbol(d, Decl(mappedTypes6.ts, 100, 15))
 
 x1 = { a: 1 };  // Error
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 91, 6))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 111, 6))
 
 x1 = { a: 1, b: 1 };
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 92, 6))
->b : Symbol(b, Decl(mappedTypes6.ts, 92, 12))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 112, 6))
+>b : Symbol(b, Decl(mappedTypes6.ts, 112, 12))
 
 x1 = { a: 1, b: 1, c: 1 };
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 93, 6))
->b : Symbol(b, Decl(mappedTypes6.ts, 93, 12))
->c : Symbol(c, Decl(mappedTypes6.ts, 93, 18))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 113, 6))
+>b : Symbol(b, Decl(mappedTypes6.ts, 113, 12))
+>c : Symbol(c, Decl(mappedTypes6.ts, 113, 18))
 
 x1 = { a: 1, b: 1, c: 1, d: 1 };
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 94, 6))
->b : Symbol(b, Decl(mappedTypes6.ts, 94, 12))
->c : Symbol(c, Decl(mappedTypes6.ts, 94, 18))
->d : Symbol(d, Decl(mappedTypes6.ts, 94, 24))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 114, 6))
+>b : Symbol(b, Decl(mappedTypes6.ts, 114, 12))
+>c : Symbol(c, Decl(mappedTypes6.ts, 114, 18))
+>d : Symbol(d, Decl(mappedTypes6.ts, 114, 24))
 
 declare let x2: Required<Foo>;
->x2 : Symbol(x2, Decl(mappedTypes6.ts, 96, 11))
+>x2 : Symbol(x2, Decl(mappedTypes6.ts, 116, 11))
 >Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
->Foo : Symbol(Foo, Decl(mappedTypes6.ts, 75, 1))
+>Foo : Symbol(Foo, Decl(mappedTypes6.ts, 95, 1))
 
 x1.a;  // number
->x1.a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 77, 12))
+>x1.a : Symbol(a, Decl(mappedTypes6.ts, 97, 12))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 97, 12))
 
 x1.b;  // number | undefined
->x1.b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->b : Symbol(b, Decl(mappedTypes6.ts, 78, 14))
+>x1.b : Symbol(b, Decl(mappedTypes6.ts, 98, 14))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>b : Symbol(b, Decl(mappedTypes6.ts, 98, 14))
 
 x1.c;  // number
->x1.c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->c : Symbol(c, Decl(mappedTypes6.ts, 79, 26))
+>x1.c : Symbol(c, Decl(mappedTypes6.ts, 99, 26))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>c : Symbol(c, Decl(mappedTypes6.ts, 99, 26))
 
 x1.d;  // number
->x1.d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
->x1 : Symbol(x1, Decl(mappedTypes6.ts, 84, 11))
->d : Symbol(d, Decl(mappedTypes6.ts, 80, 15))
+>x1.d : Symbol(d, Decl(mappedTypes6.ts, 100, 15))
+>x1 : Symbol(x1, Decl(mappedTypes6.ts, 104, 11))
+>d : Symbol(d, Decl(mappedTypes6.ts, 100, 15))
 
 x2 = { a: 1 };  // Error
->x2 : Symbol(x2, Decl(mappedTypes6.ts, 96, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 103, 6))
+>x2 : Symbol(x2, Decl(mappedTypes6.ts, 116, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 123, 6))
 
 x2 = { a: 1, b: 1 };  // Error
->x2 : Symbol(x2, Decl(mappedTypes6.ts, 96, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 104, 6))
->b : Symbol(b, Decl(mappedTypes6.ts, 104, 12))
+>x2 : Symbol(x2, Decl(mappedTypes6.ts, 116, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 124, 6))
+>b : Symbol(b, Decl(mappedTypes6.ts, 124, 12))
 
 x2 = { a: 1, b: 1, c: 1 };  // Error
->x2 : Symbol(x2, Decl(mappedTypes6.ts, 96, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 105, 6))
->b : Symbol(b, Decl(mappedTypes6.ts, 105, 12))
->c : Symbol(c, Decl(mappedTypes6.ts, 105, 18))
+>x2 : Symbol(x2, Decl(mappedTypes6.ts, 116, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 125, 6))
+>b : Symbol(b, Decl(mappedTypes6.ts, 125, 12))
+>c : Symbol(c, Decl(mappedTypes6.ts, 125, 18))
 
 x2 = { a: 1, b: 1, c: 1, d: 1 };
->x2 : Symbol(x2, Decl(mappedTypes6.ts, 96, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 106, 6))
->b : Symbol(b, Decl(mappedTypes6.ts, 106, 12))
->c : Symbol(c, Decl(mappedTypes6.ts, 106, 18))
->d : Symbol(d, Decl(mappedTypes6.ts, 106, 24))
+>x2 : Symbol(x2, Decl(mappedTypes6.ts, 116, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 126, 6))
+>b : Symbol(b, Decl(mappedTypes6.ts, 126, 12))
+>c : Symbol(c, Decl(mappedTypes6.ts, 126, 18))
+>d : Symbol(d, Decl(mappedTypes6.ts, 126, 24))
 
 type Bar = {
->Bar : Symbol(Bar, Decl(mappedTypes6.ts, 106, 32))
+>Bar : Symbol(Bar, Decl(mappedTypes6.ts, 126, 32))
 
     a: number;
->a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
+>a : Symbol(a, Decl(mappedTypes6.ts, 128, 12))
 
     readonly b: number;
->b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
+>b : Symbol(b, Decl(mappedTypes6.ts, 129, 14))
 }
 
 declare let x3: Bar;
->x3 : Symbol(x3, Decl(mappedTypes6.ts, 113, 11))
->Bar : Symbol(Bar, Decl(mappedTypes6.ts, 106, 32))
+>x3 : Symbol(x3, Decl(mappedTypes6.ts, 133, 11))
+>Bar : Symbol(Bar, Decl(mappedTypes6.ts, 126, 32))
 
 x3.a = 1;
->x3.a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
->x3 : Symbol(x3, Decl(mappedTypes6.ts, 113, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
+>x3.a : Symbol(a, Decl(mappedTypes6.ts, 128, 12))
+>x3 : Symbol(x3, Decl(mappedTypes6.ts, 133, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 128, 12))
 
 x3.b = 1;  // Error
->x3.b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
->x3 : Symbol(x3, Decl(mappedTypes6.ts, 113, 11))
->b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
+>x3.b : Symbol(b, Decl(mappedTypes6.ts, 129, 14))
+>x3 : Symbol(x3, Decl(mappedTypes6.ts, 133, 11))
+>b : Symbol(b, Decl(mappedTypes6.ts, 129, 14))
 
 declare let x4: Readonly<Bar>;
->x4 : Symbol(x4, Decl(mappedTypes6.ts, 117, 11))
+>x4 : Symbol(x4, Decl(mappedTypes6.ts, 137, 11))
 >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
->Bar : Symbol(Bar, Decl(mappedTypes6.ts, 106, 32))
+>Bar : Symbol(Bar, Decl(mappedTypes6.ts, 126, 32))
 
 x4.a = 1;  // Error
->x4.a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
->x4 : Symbol(x4, Decl(mappedTypes6.ts, 117, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
+>x4.a : Symbol(a, Decl(mappedTypes6.ts, 128, 12))
+>x4 : Symbol(x4, Decl(mappedTypes6.ts, 137, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 128, 12))
 
 x4.b = 1;  // Error
->x4.b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
->x4 : Symbol(x4, Decl(mappedTypes6.ts, 117, 11))
->b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
+>x4.b : Symbol(b, Decl(mappedTypes6.ts, 129, 14))
+>x4 : Symbol(x4, Decl(mappedTypes6.ts, 137, 11))
+>b : Symbol(b, Decl(mappedTypes6.ts, 129, 14))
 
 declare let x5: Readwrite<Bar>;
->x5 : Symbol(x5, Decl(mappedTypes6.ts, 121, 11))
->Readwrite : Symbol(Readwrite, Decl(mappedTypes6.ts, 59, 1))
->Bar : Symbol(Bar, Decl(mappedTypes6.ts, 106, 32))
+>x5 : Symbol(x5, Decl(mappedTypes6.ts, 141, 11))
+>Readwrite : Symbol(Readwrite, Decl(mappedTypes6.ts, 58, 1))
+>Bar : Symbol(Bar, Decl(mappedTypes6.ts, 126, 32))
 
 x5.a = 1;
->x5.a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
->x5 : Symbol(x5, Decl(mappedTypes6.ts, 121, 11))
->a : Symbol(a, Decl(mappedTypes6.ts, 108, 12))
+>x5.a : Symbol(a, Decl(mappedTypes6.ts, 128, 12))
+>x5 : Symbol(x5, Decl(mappedTypes6.ts, 141, 11))
+>a : Symbol(a, Decl(mappedTypes6.ts, 128, 12))
 
 x5.b = 1;
->x5.b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
->x5 : Symbol(x5, Decl(mappedTypes6.ts, 121, 11))
->b : Symbol(b, Decl(mappedTypes6.ts, 109, 14))
+>x5.b : Symbol(b, Decl(mappedTypes6.ts, 129, 14))
+>x5 : Symbol(x5, Decl(mappedTypes6.ts, 141, 11))
+>b : Symbol(b, Decl(mappedTypes6.ts, 129, 14))
 
