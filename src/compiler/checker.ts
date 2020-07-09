@@ -2385,9 +2385,11 @@ namespace ts {
             return isAliasableExpression(e) || isFunctionExpression(e) && isJSConstructor(e);
         }
 
-        function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration, dontResolveAlias: boolean): Symbol | undefined {
-            if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                const immediate = resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node));
+        function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration | VariableDeclaration, dontResolveAlias: boolean): Symbol | undefined {
+            if (isVariableDeclaration(node) || node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                const immediate = resolveExternalModuleName(node, isVariableDeclaration(node)
+                    ? (getFirstPropertyAccessExpression(node.initializer!) as CallExpression).arguments[0]
+                    : getExternalModuleImportEqualsDeclarationExpression(node));
                 const resolved = resolveExternalModuleSymbol(immediate);
                 markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
                 return resolved;
@@ -2764,7 +2766,8 @@ namespace ts {
         function getTargetOfAliasDeclaration(node: Declaration, dontRecursivelyResolve = false): Symbol | undefined {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return getTargetOfImportEqualsDeclaration(<ImportEqualsDeclaration>node, dontRecursivelyResolve);
+                case SyntaxKind.VariableDeclaration:
+                    return getTargetOfImportEqualsDeclaration(node as ImportEqualsDeclaration | VariableDeclaration, dontRecursivelyResolve);
                 case SyntaxKind.ImportClause:
                     return getTargetOfImportClause(node as ImportClause, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceImport:
@@ -2787,8 +2790,6 @@ namespace ts {
                     return getTargetOfPropertyAssignment(node as PropertyAssignment, dontRecursivelyResolve);
                 case SyntaxKind.PropertyAccessExpression:
                     return getTargetOfPropertyAccessExpression(node as PropertyAccessExpression, dontRecursivelyResolve);
-                case SyntaxKind.VariableDeclaration:
-                    return Debug.fail('second time around'); //getTargetOfRequireClause(node as VariableDeclaration, dontRecursivelyResolve);
                 default:
                     return Debug.fail();
             }
@@ -32763,7 +32764,7 @@ namespace ts {
             }
             // For a require binding element, validate the alias and exit
             // TODO: Probably should mark the symbol so I don't have to keep rescanning this
-            if (isBindingElement(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
+            if (/*isBindingElement(node) && */isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
                 checkAliasSymbol(node);
                 return;
             }
@@ -35213,7 +35214,7 @@ namespace ts {
             return true;
         }
 
-        function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier | NamespaceExport) {
+        function checkAliasSymbol(node: ImportEqualsDeclaration | VariableDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier | NamespaceExport) {
             let symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
