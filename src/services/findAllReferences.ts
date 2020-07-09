@@ -1888,7 +1888,6 @@ namespace ts.FindAllReferences {
         // This is not needed when searching for re-exports.
         function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRename: boolean, providePrefixAndSuffixText: boolean, implementations: boolean): Symbol[] {
             const result: Symbol[] = [];
-            const isSymbolStatic = isStatic(symbol);
             forEachRelatedSymbol<void>(symbol, location, checker, isForRename, !(isForRename && providePrefixAndSuffixText),
                 (sym, root, base) => {
                     // static method/property and instance method/property might have the same name. Only include static or only include instance.
