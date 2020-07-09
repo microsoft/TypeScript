@@ -2040,26 +2040,22 @@ namespace ts.FindAllReferences {
             const { checker } = state;
             return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
                 /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
-                cbSymbol,
-                /*allowBaseTypes*/ allowBaseTypes);
-
-            function cbSymbol(sym: Symbol, rootSymbol: Symbol, baseSymbol: Symbol | undefined, kind: NodeEntryKind): RelatedSymbol | undefined {
-                // check whether the symbol used to search itself is just the searched one.
-                if (baseSymbol) {
-                    // static method/property and instance method/property might have the same name. Only check static or only check instance.
-                    if (isReferenceSymbolStatic !== isStatic(baseSymbol)) {
-                        baseSymbol = undefined;
+                (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => {
+                    // check whether the symbol used to search itself is just the searched one.
+                    if (baseSymbol) {
+                        // static method/property and instance method/property might have the same name. Only check static or only check instance.
+                        if (isStatic(referenceSymbol) !== isStatic(baseSymbol)) {
+                            baseSymbol = undefined;
+                        }
                     }
-                }
-                if (!search.includes(baseSymbol || rootSymbol || sym)) {
-                    return undefined;
-                }
-                // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
-                return {
-                    symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym,
-                    kind
-                };
-            };
+                    return search.includes(baseSymbol || rootSymbol || sym)
+                        // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
+                        ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }
+                        : undefined
+                },
+                /*allowBaseTypes*/ rootSymbol =>
+                    !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker)))
+            );
         }
 
         /**
