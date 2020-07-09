@@ -11,6 +11,7 @@ export { default } from "./b";
 //// [b.js]
 "use strict";
 exports.__esModule = true;
+exports.b = void 0;
 exports.b = null;
 //// [a.js]
 "use strict";
@@ -22,6 +23,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports["default"] = exports.b = void 0;
 var b_1 = require("./b");
 __createBinding(exports, b_1, "b");
 var b_2 = require("./b");

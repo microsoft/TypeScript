@@ -35,6 +35,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.classExtender2 = exports.classExtender = void 0;
 function classExtender(superClass, _instanceModifier) {
     return /** @class */ (function (_super) {
         __extends(decoratorFunc, _super);

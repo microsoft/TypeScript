@@ -39,9 +39,9 @@ class MW {
 
     this.compiler = compiler;
 >this.compiler = compiler : import("tests/cases/conformance/jsdoc/MC")
->this.compiler : import("tests/cases/conformance/jsdoc/MC")
+>this.compiler : any
 >this : this
->compiler : import("tests/cases/conformance/jsdoc/MC")
+>compiler : any
 >compiler : import("tests/cases/conformance/jsdoc/MC")
   }
 }

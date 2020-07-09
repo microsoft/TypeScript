@@ -287,661 +287,1297 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 ---
 >>>_a = robotA[1], nameA = _a === void 0 ? "helloNoName" : _a;
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                          ^
-6 >                                                           ^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^
+4 >           ^^^
+5 >              ^^
+6 >                ^^^^^
+7 >                     ^^^^^^^^^^^^^^^^^^^
+8 >                                        ^^^^^^^^^^^^^
+9 >                                                     ^^^^^
+10>                                                          ^
+11>                                                           ^^^^^^^^^^^^^^^->
 1->
   >
   >[, 
-2 >nameA = "helloNoName"
-3 >              
-4 >                nameA = "helloNoName"
-5 >                                                          ] = robotA;
+2 >nameA = "helloNoName"] = 
+3 >     robotA
+4 >           
+5 >              
+6 >                nameA
+7 >                      = 
+8 >                                        "helloNoName"
+9 >                                                     
+10>                                                          ] = robotA;
 1->Emitted(10, 1) Source(18, 4) + SourceIndex(0)
-2 >Emitted(10, 15) Source(18, 25) + SourceIndex(0)
-3 >Emitted(10, 17) Source(18, 4) + SourceIndex(0)
-4 >Emitted(10, 59) Source(18, 25) + SourceIndex(0)
-5 >Emitted(10, 60) Source(18, 36) + SourceIndex(0)
+2 >Emitted(10, 6) Source(18, 29) + SourceIndex(0)
+3 >Emitted(10, 12) Source(18, 35) + SourceIndex(0)
+4 >Emitted(10, 15) Source(18, 25) + SourceIndex(0)
+5 >Emitted(10, 17) Source(18, 4) + SourceIndex(0)
+6 >Emitted(10, 22) Source(18, 9) + SourceIndex(0)
+7 >Emitted(10, 41) Source(18, 12) + SourceIndex(0)
+8 >Emitted(10, 54) Source(18, 25) + SourceIndex(0)
+9 >Emitted(10, 59) Source(18, 25) + SourceIndex(0)
+10>Emitted(10, 60) Source(18, 36) + SourceIndex(0)
 ---
 >>>_b = getRobotB(), _c = _b[1], nameB = _c === void 0 ? "helloNoName" : _c;
 1->
-2 >^^^^^^^^^^^^^^^^
-3 >                ^^
-4 >                  ^^^^^^^^^^
-5 >                            ^^
-6 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                        ^
-8 >                                                                         ^^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^^^^
+4 >              ^^
+5 >                ^^
+6 >                  ^^^^^^^^^^
+7 >                            ^^
+8 >                              ^^^^^
+9 >                                   ^^^^^^^^^^^^^^^^^^^
+10>                                                      ^^^^^^^^^^^^^
+11>                                                                   ^^^^^
+12>                                                                        ^
+13>                                                                         ^^^^^^^^^^^^^^^^->
 1->
   >
-2 >[, nameB = "helloNoName"] = getRobotB()
-3 >                
-4 >                  nameB = "helloNoName"
-5 >                            
-6 >                              nameB = "helloNoName"
-7 >                                                                        ] = getRobotB();
+2 >[, nameB = "helloNoName"] = 
+3 >     getRobotB
+4 >              ()
+5 >                
+6 >                  nameB = "helloNoName"
+7 >                            
+8 >                              nameB
+9 >                                    = 
+10>                                                      "helloNoName"
+11>                                                                   
+12>                                                                        ] = getRobotB();
 1->Emitted(11, 1) Source(19, 1) + SourceIndex(0)
-2 >Emitted(11, 17) Source(19, 40) + SourceIndex(0)
-3 >Emitted(11, 19) Source(19, 4) + SourceIndex(0)
-4 >Emitted(11, 29) Source(19, 25) + SourceIndex(0)
-5 >Emitted(11, 31) Source(19, 4) + SourceIndex(0)
-6 >Emitted(11, 73) Source(19, 25) + SourceIndex(0)
-7 >Emitted(11, 74) Source(19, 41) + SourceIndex(0)
+2 >Emitted(11, 6) Source(19, 29) + SourceIndex(0)
+3 >Emitted(11, 15) Source(19, 38) + SourceIndex(0)
+4 >Emitted(11, 17) Source(19, 40) + SourceIndex(0)
+5 >Emitted(11, 19) Source(19, 4) + SourceIndex(0)
+6 >Emitted(11, 29) Source(19, 25) + SourceIndex(0)
+7 >Emitted(11, 31) Source(19, 4) + SourceIndex(0)
+8 >Emitted(11, 36) Source(19, 9) + SourceIndex(0)
+9 >Emitted(11, 55) Source(19, 12) + SourceIndex(0)
+10>Emitted(11, 68) Source(19, 25) + SourceIndex(0)
+11>Emitted(11, 73) Source(19, 25) + SourceIndex(0)
+12>Emitted(11, 74) Source(19, 41) + SourceIndex(0)
 ---
 >>>_d = [2, "trimmer", "trimming"], _e = _d[1], nameB = _e === void 0 ? "helloNoName" : _e;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                               ^^
-4 >                                 ^^^^^^^^^^
-5 >                                           ^^
-6 >                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                       ^
+2 >^^^^^
+3 >     ^
+4 >      ^
+5 >       ^^
+6 >         ^^^^^^^^^
+7 >                  ^^
+8 >                    ^^^^^^^^^^
+9 >                              ^
+10>                               ^^
+11>                                 ^^^^^^^^^^
+12>                                           ^^
+13>                                             ^^^^^
+14>                                                  ^^^^^^^^^^^^^^^^^^^
+15>                                                                     ^^^^^^^^^^^^^
+16>                                                                                  ^^^^^
+17>                                                                                       ^
 1->
   >
-2 >[, nameB = "helloNoName"] = [2, "trimmer", "trimming"]
-3 >                               
-4 >                                 nameB = "helloNoName"
-5 >                                           
-6 >                                             nameB = "helloNoName"
-7 >                                                                                       ] = [2, "trimmer", "trimming"];
+2 >[, nameB = "helloNoName"] = 
+3 >     [
+4 >      2
+5 >       , 
+6 >         "trimmer"
+7 >                  , 
+8 >                    "trimming"
+9 >                              ]
+10>                               
+11>                                 nameB = "helloNoName"
+12>                                           
+13>                                             nameB
+14>                                                   = 
+15>                                                                     "helloNoName"
+16>                                                                                  
+17>                                                                                       ] = [2, "trimmer", "trimming"];
 1->Emitted(12, 1) Source(20, 1) + SourceIndex(0)
-2 >Emitted(12, 32) Source(20, 55) + SourceIndex(0)
-3 >Emitted(12, 34) Source(20, 4) + SourceIndex(0)
-4 >Emitted(12, 44) Source(20, 25) + SourceIndex(0)
-5 >Emitted(12, 46) Source(20, 4) + SourceIndex(0)
-6 >Emitted(12, 88) Source(20, 25) + SourceIndex(0)
-7 >Emitted(12, 89) Source(20, 56) + SourceIndex(0)
+2 >Emitted(12, 6) Source(20, 29) + SourceIndex(0)
+3 >Emitted(12, 7) Source(20, 30) + SourceIndex(0)
+4 >Emitted(12, 8) Source(20, 31) + SourceIndex(0)
+5 >Emitted(12, 10) Source(20, 33) + SourceIndex(0)
+6 >Emitted(12, 19) Source(20, 42) + SourceIndex(0)
+7 >Emitted(12, 21) Source(20, 44) + SourceIndex(0)
+8 >Emitted(12, 31) Source(20, 54) + SourceIndex(0)
+9 >Emitted(12, 32) Source(20, 55) + SourceIndex(0)
+10>Emitted(12, 34) Source(20, 4) + SourceIndex(0)
+11>Emitted(12, 44) Source(20, 25) + SourceIndex(0)
+12>Emitted(12, 46) Source(20, 4) + SourceIndex(0)
+13>Emitted(12, 51) Source(20, 9) + SourceIndex(0)
+14>Emitted(12, 70) Source(20, 12) + SourceIndex(0)
+15>Emitted(12, 83) Source(20, 25) + SourceIndex(0)
+16>Emitted(12, 88) Source(20, 25) + SourceIndex(0)
+17>Emitted(12, 89) Source(20, 56) + SourceIndex(0)
 ---
 >>>_f = multiRobotB[1], multiSkillB = _f === void 0 ? [] : _f;
 1 >
-2 >^^^^^^^^^^^^^^^^^^^
-3 >                   ^^
-4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                          ^
-6 >                                                           ^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^^
+5 >                   ^^
+6 >                     ^^^^^^^^^^^
+7 >                                ^^^^^^^^^^^^^^^^^^^
+8 >                                                   ^^
+9 >                                                     ^^^^^
+10>                                                          ^
+11>                                                           ^^^^^^^^^^^^^^^->
 1 >
   >[, 
-2 >multiSkillB = []
-3 >                   
-4 >                     multiSkillB = []
-5 >                                                          ] = multiRobotB;
+2 >multiSkillB = []] = 
+3 >     multiRobotB
+4 >                
+5 >                   
+6 >                     multiSkillB
+7 >                                 = 
+8 >                                                   []
+9 >                                                     
+10>                                                          ] = multiRobotB;
 1 >Emitted(13, 1) Source(21, 4) + SourceIndex(0)
-2 >Emitted(13, 20) Source(21, 20) + SourceIndex(0)
-3 >Emitted(13, 22) Source(21, 4) + SourceIndex(0)
-4 >Emitted(13, 59) Source(21, 20) + SourceIndex(0)
-5 >Emitted(13, 60) Source(21, 36) + SourceIndex(0)
+2 >Emitted(13, 6) Source(21, 24) + SourceIndex(0)
+3 >Emitted(13, 17) Source(21, 35) + SourceIndex(0)
+4 >Emitted(13, 20) Source(21, 20) + SourceIndex(0)
+5 >Emitted(13, 22) Source(21, 4) + SourceIndex(0)
+6 >Emitted(13, 33) Source(21, 15) + SourceIndex(0)
+7 >Emitted(13, 52) Source(21, 18) + SourceIndex(0)
+8 >Emitted(13, 54) Source(21, 20) + SourceIndex(0)
+9 >Emitted(13, 59) Source(21, 20) + SourceIndex(0)
+10>Emitted(13, 60) Source(21, 36) + SourceIndex(0)
 ---
 >>>_g = getMultiRobotB(), _h = _g[1], multiSkillB = _h === void 0 ? [] : _h;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^
-3 >                     ^^
-4 >                       ^^^^^^^^^^
-5 >                                 ^^
-6 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                        ^
-8 >                                                                         ^^^^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^
+6 >                       ^^^^^^^^^^
+7 >                                 ^^
+8 >                                   ^^^^^^^^^^^
+9 >                                              ^^^^^^^^^^^^^^^^^^^
+10>                                                                 ^^
+11>                                                                   ^^^^^
+12>                                                                        ^
+13>                                                                         ^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >[, multiSkillB = []] = getMultiRobotB()
-3 >                     
-4 >                       multiSkillB = []
-5 >                                 
-6 >                                   multiSkillB = []
-7 >                                                                        ] = getMultiRobotB();
+2 >[, multiSkillB = []] = 
+3 >     getMultiRobotB
+4 >                   ()
+5 >                     
+6 >                       multiSkillB = []
+7 >                                 
+8 >                                   multiSkillB
+9 >                                               = 
+10>                                                                 []
+11>                                                                   
+12>                                                                        ] = getMultiRobotB();
 1->Emitted(14, 1) Source(22, 1) + SourceIndex(0)
-2 >Emitted(14, 22) Source(22, 40) + SourceIndex(0)
-3 >Emitted(14, 24) Source(22, 4) + SourceIndex(0)
-4 >Emitted(14, 34) Source(22, 20) + SourceIndex(0)
-5 >Emitted(14, 36) Source(22, 4) + SourceIndex(0)
-6 >Emitted(14, 73) Source(22, 20) + SourceIndex(0)
-7 >Emitted(14, 74) Source(22, 41) + SourceIndex(0)
+2 >Emitted(14, 6) Source(22, 24) + SourceIndex(0)
+3 >Emitted(14, 20) Source(22, 38) + SourceIndex(0)
+4 >Emitted(14, 22) Source(22, 40) + SourceIndex(0)
+5 >Emitted(14, 24) Source(22, 4) + SourceIndex(0)
+6 >Emitted(14, 34) Source(22, 20) + SourceIndex(0)
+7 >Emitted(14, 36) Source(22, 4) + SourceIndex(0)
+8 >Emitted(14, 47) Source(22, 15) + SourceIndex(0)
+9 >Emitted(14, 66) Source(22, 18) + SourceIndex(0)
+10>Emitted(14, 68) Source(22, 20) + SourceIndex(0)
+11>Emitted(14, 73) Source(22, 20) + SourceIndex(0)
+12>Emitted(14, 74) Source(22, 41) + SourceIndex(0)
 ---
 >>>_j = ["roomba", ["vacuum", "mopping"]], _k = _j[1], multiSkillB = _k === void 0 ? [] : _k;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                      ^^
-4 >                                        ^^^^^^^^^^
-5 >                                                  ^^
-6 >                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                         ^
+2 >^^^^^
+3 >     ^
+4 >      ^^^^^^^^
+5 >              ^^
+6 >                ^
+7 >                 ^^^^^^^^
+8 >                         ^^
+9 >                           ^^^^^^^^^
+10>                                    ^
+11>                                     ^
+12>                                      ^^
+13>                                        ^^^^^^^^^^
+14>                                                  ^^
+15>                                                    ^^^^^^^^^^^
+16>                                                               ^^^^^^^^^^^^^^^^^^^
+17>                                                                                  ^^
+18>                                                                                    ^^^^^
+19>                                                                                         ^
 1->
   >
-2 >[, multiSkillB = []] = ["roomba", ["vacuum", "mopping"]]
-3 >                                      
-4 >                                        multiSkillB = []
-5 >                                                  
-6 >                                                    multiSkillB = []
-7 >                                                                                         ] = ["roomba", ["vacuum", "mopping"]];
+2 >[, multiSkillB = []] = 
+3 >     [
+4 >      "roomba"
+5 >              , 
+6 >                [
+7 >                 "vacuum"
+8 >                         , 
+9 >                           "mopping"
+10>                                    ]
+11>                                     ]
+12>                                      
+13>                                        multiSkillB = []
+14>                                                  
+15>                                                    multiSkillB
+16>                                                                = 
+17>                                                                                  []
+18>                                                                                    
+19>                                                                                         ] = ["roomba", ["vacuum", "mopping"]];
 1->Emitted(15, 1) Source(23, 1) + SourceIndex(0)
-2 >Emitted(15, 39) Source(23, 57) + SourceIndex(0)
-3 >Emitted(15, 41) Source(23, 4) + SourceIndex(0)
-4 >Emitted(15, 51) Source(23, 20) + SourceIndex(0)
-5 >Emitted(15, 53) Source(23, 4) + SourceIndex(0)
-6 >Emitted(15, 90) Source(23, 20) + SourceIndex(0)
-7 >Emitted(15, 91) Source(23, 58) + SourceIndex(0)
+2 >Emitted(15, 6) Source(23, 24) + SourceIndex(0)
+3 >Emitted(15, 7) Source(23, 25) + SourceIndex(0)
+4 >Emitted(15, 15) Source(23, 33) + SourceIndex(0)
+5 >Emitted(15, 17) Source(23, 35) + SourceIndex(0)
+6 >Emitted(15, 18) Source(23, 36) + SourceIndex(0)
+7 >Emitted(15, 26) Source(23, 44) + SourceIndex(0)
+8 >Emitted(15, 28) Source(23, 46) + SourceIndex(0)
+9 >Emitted(15, 37) Source(23, 55) + SourceIndex(0)
+10>Emitted(15, 38) Source(23, 56) + SourceIndex(0)
+11>Emitted(15, 39) Source(23, 57) + SourceIndex(0)
+12>Emitted(15, 41) Source(23, 4) + SourceIndex(0)
+13>Emitted(15, 51) Source(23, 20) + SourceIndex(0)
+14>Emitted(15, 53) Source(23, 4) + SourceIndex(0)
+15>Emitted(15, 64) Source(23, 15) + SourceIndex(0)
+16>Emitted(15, 83) Source(23, 18) + SourceIndex(0)
+17>Emitted(15, 85) Source(23, 20) + SourceIndex(0)
+18>Emitted(15, 90) Source(23, 20) + SourceIndex(0)
+19>Emitted(15, 91) Source(23, 58) + SourceIndex(0)
 ---
 >>>_l = robotB[0], numberB = _l === void 0 ? -1 : _l;
 1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                 ^
-6 >                                                  ^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^
+4 >           ^^^
+5 >              ^^
+6 >                ^^^^^^^
+7 >                       ^^^^^^^^^^^^^^^^^^^
+8 >                                          ^
+9 >                                           ^
+10>                                            ^^^^^
+11>                                                 ^
+12>                                                  ^^^^^^->
 1 >
   >
   >[
-2 >numberB = -1
-3 >              
-4 >                numberB = -1
-5 >                                                 ] = robotB;
+2 >numberB = -1] = 
+3 >     robotB
+4 >           
+5 >              
+6 >                numberB
+7 >                        = 
+8 >                                          -
+9 >                                           1
+10>                                            
+11>                                                 ] = robotB;
 1 >Emitted(16, 1) Source(25, 2) + SourceIndex(0)
-2 >Emitted(16, 15) Source(25, 14) + SourceIndex(0)
-3 >Emitted(16, 17) Source(25, 2) + SourceIndex(0)
-4 >Emitted(16, 50) Source(25, 14) + SourceIndex(0)
-5 >Emitted(16, 51) Source(25, 25) + SourceIndex(0)
+2 >Emitted(16, 6) Source(25, 18) + SourceIndex(0)
+3 >Emitted(16, 12) Source(25, 24) + SourceIndex(0)
+4 >Emitted(16, 15) Source(25, 14) + SourceIndex(0)
+5 >Emitted(16, 17) Source(25, 2) + SourceIndex(0)
+6 >Emitted(16, 24) Source(25, 9) + SourceIndex(0)
+7 >Emitted(16, 43) Source(25, 12) + SourceIndex(0)
+8 >Emitted(16, 44) Source(25, 13) + SourceIndex(0)
+9 >Emitted(16, 45) Source(25, 14) + SourceIndex(0)
+10>Emitted(16, 50) Source(25, 14) + SourceIndex(0)
+11>Emitted(16, 51) Source(25, 25) + SourceIndex(0)
 ---
 >>>_m = getRobotB()[0], numberB = _m === void 0 ? -1 : _m;
 1->
-2 >^^^^^^^^^^^^^^^^^^^
-3 >                   ^^
-4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                      ^
-6 >                                                       ^^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^^^^
+4 >              ^^
+5 >                ^^^
+6 >                   ^^
+7 >                     ^^^^^^^
+8 >                            ^^^^^^^^^^^^^^^^^^^
+9 >                                               ^
+10>                                                ^
+11>                                                 ^^^^^
+12>                                                      ^
+13>                                                       ^^^^^^^^^^^^^^^^->
 1->
   >[
-2 >numberB = -1
-3 >                   
-4 >                     numberB = -1
-5 >                                                      ] = getRobotB();
+2 >numberB = -1] = 
+3 >     getRobotB
+4 >              ()
+5 >                
+6 >                   
+7 >                     numberB
+8 >                             = 
+9 >                                               -
+10>                                                1
+11>                                                 
+12>                                                      ] = getRobotB();
 1->Emitted(17, 1) Source(26, 2) + SourceIndex(0)
-2 >Emitted(17, 20) Source(26, 14) + SourceIndex(0)
-3 >Emitted(17, 22) Source(26, 2) + SourceIndex(0)
-4 >Emitted(17, 55) Source(26, 14) + SourceIndex(0)
-5 >Emitted(17, 56) Source(26, 30) + SourceIndex(0)
+2 >Emitted(17, 6) Source(26, 18) + SourceIndex(0)
+3 >Emitted(17, 15) Source(26, 27) + SourceIndex(0)
+4 >Emitted(17, 17) Source(26, 29) + SourceIndex(0)
+5 >Emitted(17, 20) Source(26, 14) + SourceIndex(0)
+6 >Emitted(17, 22) Source(26, 2) + SourceIndex(0)
+7 >Emitted(17, 29) Source(26, 9) + SourceIndex(0)
+8 >Emitted(17, 48) Source(26, 12) + SourceIndex(0)
+9 >Emitted(17, 49) Source(26, 13) + SourceIndex(0)
+10>Emitted(17, 50) Source(26, 14) + SourceIndex(0)
+11>Emitted(17, 55) Source(26, 14) + SourceIndex(0)
+12>Emitted(17, 56) Source(26, 30) + SourceIndex(0)
 ---
 >>>_o = [2, "trimmer", "trimming"][0], numberB = _o === void 0 ? -1 : _o;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                  ^^
-4 >                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                     ^
+2 >^^^^^
+3 >     ^
+4 >      ^
+5 >       ^^
+6 >         ^^^^^^^^^
+7 >                  ^^
+8 >                    ^^^^^^^^^^
+9 >                              ^
+10>                               ^^^
+11>                                  ^^
+12>                                    ^^^^^^^
+13>                                           ^^^^^^^^^^^^^^^^^^^
+14>                                                              ^
+15>                                                               ^
+16>                                                                ^^^^^
+17>                                                                     ^
 1->
   >[
-2 >numberB = -1
-3 >                                  
-4 >                                    numberB = -1
-5 >                                                                     ] = [2, "trimmer", "trimming"];
+2 >numberB = -1] = 
+3 >     [
+4 >      2
+5 >       , 
+6 >         "trimmer"
+7 >                  , 
+8 >                    "trimming"
+9 >                              ]
+10>                               
+11>                                  
+12>                                    numberB
+13>                                            = 
+14>                                                              -
+15>                                                               1
+16>                                                                
+17>                                                                     ] = [2, "trimmer", "trimming"];
 1->Emitted(18, 1) Source(27, 2) + SourceIndex(0)
-2 >Emitted(18, 35) Source(27, 14) + SourceIndex(0)
-3 >Emitted(18, 37) Source(27, 2) + SourceIndex(0)
-4 >Emitted(18, 70) Source(27, 14) + SourceIndex(0)
-5 >Emitted(18, 71) Source(27, 45) + SourceIndex(0)
+2 >Emitted(18, 6) Source(27, 18) + SourceIndex(0)
+3 >Emitted(18, 7) Source(27, 19) + SourceIndex(0)
+4 >Emitted(18, 8) Source(27, 20) + SourceIndex(0)
+5 >Emitted(18, 10) Source(27, 22) + SourceIndex(0)
+6 >Emitted(18, 19) Source(27, 31) + SourceIndex(0)
+7 >Emitted(18, 21) Source(27, 33) + SourceIndex(0)
+8 >Emitted(18, 31) Source(27, 43) + SourceIndex(0)
+9 >Emitted(18, 32) Source(27, 44) + SourceIndex(0)
+10>Emitted(18, 35) Source(27, 14) + SourceIndex(0)
+11>Emitted(18, 37) Source(27, 2) + SourceIndex(0)
+12>Emitted(18, 44) Source(27, 9) + SourceIndex(0)
+13>Emitted(18, 63) Source(27, 12) + SourceIndex(0)
+14>Emitted(18, 64) Source(27, 13) + SourceIndex(0)
+15>Emitted(18, 65) Source(27, 14) + SourceIndex(0)
+16>Emitted(18, 70) Source(27, 14) + SourceIndex(0)
+17>Emitted(18, 71) Source(27, 45) + SourceIndex(0)
 ---
 >>>_p = multiRobotB[0], nameMB = _p === void 0 ? "helloNoName" : _p;
 1 >
-2 >^^^^^^^^^^^^^^^^^^^
-3 >                   ^^
-4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                ^
-6 >                                                                 ^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^^
+5 >                   ^^
+6 >                     ^^^^^^
+7 >                           ^^^^^^^^^^^^^^^^^^^
+8 >                                              ^^^^^^^^^^^^^
+9 >                                                           ^^^^^
+10>                                                                ^
+11>                                                                 ^^^^^^->
 1 >
   >[
-2 >nameMB = "helloNoName"
-3 >                   
-4 >                     nameMB = "helloNoName"
-5 >                                                                ] = multiRobotB;
+2 >nameMB = "helloNoName"] = 
+3 >     multiRobotB
+4 >                
+5 >                   
+6 >                     nameMB
+7 >                            = 
+8 >                                              "helloNoName"
+9 >                                                           
+10>                                                                ] = multiRobotB;
 1 >Emitted(19, 1) Source(28, 2) + SourceIndex(0)
-2 >Emitted(19, 20) Source(28, 24) + SourceIndex(0)
-3 >Emitted(19, 22) Source(28, 2) + SourceIndex(0)
-4 >Emitted(19, 65) Source(28, 24) + SourceIndex(0)
-5 >Emitted(19, 66) Source(28, 40) + SourceIndex(0)
+2 >Emitted(19, 6) Source(28, 28) + SourceIndex(0)
+3 >Emitted(19, 17) Source(28, 39) + SourceIndex(0)
+4 >Emitted(19, 20) Source(28, 24) + SourceIndex(0)
+5 >Emitted(19, 22) Source(28, 2) + SourceIndex(0)
+6 >Emitted(19, 28) Source(28, 8) + SourceIndex(0)
+7 >Emitted(19, 47) Source(28, 11) + SourceIndex(0)
+8 >Emitted(19, 60) Source(28, 24) + SourceIndex(0)
+9 >Emitted(19, 65) Source(28, 24) + SourceIndex(0)
+10>Emitted(19, 66) Source(28, 40) + SourceIndex(0)
 ---
 >>>_q = getMultiRobotB()[0], nameMB = _q === void 0 ? "helloNoName" : _q;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                        ^^
-4 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                     ^
-6 >                                                                      ^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^^
+6 >                        ^^
+7 >                          ^^^^^^
+8 >                                ^^^^^^^^^^^^^^^^^^^
+9 >                                                   ^^^^^^^^^^^^^
+10>                                                                ^^^^^
+11>                                                                     ^
+12>                                                                      ^^^^^^^^^^^^^^^^^^^^->
 1->
   >[
-2 >nameMB = "helloNoName"
-3 >                        
-4 >                          nameMB = "helloNoName"
-5 >                                                                     ] = getMultiRobotB();
+2 >nameMB = "helloNoName"] = 
+3 >     getMultiRobotB
+4 >                   ()
+5 >                     
+6 >                        
+7 >                          nameMB
+8 >                                 = 
+9 >                                                   "helloNoName"
+10>                                                                
+11>                                                                     ] = getMultiRobotB();
 1->Emitted(20, 1) Source(29, 2) + SourceIndex(0)
-2 >Emitted(20, 25) Source(29, 24) + SourceIndex(0)
-3 >Emitted(20, 27) Source(29, 2) + SourceIndex(0)
-4 >Emitted(20, 70) Source(29, 24) + SourceIndex(0)
-5 >Emitted(20, 71) Source(29, 45) + SourceIndex(0)
+2 >Emitted(20, 6) Source(29, 28) + SourceIndex(0)
+3 >Emitted(20, 20) Source(29, 42) + SourceIndex(0)
+4 >Emitted(20, 22) Source(29, 44) + SourceIndex(0)
+5 >Emitted(20, 25) Source(29, 24) + SourceIndex(0)
+6 >Emitted(20, 27) Source(29, 2) + SourceIndex(0)
+7 >Emitted(20, 33) Source(29, 8) + SourceIndex(0)
+8 >Emitted(20, 52) Source(29, 11) + SourceIndex(0)
+9 >Emitted(20, 65) Source(29, 24) + SourceIndex(0)
+10>Emitted(20, 70) Source(29, 24) + SourceIndex(0)
+11>Emitted(20, 71) Source(29, 45) + SourceIndex(0)
 ---
 >>>_r = ["trimmer", ["trimming", "edging"]][0], nameMB = _r === void 0 ? "helloNoName" : _r;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                           ^^
-4 >                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                        ^
-6 >                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^
+4 >      ^^^^^^^^^
+5 >               ^^
+6 >                 ^
+7 >                  ^^^^^^^^^^
+8 >                            ^^
+9 >                              ^^^^^^^^
+10>                                      ^
+11>                                       ^
+12>                                        ^^^
+13>                                           ^^
+14>                                             ^^^^^^
+15>                                                   ^^^^^^^^^^^^^^^^^^^
+16>                                                                      ^^^^^^^^^^^^^
+17>                                                                                   ^^^^^
+18>                                                                                        ^
+19>                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >[
-2 >nameMB = "helloNoName"
-3 >                                           
-4 >                                             nameMB = "helloNoName"
-5 >                                                                                        ] = ["trimmer", ["trimming", "edging"]];
+2 >nameMB = "helloNoName"] = 
+3 >     [
+4 >      "trimmer"
+5 >               , 
+6 >                 [
+7 >                  "trimming"
+8 >                            , 
+9 >                              "edging"
+10>                                      ]
+11>                                       ]
+12>                                        
+13>                                           
+14>                                             nameMB
+15>                                                    = 
+16>                                                                      "helloNoName"
+17>                                                                                   
+18>                                                                                        ] = ["trimmer", ["trimming", "edging"]];
 1->Emitted(21, 1) Source(30, 2) + SourceIndex(0)
-2 >Emitted(21, 44) Source(30, 24) + SourceIndex(0)
-3 >Emitted(21, 46) Source(30, 2) + SourceIndex(0)
-4 >Emitted(21, 89) Source(30, 24) + SourceIndex(0)
-5 >Emitted(21, 90) Source(30, 64) + SourceIndex(0)
+2 >Emitted(21, 6) Source(30, 28) + SourceIndex(0)
+3 >Emitted(21, 7) Source(30, 29) + SourceIndex(0)
+4 >Emitted(21, 16) Source(30, 38) + SourceIndex(0)
+5 >Emitted(21, 18) Source(30, 40) + SourceIndex(0)
+6 >Emitted(21, 19) Source(30, 41) + SourceIndex(0)
+7 >Emitted(21, 29) Source(30, 51) + SourceIndex(0)
+8 >Emitted(21, 31) Source(30, 53) + SourceIndex(0)
+9 >Emitted(21, 39) Source(30, 61) + SourceIndex(0)
+10>Emitted(21, 40) Source(30, 62) + SourceIndex(0)
+11>Emitted(21, 41) Source(30, 63) + SourceIndex(0)
+12>Emitted(21, 44) Source(30, 24) + SourceIndex(0)
+13>Emitted(21, 46) Source(30, 2) + SourceIndex(0)
+14>Emitted(21, 52) Source(30, 8) + SourceIndex(0)
+15>Emitted(21, 71) Source(30, 11) + SourceIndex(0)
+16>Emitted(21, 84) Source(30, 24) + SourceIndex(0)
+17>Emitted(21, 89) Source(30, 24) + SourceIndex(0)
+18>Emitted(21, 90) Source(30, 64) + SourceIndex(0)
 ---
 >>>_s = robotB[0], numberB = _s === void 0 ? -1 : _s, _t = robotB[1], nameB = _t === void 0 ? "helloNoName" : _t, _u = robotB[2], skillB = _u === void 0 ? "noSkill" : _u;
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                 ^^
-6 >                                                   ^^^^^^^^^^^^^^
-7 >                                                                 ^^
-8 >                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                                             ^^
-10>                                                                                                               ^^^^^^^^^^^^^^
-11>                                                                                                                             ^^
-12>                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-13>                                                                                                                                                                      ^
-14>                                                                                                                                                                       ^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^
+4 >           ^^^
+5 >              ^^
+6 >                ^^^^^^^
+7 >                       ^^^^^^^^^^^^^^^^^^^
+8 >                                          ^
+9 >                                           ^
+10>                                            ^^^^^
+11>                                                 ^^
+12>                                                   ^^^^^
+13>                                                        ^^^^^^
+14>                                                              ^^^
+15>                                                                 ^^
+16>                                                                   ^^^^^
+17>                                                                        ^^^^^^^^^^^^^^^^^^^
+18>                                                                                           ^^^^^^^^^^^^^
+19>                                                                                                        ^^^^^
+20>                                                                                                             ^^
+21>                                                                                                               ^^^^^
+22>                                                                                                                    ^^^^^^
+23>                                                                                                                          ^^^
+24>                                                                                                                             ^^
+25>                                                                                                                               ^^^^^^
+26>                                                                                                                                     ^^^^^^^^^^^^^^^^^^^
+27>                                                                                                                                                        ^^^^^^^^^
+28>                                                                                                                                                                 ^^^^^
+29>                                                                                                                                                                      ^
+30>                                                                                                                                                                       ^^^^^^^->
 1->
   >
   >[
-2 >numberB = -1
-3 >              
-4 >                numberB = -1
-5 >                                                 , 
-6 >                                                   nameB = "helloNoName"
-7 >                                                                 
-8 >                                                                   nameB = "helloNoName"
-9 >                                                                                                             , 
-10>                                                                                                               skillB = "noSkill"
-11>                                                                                                                             
-12>                                                                                                                               skillB = "noSkill"
-13>                                                                                                                                                                      ] = robotB;
+2 >numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = 
+3 >     robotB
+4 >           
+5 >              
+6 >                numberB
+7 >                        = 
+8 >                                          -
+9 >                                           1
+10>                                            
+11>                                                 , 
+12>                                                   nameB = "helloNoName", skillB = "noSkill"] = 
+13>                                                        robotB
+14>                                                              
+15>                                                                 
+16>                                                                   nameB
+17>                                                                         = 
+18>                                                                                           "helloNoName"
+19>                                                                                                        
+20>                                                                                                             , 
+21>                                                                                                               skillB = "noSkill"] = 
+22>                                                                                                                    robotB
+23>                                                                                                                          
+24>                                                                                                                             
+25>                                                                                                                               skillB
+26>                                                                                                                                      = 
+27>                                                                                                                                                        "noSkill"
+28>                                                                                                                                                                 
+29>                                                                                                                                                                      ] = robotB;
 1->Emitted(22, 1) Source(32, 2) + SourceIndex(0)
-2 >Emitted(22, 15) Source(32, 14) + SourceIndex(0)
-3 >Emitted(22, 17) Source(32, 2) + SourceIndex(0)
-4 >Emitted(22, 50) Source(32, 14) + SourceIndex(0)
-5 >Emitted(22, 52) Source(32, 16) + SourceIndex(0)
-6 >Emitted(22, 66) Source(32, 37) + SourceIndex(0)
-7 >Emitted(22, 68) Source(32, 16) + SourceIndex(0)
-8 >Emitted(22, 110) Source(32, 37) + SourceIndex(0)
-9 >Emitted(22, 112) Source(32, 39) + SourceIndex(0)
-10>Emitted(22, 126) Source(32, 57) + SourceIndex(0)
-11>Emitted(22, 128) Source(32, 39) + SourceIndex(0)
-12>Emitted(22, 167) Source(32, 57) + SourceIndex(0)
-13>Emitted(22, 168) Source(32, 68) + SourceIndex(0)
+2 >Emitted(22, 6) Source(32, 61) + SourceIndex(0)
+3 >Emitted(22, 12) Source(32, 67) + SourceIndex(0)
+4 >Emitted(22, 15) Source(32, 14) + SourceIndex(0)
+5 >Emitted(22, 17) Source(32, 2) + SourceIndex(0)
+6 >Emitted(22, 24) Source(32, 9) + SourceIndex(0)
+7 >Emitted(22, 43) Source(32, 12) + SourceIndex(0)
+8 >Emitted(22, 44) Source(32, 13) + SourceIndex(0)
+9 >Emitted(22, 45) Source(32, 14) + SourceIndex(0)
+10>Emitted(22, 50) Source(32, 14) + SourceIndex(0)
+11>Emitted(22, 52) Source(32, 16) + SourceIndex(0)
+12>Emitted(22, 57) Source(32, 61) + SourceIndex(0)
+13>Emitted(22, 63) Source(32, 67) + SourceIndex(0)
+14>Emitted(22, 66) Source(32, 37) + SourceIndex(0)
+15>Emitted(22, 68) Source(32, 16) + SourceIndex(0)
+16>Emitted(22, 73) Source(32, 21) + SourceIndex(0)
+17>Emitted(22, 92) Source(32, 24) + SourceIndex(0)
+18>Emitted(22, 105) Source(32, 37) + SourceIndex(0)
+19>Emitted(22, 110) Source(32, 37) + SourceIndex(0)
+20>Emitted(22, 112) Source(32, 39) + SourceIndex(0)
+21>Emitted(22, 117) Source(32, 61) + SourceIndex(0)
+22>Emitted(22, 123) Source(32, 67) + SourceIndex(0)
+23>Emitted(22, 126) Source(32, 57) + SourceIndex(0)
+24>Emitted(22, 128) Source(32, 39) + SourceIndex(0)
+25>Emitted(22, 134) Source(32, 45) + SourceIndex(0)
+26>Emitted(22, 153) Source(32, 48) + SourceIndex(0)
+27>Emitted(22, 162) Source(32, 57) + SourceIndex(0)
+28>Emitted(22, 167) Source(32, 57) + SourceIndex(0)
+29>Emitted(22, 168) Source(32, 68) + SourceIndex(0)
 ---
 >>>_v = getRobotB(), _w = _v[0], numberB = _w === void 0 ? -1 : _w, _x = _v[1], nameB = _x === void 0 ? "helloNoName" : _x, _y = _v[2], skillB = _y === void 0 ? "noSkill" : _y;
 1->
-2 >^^^^^^^^^^^^^^^^
-3 >                ^^
-4 >                  ^^^^^^^^^^
-5 >                            ^^
-6 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                               ^^
-8 >                                                                 ^^^^^^^^^^
-9 >                                                                           ^^
-10>                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-11>                                                                                                                       ^^
-12>                                                                                                                         ^^^^^^^^^^
-13>                                                                                                                                   ^^
-14>                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-15>                                                                                                                                                                            ^
-16>                                                                                                                                                                             ^^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^^^^
+4 >              ^^
+5 >                ^^
+6 >                  ^^^^^^^^^^
+7 >                            ^^
+8 >                              ^^^^^^^
+9 >                                     ^^^^^^^^^^^^^^^^^^^
+10>                                                        ^
+11>                                                         ^
+12>                                                          ^^^^^
+13>                                                               ^^
+14>                                                                 ^^^^^^^^^^
+15>                                                                           ^^
+16>                                                                             ^^^^^
+17>                                                                                  ^^^^^^^^^^^^^^^^^^^
+18>                                                                                                     ^^^^^^^^^^^^^
+19>                                                                                                                  ^^^^^
+20>                                                                                                                       ^^
+21>                                                                                                                         ^^^^^^^^^^
+22>                                                                                                                                   ^^
+23>                                                                                                                                     ^^^^^^
+24>                                                                                                                                           ^^^^^^^^^^^^^^^^^^^
+25>                                                                                                                                                              ^^^^^^^^^
+26>                                                                                                                                                                       ^^^^^
+27>                                                                                                                                                                            ^
+28>                                                                                                                                                                             ^^^^^^^^^^^^^^^^->
 1->
   >
-2 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = getRobotB()
-3 >                
-4 >                  numberB = -1
-5 >                            
-6 >                              numberB = -1
-7 >                                                               , 
-8 >                                                                 nameB = "helloNoName"
-9 >                                                                           
-10>                                                                             nameB = "helloNoName"
-11>                                                                                                                       , 
-12>                                                                                                                         skillB = "noSkill"
-13>                                                                                                                                   
-14>                                                                                                                                     skillB = "noSkill"
-15>                                                                                                                                                                            ] = getRobotB();
+2 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = 
+3 >     getRobotB
+4 >              ()
+5 >                
+6 >                  numberB = -1
+7 >                            
+8 >                              numberB
+9 >                                      = 
+10>                                                        -
+11>                                                         1
+12>                                                          
+13>                                                               , 
+14>                                                                 nameB = "helloNoName"
+15>                                                                           
+16>                                                                             nameB
+17>                                                                                   = 
+18>                                                                                                     "helloNoName"
+19>                                                                                                                  
+20>                                                                                                                       , 
+21>                                                                                                                         skillB = "noSkill"
+22>                                                                                                                                   
+23>                                                                                                                                     skillB
+24>                                                                                                                                            = 
+25>                                                                                                                                                              "noSkill"
+26>                                                                                                                                                                       
+27>                                                                                                                                                                            ] = getRobotB();
 1->Emitted(23, 1) Source(33, 1) + SourceIndex(0)
-2 >Emitted(23, 17) Source(33, 72) + SourceIndex(0)
-3 >Emitted(23, 19) Source(33, 2) + SourceIndex(0)
-4 >Emitted(23, 29) Source(33, 14) + SourceIndex(0)
-5 >Emitted(23, 31) Source(33, 2) + SourceIndex(0)
-6 >Emitted(23, 64) Source(33, 14) + SourceIndex(0)
-7 >Emitted(23, 66) Source(33, 16) + SourceIndex(0)
-8 >Emitted(23, 76) Source(33, 37) + SourceIndex(0)
-9 >Emitted(23, 78) Source(33, 16) + SourceIndex(0)
-10>Emitted(23, 120) Source(33, 37) + SourceIndex(0)
-11>Emitted(23, 122) Source(33, 39) + SourceIndex(0)
-12>Emitted(23, 132) Source(33, 57) + SourceIndex(0)
-13>Emitted(23, 134) Source(33, 39) + SourceIndex(0)
-14>Emitted(23, 173) Source(33, 57) + SourceIndex(0)
-15>Emitted(23, 174) Source(33, 73) + SourceIndex(0)
+2 >Emitted(23, 6) Source(33, 61) + SourceIndex(0)
+3 >Emitted(23, 15) Source(33, 70) + SourceIndex(0)
+4 >Emitted(23, 17) Source(33, 72) + SourceIndex(0)
+5 >Emitted(23, 19) Source(33, 2) + SourceIndex(0)
+6 >Emitted(23, 29) Source(33, 14) + SourceIndex(0)
+7 >Emitted(23, 31) Source(33, 2) + SourceIndex(0)
+8 >Emitted(23, 38) Source(33, 9) + SourceIndex(0)
+9 >Emitted(23, 57) Source(33, 12) + SourceIndex(0)
+10>Emitted(23, 58) Source(33, 13) + SourceIndex(0)
+11>Emitted(23, 59) Source(33, 14) + SourceIndex(0)
+12>Emitted(23, 64) Source(33, 14) + SourceIndex(0)
+13>Emitted(23, 66) Source(33, 16) + SourceIndex(0)
+14>Emitted(23, 76) Source(33, 37) + SourceIndex(0)
+15>Emitted(23, 78) Source(33, 16) + SourceIndex(0)
+16>Emitted(23, 83) Source(33, 21) + SourceIndex(0)
+17>Emitted(23, 102) Source(33, 24) + SourceIndex(0)
+18>Emitted(23, 115) Source(33, 37) + SourceIndex(0)
+19>Emitted(23, 120) Source(33, 37) + SourceIndex(0)
+20>Emitted(23, 122) Source(33, 39) + SourceIndex(0)
+21>Emitted(23, 132) Source(33, 57) + SourceIndex(0)
+22>Emitted(23, 134) Source(33, 39) + SourceIndex(0)
+23>Emitted(23, 140) Source(33, 45) + SourceIndex(0)
+24>Emitted(23, 159) Source(33, 48) + SourceIndex(0)
+25>Emitted(23, 168) Source(33, 57) + SourceIndex(0)
+26>Emitted(23, 173) Source(33, 57) + SourceIndex(0)
+27>Emitted(23, 174) Source(33, 73) + SourceIndex(0)
 ---
 >>>_z = [2, "trimmer", "trimming"], _0 = _z[0], numberB = _0 === void 0 ? -1 : _0, _1 = _z[1], nameB = _1 === void 0 ? "helloNoName" : _1, _2 = _z[2], skillB = _2 === void 0 ? "noSkill" : _2;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                               ^^
-4 >                                 ^^^^^^^^^^
-5 >                                           ^^
-6 >                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                              ^^
-8 >                                                                                ^^^^^^^^^^
-9 >                                                                                          ^^
-10>                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-11>                                                                                                                                      ^^
-12>                                                                                                                                        ^^^^^^^^^^
-13>                                                                                                                                                  ^^
-14>                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-15>                                                                                                                                                                                           ^
-16>                                                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^
+4 >      ^
+5 >       ^^
+6 >         ^^^^^^^^^
+7 >                  ^^
+8 >                    ^^^^^^^^^^
+9 >                              ^
+10>                               ^^
+11>                                 ^^^^^^^^^^
+12>                                           ^^
+13>                                             ^^^^^^^
+14>                                                    ^^^^^^^^^^^^^^^^^^^
+15>                                                                       ^
+16>                                                                        ^
+17>                                                                         ^^^^^
+18>                                                                              ^^
+19>                                                                                ^^^^^^^^^^
+20>                                                                                          ^^
+21>                                                                                            ^^^^^
+22>                                                                                                 ^^^^^^^^^^^^^^^^^^^
+23>                                                                                                                    ^^^^^^^^^^^^^
+24>                                                                                                                                 ^^^^^
+25>                                                                                                                                      ^^
+26>                                                                                                                                        ^^^^^^^^^^
+27>                                                                                                                                                  ^^
+28>                                                                                                                                                    ^^^^^^
+29>                                                                                                                                                          ^^^^^^^^^^^^^^^^^^^
+30>                                                                                                                                                                             ^^^^^^^^^
+31>                                                                                                                                                                                      ^^^^^
+32>                                                                                                                                                                                           ^
+33>                                                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = [2, "trimmer", "trimming"]
-3 >                               
-4 >                                 numberB = -1
-5 >                                           
-6 >                                             numberB = -1
-7 >                                                                              , 
-8 >                                                                                nameB = "helloNoName"
-9 >                                                                                          
-10>                                                                                            nameB = "helloNoName"
-11>                                                                                                                                      , 
-12>                                                                                                                                        skillB = "noSkill"
-13>                                                                                                                                                  
-14>                                                                                                                                                    skillB = "noSkill"
-15>                                                                                                                                                                                           ] = [2, "trimmer", "trimming"];
+2 >[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = 
+3 >     [
+4 >      2
+5 >       , 
+6 >         "trimmer"
+7 >                  , 
+8 >                    "trimming"
+9 >                              ]
+10>                               
+11>                                 numberB = -1
+12>                                           
+13>                                             numberB
+14>                                                     = 
+15>                                                                       -
+16>                                                                        1
+17>                                                                         
+18>                                                                              , 
+19>                                                                                nameB = "helloNoName"
+20>                                                                                          
+21>                                                                                            nameB
+22>                                                                                                  = 
+23>                                                                                                                    "helloNoName"
+24>                                                                                                                                 
+25>                                                                                                                                      , 
+26>                                                                                                                                        skillB = "noSkill"
+27>                                                                                                                                                  
+28>                                                                                                                                                    skillB
+29>                                                                                                                                                           = 
+30>                                                                                                                                                                             "noSkill"
+31>                                                                                                                                                                                      
+32>                                                                                                                                                                                           ] = [2, "trimmer", "trimming"];
 1->Emitted(24, 1) Source(34, 1) + SourceIndex(0)
-2 >Emitted(24, 32) Source(34, 87) + SourceIndex(0)
-3 >Emitted(24, 34) Source(34, 2) + SourceIndex(0)
-4 >Emitted(24, 44) Source(34, 14) + SourceIndex(0)
-5 >Emitted(24, 46) Source(34, 2) + SourceIndex(0)
-6 >Emitted(24, 79) Source(34, 14) + SourceIndex(0)
-7 >Emitted(24, 81) Source(34, 16) + SourceIndex(0)
-8 >Emitted(24, 91) Source(34, 37) + SourceIndex(0)
-9 >Emitted(24, 93) Source(34, 16) + SourceIndex(0)
-10>Emitted(24, 135) Source(34, 37) + SourceIndex(0)
-11>Emitted(24, 137) Source(34, 39) + SourceIndex(0)
-12>Emitted(24, 147) Source(34, 57) + SourceIndex(0)
-13>Emitted(24, 149) Source(34, 39) + SourceIndex(0)
-14>Emitted(24, 188) Source(34, 57) + SourceIndex(0)
-15>Emitted(24, 189) Source(34, 88) + SourceIndex(0)
+2 >Emitted(24, 6) Source(34, 61) + SourceIndex(0)
+3 >Emitted(24, 7) Source(34, 62) + SourceIndex(0)
+4 >Emitted(24, 8) Source(34, 63) + SourceIndex(0)
+5 >Emitted(24, 10) Source(34, 65) + SourceIndex(0)
+6 >Emitted(24, 19) Source(34, 74) + SourceIndex(0)
+7 >Emitted(24, 21) Source(34, 76) + SourceIndex(0)
+8 >Emitted(24, 31) Source(34, 86) + SourceIndex(0)
+9 >Emitted(24, 32) Source(34, 87) + SourceIndex(0)
+10>Emitted(24, 34) Source(34, 2) + SourceIndex(0)
+11>Emitted(24, 44) Source(34, 14) + SourceIndex(0)
+12>Emitted(24, 46) Source(34, 2) + SourceIndex(0)
+13>Emitted(24, 53) Source(34, 9) + SourceIndex(0)
+14>Emitted(24, 72) Source(34, 12) + SourceIndex(0)
+15>Emitted(24, 73) Source(34, 13) + SourceIndex(0)
+16>Emitted(24, 74) Source(34, 14) + SourceIndex(0)
+17>Emitted(24, 79) Source(34, 14) + SourceIndex(0)
+18>Emitted(24, 81) Source(34, 16) + SourceIndex(0)
+19>Emitted(24, 91) Source(34, 37) + SourceIndex(0)
+20>Emitted(24, 93) Source(34, 16) + SourceIndex(0)
+21>Emitted(24, 98) Source(34, 21) + SourceIndex(0)
+22>Emitted(24, 117) Source(34, 24) + SourceIndex(0)
+23>Emitted(24, 130) Source(34, 37) + SourceIndex(0)
+24>Emitted(24, 135) Source(34, 37) + SourceIndex(0)
+25>Emitted(24, 137) Source(34, 39) + SourceIndex(0)
+26>Emitted(24, 147) Source(34, 57) + SourceIndex(0)
+27>Emitted(24, 149) Source(34, 39) + SourceIndex(0)
+28>Emitted(24, 155) Source(34, 45) + SourceIndex(0)
+29>Emitted(24, 174) Source(34, 48) + SourceIndex(0)
+30>Emitted(24, 183) Source(34, 57) + SourceIndex(0)
+31>Emitted(24, 188) Source(34, 57) + SourceIndex(0)
+32>Emitted(24, 189) Source(34, 88) + SourceIndex(0)
 ---
 >>>_3 = multiRobotB[0], nameMB = _3 === void 0 ? "helloNoName" : _3, _4 = multiRobotB[1], _5 = _4 === void 0 ? [] : _4, _6 = _5[0], primarySkillB = _6 === void 0 ? "noSkill" : _6, _7 = _5[1], secondarySkillB = _7 === void 0 ? "noSkill" : _7;
 1->
-2 >^^^^^^^^^^^^^^^^^^^
-3 >                   ^^
-4 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                ^^
-6 >                                                                  ^^^^^^^^^^^^^^^^^^^
-7 >                                                                                     ^^
-8 >                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                                                   ^^
-10>                                                                                                                     ^^^^^^^^^^
-11>                                                                                                                               ^^
-12>                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-13>                                                                                                                                                                               ^^
-14>                                                                                                                                                                                 ^^^^^^^^^^
-15>                                                                                                                                                                                           ^^
-16>                                                                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-17>                                                                                                                                                                                                                                             ^
-18>                                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^^^^^^
+4 >                ^^^
+5 >                   ^^
+6 >                     ^^^^^^
+7 >                           ^^^^^^^^^^^^^^^^^^^
+8 >                                              ^^^^^^^^^^^^^
+9 >                                                           ^^^^^
+10>                                                                ^^
+11>                                                                  ^^^^^
+12>                                                                       ^^^^^^^^^^^
+13>                                                                                  ^^^
+14>                                                                                     ^^
+15>                                                                                       ^^^^^^^^^^^^^^^^^^^^^
+16>                                                                                                            ^^
+17>                                                                                                              ^^^^^
+18>                                                                                                                   ^^
+19>                                                                                                                     ^^^^^^^^^^
+20>                                                                                                                               ^^
+21>                                                                                                                                 ^^^^^^^^^^^^^
+22>                                                                                                                                              ^^^^^^^^^^^^^^^^^^^
+23>                                                                                                                                                                 ^^^^^^^^^
+24>                                                                                                                                                                          ^^^^^
+25>                                                                                                                                                                               ^^
+26>                                                                                                                                                                                 ^^^^^^^^^^
+27>                                                                                                                                                                                           ^^
+28>                                                                                                                                                                                             ^^^^^^^^^^^^^^^
+29>                                                                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^
+30>                                                                                                                                                                                                                               ^^^^^^^^^
+31>                                                                                                                                                                                                                                        ^^^^^
+32>                                                                                                                                                                                                                                             ^
+33>                                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^->
 1->
   >[
-2 >nameMB = "helloNoName"
-3 >                   
-4 >                     nameMB = "helloNoName"
-5 >                                                                , 
-6 >                                                                  [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
-7 >                                                                                     
-8 >                                                                                       [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
-9 >                                                                                                                   
-10>                                                                                                                     primarySkillB = "noSkill"
-11>                                                                                                                               
-12>                                                                                                                                 primarySkillB = "noSkill"
-13>                                                                                                                                                                               , 
-14>                                                                                                                                                                                 secondarySkillB = "noSkill"
-15>                                                                                                                                                                                           
-16>                                                                                                                                                                                             secondarySkillB = "noSkill"
-17>                                                                                                                                                                                                                                             ] = []] = multiRobotB;
+2 >nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = 
+3 >     multiRobotB
+4 >                
+5 >                   
+6 >                     nameMB
+7 >                            = 
+8 >                                              "helloNoName"
+9 >                                                           
+10>                                                                , 
+11>                                                                  [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = 
+12>                                                                       multiRobotB
+13>                                                                                  
+14>                                                                                     
+15>                                                                                       [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = 
+16>                                                                                                            []
+17>                                                                                                              
+18>                                                                                                                   
+19>                                                                                                                     primarySkillB = "noSkill"
+20>                                                                                                                               
+21>                                                                                                                                 primarySkillB
+22>                                                                                                                                               = 
+23>                                                                                                                                                                 "noSkill"
+24>                                                                                                                                                                          
+25>                                                                                                                                                                               , 
+26>                                                                                                                                                                                 secondarySkillB = "noSkill"
+27>                                                                                                                                                                                           
+28>                                                                                                                                                                                             secondarySkillB
+29>                                                                                                                                                                                                             = 
+30>                                                                                                                                                                                                                               "noSkill"
+31>                                                                                                                                                                                                                                        
+32>                                                                                                                                                                                                                                             ] = []] = multiRobotB;
 1->Emitted(25, 1) Source(35, 2) + SourceIndex(0)
-2 >Emitted(25, 20) Source(35, 24) + SourceIndex(0)
-3 >Emitted(25, 22) Source(35, 2) + SourceIndex(0)
-4 >Emitted(25, 65) Source(35, 24) + SourceIndex(0)
-5 >Emitted(25, 67) Source(35, 26) + SourceIndex(0)
-6 >Emitted(25, 86) Source(35, 87) + SourceIndex(0)
-7 >Emitted(25, 88) Source(35, 26) + SourceIndex(0)
-8 >Emitted(25, 116) Source(35, 87) + SourceIndex(0)
-9 >Emitted(25, 118) Source(35, 27) + SourceIndex(0)
-10>Emitted(25, 128) Source(35, 52) + SourceIndex(0)
-11>Emitted(25, 130) Source(35, 27) + SourceIndex(0)
-12>Emitted(25, 176) Source(35, 52) + SourceIndex(0)
-13>Emitted(25, 178) Source(35, 54) + SourceIndex(0)
-14>Emitted(25, 188) Source(35, 81) + SourceIndex(0)
-15>Emitted(25, 190) Source(35, 54) + SourceIndex(0)
-16>Emitted(25, 238) Source(35, 81) + SourceIndex(0)
-17>Emitted(25, 239) Source(35, 103) + SourceIndex(0)
+2 >Emitted(25, 6) Source(35, 91) + SourceIndex(0)
+3 >Emitted(25, 17) Source(35, 102) + SourceIndex(0)
+4 >Emitted(25, 20) Source(35, 24) + SourceIndex(0)
+5 >Emitted(25, 22) Source(35, 2) + SourceIndex(0)
+6 >Emitted(25, 28) Source(35, 8) + SourceIndex(0)
+7 >Emitted(25, 47) Source(35, 11) + SourceIndex(0)
+8 >Emitted(25, 60) Source(35, 24) + SourceIndex(0)
+9 >Emitted(25, 65) Source(35, 24) + SourceIndex(0)
+10>Emitted(25, 67) Source(35, 26) + SourceIndex(0)
+11>Emitted(25, 72) Source(35, 91) + SourceIndex(0)
+12>Emitted(25, 83) Source(35, 102) + SourceIndex(0)
+13>Emitted(25, 86) Source(35, 87) + SourceIndex(0)
+14>Emitted(25, 88) Source(35, 26) + SourceIndex(0)
+15>Emitted(25, 109) Source(35, 85) + SourceIndex(0)
+16>Emitted(25, 111) Source(35, 87) + SourceIndex(0)
+17>Emitted(25, 116) Source(35, 87) + SourceIndex(0)
+18>Emitted(25, 118) Source(35, 27) + SourceIndex(0)
+19>Emitted(25, 128) Source(35, 52) + SourceIndex(0)
+20>Emitted(25, 130) Source(35, 27) + SourceIndex(0)
+21>Emitted(25, 143) Source(35, 40) + SourceIndex(0)
+22>Emitted(25, 162) Source(35, 43) + SourceIndex(0)
+23>Emitted(25, 171) Source(35, 52) + SourceIndex(0)
+24>Emitted(25, 176) Source(35, 52) + SourceIndex(0)
+25>Emitted(25, 178) Source(35, 54) + SourceIndex(0)
+26>Emitted(25, 188) Source(35, 81) + SourceIndex(0)
+27>Emitted(25, 190) Source(35, 54) + SourceIndex(0)
+28>Emitted(25, 205) Source(35, 69) + SourceIndex(0)
+29>Emitted(25, 224) Source(35, 72) + SourceIndex(0)
+30>Emitted(25, 233) Source(35, 81) + SourceIndex(0)
+31>Emitted(25, 238) Source(35, 81) + SourceIndex(0)
+32>Emitted(25, 239) Source(35, 103) + SourceIndex(0)
 ---
 >>>_8 = getMultiRobotB(), _9 = _8[0], nameMB = _9 === void 0 ? "helloNoName" : _9, _10 = _8[1], _11 = _10 === void 0 ? [] : _10, _12 = _11[0], primarySkillB = _12 === void 0 ? "noSkill" : _12, _13 = _11[1], secondarySkillB = _13 === void 0 ? "noSkill" : _13;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^
-3 >                     ^^
-4 >                       ^^^^^^^^^^
-5 >                                 ^^
-6 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                              ^^
-8 >                                                                                ^^^^^^^^^^^
-9 >                                                                                           ^^
-10>                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-11>                                                                                                                            ^^
-12>                                                                                                                              ^^^^^^^^^^^^
-13>                                                                                                                                          ^^
-14>                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-15>                                                                                                                                                                                            ^^
-16>                                                                                                                                                                                              ^^^^^^^^^^^^
-17>                                                                                                                                                                                                          ^^
-18>                                                                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-19>                                                                                                                                                                                                                                                              ^
-20>                                                                                                                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^
+3 >     ^^^^^^^^^^^^^^
+4 >                   ^^
+5 >                     ^^
+6 >                       ^^^^^^^^^^
+7 >                                 ^^
+8 >                                   ^^^^^^
+9 >                                         ^^^^^^^^^^^^^^^^^^^
+10>                                                            ^^^^^^^^^^^^^
+11>                                                                         ^^^^^
+12>                                                                              ^^
+13>                                                                                ^^^^^^^^^^^
+14>                                                                                           ^^
+15>                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^
+16>                                                                                                                    ^^
+17>                                                                                                                      ^^^^^^
+18>                                                                                                                            ^^
+19>                                                                                                                              ^^^^^^^^^^^^
+20>                                                                                                                                          ^^
+21>                                                                                                                                            ^^^^^^^^^^^^^
+22>                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^
+23>                                                                                                                                                                             ^^^^^^^^^
+24>                                                                                                                                                                                      ^^^^^^
+25>                                                                                                                                                                                            ^^
+26>                                                                                                                                                                                              ^^^^^^^^^^^^
+27>                                                                                                                                                                                                          ^^
+28>                                                                                                                                                                                                            ^^^^^^^^^^^^^^^
+29>                                                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^
+30>                                                                                                                                                                                                                                               ^^^^^^^^^
+31>                                                                                                                                                                                                                                                        ^^^^^^
+32>                                                                                                                                                                                                                                                              ^
+33>                                                                                                                                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = getMultiRobotB()
-3 >                     
-4 >                       nameMB = "helloNoName"
-5 >                                 
-6 >                                   nameMB = "helloNoName"
-7 >                                                                              , 
-8 >                                                                                [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
-9 >                                                                                           
-10>                                                                                             [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
-11>                                                                                                                            
-12>                                                                                                                              primarySkillB = "noSkill"
-13>                                                                                                                                          
-14>                                                                                                                                            primarySkillB = "noSkill"
-15>                                                                                                                                                                                            , 
-16>                                                                                                                                                                                              secondarySkillB = "noSkill"
-17>                                                                                                                                                                                                          
-18>                                                                                                                                                                                                            secondarySkillB = "noSkill"
-19>                                                                                                                                                                                                                                                              ] = []] = getMultiRobotB();
+2 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = 
+3 >     getMultiRobotB
+4 >                   ()
+5 >                     
+6 >                       nameMB = "helloNoName"
+7 >                                 
+8 >                                   nameMB
+9 >                                          = 
+10>                                                            "helloNoName"
+11>                                                                         
+12>                                                                              , 
+13>                                                                                [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
+14>                                                                                           
+15>                                                                                             [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = 
+16>                                                                                                                    []
+17>                                                                                                                      
+18>                                                                                                                            
+19>                                                                                                                              primarySkillB = "noSkill"
+20>                                                                                                                                          
+21>                                                                                                                                            primarySkillB
+22>                                                                                                                                                          = 
+23>                                                                                                                                                                             "noSkill"
+24>                                                                                                                                                                                      
+25>                                                                                                                                                                                            , 
+26>                                                                                                                                                                                              secondarySkillB = "noSkill"
+27>                                                                                                                                                                                                          
+28>                                                                                                                                                                                                            secondarySkillB
+29>                                                                                                                                                                                                                            = 
+30>                                                                                                                                                                                                                                               "noSkill"
+31>                                                                                                                                                                                                                                                        
+32>                                                                                                                                                                                                                                                              ] = []] = getMultiRobotB();
 1->Emitted(26, 1) Source(36, 1) + SourceIndex(0)
-2 >Emitted(26, 22) Source(36, 107) + SourceIndex(0)
-3 >Emitted(26, 24) Source(36, 2) + SourceIndex(0)
-4 >Emitted(26, 34) Source(36, 24) + SourceIndex(0)
-5 >Emitted(26, 36) Source(36, 2) + SourceIndex(0)
-6 >Emitted(26, 79) Source(36, 24) + SourceIndex(0)
-7 >Emitted(26, 81) Source(36, 26) + SourceIndex(0)
-8 >Emitted(26, 92) Source(36, 87) + SourceIndex(0)
-9 >Emitted(26, 94) Source(36, 26) + SourceIndex(0)
-10>Emitted(26, 125) Source(36, 87) + SourceIndex(0)
-11>Emitted(26, 127) Source(36, 27) + SourceIndex(0)
-12>Emitted(26, 139) Source(36, 52) + SourceIndex(0)
-13>Emitted(26, 141) Source(36, 27) + SourceIndex(0)
-14>Emitted(26, 189) Source(36, 52) + SourceIndex(0)
-15>Emitted(26, 191) Source(36, 54) + SourceIndex(0)
-16>Emitted(26, 203) Source(36, 81) + SourceIndex(0)
-17>Emitted(26, 205) Source(36, 54) + SourceIndex(0)
-18>Emitted(26, 255) Source(36, 81) + SourceIndex(0)
-19>Emitted(26, 256) Source(36, 108) + SourceIndex(0)
+2 >Emitted(26, 6) Source(36, 91) + SourceIndex(0)
+3 >Emitted(26, 20) Source(36, 105) + SourceIndex(0)
+4 >Emitted(26, 22) Source(36, 107) + SourceIndex(0)
+5 >Emitted(26, 24) Source(36, 2) + SourceIndex(0)
+6 >Emitted(26, 34) Source(36, 24) + SourceIndex(0)
+7 >Emitted(26, 36) Source(36, 2) + SourceIndex(0)
+8 >Emitted(26, 42) Source(36, 8) + SourceIndex(0)
+9 >Emitted(26, 61) Source(36, 11) + SourceIndex(0)
+10>Emitted(26, 74) Source(36, 24) + SourceIndex(0)
+11>Emitted(26, 79) Source(36, 24) + SourceIndex(0)
+12>Emitted(26, 81) Source(36, 26) + SourceIndex(0)
+13>Emitted(26, 92) Source(36, 87) + SourceIndex(0)
+14>Emitted(26, 94) Source(36, 26) + SourceIndex(0)
+15>Emitted(26, 117) Source(36, 85) + SourceIndex(0)
+16>Emitted(26, 119) Source(36, 87) + SourceIndex(0)
+17>Emitted(26, 125) Source(36, 87) + SourceIndex(0)
+18>Emitted(26, 127) Source(36, 27) + SourceIndex(0)
+19>Emitted(26, 139) Source(36, 52) + SourceIndex(0)
+20>Emitted(26, 141) Source(36, 27) + SourceIndex(0)
+21>Emitted(26, 154) Source(36, 40) + SourceIndex(0)
+22>Emitted(26, 174) Source(36, 43) + SourceIndex(0)
+23>Emitted(26, 183) Source(36, 52) + SourceIndex(0)
+24>Emitted(26, 189) Source(36, 52) + SourceIndex(0)
+25>Emitted(26, 191) Source(36, 54) + SourceIndex(0)
+26>Emitted(26, 203) Source(36, 81) + SourceIndex(0)
+27>Emitted(26, 205) Source(36, 54) + SourceIndex(0)
+28>Emitted(26, 220) Source(36, 69) + SourceIndex(0)
+29>Emitted(26, 240) Source(36, 72) + SourceIndex(0)
+30>Emitted(26, 249) Source(36, 81) + SourceIndex(0)
+31>Emitted(26, 255) Source(36, 81) + SourceIndex(0)
+32>Emitted(26, 256) Source(36, 108) + SourceIndex(0)
 ---
 >>>_14 = ["trimmer", ["trimming", "edging"]], _15 = _14[0], nameMB = _15 === void 0 ? "helloNoName" : _15, _16 = _14[1], _17 = _16 === void 0 ? [] : _16, _18 = _17[0], primarySkillB = _18 === void 0 ? "noSkill" : _18, _19 = _17[1], secondarySkillB = _19 === void 0 ? "noSkill" : _19;
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                         ^^
-4 >                                           ^^^^^^^^^^^^
-5 >                                                       ^^
-6 >                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                                      ^^
-8 >                                                                                                        ^^^^^^^^^^^^
-9 >                                                                                                                    ^^
-10>                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-11>                                                                                                                                                     ^^
-12>                                                                                                                                                       ^^^^^^^^^^^^
-13>                                                                                                                                                                   ^^
-14>                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-15>                                                                                                                                                                                                                     ^^
-16>                                                                                                                                                                                                                       ^^^^^^^^^^^^
-17>                                                                                                                                                                                                                                   ^^
-18>                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-19>                                                                                                                                                                                                                                                                                       ^
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^
+5 >                ^^
+6 >                  ^
+7 >                   ^^^^^^^^^^
+8 >                             ^^
+9 >                               ^^^^^^^^
+10>                                       ^
+11>                                        ^
+12>                                         ^^
+13>                                           ^^^^^^^^^^^^
+14>                                                       ^^
+15>                                                         ^^^^^^
+16>                                                               ^^^^^^^^^^^^^^^^^^^^
+17>                                                                                   ^^^^^^^^^^^^^
+18>                                                                                                ^^^^^^
+19>                                                                                                      ^^
+20>                                                                                                        ^^^^^^^^^^^^
+21>                                                                                                                    ^^
+22>                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+23>                                                                                                                                             ^^
+24>                                                                                                                                               ^^^^^^
+25>                                                                                                                                                     ^^
+26>                                                                                                                                                       ^^^^^^^^^^^^
+27>                                                                                                                                                                   ^^
+28>                                                                                                                                                                     ^^^^^^^^^^^^^
+29>                                                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^
+30>                                                                                                                                                                                                      ^^^^^^^^^
+31>                                                                                                                                                                                                               ^^^^^^
+32>                                                                                                                                                                                                                     ^^
+33>                                                                                                                                                                                                                       ^^^^^^^^^^^^
+34>                                                                                                                                                                                                                                   ^^
+35>                                                                                                                                                                                                                                     ^^^^^^^^^^^^^^^
+36>                                                                                                                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^
+37>                                                                                                                                                                                                                                                                        ^^^^^^^^^
+38>                                                                                                                                                                                                                                                                                 ^^^^^^
+39>                                                                                                                                                                                                                                                                                       ^
 1->
   >
 2 >[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] =
-  >    ["trimmer", ["trimming", "edging"]]
-3 >                                         
-4 >                                           nameMB = "helloNoName"
-5 >                                                       
-6 >                                                         nameMB = "helloNoName"
-7 >                                                                                                      , 
-8 >                                                                                                        [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
-9 >                                                                                                                    
-10>                                                                                                                      [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
-11>                                                                                                                                                     
-12>                                                                                                                                                       primarySkillB = "noSkill"
-13>                                                                                                                                                                   
-14>                                                                                                                                                                     primarySkillB = "noSkill"
-15>                                                                                                                                                                                                                     , 
-16>                                                                                                                                                                                                                       secondarySkillB = "noSkill"
-17>                                                                                                                                                                                                                                   
-18>                                                                                                                                                                                                                                     secondarySkillB = "noSkill"
-19>                                                                                                                                                                                                                                                                                       ] = []] =
+  >    
+3 >      [
+4 >       "trimmer"
+5 >                , 
+6 >                  [
+7 >                   "trimming"
+8 >                             , 
+9 >                               "edging"
+10>                                       ]
+11>                                        ]
+12>                                         
+13>                                           nameMB = "helloNoName"
+14>                                                       
+15>                                                         nameMB
+16>                                                                = 
+17>                                                                                   "helloNoName"
+18>                                                                                                
+19>                                                                                                      , 
+20>                                                                                                        [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []
+21>                                                                                                                    
+22>                                                                                                                      [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = 
+23>                                                                                                                                             []
+24>                                                                                                                                               
+25>                                                                                                                                                     
+26>                                                                                                                                                       primarySkillB = "noSkill"
+27>                                                                                                                                                                   
+28>                                                                                                                                                                     primarySkillB
+29>                                                                                                                                                                                   = 
+30>                                                                                                                                                                                                      "noSkill"
+31>                                                                                                                                                                                                               
+32>                                                                                                                                                                                                                     , 
+33>                                                                                                                                                                                                                       secondarySkillB = "noSkill"
+34>                                                                                                                                                                                                                                   
+35>                                                                                                                                                                                                                                     secondarySkillB
+36>                                                                                                                                                                                                                                                     = 
+37>                                                                                                                                                                                                                                                                        "noSkill"
+38>                                                                                                                                                                                                                                                                                 
+39>                                                                                                                                                                                                                                                                                       ] = []] =
   >                                                                                                                                                                                                                                                                                           ["trimmer", ["trimming", "edging"]];
 1->Emitted(27, 1) Source(37, 1) + SourceIndex(0)
-2 >Emitted(27, 42) Source(38, 40) + SourceIndex(0)
-3 >Emitted(27, 44) Source(37, 2) + SourceIndex(0)
-4 >Emitted(27, 56) Source(37, 24) + SourceIndex(0)
-5 >Emitted(27, 58) Source(37, 2) + SourceIndex(0)
-6 >Emitted(27, 103) Source(37, 24) + SourceIndex(0)
-7 >Emitted(27, 105) Source(37, 26) + SourceIndex(0)
-8 >Emitted(27, 117) Source(37, 87) + SourceIndex(0)
-9 >Emitted(27, 119) Source(37, 26) + SourceIndex(0)
-10>Emitted(27, 150) Source(37, 87) + SourceIndex(0)
-11>Emitted(27, 152) Source(37, 27) + SourceIndex(0)
-12>Emitted(27, 164) Source(37, 52) + SourceIndex(0)
-13>Emitted(27, 166) Source(37, 27) + SourceIndex(0)
-14>Emitted(27, 214) Source(37, 52) + SourceIndex(0)
-15>Emitted(27, 216) Source(37, 54) + SourceIndex(0)
-16>Emitted(27, 228) Source(37, 81) + SourceIndex(0)
-17>Emitted(27, 230) Source(37, 54) + SourceIndex(0)
-18>Emitted(27, 280) Source(37, 81) + SourceIndex(0)
-19>Emitted(27, 281) Source(38, 41) + SourceIndex(0)
+2 >Emitted(27, 7) Source(38, 5) + SourceIndex(0)
+3 >Emitted(27, 8) Source(38, 6) + SourceIndex(0)
+4 >Emitted(27, 17) Source(38, 15) + SourceIndex(0)
+5 >Emitted(27, 19) Source(38, 17) + SourceIndex(0)
+6 >Emitted(27, 20) Source(38, 18) + SourceIndex(0)
+7 >Emitted(27, 30) Source(38, 28) + SourceIndex(0)
+8 >Emitted(27, 32) Source(38, 30) + SourceIndex(0)
+9 >Emitted(27, 40) Source(38, 38) + SourceIndex(0)
+10>Emitted(27, 41) Source(38, 39) + SourceIndex(0)
+11>Emitted(27, 42) Source(38, 40) + SourceIndex(0)
+12>Emitted(27, 44) Source(37, 2) + SourceIndex(0)
+13>Emitted(27, 56) Source(37, 24) + SourceIndex(0)
+14>Emitted(27, 58) Source(37, 2) + SourceIndex(0)
+15>Emitted(27, 64) Source(37, 8) + SourceIndex(0)
+16>Emitted(27, 84) Source(37, 11) + SourceIndex(0)
+17>Emitted(27, 97) Source(37, 24) + SourceIndex(0)
+18>Emitted(27, 103) Source(37, 24) + SourceIndex(0)
+19>Emitted(27, 105) Source(37, 26) + SourceIndex(0)
+20>Emitted(27, 117) Source(37, 87) + SourceIndex(0)
+21>Emitted(27, 119) Source(37, 26) + SourceIndex(0)
+22>Emitted(27, 142) Source(37, 85) + SourceIndex(0)
+23>Emitted(27, 144) Source(37, 87) + SourceIndex(0)
+24>Emitted(27, 150) Source(37, 87) + SourceIndex(0)
+25>Emitted(27, 152) Source(37, 27) + SourceIndex(0)
+26>Emitted(27, 164) Source(37, 52) + SourceIndex(0)
+27>Emitted(27, 166) Source(37, 27) + SourceIndex(0)
+28>Emitted(27, 179) Source(37, 40) + SourceIndex(0)
+29>Emitted(27, 199) Source(37, 43) + SourceIndex(0)
+30>Emitted(27, 208) Source(37, 52) + SourceIndex(0)
+31>Emitted(27, 214) Source(37, 52) + SourceIndex(0)
+32>Emitted(27, 216) Source(37, 54) + SourceIndex(0)
+33>Emitted(27, 228) Source(37, 81) + SourceIndex(0)
+34>Emitted(27, 230) Source(37, 54) + SourceIndex(0)
+35>Emitted(27, 245) Source(37, 69) + SourceIndex(0)
+36>Emitted(27, 265) Source(37, 72) + SourceIndex(0)
+37>Emitted(27, 274) Source(37, 81) + SourceIndex(0)
+38>Emitted(27, 280) Source(37, 81) + SourceIndex(0)
+39>Emitted(27, 281) Source(38, 41) + SourceIndex(0)
 ---
 >>>_20 = robotB[0], numberB = _20 === void 0 ? -1 : _20, robotAInfo = robotB.slice(1);
 1 >
-2 >^^^^^^^^^^^^^^^
-3 >               ^^
-4 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                    ^^
-6 >                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                  ^
-8 >                                                                                   ^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^^
+4 >            ^^^
+5 >               ^^
+6 >                 ^^^^^^^
+7 >                        ^^^^^^^^^^^^^^^^^^^^
+8 >                                            ^
+9 >                                             ^
+10>                                              ^^^^^^
+11>                                                    ^^
+12>                                                      ^^^^^^^^^^
+13>                                                                ^^^
+14>                                                                   ^^^^^^
+15>                                                                         ^^^^^^^^^
+16>                                                                                  ^
+17>                                                                                   ^^^^^^^^^^^^^^->
 1 >
   >
   >[
-2 >numberB = -1
-3 >               
-4 >                 numberB = -1
-5 >                                                    , 
-6 >                                                      ...robotAInfo
-7 >                                                                                  ] = robotB;
+2 >numberB = -1, ...robotAInfo] = 
+3 >      robotB
+4 >            
+5 >               
+6 >                 numberB
+7 >                         = 
+8 >                                            -
+9 >                                             1
+10>                                              
+11>                                                    , ...
+12>                                                      robotAInfo
+13>                                                                ] = 
+14>                                                                   robotB
+15>                                                                         
+16>                                                                                  ] = robotB;
 1 >Emitted(28, 1) Source(40, 2) + SourceIndex(0)
-2 >Emitted(28, 16) Source(40, 14) + SourceIndex(0)
-3 >Emitted(28, 18) Source(40, 2) + SourceIndex(0)
-4 >Emitted(28, 53) Source(40, 14) + SourceIndex(0)
-5 >Emitted(28, 55) Source(40, 16) + SourceIndex(0)
-6 >Emitted(28, 83) Source(40, 29) + SourceIndex(0)
-7 >Emitted(28, 84) Source(40, 40) + SourceIndex(0)
+2 >Emitted(28, 7) Source(40, 33) + SourceIndex(0)
+3 >Emitted(28, 13) Source(40, 39) + SourceIndex(0)
+4 >Emitted(28, 16) Source(40, 14) + SourceIndex(0)
+5 >Emitted(28, 18) Source(40, 2) + SourceIndex(0)
+6 >Emitted(28, 25) Source(40, 9) + SourceIndex(0)
+7 >Emitted(28, 45) Source(40, 12) + SourceIndex(0)
+8 >Emitted(28, 46) Source(40, 13) + SourceIndex(0)
+9 >Emitted(28, 47) Source(40, 14) + SourceIndex(0)
+10>Emitted(28, 53) Source(40, 14) + SourceIndex(0)
+11>Emitted(28, 55) Source(40, 19) + SourceIndex(0)
+12>Emitted(28, 65) Source(40, 29) + SourceIndex(0)
+13>Emitted(28, 68) Source(40, 33) + SourceIndex(0)
+14>Emitted(28, 74) Source(40, 39) + SourceIndex(0)
+15>Emitted(28, 83) Source(40, 29) + SourceIndex(0)
+16>Emitted(28, 84) Source(40, 40) + SourceIndex(0)
 ---
 >>>_21 = getRobotB(), _22 = _21[0], numberB = _22 === void 0 ? -1 : _22, robotAInfo = _21.slice(1);
 1->
-2 >^^^^^^^^^^^^^^^^^
-3 >                 ^^
-4 >                   ^^^^^^^^^^^^
-5 >                               ^^
-6 >                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                    ^^
-8 >                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                               ^
-10>                                                                                                ^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^^^^^
+4 >               ^^
+5 >                 ^^
+6 >                   ^^^^^^^^^^^^
+7 >                               ^^
+8 >                                 ^^^^^^^
+9 >                                        ^^^^^^^^^^^^^^^^^^^^
+10>                                                            ^
+11>                                                             ^
+12>                                                              ^^^^^^
+13>                                                                    ^^
+14>                                                                      ^^^^^^^^^^
+15>                                                                                ^^^^^^^^^^^^^^^
+16>                                                                                               ^
+17>                                                                                                ^^^^^^^^^^^^^^^^->
 1->
   >
-2 >[numberB = -1, ...robotAInfo] = getRobotB()
-3 >                 
-4 >                   numberB = -1
-5 >                               
-6 >                                 numberB = -1
-7 >                                                                    , 
-8 >                                                                      ...robotAInfo
-9 >                                                                                               ] = getRobotB();
+2 >[numberB = -1, ...robotAInfo] = 
+3 >      getRobotB
+4 >               ()
+5 >                 
+6 >                   numberB = -1
+7 >                               
+8 >                                 numberB
+9 >                                         = 
+10>                                                            -
+11>                                                             1
+12>                                                              
+13>                                                                    , ...
+14>                                                                      robotAInfo
+15>                                                                                
+16>                                                                                               ] = getRobotB();
 1->Emitted(29, 1) Source(41, 1) + SourceIndex(0)
-2 >Emitted(29, 18) Source(41, 44) + SourceIndex(0)
-3 >Emitted(29, 20) Source(41, 2) + SourceIndex(0)
-4 >Emitted(29, 32) Source(41, 14) + SourceIndex(0)
-5 >Emitted(29, 34) Source(41, 2) + SourceIndex(0)
-6 >Emitted(29, 69) Source(41, 14) + SourceIndex(0)
-7 >Emitted(29, 71) Source(41, 16) + SourceIndex(0)
-8 >Emitted(29, 96) Source(41, 29) + SourceIndex(0)
-9 >Emitted(29, 97) Source(41, 45) + SourceIndex(0)
+2 >Emitted(29, 7) Source(41, 33) + SourceIndex(0)
+3 >Emitted(29, 16) Source(41, 42) + SourceIndex(0)
+4 >Emitted(29, 18) Source(41, 44) + SourceIndex(0)
+5 >Emitted(29, 20) Source(41, 2) + SourceIndex(0)
+6 >Emitted(29, 32) Source(41, 14) + SourceIndex(0)
+7 >Emitted(29, 34) Source(41, 2) + SourceIndex(0)
+8 >Emitted(29, 41) Source(41, 9) + SourceIndex(0)
+9 >Emitted(29, 61) Source(41, 12) + SourceIndex(0)
+10>Emitted(29, 62) Source(41, 13) + SourceIndex(0)
+11>Emitted(29, 63) Source(41, 14) + SourceIndex(0)
+12>Emitted(29, 69) Source(41, 14) + SourceIndex(0)
+13>Emitted(29, 71) Source(41, 19) + SourceIndex(0)
+14>Emitted(29, 81) Source(41, 29) + SourceIndex(0)
+15>Emitted(29, 96) Source(41, 29) + SourceIndex(0)
+16>Emitted(29, 97) Source(41, 45) + SourceIndex(0)
 ---
 >>>_23 = [2, "trimmer", "trimming"], _24 = _23[0], numberB = _24 === void 0 ? -1 : _24, robotAInfo = _23.slice(1);
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                ^^
-4 >                                  ^^^^^^^^^^^^
-5 >                                              ^^
-6 >                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                   ^^
-8 >                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                                              ^
+2 >^^^^^^
+3 >      ^
+4 >       ^
+5 >        ^^
+6 >          ^^^^^^^^^
+7 >                   ^^
+8 >                     ^^^^^^^^^^
+9 >                               ^
+10>                                ^^
+11>                                  ^^^^^^^^^^^^
+12>                                              ^^
+13>                                                ^^^^^^^
+14>                                                       ^^^^^^^^^^^^^^^^^^^^
+15>                                                                           ^
+16>                                                                            ^
+17>                                                                             ^^^^^^
+18>                                                                                   ^^
+19>                                                                                     ^^^^^^^^^^
+20>                                                                                               ^^^^^^^^^^^^^^^
+21>                                                                                                              ^
 1->
   >
-2 >[numberB = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"]
-3 >                                
-4 >                                  numberB = -1
-5 >                                              
-6 >                                                numberB = -1
-7 >                                                                                   , 
-8 >                                                                                     ...robotAInfo
-9 >                                                                                                              ] = <Robot>[2, "trimmer", "trimming"];
+2 >[numberB = -1, ...robotAInfo] = <Robot>
+3 >      [
+4 >       2
+5 >        , 
+6 >          "trimmer"
+7 >                   , 
+8 >                     "trimming"
+9 >                               ]
+10>                                
+11>                                  numberB = -1
+12>                                              
+13>                                                numberB
+14>                                                        = 
+15>                                                                           -
+16>                                                                            1
+17>                                                                             
+18>                                                                                   , ...
+19>                                                                                     robotAInfo
+20>                                                                                               
+21>                                                                                                              ] = <Robot>[2, "trimmer", "trimming"];
 1->Emitted(30, 1) Source(42, 1) + SourceIndex(0)
-2 >Emitted(30, 33) Source(42, 66) + SourceIndex(0)
-3 >Emitted(30, 35) Source(42, 2) + SourceIndex(0)
-4 >Emitted(30, 47) Source(42, 14) + SourceIndex(0)
-5 >Emitted(30, 49) Source(42, 2) + SourceIndex(0)
-6 >Emitted(30, 84) Source(42, 14) + SourceIndex(0)
-7 >Emitted(30, 86) Source(42, 16) + SourceIndex(0)
-8 >Emitted(30, 111) Source(42, 29) + SourceIndex(0)
-9 >Emitted(30, 112) Source(42, 67) + SourceIndex(0)
+2 >Emitted(30, 7) Source(42, 40) + SourceIndex(0)
+3 >Emitted(30, 8) Source(42, 41) + SourceIndex(0)
+4 >Emitted(30, 9) Source(42, 42) + SourceIndex(0)
+5 >Emitted(30, 11) Source(42, 44) + SourceIndex(0)
+6 >Emitted(30, 20) Source(42, 53) + SourceIndex(0)
+7 >Emitted(30, 22) Source(42, 55) + SourceIndex(0)
+8 >Emitted(30, 32) Source(42, 65) + SourceIndex(0)
+9 >Emitted(30, 33) Source(42, 66) + SourceIndex(0)
+10>Emitted(30, 35) Source(42, 2) + SourceIndex(0)
+11>Emitted(30, 47) Source(42, 14) + SourceIndex(0)
+12>Emitted(30, 49) Source(42, 2) + SourceIndex(0)
+13>Emitted(30, 56) Source(42, 9) + SourceIndex(0)
+14>Emitted(30, 76) Source(42, 12) + SourceIndex(0)
+15>Emitted(30, 77) Source(42, 13) + SourceIndex(0)
+16>Emitted(30, 78) Source(42, 14) + SourceIndex(0)
+17>Emitted(30, 84) Source(42, 14) + SourceIndex(0)
+18>Emitted(30, 86) Source(42, 19) + SourceIndex(0)
+19>Emitted(30, 96) Source(42, 29) + SourceIndex(0)
+20>Emitted(30, 111) Source(42, 29) + SourceIndex(0)
+21>Emitted(30, 112) Source(42, 67) + SourceIndex(0)
 ---
 >>>if (nameA == nameB) {
 1 >

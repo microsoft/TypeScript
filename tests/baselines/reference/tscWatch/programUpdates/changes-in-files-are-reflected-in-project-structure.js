@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/f1.ts
+Input::
 //// [/a/b/f1.ts]
 export * from "./f2"
 
@@ -21,36 +21,15 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/f2.js]
-"use strict";
-exports.__esModule = true;
-exports.x = 1;
 
-
-//// [/a/b/f1.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-}
-exports.__esModule = true;
-__exportStar(require("./f2"), exports);
-
-
-
+/a/lib/tsc.js -w /a/b/f1.ts
 Output::
 >> Screen clear
-12:00:19 AM - Starting compilation in watch mode...
+[[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:24 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/f1.ts"]
@@ -79,12 +58,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Modify f2 to include f3
-
-//// [/a/b/f2.ts]
-export * from "../c/f3"
-
 //// [/a/b/f2.js]
+"use strict";
+exports.__esModule = true;
+exports.x = void 0;
+exports.x = 1;
+
+
+//// [/a/b/f1.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -94,27 +75,27 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 exports.__esModule = true;
-__exportStar(require("../c/f3"), exports);
+__exportStar(require("./f2"), exports);
 
 
-//// [/a/b/f1.js] file written with same contents
-//// [/a/c/f3.js]
-"use strict";
-exports.__esModule = true;
-exports.y = 1;
 
+Change:: Modify f2 to include f3
+
+Input::
+//// [/a/b/f2.ts]
+export * from "../c/f3"
 
 
 Output::
 >> Screen clear
-12:00:27 AM - File change detected. Starting incremental compilation...
+[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:36 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/f1.ts"]
@@ -145,3 +126,28 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/f2.js]
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+exports.__esModule = true;
+__exportStar(require("../c/f3"), exports);
+
+
+//// [/a/b/f1.js] file written with same contents
+//// [/a/c/f3.js]
+"use strict";
+exports.__esModule = true;
+exports.y = void 0;
+exports.y = 1;
+
+

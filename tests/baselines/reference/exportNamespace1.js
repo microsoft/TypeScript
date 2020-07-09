@@ -17,6 +17,7 @@ new A(); // Error
 //// [a.js]
 "use strict";
 exports.__esModule = true;
+exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
     }
@@ -36,8 +37,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 exports.__esModule = true;
 __exportStar(require("./b"), exports);
 //// [d.js]

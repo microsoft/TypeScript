@@ -4,19 +4,20 @@
     "end": 10,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
-    "transformFlags": 0,
-    "elementTypes": {
+    "transformFlags": 1,
+    "elements": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 2,
             "end": 8,
             "flags": "JSDoc",
             "modifierFlagsCache": 0,
-            "transformFlags": 0
+            "transformFlags": 1
         },
         "length": 1,
         "pos": 2,
         "end": 9,
-        "hasTrailingComma": true
+        "hasTrailingComma": true,
+        "transformFlags": 1
     }
 }

@@ -175,7 +175,7 @@ namespace ts {
         return true;
     }
 
-    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T> | undefined, getCache: (f: SourceFile) => Map<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
+    function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: ESMap<string, T> | undefined, getCache: (f: SourceFile) => ESMap<string, T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
         const file = program.getSourceFile(fileName);
         assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
         const cache = getCache(file!);
@@ -189,7 +189,7 @@ namespace ts {
     }
 
     /** True if the maps have the same keys and values. */
-    function mapsAreEqual<T>(left: Map<T>, right: Map<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
+    function mapsAreEqual<T>(left: ESMap<string, T>, right: ESMap<string, T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
         if (left === right) return true;
         if (!left || !right) return false;
         const someInLeftHasNoMatch = forEachEntry(left, (leftValue, leftKey) => {
@@ -202,11 +202,11 @@ namespace ts {
         return !someInRightHasNoMatch;
     }
 
-    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: Map<ResolvedModule | undefined> | undefined): void {
+    function checkResolvedModulesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedModule | undefined> | undefined): void {
         checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
     }
 
-    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: Map<ResolvedTypeReferenceDirective> | undefined): void {
+    function checkResolvedTypeDirectivesCache(program: Program, fileName: string, expectedContent: ESMap<string, ResolvedTypeReferenceDirective> | undefined): void {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
@@ -915,7 +915,7 @@ namespace ts {
                 program, newRootFileNames, newOptions,
                 path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
-                /*hasChangedAutomaticTypeDirectiveNames*/ false,
+                /*hasChangedAutomaticTypeDirectiveNames*/ undefined,
                 /*projectReferences*/ undefined
             );
         }
@@ -937,12 +937,20 @@ namespace ts {
             }
 
             function verifyProgramWithoutConfigFile(system: System, rootFiles: string[], options: CompilerOptions) {
-                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, /*watchOptions*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions({
+                    rootFiles,
+                    options,
+                    watchOptions: undefined,
+                    system
+                })).getCurrentProgram().getProgram();
                 verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
             }
 
             function verifyProgramWithConfigFile(system: System, configFileName: string) {
-                const program = createWatchProgram(createWatchCompilerHostOfConfigFile(configFileName, {}, /*watchOptionsToExtend*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfConfigFile({
+                    configFileName,
+                    system
+                })).getCurrentProgram().getProgram();
                 const { fileNames, options } = parseConfigFileWithSystem(configFileName, {}, /*watchOptionsToExtend*/ undefined, system, notImplemented)!; // TODO: GH#18217
                 verifyProgramIsUptoDate(program, fileNames, options);
             }
@@ -1081,7 +1089,12 @@ namespace ts {
                 const rootFiles = [module1.path, module2.path, module3.path];
                 const system = createTestSystem([module1, module2, module3]);
                 const options = {};
-                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, /*watchOptions*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions({
+                    rootFiles,
+                    options,
+                    watchOptions: undefined,
+                    system
+                })).getCurrentProgram().getProgram();
                 verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
             });
 
@@ -1112,7 +1125,12 @@ namespace ts {
                 const newRootFiles = [module1.path, module2.path, module3.path];
                 const system = createTestSystem([module1, module2, module3]);
                 const options = {};
-                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, /*watchOptions*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions({
+                    rootFiles,
+                    options,
+                    watchOptions: undefined,
+                    system
+                })).getCurrentProgram().getProgram();
                 verifyProgramIsNotUptoDate(program, duplicate(newRootFiles), duplicate(options));
             });
             it("has one root file replaced by another", () => {
@@ -1132,7 +1150,12 @@ namespace ts {
                 const newRootFiles = [module2.path, module3.path];
                 const system = createTestSystem([module1, module2, module3]);
                 const options = {};
-                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, /*watchOptions*/ undefined, system)).getCurrentProgram().getProgram();
+                const program = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions({
+                    rootFiles,
+                    options,
+                    watchOptions: undefined,
+                    system
+                })).getCurrentProgram().getProgram();
                 verifyProgramIsNotUptoDate(program, duplicate(newRootFiles), duplicate(options));
             });
         });

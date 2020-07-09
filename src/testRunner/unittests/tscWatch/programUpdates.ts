@@ -86,10 +86,10 @@ namespace ts.tscWatch {
             commandLineArgs: ["-w", "-p", configFilePath],
             sys: () => createWatchedSystem([commonFile1, libFile, configFile]),
             changes: [
-                sys => {
-                    sys.writeFile(commonFile2.path, commonFile2.content);
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Create commonFile2";
+                {
+                    caption: "Create commonFile2",
+                    change: sys => sys.writeFile(commonFile2.path, commonFile2.content),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -122,15 +122,15 @@ namespace ts.tscWatch {
                 return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
             },
             changes: [
-                sys => {
-                    sys.deleteFile(commonFile2.path);
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "delete file2";
+                {
+                    caption: "delete file2",
+                    change: sys => sys.deleteFile(commonFile2.path),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
-                sys => {
-                    sys.writeFile(commonFile2.path, commonFile2.content);
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "recreate file2";
+                {
+                    caption: "recreate file2",
+                    change: sys => sys.writeFile(commonFile2.path, commonFile2.content),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -148,10 +148,10 @@ namespace ts.tscWatch {
                 return createWatchedSystem([file1, libFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile(commonFile2.path, commonFile2.content);
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "create file2";
+                {
+                    caption: "create file2",
+                    change: sys => sys.writeFile(commonFile2.path, commonFile2.content),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -171,13 +171,13 @@ namespace ts.tscWatch {
                 return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile(configFilePath, `{
+                {
+                    caption: "Change config",
+                    change: sys => sys.writeFile(configFilePath, `{
                         "compilerOptions": {},
                         "files": ["${commonFile1.path}"]
-                    }`);
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Change config";
+                    }`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -190,20 +190,20 @@ namespace ts.tscWatch {
                 const configFile: File = {
                     path: configFilePath,
                     content: `{
-                    "compilerOptions": {},
-                    "files": ["${commonFile1.path}", "${commonFile2.path}"]
-                }`
+                        "compilerOptions": {},
+                        "files": ["${commonFile1.path}", "${commonFile2.path}"]
+                    }`
                 };
                 return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
             },
             changes: [
-                sys => {
-                    sys.modifyFile(configFilePath, `{
-                    "compilerOptions": {},
-                    "files": ["${commonFile1.path}", "${commonFile2.path}"]
-                }`);
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Modify config without changing content";
+                {
+                    caption: "Modify config without changing content",
+                    change: sys => sys.modifyFile(configFilePath, `{
+                        "compilerOptions": {},
+                        "files": ["${commonFile1.path}", "${commonFile2.path}"]
+                    }`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -226,19 +226,19 @@ namespace ts.tscWatch {
                 return createWatchedSystem([libFile, aTs, tsconfig]);
             },
             changes: [
-                sys => {
-                    sys.modifyFile("/tsconfig.json", JSON.stringify({
+                {
+                    caption: "Disable  allowUnsusedLabels",
+                    change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                         compilerOptions: { allowUnusedLabels: false }
-                    }));
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Disable  allowUnsusedLabels";
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
                 },
-                sys => {
-                    sys.modifyFile("/tsconfig.json", JSON.stringify({
+                {
+                    caption: "Enable  allowUnsusedLabels",
+                    change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                         compilerOptions: { allowUnusedLabels: true }
-                    }));
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Enable  allowUnsusedLabels";
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -269,19 +269,20 @@ export class A {
                 return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
             },
             changes: [
-                sys => {
-                    sys.modifyFile("/tsconfig.json", JSON.stringify({
+                {
+                    caption: "Enable experimentalDecorators",
+                    change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                         compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true }
-                    }));
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Enable experimentalDecorators";
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+
                 },
-                sys => {
-                    sys.modifyFile("/tsconfig.json", JSON.stringify({
+                {
+                    caption: "Enable emitDecoratorMetadata",
+                    change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                         compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true }
-                    }));
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Enable emitDecoratorMetadata";
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -336,15 +337,15 @@ export class A {
                 return createWatchedSystem([libFile, file1, nodeModuleFile, classicModuleFile, configFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile(configFile.path, `{
+                {
+                    caption: "Change module resolution to classic",
+                    change: sys => sys.writeFile(configFile.path, `{
                         "compilerOptions": {
                             "moduleResolution": "classic"
                         },
                         "files": ["/a/b/file1.ts"]
-                    }`);
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Change module resolution to classic";
+                    }`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -389,11 +390,11 @@ export class A {
                 return createWatchedSystem([file1, file2, file3, libFile]);
             },
             changes: [
-                sys => {
+                {
+                    caption: "Modify f2 to include f3",
                     // now inferred project should inclule file3
-                    sys.modifyFile("/a/b/f2.ts", `export * from "../c/f3"`);
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Modify f2 to include f3";
+                    change: sys => sys.modifyFile("/a/b/f2.ts", `export * from "../c/f3"`),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -401,7 +402,7 @@ export class A {
         verifyTscWatch({
             scenario,
             subScenario: "deleted files affect project structure",
-            commandLineArgs: ["-w", "/a/b/f1.ts"],
+            commandLineArgs: ["-w", "/a/b/f1.ts", "--noImplicitAny"],
             sys: () => {
                 const file1 = {
                     path: "/a/b/f1.ts",
@@ -418,10 +419,10 @@ export class A {
                 return createWatchedSystem([file1, file2, file3, libFile]);
             },
             changes: [
-                sys => {
-                    sys.deleteFile("/a/b/f2.ts");
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Delete f2";
+                {
+                    caption: "Delete f2",
+                    change: sys => sys.deleteFile("/a/b/f2.ts"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -429,7 +430,7 @@ export class A {
         verifyTscWatch({
             scenario,
             subScenario: "deleted files affect project structure-2",
-            commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts"],
+            commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts", "--noImplicitAny"],
             sys: () => {
                 const file1 = {
                     path: "/a/b/f1.ts",
@@ -446,10 +447,10 @@ export class A {
                 return createWatchedSystem([file1, file2, file3, libFile]);
             },
             changes: [
-                sys => {
-                    sys.deleteFile("/a/b/f2.ts");
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Delete f2";
+                {
+                    caption: "Delete f2",
+                    change: sys => sys.deleteFile("/a/b/f2.ts"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -497,13 +498,13 @@ export class A {
             };
             const host = createWatchedSystem([file1, file2, file3]);
             const watch = createWatchOfFilesAndCompilerOptions([file2.path, file3.path], host);
-            checkProgramActualFiles(watch(), [file2.path, file3.path]);
+            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
 
             const watch2 = createWatchOfFilesAndCompilerOptions([file1.path], host);
-            checkProgramActualFiles(watch2(), [file1.path, file2.path, file3.path]);
+            checkProgramActualFiles(watch2.getCurrentProgram().getProgram(), [file1.path, file2.path, file3.path]);
 
             // Previous program shouldnt be updated
-            checkProgramActualFiles(watch(), [file2.path, file3.path]);
+            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [file2.path, file3.path]);
             host.checkTimeoutQueueLength(0);
         });
 
@@ -519,10 +520,10 @@ export class A {
                 return createWatchedSystem([file1, libFile, configFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile("/a/b/f2.ts", "let y = 1");
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Write f2";
+                {
+                    caption: "Write f2",
+                    change: sys => sys.writeFile("/a/b/f2.ts", "let y = 1"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -547,10 +548,34 @@ export class A {
                 return createWatchedSystem([file1, file2, libFile, configFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }));
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Modify config to make f2 as root too";
+                {
+                    caption: "Modify config to make f2 as root too",
+                    change: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
+                }
+            ]
+        });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "can correctly update configured project when set of root files has changed through include",
+            commandLineArgs: ["-w", "-p", "."],
+            sys: () => {
+                const file1 = {
+                    path: `${projectRoot}/Project/file1.ts`,
+                    content: "export const x = 10;"
+                };
+                const configFile = {
+                    path: `${projectRoot}/Project/tsconfig.json`,
+                    content: JSON.stringify({ include: [".", "./**/*.json"] })
+                };
+                return createWatchedSystem([file1, libFile, configFile], { currentDirectory: `${projectRoot}/Project` });
+            },
+            changes: [
+                {
+                    caption: "Write file2",
+                    change: sys => sys.writeFile(`${projectRoot}/Project/file2.ts`, "export const y = 10;"),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun
                 }
             ]
         });
@@ -575,10 +600,10 @@ export class A {
                 return createWatchedSystem([file1, file2, libFile, configFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }));
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Modify config to set outFile option";
+                {
+                    caption: "Modify config to set outFile option",
+                    change: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -599,10 +624,10 @@ export class A {
                 return createWatchedSystem([file1, file2, libFile, configFile]);
             },
             changes: [
-                sys => {
-                    sys.deleteFile(configFilePath);
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Delete config file";
+                {
+                    caption: "Delete config file",
+                    change: sys => sys.deleteFile(configFilePath),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -661,8 +686,9 @@ declare const eval: any`
                 return createWatchedSystem([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
             },
             changes: [
-                sys => {
-                    sys.writeFile("/src/tsconfig.json", JSON.stringify(
+                {
+                    caption: "Change the lib in config",
+                    change: sys => sys.writeFile("/src/tsconfig.json", JSON.stringify(
                         {
                             compilerOptions: {
                                 module: "commonjs",
@@ -675,9 +701,8 @@ declare const eval: any`
                                 ]
                             }
                         })
-                    );
-                    sys.checkTimeoutQueueLengthAndRun(1);
-                    return "Change the lib in config";
+                    ),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
         });
@@ -706,17 +731,24 @@ declare const eval: any`
             changes: emptyArray
         });
 
-        function changeModuleFileToModuleFile1(sys: WatchedSystem) {
-            sys.renameFile("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
-            sys.deleteFile("/a/b/moduleFile.js");
-            sys.runQueuedTimeoutCallbacks();
-            return "Rename moduleFile to moduleFile1";
+        function runQueuedTimeoutCallbacksTwice(sys: WatchedSystem) {
+            sys.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+            sys.runQueuedTimeoutCallbacks(); // Actual update
         }
-        function changeModuleFile1ToModuleFile(sys: WatchedSystem) {
-            sys.renameFile("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts");
-            sys.runQueuedTimeoutCallbacks();
-            return "Rename moduleFile1 back to moduleFile";
-        }
+
+        const changeModuleFileToModuleFile1: TscWatchCompileChange = {
+            caption: "Rename moduleFile to moduleFile1",
+            change: sys => {
+                sys.renameFile("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
+                sys.deleteFile("/a/b/moduleFile.js");
+            },
+            timeouts: runQueuedTimeoutCallbacksTwice
+        };
+        const changeModuleFile1ToModuleFile: TscWatchCompileChange = {
+            caption: "Rename moduleFile1 back to moduleFile",
+            change: sys => sys.renameFile("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts"),
+            timeouts: runQueuedTimeoutCallbacksTwice,
+        };
 
         verifyTscWatch({
             scenario,
@@ -797,10 +829,10 @@ declare const eval: any`
                 return createWatchedSystem([file1, libFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile("/a/b/moduleFile.ts", "export function bar() { }");
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Create module file";
+                {
+                    caption: "Create module file",
+                    change: sys => sys.writeFile("/a/b/moduleFile.ts", "export function bar() { }"),
+                    timeouts: runQueuedTimeoutCallbacksTwice,
                 }
             ]
         });
@@ -860,22 +892,22 @@ declare const eval: any`
                 return createWatchedSystem([file, configFile, libFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile(configFilePath, `{
+                {
+                    caption: "change config file to add error",
+                    change: sys => sys.writeFile(configFilePath, `{
                         "compilerOptions": {
                             "haha": 123
                         }
-                    }`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "change config file to add error";
+                    }`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
-                sys => {
-                    sys.writeFile(configFilePath, `{
+                {
+                    caption: "change config file to remove error",
+                    change: sys => sys.writeFile(configFilePath, `{
                         "compilerOptions": {
                         }
-                    }`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "change config file to remove error";
+                    }`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -937,7 +969,7 @@ declare const eval: any`
             };
             const host = createWatchedSystem([f, libFile]);
             const watch = createWatchOfFilesAndCompilerOptions([f.path], host, { allowNonTsExtensions: true });
-            checkProgramActualFiles(watch(), [f.path, libFile.path]);
+            checkProgramActualFiles(watch.getCurrentProgram().getProgram(), [f.path, libFile.path]);
         });
 
         verifyTscWatch({
@@ -964,16 +996,16 @@ declare const eval: any`
                 return createWatchedSystem([file, libFile, configFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile(configFilePath, `
+                {
+                    caption: "Remove the comment from config file",
+                    change: sys => sys.writeFile(configFilePath, `
 {
     "compilerOptions": {
         "inlineSourceMap": true,
         "mapRoot": "./"
     }
-}`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Remove the comment from config file";
+}`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
@@ -984,7 +1016,6 @@ declare const eval: any`
                     scenario,
                     subScenario: `should not trigger recompilation because of program emit/${subScenario}`,
                     commandLineArgs: ["-w", "-p", `${projectRoot}/tsconfig.json`],
-                    maxNumberOfFilesToIterateForInvalidation: 1,
                     sys: () => {
                         const file1: File = {
                             path: `${projectRoot}/file1.ts`,
@@ -1000,7 +1031,15 @@ declare const eval: any`
                         };
                         return createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: projectRoot });
                     },
-                    changes: emptyArray
+                    changes: [
+                        noopChange,
+                        {
+                            caption: "Add new file",
+                            change: sys => sys.writeFile(`${projectRoot}/src/file3.ts`, `export const y = 10;`),
+                            timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2), // To update program and failed lookups
+                        },
+                        noopChange,
+                    ]
                 });
             }
 
@@ -1017,6 +1056,11 @@ declare const eval: any`
             verifyWithOptions(
                 "when outDir is specified",
                 { module: ModuleKind.AMD, outDir: "build" }
+            );
+
+            verifyWithOptions(
+                "without outDir or outFile is specified with declaration enabled",
+                { module: ModuleKind.AMD, declaration: true }
             );
 
             verifyWithOptions(
@@ -1047,15 +1091,16 @@ function two() {
                 return createWatchedSystem([file, libFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile("/a/b/file.ts", `function one() {}
+                {
+                    caption: "Change file to module",
+                    change: sys => sys.writeFile("/a/b/file.ts", `function one() {}
 export function two() {
     return function three() {
         one();
     }
-}`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Change file to module";
+}`),
+                    timeouts: runQueuedTimeoutCallbacks,
+
                 }
             ]
         });
@@ -1077,18 +1122,20 @@ export function two() {
                 return createWatchedSystem([file, libFile, configFile]);
             },
             changes: [
-                sys => {
-                    sys.renameFile("/home/username/project/src/file1.ts", "/home/username/project/src/file2.ts");
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Rename file1 to file2";
+                {
+                    caption: "Rename file1 to file2",
+                    change: sys => sys.renameFile("/home/username/project/src/file1.ts", "/home/username/project/src/file2.ts"),
+                    timeouts: runQueuedTimeoutCallbacks,
                 }
             ]
         });
 
-        function changeParameterTypeOfBFile(sys: WatchedSystem, parameterName: string, toType: string) {
-            replaceFileText(sys, `${projectRoot}/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`);
-            sys.runQueuedTimeoutCallbacks();
-            return `Changed ${parameterName} type to ${toType}`;
+        function changeParameterTypeOfBFile(parameterName: string, toType: string): TscWatchCompileChange {
+            return {
+                caption: `Changed ${parameterName} type to ${toType}`,
+                change: sys => replaceFileText(sys, `${projectRoot}/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`),
+                timeouts: runQueuedTimeoutCallbacks,
+            };
         }
 
         verifyTscWatch({
@@ -1121,10 +1168,10 @@ export default test;`
                 return createWatchedSystem([aFile, bFile, libFile, tsconfigFile], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => changeParameterTypeOfBFile(sys, "x", "string"),
-                sys => changeParameterTypeOfBFile(sys, "x", "number"),
-                sys => changeParameterTypeOfBFile(sys, "y", "string"),
-                sys => changeParameterTypeOfBFile(sys, "y", "number"),
+                changeParameterTypeOfBFile("x", "string"),
+                changeParameterTypeOfBFile("x", "number"),
+                changeParameterTypeOfBFile("y", "string"),
+                changeParameterTypeOfBFile("y", "number"),
             ]
         });
 
@@ -1145,20 +1192,20 @@ foo().hello`
                 return createWatchedSystem([aFile, config, libFile], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strictNullChecks: true } }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Enable strict null checks";
+                {
+                    caption: "Enable strict null checks",
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strictNullChecks: true } })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })); // Avoid changing 'alwaysStrict' or must re-bind
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Set always strict false";
+                {
+                    caption: "Set always strict false",
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: {} }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Disable strict";
+                {
+                    caption: "Disable strict",
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: {} })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });
@@ -1188,10 +1235,10 @@ v === 'foo';`
                 return createWatchedSystem([aFile, config, libFile], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Enable noErrorTruncation";
+                {
+                    caption: "Enable noErrorTruncation",
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });
@@ -1213,10 +1260,10 @@ class D extends C { prop = 1; }`
                 return createWatchedSystem([aFile, config, libFile]);
             },
             changes: [
-                sys => {
-                    sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { target: "es6", useDefineForClassFields: true } }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Enable useDefineForClassFields";
+                {
+                    caption: "Enable useDefineForClassFields",
+                    change: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });
@@ -1242,20 +1289,20 @@ export function f(p: C) { return p; }`
                 return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return 'Set to "remove"';
+                {
+                    caption: 'Set to "remove"',
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return 'Set to "error"';
+                {
+                    caption: 'Set to "error"',
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return 'Set to "preserve"';
+                {
+                    caption: 'Set to "preserve"',
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });
@@ -1281,10 +1328,10 @@ export function f(p: C) { return p; }`
                 return createWatchedSystem([aFile, bFile, config, libFile], { useCaseSensitiveFileNames: false });
             },
             changes: [
-                sys => {
-                    sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Enable forceConsistentCasingInFileNames";
+                {
+                    caption: "Enable forceConsistentCasingInFileNames",
+                    change: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });
@@ -1309,10 +1356,10 @@ export function f(p: C) { return p; }`
                 return createWatchedSystem([aFile, jsonFile, config, libFile], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
-                    sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } }));
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Enable resolveJsonModule";
+                {
+                    caption: "Enable resolveJsonModule",
+                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } })),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });
@@ -1335,18 +1382,18 @@ export function f(p: C) { return p; }`
                 return createWatchedSystem([aFile, config, libFile], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
+                {
+                    caption: "Create b.ts with same content",
                     // Create bts with same file contents
-                    sys.writeFile(`${projectRoot}/b.ts`, `declare module 'a' {
+                    change: sys => sys.writeFile(`${projectRoot}/b.ts`, `declare module 'a' {
   type foo = number;
-}`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Create b.ts with same content";
+}`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
-                sys => {
-                    sys.deleteFile(`${projectRoot}/b.ts`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Delete b.ts";
+                {
+                    caption: "Delete b.ts",
+                    change: sys => sys.deleteFile(`${projectRoot}/b.ts`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });
@@ -1373,15 +1420,15 @@ interface Document {
                         commandLineArgs: ["-w", aFile.path, ...commandLineOptions],
                         sys: () => createWatchedSystem([aFile, libFileWithDocument], { currentDirectory: projectRoot }),
                         changes: [
-                            sys => {
-                                sys.writeFile(aFile.path, aFile.content.replace(fieldWithoutReadonly, "var x: string;"));
-                                sys.runQueuedTimeoutCallbacks();
-                                return "Remove document declaration from file";
+                            {
+                                caption: "Remove document declaration from file",
+                                change: sys => sys.writeFile(aFile.path, aFile.content.replace(fieldWithoutReadonly, "var x: string;")),
+                                timeouts: runQueuedTimeoutCallbacks,
                             },
-                            sys => {
-                                sys.writeFile(aFile.path, aFile.content);
-                                sys.runQueuedTimeoutCallbacks();
-                                return "Rever the file to contain document declaration";
+                            {
+                                caption: "Rever the file to contain document declaration",
+                                change: sys => sys.writeFile(aFile.path, aFile.content),
+                                timeouts: runQueuedTimeoutCallbacks,
                             },
                         ]
                     });
@@ -1414,11 +1461,13 @@ var y: number;
             });
         });
 
-        function changeWhenLibCheckChanges(sys: WatchedSystem, compilerOptions: CompilerOptions) {
+        function changeWhenLibCheckChanges(compilerOptions: CompilerOptions): TscWatchCompileChange {
             const configFileContent = JSON.stringify({ compilerOptions });
-            sys.writeFile(`${projectRoot}/tsconfig.json`, configFileContent);
-            sys.runQueuedTimeoutCallbacks();
-            return `Changing config to ${configFileContent}`;
+            return {
+                caption: `Changing config to ${configFileContent}`,
+                change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, configFileContent),
+                timeouts: runQueuedTimeoutCallbacks,
+            };
         }
 
         verifyTscWatch({
@@ -1453,12 +1502,12 @@ interface Document {
                 return createWatchedSystem([aFile, bFile, configFile, libFileWithDocument], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => changeWhenLibCheckChanges(sys, { skipLibCheck: true }),
-                sys => changeWhenLibCheckChanges(sys, { skipDefaultLibCheck: true }),
-                sys => changeWhenLibCheckChanges(sys, {}),
-                sys => changeWhenLibCheckChanges(sys, { skipDefaultLibCheck: true }),
-                sys => changeWhenLibCheckChanges(sys, { skipLibCheck: true }),
-                sys => changeWhenLibCheckChanges(sys, {}),
+                changeWhenLibCheckChanges({ skipLibCheck: true }),
+                changeWhenLibCheckChanges({ skipDefaultLibCheck: true }),
+                changeWhenLibCheckChanges({}),
+                changeWhenLibCheckChanges({ skipDefaultLibCheck: true }),
+                changeWhenLibCheckChanges({ skipLibCheck: true }),
+                changeWhenLibCheckChanges({}),
             ]
         });
 
@@ -1487,10 +1536,10 @@ const b: string = a;`
                 return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
-                    sys.writeFile(`${projectRoot}/a.ts`, `export const a: number = 1`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Change shape of a";
+                {
+                    caption: "Change shape of a",
+                    change: sys => sys.writeFile(`${projectRoot}/a.ts`, `export const a: number = 1`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });
@@ -1520,12 +1569,12 @@ const b: string = a;`
                 return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: projectRoot });
             },
             changes: [
-                sys => {
-                    sys.writeFile(`${projectRoot}/a.ts`, `
+                {
+                    caption: "Make changes to file a",
+                    change: sys => sys.writeFile(`${projectRoot}/a.ts`, `
 
-import { x } from "../b";`);
-                    sys.runQueuedTimeoutCallbacks();
-                    return "Make changes to file a";
+import { x } from "../b";`),
+                    timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
         });

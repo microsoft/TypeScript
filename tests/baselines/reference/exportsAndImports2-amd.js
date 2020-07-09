@@ -16,6 +16,7 @@ export { x as y, y as x };
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = exports.x = void 0;
     exports.x = "x";
     exports.y = "y";
 });
@@ -23,6 +24,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = exports.y = void 0;
     Object.defineProperty(exports, "y", { enumerable: true, get: function () { return t1_1.x; } });
     Object.defineProperty(exports, "x", { enumerable: true, get: function () { return t1_1.y; } });
 });
@@ -30,6 +32,7 @@ define(["require", "exports", "./t1"], function (require, exports, t1_1) {
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = exports.y = void 0;
     Object.defineProperty(exports, "y", { enumerable: true, get: function () { return t1_1.x; } });
     Object.defineProperty(exports, "x", { enumerable: true, get: function () { return t1_1.y; } });
 });

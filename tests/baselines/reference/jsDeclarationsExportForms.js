@@ -61,6 +61,7 @@ import "./bar2";
 //// [cls.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -70,6 +71,7 @@ exports.Foo = Foo;
 //// [func.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.func = void 0;
 function func() { }
 exports.func = func;
 //// [bar.js]
@@ -82,8 +84,8 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./cls"), exports);
 //// [bar2.js]
@@ -96,14 +98,15 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (!Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-}
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./func"), exports);
 __exportStar(require("./cls"), exports);
 //// [baz.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
 var cls_1 = require("./cls");
 Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return cls_1.Foo; } });
 //// [bat.js]
@@ -114,11 +117,13 @@ exports.default = ns;
 //// [ban.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ns = void 0;
 var ns = require("./cls");
 exports.ns = ns;
 //// [bol.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.classContainer = void 0;
 var ns = require("./cls");
 exports.classContainer = ns;
 //// [cjs.js]

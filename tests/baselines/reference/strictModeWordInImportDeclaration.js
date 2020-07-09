@@ -6,3 +6,4 @@ import public from "./1"
 
 //// [strictModeWordInImportDeclaration.js]
 "use strict";
+export {};

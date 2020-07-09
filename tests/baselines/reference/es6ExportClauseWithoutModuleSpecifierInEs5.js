@@ -22,6 +22,7 @@ export { x } from "./server";
 //// [server.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = exports.m = exports.c = void 0;
 var c = /** @class */ (function () {
     function c() {
     }
@@ -36,6 +37,7 @@ exports.x = 10;
 //// [client.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = exports.instantiatedModule = exports.c2 = exports.c = void 0;
 var server_1 = require("./server");
 Object.defineProperty(exports, "c", { enumerable: true, get: function () { return server_1.c; } });
 var server_2 = require("./server");

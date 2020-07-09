@@ -83,6 +83,10 @@
         "category": "Error",
         "code": 1024
     },
+    "An index signature cannot have a trailing comma.": {
+        "category": "Error",
+        "code": 1025
+    },
     "Accessibility modifier already seen.": {
         "category": "Error",
         "code": 1028
@@ -211,7 +215,7 @@
         "category": "Error",
         "code": 1063
     },
-    "The return type of an async function or method must be the global Promise<T> type.": {
+    "The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<{0}>'?": {
         "category": "Error",
         "code": 1064
     },
@@ -611,7 +615,11 @@
         "category": "Error",
         "code": 1194
     },
-    "Catch clause variable cannot have a type annotation.": {
+    "'export *' does not re-export a default.": {
+        "category": "Error",
+        "code": 1195
+    },
+    "Catch clause variable type annotation must be 'any' or 'unknown' if specified.": {
         "category": "Error",
         "code": 1196
     },
@@ -859,6 +867,11 @@
         "category": "Error",
         "code": 1261
     },
+    "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
+        "category": "Error",
+        "code": 1262
+    },
+
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -867,7 +880,7 @@
         "category": "Error",
         "code": 1308
     },
-    "'=' can only be used in an object literal property inside a destructuring assignment.": {
+    "Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.": {
         "category": "Error",
         "code": 1312
     },
@@ -1143,6 +1156,14 @@
         "category": "Error",
         "code": 1382
     },
+    "Only named exports may use 'export type'.": {
+        "category": "Error",
+        "code": 1383
+    },
+    "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
+        "category": "Error",
+        "code": 1384
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1201,7 +1222,7 @@
         "category": "Error",
         "code": 2306
     },
-    "Cannot find module '{0}'.": {
+    "Cannot find module '{0}' or its corresponding type declarations.": {
         "category": "Error",
         "code": 2307
     },
@@ -1461,11 +1482,11 @@
         "category": "Error",
         "code": 2371
     },
-    "Parameter '{0}' cannot be referenced in its initializer.": {
+    "Parameter '{0}' cannot reference itself.": {
         "category": "Error",
         "code": 2372
     },
-    "Initializer of parameter '{0}' cannot reference identifier '{1}' declared after it.": {
+    "Parameter '{0}' cannot reference identifier '{1}' declared after it.": {
         "category": "Error",
         "code": 2373
     },
@@ -1564,6 +1585,10 @@
     "Declaration name conflicts with built-in global identifier '{0}'.": {
         "category": "Error",
         "code": 2397
+    },
+    "'constructor' cannot be used as a parameter property name.": {
+        "category": "Error",
+        "code": 2398
     },
     "Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.": {
         "category": "Error",
@@ -2125,10 +2150,6 @@
         "category": "Error",
         "code": 2545
     },
-    "Property '{0}' has conflicting declarations and is inaccessible in type '{1}'.": {
-        "category": "Error",
-        "code": 2546
-    },
     "The type returned by the '{0}()' method of an async iterator must be a promise for a type with a 'value' property.": {
         "category": "Error",
         "code": 2547
@@ -2241,6 +2262,10 @@
         "category": "Error",
         "code": 2577
     },
+    "Unused '@ts-expect-error' directive.": {
+        "category": "Error",
+        "code": 2578
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
@@ -2301,6 +2326,22 @@
         "category": "Error",
         "code": 2594
     },
+    "'{0}' can only be imported by using a default import.": {
+        "category": "Error",
+        "code": 2595
+    },
+    "'{0}' can only be imported by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2596
+    },
+    "'{0}' can only be imported by using a 'require' call or by using a default import.": {
+        "category": "Error",
+        "code": 2597
+    },
+    "'{0}' can only be imported by using a 'require' call or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2598
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2360,6 +2401,38 @@
     "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from {0}' instead?": {
         "category": "Error",
         "code": 2614
+    },
+    "Type of property '{0}' circularly references itself in mapped type '{1}'.": {
+        "category": "Error",
+        "code": 2615
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or a default import.": {
+        "category": "Error",
+        "code": 2616
+    },
+    "'{0}' can only be imported by using 'import {1} = require({2})' or by turning on the 'esModuleInterop' flag and using a default import.": {
+        "category": "Error",
+        "code": 2617
+    },
+    "Source has {0} element(s) but target requires {1}.": {
+        "category": "Error",
+        "code": 2618
+    },
+    "Source has {0} element(s) but target allows only {1}.": {
+        "category": "Error",
+        "code": 2619
+    },
+    "Target requires {0} element(s) but source may have fewer.": {
+        "category": "Error",
+        "code": 2620
+    },
+    "Target allows only {0} element(s) but source may have more.": {
+        "category": "Error",
+        "code": 2621
+    },
+    "Element at index {0} is variadic in one type but not in the other.": {
+        "category": "Error",
+        "code": 2622
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -2751,7 +2824,7 @@
         "category": "Error",
         "code": 2748
     },
-    "'{0}' refers to a value, but is being used as a type here.": {
+    "'{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?": {
         "category": "Error",
         "code": 2749
     },
@@ -2890,6 +2963,38 @@
     "'{0}' is specified more than once, so this usage will be overwritten.": {
         "category": "Error",
         "code": 2783
+    },
+    "'get' and 'set' accessors cannot declare 'this' parameters.": {
+        "category": "Error",
+        "code": 2784
+    },
+    "This spread always overwrites this property.": {
+        "category": "Error",
+        "code": 2785
+    },
+    "'{0}' cannot be used as a JSX component.": {
+        "category": "Error",
+        "code": 2786
+    },
+    "Its return type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2787
+    },
+    "Its instance type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2788
+    },
+    "Its element type '{0}' is not a valid JSX element.": {
+        "category": "Error",
+        "code": 2789
+    },
+    "The operand of a 'delete' operator must be optional.": {
+        "category": "Error",
+        "code": 2790
+    },
+    "Exponentiation cannot be performed on 'bigint' values unless the 'target' option is set to 'es2016' or later.": {
+        "category": "Error",
+        "code": 2791
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3429,6 +3534,34 @@
         "category": "Error",
         "code": 5081
     },
+    "'{0}' could be instantiated with an arbitrary type which could be unrelated to '{1}'.": {
+        "category": "Error",
+        "code": 5082
+    },
+    "Cannot read file '{0}'.": {
+        "category": "Error",
+        "code": 5083
+    },
+    "Tuple members must all have names or all not have names.": {
+        "category": "Error",
+        "code": 5084
+    },
+    "A tuple member cannot be both optional and rest.": {
+        "category": "Error",
+        "code": 5085
+    },
+    "A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.": {
+        "category": "Error",
+        "code": 5086
+    },
+    "A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.": {
+        "category": "Error",
+        "code": 5087
+    },
+    "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 5088
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3642,7 +3775,7 @@
         "category": "Message",
         "code": 6061
     },
-    "Option '{0}' can only be specified in 'tsconfig.json' file.": {
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'null' on command line.": {
         "category": "Error",
         "code": 6064
     },
@@ -4292,6 +4425,30 @@
         "category": "Message",
         "code": 6228
     },
+    "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
+        "category": "Error",
+        "code": 6229
+    },
+    "Option '{0}' can only be specified in 'tsconfig.json' file or set to 'false' or 'null' on command line.": {
+        "category": "Error",
+        "code": 6230
+    },
+    "Could not resolve the path '{0}' with the extensions: {1}.": {
+        "category": "Error",
+        "code": 6231
+    },
+    "Declaration augments declaration in another file. This cannot be serialized.": {
+        "category": "Error",
+        "code": 6232
+    },
+    "This is the declaration being augmented. Consider moving the augmenting declaration into the same file.": {
+        "category": "Error",
+        "code": 6233
+    },
+    "This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?": {
+        "category": "Error",
+        "code": 6234
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4325,6 +4482,10 @@
     "Output file '{0}' from project '{1}' does not exist": {
         "category": "Error",
         "code": 6309
+    },
+    "Referenced project '{0}' may not disable emit.": {
+        "category": "Error",
+        "code": 6310
     },
     "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
         "category": "Message",
@@ -4465,6 +4626,11 @@
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
         "code": 6384
+    },
+    "'{0}' is deprecated": {
+        "category": "Suggestion",
+        "code": 6385,
+        "reportsDeprecated": true
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -4803,6 +4969,14 @@
         "category": "Error",
         "code": 8032
     },
+    "A JSDoc '@typedef' comment may not contain multiple '@type' tags.": {
+        "category": "Error",
+        "code": 8033
+    },
+    "The tag was first specified here.": {
+        "category": "Error",
+        "code": 8034
+    },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
         "code": 9002
@@ -4887,11 +5061,11 @@
         "category": "Error",
         "code": 17015
     },
-    "JSX fragment is not supported when using --jsxFactory": {
+    "The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.": {
         "category": "Error",
         "code": 17016
     },
-    "JSX fragment is not supported when using an inline JSX factory pragma": {
+    "An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.": {
         "category": "Error",
         "code": 17017
     },
@@ -4980,10 +5154,6 @@
     "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
-    },
-    "Remove destructuring": {
-        "category": "Message",
-        "code": 90009
     },
     "Remove variable statement": {
         "category": "Message",
@@ -5084,6 +5254,30 @@
     "Add parameter name": {
         "category": "Message",
         "code": 90034
+    },
+    "Declare private property '{0}'": {
+        "category": "Message",
+        "code": 90035
+    },
+    "Replace '{0}' with 'Promise<{1}>'": {
+        "category": "Message",
+        "code": 90036
+    },
+    "Fix all incorrect return type of an async functions": {
+        "category": "Message",
+        "code": 90037
+    },
+    "Declare private method '{0}'": {
+        "category": "Message",
+        "code": 90038
+    },
+    "Remove unused destructuring declaration": {
+        "category": "Message",
+        "code": 90039
+    },
+    "Remove unused declarations for: '{0}'": {
+        "category": "Message",
+        "code": 90041
     },
     "Declare a private field named '{0}'.": {
         "category": "Message",
@@ -5345,6 +5539,14 @@
         "category": "Message",
         "code": 95066
     },
+    "Add missing call parentheses": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Add all missing call parentheses": {
+        "category": "Message",
+        "code": 95068
+    },
     "Add 'unknown' conversion for non-overlapping types": {
         "category": "Message",
         "code": 95069
@@ -5473,9 +5675,157 @@
         "category": "Message",
         "code": 95100
     },
-    "Wrap invalid character in an expression container": {
+    "Convert all invalid characters to HTML entity code": {
         "category": "Message",
         "code": 95101
+    },
+    "Add '@class' tag": {
+        "category": "Message",
+        "code": 95102
+    },
+    "Add '@this' tag": {
+        "category": "Message",
+        "code": 95103
+    },
+    "Add 'this' parameter.": {
+        "category": "Message",
+        "code": 95104
+    },
+    "Convert function expression '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95105
+    },
+    "Convert function declaration '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95106
+    },
+    "Fix all implicit-'this' errors": {
+        "category": "Message",
+        "code": 95107
+    },
+    "Wrap invalid character in an expression container": {
+        "category": "Message",
+        "code": 95108
+    },
+    "Wrap all invalid characters in an expression container": {
+        "category": "Message",
+        "code": 95109
+    },
+    "Visit https://aka.ms/tsconfig.json to read more about this file": {
+        "category": "Message",
+        "code": 95110
+    },
+    "Add a return statement": {
+        "category": "Message",
+        "code": 95111
+    },
+    "Remove braces from arrow function body": {
+        "category": "Message",
+        "code": 95112
+    },
+    "Wrap the following body with parentheses which should be an object literal": {
+        "category": "Message",
+        "code": 95113
+    },
+    "Add all missing return statement": {
+        "category": "Message",
+        "code": 95114
+    },
+    "Remove braces from all arrow function bodies with relevant issues": {
+        "category": "Message",
+        "code": 95115
+    },
+    "Wrap all object literal with parentheses": {
+        "category": "Message",
+        "code": 95116
+    },
+    "Move labeled tuple element modifiers to labels": {
+        "category": "Message",
+        "code": 95117
+    },
+    "Convert overload list to single signature": {
+        "category": "Message",
+        "code": 95118
+    },
+    "Generate 'get' and 'set' accessors for all overriding properties": {
+        "category": "Message",
+        "code": 95119
+    },
+    "Wrap in JSX fragment": {
+        "category": "Message",
+        "code": 95120
+    },
+    "Wrap all unparented JSX in JSX fragment": {
+        "category": "Message",
+        "code": 95121
+    },
+    "Convert arrow function or function expression": {
+        "category": "Message",
+        "code": 95122
+    },
+    "Convert to anonymous function": {
+        "category": "Message",
+        "code": 95123
+    },
+    "Convert to named function": {
+        "category": "Message",
+        "code": 95124
+    },
+    "Convert to arrow function": {
+        "category": "Message",
+        "code": 95125
+    },
+    "Remove parentheses": {
+        "category": "Message",
+        "code": 95126
+    },
+    "Could not find a containing arrow function": {
+        "category": "Message",
+        "code": 95127
+    },
+    "Containing function is not an arrow function": {
+        "category": "Message",
+        "code": 95128
+    },
+    "Could not find export statement": {
+        "category": "Message",
+        "code": 95129
+    },
+    "This file already has a default export": {
+        "category": "Message",
+        "code": 95130
+    },
+    "Could not find import clause": {
+        "category": "Message",
+        "code": 95131
+    },
+    "Could not find namespace import or named imports": {
+        "category": "Message",
+        "code": 95132
+    },
+    "Selection is not a valid type node": {
+        "category": "Message",
+        "code": 95133
+    },
+    "No type could be extracted from this type node": {
+        "category": "Message",
+        "code": 95134
+    },
+    "Could not find property for which to generate accessor": {
+        "category": "Message",
+        "code": 95135
+    },
+    "Name is not valid": {
+        "category": "Message",
+        "code": 95136
+    },
+    "Can only convert property with modifier": {
+        "category": "Message",
+        "code": 95137
+    },
+    "Switch each misused '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95138
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
@@ -5565,5 +5915,25 @@
     "An optional chain cannot contain private identifiers.": {
         "category": "Error",
         "code": 18030
+    },
+    "The intersection '{0}' was reduced to 'never' because property '{1}' has conflicting types in some constituents.": {
+        "category": "Error",
+        "code": 18031
+    },
+    "The intersection '{0}' was reduced to 'never' because property '{1}' exists in multiple constituents and is private in some.": {
+        "category": "Error",
+        "code": 18032
+    },
+    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+        "category": "Error",
+        "code": 18033
+    },
+    "Specify the JSX fragment factory function to use when targeting 'react' JSX emit with 'jsxFactory' compiler option is specified, e.g. 'Fragment'.": {
+        "category": "Message",
+        "code": 18034
+    },
+    "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
+        "category": "Error",
+        "code": 18035
     }
 }

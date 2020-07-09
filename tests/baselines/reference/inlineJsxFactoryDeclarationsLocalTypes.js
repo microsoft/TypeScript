@@ -91,6 +91,7 @@ const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 "use strict";
 var _this = this;
 exports.__esModule = true;
+exports.tree = exports.MyClass = exports.MySFC = void 0;
 /** @jsx predom */
 var renderer2_1 = require("./renderer2");
 exports.MySFC = function (props) { return renderer2_1.predom("p", null,

@@ -75,7 +75,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t1.path, tsconfig.path]);
 
             // delete t1
-            host.reloadFS([f1, tsconfig]);
+            host.deleteFile(t1.path);
             // run throttled operation
             host.runQueuedTimeoutCallbacks();
 
@@ -83,7 +83,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, tsconfig.path]);
 
             // create t2
-            host.reloadFS([f1, tsconfig, t2]);
+            host.writeFile(t2.path, t2.content);
             // run throttled operation
             host.runQueuedTimeoutCallbacks();
 
@@ -111,10 +111,10 @@ namespace ts.projectSystem {
             );
             let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
             ]);
 
-            host.reloadFS([file1, moduleFile]);
+            host.writeFile(moduleFile.path, moduleFile.content);
             host.runQueuedTimeoutCallbacks();
 
             // Make a change to trigger the program rebuild
@@ -135,8 +135,7 @@ namespace ts.projectSystem {
                 path: `${folderPath}/a.ts`,
                 content: 'import f = require("pad"); f;'
             };
-            const files = [file1, libFile];
-            const host = createServerHost(files);
+            const host = createServerHost([file1, libFile]);
             const session = createSession(host, { canUseEvents: true });
             const service = session.getProjectService();
             session.executeCommandSeq<protocol.OpenRequest>({
@@ -158,7 +157,7 @@ namespace ts.projectSystem {
                     file: file1,
                     syntax: [],
                     semantic: [
-                        createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0, ["pad"])
+                        createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, ["pad"])
                     ],
                     suggestion: []
                 }]
@@ -168,9 +167,9 @@ namespace ts.projectSystem {
                 path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
                 content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
             };
-            files.push(padIndex);
-            host.reloadFS(files, { ignoreWatchInvokedWithTriggerAsFileCreate: true });
-            host.runQueuedTimeoutCallbacks();
+            host.ensureFileOrFolder(padIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
+            host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual update
             checkProjectUpdatedInBackgroundEvent(session, [file1.path]);
             session.clearMessages();
 
@@ -335,19 +334,16 @@ namespace ts.projectSystem {
             let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
 
-            const moduleFileOldPath = moduleFile.path;
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
-            moduleFile.path = moduleFileNewPath;
-            host.reloadFS([moduleFile, file1]);
+            host.renameFile(moduleFile.path, moduleFileNewPath);
             host.runQueuedTimeoutCallbacks();
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
             ]);
             assert.equal(diags.length, 1);
 
-            moduleFile.path = moduleFileOldPath;
-            host.reloadFS([moduleFile, file1]);
+            host.renameFile(moduleFileNewPath, moduleFile.path);
             host.runQueuedTimeoutCallbacks();
 
             // Make a change to trigger the program rebuild
@@ -386,18 +382,15 @@ namespace ts.projectSystem {
             let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
 
-            const moduleFileOldPath = moduleFile.path;
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
-            moduleFile.path = moduleFileNewPath;
-            host.reloadFS([moduleFile, file1, configFile]);
+            host.renameFile(moduleFile.path, moduleFileNewPath);
             host.runQueuedTimeoutCallbacks();
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
             ]);
 
-            moduleFile.path = moduleFileOldPath;
-            host.reloadFS([moduleFile, file1, configFile]);
+            host.renameFile(moduleFileNewPath, moduleFile.path);
             host.runQueuedTimeoutCallbacks();
             diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
             verifyNoDiagnostics(diags);
@@ -420,7 +413,7 @@ namespace ts.projectSystem {
             // should have one external project since config file is missing
             projectService.checkNumberOfProjects({ externalProjects: 1 });
 
-            host.reloadFS([f1, config]);
+            host.writeFile(config.path, config.content);
             projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
         });
@@ -603,9 +596,8 @@ namespace ts.projectSystem {
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1);
 
-                file1.content += fileContent;
-                file2.content += fileContent;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + fileContent);
+                host.writeFile(file2.path, file2.content + fileContent);
                 host.runQueuedTimeoutCallbacks();
                 verifyTrace(resolutionTrace, [
                     getExpectedReusingResolutionFromOldProgram(file1, module1Name),
@@ -631,9 +623,8 @@ namespace ts.projectSystem {
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
-                file1.content += fileContent;
-                file2.content += fileContent;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + fileContent);
+                host.writeFile(file2.path, file2.content + fileContent);
                 host.runQueuedTimeoutCallbacks();
                 verifyTrace(resolutionTrace, [
                     getExpectedReusingResolutionFromOldProgram(file1, module1Name),
@@ -693,11 +684,10 @@ namespace ts.projectSystem {
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1);
 
-                file1.content += fileContent1;
-                file2.content += fileContent2;
-                file3.content += fileContent3;
-                file4.content += fileContent4;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + fileContent1);
+                host.writeFile(file2.path, file2.content + fileContent2);
+                host.writeFile(file3.path, file3.content + fileContent3);
+                host.writeFile(file4.path, file4.content + fileContent4);
                 host.runQueuedTimeoutCallbacks();
 
                 verifyTrace(resolutionTrace, [
@@ -730,11 +720,10 @@ namespace ts.projectSystem {
                 verifyTrace(resolutionTrace, expectedTrace);
                 verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
-                file1.content += fileContent;
-                file2.content += fileContent;
-                file3.content += fileContent;
-                file4.content += fileContent;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + fileContent);
+                host.writeFile(file2.path, file2.content + fileContent);
+                host.writeFile(file3.path, file3.content + fileContent);
+                host.writeFile(file4.path, file4.content + fileContent);
                 host.runQueuedTimeoutCallbacks();
 
                 verifyTrace(resolutionTrace, [
@@ -782,11 +771,10 @@ namespace ts.projectSystem {
                 ]);
                 checkWatches();
 
-                file1.content += importModuleContent;
-                file2.content += importModuleContent;
-                file3.content += importModuleContent;
-                file4.content += importModuleContent;
-                host.reloadFS(files);
+                host.writeFile(file1.path, file1.content + importModuleContent);
+                host.writeFile(file2.path, file2.content + importModuleContent);
+                host.writeFile(file3.path, file3.content + importModuleContent);
+                host.writeFile(file4.path, file4.content + importModuleContent);
                 host.runQueuedTimeoutCallbacks();
 
                 verifyTrace(resolutionTrace, [
@@ -902,7 +890,6 @@ export const x = 10;`
                 checkNumberOfProjects(service, { inferredProjects: 1 });
                 const project = service.inferredProjects[0];
                 checkProjectActualFiles(project, files.map(f => f.path));
-                (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
                 host.checkTimeoutQueueLength(0);
 
                 host.ensureFileOrFolder(npmCacheFile);
@@ -943,8 +930,6 @@ export const x = 10;`
                 const resolutionTrace = createHostModuleResolutionTrace(host);
                 const service = createProjectService(host);
                 service.openClientFile(file1.path);
-                const project = service.configuredProjects.get(configFile.path)!;
-                (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
                 const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
                 getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
                 verifyTrace(resolutionTrace, expectedTrace);

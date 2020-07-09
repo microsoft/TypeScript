@@ -14,6 +14,7 @@ export { MyConstEnum as default } from './ConstEnum';
 //// [ConstEnum.js]
 "use strict";
 exports.__esModule = true;
+exports.MyConstEnum = void 0;
 var MyConstEnum;
 (function (MyConstEnum) {
     MyConstEnum[MyConstEnum["Foo"] = 0] = "Foo";
@@ -35,5 +36,6 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports["default"] = void 0;
 var ConstEnum_1 = require("./ConstEnum");
 __createBinding(exports, ConstEnum_1, "MyConstEnum", "default");

@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -25,43 +25,27 @@ export class B {}
 //// [/tsconfig.json]
 {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error"}}
 
-//// [/b.js]
-export class B {
-}
 
-
-//// [/a.js]
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-import './b';
-const A = /** @class */ (() => {
-    let A = class A {
-        constructor(p) { }
-    };
-    A = __decorate([
-        ((_) => { })
-    ], A);
-    return A;
-})();
-export { A };
-
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
-12:00:15 AM - Starting compilation in watch mode...
+[[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 
-a.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
 
-a.ts(3,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+[7m1[0m import {B} from './b'
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
 
 
-12:00:20 AM - Found 2 errors. Watching for file changes.
+[96ma.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS1219: [0mExperimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+[7m3[0m export class A {
+[7m [0m [91m             ~[0m
+
+
+[[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
+
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
@@ -94,21 +78,49 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/b.js]
+export class B {
+}
+
+
+//// [/a.js]
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+import './b';
+let A = class A {
+    constructor(p) { }
+};
+A = __decorate([
+    ((_) => { })
+], A);
+export { A };
+
+
+
 Change:: Enable experimentalDecorators
 
+Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true}}
 
 
 Output::
 >> Screen clear
-12:00:23 AM - File change detected. Starting incremental compilation...
+[[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
 
 
-a.ts(1,1): error TS1371: This import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because the 'importsNotUsedAsValues' is set to 'error'.
+
+[7m1[0m import {B} from './b'
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
 
 
-12:00:24 AM - Found 1 error. Watching for file changes.
+[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
@@ -141,44 +153,21 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Enable emitDecoratorMetadata
 
+Input::
 //// [/tsconfig.json]
 {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true,"emitDecoratorMetadata":true}}
-
-//// [/b.js] file written with same contents
-//// [/a.js]
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-import { B } from './b';
-const A = /** @class */ (() => {
-    let A = class A {
-        constructor(p) { }
-    };
-    A = __decorate([
-        ((_) => { }),
-        __metadata("design:paramtypes", [B])
-    ], A);
-    return A;
-})();
-export { A };
-
 
 
 Output::
 >> Screen clear
-12:00:27 AM - File change detected. Starting incremental compilation...
+[[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:34 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
@@ -210,3 +199,26 @@ FsWatchesRecursive::
   {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/b.js] file written with same contents
+//// [/a.js]
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+import { B } from './b';
+let A = class A {
+    constructor(p) { }
+};
+A = __decorate([
+    ((_) => { }),
+    __metadata("design:paramtypes", [B])
+], A);
+export { A };
+
+

@@ -29,6 +29,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.makeP = void 0;
 var React = require("react");
 function makeP(Ctor) {
     return /** @class */ (function (_super) {

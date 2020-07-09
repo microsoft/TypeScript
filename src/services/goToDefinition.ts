@@ -100,10 +100,13 @@ namespace ts.GoToDefinition {
     /**
      * True if we should not add definitions for both the signature symbol and the definition symbol.
      * True for `const |f = |() => 0`, false for `function |f() {} const |g = f;`.
+     * Also true for any assignment RHS.
      */
     function symbolMatchesSignature(s: Symbol, calledDeclaration: SignatureDeclaration) {
-        return s === calledDeclaration.symbol || s === calledDeclaration.symbol.parent ||
-            !isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol;
+        return s === calledDeclaration.symbol
+            || s === calledDeclaration.symbol.parent
+            || isAssignmentExpression(calledDeclaration.parent)
+            || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
     }
 
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { fileName: string, file: SourceFile } | undefined {
@@ -246,13 +249,15 @@ namespace ts.GoToDefinition {
         // There are cases when you extend a function by adding properties to it afterwards,
         // we want to strip those extra properties.
         // For deduping purposes, we also want to exclude any declarationNodes if provided.
-        const filteredDeclarations = filter(symbol.declarations, d => d !== declarationNode && (!isAssignmentDeclaration(d) || d === symbol.valueDeclaration)) || undefined;
+        const filteredDeclarations =
+            filter(symbol.declarations, d => d !== declarationNode && (!isAssignmentDeclaration(d) || d === symbol.valueDeclaration))
+            || undefined;
         return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(filteredDeclarations, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node));
 
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
-            if (symbol.flags & SymbolFlags.Class && !(symbol.flags & SymbolFlags.Function) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
+            if (symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
                 const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
@@ -330,13 +335,9 @@ namespace ts.GoToDefinition {
 
     /** Returns a CallLikeExpression where `node` is the target being invoked. */
     function getAncestorCallLikeExpression(node: Node): CallLikeExpression | undefined {
-        const target = climbPastManyPropertyAccesses(node);
-        const callLike = target.parent;
+        const target = findAncestor(node, n => !isRightSideOfPropertyAccess(n));
+        const callLike = target?.parent;
         return callLike && isCallLikeExpression(callLike) && getInvokedExpression(callLike) === target ? callLike : undefined;
-    }
-
-    function climbPastManyPropertyAccesses(node: Node): Node {
-        return isRightSideOfPropertyAccess(node) ? climbPastManyPropertyAccesses(node.parent) : node;
     }
 
     function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {

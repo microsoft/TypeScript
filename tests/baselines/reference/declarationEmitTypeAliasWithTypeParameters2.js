@@ -7,6 +7,7 @@ export const y = (x: Baa<number>) => 1
 //// [declarationEmitTypeAliasWithTypeParameters2.js]
 "use strict";
 exports.__esModule = true;
+exports.y = void 0;
 exports.y = function (x) { return 1; };
 
 
@@ -14,4 +15,4 @@ exports.y = function (x) { return 1; };
 export declare type Bar<X, Y, Z> = () => [X, Y, Z];
 export declare type Baz<M, N> = Bar<M, string, N>;
 export declare type Baa<Y> = Baz<boolean, Y>;
-export declare const y: (x: Bar<boolean, string, number>) => number;
+export declare const y: (x: Baa<number>) => number;

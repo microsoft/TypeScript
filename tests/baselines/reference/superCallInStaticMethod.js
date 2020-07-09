@@ -103,7 +103,7 @@ var Other = /** @class */ (function (_super) {
         set: function (value) {
             _super.staticMethod.call(this);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     // in static method

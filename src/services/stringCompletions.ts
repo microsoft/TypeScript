@@ -8,11 +8,11 @@ namespace ts.Completions.StringCompletions {
         if (isInString(sourceFile, position, contextToken)) {
             if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
             const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host);
-            return convertStringLiteralCompletions(entries, sourceFile, checker, log, preferences);
+            return convertStringLiteralCompletions(entries, contextToken, sourceFile, checker, log, preferences);
         }
     }
 
-    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
+    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, contextToken: Node, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
         if (completion === undefined) {
             return undefined;
         }
@@ -24,6 +24,7 @@ namespace ts.Completions.StringCompletions {
                 getCompletionEntriesFromSymbols(
                     completion.symbols,
                     entries,
+                    contextToken,
                     sourceFile,
                     sourceFile,
                     checker,
@@ -35,7 +36,13 @@ namespace ts.Completions.StringCompletions {
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
             }
             case StringLiteralCompletionKind.Types: {
-                const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.string, sortText: "0" }));
+                const entries = completion.types.map(type => ({
+                    name: type.value,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.string,
+                    sortText: "0",
+                    replacementSpan: getReplacementSpanForContextToken(contextToken)
+                }));
                 return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
             }
             default:
@@ -216,7 +223,7 @@ namespace ts.Completions.StringCompletions {
     function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
         return type && {
             kind: StringLiteralCompletionKind.Properties,
-            symbols: type.getApparentProperties().filter(prop => !isPrivateIdentifierPropertyDeclaration(prop.valueDeclaration)),
+            symbols: filter(type.getApparentProperties(), prop => !(prop.valueDeclaration && isPrivateIdentifierPropertyDeclaration(prop.valueDeclaration))),
             hasIndexSignature: hasIndexSignature(type)
         };
     }

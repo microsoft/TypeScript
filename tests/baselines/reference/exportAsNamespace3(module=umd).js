@@ -30,6 +30,7 @@ foo.ns.b;
 })(function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.b = exports.a = void 0;
     exports.a = 1;
     exports.b = 2;
 });
@@ -49,7 +50,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -64,6 +65,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 })(function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.ns = void 0;
     exports.ns = __importStar(require("./0"));
     ns.a;
     ns.b;
@@ -87,7 +89,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };

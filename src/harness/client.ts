@@ -35,7 +35,7 @@ namespace ts.server {
 
     export class SessionClient implements LanguageService {
         private sequence = 0;
-        private lineMaps: Map<number[]> = createMap<number[]>();
+        private lineMaps: ESMap<string, number[]> = createMap<number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry | undefined;
 
@@ -127,6 +127,13 @@ namespace ts.server {
         /*@internal*/
         configure(preferences: UserPreferences) {
             const args: protocol.ConfigureRequestArguments = { preferences };
+            const request = this.processRequest(CommandNames.Configure, args);
+            this.processResponse(request, /*expectEmptyBody*/ true);
+        }
+
+        /*@internal*/
+        setFormattingOptions(formatOptions: FormatCodeSettings) {
+            const args: protocol.ConfigureRequestArguments = { formatOptions };
             const request = this.processRequest(CommandNames.Configure, args);
             this.processResponse(request, /*expectEmptyBody*/ true);
         }
@@ -358,7 +365,7 @@ namespace ts.server {
         getEmitOutput(file: string): EmitOutput {
             const request = this.processRequest<protocol.EmitOutputRequest>(protocol.CommandTypes.EmitOutput, { file });
             const response = this.processResponse<protocol.EmitOutputResponse>(request);
-            return response.body;
+            return response.body as EmitOutput;
         }
 
         getSyntacticDiagnostics(file: string): DiagnosticWithLocation[] {
@@ -388,6 +395,7 @@ namespace ts.server {
                     category: Debug.checkDefined(category, "convertDiagnostic: category should not be undefined"),
                     code: entry.code,
                     reportsUnnecessary: entry.reportsUnnecessary,
+                    reportsDeprecated: entry.reportsDeprecated,
                 };
             });
         }
@@ -748,6 +756,7 @@ namespace ts.server {
                 file: item.file,
                 name: item.name,
                 kind: item.kind,
+                kindModifiers: item.kindModifiers,
                 span: this.decodeSpan(item.span, item.file),
                 selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
             };
@@ -789,7 +798,11 @@ namespace ts.server {
         }
 
         getProgram(): Program {
-            throw new Error("SourceFile objects are not serializable through the server protocol.");
+            throw new Error("Program objects are not serializable through the server protocol.");
+        }
+
+        getAutoImportProvider(): Program | undefined {
+            throw new Error("Program objects are not serializable through the server protocol.");
         }
 
         getNonBoundSourceFile(_fileName: string): SourceFile {
@@ -805,6 +818,10 @@ namespace ts.server {
         }
 
         getSourceMapper(): never {
+            return notImplemented();
+        }
+
+        clearSourceMapperCache(): never {
             return notImplemented();
         }
 

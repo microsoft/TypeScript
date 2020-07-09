@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/commonFile1.ts
+Input::
 //// [/a/b/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>
                     let x = y
@@ -16,23 +16,27 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/commonFile1.js]
-/// <reference path="commonFile2.ts"/>
-var x = y;
 
-
-
+/a/lib/tsc.js -w /a/b/commonFile1.ts
 Output::
 >> Screen clear
-12:00:13 AM - Starting compilation in watch mode...
+[[90m12:00:13 AM[0m] Starting compilation in watch mode...
 
 
-a/b/commonFile1.ts(1,22): error TS6053: File '/a/b/commonFile2.ts' not found.
+[96ma/b/commonFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/a/b/commonFile2.ts' not found.
 
-a/b/commonFile1.ts(2,29): error TS2304: Cannot find name 'y'.
+[7m1[0m /// <reference path="commonFile2.ts"/>
+[7m [0m [91m                     ~~~~~~~~~~~~~~[0m
 
 
-12:00:16 AM - Found 2 errors. Watching for file changes.
+[96ma/b/commonFile1.ts[0m:[93m2[0m:[93m29[0m - [91merror[0m[90m TS2304: [0mCannot find name 'y'.
+
+[7m2[0m                     let x = y
+[7m [0m [91m                            ~[0m
+
+
+[[90m12:00:16 AM[0m] Found 2 errors. Watching for file changes.
+
 
 
 Program root files: ["/a/b/commonFile1.ts"]
@@ -59,24 +63,26 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/commonFile1.js]
+/// <reference path="commonFile2.ts"/>
+var x = y;
+
+
+
 Change:: create file2
 
-//// [/a/b/commonFile1.js] file written with same contents
+Input::
 //// [/a/b/commonFile2.ts]
 let y = 1
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
 
 
 Output::
 >> Screen clear
-12:00:19 AM - File change detected. Starting incremental compilation...
+[[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:25 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:25 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/commonFile1.ts"]
@@ -104,3 +110,9 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/commonFile1.js] file written with same contents
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+

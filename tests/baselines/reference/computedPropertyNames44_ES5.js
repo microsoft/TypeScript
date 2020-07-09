@@ -40,7 +40,7 @@ var C = /** @class */ (function () {
     }
     Object.defineProperty(C.prototype, "get1", {
         get: function () { return new Foo; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -52,7 +52,7 @@ var D = /** @class */ (function (_super) {
     }
     Object.defineProperty(D.prototype, "set1", {
         set: function (p) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return D;

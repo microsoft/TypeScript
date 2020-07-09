@@ -33,6 +33,6 @@ import { Foo } from "./Foo";
 // When JSX namespace is missing, provide fix for that
 goTo.file("/d.tsx");
 verify.importFixAtPosition([
-`import { Foo } from "./Foo";
-import { React } from "react";
+`import { React } from "react";
+import { Foo } from "./Foo";
 <Foo />;`]);

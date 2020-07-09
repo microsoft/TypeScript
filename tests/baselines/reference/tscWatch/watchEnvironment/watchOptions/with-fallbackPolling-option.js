@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,22 +21,15 @@ let y = 1
 //// [/a/b/tsconfig.json]
 {"watchOptions":{"fallbackPolling":"PriorityInterval"}}
 
-//// [/a/b/commonFile1.js]
-var x = 1;
 
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-
-
+/a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-12:00:17 AM - Starting compilation in watch mode...
+[[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:22 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
@@ -70,3 +63,12 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+

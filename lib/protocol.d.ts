@@ -146,6 +146,16 @@ declare namespace ts.server.protocol {
          * Contains extra information that plugin can include to be passed on
          */
         metadata?: unknown;
+        /**
+         * Exposes information about the performance of this request-response pair.
+         */
+        performanceData?: PerformanceData;
+    }
+    interface PerformanceData {
+        /**
+         * Time spent updating the program graph, in milliseconds.
+         */
+        updateGraphDurationMs?: number;
     }
     /**
      * Arguments for FileRequest messages.
@@ -348,6 +358,7 @@ declare namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
     }
     /**
@@ -384,7 +395,10 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-    type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
+    type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
+        triggerReason?: RefactorTriggerReason;
+    };
+    type RefactorTriggerReason = "implicit" | "invoked";
     /**
      * Response is a list of available refactorings.
      * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
@@ -961,6 +975,16 @@ declare namespace ts.server.protocol {
      * compiler settings.
      */
     type ExternalProjectCompilerOptions = CompilerOptions & CompileOnSaveMixin & WatchOptions;
+    interface FileWithProjectReferenceRedirectInfo {
+        /**
+         * Name of file
+         */
+        fileName: string;
+        /**
+         * True if the file is primarily included in a referenced project
+         */
+        isSourceOfProjectReferenceRedirect: boolean;
+    }
     /**
      * Represents a set of changes that happen in project
      */
@@ -968,15 +992,20 @@ declare namespace ts.server.protocol {
         /**
          * List of added files
          */
-        added: string[];
+        added: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of removed files
          */
-        removed: string[];
+        removed: string[] | FileWithProjectReferenceRedirectInfo[];
         /**
          * List of updated files
          */
-        updated: string[];
+        updated: string[] | FileWithProjectReferenceRedirectInfo[];
+        /**
+         * List of files that have had their project reference redirect status updated
+         * Only provided when the synchronizeProjectList request has includeProjectReferenceRedirectInfo set to true
+         */
+        updatedRedirects?: FileWithProjectReferenceRedirectInfo[];
     }
     /**
      * Information found in a configure request.
@@ -1278,6 +1307,16 @@ declare namespace ts.server.protocol {
          * if true - then file should be recompiled even if it does not have any changes.
          */
         forced?: boolean;
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
+    interface CompileOnSaveEmitFileResponse extends Response {
+        body: boolean | EmitResult;
+    }
+    interface EmitResult {
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
     /**
      * Quickinfo request; value of command field is
@@ -1436,7 +1475,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Formatonkey;
         arguments: FormatOnKeyRequestArgs;
     }
-    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<";
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
     /**
      * Arguments for completions messages.
      */
@@ -1553,6 +1592,11 @@ declare namespace ts.server.protocol {
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
          */
         isRecommended?: true;
+        /**
+         * If true, this completion was generated from traversing the name table of an unchecked JS file,
+         * and therefore may not be accurate.
+         */
+        isFromUncheckedFile?: true;
     }
     /**
      * Additional completion entry details, available on demand
@@ -1868,6 +1912,7 @@ declare namespace ts.server.protocol {
          */
         category: string;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         /**
          * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
          */
@@ -2077,7 +2122,7 @@ declare namespace ts.server.protocol {
     /**
      * Arguments for navto request message.
      */
-    interface NavtoRequestArgs extends FileRequestArgs {
+    interface NavtoRequestArgs {
         /**
          * Search term to navigate to from current location; term can
          * be '.*' or an identifier prefix.
@@ -2087,6 +2132,10 @@ declare namespace ts.server.protocol {
          *  Optional limit on the number of items to return.
          */
         maxResultCount?: number;
+        /**
+         * The file for the request (absolute pathname required).
+         */
+        file?: string;
         /**
          * Optional flag to indicate we want results for just the current file
          * or the entire project.
@@ -2100,7 +2149,7 @@ declare namespace ts.server.protocol {
      * match the search term given in argument 'searchTerm'.  The
      * context for the search is given by the named file.
      */
-    interface NavtoRequest extends FileRequest {
+    interface NavtoRequest extends Request {
         command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }
@@ -2300,9 +2349,11 @@ declare namespace ts.server.protocol {
     interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        containerName?: string;
     }
     interface CallHierarchyIncomingCall {
         from: CallHierarchyItem;
@@ -2347,6 +2398,7 @@ declare namespace ts.server.protocol {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle | ts.IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
     interface FormatCodeSettings extends EditorSettings {
         insertSpaceAfterCommaDelimiter?: boolean;
@@ -2387,6 +2439,8 @@ declare namespace ts.server.protocol {
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
+        readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;

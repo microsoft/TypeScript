@@ -46,6 +46,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.Test = exports.WithTags = exports.FooItem = exports.circularReference = exports.simpleExample = void 0;
 exports.simpleExample = /** @class */ (function () {
     function simpleExample() {
     }

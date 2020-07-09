@@ -1,5 +1,6 @@
 FROM node:current
 ENV CI=true
+ENV TF_BUILD=true
 RUN npm install -g yarn lerna --force
 RUN git clone https://github.com/OfficeDev/office-ui-fabric-react.git /office-ui-fabric-react
 WORKDIR /office-ui-fabric-react
@@ -19,4 +20,4 @@ RUN yarn add typescript@../../typescript.tgz --exact --ignore-scripts
 WORKDIR /office-ui-fabric-react
 RUN yarn
 ENTRYPOINT [ "lerna" ]
-CMD [ "run", "build", "--stream", "--concurrency", "1", "--", "--production", "--lint" ]
+CMD [ "run", "build", "--stream", "--concurrency", "1", "--loglevel", "error", "--", "--production", "--lint", "--silent" ]

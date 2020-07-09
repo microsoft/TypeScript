@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/tsconfig.json]
 
                 {
@@ -30,22 +30,15 @@ let y = 1
 //// [/a/b/e/f3.ts]
 let z = 1
 
-//// [/a/b/c/f1.js]
-var x = 1;
 
-
-//// [/a/b/d/f2.js]
-var y = 1;
-
-
-
+/a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-12:00:25 AM - Starting compilation in watch mode...
+[[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:30 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/b/c/f1.ts","/a/b/d/f2.ts"]
@@ -79,3 +72,12 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/c/f1.js]
+var x = 1;
+
+
+//// [/a/b/d/f2.js]
+var y = 1;
+
+

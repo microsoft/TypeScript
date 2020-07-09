@@ -92,7 +92,11 @@ namespace ts {
         if (node.kind === SyntaxKind.SourceFile) {
             return SemanticMeaning.Value;
         }
-        else if (node.parent.kind === SyntaxKind.ExportAssignment || node.parent.kind === SyntaxKind.ExternalModuleReference) {
+        else if (node.parent.kind === SyntaxKind.ExportAssignment
+            || node.parent.kind === SyntaxKind.ExternalModuleReference
+            || node.parent.kind === SyntaxKind.ImportSpecifier
+            || node.parent.kind === SyntaxKind.ImportClause
+            || isImportEqualsDeclaration(node.parent) && node === node.parent.name) {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
@@ -403,7 +407,7 @@ namespace ts {
             case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.enumMemberElement;
-            case SyntaxKind.Parameter: return hasModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
+            case SyntaxKind.Parameter: return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
@@ -1355,7 +1359,7 @@ namespace ts {
     export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): readonly Signature[] {
         let type = checker.getTypeAtLocation(called);
         if (isOptionalChain(called.parent)) {
-            type = removeOptionality(type, !!called.parent.questionDotToken, /*isOptionalChain*/ true);
+            type = removeOptionality(type, isOptionalChainRoot(called.parent), /*isOptionalChain*/ true);
         }
 
         const signatures = isNewExpression(called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
@@ -1491,7 +1495,7 @@ namespace ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        const flags = isDeclaration(node) ? getCombinedModifierFlags(node) : ModifierFlags.None;
+        const flags = isDeclaration(node) ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) : ModifierFlags.None;
         const result: string[] = [];
 
         if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
@@ -1500,6 +1504,7 @@ namespace ts {
         if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+        if (flags & ModifierFlags.Deprecated) result.push(ScriptElementKindModifier.deprecatedModifier);
         if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
         if (node.kind === SyntaxKind.ExportAssignment) result.push(ScriptElementKindModifier.exportedModifier);
 
@@ -1600,8 +1605,25 @@ namespace ts {
         return !!range && shouldBeReference === tripleSlashDirectivePrefixRegex.test(sourceFile.text.substring(range.pos, range.end));
     }
 
+    export function getReplacementSpanForContextToken(contextToken: Node | undefined) {
+        if (!contextToken) return undefined;
+
+        switch (contextToken.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return createTextSpanFromStringLiteralLikeContent(<StringLiteralLike>contextToken);
+            default:
+                return createTextSpanFromNode(contextToken);
+        }
+    }
+
     export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endNode?: Node): TextSpan {
         return createTextSpanFromBounds(node.getStart(sourceFile), (endNode || node).getEnd());
+    }
+
+    export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike) {
+        if (node.isUnterminated) return undefined;
+        return createTextSpanFromBounds(node.getStart() + 1, node.getEnd() - 1);
     }
 
     export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
@@ -1691,6 +1713,9 @@ namespace ts {
             : isPrivateIdentifier(name) ? idText(name) : getTextOfIdentifierOrLiteral(name);
     }
 
+    export function programContainsModules(program: Program): boolean {
+        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
+    }
     export function programContainsEs6Modules(program: Program): boolean {
         return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
     }
@@ -1698,12 +1723,28 @@ namespace ts {
         return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
-    export function hostUsesCaseSensitiveFileNames(host: { useCaseSensitiveFileNames?(): boolean; }): boolean {
-        return host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+    export function createModuleSpecifierResolutionHost(program: Program, host: LanguageServiceHost): ModuleSpecifierResolutionHost {
+        // Mix in `getProbableSymlinks` from Program when host doesn't have it
+        // in order for non-Project hosts to have a symlinks cache.
+        return {
+            fileExists: fileName => program.fileExists(fileName),
+            getCurrentDirectory: () => host.getCurrentDirectory(),
+            readFile: maybeBind(host, host.readFile),
+            useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+            getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || (() => program.getProbableSymlinks()),
+            getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
+            getSourceFiles: () => program.getSourceFiles(),
+            redirectTargetsMap: program.redirectTargetsMap,
+            getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
+            isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
+        };
     }
 
-    export function hostGetCanonicalFileName(host: { useCaseSensitiveFileNames?(): boolean; }): GetCanonicalFileName {
-        return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
+    export function getModuleSpecifierResolverHost(program: Program, host: LanguageServiceHost): SymbolTracker["moduleResolverHost"] {
+        return {
+            ...createModuleSpecifierResolutionHost(program, host),
+            getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
+        };
     }
 
     export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
@@ -1711,17 +1752,17 @@ namespace ts {
     }
 
     export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
-        return createImportDeclaration(
+        return factory.createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
-                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined, isTypeOnly)
+                ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
                 : undefined,
             typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier);
     }
 
     export function makeStringLiteral(text: string, quotePreference: QuotePreference): StringLiteral {
-        return createLiteral(text, quotePreference === QuotePreference.Single);
+        return factory.createStringLiteral(text, quotePreference === QuotePreference.Single);
     }
 
     export const enum QuotePreference { Single, Double }
@@ -1831,13 +1872,34 @@ namespace ts {
         return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
 
-    export function insertImport(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDecl: Statement, blankLineBetween: boolean): void {
-        const lastImportDeclaration = findLast(sourceFile.statements, isAnyImportSyntax);
-        if (lastImportDeclaration) {
-            changes.insertNodeAfter(sourceFile, lastImportDeclaration, importDecl);
+    export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean): void {
+        const decl = isArray(imports) ? imports[0] : imports;
+        const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
+        const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
+        const sortedNewImports = isArray(imports) ? stableSort(imports, OrganizeImports.compareImportsOrRequireStatements) : [imports];
+        if (!existingImportStatements.length) {
+            changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
+        }
+        else if (existingImportStatements && OrganizeImports.importsAreSorted(existingImportStatements)) {
+            for (const newImport of sortedNewImports) {
+                const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
+                if (insertionIndex === 0) {
+                    changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false);
+                }
+                else {
+                    const prevImport = existingImportStatements[insertionIndex - 1];
+                    changes.insertNodeAfter(sourceFile, prevImport, newImport);
+                }
+            }
         }
         else {
-            changes.insertNodeAtTopOfFile(sourceFile, importDecl, blankLineBetween);
+            const lastExistingImport = lastOrUndefined(existingImportStatements);
+            if (lastExistingImport) {
+                changes.insertNodesAfter(sourceFile, lastExistingImport, sortedNewImports);
+            }
+            else {
+                changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
+            }
         }
     }
 
@@ -2035,9 +2097,9 @@ namespace ts {
     /**
      * The default is CRLF.
      */
-    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost, formatSettings?: FormatCodeSettings) {
-        return (formatSettings && formatSettings.newLineCharacter) ||
-            (host.getNewLine && host.getNewLine()) ||
+    export function getNewLineOrDefaultFromHost(host: FormattingHost, formatSettings?: FormatCodeSettings) {
+        return formatSettings?.newLineCharacter ||
+            host.getNewLine?.() ||
             carriageReturnLineFeed;
     }
 
@@ -2078,15 +2140,10 @@ namespace ts {
         return !!location.parent && isImportOrExportSpecifier(location.parent) && location.parent.propertyName === location;
     }
 
-    export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
-        const scriptKind = getScriptKind(fileName, host);
-        return some(scriptKinds, k => k === scriptKind);
-    }
-
-    export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
+    export function getScriptKind(fileName: string, host: LanguageServiceHost): ScriptKind {
         // First check to see if the script kind was specified by the host. Chances are the host
         // may override the default script kind for the file extension.
-        return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
+        return ensureScriptKind(fileName, host.getScriptKind && host.getScriptKind(fileName));
     }
 
     export function getSymbolTarget(symbol: Symbol, checker: TypeChecker): Symbol {
@@ -2140,18 +2197,20 @@ namespace ts {
         return clone;
     }
 
-    export function getSynthesizedDeepCloneWithRenames<T extends Node>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
+    export function getSynthesizedDeepCloneWithRenames<T extends Node>(node: T, includeTrivia = true, renameMap?: ESMap<string, Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         let clone;
         if (renameMap && checker && isBindingElement(node) && isIdentifier(node.name) && isObjectBindingPattern(node.parent)) {
             const symbol = checker.getSymbolAtLocation(node.name);
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
-                clone = createBindingElement(
-                    node.dotDotDotToken,
-                    node.propertyName || node.name,
-                    renameInfo,
-                    node.initializer);
+                clone = setOriginalNode(
+                    factory.createBindingElement(
+                        node.dotDotDotToken,
+                        node.propertyName || node.name,
+                        renameInfo,
+                        node.initializer),
+                    node);
             }
         }
         else if (renameMap && checker && isIdentifier(node)) {
@@ -2159,7 +2218,7 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo) {
-                clone = createIdentifier(renameInfo.text);
+                clone = setOriginalNode(factory.createIdentifier(renameInfo.text), node);
             }
         }
 
@@ -2174,27 +2233,24 @@ namespace ts {
     }
 
 
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: ESMap<string, Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         const visited = (renameMap || checker || callback) ?
             visitEachChild(node, wrapper, nullTransformationContext) :
             visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
-            const clone = getSynthesizedClone(node);
-            if (isStringLiteral(clone)) {
-                clone.textSourceNode = node as any;
-            }
-            else if (isNumericLiteral(clone)) {
-                clone.numericLiteralFlags = (node as any).numericLiteralFlags;
-            }
+            const clone =
+                isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
+                isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
+                factory.cloneNode(node);
             return setTextRange(clone, node);
         }
 
         // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
         // the new node created by visitEachChild with the extra changes getSynthesizedClone
         // would have made.
-        visited.parent = undefined!;
+        (visited as Mutable<T>).parent = undefined!;
         return visited;
 
         function wrapper(node: T) {
@@ -2205,7 +2261,7 @@ namespace ts {
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        return nodes && factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
     }
 
     /**
@@ -2228,6 +2284,27 @@ namespace ts {
      */
     export function suppressTrailingTrivia(node: Node) {
         addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+    }
+
+    export function copyComments(sourceNode: Node, targetNode: Node) {
+        const sourceFile = sourceNode.getSourceFile();
+        const text = sourceFile.text;
+        if (hasLeadingLineBreak(sourceNode, text)) {
+            copyLeadingComments(sourceNode, targetNode, sourceFile);
+        }
+        else {
+            copyTrailingAsLeadingComments(sourceNode, targetNode, sourceFile);
+        }
+        copyTrailingComments(sourceNode, targetNode, sourceFile);
+    }
+
+    function hasLeadingLineBreak(node: Node, text: string) {
+        const start = node.getFullStart();
+        const end = node.getStart();
+        for (let i = start; i < end; i++) {
+            if (text.charCodeAt(i) === CharacterCodes.lineFeed) return true;
+        }
+        return false;
     }
 
     function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
@@ -2324,6 +2401,11 @@ namespace ts {
         return idx === -1 ? -1 : idx + 1;
     }
 
+    /* @internal */
+    export function needsParentheses(expression: Expression) {
+        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
+    }
+
     export function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {
         const { parent } = node;
         switch (parent.kind) {
@@ -2390,6 +2472,8 @@ namespace ts {
         return checker.getTypeAtLocation(caseClause.parent.parent.expression);
     }
 
+    export const ANONYMOUS = "anonymous function";
+
     export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
         const checker = program.getTypeChecker();
         let typeIsAccessible = true;
@@ -2401,14 +2485,7 @@ namespace ts {
             reportInaccessibleThisError: notAccessible,
             reportPrivateInBaseOfClassExpression: notAccessible,
             reportInaccessibleUniqueSymbolError: notAccessible,
-            moduleResolverHost: {
-                readFile: host.readFile,
-                fileExists: host.fileExists,
-                directoryExists: host.directoryExists,
-                getSourceFiles: program.getSourceFiles,
-                getCurrentDirectory: program.getCurrentDirectory,
-                getCommonSourceDirectory: program.getCommonSourceDirectory,
-            }
+            moduleResolverHost: getModuleSpecifierResolverHost(program, host)
         });
         return typeIsAccessible ? res : undefined;
     }
@@ -2612,7 +2689,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | false | undefined {
+    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): PackageJsonInfo | undefined {
         if (!host.readFile) {
             return undefined;
         }
@@ -2622,19 +2699,20 @@ namespace ts {
         const stringContent = host.readFile(fileName);
         if (!stringContent) return undefined;
 
-        const content = tryParseJson(stringContent) as PackageJsonRaw;
-        if (!content) return false;
+        const content = tryParseJson(stringContent) as PackageJsonRaw | undefined;
         const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
-        for (const key of dependencyKeys) {
-            const dependencies = content[key];
-            if (!dependencies) {
-                continue;
+        if (content) {
+            for (const key of dependencyKeys) {
+                const dependencies = content[key];
+                if (!dependencies) {
+                    continue;
+                }
+                const dependencyMap = createMap<string>();
+                for (const packageName in dependencies) {
+                    dependencyMap.set(packageName, dependencies[packageName]);
+                }
+                info[key] = dependencyMap;
             }
-            const dependencyMap = createMap<string>();
-            for (const packageName in dependencies) {
-                dependencyMap.set(packageName, dependencies[packageName]);
-            }
-            info[key] = dependencyMap;
         }
 
         const dependencyGroups = [
@@ -2646,6 +2724,7 @@ namespace ts {
 
         return {
             ...info,
+            parseable: !!content,
             fileName,
             get,
             has(dependencyName, inGroups) {
@@ -2752,6 +2831,53 @@ namespace ts {
                 || codefix.moduleSymbolToValidIdentifier(Debug.checkDefined(symbol.parent), scriptTarget);
         }
         return symbol.name;
+    }
+
+    /**
+     * Useful to check whether a string contains another string at a specific index
+     * without allocating another string or traversing the entire contents of the outer string.
+     *
+     * This function is useful in place of either of the following:
+     *
+     * ```ts
+     * // Allocates
+     * haystack.substr(startIndex, needle.length) === needle
+     *
+     * // Full traversal
+     * haystack.indexOf(needle, startIndex) === startIndex
+     * ```
+     *
+     * @param haystack The string that potentially contains `needle`.
+     * @param needle The string whose content might sit within `haystack`.
+     * @param startIndex The index within `haystack` to start searching for `needle`.
+     */
+    export function stringContainsAt(haystack: string, needle: string, startIndex: number) {
+        const needleLength = needle.length;
+        if (needleLength + startIndex > haystack.length) {
+            return false;
+        }
+        for (let i = 0; i < needleLength; i++) {
+            if (needle.charCodeAt(i) !== haystack.charCodeAt(i + startIndex)) return false;
+        }
+        return true;
+    }
+
+    export function startsWithUnderscore(name: string): boolean {
+        return name.charCodeAt(0) === CharacterCodes._;
+    }
+
+    export function isGlobalDeclaration(declaration: Declaration) {
+        return !isNonGlobalDeclaration(declaration);
+    }
+
+    export function isNonGlobalDeclaration(declaration: Declaration) {
+        const sourceFile = declaration.getSourceFile();
+        // If the file is not a module, the declaration is global
+        if (!sourceFile.externalModuleIndicator && !sourceFile.commonJsModuleIndicator) {
+            return false;
+        }
+        // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
+        return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
     }
 
     // #endregion

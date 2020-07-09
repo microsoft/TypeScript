@@ -49,6 +49,7 @@ export declare function __makeTemplateObject(cooked: string[], raw: string[]): T
 //// [external.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.result = exports.B = exports.A = void 0;
 var tslib_1 = require("tslib");
 var A = /** @class */ (function () {
     function A() {

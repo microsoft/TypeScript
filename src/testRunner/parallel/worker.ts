@@ -41,7 +41,7 @@ namespace Harness.Parallel.Worker {
             return class extends (base as typeof Mocha.Runnable) {
                 resetTimeout() {
                     this.clearTimeout();
-                    if (this.enableTimeouts()) {
+                    if (this.timeout() > 0) {
                         sendMessage({ type: "timeout", payload: { duration: this.timeout() || 1e9 } });
                         this.timer = true;
                     }
@@ -301,9 +301,9 @@ namespace Harness.Parallel.Worker {
 
         // The root suite for all unit tests.
         let unitTestSuite: Suite;
-        let unitTestSuiteMap: ts.Map<Mocha.Suite>;
+        let unitTestSuiteMap: ts.ESMap<string, Mocha.Suite>;
         // (Unit) Tests directly within the root suite
-        let unitTestTestMap: ts.Map<Mocha.Test>;
+        let unitTestTestMap: ts.ESMap<string, Mocha.Test>;
 
         if (runUnitTests) {
             unitTestSuite = new Suite("", new Mocha.Context());

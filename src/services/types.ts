@@ -41,6 +41,8 @@ namespace ts {
         getName(): string;
         getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
+        /* @internal */
+        getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
         getJsDocTags(): JSDocTagInfo[];
     }
 
@@ -90,7 +92,7 @@ namespace ts {
         /* @internal */ scriptSnapshot: IScriptSnapshot | undefined;
         /* @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
 
-        /* @internal */ getNamedDeclarations(): Map<readonly Declaration[]>;
+        /* @internal */ getNamedDeclarations(): ESMap<string, readonly Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
@@ -114,7 +116,7 @@ namespace ts {
      * snapshot is observably immutable. i.e. the same calls with the same parameters will return
      * the same values.
      */
-    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     export interface IScriptSnapshot {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
@@ -193,18 +195,36 @@ namespace ts {
     /* @internal */
     export interface PackageJsonInfo {
         fileName: string;
-        dependencies?: Map<string>;
-        devDependencies?: Map<string>;
-        peerDependencies?: Map<string>;
-        optionalDependencies?: Map<string>;
+        parseable: boolean;
+        dependencies?: ESMap<string, string>;
+        devDependencies?: ESMap<string, string>;
+        peerDependencies?: ESMap<string, string>;
+        optionalDependencies?: ESMap<string, string>;
         get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
         has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
+    }
+
+    /* @internal */
+    export interface FormattingHost {
+        getNewLine?(): string;
+    }
+
+    /* @internal */
+    export const enum PackageJsonAutoImportPreference {
+        None,
+        ExcludeDevDependencies,
+        All
+    }
+
+    export interface PerformanceEvent {
+        kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
+        durationMs: number;
     }
 
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends ModuleSpecifierResolutionHost {
+    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -220,6 +240,7 @@ namespace ts {
         log?(s: string): void;
         trace?(s: string): void;
         error?(s: string): void;
+        useCaseSensitiveFileNames?(): boolean;
 
         /*
          * LS host can optionally implement these methods to support completions for module specifiers.
@@ -246,9 +267,11 @@ namespace ts {
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
-        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
+        /* @internal */
+        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyESMap<string, string>;
 
         /*
          * Required for full import and type reference completions.
@@ -272,11 +295,17 @@ namespace ts {
         /* @internal */
         getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
+        getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */
         getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
         /* @internal */
-        setResolvedProjectReferenceCallbacks?(callbacks: ResolvedProjectReferenceCallbacks): void;
+        setCompilerHost?(host: CompilerHost): void;
         /* @internal */
         useSourceOfProjectReferenceRedirect?(): boolean;
+        /* @internal */
+        getPackageJsonAutoImportProvider?(): Program | undefined;
+        /* @internal */
+        sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
     }
 
     /* @internal */
@@ -289,43 +318,110 @@ namespace ts {
     // with a language service host instance
     //
     export interface LanguageService {
+        /** This is used as a part of restarting the language service. */
         cleanupSemanticCache(): void;
 
+        /**
+         * Gets errors indicating invalid syntax in a file.
+         *
+         * In English, "this cdeo have, erorrs" is syntactically invalid because it has typos,
+         * grammatical errors, and misplaced punctuation. Likewise, examples of syntax
+         * errors in TypeScript are missing parentheses in an `if` statement, mismatched
+         * curly braces, and using a reserved keyword as a variable name.
+         *
+         * These diagnostics are inexpensive to compute and don't require knowledge of
+         * other files. Note that a non-empty result increases the likelihood of false positives
+         * from `getSemanticDiagnostics`.
+         *
+         * While these represent the majority of syntax-related diagnostics, there are some
+         * that require the type system, which will be present in `getSemanticDiagnostics`.
+         *
+         * @param fileName A path to the file you want syntactic diagnostics for
+         */
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
-        /** The first time this is called, it will return global diagnostics (no location). */
+
+        /**
+         * Gets warnings or errors indicating type system issues in a given file.
+         * Requesting semantic diagnostics may start up the type system and
+         * run deferred work, so the first call may take longer than subsequent calls.
+         *
+         * Unlike the other get*Diagnostics functions, these diagnostics can potentially not
+         * include a reference to a source file. Specifically, the first time this is called,
+         * it will return global diagnostics with no associated location.
+         *
+         * To contrast the differences between semantic and syntactic diagnostics, consider the
+         * sentence: "The sun is green." is syntactically correct; those are real English words with
+         * correct sentence structure. However, it is semantically invalid, because it is not true.
+         *
+         * @param fileName A path to the file you want semantic diagnostics for
+         */
         getSemanticDiagnostics(fileName: string): Diagnostic[];
+
+        /**
+         * Gets suggestion diagnostics for a specific file. These diagnostics tend to
+         * proactively suggest refactors, as opposed to diagnostics that indicate
+         * potentially incorrect runtime behavior.
+         *
+         * @param fileName A path to the file you want semantic diagnostics for
+         */
         getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[];
 
         // TODO: Rename this to getProgramDiagnostics to better indicate that these are any
         // diagnostics present for the program level, and not just 'options' diagnostics.
+
+        /**
+         * Gets global diagnostics related to the program configuration and compiler options.
+         */
         getCompilerOptionsDiagnostics(): Diagnostic[];
 
-        /**
-         * @deprecated Use getEncodedSyntacticClassifications instead.
-         */
+        /** @deprecated Use getEncodedSyntacticClassifications instead. */
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
 
-        /**
-         * @deprecated Use getEncodedSemanticClassifications instead.
-         */
+        /** @deprecated Use getEncodedSemanticClassifications instead. */
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
 
         // Encoded as triples of [start, length, ClassificationType].
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
+        /**
+         * Gets completion entries at a particular position in a file.
+         *
+         * @param fileName The path to the file
+         * @param position A zero-based index of the character where you want the entries
+         * @param options An object describing how the request was triggered and what kinds
+         * of code actions can be returned with the completions.
+         */
         getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): WithMetadata<CompletionInfo> | undefined;
-        // "options" and "source" are optional only for backwards-compatibility
+
+        /**
+         * Gets the extended details for a completion entry retrieved from `getCompletionsAtPosition`.
+         *
+         * @param fileName The path to the file
+         * @param position A zero based index of the character where you want the entries
+         * @param entryName The name from an existing completion which came from `getCompletionsAtPosition`
+         * @param formatOptions How should code samples in the completions be formatted, can be undefined for backwards compatibility
+         * @param source Source code for the current file, can be undefined for backwards compatibility
+         * @param preferences User settings, can be undefined for backwards compatibility
+         */
         getCompletionEntryDetails(
             fileName: string,
             position: number,
-            name: string,
+            entryName: string,
             formatOptions: FormatCodeOptions | FormatCodeSettings | undefined,
             source: string | undefined,
             preferences: UserPreferences | undefined,
         ): CompletionEntryDetails | undefined;
+
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
 
+        /**
+         * Gets semantic information about the identifier at a particular position in a
+         * file. Quick info is what you typically see when you hover in an editor.
+         *
+         * @param fileName The path to the file
+         * @param position A zero-based index of the character where you want the quick info
+         */
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
 
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
@@ -382,6 +478,8 @@ namespace ts {
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         /** @internal */
         getSourceMapper(): SourceMapper;
+        /** @internal */
+        clearSourceMapperCache(): void;
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: readonly number[], formatOptions: FormatCodeSettings, preferences: UserPreferences): readonly CodeFixAction[];
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
@@ -396,7 +494,7 @@ namespace ts {
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
 
-        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined): ApplicableRefactorInfo[];
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
         organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
@@ -406,6 +504,7 @@ namespace ts {
         getProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
+        /* @internal */ getAutoImportProvider(): Program | undefined;
 
         dispose(): void;
     }
@@ -533,9 +632,11 @@ namespace ts {
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string;
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        containerName?: string;
     }
 
     export interface CallHierarchyIncomingCall {
@@ -649,6 +750,12 @@ namespace ts {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
+
+        /**
+         * A message to show to the user if the refactoring cannot be applied in
+         * the current context.
+         */
+        notApplicableReason?: string;
     }
 
     /**
@@ -661,6 +768,8 @@ namespace ts {
         renameLocation?: number;
         commands?: CodeActionCommand[];
     }
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     export interface TextInsertion {
         newText: string;
@@ -760,6 +869,7 @@ namespace ts {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
 
     /* @deprecated - consider using FormatCodeSettings instead */
@@ -792,6 +902,7 @@ namespace ts {
         readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         readonly insertSpaceAfterTypeAssertion?: boolean;
@@ -825,6 +936,7 @@ namespace ts {
             placeOpenBraceOnNewLineForFunctions: false,
             placeOpenBraceOnNewLineForControlBlocks: false,
             semicolons: SemicolonPreference.Ignore,
+            trimTrailingWhitespace: true
         };
     }
 
@@ -989,6 +1101,7 @@ namespace ts {
         source?: string;
         isRecommended?: true;
         isFromUncheckedFile?: true;
+        isPackageJsonImport?: true;
     }
 
     export interface CompletionEntryDetails {
@@ -1213,6 +1326,8 @@ namespace ts {
         abstractModifier = "abstract",
         optionalModifier = "optional",
 
+        deprecatedModifier = "deprecated",
+
         dtsModifier = ".d.ts",
         tsModifier = ".ts",
         tsxModifier = ".tsx",
@@ -1322,5 +1437,6 @@ namespace ts {
         program: Program;
         cancellationToken?: CancellationToken;
         preferences: UserPreferences;
+        triggerReason?: RefactorTriggerReason;
     }
 }

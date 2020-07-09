@@ -1,0 +1,8 @@
+tests/cases/conformance/es2020/modules/exportAsNamespace_nonExistent.ts(1,21): error TS2307: Cannot find module './nonexistent' or its corresponding type declarations.
+
+
+==== tests/cases/conformance/es2020/modules/exportAsNamespace_nonExistent.ts (1 errors) ====
+    export * as ns from './nonexistent'; // Error
+                        ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './nonexistent' or its corresponding type declarations.
+    

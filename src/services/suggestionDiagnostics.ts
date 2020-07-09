@@ -133,7 +133,7 @@ namespace ts {
         return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
     }
 
-    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement {
+    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement & { expression: CallExpression } {
         return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
     }
 
@@ -156,7 +156,18 @@ namespace ts {
     }
 
     function isPromiseHandler(node: Node): node is CallExpression {
-        return isCallExpression(node) && (hasPropertyAccessExpressionWithName(node, "then") || hasPropertyAccessExpressionWithName(node, "catch"));
+        return isCallExpression(node) && (
+            hasPropertyAccessExpressionWithName(node, "then") && hasSupportedNumberOfArguments(node) ||
+            hasPropertyAccessExpressionWithName(node, "catch"));
+    }
+
+    function hasSupportedNumberOfArguments(node: CallExpression) {
+        if (node.arguments.length > 2) return false;
+        if (node.arguments.length < 2) return true;
+        return some(node.arguments, arg => {
+            return arg.kind === SyntaxKind.NullKeyword ||
+                isIdentifier(arg) && arg.text === "undefined";
+        });
     }
 
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts

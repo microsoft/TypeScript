@@ -78,12 +78,15 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 ---
 >>>    var skillA = _a[1];
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^
-3 >                      ^^^->
+2 >        ^^^^^^
+3 >              ^^^^^^^^
+4 >                      ^^^->
 1->
 2 >        skillA
+3 >              
 1->Emitted(3, 9) Source(7, 18) + SourceIndex(0)
-2 >Emitted(3, 23) Source(7, 24) + SourceIndex(0)
+2 >Emitted(3, 15) Source(7, 24) + SourceIndex(0)
+3 >Emitted(3, 23) Source(7, 24) + SourceIndex(0)
 ---
 >>>    console.log(skillA);
 1->^^^^
@@ -144,12 +147,15 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 ---
 >>>    var nameMB = _a[0];
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^
-3 >                      ^^^->
+2 >        ^^^^^^
+3 >              ^^^^^^^^
+4 >                      ^^^->
 1->
 2 >        nameMB
+3 >              
 1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
-2 >Emitted(7, 23) Source(11, 22) + SourceIndex(0)
+2 >Emitted(7, 15) Source(11, 22) + SourceIndex(0)
+3 >Emitted(7, 23) Source(11, 22) + SourceIndex(0)
 ---
 >>>    console.log(nameMB);
 1->^^^^
@@ -210,29 +216,38 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 ---
 >>>    var nameMA = _a[0], _b = _a[1], primarySkillA = _b[0], secondarySkillA = _b[1];
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^
-3 >                      ^^
-4 >                        ^^^^^^^^^^
-5 >                                  ^^
-6 >                                    ^^^^^^^^^^^^^^^^^^^^^
-7 >                                                         ^^
-8 >                                                           ^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^
+3 >              ^^^^^^^^
+4 >                      ^^
+5 >                        ^^^^^^^^^^
+6 >                                  ^^
+7 >                                    ^^^^^^^^^^^^^
+8 >                                                 ^^^^^^^^
+9 >                                                         ^^
+10>                                                           ^^^^^^^^^^^^^^^
+11>                                                                          ^^^^^^^^
 1->
 2 >        nameMA
-3 >                      , 
-4 >                        [primarySkillA, secondarySkillA]
-5 >                                  
-6 >                                    primarySkillA
-7 >                                                         , 
-8 >                                                           secondarySkillA
+3 >              
+4 >                      , 
+5 >                        [primarySkillA, secondarySkillA]
+6 >                                  
+7 >                                    primarySkillA
+8 >                                                 
+9 >                                                         , 
+10>                                                           secondarySkillA
+11>                                                                          
 1->Emitted(11, 9) Source(15, 16) + SourceIndex(0)
-2 >Emitted(11, 23) Source(15, 22) + SourceIndex(0)
-3 >Emitted(11, 25) Source(15, 24) + SourceIndex(0)
-4 >Emitted(11, 35) Source(15, 56) + SourceIndex(0)
-5 >Emitted(11, 37) Source(15, 25) + SourceIndex(0)
-6 >Emitted(11, 58) Source(15, 38) + SourceIndex(0)
-7 >Emitted(11, 60) Source(15, 40) + SourceIndex(0)
-8 >Emitted(11, 83) Source(15, 55) + SourceIndex(0)
+2 >Emitted(11, 15) Source(15, 22) + SourceIndex(0)
+3 >Emitted(11, 23) Source(15, 22) + SourceIndex(0)
+4 >Emitted(11, 25) Source(15, 24) + SourceIndex(0)
+5 >Emitted(11, 35) Source(15, 56) + SourceIndex(0)
+6 >Emitted(11, 37) Source(15, 25) + SourceIndex(0)
+7 >Emitted(11, 50) Source(15, 38) + SourceIndex(0)
+8 >Emitted(11, 58) Source(15, 38) + SourceIndex(0)
+9 >Emitted(11, 60) Source(15, 40) + SourceIndex(0)
+10>Emitted(11, 75) Source(15, 55) + SourceIndex(0)
+11>Emitted(11, 83) Source(15, 55) + SourceIndex(0)
 ---
 >>>    console.log(nameMA);
 1 >^^^^
@@ -293,11 +308,14 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern2.ts
 ---
 >>>    var multiRobotAInfo = _a.slice(0);
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^
+3 >                       ^^^^^^^^^^^^^^
 1->
-2 >        ...multiRobotAInfo
-1->Emitted(15, 9) Source(19, 16) + SourceIndex(0)
-2 >Emitted(15, 38) Source(19, 34) + SourceIndex(0)
+2 >        multiRobotAInfo
+3 >                       
+1->Emitted(15, 9) Source(19, 19) + SourceIndex(0)
+2 >Emitted(15, 24) Source(19, 34) + SourceIndex(0)
+3 >Emitted(15, 38) Source(19, 34) + SourceIndex(0)
 ---
 >>>    console.log(multiRobotAInfo);
 1 >^^^^

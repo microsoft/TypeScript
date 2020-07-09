@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w /a/app.ts
+Input::
 //// [/a/app.ts]
 var x = 1;
 var y = 2;
@@ -16,19 +16,15 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/app.js]
-var x = 1;
-var y = 2;
 
-
-
+/a/lib/tsc.js --w /a/app.ts
 Output::
 >> Screen clear
-12:00:11 AM - Starting compilation in watch mode...
+[[90m12:00:11 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:14 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:14 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/app.ts"]
@@ -53,27 +49,28 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/app.js]
+var x = 1;
+var y = 2;
+
+
+
 Change:: Append a line
 
+Input::
 //// [/a/app.ts]
 var x = 1;
 var y = 2;
 var z = 3;
 
-//// [/a/app.js]
-var x = 1;
-var y = 2;
-var z = 3;
-
-
 
 Output::
 >> Screen clear
-12:00:17 AM - File change detected. Starting incremental compilation...
+[[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:21 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:21 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/app.ts"]
@@ -97,3 +94,10 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/app.js]
+var x = 1;
+var y = 2;
+var z = 3;
+
+

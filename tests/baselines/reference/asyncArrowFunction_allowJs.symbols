@@ -1,0 +1,30 @@
+=== tests/cases/conformance/async/es2017/asyncArrowFunction/file.js ===
+// Error (good)
+/** @type {function(): string} */
+const a = () => 0
+>a : Symbol(a, Decl(file.js, 2, 5))
+
+// Error (good)
+/** @type {function(): string} */
+const b = async () => 0
+>b : Symbol(b, Decl(file.js, 6, 5))
+
+// No error (bad)
+/** @type {function(): string} */
+const c = async () => {
+>c : Symbol(c, Decl(file.js, 10, 5))
+
+	return 0
+}
+
+/** @type {function(function(): string): void} */
+const f = (p) => {}
+>f : Symbol(f, Decl(file.js, 15, 5))
+>p : Symbol(p, Decl(file.js, 15, 11))
+
+// Error (good)
+f(async () => {
+>f : Symbol(f, Decl(file.js, 15, 5))
+
+	return 0
+})

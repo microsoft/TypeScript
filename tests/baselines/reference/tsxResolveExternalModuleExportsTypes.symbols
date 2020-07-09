@@ -1,0 +1,42 @@
+=== /node_modules/@types/a/index.d.ts ===
+declare var a: a.Foo;
+>a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
+>a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
+>Foo : Symbol(a.Foo, Decl(index.d.ts, 1, 21), Decl(index.d.ts, 2, 21))
+
+declare namespace a {
+>a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
+
+    interface Foo {}
+>Foo : Symbol(Foo, Decl(index.d.ts, 1, 21), Decl(index.d.ts, 2, 21))
+}
+export = a;
+>a : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
+
+=== /node_modules/@types/b/index.d.ts ===
+import * as a from 'a';
+>a : Symbol(a, Decl(index.d.ts, 0, 6))
+
+declare module 'a' {
+>'a' : Symbol(a, Decl(index.d.ts, 0, 11), Decl(index.d.ts, 0, 21), Decl(index.d.ts, 0, 23))
+
+    namespace Test {}
+>Test : Symbol(Test, Decl(index.d.ts, 1, 20))
+
+    interface Foo {
+>Foo : Symbol(Foo, Decl(index.d.ts, 1, 21), Decl(index.d.ts, 2, 21))
+
+        Test: null;
+>Test : Symbol(Foo.Test, Decl(index.d.ts, 4, 19))
+    }
+}
+
+=== tests/cases/compiler/foo.tsx ===
+import { Test } from 'a';
+>Test : Symbol(Test, Decl(foo.tsx, 0, 8))
+
+const Foo = (<h1></h1>);
+>Foo : Symbol(Foo, Decl(foo.tsx, 1, 5))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+

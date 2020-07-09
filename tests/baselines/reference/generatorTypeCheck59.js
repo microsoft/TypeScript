@@ -14,14 +14,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 function* g() {
-    const C = /** @class */ (() => {
-        class C {
-            m() { }
-        }
-        __decorate([
-            (yield "")
-        ], C.prototype, "m", null);
-        return C;
-    })();
+    class C {
+        m() { }
+    }
+    __decorate([
+        (yield "")
+    ], C.prototype, "m", null);
     ;
 }

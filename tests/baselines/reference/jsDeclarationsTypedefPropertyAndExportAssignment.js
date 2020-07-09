@@ -106,7 +106,7 @@ module.exports = MainThreadTasks;
 //// [module.d.ts]
 export type TaskGroupIds = "parseHTML" | "styleLayout";
 export type TaskGroup = {
-    id: "parseHTML" | "styleLayout";
+    id: TaskGroupIds;
     label: string;
     traceEventNames: string[];
 };
@@ -121,8 +121,12 @@ export type TaskGroup = {
  * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
  */
 export const taskGroups: {
-    [P in TaskGroupIds]: {
-        id: P;
+    parseHTML: {
+        id: "parseHTML";
+        label: string;
+    };
+    styleLayout: {
+        id: "styleLayout";
         label: string;
     };
 };
@@ -145,20 +149,20 @@ declare class MainThreadTasks {
      * @param {TaskGroup} x
      * @param {TaskNode} y
      */
-    constructor(x: import("./module.js").TaskGroup, y: TaskNode);
+    constructor(x: TaskGroup, y: TaskNode);
 }
 declare namespace MainThreadTasks {
     export { TaskGroup, TaskNode, PriorTaskData };
 }
-type TaskNode = {
-    children: TaskNode[];
-    parent: TaskNode;
-    group: import("./module.js").TaskGroup;
-};
 type TaskGroup = {
     id: "parseHTML" | "styleLayout";
     label: string;
     traceEventNames: string[];
+};
+type TaskNode = {
+    children: TaskNode[];
+    parent: TaskNode | undefined;
+    group: TaskGroup;
 };
 type PriorTaskData = {
     timers: Map<string, TaskNode>;

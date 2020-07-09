@@ -10,18 +10,12 @@ class D {
 
 
 //// [emitClassDeclarationWithStaticPropertyAssignmentInES6.js]
-const C = /** @class */ (() => {
-    class C {
+class C {
+}
+C.z = "Foo";
+class D {
+    constructor() {
+        this.x = 20000;
     }
-    C.z = "Foo";
-    return C;
-})();
-const D = /** @class */ (() => {
-    class D {
-        constructor() {
-            this.x = 20000;
-        }
-    }
-    D.b = true;
-    return D;
-})();
+}
+D.b = true;

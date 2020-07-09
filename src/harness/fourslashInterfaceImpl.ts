@@ -27,7 +27,7 @@ namespace FourSlashInterface {
             return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
         }
 
-        public rangesByText(): ts.Map<FourSlash.Range[]> {
+        public rangesByText(): ts.ESMap<string, FourSlash.Range[]> {
             return this.state.rangesByText();
         }
 
@@ -208,7 +208,11 @@ namespace FourSlashInterface {
         }
 
         public refactorAvailable(name: string, actionName?: string) {
-            this.state.verifyRefactorAvailable(this.negative, name, actionName);
+            this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName);
+        }
+
+        public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
+            this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
         }
     }
 
@@ -560,6 +564,10 @@ namespace FourSlashInterface {
         public noMoveToNewFile(): void {
             this.state.noMoveToNewFile();
         }
+
+        public organizeImports(newContent: string) {
+            this.state.verifyOrganizeImports(newContent);
+        }
     }
 
     export class Edit {
@@ -723,7 +731,7 @@ namespace FourSlashInterface {
         }
 
         public setOption(name: keyof ts.FormatCodeSettings, value: number | string | boolean): void {
-            this.state.formatCodeSettings = { ...this.state.formatCodeSettings, [name]: value };
+            this.state.setFormatOptions({ ...this.state.formatCodeSettings, [name]: value });
         }
     }
 
@@ -845,6 +853,7 @@ namespace FourSlashInterface {
     }
     export namespace Completion {
         export import SortText = ts.Completions.SortText;
+        export import CompletionSource = ts.Completions.CompletionSource;
 
         const functionEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -1486,6 +1495,7 @@ namespace FourSlashInterface {
         readonly isRecommended?: boolean; // If not specified, will assert that this is false.
         readonly isFromUncheckedFile?: boolean; // If not specified, won't assert about this
         readonly kind?: string; // If not specified, won't assert about this
+        readonly isPackageJsonImport?: boolean; // If not specified, won't assert about this
         readonly kindModifiers?: string; // Must be paired with 'kind'
         readonly text?: string;
         readonly documentation?: string;
@@ -1523,6 +1533,7 @@ namespace FourSlashInterface {
         /** @default ts.emptyArray */
         readonly tags?: readonly ts.JSDocTagInfo[];
         readonly triggerReason?: ts.SignatureHelpTriggerReason;
+        readonly overrideSelectedItemIndex?: number;
     }
 
     export interface VerifyNavigateToOptions {
@@ -1603,6 +1614,7 @@ namespace FourSlashInterface {
         range?: FourSlash.Range;
         code: number;
         reportsUnnecessary?: true;
+        reportsDeprecated?: true;
     }
 
     export interface GetEditsForFileRenameOptions {

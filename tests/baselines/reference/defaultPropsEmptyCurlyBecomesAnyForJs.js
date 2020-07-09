@@ -41,6 +41,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.MyFoo = void 0;
 var library_1 = require("./library");
 var MyFoo = /** @class */ (function (_super) {
     __extends(MyFoo, _super);
@@ -66,6 +67,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.TypedFoo = void 0;
 var component_1 = require("./component");
 var TypedFoo = /** @class */ (function (_super) {
     __extends(TypedFoo, _super);

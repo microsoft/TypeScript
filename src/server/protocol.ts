@@ -248,6 +248,10 @@ namespace ts.server.protocol {
          * Time spent updating the program graph, in milliseconds.
          */
         updateGraphDurationMs?: number;
+        /**
+         * The time spent creating or updating the auto-import program, in milliseconds.
+         */
+        createAutoImportProviderProgramDurationMs?: number;
     }
 
     /**
@@ -498,6 +502,7 @@ namespace ts.server.protocol {
         code: number;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
     }
 
@@ -546,7 +551,11 @@ namespace ts.server.protocol {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
+    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
+        triggerReason?: RefactorTriggerReason
+    };
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     /**
      * Response is a list of available refactorings.
@@ -857,10 +866,25 @@ namespace ts.server.protocol {
     }
 
     /** @internal */
-    export interface EmitOutputRequest extends FileRequest {}
+    export interface EmitOutputRequest extends FileRequest {
+        command: CommandTypes.EmitOutput;
+        arguments: EmitOutputRequestArgs;
+    }
+    /** @internal */
+    export interface EmitOutputRequestArgs extends FileRequestArgs {
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
     /** @internal */
     export interface EmitOutputResponse extends Response {
-        readonly body: EmitOutput;
+        readonly body: EmitOutput | ts.EmitOutput;
+    }
+    /** @internal */
+    export interface EmitOutput {
+        outputFiles: OutputFile[];
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
@@ -1808,6 +1832,18 @@ namespace ts.server.protocol {
          * if true - then file should be recompiled even if it does not have any changes.
          */
         forced?: boolean;
+        includeLinePosition?: boolean;
+        /** if true - return response as object with emitSkipped and diagnostics */
+        richResponse?: boolean;
+    }
+
+    export interface CompileOnSaveEmitFileResponse extends Response {
+        body: boolean | EmitResult;
+    }
+
+    export interface EmitResult {
+        emitSkipped: boolean;
+        diagnostics: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
@@ -2127,6 +2163,11 @@ namespace ts.server.protocol {
          * and therefore may not be accurate.
          */
         isFromUncheckedFile?: true;
+        /**
+         * If true, this completion was for an auto-import of a module not yet in the program, but listed
+         * in the project package.json.
+         */
+        isPackageJsonImport?: true;
     }
 
     /**
@@ -2504,6 +2545,8 @@ namespace ts.server.protocol {
 
         reportsUnnecessary?: {};
 
+        reportsDeprecated?: {};
+
         /**
          * Any related spans the diagnostic may have, such as other locations relevant to an error, such as declarartion sites
          */
@@ -2757,7 +2800,7 @@ namespace ts.server.protocol {
     /**
      * Arguments for navto request message.
      */
-    export interface NavtoRequestArgs extends FileRequestArgs {
+    export interface NavtoRequestArgs {
         /**
          * Search term to navigate to from current location; term can
          * be '.*' or an identifier prefix.
@@ -2767,6 +2810,10 @@ namespace ts.server.protocol {
          *  Optional limit on the number of items to return.
          */
         maxResultCount?: number;
+        /**
+         * The file for the request (absolute pathname required).
+         */
+        file?: string;
         /**
          * Optional flag to indicate we want results for just the current file
          * or the entire project.
@@ -2782,7 +2829,7 @@ namespace ts.server.protocol {
      * match the search term given in argument 'searchTerm'.  The
      * context for the search is given by the named file.
      */
-    export interface NavtoRequest extends FileRequest {
+    export interface NavtoRequest extends Request {
         command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }
@@ -3031,9 +3078,11 @@ namespace ts.server.protocol {
     export interface CallHierarchyItem {
         name: string;
         kind: ScriptElementKind;
+        kindModifiers?: string
         file: string;
         span: TextSpan;
         selectionSpan: TextSpan;
+        containerName?: string;
     }
 
     export interface CallHierarchyIncomingCall {
@@ -3089,6 +3138,7 @@ namespace ts.server.protocol {
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
         indentStyle?: IndentStyle | ts.IndentStyle;
+        trimTrailingWhitespace?: boolean;
     }
 
     export interface FormatCodeSettings extends EditorSettings {
@@ -3137,6 +3187,7 @@ namespace ts.server.protocol {
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
+        readonly includePackageJsonAutoImports?: "exclude-dev" | "all" | "none";
     }
 
     export interface CompilerOptions {

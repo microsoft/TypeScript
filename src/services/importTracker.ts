@@ -12,7 +12,7 @@ namespace ts.FindAllReferences {
     export type ImportTracker = (exportSymbol: Symbol, exportInfo: ExportInfo, isForRename: boolean) => ImportsResult;
 
     /** Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.  */
-    export function createImportTracker(sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken | undefined): ImportTracker {
+    export function createImportTracker(sourceFiles: readonly SourceFile[], sourceFilesSet: ReadonlySet<string>, checker: TypeChecker, cancellationToken: CancellationToken | undefined): ImportTracker {
         const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
         return (exportSymbol, exportInfo, isForRename) => {
             const { directImports, indirectUsers } = getImportersForExport(sourceFiles, sourceFilesSet, allDirectImports, exportInfo, checker, cancellationToken);
@@ -39,8 +39,8 @@ namespace ts.FindAllReferences {
     /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
     function getImportersForExport(
         sourceFiles: readonly SourceFile[],
-        sourceFilesSet: ReadonlyMap<true>,
-        allDirectImports: Map<ImporterOrCallExpression[]>,
+        sourceFilesSet: ReadonlySet<string>,
+        allDirectImports: ESMap<string, ImporterOrCallExpression[]>,
         { exportingModuleSymbol, exportKind }: ExportInfo,
         checker: TypeChecker,
         cancellationToken: CancellationToken | undefined,
@@ -103,7 +103,7 @@ namespace ts.FindAllReferences {
                             break; // TODO: GH#23879
 
                         case SyntaxKind.ImportEqualsDeclaration:
-                            handleNamespaceImport(direct, direct.name, hasModifier(direct, ModifierFlags.Export), /*alreadyAddedDirect*/ false);
+                            handleNamespaceImport(direct, direct.name, hasSyntacticModifier(direct, ModifierFlags.Export), /*alreadyAddedDirect*/ false);
                             break;
 
                         case SyntaxKind.ImportDeclaration:
@@ -121,6 +121,10 @@ namespace ts.FindAllReferences {
                             if (!direct.exportClause) {
                                 // This is `export * from "foo"`, so imports of this module may import the export too.
                                 handleDirectImports(getContainingModuleSymbol(direct, checker));
+                            }
+                            else if (direct.exportClause.kind === SyntaxKind.NamespaceExport) {
+                                // `export * as foo from "foo"` add to indirect uses
+                                addIndirectUsers(getSourceFileLikeForImportDeclaration(direct));
                             }
                             else {
                                 // This is `export { foo } from "foo"` and creates an alias symbol, so recursive search will get handle re-exports.
@@ -368,7 +372,7 @@ namespace ts.FindAllReferences {
     }
 
     /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
-    function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): Map<ImporterOrCallExpression[]> {
+    function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): ESMap<string, ImporterOrCallExpression[]> {
         const map = createMap<ImporterOrCallExpression[]>();
 
         for (const sourceFile of sourceFiles) {
@@ -463,7 +467,7 @@ namespace ts.FindAllReferences {
             }
             else {
                 const exportNode = getExportNode(parent, node);
-                if (exportNode && hasModifier(exportNode, ModifierFlags.Export)) {
+                if (exportNode && hasSyntacticModifier(exportNode, ModifierFlags.Export)) {
                     if (isImportEqualsDeclaration(exportNode) && exportNode.moduleReference === node) {
                         // We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
                         if (comingFromExport) {
@@ -476,6 +480,9 @@ namespace ts.FindAllReferences {
                     else {
                         return exportInfo(symbol, getExportKindForDeclaration(exportNode));
                     }
+                }
+                else if (isNamespaceExport(parent)) {
+                    return exportInfo(symbol, ExportKind.Named);
                 }
                 // If we are in `export = a;` or `export default a;`, `parent` is the export assignment.
                 else if (isExportAssignment(parent)) {
@@ -518,10 +525,6 @@ namespace ts.FindAllReferences {
                 }
 
                 const sym = useLhsSymbol ? checker.getSymbolAtLocation(getNameOfAccessExpression(cast(node.left, isAccessExpression))) : symbol;
-                // Better detection for GH#20803
-                if (sym && !(checker.getMergedSymbol(sym.parent!).flags & SymbolFlags.Module)) {
-                    Debug.fail(`Special property assignment kind does not have a module as its parent. Assignment is ${Debug.formatSymbol(sym)}, parent is ${Debug.formatSymbol(sym.parent!)}`);
-                }
                 return sym && exportInfo(sym, kind);
             }
         }
@@ -557,7 +560,7 @@ namespace ts.FindAllReferences {
 
         // Not meant for use with export specifiers or export assignment.
         function getExportKindForDeclaration(node: Node): ExportKind {
-            return hasModifier(node, ModifierFlags.Default) ? ExportKind.Default : ExportKind.Named;
+            return hasSyntacticModifier(node, ModifierFlags.Default) ? ExportKind.Default : ExportKind.Named;
         }
     }
 

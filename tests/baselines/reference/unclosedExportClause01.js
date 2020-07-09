@@ -18,6 +18,7 @@ export { x as a, from "./t1"
 //// [t1.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 exports.x = "x";
 //// [t2.js]
 "use strict";
@@ -29,6 +30,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports.from = exports.x = void 0;
 var t1_1 = require("./t1");
 __createBinding(exports, t1_1, "x");
 __createBinding(exports, t1_1, "from");
@@ -42,6 +44,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports.from = void 0;
 var t1_1 = require("./t1");
 __createBinding(exports, t1_1, "from");
 //// [t4.js]
@@ -54,6 +57,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports.from = exports.a = void 0;
 var t1_1 = require("./t1");
 __createBinding(exports, t1_1, "x", "a");
 __createBinding(exports, t1_1, "from");
@@ -67,6 +71,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     o[k2] = m[k];
 }));
 exports.__esModule = true;
+exports.from = exports.a = void 0;
 var t1_1 = require("./t1");
 __createBinding(exports, t1_1, "x", "a");
 __createBinding(exports, t1_1, "from");

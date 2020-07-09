@@ -26,7 +26,7 @@ const B = function() { this.id = 1; }
 >function() { this.id = 1; } : typeof B
 >this.id = 1 : 1
 >this.id : any
->this : any
+>this : this
 >id : any
 >1 : 1
 
@@ -64,7 +64,7 @@ function A() { this.id = 1; }
 >A : typeof A
 >this.id = 1 : 1
 >this.id : any
->this : any
+>this : this
 >id : any
 >1 : 1
 

@@ -277,3 +277,19 @@ map[rover] = "Rover";
 >map : Symbol(map, Decl(noImplicitAnyStringIndexerOnObject.ts, 91, 11))
 >rover : Symbol(rover, Decl(noImplicitAnyStringIndexerOnObject.ts, 89, 3))
 
+interface I {
+>I : Symbol(I, Decl(noImplicitAnyStringIndexerOnObject.ts, 92, 21))
+
+  prop: MyMap<string, string>
+>prop : Symbol(I.prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
+>MyMap : Symbol(MyMap, Decl(noImplicitAnyStringIndexerOnObject.ts, 80, 14))
+}
+declare const m: I;
+>m : Symbol(m, Decl(noImplicitAnyStringIndexerOnObject.ts, 97, 13))
+>I : Symbol(I, Decl(noImplicitAnyStringIndexerOnObject.ts, 92, 21))
+
+m.prop['a'];
+>m.prop : Symbol(I.prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
+>m : Symbol(m, Decl(noImplicitAnyStringIndexerOnObject.ts, 97, 13))
+>prop : Symbol(I.prop, Decl(noImplicitAnyStringIndexerOnObject.ts, 94, 13))
+

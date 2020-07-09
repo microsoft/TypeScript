@@ -727,14 +727,14 @@ function f20(v: [number, number, number]) {
 
     [...a3] = v;
 >[...a3] = v : [number, number, number]
->[...a3] : number[]
+>[...a3] : [number, number, number]
 >...a3 : number
 >a3 : [number, number, number]
 >v : [number, number, number]
 
     [x, ...a2] = v;
 >[x, ...a2] = v : [number, number, number]
->[x, ...a2] : [number, ...number[]]
+>[x, ...a2] : [number, number, number]
 >x : number
 >...a2 : number
 >a2 : [number, number]
@@ -742,7 +742,7 @@ function f20(v: [number, number, number]) {
 
     [x, y, ...a1] = v;
 >[x, y, ...a1] = v : [number, number, number]
->[x, y, ...a1] : [number, number, ...number[]]
+>[x, y, ...a1] : [number, number, number]
 >x : number
 >y : number
 >...a1 : number
@@ -751,7 +751,7 @@ function f20(v: [number, number, number]) {
 
     [x, y, z, ...a0] = v;
 >[x, y, z, ...a0] = v : [number, number, number]
->[x, y, z, ...a0] : [number, number, number, ...never[]]
+>[x, y, z, ...a0] : [number, number, number]
 >x : number
 >y : number
 >z : number
@@ -809,14 +809,14 @@ function f21(v: [number, string, boolean]) {
 
     [...a0] = v;
 >[...a0] = v : [number, string, boolean]
->[...a0] : (string | number | boolean)[]
+>[...a0] : [number, string, boolean]
 >...a0 : string | number | boolean
 >a0 : [number, string, boolean]
 >v : [number, string, boolean]
 
     [x, ...a1] = v;
 >[x, ...a1] = v : [number, string, boolean]
->[x, ...a1] : [number, ...(string | boolean)[]]
+>[x, ...a1] : [number, string, boolean]
 >x : number
 >...a1 : string | boolean
 >a1 : [string, boolean]
@@ -824,7 +824,7 @@ function f21(v: [number, string, boolean]) {
 
     [x, y, ...a2] = v;
 >[x, y, ...a2] = v : [number, string, boolean]
->[x, y, ...a2] : [number, string, ...boolean[]]
+>[x, y, ...a2] : [number, string, boolean]
 >x : number
 >y : string
 >...a2 : boolean
@@ -833,7 +833,7 @@ function f21(v: [number, string, boolean]) {
 
     [x, y, z, ...a3] = v;
 >[x, y, z, ...a3] = v : [number, string, boolean]
->[x, y, z, ...a3] : [number, string, boolean, ...never[]]
+>[x, y, z, ...a3] : [number, string, boolean]
 >x : number
 >y : string
 >z : boolean

@@ -16,7 +16,7 @@ namespace ts.projectSystem {
         type CalledMaps = CalledMapsWithSingleArg | CalledMapsWithFiveArgs;
         type CalledWithFiveArgs = [readonly string[], readonly string[], readonly string[], number];
         function createCallsTrackingHost(host: TestServerHost) {
-            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<true>> & Record<CalledMapsWithFiveArgs, MultiMap<CalledWithFiveArgs>> = {
+            const calledMaps: Record<CalledMapsWithSingleArg, MultiMap<string, true>> & Record<CalledMapsWithFiveArgs, MultiMap<string, CalledWithFiveArgs>> = {
                 fileExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.fileExists),
                 directoryExists: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.directoryExists),
                 getDirectories: setCallsTrackingWithSingleArgFn(CalledMapsWithSingleArg.getDirectories),
@@ -65,7 +65,7 @@ namespace ts.projectSystem {
                 assert.equal(calledMap.size, 0, `${callback} shouldn't be called: ${arrayFrom(calledMap.keys())}`);
             }
 
-            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<number>) {
+            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: ESMap<string, number>) {
                 TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
             }
 
@@ -240,13 +240,13 @@ namespace ts.projectSystem {
             let diags = project.getLanguageService().getSemanticDiagnostics(root.path);
             assert.equal(diags.length, 1);
             const diag = diags[0];
-            assert.equal(diag.code, Diagnostics.Cannot_find_module_0.code);
-            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar'.");
+            assert.equal(diag.code, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code);
+            assert.equal(flattenDiagnosticMessageText(diag.messageText, "\n"), "Cannot find module 'bar' or its corresponding type declarations.");
             callsTrackingHost.verifyCalledOn(CalledMapsWithSingleArg.fileExists, imported.path);
 
 
             callsTrackingHost.clear();
-            host.reloadFS([root, imported]);
+            host.writeFile(imported.path, imported.content);
             host.runQueuedTimeoutCallbacks();
             diags = project.getLanguageService().getSemanticDiagnostics(root.path);
             assert.equal(diags.length, 0);
@@ -400,7 +400,7 @@ namespace ts.projectSystem {
 
                 // Create file cookie.ts
                 projectFiles.push(file3);
-                host.reloadFS(projectFiles);
+                host.writeFile(file3.path, file3.content);
                 host.runQueuedTimeoutCallbacks();
 
                 const canonicalFile3Path = useCaseSensitiveFileNames ? file3.path : file3.path.toLocaleLowerCase();
@@ -474,16 +474,17 @@ namespace ts.projectSystem {
 
                 const project = service.configuredProjects.get(tsconfig.path)!;
                 checkProjectActualFiles(project, files.map(f => f.path));
-                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
-                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
+                assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
 
                 const debugTypesFile: File = {
                     path: `${projectLocation}/node_modules/debug/index.d.ts`,
                     content: "export {}"
                 };
                 files.push(debugTypesFile);
-                host.reloadFS(files);
-                host.runQueuedTimeoutCallbacks();
+                host.writeFile(debugTypesFile.path, debugTypesFile.content);
+                host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                host.runQueuedTimeoutCallbacks(); // Actual update
                 checkProjectActualFiles(project, files.map(f => f.path));
                 assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file1.path).map(diag => diag.messageText), []);
                 assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(file2.path).map(diag => diag.messageText), []);
@@ -543,6 +544,7 @@ namespace ts.projectSystem {
                 const otherFiles = [packageJson];
                 const host = createServerHost(projectFiles.concat(otherFiles));
                 const projectService = createProjectService(host);
+                projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "none" } });
                 const { configFileName } = projectService.openClientFile(app.path);
                 assert.equal(configFileName, tsconfigJson.path as server.NormalizedPath, `should find config`); // TODO: GH#18217
                 const recursiveWatchedDirectories: string[] = [`${appFolder}`, `${appFolder}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));
@@ -575,12 +577,13 @@ namespace ts.projectSystem {
                     { path: "/a/b/node_modules/.staging/rxjs-22375c61/add/operator" },
                     { path: "/a/b/node_modules/.staging/@types/lodash-e56c4fe7/package.json", content: "{\n    \"name\": \"@types/lodash\",\n    \"version\": \"4.14.74\",\n    \"description\": \"TypeScript definitions for Lo-Dash\",\n    \"license\": \"MIT\",\n    \"contributors\": [\n        {\n            \"name\": \"Brian Zengel\",\n            \"url\": \"https://github.com/bczengel\"\n        },\n        {\n            \"name\": \"Ilya Mochalov\",\n            \"url\": \"https://github.com/chrootsu\"\n        },\n        {\n            \"name\": \"Stepan Mikhaylyuk\",\n            \"url\": \"https://github.com/stepancar\"\n        },\n        {\n            \"name\": \"Eric L Anderson\",\n            \"url\": \"https://github.com/ericanderson\"\n        },\n        {\n            \"name\": \"AJ Richardson\",\n            \"url\": \"https://github.com/aj-r\"\n        },\n        {\n            \"name\": \"Junyoung Clare Jang\",\n            \"url\": \"https://github.com/ailrun\"\n        }\n    ],\n    \"main\": \"\",\n    \"repository\": {\n        \"type\": \"git\",\n        \"url\": \"https://www.github.com/DefinitelyTyped/DefinitelyTyped.git\"\n    },\n    \"scripts\": {},\n    \"dependencies\": {},\n    \"typesPublisherContentHash\": \"12af578ffaf8d86d2df37e591857906a86b983fa9258414326544a0fe6af0de8\",\n    \"typeScriptVersion\": \"2.2\"\n}" },
                     { path: "/a/b/node_modules/.staging/lodash-b0733faa/index.js", content: "module.exports = require('./lodash');" },
-                    { path: "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594" }
+                    { path: "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594", content: "" }
                 ].map(getRootedFileOrFolder));
                 // Since we added/removed in .staging no timeout
                 verifyAfterPartialOrCompleteNpmInstall(0);
 
                 // Remove file "/a/b/node_modules/.staging/typescript-8493ea5d/package.json.3017591594"
+                host.deleteFile(last(filesAndFoldersToAdd).path);
                 filesAndFoldersToAdd.length--;
                 verifyAfterPartialOrCompleteNpmInstall(0);
 
@@ -602,6 +605,7 @@ namespace ts.projectSystem {
                 verifyAfterPartialOrCompleteNpmInstall(0);
 
                 // remove /a/b/node_modules/.staging/rxjs-22375c61/package.json.2252192041
+                host.deleteFile(last(filesAndFoldersToAdd).path);
                 filesAndFoldersToAdd.length--;
                 // and add few more folders/files
                 filesAndFoldersToAdd.push(...[
@@ -622,6 +626,7 @@ namespace ts.projectSystem {
                         .replace(/[\-\.][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w]/g, "");
                 });
 
+                host.deleteFolder(root + "/a/b/node_modules/.staging", /*recursive*/ true);
                 const lodashIndexPath = root + "/a/b/node_modules/@types/lodash/index.d.ts";
                 projectFiles.push(find(filesAndFoldersToAdd, f => f.path === lodashIndexPath)!);
                 // we would now not have failed lookup in the parent of appFolder since lodash is available
@@ -631,12 +636,19 @@ namespace ts.projectSystem {
                 verifyAfterPartialOrCompleteNpmInstall(2);
 
                 function verifyAfterPartialOrCompleteNpmInstall(timeoutQueueLengthWhenRunningTimeouts: number) {
-                    host.reloadFS(projectFiles.concat(otherFiles, filesAndFoldersToAdd));
+                    filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
                     if (npmInstallComplete || timeoutDuringPartialInstallation) {
-                        host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts);
+                        if (timeoutQueueLengthWhenRunningTimeouts) {
+                            // Expected project update
+                            host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts + 1); // Scheduled invalidation of resolutions
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        }
+                        else {
+                            host.checkTimeoutQueueLengthAndRun(timeoutQueueLengthWhenRunningTimeouts);
+                        }
                     }
                     else {
-                        host.checkTimeoutQueueLength(2);
+                        host.checkTimeoutQueueLength(3);
                     }
                     verifyProject();
                 }
@@ -682,7 +694,7 @@ namespace ts.projectSystem {
 
             const project = service.configuredProjects.get(tsconfig.path)!;
             checkProjectActualFiles(project, files.map(f => f.path));
-            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug'."]);
+            assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), ["Cannot find module 'debug' or its corresponding type declarations."]);
 
             const debugTypesFile: File = {
                 path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,
@@ -696,7 +708,7 @@ namespace ts.projectSystem {
                     invoker.call(host, fullPath, eventName, entryFullPath);
                 }
             };
-            host.reloadFS(files);
+            host.writeFile(debugTypesFile.path, debugTypesFile.content);
             host.runQueuedTimeoutCallbacks();
             checkProjectActualFiles(project, files.map(f => f.path));
             assert.deepEqual(project.getLanguageService().getSemanticDiagnostics(app.path).map(diag => diag.messageText), []);

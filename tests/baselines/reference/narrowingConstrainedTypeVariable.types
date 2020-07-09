@@ -5,7 +5,7 @@ class C { }
 >C : C
 
 function f1<T extends C>(v: T | string): void {
->f1 : <T extends C>(v: string | T) => void
+>f1 : <T extends C>(v: T | string) => void
 >v : string | T
 
     if (v instanceof C) {
@@ -52,7 +52,7 @@ class E { x: string | undefined }
 >x : string | undefined
 
 function f3<T extends E>(v: T | { x: string }) {
->f3 : <T extends E>(v: T | { x: string; }) => void
+>f3 : <T extends E>(v: T | {    x: string;}) => void
 >v : T | { x: string; }
 >x : string
 

@@ -499,7 +499,7 @@ var CLASS = /** @class */ (function () {
     }
     Object.defineProperty(CLASS.prototype, "Property", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     CLASS.prototype.Member = function () {

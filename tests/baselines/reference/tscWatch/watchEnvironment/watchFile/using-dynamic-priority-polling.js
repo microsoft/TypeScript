@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w /a/username/project/typescript.ts
+Input::
 //// [/a/username/project/typescript.ts]
 var z = 10;
 
@@ -15,18 +15,15 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/username/project/typescript.js]
-var z = 10;
 
-
-
+/a/lib/tsc.js --w /a/username/project/typescript.ts
 Output::
 >> Screen clear
-12:00:15 AM - Starting compilation in watch mode...
+[[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:18 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:18 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/username/project/typescript.ts"]
@@ -47,8 +44,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/username/project/typescript.js]
+var z = 10;
+
+
+
 Change:: Time spent to Transition libFile and file1 to low priority queue
 
+Input::
 
 Output::
 
@@ -60,8 +63,10 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Make change to file
 
+Input::
 //// [/a/username/project/typescript.ts]
 var zz30 = 100;
 
@@ -76,20 +81,18 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Callbacks: medium priority + high priority queue and scheduled program update
 
-//// [/a/username/project/typescript.js]
-var zz30 = 100;
-
-
+Input::
 
 Output::
 >> Screen clear
-12:00:22 AM - File change detected. Starting incremental compilation...
+[[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
 
 
+[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:26 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/a/username/project/typescript.ts"]
@@ -110,8 +113,14 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/username/project/typescript.js]
+var zz30 = 100;
+
+
+
 Change:: Polling queues polled and everything is in the high polling queue
 
+Input::
 
 Output::
 
@@ -122,3 +131,4 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+

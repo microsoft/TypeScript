@@ -89,7 +89,7 @@ var Thing = /** @class */ (function () {
     }
     Object.defineProperty(Thing.prototype, "Components", {
         get: function () { return null; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Thing;
@@ -109,7 +109,7 @@ var Foo = /** @class */ (function () {
         get: function () {
             return new GenericType(this);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Foo.prototype.populate = function () {
@@ -119,7 +119,7 @@ var Foo = /** @class */ (function () {
         get: function () {
             return new BaseCollection(Derived.createEmpty);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Foo;

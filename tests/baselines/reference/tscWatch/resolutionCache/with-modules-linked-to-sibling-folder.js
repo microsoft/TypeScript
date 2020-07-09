@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -28,19 +28,15 @@ export * from './other';
 //// [/user/username/projects/myproject/linked-package/dist/other.d.ts]
 export declare const Foo = "BAR";
 
-//// [/user/username/projects/myproject/main/index.js]
-"use strict";
-exports.__esModule = true;
 
-
-
+/a/lib/tsc.js -w
 Output::
 >> Screen clear
-12:00:39 AM - Starting compilation in watch mode...
+[[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
 
+[[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
 
-12:00:42 AM - Found 0 errors. Watching for file changes.
 
 
 Program root files: ["/user/username/projects/myproject/main/index.ts"]
@@ -84,3 +80,9 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/main/index.js]
+"use strict";
+exports.__esModule = true;
+
+

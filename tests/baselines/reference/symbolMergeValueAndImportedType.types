@@ -8,9 +8,9 @@ const X = 42;
 
 console.log('X is ' + X);
 >console.log('X is ' + X) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >'X is ' + X : string
 >'X is ' : "X is "
 >X : 42

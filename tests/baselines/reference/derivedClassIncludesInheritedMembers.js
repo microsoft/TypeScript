@@ -61,14 +61,14 @@ var Base = /** @class */ (function () {
     Object.defineProperty(Base.prototype, "c", {
         get: function () { return ''; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Base.s = function () { };
     Object.defineProperty(Base, "t", {
         get: function () { return ''; },
         set: function (v) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Base;

@@ -458,7 +458,7 @@ namespace ts {
     });
 
     describe("unittests:: moduleResolution:: Relative imports", () => {
-        function test(files: Map<string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
+        function test(files: ESMap<string, string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
             const options: CompilerOptions = { module: ModuleKind.CommonJS };
             const host: CompilerHost = {
                 getSourceFile: (fileName: string, languageVersion: ScriptTarget) => {
@@ -533,7 +533,7 @@ export = C;
     describe("unittests:: moduleResolution:: Files with different casing with forceConsistentCasingInFileNames", () => {
         let library: SourceFile;
         function test(
-            files: Map<string>,
+            files: ESMap<string, string>,
             options: CompilerOptions,
             currentDirectory: string,
             useCaseSensitiveFileNames: boolean,
@@ -615,7 +615,8 @@ export = C;
                         "D.ts",
                         "d.ts",
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });
@@ -641,7 +642,8 @@ export = C;
                         "/a/b/D.ts",
                         "d.ts",
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });
@@ -667,7 +669,8 @@ export = C;
                         "ModuleB.ts",
                         "moduleB.ts",
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });
@@ -694,7 +697,8 @@ export = C;
                         "/a/b/D.ts",
                         "d.ts",
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });
@@ -722,7 +726,8 @@ export = C;
                             "ModuleC.ts",
                             "moduleC.ts",
                         ),
-                        reportsUnnecessary: undefined
+                        reportsUnnecessary: undefined,
+                        reportsDeprecated: undefined
                     },
                     {
                         ...tscWatch.getDiagnosticOfFileFromProgram(
@@ -734,7 +739,8 @@ export = C;
                             "moduleC.ts",
                             "ModuleC.ts"
                         ),
-                        reportsUnnecessary: undefined
+                        reportsUnnecessary: undefined,
+                        reportsDeprecated: undefined
                     }
                 ]
             );
@@ -766,7 +772,8 @@ import b = require("./moduleB");
                         "/a/B/c/moduleC.ts",
                         "/a/B/c/ModuleC.ts"
                     ),
-                    reportsUnnecessary: undefined
+                    reportsUnnecessary: undefined,
+                    reportsDeprecated: undefined
                 }]
             );
         });
@@ -1106,7 +1113,7 @@ import b = require("./moduleB");
 
             function test(hasDirectoryExists: boolean) {
                 const file1: File = { name: "/root/folder1/file1.ts" };
-                const file1_1: File = { name: "/root/folder1/file1_1/index.d.ts" }; // eslint-disable-line @typescript-eslint/camelcase
+                const file1_1: File = { name: "/root/folder1/file1_1/index.d.ts" }; // eslint-disable-line @typescript-eslint/naming-convention
                 const file2: File = { name: "/root/generated/folder1/file2.ts" };
                 const file3: File = { name: "/root/generated/folder2/file3.ts" };
                 const host = createModuleResolutionHost(hasDirectoryExists, file1, file1_1, file2, file3);

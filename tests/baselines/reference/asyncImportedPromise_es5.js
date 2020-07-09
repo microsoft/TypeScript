@@ -25,6 +25,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Task = void 0;
 var Task = /** @class */ (function (_super) {
     __extends(Task, _super);
     function Task() {

@@ -41,6 +41,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.App = void 0;
 var React = require("react");
 function TabLayout(props) {
     return React.createElement("div", null);

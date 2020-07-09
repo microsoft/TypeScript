@@ -5,7 +5,7 @@ function C() {
     this.a = 1
 >this.a = 1 : 1
 >this.a : any
->this : any
+>this : this
 >a : any
 >1 : 1
 }

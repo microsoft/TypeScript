@@ -52,7 +52,7 @@ var b = bar<number>();
 >bar : <T>() => { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: any; }; }; }; }; }; }; }; }; }; }; }
 
 function test<T>(x: typeof a): void { }
->test : <T>(x: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: any; }; }; }; }; }; }; }; }; }; }; }) => void
+>test : <T>(x: typeof a) => void
 >x : { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: any; }; }; }; }; }; }; }; }; }; }; }
 >a : { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: { y2: any; }; }; }; }; }; }; }; }; }; }; }
 

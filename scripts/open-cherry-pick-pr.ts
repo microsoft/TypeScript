@@ -85,7 +85,7 @@ ${logText.trim()}`;
         owner: "Microsoft",
         repo: "TypeScript",
         maintainer_can_modify: true,
-        title: `🤖 Cherry-pick PR #${process.env.SOURCE_ISSUE} into ${process.env.TARGET_BRANCH}`,
+        title: `🤖 Pick PR #${process.env.SOURCE_ISSUE} (${inputPR.title.substring(0, 35)}${inputPR.title.length > 35 ? "..." : ""}) into ${process.env.TARGET_BRANCH}`,
         head: `${userName}:${branchName}`,
         base: process.env.TARGET_BRANCH,
         body:
