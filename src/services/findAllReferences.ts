@@ -129,6 +129,7 @@ namespace ts.FindAllReferences {
 
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.NamespaceImport:
+            case SyntaxKind.NamespaceExport:
                 return node.parent.parent;
 
             case SyntaxKind.ImportClause:
