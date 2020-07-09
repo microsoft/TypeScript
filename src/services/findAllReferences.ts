@@ -2033,22 +2033,29 @@ namespace ts.FindAllReferences {
 
         function isStatic(symbol: Symbol): boolean {
             if (!symbol.valueDeclaration) { return false; }
-            if (symbol.valueDeclaration?.modifierFlagsCache) { return !!((symbol.valueDeclaration.modifierFlagsCache & ModifierFlags.Static)); }
-            return !!forEach(symbol.valueDeclaration.modifiers, modifier => modifier.kind & ModifierFlags.Static);
+            const modifierFlags = getEffectiveModifierFlags(symbol.valueDeclaration);
+            return !!(modifierFlags & ModifierFlags.Static);
         }
 
         function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
             const { checker } = state;
             const isReferenceSymbolStatic = isStatic(referenceSymbol);
+            const allowBaseTypes = (rootSymbol: Symbol) =>
+                !(search.parents?.every(parent => !explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker)));
+
+            return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
+                /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
+                cbSymbol,
+                /*allowBaseTypes*/ allowBaseTypes);
+
             function cbSymbol(sym: Symbol, rootSymbol: Symbol, baseSymbol: Symbol | undefined, kind: NodeEntryKind): RelatedSymbol | undefined {
                 // check whether the symbol used to search itself is just the searched one.
                 if (baseSymbol) {
                     // static method/property and instance method/property might have the same name. Only check static or only check instance.
-                    if ((isReferenceSymbolStatic && !isStatic(baseSymbol)) || (!isReferenceSymbolStatic && isStatic(baseSymbol))) {
+                    if (isReferenceSymbolStatic !== isStatic(baseSymbol)) {
                         baseSymbol = undefined;
                     }
                 }
-
                 if (!search.includes(baseSymbol || rootSymbol || sym)) {
                     return undefined;
                 }
@@ -2058,13 +2065,6 @@ namespace ts.FindAllReferences {
                     kind
                 };
             };
-            const allowBaseTypes = (rootSymbol: Symbol) =>
-                !every(search.parents, parent => !explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker));
-
-            return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
-                /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
-                cbSymbol,
-                /*allowBaseTypes*/ allowBaseTypes);
         }
 
         /**
