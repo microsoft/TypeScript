@@ -3184,6 +3184,7 @@ namespace ts {
 
             if (!isBindingPattern(node.name)) {
                 if (isBlockOrCatchScoped(node)) {
+                    // TODO: This can probably come first, and be mutex with the succeeding 3 branches
                     if (isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
                         declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
                     }
@@ -3204,7 +3205,12 @@ namespace ts {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
                 }
                 else {
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    if (isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
+                        declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                    }
+                    else {
+                        declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    }
                 }
             }
         }
