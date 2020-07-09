@@ -2038,10 +2038,6 @@ namespace ts.FindAllReferences {
 
         function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
             const { checker } = state;
-            const isReferenceSymbolStatic = isStatic(referenceSymbol);
-            const allowBaseTypes = (rootSymbol: Symbol) =>
-                !(search.parents?.every(parent => !explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker)));
-
             return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
                 /*onlyIncludeBindingElementAtReferenceLocation*/ state.options.use !== FindReferencesUse.Rename || !!state.options.providePrefixAndSuffixTextForRename,
                 cbSymbol,
