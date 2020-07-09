@@ -132,6 +132,7 @@ namespace ts.FindAllReferences {
                 return node.parent.parent;
 
             case SyntaxKind.ImportClause:
+            case SyntaxKind.NamespaceExport:
                 return node.parent;
 
             case SyntaxKind.BinaryExpression:
