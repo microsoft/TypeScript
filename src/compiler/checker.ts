@@ -5095,7 +5095,7 @@ namespace ts {
                     parameterType = getOptionalType(parameterType);
                 }
                 if ((context.flags & NodeBuilderFlags.NoUndefinedOptionalParameterType) && parameterDeclaration && !isJSDocParameterTag(parameterDeclaration) && isOptionalUninitializedParameter(parameterDeclaration)) {
-                    parameterType = removeUndefinedType(parameterType);
+                    parameterType = getTypeWithFacts(parameterType, TypeFacts.NEUndefined);
                 }
                 const parameterTypeNode = serializeTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
 
@@ -18547,12 +18547,6 @@ namespace ts {
         function removeDefinitelyFalsyTypes(type: Type): Type {
             return getFalsyFlags(type) & TypeFlags.DefinitelyFalsy ?
                 filterType(type, t => !(getFalsyFlags(t) & TypeFlags.DefinitelyFalsy)) :
-                type;
-        }
-
-        function removeUndefinedType(type: Type): Type {
-            return getFalsyFlags(type) & TypeFlags.Undefined ?
-                filterType(type, t => !(getFalsyFlags(t) & TypeFlags.Undefined)) :
                 type;
         }
 
