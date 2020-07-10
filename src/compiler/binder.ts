@@ -2986,7 +2986,9 @@ namespace ts {
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.Assignment;
                 namespaceSymbol = forEachIdentifierInEntityName(entityName, namespaceSymbol, (id, symbol, parent) => {
                     if (symbol) {
-                        addDeclarationToSymbol(symbol, id, flags);
+                        if (!(symbol.flags & SymbolFlags.Alias)) {
+                            addDeclarationToSymbol(symbol, id, flags);
+                        }
                         return symbol;
                     }
                     else {
