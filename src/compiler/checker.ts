@@ -2390,13 +2390,30 @@ namespace ts {
                 const immediate = resolveExternalModuleName(node, isVariableDeclaration(node)
                     ? (getFirstPropertyAccessExpression(node.initializer!) as CallExpression).arguments[0]
                     : getExternalModuleImportEqualsDeclarationExpression(node));
-                const resolved = resolveExternalModuleSymbol(immediate);
-                if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
-                    // TODO: Relies on old code in resolveCallExpression that special-cases `require("x")`
-                    return isIdentifier(node.initializer.name)
-                        ? getPropertyOfType(checkExpression(node.initializer.expression), node.initializer.name.escapedText)
-                        : undefined;
+                if (isVariableDeclaration(node)) {
+                    const typeTag = getJSDocTypeTag(node);
+                    if (node.initializer && isPropertyAccessExpression(node.initializer)) {
+                        if (!isIdentifier(node.initializer.name))
+                            return undefined;
+                        // TODO: Relies on old code in resolveCallExpression that special-cases `require("x")`
+                        const original = getPropertyOfType(checkExpression(node.initializer.expression), node.initializer.name.escapedText);
+                        if (typeTag && original) {
+                            const symbol: TransientSymbol = cloneSymbol(original) as TransientSymbol
+                            symbol.type = getTypeFromTypeNode(typeTag.typeExpression);
+                            return symbol;
+                        }
+                        // TODO: Might still want to resolveExternalModuleSymbol here?
+                        return original;
+                    }
+                    else if (typeTag && immediate) {
+                        // TODO: This is basically wrong.
+                        const symbol: TransientSymbol = cloneSymbol(immediate) as TransientSymbol
+                        symbol.type = getTypeFromTypeNode(typeTag.typeExpression);
+                        return symbol;
+                    }
+                    return resolveExternalModuleSymbol(immediate);
                 }
+                const resolved = resolveExternalModuleSymbol(immediate);
                 markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
                 return resolved;
             }
@@ -32773,6 +32790,12 @@ namespace ts {
             const symbol = getSymbolOfNode(node);
             if (/*isBindingElement(node) && */isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true) && symbol.flags & SymbolFlags.Alias) {
                 checkAliasSymbol(node);
+                const typeTag = getJSDocTypeTag(node);
+                const initializer = node.initializer;
+                if (typeTag) {
+                    const type = getTypeFromTypeNode(typeTag.typeExpression);
+                    checkTypeAssignableToAndOptionallyElaborate(checkExpressionCached(initializer), type, node, initializer, /*headMessage*/ undefined);
+                }
                 return;
             }
 
