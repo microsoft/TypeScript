@@ -4572,8 +4572,8 @@ namespace ts {
                 }
 
                 function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
-                    if (isGenericMappedType(type)) {
-                        return createMappedTypeNodeFromType(type);
+                    if (isGenericMappedType(type) || (type as MappedType).containsError) {
+                        return createMappedTypeNodeFromType(type as MappedType);
                     }
 
                     const resolved = resolveStructuredTypeMembers(type);
@@ -10309,6 +10309,7 @@ namespace ts {
         function getTypeOfMappedSymbol(symbol: MappedSymbol) {
             if (!symbol.type) {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    symbol.mappedType.containsError = true;
                     return errorType;
                 }
                 const templateType = getTemplateTypeFromMappedType(<MappedType>symbol.mappedType.target || symbol.mappedType);
