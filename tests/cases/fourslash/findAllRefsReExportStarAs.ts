@@ -1,16 +1,20 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: /leafModule.ts
-////[|export const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}hello|] = () => 'Hello';|]
+////[|{| "id": "helloDecl" |}export const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeId": "helloDecl" |}hello|] = () => 'Hello';|]
 
 // @Filename: /exporting.ts
-////export * as Leaf from './leafModule';
+////[|{| "id": "leafExportDecl" |}export * as [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeId": "leafExportDecl" |}Leaf|] from './leafModule';|]
 
 // @Filename: /importing.ts
-//// import { Leaf } from './exporting';
-//// Leaf.[|hello|]()
+//// [|{| "id": "leafImportDecl" |}import { [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeId": "leafImportDecl" |}Leaf|] } from './exporting';|]
+//// [|Leaf|].[|hello|]()
 
 verify.noErrors();
 const ranges = test.ranges();
-const [r0Def, r0, r1] = ranges;
-verify.singleReferenceGroup("const hello: () => string", [r0, r1]);
+const [helloDecl, helloDef, leafExportDecl, leafDef, leafImportDecl, leafImportDef, leafUse, helloUse] = ranges;
+verify.singleReferenceGroup("const hello: () => string", [helloDef, helloUse]);
+const leafExportAsRef = { definition: "import Leaf", ranges: [leafDef] };
+const leafImportRef = { definition: "import Leaf", ranges: [leafImportDef, leafUse] };
+verify.referenceGroups([leafDef], [leafExportAsRef, leafImportRef]);
+verify.referenceGroups([leafImportDef, leafUse], [leafImportRef, leafExportAsRef]);

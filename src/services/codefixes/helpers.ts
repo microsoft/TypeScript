@@ -164,7 +164,7 @@ namespace ts.codefix {
         const program = context.program;
         const checker = program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
-        const flags = NodeBuilderFlags.NoTruncation | NodeBuilderFlags.SuppressAnyReturnType | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0);
+        const flags = NodeBuilderFlags.NoTruncation | NodeBuilderFlags.NoUndefinedOptionalParameterType | NodeBuilderFlags.SuppressAnyReturnType | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0);
         const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
         if (!signatureDeclaration) {
             return undefined;

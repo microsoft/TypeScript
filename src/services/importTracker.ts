@@ -481,6 +481,9 @@ namespace ts.FindAllReferences {
                         return exportInfo(symbol, getExportKindForDeclaration(exportNode));
                     }
                 }
+                else if (isNamespaceExport(parent)) {
+                    return exportInfo(symbol, ExportKind.Named);
+                }
                 // If we are in `export = a;` or `export default a;`, `parent` is the export assignment.
                 else if (isExportAssignment(parent)) {
                     return getExportAssignmentExport(parent);
