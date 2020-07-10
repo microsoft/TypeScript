@@ -2009,7 +2009,7 @@ namespace ts {
 
             let isCommenting = insertComment || false;
             let leftMostPosition = Number.MAX_VALUE;
-            const lineTextStarts = new Map<number>();
+            const lineTextStarts = new Map<string, number>();
             const firstNonWhitespaceCharacterRegex = new RegExp(/\S/);
             const isJsx = isInsideJsxElement(sourceFile, lineStarts[firstLine]);
             const openComment = isJsx ? "{/*" : "//";
