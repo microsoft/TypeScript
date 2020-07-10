@@ -1993,7 +1993,7 @@ namespace ts {
             let isCommenting = insertComment || false;
             let leftMostPosition = Number.MAX_VALUE;
             const lineTextStarts = new Map<number>();
-            const whiteSpaceRegex = new RegExp(/\S/);
+            const firstNonWhitespaceCharacterRegex = new RegExp(/\S/);
             const isJsx = isInsideJsxElement(sourceFile, lineStarts[firstLine]);
             const openComment = isJsx ? "{/*" : "//";
 
@@ -2002,13 +2002,13 @@ namespace ts {
                 const lineText = sourceFile.text.substring(lineStarts[i], sourceFile.getLineEndOfPosition(lineStarts[i]));
 
                 // Find the start of text and the left-most character. No-op on empty lines.
-                const regExec = whiteSpaceRegex.exec(lineText);
+                const regExec = firstNonWhitespaceCharacterRegex.exec(lineText);
                 if (regExec) {
                     leftMostPosition = Math.min(leftMostPosition, regExec.index);
                     lineTextStarts.set(i.toString(), regExec.index);
 
                     if (lineText.substr(regExec.index, openComment.length) !== openComment) {
-                        isCommenting = insertComment !== undefined ? insertComment : true;
+                        isCommenting = insertComment === undefined || insertComment;
                     }
                 }
             }
@@ -2164,7 +2164,13 @@ namespace ts {
         }
 
         function commentSelection(fileName: string, textRange: TextRange): TextChange[] {
-            return toggleLineComment(fileName, textRange, /*insertComment*/ true);
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const { firstLine, lastLine } = getLinesForRange(sourceFile, textRange);
+
+            // If there is a selection that is on the same line, add multiline.
+            return firstLine === lastLine && textRange.pos !== textRange.end
+                ? toggleMultilineComment(fileName, textRange, /*insertComment*/ true)
+                : toggleLineComment(fileName, textRange, /*insertComment*/ true);
         }
 
         function uncommentSelection(fileName: string, textRange: TextRange): TextChange[] {

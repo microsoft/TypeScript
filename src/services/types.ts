@@ -486,10 +486,10 @@ namespace ts {
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 
-        toggleLineComment(fileName: string, textRanges: TextRange): TextChange[];
-        toggleMultilineComment(fileName: string, textRanges: TextRange): TextChange[];
-        commentSelection(fileName: string, textRanges: TextRange): TextChange[];
-        uncommentSelection(fileName: string, textRanges: TextRange): TextChange[];
+        toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
+        toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
+        commentSelection(fileName: string, textRange: TextRange): TextChange[];
+        uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
 
         dispose(): void;
     }
