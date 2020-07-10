@@ -2391,6 +2391,12 @@ namespace ts {
                     ? (getFirstPropertyAccessExpression(node.initializer!) as CallExpression).arguments[0]
                     : getExternalModuleImportEqualsDeclarationExpression(node));
                 const resolved = resolveExternalModuleSymbol(immediate);
+                if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
+                    // TODO: Relies on old code in resolveCallExpression that special-cases `require("x")`
+                    return isIdentifier(node.initializer.name)
+                        ? getPropertyOfType(checkExpression(node.initializer.expression), node.initializer.name.escapedText)
+                        : undefined;
+                }
                 markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
                 return resolved;
             }
@@ -32764,11 +32770,12 @@ namespace ts {
             }
             // For a require binding element, validate the alias and exit
             // TODO: Probably should mark the symbol so I don't have to keep rescanning this
-            if (/*isBindingElement(node) && */isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
+            const symbol = getSymbolOfNode(node);
+            if (/*isBindingElement(node) && */isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true) && symbol.flags & SymbolFlags.Alias) {
                 checkAliasSymbol(node);
                 return;
             }
-            const symbol = getSymbolOfNode(node);
+
             const type = convertAutoToAny(getTypeOfSymbol(symbol));
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
