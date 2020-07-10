@@ -20633,7 +20633,7 @@ namespace ts {
         // we defer subtype reduction until the evolving array type is finalized into a manifest
         // array type.
         function addEvolvingArrayElementType(evolvingArrayType: EvolvingArrayType, node: Expression): EvolvingArrayType {
-            const elementType = getBaseTypeOfLiteralType(getContextFreeTypeOfExpression(node));
+            const elementType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(getContextFreeTypeOfExpression(node)));
             return isTypeSubsetOf(elementType, evolvingArrayType.elementType) ? evolvingArrayType : getEvolvingArrayType(getUnionType([evolvingArrayType.elementType, elementType]));
         }
 
