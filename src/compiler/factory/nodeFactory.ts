@@ -1647,7 +1647,13 @@ namespace ts {
         }
 
         // @api
-        function createConstructorTypeNode(
+        function createConstructorTypeNode(...args: Parameters<typeof createConstructorTypeNode1 | typeof createConstructorTypeNode2>) {
+            return args.length === 4 ? createConstructorTypeNode1(...args) :
+                args.length === 3 ? createConstructorTypeNode2(...args) :
+                Debug.fail("Incorrect number of arguments specified.");
+        }
+
+        function createConstructorTypeNode1(
             modifiers: readonly Modifier[] | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
@@ -1666,8 +1672,23 @@ namespace ts {
             return node;
         }
 
+        /** @deprecated */
+        function createConstructorTypeNode2(
+            typeParameters: readonly TypeParameterDeclaration[] | undefined,
+            parameters: readonly ParameterDeclaration[],
+            type: TypeNode | undefined
+        ): ConstructorTypeNode {
+            return createConstructorTypeNode1(/*modifiers*/ undefined, typeParameters, parameters, type);
+        }
+
         // @api
-        function updateConstructorTypeNode(
+        function updateConstructorTypeNode(...args: Parameters<typeof updateConstructorTypeNode1 | typeof updateConstructorTypeNode2>) {
+            return args.length === 5 ? updateConstructorTypeNode1(...args) :
+                args.length === 4 ? updateConstructorTypeNode2(...args) :
+                Debug.fail("Incorrect number of arguments specified.");
+        }
+
+        function updateConstructorTypeNode1(
             node: ConstructorTypeNode,
             modifiers: readonly Modifier[] | undefined,
             typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
@@ -1680,6 +1701,16 @@ namespace ts {
                 || node.type !== type
                 ? updateBaseSignatureDeclaration(createConstructorTypeNode(modifiers, typeParameters, parameters, type), node)
                 : node;
+        }
+
+        /** @deprecated */
+        function updateConstructorTypeNode2(
+            node: ConstructorTypeNode,
+            typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+            parameters: NodeArray<ParameterDeclaration>,
+            type: TypeNode | undefined
+        ) {
+            return updateConstructorTypeNode1(node, node.modifiers, typeParameters, parameters, type);
         }
 
         // @api

@@ -26570,7 +26570,7 @@ namespace ts {
                 if (!isConstructorAccessible(node, constructSignatures[0])) {
                     return resolveErrorCall(node);
                 }
-                // If the expression is a class of abstract type, or an abstract construct signature, 
+                // If the expression is a class of abstract type, or an abstract construct signature,
                 // then it cannot be instantiated.
                 // In the case of a merged class-module or class-interface declaration,
                 // only the class declaration node will have the Abstract flag set.
@@ -30720,7 +30720,7 @@ namespace ts {
                 const implementationSharesContainerWithFirstOverload = implementation !== undefined && implementation.parent === overloads[0].parent;
                 return implementationSharesContainerWithFirstOverload ? implementation! : overloads[0];
             }
-    
+
             function checkFlagAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined, flagsToCheck: ModifierFlags, someOverloadFlags: ModifierFlags, allOverloadFlags: ModifierFlags): void {
                 // Error if some overloads have a flag that is not shared by all overloads. To find the
                 // deviations, we XOR someOverloadFlags with allOverloadFlags
@@ -30744,7 +30744,7 @@ namespace ts {
                     });
                 }
             }
-    
+
             function checkQuestionTokenAgreementBetweenOverloads(overloads: Declaration[], implementation: FunctionLikeDeclaration | undefined, someHaveQuestionToken: boolean, allHaveQuestionToken: boolean): void {
                 if (someHaveQuestionToken !== allHaveQuestionToken) {
                     const canonicalHasQuestionToken = hasQuestionToken(getCanonicalOverload(overloads, implementation));
