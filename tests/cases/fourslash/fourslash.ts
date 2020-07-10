@@ -243,6 +243,7 @@ declare namespace FourSlashInterface {
         applicableRefactorAvailableForRange(): void;
 
         refactorAvailable(name: string, actionName?: string): void;
+        refactorAvailableForTriggerReason(triggerReason: RefactorTriggerReason, name: string, action?: string): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -590,12 +591,13 @@ declare namespace FourSlashInterface {
         range?: Range;
         code: number;
         reportsUnnecessary?: true;
+        reportsDeprecated?: true;
     }
     interface VerifyDocumentHighlightsOptions {
         filesToSearch?: ReadonlyArray<string>;
     }
     interface UserPreferences {
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
@@ -624,6 +626,7 @@ declare namespace FourSlashInterface {
         readonly kind?: string;
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;
+        readonly isPackageJsonImport?: boolean;
 
         // details
         readonly text?: string;
@@ -646,6 +649,7 @@ declare namespace FourSlashInterface {
         isVariadic?: boolean;
         tags?: ReadonlyArray<JSDocTagInfo>;
         triggerReason?: SignatureHelpTriggerReason;
+        overrideSelectedItemIndex?: number;
     }
 
     export type SignatureHelpTriggerReason =
@@ -687,6 +691,8 @@ declare namespace FourSlashInterface {
          */
         triggerCharacter?: string,
     }
+
+    export type RefactorTriggerReason = "implicit" | "invoked";
 
     export interface VerifyCodeFixAvailableOptions {
         readonly description: string;

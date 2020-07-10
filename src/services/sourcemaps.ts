@@ -76,7 +76,7 @@ namespace ts {
             }
 
             const options = program.getCompilerOptions();
-            const outPath = options.outFile || options.out;
+            const outPath = outFile(options);
 
             const declarationPath = outPath ?
                 removeFileExtension(outPath) + Extension.Dts :

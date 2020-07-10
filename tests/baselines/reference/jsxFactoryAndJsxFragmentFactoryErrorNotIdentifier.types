@@ -1,0 +1,20 @@
+=== tests/cases/compiler/jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx ===
+declare var h: any;
+>h : any
+
+<></>;
+><></> : any
+
+<><span>1</span><><span>2.1</span><span>2.2</span></></>;
+><><span>1</span><><span>2.1</span><span>2.2</span></></> : any
+><span>1</span> : any
+>span : any
+>span : any
+><><span>2.1</span><span>2.2</span></> : any
+><span>2.1</span> : any
+>span : any
+>span : any
+><span>2.2</span> : any
+>span : any
+>span : any
+

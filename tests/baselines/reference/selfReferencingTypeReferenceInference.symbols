@@ -1,0 +1,49 @@
+=== tests/cases/compiler/selfReferencingTypeReferenceInference.ts ===
+interface Box<T> {
+>Box : Symbol(Box, Decl(selfReferencingTypeReferenceInference.ts, 0, 0))
+>T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 0, 14))
+
+    __: T
+>__ : Symbol(Box.__, Decl(selfReferencingTypeReferenceInference.ts, 0, 18))
+>T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 0, 14))
+}
+
+type Recursive<T> =
+>Recursive : Symbol(Recursive, Decl(selfReferencingTypeReferenceInference.ts, 2, 1))
+>T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 4, 15))
+
+    | T
+>T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 4, 15))
+
+    | Box<Recursive<T>>
+>Box : Symbol(Box, Decl(selfReferencingTypeReferenceInference.ts, 0, 0))
+>Recursive : Symbol(Recursive, Decl(selfReferencingTypeReferenceInference.ts, 2, 1))
+>T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 4, 15))
+
+type InferRecursive<T> = T extends Recursive<infer R> ? R : "never!"
+>InferRecursive : Symbol(InferRecursive, Decl(selfReferencingTypeReferenceInference.ts, 6, 23))
+>T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 8, 20))
+>T : Symbol(T, Decl(selfReferencingTypeReferenceInference.ts, 8, 20))
+>Recursive : Symbol(Recursive, Decl(selfReferencingTypeReferenceInference.ts, 2, 1))
+>R : Symbol(R, Decl(selfReferencingTypeReferenceInference.ts, 8, 50))
+>R : Symbol(R, Decl(selfReferencingTypeReferenceInference.ts, 8, 50))
+
+// the type we are testing with
+type t1 = Box<string | Box<number | boolean>>
+>t1 : Symbol(t1, Decl(selfReferencingTypeReferenceInference.ts, 8, 68))
+>Box : Symbol(Box, Decl(selfReferencingTypeReferenceInference.ts, 0, 0))
+>Box : Symbol(Box, Decl(selfReferencingTypeReferenceInference.ts, 0, 0))
+
+type t2 = InferRecursive<t1>
+>t2 : Symbol(t2, Decl(selfReferencingTypeReferenceInference.ts, 11, 45))
+>InferRecursive : Symbol(InferRecursive, Decl(selfReferencingTypeReferenceInference.ts, 6, 23))
+>t1 : Symbol(t1, Decl(selfReferencingTypeReferenceInference.ts, 8, 68))
+
+type t3 = InferRecursive<Box<string | Box<number | boolean>>> // write t1 explicitly
+>t3 : Symbol(t3, Decl(selfReferencingTypeReferenceInference.ts, 13, 28))
+>InferRecursive : Symbol(InferRecursive, Decl(selfReferencingTypeReferenceInference.ts, 6, 23))
+>Box : Symbol(Box, Decl(selfReferencingTypeReferenceInference.ts, 0, 0))
+>Box : Symbol(Box, Decl(selfReferencingTypeReferenceInference.ts, 0, 0))
+
+  // Why is t2 and t3 different??
+  // They have same input type!

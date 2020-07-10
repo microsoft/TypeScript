@@ -27,7 +27,7 @@ tests/cases/compiler/incompatibleTypes.ts(49,7): error TS2769: No overload match
       Object literal may only specify known properties, and 'e' does not exist in type '{ c: { b: string; }; d: string; }'.
 tests/cases/compiler/incompatibleTypes.ts(66,47): error TS2322: Type '{ e: number; f: number; }' is not assignable to type '{ a: { a: string; }; b: string; }'.
   Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
-tests/cases/compiler/incompatibleTypes.ts(72,5): error TS2322: Type '5' is not assignable to type '() => string'.
+tests/cases/compiler/incompatibleTypes.ts(72,5): error TS2322: Type 'number' is not assignable to type '() => string'.
 tests/cases/compiler/incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) => number' is not assignable to type '() => any'.
 
 
@@ -141,7 +141,7 @@ tests/cases/compiler/incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) =>
     
     var i1c1: { (): string; } = 5;
         ~~~~
-!!! error TS2322: Type '5' is not assignable to type '() => string'.
+!!! error TS2322: Type 'number' is not assignable to type '() => string'.
     
     var fp1: () =>any = a => 0;
         ~~~

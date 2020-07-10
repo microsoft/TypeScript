@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+function foo() {}
+>foo : Symbol(foo, Decl(source.js, 0, 0), Decl(source.js, 0, 17))
+
+foo.null = true;
+>foo.null : Symbol(foo.null, Decl(source.js, 0, 17))
+>foo : Symbol(foo, Decl(source.js, 0, 0), Decl(source.js, 0, 17))
+>null : Symbol(foo.null, Decl(source.js, 0, 17))
+
+function bar() {}
+>bar : Symbol(bar, Decl(source.js, 1, 16), Decl(source.js, 3, 17), Decl(source.js, 4, 17))
+
+bar.async = true;
+>bar.async : Symbol(bar.async, Decl(source.js, 3, 17))
+>bar : Symbol(bar, Decl(source.js, 1, 16), Decl(source.js, 3, 17), Decl(source.js, 4, 17))
+>async : Symbol(bar.async, Decl(source.js, 3, 17))
+
+bar.normal = false;
+>bar.normal : Symbol(bar.normal, Decl(source.js, 4, 17))
+>bar : Symbol(bar, Decl(source.js, 1, 16), Decl(source.js, 3, 17), Decl(source.js, 4, 17))
+>normal : Symbol(bar.normal, Decl(source.js, 4, 17))
+
+function baz() {}
+>baz : Symbol(baz, Decl(source.js, 5, 19), Decl(source.js, 7, 17), Decl(source.js, 8, 17))
+
+baz.class = true;
+>baz.class : Symbol(baz.class, Decl(source.js, 7, 17))
+>baz : Symbol(baz, Decl(source.js, 5, 19), Decl(source.js, 7, 17), Decl(source.js, 8, 17))
+>class : Symbol(baz.class, Decl(source.js, 7, 17))
+
+baz.normal = false;
+>baz.normal : Symbol(baz.normal, Decl(source.js, 8, 17))
+>baz : Symbol(baz, Decl(source.js, 5, 19), Decl(source.js, 7, 17), Decl(source.js, 8, 17))
+>normal : Symbol(baz.normal, Decl(source.js, 8, 17))
+

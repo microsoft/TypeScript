@@ -1,5 +1,4 @@
 namespace Harness {
-    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
     export interface IO {
         newLine(): string;
         getCurrentDirectory(): string;
@@ -244,7 +243,7 @@ namespace Harness {
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
         // Cache of lib files from "built/local"
-        let libFileNameSourceFileMap: ts.Map<ts.SourceFile> | undefined;
+        let libFileNameSourceFileMap: ts.ESMap<string, ts.SourceFile> | undefined;
 
         export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile | undefined {
             if (!isDefaultLibraryFile(fileName)) {
@@ -314,7 +313,7 @@ namespace Harness {
             { name: "fullEmitPaths", type: "boolean" }
         ];
 
-        let optionsIndex: ts.Map<ts.CommandLineOption>;
+        let optionsIndex: ts.ESMap<string, ts.CommandLineOption>;
         function getCommandLineOption(name: string): ts.CommandLineOption | undefined {
             if (!optionsIndex) {
                 optionsIndex = ts.createMap<ts.CommandLineOption>();
@@ -959,7 +958,7 @@ namespace Harness {
             }
         }
 
-        function checkDuplicatedFileName(resultName: string, dupeCase: ts.Map<number>): string {
+        function checkDuplicatedFileName(resultName: string, dupeCase: ts.ESMap<string, number>): string {
             resultName = sanitizeTestFilePath(resultName);
             if (dupeCase.has(resultName)) {
                 // A different baseline filename should be manufactured if the names differ only in case, for windows compat
@@ -1067,9 +1066,9 @@ namespace Harness {
         }
     }
 
-    let booleanVaryByStarSettingValues: ts.Map<string | number> | undefined;
+    let booleanVaryByStarSettingValues: ts.ESMap<string, string | number> | undefined;
 
-    function getVaryByStarSettingValues(varyBy: string): ts.ReadonlyMap<string | number> | undefined {
+    function getVaryByStarSettingValues(varyBy: string): ts.ReadonlyESMap<string, string | number> | undefined {
         const option = ts.forEach(ts.optionDeclarations, decl => ts.equateStringsCaseInsensitive(decl.name, varyBy) ? decl : undefined);
         if (option) {
             if (typeof option.type === "object") {
@@ -1293,6 +1292,7 @@ namespace Harness {
         export interface BaselineOptions {
             Subfolder?: string;
             Baselinefolder?: string;
+            PrintDiff?: true;
         }
 
         export function localPath(fileName: string, baselineFolder?: string, subfolder?: string) {
@@ -1347,7 +1347,7 @@ namespace Harness {
             return { expected, actual };
         }
 
-        function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string) {
+        function writeComparison(expected: string, actual: string, relativeFileName: string, actualFileName: string, opts?: BaselineOptions) {
             // For now this is written using TypeScript, because sys is not available when running old test cases.
             // But we need to move to sys once we have
             // Creates the directory including its parent if not already present
@@ -1381,7 +1381,14 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
-                throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                if (require && opts && opts.PrintDiff) {
+                    const Diff = require("diff");
+                    const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
+                    throw new Error(`The baseline file ${relativeFileName} has changed.${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
+                }
+                else {
+                    throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                }
             }
         }
 
@@ -1391,7 +1398,7 @@ namespace Harness {
                 throw new Error("The generated content was \"undefined\". Return \"null\" if no baselining is required.\"");
             }
             const comparison = compareToBaseline(actual, relativeFileName, opts);
-            writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName);
+            writeComparison(comparison.expected, comparison.actual, relativeFileName, actualFileName, opts);
         }
 
         export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void {

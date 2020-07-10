@@ -38,9 +38,9 @@ edit.applyRefactor({
   actionName: "function_scope_1",
   actionDescription: "Extract to function in module scope",
   newContent:
-`import { c, C } from "./c";
+`import { A } from "./a";
 import { B } from "./b";
-import { A } from "./a";
+import { C, c } from "./c";
 
 function foo() {
     const prop = c;

@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/tsconfig.json
+Input::
 //// [/a/a.ts]
 let x = 1
 
@@ -21,12 +21,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/out.js]
-var x = 1;
-var y = 1;
 
-
-
+/a/lib/tsc.js --w -p /a/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
@@ -65,15 +61,17 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Make change in the file
-
-//// [/a/a.ts]
-let x = 11
-
 //// [/a/out.js]
-var x = 11;
+var x = 1;
 var y = 1;
 
+
+
+Change:: Make change in the file
+
+Input::
+//// [/a/a.ts]
+let x = 11
 
 
 Output::
@@ -113,3 +111,9 @@ FsWatchesRecursive::
   {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/out.js]
+var x = 11;
+var y = 1;
+
+

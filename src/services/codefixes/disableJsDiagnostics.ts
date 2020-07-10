@@ -37,7 +37,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const seenLines = createMap<true>();
+            const seenLines = new Set<number>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 if (textChanges.isValidLocationToAddComment(diag.file, diag.start)) {
                     makeChange(changes, diag.file, diag.start, seenLines);
@@ -46,10 +46,10 @@ namespace ts.codefix {
         },
     });
 
-    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Map<true>) {
+    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Set<number>) {
         const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
         // Only need to add `// @ts-ignore` for a line once.
-        if (!seenLines || addToSeen(seenLines, lineNumber)) {
+        if (!seenLines || tryAddToSet(seenLines, lineNumber)) {
             changes.insertCommentBeforeLine(sourceFile, lineNumber, position, " @ts-ignore");
         }
     }

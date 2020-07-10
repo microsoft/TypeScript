@@ -6,11 +6,11 @@ namespace ts.tscWatch {
             content: ""
         };
 
-        function makeChangeToFile(sys: WatchedSystem) {
-            sys.modifyFile(file.path, "//");
-            sys.runQueuedTimeoutCallbacks();
-            return "Comment added to file f";
-        }
+        const makeChangeToFile: TscWatchCompileChange[] = [{
+            caption: "Comment added to file f",
+            change: sys => sys.modifyFile(file.path, "//"),
+            timeouts: runQueuedTimeoutCallbacks,
+        }];
 
         function checkConsoleClearingUsingCommandLineOptions(subScenario: string, commandLineOptions?: string[]) {
             verifyTscWatch({
@@ -18,9 +18,7 @@ namespace ts.tscWatch {
                 subScenario,
                 commandLineArgs: ["--w", file.path, ...commandLineOptions || emptyArray],
                 sys: () => createWatchedSystem([file, libFile]),
-                changes: [
-                    makeChangeToFile
-                ],
+                changes: makeChangeToFile,
             });
         }
 
@@ -39,20 +37,16 @@ namespace ts.tscWatch {
             };
             const files = [file, configFile, libFile];
             it("using createWatchOfConfigFile ", () => {
-                const sys = TestFSWithWatch.changeToHostTrackingWrittenFiles(
-                    createWatchedSystem(files)
-                );
-                const watch = createWatchOfConfigFile(configFile.path, sys);
+                const baseline = createBaseline(createWatchedSystem(files));
+                const watch = createWatchOfConfigFile(configFile.path, baseline.sys);
                 // Initially console is cleared if --preserveOutput is not provided since the config file is yet to be parsed
                 runWatchBaseline({
                     scenario,
                     subScenario: "when preserveWatchOutput is true in config file/createWatchOfConfigFile",
                     commandLineArgs: ["--w", "-p", configFile.path],
-                    sys,
+                    ...baseline,
                     getPrograms: () => [[watch.getCurrentProgram().getProgram(), watch.getCurrentProgram()]],
-                    changes: [
-                        makeChangeToFile
-                    ],
+                    changes: makeChangeToFile,
                     watchOrSolution: watch
                 });
             });
@@ -61,9 +55,7 @@ namespace ts.tscWatch {
                 subScenario: "when preserveWatchOutput is true in config file/when createWatchProgram is invoked with configFileParseResult on WatchCompilerHostOfConfigFile",
                 commandLineArgs: ["--w", "-p", configFile.path],
                 sys: () => createWatchedSystem(files),
-                changes: [
-                    makeChangeToFile
-                ],
+                changes: makeChangeToFile,
             });
         });
     });

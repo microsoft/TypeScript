@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -19,15 +19,8 @@ export var x = Foo();
 //// [/a/b/tsconfig.json]
 {}
 
-//// [/a/b/referenceFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.x = void 0;
-/// <reference path="./moduleFile2.ts" />
-exports.x = Foo();
 
-
-
+/a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
@@ -79,20 +72,21 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: edit refereceFile1
-
-//// [/a/b/referenceFile1.ts]
-/// <reference path="./moduleFile2.ts" />
-export var x = Foo();export var yy = Foo();
-
 //// [/a/b/referenceFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.yy = exports.x = void 0;
+exports.x = void 0;
 /// <reference path="./moduleFile2.ts" />
 exports.x = Foo();
-exports.yy = Foo();
 
+
+
+Change:: edit refereceFile1
+
+Input::
+//// [/a/b/referenceFile1.ts]
+/// <reference path="./moduleFile2.ts" />
+export var x = Foo();export var yy = Foo();
 
 
 Output::
@@ -151,18 +145,21 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: create moduleFile2
-
-//// [/a/b/referenceFile1.js] file written with same contents
-//// [/a/b/moduleFile2.ts]
-export var Foo4 = 10;
-
-//// [/a/b/moduleFile2.js]
+//// [/a/b/referenceFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
+exports.yy = exports.x = void 0;
+/// <reference path="./moduleFile2.ts" />
+exports.x = Foo();
+exports.yy = Foo();
 
+
+
+Change:: create moduleFile2
+
+Input::
+//// [/a/b/moduleFile2.ts]
+export var Foo4 = 10;
 
 
 Output::
@@ -216,3 +213,12 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/referenceFile1.js] file written with same contents
+//// [/a/b/moduleFile2.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo4 = void 0;
+exports.Foo4 = 10;
+
+

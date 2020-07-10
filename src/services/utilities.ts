@@ -1522,7 +1522,7 @@ namespace ts {
     }
 
     export function getNodeModifiers(node: Node): string {
-        const flags = isDeclaration(node) ? getCombinedModifierFlags(node) : ModifierFlags.None;
+        const flags = isDeclaration(node) ? getCombinedNodeFlagsAlwaysIncludeJSDoc(node) : ModifierFlags.None;
         const result: string[] = [];
 
         if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
@@ -1531,6 +1531,7 @@ namespace ts {
         if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
+        if (flags & ModifierFlags.Deprecated) result.push(ScriptElementKindModifier.deprecatedModifier);
         if (node.flags & NodeFlags.Ambient) result.push(ScriptElementKindModifier.ambientModifier);
         if (node.kind === SyntaxKind.ExportAssignment) result.push(ScriptElementKindModifier.exportedModifier);
 
@@ -1778,17 +1779,17 @@ namespace ts {
     }
 
     export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
-        return createImportDeclaration(
+        return factory.createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
-                ? createImportClause(defaultImport, namedImports && namedImports.length ? createNamedImports(namedImports) : undefined, isTypeOnly)
+                ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
                 : undefined,
             typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier);
     }
 
     export function makeStringLiteral(text: string, quotePreference: QuotePreference): StringLiteral {
-        return createLiteral(text, quotePreference === QuotePreference.Single);
+        return factory.createStringLiteral(text, quotePreference === QuotePreference.Single);
     }
 
     export const enum QuotePreference { Single, Double }
@@ -1898,23 +1899,34 @@ namespace ts {
         return node.modifiers && find(node.modifiers, m => m.kind === kind);
     }
 
-    export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: Statement | readonly Statement[], blankLineBetween: boolean): void {
+    export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean): void {
         const decl = isArray(imports) ? imports[0] : imports;
-        const importKindPredicate = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableDeclarationStatement : isAnyImportSyntax;
-        const lastImportDeclaration = findLast(sourceFile.statements, statement => importKindPredicate(statement));
-        if (lastImportDeclaration) {
-            if (isArray(imports)) {
-                changes.insertNodesAfter(sourceFile, lastImportDeclaration, imports);
-            }
-            else {
-                changes.insertNodeAfter(sourceFile, lastImportDeclaration, imports);
-            }
+        const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
+        const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
+        const sortedNewImports = isArray(imports) ? stableSort(imports, OrganizeImports.compareImportsOrRequireStatements) : [imports];
+        if (!existingImportStatements.length) {
+            changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
         }
-        else if (isArray(imports)) {
-            changes.insertNodesAtTopOfFile(sourceFile, imports, blankLineBetween);
+        else if (existingImportStatements && OrganizeImports.importsAreSorted(existingImportStatements)) {
+            for (const newImport of sortedNewImports) {
+                const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
+                if (insertionIndex === 0) {
+                    changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false);
+                }
+                else {
+                    const prevImport = existingImportStatements[insertionIndex - 1];
+                    changes.insertNodeAfter(sourceFile, prevImport, newImport);
+                }
+            }
         }
         else {
-            changes.insertNodeAtTopOfFile(sourceFile, imports, blankLineBetween);
+            const lastExistingImport = lastOrUndefined(existingImportStatements);
+            if (lastExistingImport) {
+                changes.insertNodesAfter(sourceFile, lastExistingImport, sortedNewImports);
+            }
+            else {
+                changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
+            }
         }
     }
 
@@ -2165,15 +2177,10 @@ namespace ts {
         return !!location.parent && isImportOrExportSpecifier(location.parent) && location.parent.propertyName === location;
     }
 
-    export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
-        const scriptKind = getScriptKind(fileName, host);
-        return some(scriptKinds, k => k === scriptKind);
-    }
-
-    export function getScriptKind(fileName: string, host?: LanguageServiceHost): ScriptKind {
+    export function getScriptKind(fileName: string, host: LanguageServiceHost): ScriptKind {
         // First check to see if the script kind was specified by the host. Chances are the host
         // may override the default script kind for the file extension.
-        return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
+        return ensureScriptKind(fileName, host.getScriptKind && host.getScriptKind(fileName));
     }
 
     export function getSymbolTarget(symbol: Symbol, checker: TypeChecker): Symbol {
@@ -2227,7 +2234,7 @@ namespace ts {
         return clone;
     }
 
-    export function getSynthesizedDeepCloneWithRenames<T extends Node>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
+    export function getSynthesizedDeepCloneWithRenames<T extends Node>(node: T, includeTrivia = true, renameMap?: ESMap<string, Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         let clone;
         if (renameMap && checker && isBindingElement(node) && isIdentifier(node.name) && isObjectBindingPattern(node.parent)) {
             const symbol = checker.getSymbolAtLocation(node.name);
@@ -2235,7 +2242,7 @@ namespace ts {
 
             if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
                 clone = setOriginalNode(
-                    createBindingElement(
+                    factory.createBindingElement(
                         node.dotDotDotToken,
                         node.propertyName || node.name,
                         renameInfo,
@@ -2248,7 +2255,7 @@ namespace ts {
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo) {
-                clone = setOriginalNode(createIdentifier(renameInfo.text), node);
+                clone = setOriginalNode(factory.createIdentifier(renameInfo.text), node);
             }
         }
 
@@ -2263,27 +2270,24 @@ namespace ts {
     }
 
 
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: ESMap<string, Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         const visited = (renameMap || checker || callback) ?
             visitEachChild(node, wrapper, nullTransformationContext) :
             visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
-            const clone = getSynthesizedClone(node);
-            if (isStringLiteral(clone)) {
-                clone.textSourceNode = node as any;
-            }
-            else if (isNumericLiteral(clone)) {
-                clone.numericLiteralFlags = (node as any).numericLiteralFlags;
-            }
+            const clone =
+                isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
+                isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
+                factory.cloneNode(node);
             return setTextRange(clone, node);
         }
 
         // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
         // the new node created by visitEachChild with the extra changes getSynthesizedClone
         // would have made.
-        visited.parent = undefined!;
+        (visited as Mutable<T>).parent = undefined!;
         return visited;
 
         function wrapper(node: T) {
@@ -2294,7 +2298,7 @@ namespace ts {
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
-        return nodes && createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        return nodes && factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
     }
 
     /**
@@ -2722,7 +2726,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: LanguageServiceHost): PackageJsonInfo | false | undefined {
+    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): PackageJsonInfo | undefined {
         if (!host.readFile) {
             return undefined;
         }
@@ -2732,19 +2736,20 @@ namespace ts {
         const stringContent = host.readFile(fileName);
         if (!stringContent) return undefined;
 
-        const content = tryParseJson(stringContent) as PackageJsonRaw;
-        if (!content) return false;
+        const content = tryParseJson(stringContent) as PackageJsonRaw | undefined;
         const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
-        for (const key of dependencyKeys) {
-            const dependencies = content[key];
-            if (!dependencies) {
-                continue;
+        if (content) {
+            for (const key of dependencyKeys) {
+                const dependencies = content[key];
+                if (!dependencies) {
+                    continue;
+                }
+                const dependencyMap = createMap<string>();
+                for (const packageName in dependencies) {
+                    dependencyMap.set(packageName, dependencies[packageName]);
+                }
+                info[key] = dependencyMap;
             }
-            const dependencyMap = createMap<string>();
-            for (const packageName in dependencies) {
-                dependencyMap.set(packageName, dependencies[packageName]);
-            }
-            info[key] = dependencyMap;
         }
 
         const dependencyGroups = [
@@ -2756,6 +2761,7 @@ namespace ts {
 
         return {
             ...info,
+            parseable: !!content,
             fileName,
             get,
             has(dependencyName, inGroups) {

@@ -1,7 +1,7 @@
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(2,9): error TS2322: Type 'T' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(9,17): error TS2345: Argument of type '123' is not assignable to parameter of type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(9,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(10,17): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(18,7): error TS2345: Argument of type '123' is not assignable to parameter of type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(18,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(19,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(25,8): error TS2344: Type 'number' does not satisfy the constraint 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(26,8): error TS2344: Type 'string' does not satisfy the constraint 'object'.
@@ -21,7 +21,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(34,14): erro
     generic<object>(a);
     generic<object>(123); // expect error
                     ~~~
-!!! error TS2345: Argument of type '123' is not assignable to parameter of type 'object'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
     generic<object>(b); // expect error
                     ~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
@@ -34,7 +34,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts(34,14): erro
     bound(a);
     bound(123); // expect error
           ~~~
-!!! error TS2345: Argument of type '123' is not assignable to parameter of type 'object'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
     bound(b); // expect error
           ~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.

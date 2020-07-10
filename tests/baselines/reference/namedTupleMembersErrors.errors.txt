@@ -7,8 +7,8 @@ tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(11,49): err
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(11,52): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(13,39): error TS5085: A tuple member cannot be both optional and rest.
 tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(15,44): error TS2574: A rest element type must be an array type.
-tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(17,46): error TS2574: A rest element type must be an array type.
-tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(18,44): error TS2574: A rest element type must be an array type.
+tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(17,13): error TS2456: Type alias 'RecusiveRestUnlabeled' circularly references itself.
+tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(18,13): error TS2456: Type alias 'RecusiveRest' circularly references itself.
 
 
 ==== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts (11 errors) ====
@@ -47,9 +47,9 @@ tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts(18,44): err
 !!! error TS2574: A rest element type must be an array type.
     
     export type RecusiveRestUnlabeled = [string, ...RecusiveRestUnlabeled];
-                                                 ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2574: A rest element type must be an array type.
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2456: Type alias 'RecusiveRestUnlabeled' circularly references itself.
     export type RecusiveRest = [first: string, ...rest: RecusiveRest]; // marked as incorrect, same as above
-                                               ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2574: A rest element type must be an array type.
+                ~~~~~~~~~~~~
+!!! error TS2456: Type alias 'RecusiveRest' circularly references itself.
     

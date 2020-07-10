@@ -72,6 +72,8 @@ function A() {
 >A : Symbol(A, Decl(mod1.js, 5, 18), Decl(mod1.js, 1, 36), Decl(mod1.js, 2, 16), Decl(mod1.js, 3, 16))
 
     this.p = 1
+>this.p : Symbol(A.p, Decl(mod1.js, 6, 14))
+>this : Symbol(A, Decl(mod1.js, 5, 18), Decl(mod1.js, 1, 36), Decl(mod1.js, 2, 16), Decl(mod1.js, 3, 16))
 >p : Symbol(A.p, Decl(mod1.js, 6, 14))
 }
 module.exports.bothAfter = 'string'

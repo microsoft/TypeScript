@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/projects/myProject/src
+Input::
 //// [/a/b/projects/myProject/src/file1.ts]
 import module1 = require("module1");
 module1("hello");
@@ -26,21 +26,8 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/projects/myProject/src/tsconfig.json]
 {"compilerOptions":{"allowJs":true,"rootDir":".","outDir":"../dist","moduleResolution":"node","maxNodeModuleJsDepth":1}}
 
-//// [/a/b/projects/myProject/dist/file1.js]
-"use strict";
-exports.__esModule = true;
-var module1 = require("module1");
-module1("hello");
 
-
-//// [/a/b/projects/myProject/dist/file2.js]
-"use strict";
-exports.__esModule = true;
-var module11 = require("module1");
-module11("hello");
-
-
-
+/a/lib/tsc.js --w -p /a/b/projects/myProject/src
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
@@ -92,20 +79,28 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Add new line to file1
-
-//// [/a/b/projects/myProject/src/file1.ts]
-import module1 = require("module1");
-module1("hello");
-;
-
 //// [/a/b/projects/myProject/dist/file1.js]
 "use strict";
 exports.__esModule = true;
 var module1 = require("module1");
 module1("hello");
-;
 
+
+//// [/a/b/projects/myProject/dist/file2.js]
+"use strict";
+exports.__esModule = true;
+var module11 = require("module1");
+module11("hello");
+
+
+
+Change:: Add new line to file1
+
+Input::
+//// [/a/b/projects/myProject/src/file1.ts]
+import module1 = require("module1");
+module1("hello");
+;
 
 
 Output::
@@ -155,3 +150,12 @@ FsWatchesRecursive::
   {"directoryName":"/a/b/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/projects/myProject/dist/file1.js]
+"use strict";
+exports.__esModule = true;
+var module1 = require("module1");
+module1("hello");
+;
+
+
