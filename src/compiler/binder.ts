@@ -2980,15 +2980,16 @@ namespace ts {
         }
 
         function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: BindableStaticNameExpression, isToplevel: boolean, isPrototypeProperty: boolean, containerIsClass: boolean) {
+            if (namespaceSymbol?.flags! & SymbolFlags.Alias) {
+                return namespaceSymbol;
+            }
             if (isToplevel && !isPrototypeProperty) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.Assignment;
                 namespaceSymbol = forEachIdentifierInEntityName(entityName, namespaceSymbol, (id, symbol, parent) => {
                     if (symbol) {
-                        if (!(symbol.flags & SymbolFlags.Alias)) {
-                            addDeclarationToSymbol(symbol, id, flags);
-                        }
+                        addDeclarationToSymbol(symbol, id, flags);
                         return symbol;
                     }
                     else {
