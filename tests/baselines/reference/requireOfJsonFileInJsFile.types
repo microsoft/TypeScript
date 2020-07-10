@@ -1,13 +1,13 @@
 === /user.js ===
 const json0 = require("./json.json");
->json0 : typeof json0
+>json0 : { a: number; }
 >require("./json.json") : { a: number; }
 >require : any
 >"./json.json" : "./json.json"
 
 json0.b; // Error (good)
 >json0.b : any
->json0 : typeof json0
+>json0 : { a: number; }
 >b : any
 
 /** @type {{ b: number }} */
@@ -30,7 +30,7 @@ const js0 = require("./js.js");
 
 json0.b; // Error (good)
 >json0.b : any
->json0 : typeof json0
+>json0 : { a: number; }
 >b : any
 
 /** @type {{ b: number }} */
