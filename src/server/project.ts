@@ -1948,7 +1948,7 @@ namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     export class ConfiguredProject extends Project {
-        private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
+        private typeAcquisition: TypeAcquisition | undefined;
         /* @internal */
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher> | undefined;
@@ -2164,7 +2164,7 @@ namespace ts.server {
         }
 
         getTypeAcquisition() {
-            return this.typeAcquisition;
+            return this.typeAcquisition || {};
         }
 
         /*@internal*/
@@ -2282,7 +2282,7 @@ namespace ts.server {
      */
     export class ExternalProject extends Project {
         excludedFiles: readonly NormalizedPath[] = [];
-        private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
+        private typeAcquisition: TypeAcquisition | undefined;
         /*@internal*/
         constructor(public externalProjectName: string,
             projectService: ProjectService,
@@ -2318,7 +2318,7 @@ namespace ts.server {
         }
 
         getTypeAcquisition() {
-            return this.typeAcquisition;
+            return this.typeAcquisition || {};
         }
 
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
