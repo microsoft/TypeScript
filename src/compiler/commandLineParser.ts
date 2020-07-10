@@ -51,6 +51,7 @@ namespace ts {
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
         ["es2020.bigint", "lib.es2020.bigint.d.ts"],
         ["es2020.promise", "lib.es2020.promise.d.ts"],
+        ["es2020.sharedmemory", "lib.es2020.sharedmemory.d.ts"],
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["es2020.intl", "lib.es2020.intl.d.ts"],
