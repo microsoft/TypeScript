@@ -4698,6 +4698,11 @@
         "code": 6504
     },
 
+    "Include 'undefined' in index signature results": {
+        "category": "Message",
+        "code": 6800
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
