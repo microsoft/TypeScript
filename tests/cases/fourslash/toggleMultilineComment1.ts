@@ -11,6 +11,8 @@
 //// [|/*let var7 = 1;
 //// let var8 = 2;
 //// let var9 = 3;*/|]
+//// 
+//// let var10[||] = 10;
 
 verify.toggleMultilineComment(
     `let var1/* = 1;
@@ -23,4 +25,6 @@ let var6 = 3;
 
 let var7 = 1;
 let var8 = 2;
-let var9 = 3;`);
+let var9 = 3;
+
+let var10/**/ = 10;`);

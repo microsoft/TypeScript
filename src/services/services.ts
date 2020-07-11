@@ -2068,6 +2068,7 @@ namespace ts {
             const textChanges: TextChange[] = [];
             const { text } = sourceFile;
 
+            let hasComment = false;
             let isCommenting = insertComment || false;
             const positions = [] as number[] as SortedArray<number>;
 
@@ -2098,6 +2099,7 @@ namespace ts {
                         positions.push(commentRange.end);
                     }
 
+                    hasComment = true;
                     pos = commentRange.end + 1;
                 }
                 else { // If it's not in a comment range, then we need to comment the uncommented portions.
@@ -2110,7 +2112,9 @@ namespace ts {
                 }
             }
 
-            if (isCommenting) {
+            // If it didn't found a comment and isCommenting is false means is only empty space.
+            // We want to insert comment in this scenario.
+            if (isCommenting || !hasComment) {
                 if (isInComment(sourceFile, textRange.pos)?.kind !== SyntaxKind.SingleLineCommentTrivia) {
                     insertSorted(positions, textRange.pos, compareValues);
                 }

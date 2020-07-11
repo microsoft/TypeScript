@@ -1321,7 +1321,7 @@ namespace ts {
     }
 
     export function isInsideJsxElement(sourceFile: SourceFile, position: number): boolean {
-        function isInsideJsxElementRecursion(node: Node): boolean {
+        function isInsideJsxElementTraversal(node: Node): boolean {
             while (node) {
                 if (node.kind >= SyntaxKind.JsxSelfClosingElement && node.kind <= SyntaxKind.JsxExpression
                     || node.kind === SyntaxKind.JsxText
@@ -1334,7 +1334,9 @@ namespace ts {
                     node = node.parent;
                 }
                 else if (node.kind === SyntaxKind.JsxElement) {
-                    return position > node.getStart(sourceFile) || isInsideJsxElementRecursion(node.parent);
+                    if (position > node.getStart(sourceFile)) return true;
+
+                    node = node.parent;
                 }
                 else {
                     return false;
@@ -1344,7 +1346,7 @@ namespace ts {
             return false;
         }
 
-        return isInsideJsxElementRecursion(getTokenAtPosition(sourceFile, position));
+        return isInsideJsxElementTraversal(getTokenAtPosition(sourceFile, position));
     }
 
     export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
@@ -2279,8 +2281,8 @@ namespace ts {
             // This only happens for leaf nodes - internal nodes always see their children change.
             const clone =
                 isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
-                isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
-                factory.cloneNode(node);
+                    isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
+                        factory.cloneNode(node);
             return setTextRange(clone, node);
         }
 
