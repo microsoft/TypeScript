@@ -3569,18 +3569,36 @@ namespace ts {
             return parsePostfixTypeOrHigher();
         }
 
+        function parseFunctionOrConstructorTypeToError(
+            functionTypeDiagnostic: DiagnosticMessage,
+            constructorTypeDiagnostic: DiagnosticMessage
+        ): TypeNode | undefined {
+            // function type notations or constructor type notations are not allowed in this context,
+            // but we try parsing them for graceful error message
+            if (isStartOfFunctionType() || token() === SyntaxKind.NewKeyword) {
+                const type = parseFunctionOrConstructorType();
+                parseErrorAtRange(type, isFunctionTypeNode(type) ? functionTypeDiagnostic : constructorTypeDiagnostic);
+                return type;
+            }
+            return undefined;
+        }
+
         function parseUnionOrIntersectionType(
             operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken,
             parseConstituentType: () => TypeNode,
-            createTypeNode: (types: NodeArray<TypeNode>) => UnionOrIntersectionTypeNode
+            createTypeNode: (types: NodeArray<TypeNode>) => UnionOrIntersectionTypeNode,
+            functionTypeDiagnostic: DiagnosticMessage,
+            constructorTypeDiagnostic: DiagnosticMessage
         ): TypeNode {
             const pos = getNodePos();
             const hasLeadingOperator = parseOptional(operator);
-            let type = parseConstituentType();
+            let type = hasLeadingOperator ?
+                parseFunctionOrConstructorTypeToError(functionTypeDiagnostic, constructorTypeDiagnostic) || parseConstituentType() :
+                parseConstituentType();
             if (token() === operator || hasLeadingOperator) {
                 const types = [type];
                 while (parseOptional(operator)) {
-                    types.push(parseConstituentType());
+                    types.push(parseFunctionOrConstructorTypeToError(functionTypeDiagnostic, constructorTypeDiagnostic) || parseConstituentType());
                 }
                 type = finishNode(createTypeNode(createNodeArray(types, pos)), pos);
             }
@@ -3588,11 +3606,23 @@ namespace ts {
         }
 
         function parseIntersectionTypeOrHigher(): TypeNode {
-            return parseUnionOrIntersectionType(SyntaxKind.AmpersandToken, parseTypeOperatorOrHigher, factory.createIntersectionTypeNode);
+            return parseUnionOrIntersectionType(
+                SyntaxKind.AmpersandToken,
+                parseTypeOperatorOrHigher,
+                factory.createIntersectionTypeNode,
+                Diagnostics.Function_type_notation_must_be_parenthesized_when_used_in_an_intersection_type,
+                Diagnostics.Constructor_type_notation_must_be_parenthesized_when_used_in_an_intersection_type
+            );
         }
 
         function parseUnionTypeOrHigher(): TypeNode {
-            return parseUnionOrIntersectionType(SyntaxKind.BarToken, parseIntersectionTypeOrHigher, factory.createUnionTypeNode);
+            return parseUnionOrIntersectionType(
+                SyntaxKind.BarToken,
+                parseIntersectionTypeOrHigher,
+                factory.createUnionTypeNode,
+                Diagnostics.Function_type_notation_must_be_parenthesized_when_used_in_a_union_type,
+                Diagnostics.Constructor_type_notation_must_be_parenthesized_when_used_in_a_union_type
+            );
         }
 
         function isStartOfFunctionType(): boolean {
