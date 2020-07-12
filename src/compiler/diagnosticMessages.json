@@ -3041,6 +3041,10 @@
         "category": "Error",
         "code": 4020
     },
+    "'extends' clause of exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4021
+    },
     "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4022
