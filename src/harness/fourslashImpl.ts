@@ -1102,9 +1102,6 @@ namespace FourSlash {
             baselineContent += JSON.stringify(references, undefined, 2);
             Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
 
-            function commentEachLine(source: string) {
-                return source.split(/\r?\n/).map(l => "// " + l).join("\n");
-            }
             function getBaselineContentForFile(fileName: string, content: string) {
                 let newContent = `=== ${fileName} ===\n`;
                 let pos = 0;
@@ -1120,7 +1117,7 @@ namespace FourSlash {
                     pos = end;
                 }
                 newContent += content.slice(pos);
-                return commentEachLine(newContent);
+                return newContent.split(/\r?\n/).map(l => "// " + l).join("\n");
             }
         }
 
