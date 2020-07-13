@@ -154,9 +154,9 @@ namespace ts {
         of: SyntaxKind.OfKeyword,
     };
 
-    const textToKeyword = createMapFromTemplate(textToKeywordObj);
+    const textToKeyword = new Map(getEntries(textToKeywordObj));
 
-    const textToToken = createMapFromTemplate<SyntaxKind>({
+    const textToToken = new Map(getEntries({
         ...textToKeywordObj,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
@@ -218,7 +218,7 @@ namespace ts {
         "??=": SyntaxKind.QuestionQuestionEqualsToken,
         "@": SyntaxKind.AtToken,
         "`": SyntaxKind.BacktickToken
-    });
+    }));
 
     /*
         As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers

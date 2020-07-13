@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.server {
     export class ThrottledOperations {
-        private readonly pendingTimeouts: ESMap<string, any> = createMap<any>();
+        private readonly pendingTimeouts = new Map<string, any>();
         private readonly logger?: Logger | undefined;
         constructor(private readonly host: ServerHost, logger: Logger) {
             this.logger = logger.hasLevel(LogLevel.verbose) ? logger : undefined;

@@ -51,17 +51,17 @@ namespace ts.server.typingsInstaller {
             if (log.isEnabled()) {
                 log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
             }
-            return createMap<MapLike<string>>();
+            return new Map<string, MapLike<string>>();
         }
         try {
             const content = <TypesRegistryFile>JSON.parse(host.readFile(typesRegistryFilePath)!);
-            return createMapFromTemplate(content.entries);
+            return new Map(getEntries(content.entries));
         }
         catch (e) {
             if (log.isEnabled()) {
                 log.writeLine(`Error when loading types registry file '${typesRegistryFilePath}': ${(<Error>e).message}, ${(<Error>e).stack}`);
             }
-            return createMap<MapLike<string>>();
+            return new Map<string, MapLike<string>>();
         }
     }
 

@@ -11,8 +11,8 @@ namespace ts.server {
     }
 
     export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
-        const packageJsons = createMap<PackageJsonInfo>();
-        const directoriesWithoutPackageJson = createMap<true>();
+        const packageJsons = new Map<string, PackageJsonInfo>();
+        const directoriesWithoutPackageJson = new Map<string, true>();
         return {
             addOrUpdate,
             forEach: packageJsons.forEach.bind(packageJsons),

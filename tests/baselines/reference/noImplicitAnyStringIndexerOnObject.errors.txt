@@ -35,9 +35,10 @@ tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(76,1): error TS7053: 
 tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(81,1): error TS7053: Element implicitly has an 'any' type because expression of type 'StrEnum' can't be used to index type '{ a: number; }'.
   Property '[StrEnum.b]' does not exist on type '{ a: number; }'.
 tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(93,5): error TS2538: Type 'Dog' cannot be used as an index type.
+tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(99,1): error TS7052: Element implicitly has an 'any' type because type 'MyMap<string, string>' has no index signature. Did you mean to call 'm.prop.get'?
 
 
-==== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts (30 errors) ====
+==== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts (31 errors) ====
     var a = {}["hello"];
             ~~~~~~~~~~~
 !!! error TS7053: Element implicitly has an 'any' type because expression of type '"hello"' can't be used to index type '{}'.
@@ -198,4 +199,12 @@ tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(93,5): error TS2538: 
     map[rover] = "Rover";
         ~~~~~
 !!! error TS2538: Type 'Dog' cannot be used as an index type.
+    
+    interface I {
+      prop: MyMap<string, string>
+    }
+    declare const m: I;
+    m.prop['a'];
+    ~~~~~~~~~~~
+!!! error TS7052: Element implicitly has an 'any' type because type 'MyMap<string, string>' has no index signature. Did you mean to call 'm.prop.get'?
     

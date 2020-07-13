@@ -1408,7 +1408,7 @@ namespace ts {
                         //
                         // Each LS has a reference to file 'foo.ts' at version 1.  LS2 then updates
                         // it's version of 'foo.ts' to version 2.  This will cause LS2 and the
-                        // DocumentRegistry to have version 2 of the document.  HOwever, LS1 will
+                        // DocumentRegistry to have version 2 of the document.  However, LS1 will
                         // have version 1.  And *importantly* this source file will be *corrupt*.
                         // The act of creating version 2 of the file irrevocably damages the version
                         // 1 file.
@@ -1451,7 +1451,7 @@ namespace ts {
 
         function dispose(): void {
             if (program) {
-                // Use paths to ensure we are using correct key and paths as document registry could bre created with different current directory than host
+                // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
                 const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
                 forEach(program.getSourceFiles(), f =>
                     documentRegistry.releaseDocumentWithKey(f.resolvedPath, key));
@@ -1831,12 +1831,12 @@ namespace ts {
             return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
         }
 
-        const braceMatching = createMapFromTemplate({
+        const braceMatching = new Map(getEntries({
             [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
             [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
             [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
             [SyntaxKind.GreaterThanToken]: SyntaxKind.LessThanToken,
-        });
+        }));
         braceMatching.forEach((value, key) => braceMatching.set(value.toString(), Number(key) as SyntaxKind));
 
         function getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
@@ -2299,7 +2299,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
+        const nameTable = sourceFile.nameTable = new Map();
         sourceFile.forEachChild(function walk(node) {
             if (isIdentifier(node) && !isTagName(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
                 const text = getEscapedTextOfIdentifierOrLiteral(node);
