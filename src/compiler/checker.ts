@@ -741,7 +741,6 @@ namespace ts {
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
 
-        const restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(<TypeParameter>t) : t);
         const permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t);
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
@@ -940,6 +939,7 @@ namespace ts {
         const subtypeRelation = createMap<RelationComparisonResult>();
         const strictSubtypeRelation = createMap<RelationComparisonResult>();
         const assignableRelation = createMap<RelationComparisonResult>();
+        const definitelyAssignableRelation = createMap<RelationComparisonResult>();
         const comparableRelation = createMap<RelationComparisonResult>();
         const identityRelation = createMap<RelationComparisonResult>();
         const enumRelation = createMap<RelationComparisonResult>();
@@ -13576,7 +13576,7 @@ namespace ts {
             const falseType = getFalseTypeFromConditionalType(type);
             // Simplifications for types of the form `T extends U ? T : never` and `T extends U ? never : T`.
             if (falseType.flags & TypeFlags.Never && getActualTypeVariable(trueType) === getActualTypeVariable(checkType)) {
-                if (checkType.flags & TypeFlags.Any || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+                if (checkType.flags & TypeFlags.Any || isTypeDefinitelyAssignableTo(checkType, extendsType)) { // Always true
                     return getSimplifiedType(trueType, writing);
                 }
                 else if (isIntersectionEmpty(checkType, extendsType)) { // Always false
@@ -13584,7 +13584,7 @@ namespace ts {
                 }
             }
             else if (trueType.flags & TypeFlags.Never && getActualTypeVariable(falseType) === getActualTypeVariable(checkType)) {
-                if (!(checkType.flags & TypeFlags.Any) && isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+                if (!(checkType.flags & TypeFlags.Any) && isTypeDefinitelyAssignableTo(checkType, extendsType)) { // Always true
                     return neverType;
                 }
                 else if (checkType.flags & TypeFlags.Any || isIntersectionEmpty(checkType, extendsType)) { // Always false
@@ -13783,7 +13783,7 @@ namespace ts {
                     // that has no constraint. This ensures that, for example, the type
                     //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                     // doesn't immediately resolve to 'string' instead of being deferred.
-                    if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
+                    if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeDefinitelyAssignableTo(checkType, inferredExtendsType)) {
                         result = instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper);
                         break;
                     }
@@ -14513,14 +14513,6 @@ namespace ts {
             return !mapper ? makeUnaryTypeMapper(source, target) : makeCompositeTypeMapper(TypeMapKind.Merged, mapper, makeUnaryTypeMapper(source, target));
         }
 
-        function getRestrictiveTypeParameter(tp: TypeParameter) {
-            return tp.constraint === unknownType ? tp : tp.restrictiveInstantiation || (
-                tp.restrictiveInstantiation = createTypeParameter(tp.symbol),
-                (tp.restrictiveInstantiation as TypeParameter).constraint = unknownType,
-                tp.restrictiveInstantiation
-            );
-        }
-
         function cloneTypeParameter(typeParameter: TypeParameter): TypeParameter {
             const result = createTypeParameter(typeParameter.symbol);
             result.target = typeParameter;
@@ -14883,7 +14875,7 @@ namespace ts {
                 }
                 else {
                     const sub = instantiateType((<SubstitutionType>type).substitute, mapper);
-                    if (sub.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(maybeVariable), getRestrictiveInstantiation(sub))) {
+                    if (sub.flags & TypeFlags.AnyOrUnknown || isTypeDefinitelyAssignableTo(maybeVariable, sub)) {
                         return maybeVariable;
                     }
                     return sub;
@@ -14895,23 +14887,6 @@ namespace ts {
         function getPermissiveInstantiation(type: Type) {
             return type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never) ? type :
                 type.permissiveInstantiation || (type.permissiveInstantiation = instantiateType(type, permissiveMapper));
-        }
-
-        function getRestrictiveInstantiation(type: Type) {
-            if (type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never)) {
-                return type;
-            }
-            if (type.restrictiveInstantiation) {
-                return type.restrictiveInstantiation;
-            }
-            type.restrictiveInstantiation = instantiateType(type, restrictiveMapper);
-            // We set the following so we don't attempt to set the restrictive instance of a restrictive instance
-            // which is redundant - we'll produce new type identities, but all type params have already been mapped.
-            // This also gives us a way to detect restrictive instances upon comparisons and _disable_ the "distributeive constraint"
-            // assignability check for them, which is distinctly unsafe, as once you have a restrctive instance, all the type parameters
-            // are constrained to `unknown` and produce tons of false positives/negatives!
-            type.restrictiveInstantiation.restrictiveInstantiation = type.restrictiveInstantiation;
-            return type.restrictiveInstantiation;
         }
 
         function instantiateIndexInfo(info: IndexInfo | undefined, mapper: TypeMapper): IndexInfo | undefined {
@@ -15035,6 +15010,10 @@ namespace ts {
 
         function isTypeAssignableTo(source: Type, target: Type): boolean {
             return isTypeRelatedTo(source, target, assignableRelation);
+        }
+
+        function isTypeDefinitelyAssignableTo(source: Type, target: Type): boolean {
+            return isTypeRelatedTo(source, target, definitelyAssignableRelation);
         }
 
         // An object type S is considered to be derived from an object type T if
@@ -15847,7 +15826,7 @@ namespace ts {
             if (s & TypeFlags.Undefined && (!strictNullChecks || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
-            if (relation === assignableRelation || relation === comparableRelation) {
+            if (relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
                 // numeric enum literal type. This rule exists for backwards compatibility reasons because
@@ -16262,7 +16241,7 @@ namespace ts {
                 // as we break down the _target_ union first, _then_ get the source constraint - so for every
                 // member of the target, we attempt to find a match in the source. This avoids that in cases where
                 // the target is exactly the constraint.
-                if (source.flags & TypeFlags.TypeParameter && getConstraintOfType(source) === target) {
+                if (relation !== definitelyAssignableRelation && source.flags & TypeFlags.TypeParameter && getConstraintOfType(source) === target) {
                     return Ternary.True;
                 }
 
@@ -16482,7 +16461,7 @@ namespace ts {
                     return false; // Disable excess property checks on JS literals to simulate having an implicit "index signature" - but only outside of noImplicitAny
                 }
                 const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
-                if ((relation === assignableRelation || relation === comparableRelation) &&
+                if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) &&
                     (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                     return false;
                 }
@@ -16867,31 +16846,33 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.Index) {
-                    const targetType = (target as IndexType).type;
-                    // A keyof S is related to a keyof T if T is related to S.
-                    if (source.flags & TypeFlags.Index) {
-                        if (result = isRelatedTo(targetType, (<IndexType>source).type, /*reportErrors*/ false)) {
-                            return result;
+                    if (relation !== definitelyAssignableRelation) {
+                        const targetType = (target as IndexType).type;
+                        // A keyof S is related to a keyof T if T is related to S.
+                        if (source.flags & TypeFlags.Index) {
+                            if (result = isRelatedTo(targetType, (<IndexType>source).type, /*reportErrors*/ false)) {
+                                return result;
+                            }
                         }
-                    }
-                    if (isTupleType(targetType)) {
-                        // An index type can have a tuple type target when the tuple type contains variadic elements.
-                        // Check if the source is related to the known keys of the tuple type.
-                        if (result = isRelatedTo(source, getKnownKeysOfTupleType(targetType), reportErrors)) {
-                            return result;
+                        if (isTupleType(targetType)) {
+                            // An index type can have a tuple type target when the tuple type contains variadic elements.
+                            // Check if the source is related to the known keys of the tuple type.
+                            if (result = isRelatedTo(source, getKnownKeysOfTupleType(targetType), reportErrors)) {
+                                return result;
+                            }
                         }
-                    }
-                    else {
-                        // A type S is assignable to keyof T if S is assignable to keyof C, where C is the
-                        // simplified form of T or, if T doesn't simplify, the constraint of T.
-                        const constraint = getSimplifiedTypeOrConstraint(targetType);
-                        if (constraint) {
-                            // We require Ternary.True here such that circular constraints don't cause
-                            // false positives. For example, given 'T extends { [K in keyof T]: string }',
-                            // 'keyof T' has itself as its constraint and produces a Ternary.Maybe when
-                            // related to other types.
-                            if (isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors) === Ternary.True) {
-                                return Ternary.True;
+                        else {
+                            // A type S is assignable to keyof T if S is assignable to keyof C, where C is the
+                            // simplified form of T or, if T doesn't simplify, the constraint of T.
+                            const constraint = getSimplifiedTypeOrConstraint(targetType);
+                            if (constraint) {
+                                // We require Ternary.True here such that circular constraints don't cause
+                                // false positives. For example, given 'T extends { [K in keyof T]: string }',
+                                // 'keyof T' has itself as its constraint and produces a Ternary.Maybe when
+                                // related to other types.
+                                if (isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors) === Ternary.True) {
+                                    return Ternary.True;
+                                }
                             }
                         }
                     }
@@ -16957,7 +16938,7 @@ namespace ts {
                             return result;
                         }
                     }
-                    else {
+                    else if (relation !== definitelyAssignableRelation) {
                         const constraint = getConstraintOfType(<TypeVariable>source);
                         if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
                             // A type variable with no constraint is not related to the non-primitive object type.
@@ -17010,7 +16991,7 @@ namespace ts {
                             }
                         }
                     }
-                    else {
+                    else if (relation !== definitelyAssignableRelation) {
                         // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
                         // more assignments than are desirable (since it maps the source check type to its constraint, it loses information)
                         const distributiveConstraint = getConstraintOfDistributiveConditionalType(<ConditionalType>source);
