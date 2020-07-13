@@ -491,12 +491,7 @@ namespace ts.codefix {
 
     function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): FixesInfo | undefined {
         const checker = program.getTypeChecker();
-        // If we're at `<Foo/>`, we must check if `Foo` is already in scope, and if so, get an import for `React` instead.
-        const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
-            && symbolToken.parent.tagName === symbolToken
-            && (isIntrinsicJsxName(symbolToken.text) || checker.resolveName(symbolToken.text, symbolToken, SymbolFlags.All, /*excludeGlobals*/ false))
-            ? checker.getJsxNamespace(sourceFile)
-            : symbolToken.text;
+        const symbolName = getSymbolName(sourceFile, checker, symbolToken);
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default, "'default' isn't a legal identifier and couldn't occur here");
 
@@ -507,6 +502,17 @@ namespace ts.codefix {
         const fixes = arrayFrom(flatMapIterator(exportInfos.entries(), ([_, exportInfos]) =>
             getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), preferTypeOnlyImport, useRequire, program, sourceFile, host, preferences)));
         return { fixes, symbolName };
+    }
+
+    function getSymbolName(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier): string {
+        const parent = symbolToken.parent;
+        if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken) {
+            const jsxNamespace = checker.getJsxNamespace(sourceFile);
+            if (isIntrinsicJsxName(symbolToken.text) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
+                return jsxNamespace;
+            }
+        }
+        return symbolToken.text;
     }
 
     // Returns a map from an exported symbol's ID to a list of every way it's (re-)exported.
