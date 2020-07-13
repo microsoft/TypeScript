@@ -1084,6 +1084,20 @@ namespace FourSlash {
             }
         }
 
+        public verifyBaselineFindAllReferences(markerName: string) {
+            const marker = this.getMarkerByName(markerName);
+            const references = this.languageService.findReferences(marker.fileName, marker.position);
+            const commentEachLine = (source: string) => source.split(/\r?\n/).map(l => "// " + l).join("\n");
+            const baselineContent =
+                commentEachLine(
+                    this.getFileContent(marker.fileName).slice(0, marker.position) +
+                    "/*FIND ALL REFERENCES*/" +
+                    this.getFileContent(marker.fileName).slice(marker.position)) +
+                "\n\n" + JSON.stringify(references, undefined, 2);
+
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+        }
+
         public verifyNoReferences(markerNameOrRange?: string | Range) {
             if (markerNameOrRange !== undefined) this.goToMarkerOrRange(markerNameOrRange);
             const refs = this.getReferencesAtCaret();

@@ -304,7 +304,7 @@ namespace ts.FindAllReferences {
                     const { symbol } = def;
                     const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, checker, originalNode);
                     const name = displayParts.map(p => p.text).join("");
-                    const declaration = symbol.declarations ? first(symbol.declarations) : undefined;
+                    const declaration = firstOrUndefined(symbol.declarations);
                     return {
                         node: declaration ?
                             getNameOfDeclaration(declaration) || declaration :

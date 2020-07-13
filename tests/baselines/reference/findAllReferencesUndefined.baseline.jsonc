@@ -1,0 +1,42 @@
+// /*FIND ALL REFERENCES*/undefined;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllReferencesUndefined.ts",
+      "kind": "var",
+      "name": "var undefined",
+      "textSpan": {
+        "start": 0,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "propertyName"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 0,
+          "length": 9
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesUndefined.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
