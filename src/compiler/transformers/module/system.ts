@@ -144,7 +144,7 @@ namespace ts {
          * @param externalImports The imports for the file.
          */
         function collectDependencyGroups(externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]) {
-            const groupIndices = createMap<number>();
+            const groupIndices = new Map<string, number>();
             const dependencyGroups: DependencyGroup[] = [];
             for (const externalImport of externalImports) {
                 const externalModuleName = getExternalModuleNameLiteral(factory, externalImport, currentSourceFile, host, resolver, compilerOptions);

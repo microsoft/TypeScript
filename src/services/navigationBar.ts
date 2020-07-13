@@ -128,7 +128,7 @@ namespace ts.NavigationBar {
 
     function addTrackedEs5Class(name: string) {
         if (!trackedEs5Classes) {
-            trackedEs5Classes = createMap();
+            trackedEs5Classes = new Map();
         }
         trackedEs5Classes.set(name, true);
     }
@@ -443,7 +443,7 @@ namespace ts.NavigationBar {
 
     /** Merge declarations of the same kind. */
     function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): void {
-        const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
+        const nameToItems = new Map<string, NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, (child, index) => {
             const declName = child.name || getNameOfDeclaration(<Declaration>child.node);
             const name = declName && nodeText(declName);

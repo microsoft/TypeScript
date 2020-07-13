@@ -16,7 +16,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const seen = createMap<true>();
+            const seen = new Map<string, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const nodes = getNodes(diag.file, diag.start);
                 if (!nodes || !addToSeen(seen, getNodeId(nodes.insertBefore))) return;

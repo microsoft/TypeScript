@@ -188,7 +188,7 @@ new C();`
                     if (!withPathMapping) {
                         watchedDirectoriesWithResolvedModule.set(`${recognizersDateTime}/node_modules`, 1); // failed lookups
                     }
-                    const watchedDirectoriesWithUnresolvedModule = cloneMap(watchedDirectoriesWithResolvedModule);
+                    const watchedDirectoriesWithUnresolvedModule = new Map(watchedDirectoriesWithResolvedModule);
                     watchedDirectoriesWithUnresolvedModule.set(`${recognizersDateTime}/src`, 2); // wild card + failed lookups
                     [`${recognizersDateTime}/node_modules`, ...(withPathMapping ? [recognizersText] : emptyArray), ...getNodeModuleDirectories(packages)].forEach(d => {
                         watchedDirectoriesWithUnresolvedModule.set(d, 1);

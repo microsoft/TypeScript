@@ -1857,7 +1857,7 @@ namespace ts {
      *                                The value of previousIterationSymbol is undefined when the function is first called.
      */
     export function getPropertySymbolsFromBaseTypes<T>(symbol: Symbol, propertyName: string, checker: TypeChecker, cb: (symbol: Symbol) => T | undefined): T | undefined {
-        const seen = createMap<true>();
+        const seen = new Map<string, true>();
         return recur(symbol);
 
         function recur(symbol: Symbol): T | undefined {
@@ -2746,7 +2746,7 @@ namespace ts {
                 if (!dependencies) {
                     continue;
                 }
-                const dependencyMap = createMap<string>();
+                const dependencyMap = new Map<string, string>();
                 for (const packageName in dependencies) {
                     dependencyMap.set(packageName, dependencies[packageName]);
                 }

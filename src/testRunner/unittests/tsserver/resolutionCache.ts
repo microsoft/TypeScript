@@ -551,7 +551,7 @@ namespace ts.projectSystem {
         }
 
         function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: readonly string[]) {
-            const expectedRecursiveDirectories = arrayToSet([tscWatch.projectRoot, `${tscWatch.projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
+            const expectedRecursiveDirectories = new Set([tscWatch.projectRoot, `${tscWatch.projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
             checkWatchedFiles(host, mapDefined(files, f => {
                 if (f === openFile) {
                     return undefined;
@@ -560,11 +560,11 @@ namespace ts.projectSystem {
                 if (indexOfNodeModules === -1) {
                     return f.path;
                 }
-                expectedRecursiveDirectories.set(f.path.substr(0, indexOfNodeModules + "/node_modules".length), true);
+                expectedRecursiveDirectories.add(f.path.substr(0, indexOfNodeModules + "/node_modules".length));
                 return undefined;
             }));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, arrayFrom(expectedRecursiveDirectories.keys()), /*recursive*/ true);
+            checkWatchedDirectories(host, arrayFrom(expectedRecursiveDirectories.values()), /*recursive*/ true);
         }
 
         describe("from files in same folder", () => {
@@ -850,7 +850,7 @@ export const x = 10;`
                 else {
                     checkWatchedDirectoriesDetailed(host, [`${tscWatch.projectRoot}`, `${tscWatch.projectRoot}/src`], 1,  /*recursive*/ false); // failed lookup for fs
                 }
-                const expectedWatchedDirectories = createMap<number>();
+                const expectedWatchedDirectories = new Map<string, number>();
                 expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src`, 1); // Wild card
                 expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/somefolder`, 1); // failedLookup for somefolder/module2
                 expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/node_modules`, 1); // failed lookup for somefolder/module2
