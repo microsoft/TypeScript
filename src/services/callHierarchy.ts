@@ -263,6 +263,7 @@ namespace ts.CallHierarchy {
                 }
             }
             else {
+                // #39453
                 if (isVariableDeclaration(location) && location.initializer && isConstNamedExpression(location.initializer)) {
                     return location.initializer;
                 }
