@@ -122,6 +122,8 @@ namespace ts {
                                     uniqueExports.set(idText(name), true);
                                     exportedNames = append(exportedNames, name);
                                 }
+                                // we use the same helpers for `export * as ns` as we do for `import * as ns`
+                                hasImportStar = true;
                             }
                         }
                     }

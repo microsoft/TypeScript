@@ -35258,6 +35258,12 @@ namespace ts {
             checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
             checkAliasSymbol(node);
+            if (node.kind === SyntaxKind.ImportSpecifier &&
+                idText(node.propertyName || node.name) === "default" &&
+                compilerOptions.esModuleInterop &&
+                moduleKind !== ModuleKind.System && moduleKind < ModuleKind.ES2015) {
+                checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportDefault);
+            }
         }
 
         function checkImportDeclaration(node: ImportDeclaration) {
@@ -35277,6 +35283,10 @@ namespace ts {
                     if (importClause.namedBindings) {
                         if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                             checkImportBinding(importClause.namedBindings);
+                            if (moduleKind !== ModuleKind.System && moduleKind < ModuleKind.ES2015 && compilerOptions.esModuleInterop) {
+                                // import * as ns from "foo";
+                                checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportStar);
+                            }
                         }
                         else {
                             const moduleExisted = resolveExternalModuleName(node, node.moduleSpecifier);
@@ -35287,6 +35297,7 @@ namespace ts {
                     }
                 }
             }
+
         }
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -35354,6 +35365,7 @@ namespace ts {
                 }
                 else {
                     // export * from "foo"
+                    // export * as ns from "foo";
                     const moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier!);
                     if (moduleSymbol && hasExportAssignmentSymbol(moduleSymbol)) {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
@@ -35362,7 +35374,18 @@ namespace ts {
                         checkAliasSymbol(node.exportClause);
                     }
                     if (moduleKind !== ModuleKind.System && moduleKind < ModuleKind.ES2015) {
-                        checkExternalEmitHelpers(node, ExternalEmitHelpers.ExportStar);
+                        if (node.exportClause) {
+                            // export * as ns from "foo";
+                            // For ES2015 modules, we emit it as a pair of `import * as a_1 ...; export { a_1 as ns }` and don't need the helper.
+                            // We only use the helper here when in esModuleInterop
+                            if (compilerOptions.esModuleInterop) {
+                                checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportStar);
+                            }
+                        }
+                        else {
+                            // export * from "foo"
+                            checkExternalEmitHelpers(node, ExternalEmitHelpers.ExportStar);
+                        }
                     }
                 }
             }
@@ -35432,6 +35455,14 @@ namespace ts {
                     if (!target || target === unknownSymbol || target.flags & SymbolFlags.Value) {
                         checkExpressionCached(node.propertyName || node.name);
                     }
+                }
+            }
+            else {
+                if (compilerOptions.esModuleInterop &&
+                    moduleKind !== ModuleKind.System &&
+                    moduleKind < ModuleKind.ES2015 &&
+                    idText(node.propertyName || node.name) === "default") {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportDefault);
                 }
             }
         }
@@ -37624,6 +37655,8 @@ namespace ts {
                 case ExternalEmitHelpers.AsyncDelegator: return "__asyncDelegator";
                 case ExternalEmitHelpers.AsyncValues: return "__asyncValues";
                 case ExternalEmitHelpers.ExportStar: return "__exportStar";
+                case ExternalEmitHelpers.ImportStar: return "__importStar";
+                case ExternalEmitHelpers.ImportDefault: return "__importDefault";
                 case ExternalEmitHelpers.MakeTemplateObject: return "__makeTemplateObject";
                 case ExternalEmitHelpers.ClassPrivateFieldGet: return "__classPrivateFieldGet";
                 case ExternalEmitHelpers.ClassPrivateFieldSet: return "__classPrivateFieldSet";

@@ -700,7 +700,6 @@ namespace ts {
 
             const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
             if (compilerOptions.esModuleInterop) {
-                context.requestEmitHelper(importStarHelper);
                 return factory.createCallExpression(factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [emitHelpers().createImportStarCallbackHelper()]);
             }
             return promise;
@@ -715,7 +714,6 @@ namespace ts {
             const promiseResolveCall = factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
             let requireCall: Expression = factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
             if (compilerOptions.esModuleInterop) {
-                context.requestEmitHelper(importStarHelper);
                 requireCall = emitHelpers().createImportStarHelper(requireCall);
             }
 
@@ -755,8 +753,7 @@ namespace ts {
                 return innerExpr;
             }
             if (getExportNeedsImportStarHelper(node)) {
-                context.requestEmitHelper(importStarHelper);
-                return factory.createCallExpression(context.getEmitHelperFactory().getUnscopedHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+                return emitHelpers().createImportStarHelper(innerExpr);
             }
             return innerExpr;
         }
@@ -766,11 +763,9 @@ namespace ts {
                 return innerExpr;
             }
             if (getImportNeedsImportStarHelper(node)) {
-                context.requestEmitHelper(importStarHelper);
                 return emitHelpers().createImportStarHelper(innerExpr);
             }
             if (getImportNeedsImportDefaultHelper(node)) {
-                context.requestEmitHelper(importDefaultHelper);
                 return emitHelpers().createImportDefaultHelper(innerExpr);
             }
             return innerExpr;
@@ -1015,7 +1010,7 @@ namespace ts {
                             setOriginalNode(
                                 setTextRange(
                                     factory.createExpressionStatement(
-                                        context.getEmitHelperFactory().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
+                                        emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
                                     ),
                                     specifier),
                                 specifier
@@ -1023,10 +1018,13 @@ namespace ts {
                         );
                     }
                     else {
+                        const exportNeedsImportDefault =
+                            !!compilerOptions.esModuleInterop &&
+                            !(getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) &&
+                            idText(specifier.propertyName || specifier.name) === "default";
                         const exportedValue = factory.createPropertyAccessExpression(
-                            generatedName,
-                            specifier.propertyName || specifier.name
-                        );
+                            exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
+                            specifier.propertyName || specifier.name);
                         statements.push(
                             setOriginalNode(
                                 setTextRange(
@@ -1051,9 +1049,9 @@ namespace ts {
                             factory.createExpressionStatement(
                                 createExportExpression(
                                     factory.cloneNode(node.exportClause.name),
-                                    moduleKind !== ModuleKind.AMD ?
-                                        getHelperExpressionForExport(node, createRequireCall(node)) :
-                                        factory.createIdentifier(idText(node.exportClause.name))
+                                    getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
+                                        createRequireCall(node) :
+                                        factory.createIdentifier(idText(node.exportClause.name)))
                                 )
                             ),
                             node
@@ -1069,7 +1067,7 @@ namespace ts {
                 return setOriginalNode(
                     setTextRange(
                         factory.createExpressionStatement(
-                            createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
+                            emitHelpers().createExportStarHelper(moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
                         ),
                         node),
                     node
@@ -1855,24 +1853,6 @@ namespace ts {
                 }
             }
         }
-    }
-
-    // emit output for the __export helper function
-    const exportStarHelper: UnscopedEmitHelper = {
-        name: "typescript:export-star",
-        importName: "__exportStar",
-        scoped: false,
-        dependencies: [createBindingHelper],
-        priority: 2,
-        text: `
-            var __exportStar = (this && this.__exportStar) || function(m, exports) {
-                for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-            };`
-    };
-
-    function createExportStarHelper(context: TransformationContext, module: Expression) {
-        context.requestEmitHelper(exportStarHelper);
-        return context.factory.createCallExpression(context.getEmitHelperFactory().getUnscopedHelperName("__exportStar"), /*typeArguments*/ undefined, [module, context.factory.createIdentifier("exports")]);
     }
 
     // emit helper for dynamic import

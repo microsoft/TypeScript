@@ -6436,10 +6436,12 @@ namespace ts {
         AsyncDelegator = 1 << 14,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
         AsyncValues = 1 << 15,          // __asyncValues (used by ES2017 for..await..of transformation)
         ExportStar = 1 << 16,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
-        MakeTemplateObject = 1 << 17,   // __makeTemplateObject (used for constructing template string array objects)
-        ClassPrivateFieldGet = 1 << 18, // __classPrivateFieldGet (used by the class private field transformation)
-        ClassPrivateFieldSet = 1 << 19, // __classPrivateFieldSet (used by the class private field transformation)
-        CreateBinding = 1 << 20,        // __createBinding (use by the module transform for (re)exports and namespace imports)
+        ImportStar = 1 << 17,           // __importStar (used by CommonJS/AMD/UMD module transformation)
+        ImportDefault = 1 << 18,        // __importStar (used by CommonJS/AMD/UMD module transformation)
+        MakeTemplateObject = 1 << 19,   // __makeTemplateObject (used for constructing template string array objects)
+        ClassPrivateFieldGet = 1 << 20, // __classPrivateFieldGet (used by the class private field transformation)
+        ClassPrivateFieldSet = 1 << 21, // __classPrivateFieldSet (used by the class private field transformation)
+        CreateBinding = 1 << 22,        // __createBinding (use by the module transform for (re)exports and namespace imports)
         FirstEmitHelper = Extends,
         LastEmitHelper = CreateBinding,
 
