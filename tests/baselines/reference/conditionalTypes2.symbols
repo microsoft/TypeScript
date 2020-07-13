@@ -841,3 +841,15 @@ gg(ff);
 >gg : Symbol(gg, Decl(conditionalTypes2.ts, 234, 43))
 >ff : Symbol(ff, Decl(conditionalTypes2.ts, 230, 2))
 
+// Repro from 39364
+
+type StringOrNumber<T extends () => any> = [ReturnType<T>] extends [string] ? string : number;
+>StringOrNumber : Symbol(StringOrNumber, Decl(conditionalTypes2.ts, 237, 7))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 241, 20))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 241, 20))
+
+type Test = StringOrNumber<() => number>;  // number
+>Test : Symbol(Test, Decl(conditionalTypes2.ts, 241, 94))
+>StringOrNumber : Symbol(StringOrNumber, Decl(conditionalTypes2.ts, 237, 7))
+

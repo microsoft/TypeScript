@@ -527,3 +527,11 @@ gg(ff);
 >gg : <T>(f: (x: Foo3<T>) => void) => void
 >ff : (x: { x: string; }) => void
 
+// Repro from 39364
+
+type StringOrNumber<T extends () => any> = [ReturnType<T>] extends [string] ? string : number;
+>StringOrNumber : StringOrNumber<T>
+
+type Test = StringOrNumber<() => number>;  // number
+>Test : number
+

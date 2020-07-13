@@ -239,3 +239,9 @@ declare function ff(x: Foo3<string>): void;
 declare function gg<T>(f: (x: Foo3<T>) => void): void;
 type Foo3<T> = T extends number ? { n: T } : { x: T };
 gg(ff);
+
+// Repro from 39364
+
+type StringOrNumber<T extends () => any> = [ReturnType<T>] extends [string] ? string : number;
+
+type Test = StringOrNumber<() => number>;  // number
