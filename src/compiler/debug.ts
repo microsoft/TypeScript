@@ -430,7 +430,7 @@ namespace ts {
 
             Object.defineProperties(objectAllocator.getSignatureConstructor().prototype, {
                 __debugFlags: { get(this: Signature) { return formatSignatureFlags(this.flags); } },
-                __debugSignatureToString: { value(this: Signature) { return this.checker?.signatureToString(this) } }
+                __debugSignatureToString: { value(this: Signature) { return this.checker?.signatureToString(this); } }
             });
 
             const nodeConstructors = [
