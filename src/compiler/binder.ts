@@ -2980,6 +2980,9 @@ namespace ts {
         }
 
         function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: BindableStaticNameExpression, isToplevel: boolean, isPrototypeProperty: boolean, containerIsClass: boolean) {
+            if (namespaceSymbol?.flags! & SymbolFlags.Alias) {
+                return namespaceSymbol;
+            }
             if (isToplevel && !isPrototypeProperty) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
