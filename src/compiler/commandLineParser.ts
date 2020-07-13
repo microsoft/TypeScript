@@ -883,6 +883,13 @@ namespace ts {
             description: Diagnostics.Disable_solution_searching_for_this_project
         },
         {
+            name: "disableReferencedProjectLoad",
+            type: "boolean",
+            isTSConfigOnly: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disable_loading_projects_this_project_references
+        },
+        {
             name: "noImplicitUseStrict",
             type: "boolean",
             affectsSemanticDiagnostics: true,

@@ -433,13 +433,13 @@ namespace ts.server {
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
         cb: (child: ConfiguredProject, configFileName: NormalizedPath) => T | undefined,
-        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind.Find | ProjectReferenceProjectLoadKind.FindCreate
+        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind.Find | ProjectReferenceProjectLoadKind.FindCreate,
     ): T | undefined;
     /*@internal*/
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
         cb: (child: ConfiguredProject, configFileName: NormalizedPath) => T | undefined,
-        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind.FindCreateLoad,
+        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
         reason: string
     ): T | undefined;
     export function forEachResolvedProjectReferenceProject<T>(
@@ -452,11 +452,13 @@ namespace ts.server {
             if (!ref) return undefined;
             const configFileName = toNormalizedPath(ref.sourceFile.fileName);
             const child = project.projectService.findConfiguredProjectByProjectName(configFileName) || (
-                projectReferenceProjectLoadKind === ProjectReferenceProjectLoadKind.FindCreate ?
-                    project.projectService.createConfiguredProject(configFileName) :
-                    projectReferenceProjectLoadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
-                        project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
-                        undefined
+                project.getCompilerOptions().disableReferencedProjectLoad || projectReferenceProjectLoadKind === ProjectReferenceProjectLoadKind.Find ?
+                    undefined :
+                    projectReferenceProjectLoadKind === ProjectReferenceProjectLoadKind.FindCreate ?
+                        project.projectService.createConfiguredProject(configFileName) :
+                        projectReferenceProjectLoadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
+                            project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
+                            Debug.assertNever(projectReferenceProjectLoadKind)
             );
             return child && cb(child, configFileName);
         });
@@ -2913,7 +2915,7 @@ namespace ts.server {
                         const info = this.getScriptInfo(fileName);
                         return info && projectContainsInfoDirectly(child, info) ? child : undefined;
                     },
-                    ProjectReferenceProjectLoadKind.FindCreateLoad,
+                    configuredProject.getCompilerOptions().disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : ProjectReferenceProjectLoadKind.FindCreateLoad,
                     `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`
                 );
                 if (!configuredProject) return undefined;
