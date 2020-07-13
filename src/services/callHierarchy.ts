@@ -243,9 +243,6 @@ namespace ts.CallHierarchy {
                 }
                 return undefined;
             }
-            if (isVariableDeclaration(location.parent) && location.parent.initializer && isConstNamedExpression(location.parent.initializer)) {
-                return location.parent.initializer;
-            }
             if (isConstructorDeclaration(location)) {
                 if (isValidCallHierarchyDeclaration(location.parent)) {
                     return location.parent;
@@ -263,6 +260,11 @@ namespace ts.CallHierarchy {
                         location = symbol.valueDeclaration;
                         continue;
                     }
+                }
+            }
+            else {
+                if (isVariableDeclaration(location) && location.initializer && isConstNamedExpression(location.initializer)) {
+                    return location.initializer;
                 }
             }
             return undefined;
