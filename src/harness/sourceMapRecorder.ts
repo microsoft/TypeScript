@@ -325,7 +325,7 @@ namespace Harness.SourceMapRecorder {
     export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string) {
         const sourceMapRecorder = new Compiler.WriterAggregator();
         let prevSourceFile: documents.TextDocument | undefined;
-        const files = ts.createMap<documents.TextDocument>();
+        const files = new ts.Map<string, documents.TextDocument>();
         const sourceMap = ts.tryParseRawSourceMap(sys.readFile(sourceMapFile, "utf8")!);
         if (sourceMap) {
             const mapDirectory = ts.getDirectoryPath(sourceMapFile);

@@ -610,7 +610,7 @@ namespace ts.refactor {
         forEachEntry<T>(cb: (symbol: Symbol) => T | undefined): T | undefined;
     }
     class SymbolSet implements ReadonlySymbolSet {
-        private map = createMap<Symbol>();
+        private map = new Map<string, Symbol>();
         add(symbol: Symbol): void {
             this.map.set(String(getSymbolId(symbol)), symbol);
         }
