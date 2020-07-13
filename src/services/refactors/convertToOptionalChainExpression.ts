@@ -8,28 +8,54 @@ namespace ts.refactor.convertToOptionalChainExpression {
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
-        return [{
-            name: refactorName,
-            description: convertToOptionalChainExpressionMessage,
-            actions: [{
+
+        if (!info.error) {
+            return [{
                 name: refactorName,
-                description: convertToOptionalChainExpressionMessage
-            }]
-        }];
+                description: convertToOptionalChainExpressionMessage,
+                actions: [{
+                    name: refactorName,
+                    description: convertToOptionalChainExpressionMessage
+                }]
+            }];
+        }
+
+        if (context.preferences.provideRefactorNotApplicableReason) {
+            return [{
+                name: refactorName,
+                description: convertToOptionalChainExpressionMessage,
+                actions: [{
+                    name: refactorName,
+                    description: convertToOptionalChainExpressionMessage,
+                    notApplicableReason: info.error
+                }]
+            }];
+        }
+        return emptyArray;
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const info = getInfo(context);
-        if (!info) return undefined;
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program.getTypeChecker(), t, info, actionName));
+        if (!info || !info.info) return undefined;
+        const edits = textChanges.ChangeTracker.with(context, t =>
+            doChange(context.file, context.program.getTypeChecker(), t, Debug.checkDefined(info.info, "context must have info"), actionName)
+        );
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
+
+    type InfoOrError = {
+        info: Info,
+        error?: never;
+    } | {
+        info?: never,
+        error: string;
+    };
 
     interface Info {
         finalExpression: PropertyAccessExpression | CallExpression,
         occurrences: (PropertyAccessExpression | Identifier)[],
-        expression: ValidExpression
-    }
+        expression: ValidExpression,
+    };
 
     type ValidExpressionOrStatement = ValidExpression | ValidStatement;
 
@@ -55,7 +81,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
         return isValidExpression(node) || isValidStatement(node);
     }
 
-    function getInfo(context: RefactorContext, considerEmptySpans = true): Info | undefined {
+    function getInfo(context: RefactorContext, considerEmptySpans = true): InfoOrError | undefined {
         const { file, program } = context;
         const span = getRefactorContextSpan(context);
 
@@ -69,36 +95,42 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
         const parent = forEmptySpan ? getValidParentNodeOfEmptySpan(startToken) : getValidParentNodeContainingSpan(startToken, adjustedSpan);
         const expression = parent && isValidExpressionOrStatement(parent) ? getExpression(parent) : undefined;
-        if (!expression) return undefined;
+        if (!expression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
 
         const checker = program.getTypeChecker();
         return isConditionalExpression(expression) ? getConditionalInfo(expression, checker) : getBinaryInfo(expression);
     }
 
-    function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): Info | undefined {
+    function getConditionalInfo(expression: ConditionalExpression, checker: TypeChecker): InfoOrError | undefined {
         const condition = expression.condition;
         const finalExpression = getFinalExpressionInChain(expression.whenTrue);
 
-        if (!finalExpression || checker.isNullableType(checker.getTypeAtLocation(finalExpression))) return undefined;
+        if (!finalExpression || checker.isNullableType(checker.getTypeAtLocation(finalExpression))) {
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
+        };
 
         if ((isPropertyAccessExpression(condition) || isIdentifier(condition))
             && getMatchingStart(condition, finalExpression.expression)) {
-            return { finalExpression, occurrences:[condition], expression };
+            return { info: { finalExpression, occurrences: [condition], expression } };
         }
         else if (isBinaryExpression(condition)) {
             const occurrences = getOccurrencesInExpression(finalExpression.expression, condition);
-            return occurrences ? { finalExpression, occurrences, expression } : undefined;
+            return occurrences ? { info: { finalExpression, occurrences, expression } } :
+                { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
         }
     }
 
-    function getBinaryInfo(expression: BinaryExpression): Info | undefined {
-        if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken) return undefined;
+    function getBinaryInfo(expression: BinaryExpression): InfoOrError | undefined {
+        if (expression.operatorToken.kind !== SyntaxKind.AmpersandAmpersandToken) {
+            return { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_logical_AND_access_chains) };
+        };
         const finalExpression = getFinalExpressionInChain(expression.right);
 
-        if (!finalExpression) return undefined;
+        if (!finalExpression) return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_convertible_access_expression) };
 
         const occurrences = getOccurrencesInExpression(finalExpression.expression, expression.left);
-        return occurrences ? { finalExpression, occurrences, expression } : undefined;
+        return occurrences ? { info: { finalExpression, occurrences, expression } } :
+            { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_matching_access_expressions) };
     }
 
     /**
