@@ -107,7 +107,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
     function getOccurrencesInExpression(matchTo: Expression, expression: Expression): (PropertyAccessExpression | Identifier)[] | undefined {
         const occurrences: (PropertyAccessExpression | Identifier)[] = [];
         while (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken) {
-            const match = getMatchingStart(matchTo, expression.right);
+            const match = getMatchingStart(skipParentheses(matchTo), skipParentheses(expression.right));
             if (!match) {
                 break;
             }
@@ -126,8 +126,8 @@ namespace ts.refactor.convertToOptionalChainExpression {
      * Returns subchain if chain begins with subchain syntactically.
      */
     function getMatchingStart(chain: Expression, subchain: Expression): PropertyAccessExpression | Identifier | undefined {
-        if (!isIdentifier(subchain) && !isPropertyAccessExpression(subchain)) return undefined;
-        return chainStartsWith(chain, subchain) ? subchain : undefined;
+        return (isIdentifier(subchain) || isPropertyAccessExpression(subchain)) &&
+        chainStartsWith(chain, subchain) ? subchain : undefined;
     }
 
     /**
@@ -200,6 +200,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
     function getFinalExpressionInChain(node: Expression): CallExpression | PropertyAccessExpression | undefined {
         // foo && |foo.bar === 1|; - here the right child of the && binary expression is another binary expression.
         // the rightmost member of the && chain should be the leftmost child of that expression.
+        node = skipParentheses(node);
         if (isBinaryExpression(node)) {
             return getFinalExpressionInChain(node.left);
         }
@@ -234,12 +235,12 @@ namespace ts.refactor.convertToOptionalChainExpression {
     }
 
     function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: Info, _actionName: string): void {
-        const { finalExpression: lastPropertyAccessChain, occurrences, expression } = info;
+        const { finalExpression, occurrences, expression } = info;
         const firstOccurrence = occurrences[occurrences.length - 1];
-        const convertedChain = convertOccurrences(checker, lastPropertyAccessChain, occurrences);
+        const convertedChain = convertOccurrences(checker, finalExpression, occurrences);
         if (convertedChain && (isPropertyAccessExpression(convertedChain) || isCallExpression(convertedChain))) {
             if (isBinaryExpression(expression)) {
-                changes.replaceNodeRange(sourceFile, firstOccurrence, lastPropertyAccessChain, convertedChain);
+                changes.replaceNodeRange(sourceFile, firstOccurrence, finalExpression, convertedChain);
             }
             else if (isConditionalExpression(expression)) {
                 changes.replaceNode(sourceFile, expression,
