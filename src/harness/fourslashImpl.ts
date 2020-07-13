@@ -1087,15 +1087,41 @@ namespace FourSlash {
         public verifyBaselineFindAllReferences(markerName: string) {
             const marker = this.getMarkerByName(markerName);
             const references = this.languageService.findReferences(marker.fileName, marker.position);
-            const commentEachLine = (source: string) => source.split(/\r?\n/).map(l => "// " + l).join("\n");
-            const baselineContent =
-                commentEachLine(
-                    this.getFileContent(marker.fileName).slice(0, marker.position) +
-                    "/*FIND ALL REFERENCES*/" +
-                    this.getFileContent(marker.fileName).slice(marker.position)) +
-                "\n\n" + JSON.stringify(references, undefined, 2);
+            const refsByFile = references
+                ? ts.group(ts.sort(ts.flatMap(references, r => r.references), (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
+                : ts.emptyArray;
 
+            // Write input files
+            let baselineContent = "";
+            for (const group of refsByFile) {
+                baselineContent += getBaselineContentForFile(group[0].fileName, this.getFileContent(group[0].fileName));
+                baselineContent += "\n\n";
+            }
+
+            // Write response JSON
+            baselineContent += JSON.stringify(references, undefined, 2);
             Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+
+            function commentEachLine(source: string) {
+                return source.split(/\r?\n/).map(l => "// " + l).join("\n");
+            }
+            function getBaselineContentForFile(fileName: string, content: string) {
+                let newContent = `=== ${fileName} ===\n`;
+                let pos = 0;
+                for (const { textSpan } of refsByFile.find(refs => refs[0].fileName === fileName) ?? ts.emptyArray) {
+                    if (fileName === marker.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
+                        newContent += "/*FIND ALL REFS*/";
+                    }
+                    const end = textSpan.start + textSpan.length;
+                    newContent += content.slice(pos, textSpan.start);
+                    newContent += "[|";
+                    newContent += content.slice(textSpan.start, end);
+                    newContent += "|]";
+                    pos = end;
+                }
+                newContent += content.slice(pos);
+                return commentEachLine(newContent);
+            }
         }
 
         public verifyNoReferences(markerNameOrRange?: string | Range) {
