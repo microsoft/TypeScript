@@ -18495,8 +18495,8 @@ namespace ts {
             return restType && createArrayType(restType);
         }
 
-        function getEndLengthOfType(type: Type) {
-            return isTupleType(type) ? getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !(f & ElementFlags.Required)) - 1 : 0;
+        function getEndLengthOfType(type: Type, flags: ElementFlags) {
+            return isTupleType(type) ? getTypeReferenceArity(type) - findLastIndex(type.target.elementFlags, f => !(f & flags)) - 1 : 0;
         }
 
         function getElementTypeOfSliceOfTupleType(type: TupleTypeReference, index: number, endSkipCount = 0, writing = false) {
@@ -19757,8 +19757,8 @@ namespace ts {
                             const sourceRestType = !isTupleType(source) || sourceArity > 0 && source.target.elementFlags[sourceArity - 1] & ElementFlags.Rest ?
                                 getTypeArguments(source)[sourceArity - 1] : undefined;
                             const endLength = !(target.target.combinedFlags & ElementFlags.Variable) ? 0 :
-                                sourceRestType ? getEndLengthOfType(target) :
-                                Math.min(getEndLengthOfType(source), getEndLengthOfType(target));
+                                sourceRestType ? getEndLengthOfType(target, ElementFlags.Required) :
+                                Math.min(getEndLengthOfType(source, ElementFlags.Required | ElementFlags.Optional), getEndLengthOfType(target, ElementFlags.Required));
                             const sourceEndLength = sourceRestType ? 0 : endLength;
                             // Infer between starting fixed elements.
                             for (let i = 0; i < startLength; i++) {
