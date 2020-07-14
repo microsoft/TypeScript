@@ -15013,7 +15013,7 @@ namespace ts {
         }
 
         function isTypeDefinitelyAssignableTo(source: Type, target: Type): boolean {
-            return isTypeAssignableTo(source, target) && isTypeRelatedTo(source, target, definitelyAssignableRelation);
+            return isTypeRelatedTo(source, target, definitelyAssignableRelation);
         }
 
         // An object type S is considered to be derived from an object type T if
