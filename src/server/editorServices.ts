@@ -1775,11 +1775,9 @@ namespace ts.server {
             const project = configFileName &&
                 this.findConfiguredProjectByProjectName(configFileName);
 
-            return project?.isSolution() ?
-                project.getDefaultChildProjectFromSolution(info) :
-                project && projectContainsInfoDirectly(project, info) ?
-                    project :
-                    undefined;
+            return project && projectContainsInfoDirectly(project, info) ?
+                project :
+                project?.getDefaultChildProjectFromProjectWithReferences(info);
         }
 
         /**
@@ -2826,8 +2824,8 @@ namespace ts.server {
                         else {
                             // reload from the disk
                             this.reloadConfiguredProject(project, reason);
-                            // If this is solution, reload the project till the reloaded project contains the script info directly
-                            if (!project.containsScriptInfo(info) && project.isSolution()) {
+                            // If this is project does not contain this file directly, reload the project till the reloaded project contains the script info directly
+                            if (!projectContainsInfoDirectly(project, info)) {
                                 const referencedProject = forEachResolvedProjectReferenceProject(
                                     project,
                                     child => {
@@ -2936,14 +2934,18 @@ namespace ts.server {
                 this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
             updateProjectIfDirty(configuredProject);
 
-            if (configuredProject.isSolution()) {
+            const projectContainsOriginalInfo = (project: ConfiguredProject) => {
+                const info = this.getScriptInfo(fileName);
+                return info && projectContainsInfoDirectly(project, info);
+            };
+
+            if (configuredProject.isSolution() || !projectContainsOriginalInfo(configuredProject)) {
                 // Find the project that is referenced from this solution that contains the script info directly
                 configuredProject = forEachResolvedProjectReferenceProject(
                     configuredProject,
                     child => {
                         updateProjectIfDirty(child);
-                        const info = this.getScriptInfo(fileName);
-                        return info && projectContainsInfoDirectly(child, info) ? child : undefined;
+                        return projectContainsOriginalInfo(child) ? child : undefined;
                     },
                     configuredProject.getCompilerOptions().disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : ProjectReferenceProjectLoadKind.FindCreateLoad,
                     `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`
@@ -3018,7 +3020,7 @@ namespace ts.server {
 
                     // If this configured project doesnt contain script info but
                     // it is solution with project references, try those project references
-                    if (project.isSolution()) {
+                    if (!projectContainsInfoDirectly(project, info)) {
                         forEachResolvedProjectReferenceProject(
                             project,
                             child => {
@@ -3139,10 +3141,10 @@ namespace ts.server {
                 if (forEachPotentialProjectReference(
                     project,
                     potentialRefPath => forProjects!.has(potentialRefPath)
-                ) || (project.isSolution() && forEachResolvedProjectReference(
+                ) || forEachResolvedProjectReference(
                     project,
                     (_ref, resolvedPath) => forProjects!.has(resolvedPath)
-                ))) {
+                )) {
                     // Load children
                     this.ensureProjectChildren(project, seenProjects);
                 }

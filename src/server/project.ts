@@ -2216,9 +2216,8 @@ namespace ts.server {
         }
 
         /* @internal */
-        /** Find the configured project from the project references in this solution which contains the info directly */
-        getDefaultChildProjectFromSolution(info: ScriptInfo) {
-            Debug.assert(this.isSolution());
+        /** Find the configured project from the project references in project which contains the info directly */
+        getDefaultChildProjectFromProjectWithReferences(info: ScriptInfo) {
             return forEachResolvedProjectReferenceProject(
                 this,
                 child => projectContainsInfoDirectly(child, info) ?
@@ -2248,8 +2247,6 @@ namespace ts.server {
                 return !!configFileExistenceInfo.openFilesImpactedByConfigFile.size;
             }
 
-            const isSolution = this.isSolution();
-
             // If there is no pending update for this project,
             // We know exact set of open files that get impacted by this configured project as the files in the project
             // The project is referenced only if open files impacted by this project are present in this project
@@ -2257,13 +2254,12 @@ namespace ts.server {
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
                 (_value, infoPath) => {
                     const info = this.projectService.getScriptInfoForPath(infoPath)!;
-                    return isSolution ?
+                    return this.containsScriptInfo(info) ||
                         !!forEachResolvedProjectReferenceProject(
                             this,
                             child => child.containsScriptInfo(info),
                             ProjectReferenceProjectLoadKind.Find
-                        ) :
-                        this.containsScriptInfo(info);
+                        );
                 }
             ) || false;
         }
