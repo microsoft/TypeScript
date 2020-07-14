@@ -2996,6 +2996,11 @@
         "category": "Error",
         "code": 2791
     },
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+        "category": "Error",
+        "code": 2792
+    },
+
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3561,10 +3566,6 @@
     "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
         "category": "Error",
         "code": 5088
-    },
-    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
-        "category": "Error",
-        "code": 5089
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

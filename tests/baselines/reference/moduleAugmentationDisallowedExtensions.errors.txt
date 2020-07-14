@@ -1,11 +1,11 @@
 tests/cases/compiler/x.ts(17,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
 tests/cases/compiler/x.ts(17,26): error TS2307: Cannot find module './x0' or its corresponding type declarations.
 tests/cases/compiler/x.ts(18,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
-tests/cases/compiler/x.ts(18,21): error TS5084: Cannot find module './x0'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/x.ts(18,21): error TS2792: Cannot find module './x0'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 tests/cases/compiler/x.ts(19,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
 tests/cases/compiler/x.ts(19,19): error TS2307: Cannot find module './x0' or its corresponding type declarations.
 tests/cases/compiler/x.ts(20,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
-tests/cases/compiler/x.ts(20,21): error TS5084: Cannot find module './x0'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/x.ts(20,21): error TS2792: Cannot find module './x0'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 tests/cases/compiler/x.ts(24,5): error TS2666: Exports and export assignments are not permitted in module augmentations.
 
 
@@ -38,7 +38,7 @@ tests/cases/compiler/x.ts(24,5): error TS2666: Exports and export assignments ar
         ~~~~~~
 !!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
                         ~~~~~~
-!!! error TS5084: Cannot find module './x0'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module './x0'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
         export * from "./x0";
         ~~~~~~
 !!! error TS2666: Exports and export assignments are not permitted in module augmentations.
@@ -48,7 +48,7 @@ tests/cases/compiler/x.ts(24,5): error TS2666: Exports and export assignments ar
         ~~~~~~
 !!! error TS2666: Exports and export assignments are not permitted in module augmentations.
                         ~~~~~~
-!!! error TS5084: Cannot find module './x0'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module './x0'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     }
     
     declare module "./test" {

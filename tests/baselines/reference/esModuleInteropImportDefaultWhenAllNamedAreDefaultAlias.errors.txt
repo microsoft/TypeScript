@@ -1,9 +1,9 @@
-tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts(1,42): error TS5084: Cannot find module 'm'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts(1,42): error TS2792: Cannot find module 'm'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
 
 ==== tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts (1 errors) ====
     import {default as a, default as b} from "m";
                                              ~~~
-!!! error TS5084: Cannot find module 'm'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'm'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     void a;
     void b;

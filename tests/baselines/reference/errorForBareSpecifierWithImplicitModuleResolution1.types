@@ -1,8 +1,0 @@
-=== tests/cases/compiler/errorForBareSpecifierWithImplicitModuleResolution1.ts ===
-import { thing } from "non-existent-module";
->thing : any
-
-thing()
->thing() : any
->thing : any
-

@@ -1,8 +1,0 @@
-tests/cases/compiler/errorForBareSpecifierWithImplicitModuleResolution1.ts(1,23): error TS5084: Cannot find module 'non-existent-module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-
-
-==== tests/cases/compiler/errorForBareSpecifierWithImplicitModuleResolution1.ts (1 errors) ====
-    import { thing } from "non-existent-module";
-                          ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5084: Cannot find module 'non-existent-module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-    thing()

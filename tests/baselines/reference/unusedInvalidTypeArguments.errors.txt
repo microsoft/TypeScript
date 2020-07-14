@@ -1,11 +1,11 @@
-/call.ts(1,21): error TS5084: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+/call.ts(1,21): error TS2792: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 /callAny.ts(3,1): error TS2347: Untyped function calls may not accept type arguments.
 /callAny.ts(4,1): error TS2347: Untyped function calls may not accept type arguments.
 /callAny.ts(4,3): error TS2304: Cannot find name 'InvalidReference'.
 /classReference.ts(4,24): error TS2315: Type 'C' is not generic.
-/interface.ts(1,21): error TS5084: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-/new.ts(1,21): error TS5084: Cannot find module 'unkown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-/super.ts(1,22): error TS5084: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+/interface.ts(1,21): error TS2792: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+/new.ts(1,21): error TS2792: Cannot find module 'unkown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+/super.ts(1,22): error TS2792: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 /super.ts(8,17): error TS2304: Cannot find name 'InvalidReference'.
 /typeReference.ts(6,17): error TS2315: Type 'U' is not generic.
 
@@ -31,20 +31,20 @@
 ==== /interface.ts (1 errors) ====
     import { Foo } from "unknown";
                         ~~~~~~~~~
-!!! error TS5084: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     export interface I<T> { x: Foo<T>; }
     
 ==== /call.ts (1 errors) ====
     import { foo } from "unknown";
                         ~~~~~~~~~
-!!! error TS5084: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     type T = number;
     foo<T>();
     
 ==== /new.ts (1 errors) ====
     import { Foo } from "unkown";
                         ~~~~~~~~
-!!! error TS5084: Cannot find module 'unkown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'unkown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     type T = number;
     new Foo<T>();
     
@@ -63,7 +63,7 @@
 ==== /super.ts (2 errors) ====
     import { A, B } from "unknown";
                          ~~~~~~~~~
-!!! error TS5084: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'unknown'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     
     type T = number;
     

@@ -1,4 +1,4 @@
-/a.ts(1,21): error TS5084: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+/a.ts(1,21): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
 
 ==== /tsconfig.json (0 errors) ====
@@ -14,5 +14,5 @@
 ==== /a.ts (1 errors) ====
     import { foo } from "foo";
                         ~~~~~
-!!! error TS5084: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     

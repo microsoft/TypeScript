@@ -1,4 +1,4 @@
-tests/cases/compiler/test.ts(2,19): error TS5084: Cannot find module './missingModule'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/test.ts(2,19): error TS2792: Cannot find module './missingModule'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
 
 ==== tests/cases/compiler/existingModule.ts (0 errors) ====
@@ -8,7 +8,7 @@ tests/cases/compiler/test.ts(2,19): error TS5084: Cannot find module './missingM
     import {x} from './existingModule';
     import {foo} from './missingModule';
                       ~~~~~~~~~~~~~~~~~
-!!! error TS5084: Cannot find module './missingModule'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module './missingModule'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     
     declare function use(a: any): void;
     
