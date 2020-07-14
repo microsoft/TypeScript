@@ -1,4 +1,3 @@
-tests/cases/compiler/infiniteConstraints.ts(3,37): error TS2536: Type '"val"' cannot be used to index type 'Extract<B[Exclude<keyof B, K>], { val: string; }>'.
 tests/cases/compiler/infiniteConstraints.ts(4,37): error TS2536: Type '"val"' cannot be used to index type 'B[Exclude<keyof B, K>]'.
 tests/cases/compiler/infiniteConstraints.ts(31,43): error TS2322: Type 'Record<"val", "dup">' is not assignable to type 'never'.
 tests/cases/compiler/infiniteConstraints.ts(31,63): error TS2322: Type 'Record<"val", "dup">' is not assignable to type 'never'.
@@ -6,12 +5,10 @@ tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' c
 tests/cases/compiler/infiniteConstraints.ts(48,16): error TS2589: Type instantiation is excessively deep and possibly infinite.
 
 
-==== tests/cases/compiler/infiniteConstraints.ts (6 errors) ====
+==== tests/cases/compiler/infiniteConstraints.ts (5 errors) ====
     // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
     
     type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;
-                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2536: Type '"val"' cannot be used to index type 'Extract<B[Exclude<keyof B, K>], { val: string; }>'.
     type T2<B extends { [K in keyof B]: B[Exclude<keyof B, K>]["val"] }> = B;
                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2536: Type '"val"' cannot be used to index type 'B[Exclude<keyof B, K>]'.
