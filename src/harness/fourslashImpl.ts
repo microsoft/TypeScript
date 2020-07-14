@@ -3226,7 +3226,7 @@ namespace FourSlash {
 
                 this.raiseError(
                     `Expected to find a fix with the name '${fixName}', but none exists.` +
-                    availableFixes.length
+                        availableFixes.length
                         ? ` Available fixes: ${availableFixes.map(fix => `${fix.fixName} (${fix.fixId ? "with" : "without"} fix-all)`).join(", ")}`
                         : ""
                 );
@@ -3465,13 +3465,13 @@ namespace FourSlash {
 
             const incomingCalls =
                 direction === CallHierarchyItemDirection.Outgoing ? { result: "skip" } as const :
-                alreadySeen ? { result: "seen" } as const :
-                { result: "show", values: this.languageService.provideCallHierarchyIncomingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
+                    alreadySeen ? { result: "seen" } as const :
+                        { result: "show", values: this.languageService.provideCallHierarchyIncomingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
 
             const outgoingCalls =
                 direction === CallHierarchyItemDirection.Incoming ? { result: "skip" } as const :
-                alreadySeen ? { result: "seen" } as const :
-                { result: "show", values: this.languageService.provideCallHierarchyOutgoingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
+                    alreadySeen ? { result: "seen" } as const :
+                        { result: "show", values: this.languageService.provideCallHierarchyOutgoingCalls(callHierarchyItem.file, callHierarchyItem.selectionSpan.start) } as const;
 
             let text = "";
             text += `${prefix}╭ name: ${callHierarchyItem.name}\n`;
@@ -3485,7 +3485,7 @@ namespace FourSlash {
             text += `${prefix}├ selectionSpan:\n`;
             text += this.formatCallHierarchyItemSpan(file, callHierarchyItem.selectionSpan, `${prefix}│ `,
                 incomingCalls.result !== "skip" || outgoingCalls.result !== "skip" ? `${prefix}│ ` :
-                `${trailingPrefix}╰ `);
+                    `${trailingPrefix}╰ `);
 
             if (incomingCalls.result === "seen") {
                 if (outgoingCalls.result === "skip") {
@@ -3514,8 +3514,8 @@ namespace FourSlash {
                         text += `${prefix}│ ├ fromSpans:\n`;
                         text += this.formatCallHierarchyItemSpans(file, incomingCall.fromSpans, `${prefix}│ │ `,
                             i < incomingCalls.values.length - 1 ? `${prefix}│ ╰ ` :
-                            outgoingCalls.result !== "skip" ? `${prefix}│ ╰ ` :
-                            `${trailingPrefix}╰ ╰ `);
+                                outgoingCalls.result !== "skip" ? `${prefix}│ ╰ ` :
+                                    `${trailingPrefix}╰ ╰ `);
                     }
                 }
             }
@@ -3536,7 +3536,7 @@ namespace FourSlash {
                         text += `${prefix}│ ├ fromSpans:\n`;
                         text += this.formatCallHierarchyItemSpans(file, outgoingCall.fromSpans, `${prefix}│ │ `,
                             i < outgoingCalls.values.length - 1 ? `${prefix}│ ╰ ` :
-                            `${trailingPrefix}╰ ╰ `);
+                                `${trailingPrefix}╰ ╰ `);
                     }
                 }
             }
@@ -3695,6 +3695,50 @@ namespace FourSlash {
 
         public configurePlugin(pluginName: string, configuration: any): void {
             (<ts.server.SessionClient>this.languageService).configurePlugin(pluginName, configuration);
+        }
+
+        public toggleLineComment(newFileContent: string): void {
+            const changes: ts.TextChange[] = [];
+            for (const range of this.getRanges()) {
+                changes.push.apply(changes, this.languageService.toggleLineComment(this.activeFile.fileName, range));
+            }
+
+            this.applyEdits(this.activeFile.fileName, changes);
+
+            this.verifyCurrentFileContent(newFileContent);
+        }
+
+        public toggleMultilineComment(newFileContent: string): void {
+            const changes: ts.TextChange[] = [];
+            for (const range of this.getRanges()) {
+                changes.push.apply(changes, this.languageService.toggleMultilineComment(this.activeFile.fileName, range));
+            }
+
+            this.applyEdits(this.activeFile.fileName, changes);
+
+            this.verifyCurrentFileContent(newFileContent);
+        }
+
+        public commentSelection(newFileContent: string): void {
+            const changes: ts.TextChange[] = [];
+            for (const range of this.getRanges()) {
+                changes.push.apply(changes, this.languageService.commentSelection(this.activeFile.fileName, range));
+            }
+
+            this.applyEdits(this.activeFile.fileName, changes);
+
+            this.verifyCurrentFileContent(newFileContent);
+        }
+
+        public uncommentSelection(newFileContent: string): void {
+            const changes: ts.TextChange[] = [];
+            for (const range of this.getRanges()) {
+                changes.push.apply(changes, this.languageService.uncommentSelection(this.activeFile.fileName, range));
+            }
+
+            this.applyEdits(this.activeFile.fileName, changes);
+
+            this.verifyCurrentFileContent(newFileContent);
         }
     }
 

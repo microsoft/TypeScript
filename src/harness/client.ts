@@ -825,6 +825,22 @@ namespace ts.server {
             return notImplemented();
         }
 
+        toggleLineComment(): TextChange[] {
+            return notImplemented();
+        }
+
+        toggleMultilineComment(): TextChange[] {
+            return notImplemented();
+        }
+
+        commentSelection(): TextChange[] {
+            return notImplemented();
+        }
+
+        uncommentSelection(): TextChange[] {
+            return notImplemented();
+        }
+
         dispose(): void {
             throw new Error("dispose is not available through the server layer.");
         }

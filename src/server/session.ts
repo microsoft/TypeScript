@@ -2012,14 +2012,19 @@ namespace ts.server {
                 position = getPosition(args);
             }
             else {
-                const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
-                textRange = { pos: startPosition, end: endPosition };
+                textRange = this.getRange(args, scriptInfo);
             }
             return Debug.checkDefined(position === undefined ? textRange : position);
 
             function getPosition(loc: protocol.FileLocationRequestArgs) {
                 return loc.position !== undefined ? loc.position : scriptInfo.lineOffsetToPosition(loc.line, loc.offset);
             }
+        }
+
+        private getRange(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo): TextRange {
+            const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
+
+            return { pos: startPosition, end: endPosition };
         }
 
         private getApplicableRefactors(args: protocol.GetApplicableRefactorsRequestArgs): protocol.ApplicableRefactorInfo[] {
@@ -2249,6 +2254,70 @@ namespace ts.server {
                 const selectionRange = languageService.getSmartSelectionRange(file, pos);
                 return simplifiedResult ? this.mapSelectionRange(selectionRange, scriptInfo) : selectionRange;
             });
+        }
+
+        private toggleLineComment(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfo(file)!;
+            const textRange = this.getRange(args, scriptInfo);
+
+            const textChanges = languageService.toggleLineComment(file, textRange);
+
+            if (simplifiedResult) {
+                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+
+                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
+            }
+
+            return textChanges;
+        }
+
+        private toggleMultilineComment(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const textRange = this.getRange(args, scriptInfo);
+
+            const textChanges = languageService.toggleMultilineComment(file, textRange);
+
+            if (simplifiedResult) {
+                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+
+                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
+            }
+
+            return textChanges;
+        }
+
+        private commentSelection(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const textRange = this.getRange(args, scriptInfo);
+
+            const textChanges = languageService.commentSelection(file, textRange);
+
+            if (simplifiedResult) {
+                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+
+                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
+            }
+
+            return textChanges;
+        }
+
+        private uncommentSelection(args: protocol.FileRangeRequestArgs, simplifiedResult: boolean): TextChange[] | protocol.CodeEdit[] {
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const textRange = this.getRange(args, scriptInfo);
+
+            const textChanges = languageService.uncommentSelection(file, textRange);
+
+            if (simplifiedResult) {
+                const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+
+                return textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo));
+            }
+
+            return textChanges;
         }
 
         private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
@@ -2696,6 +2765,30 @@ namespace ts.server {
             },
             [CommandNames.ProvideCallHierarchyOutgoingCalls]: (request: protocol.ProvideCallHierarchyOutgoingCallsRequest) => {
                 return this.requiredResponse(this.provideCallHierarchyOutgoingCalls(request.arguments));
+            },
+            [CommandNames.ToggleLineComment]: (request: protocol.ToggleLineCommentRequest) => {
+                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.ToggleLineCommentFull]: (request: protocol.ToggleLineCommentRequest) => {
+                return this.requiredResponse(this.toggleLineComment(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.ToggleMultilineComment]: (request: protocol.ToggleMultilineCommentRequest) => {
+                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.ToggleMultilineCommentFull]: (request: protocol.ToggleMultilineCommentRequest) => {
+                return this.requiredResponse(this.toggleMultilineComment(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.CommentSelection]: (request: protocol.CommentSelectionRequest) => {
+                return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.CommentSelectionFull]: (request: protocol.CommentSelectionRequest) => {
+                return this.requiredResponse(this.commentSelection(request.arguments, /*simplifiedResult*/ false));
+            },
+            [CommandNames.UncommentSelection]: (request: protocol.UncommentSelectionRequest) => {
+                return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
+                return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
             },
         }));
 
