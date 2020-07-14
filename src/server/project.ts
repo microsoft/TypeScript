@@ -2255,9 +2255,16 @@ namespace ts.server {
             // The project is referenced only if open files impacted by this project are present in this project
             return forEachEntry(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
-                (_value, infoPath) => isSolution ?
-                    !!this.getDefaultChildProjectFromSolution(this.projectService.getScriptInfoForPath(infoPath)!) :
-                    this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath)!)
+                (_value, infoPath) => {
+                    const info = this.projectService.getScriptInfoForPath(infoPath)!;
+                    return isSolution ?
+                        !!forEachResolvedProjectReferenceProject(
+                            this,
+                            child => child.containsScriptInfo(info),
+                            ProjectReferenceProjectLoadKind.Find
+                        ) :
+                        this.containsScriptInfo(info);
+                }
             ) || false;
         }
 
