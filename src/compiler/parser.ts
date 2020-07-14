@@ -3573,8 +3573,9 @@ namespace ts {
             functionTypeDiagnostic: DiagnosticMessage,
             constructorTypeDiagnostic: DiagnosticMessage
         ): TypeNode | undefined {
-            // function type notations or constructor type notations are not allowed in this context,
-            // but we try parsing them for graceful error message
+            // the function type and constructor type shorthand notation
+            // are not allowed directly in unions and intersections, but we'll
+            // try to parse them gracefully and issue a helpful message.
             if (isStartOfFunctionType() || token() === SyntaxKind.NewKeyword) {
                 const type = parseFunctionOrConstructorType();
                 parseErrorAtRange(type, isFunctionTypeNode(type) ? functionTypeDiagnostic : constructorTypeDiagnostic);
