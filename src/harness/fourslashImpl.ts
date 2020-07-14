@@ -1084,6 +1084,43 @@ namespace FourSlash {
             }
         }
 
+        public verifyBaselineFindAllReferences(markerName: string) {
+            const marker = this.getMarkerByName(markerName);
+            const references = this.languageService.findReferences(marker.fileName, marker.position);
+            const refsByFile = references
+                ? ts.group(ts.sort(ts.flatMap(references, r => r.references), (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
+                : ts.emptyArray;
+
+            // Write input files
+            let baselineContent = "";
+            for (const group of refsByFile) {
+                baselineContent += getBaselineContentForFile(group[0].fileName, this.getFileContent(group[0].fileName));
+                baselineContent += "\n\n";
+            }
+
+            // Write response JSON
+            baselineContent += JSON.stringify(references, undefined, 2);
+            Harness.Baseline.runBaseline(this.getBaselineFileNameForContainingTestFile(".baseline.jsonc"), baselineContent);
+
+            function getBaselineContentForFile(fileName: string, content: string) {
+                let newContent = `=== ${fileName} ===\n`;
+                let pos = 0;
+                for (const { textSpan } of refsByFile.find(refs => refs[0].fileName === fileName) ?? ts.emptyArray) {
+                    if (fileName === marker.fileName && ts.textSpanContainsPosition(textSpan, marker.position)) {
+                        newContent += "/*FIND ALL REFS*/";
+                    }
+                    const end = textSpan.start + textSpan.length;
+                    newContent += content.slice(pos, textSpan.start);
+                    newContent += "[|";
+                    newContent += content.slice(textSpan.start, end);
+                    newContent += "|]";
+                    pos = end;
+                }
+                newContent += content.slice(pos);
+                return newContent.split(/\r?\n/).map(l => "// " + l).join("\n");
+            }
+        }
+
         public verifyNoReferences(markerNameOrRange?: string | Range) {
             if (markerNameOrRange !== undefined) this.goToMarkerOrRange(markerNameOrRange);
             const refs = this.getReferencesAtCaret();

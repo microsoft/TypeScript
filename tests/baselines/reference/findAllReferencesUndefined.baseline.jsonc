@@ -1,0 +1,66 @@
+// === /a.ts ===
+// /*FIND ALL REFS*/[|undefined|];
+// 
+// void [|undefined|];
+
+// === /b.ts ===
+// [|undefined|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "var",
+      "name": "var undefined",
+      "textSpan": {
+        "start": 0,
+        "length": 9
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "propertyName"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 0,
+          "length": 9
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 17,
+          "length": 9
+        },
+        "fileName": "/a.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 0,
+          "length": 9
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

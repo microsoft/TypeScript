@@ -316,6 +316,10 @@ namespace FourSlashInterface {
             this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
         }
 
+        public baselineFindAllReferences(markerName: string) {
+            this.state.verifyBaselineFindAllReferences(markerName);
+        }
+
         public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {
             this.state.verifyReferenceGroups(starts, parts);
         }
