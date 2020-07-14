@@ -75,7 +75,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = new Map<string, string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (const option of optionsList) {
             // If an option lacks a description,

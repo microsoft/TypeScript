@@ -15,7 +15,7 @@ namespace ts {
         let text = "";
         let lastPos = 0;
         let pos = 0;
-        const ranges = createMap<Range>();
+        const ranges = new Map<string, Range>();
 
         while (pos < source.length) {
             if (source.charCodeAt(pos) === CharacterCodes.openBracket &&

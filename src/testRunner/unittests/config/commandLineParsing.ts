@@ -571,10 +571,10 @@ namespace ts {
 
             describe("option of type Map<number | string>", () => {
                 verifyNullNonIncludedOption({
-                    type: () => createMapFromTemplate({
+                    type: () => new Map(getEntries({
                         node: ModuleResolutionKind.NodeJs,
                         classic: ModuleResolutionKind.Classic,
-                    }),
+                    })),
                     nonNullValue: "node"
                 });
             });

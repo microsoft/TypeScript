@@ -51,7 +51,6 @@ declare namespace ts {
     }
     /**
      * ES6 Map interface, only read methods included.
-     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
      */
     interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
     }
@@ -61,7 +60,6 @@ declare namespace ts {
     }
     /**
      * ES6 Map interface.
-     * @deprecated Use `ts.ESMap<K, V>` instead.
      */
     interface Map<T> extends ESMap<string, T> {
     }
@@ -5489,6 +5487,10 @@ declare namespace ts {
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
         getProgram(): Program | undefined;
+        toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
+        toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
+        commentSelection(fileName: string, textRange: TextRange): TextChange[];
+        uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         dispose(): void;
     }
     interface JsxClosingTagInfo {
@@ -6484,6 +6486,10 @@ declare namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         ConfigurePlugin = "configurePlugin",
         SelectionRange = "selectionRange",
+        ToggleLineComment = "toggleLineComment",
+        ToggleMultilineComment = "toggleMultilineComment",
+        CommentSelection = "commentSelection",
+        UncommentSelection = "uncommentSelection",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
@@ -7515,6 +7521,22 @@ declare namespace ts.server.protocol {
     interface SelectionRange {
         textSpan: TextSpan;
         parent?: SelectionRange;
+    }
+    interface ToggleLineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleLineComment;
+        arguments: FileRangeRequestArgs;
+    }
+    interface ToggleMultilineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleMultilineComment;
+        arguments: FileRangeRequestArgs;
+    }
+    interface CommentSelectionRequest extends FileRequest {
+        command: CommandTypes.CommentSelection;
+        arguments: FileRangeRequestArgs;
+    }
+    interface UncommentSelectionRequest extends FileRequest {
+        command: CommandTypes.UncommentSelection;
+        arguments: FileRangeRequestArgs;
     }
     /**
      *  Information found in an "open" request.
@@ -9872,6 +9894,7 @@ declare namespace ts.server {
         private getSupportedCodeFixes;
         private isLocation;
         private extractPositionOrRange;
+        private getRange;
         private getApplicableRefactors;
         private getEditsForRefactor;
         private organizeImports;
@@ -9889,6 +9912,10 @@ declare namespace ts.server {
         private getDiagnosticsForProject;
         private configurePlugin;
         private getSmartSelectionRange;
+        private toggleLineComment;
+        private toggleMultilineComment;
+        private commentSelection;
+        private uncommentSelection;
         private mapSelectionRange;
         private getScriptInfoFromProjectService;
         private toProtocolCallHierarchyItem;
@@ -10673,6 +10700,16 @@ declare namespace ts {
     const getMutableClone: <T extends Node>(node: T) => T;
     /** @deprecated Use `isTypeAssertionExpression` instead. */
     const isTypeAssertion: (node: Node) => node is TypeAssertion;
+    /**
+     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
+     */
+    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
+    }
+    /**
+     * @deprecated Use `ts.ESMap<K, V>` instead.
+     */
+    interface Map<T> extends ESMap<string, T> {
+    }
 }
 
 export = ts;

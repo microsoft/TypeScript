@@ -31,6 +31,7 @@ namespace ts {
         createImportStarHelper(expression: Expression): Expression;
         createImportStarCallbackHelper(): Expression;
         createImportDefaultHelper(expression: Expression): Expression;
+        createExportStarHelper(moduleExpression: Expression, exportsExpression?: Expression): Expression;
         // Class Fields Helpers
         createClassPrivateFieldGetHelper(receiver: Expression, privateField: Identifier): Expression;
         createClassPrivateFieldSetHelper(receiver: Expression, privateField: Identifier, value: Expression): Expression;
@@ -69,6 +70,7 @@ namespace ts {
             createImportStarHelper,
             createImportStarCallbackHelper,
             createImportDefaultHelper,
+            createExportStarHelper,
             // Class Fields Helpers
             createClassPrivateFieldGetHelper,
             createClassPrivateFieldSetHelper,
@@ -363,6 +365,16 @@ namespace ts {
                 getUnscopedHelperName("__importDefault"),
                 /*typeArguments*/ undefined,
                 [expression]
+            );
+        }
+
+        function createExportStarHelper(moduleExpression: Expression, exportsExpression: Expression = factory.createIdentifier("exports")) {
+            context.requestEmitHelper(exportStarHelper);
+            context.requestEmitHelper(createBindingHelper);
+            return factory.createCallExpression(
+                getUnscopedHelperName("__exportStar"),
+                /*typeArguments*/ undefined,
+                [moduleExpression, exportsExpression]
             );
         }
 
@@ -815,6 +827,19 @@ namespace ts {
             };`
     };
 
+    // emit output for the __export helper function
+    export const exportStarHelper: UnscopedEmitHelper = {
+        name: "typescript:export-star",
+        importName: "__exportStar",
+        scoped: false,
+        dependencies: [createBindingHelper],
+        priority: 2,
+        text: `
+            var __exportStar = (this && this.__exportStar) || function(m, exports) {
+                for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+            };`
+    };
+
     // Class fields helpers
     export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldGet",
@@ -864,6 +889,7 @@ namespace ts {
             generatorHelper,
             importStarHelper,
             importDefaultHelper,
+            exportStarHelper,
             classPrivateFieldGetHelper,
             classPrivateFieldSetHelper,
             createBindingHelper,
