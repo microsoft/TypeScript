@@ -3289,9 +3289,9 @@ namespace FourSlash {
             }
         }
 
-        public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker }: FourSlashInterface.ApplyRefactorOptions) {
+        public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker, triggerReason }: FourSlashInterface.ApplyRefactorOptions) {
             const range = this.getSelection();
-            const refactors = this.getApplicableRefactorsAtSelection();
+            const refactors = this.getApplicableRefactorsAtSelection(triggerReason);
             const refactorsWithName = refactors.filter(r => r.name === refactorName);
             if (refactorsWithName.length === 0) {
                 this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.\nAvailable refactors: ${refactors.map(r => r.name)}`);

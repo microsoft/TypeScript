@@ -5827,6 +5827,22 @@
         "category": "Message",
         "code": 95138
     },
+    "Convert to optional chain expression": {
+        "category": "Message",
+        "code": 95139
+    },
+    "Could not find convertible access expression": {
+        "category": "Message",
+        "code": 95140
+    },
+    "Could not find matching access expressions": {
+        "category": "Message",
+        "code": 95141
+    },
+    "Can only convert logical AND access chains": {
+        "category": "Message",
+        "code": 95142
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
