@@ -624,6 +624,7 @@ namespace ts {
         | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
         | SyntaxKind.NeverKeyword
+        | SyntaxKind.NullKeyword
         | SyntaxKind.NumberKeyword
         | SyntaxKind.ObjectKeyword
         | SyntaxKind.StringKeyword
