@@ -3601,13 +3601,14 @@ namespace ts {
             createTypeNode: (types: NodeArray<TypeNode>) => UnionOrIntersectionTypeNode
         ): TypeNode {
             const pos = getNodePos();
+            const isUnionType = operator === SyntaxKind.BarToken;
             const hasLeadingOperator = parseOptional(operator);
-            let type = hasLeadingOperator && parseFunctionOrConstructorTypeToError(operator === SyntaxKind.BarToken)
+            let type = hasLeadingOperator && parseFunctionOrConstructorTypeToError(isUnionType)
                 || parseConstituentType();
             if (token() === operator || hasLeadingOperator) {
                 const types = [type];
                 while (parseOptional(operator)) {
-                    types.push(parseFunctionOrConstructorTypeToError(operator === SyntaxKind.BarToken) || parseConstituentType());
+                    types.push(parseFunctionOrConstructorTypeToError(isUnionType) || parseConstituentType());
                 }
                 type = finishNode(createTypeNode(createNodeArray(types, pos)), pos);
             }
