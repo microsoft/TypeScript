@@ -1,0 +1,27 @@
+=== tests/cases/compiler/a.ts ===
+export default class { }
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/b.ts ===
+export { default } from "./a";
+>default : typeof b
+
+export { default as a } from "./a";
+>default : typeof b
+>a : typeof b
+
+import { default as b } from "./a";
+>default : typeof b
+>b : typeof b
+
+void b;
+>void b : undefined
+>b : typeof b
+
+=== tests/cases/compiler/tslib.d.ts ===
+declare module "tslib" {
+>"tslib" : typeof import("tslib")
+
+    function __importDefault(m: any): void;
+>__importDefault : (m: any) => void
+>m : any
+}

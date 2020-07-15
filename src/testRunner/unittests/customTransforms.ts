@@ -4,7 +4,7 @@ namespace ts {
             it(name, () => {
                 const roots = sources.map(source => createSourceFile(source.file, source.text, ScriptTarget.ES2015));
                 const fileMap = arrayToMap(roots, file => file.fileName);
-                const outputs = createMap<string>();
+                const outputs = new Map<string, string>();
                 const host: CompilerHost = {
                     getSourceFile: (fileName) => fileMap.get(fileName),
                     getDefaultLibFileName: () => "lib.d.ts",

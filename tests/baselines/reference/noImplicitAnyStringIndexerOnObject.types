@@ -418,3 +418,17 @@ map[rover] = "Rover";
 >rover : Dog
 >"Rover" : "Rover"
 
+interface I {
+  prop: MyMap<string, string>
+>prop : MyMap<string, string>
+}
+declare const m: I;
+>m : I
+
+m.prop['a'];
+>m.prop['a'] : any
+>m.prop : MyMap<string, string>
+>m : I
+>prop : MyMap<string, string>
+>'a' : "a"
+

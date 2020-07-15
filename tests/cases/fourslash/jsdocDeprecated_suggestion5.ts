@@ -1,46 +1,23 @@
-// @Filename: a.tsx
-//// /** @deprecated */
-//// type Props = {}
+///<reference path="fourslash.ts" />
 
-//// /** @deprecated */
-//// const Component = (props: [|Props|]) => props && <div />;
+// @checkJs: true
+// @allowJs: true
+// @Filename: jsdocDeprecated_suggestion5.js
+//// /** @typedef {{ email: string, nickName?: string }} U2 */
+//// /** @type {U2} */
+//// const u2 = { email: "" }
 
-//// <[|Component|] old="old" new="new" />
+//// /**
+////  * @callback K
+////  * @param {any} ctx
+////  * @return {void}
+////  */
+//// /** @type {K} */
+//// const cc = _k => {}
 
-//// /** @deprecated */
-//// type Options = {}
+//// /** @enum {number} */
+//// const DOOM = { e: 1, m: 1 }
+//// /** @type {DOOM} */
+//// const kneeDeep = DOOM.e
 
-//// /** @deprecated */
-//// const deprecatedFunction = (options: [|Options|]) => { options }
-
-//// [|deprecatedFunction|]({});
-
-goTo.file('a.tsx')
-const ranges = test.ranges();
-
-verify.getSuggestionDiagnostics([
-    {
-        message: "'Props' is deprecated",
-        code: 6385,
-        range: ranges[0],
-        reportsDeprecated: true,
-    },
-    {
-        message: "'Component' is deprecated",
-        code: 6385,
-        range: ranges[1],
-        reportsDeprecated: true
-    },
-    {
-        message: "'Options' is deprecated",
-        code: 6385,
-        range: ranges[2],
-        reportsDeprecated: true,
-    },
-    {
-        message: "'deprecatedFunction' is deprecated",
-        code: 6385,
-        range: ranges[3],
-        reportsDeprecated: true,
-    }
-])
+verify.getSuggestionDiagnostics([])

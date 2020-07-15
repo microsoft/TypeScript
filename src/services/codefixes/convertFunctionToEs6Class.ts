@@ -14,47 +14,30 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
-
         if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
             // Bad input
             return undefined;
         }
 
         const ctorDeclaration = ctorSymbol.valueDeclaration;
+        if (isFunctionDeclaration(ctorDeclaration)) {
+            changes.replaceNode(sourceFile, ctorDeclaration, createClassFromFunctionDeclaration(ctorDeclaration));
+        }
+        else if (isVariableDeclaration(ctorDeclaration)) {
+            const classDeclaration = createClassFromVariableDeclaration(ctorDeclaration);
+            if (!classDeclaration) {
+                return undefined;
+            }
 
-        let precedingNode: Node | undefined;
-        let newClassDeclaration: ClassDeclaration | undefined;
-        switch (ctorDeclaration.kind) {
-            case SyntaxKind.FunctionDeclaration:
-                precedingNode = ctorDeclaration;
+            const ancestor = ctorDeclaration.parent.parent;
+            if (isVariableDeclarationList(ctorDeclaration.parent) && ctorDeclaration.parent.declarations.length > 1) {
                 changes.delete(sourceFile, ctorDeclaration);
-                newClassDeclaration = createClassFromFunctionDeclaration(ctorDeclaration as FunctionDeclaration);
-                break;
-
-            case SyntaxKind.VariableDeclaration:
-                precedingNode = ctorDeclaration.parent.parent;
-                newClassDeclaration = createClassFromVariableDeclaration(ctorDeclaration as VariableDeclaration);
-                if ((<VariableDeclarationList>ctorDeclaration.parent).declarations.length === 1) {
-                    copyLeadingComments(precedingNode, newClassDeclaration!, sourceFile); // TODO: GH#18217
-                    changes.delete(sourceFile, precedingNode);
-                }
-                else {
-                    changes.delete(sourceFile, ctorDeclaration);
-                }
-                break;
+                changes.insertNodeAfter(sourceFile, ancestor, classDeclaration);
+            }
+            else {
+                changes.replaceNode(sourceFile, ancestor, classDeclaration);
+            }
         }
-
-        if (!newClassDeclaration) {
-            return undefined;
-        }
-
-        // Deleting a declaration only deletes JSDoc style comments, so only copy those to the new node.
-        if (hasJSDocNodes(ctorDeclaration)) {
-            copyLeadingComments(ctorDeclaration, newClassDeclaration, sourceFile);
-        }
-
-        // Because the preceding node could be touched, we need to insert nodes before delete nodes.
-        changes.insertNodeAfter(sourceFile, precedingNode!, newClassDeclaration);
 
         function createClassElementsFromSymbol(symbol: Symbol) {
             const memberElements: ClassElement[] = [];
@@ -220,12 +203,8 @@ namespace ts.codefix {
         }
 
         function createClassFromVariableDeclaration(node: VariableDeclaration): ClassDeclaration | undefined {
-            const initializer = node.initializer as FunctionExpression;
-            if (!initializer || initializer.kind !== SyntaxKind.FunctionExpression) {
-                return undefined;
-            }
-
-            if (node.name.kind !== SyntaxKind.Identifier) {
+            const initializer = node.initializer;
+            if (!initializer || !isFunctionExpression(initializer) || !isIdentifier(node.name)) {
                 return undefined;
             }
 
@@ -234,7 +213,7 @@ namespace ts.codefix {
                 memberElements.unshift(factory.createConstructorDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
 
-            const modifiers = getModifierKindFromSource(precedingNode!, SyntaxKind.ExportKeyword);
+            const modifiers = getModifierKindFromSource(node.parent.parent, SyntaxKind.ExportKeyword);
             const cls = factory.createClassDeclaration(/*decorators*/ undefined, modifiers, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
             // Don't call copyComments here because we'll already leave them in place

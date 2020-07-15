@@ -1,0 +1,68 @@
+=== tests/cases/compiler/doesNotNarrowUnionOfConstructorsWithInstanceof.ts ===
+class A {
+>A : Symbol(A, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 0, 0))
+
+    length: 1
+>length : Symbol(A.length, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 0, 9))
+
+    constructor() {
+      this.length = 1
+>this.length : Symbol(A.length, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 0, 9))
+>this : Symbol(A, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 0, 0))
+>length : Symbol(A.length, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 0, 9))
+    }
+}
+
+class B {
+>B : Symbol(B, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 5, 1))
+
+    length: 2
+>length : Symbol(B.length, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 7, 9))
+
+    constructor() {
+      this.length = 2
+>this.length : Symbol(B.length, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 7, 9))
+>this : Symbol(B, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 5, 1))
+>length : Symbol(B.length, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 7, 9))
+    }
+}
+
+function getTypedArray(flag: boolean) {
+>getTypedArray : Symbol(getTypedArray, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 12, 1))
+>flag : Symbol(flag, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 14, 23))
+
+  return flag ? new A() : new B();
+>flag : Symbol(flag, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 14, 23))
+>A : Symbol(A, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 0, 0))
+>B : Symbol(B, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 5, 1))
+}
+function getTypedArrayConstructor(flag: boolean) {
+>getTypedArrayConstructor : Symbol(getTypedArrayConstructor, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 16, 1))
+>flag : Symbol(flag, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 17, 34))
+
+  return flag ? A : B;
+>flag : Symbol(flag, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 17, 34))
+>A : Symbol(A, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 0, 0))
+>B : Symbol(B, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 5, 1))
+}
+const a = getTypedArray(true);              // A | B
+>a : Symbol(a, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 20, 5))
+>getTypedArray : Symbol(getTypedArray, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 12, 1))
+
+const b = getTypedArrayConstructor(false);  // A constructor | B constructor
+>b : Symbol(b, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 21, 5))
+>getTypedArrayConstructor : Symbol(getTypedArrayConstructor, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 16, 1))
+
+if (!(a instanceof b)) {
+>a : Symbol(a, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 20, 5))
+>b : Symbol(b, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 21, 5))
+
+  console.log(a.length);  // Used to be property 'length' does not exist on type 'never'.
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a.length : Symbol(length, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 0, 9), Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 7, 9))
+>a : Symbol(a, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 20, 5))
+>length : Symbol(length, Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 0, 9), Decl(doesNotNarrowUnionOfConstructorsWithInstanceof.ts, 7, 9))
+}
+

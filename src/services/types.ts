@@ -506,6 +506,11 @@ namespace ts {
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
         /* @internal */ getAutoImportProvider(): Program | undefined;
 
+        toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
+        toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
+        commentSelection(fileName: string, textRange: TextRange): TextChange[];
+        uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
+
         dispose(): void;
     }
 

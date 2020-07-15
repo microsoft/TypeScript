@@ -7,7 +7,7 @@ var Validator = function VFunc() {
     this.flags = "gim"
 >this.flags = "gim" : "gim"
 >this.flags : any
->this : any
+>this : this
 >flags : any
 >"gim" : "gim"
 

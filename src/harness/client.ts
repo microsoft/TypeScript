@@ -35,7 +35,7 @@ namespace ts.server {
 
     export class SessionClient implements LanguageService {
         private sequence = 0;
-        private lineMaps: ESMap<string, number[]> = createMap<number[]>();
+        private lineMaps = new Map<string, number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry | undefined;
 
@@ -822,6 +822,22 @@ namespace ts.server {
         }
 
         clearSourceMapperCache(): never {
+            return notImplemented();
+        }
+
+        toggleLineComment(): TextChange[] {
+            return notImplemented();
+        }
+
+        toggleMultilineComment(): TextChange[] {
+            return notImplemented();
+        }
+
+        commentSelection(): TextChange[] {
+            return notImplemented();
+        }
+
+        uncommentSelection(): TextChange[] {
             return notImplemented();
         }
 

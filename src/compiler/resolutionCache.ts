@@ -181,15 +181,15 @@ namespace ts {
          * Note that .d.ts file also has .d.ts extension hence will be part of default extensions
          */
         const failedLookupDefaultExtensions = [Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx, Extension.Json];
-        const customFailedLookupPaths = createMap<number>();
+        const customFailedLookupPaths = new Map<string, number>();
 
-        const directoryWatchesOfFailedLookups = createMap<DirectoryWatchesOfFailedLookup>();
+        const directoryWatchesOfFailedLookups = new Map<string, DirectoryWatchesOfFailedLookup>();
         const rootDir = rootDirForResolution && removeTrailingDirectorySeparator(getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory()));
         const rootPath = (rootDir && resolutionHost.toPath(rootDir)) as Path; // TODO: GH#18217
         const rootSplitLength = rootPath !== undefined ? rootPath.split(directorySeparator).length : 0;
 
         // TypeRoot watches for the types that get added as part of getAutomaticTypeDirectiveNames
-        const typeRootsWatches = createMap<FileWatcher>();
+        const typeRootsWatches = new Map<string, FileWatcher>();
 
         return {
             startRecordingFilesWithChangedResolutions,
@@ -349,12 +349,12 @@ namespace ts {
             shouldRetryResolution, reusedNames, logChanges
         }: ResolveNamesWithLocalCacheInput<T, R>): (R | undefined)[] {
             const path = resolutionHost.toPath(containingFile);
-            const resolutionsInFile = cache.get(path) || cache.set(path, createMap()).get(path)!;
+            const resolutionsInFile = cache.get(path) || cache.set(path, new Map()).get(path)!;
             const dirPath = getDirectoryPath(path);
             const perDirectoryCache = perDirectoryCacheWithRedirects.getOrCreateMapOfCacheRedirects(redirectedReference);
             let perDirectoryResolution = perDirectoryCache.get(dirPath);
             if (!perDirectoryResolution) {
-                perDirectoryResolution = createMap();
+                perDirectoryResolution = new Map();
                 perDirectoryCache.set(dirPath, perDirectoryResolution);
             }
             const resolvedModules: (R | undefined)[] = [];
@@ -368,7 +368,7 @@ namespace ts {
                 !redirectedReference || redirectedReference.sourceFile.path !== oldRedirect.sourceFile.path :
                 !!redirectedReference;
 
-            const seenNamesInFile = createMap<true>();
+            const seenNamesInFile = new Map<string, true>();
             for (const name of names) {
                 let resolution = resolutionsInFile.get(name);
                 // Resolution is valid if it is present and not invalidated

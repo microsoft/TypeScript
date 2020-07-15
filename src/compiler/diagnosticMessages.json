@@ -880,7 +880,7 @@
         "category": "Error",
         "code": 1308
     },
-    "Did you mean to use a ':'? When following property names in an object literal, '=' implies a destructuring assignment.": {
+    "Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.": {
         "category": "Error",
         "code": 1312
     },
@@ -5826,6 +5826,22 @@
     "Switch each misused '{0}' to '{1}'": {
         "category": "Message",
         "code": 95138
+    },
+    "Convert to optional chain expression": {
+        "category": "Message",
+        "code": 95139
+    },
+    "Could not find convertible access expression": {
+        "category": "Message",
+        "code": 95140
+    },
+    "Could not find matching access expressions": {
+        "category": "Message",
+        "code": 95141
+    },
+    "Can only convert logical AND access chains": {
+        "category": "Message",
+        "code": 95142
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

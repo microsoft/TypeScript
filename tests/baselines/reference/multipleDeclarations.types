@@ -5,7 +5,7 @@ function C() {
     this.m = null;
 >this.m = null : null
 >this.m : any
->this : any
+>this : this
 >m : any
 >null : null
 }
