@@ -23,3 +23,9 @@ tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts(6,1): error T
     var writable = { ...roindex };
     writable.a = 0;  // should be ok.
     
+    // #39494
+    indexed3 = {
+      ...indexed3,
+      ["computed".toUpperCase()]: 4
+    };
+    

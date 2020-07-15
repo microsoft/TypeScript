@@ -16,6 +16,12 @@ declare var roindex: { readonly [x:string]: number };
 var writable = { ...roindex };
 writable.a = 0;  // should be ok.
 
+// #39494
+indexed3 = {
+  ...indexed3,
+  ["computed".toUpperCase()]: 4
+};
+
 
 //// [objectSpreadIndexSignature.js]
 "use strict";
@@ -30,6 +36,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var _a;
 var i = __assign(__assign({}, indexed1), { b: 11 });
 // only indexed has indexer, so i[101]: any
 i[101];
@@ -39,3 +46,5 @@ ii[1001];
 indexed3 = __assign({}, b ? indexed3 : undefined);
 var writable = __assign({}, roindex);
 writable.a = 0; // should be ok.
+// #39494
+indexed3 = __assign(__assign({}, indexed3), (_a = {}, _a["computed".toUpperCase()] = 4, _a));

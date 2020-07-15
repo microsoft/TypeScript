@@ -66,3 +66,22 @@ writable.a = 0;  // should be ok.
 >a : number
 >0 : 0
 
+// #39494
+indexed3 = {
+>indexed3 = {  ...indexed3,  ["computed".toUpperCase()]: 4} : { [x: string]: number; }
+>indexed3 : { [n: string]: number; }
+>{  ...indexed3,  ["computed".toUpperCase()]: 4} : { [x: string]: number; }
+
+  ...indexed3,
+>indexed3 : { [n: string]: number; }
+
+  ["computed".toUpperCase()]: 4
+>["computed".toUpperCase()] : number
+>"computed".toUpperCase() : string
+>"computed".toUpperCase : () => string
+>"computed" : "computed"
+>toUpperCase : () => string
+>4 : 4
+
+};
+

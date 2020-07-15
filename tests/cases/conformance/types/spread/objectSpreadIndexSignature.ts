@@ -15,3 +15,9 @@ indexed3 = { ...b ? indexed3 : undefined };
 declare var roindex: { readonly [x:string]: number };
 var writable = { ...roindex };
 writable.a = 0;  // should be ok.
+
+// #39494
+indexed3 = {
+  ...indexed3,
+  ["computed".toUpperCase()]: 4
+};
