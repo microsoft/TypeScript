@@ -3575,7 +3575,7 @@ namespace ts {
             // the function type and constructor type shorthand notation
             // are not allowed directly in unions and intersections, but we'll
             // try to parse them gracefully and issue a helpful message.
-            if (isStartOfFunctionType() || token() === SyntaxKind.NewKeyword) {
+            if (isStartOfFunctionTypeOrConstructorType()) {
                 const type = parseFunctionOrConstructorType();
                 let diagnostic: DiagnosticMessage;
                 if (isFunctionTypeNode(type)) {
@@ -3622,11 +3622,14 @@ namespace ts {
             return parseUnionOrIntersectionType(SyntaxKind.BarToken, parseIntersectionTypeOrHigher, factory.createUnionTypeNode);
         }
 
-        function isStartOfFunctionType(): boolean {
+        function isStartOfFunctionTypeOrConstructorType(): boolean {
             if (token() === SyntaxKind.LessThanToken) {
                 return true;
             }
-            return token() === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType);
+            if(token() === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType)) {
+                return true;
+            }
+            return token() === SyntaxKind.NewKeyword;
         }
 
         function skipParameterStart(): boolean {
@@ -3711,7 +3714,7 @@ namespace ts {
         }
 
         function parseTypeWorker(noConditionalTypes?: boolean): TypeNode {
-            if (isStartOfFunctionType() || token() === SyntaxKind.NewKeyword) {
+            if (isStartOfFunctionTypeOrConstructorType()) {
                 return parseFunctionOrConstructorType();
             }
             const pos = getNodePos();
