@@ -1,0 +1,14 @@
+[
+    "======== Resolving module './other' from '/index.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/other', target file type 'TypeScript'.",
+    "File '/other.ts' exist - use it as a name resolution result.",
+    "======== Module name './other' was successfully resolved to '/other.ts'. ========",
+    "======== Resolving module '../outside-of-rootdir/foo' from '/index.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/outside-of-rootdir/foo', target file type 'TypeScript'.",
+    "Directory '/outside-of-rootdir' does not exist, skipping all lookups in it.",
+    "Loading module as file / folder, candidate module location '/outside-of-rootdir/foo', target file type 'JavaScript'.",
+    "Directory '/outside-of-rootdir' does not exist, skipping all lookups in it.",
+    "======== Module name '../outside-of-rootdir/foo' was not resolved. ========"
+]
