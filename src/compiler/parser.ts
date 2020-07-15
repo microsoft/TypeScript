@@ -3626,7 +3626,7 @@ namespace ts {
             if (token() === SyntaxKind.LessThanToken) {
                 return true;
             }
-            if(token() === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType)) {
+            if (token() === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType)) {
                 return true;
             }
             return token() === SyntaxKind.NewKeyword;
