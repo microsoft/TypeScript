@@ -887,7 +887,7 @@ namespace ts {
             type: "boolean",
             isTSConfigOnly: true,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Disable_loading_projects_this_project_references
+            description: Diagnostics.Disable_loading_referenced_projects
         },
         {
             name: "noImplicitUseStrict",

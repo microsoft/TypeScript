@@ -2837,7 +2837,7 @@ namespace ts.server {
                                     ProjectReferenceProjectLoadKind.FindCreate
                                 );
                                 if (referencedProject) {
-                                    // Reload the projec tree thats already present
+                                    // Reload the project's tree that is already present
                                     forEachResolvedProjectReferenceProject(
                                         project,
                                         reloadChildProject,
