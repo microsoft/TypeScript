@@ -1244,3 +1244,43 @@ const b = a.bind("", 1);  // Desc<[boolean], object>
 >a : Symbol(a, Decl(variadicTuples1.ts, 360, 13))
 >bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 356, 34))
 
+// Repro from #39607
+
+declare function getUser(id: string, options?: { x?: string }): string;
+>getUser : Symbol(getUser, Decl(variadicTuples1.ts, 361, 24))
+>id : Symbol(id, Decl(variadicTuples1.ts, 365, 25))
+>options : Symbol(options, Decl(variadicTuples1.ts, 365, 36))
+>x : Symbol(x, Decl(variadicTuples1.ts, 365, 48))
+
+declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z?: boolean }): void;
+>getOrgUser : Symbol(getOrgUser, Decl(variadicTuples1.ts, 365, 71))
+>id : Symbol(id, Decl(variadicTuples1.ts, 367, 28))
+>orgId : Symbol(orgId, Decl(variadicTuples1.ts, 367, 39))
+>options : Symbol(options, Decl(variadicTuples1.ts, 367, 54))
+>y : Symbol(y, Decl(variadicTuples1.ts, 367, 66))
+>z : Symbol(z, Decl(variadicTuples1.ts, 367, 78))
+
+function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
+>callApi : Symbol(callApi, Decl(variadicTuples1.ts, 367, 100))
+>T : Symbol(T, Decl(variadicTuples1.ts, 369, 17))
+>U : Symbol(U, Decl(variadicTuples1.ts, 369, 42))
+>method : Symbol(method, Decl(variadicTuples1.ts, 369, 53))
+>args : Symbol(args, Decl(variadicTuples1.ts, 369, 62))
+>T : Symbol(T, Decl(variadicTuples1.ts, 369, 17))
+>U : Symbol(U, Decl(variadicTuples1.ts, 369, 42))
+
+    return (...args: [...T]) => method(...args, {});
+>args : Symbol(args, Decl(variadicTuples1.ts, 370, 12))
+>T : Symbol(T, Decl(variadicTuples1.ts, 369, 17))
+>method : Symbol(method, Decl(variadicTuples1.ts, 369, 53))
+>args : Symbol(args, Decl(variadicTuples1.ts, 370, 12))
+}
+
+callApi(getUser);
+>callApi : Symbol(callApi, Decl(variadicTuples1.ts, 367, 100))
+>getUser : Symbol(getUser, Decl(variadicTuples1.ts, 361, 24))
+
+callApi(getOrgUser);
+>callApi : Symbol(callApi, Decl(variadicTuples1.ts, 367, 100))
+>getOrgUser : Symbol(getOrgUser, Decl(variadicTuples1.ts, 365, 71))
+
