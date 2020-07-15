@@ -25,6 +25,7 @@ module.exports = {
 >thing : Something
 
 };
+
 === tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts ===
 declare module "fs" {
 >"fs" : typeof import("fs")

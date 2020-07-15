@@ -6612,18 +6612,6 @@ namespace ts {
                     ), symbol.declarations && filter(symbol.declarations, d => isClassDeclaration(d) || isClassExpression(d))[0]), modifierFlags);
                 }
 
-                function blug(node: Node) {
-                    const file = getSourceFileOfNode(node);
-                    const ranges = getLeadingCommentRangesOfNode(node, file);
-                    if (!ranges) return undefined;
-                    // return ranges;
-                    let res = "";
-                    for (const r of ranges) {
-                        res += file.text.substring(r.pos, r.end)
-                    }
-                    return res.slice(2);
-                }
-
                 function serializeAsAlias(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     // synthesize an alias, eg `export { symbolName as Name }`
                     // need to mark the alias `symbol` points at
@@ -6647,21 +6635,18 @@ namespace ts {
                             if (isPropertyAccessExpression((node as VariableDeclaration).initializer!)) {
                                 // const x = require('x').x
                                 const access = (node as VariableDeclaration).initializer! as PropertyAccessExpression;
-                                const moduleName = (getFirstPropertyAccessExpression(access) as CallExpression).arguments[0] as StringLiteral;
+                                const require = getFirstPropertyAccessExpression(access) as CallExpression;
+                                const moduleName = require.arguments[0] as StringLiteral;
                                 const tmp = factory.createUniqueName(moduleName.text);
                                 // import _x = require('x')
-
                                 let n = factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     tmp,
-                                    factory.createExternalModuleReference(factory.createStringLiteral(moduleName.text))
+                                    // TODO: Use target.parent here because alias resolution on post-property-access over-resolves to a module export
+                                    // *probably* I should fix this in type-checking instead, but I'm not sure how to request an additional resolution step during checking
+                                    factory.createExternalModuleReference(factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)))
                                 );
-                                const comments = blug(node.parent);
-                                if (comments) {
-                                    // n = setCommentRange(n, comments[0]);
-                                    n = addSyntheticLeadingComment(n, SyntaxKind.SingleLineCommentTrivia, comments);
-                                }
                                 addResult(n, ModifierFlags.None);
                                 // import x = _x.X
                                 addResult(factory.createImportEqualsDeclaration(
@@ -6677,9 +6662,8 @@ namespace ts {
                             // Could be a local `import localName = ns.member` or
                             // an external `import localName = require("whatever")`
                             const isLocalImport = !(target.flags & SymbolFlags.ValueModule);
-                            // TODO: Do this the right way in getSpecifierForModuleSymbol
                             const naam = isVariableDeclaration(node)
-                                ? ((getFirstPropertyAccessExpression((node as VariableDeclaration).initializer! as PropertyAccessExpression) as CallExpression).arguments[0] as StringLiteral).text
+                                ? getSpecifierForModuleSymbol(target, context)
                                 : getSpecifierForModuleSymbol(symbol, context)
                             let n = factory.createImportEqualsDeclaration(
                                 /*decorators*/ undefined,
@@ -6690,11 +6674,6 @@ namespace ts {
                                 // TODO: make getSpecifierForModuleSymbol work with require Symbols
                                     : factory.createExternalModuleReference(factory.createStringLiteral(naam))
                             )
-                            const comments = blug(node.parent);
-                            if (comments) {
-                                // n = setCommentRange(n, comments[0]);
-                                n = addSyntheticLeadingComment(n, SyntaxKind.SingleLineCommentTrivia, comments);
-                            }
                             addResult(n, isLocalImport ? modifierFlags : ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceExportDeclaration:
