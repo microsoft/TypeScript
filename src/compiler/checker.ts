@@ -6612,6 +6612,18 @@ namespace ts {
                     ), symbol.declarations && filter(symbol.declarations, d => isClassDeclaration(d) || isClassExpression(d))[0]), modifierFlags);
                 }
 
+                function blug(node: Node) {
+                    const file = getSourceFileOfNode(node);
+                    const ranges = getLeadingCommentRangesOfNode(node, file);
+                    if (!ranges) return undefined;
+                    // return ranges;
+                    let res = "";
+                    for (const r of ranges) {
+                        res += file.text.substring(r.pos, r.end)
+                    }
+                    return res.slice(2);
+                }
+
                 function serializeAsAlias(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     // synthesize an alias, eg `export { symbolName as Name }`
                     // need to mark the alias `symbol` points at
@@ -6630,18 +6642,60 @@ namespace ts {
                     const targetName = getInternalSymbolName(target, verbatimTargetName);
                     includePrivateSymbol(target); // the target may be within the same scope - attempt to serialize it first
                     switch (node.kind) {
+                        case SyntaxKind.VariableDeclaration:
+                            // commonjs require
+                            if (isPropertyAccessExpression((node as VariableDeclaration).initializer!)) {
+                                // const x = require('x').x
+                                const access = (node as VariableDeclaration).initializer! as PropertyAccessExpression;
+                                const moduleName = (getFirstPropertyAccessExpression(access) as CallExpression).arguments[0] as StringLiteral;
+                                const tmp = factory.createUniqueName(moduleName.text);
+                                // import _x = require('x')
+
+                                let n = factory.createImportEqualsDeclaration(
+                                    /*decorators*/ undefined,
+                                    /*modifiers*/ undefined,
+                                    tmp,
+                                    factory.createExternalModuleReference(factory.createStringLiteral(moduleName.text))
+                                );
+                                const comments = blug(node.parent);
+                                if (comments) {
+                                    // n = setCommentRange(n, comments[0]);
+                                    n = addSyntheticLeadingComment(n, SyntaxKind.SingleLineCommentTrivia, comments);
+                                }
+                                addResult(n, ModifierFlags.None);
+                                // import x = _x.X
+                                addResult(factory.createImportEqualsDeclaration(
+                                    /*decorators*/ undefined,
+                                    /*modifiers*/ undefined,
+                                    factory.createIdentifier(localName),
+                                    factory.createQualifiedName(tmp, access.name as Identifier), // TODO: symbolToName handles the recursive case (but may do some extra stuff we don't want)
+                                ), modifierFlags);
+                                break;
+                            }
+                            // else fall through and treat require just like import=
                         case SyntaxKind.ImportEqualsDeclaration:
                             // Could be a local `import localName = ns.member` or
                             // an external `import localName = require("whatever")`
                             const isLocalImport = !(target.flags & SymbolFlags.ValueModule);
-                            addResult(factory.createImportEqualsDeclaration(
+                            // TODO: Do this the right way in getSpecifierForModuleSymbol
+                            const naam = isVariableDeclaration(node)
+                                ? ((getFirstPropertyAccessExpression((node as VariableDeclaration).initializer! as PropertyAccessExpression) as CallExpression).arguments[0] as StringLiteral).text
+                                : getSpecifierForModuleSymbol(symbol, context)
+                            let n = factory.createImportEqualsDeclaration(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 factory.createIdentifier(localName),
                                 isLocalImport
                                     ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
-                                    : factory.createExternalModuleReference(factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context)))
-                            ), isLocalImport ? modifierFlags : ModifierFlags.None);
+                                // TODO: make getSpecifierForModuleSymbol work with require Symbols
+                                    : factory.createExternalModuleReference(factory.createStringLiteral(naam))
+                            )
+                            const comments = blug(node.parent);
+                            if (comments) {
+                                // n = setCommentRange(n, comments[0]);
+                                n = addSyntheticLeadingComment(n, SyntaxKind.SingleLineCommentTrivia, comments);
+                            }
+                            addResult(n, isLocalImport ? modifierFlags : ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceExportDeclaration:
                             // export as namespace foo
@@ -6677,6 +6731,9 @@ namespace ts {
                                 factory.createStringLiteral(getSpecifierForModuleSymbol(target, context))
                             ), ModifierFlags.None);
                             break;
+                        case SyntaxKind.BindingElement:
+                            // TODO: remember to handle postfix property access~~~
+                            // TODO: Actually write tests for this, there aren't any that I can see
                         case SyntaxKind.ImportSpecifier:
                             addResult(factory.createImportDeclaration(
                                 /*decorators*/ undefined,
