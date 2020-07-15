@@ -43,7 +43,7 @@ function F() {
     this.z = 1
 >this.z = 1 : 1
 >this.z : any
->this : any
+>this : this
 >z : any
 >1 : 1
 }

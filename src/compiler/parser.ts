@@ -820,7 +820,7 @@ namespace ts {
                 result.libReferenceDirectives = emptyArray;
                 result.amdDependencies = emptyArray;
                 result.hasNoDefaultLib = false;
-                result.pragmas = emptyMap;
+                result.pragmas = emptyMap as ReadonlyPragmaMap;
                 return result;
             }
 
@@ -929,8 +929,8 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = createMap<string>();
-            privateIdentifiers = createMap<string>();
+            identifiers = new Map<string, string>();
+            privateIdentifiers = new Map<string, string>();
             identifierCount = 0;
             nodeCount = 0;
             sourceFlags = 0;
@@ -2701,19 +2701,10 @@ namespace ts {
             return finishNode(factory.createThisTypeNode(), pos);
         }
 
-        function parseJSDocAllType(postFixEquals: boolean): JSDocAllType | JSDocOptionalType {
+        function parseJSDocAllType(): JSDocAllType | JSDocOptionalType {
             const pos = getNodePos();
             nextToken();
-
-            const node = factory.createJSDocAllType();
-            if (postFixEquals) {
-                // Trim the trailing `=` from the `*=` token
-                const end = Math.max(getNodePos() - 1, pos);
-                return finishNode(factory.createJSDocOptionalType(finishNode(node, pos, end)), pos);
-            }
-            else {
-                return finishNode(node, pos);
-            }
+            return finishNode(factory.createJSDocAllType(), pos);
         }
 
         function parseJSDocNonNullableType(): TypeNode {
@@ -3396,12 +3387,14 @@ namespace ts {
                 case SyntaxKind.ObjectKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
                     return tryParse(parseKeywordAndNoDot) || parseTypeReference();
-                case SyntaxKind.AsteriskToken:
-                    return parseJSDocAllType(/*postfixEquals*/ false);
                 case SyntaxKind.AsteriskEqualsToken:
-                    return parseJSDocAllType(/*postfixEquals*/ true);
+                    // If there is '*=', treat it as * followed by postfix =
+                    scanner.reScanAsteriskEqualsToken();
+                    // falls through
+                case SyntaxKind.AsteriskToken:
+                    return parseJSDocAllType();
                 case SyntaxKind.QuestionQuestionToken:
-                    // If there is '??', consider that is prefix '?' in JSDoc type.
+                    // If there is '??', treat it as prefix-'?' in JSDoc type.
                     scanner.reScanQuestionToken();
                     // falls through
                 case SyntaxKind.QuestionToken:
@@ -7440,11 +7433,9 @@ namespace ts {
                     loop: while (true) {
                         switch (tok) {
                             case SyntaxKind.NewLineTrivia:
-                                if (state >= JSDocState.SawAsterisk) {
-                                    state = JSDocState.BeginningOfLine;
-                                    // don't use pushComment here because we want to keep the margin unchanged
-                                    comments.push(scanner.getTokenText());
-                                }
+                                state = JSDocState.BeginningOfLine;
+                                // don't use pushComment here because we want to keep the margin unchanged
+                                comments.push(scanner.getTokenText());
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
@@ -8678,7 +8669,7 @@ namespace ts {
             extractPragmas(pragmas, range, comment);
         }
 
-        context.pragmas = createMap() as PragmaMap;
+        context.pragmas = new Map() as PragmaMap;
         for (const pragma of pragmas) {
             if (context.pragmas.has(pragma.name)) {
                 const currentValue = context.pragmas.get(pragma.name);
@@ -8776,7 +8767,7 @@ namespace ts {
         });
     }
 
-    const namedArgRegExCache = createMap<RegExp>();
+    const namedArgRegExCache = new Map<string, RegExp>();
     function getNamedArgRegEx(name: string): RegExp {
         if (namedArgRegExCache.has(name)) {
             return namedArgRegExCache.get(name)!;

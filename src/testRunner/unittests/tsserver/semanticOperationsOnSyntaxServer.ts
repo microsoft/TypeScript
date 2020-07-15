@@ -95,5 +95,19 @@ class c { prop = "hello"; foo() { return this.prop; } }`
             }
             assert.isTrue(hasException);
         });
+
+        it("should not include auto type reference directives", () => {
+            const { host, session, file1 } = setup();
+            const atTypes: File = {
+                path: `/node_modules/@types/somemodule/index.d.ts`,
+                content: "export const something = 10;"
+            };
+            host.ensureFileOrFolder(atTypes);
+            const service = session.getProjectService();
+            openFilesForSession([file1], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [libFile.path, file1.path]); // Should not contain atTypes
+        });
     });
 }

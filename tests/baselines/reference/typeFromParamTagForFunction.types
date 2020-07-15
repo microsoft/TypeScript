@@ -18,7 +18,7 @@ exports.A = function () {
     this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
 
@@ -79,7 +79,7 @@ export function C() {
     this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
 }
@@ -107,7 +107,7 @@ export var D = function() {
     this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
 
@@ -165,7 +165,7 @@ var F = function () {
     this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
 
@@ -186,7 +186,7 @@ function G() {
     this.x = 1;
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
 }

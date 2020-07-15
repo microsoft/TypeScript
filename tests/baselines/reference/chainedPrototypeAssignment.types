@@ -52,7 +52,7 @@ var A = function A() {
     this.a = 1
 >this.a = 1 : 1
 >this.a : any
->this : any
+>this : this
 >a : any
 >1 : 1
 }
@@ -64,7 +64,7 @@ var B = function B() {
     this.b = 2
 >this.b = 2 : 2
 >this.b : any
->this : any
+>this : this
 >b : any
 >2 : 2
 }

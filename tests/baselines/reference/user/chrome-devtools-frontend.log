@@ -1,7 +1,7 @@
 Exit Code: 2
 Standard output:
 ../../../../built/local/lib.es5.d.ts(1451,11): error TS2300: Duplicate identifier 'ArrayLike'.
-../../../../node_modules/@types/node/globals.d.ts(167,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
+../../../../node_modules/@types/node/globals.d.ts(60,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(78,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -11342,7 +11342,7 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(503,30
   Type 'Function' provides no match for the signature '(value: any[]): any[] | PromiseLike<any[]>'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(641,59): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(641,92): error TS2551: Property 'testRunner' does not exist on type 'Window & typeof globalThis'. Did you mean 'TestRunner'?
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(642,3): error TS2322: Type '1' is not assignable to type 'boolean'.
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(642,3): error TS2322: Type 'number' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(683,28): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(777,22): error TS2339: Property 'attributes' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(785,14): error TS2339: Property 'shadowRoot' does not exist on type 'Node'.
