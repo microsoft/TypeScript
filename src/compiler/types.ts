@@ -186,6 +186,7 @@ namespace ts {
         FromKeyword,
         GlobalKeyword,
         BigIntKeyword,
+        OverrideKeyword,
         OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
@@ -581,6 +582,7 @@ namespace ts {
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OverrideKeyword
         | SyntaxKind.RequireKeyword
         | SyntaxKind.ReturnKeyword
         | SyntaxKind.SetKeyword
@@ -616,6 +618,7 @@ namespace ts {
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OverrideKeyword
         | SyntaxKind.StaticKeyword
         ;
 
@@ -1018,6 +1021,7 @@ namespace ts {
     export type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
     export type PublicKeyword = ModifierToken<SyntaxKind.PublicKeyword>;
     export type ReadonlyKeyword = ModifierToken<SyntaxKind.ReadonlyKeyword>;
+    export type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
     export type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
 
     /** @deprecated Use `ReadonlyKeyword` instead. */
@@ -1033,6 +1037,7 @@ namespace ts {
         | PrivateKeyword
         | ProtectedKeyword
         | PublicKeyword
+        | OverrideKeyword
         | ReadonlyKeyword
         | StaticKeyword
         ;
