@@ -168,5 +168,50 @@ import { something } from "something";
             const project = service.inferredProjects[0];
             checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]); // Should not contain atTypes
         });
+
+        it("should not include referenced files from unopened files", () => {
+            const file1: File = {
+                path: `${tscWatch.projectRoot}/a.ts`,
+                content: `///<reference path="b.ts"/>
+///<reference path="${tscWatch.projectRoot}/node_modules/something/index.d.ts"/>
+function fooA() { }`
+            };
+            const file2: File = {
+                path: `${tscWatch.projectRoot}/b.ts`,
+                content: `///<reference path="./c.ts"/>
+///<reference path="${tscWatch.projectRoot}/node_modules/something/index.d.ts"/>
+function fooB() { }`
+            };
+            const file3: File = {
+                path: `${tscWatch.projectRoot}/c.ts`,
+                content: `function fooC() { }`
+            };
+            const something: File = {
+                path: `${tscWatch.projectRoot}/node_modules/something/index.d.ts`,
+                content: "function something() {}"
+            };
+            const configFile: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
+            const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true });
+            const service = session.getProjectService();
+            openFilesForSession([file1], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, something.path]); // Should not contains c
+
+            openFilesForSession([file2], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            assert.isTrue(project.dirty);
+            project.updateGraph();
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
+
+            closeFilesForSession([file2], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            assert.isFalse(project.dirty);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
+        });
     });
 }

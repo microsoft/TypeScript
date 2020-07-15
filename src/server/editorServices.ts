@@ -3055,6 +3055,10 @@ namespace ts.server {
                 Debug.assert(this.openFiles.has(info.path));
                 this.assignOrphanScriptInfoToInferredProject(info, this.openFiles.get(info.path));
             }
+            else if (this.syntaxOnly && info.cacheSourceFile?.sourceFile.referencedFiles.length) {
+                // This file was just opened and references in this file will previously not been resolved so schedule update
+                info.containingProjects.forEach(project => project.markAsDirty());
+            }
             Debug.assert(!info.isOrphan());
             return { configFileName, configFileErrors, retainProjects };
         }

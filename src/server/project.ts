@@ -454,6 +454,11 @@ namespace ts.server {
             return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference);
         }
 
+        /*@internal*/
+        includeTripleslashReferencesFrom(containingFile: string) {
+            return !this.projectService.syntaxOnly || this.fileIsOpen(this.toPath(containingFile));
+        }
+
         directoryExists(path: string): boolean {
             return this.directoryStructureHost.directoryExists!(path); // TODO: GH#18217
         }
