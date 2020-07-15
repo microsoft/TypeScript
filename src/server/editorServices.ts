@@ -2824,7 +2824,7 @@ namespace ts.server {
                         else {
                             // reload from the disk
                             this.reloadConfiguredProject(project, reason);
-                            // If this is project does not contain this file directly, reload the project till the reloaded project contains the script info directly
+                            // If this project does not contain this file directly, reload the project till the reloaded project contains the script info directly
                             if (!projectContainsInfoDirectly(project, info)) {
                                 const referencedProject = forEachResolvedProjectReferenceProject(
                                     project,
