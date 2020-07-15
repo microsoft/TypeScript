@@ -2667,7 +2667,7 @@ namespace ts {
                 return;
             }
             forEach(file.referencedFiles, (ref, index) => {
-                const referencedFileName = resolveTripleslashReference(ref.fileName, file.originalFileName);
+                const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
                 processSourceFile(
                     referencedFileName,
                     isDefaultLib,
