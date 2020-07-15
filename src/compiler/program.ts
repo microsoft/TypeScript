@@ -2176,7 +2176,7 @@ namespace ts {
                 const r = /import|require/g;
                 while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                     const node = getNodeAtPosition(file, r.lastIndex);
-                    if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
+                    if (isJavaScriptFile && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                         imports = append(imports, node.arguments[0]);
                     }
                     // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
