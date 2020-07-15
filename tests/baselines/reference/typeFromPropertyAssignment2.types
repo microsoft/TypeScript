@@ -5,7 +5,7 @@ function Outer() {
     this.y = 2
 >this.y = 2 : 2
 >this.y : any
->this : any
+>this : this
 >y : any
 >2 : 2
 }

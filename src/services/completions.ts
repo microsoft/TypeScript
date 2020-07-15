@@ -293,7 +293,7 @@ namespace ts.Completions {
         }
 
         if (keywordFilters !== KeywordCompletionFilters.None) {
-            const entryNames = arrayToSet(entries, e => e.name);
+            const entryNames = new Set(entries.map(e => e.name));
             for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
                 if (!entryNames.has(keywordEntry.name)) {
                     entries.push(keywordEntry);
@@ -491,7 +491,7 @@ namespace ts.Completions {
         // Value is set to false for global variables or completions from external module exports, because we can have multiple of those;
         // true otherwise. Based on the order we add things we will always see locals first, then globals, then module exports.
         // So adding a completion for a local will prevent us from adding completions for external module exports sharing the same name.
-        const uniques = createMap<boolean>();
+        const uniques = new Map<string, boolean>();
         for (const symbol of symbols) {
             const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
             const info = getCompletionEntryDisplayNameForSymbol(symbol, target, origin, kind, !!jsxIdentifierExpected);
@@ -549,7 +549,7 @@ namespace ts.Completions {
 
     function getLabelStatementCompletions(node: Node): CompletionEntry[] {
         const entries: CompletionEntry[] = [];
-        const uniques = createMap<true>();
+        const uniques = new Map<string, true>();
         let current = node;
 
         while (current) {
@@ -1537,7 +1537,7 @@ namespace ts.Completions {
         }
 
         /** True if symbol is a type or a module containing at least one type. */
-        function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, seenModules = createMap<true>()): boolean {
+        function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, seenModules = new Map<string, true>()): boolean {
             const sym = skipAlias(symbol.exportSymbol || symbol, typeChecker);
             return !!(sym.flags & SymbolFlags.Type) ||
                 !!(sym.flags & SymbolFlags.Module) &&
@@ -1605,16 +1605,16 @@ namespace ts.Completions {
 
             const startTime = timestamp();
             log(`getSymbolsFromOtherSourceFileExports: Recomputing list${detailsEntryId ? " for details entry" : ""}`);
-            const seenResolvedModules = createMap<true>();
-            const seenExports = createMap<true>();
+            const seenResolvedModules = new Map<string, true>();
+            const seenExports = new Map<string, true>();
             /** Bucket B */
-            const aliasesToAlreadyIncludedSymbols = createMap<true>();
+            const aliasesToAlreadyIncludedSymbols = new Map<string, true>();
             /** Bucket C */
-            const aliasesToReturnIfOriginalsAreMissing = createMap<{ alias: Symbol, moduleSymbol: Symbol, isFromPackageJson: boolean }>();
+            const aliasesToReturnIfOriginalsAreMissing = new Map<string, { alias: Symbol, moduleSymbol: Symbol, isFromPackageJson: boolean }>();
             /** Bucket A */
             const results: AutoImportSuggestion[] = [];
             /** Ids present in `results` for faster lookup */
-            const resultSymbolIds = createMap<true>();
+            const resultSymbolIds = new Map<string, true>();
 
             codefix.forEachExternalModuleToImportFrom(program, host, sourceFile, !detailsEntryId, /*useAutoImportProvider*/ true, (moduleSymbol, _, program, isFromPackageJson) => {
                 // Perf -- ignore other modules if this is a request for details
@@ -1940,8 +1940,8 @@ namespace ts.Completions {
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
             const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
-            const existing = arrayToSet<ImportOrExportSpecifier>(namedImportsOrExports.elements, n => isCurrentlyEditingNode(n) ? undefined : (n.propertyName || n.name).escapedText);
-            symbols = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.get(e.escapedName));
+            const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
+            symbols = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
             return GlobalsSearch.Success;
         }
 
@@ -2312,7 +2312,7 @@ namespace ts.Completions {
             }
 
             const membersDeclaredBySpreadAssignment = new Set<string>();
-            const existingMemberNames = createUnderscoreEscapedMap<boolean>();
+            const existingMemberNames = new Set<__String>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyAssignment &&
@@ -2349,10 +2349,12 @@ namespace ts.Completions {
                     existingName = name && isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
                 }
 
-                existingMemberNames.set(existingName!, true); // TODO: GH#18217
+                if (existingName !== undefined) {
+                    existingMemberNames.add(existingName);
+                }
             }
 
-            const filteredSymbols = contextualMemberSymbols.filter(m => !existingMemberNames.get(m.escapedName));
+            const filteredSymbols = contextualMemberSymbols.filter(m => !existingMemberNames.has(m.escapedName));
             setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment, filteredSymbols);
 
             return filteredSymbols;
@@ -2397,7 +2399,7 @@ namespace ts.Completions {
          * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
          */
         function filterClassMembersList(baseSymbols: readonly Symbol[], existingMembers: readonly ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
-            const existingMemberNames = createUnderscoreEscapedMap<true>();
+            const existingMemberNames = new Set<__String>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyDeclaration &&
@@ -2424,7 +2426,7 @@ namespace ts.Completions {
 
                 const existingName = getPropertyNameForPropertyNameNode(m.name!);
                 if (existingName) {
-                    existingMemberNames.set(existingName, true);
+                    existingMemberNames.add(existingName);
                 }
             }
 
@@ -2442,7 +2444,7 @@ namespace ts.Completions {
          *          do not occur at the current position and have not otherwise been typed.
          */
         function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-            const seenNames = createUnderscoreEscapedMap<boolean>();
+            const seenNames = new Set<__String>();
             const membersDeclaredBySpreadAssignment = new Set<string>();
             for (const attr of attributes) {
                 // If this is the current item we are editing right now, do not filter it out
@@ -2451,13 +2453,13 @@ namespace ts.Completions {
                 }
 
                 if (attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames.set(attr.name.escapedText, true);
+                    seenNames.add(attr.name.escapedText);
                 }
                 else if (isJsxSpreadAttribute(attr)) {
                     setMembersDeclaredBySpreadAssignment(attr, membersDeclaredBySpreadAssignment);
                 }
             }
-            const filteredSymbols = symbols.filter(a => !seenNames.get(a.escapedName));
+            const filteredSymbols = symbols.filter(a => !seenNames.has(a.escapedName));
 
             setSortTextToMemberDeclaredBySpreadAssignment(membersDeclaredBySpreadAssignment, filteredSymbols);
 

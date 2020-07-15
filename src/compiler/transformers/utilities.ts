@@ -69,7 +69,7 @@ namespace ts {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMultiMap<ExportSpecifier>();
         const exportedBindings: Identifier[][] = [];
-        const uniqueExports = createMap<boolean>();
+        const uniqueExports = new Map<string, boolean>();
         let exportedNames: Identifier[] | undefined;
         let hasExportDefault = false;
         let exportEquals: ExportAssignment | undefined;
@@ -122,6 +122,8 @@ namespace ts {
                                     uniqueExports.set(idText(name), true);
                                     exportedNames = append(exportedNames, name);
                                 }
+                                // we use the same helpers for `export * as ns` as we do for `import * as ns`
+                                hasImportStar = true;
                             }
                         }
                     }

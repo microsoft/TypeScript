@@ -159,13 +159,12 @@ namespace Harness {
                 let configuredName = "";
                 const keys = Object
                     .keys(configurationOverrides)
-                    .map(k => k.toLowerCase())
                     .sort();
                 for (const key of keys) {
                     if (configuredName) {
                         configuredName += ",";
                     }
-                    configuredName += `${key}=${configurationOverrides[key].toLowerCase()}`;
+                    configuredName += `${key.toLowerCase()}=${configurationOverrides[key].toLowerCase()}`;
                 }
                 if (configuredName) {
                     const extname = vpath.extname(this.justName);

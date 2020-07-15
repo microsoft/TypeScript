@@ -214,6 +214,22 @@ namespace FourSlashInterface {
         public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
             this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
         }
+
+        public toggleLineComment(newFileContent: string) {
+            this.state.toggleLineComment(newFileContent);
+        }
+
+        public toggleMultilineComment(newFileContent: string) {
+            this.state.toggleMultilineComment(newFileContent);
+        }
+
+        public commentSelection(newFileContent: string) {
+            this.state.commentSelection(newFileContent);
+        }
+
+        public uncommentSelection(newFileContent: string) {
+            this.state.uncommentSelection(newFileContent);
+        }
     }
 
     export class Verify extends VerifyNegatable {
@@ -314,6 +330,10 @@ namespace FourSlashInterface {
 
         public typeOfSymbolAtLocation(range: FourSlash.Range, symbol: ts.Symbol, expected: string) {
             this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
+        }
+
+        public baselineFindAllReferences(markerName: string) {
+            this.state.verifyBaselineFindAllReferences(markerName);
         }
 
         public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {
@@ -1483,6 +1503,7 @@ namespace FourSlashInterface {
         actionName: string;
         actionDescription: string;
         newContent: NewFileContent;
+        triggerReason?: ts.RefactorTriggerReason;
     }
 
     export type ExpectedCompletionEntry = string | ExpectedCompletionEntryObject;

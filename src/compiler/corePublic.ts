@@ -45,7 +45,6 @@ namespace ts {
 
     /**
      * ES6 Map interface, only read methods included.
-     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
      */
     export interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
     }
@@ -57,7 +56,6 @@ namespace ts {
 
     /**
      * ES6 Map interface.
-     * @deprecated Use `ts.ESMap<K, V>` instead.
      */
     export interface Map<T> extends ESMap<string, T> {
     }

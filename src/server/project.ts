@@ -127,7 +127,7 @@ namespace ts.server {
 
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
-        private rootFilesMap = createMap<ProjectRootFile>();
+        private rootFilesMap = new Map<string, ProjectRootFile>();
         private program: Program | undefined;
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: ESMap<Path, FileWatcher> | undefined;
@@ -1286,7 +1286,7 @@ namespace ts.server {
                     if (this.generatedFilesMap.has(path)) return;
                 }
                 else {
-                    this.generatedFilesMap = createMap();
+                    this.generatedFilesMap = new Map();
                 }
                 this.generatedFilesMap.set(path, this.createGeneratedFileWatcher(generatedFile));
             }
@@ -1952,7 +1952,7 @@ namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     export class ConfiguredProject extends Project {
-        private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
+        private typeAcquisition: TypeAcquisition | undefined;
         /* @internal */
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher> | undefined;
@@ -1964,7 +1964,7 @@ namespace ts.server {
         pendingReloadReason: string | undefined;
 
         /* @internal */
-        openFileWatchTriggered = createMap<true>();
+        openFileWatchTriggered = new Map<string, true>();
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
@@ -2168,13 +2168,13 @@ namespace ts.server {
         }
 
         getTypeAcquisition() {
-            return this.typeAcquisition;
+            return this.typeAcquisition || {};
         }
 
         /*@internal*/
         watchWildcards(wildcardDirectories: ESMap<string, WatchDirectoryFlags>) {
             updateWatchingWildcardDirectories(
-                this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = createMap()),
+                this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = new Map()),
                 wildcardDirectories,
                 // Create new directory watcher
                 (directory, flags) => this.projectService.watchWildcardDirectory(directory as Path, flags, this),
@@ -2286,7 +2286,7 @@ namespace ts.server {
      */
     export class ExternalProject extends Project {
         excludedFiles: readonly NormalizedPath[] = [];
-        private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
+        private typeAcquisition: TypeAcquisition | undefined;
         /*@internal*/
         constructor(public externalProjectName: string,
             projectService: ProjectService,
@@ -2322,7 +2322,7 @@ namespace ts.server {
         }
 
         getTypeAcquisition() {
-            return this.typeAcquisition;
+            return this.typeAcquisition || {};
         }
 
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void {
