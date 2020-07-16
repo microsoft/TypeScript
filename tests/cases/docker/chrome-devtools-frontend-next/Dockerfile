@@ -11,4 +11,4 @@ COPY --from=typescript/typescript /typescript/typescript-*.tgz typescript.tgz
 RUN mkdir /typescript
 RUN tar -xzvf /typescript.tgz -C /typescript
 RUN ln -s /typescript/package ./node_modules/typescript
-CMD [ "autoninja", "-C", "out/Default" ]
+RUN autoninja -C out/Default front_end
