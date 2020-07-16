@@ -2663,7 +2663,7 @@ namespace ts {
 
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             if (!includeTripleslashReferencesFrom(file)) {
-                (skippedTrippleSlashReferences || (skippedTrippleSlashReferences = new Set())).add(file.path);
+                (skippedTrippleSlashReferences ||= new Set()).add(file.path);
                 return;
             }
             forEach(file.referencedFiles, (ref, index) => {

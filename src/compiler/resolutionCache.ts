@@ -786,7 +786,6 @@ namespace ts {
             let invalidated = removeRelativeNoResolveResolutionsOfFileFromCache(resolvedModuleNames, filePath, noResolveResolvedModule);
             invalidated = removeRelativeNoResolveResolutionsOfFileFromCache(resolvedTypeReferenceDirectives, filePath, noResolveResolvedTypeReferenceDirective) || invalidated;
             return invalidated;
-
         }
 
         function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyESMap<Path, readonly string[]>) {
