@@ -3687,6 +3687,8 @@ namespace ts {
         /* @internal */
         getRefFileMap(): MultiMap<Path, RefFile> | undefined;
         /* @internal */
+        getSkippedTrippleSlashReferences(): Set<Path> | undefined;
+        /* @internal */
         getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
         /**
@@ -6227,6 +6229,7 @@ namespace ts {
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
+        /* @internal */ includeTripleslashReferencesFrom?(containingFile: string): boolean;
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
