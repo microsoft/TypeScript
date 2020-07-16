@@ -363,3 +363,16 @@ interface Desc<A extends unknown[], T> {
 
 declare const a: Desc<[string, number, boolean], object>;
 const b = a.bind("", 1);  // Desc<[boolean], object>
+
+// Repro from #39607
+
+declare function getUser(id: string, options?: { x?: string }): string;
+
+declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z?: boolean }): void;
+
+function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
+    return (...args: [...T]) => method(...args, {});
+}
+
+callApi(getUser);
+callApi(getOrgUser);
