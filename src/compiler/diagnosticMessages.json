@@ -4465,6 +4465,10 @@
         "category": "Error",
         "code": 6234
     },
+    "Arguments for the rest parameter '{0}' were not provided.": {
+        "category": "Error",
+        "code": 6235
+    },
 
     "Projects to reference": {
         "category": "Message",
