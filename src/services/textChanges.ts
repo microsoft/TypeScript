@@ -794,7 +794,8 @@ namespace ts.textChanges {
                     const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
                     // insert element before the line break on the line that contains 'after' element
                     let insertPos = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
-                    if (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
+                    // find position before "\n" or "\r\n"
+                    while (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
                         insertPos--;
                     }
                     this.replaceRange(sourceFile, createRange(insertPos), newNode, { indentation, prefix: this.newLineCharacter });
