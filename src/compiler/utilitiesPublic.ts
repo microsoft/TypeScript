@@ -1129,6 +1129,7 @@ namespace ts {
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.StaticKeyword:
+            case SyntaxKind.OverrideKeyword:
                 return true;
         }
         return false;

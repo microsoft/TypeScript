@@ -34375,6 +34375,11 @@ namespace ts {
                 }
             }
 
+
+            else {
+                issueMemberWithOverrideButNotInhert(node);
+            }
+
             const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
             if (implementedTypeNodes) {
                 for (const typeRefNode of implementedTypeNodes) {
@@ -34406,6 +34411,37 @@ namespace ts {
                 checkIndexConstraints(type);
                 checkTypeForDuplicateIndexSignatures(node);
                 checkPropertyInitialization(node);
+            }
+        }
+
+        function issueMemberWithOverrideButNotInhert(node: ClassLikeDeclaration) {
+            for (const member of node.members) {
+                if (hasOverrideModifier(member)) {
+                    const modifier = member.modifiers?.find(modifier => modifier.kind === SyntaxKind.OverrideKeyword)
+                    Debug.assertIsDefined(modifier)
+                    error(modifier, Diagnostics.Expression_expected);
+                }
+            }
+        }
+
+        function issueMemberWithOverride (node: ClassLikeDeclaration) {
+            
+        }
+
+        function issueMemberWithOverrideButNotExistedInBase(node: ClassDeclaration, typeWithThis: Type, baseWithThis: Type) {
+            for (const member of node.members) {
+                const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
+                if (declaredProp) {
+                    const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
+                    const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
+                    const hasOVerride = hasOverrideModifier(member);
+                    if (prop && !baseProp && hasOVerride) {
+                        error(member, Diagnostics.Expression_expected);
+                    }
+                    if (prop && baseProp && !hasOVerride) {
+                        error(member, Diagnostics.Expression_expected);
+                    }
+                }
             }
         }
 

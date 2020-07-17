@@ -4529,6 +4529,10 @@ namespace ts {
         return hasSyntacticModifier(node, ModifierFlags.Static);
     }
 
+    export function hasOverrideModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Override);
+    }
+
     export function hasEffectiveReadonlyModifier(node: Node): boolean {
         return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
@@ -4639,6 +4643,7 @@ namespace ts {
             case SyntaxKind.DefaultKeyword: return ModifierFlags.Default;
             case SyntaxKind.AsyncKeyword: return ModifierFlags.Async;
             case SyntaxKind.ReadonlyKeyword: return ModifierFlags.Readonly;
+            case SyntaxKind.OverrideKeyword: return ModifierFlags.Override;
         }
         return ModifierFlags.None;
     }
