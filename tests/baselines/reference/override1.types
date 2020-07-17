@@ -7,6 +7,11 @@ class B {
 >v : string
 
     }
+    fooo (v: string) {
+>fooo : (v: string) => void
+>v : string
+
+    }
 }
 
 class D extends B {
@@ -17,6 +22,12 @@ class D extends B {
 >foo : (v: string) => void
 >v : string
 
+    }
+
+    fooo (v: string) {
+>fooo : (v: string) => void
+>v : string
+        
     }
 
     override bar(v: string) {

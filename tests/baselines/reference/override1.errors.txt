@@ -1,10 +1,14 @@
-tests/cases/conformance/override/override1.ts(12,14): suggestion TS6385: 'not founded in base class' is deprecated
-tests/cases/conformance/override/override1.ts(18,14): suggestion TS6385: 'has override but not extended' is deprecated
+tests/cases/conformance/override/override1.ts(15,5): suggestion TS6385: 'need override' is deprecated
+tests/cases/conformance/override/override1.ts(19,14): suggestion TS6385: 'not founded in base class' is deprecated
+tests/cases/conformance/override/override1.ts(25,14): suggestion TS6385: 'has override but not extended' is deprecated
 
 
-==== tests/cases/conformance/override/override1.ts (2 errors) ====
+==== tests/cases/conformance/override/override1.ts (3 errors) ====
     class B {
         foo (v: string) {
+    
+        }
+        fooo (v: string) {
     
         }
     }
@@ -12,6 +16,12 @@ tests/cases/conformance/override/override1.ts(18,14): suggestion TS6385: 'has ov
     class D extends B {
         override foo (v: string) {
     
+        }
+    
+        fooo (v: string) {
+        ~~~~
+!!! suggestion TS6385: 'need override' is deprecated
+            
         }
     
         override bar(v: string) {

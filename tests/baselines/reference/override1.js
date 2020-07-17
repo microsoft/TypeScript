@@ -3,11 +3,18 @@ class B {
     foo (v: string) {
 
     }
+    fooo (v: string) {
+
+    }
 }
 
 class D extends B {
     override foo (v: string) {
 
+    }
+
+    fooo (v: string) {
+        
     }
 
     override bar(v: string) {
@@ -40,6 +47,8 @@ var B = /** @class */ (function () {
     }
     B.prototype.foo = function (v) {
     };
+    B.prototype.fooo = function (v) {
+    };
     return B;
 }());
 var D = /** @class */ (function (_super) {
@@ -48,6 +57,8 @@ var D = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     D.prototype.foo = function (v) {
+    };
+    D.prototype.fooo = function (v) {
     };
     D.prototype.bar = function (v) {
     };
