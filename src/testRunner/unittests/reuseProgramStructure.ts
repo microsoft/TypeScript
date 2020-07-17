@@ -210,6 +210,18 @@ namespace ts {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
+    type Traces = [subScenario: string, program: ProgramWithSourceTexts][];
+    function baselineTrace(scenario: string, traces: Traces) {
+        const actual: MapLike<string[]> = {};
+        for (const [subScenario, program] of traces) {
+            actual[subScenario] = program.host.getTrace().map(Utils.sanitizeTraceResolutionLogEntry);
+        }
+        Harness.Baseline.runBaseline(
+            `reuseProgramStructure/${scenario.split(" ").join("-")}.trace.json`,
+            JSON.stringify(actual, undefined, 4)
+        );
+    }
+
     describe("unittests:: Reuse program structure:: General", () => {
         const target = ScriptTarget.Latest;
         const files: NamedSourceText[] = [
@@ -455,34 +467,11 @@ namespace ts {
             const options: CompilerOptions = { target: ScriptTarget.ES2015, traceResolution: true, moduleResolution: ModuleResolutionKind.NodeJs };
             const rootFiles = [file1Ts, file2Ts];
             const filesAfterNpmInstall = [file1Ts, file2Ts, indexDTS];
+            const traces: Traces = [];
 
             const initialProgram = newProgram(rootFiles, rootFiles.map(f => f.name), options);
             {
-                assert.deepEqual(initialProgram.host.getTrace(),
-                    [
-                        "======== Resolving module 'a' from 'file1.ts'. ========",
-                        "Explicitly specified module resolution kind: 'NodeJs'.",
-                        "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
-                        "File 'node_modules/a/package.json' does not exist.",
-                        "File 'node_modules/a.ts' does not exist.",
-                        "File 'node_modules/a.tsx' does not exist.",
-                        "File 'node_modules/a.d.ts' does not exist.",
-                        "File 'node_modules/a/index.ts' does not exist.",
-                        "File 'node_modules/a/index.tsx' does not exist.",
-                        "File 'node_modules/a/index.d.ts' does not exist.",
-                        "File 'node_modules/@types/a/package.json' does not exist.",
-                        "File 'node_modules/@types/a.d.ts' does not exist.",
-                        "File 'node_modules/@types/a/index.d.ts' does not exist.",
-                        "Loading module 'a' from 'node_modules' folder, target file type 'JavaScript'.",
-                        "File 'node_modules/a/package.json' does not exist.",
-                        "File 'node_modules/a.js' does not exist.",
-                        "File 'node_modules/a.jsx' does not exist.",
-                        "File 'node_modules/a/index.js' does not exist.",
-                        "File 'node_modules/a/index.jsx' does not exist.",
-                        "======== Module name 'a' was not resolved. ========"
-                    ],
-                    "initialProgram: execute module resolution normally.");
-
+                traces.push(["initialProgram: execute module resolution normally.", initialProgram]);
                 const initialProgramDiagnostics = initialProgram.getSemanticDiagnostics(initialProgram.getSourceFile("file1.ts"));
                 assert.lengthOf(initialProgramDiagnostics, 1, `initialProgram: import should fail.`);
             }
@@ -491,25 +480,12 @@ namespace ts {
                 f[1].text = f[1].text.updateReferences(`/// <reference no-default-lib="true"/>`);
             }, filesAfterNpmInstall);
             {
-                assert.deepEqual(afterNpmInstallProgram.host.getTrace(),
-                    [
-                        "======== Resolving module 'a' from 'file1.ts'. ========",
-                        "Explicitly specified module resolution kind: 'NodeJs'.",
-                        "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
-                        "File 'node_modules/a/package.json' does not exist.",
-                        "File 'node_modules/a.ts' does not exist.",
-                        "File 'node_modules/a.tsx' does not exist.",
-                        "File 'node_modules/a.d.ts' does not exist.",
-                        "File 'node_modules/a/index.ts' does not exist.",
-                        "File 'node_modules/a/index.tsx' does not exist.",
-                        "File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.",
-                        "======== Module name 'a' was successfully resolved to 'node_modules/a/index.d.ts'. ========"
-                    ],
-                    "afterNpmInstallProgram: execute module resolution normally.");
-
+                traces.push(["afterNpmInstallProgram: execute module resolution normally.", afterNpmInstallProgram]);
                 const afterNpmInstallProgramDiagnostics = afterNpmInstallProgram.getSemanticDiagnostics(afterNpmInstallProgram.getSourceFile("file1.ts"));
                 assert.lengthOf(afterNpmInstallProgramDiagnostics, 0, `afterNpmInstallProgram: program is well-formed with import.`);
             }
+
+            baselineTrace("fetches imports after npm install", traces);
         });
 
         it("can reuse ambient module declarations from non-modified files", () => {
@@ -519,78 +495,19 @@ namespace ts {
             ];
             const options = { target: ScriptTarget.ES2015, traceResolution: true };
             const program = newProgram(files, files.map(f => f.name), options);
-            assert.deepEqual(program.host.getTrace(),
-                [
-                    "======== Resolving module 'fs' from '/a/b/app.ts'. ========",
-                    "Module resolution kind is not specified, using 'Classic'.",
-                    "File '/a/b/fs.ts' does not exist.",
-                    "File '/a/b/fs.tsx' does not exist.",
-                    "File '/a/b/fs.d.ts' does not exist.",
-                    "File '/a/fs.ts' does not exist.",
-                    "File '/a/fs.tsx' does not exist.",
-                    "File '/a/fs.d.ts' does not exist.",
-                    "File '/fs.ts' does not exist.",
-                    "File '/fs.tsx' does not exist.",
-                    "File '/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
-                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs/package.json' does not exist.",
-                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs/package.json' does not exist.",
-                    "File '/node_modules/@types/fs.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/b/fs.js' does not exist.",
-                    "File '/a/b/fs.jsx' does not exist.",
-                    "File '/a/fs.js' does not exist.",
-                    "File '/a/fs.jsx' does not exist.",
-                    "File '/fs.js' does not exist.",
-                    "File '/fs.jsx' does not exist.",
-                    "======== Module name 'fs' was not resolved. ========",
-                ], "should look for 'fs'");
+            const traces: Traces = [];
+            traces.push(["should look for 'fs'.", program]);
 
             const program2 = updateProgram(program, program.getRootFileNames(), options, f => {
                 f[0].text = f[0].text.updateProgram("var x = 1;");
             });
-            assert.deepEqual(program2.host.getTrace(), [
-                "Module 'fs' was resolved as ambient module declared in '/a/b/node.d.ts' since this file was not modified."
-            ], "should reuse 'fs' since node.d.ts was not changed");
-
+            traces.push(["should reuse 'fs' since node.d.ts was not changed", program2]);
             const program3 = updateProgram(program2, program2.getRootFileNames(), options, f => {
                 f[0].text = f[0].text.updateProgram("var y = 1;");
                 f[1].text = f[1].text.updateProgram("declare var process: any");
             });
-            assert.deepEqual(program3.host.getTrace(),
-                [
-                    "======== Resolving module 'fs' from '/a/b/app.ts'. ========",
-                    "Module resolution kind is not specified, using 'Classic'.",
-                    "File '/a/b/fs.ts' does not exist.",
-                    "File '/a/b/fs.tsx' does not exist.",
-                    "File '/a/b/fs.d.ts' does not exist.",
-                    "File '/a/fs.ts' does not exist.",
-                    "File '/a/fs.tsx' does not exist.",
-                    "File '/a/fs.d.ts' does not exist.",
-                    "File '/fs.ts' does not exist.",
-                    "File '/fs.tsx' does not exist.",
-                    "File '/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs/package.json' does not exist.",
-                    "File '/a/b/node_modules/@types/fs.d.ts' does not exist.",
-                    "File '/a/b/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs/package.json' does not exist.",
-                    "File '/a/node_modules/@types/fs.d.ts' does not exist.",
-                    "File '/a/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs/package.json' does not exist.",
-                    "File '/node_modules/@types/fs.d.ts' does not exist.",
-                    "File '/node_modules/@types/fs/index.d.ts' does not exist.",
-                    "File '/a/b/fs.js' does not exist.",
-                    "File '/a/b/fs.jsx' does not exist.",
-                    "File '/a/fs.js' does not exist.",
-                    "File '/a/fs.jsx' does not exist.",
-                    "File '/fs.js' does not exist.",
-                    "File '/fs.jsx' does not exist.",
-                    "======== Module name 'fs' was not resolved. ========",
-                ], "should look for 'fs' again since node.d.ts was changed");
+            traces.push(["should look for 'fs' again since node.d.ts was changed", program3]);
+            baselineTrace("can reuse ambient module declarations from non-modified files", traces);
         });
 
         it("can reuse module resolutions from non-modified files", () => {
@@ -617,38 +534,12 @@ namespace ts {
                         "(new BB).x; (new BB).y;")
                 },
             ];
-
+            const traces: Traces = [];
             const options: CompilerOptions = { target: ScriptTarget.ES2015, traceResolution: true, moduleResolution: ModuleResolutionKind.Classic };
             const program1 = newProgram(files, files.map(f => f.name), options);
             let expectedErrors = 0;
             {
-                assert.deepEqual(program1.host.getTrace(),
-                    [
-                        "======== Resolving type reference directive 'typerefs1', containing file 'f1.ts', root directory 'node_modules/@types'. ========",
-                        "Resolving with primary search path 'node_modules/@types'.",
-                        "File 'node_modules/@types/typerefs1/package.json' does not exist.",
-                        "File 'node_modules/@types/typerefs1/index.d.ts' exist - use it as a name resolution result.",
-                        "======== Type reference directive 'typerefs1' was successfully resolved to 'node_modules/@types/typerefs1/index.d.ts', primary: true. ========",
-                        "======== Resolving module './b1' from 'f1.ts'. ========",
-                        "Explicitly specified module resolution kind: 'Classic'.",
-                        "File 'b1.ts' exist - use it as a name resolution result.",
-                        "======== Module name './b1' was successfully resolved to 'b1.ts'. ========",
-                        "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
-                        "Resolving with primary search path 'node_modules/@types'.",
-                        "File 'node_modules/@types/typerefs2/package.json' does not exist.",
-                        "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
-                        "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                        "======== Resolving module './b2' from 'f2.ts'. ========",
-                        "Explicitly specified module resolution kind: 'Classic'.",
-                        "File 'b2.ts' exist - use it as a name resolution result.",
-                        "======== Module name './b2' was successfully resolved to 'b2.ts'. ========",
-                        "======== Resolving module './f1' from 'f2.ts'. ========",
-                        "Explicitly specified module resolution kind: 'Classic'.",
-                        "File 'f1.ts' exist - use it as a name resolution result.",
-                        "======== Module name './f1' was successfully resolved to 'f1.ts'. ========"
-                    ],
-                    "program1: execute module resolution normally.");
-
+                traces.push(["program1: execute module resolution normally.", program1]);
                 const program1Diagnostics = program1.getSemanticDiagnostics(program1.getSourceFile("f2.ts"));
                 assert.lengthOf(program1Diagnostics, expectedErrors, `initial program should be well-formed`);
             }
@@ -661,25 +552,7 @@ namespace ts {
             {
                 const program2Diagnostics = program2.getSemanticDiagnostics(program2.getSourceFile("f2.ts"));
                 assert.lengthOf(program2Diagnostics, expectedErrors, `removing no-default-lib shouldn't affect any types used.`);
-
-                assert.deepEqual(program2.host.getTrace(), [
-                    "======== Resolving type reference directive 'typerefs1', containing file 'f1.ts', root directory 'node_modules/@types'. ========",
-                    "Resolving with primary search path 'node_modules/@types'.",
-                    "File 'node_modules/@types/typerefs1/package.json' does not exist.",
-                    "File 'node_modules/@types/typerefs1/index.d.ts' exist - use it as a name resolution result.",
-                    "======== Type reference directive 'typerefs1' was successfully resolved to 'node_modules/@types/typerefs1/index.d.ts', primary: true. ========",
-                    "======== Resolving module './b1' from 'f1.ts'. ========",
-                    "Explicitly specified module resolution kind: 'Classic'.",
-                    "File 'b1.ts' exist - use it as a name resolution result.",
-                    "======== Module name './b1' was successfully resolved to 'b1.ts'. ========",
-                    "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
-                    "Resolving with primary search path 'node_modules/@types'.",
-                    "File 'node_modules/@types/typerefs2/package.json' does not exist.",
-                    "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
-                    "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
-                ], "program2: reuse module resolutions in f2 since it is unchanged");
+                traces.push(["program2: reuse module resolutions in f2 since it is unchanged", program2]);
             }
 
             const program3 = updateProgram(program2, program2.getRootFileNames(), options, f => {
@@ -690,20 +563,7 @@ namespace ts {
             {
                 const program3Diagnostics = program3.getSemanticDiagnostics(program3.getSourceFile("f2.ts"));
                 assert.lengthOf(program3Diagnostics, expectedErrors, `typerefs2 was unused, so diagnostics should be unaffected.`);
-
-                assert.deepEqual(program3.host.getTrace(), [
-                    "======== Resolving module './b1' from 'f1.ts'. ========",
-                    "Explicitly specified module resolution kind: 'Classic'.",
-                    "File 'b1.ts' exist - use it as a name resolution result.",
-                    "======== Module name './b1' was successfully resolved to 'b1.ts'. ========",
-                    "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
-                    "Resolving with primary search path 'node_modules/@types'.",
-                    "File 'node_modules/@types/typerefs2/package.json' does not exist.",
-                    "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
-                    "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
-                ], "program3: reuse module resolutions in f2 since it is unchanged");
+                traces.push(["program3: reuse module resolutions in f2 since it is unchanged", program3]);
             }
 
 
@@ -715,20 +575,7 @@ namespace ts {
             {
                 const program4Diagnostics = program4.getSemanticDiagnostics(program4.getSourceFile("f2.ts"));
                 assert.lengthOf(program4Diagnostics, expectedErrors, `a1.ts was unused, so diagnostics should be unaffected.`);
-
-                assert.deepEqual(program4.host.getTrace(), [
-                    "======== Resolving module './b1' from 'f1.ts'. ========",
-                    "Explicitly specified module resolution kind: 'Classic'.",
-                    "File 'b1.ts' exist - use it as a name resolution result.",
-                    "======== Module name './b1' was successfully resolved to 'b1.ts'. ========",
-                    "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
-                    "Resolving with primary search path 'node_modules/@types'.",
-                    "File 'node_modules/@types/typerefs2/package.json' does not exist.",
-                    "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
-                    "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
-                ], "program_4: reuse module resolutions in f2 since it is unchanged");
+                traces.push(["program_4: reuse module resolutions in f2 since it is unchanged", program4]);
             }
 
             const program5 = updateProgram(program4, program4.getRootFileNames(), options, f => {
@@ -739,13 +586,7 @@ namespace ts {
             {
                 const program5Diagnostics = program5.getSemanticDiagnostics(program5.getSourceFile("f2.ts"));
                 assert.lengthOf(program5Diagnostics, ++expectedErrors, `import of BB in f1 fails. BB is of type any. Add one error`);
-
-                assert.deepEqual(program5.host.getTrace(), [
-                    "======== Resolving module './b1' from 'f1.ts'. ========",
-                    "Explicitly specified module resolution kind: 'Classic'.",
-                    "File 'b1.ts' exist - use it as a name resolution result.",
-                    "======== Module name './b1' was successfully resolved to 'b1.ts'. ========"
-                ], "program_5: exports do not affect program structure, so f2's resolutions are silently reused.");
+                traces.push(["program_5: exports do not affect program structure, so f2's resolutions are silently reused.", program5]);
             }
 
             const program6 = updateProgram(program5, program5.getRootFileNames(), options, f => {
@@ -756,20 +597,7 @@ namespace ts {
             {
                 const program6Diagnostics = program6.getSemanticDiagnostics(program6.getSourceFile("f2.ts"));
                 assert.lengthOf(program6Diagnostics, expectedErrors, `import of BB in f1 fails.`);
-
-                assert.deepEqual(program6.host.getTrace(), [
-                    "======== Resolving module './b1' from 'f1.ts'. ========",
-                    "Explicitly specified module resolution kind: 'Classic'.",
-                    "File 'b1.ts' exist - use it as a name resolution result.",
-                    "======== Module name './b1' was successfully resolved to 'b1.ts'. ========",
-                    "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
-                    "Resolving with primary search path 'node_modules/@types'.",
-                    "File 'node_modules/@types/typerefs2/package.json' does not exist.",
-                    "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
-                    "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
-                ], "program_6: reuse module resolutions in f2 since it is unchanged");
+                traces.push(["program_6: reuse module resolutions in f2 since it is unchanged", program6]);
             }
 
             const program7 = updateProgram(program6, program6.getRootFileNames(), options, f => {
@@ -780,17 +608,9 @@ namespace ts {
             {
                 const program7Diagnostics = program7.getSemanticDiagnostics(program7.getSourceFile("f2.ts"));
                 assert.lengthOf(program7Diagnostics, expectedErrors, `removing import is noop with respect to program, so no change in diagnostics.`);
-
-                assert.deepEqual(program7.host.getTrace(), [
-                    "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
-                    "Resolving with primary search path 'node_modules/@types'.",
-                    "File 'node_modules/@types/typerefs2/package.json' does not exist.",
-                    "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
-                    "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
-                ], "program_7 should reuse module resolutions in f2 since it is unchanged");
+                traces.push(["program_7 should reuse module resolutions in f2 since it is unchanged", program7]);
             }
+            baselineTrace("can reuse module resolutions from non-modified files", traces);
         });
 
         describe("redirects", () => {
