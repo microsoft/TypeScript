@@ -34375,10 +34375,7 @@ namespace ts {
                 }
             }
 
-
-            else {
-                issueMemberWithOverrideButNotInhert(node);
-            }
+            issueMemberWithOverride(node, type, typeWithThis);
 
             const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
             if (implementedTypeNodes) {
@@ -34414,32 +34411,30 @@ namespace ts {
             }
         }
 
-        function issueMemberWithOverrideButNotInhert(node: ClassLikeDeclaration) {
+        function issueMemberWithOverride (node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type) {
+            const baseTypeNode = getEffectiveBaseTypeNode(node);
             for (const member of node.members) {
-                if (hasOverrideModifier(member)) {
-                    const modifier = member.modifiers?.find(modifier => modifier.kind === SyntaxKind.OverrideKeyword)
-                    Debug.assertIsDefined(modifier)
-                    error(modifier, Diagnostics.Expression_expected);
+                const hasOverride = hasOverrideModifier(member);
+                if (hasOverride && !baseTypeNode) {
+                    error(member, Diagnostics._0_is_deprecated, 'has override but not extended')
                 }
-            }
-        }
+                else if (baseTypeNode) {
+                    const baseTypes = getBaseTypes(type);
+                    if (baseTypes.length) {
+                        const baseType = first(baseTypes);
+                        const baseWithThis = getTypeWithThisArgument(baseType, type.thisType);
 
-        function issueMemberWithOverride (node: ClassLikeDeclaration) {
-            
-        }
-
-        function issueMemberWithOverrideButNotExistedInBase(node: ClassDeclaration, typeWithThis: Type, baseWithThis: Type) {
-            for (const member of node.members) {
-                const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
-                if (declaredProp) {
-                    const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
-                    const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
-                    const hasOVerride = hasOverrideModifier(member);
-                    if (prop && !baseProp && hasOVerride) {
-                        error(member, Diagnostics.Expression_expected);
-                    }
-                    if (prop && baseProp && !hasOVerride) {
-                        error(member, Diagnostics.Expression_expected);
+                        const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
+                        if (declaredProp) {
+                            const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
+                            const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
+                            if (prop && !baseProp && hasOverride) {
+                                error(member, Diagnostics._0_is_deprecated, 'not founded in base class')
+                            }
+                            else if (prop && baseProp && !hasOverride) {
+                                error(member, Diagnostics._0_is_deprecated, 'need override')
+                            }
+                        }
                     }
                 }
             }

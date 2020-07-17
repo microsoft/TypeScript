@@ -1,0 +1,37 @@
+=== tests/cases/conformance/override/override1.ts ===
+class B {
+>B : B
+
+    foo (v: string) {
+>foo : (v: string) => void
+>v : string
+
+    }
+}
+
+class D extends B {
+>D : D
+>B : B
+
+    override foo (v: string) {
+>foo : (v: string) => void
+>v : string
+
+    }
+
+    override bar(v: string) {
+>bar : (v: string) => void
+>v : string
+        
+    }
+}
+
+class C {
+>C : C
+
+    override foo(v: string) {
+>foo : (v: string) => void
+>v : string
+
+    }
+}
