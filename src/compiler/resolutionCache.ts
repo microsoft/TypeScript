@@ -746,7 +746,7 @@ namespace ts {
                 for (const containingFilePath of Debug.assertDefined(resolution.files)) {
                     (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = new Set())).add(containingFilePath);
                     // When its a file with inferred types resolution, invalidate type reference directive resolution
-                    hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || containingFilePath.endsWith(inferredTypesContainingFile);
+                    hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || endsWith(containingFilePath, inferredTypesContainingFile);
                 }
             }
             return invalidated;
