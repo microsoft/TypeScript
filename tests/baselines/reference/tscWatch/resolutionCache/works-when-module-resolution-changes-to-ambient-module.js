@@ -114,6 +114,8 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
+/a/b/node_modules:
+  {"directoryName":"/a/b/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b/node_modules/@types:
   {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
