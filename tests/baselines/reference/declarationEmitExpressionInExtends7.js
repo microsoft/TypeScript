@@ -1,17 +1,8 @@
-//// [tests/cases/compiler/declarationEmitExpressionInExtends6.ts] ////
-
-//// [index.d.ts]
-declare const require: any;
-
-//// [a.js]
-export class Foo {}
-
-//// [b.ts]
-const { Foo } = require("./a");
-export default class extends Foo {}
+//// [declarationEmitExpressionInExtends7.ts]
+export default class extends SomeUndefinedFunction {}
 
 
-//// [b.js]
+//// [declarationEmitExpressionInExtends7.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -27,12 +18,11 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var Foo = require("./a").Foo;
 var default_1 = /** @class */ (function (_super) {
     __extends(default_1, _super);
     function default_1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return default_1;
-}(Foo));
+}(SomeUndefinedFunction));
 exports["default"] = default_1;

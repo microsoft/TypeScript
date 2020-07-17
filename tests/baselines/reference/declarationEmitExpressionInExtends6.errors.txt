@@ -10,6 +10,6 @@
 ==== /node_modules/@types/node/index.d.ts (0 errors) ====
     declare const require: any;
     
-==== /a.ts (0 errors) ====
+==== /a.js (0 errors) ====
     export class Foo {}
     
