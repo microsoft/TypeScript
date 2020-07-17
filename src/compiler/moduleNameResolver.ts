@@ -365,18 +365,27 @@ namespace ts {
             const initialLocationForSecondaryLookup = containingFile && getDirectoryPath(containingFile);
 
             if (initialLocationForSecondaryLookup !== undefined) {
-                // check secondary locations
-                if (traceEnabled) {
-                    trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
-                }
-                let result: Resolved | undefined;
-                if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
-                    const searchResult = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined, /*redirectedReference*/ undefined);
-                    result = searchResult && searchResult.value;
-                }
-                else {
-                    const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
-                    result = nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true);
+                // Try using baseUrl resolution
+                let result = tryLoadModuleUsingOptionalResolutionSettings(
+                    Extensions.DtsOnly,
+                    typeReferenceDirectiveName,
+                    initialLocationForSecondaryLookup,
+                    (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true),
+                    moduleResolutionState
+                );
+                if (!result) {
+                    // check secondary locations
+                    if (traceEnabled) {
+                        trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
+                    }
+                    if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
+                        const searchResult = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined, /*redirectedReference*/ undefined);
+                        result = searchResult && searchResult.value;
+                    }
+                    else {
+                        const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
+                        result = nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true);
+                    }
                 }
                 const resolvedFile = resolvedTypeScriptOnly(result);
                 if (!resolvedFile && traceEnabled) {
