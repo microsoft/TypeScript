@@ -14,6 +14,8 @@
     "======== Module name 'xyz' was not resolved. ========",
     "======== Resolving type reference directive 'foo', containing file '/src/__inferred type names__.ts', root directory '/node_modules/@types'. ========",
     "Resolving with primary search path '/node_modules/@types'.",
+    "Loading module as file / folder, candidate module location '/node_modules/@types/foo', target file type 'DtsOnly'.",
+    "File '/node_modules/@types/foo.d.ts' does not exist.",
     "File '/node_modules/@types/foo/package.json' does not exist.",
     "File '/node_modules/@types/foo/index.d.ts' exist - use it as a name resolution result.",
     "Resolving real path for '/node_modules/@types/foo/index.d.ts', result '/node_modules/@types/foo/index.d.ts'.",
