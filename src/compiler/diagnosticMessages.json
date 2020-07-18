@@ -4473,6 +4473,10 @@
         "category": "Message",
         "code": 6235
     },
+    "Resolving type reference directive for program with typeRoots, skipping lookup in 'node_modules' folder.": {
+        "category": "Message",
+        "code": 6236
+    },
 
     "Projects to reference": {
         "category": "Message",

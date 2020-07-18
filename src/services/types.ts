@@ -250,6 +250,7 @@ namespace ts {
         readFile?(path: string, encoding?: string): string | undefined;
         realpath?(path: string): string;
         fileExists?(path: string): boolean;
+        directoryExists?(directoryName: string): boolean;
 
         /*
          * LS host can optionally implement these methods to support automatic updating when new type libraries are installed

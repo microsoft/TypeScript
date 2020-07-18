@@ -1,8 +1,4 @@
 === /a.ts ===
 a;
->a : Symbol(a, Decl(phaser.d.ts, 0, 13))
-
-=== /node_modules/phaser/types/phaser.d.ts ===
-declare const a: number;
->a : Symbol(a, Decl(phaser.d.ts, 0, 13))
-
+No type information for this code.
+No type information for this code.

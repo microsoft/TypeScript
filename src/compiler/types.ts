@@ -7748,7 +7748,6 @@ namespace ts {
     }
 
     export interface GetEffectiveTypeRootsHost {
-        directoryExists?(directoryName: string): boolean;
         getCurrentDirectory?(): string;
     }
 

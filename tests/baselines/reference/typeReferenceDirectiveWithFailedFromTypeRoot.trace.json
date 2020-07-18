@@ -4,13 +4,6 @@
     "Loading module as file / folder, candidate module location '/typings/phaser', target file type 'DtsOnly'.",
     "File '/typings/phaser.d.ts' does not exist.",
     "Directory '/typings/phaser' does not exist, skipping all lookups in it.",
-    "Looking up in 'node_modules' folder, initial location '/'.",
-    "Found 'package.json' at '/node_modules/phaser/package.json'.",
-    "'package.json' does not have a 'typesVersions' field.",
-    "File '/node_modules/phaser.d.ts' does not exist.",
-    "'package.json' does not have a 'typings' field.",
-    "'package.json' has 'types' field 'types/phaser.d.ts' that references '/node_modules/phaser/types/phaser.d.ts'.",
-    "File '/node_modules/phaser/types/phaser.d.ts' exist - use it as a name resolution result.",
-    "Resolving real path for '/node_modules/phaser/types/phaser.d.ts', result '/node_modules/phaser/types/phaser.d.ts'.",
-    "======== Type reference directive 'phaser' was successfully resolved to '/node_modules/phaser/types/phaser.d.ts' with Package ID 'phaser/types/phaser.d.ts@1.2.3', primary: false. ========"
+    "Resolving type reference directive for program with typeRoots, skipping lookup in 'node_modules' folder.",
+    "======== Type reference directive 'phaser' was not resolved. ========"
 ]

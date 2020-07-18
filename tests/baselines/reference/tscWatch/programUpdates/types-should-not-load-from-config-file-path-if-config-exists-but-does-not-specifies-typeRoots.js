@@ -3,7 +3,7 @@ Input::
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"types":["node"]}}
+{"compilerOptions":{"types":["node"],"typeRoots":[]}}
 
 //// [/a/b/node_modules/@types/node/index.d.ts]
 declare var process: any
@@ -28,37 +28,32 @@ Output::
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS2688: [0mCannot find type definition file for 'node'.
+
+
+[[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/a/b/app.ts"]
-Program options: {"types":["node"],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {"types":["node"],"typeRoots":[],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /a/b/app.ts
-/a/b/node_modules/@types/node/index.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/app.ts
-/a/b/node_modules/@types/node/index.d.ts
+No cached semantic diagnostics in the builder::
 
 WatchedFiles::
 /a/b/tsconfig.json:
   {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
 /a/b/app.ts:
   {"fileName":"/a/b/app.ts","pollingInterval":250}
-/a/b/node_modules/@types/node/index.d.ts:
-  {"fileName":"/a/b/node_modules/@types/node/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules:
-  {"directoryName":"/a/b/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 

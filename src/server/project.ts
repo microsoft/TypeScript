@@ -2278,10 +2278,6 @@ namespace ts.server {
             return !!this.externalProjectRefCount;
         }
 
-        getEffectiveTypeRoots() {
-            return getEffectiveTypeRoots(this.getCompilationSettings(), this.directoryStructureHost) || [];
-        }
-
         /*@internal*/
         updateErrorOnNoInputFiles(fileNameResult: ExpandResult) {
             updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
