@@ -61,7 +61,7 @@ interface Foo2 {
 }
 
 var a: {
->a : { [x: number]: A; 1: A; 2: B; 2.5: B; 3: number; "4.0": string; }
+>a : { [x: number]: A; 1: A; 2: B; "2.5": B; 3: number; "4.0": string; }
 
     [x: number]: A;
 >x : number
@@ -87,7 +87,7 @@ var a: {
 var b: { [x: number]: A } = {
 >b : { [x: number]: A; }
 >x : number
->{    1.0: new A(),     2.0: new B(),     "2.5": new B(),    3.0: 1,    "4.0": ''} : { 1: A; 2: B; 2.5: B; 3: number; "4.0": string; }
+>{    1.0: new A(),     2.0: new B(),     "2.5": new B(),    3.0: 1,    "4.0": ''} : { 1: A; 2: B; "2.5": B; 3: number; "4.0": string; }
 
     1.0: new A(), 
 >1.0 : A
