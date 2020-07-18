@@ -679,7 +679,7 @@ namespace ts.server {
         typesMapLocation?: string;
     }
 
-    export class Session implements EventSender {
+    export class Session<MessageType extends {} = string> implements EventSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private changeSeq = 0;
@@ -2894,7 +2894,7 @@ namespace ts.server {
             }
         }
 
-        public onMessage(message: string) {
+        public onMessage(message: MessageType) {
             this.gcTimer.scheduleCollect();
 
             this.performanceData = undefined;
@@ -2903,17 +2903,17 @@ namespace ts.server {
             if (this.logger.hasLevel(LogLevel.requestTime)) {
                 start = this.hrtime();
                 if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`request:${indent(message)}`);
+                    this.logger.info(`request:${indent(message.toString())}`);
                 }
             }
 
             let request: protocol.Request | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
             try {
-                request = <protocol.Request>JSON.parse(message);
+                request = this.parseMessage(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
-                perfLogger.logStartCommand("" + request.command, message.substring(0, 100));
+                perfLogger.logStartCommand("" + request.command, message.toString().substring(0, 100));
                 const { response, responseRequired } = this.executeCommand(request);
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -2943,7 +2943,7 @@ namespace ts.server {
                     return;
                 }
 
-                this.logErrorWorker(err, message, relevantFile);
+                this.logErrorWorker(err, message.toString(), relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
 
                 this.doOutput(
@@ -2953,6 +2953,10 @@ namespace ts.server {
                     /*success*/ false,
                     "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
             }
+        }
+
+        protected parseMessage(message: MessageType): protocol.Request {
+            return <protocol.Request>JSON.parse(message as any as string);
         }
 
         private getFormatOptions(file: NormalizedPath): FormatCodeSettings {

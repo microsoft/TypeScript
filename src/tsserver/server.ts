@@ -1,133 +1,48 @@
 namespace ts.server {
-    const childProcess: {
-        fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
-        execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
-    } = require("child_process");
+    //#region Platform
 
-    const os: {
-        homedir?(): string;
-        tmpdir(): string;
-        platform(): string;
-    } = require("os");
+    const enum Runtime {
+        Node,
+        Web
+    };
 
-    interface NodeSocket {
-        write(data: string, encoding: string): boolean;
-    }
+    const runtime = typeof process !== "undefined" ? Runtime.Node : Runtime.Web;
 
-    const net: {
-        connect(options: { port: number }, onConnect?: () => void): NodeSocket
-    } = require("net");
-
-    function getGlobalTypingsCacheLocation() {
-        switch (process.platform) {
-            case "win32": {
-                const basePath = process.env.LOCALAPPDATA ||
-                    process.env.APPDATA ||
-                    (os.homedir && os.homedir()) ||
-                    process.env.USERPROFILE ||
-                    (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
-                    os.tmpdir();
-                return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
-            }
-            case "openbsd":
-            case "freebsd":
-            case "netbsd":
-            case "darwin":
-            case "linux":
-            case "android": {
-                const cacheLocation = getNonWindowsCacheLocation(process.platform === "darwin");
-                return combinePaths(combinePaths(cacheLocation, "typescript"), versionMajorMinor);
-            }
-            default:
-                return Debug.fail(`unsupported platform '${process.platform}'`);
+    const platform = function () {
+        if (runtime === Runtime.Web) {
+            return "web";
         }
+        return require("os").platform();
+    };
+
+    //#endregion
+
+    class NoopLogger implements server.Logger { // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+        close(): void { /* noop */ }
+        hasLevel(_level: LogLevel): boolean { return false; }
+        loggingEnabled(): boolean { return false; }
+        perftrc(_s: string): void { /* noop */ }
+        info(_s: string): void { /* noop */ }
+        startGroup(): void { /* noop */ }
+        endGroup(): void { /* noop */ }
+        msg(_s: string, _type?: Msg | undefined): void { /* noop */ }
+        getLogFileName(): string | undefined { return undefined; }
     }
 
-    function getNonWindowsCacheLocation(platformIsDarwin: boolean) {
-        if (process.env.XDG_CACHE_HOME) {
-            return process.env.XDG_CACHE_HOME;
-        }
-        const usersDir = platformIsDarwin ? "Users" : "home";
-        const homePath = (os.homedir && os.homedir()) ||
-            process.env.HOME ||
-            ((process.env.LOGNAME || process.env.USER) && `/${usersDir}/${process.env.LOGNAME || process.env.USER}`) ||
-            os.tmpdir();
-        const cacheFolder = platformIsDarwin
-            ? "Library/Caches"
-            : ".cache";
-        return combinePaths(normalizeSlashes(homePath), cacheFolder);
-    }
-
-    interface NodeChildProcess {
-        send(message: any, sendHandle?: any): void;
-        on(message: "message" | "exit", f: (m: any) => void): void;
-        kill(): void;
-        pid: number;
-    }
-
-    interface ReadLineOptions {
-        input: NodeJS.ReadableStream;
-        output?: NodeJS.WritableStream;
-        terminal?: boolean;
-        historySize?: number;
-    }
-
-    interface Stats {
-        isFile(): boolean;
-        isDirectory(): boolean;
-        isBlockDevice(): boolean;
-        isCharacterDevice(): boolean;
-        isSymbolicLink(): boolean;
-        isFIFO(): boolean;
-        isSocket(): boolean;
-        dev: number;
-        ino: number;
-        mode: number;
-        nlink: number;
-        uid: number;
-        gid: number;
-        rdev: number;
-        size: number;
-        blksize: number;
-        blocks: number;
-        atime: Date;
-        mtime: Date;
-        ctime: Date;
-        birthtime: Date;
-    }
-
-    const readline: {
-        createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
-    } = require("readline");
-
-    const fs: {
-        openSync(path: string, options: string): number;
-        close(fd: number, callback: (err: NodeJS.ErrnoException) => void): void;
-        writeSync(fd: number, buffer: Buffer, offset: number, length: number, position?: number): number;
-        writeSync(fd: number, data: any, position?: number, enconding?: string): number;
-        statSync(path: string): Stats;
-        stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
-    } = require("fs");
-
-
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-        terminal: false,
-    });
-
-    class Logger implements server.Logger { // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+    class NodeLogger implements server.Logger { // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
         private fd = -1;
         private seq = 0;
         private inGroup = false;
         private firstInGroup = true;
 
-        constructor(private readonly logFilename: string,
+        constructor(
+            private readonly sys: ServerHost,
+            private readonly logFilename: string,
             private readonly traceToConsole: boolean,
             private readonly level: LogLevel) {
             if (this.logFilename) {
                 try {
-                    this.fd = fs.openSync(this.logFilename, "w");
+                    this.fd = require("fs").openSync(this.logFilename, "w");
                 }
                 catch (_) {
                     // swallow the error and keep logging disabled if file cannot be opened
@@ -135,13 +50,13 @@ namespace ts.server {
             }
         }
 
-        static padStringRight(str: string, padding: string) {
+        private static padStringRight(str: string, padding: string) {
             return (str + padding).slice(0, padding.length);
         }
 
         close() {
             if (this.fd >= 0) {
-                fs.close(this.fd, noop);
+                require("fs").close(this.fd, noop);
             }
         }
 
@@ -195,7 +110,7 @@ namespace ts.server {
 
             s = `[${nowString()}] ${s}\n`;
             if (!this.inGroup || this.firstInGroup) {
-                const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
+                const prefix = NodeLogger.padStringRight(type + " " + this.seq.toString(), "          ");
                 s = prefix + s;
             }
             this.write(s);
@@ -210,377 +125,13 @@ namespace ts.server {
 
         private write(s: string) {
             if (this.fd >= 0) {
-                const buf = sys.bufferFrom!(s);
+                const buf = this.sys.bufferFrom!(s);
                 // eslint-disable-next-line no-null/no-null
-                fs.writeSync(this.fd, buf as globalThis.Buffer, 0, buf.length, /*position*/ null!); // TODO: GH#18217
+                require("fs").writeSync(this.fd, buf as globalThis.Buffer, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {
                 console.warn(s);
             }
-        }
-    }
-
-    interface QueuedOperation {
-        operationId: string;
-        operation: () => void;
-    }
-
-    class NodeTypingsInstaller implements ITypingsInstaller {
-        private installer!: NodeChildProcess;
-        private projectService!: ProjectService;
-        private activeRequestCount = 0;
-        private requestQueue: QueuedOperation[] = [];
-        private requestMap = new Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
-        /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
-        private requestedRegistry = false;
-        private typesRegistryCache: ESMap<string, MapLike<string>> | undefined;
-
-        // This number is essentially arbitrary.  Processing more than one typings request
-        // at a time makes sense, but having too many in the pipe results in a hang
-        // (see https://github.com/nodejs/node/issues/7657).
-        // It would be preferable to base our limit on the amount of space left in the
-        // buffer, but we have yet to find a way to retrieve that value.
-        private static readonly maxActiveRequestCount = 10;
-        private static readonly requestDelayMillis = 100;
-        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
-
-        constructor(
-            private readonly telemetryEnabled: boolean,
-            private readonly logger: Logger,
-            private readonly host: ServerHost,
-            readonly globalTypingsCacheLocation: string,
-            readonly typingSafeListLocation: string,
-            readonly typesMapLocation: string,
-            private readonly npmLocation: string | undefined,
-            private readonly validateDefaultNpmLocation: boolean,
-            private event: Event) {
-        }
-
-        isKnownTypesPackageName(name: string): boolean {
-            // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
-            const validationResult = JsTyping.validatePackageName(name);
-            if (validationResult !== JsTyping.NameValidationResult.Ok) {
-                return false;
-            }
-
-            if (this.requestedRegistry) {
-                return !!this.typesRegistryCache && this.typesRegistryCache.has(name);
-            }
-
-            this.requestedRegistry = true;
-            this.send({ kind: "typesRegistry" });
-            return false;
-        }
-
-        installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
-            this.send<InstallPackageRequest>({ kind: "installPackage", ...options });
-            Debug.assert(this.packageInstalledPromise === undefined);
-            return new Promise<ApplyCodeActionCommandResult>((resolve, reject) => {
-                this.packageInstalledPromise = { resolve, reject };
-            });
-        }
-
-        attach(projectService: ProjectService) {
-            this.projectService = projectService;
-            if (this.logger.hasLevel(LogLevel.requestTime)) {
-                this.logger.info("Binding...");
-            }
-
-            const args: string[] = [Arguments.GlobalCacheLocation, this.globalTypingsCacheLocation];
-            if (this.telemetryEnabled) {
-                args.push(Arguments.EnableTelemetry);
-            }
-            if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
-                args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
-            }
-            if (this.typingSafeListLocation) {
-                args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
-            }
-            if (this.typesMapLocation) {
-                args.push(Arguments.TypesMapLocation, this.typesMapLocation);
-            }
-            if (this.npmLocation) {
-                args.push(Arguments.NpmLocation, this.npmLocation);
-            }
-            if (this.validateDefaultNpmLocation) {
-                args.push(Arguments.ValidateDefaultNpmLocation);
-            }
-
-            const execArgv: string[] = [];
-            for (const arg of process.execArgv) {
-                const match = /^--((?:debug|inspect)(?:-brk)?)(?:=(\d+))?$/.exec(arg);
-                if (match) {
-                    // if port is specified - use port + 1
-                    // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
-                    const currentPort = match[2] !== undefined
-                        ? +match[2]
-                        : match[1].charAt(0) === "d" ? 5858 : 9229;
-                    execArgv.push(`--${match[1]}=${currentPort + 1}`);
-                    break;
-                }
-            }
-
-            this.installer = childProcess.fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
-            this.installer.on("message", m => this.handleMessage(m));
-
-            this.event({ pid: this.installer.pid }, "typingsInstallerPid");
-
-            process.on("exit", () => {
-                this.installer.kill();
-            });
-        }
-
-        onProjectClosed(p: Project): void {
-            this.send({ projectName: p.getProjectName(), kind: "closeProject" });
-        }
-
-        private send<T extends TypingInstallerRequestUnion>(rq: T): void {
-            this.installer.send(rq);
-        }
-
-        enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void {
-            const request = createInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
-            if (this.logger.hasLevel(LogLevel.verbose)) {
-                if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Scheduling throttled operation:${stringifyIndented(request)}`);
-                }
-            }
-
-            const operationId = project.getProjectName();
-            const operation = () => {
-                if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Sending request:${stringifyIndented(request)}`);
-                }
-                this.send(request);
-            };
-            const queuedRequest: QueuedOperation = { operationId, operation };
-
-            if (this.activeRequestCount < NodeTypingsInstaller.maxActiveRequestCount) {
-                this.scheduleRequest(queuedRequest);
-            }
-            else {
-                if (this.logger.hasLevel(LogLevel.verbose)) {
-                    this.logger.info(`Deferring request for: ${operationId}`);
-                }
-                this.requestQueue.push(queuedRequest);
-                this.requestMap.set(operationId, queuedRequest);
-            }
-        }
-
-        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
-            if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Received response:${stringifyIndented(response)}`);
-            }
-
-            switch (response.kind) {
-                case EventTypesRegistry:
-                    this.typesRegistryCache = new Map(getEntries(response.typesRegistry));
-                    break;
-                case ActionPackageInstalled: {
-                    const { success, message } = response;
-                    if (success) {
-                        this.packageInstalledPromise!.resolve({ successMessage: message });
-                    }
-                    else {
-                        this.packageInstalledPromise!.reject(message);
-                    }
-                    this.packageInstalledPromise = undefined;
-
-                    this.projectService.updateTypingsForProject(response);
-
-                    // The behavior is the same as for setTypings, so send the same event.
-                    this.event(response, "setTypings");
-                    break;
-                }
-                case EventInitializationFailed: {
-                    const body: protocol.TypesInstallerInitializationFailedEventBody = {
-                        message: response.message
-                    };
-                    const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
-                    this.event(body, eventName);
-                    break;
-                }
-                case EventBeginInstallTypes: {
-                    const body: protocol.BeginInstallTypesEventBody = {
-                        eventId: response.eventId,
-                        packages: response.packagesToInstall,
-                    };
-                    const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
-                    this.event(body, eventName);
-                    break;
-                }
-                case EventEndInstallTypes: {
-                    if (this.telemetryEnabled) {
-                        const body: protocol.TypingsInstalledTelemetryEventBody = {
-                            telemetryEventName: "typingsInstalled",
-                            payload: {
-                                installedPackages: response.packagesToInstall.join(","),
-                                installSuccess: response.installSuccess,
-                                typingsInstallerVersion: response.typingsInstallerVersion
-                            }
-                        };
-                        const eventName: protocol.TelemetryEventName = "telemetry";
-                        this.event(body, eventName);
-                    }
-
-                    const body: protocol.EndInstallTypesEventBody = {
-                        eventId: response.eventId,
-                        packages: response.packagesToInstall,
-                        success: response.installSuccess,
-                    };
-                    const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
-                    this.event(body, eventName);
-                    break;
-                }
-                case ActionInvalidate: {
-                    this.projectService.updateTypingsForProject(response);
-                    break;
-                }
-                case ActionSet: {
-                    if (this.activeRequestCount > 0) {
-                        this.activeRequestCount--;
-                    }
-                    else {
-                        Debug.fail("Received too many responses");
-                    }
-
-                    while (this.requestQueue.length > 0) {
-                        const queuedRequest = this.requestQueue.shift()!;
-                        if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
-                            this.requestMap.delete(queuedRequest.operationId);
-                            this.scheduleRequest(queuedRequest);
-                            break;
-                        }
-
-                        if (this.logger.hasLevel(LogLevel.verbose)) {
-                            this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
-                        }
-                    }
-
-                    this.projectService.updateTypingsForProject(response);
-
-                    this.event(response, "setTypings");
-
-                    break;
-                }
-                default:
-                    assertType<never>(response);
-            }
-        }
-
-        private scheduleRequest(request: QueuedOperation) {
-            if (this.logger.hasLevel(LogLevel.verbose)) {
-                this.logger.info(`Scheduling request for: ${request.operationId}`);
-            }
-            this.activeRequestCount++;
-            this.host.setTimeout(request.operation, NodeTypingsInstaller.requestDelayMillis);
-        }
-    }
-
-    class IOSession extends Session {
-        private eventPort: number | undefined;
-        private eventSocket: NodeSocket | undefined;
-        private socketEventQueue: { body: any, eventName: string }[] | undefined;
-        private constructed: boolean | undefined;
-
-        constructor() {
-            const event: Event | undefined = (body: object, eventName: string) => {
-                if (this.constructed) {
-                    this.event(body, eventName);
-                }
-                else {
-                    // It is unsafe to dereference `this` before initialization completes,
-                    // so we defer until the next tick.
-                    //
-                    // Construction should finish before the next tick fires, so we do not need to do this recursively.
-                    // eslint-disable-next-line no-restricted-globals
-                    setImmediate(() => this.event(body, eventName));
-                }
-            };
-
-            const host = sys;
-
-            const typingsInstaller = disableAutomaticTypingAcquisition
-                ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, validateDefaultNpmLocation, event);
-
-            super({
-                host,
-                cancellationToken,
-                useSingleInferredProject,
-                useInferredProjectPerProjectRoot,
-                typingsInstaller: typingsInstaller || nullTypingsInstaller,
-                byteLength: Buffer.byteLength,
-                hrtime: process.hrtime,
-                logger,
-                canUseEvents: true,
-                suppressDiagnosticEvents,
-                syntaxOnly,
-                serverMode,
-                noGetErrOnBackgroundUpdate,
-                globalPlugins,
-                pluginProbeLocations,
-                allowLocalPluginLoads,
-                typesMapLocation,
-            });
-
-            this.eventPort = eventPort;
-            if (this.canUseEvents && this.eventPort) {
-                const s = net.connect({ port: this.eventPort }, () => {
-                    this.eventSocket = s;
-                    if (this.socketEventQueue) {
-                        // flush queue.
-                        for (const event of this.socketEventQueue) {
-                            this.writeToEventSocket(event.body, event.eventName);
-                        }
-                        this.socketEventQueue = undefined;
-                    }
-                });
-            }
-
-            this.constructed = true;
-        }
-
-        event<T extends object>(body: T, eventName: string): void {
-            Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
-
-            if (this.canUseEvents && this.eventPort) {
-                if (!this.eventSocket) {
-                    if (this.logger.hasLevel(LogLevel.verbose)) {
-                        this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
-                    }
-                    (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
-                    return;
-                }
-                else {
-                    Debug.assert(this.socketEventQueue === undefined);
-                    this.writeToEventSocket(body, eventName);
-                }
-            }
-            else {
-                super.event(body, eventName);
-            }
-        }
-
-        private writeToEventSocket(body: object, eventName: string): void {
-            this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
-        }
-
-        exit() {
-            this.logger.info("Exiting...");
-            this.projectService.closeLog();
-            process.exit(0);
-        }
-
-        listen() {
-            rl.on("line", (input: string) => {
-                const message = input.trim();
-                this.onMessage(message);
-            });
-
-            rl.on("close", () => {
-                this.exit();
-            });
         }
     }
 
@@ -651,7 +202,10 @@ namespace ts.server {
     }
 
     // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
-    function createLogger() {
+    function createLogger(): Logger {
+        if (runtime === Runtime.Web) {
+            return new NoopLogger();
+        }
         const cmdLineLogFileName = findArgument("--logFile");
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
@@ -667,7 +221,7 @@ namespace ts.server {
             : undefined;
 
         const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-        return new Logger(substitutedLogFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
+        return new NodeLogger(sys, substitutedLogFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -680,7 +234,7 @@ namespace ts.server {
         return { getModifiedTime, poll, startWatchTimer, addFile, removeFile };
 
         function getModifiedTime(fileName: string): Date {
-            return fs.statSync(fileName).mtime;
+            return require("fs").statSync(fileName).mtime;
         }
 
         function poll(checkedIndex: number) {
@@ -689,7 +243,7 @@ namespace ts.server {
                 return;
             }
 
-            fs.stat(watchedFile.fileName, (err, stats) => {
+            require("fs").stat(watchedFile.fileName, (err: any, stats: any) => {
                 if (err) {
                     if (err.code === "ENOENT") {
                         if (watchedFile.mtime.getTime() !== 0) {
@@ -767,26 +321,6 @@ namespace ts.server {
     // time dynamically to match the large reference set?
     const pollingWatchedFileSet = createPollingWatchedFileSet();
 
-    const pending: Buffer[] = [];
-    let canWrite = true;
-
-    function writeMessage(buf: Buffer) {
-        if (!canWrite) {
-            pending.push(buf);
-        }
-        else {
-            canWrite = false;
-            process.stdout.write(buf, setCanWriteFlagAndWriteMessageIfNecessary);
-        }
-    }
-
-    function setCanWriteFlagAndWriteMessageIfNecessary() {
-        canWrite = true;
-        if (pending.length) {
-            writeMessage(pending.shift()!);
-        }
-    }
-
     function extractWatchDirectoryCacheKey(path: string, currentDriveKey: string | undefined) {
         path = normalizeSlashes(path);
         if (isUNCPath(path)) {
@@ -819,115 +353,168 @@ namespace ts.server {
 
     const logger = createLogger();
 
-    const sys = <ServerHost>ts.sys;
-    const nodeVersion = getNodeMajorVersion();
-    // use watchGuard process on Windows when node version is 4 or later
-    const useWatchGuard = process.platform === "win32" && nodeVersion! >= 4;
-    const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory.bind(sys);
-    const noopWatcher: FileWatcher = { close: noop };
-    // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
-    // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
-    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher {
-        try {
-            return originalWatchDirectory(path, callback, recursive, options);
-        }
-        catch (e) {
-            logger.info(`Exception when creating directory watcher: ${e.message}`);
-            return noopWatcher;
-        }
-    }
+    function createNodeSys(): ServerHost {
+        class NodeWriter {
+            private readonly pending: Buffer[] = [];
+            private canWrite = true;
 
-    if (useWatchGuard) {
-        const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
-        const statusCache = new Map<string, boolean>();
-        sys.watchDirectory = (path, callback, recursive, options) => {
-            const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
-            let status = cacheKey && statusCache.get(cacheKey);
-            if (status === undefined) {
-                if (logger.hasLevel(LogLevel.verbose)) {
-                    logger.info(`${cacheKey} for path ${path} not found in cache...`);
+            public writeMessage(buf: Buffer) {
+                if (!this.canWrite) {
+                    this.pending.push(buf);
                 }
-                try {
-                    const args = [combinePaths(__dirname, "watchGuard.js"), path];
-                    if (logger.hasLevel(LogLevel.verbose)) {
-                        logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
-                    }
-                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { ELECTRON_RUN_AS_NODE: "1" } });
-                    status = true;
-                    if (logger.hasLevel(LogLevel.verbose)) {
-                        logger.info(`WatchGuard for path ${path} returned: OK`);
-                    }
-                }
-                catch (e) {
-                    status = false;
-                    if (logger.hasLevel(LogLevel.verbose)) {
-                        logger.info(`WatchGuard for path ${path} returned: ${e.message}`);
-                    }
-                }
-                if (cacheKey) {
-                    statusCache.set(cacheKey, status);
+                else {
+                    this.canWrite = false;
+                    process.stdout.write(buf, this.setCanWriteFlagAndWriteMessageIfNecessary.bind(this));
                 }
             }
-            else if (logger.hasLevel(LogLevel.verbose)) {
-                logger.info(`watchDirectory for ${path} uses cached drive information.`);
+
+            private setCanWriteFlagAndWriteMessageIfNecessary() {
+                this.canWrite = true;
+                if (this.pending.length) {
+                    this.writeMessage(this.pending.shift()!);
+                }
             }
-            if (status) {
-                // this drive is safe to use - call real 'watchDirectory'
-                return watchDirectorySwallowingException(path, callback, recursive, options);
+        }
+
+        const sys = <ServerHost>ts.sys;
+
+        // use watchGuard process on Windows when node version is 4 or later
+        const useWatchGuard = process.platform === "win32" && getNodeMajorVersion()! >= 4;
+        const originalWatchDirectory: ServerHost["watchDirectory"] = sys.watchDirectory?.bind(sys);
+        const noopWatcher: FileWatcher = { close: noop };
+
+        // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
+        // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
+        function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher {
+            try {
+                return originalWatchDirectory(path, callback, recursive, options);
             }
-            else {
-                // this drive is unsafe - return no-op watcher
+            catch (e) {
+                logger.info(`Exception when creating directory watcher: ${e.message}`);
                 return noopWatcher;
             }
+        }
+
+        if (useWatchGuard) {
+            const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
+            const statusCache = new Map<string, boolean>();
+            sys.watchDirectory = (path, callback, recursive, options) => {
+                const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
+                let status = cacheKey && statusCache.get(cacheKey);
+                if (status === undefined) {
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`${cacheKey} for path ${path} not found in cache...`);
+                    }
+                    try {
+                        const args = [combinePaths(__dirname, "watchGuard.js"), path];
+                        if (logger.hasLevel(LogLevel.verbose)) {
+                            logger.info(`Starting ${process.execPath} with args:${stringifyIndented(args)}`);
+                        }
+                        require("child_process").execFileSync(process.execPath, args, { stdio: "ignore", env: { ELECTRON_RUN_AS_NODE: "1" } });
+                        status = true;
+                        if (logger.hasLevel(LogLevel.verbose)) {
+                            logger.info(`WatchGuard for path ${path} returned: OK`);
+                        }
+                    }
+                    catch (e) {
+                        status = false;
+                        if (logger.hasLevel(LogLevel.verbose)) {
+                            logger.info(`WatchGuard for path ${path} returned: ${e.message}`);
+                        }
+                    }
+                    if (cacheKey) {
+                        statusCache.set(cacheKey, status);
+                    }
+                }
+                else if (logger.hasLevel(LogLevel.verbose)) {
+                    logger.info(`watchDirectory for ${path} uses cached drive information.`);
+                }
+                if (status) {
+                    // this drive is safe to use - call real 'watchDirectory'
+                    return watchDirectorySwallowingException(path, callback, recursive, options);
+                }
+                else {
+                    // this drive is unsafe - return no-op watcher
+                    return noopWatcher;
+                }
+            };
+        }
+        else {
+            sys.watchDirectory = watchDirectorySwallowingException;
+        }
+
+        // Override sys.write because fs.writeSync is not reliable on Node 4
+        const writer = new NodeWriter();
+        sys.write = (s: string) => writer.writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
+
+        sys.watchFile = (fileName, callback) => {
+            const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
+            return {
+                close: () => pollingWatchedFileSet.removeFile(watchedFile)
+            };
         };
-    }
-    else {
-        sys.watchDirectory = watchDirectorySwallowingException;
-    }
 
-    // Override sys.write because fs.writeSync is not reliable on Node 4
-    sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
-    sys.watchFile = (fileName, callback) => {
-        const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
-        return {
-            close: () => pollingWatchedFileSet.removeFile(watchedFile)
+        /* eslint-disable no-restricted-globals */
+        sys.setTimeout = setTimeout;
+        sys.clearTimeout = clearTimeout;
+        sys.setImmediate = setImmediate;
+        sys.clearImmediate = clearImmediate;
+        /* eslint-enable no-restricted-globals */
+
+        if (typeof global !== "undefined" && global.gc) {
+            sys.gc = () => global.gc();
+        }
+
+        sys.require = (initialDir: string, moduleName: string): RequireResult => {
+            try {
+                return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
+            }
+            catch (error) {
+                return { module: undefined, error };
+            }
         };
-    };
 
-    /* eslint-disable no-restricted-globals */
-    sys.setTimeout = setTimeout;
-    sys.clearTimeout = clearTimeout;
-    sys.setImmediate = setImmediate;
-    sys.clearImmediate = clearImmediate;
-    /* eslint-enable no-restricted-globals */
-
-    if (typeof global !== "undefined" && global.gc) {
-        sys.gc = () => global.gc();
+        return sys;
     }
 
-    sys.require = (initialDir: string, moduleName: string): RequireResult => {
+    function createWebSys(): ServerHost {
+        const sys = {
+            getExecutingFilePath: () => "", // TODO:
+            getCurrentDirectory: () => "", //TODO
+            createHash: (data: string) => data,
+        } as ServerHost;
+
+        sys.args = []; // TODO
+
+        sys.write = (s: string) => postMessage(s);
+
+        /* eslint-disable no-restricted-globals */
+        sys.setTimeout = (callback: any, time: number, ...args: any[]) => setTimeout(callback, time, ...args);
+        sys.clearTimeout = (timeout: any) => clearTimeout(timeout);
+        sys.setImmediate = (x: any) => setTimeout(x, 0);
+        sys.clearImmediate = (x: any) => clearTimeout(x);
+        /* eslint-enable no-restricted-globals */
+
+        sys.require = (_initialDir: string, _moduleName: string): RequireResult => {
+            return { module: undefined, error: new Error("Not implemented") };
+        };
+
+        return sys;
+    }
+
+    const sys = runtime === Runtime.Node ? createNodeSys() : createWebSys();
+    ts.sys = sys;
+
+    let cancellationToken: ServerCancellationToken = nullCancellationToken;
+    if (runtime === Runtime.Node) {
         try {
-            return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
+            const factory = require("./cancellationToken");
+            cancellationToken = factory(sys.args);
         }
-        catch (error) {
-            return { module: undefined, error };
+        catch (e) {
+            // noop
         }
-    };
-
-    let cancellationToken: ServerCancellationToken;
-    try {
-        const factory = require("./cancellationToken");
-        cancellationToken = factory(sys.args);
     }
-    catch (e) {
-        cancellationToken = nullCancellationToken;
-    }
-
-    function parseEventPort(eventPortStr: string | undefined) {
-        const eventPort = eventPortStr === undefined ? undefined : parseInt(eventPortStr);
-        return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
-    }
-    const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
 
     const localeStr = findArgument("--locale");
     if (localeStr) {
@@ -936,17 +523,580 @@ namespace ts.server {
 
     setStackTraceLimit();
 
-    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
-    const npmLocation = findArgument(Arguments.NpmLocation);
-    const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
-
     function parseStringArray(argName: string): readonly string[] {
         const arg = findArgument(argName);
         if (arg === undefined) {
             return emptyArray;
         }
         return arg.split(",").filter(name => name !== "");
+    }
+
+    interface LaunchOptions {
+        readonly useSingleInferredProject: boolean;
+        readonly useInferredProjectPerProjectRoot: boolean;
+        readonly suppressDiagnosticEvents?: boolean;
+        readonly syntaxOnly?: boolean;
+        readonly serverMode?: LanguageServiceMode;
+        readonly telemetryEnabled: boolean;
+        readonly noGetErrOnBackgroundUpdate?: boolean;
+    }
+
+    function startNodeServer(options: LaunchOptions) {
+
+        interface NodeSocket {
+            write(data: string, encoding: string): boolean;
+        }
+
+        interface NodeChildProcess {
+            send(message: any, sendHandle?: any): void;
+            on(message: "message" | "exit", f: (m: any) => void): void;
+            kill(): void;
+            pid: number;
+        }
+
+        interface QueuedOperation {
+            operationId: string;
+            operation: () => void;
+        }
+
+        class NodeTypingsInstaller implements ITypingsInstaller {
+
+            public static getGlobalTypingsCacheLocation() {
+                const os = require("os");
+                switch (process.platform) {
+                    case "win32": {
+                        const basePath = process.env.LOCALAPPDATA ||
+                            process.env.APPDATA ||
+                            (os.homedir && os.homedir()) ||
+                            process.env.USERPROFILE ||
+                            (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
+                            os.tmpdir();
+                        return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
+                    }
+                    case "openbsd":
+                    case "freebsd":
+                    case "netbsd":
+                    case "darwin":
+                    case "linux":
+                    case "android": {
+                        const cacheLocation = NodeTypingsInstaller.getNonWindowsCacheLocation(process.platform === "darwin");
+                        return combinePaths(combinePaths(cacheLocation, "typescript"), versionMajorMinor);
+                    }
+                    default:
+                        return Debug.fail(`unsupported platform '${process.platform}'`);
+                }
+            }
+
+            private static getNonWindowsCacheLocation(platformIsDarwin: boolean) {
+                if (process.env.XDG_CACHE_HOME) {
+                    return process.env.XDG_CACHE_HOME;
+                }
+                const os = require("os");
+                const usersDir = platformIsDarwin ? "Users" : "home";
+                const homePath = (os.homedir && os.homedir()) ||
+                    process.env.HOME ||
+                    ((process.env.LOGNAME || process.env.USER) && `/${usersDir}/${process.env.LOGNAME || process.env.USER}`) ||
+                    os.tmpdir();
+                const cacheFolder = platformIsDarwin
+                    ? "Library/Caches"
+                    : ".cache";
+                return combinePaths(normalizeSlashes(homePath), cacheFolder);
+            }
+
+            private installer!: NodeChildProcess;
+            private projectService!: ProjectService;
+            private activeRequestCount = 0;
+            private requestQueue: QueuedOperation[] = [];
+            private requestMap = new Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+            /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
+            private requestedRegistry = false;
+            private typesRegistryCache: ESMap<string, MapLike<string>> | undefined;
+
+            // This number is essentially arbitrary.  Processing more than one typings request
+            // at a time makes sense, but having too many in the pipe results in a hang
+            // (see https://github.com/nodejs/node/issues/7657).
+            // It would be preferable to base our limit on the amount of space left in the
+            // buffer, but we have yet to find a way to retrieve that value.
+            private static readonly maxActiveRequestCount = 10;
+            private static readonly requestDelayMillis = 100;
+            private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
+
+            constructor(
+                private readonly telemetryEnabled: boolean,
+                private readonly logger: Logger,
+                private readonly host: ServerHost,
+                readonly globalTypingsCacheLocation: string,
+                readonly typingSafeListLocation: string,
+                readonly typesMapLocation: string,
+                private readonly npmLocation: string | undefined,
+                private readonly validateDefaultNpmLocation: boolean,
+                private event: Event
+            ) { }
+
+            isKnownTypesPackageName(name: string): boolean {
+                // We want to avoid looking this up in the registry as that is expensive. So first check that it's actually an NPM package.
+                const validationResult = JsTyping.validatePackageName(name);
+                if (validationResult !== JsTyping.NameValidationResult.Ok) {
+                    return false;
+                }
+
+                if (this.requestedRegistry) {
+                    return !!this.typesRegistryCache && this.typesRegistryCache.has(name);
+                }
+
+                this.requestedRegistry = true;
+                this.send({ kind: "typesRegistry" });
+                return false;
+            }
+
+            installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
+                this.send<InstallPackageRequest>({ kind: "installPackage", ...options });
+                Debug.assert(this.packageInstalledPromise === undefined);
+                return new Promise<ApplyCodeActionCommandResult>((resolve, reject) => {
+                    this.packageInstalledPromise = { resolve, reject };
+                });
+            }
+
+            attach(projectService: ProjectService) {
+                this.projectService = projectService;
+                if (this.logger.hasLevel(LogLevel.requestTime)) {
+                    this.logger.info("Binding...");
+                }
+
+                const args: string[] = [Arguments.GlobalCacheLocation, this.globalTypingsCacheLocation];
+                if (this.telemetryEnabled) {
+                    args.push(Arguments.EnableTelemetry);
+                }
+                if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
+                    args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName()!)), `ti-${process.pid}.log`));
+                }
+                if (this.typingSafeListLocation) {
+                    args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
+                }
+                if (this.typesMapLocation) {
+                    args.push(Arguments.TypesMapLocation, this.typesMapLocation);
+                }
+                if (this.npmLocation) {
+                    args.push(Arguments.NpmLocation, this.npmLocation);
+                }
+                if (this.validateDefaultNpmLocation) {
+                    args.push(Arguments.ValidateDefaultNpmLocation);
+                }
+
+                const execArgv: string[] = [];
+                for (const arg of process.execArgv) {
+                    const match = /^--((?:debug|inspect)(?:-brk)?)(?:=(\d+))?$/.exec(arg);
+                    if (match) {
+                        // if port is specified - use port + 1
+                        // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
+                        const currentPort = match[2] !== undefined
+                            ? +match[2]
+                            : match[1].charAt(0) === "d" ? 5858 : 9229;
+                        execArgv.push(`--${match[1]}=${currentPort + 1}`);
+                        break;
+                    }
+                }
+
+                this.installer = require("child_process").fork(combinePaths(__dirname, "typingsInstaller.js"), args, { execArgv });
+                this.installer.on("message", m => this.handleMessage(m));
+
+                this.event({ pid: this.installer.pid }, "typingsInstallerPid");
+
+                process.on("exit", () => {
+                    this.installer.kill();
+                });
+            }
+
+            onProjectClosed(p: Project): void {
+                this.send({ projectName: p.getProjectName(), kind: "closeProject" });
+            }
+
+            private send<T extends TypingInstallerRequestUnion>(rq: T): void {
+                this.installer.send(rq);
+            }
+
+            enqueueInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void {
+                const request = createInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
+                        this.logger.info(`Scheduling throttled operation:${stringifyIndented(request)}`);
+                    }
+                }
+
+                const operationId = project.getProjectName();
+                const operation = () => {
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
+                        this.logger.info(`Sending request:${stringifyIndented(request)}`);
+                    }
+                    this.send(request);
+                };
+                const queuedRequest: QueuedOperation = { operationId, operation };
+
+                if (this.activeRequestCount < NodeTypingsInstaller.maxActiveRequestCount) {
+                    this.scheduleRequest(queuedRequest);
+                }
+                else {
+                    if (this.logger.hasLevel(LogLevel.verbose)) {
+                        this.logger.info(`Deferring request for: ${operationId}`);
+                    }
+                    this.requestQueue.push(queuedRequest);
+                    this.requestMap.set(operationId, queuedRequest);
+                }
+            }
+
+            private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Received response:${stringifyIndented(response)}`);
+                }
+
+                switch (response.kind) {
+                    case EventTypesRegistry:
+                        this.typesRegistryCache = new Map(getEntries(response.typesRegistry));
+                        break;
+                    case ActionPackageInstalled: {
+                        const { success, message } = response;
+                        if (success) {
+                            this.packageInstalledPromise!.resolve({ successMessage: message });
+                        }
+                        else {
+                            this.packageInstalledPromise!.reject(message);
+                        }
+                        this.packageInstalledPromise = undefined;
+
+                        this.projectService.updateTypingsForProject(response);
+
+                        // The behavior is the same as for setTypings, so send the same event.
+                        this.event(response, "setTypings");
+                        break;
+                    }
+                    case EventInitializationFailed: {
+                        const body: protocol.TypesInstallerInitializationFailedEventBody = {
+                            message: response.message
+                        };
+                        const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+                        this.event(body, eventName);
+                        break;
+                    }
+                    case EventBeginInstallTypes: {
+                        const body: protocol.BeginInstallTypesEventBody = {
+                            eventId: response.eventId,
+                            packages: response.packagesToInstall,
+                        };
+                        const eventName: protocol.BeginInstallTypesEventName = "beginInstallTypes";
+                        this.event(body, eventName);
+                        break;
+                    }
+                    case EventEndInstallTypes: {
+                        if (this.telemetryEnabled) {
+                            const body: protocol.TypingsInstalledTelemetryEventBody = {
+                                telemetryEventName: "typingsInstalled",
+                                payload: {
+                                    installedPackages: response.packagesToInstall.join(","),
+                                    installSuccess: response.installSuccess,
+                                    typingsInstallerVersion: response.typingsInstallerVersion
+                                }
+                            };
+                            const eventName: protocol.TelemetryEventName = "telemetry";
+                            this.event(body, eventName);
+                        }
+
+                        const body: protocol.EndInstallTypesEventBody = {
+                            eventId: response.eventId,
+                            packages: response.packagesToInstall,
+                            success: response.installSuccess,
+                        };
+                        const eventName: protocol.EndInstallTypesEventName = "endInstallTypes";
+                        this.event(body, eventName);
+                        break;
+                    }
+                    case ActionInvalidate: {
+                        this.projectService.updateTypingsForProject(response);
+                        break;
+                    }
+                    case ActionSet: {
+                        if (this.activeRequestCount > 0) {
+                            this.activeRequestCount--;
+                        }
+                        else {
+                            Debug.fail("Received too many responses");
+                        }
+
+                        while (this.requestQueue.length > 0) {
+                            const queuedRequest = this.requestQueue.shift()!;
+                            if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
+                                this.requestMap.delete(queuedRequest.operationId);
+                                this.scheduleRequest(queuedRequest);
+                                break;
+                            }
+
+                            if (this.logger.hasLevel(LogLevel.verbose)) {
+                                this.logger.info(`Skipping defunct request for: ${queuedRequest.operationId}`);
+                            }
+                        }
+
+                        this.projectService.updateTypingsForProject(response);
+
+                        this.event(response, "setTypings");
+
+                        break;
+                    }
+                    default:
+                        assertType<never>(response);
+                }
+            }
+
+            private scheduleRequest(request: QueuedOperation) {
+                if (this.logger.hasLevel(LogLevel.verbose)) {
+                    this.logger.info(`Scheduling request for: ${request.operationId}`);
+                }
+                this.activeRequestCount++;
+                this.host.setTimeout(request.operation, NodeTypingsInstaller.requestDelayMillis);
+            }
+        }
+
+        class IOSession extends Session {
+            private eventPort: number | undefined;
+            private eventSocket: NodeSocket | undefined;
+            private socketEventQueue: { body: any, eventName: string }[] | undefined;
+            private constructed: boolean | undefined;
+            private readonly rl: import("readline").Interface;
+
+            constructor(sys: ServerHost, config: LaunchOptions & {
+                globalPlugins: readonly string[],
+                pluginProbeLocations: readonly string[],
+                allowLocalPluginLoads: boolean,
+                disableAutomaticTypingAcquisition: boolean,
+                typingSafeListLocation: string,
+                typesMapLocation: string,
+                npmLocation: string | undefined,
+                validateDefaultNpmLocation: boolean,
+            }) {
+                const event: Event | undefined = (body: object, eventName: string) => {
+                    if (this.constructed) {
+                        this.event(body, eventName);
+                    }
+                    else {
+                        // It is unsafe to dereference `this` before initialization completes,
+                        // so we defer until the next tick.
+                        //
+                        // Construction should finish before the next tick fires, so we do not need to do this recursively.
+                        // eslint-disable-next-line no-restricted-globals
+                        setImmediate(() => this.event(body, eventName));
+                    }
+                };
+
+                const host = sys;
+
+                const typingsInstaller = config.disableAutomaticTypingAcquisition
+                    ? nullTypingsInstaller
+                    : new NodeTypingsInstaller(config.telemetryEnabled, logger, host, NodeTypingsInstaller.getGlobalTypingsCacheLocation(), config.typingSafeListLocation, config.typesMapLocation, config.npmLocation, config.validateDefaultNpmLocation, event);
+
+                super({
+                    host,
+                    cancellationToken,
+                    useSingleInferredProject: config.useSingleInferredProject,
+                    useInferredProjectPerProjectRoot: config.useInferredProjectPerProjectRoot,
+                    typingsInstaller,
+                    byteLength: Buffer.byteLength,
+                    hrtime: process.hrtime,
+                    logger,
+                    canUseEvents: true,
+                    suppressDiagnosticEvents: config.suppressDiagnosticEvents,
+                    syntaxOnly: config.syntaxOnly,
+                    serverMode: config.serverMode,
+                    noGetErrOnBackgroundUpdate: config.noGetErrOnBackgroundUpdate,
+                    globalPlugins: config.globalPlugins,
+                    pluginProbeLocations: config.pluginProbeLocations,
+                    allowLocalPluginLoads: config.allowLocalPluginLoads,
+                    typesMapLocation: config.typesMapLocation,
+                });
+
+                this.eventPort = eventPort;
+                if (this.canUseEvents && this.eventPort) {
+                    const s = require("net").connect({ port: this.eventPort }, () => {
+                        this.eventSocket = s;
+                        if (this.socketEventQueue) {
+                            // flush queue.
+                            for (const event of this.socketEventQueue) {
+                                this.writeToEventSocket(event.body, event.eventName);
+                            }
+                            this.socketEventQueue = undefined;
+                        }
+                    });
+                }
+
+                this.constructed = true;
+
+                this.rl = require("readline").createInterface({
+                    input: process.stdin,
+                    output: process.stdout,
+                    terminal: false,
+                });
+            }
+
+            event<T extends object>(body: T, eventName: string): void {
+                Debug.assert(!!this.constructed, "Should only call `IOSession.prototype.event` on an initialized IOSession");
+
+                if (this.canUseEvents && this.eventPort) {
+                    if (!this.eventSocket) {
+                        if (this.logger.hasLevel(LogLevel.verbose)) {
+                            this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
+                        }
+                        (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
+                        return;
+                    }
+                    else {
+                        Debug.assert(this.socketEventQueue === undefined);
+                        this.writeToEventSocket(body, eventName);
+                    }
+                }
+                else {
+                    super.event(body, eventName);
+                }
+            }
+
+            private writeToEventSocket(body: object, eventName: string): void {
+                this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
+            }
+
+            exit() {
+                this.logger.info("Exiting...");
+                this.projectService.closeLog();
+                process.exit(0);
+            }
+
+            listen() {
+                this.rl.on("line", (input: string) => {
+                    const message = input.trim();
+                    this.onMessage(message);
+                });
+
+                this.rl.on("close", () => {
+                    this.exit();
+                });
+            }
+        }
+
+        const globalPlugins = parseStringArray("--globalPlugins");
+        const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
+        const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
+
+        const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
+        const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
+        const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
+        const npmLocation = findArgument(Arguments.NpmLocation);
+        const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
+
+        function parseEventPort(eventPortStr: string | undefined) {
+            const eventPort = eventPortStr === undefined ? undefined : parseInt(eventPortStr);
+            return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
+        }
+
+        const eventPort: number | undefined = parseEventPort(findArgument("--eventPort"));
+
+        const session = new IOSession(sys, {
+            ...options,
+            globalPlugins,
+            pluginProbeLocations,
+            allowLocalPluginLoads,
+            disableAutomaticTypingAcquisition,
+            typingSafeListLocation,
+            typesMapLocation,
+            npmLocation,
+            validateDefaultNpmLocation,
+        });
+
+        process.on("uncaughtException", err => {
+            session.logError(err, "unknown");
+        });
+        // See https://github.com/Microsoft/TypeScript/issues/11348
+        (process as any).noAsar = true;
+
+        // Start listening
+        session.listen();
+
+        if (sys.tryEnableSourceMapsForHost && /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))) {
+            sys.tryEnableSourceMapsForHost();
+        }
+
+        // Overwrites the current console messages to instead write to
+        // the log. This is so that language service plugins which use
+        // console.log don't break the message passing between tsserver
+        // and the client
+        console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Info);
+        console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
+        console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
+    }
+
+    declare const addEventListener: any;
+    declare const removeEventListener: any;
+    declare const postMessage: any;
+    declare const close: any;
+
+    function startWebServer(launchOptions: LaunchOptions) {
+        class WorkerSession extends Session {
+            constructor() {
+                const host = sys;
+
+                super({
+                    host,
+                    cancellationToken,
+                    useSingleInferredProject: launchOptions.useSingleInferredProject,
+                    useInferredProjectPerProjectRoot: launchOptions.useInferredProjectPerProjectRoot,
+                    typingsInstaller: nullTypingsInstaller,
+                    byteLength: () => 1, // TODO!
+                    // From https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
+                    hrtime: (previousTimestamp) => {
+                        const clocktime = (performance as any).now.call(performance) * 1e-3;
+                        let seconds = Math.floor(clocktime);
+                        let nanoseconds = Math.floor((clocktime % 1) * 1e9);
+                        if (previousTimestamp) {
+                            seconds = seconds - previousTimestamp[0];
+                            nanoseconds = nanoseconds - previousTimestamp[1];
+                            if (nanoseconds < 0) {
+                                seconds--;
+                                nanoseconds += 1e9;
+                            }
+                        }
+                        return [seconds, nanoseconds];
+                    },
+                    logger,
+                    canUseEvents: false,
+                    suppressDiagnosticEvents: launchOptions.suppressDiagnosticEvents,
+                    syntaxOnly: launchOptions.syntaxOnly,
+                    noGetErrOnBackgroundUpdate: launchOptions.noGetErrOnBackgroundUpdate,
+                    globalPlugins: [],
+                    pluginProbeLocations: [],
+                    allowLocalPluginLoads: false,
+                    typesMapLocation: undefined,
+                });
+            }
+
+            public send(msg: protocol.Message) {
+                postMessage(msg);
+            }
+
+            protected parseMessage(message: any): protocol.Request {
+                return <protocol.Request>message;
+            }
+
+            exit() {
+                this.logger.info("Exiting...");
+                this.projectService.closeLog();
+                close(0);
+            }
+
+            listen() {
+                addEventListener("message", (message: any) => {
+                    this.onMessage(message.data);
+                });
+            }
+        }
+
+        const session = new WorkerSession();
+
+        // Start listening
+        session.listen();
     }
 
     let unknownServerMode: string | undefined;
@@ -969,47 +1119,51 @@ namespace ts.server {
         }
     }
 
-    const globalPlugins = parseStringArray("--globalPlugins");
-    const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
-    const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
+    function start(args: string[]) {
+        const serverMode = parseServerMode();
+        const syntaxOnly = hasArgument("--syntaxOnly") || runtime !== Runtime.Node;
 
-    const useSingleInferredProject = hasArgument("--useSingleInferredProject");
-    const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
-    const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
-    const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
-    const syntaxOnly = hasArgument("--syntaxOnly");
-    const serverMode = parseServerMode();
-    const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
-    const noGetErrOnBackgroundUpdate = hasArgument("--noGetErrOnBackgroundUpdate");
+        const options: LaunchOptions = {
+            useSingleInferredProject: hasArgument("--useSingleInferredProject"),
+            useInferredProjectPerProjectRoot: hasArgument("--useInferredProjectPerProjectRoot"),
+            suppressDiagnosticEvents: hasArgument("--suppressDiagnosticEvents"),
+            syntaxOnly,
+            serverMode,
+            telemetryEnabled: hasArgument(Arguments.EnableTelemetry),
+            noGetErrOnBackgroundUpdate: hasArgument("--noGetErrOnBackgroundUpdate"),
+        };
 
-    logger.info(`Starting TS Server`);
-    logger.info(`Version: ${version}`);
-    logger.info(`Arguments: ${process.argv.join(" ")}`);
-    logger.info(`Platform: ${os.platform()} NodeVersion: ${nodeVersion} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
-    logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode}`);
+        logger.info(`Starting TS Server`);
+        logger.info(`Version: ${version}`);
+        logger.info(`Arguments: ${runtime === Runtime.Node ? args.join(" ") : []}`);
+        logger.info(`Platform: ${platform()} NodeVersion: ${getNodeMajorVersion()} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
+        logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode}`);
 
-    const ioSession = new IOSession();
-    process.on("uncaughtException", err => {
-        ioSession.logError(err, "unknown");
-    });
-    // See https://github.com/Microsoft/TypeScript/issues/11348
-    (process as any).noAsar = true;
-    // Start listening
-    ioSession.listen();
+        if (runtime === Runtime.Node) {
+            startNodeServer(options);
+        }
+        else {
+            startWebServer(options);
+        }
 
-    if (Debug.isDebugging) {
-        Debug.enableDebugInfo();
+        if (Debug.isDebugging) {
+            Debug.enableDebugInfo();
+        }
     }
 
-    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
-        ts.sys.tryEnableSourceMapsForHost();
+    if (runtime === Runtime.Node) {
+        start(process.argv);
     }
+    else {
+        // Get args from first message
+        const listener = (e: any) => {
+            removeEventListener("message", listener);
 
-    // Overwrites the current console messages to instead write to
-    // the log. This is so that language service plugins which use
-    // console.log don't break the message passing between tsserver
-    // and the client
-    console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Info);
-    console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
-    console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
+            const args = e.data;
+            sys.args = args;
+            start(args);
+        };
+
+        addEventListener("message", listener);
+    }
 }
