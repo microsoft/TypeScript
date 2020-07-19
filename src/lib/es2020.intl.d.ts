@@ -274,28 +274,20 @@ declare namespace Intl {
         unitDisplay?: string;
     }
 
-    // https://github.com/unicode-org/cldr/blob/latest/common/bcp47/calendar.xml
-    type LDMLCalendarKey = "buddhist" | "chinese" | "coptic" | "dangi" | "ethioaa" | "ethiopic" | "gregory" | "hebrew" | "indian" | "islamic" | "islamic-umalqura" | "islamic-tbla" | "islamic-civil" | "islamic-rgsa" | "iso8601" | "japanese" | "persian" | "roc";
     type LDMLHourCycleKey = "h12" | "h23" | "h11" | "h24";
-    // https://github.com/unicode-org/cldr/blob/master/common/bcp47/collation.xml
-    type LDMLCollationKey = "big5han" | "compat" | "dict" | "direct" | "ducet" | "emoji" | "eor" | "gb2312" | "phonebk" | "phonetic" | "pinyin" | "reformed" | "search" | "searchjl" | "standard" | "stroke" | "trad" | "unihan" | "zhuyin";
     type LDMLCollationCaseFirst = "upper" | "lower" | "false";
-    // https://github.com/unicode-org/cldr/blob/latest/common/bcp47/number.xml
-    type LDMLNumberingSystemKey = "adlm" | "ahom" | "arab" | "arabext" | "armn" | "armnlow" | "bali" | "beng" | "bhks" | "brah" | "cakm" | "cham" | "cyrl" | "deva" | "diak" | "ethi" | "finance" | "fullwide" | "geor" | "gong" | "gonm" | "grek" | "greklow" | "gujr" | "guru" | "hanidays" | "hanidec" | "hans" | "hansfin" | "hant" | "hantfin" | "hebr" | "hmng" | "hmnp" | "java" | "jpan" | "jpanfin" | "jpanyear" | "kali" | "khmr" | "knda" | "lana" | "lanatham" | "laoo" | "latn" | "lepc" | "limb" | "mathbold" | "mathdbl" | "mathmono" | "mathsanb" | "mathsans" | "mlym" | "modi" | "mong" | "mroo" | "mtei" | "mymr" | "mymrshan" | "mymrtlng" | "native" | "newa" | "nkoo" | "olck" | "orya" | "osma" | "rohg" | "roman" | "romanlow" | "saur" | "shrd" | "sind" | "sinh" | "sora" | "sund" | "takr" | "talu" | "taml" | "tamldec" | "telu" | "thai" | "tirh" | "tibt" | "traditio" | "vaii" | "wara" | "wcho";
-    // https://www.unicode.org/iso15924/iso15924-codes.html
-    type ScriptCode = "Adlm" | "Afak" | "Aghb" | "Ahom" | "Arab" | "Aran" | "Armi" | "Armn" | "Avst" | "Bali" | "Bamu" | "Bass" | "Batk" | "Beng" | "Bhks" | "Blis" | "Bopo" | "Brah" | "Brai" | "Bugi" | "Buhd" | "Cakm" | "Cans" | "Cari" | "Cham" | "Cher" | "Chrs" | "Cirt" | "Copt" | "Cpmn" | "Cprt" | "Cyrl" | "Cyrs" | "Deva" | "Diak" | "Dogr" | "Dsrt" | "Dupl" | "Egyd" | "Egyh" | "Egyp" | "Elba" | "Elym" | "Ethi" | "Geok" | "Geor" | "Glag" | "Gong" | "Gonm" | "Goth" | "Gran" | "Grek" | "Gujr" | "Guru" | "Hanb" | "Hang" | "Hani" | "Hano" | "Hans" | "Hant" | "Hatr" | "Hebr" | "Hira" | "Hluw" | "Hmng" | "Hmnp" | "Hrkt" | "Hung" | "Inds" | "Ital" | "Jamo" | "Java" | "Jpan" | "Jurc" | "Kali" | "Kana" | "Khar" | "Khmr" | "Khoj" | "Kitl" | "Kits" | "Knda" | "Kore" | "Kpel" | "Kthi" | "Lana" | "Laoo" | "Latf" | "Latg" | "Latn" | "Leke" | "Lepc" | "Limb" | "Lina" | "Linb" | "Lisu" | "Loma" | "Lyci" | "Lydi" | "Mahj" | "Maka" | "Mand" | "Mani" | "Marc" | "Maya" | "Medf" | "Mend" | "Merc" | "Mero" | "Mlym" | "Modi" | "Mong" | "Moon" | "Mroo" | "Mtei" | "Mult" | "Mymr" | "Nand" | "Narb" | "Nbat" | "Newa" | "Nkdb" | "Nkgb" | "Nkoo" | "Nshu" | "Ogam" | "Olck" | "Orkh" | "Orya" | "Osge" | "Osma" | "Palm" | "Pauc" | "Perm" | "Phag" | "Phli" | "Phlp" | "Phlv" | "Phnx" | "Plrd" | "Piqd" | "Prti" | "Qaaa" | "Qabx" | "Rjng" | "Rohg" | "Roro" | "Runr" | "Samr" | "Sara" | "Sarb" | "Saur" | "Sgnw" | "Shaw" | "Shrd" | "Shui" | "Sidd" | "Sind" | "Sinh" | "Sogd" | "Sogo" | "Sora" | "Soyo" | "Sund" | "Sylo" | "Syrc" | "Syre" | "Syrj" | "Syrn" | "Tagb" | "Takr" | "Tale" | "Talu" | "Taml" | "Tang" | "Tavt" | "Telu" | "Teng" | "Tfng" | "Tglg" | "Thaa" | "Thai" | "Tibt" | "Tirh" | "Toto" | "Ugar" | "Vaii" | "Visp" | "Wara" | "Wcho" | "Wole" | "Xpeo" | "Xsux" | "Yezi" | "Yiii" | "Zanb" | "Zinh" | "Zmth" | "Zsye" | "Zsym" | "Zxxx" | "Zyyy" | "Zzzz";
 
     interface LocaleOptions {
         baseName?: string;
-        calendar?: LDMLCalendarKey | string;
-        caseFirst?: LDMLCollationCaseFirst | string;
-        collation?: LDMLCollationKey | string;
-        hourCycle?: LDMLHourCycleKey | string;
+        calendar?: string;
+        caseFirst?: LDMLCollationCaseFirst;
+        collation?: string;
+        hourCycle?: LDMLHourCycleKey;
         language?: string;
-        numberingSystem?: LDMLNumberingSystemKey | string;
+        numberingSystem?: string;
         numeric?: boolean;
         region?: string;
-        script?: ScriptCode | string;
+        script?: string;
     }
 
     interface Locale extends LocaleOptions {
