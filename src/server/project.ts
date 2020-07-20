@@ -246,7 +246,7 @@ namespace ts.server {
         /*@internal*/
         private dirtyFilesForSuggestions: Set<Path> | undefined;
         /*@internal*/
-        private symlinks: ReadonlyESMap<string, string> | undefined;
+        private symlinks: SymlinkCache | undefined;
         /*@internal*/
         autoImportProviderHost: AutoImportProviderProject | false | undefined;
 
@@ -324,11 +324,14 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getProbableSymlinks(files: readonly SourceFile[]): ReadonlyESMap<string, string> {
-            return this.symlinks || (this.symlinks = discoverProbableSymlinks(
-                files,
+        getSymlinkCache(): SymlinkCache {
+            if (this.symlinks) {
+                return this.symlinks;
+            }
+            return this.symlinks = discoverProbableSymlinks(
+                this.program?.getSourceFiles() || emptyArray,
                 this.getCanonicalFileName,
-                this.getCurrentDirectory()));
+                this.getCurrentDirectory());
         }
 
         // Method of LanguageServiceHost
@@ -1632,13 +1635,36 @@ namespace ts.server {
         }
 
         /*@internal*/
+        getModuleResolutionHostForAutoImportProvider(): ModuleResolutionHost {
+            if (this.program) {
+                return {
+                    fileExists: this.program.fileExists,
+                    directoryExists: this.program.directoryExists,
+                    readFile: this.projectService.host.readFile.bind(this.projectService.host),
+                    getCurrentDirectory: this.getCurrentDirectory.bind(this),
+                    getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
+                    trace: this.projectService.host.trace?.bind(this.projectService.host),
+                    realpath: path => {
+                        const realPath = this.program!.realpath?.(path) ?? path;
+                        if (realPath !== path) {
+                            const [resolved, original] = guessDirectorySymlink(path, realPath, this.getCurrentDirectory(), this.getCanonicalFileName);
+                            this.getSymlinkCache().setSymlinkedDirectory(this.toPath(resolved), { real: original, realPath: this.toPath(original) });
+                        }
+                        return realPath;
+                    }
+                };
+            }
+            return this.projectService.host;
+        }
+
+        /*@internal*/
         getPackageJsonAutoImportProvider(): Program | undefined {
             if (this.autoImportProviderHost === false) {
                 return undefined;
             }
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
-                if (!this.autoImportProviderHost.hasRoots()) {
+                if (!this.autoImportProviderHost.rootFilesMap.size) {
                     this.autoImportProviderHost.close();
                     this.autoImportProviderHost = undefined;
                     return undefined;
@@ -1648,7 +1674,7 @@ namespace ts.server {
 
             const dependencySelection = this.includePackageJsonAutoImports();
             if (dependencySelection) {
-                this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.projectService.host, this.documentRegistry);
+                this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getModuleResolutionHostForAutoImportProvider(), this.documentRegistry);
                 if (this.autoImportProviderHost) {
                     updateProjectIfDirty(this.autoImportProviderHost);
                     return this.autoImportProviderHost.getCurrentProgram();
@@ -1858,9 +1884,10 @@ namespace ts.server {
                 noLib: true,
                 diagnostics: false,
                 skipLibCheck: true,
+                preserveSymlinks: true,
                 types: ts.emptyArray,
                 lib: ts.emptyArray,
-                sourceMap: false
+                sourceMap: false,
             };
 
             const rootNames = this.getRootFileNames(dependencySelection, hostProject, moduleResolutionHost, compilerOptions);
@@ -1872,6 +1899,7 @@ namespace ts.server {
         }
 
         private rootFileNames: string[] | undefined;
+        readonly realpath: ((path: string) => string) | undefined;
 
         /*@internal*/
         constructor(
@@ -1893,6 +1921,7 @@ namespace ts.server {
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
+            this.realpath = path => this.hostProject.getModuleResolutionHostForAutoImportProvider().realpath?.(path) ?? path;
         }
 
         isOrphan() {
@@ -1905,7 +1934,7 @@ namespace ts.server {
                 rootFileNames = AutoImportProviderProject.getRootFileNames(
                     this.hostProject.includePackageJsonAutoImports(),
                     this.hostProject,
-                    this.projectService.host,
+                    this.hostProject.getModuleResolutionHostForAutoImportProvider(),
                     this.getCompilationSettings());
             }
 
@@ -1932,6 +1961,18 @@ namespace ts.server {
             throw new Error("AutoImportProviderProject is an auto import provider; use `markAsDirty()` instead.");
         }
 
+        getModuleResolutionHostForAutoImportProvider(): never {
+            throw new Error("AutoImportProviderProject cannot provide its own host; use `hostProject.getModuleResolutionHostForAutomImportProvider()` instead.");
+        }
+
+        getProjectReferences() {
+            return this.hostProject.getProjectReferences();
+        }
+
+        useSourceOfProjectReferenceRedirect() {
+            return true;
+        }
+
         /*@internal*/
         includePackageJsonAutoImports() {
             return PackageJsonAutoImportPreference.None;
@@ -1939,6 +1980,10 @@ namespace ts.server {
 
         getTypeAcquisition(): TypeAcquisition {
             return { enable: false };
+        }
+
+        getSymlinkCache() {
+            return this.hostProject.getSymlinkCache();
         }
     }
 
