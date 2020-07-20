@@ -61,13 +61,13 @@ declare class B {
 }
 declare class D extends B {
     foo(): void;
-    bar(): void;
+    override bar(): void;
 }
 declare class DB extends B {
-    foo(): void;
-    bar(): void;
+    override foo(): void;
+    override bar(): void;
 }
 declare class DD extends D {
-    foo(): void;
-    bar(): void;
+    override foo(): void;
+    override bar(): void;
 }

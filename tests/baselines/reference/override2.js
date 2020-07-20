@@ -86,10 +86,10 @@ declare abstract class AD2 extends AB {
     abstract foo(v: ''): void;
 }
 declare abstract class AD3 extends AB {
-    foo(v: ''): void;
+    override foo(v: ''): void;
     abstract bar(): void;
 }
 declare class D4 extends AB {
-    foo(v: ''): void;
-    bar(v: ''): void;
+    override foo(v: ''): void;
+    override bar(v: ''): void;
 }

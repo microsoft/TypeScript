@@ -126,12 +126,12 @@ declare class B {
     fooo(v: string): void;
 }
 declare class D extends B {
-    foo(v: string): void;
+    override foo(v: string): void;
     fooo(v: string): void;
-    bar(v: string): void;
+    override bar(v: string): void;
 }
 declare class C {
-    foo(v: string): void;
+    override foo(v: string): void;
 }
 declare function f(): {
     new (): {
@@ -147,10 +147,10 @@ declare const E_base: {
     };
 };
 declare class E extends E_base {
-    foo(): void;
+    override foo(): void;
     bar(): void;
     baz(): void;
-    bazz(): void;
+    override bazz(): void;
 }
 declare function ff(): {
     new (): {
