@@ -481,6 +481,26 @@ export class A {
             changes: emptyArray
         });
 
+        verifyTscWatch({
+            scenario,
+            subScenario: "change module to none",
+            commandLineArgs: ["-w", "-p", configFilePath],
+            sys: () => {
+                const file1 = {
+                    path: "/a/b/f1.ts",
+                    content: "export {}\ndeclare global {}"
+                };
+                return createWatchedSystem([file1, libFile, configFile]);
+            },
+            changes: [{
+                caption: "change `module` to 'none'",
+                timeouts: checkSingleTimeoutQueueLengthAndRun,
+                change: sys => {
+                    sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { module: "none" } }));
+                }
+            }]
+        });
+
         it("correctly migrate files between projects", () => {
             const file1 = {
                 path: "/a/b/f1.ts",

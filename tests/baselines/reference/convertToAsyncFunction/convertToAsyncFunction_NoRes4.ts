@@ -9,8 +9,7 @@ function /*[#|*/f/*|]*/() {
 async function f() {
     try {
         await fetch('https://typescriptlang.org');
-    }
-    catch (rejection) {
+    } catch (rejection) {
         return console.log("rejected:", rejection);
     }
 }

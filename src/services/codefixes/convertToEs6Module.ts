@@ -40,7 +40,7 @@ namespace ts.codefix {
 
     /** @returns Whether we converted a `module.exports =` to a default export. */
     function convertFileToEs6Module(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
-        const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: createMap<true>() };
+        const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: new Set() };
         const exports = collectExportRenames(sourceFile, checker, identifiers);
         convertExportsAccesses(sourceFile, exports, changes);
         let moduleExportsChangedToDefault = false;
@@ -60,10 +60,10 @@ namespace ts.codefix {
      *     export { _x as x };
      * This conversion also must place if the exported name is not a valid identifier, e.g. `exports.class = 0;`.
      */
-    type ExportRenames = ReadonlyMap<string>;
+    type ExportRenames = ReadonlyESMap<string, string>;
 
     function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, identifiers: Identifiers): ExportRenames {
-        const res = createMap<string>();
+        const res = new Map<string, string>();
         forEachExportReference(sourceFile, node => {
             const { text, originalKeywordKind } = node.name;
             if (!res.has(text) && (originalKeywordKind !== undefined && isNonContextualKeyword(originalKeywordKind)
@@ -274,9 +274,9 @@ namespace ts.codefix {
         // `module.exports = require("x");` ==> `export * from "x"; export { default } from "x";`
         const moduleSpecifier = reExported.text;
         const moduleSymbol = checker.getSymbolAtLocation(reExported);
-        const exports = moduleSymbol ? moduleSymbol.exports! : emptyUnderscoreEscapedMap;
-        return exports.has("export=" as __String) ? [[reExportDefault(moduleSpecifier)], true] :
-            !exports.has("default" as __String) ? [[reExportStar(moduleSpecifier)], false] :
+        const exports = moduleSymbol ? moduleSymbol.exports! : emptyMap as ReadonlyCollection<__String>;
+        return exports.has(InternalSymbolName.ExportEquals) ? [[reExportDefault(moduleSpecifier)], true] :
+            !exports.has(InternalSymbolName.Default) ? [[reExportStar(moduleSpecifier)], false] :
             // If there's some non-default export, must include both `export *` and `export default`.
             exports.size > 1 ? [[reExportStar(moduleSpecifier), reExportDefault(moduleSpecifier)], true] : [[reExportDefault(moduleSpecifier)], true];
     }
@@ -388,7 +388,7 @@ namespace ts.codefix {
     function convertSingleIdentifierImport(file: SourceFile, name: Identifier, moduleSpecifier: StringLiteralLike, changes: textChanges.ChangeTracker, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): readonly Node[] {
         const nameSymbol = checker.getSymbolAtLocation(name);
         // Maps from module property name to name actually used. (The same if there isn't shadowing.)
-        const namedBindingsNames = createMap<string>();
+        const namedBindingsNames = new Map<string, string>();
         // True if there is some non-property use like `x()` or `f(x)`.
         let needDefaultImport = false;
 
@@ -429,7 +429,7 @@ namespace ts.codefix {
         while (identifiers.original.has(name) || identifiers.additional.has(name)) {
             name = `_${name}`;
         }
-        identifiers.additional.set(name, true);
+        identifiers.additional.add(name);
         return name;
     }
 
@@ -441,10 +441,10 @@ namespace ts.codefix {
     interface Identifiers {
         readonly original: FreeIdentifiers;
         // Additional identifiers we've added. Mutable!
-        readonly additional: Map<true>;
+        readonly additional: Set<string>;
     }
 
-    type FreeIdentifiers = ReadonlyMap<readonly Identifier[]>;
+    type FreeIdentifiers = ReadonlyESMap<string, readonly Identifier[]>;
     function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
         const map = createMultiMap<Identifier>();
         forEachFreeIdentifier(file, id => map.add(id.text, id));

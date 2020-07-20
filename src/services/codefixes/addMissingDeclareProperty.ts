@@ -15,19 +15,19 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const fixedNodes = new NodeSet();
+            const fixedNodes = new Set<Node>();
             return codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start, fixedNodes));
         },
     });
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, fixedNodes?: NodeSet<Node>) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, fixedNodes?: Set<Node>) {
         const token = getTokenAtPosition(sourceFile, pos);
         if (!isIdentifier(token)) {
             return;
         }
         const declaration = token.parent;
         if (declaration.kind === SyntaxKind.PropertyDeclaration &&
-            (!fixedNodes || fixedNodes.tryAdd(declaration))) {
+            (!fixedNodes || tryAddToSet(fixedNodes, declaration))) {
             changeTracker.insertModifierBefore(sourceFile, SyntaxKind.DeclareKeyword, declaration);
         }
     }

@@ -867,6 +867,11 @@
         "category": "Error",
         "code": 1261
     },
+    "Identifier expected. '{0}' is a reserved word at the top-level of a module.": {
+        "category": "Error",
+        "code": 1262
+    },
+
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -875,7 +880,7 @@
         "category": "Error",
         "code": 1308
     },
-    "'=' can only be used in an object literal property inside a destructuring assignment.": {
+    "Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.": {
         "category": "Error",
         "code": 1312
     },
@@ -1158,6 +1163,22 @@
     "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
         "category": "Error",
         "code": 1384
+    },
+    "Function type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1385
+    },
+    "Constructor type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1386
+    },
+    "Function type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1387
+    },
+    "Constructor type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1388
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2409,6 +2430,26 @@
         "category": "Error",
         "code": 2617
     },
+    "Source has {0} element(s) but target requires {1}.": {
+        "category": "Error",
+        "code": 2618
+    },
+    "Source has {0} element(s) but target allows only {1}.": {
+        "category": "Error",
+        "code": 2619
+    },
+    "Target requires {0} element(s) but source may have fewer.": {
+        "category": "Error",
+        "code": 2620
+    },
+    "Target allows only {0} element(s) but source may have more.": {
+        "category": "Error",
+        "code": 2621
+    },
+    "Element at index {0} is variadic in one type but not in the other.": {
+        "category": "Error",
+        "code": 2622
+    },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
@@ -3015,6 +3056,10 @@
     "'extends' clause of exported class '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4020
+    },
+    "'extends' clause of exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4021
     },
     "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
@@ -4458,6 +4503,10 @@
         "category": "Error",
         "code": 6309
     },
+    "Referenced project '{0}' may not disable emit.": {
+        "category": "Error",
+        "code": 6310
+    },
     "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
         "category": "Message",
         "code": 6350
@@ -4597,6 +4646,11 @@
     "Have recompiles in '--incremental' and '--watch' assume that changes within a file will only affect files directly depending on it.": {
         "category": "Message",
         "code": 6384
+    },
+    "'{0}' is deprecated": {
+        "category": "Suggestion",
+        "code": 6385,
+        "reportsDeprecated": true
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -5027,11 +5081,11 @@
         "category": "Error",
         "code": 17015
     },
-    "JSX fragment is not supported when using --jsxFactory": {
+    "The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.": {
         "category": "Error",
         "code": 17016
     },
-    "JSX fragment is not supported when using an inline JSX factory pragma": {
+    "An @jsxFrag pragma is required when using an @jsx pragma with JSX fragments.": {
         "category": "Error",
         "code": 17017
     },
@@ -5120,10 +5174,6 @@
     "Add '{0}.' to unresolved variable": {
         "category": "Message",
         "code": 90008
-    },
-    "Remove destructuring": {
-        "category": "Message",
-        "code": 90009
     },
     "Remove variable statement": {
         "category": "Message",
@@ -5240,6 +5290,14 @@
     "Declare private method '{0}'": {
         "category": "Message",
         "code": 90038
+    },
+    "Remove unused destructuring declaration": {
+        "category": "Message",
+        "code": 90039
+    },
+    "Remove unused declarations for: '{0}'": {
+        "category": "Message",
+        "code": 90041
     },
     "Declare a private field named '{0}'.": {
         "category": "Message",
@@ -5737,6 +5795,74 @@
         "category": "Message",
         "code": 95125
     },
+    "Remove parentheses": {
+        "category": "Message",
+        "code": 95126
+    },
+    "Could not find a containing arrow function": {
+        "category": "Message",
+        "code": 95127
+    },
+    "Containing function is not an arrow function": {
+        "category": "Message",
+        "code": 95128
+    },
+    "Could not find export statement": {
+        "category": "Message",
+        "code": 95129
+    },
+    "This file already has a default export": {
+        "category": "Message",
+        "code": 95130
+    },
+    "Could not find import clause": {
+        "category": "Message",
+        "code": 95131
+    },
+    "Could not find namespace import or named imports": {
+        "category": "Message",
+        "code": 95132
+    },
+    "Selection is not a valid type node": {
+        "category": "Message",
+        "code": 95133
+    },
+    "No type could be extracted from this type node": {
+        "category": "Message",
+        "code": 95134
+    },
+    "Could not find property for which to generate accessor": {
+        "category": "Message",
+        "code": 95135
+    },
+    "Name is not valid": {
+        "category": "Message",
+        "code": 95136
+    },
+    "Can only convert property with modifier": {
+        "category": "Message",
+        "code": 95137
+    },
+    "Switch each misused '{0}' to '{1}'": {
+        "category": "Message",
+        "code": 95138
+    },
+    "Convert to optional chain expression": {
+        "category": "Message",
+        "code": 95139
+    },
+    "Could not find convertible access expression": {
+        "category": "Message",
+        "code": 95140
+    },
+    "Could not find matching access expressions": {
+        "category": "Message",
+        "code": 95141
+    },
+    "Can only convert logical AND access chains": {
+        "category": "Message",
+        "code": 95142
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -5837,5 +5963,13 @@
     "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
         "category": "Error",
         "code": 18033
+    },
+    "Specify the JSX fragment factory function to use when targeting 'react' JSX emit with 'jsxFactory' compiler option is specified, e.g. 'Fragment'.": {
+        "category": "Message",
+        "code": 18034
+    },
+    "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
+        "category": "Error",
+        "code": 18035
     }
 }

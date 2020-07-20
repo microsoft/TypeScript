@@ -15,7 +15,7 @@ namespace ts {
         referenced: boolean;
     }
 
-    export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+    export function getModuleInstanceState(node: ModuleDeclaration, visited?: ESMap<number, ModuleInstanceState | undefined>): ModuleInstanceState {
         if (node.body && !node.body.parent) {
             // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
             setParent(node.body, node);
@@ -24,8 +24,8 @@ namespace ts {
         return node.body ? getModuleInstanceStateCached(node.body, visited) : ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateCached(node: Node, visited = createMap<ModuleInstanceState | undefined>()) {
-        const nodeId = "" + getNodeId(node);
+    function getModuleInstanceStateCached(node: Node, visited = new Map<number, ModuleInstanceState | undefined>()) {
+        const nodeId = getNodeId(node);
         if (visited.has(nodeId)) {
             return visited.get(nodeId) || ModuleInstanceState.NonInstantiated;
         }
@@ -35,7 +35,7 @@ namespace ts {
         return result;
     }
 
-    function getModuleInstanceStateWorker(node: Node, visited: Map<ModuleInstanceState | undefined>): ModuleInstanceState {
+    function getModuleInstanceStateWorker(node: Node, visited: ESMap<number, ModuleInstanceState | undefined>): ModuleInstanceState {
         // A module is uninstantiated if it contains only
         switch (node.kind) {
             // 1. interface declarations, type alias declarations
@@ -107,7 +107,7 @@ namespace ts {
         return ModuleInstanceState.Instantiated;
     }
 
-    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<ModuleInstanceState | undefined>) {
+    function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: ESMap<number, ModuleInstanceState | undefined>) {
         const name = specifier.propertyName || specifier.name;
         let p: Node | undefined = specifier.parent;
         while (p) {
@@ -218,7 +218,7 @@ namespace ts {
         let symbolCount = 0;
 
         let Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
-        let classifiableNames: UnderscoreEscapedMap<true>;
+        let classifiableNames: Set<__String>;
 
         const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
         const reportedUnreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -237,7 +237,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = bindInStrictMode(file, opts);
-            classifiableNames = createUnderscoreEscapedMap<true>();
+            classifiableNames = new Set();
             symbolCount = 0;
 
             Symbol = objectAllocator.getSymbolConstructor();
@@ -445,7 +445,7 @@ namespace ts {
                 symbol = symbolTable.get(name);
 
                 if (includes & SymbolFlags.Classifiable) {
-                    classifiableNames.set(name, true);
+                    classifiableNames.add(name);
                 }
 
                 if (!symbol) {
@@ -1241,6 +1241,11 @@ namespace ts {
                     if (currentReturnTarget && returnLabel.antecedents) {
                         addAntecedent(currentReturnTarget, createReduceLabel(finallyLabel, returnLabel.antecedents, currentFlow));
                     }
+                    // If we have an outer exception target (i.e. a containing try-finally or try-catch-finally), add a
+                    // control flow that goes back through the finally blok and back through each possible exception source.
+                    if (currentExceptionTarget && exceptionLabel.antecedents) {
+                        addAntecedent(currentExceptionTarget, createReduceLabel(finallyLabel, exceptionLabel.antecedents, currentFlow));
+                    }
                     // If the end of the finally block is reachable, but the end of the try and catch blocks are not,
                     // convert the current flow to unreachable. For example, 'try { return 1; } finally { ... }' should
                     // result in an unreachable current control flow.
@@ -1960,7 +1965,7 @@ namespace ts {
             }
 
             if (inStrictMode && !isAssignmentTarget(node)) {
-                const seen = createUnderscoreEscapedMap<ElementKind>();
+                const seen = new Map<__String, ElementKind>();
 
                 for (const prop of node.properties) {
                     if (prop.kind === SyntaxKind.SpreadAssignment || prop.name.kind !== SyntaxKind.Identifier) {
@@ -2105,19 +2110,38 @@ namespace ts {
         }
 
         // The binder visits every node in the syntax tree so it is a convenient place to perform a single localized
-        // check for reserved words used as identifiers in strict mode code.
-        function checkStrictModeIdentifier(node: Identifier) {
-            if (inStrictMode &&
-                node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
-                node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord &&
-                !isIdentifierName(node) &&
+        // check for reserved words used as identifiers in strict mode code, as well as `yield` or `await` in
+        // [Yield] or [Await] contexts, respectively.
+        function checkContextualIdentifier(node: Identifier) {
+            // Report error only if there are no parse errors in file
+            if (!file.parseDiagnostics.length &&
                 !(node.flags & NodeFlags.Ambient) &&
-                !(node.flags & NodeFlags.JSDoc)) {
+                !(node.flags & NodeFlags.JSDoc) &&
+                !isIdentifierName(node)) {
 
-                // Report error only if there are no parse errors in file
-                if (!file.parseDiagnostics.length) {
+                // strict mode identifiers
+                if (inStrictMode &&
+                    node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
+                    node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node,
                         getStrictModeIdentifierMessage(node), declarationNameToString(node)));
+                }
+                else if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
+                    if (isExternalModule(file) && isInTopLevelContext(node)) {
+                        file.bindDiagnostics.push(createDiagnosticForNode(node,
+                            Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module,
+                            declarationNameToString(node)));
+                    }
+                    else if (node.flags & NodeFlags.AwaitContext) {
+                        file.bindDiagnostics.push(createDiagnosticForNode(node,
+                            Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
+                            declarationNameToString(node)));
+                    }
+                }
+                else if (node.originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node,
+                        Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
+                        declarationNameToString(node)));
                 }
             }
         }
@@ -2419,7 +2443,7 @@ namespace ts {
                     if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                         node.flowNode = currentFlow;
                     }
-                    return checkStrictModeIdentifier(<Identifier>node);
+                    return checkContextualIdentifier(<Identifier>node);
                 case SyntaxKind.SuperKeyword:
                     node.flowNode = currentFlow;
                     break;
@@ -2861,8 +2885,7 @@ namespace ts {
 
         function addLateBoundAssignmentDeclarationToSymbol(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol | undefined) {
             if (symbol) {
-                const members = symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = createMap());
-                members.set("" + getNodeId(node), node);
+                (symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = new Map())).set(getNodeId(node), node);
             }
         }
 
@@ -2957,6 +2980,9 @@ namespace ts {
         }
 
         function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: BindableStaticNameExpression, isToplevel: boolean, isPrototypeProperty: boolean, containerIsClass: boolean) {
+            if (namespaceSymbol?.flags! & SymbolFlags.Alias) {
+                return namespaceSymbol;
+            }
             if (isToplevel && !isPrototypeProperty) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
@@ -3120,7 +3146,7 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Class, bindingName);
                 // Add name of class expression into the map for semantic classifier
                 if (node.name) {
-                    classifiableNames.set(node.name.escapedText, true);
+                    classifiableNames.add(node.name.escapedText);
                 }
             }
 

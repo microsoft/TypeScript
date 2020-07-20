@@ -321,6 +321,8 @@ namespace ts {
      * @param context A lexical environment context for the visitor.
      */
     export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
+    /* @internal */
+    export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -838,7 +840,7 @@ namespace ts {
 
             case SyntaxKind.ThrowStatement:
                 return factory.updateThrowStatement(<ThrowStatement>node,
-                    nodeVisitor((<ThrowStatement>node).expression!, visitor, isExpression)); // expression could be `undefined` due to invalid parse.
+                    nodeVisitor((<ThrowStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.TryStatement:
                 return factory.updateTryStatement(<TryStatement>node,

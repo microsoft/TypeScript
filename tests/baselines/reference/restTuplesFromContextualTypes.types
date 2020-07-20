@@ -314,10 +314,10 @@ function f4<T extends any[]>(t: T) {
 
     (function(a, ...x){})(1, 2, ...t);
 >(function(a, ...x){})(1, 2, ...t) : void
->(function(a, ...x){}) : (a: number, x_0: number, ...x_1: any[]) => void
->function(a, ...x){} : (a: number, x_0: number, ...x_1: any[]) => void
+>(function(a, ...x){}) : (a: number, x_0: number, ...x_1: T) => void
+>function(a, ...x){} : (a: number, x_0: number, ...x_1: T) => void
 >a : number
->x : [number, ...any[]]
+>x : [number, ...T]
 >1 : 1
 >2 : 2
 >...t : any
@@ -332,8 +332,8 @@ function f4<T extends any[]>(t: T) {
     f((...x) => {});
 >f((...x) => {}) : void
 >f : (cb: (x: number, ...args: T) => void) => void
->(...x) => {} : (x: number, ...args: T[number][]) => void
->x : [x: number, ...args: T[number][]]
+>(...x) => {} : (x: number, ...args: T) => void
+>x : [x: number, ...args: T]
 
     f((a, ...x) => {});
 >f((a, ...x) => {}) : void

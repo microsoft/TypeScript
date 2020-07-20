@@ -3,17 +3,30 @@ namespace ts.refactor {
     const refactorName = "Convert export";
     const actionNameDefaultToNamed = "Convert default export to named export";
     const actionNameNamedToDefault = "Convert named export to default export";
+
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
             const info = getInfo(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
-            const description = info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
-            const actionName = info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
-            return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+
+            if (info.error === undefined) {
+                const description = info.info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
+                const actionName = info.info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
+                return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+            }
+
+            if (context.preferences.provideRefactorNotApplicableReason) {
+                return [
+                    { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message, actions: [{ name: actionNameDefaultToNamed, description: Diagnostics.Convert_default_export_to_named_export.message, notApplicableReason: info.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_named_export_to_default_export.message, actions: [{ name: actionNameNamedToDefault, description: Diagnostics.Convert_named_export_to_default_export.message, notApplicableReason: info.error }] },
+                ];
+            }
+
+            return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameDefaultToNamed || actionName === actionNameNamedToDefault, "Unexpected action name");
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, Debug.checkDefined(getInfo(context), "context must have info"), t, context.cancellationToken));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, Debug.checkDefined(getInfo(context)?.info, "context must have info"), t, context.cancellationToken));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         },
     });
@@ -27,13 +40,21 @@ namespace ts.refactor {
         readonly exportingModuleSymbol: Symbol;
     }
 
-    function getInfo(context: RefactorContext, considerPartialSpans = true): Info | undefined {
+    type InfoOrError = {
+        info: Info,
+        error?: never
+    } | {
+        info?: never,
+        error: string
+    };
+
+    function getInfo(context: RefactorContext, considerPartialSpans = true): InfoOrError | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
         const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
-            return undefined;
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_export_statement) };
         }
 
         const exportingModuleSymbol = isSourceFile(exportNode.parent) ? exportNode.parent.symbol : exportNode.parent.parent.symbol;
@@ -42,7 +63,7 @@ namespace ts.refactor {
         const wasDefault = !!(flags & ModifierFlags.Default);
         // If source file already has a default export, don't offer refactor.
         if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {
-            return undefined;
+            return { error: getLocaleSpecificMessage(Diagnostics.This_file_already_has_a_default_export) };
         }
 
         switch (exportNode.kind) {
@@ -53,7 +74,7 @@ namespace ts.refactor {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.ModuleDeclaration: {
                 const node = exportNode as FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | TypeAliasDeclaration | NamespaceDeclaration;
-                return node.name && isIdentifier(node.name) ? { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol } : undefined;
+                return node.name && isIdentifier(node.name) ? { info: { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol } } : undefined;
             }
             case SyntaxKind.VariableStatement: {
                 const vs = exportNode as VariableStatement;
@@ -64,7 +85,7 @@ namespace ts.refactor {
                 const decl = first(vs.declarationList.declarations);
                 if (!decl.initializer) return undefined;
                 Debug.assert(!wasDefault, "Can't have a default flag here");
-                return isIdentifier(decl.name) ? { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } : undefined;
+                return isIdentifier(decl.name) ? { info: { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } } : undefined;
             }
             default:
                 return undefined;
