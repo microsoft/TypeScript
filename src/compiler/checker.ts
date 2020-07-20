@@ -21370,7 +21370,7 @@ namespace ts {
                 // The result is incomplete if the first antecedent (the non-looping control flow path)
                 // is incomplete.
                 const result = getUnionOrEvolvingArrayType(antecedentTypes, subtypeReduction ? UnionReduction.Subtype : UnionReduction.Literal);
-                 if (isIncomplete(firstAntecedentType!)) {
+                if (isIncomplete(firstAntecedentType!)) {
                     return createFlowType(result, /*incomplete*/ true);
                 }
                 cache.set(key, result);
@@ -30030,19 +30030,19 @@ namespace ts {
                 return quickType;
             }
             // If a type has been cached for the node, return it.
-            // if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
-            //     const cachedType = flowTypeCache[getNodeId(node)];
-            //     if (cachedType) {
-            //         return cachedType;
-            //     }
-            // }
+            if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
+                const cachedType = flowTypeCache[getNodeId(node)];
+                if (cachedType) {
+                    return cachedType;
+                }
+            }
             const startInvocationCount = flowInvocationCount;
             const type = checkExpression(node);
             // If control flow analysis was required to determine the type, it is worth caching.
             if (flowInvocationCount !== startInvocationCount) {
-            //     const cache = flowTypeCache || (flowTypeCache = []);
-            //     cache[getNodeId(node)] = type;
-            //     setNodeFlags(node, node.flags | NodeFlags.TypeCached);
+                const cache = flowTypeCache || (flowTypeCache = []);
+                cache[getNodeId(node)] = type;
+                setNodeFlags(node, node.flags | NodeFlags.TypeCached);
             }
             return type;
         }
