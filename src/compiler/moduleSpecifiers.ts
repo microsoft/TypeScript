@@ -200,7 +200,7 @@ namespace ts.moduleSpecifiers {
             const target = find(targets, t => compareStrings(t.slice(0, resolved.real.length), resolved.real) === Comparison.EqualTo);
             if (target === undefined) return undefined;
 
-            const relative = getRelativePathFromDirectory(resolved.realPath, target, getCanonicalFileName);
+            const relative = getRelativePathFromDirectory(resolved.real, target, getCanonicalFileName);
             const option = resolvePath(path, relative);
             if (!host.fileExists || host.fileExists(option)) {
                 const result = cb(option);
