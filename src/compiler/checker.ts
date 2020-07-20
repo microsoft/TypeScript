@@ -5575,15 +5575,14 @@ namespace ts {
                 }
             }
 
+            function isStringNamed(d: Declaration) {
+                const name = getNameOfDeclaration(d);
+                return !!name && isStringLiteral(name);
+            }
+
             function isSingleQuotedStringNamed(d: Declaration) {
                 const name = getNameOfDeclaration(d);
-                if (name && isStringLiteral(name) && (
-                    name.singleQuote ||
-                    (!nodeIsSynthesized(name) && startsWith(getTextOfNode(name, /*includeTrivia*/ false), "'"))
-                )) {
-                    return true;
-                }
-                return false;
+                return !!(name && isStringLiteral(name) && (name.singleQuote || !nodeIsSynthesized(name) && startsWith(getTextOfNode(name, /*includeTrivia*/ false), "'")));
             }
 
             function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
@@ -5596,7 +5595,8 @@ namespace ts {
                     return factory.createComputedPropertyName(factory.createPropertyAccessExpression(factory.createIdentifier("Symbol"), (symbol.escapedName as string).substr(3)));
                 }
                 const rawName = unescapeLeadingUnderscores(symbol.escapedName);
-                return createPropertyNameNodeForIdentifierOrLiteral(rawName, singleQuote);
+                const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
+                return createPropertyNameNodeForIdentifierOrLiteral(rawName, stringNamed, singleQuote);
             }
 
             // See getNameForSymbolFromNameType for a stringy equivalent
@@ -5619,9 +5619,9 @@ namespace ts {
                 }
             }
 
-            function createPropertyNameNodeForIdentifierOrLiteral(name: string, singleQuote?: boolean) {
+            function createPropertyNameNodeForIdentifierOrLiteral(name: string, stringNamed?: boolean, singleQuote?: boolean) {
                 return isIdentifierText(name, compilerOptions.target) ? factory.createIdentifier(name) :
-                    isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
+                    !stringNamed && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
                     factory.createStringLiteral(name, !!singleQuote);
             }
 
