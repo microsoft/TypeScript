@@ -1979,6 +1979,7 @@ namespace ts.server {
             return { enable: false };
         }
 
+        /*@internal*/
         getSymlinkCache() {
             return this.hostProject.getSymlinkCache();
         }

@@ -9268,6 +9268,9 @@ declare namespace ts.server {
         getScriptFileNames(): string[];
         getLanguageService(): never;
         markAutoImportProviderAsDirty(): never;
+        getModuleResolutionHostForAutoImportProvider(): never;
+        getProjectReferences(): readonly ProjectReference[] | undefined;
+        useSourceOfProjectReferenceRedirect(): boolean;
         getTypeAcquisition(): TypeAcquisition;
     }
     /**
