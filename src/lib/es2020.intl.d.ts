@@ -274,15 +274,15 @@ declare namespace Intl {
         unitDisplay?: string;
     }
 
-    type LDMLHourCycleKey = "h12" | "h23" | "h11" | "h24";
-    type LDMLCollationCaseFirst = "upper" | "lower" | "false";
+    type LocaleHourCycleKey = "h12" | "h23" | "h11" | "h24";
+    type LocaleCollationCaseFirst = "upper" | "lower" | "false";
 
     interface LocaleOptions {
         baseName?: string;
         calendar?: string;
-        caseFirst?: LDMLCollationCaseFirst;
+        caseFirst?: LocaleCollationCaseFirst;
         collation?: string;
-        hourCycle?: LDMLHourCycleKey;
+        hourCycle?: LocaleHourCycleKey;
         language?: string;
         numberingSystem?: string;
         numeric?: boolean;
