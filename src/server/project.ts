@@ -329,13 +329,10 @@ namespace ts.server {
 
         /*@internal*/
         getSymlinkCache(): SymlinkCache {
-            if (this.symlinks) {
-                return this.symlinks;
-            }
-            return this.symlinks = discoverProbableSymlinks(
+            return this.symlinks || (this.symlinks = discoverProbableSymlinks(
                 this.program?.getSourceFiles() || emptyArray,
                 this.getCanonicalFileName,
-                this.getCurrentDirectory());
+                this.getCurrentDirectory()));
         }
 
         // Method of LanguageServiceHost
