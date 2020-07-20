@@ -1,30 +1,46 @@
 //// [override1.ts]
 class B {
-    foo (v: string) {
-
-    }
-    fooo (v: string) {
-
-    }
+    foo (v: string) {}
+    fooo (v: string) {}
 }
 
 class D extends B {
-    override foo (v: string) {
+    override foo (v: string) {}
 
-    }
+    fooo (v: string) {}
 
-    fooo (v: string) {
-        
-    }
-
-    override bar(v: string) {
-        
-    }
+    override bar(v: string) {}
 }
 
 class C {
-    override foo(v: string) {
+    override foo(v: string) {}
+}
 
+function f () {
+    return class extends B {
+        override foo (v: string) {}
+    
+        fooo (v: string) {}
+    
+        override bar(v: string) {}
+    }
+}
+
+class E extends (class {
+    foo () { }
+    bar () { }
+}) {
+    override foo () { }
+    bar () { }
+
+    baz() {}
+
+    override bazz () {}
+}
+
+function ff () {
+    return class {
+        override foo () {}
     }
 }
 
@@ -45,10 +61,8 @@ var __extends = (this && this.__extends) || (function () {
 var B = /** @class */ (function () {
     function B() {
     }
-    B.prototype.foo = function (v) {
-    };
-    B.prototype.fooo = function (v) {
-    };
+    B.prototype.foo = function (v) { };
+    B.prototype.fooo = function (v) { };
     return B;
 }());
 var D = /** @class */ (function (_super) {
@@ -56,18 +70,51 @@ var D = /** @class */ (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    D.prototype.foo = function (v) {
-    };
-    D.prototype.fooo = function (v) {
-    };
-    D.prototype.bar = function (v) {
-    };
+    D.prototype.foo = function (v) { };
+    D.prototype.fooo = function (v) { };
+    D.prototype.bar = function (v) { };
     return D;
 }(B));
 var C = /** @class */ (function () {
     function C() {
     }
-    C.prototype.foo = function (v) {
-    };
+    C.prototype.foo = function (v) { };
     return C;
 }());
+function f() {
+    return /** @class */ (function (_super) {
+        __extends(class_1, _super);
+        function class_1() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        class_1.prototype.foo = function (v) { };
+        class_1.prototype.fooo = function (v) { };
+        class_1.prototype.bar = function (v) { };
+        return class_1;
+    }(B));
+}
+var E = /** @class */ (function (_super) {
+    __extends(E, _super);
+    function E() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    E.prototype.foo = function () { };
+    E.prototype.bar = function () { };
+    E.prototype.baz = function () { };
+    E.prototype.bazz = function () { };
+    return E;
+}((/** @class */ (function () {
+    function class_2() {
+    }
+    class_2.prototype.foo = function () { };
+    class_2.prototype.bar = function () { };
+    return class_2;
+}()))));
+function ff() {
+    return /** @class */ (function () {
+        function class_3() {
+        }
+        class_3.prototype.foo = function () { };
+        return class_3;
+    }());
+}

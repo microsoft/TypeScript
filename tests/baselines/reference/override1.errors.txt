@@ -1,40 +1,71 @@
-tests/cases/conformance/override/override1.ts(15,5): suggestion TS6385: 'need override' is deprecated
-tests/cases/conformance/override/override1.ts(19,14): suggestion TS6385: 'not founded in base class' is deprecated
-tests/cases/conformance/override/override1.ts(25,14): suggestion TS6385: 'has override but not extended' is deprecated
+tests/cases/conformance/override/override1.ts(9,5): error TS4113: Method must have override modifier because it's override the base class 'B'.
+tests/cases/conformance/override/override1.ts(11,14): error TS4112: Method cannot have override modifier because it's not existed in the base class 'B'.
+tests/cases/conformance/override/override1.ts(15,14): error TS4111: Method cannot have override modifier because class 'C' does not extended another class.
+tests/cases/conformance/override/override1.ts(22,9): error TS4113: Method must have override modifier because it's override the base class 'B'.
+tests/cases/conformance/override/override1.ts(24,18): error TS4112: Method cannot have override modifier because it's not existed in the base class 'B'.
+tests/cases/conformance/override/override1.ts(33,5): error TS4113: Method must have override modifier because it's override the base class '(Anonymous class)'.
+tests/cases/conformance/override/override1.ts(37,14): error TS4112: Method cannot have override modifier because it's not existed in the base class '(Anonymous class)'.
+tests/cases/conformance/override/override1.ts(42,18): error TS4111: Method cannot have override modifier because class '(Anonymous class)' does not extended another class.
 
 
-==== tests/cases/conformance/override/override1.ts (3 errors) ====
+==== tests/cases/conformance/override/override1.ts (8 errors) ====
     class B {
-        foo (v: string) {
-    
-        }
-        fooo (v: string) {
-    
-        }
+        foo (v: string) {}
+        fooo (v: string) {}
     }
     
     class D extends B {
-        override foo (v: string) {
+        override foo (v: string) {}
     
-        }
-    
-        fooo (v: string) {
+        fooo (v: string) {}
         ~~~~
-!!! suggestion TS6385: 'need override' is deprecated
-            
-        }
+!!! error TS4113: Method must have override modifier because it's override the base class 'B'.
     
-        override bar(v: string) {
+        override bar(v: string) {}
                  ~~~
-!!! suggestion TS6385: 'not founded in base class' is deprecated
-            
-        }
+!!! error TS4112: Method cannot have override modifier because it's not existed in the base class 'B'.
     }
     
     class C {
-        override foo(v: string) {
+        override foo(v: string) {}
                  ~~~
-!!! suggestion TS6385: 'has override but not extended' is deprecated
+!!! error TS4111: Method cannot have override modifier because class 'C' does not extended another class.
+    }
     
+    function f () {
+        return class extends B {
+            override foo (v: string) {}
+        
+            fooo (v: string) {}
+            ~~~~
+!!! error TS4113: Method must have override modifier because it's override the base class 'B'.
+        
+            override bar(v: string) {}
+                     ~~~
+!!! error TS4112: Method cannot have override modifier because it's not existed in the base class 'B'.
+        }
+    }
+    
+    class E extends (class {
+        foo () { }
+        bar () { }
+    }) {
+        override foo () { }
+        bar () { }
+        ~~~
+!!! error TS4113: Method must have override modifier because it's override the base class '(Anonymous class)'.
+    
+        baz() {}
+    
+        override bazz () {}
+                 ~~~~
+!!! error TS4112: Method cannot have override modifier because it's not existed in the base class '(Anonymous class)'.
+    }
+    
+    function ff () {
+        return class {
+            override foo () {}
+                     ~~~
+!!! error TS4111: Method cannot have override modifier because class '(Anonymous class)' does not extended another class.
         }
     }

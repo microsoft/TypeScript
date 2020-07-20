@@ -606,6 +606,14 @@ namespace ts {
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
         },
+        {
+            name: "pedanticOverride",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Required_override_modifier_in_class_element
+        },
 
         // Module Resolution
         {

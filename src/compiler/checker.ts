@@ -34375,7 +34375,9 @@ namespace ts {
                 }
             }
 
-            issueMemberWithOverride(node, type, typeWithThis);
+            if (compilerOptions.pedanticOverride) {
+                issueMemberWithOverride(node, type, typeWithThis);
+            }
 
             const implementedTypeNodes = getEffectiveImplementsTypeNodes(node);
             if (implementedTypeNodes) {
@@ -34411,31 +34413,30 @@ namespace ts {
             }
         }
 
-        function issueMemberWithOverride (node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type) {
+        function issueMemberWithOverride(node: ClassLikeDeclaration, type: InterfaceType, typeWithThis: Type) {
             const baseTypeNode = getEffectiveBaseTypeNode(node);
+            const baseTypes = baseTypeNode && getBaseTypes(type);
+            const baseWithThis = baseTypes?.length ? getTypeWithThisArgument(first(baseTypes), type.thisType) : undefined;
+
             for (const member of node.members) {
                 const hasOverride = hasOverrideModifier(member);
-                if (hasOverride && !baseTypeNode) {
-                    error(member, Diagnostics._0_is_deprecated, 'has override but not extended')
-                }
-                else if (baseTypeNode) {
-                    const baseTypes = getBaseTypes(type);
-                    if (baseTypes.length) {
-                        const baseType = first(baseTypes);
-                        const baseWithThis = getTypeWithThisArgument(baseType, type.thisType);
-
-                        const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
-                        if (declaredProp) {
-                            const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
-                            const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
-                            if (prop && !baseProp && hasOverride) {
-                                error(member, Diagnostics._0_is_deprecated, 'not founded in base class')
-                            }
-                            else if (prop && baseProp && !hasOverride) {
-                                error(member, Diagnostics._0_is_deprecated, 'need override')
-                            }
+                if (baseWithThis) {
+                    const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
+                    if (declaredProp) {
+                        const baseClassName = typeToString(baseWithThis);
+                        const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
+                        const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
+                        if (prop && !baseProp && hasOverride) {
+                            error(member, Diagnostics.Method_cannot_have_override_modifier_because_it_s_not_existed_in_the_base_class_0, baseClassName);
+                        }
+                        else if (prop && baseProp && !hasOverride) {
+                            error(member, Diagnostics.Method_must_have_override_modifier_because_it_s_override_the_base_class_0, baseClassName);
                         }
                     }
+                }
+                else if (hasOverride) {
+                    const className = typeToString(type);
+                    error(member, Diagnostics.Method_cannot_have_override_modifier_because_class_0_does_not_extended_another_class, className);
                 }
             }
         }
