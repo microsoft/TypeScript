@@ -1,3 +1,4 @@
+// @declaration: true
 // @pedanticOverride: true
 class B {
     foo (v: string) {}

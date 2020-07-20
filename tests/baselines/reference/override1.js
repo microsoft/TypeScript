@@ -118,3 +118,42 @@ function ff() {
         return class_3;
     }());
 }
+
+
+//// [override1.d.ts]
+declare class B {
+    foo(v: string): void;
+    fooo(v: string): void;
+}
+declare class D extends B {
+    foo(v: string): void;
+    fooo(v: string): void;
+    bar(v: string): void;
+}
+declare class C {
+    foo(v: string): void;
+}
+declare function f(): {
+    new (): {
+        foo(v: string): void;
+        fooo(v: string): void;
+        bar(v: string): void;
+    };
+};
+declare const E_base: {
+    new (): {
+        foo(): void;
+        bar(): void;
+    };
+};
+declare class E extends E_base {
+    foo(): void;
+    bar(): void;
+    baz(): void;
+    bazz(): void;
+}
+declare function ff(): {
+    new (): {
+        foo(): void;
+    };
+};
