@@ -1279,3 +1279,44 @@ const b = a.bind("", 1);  // Desc<[boolean], object>
 >"" : ""
 >1 : 1
 
+// Repro from #39607
+
+declare function getUser(id: string, options?: { x?: string }): string;
+>getUser : (id: string, options?: { x?: string | undefined; } | undefined) => string
+>id : string
+>options : { x?: string | undefined; } | undefined
+>x : string | undefined
+
+declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z?: boolean }): void;
+>getOrgUser : (id: string, orgId: number, options?: { y?: number | undefined; z?: boolean | undefined; } | undefined) => void
+>id : string
+>orgId : number
+>options : { y?: number | undefined; z?: boolean | undefined; } | undefined
+>y : number | undefined
+>z : boolean | undefined
+
+function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
+>callApi : <T extends unknown[] = [], U = void>(method: (...args_0: T, args_1: object) => U) => (...args_0: T) => U
+>method : (...args_0: T, args_1: object) => U
+>args : [...T, object]
+
+    return (...args: [...T]) => method(...args, {});
+>(...args: [...T]) => method(...args, {}) : (...args_0: T) => U
+>args : [...T]
+>method(...args, {}) : U
+>method : (...args_0: T, args_1: object) => U
+>...args : T[number]
+>args : [...T]
+>{} : {}
+}
+
+callApi(getUser);
+>callApi(getUser) : (id: string) => string
+>callApi : <T extends unknown[] = [], U = void>(method: (...args_0: T, args_1: object) => U) => (...args_0: T) => U
+>getUser : (id: string, options?: { x?: string | undefined; } | undefined) => string
+
+callApi(getOrgUser);
+>callApi(getOrgUser) : (id: string, orgId: number) => void
+>callApi : <T extends unknown[] = [], U = void>(method: (...args_0: T, args_1: object) => U) => (...args_0: T) => U
+>getOrgUser : (id: string, orgId: number, options?: { y?: number | undefined; z?: boolean | undefined; } | undefined) => void
+
