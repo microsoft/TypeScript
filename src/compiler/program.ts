@@ -973,7 +973,6 @@ namespace ts {
             emitBuildInfo,
             fileExists,
             directoryExists,
-            realpath: maybeBind(host, host.realpath),
             getSymlinkCache,
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };

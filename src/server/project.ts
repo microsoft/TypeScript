@@ -1640,18 +1640,11 @@ namespace ts.server {
                 return {
                     fileExists: this.program.fileExists,
                     directoryExists: this.program.directoryExists,
-                    readFile: this.projectService.host.readFile.bind(this.projectService.host),
                     getCurrentDirectory: this.getCurrentDirectory.bind(this),
+                    readFile: this.projectService.host.readFile.bind(this.projectService.host),
                     getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
+                    realpath: this.projectService.host.realpath?.bind(this.projectService.host),
                     trace: this.projectService.host.trace?.bind(this.projectService.host),
-                    realpath: path => {
-                        const realPath = this.program!.realpath?.(path) ?? path;
-                        if (realPath !== path) {
-                            const [resolved, original] = guessDirectorySymlink(path, realPath, this.getCurrentDirectory(), this.getCanonicalFileName);
-                            this.getSymlinkCache().setSymlinkedDirectory(this.toPath(resolved), { real: original, realPath: this.toPath(original) });
-                        }
-                        return realPath;
-                    }
                 };
             }
             return this.projectService.host;
@@ -1899,7 +1892,6 @@ namespace ts.server {
         }
 
         private rootFileNames: string[] | undefined;
-        readonly realpath: ((path: string) => string) | undefined;
 
         /*@internal*/
         constructor(
@@ -1921,7 +1913,6 @@ namespace ts.server {
                 hostProject.currentDirectory);
 
             this.rootFileNames = initialRootNames;
-            this.realpath = path => this.hostProject.getModuleResolutionHostForAutoImportProvider().realpath?.(path) ?? path;
         }
 
         isOrphan() {

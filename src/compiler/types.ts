@@ -7751,7 +7751,6 @@ namespace ts {
         fileExists(path: string): boolean;
         getCurrentDirectory(): string;
         directoryExists?(path: string): boolean;
-        realpath?(path: string): string;
         readFile?(path: string): string | undefined;
         getSymlinkCache?(): SymlinkCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
