@@ -34420,7 +34420,14 @@ namespace ts {
 
             for (const member of node.members) {
                 const hasOverride = hasOverrideModifier(member);
-                if (baseWithThis) {
+                const hasAmbient = hasAmbientModifier(member);
+
+                if (hasAmbient) {
+                    if (hasOverride) {
+                        error(member, Diagnostics.Override_modifier_cannot_be_used_with_declare_modifier);
+                    }
+                }
+                else if (baseWithThis) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
                     if (declaredProp) {
                         const baseClassName = typeToString(baseWithThis);

@@ -3373,6 +3373,10 @@
         "category": "Error",
         "code": 4113
     },
+    "Override modifier cannot be used with declare modifier.": {
+        "category": "Error",
+        "code": 4114
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

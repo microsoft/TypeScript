@@ -4533,6 +4533,10 @@ namespace ts {
         return hasSyntacticModifier(node, ModifierFlags.Override);
     }
 
+    export function hasAmbientModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Ambient);
+    }
+
     export function hasEffectiveReadonlyModifier(node: Node): boolean {
         return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
