@@ -1,0 +1,65 @@
+=== tests/cases/conformance/override/override4.ts ===
+class B {
+>B : B
+
+    p1: number = 1;
+>p1 : number
+>1 : 1
+
+    p2: number = 1;
+>p2 : number
+>1 : 1
+
+    p3: () => void;
+>p3 : () => void
+
+    p4: () => void;
+>p4 : () => void
+
+    foo (v: string) {}
+>foo : (v: string) => void
+>v : string
+
+    fooo (v: string) {}
+>fooo : (v: string) => void
+>v : string
+}
+
+class D extends B {
+>D : D
+>B : B
+
+    p1: number = 2;
+>p1 : number
+>2 : 2
+
+    override p2: number = 3;
+>p2 : number
+>3 : 3
+
+    p3: () => void;
+>p3 : () => void
+
+    override p4: () => void;
+>p4 : () => void
+
+    override foo (v: string) {}
+>foo : (v: string) => void
+>v : string
+
+    fooo (v: string) {}
+>fooo : (v: string) => void
+>v : string
+
+}
+
+class DD extends B {
+>DD : DD
+>B : B
+
+    override foo: () => void
+>foo : () => void
+
+    fooo: () => void;
+>fooo : () => void
+}
