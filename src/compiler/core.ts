@@ -1943,6 +1943,7 @@ namespace ts {
         let bestDistance = Math.floor(name.length * 0.4); // If the best result is worse than this, don't bother.
         let bestCaseSensitiveDistance = Infinity;
         let bestCandidate: T | undefined;
+        let bestCandidateName: string | undefined; // cached name of best candidate
         const nameLowerCase = name.toLowerCase();
         for (const candidate of candidates) {
             const candidateName = getName(candidate);
@@ -1968,11 +1969,16 @@ namespace ts {
                 if (distance < bestDistance) {
                     bestDistance = distance;
                     bestCandidate = candidate;
-                    const newBestCaseSensitiveDistance = levenshteinWithMax(name, candidateName, Infinity);
-                    Debug.assert(newBestCaseSensitiveDistance !== undefined);
-                    bestCaseSensitiveDistance = newBestCaseSensitiveDistance;
+                    bestCaseSensitiveDistance = Infinity;
+                    bestCandidateName = candidateName;
                 }
                 else {
+                    // when we have a best candidate but its case-sensitive distance is not initialized.
+                    if (bestCandidateName && !Number.isFinite(bestCaseSensitiveDistance)) {
+                        const newBestCaseSensitiveDistance = levenshteinWithMax(name, bestCandidateName, Infinity)!;
+                        Debug.assertIsDefined(newBestCaseSensitiveDistance);
+                        bestCaseSensitiveDistance = newBestCaseSensitiveDistance;
+                    }
                     const caseSensitiveDistance = levenshteinWithMax(name, candidateName, bestCaseSensitiveDistance - 1);
                     if (caseSensitiveDistance === undefined) {
                         continue;
@@ -1980,6 +1986,7 @@ namespace ts {
                     bestDistance = distance;
                     bestCandidate = candidate;
                     bestCaseSensitiveDistance = caseSensitiveDistance;
+                    bestCandidateName = candidateName;
                 }
             }
         }
