@@ -3361,15 +3361,15 @@
         "category": "Error",
         "code": 4110
     },
-    "Method cannot have override modifier because class '{0}' does not extended another class.": {
+    "Class member cannot have override modifier because class '{0}' does not extended another class.": {
         "category": "Error",
         "code": 4111
     },
-    "Method cannot have override modifier because it's not existed in the base class '{0}'.": {
+    "Class member cannot have override modifier because it's not existed in the base class '{0}'.": {
         "category": "Error",
         "code": 4112
     },
-    "Method must have override modifier because it's override the base class '{0}'.": {
+    "Class member must have override modifier because it's override the base class '{0}'.": {
         "category": "Error",
         "code": 4113
     },

@@ -1,5 +1,5 @@
-tests/cases/conformance/override/override2.ts(12,14): error TS4113: Method must have override modifier because it's override the base class 'AB'.
-tests/cases/conformance/override/override2.ts(17,14): error TS4113: Method must have override modifier because it's override the base class 'AB'.
+tests/cases/conformance/override/override2.ts(12,14): error TS4113: Class member must have override modifier because it's override the base class 'AB'.
+tests/cases/conformance/override/override2.ts(17,14): error TS4113: Class member must have override modifier because it's override the base class 'AB'.
 
 
 ==== tests/cases/conformance/override/override2.ts (2 errors) ====
@@ -16,14 +16,14 @@ tests/cases/conformance/override/override2.ts(17,14): error TS4113: Method must 
     abstract class AD2 extends AB {
         abstract foo(v: ''): void // need override?
                  ~~~
-!!! error TS4113: Method must have override modifier because it's override the base class 'AB'.
+!!! error TS4113: Class member must have override modifier because it's override the base class 'AB'.
     }
     
     abstract class AD3 extends AB {
         override foo(v: ''): void { } // need override?
         abstract bar(): void;
                  ~~~
-!!! error TS4113: Method must have override modifier because it's override the base class 'AB'.
+!!! error TS4113: Class member must have override modifier because it's override the base class 'AB'.
     }
     
     class D4 extends AB {

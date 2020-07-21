@@ -1,4 +1,4 @@
-tests/cases/conformance/override/override5.ts(10,13): error TS4113: Method must have override modifier because it's override the base class 'B'.
+tests/cases/conformance/override/override5.ts(10,13): error TS4113: Class member must have override modifier because it's override the base class 'B'.
 tests/cases/conformance/override/override5.ts(12,14): error TS1040: 'override' modifier cannot be used in an ambient context.
 tests/cases/conformance/override/override5.ts(14,14): error TS1243: 'static' modifier cannot be used with 'override' modifier.
 tests/cases/conformance/override/override5.ts(16,14): error TS1030: 'override' modifier already seen.
@@ -18,7 +18,7 @@ tests/cases/conformance/override/override5.ts(21,5): error TS1089: 'override' mo
     class D extends B{
         declare p1: number
                 ~~
-!!! error TS4113: Method must have override modifier because it's override the base class 'B'.
+!!! error TS4113: Class member must have override modifier because it's override the base class 'B'.
     
         override declare p2: number
                  ~~~~~~~

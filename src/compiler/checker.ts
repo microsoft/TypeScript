@@ -34428,16 +34428,16 @@ namespace ts {
                         const prop = getPropertyOfType(typeWithThis, declaredProp.escapedName);
                         const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
                         if (prop && !baseProp && hasOverride) {
-                            error(member, Diagnostics.Method_cannot_have_override_modifier_because_it_s_not_existed_in_the_base_class_0, baseClassName);
+                            error(member, Diagnostics.Class_member_cannot_have_override_modifier_because_it_s_not_existed_in_the_base_class_0, baseClassName);
                         }
                         else if (prop && baseProp && !hasOverride) {
-                            error(member, Diagnostics.Method_must_have_override_modifier_because_it_s_override_the_base_class_0, baseClassName);
+                            error(member, Diagnostics.Class_member_must_have_override_modifier_because_it_s_override_the_base_class_0, baseClassName);
                         }
                     }
                 }
                 else if (hasOverride) {
                     const className = typeToString(type);
-                    error(member, Diagnostics.Method_cannot_have_override_modifier_because_class_0_does_not_extended_another_class, className);
+                    error(member, Diagnostics.Class_member_cannot_have_override_modifier_because_class_0_does_not_extended_another_class, className);
                 }
             }
         }
