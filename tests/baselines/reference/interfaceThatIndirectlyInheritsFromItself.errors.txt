@@ -1,8 +1,12 @@
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(1,11): error TS2310: Type 'Base' recursively references itself as a base type.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(5,11): error TS2310: Type 'Derived' recursively references itself as a base type.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(9,11): error TS2310: Type 'Derived2' recursively references itself as a base type.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(14,15): error TS2310: Type 'Base<T>' recursively references itself as a base type.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(18,15): error TS2310: Type 'Derived<T>' recursively references itself as a base type.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts(22,15): error TS2310: Type 'Derived2<T>' recursively references itself as a base type.
 
 
-==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts (2 errors) ====
+==== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts (6 errors) ====
     interface Base extends Derived2 { // error
               ~~~~
 !!! error TS2310: Type 'Base' recursively references itself as a base type.
@@ -10,10 +14,14 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectly
     }
     
     interface Derived extends Base {
+              ~~~~~~~
+!!! error TS2310: Type 'Derived' recursively references itself as a base type.
         y: string;
     }
     
     interface Derived2 extends Derived {
+              ~~~~~~~~
+!!! error TS2310: Type 'Derived2' recursively references itself as a base type.
         z: string;
     }
     
@@ -25,10 +33,14 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectly
         }
     
         interface Derived<T> extends Base<T> {
+                  ~~~~~~~
+!!! error TS2310: Type 'Derived<T>' recursively references itself as a base type.
             y: string;
         }
     
         interface Derived2<T> extends Derived<T> {
+                  ~~~~~~~~
+!!! error TS2310: Type 'Derived2<T>' recursively references itself as a base type.
             z: string;
         }
     }

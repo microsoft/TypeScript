@@ -1164,6 +1164,22 @@
         "category": "Error",
         "code": 1384
     },
+    "Function type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1385
+    },
+    "Constructor type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1386
+    },
+    "Function type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1387
+    },
+    "Constructor type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1388
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3040,6 +3056,10 @@
     "'extends' clause of exported class '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4020
+    },
+    "'extends' clause of exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4021
     },
     "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",

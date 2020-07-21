@@ -362,6 +362,19 @@ interface Desc<A extends unknown[], T> {
 declare const a: Desc<[string, number, boolean], object>;
 const b = a.bind("", 1);  // Desc<[boolean], object>
 
+// Repro from #39607
+
+declare function getUser(id: string, options?: { x?: string }): string;
+
+declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z?: boolean }): void;
+
+function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
+    return (...args: [...T]) => method(...args, {});
+}
+
+callApi(getUser);
+callApi(getOrgUser);
+
 
 //// [variadicTuples1.js]
 "use strict";
@@ -568,6 +581,17 @@ function f23(args) {
     var v3 = f22(["foo", 42]); // [string]
 }
 var b = a.bind("", 1); // Desc<[boolean], object>
+function callApi(method) {
+    return function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return method.apply(void 0, __spreadArrays(args, [{}]));
+    };
+}
+callApi(getUser);
+callApi(getOrgUser);
 
 
 //// [variadicTuples1.d.ts]
@@ -720,3 +744,11 @@ interface Desc<A extends unknown[], T> {
 }
 declare const a: Desc<[string, number, boolean], object>;
 declare const b: Desc<[boolean], object>;
+declare function getUser(id: string, options?: {
+    x?: string;
+}): string;
+declare function getOrgUser(id: string, orgId: number, options?: {
+    y?: number;
+    z?: boolean;
+}): void;
+declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args_0: T) => U;

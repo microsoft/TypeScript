@@ -620,6 +620,20 @@ import {
             });
         }
         {
+            const runTest = (name: string, text: string) => runSingleFileTest(name, /*placeOpenBraceOnNewLineForFunctions*/ false, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
+                for (const specifier of ["x3", "x4", "x5"]) {
+                    // eslint-disable-next-line boolean-trivia
+                    changeTracker.insertNodeInListAfter(sourceFile, findChild("x2", sourceFile), factory.createImportSpecifier(undefined, factory.createIdentifier(specifier)));
+                }
+            });
+
+            const crlfText = "import {\r\nx1,\r\nx2\r\n} from \"bar\";";
+            runTest("insertNodeInListAfter19", crlfText);
+
+            const lfText = "import {\nx1,\nx2\n} from \"bar\";";
+            runTest("insertNodeInListAfter20", lfText);
+        }
+        {
             const text = `
 class A {
     x;
