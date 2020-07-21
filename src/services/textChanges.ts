@@ -469,7 +469,7 @@ namespace ts.textChanges {
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[]): void {
             // If no `(`, is an arrow function `x => x`, so use the pos of the first parameter
             const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) || first(node.parameters)).getStart(sourceFile);
-            this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
+            this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">", joiner: ", " });
         }
 
         private getOptionsForInsertNodeBefore(before: Node, inserted: Node, blankLineBetween: boolean): InsertNodeOptions {
@@ -794,7 +794,8 @@ namespace ts.textChanges {
                     const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
                     // insert element before the line break on the line that contains 'after' element
                     let insertPos = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
-                    if (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
+                    // find position before "\n" or "\r\n"
+                    while (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
                         insertPos--;
                     }
                     this.replaceRange(sourceFile, createRange(insertPos), newNode, { indentation, prefix: this.newLineCharacter });
