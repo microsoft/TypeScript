@@ -4469,6 +4469,10 @@
         "category": "Error",
         "code": 6234
     },
+    "Disable loading referenced projects.": {
+        "category": "Message",
+        "code": 6235
+    },
 
     "Projects to reference": {
         "category": "Message",
