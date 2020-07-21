@@ -34421,14 +34421,7 @@ namespace ts {
 
             for (const member of node.members) {
                 const hasOverride = hasOverrideModifier(member);
-                const hasAmbient = hasAmbientModifier(member);
-
-                if (hasAmbient) {
-                    if (hasOverride) {
-                        error(member, Diagnostics.Override_modifier_cannot_be_used_with_declare_modifier);
-                    }
-                }
-                else if (baseWithThis) {
+                if (baseWithThis) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
                     if (declaredProp) {
                         const baseClassName = typeToString(baseWithThis);
@@ -37749,7 +37742,7 @@ namespace ts {
                 return quickResult;
             }
 
-            let lastStatic: Node | undefined, lastDeclare: Node | undefined, lastAsync: Node | undefined, lastReadonly: Node | undefined;
+            let lastStatic: Node | undefined, lastDeclare: Node | undefined, lastAsync: Node | undefined, lastReadonly: Node | undefined, lastOverride: Node | undefined;
             let flags = ModifierFlags.None;
             for (const modifier of node.modifiers!) {
                 if (modifier.kind !== SyntaxKind.ReadonlyKeyword) {
@@ -37766,6 +37759,23 @@ namespace ts {
                             return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));
                         }
                         break;
+                    case SyntaxKind.OverrideKeyword:
+                        if (!compilerOptions.pedanticOverride) {
+                            return grammarErrorOnNode(modifier, Diagnostics.Override_modifier_must_be_used_with_pedanticOverride_compiler_option);
+                        }
+                        if (flags & ModifierFlags.Override) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
+                        }
+                        else if(flags & ModifierFlags.Ambient) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "override", "declare");
+                        }
+                        else if(flags & ModifierFlags.Static) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
+                        }
+                        flags |= ModifierFlags.Override;
+                        lastOverride = modifier;
+                        break;
+
                     case SyntaxKind.PublicKeyword:
                     case SyntaxKind.ProtectedKeyword:
                     case SyntaxKind.PrivateKeyword:
@@ -37773,6 +37783,9 @@ namespace ts {
 
                         if (flags & ModifierFlags.AccessibilityModifier) {
                             return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
+                        }
+                        else if (compilerOptions.pedanticOverride && flags & ModifierFlags.Override) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "override");
                         }
                         else if (flags & ModifierFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
@@ -37806,6 +37819,9 @@ namespace ts {
                         }
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "readonly");
+                        }
+                        else if (compilerOptions.pedanticOverride && flags & ModifierFlags.Override) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "override");
                         }
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "async");
@@ -37874,6 +37890,9 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
                         }
+                        else if (compilerOptions.pedanticOverride && flags & ModifierFlags.Override) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "override");
+                        }
                         else if (isClassLike(node.parent) && !isPropertyDeclaration(node)) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_class_element, "declare");
                         }
@@ -37940,6 +37959,9 @@ namespace ts {
                 }
                 if (flags & ModifierFlags.Abstract) {
                     return grammarErrorOnNode(lastStatic!, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "abstract"); // TODO: GH#18217
+                }
+                if (compilerOptions.pedanticOverride && flags & ModifierFlags.Override) {
+                    return grammarErrorOnNode(lastOverride!, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "override"); // TODO: GH#18217
                 }
                 else if (flags & ModifierFlags.Async) {
                     return grammarErrorOnNode(lastAsync!, Diagnostics._0_modifier_cannot_appear_on_a_constructor_declaration, "async");

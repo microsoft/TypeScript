@@ -9,6 +9,15 @@ class B {
     p2: number = 2;
 >p2 : number
 >2 : 2
+
+    oop: number;
+>oop : number
+
+    pp: number;
+>pp : number
+
+    op: number;
+>op : number
 }
 
 class D extends B{
@@ -20,5 +29,23 @@ class D extends B{
 
     override declare p2: number
 >p2 : number
+
+    override static sp: number;
+>sp : number
+
+    override override oop: number;
+>oop : number
+
+    public override pp: number;
+>pp : number
+
+    override public op: number;
+>op : number
+
+    override constructor () {
+        super();
+>super() : void
+>super : typeof B
+    }
 }
 

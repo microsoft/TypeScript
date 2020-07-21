@@ -3373,7 +3373,7 @@
         "category": "Error",
         "code": 4113
     },
-    "Override modifier cannot be used with declare modifier.": {
+    "'Override' modifier must be used with 'pedanticOverride ' compiler option": {
         "category": "Error",
         "code": 4114
     },

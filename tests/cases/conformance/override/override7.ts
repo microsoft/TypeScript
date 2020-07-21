@@ -1,11 +1,8 @@
 // @declaration: true
-// @pedanticOverride: true
+// @pedanticOverride: false
 class B {
     p1: number = 1;
     p2: number = 2;
-    oop: number;
-    pp: number;
-    op: number;
 }
 
 class D extends B{

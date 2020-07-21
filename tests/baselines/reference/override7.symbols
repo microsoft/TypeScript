@@ -1,0 +1,39 @@
+=== tests/cases/conformance/override/override7.ts ===
+class B {
+>B : Symbol(B, Decl(override7.ts, 0, 0))
+
+    p1: number = 1;
+>p1 : Symbol(B.p1, Decl(override7.ts, 0, 9))
+
+    p2: number = 2;
+>p2 : Symbol(B.p2, Decl(override7.ts, 1, 19))
+}
+
+class D extends B{
+>D : Symbol(D, Decl(override7.ts, 3, 1))
+>B : Symbol(B, Decl(override7.ts, 0, 0))
+
+    declare p1: number
+>p1 : Symbol(D.p1, Decl(override7.ts, 5, 18))
+
+    override declare p2: number
+>p2 : Symbol(D.p2, Decl(override7.ts, 6, 22))
+
+    override static sp: number;
+>sp : Symbol(D.sp, Decl(override7.ts, 8, 31))
+
+    override override oop: number;
+>oop : Symbol(D.oop, Decl(override7.ts, 10, 31))
+
+    public override pp: number;
+>pp : Symbol(D.pp, Decl(override7.ts, 12, 34))
+
+    override public op: number;
+>op : Symbol(D.op, Decl(override7.ts, 14, 31))
+
+    override constructor () {
+        super();
+>super : Symbol(B, Decl(override7.ts, 0, 0))
+    }
+}
+

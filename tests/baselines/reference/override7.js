@@ -1,10 +1,7 @@
-//// [override5.ts]
+//// [override7.ts]
 class B {
     p1: number = 1;
     p2: number = 2;
-    oop: number;
-    pp: number;
-    op: number;
 }
 
 class D extends B{
@@ -25,7 +22,7 @@ class D extends B{
 }
 
 
-//// [override5.js]
+//// [override7.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -55,13 +52,10 @@ var D = /** @class */ (function (_super) {
 }(B));
 
 
-//// [override5.d.ts]
+//// [override7.d.ts]
 declare class B {
     p1: number;
     p2: number;
-    oop: number;
-    pp: number;
-    op: number;
 }
 declare class D extends B {
     p1: number;
