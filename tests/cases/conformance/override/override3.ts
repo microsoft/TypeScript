@@ -19,3 +19,8 @@ class DD extends D {
     override foo(): void {}
     override bar(): void {}
 }
+
+class EB extends D {
+    foo(): void {}
+    override bar(): void {}
+}

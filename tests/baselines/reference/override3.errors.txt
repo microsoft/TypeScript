@@ -1,4 +1,4 @@
-tests/cases/conformance/override/override3.ts(7,5): error TS4113: Method must have override modifier because it's override the base class 'B'.
+tests/cases/conformance/override/override3.ts(22,5): error TS4113: Method must have override modifier because it's override the base class 'D'.
 
 
 ==== tests/cases/conformance/override/override3.ts (1 errors) ====
@@ -9,8 +9,6 @@ tests/cases/conformance/override/override3.ts(7,5): error TS4113: Method must ha
     
     declare class D extends B {
         foo (): void;
-        ~~~
-!!! error TS4113: Method must have override modifier because it's override the base class 'B'.
         override bar (): void;
     }
     
@@ -21,6 +19,13 @@ tests/cases/conformance/override/override3.ts(7,5): error TS4113: Method must ha
     
     class DD extends D {
         override foo(): void {}
+        override bar(): void {}
+    }
+    
+    class EB extends D {
+        foo(): void {}
+        ~~~
+!!! error TS4113: Method must have override modifier because it's override the base class 'D'.
         override bar(): void {}
     }
     

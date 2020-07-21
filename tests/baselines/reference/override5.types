@@ -1,0 +1,24 @@
+=== tests/cases/conformance/override/override5.ts ===
+class B {
+>B : B
+
+    p1: number = 1;
+>p1 : number
+>1 : 1
+
+    p2: number = 2;
+>p2 : number
+>2 : 2
+}
+
+class D extends B{
+>D : D
+>B : B
+
+    declare p1: number
+>p1 : number
+
+    override declare p2: number
+>p2 : number
+}
+

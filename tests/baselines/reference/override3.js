@@ -19,6 +19,11 @@ class DD extends D {
     override bar(): void {}
 }
 
+class EB extends D {
+    foo(): void {}
+    override bar(): void {}
+}
+
 
 //// [override3.js]
 var __extends = (this && this.__extends) || (function () {
@@ -52,6 +57,15 @@ var DD = /** @class */ (function (_super) {
     DD.prototype.bar = function () { };
     return DD;
 }(D));
+var EB = /** @class */ (function (_super) {
+    __extends(EB, _super);
+    function EB() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    EB.prototype.foo = function () { };
+    EB.prototype.bar = function () { };
+    return EB;
+}(D));
 
 
 //// [override3.d.ts]
@@ -69,5 +83,9 @@ declare class DB extends B {
 }
 declare class DD extends D {
     override foo(): void;
+    override bar(): void;
+}
+declare class EB extends D {
+    foo(): void;
     override bar(): void;
 }

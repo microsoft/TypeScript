@@ -1,0 +1,17 @@
+tests/cases/conformance/override/override5.ts(9,22): error TS4114: Override modifier cannot be used with declare modifier.
+
+
+==== tests/cases/conformance/override/override5.ts (1 errors) ====
+    class B {
+        p1: number = 1;
+        p2: number = 2;
+    }
+    
+    class D extends B{
+        declare p1: number
+    
+        override declare p2: number
+                         ~~
+!!! error TS4114: Override modifier cannot be used with declare modifier.
+    }
+    
