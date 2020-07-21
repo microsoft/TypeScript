@@ -1,0 +1,20 @@
+tests/cases/conformance/override/override6.ts(9,12): error TS4113: Method must have override modifier because it's override the base class 'B'.
+
+
+==== tests/cases/conformance/override/override6.ts (1 errors) ====
+    class B {
+        public baz: number = 1;
+        constructor(public foo: string, public bar: number) {
+    
+        }
+    }
+    
+    class D extends B {
+        public bar: number = 1
+               ~~~
+!!! error TS4113: Method must have override modifier because it's override the base class 'B'.
+        constructor(public foo: string, public baz: number) {
+            super(foo, 42)
+        }
+    }
+    
