@@ -34319,7 +34319,7 @@ namespace ts {
             checkClassForDuplicateDeclarations(node);
 
             // Only check for reserved static identifiers on non-ambient context.
-            const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient)
+            const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
             if (!nodeInAmbientContext) {
                 checkClassForStaticPropertyNameConflicts(node);
             }
