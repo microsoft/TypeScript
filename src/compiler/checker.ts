@@ -27536,12 +27536,12 @@ namespace ts {
 
         function checkDeprecatedSignature(signature: Signature, node: CallLikeExpression) {
             if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
-                const suggestionNode = getSignautreSuggestionNode(node);
+                const suggestionNode = getSignatureSuggestionNode(node);
                 errorOrSuggestion(/*isError*/ false, suggestionNode, Diagnostics._0_is_deprecated, signatureToString(signature));
             }
         }
 
-        function getSignautreSuggestionNode(node: CallLikeExpression): Node {
+        function getSignatureSuggestionNode(node: CallLikeExpression): Node {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.Decorator:
@@ -27553,7 +27553,7 @@ namespace ts {
                 case SyntaxKind.JsxSelfClosingElement:
                     return node.tagName;
                 default:
-                    return node;
+                    return Debug.assertNever(node);
             }
         }
 
