@@ -10972,7 +10972,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此模組使用 'export =' 宣告，而且在使用 '{0}' 旗標時，只能搭配預設匯入使用。]]></Val>
+            <Val><![CDATA[此模組使用 'export =' 宣告，只能在使用 '{0}' 旗標時搭配預設匯入使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
