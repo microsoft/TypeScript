@@ -1663,7 +1663,7 @@ namespace ts.server {
             }
             if (this.autoImportProviderHost) {
                 updateProjectIfDirty(this.autoImportProviderHost);
-                if (!this.autoImportProviderHost.rootFilesMap.size) {
+                if (!this.autoImportProviderHost.hasRoots()) {
                     this.autoImportProviderHost.close();
                     this.autoImportProviderHost = undefined;
                     return undefined;
