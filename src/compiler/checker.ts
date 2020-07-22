@@ -18007,6 +18007,7 @@ namespace ts {
             if (!variances) {
                 // The emptyArray singleton is used to signal a recursive invocation.
                 cache.variances = emptyArray;
+                let encounteredMaybeResult = false;
                 variances = [];
                 for (const tp of typeParameters) {
                     let unmeasurable = false;
@@ -18018,21 +18019,28 @@ namespace ts {
                     // invariance, covariance, contravariance or bivariance.
                     const typeWithSuper = createMarkerType(cache, tp, markerSuperType);
                     const typeWithSub = createMarkerType(cache, tp, markerSubType);
-                    // Note: We consider a `Maybe` result to be affirmative below; if we're already trying to figure out if A<+?> is assignable to A<-?>
-                    // and we end up needing to check some type we're already comparing in the body of the calling comparison, we can assume it to be true
-                    // for the scope of the remainder of the comparison. (Simply because disproving it is the point of the _other_ comparisons we're performing)
-                    // The issue comes with invalidating the cached variance result if the root comparison turns out to be negative. _Right now_, we're simply...
-                    // not. This will _probably_ cause some subtle bugs, however coming up with an example exposing one such bug is nontrivial.
-                    // But! In the event such a motiviating example should come to light, the fix shouldn't be _too_ bad - here in `getVariancesWorker` we'd
-                    // just need a `Maybe` tracking stack just like we have in `recursiveTypeRelatedTo`.
-                    let variance = (compareTypes(typeWithSub, typeWithSuper) ? VarianceFlags.Covariant : 0) |
-                        (compareTypes(typeWithSuper, typeWithSub) ? VarianceFlags.Contravariant : 0);
+
+                    const subResult = compareTypes(typeWithSub, typeWithSuper);
+                    const superResult = compareTypes(typeWithSuper, typeWithSub);
+                    let variance = (subResult ? VarianceFlags.Covariant : 0) |
+                        (superResult ? VarianceFlags.Contravariant : 0);
+                    if (subResult === Ternary.Maybe || superResult === Ternary.Maybe) {
+                        variance |= VarianceFlags.Unmeasurable;
+                        encounteredMaybeResult = true;
+                    }
                     // If the instantiations appear to be related bivariantly it may be because the
                     // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
                     // type). To determine this we compare instantiations where the type parameter is
                     // replaced with marker types that are known to be unrelated.
-                    if (variance === VarianceFlags.Bivariant && compareTypes(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
-                        variance = VarianceFlags.Independent;
+                    if (variance === VarianceFlags.Bivariant) {
+                        const otherResult = compareTypes(createMarkerType(cache, tp, markerOtherType), typeWithSuper);
+                        if (otherResult === Ternary.Maybe) {
+                            variance |= VarianceFlags.Unmeasurable;
+                            encounteredMaybeResult = true;
+                        }
+                        if (otherResult) {
+                            variance = VarianceFlags.Independent;
+                        }
                     }
                     outofbandVarianceMarkerHandler = oldHandler;
                     if (unmeasurable || unreliable) {
@@ -18045,7 +18053,12 @@ namespace ts {
                     }
                     variances.push(variance);
                 }
-                cache.variances = variances;
+                if (!encounteredMaybeResult) {
+                    cache.variances = variances;
+                }
+                else {
+                    cache.variances = undefined;
+                }
             }
             return variances;
         }

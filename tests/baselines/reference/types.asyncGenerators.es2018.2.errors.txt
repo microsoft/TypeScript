@@ -2,12 +2,14 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(8,12): error TS2504: Type 'Promise<number[]>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(10,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterableIterator<number>'.
   Call signature return types 'AsyncGenerator<string, void, undefined>' and 'AsyncIterableIterator<number>' are incompatible.
-    The types returned by 'next(...)' are incompatible between these types.
-      Type 'Promise<IteratorResult<string, void>>' is not assignable to type 'Promise<IteratorResult<number, any>>'.
-        Type 'IteratorResult<string, void>' is not assignable to type 'IteratorResult<number, any>'.
-          Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
-            Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
-              Type 'string' is not assignable to type 'number'.
+    The types of 'next(...).then' are incompatible between these types.
+      Type '<TResult1 = IteratorResult<string, void>, TResult2 = never>(onfulfilled?: (value: IteratorResult<string, void>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>' is not assignable to type '<TResult1 = IteratorResult<number, any>, TResult2 = never>(onfulfilled?: (value: IteratorResult<number, any>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>'.
+        Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+          Types of parameters 'value' and 'value' are incompatible.
+            Type 'IteratorResult<string, void>' is not assignable to type 'IteratorResult<number, any>'.
+              Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
+                Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
+                  Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(13,7): error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterableIterator<number>'.
   Type 'AsyncGenerator<string, void, undefined>' is not assignable to type 'AsyncIterableIterator<number>'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(16,7): error TS2322: Type '() => AsyncGenerator<string, void, unknown>' is not assignable to type '() => AsyncIterableIterator<number>'.
@@ -67,12 +69,14 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
           ~~~~~~~~~~~~~~
 !!! error TS2322: Type '() => AsyncGenerator<string, void, undefined>' is not assignable to type '() => AsyncIterableIterator<number>'.
 !!! error TS2322:   Call signature return types 'AsyncGenerator<string, void, undefined>' and 'AsyncIterableIterator<number>' are incompatible.
-!!! error TS2322:     The types returned by 'next(...)' are incompatible between these types.
-!!! error TS2322:       Type 'Promise<IteratorResult<string, void>>' is not assignable to type 'Promise<IteratorResult<number, any>>'.
-!!! error TS2322:         Type 'IteratorResult<string, void>' is not assignable to type 'IteratorResult<number, any>'.
-!!! error TS2322:           Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
-!!! error TS2322:             Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
-!!! error TS2322:               Type 'string' is not assignable to type 'number'.
+!!! error TS2322:     The types of 'next(...).then' are incompatible between these types.
+!!! error TS2322:       Type '<TResult1 = IteratorResult<string, void>, TResult2 = never>(onfulfilled?: (value: IteratorResult<string, void>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>' is not assignable to type '<TResult1 = IteratorResult<number, any>, TResult2 = never>(onfulfilled?: (value: IteratorResult<number, any>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>'.
+!!! error TS2322:         Types of parameters 'onfulfilled' and 'onfulfilled' are incompatible.
+!!! error TS2322:           Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:             Type 'IteratorResult<string, void>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2322:               Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2322:                 Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
+!!! error TS2322:                   Type 'string' is not assignable to type 'number'.
         yield "a";
     };
     const assignability2: () => AsyncIterableIterator<number> = async function * () {
