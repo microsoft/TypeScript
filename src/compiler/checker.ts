@@ -27551,7 +27551,7 @@ namespace ts {
                     return getDeprecatedSuggestionNode(node.tag);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
-                    return node.tagName;
+                    return getDeprecatedSuggestionNode(node.tagName);
                 default:
                     return Debug.assertNever(node);
             }
