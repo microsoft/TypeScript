@@ -845,6 +845,7 @@ namespace ts {
         let reservedNamesStack: Set<string>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
         let reservedNames: Set<string>; // TempFlags to reserve in nested name generation scopes.
         let preserveSourceNewlines = printerOptions.preserveSourceNewlines; // Can be overridden inside nodes with the `IgnoreSourceNewlines` emit flag.
+        let nextListElementPos: number | undefined; // See comment in `getLeadingLineTerminatorCount`.
 
         let writer: EmitTextWriter;
         let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
@@ -4104,6 +4105,7 @@ namespace ts {
                         shouldEmitInterveningComments = mayEmitInterveningComments;
                     }
 
+                    nextListElementPos = child.pos;
                     emit(child);
 
                     if (shouldDecreaseIndentAfterEmit) {
@@ -4312,11 +4314,32 @@ namespace ts {
                 if (firstChild === undefined) {
                     return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
+                if (firstChild.pos === nextListElementPos) {
+                    // If this child starts at the beginning of a list item in a parent list, its leading
+                    // line terminators have already been written as the separating line terminators of the
+                    // parent list. Example:
+                    //
+                    // class Foo {
+                    //   constructor() {}
+                    //   public foo() {}
+                    // }
+                    //
+                    // The outer list is the list of class members, with one line terminator between the
+                    // constructor and the method. The constructor is written, the separating line terminator
+                    // is written, and then we start emitting the method. Its modifiers ([public]) constitute an inner
+                    // list, so we look for its leading line terminators. If we didn't know that we had already
+                    // written a newline as part of the parent list, it would appear that we need to write a
+                    // leading newline to start the modifiers.
+                    return 0;
+                }
                 if (firstChild.kind === SyntaxKind.JsxText) {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(firstChild) && (!firstChild.parent || firstChild.parent === parentNode)) {
+                if (!positionIsSynthesized(parentNode.pos) &&
+                    !nodeIsSynthesized(firstChild) &&
+                    (!firstChild.parent || getOriginalNode(firstChild.parent) === getOriginalNode(parentNode as Node))
+                ) {
                     if (preserveSourceNewlines) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter(
@@ -4376,9 +4399,10 @@ namespace ts {
                 }
                 if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
                     if (preserveSourceNewlines) {
+                        const end = isNodeArray(children) && !positionIsSynthesized(children.end) ? children.end : lastChild.end;
                         return getEffectiveLines(
                             includeComments => getLinesBetweenPositionAndNextNonWhitespaceCharacter(
-                                lastChild.end,
+                                end,
                                 parentNode.end,
                                 currentSourceFile!,
                                 includeComments));
