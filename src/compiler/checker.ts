@@ -27536,30 +27536,23 @@ namespace ts {
 
         function checkDeprecatedSignature(signature: Signature, node: CallLikeExpression) {
             if (signature.declaration && signature.declaration.flags & NodeFlags.Deprecated) {
-                const suggestionNode = getSignatureSuggestionNode(node);
+                const suggestionNode = getDeprecatedSuggestionNode(node);
                 errorOrSuggestion(/*isError*/ false, suggestionNode, Diagnostics._0_is_deprecated, signatureToString(signature));
-            }
-        }
-
-        function getSignatureSuggestionNode(node: CallLikeExpression): Node {
-            switch (node.kind) {
-                case SyntaxKind.CallExpression:
-                case SyntaxKind.Decorator:
-                case SyntaxKind.NewExpression:
-                    return getDeprecatedSuggestionNode(node.expression);
-                case SyntaxKind.TaggedTemplateExpression:
-                    return getDeprecatedSuggestionNode(node.tag);
-                case SyntaxKind.JsxOpeningElement:
-                case SyntaxKind.JsxSelfClosingElement:
-                    return getDeprecatedSuggestionNode(node.tagName);
-                default:
-                    return Debug.assertNever(node);
             }
         }
 
         function getDeprecatedSuggestionNode(node: Node): Node {
             node = skipParentheses(node);
             switch (node.kind) {
+                case SyntaxKind.CallExpression:
+                case SyntaxKind.Decorator:
+                case SyntaxKind.NewExpression:
+                    return getDeprecatedSuggestionNode((<Decorator | CallExpression | NewExpression>node).expression);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return getDeprecatedSuggestionNode((<TaggedTemplateExpression>node).tag);
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                    return getDeprecatedSuggestionNode((<JsxOpeningLikeElement>node).tagName);
                 case SyntaxKind.ElementAccessExpression:
                     return (<ElementAccessExpression>node).argumentExpression;
                 case SyntaxKind.PropertyAccessExpression:
