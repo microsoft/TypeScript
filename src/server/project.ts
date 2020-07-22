@@ -1859,7 +1859,7 @@ namespace ts.server {
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
                     const { resolvedFileName } = resolution.resolvedTypeReferenceDirective;
-                    const fileName = moduleResolutionHost.realpath?.(resolvedFileName) || resolvedFileName; 
+                    const fileName = moduleResolutionHost.realpath?.(resolvedFileName) || resolvedFileName;
                     if (!hostProject.getCurrentProgram()!.getSourceFile(fileName) && !hostProject.getCurrentProgram()!.getSourceFile(resolvedFileName)) {
                         rootNames = append(rootNames, fileName);
                     }
