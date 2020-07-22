@@ -4652,7 +4652,10 @@
         "code": 6385,
         "reportsDeprecated": true
     },
-
+    "Not check static member type whether incompatible with base in inheritance class": {
+        "category": "Message",
+        "code": 6386
+    },
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
         "code": 6500

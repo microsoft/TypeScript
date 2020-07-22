@@ -760,6 +760,12 @@ namespace ts {
 
         // Advanced
         {
+            name: "looseClassInheritanceStaticCheck",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Not_check_static_member_type_whether_incompatible_with_base_in_inheritance_class
+        },
+        {
             name: "jsxFactory",
             type: "string",
             category: Diagnostics.Advanced_Options,

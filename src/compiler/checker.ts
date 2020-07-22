@@ -34355,7 +34355,7 @@ namespace ts {
                     if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
                         issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     }
-                    else {
+                    else if(!compilerOptions.looseClassInheritanceStaticCheck) {
                         // Report static side error only when instance type is assignable
                         checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
                             Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);

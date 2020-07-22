@@ -5689,6 +5689,7 @@ namespace ts {
         /*@internal*/listFiles?: boolean;
         /*@internal*/listFilesOnly?: boolean;
         locale?: string;
+        looseClassInheritanceStaticCheck?: boolean;
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
