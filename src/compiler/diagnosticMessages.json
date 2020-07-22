@@ -1180,6 +1180,14 @@
         "category": "Error",
         "code": 1388
     },
+    "Number literals starting with '0' are not allowed in strict mode.": {
+        "category": "Error",
+        "code": 1389
+    },
+    "A bigint literal cannot start with '0'.": {
+        "category": "Error",
+        "code": 1390
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -4676,6 +4684,10 @@
     "File '{0}' is a JavaScript file. Did you mean to enable the 'allowJs' option?": {
         "category": "Error",
         "code": 6504
+    },
+    "Numeric separators are not allowed in numbers that start with '0'.": {
+        "category": "Error",
+        "code": 6505
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

@@ -11,8 +11,7 @@ tests/cases/compiler/b.js(3,7): error TS1210: Invalid use of 'eval'. Class defin
 tests/cases/compiler/b.js(6,13): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/c.js(1,12): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
 tests/cases/compiler/c.js(2,5): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
-tests/cases/compiler/d.js(2,9): error TS1121: Octal literals are not allowed in strict mode.
-tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
+tests/cases/compiler/d.js(2,9): error TS1389: Number literals starting with '0' are not allowed in strict mode.
 
 
 ==== tests/cases/compiler/a.js (9 errors) ====
@@ -75,10 +74,8 @@ tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
 !!! error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
     };
     
-==== tests/cases/compiler/d.js (2 errors) ====
+==== tests/cases/compiler/d.js (1 errors) ====
     "use strict";
     var x = 009; // error
-            ~~
-!!! error TS1121: Octal literals are not allowed in strict mode.
-              ~
-!!! error TS1005: ',' expected.
+            ~~~
+!!! error TS1389: Number literals starting with '0' are not allowed in strict mode.

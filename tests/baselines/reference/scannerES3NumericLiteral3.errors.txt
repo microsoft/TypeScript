@@ -1,7 +1,0 @@
-tests/cases/conformance/scanner/ecmascript3/scannerES3NumericLiteral3.ts(1,3): error TS1005: ';' expected.
-
-
-==== tests/cases/conformance/scanner/ecmascript3/scannerES3NumericLiteral3.ts (1 errors) ====
-    01.0
-      ~~
-!!! error TS1005: ';' expected.

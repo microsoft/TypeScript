@@ -210,3 +210,11 @@ _0.0e-0
 0._
 >0._ : 0
 
+=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/52.ts ===
+09_0
+>09_0 : 90
+
+=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/53.ts ===
+07_0
+>07_0 : 70
+

@@ -2078,9 +2078,11 @@ namespace ts {
         /* @internal */
         ContainsInvalidEscape = 1 << 11,    // e.g. `\uhello`
         /* @internal */
+        StartsWithZero = 1 << 12,
+        /* @internal */
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
         /* @internal */
-        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator,
+        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator | StartsWithZero,
         /* @internal */
         TemplateLiteralLikeFlags = ContainsInvalidEscape,
     }

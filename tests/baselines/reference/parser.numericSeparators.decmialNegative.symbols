@@ -151,4 +151,10 @@ No type information for this code.
 No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/51.ts ===
 0._
 No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/52.ts ===
+09_0
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/parser/ecmascriptnext/numericSeparators/53.ts ===
+07_0
+No type information for this code.
 No type information for this code.

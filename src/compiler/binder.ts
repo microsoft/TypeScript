@@ -2266,8 +2266,13 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: NumericLiteral) {
-            if (inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
-                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
+            if (inStrictMode) {
+                if (node.numericLiteralFlags & TokenFlags.Octal) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
+                }
+                else if (node.numericLiteralFlags & TokenFlags.StartsWithZero) {
+                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Number_literals_starting_with_0_are_not_allowed_in_strict_mode));
+                }
             }
         }
 

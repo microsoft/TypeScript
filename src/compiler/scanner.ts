@@ -1094,6 +1094,116 @@ namespace ts {
             }
         }
 
+        function scanPotentiallyOctalNumberFragment(): { fragment: string, isOctalCandidate: boolean } {
+            let start = pos;
+            let allowSeparator = false;
+            let isPreviousTokenSeparator = false;
+            let shouldShowLeadingZeroError = true;
+            let isOctalCandidate = pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1));
+            let result = "";
+            while (true) {
+                const ch = text.charCodeAt(pos);
+                if (ch === CharacterCodes._) {
+                    tokenFlags |= TokenFlags.ContainsSeparator;
+                    isOctalCandidate = false;
+                    if (allowSeparator) {
+                        allowSeparator = false;
+                        isPreviousTokenSeparator = true;
+                        result += text.substring(start, pos);
+                    }
+                    else if (isPreviousTokenSeparator) {
+                        error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
+                    }
+                    else {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    }
+                    if (shouldShowLeadingZeroError) {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_in_numbers_that_start_with_0, pos, 1);
+                        shouldShowLeadingZeroError = false;
+                    }
+                    pos++;
+                    start = pos;
+                    continue;
+                }
+                if (isDigit(ch)) {
+                    if (!isOctalDigit(ch)) {
+                        isOctalCandidate = false;
+                    }
+                    allowSeparator = true;
+                    isPreviousTokenSeparator = false;
+                    pos++;
+                    continue;
+                }
+                break;
+            }
+            if (text.charCodeAt(pos - 1) === CharacterCodes._) {
+                error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
+            }
+            return { fragment: result + text.substring(start, pos), isOctalCandidate };
+        }
+
+        function scanZeroLeadingNumber(): { type: SyntaxKind, value: string } {
+            const start = pos;
+            const { fragment: mainFragment, isOctalCandidate } = scanPotentiallyOctalNumberFragment();
+            let decimalFragment: string | undefined;
+            let scientificFragment: string | undefined;
+            if (text.charCodeAt(pos) === CharacterCodes.dot && !(isOctalCandidate && isIdentifierStart(codePointAt(text, pos + 1), languageVersion))) {
+                pos++;
+                decimalFragment = scanNumberFragment();
+            }
+            let end = pos;
+            if (text.charCodeAt(pos) === CharacterCodes.E || text.charCodeAt(pos) === CharacterCodes.e) {
+                pos++;
+                tokenFlags |= TokenFlags.Scientific;
+                if (text.charCodeAt(pos) === CharacterCodes.plus || text.charCodeAt(pos) === CharacterCodes.minus) pos++;
+                const preNumericPart = pos;
+                const finalFragment = scanNumberFragment();
+                if (!finalFragment) {
+                    error(Diagnostics.Digit_expected);
+                }
+                else {
+                    scientificFragment = text.substring(end, preNumericPart) + finalFragment;
+                    end = pos;
+                }
+            }
+            let result: string;
+            if (tokenFlags & TokenFlags.ContainsSeparator) {
+                result = mainFragment;
+                if (decimalFragment) {
+                    result += "." + decimalFragment;
+                }
+                if (scientificFragment) {
+                    result += scientificFragment;
+                }
+            }
+            else {
+                result = text.substring(start, end); // No need to use all the fragments; no _ removal needed
+            }
+
+            if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
+                checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
+                return {
+                    type: SyntaxKind.NumericLiteral,
+                    value: "" + +result // if value is not an integer, it can be safely coerced to a number
+                };
+            }
+            else {
+                let type = SyntaxKind.NumericLiteral;
+                tokenValue = "" + +result;
+                if (text.charCodeAt(pos) === CharacterCodes.n) {
+                    type = SyntaxKind.BigIntLiteral;
+                    tokenValue = parsePseudoBigInt(tokenValue + "n") + "n";
+                    pos++;
+                    error(Diagnostics.A_bigint_literal_cannot_start_with_0, start, pos - start);
+                }
+                else if (isOctalCandidate) {
+                    tokenFlags |= TokenFlags.Octal;
+                }
+                checkForIdentifierStartAfterNumericLiteral(start);
+                return { type, value: tokenValue };
+            }
+        }
+
         function checkForIdentifierStartAfterNumericLiteral(numericStart: number, isScientific?: boolean) {
             if (!isIdentifierStart(codePointAt(text, pos), languageVersion)) {
                 return;
@@ -1114,14 +1224,6 @@ namespace ts {
                 error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
                 pos = identifierStart;
             }
-        }
-
-        function scanOctalDigits(): number {
-            const start = pos;
-            while (isOctalDigit(text.charCodeAt(pos))) {
-                pos++;
-            }
-            return +(text.substring(start, pos));
         }
 
         /**
@@ -1852,16 +1954,13 @@ namespace ts {
                             tokenFlags |= TokenFlags.OctalSpecifier;
                             return token = checkBigIntSuffix();
                         }
-                        // Try to parse as an octal
-                        if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
-                            tokenValue = "" + scanOctalDigits();
-                            tokenFlags |= TokenFlags.Octal;
-                            return token = SyntaxKind.NumericLiteral;
+                        else if (pos + 1 < end && (isDigit(text.charCodeAt(pos + 1)) || text.charCodeAt(pos + 1) === CharacterCodes._)) {
+                            tokenFlags |= TokenFlags.StartsWithZero;
+                            ({ type: token, value: tokenValue } = scanZeroLeadingNumber());
+                            return token;
                         }
-                    // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
-                    // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
-                    // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
-                    // falls through
+
+                    // Fallthrough only for single digit number '0' or number starting with '0.' which don't need special checks
                     case CharacterCodes._1:
                     case CharacterCodes._2:
                     case CharacterCodes._3:

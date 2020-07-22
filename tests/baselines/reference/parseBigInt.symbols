@@ -127,7 +127,6 @@ const unaryPlusHex = +0x123n;
 // In separate blocks because they each declare an "n" variable
 { const legacyOct = 0123n; }
 >legacyOct : Symbol(legacyOct, Decl(parseBigInt.ts, 55, 7))
->n : Symbol(n, Decl(parseBigInt.ts, 55, 24))
 
 { const scientific = 1e2n; }
 >scientific : Symbol(scientific, Decl(parseBigInt.ts, 56, 7))

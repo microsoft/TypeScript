@@ -150,3 +150,9 @@ _0.0e-0
 
 // @filename: 51.ts
 0._
+
+// @filename: 52.ts
+09_0
+
+// @filename: 53.ts
+07_0

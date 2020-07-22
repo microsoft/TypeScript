@@ -1,6 +1,6 @@
 tests/cases/compiler/parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type 'bigint'.
 tests/cases/compiler/parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type 'bigint'.
-tests/cases/compiler/parseBigInt.ts(56,25): error TS1005: ',' expected.
+tests/cases/compiler/parseBigInt.ts(56,21): error TS1390: A bigint literal cannot start with '0'.
 tests/cases/compiler/parseBigInt.ts(57,22): error TS1352: A bigint literal cannot use exponential notation.
 tests/cases/compiler/parseBigInt.ts(58,19): error TS1353: A bigint literal must be an integer.
 tests/cases/compiler/parseBigInt.ts(59,26): error TS1353: A bigint literal must be an integer.
@@ -78,8 +78,8 @@ tests/cases/compiler/parseBigInt.ts(70,72): error TS2345: Argument of type '3' i
     // Parsing errors
     // In separate blocks because they each declare an "n" variable
     { const legacyOct = 0123n; }
-                            ~
-!!! error TS1005: ',' expected.
+                        ~~~~~
+!!! error TS1390: A bigint literal cannot start with '0'.
     { const scientific = 1e2n; }
                          ~~~~
 !!! error TS1352: A bigint literal cannot use exponential notation.
