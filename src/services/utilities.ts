@@ -1760,7 +1760,7 @@ namespace ts {
             getCurrentDirectory: () => host.getCurrentDirectory(),
             readFile: maybeBind(host, host.readFile),
             useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
-            getProbableSymlinks: maybeBind(host, host.getProbableSymlinks) || (() => program.getProbableSymlinks()),
+            getSymlinkCache: maybeBind(host, host.getSymlinkCache) || program.getSymlinkCache,
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
             getSourceFiles: () => program.getSourceFiles(),
             redirectTargetsMap: program.redirectTargetsMap,

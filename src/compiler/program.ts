@@ -702,7 +702,7 @@ namespace ts {
         let processingDefaultLibFiles: SourceFile[] | undefined;
         let processingOtherFiles: SourceFile[] | undefined;
         let files: SourceFile[];
-        let symlinks: ReadonlyESMap<string, string> | undefined;
+        let symlinks: SymlinkCache | undefined;
         let commonSourceDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
@@ -811,8 +811,9 @@ namespace ts {
 
         const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
             !options.disableSourceOfProjectReferenceRedirect;
-        const { onProgramCreateComplete, fileExists } = updateHostForUseSourceOfProjectReferenceRedirect({
+        const { onProgramCreateComplete, fileExists, directoryExists } = updateHostForUseSourceOfProjectReferenceRedirect({
             compilerHost: host,
+            getSymlinkCache,
             useSourceOfProjectReferenceRedirect,
             toPath,
             getResolvedProjectReferences,
@@ -974,7 +975,9 @@ namespace ts {
             isSourceOfProjectReferenceRedirect,
             emitBuildInfo,
             fileExists,
-            getProbableSymlinks,
+            directoryExists,
+            getSymlinkCache,
+            realpath: host.realpath?.bind(host),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };
 
@@ -1490,7 +1493,7 @@ namespace ts {
                 getResolvedProjectReferenceToRedirect,
                 getProjectReferenceRedirect,
                 isSourceOfProjectReferenceRedirect,
-                getProbableSymlinks,
+                getSymlinkCache,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -3468,9 +3471,9 @@ namespace ts {
             return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
 
-        function getProbableSymlinks(): ReadonlyESMap<string, string> {
-            if (host.getSymlinks) {
-                return host.getSymlinks();
+        function getSymlinkCache(): SymlinkCache {
+            if (host.getSymlinkCache) {
+                return host.getSymlinkCache();
             }
             return symlinks || (symlinks = discoverProbableSymlinks(
                 files,
@@ -3479,13 +3482,9 @@ namespace ts {
         }
     }
 
-    interface SymlinkedDirectory {
-        real: string;
-        realPath: Path;
-    }
-
     interface HostForUseSourceOfProjectReferenceRedirect {
         compilerHost: CompilerHost;
+        getSymlinkCache: () => SymlinkCache;
         useSourceOfProjectReferenceRedirect: boolean;
         toPath(fileName: string): Path;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
@@ -3495,9 +3494,6 @@ namespace ts {
 
     function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSourceOfProjectReferenceRedirect) {
         let setOfDeclarationDirectories: Set<Path> | undefined;
-        let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
-        let symlinkedFiles: ESMap<Path, string> | undefined;
-
         const originalFileExists = host.compilerHost.fileExists;
         const originalDirectoryExists = host.compilerHost.directoryExists;
         const originalGetDirectories = host.compilerHost.getDirectories;
@@ -3507,11 +3503,12 @@ namespace ts {
 
         host.compilerHost.fileExists = fileExists;
 
+        let directoryExists;
         if (originalDirectoryExists) {
             // This implementation of directoryExists checks if the directory being requested is
             // directory of .d.ts file for the referenced Project.
             // If it is it returns true irrespective of whether that directory exists on host
-            host.compilerHost.directoryExists = path => {
+            directoryExists = host.compilerHost.directoryExists = path => {
                 if (originalDirectoryExists.call(host.compilerHost, path)) {
                     handleDirectoryCouldBeSymlink(path);
                     return true;
@@ -3553,11 +3550,11 @@ namespace ts {
         // This is something we keep for life time of the host
         if (originalRealpath) {
             host.compilerHost.realpath = s =>
-                symlinkedFiles?.get(host.toPath(s)) ||
+                host.getSymlinkCache().getSymlinkedFiles()?.get(host.toPath(s)) ||
                 originalRealpath.call(host.compilerHost, s);
         }
 
-        return { onProgramCreateComplete, fileExists };
+        return { onProgramCreateComplete, fileExists, directoryExists };
 
         function onProgramCreateComplete() {
             host.compilerHost.fileExists = originalFileExists;
@@ -3603,20 +3600,20 @@ namespace ts {
 
             // Because we already watch node_modules, handle symlinks in there
             if (!originalRealpath || !stringContains(directory, nodeModulesPathPart)) return;
-            if (!symlinkedDirectories) symlinkedDirectories = new Map();
+            const symlinkCache = host.getSymlinkCache();
             const directoryPath = ensureTrailingDirectorySeparator(host.toPath(directory));
-            if (symlinkedDirectories.has(directoryPath)) return;
+            if (symlinkCache.getSymlinkedDirectories()?.has(directoryPath)) return;
 
             const real = normalizePath(originalRealpath.call(host.compilerHost, directory));
             let realPath: Path;
             if (real === directory ||
                 (realPath = ensureTrailingDirectorySeparator(host.toPath(real))) === directoryPath) {
                 // not symlinked
-                symlinkedDirectories.set(directoryPath, false);
+                symlinkCache.setSymlinkedDirectory(directoryPath, false);
                 return;
             }
 
-            symlinkedDirectories.set(directoryPath, {
+            symlinkCache.setSymlinkedDirectory(directoryPath, {
                 real: ensureTrailingDirectorySeparator(real),
                 realPath
             });
@@ -3630,10 +3627,12 @@ namespace ts {
             const result = fileOrDirectoryExistsUsingSource(fileOrDirectory);
             if (result !== undefined) return result;
 
+            const symlinkCache = host.getSymlinkCache();
+            const symlinkedDirectories = symlinkCache.getSymlinkedDirectories();
             if (!symlinkedDirectories) return false;
             const fileOrDirectoryPath = host.toPath(fileOrDirectory);
             if (!stringContains(fileOrDirectoryPath, nodeModulesPathPart)) return false;
-            if (isFile && symlinkedFiles && symlinkedFiles.has(fileOrDirectoryPath)) return true;
+            if (isFile && symlinkCache.getSymlinkedFiles()?.has(fileOrDirectoryPath)) return true;
 
             // If it contains node_modules check if its one of the symlinked path we know of
             return firstDefinedIterator(
@@ -3642,10 +3641,9 @@ namespace ts {
                     if (!symlinkedDirectory || !startsWith(fileOrDirectoryPath, directoryPath)) return undefined;
                     const result = fileOrDirectoryExistsUsingSource(fileOrDirectoryPath.replace(directoryPath, symlinkedDirectory.realPath));
                     if (isFile && result) {
-                        if (!symlinkedFiles) symlinkedFiles = new Map();
                         // Store the real path for the file'
                         const absolutePath = getNormalizedAbsolutePath(fileOrDirectory, host.compilerHost.getCurrentDirectory());
-                        symlinkedFiles.set(
+                        symlinkCache.setSymlinkedFile(
                             fileOrDirectoryPath,
                             `${symlinkedDirectory.real}${absolutePath.replace(new RegExp(directoryPath, "i"), "")}`
                         );
