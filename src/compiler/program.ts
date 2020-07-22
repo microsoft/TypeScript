@@ -977,6 +977,7 @@ namespace ts {
             fileExists,
             directoryExists,
             getSymlinkCache,
+            realpath: host.realpath?.bind(host),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };
 

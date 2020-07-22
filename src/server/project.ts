@@ -1646,10 +1646,10 @@ namespace ts.server {
                 return {
                     fileExists: this.program.fileExists,
                     directoryExists: this.program.directoryExists,
+                    realpath: this.program.realpath || this.projectService.host.realpath?.bind(this.projectService.host),
                     getCurrentDirectory: this.getCurrentDirectory.bind(this),
                     readFile: this.projectService.host.readFile.bind(this.projectService.host),
                     getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
-                    realpath: this.projectService.host.realpath?.bind(this.projectService.host),
                     trace: this.projectService.host.trace?.bind(this.projectService.host),
                 };
             }
@@ -1857,8 +1857,10 @@ namespace ts.server {
                     moduleResolutionHost));
 
                 for (const resolution of resolutions) {
-                    if (resolution.resolvedTypeReferenceDirective?.resolvedFileName && !hostProject.getCurrentProgram()!.getSourceFile(resolution.resolvedTypeReferenceDirective.resolvedFileName)) {
-                        rootNames = append(rootNames, resolution.resolvedTypeReferenceDirective.resolvedFileName);
+                    if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
+                    const { resolvedFileName } = resolution.resolvedTypeReferenceDirective;
+                    if (!hostProject.getCurrentProgram()!.getSourceFile(resolvedFileName)) {
+                        rootNames = append(rootNames, moduleResolutionHost.realpath?.(resolvedFileName) || resolvedFileName);
                     }
                 }
             }
@@ -1883,7 +1885,6 @@ namespace ts.server {
                 noLib: true,
                 diagnostics: false,
                 skipLibCheck: true,
-                preserveSymlinks: true,
                 types: ts.emptyArray,
                 lib: ts.emptyArray,
                 sourceMap: false,
