@@ -192,7 +192,7 @@ namespace ts.moduleSpecifiers {
         const symlinkedDirectories = links.getSymlinkedDirectories();
         const compareStrings = (!host.useCaseSensitiveFileNames || host.useCaseSensitiveFileNames()) ? compareStringsCaseSensitive : compareStringsCaseInsensitive;
         const result = symlinkedDirectories && forEachEntry(symlinkedDirectories, (resolved, path) => {
-            if (resolved === false) return;
+            if (resolved === false) return undefined;
             if (startsWithDirectory(importingFileName, resolved.realPath, getCanonicalFileName)) {
                 return undefined; // Don't want to a package to globally import from itself
             }
