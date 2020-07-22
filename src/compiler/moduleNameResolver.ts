@@ -941,6 +941,7 @@ namespace ts {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_type_1, moduleName, Extensions[extensions]);
                 }
+                // TODO:: resolve type ference directive
                 const resolved = loadModuleFromNearestNodeModulesDirectory(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
                 if (!resolved) return undefined;
 
@@ -1470,7 +1471,8 @@ namespace ts {
                 }
                 if (extensions === Extensions.TypeScript) {
                     // If we didn't find the file normally, look it up in @types.
-                    return loadModuleFromNearestNodeModulesDirectoryTypesScope(moduleName, containingDirectory, state);
+                    // TODO type referecnce like resolution
+                    return resolveTypeReferenceDirective(moduleName, containingFile,  containingDirectory, state);
                 }
             }
             else {
