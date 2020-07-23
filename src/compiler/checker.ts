@@ -35669,7 +35669,9 @@ namespace ts {
 
                 // Never report expensive statements in .d.ts files
                 if (!checkingDtsFile) {
-                    if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
+                    if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement ||
+                        node.kind === SyntaxKind.TypeAliasDeclaration ||
+                        node.kind === SyntaxKind.InterfaceDeclaration) {
                         const typeDelta = typeCount - oldTypeCount;
                         const symbolDelta = symbolCount - oldSymbolCount;
                         const record = { node, typeDelta, symbolDelta };
