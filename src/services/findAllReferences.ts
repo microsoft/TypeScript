@@ -1915,9 +1915,6 @@ namespace ts.FindAllReferences {
         function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRename: boolean, providePrefixAndSuffixText: boolean, implementations: boolean): Symbol[] {
             const result: Symbol[] = [];
             forEachRelatedSymbol<void>(symbol, location, checker, isForRename, !(isForRename && providePrefixAndSuffixText),
-<<<<<<< HEAD
-                (sym, root, base) => { result.push(base || root || sym); },
-=======
                 (sym, root, base) => {
                     // static method/property and instance method/property might have the same name. Only include static or only include instance.
                     if (base) {
@@ -1928,7 +1925,6 @@ namespace ts.FindAllReferences {
                     result.push(base || root || sym);
                 },
                 // when try to find implementation, implementations is true, and not allowed to find base class
->>>>>>> master
                 /*allowBaseTypes*/() => !implementations);
             return result;
         }
