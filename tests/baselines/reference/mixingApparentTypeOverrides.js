@@ -46,6 +46,10 @@ function Tagged(Base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
             var _this = _super.apply(this, args) || this;
             _this._tag = "";
             return _this;
