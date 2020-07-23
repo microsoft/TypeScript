@@ -482,6 +482,7 @@ namespace ts.server {
             getExecutingFilePath: () => "", // TODO:
             getCurrentDirectory: () => "", //TODO
             createHash: (data: string) => data,
+            directoryExists: (_path) => false, // TODO
         } as ServerHost;
 
         sys.args = []; // TODO
