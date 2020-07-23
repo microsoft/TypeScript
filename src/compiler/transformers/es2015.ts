@@ -1056,8 +1056,7 @@ namespace ts {
 
                     // Since the `super()` call was the first statement, we insert the `this` capturing call to
                     // `super()` at the top of the list of `statements` (after any pre-existing custom prologues).
-                    insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
-
+                    insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis(), superCallStatement);
                     if (!isSufficientlyCoveredByReturnStatements(constructor.body)) {
                         statements.push(factory.createReturnStatement(factory.createUniqueName("_this", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)));
                     }
@@ -1457,9 +1456,9 @@ namespace ts {
                 insertStatementsAfterCustomPrologue(statements, prologueStatements);
             }
             else {
-                const idx = statements.indexOf(firstStatementContainsRestParameter)
-                Debug.assert(idx > -1)
-                statements.splice(idx, 0, ...prologueStatements)
+                const idx = statements.indexOf(firstStatementContainsRestParameter);
+                Debug.assert(idx > -1);
+                statements.splice(idx, 0, ...prologueStatements);
             }
             return true;
         }
@@ -1473,13 +1472,13 @@ namespace ts {
          */
         function insertCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): boolean {
             if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
-                insertCaptureThisForNode(statements, node, factory.createThis());
+                insertCaptureThisForNode(statements, node, factory.createThis(), /* originalNode */ undefined);
                 return true;
             }
             return false;
         }
 
-        function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
+        function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, originalNode: Node | undefined): void {
             enableSubstitutionsForCapturedThis();
             const captureThisStatement = factory.createVariableStatement(
                 /*modifiers*/ undefined,
@@ -1493,6 +1492,7 @@ namespace ts {
                 ])
             );
             setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
+            setOriginalNode(captureThisStatement, originalNode);
             setSourceMapRange(captureThisStatement, node);
             insertStatementAfterCustomPrologue(statements, captureThisStatement);
         }
@@ -1930,7 +1930,7 @@ namespace ts {
 
                 const expression = visitNode(body, visitor, isExpression);
                 const returnStatement = factory.createReturnStatement(expression);
-                setOriginalNode(returnStatement, expression)
+                setOriginalNode(returnStatement, expression);
                 setTextRange(returnStatement, body);
                 moveSyntheticComments(returnStatement, body);
                 setEmitFlags(returnStatement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTrailingComments);

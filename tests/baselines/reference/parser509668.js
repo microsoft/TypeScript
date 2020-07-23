@@ -8,6 +8,10 @@ class Foo3 {
 var Foo3 = /** @class */ (function () {
     // Doesn't work, but should
     function Foo3() {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         this.args = args;
     }
     return Foo3;

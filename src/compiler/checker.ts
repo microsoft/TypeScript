@@ -22101,27 +22101,7 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if ((symbol.flags & SymbolFlags.Value) && symbol.valueDeclaration && symbol.valueDeclaration !== node.parent &&
-                isParameter(symbol.valueDeclaration) && isRestParameter(symbol.valueDeclaration) &&
-                !(symbol.valueDeclaration.flags & NodeFlags.RestParameterMustEmitAtTop)) {
-                const containerFunctionLikeDeclaration = findAncestor(symbol.valueDeclaration, isFunctionLikeDeclaration);
-                if (containerFunctionLikeDeclaration) {
-                    let insideOtherFunctionLikeScope = false;
-                    const topLevelStatementInContainer = findAncestor(node, n => {
-                        if (isFunctionLikeDeclaration(n)) {
-                            insideOtherFunctionLikeScope = true;
-                            return "quit";
-                        }
-                        return n.parent && (isBlock(n.parent) ? n.parent.parent === containerFunctionLikeDeclaration : n.parent === containerFunctionLikeDeclaration);
-                    });
-                    if (insideOtherFunctionLikeScope) {
-                        (<Mutable<Node>>symbol.valueDeclaration).flags |= NodeFlags.RestParameterMustEmitAtTop;
-                    }
-                    else if(topLevelStatementInContainer) {
-                        (<Mutable<Node>>topLevelStatementInContainer).flags |= NodeFlags.ContainsRestParameterReference;
-                    }
-                }
-            }
+            checkIdentifierForRestParameter(node, symbol);
 
             // We should only mark aliases as referenced if there isn't a local value declaration
             // for the symbol. Also, don't mark any property access expression LHS - checkPropertyAccessExpression will handle that
@@ -22261,6 +22241,36 @@ namespace ts {
                 return type;
             }
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function checkIdentifierForRestParameter(node: Identifier, symbol: Symbol) {
+            if ((symbol.flags & SymbolFlags.Value) && symbol.valueDeclaration && isParameter(symbol.valueDeclaration) &&
+                (symbol.valueDeclaration !== node.parent || isParameterPropertyDeclaration(symbol.valueDeclaration, symbol.valueDeclaration.parent)) &&
+                isRestParameter(symbol.valueDeclaration) && !(symbol.valueDeclaration.flags & NodeFlags.RestParameterMustEmitAtTop)) {
+                const containerFunctionLikeDeclaration = findAncestor(symbol.valueDeclaration, isFunctionLikeDeclaration);
+                if (containerFunctionLikeDeclaration) {
+                    const mutableValueDeclaration = <Mutable<Node>>symbol.valueDeclaration;
+                    if (isParameterPropertyDeclaration(symbol.valueDeclaration, symbol.valueDeclaration.parent)) {
+                        mutableValueDeclaration.flags |= NodeFlags.RestParameterMustEmitAtTop;
+                    }
+                    else {
+                        let insideOtherFunctionLikeScope = false;
+                        const topLevelStatementInContainer = findAncestor(node, n => {
+                            if (isFunctionLikeDeclaration(n)) {
+                                insideOtherFunctionLikeScope = true;
+                                return "quit";
+                            }
+                            return n.parent && (isBlock(n.parent) ? n.parent.parent === containerFunctionLikeDeclaration : n.parent === containerFunctionLikeDeclaration);
+                        });
+                        if (insideOtherFunctionLikeScope) {
+                            mutableValueDeclaration.flags |= NodeFlags.RestParameterMustEmitAtTop;
+                        }
+                        else if(topLevelStatementInContainer) {
+                            (<Mutable<Node>>topLevelStatementInContainer).flags |= NodeFlags.ContainsRestParameterReference;
+                        }
+                    }
+                }
+            }
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
@@ -30326,6 +30336,9 @@ namespace ts {
             checkVariableLikeDeclaration(node);
             const func = getContainingFunction(node)!;
             if (hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+                if (isIdentifier(node.name)) {
+                    checkIdentifierForRestParameter(node.name, getResolvedSymbol(node.name));
+                }
                 if (!(func.kind === SyntaxKind.Constructor && nodeIsPresent(func.body))) {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }

@@ -533,24 +533,12 @@ var c1 = curry(fn1, 1); // (b: string, c: boolean, d: string[]) => number
 var c2 = curry(fn1, 1, 'abc'); // (c: boolean, d: string[]) => number
 var c3 = curry(fn1, 1, 'abc', true); // (d: string[]) => number
 var c4 = curry(fn1, 1, 'abc', true, ['x', 'y']); // () => number
-var fn2 = function (x, b) {
-    var args = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        args[_i - 2] = arguments[_i];
-    }
-    return 0;
-};
+var fn2 = function (x, b) { return 0; };
 var c10 = curry(fn2); // (x: number, b: boolean, ...args: string[]) => number
 var c11 = curry(fn2, 1); // (b: boolean, ...args: string[]) => number
 var c12 = curry(fn2, 1, true); // (...args: string[]) => number
 var c13 = curry(fn2, 1, true, 'abc', 'def'); // (...args: string[]) => number
-var fn3 = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return 0;
-};
+var fn3 = function () { return 0; };
 var c20 = curry(fn3); // (...args: string[]) => number
 var c21 = curry(fn3, 'abc', 'def'); // (...args: string[]) => number
 var c22 = curry.apply(void 0, __spreadArrays([fn3], sa)); // (...args: string[]) => number
@@ -563,13 +551,7 @@ curry2(fn10, ['hello'], [42, true]);
 call('hello', 32, function (a, b) { return 42; });
 // Would be nice to infer [...string[], (...args: string[]) => number] here
 // Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
-call.apply(void 0, __spreadArrays(sa, [function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i] = arguments[_i];
-        }
-        return 42;
-    }]));
+call.apply(void 0, __spreadArrays(sa, [function () { return 42; }]));
 function f21(args) {
     var v1 = f20(args); // U
     var v2 = f20(["foo", "bar"]); // []

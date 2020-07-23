@@ -59,6 +59,10 @@ a6([1, 2, "string"]); // Error, parameter type is number[]
 var temp = [1, 2, 3];
 var C = /** @class */ (function () {
     function C() {
+        var temp = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            temp[_i] = arguments[_i];
+        }
         this.temp = temp;
     } // Error, rest parameter can't have properties
     return C;
