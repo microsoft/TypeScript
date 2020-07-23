@@ -5424,15 +5424,16 @@ namespace ts {
 
     export const enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
-        HomomorphicMappedType        = 1 << 1,  // Reverse inference for homomorphic mapped type
-        PartialHomomorphicMappedType = 1 << 2,  // Partial reverse inference for homomorphic mapped type
-        MappedTypeConstraint         = 1 << 3,  // Reverse inference for mapped type
-        ContravariantConditional     = 1 << 4,  // Conditional type in contravariant position
-        ReturnType                   = 1 << 5,  // Inference made from return type of generic function
-        LiteralKeyof                 = 1 << 6,  // Inference made from a string literal to a keyof T
-        NoConstraints                = 1 << 7,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 8,  // Always use strict rules for contravariant inferences
-        MaxValue                     = 1 << 9,  // Seed for inference priority tracking
+        SpeculativeTuple             = 1 << 1,  // Speculative tuple inference
+        HomomorphicMappedType        = 1 << 2,  // Reverse inference for homomorphic mapped type
+        PartialHomomorphicMappedType = 1 << 3,  // Partial reverse inference for homomorphic mapped type
+        MappedTypeConstraint         = 1 << 4,  // Reverse inference for mapped type
+        ContravariantConditional     = 1 << 5,  // Conditional type in contravariant position
+        ReturnType                   = 1 << 6,  // Inference made from return type of generic function
+        LiteralKeyof                 = 1 << 7,  // Inference made from a string literal to a keyof T
+        NoConstraints                = 1 << 8,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                 = 1 << 9,  // Always use strict rules for contravariant inferences
+        MaxValue                     = 1 << 10, // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
         Circularity = -1,  // Inference circularity (value less than all other priorities)
