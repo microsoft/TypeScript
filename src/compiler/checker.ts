@@ -6235,16 +6235,16 @@ namespace ts {
                                 if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
                                     textRange = textRange.parent.parent;
                                 }
-                                if (find(symbol.declarations, isPropertyAccessExpression) && isSourceFile(type.symbol.valueDeclaration)) {
-                                    // TODO: Don't really need to do this, just whatever symbol-visiting code that this function actually calls
+                                const ex = find(symbol.declarations, isPropertyAccessExpression);
+                                if (ex && isBinaryExpression(ex.parent) && isIdentifier(ex.parent.right) && type.symbol && isSourceFile(type.symbol.valueDeclaration)) {
+                                    // TODO: Don't really need to do this, just whatever symbol-visiting code that this function actually calls, to mark it as used
                                     serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, includePrivateSymbol, bundled);
                                     addResult(
                                         factory.createExportDeclaration(
                                             /*decorators*/ undefined,
                                             /*modifiers*/ undefined,
                                             /*isTypeOnly*/ false,
-                                            // TODO: name is not right here, should be based on ???
-                                            factory.createNamedExports([factory.createExportSpecifier(name, localName)])
+                                            factory.createNamedExports([factory.createExportSpecifier(localName === ex.parent.right.escapedText ? undefined : ex.parent.right, localName)])
                                         ),
                                         ModifierFlags.None
                                     );
