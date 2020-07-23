@@ -40,18 +40,6 @@ interface FinalizationRegistry {
      * register to register the target object.
      */
     unregister(unregisterToken: object): void;
-
-    /**
-     * Triggers callbacks for an implementation-chosen number of objects in the registry that have
-     * been reclaimed but whose callbacks have not yet been called.
-     *
-     * Note: The number of entries for reclaimed objects that are cleaned up from the registry
-     * (calling the cleanup callbacks) is implementation-defined. An implementation might remove
-     * just one eligible entry, or all eligible entries, or somewhere in between.
-     * @param callback If given, the registry uses the given callback instead of the one it was
-     * created with.
-     */
-    cleanupSome?(callback?: (heldValue: any) => void): void;
 }
 
 interface FinalizationRegistryConstructor {
