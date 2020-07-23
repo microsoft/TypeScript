@@ -333,7 +333,7 @@ namespace ts {
         const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
         const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
 
-        let ignoreExpensiveStatement = true;
+        let checkingDtsFile: boolean;
         const maxExpensiveStatementCount = compilerOptions.expensiveStatements ?? 0;
         const expensiveStatements: ExpensiveStatement[] = [];
 
@@ -35667,12 +35667,9 @@ namespace ts {
 
                 checkSourceElementWorker(node);
 
-                if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
-                    if (ignoreExpensiveStatement) {
-                        // The first statement is unfairly blamed for a lot of lib types
-                        ignoreExpensiveStatement = false;
-                    }
-                    else {
+                // Never report expensive statements in .d.ts files
+                if (!checkingDtsFile) {
+                    if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
                         const typeDelta = typeCount - oldTypeCount;
                         const symbolDelta = symbolCount - oldSymbolCount;
                         const record = { node, typeDelta, symbolDelta };
@@ -36011,10 +36008,12 @@ namespace ts {
         }
 
         function checkSourceFile(node: SourceFile) {
+            checkingDtsFile = fileExtensionIs(node.path, Extension.Dts);
             performance.mark("beforeCheck");
             checkSourceFileWorker(node);
             performance.mark("afterCheck");
             performance.measure("Check", "beforeCheck", "afterCheck");
+            checkingDtsFile = false;
         }
 
         function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {
