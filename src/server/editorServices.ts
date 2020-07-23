@@ -629,6 +629,8 @@ namespace ts.server {
          * Open files: with value being project root path, and key being Path of the file that is open
          */
         readonly openFiles: Map<NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
+        /* @internal */
+        readonly configFileForOpenFiles: ESMap<Path, NormalizedPath | false> = new Map();
         /**
          * Map of open files that are opened without complete path but have projectRoot as current directory
          */
@@ -1461,6 +1463,7 @@ namespace ts.server {
             }
 
             this.openFiles.delete(info.path);
+            this.configFileForOpenFiles.delete(info.path);
 
             if (!skipAssignOrphanScriptInfosToInferredProject && ensureProjectsForOpenFiles) {
                 this.assignOrphanScriptInfosToInferredProject();
@@ -1791,7 +1794,11 @@ namespace ts.server {
          * otherwise just file name
          */
         private getConfigFileNameForFile(info: OpenScriptInfoOrClosedOrConfigFileInfo) {
-            if (isOpenScriptInfo(info)) Debug.assert(info.isScriptOpen());
+            if (isOpenScriptInfo(info)) {
+                Debug.assert(info.isScriptOpen());
+                const result = this.configFileForOpenFiles.get(info.path);
+                if (result !== undefined) return result || undefined;
+            }
             this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
             const configFileName = this.forEachConfigFileLocation(info, (configFileName, canonicalConfigFilePath) =>
                 this.configFileExists(configFileName, canonicalConfigFilePath, info));
@@ -1800,6 +1807,9 @@ namespace ts.server {
             }
             else {
                 this.logger.info(`For info: ${info.fileName} :: No config files found.`);
+            }
+            if (isOpenScriptInfo(info)) {
+                this.configFileForOpenFiles.set(info.path, configFileName || false);
             }
             return configFileName;
         }
@@ -2171,14 +2181,14 @@ namespace ts.server {
          * Read the config file of the project again by clearing the cache and update the project graph
          */
         /* @internal */
-        reloadConfiguredProject(project: ConfiguredProject, reason: string) {
+        reloadConfiguredProject(project: ConfiguredProject, reason: string, isInitialLoad: boolean) {
             // At this point, there is no reason to not have configFile in the host
             const host = project.getCachedDirectoryStructureHost();
 
             // Clear the cache since we are reloading the project from disk
             host.clearCache();
             const configFileName = project.getConfigFilePath();
-            this.logger.info(`Reloading configured project ${configFileName}`);
+            this.logger.info(`${isInitialLoad ? "Loading" : "Reloading"} configured project ${configFileName}`);
 
             // Load project from the disk
             this.loadConfiguredProject(project, reason);
@@ -2795,11 +2805,13 @@ namespace ts.server {
             const reloadChildProject = (child: ConfiguredProject) => {
                 if (!updatedProjects.has(child.canonicalConfigFilePath)) {
                     updatedProjects.set(child.canonicalConfigFilePath, true);
-                    this.reloadConfiguredProject(child, reason);
+                    this.reloadConfiguredProject(child, reason, /*isInitialLoad*/ false);
                 }
             };
             // try to reload config file for all open files
             openFiles.forEach((openFileValue, path) => {
+                // Invalidate default config file name for open file
+                this.configFileForOpenFiles.delete(path);
                 // Filter out the files that need to be ignored
                 if (!shouldReloadProjectFor(openFileValue)) {
                     return;
@@ -2823,7 +2835,7 @@ namespace ts.server {
                         }
                         else {
                             // reload from the disk
-                            this.reloadConfiguredProject(project, reason);
+                            this.reloadConfiguredProject(project, reason, /*isInitialLoad*/ false);
                             // If this project does not contain this file directly, reload the project till the reloaded project contains the script info directly
                             if (!projectContainsInfoDirectly(project, info)) {
                                 const referencedProject = forEachResolvedProjectReferenceProject(
