@@ -157,11 +157,11 @@ namespace ts.server {
         [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
     }
 
-    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<string, Map<string, number>> {
-        const map: Map<string, Map<string, number>> = createMap<Map<string, number>>();
+    function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): ESMap<string, ESMap<string, number>> {
+        const map = new Map<string, ESMap<string, number>>();
         for (const option of commandLineOptions) {
             if (typeof option.type === "object") {
-                const optionMap = <Map<string, number>>option.type;
+                const optionMap = <ESMap<string, number>>option.type;
                 // verify that map contains only numbers
                 optionMap.forEach(value => {
                     Debug.assert(typeof value === "number");
@@ -174,11 +174,11 @@ namespace ts.server {
 
     const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
     const watchOptionsConverters = prepareConvertersForEnumLikeCompilerOptions(optionsForWatch);
-    const indentStyle = createMapFromTemplate({
+    const indentStyle = new Map(getEntries({
         none: IndentStyle.None,
         block: IndentStyle.Block,
         smart: IndentStyle.Smart
-    });
+    }));
 
     export interface TypesMapFile {
         typesMap: SafeList;
@@ -373,7 +373,7 @@ namespace ts.server {
          * It is false when the open file that would still be impacted by existence of
          *   this config file but it is not the root of inferred project
          */
-        openFilesImpactedByConfigFile: Map<Path, boolean>;
+        openFilesImpactedByConfigFile: ESMap<Path, boolean>;
         /**
          * The file watcher watching the config file because there is open script info that is root of
          * inferred project and will be impacted by change in the status of the config file
@@ -571,16 +571,16 @@ namespace ts.server {
          * Container of all known scripts
          */
         /*@internal*/
-        readonly filenameToScriptInfo = createMap<ScriptInfo>();
-        private readonly scriptInfoInNodeModulesWatchers = createMap <ScriptInfoInNodeModulesWatcher>();
+        readonly filenameToScriptInfo = new Map<string, ScriptInfo>();
+        private readonly scriptInfoInNodeModulesWatchers = new Map<string, ScriptInfoInNodeModulesWatcher>();
         /**
          * Contains all the deleted script info's version information so that
          * it does not reset when creating script info again
          * (and could have potentially collided with version where contents mismatch)
          */
-        private readonly filenameToScriptInfoVersion = createMap<ScriptInfoVersion>();
+        private readonly filenameToScriptInfoVersion = new Map<string, ScriptInfoVersion>();
         // Set of all '.js' files ever opened.
-        private readonly allJsFilesForOpenFileTelemetry = createMap<true>();
+        private readonly allJsFilesForOpenFileTelemetry = new Map<string, true>();
 
         /**
          * Map to the real path of the infos
@@ -590,7 +590,7 @@ namespace ts.server {
         /**
          * maps external project file name to list of config files that were the part of this project
          */
-        private readonly externalProjectToConfiguredProjectMap: Map<string, NormalizedPath[]> = createMap<NormalizedPath[]>();
+        private readonly externalProjectToConfiguredProjectMap = new Map<string, NormalizedPath[]>();
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
@@ -603,24 +603,24 @@ namespace ts.server {
         /**
          * projects specified by a tsconfig.json file
          */
-        readonly configuredProjects = createMap<ConfiguredProject>();
+        readonly configuredProjects: Map<ConfiguredProject> = new Map<string, ConfiguredProject>();
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
-        readonly openFiles = new Map<Path, NormalizedPath | undefined>();
+        readonly openFiles: Map<NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
         /**
          * Map of open files that are opened without complete path but have projectRoot as current directory
          */
-        private readonly openFilesWithNonRootedDiskPath = createMap<ScriptInfo>();
+        private readonly openFilesWithNonRootedDiskPath = new Map<string, ScriptInfo>();
 
         private compilerOptionsForInferredProjects: CompilerOptions | undefined;
-        private compilerOptionsForInferredProjectsPerProjectRoot = createMap<CompilerOptions>();
+        private compilerOptionsForInferredProjectsPerProjectRoot = new Map<string, CompilerOptions>();
         private watchOptionsForInferredProjects: WatchOptions | undefined;
-        private watchOptionsForInferredProjectsPerProjectRoot = createMap<WatchOptions | false>();
+        private watchOptionsForInferredProjectsPerProjectRoot = new Map<string, WatchOptions | false>();
         /**
          * Project size for configured or external projects
          */
-        private readonly projectToSizeMap: Map<string, number> = createMap<number>();
+        private readonly projectToSizeMap = new Map<string, number>();
         /**
          * This is a map of config file paths existence that doesnt need query to disk
          * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
@@ -628,14 +628,14 @@ namespace ts.server {
          * - Or it is present if we have configured project open with config file at that location
          *   In this case the exists property is always true
          */
-        private readonly configFileExistenceInfoCache = createMap<ConfigFileExistenceInfo>();
+        private readonly configFileExistenceInfoCache = new Map<string, ConfigFileExistenceInfo>();
         /*@internal*/ readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
-        private readonly legacySafelist = createMap<string>();
+        private readonly legacySafelist = new Map<string, string>();
 
-        private pendingProjectUpdates = createMap<Project>();
+        private pendingProjectUpdates = new Map<string, Project>();
         /* @internal */
         pendingEnsureProjectForOpenFiles = false;
 
@@ -656,14 +656,14 @@ namespace ts.server {
         public readonly globalPlugins: readonly string[];
         public readonly pluginProbeLocations: readonly string[];
         public readonly allowLocalPluginLoads: boolean;
-        private currentPluginConfigOverrides: Map<string, any> | undefined;
+        private currentPluginConfigOverrides: ESMap<string, any> | undefined;
 
         public readonly typesMapLocation: string | undefined;
 
         public readonly syntaxOnly?: boolean;
 
         /** Tracks projects that we have already sent telemetry for. */
-        private readonly seenProjects = createMap<true>();
+        private readonly seenProjects = new Map<string, true>();
 
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
@@ -671,7 +671,7 @@ namespace ts.server {
         /*@internal*/
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
-        private packageJsonFilesMap: Map<Path, FileWatcher> | undefined;
+        private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
 
 
         private performanceEventHandler?: PerformanceEventHandler;
@@ -875,7 +875,7 @@ namespace ts.server {
             const event: ProjectsUpdatedInBackgroundEvent = {
                 eventName: ProjectsUpdatedInBackgroundEvent,
                 data: {
-                    openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path)!.fileName)
+                    openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
                 }
             };
             this.eventHandler(event);
@@ -1375,7 +1375,7 @@ namespace ts.server {
         private assignOrphanScriptInfosToInferredProject() {
             // collect orphaned files and assign them to inferred project just like we treat open of a file
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path)!;
+                const info = this.getScriptInfoForPath(path as Path)!;
                 // collect all orphaned script infos from open files
                 if (info.isOrphan()) {
                     this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
@@ -1798,7 +1798,7 @@ namespace ts.server {
 
             this.logger.info("Open files: ");
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path)!;
+                const info = this.getScriptInfoForPath(path as Path)!;
                 this.logger.info(`\tFileName: ${info.fileName} ProjectRootPath: ${projectRootPath}`);
                 this.logger.info(`\t\tProjects: ${info.containingProjects.map(p => p.getProjectName())}`);
             });
@@ -2039,7 +2039,7 @@ namespace ts.server {
                 project.setCompilerOptions(compilerOptions);
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
-                project.watchWildcards(createMapFromTemplate(parsedCommandLine.wildcardDirectories!)); // TODO: GH#18217
+                project.watchWildcards(new Map(getEntries(parsedCommandLine.wildcardDirectories!))); // TODO: GH#18217
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
@@ -2048,7 +2048,7 @@ namespace ts.server {
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
-            const newRootScriptInfoMap = createMap<true>();
+            const newRootScriptInfoMap = new Map<string, true>();
 
             for (const f of files) {
                 const newRootFile = propertyReader.getFileName(f);
@@ -2747,7 +2747,7 @@ namespace ts.server {
             // as there is no need to load contents of the files from the disk
 
             // Reload Projects
-            this.reloadConfiguredProjectForFiles(this.openFiles, /*delayReload*/ false, returnTrue, "User requested reload projects");
+            this.reloadConfiguredProjectForFiles(this.openFiles as ESMap<Path, NormalizedPath | undefined>, /*delayReload*/ false, returnTrue, "User requested reload projects");
             this.ensureProjectForOpenFiles();
         }
 
@@ -2771,8 +2771,8 @@ namespace ts.server {
          * If the there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles<T>(openFiles: Map<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
-            const updatedProjects = createMap<true>();
+        private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
+            const updatedProjects = new Map<string, true>();
             // try to reload config file for all open files
             openFiles.forEach((openFileValue, path) => {
                 // Filter out the files that need to be ignored
@@ -2860,7 +2860,7 @@ namespace ts.server {
             this.printProjects();
 
             this.openFiles.forEach((projectRootPath, path) => {
-                const info = this.getScriptInfoForPath(path)!;
+                const info = this.getScriptInfoForPath(path as Path)!;
                 // collect all orphaned script infos from open files
                 if (info.isOrphan()) {
                     this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
@@ -2967,7 +2967,15 @@ namespace ts.server {
             let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
             let defaultConfigProject: ConfiguredProject | undefined;
             let retainProjects: ConfiguredProject[] | ConfiguredProject | undefined;
-            if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
+            if (this.syntaxOnly) {
+                // Invalidate resolutions in the file since this file is now open
+                info.containingProjects.forEach(project => {
+                    if (project.resolutionCache.removeRelativeNoResolveResolutionsOfFile(info.path)) {
+                        project.markAsDirty();
+                    }
+                });
+            }
+            else if (!project) { // Checking syntaxOnly is an optimization
                 configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
@@ -3046,6 +3054,10 @@ namespace ts.server {
                 }
                 Debug.assert(this.openFiles.has(info.path));
                 this.assignOrphanScriptInfoToInferredProject(info, this.openFiles.get(info.path));
+            }
+            else if (this.syntaxOnly && info.cacheSourceFile?.sourceFile.referencedFiles.length) {
+                // This file was just opened and references in this file will previously not been resolved so schedule update
+                info.containingProjects.forEach(project => project.markAsDirty());
             }
             Debug.assert(!info.isOrphan());
             return { configFileName, configFileErrors, retainProjects };
@@ -3153,7 +3165,7 @@ namespace ts.server {
         }
 
         private removeOrphanConfiguredProjects(toRetainConfiguredProjects: readonly ConfiguredProject[] | ConfiguredProject | undefined) {
-            const toRemoveConfiguredProjects = cloneMap(this.configuredProjects);
+            const toRemoveConfiguredProjects = new Map(this.configuredProjects);
             const markOriginalProjectsAsUsed = (project: Project) => {
                 if (!project.isOrphan() && project.originalConfiguredProjects) {
                     project.originalConfiguredProjects.forEach(
@@ -3208,7 +3220,7 @@ namespace ts.server {
         }
 
         private removeOrphanScriptInfos() {
-            const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
+            const toRemoveScriptInfos = new Map(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
                 if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByAutoImportProvider()) {
@@ -3686,7 +3698,7 @@ namespace ts.server {
 
             // Also save the current configuration to pass on to any projects that are yet to be loaded.
             // If a plugin is configured twice, only the latest configuration will be remembered.
-            this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || createMap();
+            this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || new Map();
             this.currentPluginConfigOverrides.set(args.pluginName, args.configuration);
         }
 
@@ -3721,7 +3733,7 @@ namespace ts.server {
 
         /*@internal*/
         private watchPackageJsonFile(path: Path) {
-            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
+            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = new Map());
             if (!watchers.has(path)) {
                 this.invalidateProjectAutoImports(path);
                 watchers.set(path, this.watchFactory.watchFile(

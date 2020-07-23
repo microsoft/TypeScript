@@ -40,7 +40,7 @@ namespace ts.FindAllReferences {
     function getImportersForExport(
         sourceFiles: readonly SourceFile[],
         sourceFilesSet: ReadonlySet<string>,
-        allDirectImports: Map<string, ImporterOrCallExpression[]>,
+        allDirectImports: ESMap<string, ImporterOrCallExpression[]>,
         { exportingModuleSymbol, exportKind }: ExportInfo,
         checker: TypeChecker,
         cancellationToken: CancellationToken | undefined,
@@ -121,6 +121,10 @@ namespace ts.FindAllReferences {
                             if (!direct.exportClause) {
                                 // This is `export * from "foo"`, so imports of this module may import the export too.
                                 handleDirectImports(getContainingModuleSymbol(direct, checker));
+                            }
+                            else if (direct.exportClause.kind === SyntaxKind.NamespaceExport) {
+                                // `export * as foo from "foo"` add to indirect uses
+                                addIndirectUsers(getSourceFileLikeForImportDeclaration(direct));
                             }
                             else {
                                 // This is `export { foo } from "foo"` and creates an alias symbol, so recursive search will get handle re-exports.
@@ -368,8 +372,8 @@ namespace ts.FindAllReferences {
     }
 
     /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
-    function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): Map<string, ImporterOrCallExpression[]> {
-        const map = createMap<ImporterOrCallExpression[]>();
+    function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): ESMap<string, ImporterOrCallExpression[]> {
+        const map = new Map<string, ImporterOrCallExpression[]>();
 
         for (const sourceFile of sourceFiles) {
             if (cancellationToken) cancellationToken.throwIfCancellationRequested();
@@ -476,6 +480,9 @@ namespace ts.FindAllReferences {
                     else {
                         return exportInfo(symbol, getExportKindForDeclaration(exportNode));
                     }
+                }
+                else if (isNamespaceExport(parent)) {
+                    return exportInfo(symbol, ExportKind.Named);
                 }
                 // If we are in `export = a;` or `export default a;`, `parent` is the export assignment.
                 else if (isExportAssignment(parent)) {

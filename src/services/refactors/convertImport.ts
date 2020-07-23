@@ -74,7 +74,7 @@ namespace ts.refactor {
         let usedAsNamespaceOrDefault = false;
 
         const nodesToReplace: PropertyAccessExpression[] = [];
-        const conflictingNames = createMap<true>();
+        const conflictingNames = new Map<string, true>();
 
         FindAllReferences.Core.eachSymbolReferenceInFile(toConvert.name, checker, sourceFile, id => {
             if (!isPropertyAccessExpression(id.parent)) {
@@ -92,7 +92,7 @@ namespace ts.refactor {
         });
 
         // We may need to change `mod.x` to `_x` to avoid a name conflict.
-        const exportNameToImportName = createMap<string>();
+        const exportNameToImportName = new Map<string, string>();
 
         for (const propertyAccess of nodesToReplace) {
             const exportName = propertyAccess.name.text;

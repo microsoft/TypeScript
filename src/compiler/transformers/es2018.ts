@@ -66,7 +66,7 @@ namespace ts {
         let taggedTemplateStringDeclarations: VariableDeclaration[];
 
         /** Keeps track of property names accessed on super (`super.x`) within async functions. */
-        let capturedSuperProperties: UnderscoreEscapedMap<true>;
+        let capturedSuperProperties: Set<__String>;
         /** Whether the async function contains an element access on super (`super[x]`). */
         let hasSuperElementAccess: boolean;
         /** A set of node IDs for generated super accessors. */
@@ -240,7 +240,7 @@ namespace ts {
                     return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.PropertyAccessExpression:
                     if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
-                        capturedSuperProperties.set(node.name.escapedText, true);
+                        capturedSuperProperties.add(node.name.escapedText);
                     }
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.ElementAccessExpression:
@@ -911,7 +911,7 @@ namespace ts {
 
             const savedCapturedSuperProperties = capturedSuperProperties;
             const savedHasSuperElementAccess = hasSuperElementAccess;
-            capturedSuperProperties = createUnderscoreEscapedMap<true>();
+            capturedSuperProperties = new Set();
             hasSuperElementAccess = false;
 
             const returnStatement = factory.createReturnStatement(

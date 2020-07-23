@@ -890,7 +890,7 @@ namespace ts {
         }
 
         function getPrivateIdentifierEnvironment() {
-            return currentPrivateIdentifierEnvironment || (currentPrivateIdentifierEnvironment = createUnderscoreEscapedMap());
+            return currentPrivateIdentifierEnvironment || (currentPrivateIdentifierEnvironment = new Map());
         }
 
         function getPendingExpressions() {

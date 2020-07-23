@@ -65,7 +65,7 @@ namespace ts.projectSystem {
                 assert.equal(calledMap.size, 0, `${callback} shouldn't be called: ${arrayFrom(calledMap.keys())}`);
             }
 
-            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: Map<string, number>) {
+            function verifyCalledOnEachEntry(callback: CalledMaps, expectedKeys: ESMap<string, number>) {
                 TestFSWithWatch.checkMap<true | CalledWithFiveArgs>(callback, calledMaps[callback], expectedKeys);
             }
 
@@ -204,7 +204,7 @@ namespace ts.projectSystem {
             }
 
             function getLocationsForDirectoryLookup() {
-                const result = createMap<number>();
+                const result = new Map<string, number>();
                 forEachAncestorDirectory(getDirectoryPath(root.path), ancestor => {
                     // To resolve modules
                     result.set(ancestor, 2);

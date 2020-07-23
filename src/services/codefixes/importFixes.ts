@@ -47,8 +47,8 @@ namespace ts.codefix {
         const addToNamespace: FixUseNamespaceImport[] = [];
         const importType: FixUseImportType[] = [];
         // Keys are import clause node IDs.
-        const addToExisting = createMap<{ readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern, defaultImport: string | undefined; readonly namedImports: string[], canUseTypeOnlyImport: boolean }>();
-        const newImports = createMap<Mutable<ImportsCollection & { useRequire: boolean }>>();
+        const addToExisting = new Map<string, { readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern, defaultImport: string | undefined; readonly namedImports: string[], canUseTypeOnlyImport: boolean }>();
+        const newImports = new Map<string, Mutable<ImportsCollection & { useRequire: boolean }>>();
         return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes };
 
         function addImportFromDiagnostic(diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) {
@@ -138,7 +138,7 @@ namespace ts.codefix {
                 doAddExistingFix(changeTracker, sourceFile, importClauseOrBindingPattern, defaultImport, namedImports, canUseTypeOnlyImport);
             });
 
-            let newDeclarations: Statement | readonly Statement[] | undefined;
+            let newDeclarations: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[] | undefined;
             newImports.forEach(({ useRequire, ...imports }, moduleSpecifier) => {
                 const getDeclarations = useRequire ? getNewRequires : getNewImports;
                 newDeclarations = combine(newDeclarations, getDeclarations(moduleSpecifier, quotePreference, imports));
@@ -491,12 +491,7 @@ namespace ts.codefix {
 
     function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): FixesInfo | undefined {
         const checker = program.getTypeChecker();
-        // If we're at `<Foo/>`, we must check if `Foo` is already in scope, and if so, get an import for `React` instead.
-        const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
-            && symbolToken.parent.tagName === symbolToken
-            && (isIntrinsicJsxName(symbolToken.text) || checker.resolveName(symbolToken.text, symbolToken, SymbolFlags.All, /*excludeGlobals*/ false))
-            ? checker.getJsxNamespace(sourceFile)
-            : symbolToken.text;
+        const symbolName = getSymbolName(sourceFile, checker, symbolToken);
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default, "'default' isn't a legal identifier and couldn't occur here");
 
@@ -509,6 +504,17 @@ namespace ts.codefix {
         return { fixes, symbolName };
     }
 
+    function getSymbolName(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier): string {
+        const parent = symbolToken.parent;
+        if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken) {
+            const jsxNamespace = checker.getJsxNamespace(sourceFile);
+            if (isIntrinsicJsxName(symbolToken.text) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
+                return jsxNamespace;
+            }
+        }
+        return symbolToken.text;
+    }
+
     // Returns a map from an exported symbol's ID to a list of every way it's (re-)exported.
     function getExportInfos(
         symbolName: string,
@@ -519,7 +525,7 @@ namespace ts.codefix {
         program: Program,
         useAutoImportProvider: boolean,
         host: LanguageServiceHost
-    ): ReadonlyMap<string, readonly SymbolExportInfo[]> {
+    ): ReadonlyESMap<string, readonly SymbolExportInfo[]> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
         // Maps symbol id to info for modules providing that symbol (original export + re-exports).
         const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
@@ -671,15 +677,35 @@ namespace ts.codefix {
         }
 
         if (namedImports.length) {
-            const specifiers = namedImports.map(name => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(name)));
-            if (clause.namedBindings && cast(clause.namedBindings, isNamedImports).elements.length) {
-                for (const spec of specifiers) {
-                    changes.insertNodeInListAfter(sourceFile, last(cast(clause.namedBindings, isNamedImports).elements), spec);
+            const existingSpecifiers = clause.namedBindings && cast(clause.namedBindings, isNamedImports).elements;
+            const newSpecifiers = stableSort(
+                namedImports.map(name => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(name))),
+                OrganizeImports.compareImportOrExportSpecifiers);
+
+            if (existingSpecifiers?.length && OrganizeImports.importSpecifiersAreSorted(existingSpecifiers)) {
+                for (const spec of newSpecifiers) {
+                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec);
+                    const prevSpecifier = (clause.namedBindings as NamedImports).elements[insertionIndex - 1];
+                    if (prevSpecifier) {
+                        changes.insertNodeInListAfter(sourceFile, prevSpecifier, spec);
+                    }
+                    else {
+                        changes.insertNodeBefore(
+                            sourceFile,
+                            existingSpecifiers[0],
+                            spec,
+                            !positionsAreOnSameLine(existingSpecifiers[0].getStart(), clause.parent.getStart(), sourceFile));
+                    }
+                }
+            }
+            else if (existingSpecifiers?.length) {
+                for (const spec of newSpecifiers) {
+                    changes.insertNodeAtEndOfList(sourceFile, existingSpecifiers, spec);
                 }
             }
             else {
-                if (specifiers.length) {
-                    const namedImports = factory.createNamedImports(specifiers);
+                if (newSpecifiers.length) {
+                    const namedImports = factory.createNamedImports(newSpecifiers);
                     if (clause.namedBindings) {
                         changes.replaceNode(sourceFile, clause.namedBindings, namedImports);
                     }
@@ -727,9 +753,9 @@ namespace ts.codefix {
             readonly name: string;
         };
     }
-    function getNewImports(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): Statement | readonly Statement[] {
+    function getNewImports(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): AnyImportSyntax | readonly AnyImportSyntax[] {
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
-        let statements: Statement | readonly Statement[] | undefined;
+        let statements: AnyImportSyntax | readonly AnyImportSyntax[] | undefined;
         if (imports.defaultImport !== undefined || imports.namedImports?.length) {
             statements = combine(statements, makeImport(
                 imports.defaultImport === undefined ? undefined : factory.createIdentifier(imports.defaultImport),
@@ -756,9 +782,9 @@ namespace ts.codefix {
         return Debug.checkDefined(statements);
     }
 
-    function getNewRequires(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): Statement | readonly Statement[] {
+    function getNewRequires(moduleSpecifier: string, quotePreference: QuotePreference, imports: ImportsCollection): RequireVariableStatement | readonly RequireVariableStatement[] {
         const quotedModuleSpecifier = makeStringLiteral(moduleSpecifier, quotePreference);
-        let statements: Statement | readonly Statement[] | undefined;
+        let statements: RequireVariableStatement | readonly RequireVariableStatement[] | undefined;
         // const { default: foo, bar, etc } = require('./mod');
         if (imports.defaultImport || imports.namedImports?.length) {
             const bindingElements = imports.namedImports?.map(name => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) || [];
@@ -776,7 +802,7 @@ namespace ts.codefix {
         return Debug.checkDefined(statements);
     }
 
-    function createConstEqualsRequireDeclaration(name: string | ObjectBindingPattern, quotedModuleSpecifier: StringLiteral): VariableStatement {
+    function createConstEqualsRequireDeclaration(name: string | ObjectBindingPattern, quotedModuleSpecifier: StringLiteral): RequireVariableStatement {
         return factory.createVariableStatement(
             /*modifiers*/ undefined,
             factory.createVariableDeclarationList([
@@ -785,7 +811,7 @@ namespace ts.codefix {
                     /*exclamationToken*/ undefined,
                     /*type*/ undefined,
                     factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [quotedModuleSpecifier]))],
-                NodeFlags.Const));
+                NodeFlags.Const)) as RequireVariableStatement;
     }
 
     function symbolHasMeaning({ declarations }: Symbol, meaning: SemanticMeaning): boolean {

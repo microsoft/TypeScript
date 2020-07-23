@@ -8,7 +8,7 @@ namespace ts {
     export interface ExternalModuleInfo {
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
         externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
-        exportSpecifiers: Map<string, ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
+        exportSpecifiers: ESMap<string, ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
         exportedBindings: Identifier[][]; // exported names of local declarations
         exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported
         exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
@@ -69,7 +69,7 @@ namespace ts {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMultiMap<ExportSpecifier>();
         const exportedBindings: Identifier[][] = [];
-        const uniqueExports = createMap<boolean>();
+        const uniqueExports = new Map<string, boolean>();
         let exportedNames: Identifier[] | undefined;
         let hasExportDefault = false;
         let exportEquals: ExportAssignment | undefined;
@@ -122,6 +122,8 @@ namespace ts {
                                     uniqueExports.set(idText(name), true);
                                     exportedNames = append(exportedNames, name);
                                 }
+                                // we use the same helpers for `export * as ns` as we do for `import * as ns`
+                                hasImportStar = true;
                             }
                         }
                     }
@@ -219,7 +221,7 @@ namespace ts {
         }
     }
 
-    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined) {
+    function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: ESMap<string, boolean>, exportedNames: Identifier[] | undefined) {
         if (isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
                 if (!isOmittedExpression(element)) {

@@ -43,11 +43,11 @@ namespace ts.refactor.extractSymbol {
         }
 
         const functionActions: RefactorActionInfo[] = [];
-        const usedFunctionNames: Map<string, boolean> = createMap();
+        const usedFunctionNames = new Map<string, boolean>();
         let innermostErrorFunctionAction: RefactorActionInfo | undefined;
 
         const constantActions: RefactorActionInfo[] = [];
-        const usedConstantNames: Map<string, boolean> = createMap();
+        const usedConstantNames = new Map<string, boolean>();
         let innermostErrorConstantAction: RefactorActionInfo | undefined;
 
         let i = 0;
@@ -915,6 +915,9 @@ namespace ts.refactor.extractSymbol {
         if (range.facts & RangeFacts.IsAsyncFunction) {
             call = factory.createAwaitExpression(call);
         }
+        if (isInJSXContent(node)) {
+            call = factory.createJsxExpression(/*dotDotDotToken*/ undefined, call);
+        }
 
         if (exposedVariableDeclarations.length && !writes) {
             // No need to mix declarations and writes.
@@ -1118,11 +1121,15 @@ namespace ts.refactor.extractSymbol {
                 variableType,
                 initializer);
 
-            const localReference = factory.createPropertyAccessExpression(
+            let localReference: Expression = factory.createPropertyAccessExpression(
                 rangeFacts & RangeFacts.InStaticRegion
                     ? factory.createIdentifier(scope.name!.getText()) // TODO: GH#18217
                     : factory.createThis(),
                     factory.createIdentifier(localNameText));
+
+            if (isInJSXContent(node)) {
+                localReference = factory.createJsxExpression(/*dotDotDotToken*/ undefined, localReference);
+            }
 
             // Declare
             const maxInsertionPos = node.pos;
@@ -1193,12 +1200,6 @@ namespace ts.refactor.extractSymbol {
         const renameFilename = node.getSourceFile().fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, localNameText, /*isDeclaredBeforeUse*/ true);
         return { renameFilename, renameLocation, edits };
-
-        function isInJSXContent(node: Node) {
-            if (!isJsxElement(node)) return false;
-            if (isJsxElement(node.parent)) return true;
-            return false;
-        }
 
         function transformFunctionInitializerAndType(variableType: TypeNode | undefined, initializer: Expression): { variableType: TypeNode | undefined, initializer: Expression } {
             // If no contextual type exists there is nothing to transfer to the function signature
@@ -1321,7 +1322,7 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyMap<string, Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
+    function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyESMap<string, Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
         const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
         if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
             // already block, no declarations or writes to propagate back, no substitutions - can use node as is
@@ -1377,7 +1378,7 @@ namespace ts.refactor.extractSymbol {
         }
     }
 
-    function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyMap<string, Node>): Expression {
+    function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyESMap<string, Node>): Expression {
         return substitutions.size
             ? visitor(initializer) as Expression
             : initializer;
@@ -1525,9 +1526,9 @@ namespace ts.refactor.extractSymbol {
     }
 
     interface ScopeUsages {
-        readonly usages: Map<string, UsageEntry>;
-        readonly typeParameterUsages: Map<string, TypeParameter>; // Key is type ID
-        readonly substitutions: Map<string, Node>;
+        readonly usages: ESMap<string, UsageEntry>;
+        readonly typeParameterUsages: ESMap<string, TypeParameter>; // Key is type ID
+        readonly substitutions: ESMap<string, Node>;
     }
 
     interface ReadsAndWrites {
@@ -1545,13 +1546,13 @@ namespace ts.refactor.extractSymbol {
         checker: TypeChecker,
         cancellationToken: CancellationToken): ReadsAndWrites {
 
-        const allTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
+        const allTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
         const usagesPerScope: ScopeUsages[] = [];
-        const substitutionsPerScope: Map<string, Node>[] = [];
+        const substitutionsPerScope: ESMap<string, Node>[] = [];
         const functionErrorsPerScope: Diagnostic[][] = [];
         const constantErrorsPerScope: Diagnostic[][] = [];
         const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];
-        const exposedVariableSymbolSet = createMap<true>(); // Key is symbol ID
+        const exposedVariableSymbolSet = new Map<string, true>(); // Key is symbol ID
         const exposedVariableDeclarations: VariableDeclaration[] = [];
         let firstExposedNonVariableDeclaration: NamedDeclaration | undefined;
 
@@ -1574,8 +1575,8 @@ namespace ts.refactor.extractSymbol {
 
         // initialize results
         for (const scope of scopes) {
-            usagesPerScope.push({ usages: createMap<UsageEntry>(), typeParameterUsages: createMap<TypeParameter>(), substitutions: createMap<Expression>() });
-            substitutionsPerScope.push(createMap<Expression>());
+            usagesPerScope.push({ usages: new Map<string, UsageEntry>(), typeParameterUsages: new Map<string, TypeParameter>(), substitutions: new Map<string, Expression>() });
+            substitutionsPerScope.push(new Map<string, Expression>());
 
             functionErrorsPerScope.push(
                 isFunctionLikeDeclaration(scope) && scope.kind !== SyntaxKind.FunctionDeclaration
@@ -1596,7 +1597,7 @@ namespace ts.refactor.extractSymbol {
             constantErrorsPerScope.push(constantErrors);
         }
 
-        const seenUsages = createMap<Usage>();
+        const seenUsages = new Map<string, Usage>();
         const target = isReadonlyArray(targetRange.range) ? factory.createBlock(targetRange.range) : targetRange.range;
 
         const unmodifiedNode = isReadonlyArray(targetRange.range) ? first(targetRange.range) : targetRange.range;
@@ -1613,7 +1614,7 @@ namespace ts.refactor.extractSymbol {
         }
 
         if (allTypeParameterUsages.size > 0) {
-            const seenTypeParameterUsages = createMap<TypeParameter>(); // Key is type ID
+            const seenTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
 
             let i = 0;
             for (let curr: Node = unmodifiedNode; curr !== undefined && i < scopes.length; curr = curr.parent) {
@@ -1952,5 +1953,9 @@ namespace ts.refactor.extractSymbol {
             default:
                 return false;
         }
+    }
+
+    function isInJSXContent(node: Node) {
+        return (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && isJsxElement(node.parent);
     }
 }

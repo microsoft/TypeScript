@@ -62,7 +62,7 @@ node_modules/uglify-js/lib/compress.js(3530,48): error TS2554: Expected 0 argume
 node_modules/uglify-js/lib/compress.js(3628,48): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3646,33): error TS2532: Object is possibly 'undefined'.
 node_modules/uglify-js/lib/compress.js(4066,38): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/compress.js(4092,29): error TS2322: Type '"f"' is not assignable to type 'boolean'.
+node_modules/uglify-js/lib/compress.js(4092,29): error TS2322: Type 'string' is not assignable to type 'boolean'.
 node_modules/uglify-js/lib/compress.js(4275,33): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(4276,74): error TS2339: Property 'has_directive' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/compress.js(4327,29): error TS2554: Expected 0 arguments, but got 1.

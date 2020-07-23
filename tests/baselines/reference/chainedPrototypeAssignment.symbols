@@ -42,6 +42,8 @@ var A = function A() {
 >A : Symbol(A, Decl(mod.js, 1, 7))
 
     this.a = 1
+>this.a : Symbol(A.a, Decl(mod.js, 1, 22))
+>this : Symbol(A, Decl(mod.js, 1, 7))
 >a : Symbol(A.a, Decl(mod.js, 1, 22))
 }
 var B = function B() {
@@ -49,6 +51,8 @@ var B = function B() {
 >B : Symbol(B, Decl(mod.js, 4, 7))
 
     this.b = 2
+>this.b : Symbol(B.b, Decl(mod.js, 4, 22))
+>this : Symbol(B, Decl(mod.js, 4, 7))
 >b : Symbol(B.b, Decl(mod.js, 4, 22))
 }
 exports.A = A

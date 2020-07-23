@@ -5,8 +5,8 @@ namespace ts {
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
         const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
-            kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
-                new TokenObject(kind, pos, end);
+                kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
+                    new TokenObject(kind, pos, end);
         node.parent = parent;
         node.flags = parent.flags & NodeFlags.ContextFlags;
         return node;
@@ -634,13 +634,13 @@ namespace ts {
         public scriptKind!: ScriptKind;
         public languageVersion!: ScriptTarget;
         public languageVariant!: LanguageVariant;
-        public identifiers!: Map<string, string>;
+        public identifiers!: ESMap<string, string>;
         public nameTable: UnderscoreEscapedMap<number> | undefined;
-        public resolvedModules: Map<string, ResolvedModuleFull> | undefined;
-        public resolvedTypeReferenceDirectiveNames!: Map<string, ResolvedTypeReferenceDirective>;
+        public resolvedModules: ESMap<string, ResolvedModuleFull> | undefined;
+        public resolvedTypeReferenceDirectiveNames!: ESMap<string, ResolvedTypeReferenceDirective>;
         public imports!: readonly StringLiteralLike[];
         public moduleAugmentations!: StringLiteral[];
-        private namedDeclarations: Map<string, Declaration[]> | undefined;
+        private namedDeclarations: ESMap<string, Declaration[]> | undefined;
         public ambientModuleNames!: string[];
         public checkJsDirective: CheckJsDirective | undefined;
         public errorExpectations: TextRange[] | undefined;
@@ -686,7 +686,7 @@ namespace ts {
             return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
         }
 
-        public getNamedDeclarations(): Map<string, Declaration[]> {
+        public getNamedDeclarations(): ESMap<string, Declaration[]> {
             if (!this.namedDeclarations) {
                 this.namedDeclarations = this.computeNamedDeclarations();
             }
@@ -694,7 +694,7 @@ namespace ts {
             return this.namedDeclarations;
         }
 
-        private computeNamedDeclarations(): Map<string, Declaration[]> {
+        private computeNamedDeclarations(): ESMap<string, Declaration[]> {
             const result = createMultiMap<Declaration>();
 
             this.forEachChild(visit);
@@ -773,7 +773,7 @@ namespace ts {
                         if (!hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
                             break;
                         }
-                        // falls through
+                    // falls through
 
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement: {
@@ -834,7 +834,7 @@ namespace ts {
                         if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
                             addDeclaration(node as BinaryExpression);
                         }
-                        // falls through
+                    // falls through
 
                     default:
                         forEachChild(node, visit);
@@ -937,7 +937,7 @@ namespace ts {
     // at each language service public entry point, since we don't know when
     // the set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: Map<Path, CachedHostFileInformation>;
+        private fileNameToEntry: ESMap<Path, CachedHostFileInformation>;
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
@@ -1296,7 +1296,7 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists,
                 readFile,
-                realpath: host.realpath && (path => host.realpath!(path)),
+                realpath: maybeBind(host, host.realpath),
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
                 },
@@ -1309,21 +1309,13 @@ namespace ts {
                 },
                 onReleaseOldSourceFile,
                 hasInvalidatedResolution,
-                hasChangedAutomaticTypeDirectiveNames
+                hasChangedAutomaticTypeDirectiveNames,
+                includeTripleslashReferencesFrom: maybeBind(host, host.includeTripleslashReferencesFrom),
+                trace: maybeBind(host, host.trace),
+                resolveModuleNames: maybeBind(host, host.resolveModuleNames),
+                resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
+                useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             };
-            if (host.trace) {
-                compilerHost.trace = message => host.trace!(message);
-            }
-
-            if (host.resolveModuleNames) {
-                compilerHost.resolveModuleNames = (...args) => host.resolveModuleNames!(...args);
-            }
-            if (host.resolveTypeReferenceDirectives) {
-                compilerHost.resolveTypeReferenceDirectives = (...args) => host.resolveTypeReferenceDirectives!(...args);
-            }
-            if (host.useSourceOfProjectReferenceRedirect) {
-                compilerHost.useSourceOfProjectReferenceRedirect = () => host.useSourceOfProjectReferenceRedirect!();
-            }
             host.setCompilerHost?.(compilerHost);
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
@@ -1408,7 +1400,7 @@ namespace ts {
                         //
                         // Each LS has a reference to file 'foo.ts' at version 1.  LS2 then updates
                         // it's version of 'foo.ts' to version 2.  This will cause LS2 and the
-                        // DocumentRegistry to have version 2 of the document.  HOwever, LS1 will
+                        // DocumentRegistry to have version 2 of the document.  However, LS1 will
                         // have version 1.  And *importantly* this source file will be *corrupt*.
                         // The act of creating version 2 of the file irrevocably damages the version
                         // 1 file.
@@ -1451,7 +1443,7 @@ namespace ts {
 
         function dispose(): void {
             if (program) {
-                // Use paths to ensure we are using correct key and paths as document registry could bre created with different current directory than host
+                // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
                 const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
                 forEach(program.getSourceFiles(), f =>
                     documentRegistry.releaseDocumentWithKey(f.resolvedPath, key));
@@ -1831,12 +1823,12 @@ namespace ts {
             return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
         }
 
-        const braceMatching = createMapFromTemplate({
+        const braceMatching = new Map(getEntries({
             [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
             [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
             [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
             [SyntaxKind.GreaterThanToken]: SyntaxKind.LessThanToken,
-        });
+        }));
         braceMatching.forEach((value, key) => braceMatching.set(value.toString(), Number(key) as SyntaxKind));
 
         function getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
@@ -1992,6 +1984,236 @@ namespace ts {
             if (element && isUnclosedTag(element)) {
                 return { newText: `</${element.openingElement.tagName.getText(sourceFile)}>` };
             }
+        }
+
+        function getLinesForRange(sourceFile: SourceFile, textRange: TextRange) {
+            return {
+                lineStarts: sourceFile.getLineStarts(),
+                firstLine: sourceFile.getLineAndCharacterOfPosition(textRange.pos).line,
+                lastLine: sourceFile.getLineAndCharacterOfPosition(textRange.end).line
+            };
+        }
+
+        function toggleLineComment(fileName: string, textRange: TextRange, insertComment?: boolean): TextChange[] {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const textChanges: TextChange[] = [];
+            const { lineStarts, firstLine, lastLine } = getLinesForRange(sourceFile, textRange);
+
+            let isCommenting = insertComment || false;
+            let leftMostPosition = Number.MAX_VALUE;
+            const lineTextStarts = new Map<string, number>();
+            const firstNonWhitespaceCharacterRegex = new RegExp(/\S/);
+            const isJsx = isInsideJsxElement(sourceFile, lineStarts[firstLine]);
+            const openComment = isJsx ? "{/*" : "//";
+
+            // Check each line before any text changes.
+            for (let i = firstLine; i <= lastLine; i++) {
+                const lineText = sourceFile.text.substring(lineStarts[i], sourceFile.getLineEndOfPosition(lineStarts[i]));
+
+                // Find the start of text and the left-most character. No-op on empty lines.
+                const regExec = firstNonWhitespaceCharacterRegex.exec(lineText);
+                if (regExec) {
+                    leftMostPosition = Math.min(leftMostPosition, regExec.index);
+                    lineTextStarts.set(i.toString(), regExec.index);
+
+                    if (lineText.substr(regExec.index, openComment.length) !== openComment) {
+                        isCommenting = insertComment === undefined || insertComment;
+                    }
+                }
+            }
+
+            // Push all text changes.
+            for (let i = firstLine; i <= lastLine; i++) {
+                const lineTextStart = lineTextStarts.get(i.toString());
+
+                // If the line is not an empty line; otherwise no-op.
+                if (lineTextStart !== undefined) {
+                    if (isJsx) {
+                        textChanges.push.apply(textChanges, toggleMultilineComment(fileName, { pos: lineStarts[i] + leftMostPosition, end: sourceFile.getLineEndOfPosition(lineStarts[i]) }, isCommenting, isJsx));
+                    }
+                    else if (isCommenting) {
+                        textChanges.push({
+                            newText: openComment,
+                            span: {
+                                length: 0,
+                                start: lineStarts[i] + leftMostPosition
+                            }
+                        });
+                    }
+                    else if (sourceFile.text.substr(lineStarts[i] + lineTextStart, openComment.length) === openComment) {
+                        textChanges.push({
+                            newText: "",
+                            span: {
+                                length: openComment.length,
+                                start: lineStarts[i] + lineTextStart
+                            }
+                        });
+                    }
+                }
+            }
+
+            return textChanges;
+        }
+
+        function toggleMultilineComment(fileName: string, textRange: TextRange, insertComment?: boolean, isInsideJsx?: boolean): TextChange[] {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const textChanges: TextChange[] = [];
+            const { text } = sourceFile;
+
+            let hasComment = false;
+            let isCommenting = insertComment || false;
+            const positions = [] as number[] as SortedArray<number>;
+
+            let { pos } = textRange;
+            const isJsx = isInsideJsx !== undefined ? isInsideJsx : isInsideJsxElement(sourceFile, pos);
+
+            const openMultiline = isJsx ? "{/*" : "/*";
+            const closeMultiline = isJsx ? "*/}" : "*/";
+            const openMultilineRegex = isJsx ? "\\{\\/\\*" : "\\/\\*";
+            const closeMultilineRegex = isJsx ? "\\*\\/\\}" : "\\*\\/";
+
+            // Get all comment positions
+            while (pos <= textRange.end) {
+                // Start of comment is considered inside comment.
+                const offset = text.substr(pos, openMultiline.length) === openMultiline ? openMultiline.length : 0;
+                const commentRange = isInComment(sourceFile, pos + offset);
+
+                // If position is in a comment add it to the positions array.
+                if (commentRange) {
+                    // Comment range doesn't include the brace character. Increase it to include them.
+                    if (isJsx) {
+                        commentRange.pos--;
+                        commentRange.end++;
+                    }
+
+                    positions.push(commentRange.pos);
+                    if (commentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
+                        positions.push(commentRange.end);
+                    }
+
+                    hasComment = true;
+                    pos = commentRange.end + 1;
+                }
+                else { // If it's not in a comment range, then we need to comment the uncommented portions.
+                    const newPos = text.substring(pos, textRange.end).search(`(${openMultilineRegex})|(${closeMultilineRegex})`);
+
+                    isCommenting = insertComment !== undefined
+                        ? insertComment
+                        : isCommenting || !isTextWhiteSpaceLike(text, pos, newPos === -1 ? textRange.end : pos + newPos); // If isCommenting is already true we don't need to check whitespace again.
+                    pos = newPos === -1 ? textRange.end + 1 : pos + newPos + closeMultiline.length;
+                }
+            }
+
+            // If it didn't found a comment and isCommenting is false means is only empty space.
+            // We want to insert comment in this scenario.
+            if (isCommenting || !hasComment) {
+                if (isInComment(sourceFile, textRange.pos)?.kind !== SyntaxKind.SingleLineCommentTrivia) {
+                    insertSorted(positions, textRange.pos, compareValues);
+                }
+                insertSorted(positions, textRange.end, compareValues);
+
+                // Insert open comment if the first position is not a comment already.
+                const firstPos = positions[0];
+                if (text.substr(firstPos, openMultiline.length) !== openMultiline) {
+                    textChanges.push({
+                        newText: openMultiline,
+                        span: {
+                            length: 0,
+                            start: firstPos
+                        }
+                    });
+                }
+
+                // Insert open and close comment to all positions between first and last. Exclusive.
+                for (let i = 1; i < positions.length - 1; i++) {
+                    if (text.substr(positions[i] - closeMultiline.length, closeMultiline.length) !== closeMultiline) {
+                        textChanges.push({
+                            newText: closeMultiline,
+                            span: {
+                                length: 0,
+                                start: positions[i]
+                            }
+                        });
+                    }
+
+                    if (text.substr(positions[i], openMultiline.length) !== openMultiline) {
+                        textChanges.push({
+                            newText: openMultiline,
+                            span: {
+                                length: 0,
+                                start: positions[i]
+                            }
+                        });
+                    }
+                }
+
+                // Insert open comment if the last position is not a comment already.
+                if (textChanges.length % 2 !== 0) {
+                    textChanges.push({
+                        newText: closeMultiline,
+                        span: {
+                            length: 0,
+                            start: positions[positions.length - 1]
+                        }
+                    });
+                }
+            }
+            else {
+                // If is not commenting then remove all comments found.
+                for (const pos of positions) {
+                    const from = pos - closeMultiline.length > 0 ? pos - closeMultiline.length : 0;
+                    const offset = text.substr(from, closeMultiline.length) === closeMultiline ? closeMultiline.length : 0;
+                    textChanges.push({
+                        newText: "",
+                        span: {
+                            length: openMultiline.length,
+                            start: pos - offset
+                        }
+                    });
+                }
+            }
+
+            return textChanges;
+        }
+
+        function commentSelection(fileName: string, textRange: TextRange): TextChange[] {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const { firstLine, lastLine } = getLinesForRange(sourceFile, textRange);
+
+            // If there is a selection that is on the same line, add multiline.
+            return firstLine === lastLine && textRange.pos !== textRange.end
+                ? toggleMultilineComment(fileName, textRange, /*insertComment*/ true)
+                : toggleLineComment(fileName, textRange, /*insertComment*/ true);
+        }
+
+        function uncommentSelection(fileName: string, textRange: TextRange): TextChange[] {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            const textChanges: TextChange[] = [];
+            const { pos } = textRange;
+            let { end } = textRange;
+
+            // If cursor is not a selection we need to increase the end position
+            // to include the start of the comment.
+            if (pos === end) {
+                end += isInsideJsxElement(sourceFile, pos) ? 2 : 1;
+            }
+
+            for (let i = pos; i <= end; i++) {
+                const commentRange = isInComment(sourceFile, i);
+                if (commentRange) {
+                    switch (commentRange.kind) {
+                        case SyntaxKind.SingleLineCommentTrivia:
+                            textChanges.push.apply(textChanges, toggleLineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
+                            break;
+                        case SyntaxKind.MultiLineCommentTrivia:
+                            textChanges.push.apply(textChanges, toggleMultilineComment(fileName, { end: commentRange.end, pos: commentRange.pos + 1 }, /*insertComment*/ false));
+                    }
+
+                    i = commentRange.end + 1;
+                }
+            }
+
+            return textChanges;
         }
 
         function isUnclosedTag({ openingElement, closingElement, parent }: JsxElement): boolean {
@@ -2274,7 +2496,11 @@ namespace ts {
             clearSourceMapperCache: () => sourceMapper.clearCache(),
             prepareCallHierarchy,
             provideCallHierarchyIncomingCalls,
-            provideCallHierarchyOutgoingCalls
+            provideCallHierarchyOutgoingCalls,
+            toggleLineComment,
+            toggleMultilineComment,
+            commentSelection,
+            uncommentSelection,
         };
 
         if (syntaxOnly) {
@@ -2299,7 +2525,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
+        const nameTable = sourceFile.nameTable = new Map();
         sourceFile.forEachChild(function walk(node) {
             if (isIdentifier(node) && !isTagName(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
                 const text = getEscapedTextOfIdentifierOrLiteral(node);
@@ -2348,7 +2574,7 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
                     return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
-                // falls through
+            // falls through
 
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&

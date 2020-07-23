@@ -304,7 +304,7 @@ namespace ts.CallHierarchy {
     }
 
     function getCallSiteGroupKey(entry: CallSite) {
-        return "" + getNodeId(entry.declaration);
+        return getNodeId(entry.declaration);
     }
 
     function createCallHierarchyIncomingCall(from: CallHierarchyItem, fromSpans: TextSpan[]): CallHierarchyIncomingCall {

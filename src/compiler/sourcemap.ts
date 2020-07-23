@@ -12,11 +12,11 @@ namespace ts {
         // Current source map file and its index in the sources list
         const rawSources: string[] = [];
         const sources: string[] = [];
-        const sourceToSourceIndexMap = createMap<number>();
+        const sourceToSourceIndexMap = new Map<string, number>();
         let sourcesContent: (string | null)[] | undefined;
 
         const names: string[] = [];
-        let nameToNameIndexMap: Map<string, number> | undefined;
+        let nameToNameIndexMap: ESMap<string, number> | undefined;
         let mappings = "";
 
         // Last recorded and encoded mappings
@@ -84,7 +84,7 @@ namespace ts {
 
         function addName(name: string) {
             enter();
-            if (!nameToNameIndexMap) nameToNameIndexMap = createMap();
+            if (!nameToNameIndexMap) nameToNameIndexMap = new Map();
             let nameIndex = nameToNameIndexMap.get(name);
             if (nameIndex === undefined) {
                 nameIndex = names.length;
