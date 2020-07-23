@@ -820,7 +820,7 @@ namespace ts {
                 result.libReferenceDirectives = emptyArray;
                 result.amdDependencies = emptyArray;
                 result.hasNoDefaultLib = false;
-                result.pragmas = emptyMap;
+                result.pragmas = emptyMap as ReadonlyPragmaMap;
                 return result;
             }
 
@@ -929,8 +929,8 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = createMap<string>();
-            privateIdentifiers = createMap<string>();
+            identifiers = new Map<string, string>();
+            privateIdentifiers = new Map<string, string>();
             identifierCount = 0;
             nodeCount = 0;
             sourceFlags = 0;
@@ -3569,18 +3569,46 @@ namespace ts {
             return parsePostfixTypeOrHigher();
         }
 
+        function parseFunctionOrConstructorTypeToError(
+            isInUnionType: boolean
+        ): TypeNode | undefined {
+            // the function type and constructor type shorthand notation
+            // are not allowed directly in unions and intersections, but we'll
+            // try to parse them gracefully and issue a helpful message.
+            if (isStartOfFunctionTypeOrConstructorType()) {
+                const type = parseFunctionOrConstructorType();
+                let diagnostic: DiagnosticMessage;
+                if (isFunctionTypeNode(type)) {
+                    diagnostic = isInUnionType
+                        ? Diagnostics.Function_type_notation_must_be_parenthesized_when_used_in_a_union_type
+                        : Diagnostics.Function_type_notation_must_be_parenthesized_when_used_in_an_intersection_type;
+                }
+                else {
+                    diagnostic = isInUnionType
+                        ? Diagnostics.Constructor_type_notation_must_be_parenthesized_when_used_in_a_union_type
+                        : Diagnostics.Constructor_type_notation_must_be_parenthesized_when_used_in_an_intersection_type;
+
+                }
+                parseErrorAtRange(type, diagnostic);
+                return type;
+            }
+            return undefined;
+        }
+
         function parseUnionOrIntersectionType(
             operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken,
             parseConstituentType: () => TypeNode,
             createTypeNode: (types: NodeArray<TypeNode>) => UnionOrIntersectionTypeNode
         ): TypeNode {
             const pos = getNodePos();
+            const isUnionType = operator === SyntaxKind.BarToken;
             const hasLeadingOperator = parseOptional(operator);
-            let type = parseConstituentType();
+            let type = hasLeadingOperator && parseFunctionOrConstructorTypeToError(isUnionType)
+                || parseConstituentType();
             if (token() === operator || hasLeadingOperator) {
                 const types = [type];
                 while (parseOptional(operator)) {
-                    types.push(parseConstituentType());
+                    types.push(parseFunctionOrConstructorTypeToError(isUnionType) || parseConstituentType());
                 }
                 type = finishNode(createTypeNode(createNodeArray(types, pos)), pos);
             }
@@ -3595,11 +3623,14 @@ namespace ts {
             return parseUnionOrIntersectionType(SyntaxKind.BarToken, parseIntersectionTypeOrHigher, factory.createUnionTypeNode);
         }
 
-        function isStartOfFunctionType(): boolean {
+        function isStartOfFunctionTypeOrConstructorType(): boolean {
             if (token() === SyntaxKind.LessThanToken) {
                 return true;
             }
-            return token() === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType);
+            if (token() === SyntaxKind.OpenParenToken && lookAhead(isUnambiguouslyStartOfFunctionType)) {
+                return true;
+            }
+            return token() === SyntaxKind.NewKeyword;
         }
 
         function skipParameterStart(): boolean {
@@ -3684,7 +3715,7 @@ namespace ts {
         }
 
         function parseTypeWorker(noConditionalTypes?: boolean): TypeNode {
-            if (isStartOfFunctionType() || token() === SyntaxKind.NewKeyword) {
+            if (isStartOfFunctionTypeOrConstructorType()) {
                 return parseFunctionOrConstructorType();
             }
             const pos = getNodePos();
@@ -8669,7 +8700,7 @@ namespace ts {
             extractPragmas(pragmas, range, comment);
         }
 
-        context.pragmas = createMap() as PragmaMap;
+        context.pragmas = new Map() as PragmaMap;
         for (const pragma of pragmas) {
             if (context.pragmas.has(pragma.name)) {
                 const currentValue = context.pragmas.get(pragma.name);
@@ -8767,7 +8798,7 @@ namespace ts {
         });
     }
 
-    const namedArgRegExCache = createMap<RegExp>();
+    const namedArgRegExCache = new Map<string, RegExp>();
     function getNamedArgRegEx(name: string): RegExp {
         if (namedArgRegExCache.has(name)) {
             return namedArgRegExCache.get(name)!;

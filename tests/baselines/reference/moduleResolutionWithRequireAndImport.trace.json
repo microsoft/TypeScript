@@ -1,0 +1,7 @@
+[
+    "======== Resolving module './other' from '/index.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/other', target file type 'TypeScript'.",
+    "File '/other.ts' exist - use it as a name resolution result.",
+    "======== Module name './other' was successfully resolved to '/other.ts'. ========"
+]

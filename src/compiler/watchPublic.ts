@@ -252,7 +252,7 @@ namespace ts {
         let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
 
 
-        const sourceFilesCache = createMap<HostFileInfo>();                 // Cache that stores the source file and version info
+        const sourceFilesCache = new Map<string, HostFileInfo>();                 // Cache that stores the source file and version info
         let missingFilePathsRequestedForRelease: Path[] | undefined;        // These paths are held temparirly so that we can remove the entry from source file cache if the file is not tracked by missing files
         let hasChangedCompilerOptions = false;                              // True if the compiler options have changed between compilations
 
@@ -320,6 +320,7 @@ namespace ts {
             configFileName ?
                 getDirectoryPath(getNormalizedAbsolutePath(configFileName, currentDirectory)) :
                 currentDirectory,
+            ResolutionKind.All,
             /*logChangesWhenResolvingModule*/ false
         );
         // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
@@ -717,8 +718,8 @@ namespace ts {
         function watchConfigFileWildCardDirectories() {
             if (configFileSpecs) {
                 updateWatchingWildcardDirectories(
-                    watchedWildcardDirectories || (watchedWildcardDirectories = createMap()),
-                    createMapFromTemplate(configFileSpecs.wildcardDirectories),
+                    watchedWildcardDirectories || (watchedWildcardDirectories = new Map()),
+                    new Map(getEntries(configFileSpecs.wildcardDirectories)),
                     watchWildcardDirectory
                 );
             }

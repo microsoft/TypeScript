@@ -289,6 +289,7 @@ declare namespace FourSlashInterface {
         goToType(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
+        baselineFindAllReferences(markerName: string): void;
         noReferences(markerNameOrRange?: string | Range): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
@@ -397,6 +398,11 @@ declare namespace FourSlashInterface {
         generateTypes(...options: GenerateTypesOptions[]): void;
 
         organizeImports(newContent: string): void;
+
+        toggleLineComment(newFileContent: string): void;
+        toggleMultilineComment(newFileContent: string): void;
+        commentSelection(newFileContent: string): void;
+        uncommentSelection(newFileContent: string): void;
     }
     class edit {
         backspace(count?: number): void;
@@ -420,7 +426,7 @@ declare namespace FourSlashInterface {
         enableFormatting(): void;
         disableFormatting(): void;
 
-        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string, newContent: NewFileContent }): void;
+        applyRefactor(options: { refactorName: string, actionName: string, actionDescription: string, newContent: NewFileContent, triggerReason?: RefactorTriggerReason }): void;
     }
     class debug {
         printCurrentParameterHelp(): void;

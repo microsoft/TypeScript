@@ -158,7 +158,7 @@ namespace ts.server {
     }
 
     function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): ESMap<string, ESMap<string, number>> {
-        const map: ESMap<string, ESMap<string, number>> = createMap<ESMap<string, number>>();
+        const map = new Map<string, ESMap<string, number>>();
         for (const option of commandLineOptions) {
             if (typeof option.type === "object") {
                 const optionMap = <ESMap<string, number>>option.type;
@@ -174,11 +174,11 @@ namespace ts.server {
 
     const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
     const watchOptionsConverters = prepareConvertersForEnumLikeCompilerOptions(optionsForWatch);
-    const indentStyle = createMapFromTemplate({
+    const indentStyle = new Map(getEntries({
         none: IndentStyle.None,
         block: IndentStyle.Block,
         smart: IndentStyle.Smart
-    });
+    }));
 
     export interface TypesMapFile {
         typesMap: SafeList;
@@ -432,34 +432,55 @@ namespace ts.server {
     /*@internal*/
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
-        cb: (child: ConfiguredProject, configFileName: NormalizedPath) => T | undefined,
-        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind.Find | ProjectReferenceProjectLoadKind.FindCreate
+        cb: (child: ConfiguredProject) => T | undefined,
+        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind.Find | ProjectReferenceProjectLoadKind.FindCreate,
     ): T | undefined;
     /*@internal*/
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
-        cb: (child: ConfiguredProject, configFileName: NormalizedPath) => T | undefined,
-        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind.FindCreateLoad,
+        cb: (child: ConfiguredProject) => T | undefined,
+        projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
         reason: string
     ): T | undefined;
     export function forEachResolvedProjectReferenceProject<T>(
         project: ConfiguredProject,
-        cb: (child: ConfiguredProject, configFileName: NormalizedPath) => T | undefined,
+        cb: (child: ConfiguredProject) => T | undefined,
         projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
         reason?: string
     ): T | undefined {
-        return forEachResolvedProjectReference(project, ref => {
-            if (!ref) return undefined;
-            const configFileName = toNormalizedPath(ref.sourceFile.fileName);
-            const child = project.projectService.findConfiguredProjectByProjectName(configFileName) || (
-                projectReferenceProjectLoadKind === ProjectReferenceProjectLoadKind.FindCreate ?
-                    project.projectService.createConfiguredProject(configFileName) :
-                    projectReferenceProjectLoadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
-                        project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
-                        undefined
-            );
-            return child && cb(child, configFileName);
-        });
+        let seenResolvedRefs: ESMap<string, ProjectReferenceProjectLoadKind> | undefined;
+        return worker(project.getCurrentProgram()?.getResolvedProjectReferences(), project.getCompilerOptions());
+
+        function worker(resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined, parentOptions: CompilerOptions): T | undefined {
+            const loadKind = parentOptions.disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : projectReferenceProjectLoadKind;
+            return forEach(resolvedProjectReferences, ref => {
+                if (!ref) return undefined;
+
+                const configFileName = toNormalizedPath(ref.sourceFile.fileName);
+                const canonicalPath = project.projectService.toCanonicalFileName(configFileName);
+                const seenValue = seenResolvedRefs?.get(canonicalPath);
+                if (seenValue !== undefined && seenValue >= loadKind) {
+                    return undefined;
+                }
+                const child = project.projectService.findConfiguredProjectByProjectName(configFileName) || (
+                    loadKind === ProjectReferenceProjectLoadKind.Find ?
+                        undefined :
+                        loadKind === ProjectReferenceProjectLoadKind.FindCreate ?
+                            project.projectService.createConfiguredProject(configFileName) :
+                            loadKind === ProjectReferenceProjectLoadKind.FindCreateLoad ?
+                                project.projectService.createAndLoadConfiguredProject(configFileName, reason!) :
+                                Debug.assertNever(loadKind)
+                );
+
+                const result = child && cb(child);
+                if (result) {
+                    return result;
+                }
+
+                (seenResolvedRefs || (seenResolvedRefs = new Map())).set(canonicalPath, loadKind);
+                return worker(ref.references, ref.commandLine.options);
+            });
+        }
     }
 
     /*@internal*/
@@ -571,16 +592,16 @@ namespace ts.server {
          * Container of all known scripts
          */
         /*@internal*/
-        readonly filenameToScriptInfo = createMap<ScriptInfo>();
-        private readonly scriptInfoInNodeModulesWatchers = createMap <ScriptInfoInNodeModulesWatcher>();
+        readonly filenameToScriptInfo = new Map<string, ScriptInfo>();
+        private readonly scriptInfoInNodeModulesWatchers = new Map<string, ScriptInfoInNodeModulesWatcher>();
         /**
          * Contains all the deleted script info's version information so that
          * it does not reset when creating script info again
          * (and could have potentially collided with version where contents mismatch)
          */
-        private readonly filenameToScriptInfoVersion = createMap<ScriptInfoVersion>();
+        private readonly filenameToScriptInfoVersion = new Map<string, ScriptInfoVersion>();
         // Set of all '.js' files ever opened.
-        private readonly allJsFilesForOpenFileTelemetry = createMap<true>();
+        private readonly allJsFilesForOpenFileTelemetry = new Map<string, true>();
 
         /**
          * Map to the real path of the infos
@@ -590,7 +611,7 @@ namespace ts.server {
         /**
          * maps external project file name to list of config files that were the part of this project
          */
-        private readonly externalProjectToConfiguredProjectMap: ESMap<string, NormalizedPath[]> = createMap<NormalizedPath[]>();
+        private readonly externalProjectToConfiguredProjectMap = new Map<string, NormalizedPath[]>();
 
         /**
          * external projects (configuration and list of root files is not controlled by tsserver)
@@ -603,7 +624,7 @@ namespace ts.server {
         /**
          * projects specified by a tsconfig.json file
          */
-        readonly configuredProjects: Map<ConfiguredProject> = createMap<ConfiguredProject>();
+        readonly configuredProjects: Map<ConfiguredProject> = new Map<string, ConfiguredProject>();
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
@@ -611,16 +632,16 @@ namespace ts.server {
         /**
          * Map of open files that are opened without complete path but have projectRoot as current directory
          */
-        private readonly openFilesWithNonRootedDiskPath = createMap<ScriptInfo>();
+        private readonly openFilesWithNonRootedDiskPath = new Map<string, ScriptInfo>();
 
         private compilerOptionsForInferredProjects: CompilerOptions | undefined;
-        private compilerOptionsForInferredProjectsPerProjectRoot = createMap<CompilerOptions>();
+        private compilerOptionsForInferredProjectsPerProjectRoot = new Map<string, CompilerOptions>();
         private watchOptionsForInferredProjects: WatchOptions | undefined;
-        private watchOptionsForInferredProjectsPerProjectRoot = createMap<WatchOptions | false>();
+        private watchOptionsForInferredProjectsPerProjectRoot = new Map<string, WatchOptions | false>();
         /**
          * Project size for configured or external projects
          */
-        private readonly projectToSizeMap: ESMap<string, number> = createMap<number>();
+        private readonly projectToSizeMap = new Map<string, number>();
         /**
          * This is a map of config file paths existence that doesnt need query to disk
          * - The entry can be present because there is inferred project that needs to watch addition of config file to directory
@@ -628,14 +649,14 @@ namespace ts.server {
          * - Or it is present if we have configured project open with config file at that location
          *   In this case the exists property is always true
          */
-        private readonly configFileExistenceInfoCache = createMap<ConfigFileExistenceInfo>();
+        private readonly configFileExistenceInfoCache = new Map<string, ConfigFileExistenceInfo>();
         /*@internal*/ readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
-        private readonly legacySafelist = createMap<string>();
+        private readonly legacySafelist = new Map<string, string>();
 
-        private pendingProjectUpdates = createMap<Project>();
+        private pendingProjectUpdates = new Map<string, Project>();
         /* @internal */
         pendingEnsureProjectForOpenFiles = false;
 
@@ -663,7 +684,7 @@ namespace ts.server {
         public readonly syntaxOnly?: boolean;
 
         /** Tracks projects that we have already sent telemetry for. */
-        private readonly seenProjects = createMap<true>();
+        private readonly seenProjects = new Map<string, true>();
 
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
@@ -1754,11 +1775,9 @@ namespace ts.server {
             const project = configFileName &&
                 this.findConfiguredProjectByProjectName(configFileName);
 
-            return project?.isSolution() ?
-                project.getDefaultChildProjectFromSolution(info) :
-                project && projectContainsInfoDirectly(project, info) ?
-                    project :
-                    undefined;
+            return project && projectContainsInfoDirectly(project, info) ?
+                project :
+                project?.getDefaultChildProjectFromProjectWithReferences(info);
         }
 
         /**
@@ -2039,7 +2058,7 @@ namespace ts.server {
                 project.setCompilerOptions(compilerOptions);
                 project.setWatchOptions(parsedCommandLine.watchOptions);
                 project.enableLanguageService();
-                project.watchWildcards(createMapFromTemplate(parsedCommandLine.wildcardDirectories!)); // TODO: GH#18217
+                project.watchWildcards(new Map(getEntries(parsedCommandLine.wildcardDirectories!))); // TODO: GH#18217
             }
             project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
@@ -2048,7 +2067,7 @@ namespace ts.server {
 
         private updateNonInferredProjectFiles<T>(project: ExternalProject | ConfiguredProject | AutoImportProviderProject, files: T[], propertyReader: FilePropertyReader<T>) {
             const projectRootFilesMap = project.getRootFilesMap();
-            const newRootScriptInfoMap = createMap<true>();
+            const newRootScriptInfoMap = new Map<string, true>();
 
             for (const f of files) {
                 const newRootFile = propertyReader.getFileName(f);
@@ -2772,7 +2791,13 @@ namespace ts.server {
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
         private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
-            const updatedProjects = createMap<true>();
+            const updatedProjects = new Map<string, true>();
+            const reloadChildProject = (child: ConfiguredProject) => {
+                if (!updatedProjects.has(child.canonicalConfigFilePath)) {
+                    updatedProjects.set(child.canonicalConfigFilePath, true);
+                    this.reloadConfiguredProject(child, reason);
+                }
+            };
             // try to reload config file for all open files
             openFiles.forEach((openFileValue, path) => {
                 // Filter out the files that need to be ignored
@@ -2799,19 +2824,24 @@ namespace ts.server {
                         else {
                             // reload from the disk
                             this.reloadConfiguredProject(project, reason);
-                            // If this is solution, reload the project till the reloaded project contains the script info directly
-                            if (!project.containsScriptInfo(info) && project.isSolution()) {
-                                forEachResolvedProjectReferenceProject(
+                            // If this project does not contain this file directly, reload the project till the reloaded project contains the script info directly
+                            if (!projectContainsInfoDirectly(project, info)) {
+                                const referencedProject = forEachResolvedProjectReferenceProject(
                                     project,
                                     child => {
-                                        if (!updatedProjects.has(child.canonicalConfigFilePath)) {
-                                            updatedProjects.set(child.canonicalConfigFilePath, true);
-                                            this.reloadConfiguredProject(child, reason);
-                                        }
+                                        reloadChildProject(child);
                                         return projectContainsInfoDirectly(child, info);
                                     },
                                     ProjectReferenceProjectLoadKind.FindCreate
                                 );
+                                if (referencedProject) {
+                                    // Reload the project's tree that is already present
+                                    forEachResolvedProjectReferenceProject(
+                                        project,
+                                        reloadChildProject,
+                                        ProjectReferenceProjectLoadKind.Find
+                                    );
+                                }
                             }
                         }
                     }
@@ -2904,16 +2934,20 @@ namespace ts.server {
                 this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
             updateProjectIfDirty(configuredProject);
 
-            if (configuredProject.isSolution()) {
+            const projectContainsOriginalInfo = (project: ConfiguredProject) => {
+                const info = this.getScriptInfo(fileName);
+                return info && projectContainsInfoDirectly(project, info);
+            };
+
+            if (configuredProject.isSolution() || !projectContainsOriginalInfo(configuredProject)) {
                 // Find the project that is referenced from this solution that contains the script info directly
                 configuredProject = forEachResolvedProjectReferenceProject(
                     configuredProject,
                     child => {
                         updateProjectIfDirty(child);
-                        const info = this.getScriptInfo(fileName);
-                        return info && projectContainsInfoDirectly(child, info) ? child : undefined;
+                        return projectContainsOriginalInfo(child) ? child : undefined;
                     },
-                    ProjectReferenceProjectLoadKind.FindCreateLoad,
+                    configuredProject.getCompilerOptions().disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : ProjectReferenceProjectLoadKind.FindCreateLoad,
                     `Creating project referenced in solution ${configuredProject.projectName} to find possible configured project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`
                 );
                 if (!configuredProject) return undefined;
@@ -2965,38 +2999,39 @@ namespace ts.server {
             let configFileName: NormalizedPath | undefined;
             let configFileErrors: readonly Diagnostic[] | undefined;
             let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
-            let defaultConfigProject: ConfiguredProject | undefined;
             let retainProjects: ConfiguredProject[] | ConfiguredProject | undefined;
-            if (!project && !this.syntaxOnly) { // Checking syntaxOnly is an optimization
+            let projectForConfigFileDiag: ConfiguredProject | undefined;
+            let defaultConfigProjectIsCreated = false;
+            if (this.syntaxOnly) {
+                // Invalidate resolutions in the file since this file is now open
+                info.containingProjects.forEach(project => {
+                    if (project.resolutionCache.removeRelativeNoResolveResolutionsOfFile(info.path)) {
+                        project.markAsDirty();
+                    }
+                });
+            }
+            else if (!project) { // Checking syntaxOnly is an optimization
                 configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
                         project = this.createLoadAndUpdateConfiguredProject(configFileName, `Creating possible configured project for ${info.fileName} to open`);
-                        // Send the event only if the project got created as part of this open request and info is part of the project
-                        if (!project.containsScriptInfo(info)) {
-                            // Since the file isnt part of configured project, do not send config file info
-                            configFileName = undefined;
-                        }
-                        else {
-                            configFileErrors = project.getAllProjectErrors();
-                            this.sendConfigFileDiagEvent(project, info.fileName);
-                        }
+                        defaultConfigProjectIsCreated = true;
                     }
                     else {
                         // Ensure project is ready to check if it contains opened script info
                         updateProjectIfDirty(project);
                     }
 
-                    defaultConfigProject = project;
-                    retainProjects = defaultConfigProject;
+                    projectForConfigFileDiag = project.containsScriptInfo(info) ? project : undefined;
+                    retainProjects = project;
 
                     // If this configured project doesnt contain script info but
                     // it is solution with project references, try those project references
-                    if (!project.containsScriptInfo(info) && project.isSolution()) {
+                    if (!projectContainsInfoDirectly(project, info)) {
                         forEachResolvedProjectReferenceProject(
                             project,
-                            (child, childConfigFileName) => {
+                            child => {
                                 updateProjectIfDirty(child);
                                 // Retain these projects
                                 if (!isArray(retainProjects)) {
@@ -3008,20 +3043,35 @@ namespace ts.server {
 
                                 // If script info belongs to this child project, use this as default config project
                                 if (projectContainsInfoDirectly(child, info)) {
-                                    configFileName = childConfigFileName;
-                                    configFileErrors = child.getAllProjectErrors();
-                                    this.sendConfigFileDiagEvent(child, info.fileName);
+                                    projectForConfigFileDiag = child;
                                     return child;
+                                }
+
+                                // If this project uses the script info (even through project reference), if default project is not found, use this for configFileDiag
+                                if (!projectForConfigFileDiag && child.containsScriptInfo(info)) {
+                                    projectForConfigFileDiag = child;
                                 }
                             },
                             ProjectReferenceProjectLoadKind.FindCreateLoad,
                             `Creating project referenced in solution ${project.projectName} to find possible configured project for ${info.fileName} to open`
                         );
                     }
-                    else {
-                        // Create ancestor configured project
-                        this.createAncestorProjects(info, defaultConfigProject || project);
+
+                    // Send the event only if the project got created as part of this open request and info is part of the project
+                    if (projectForConfigFileDiag) {
+                        configFileName = projectForConfigFileDiag.getConfigFilePath();
+                        if (projectForConfigFileDiag !== project || defaultConfigProjectIsCreated) {
+                            configFileErrors = projectForConfigFileDiag.getAllProjectErrors();
+                            this.sendConfigFileDiagEvent(projectForConfigFileDiag, info.fileName);
+                        }
                     }
+                    else {
+                        // Since the file isnt part of configured project, do not send config file info
+                        configFileName = undefined;
+                    }
+
+                    // Create ancestor configured project
+                    this.createAncestorProjects(info, project);
                 }
             }
 
@@ -3046,6 +3096,10 @@ namespace ts.server {
                 }
                 Debug.assert(this.openFiles.has(info.path));
                 this.assignOrphanScriptInfoToInferredProject(info, this.openFiles.get(info.path));
+            }
+            else if (this.syntaxOnly && info.cacheSourceFile?.sourceFile.referencedFiles.length) {
+                // This file was just opened and references in this file will previously not been resolved so schedule update
+                info.containingProjects.forEach(project => project.markAsDirty());
             }
             Debug.assert(!info.isOrphan());
             return { configFileName, configFileErrors, retainProjects };
@@ -3099,10 +3153,10 @@ namespace ts.server {
                 if (forEachPotentialProjectReference(
                     project,
                     potentialRefPath => forProjects!.has(potentialRefPath)
-                ) || (project.isSolution() && forEachResolvedProjectReference(
+                ) || forEachResolvedProjectReference(
                     project,
                     (_ref, resolvedPath) => forProjects!.has(resolvedPath)
-                ))) {
+                )) {
                     // Load children
                     this.ensureProjectChildren(project, seenProjects);
                 }
@@ -3153,7 +3207,7 @@ namespace ts.server {
         }
 
         private removeOrphanConfiguredProjects(toRetainConfiguredProjects: readonly ConfiguredProject[] | ConfiguredProject | undefined) {
-            const toRemoveConfiguredProjects = cloneMap(this.configuredProjects);
+            const toRemoveConfiguredProjects = new Map(this.configuredProjects);
             const markOriginalProjectsAsUsed = (project: Project) => {
                 if (!project.isOrphan() && project.originalConfiguredProjects) {
                     project.originalConfiguredProjects.forEach(
@@ -3208,7 +3262,7 @@ namespace ts.server {
         }
 
         private removeOrphanScriptInfos() {
-            const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
+            const toRemoveScriptInfos = new Map(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
                 // If script info is open or orphan, retain it and its dependencies
                 if (!info.isScriptOpen() && info.isOrphan() && !info.isContainedByAutoImportProvider()) {
@@ -3686,7 +3740,7 @@ namespace ts.server {
 
             // Also save the current configuration to pass on to any projects that are yet to be loaded.
             // If a plugin is configured twice, only the latest configuration will be remembered.
-            this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || createMap();
+            this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || new Map();
             this.currentPluginConfigOverrides.set(args.pluginName, args.configuration);
         }
 
@@ -3721,7 +3775,7 @@ namespace ts.server {
 
         /*@internal*/
         private watchPackageJsonFile(path: Path) {
-            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = createMap());
+            const watchers = this.packageJsonFilesMap || (this.packageJsonFilesMap = new Map());
             if (!watchers.has(path)) {
                 this.invalidateProjectAutoImports(path);
                 watchers.set(path, this.watchFactory.watchFile(

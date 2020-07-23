@@ -63,7 +63,7 @@ TypeScript is currently accepting contributions in the form of bug fixes. A bug 
 
 ## Contributing features
 
-Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer) in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
+Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
 
 Design changes will not be accepted at this time. If you have a design change proposal, please log a suggestion issue.
 

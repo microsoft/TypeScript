@@ -304,14 +304,17 @@ namespace ts.SignatureHelp {
         if (!info) return undefined;
         const { contextualType, argumentIndex, argumentCount, argumentsSpan } = info;
 
-        const signatures = contextualType.getCallSignatures();
+        // for optional function condition.
+        const nonNullableContextualType = contextualType.getNonNullableType();
+
+        const signatures = nonNullableContextualType.getCallSignatures();
         if (signatures.length !== 1) return undefined;
 
-        const invocation: ContextualInvocation = { kind: InvocationKind.Contextual, signature: first(signatures), node: startingToken, symbol: chooseBetterSymbol(contextualType.symbol) };
+        const invocation: ContextualInvocation = { kind: InvocationKind.Contextual, signature: first(signatures), node: startingToken, symbol: chooseBetterSymbol(nonNullableContextualType.symbol) };
         return { isTypeParameterList: false, invocation, argumentsSpan, argumentIndex, argumentCount };
     }
 
-    interface ContextualSignatureLocationInfo {readonly contextualType: Type; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; }
+    interface ContextualSignatureLocationInfo { readonly contextualType: Type; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; }
     function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: SourceFile, checker: TypeChecker): ContextualSignatureLocationInfo | undefined {
         if (startingToken.kind !== SyntaxKind.OpenParenToken && startingToken.kind !== SyntaxKind.CommaToken) return undefined;
         const { parent } = startingToken;

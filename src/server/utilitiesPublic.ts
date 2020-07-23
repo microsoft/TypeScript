@@ -80,7 +80,7 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-        const map = createMap<T>();
+        const map = new Map<string, T>();
         return {
             get(path) {
                 return map.get(path);

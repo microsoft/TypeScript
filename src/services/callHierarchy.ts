@@ -249,6 +249,10 @@ namespace ts.CallHierarchy {
                 }
                 return undefined;
             }
+            // #39453
+            if (isVariableDeclaration(location) && location.initializer && isConstNamedExpression(location.initializer)) {
+                return location.initializer;
+            }
             if (!followingSymbol) {
                 let symbol = typeChecker.getSymbolAtLocation(location);
                 if (symbol) {
@@ -304,7 +308,7 @@ namespace ts.CallHierarchy {
     }
 
     function getCallSiteGroupKey(entry: CallSite) {
-        return "" + getNodeId(entry.declaration);
+        return getNodeId(entry.declaration);
     }
 
     function createCallHierarchyIncomingCall(from: CallHierarchyItem, fromSpans: TextSpan[]): CallHierarchyIncomingCall {

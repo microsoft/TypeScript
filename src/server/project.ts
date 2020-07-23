@@ -127,7 +127,7 @@ namespace ts.server {
 
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
-        private rootFilesMap = createMap<ProjectRootFile>();
+        private rootFilesMap = new Map<string, ProjectRootFile>();
         private program: Program | undefined;
         private externalFiles: SortedReadonlyArray<string> | undefined;
         private missingFilesMap: ESMap<Path, FileWatcher> | undefined;
@@ -246,7 +246,7 @@ namespace ts.server {
         /*@internal*/
         private dirtyFilesForSuggestions: Set<Path> | undefined;
         /*@internal*/
-        private symlinks: ReadonlyESMap<string, string> | undefined;
+        private symlinks: SymlinkCache | undefined;
         /*@internal*/
         autoImportProviderHost: AutoImportProviderProject | false | undefined;
 
@@ -281,7 +281,6 @@ namespace ts.server {
 
             this.languageServiceEnabled = true;
             if (projectService.syntaxOnly) {
-                this.compilerOptions.noResolve = true;
                 this.compilerOptions.types = [];
             }
 
@@ -296,7 +295,12 @@ namespace ts.server {
             this.realpath = maybeBind(host, host.realpath);
 
             // Use the current directory as resolution root only if the project created using current directory string
-            this.resolutionCache = createResolutionCache(this, currentDirectory && this.currentDirectory, /*logChangesWhenResolvingModule*/ true);
+            this.resolutionCache = createResolutionCache(
+                this,
+                currentDirectory && this.currentDirectory,
+                projectService.syntaxOnly ? ResolutionKind.RelativeReferencesInOpenFileOnly : ResolutionKind.All,
+                /*logChangesWhenResolvingModule*/ true
+            );
             this.languageService = createLanguageService(this, this.documentRegistry, this.projectService.syntaxOnly);
             if (lastFileExceededProgramSize) {
                 this.disableLanguageService(lastFileExceededProgramSize);
@@ -324,9 +328,9 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getProbableSymlinks(files: readonly SourceFile[]): ReadonlyESMap<string, string> {
+        getSymlinkCache(): SymlinkCache {
             return this.symlinks || (this.symlinks = discoverProbableSymlinks(
-                files,
+                this.program?.getSourceFiles() || emptyArray,
                 this.getCanonicalFileName,
                 this.getCurrentDirectory()));
         }
@@ -448,6 +452,11 @@ namespace ts.server {
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[] {
             return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference);
+        }
+
+        /*@internal*/
+        includeTripleslashReferencesFrom(containingFile: string) {
+            return !this.projectService.syntaxOnly || this.fileIsOpen(this.toPath(containingFile));
         }
 
         directoryExists(path: string): boolean {
@@ -1282,7 +1291,7 @@ namespace ts.server {
                     if (this.generatedFilesMap.has(path)) return;
                 }
                 else {
-                    this.generatedFilesMap = createMap();
+                    this.generatedFilesMap = new Map();
                 }
                 this.generatedFilesMap.set(path, this.createGeneratedFileWatcher(generatedFile));
             }
@@ -1632,6 +1641,22 @@ namespace ts.server {
         }
 
         /*@internal*/
+        getModuleResolutionHostForAutoImportProvider(): ModuleResolutionHost {
+            if (this.program) {
+                return {
+                    fileExists: this.program.fileExists,
+                    directoryExists: this.program.directoryExists,
+                    realpath: this.program.realpath || this.projectService.host.realpath?.bind(this.projectService.host),
+                    getCurrentDirectory: this.getCurrentDirectory.bind(this),
+                    readFile: this.projectService.host.readFile.bind(this.projectService.host),
+                    getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
+                    trace: this.projectService.host.trace?.bind(this.projectService.host),
+                };
+            }
+            return this.projectService.host;
+        }
+
+        /*@internal*/
         getPackageJsonAutoImportProvider(): Program | undefined {
             if (this.autoImportProviderHost === false) {
                 return undefined;
@@ -1648,7 +1673,7 @@ namespace ts.server {
 
             const dependencySelection = this.includePackageJsonAutoImports();
             if (dependencySelection) {
-                this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.projectService.host, this.documentRegistry);
+                this.autoImportProviderHost = AutoImportProviderProject.create(dependencySelection, this, this.getModuleResolutionHostForAutoImportProvider(), this.documentRegistry);
                 if (this.autoImportProviderHost) {
                     updateProjectIfDirty(this.autoImportProviderHost);
                     return this.autoImportProviderHost.getCurrentProgram();
@@ -1832,8 +1857,11 @@ namespace ts.server {
                     moduleResolutionHost));
 
                 for (const resolution of resolutions) {
-                    if (resolution.resolvedTypeReferenceDirective?.resolvedFileName && !hostProject.getCurrentProgram()!.getSourceFile(resolution.resolvedTypeReferenceDirective.resolvedFileName)) {
-                        rootNames = append(rootNames, resolution.resolvedTypeReferenceDirective.resolvedFileName);
+                    if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
+                    const { resolvedFileName } = resolution.resolvedTypeReferenceDirective;
+                    const fileName = moduleResolutionHost.realpath?.(resolvedFileName) || resolvedFileName;
+                    if (!hostProject.getCurrentProgram()!.getSourceFile(fileName) && !hostProject.getCurrentProgram()!.getSourceFile(resolvedFileName)) {
+                        rootNames = append(rootNames, fileName);
                     }
                 }
             }
@@ -1860,7 +1888,7 @@ namespace ts.server {
                 skipLibCheck: true,
                 types: ts.emptyArray,
                 lib: ts.emptyArray,
-                sourceMap: false
+                sourceMap: false,
             };
 
             const rootNames = this.getRootFileNames(dependencySelection, hostProject, moduleResolutionHost, compilerOptions);
@@ -1905,7 +1933,7 @@ namespace ts.server {
                 rootFileNames = AutoImportProviderProject.getRootFileNames(
                     this.hostProject.includePackageJsonAutoImports(),
                     this.hostProject,
-                    this.projectService.host,
+                    this.hostProject.getModuleResolutionHostForAutoImportProvider(),
                     this.getCompilationSettings());
             }
 
@@ -1932,6 +1960,18 @@ namespace ts.server {
             throw new Error("AutoImportProviderProject is an auto import provider; use `markAsDirty()` instead.");
         }
 
+        getModuleResolutionHostForAutoImportProvider(): never {
+            throw new Error("AutoImportProviderProject cannot provide its own host; use `hostProject.getModuleResolutionHostForAutomImportProvider()` instead.");
+        }
+
+        getProjectReferences() {
+            return this.hostProject.getProjectReferences();
+        }
+
+        useSourceOfProjectReferenceRedirect() {
+            return true;
+        }
+
         /*@internal*/
         includePackageJsonAutoImports() {
             return PackageJsonAutoImportPreference.None;
@@ -1939,6 +1979,11 @@ namespace ts.server {
 
         getTypeAcquisition(): TypeAcquisition {
             return { enable: false };
+        }
+
+        /*@internal*/
+        getSymlinkCache() {
+            return this.hostProject.getSymlinkCache();
         }
     }
 
@@ -1960,7 +2005,7 @@ namespace ts.server {
         pendingReloadReason: string | undefined;
 
         /* @internal */
-        openFileWatchTriggered = createMap<true>();
+        openFileWatchTriggered = new Map<string, true>();
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
@@ -2170,7 +2215,7 @@ namespace ts.server {
         /*@internal*/
         watchWildcards(wildcardDirectories: ESMap<string, WatchDirectoryFlags>) {
             updateWatchingWildcardDirectories(
-                this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = createMap()),
+                this.directoriesWatchedForWildcards || (this.directoriesWatchedForWildcards = new Map()),
                 wildcardDirectories,
                 // Create new directory watcher
                 (directory, flags) => this.projectService.watchWildcardDirectory(directory as Path, flags, this),
@@ -2216,9 +2261,8 @@ namespace ts.server {
         }
 
         /* @internal */
-        /** Find the configured project from the project references in this solution which contains the info directly */
-        getDefaultChildProjectFromSolution(info: ScriptInfo) {
-            Debug.assert(this.isSolution());
+        /** Find the configured project from the project references in project which contains the info directly */
+        getDefaultChildProjectFromProjectWithReferences(info: ScriptInfo) {
             return forEachResolvedProjectReferenceProject(
                 this,
                 child => projectContainsInfoDirectly(child, info) ?
@@ -2248,16 +2292,20 @@ namespace ts.server {
                 return !!configFileExistenceInfo.openFilesImpactedByConfigFile.size;
             }
 
-            const isSolution = this.isSolution();
-
             // If there is no pending update for this project,
             // We know exact set of open files that get impacted by this configured project as the files in the project
             // The project is referenced only if open files impacted by this project are present in this project
             return forEachEntry(
                 configFileExistenceInfo.openFilesImpactedByConfigFile,
-                (_value, infoPath) => isSolution ?
-                    !!this.getDefaultChildProjectFromSolution(this.projectService.getScriptInfoForPath(infoPath)!) :
-                    this.containsScriptInfo(this.projectService.getScriptInfoForPath(infoPath)!)
+                (_value, infoPath) => {
+                    const info = this.projectService.getScriptInfoForPath(infoPath)!;
+                    return this.containsScriptInfo(info) ||
+                        !!forEachResolvedProjectReferenceProject(
+                            this,
+                            child => child.containsScriptInfo(info),
+                            ProjectReferenceProjectLoadKind.Find
+                        );
+                }
             ) || false;
         }
 

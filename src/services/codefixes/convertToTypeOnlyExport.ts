@@ -12,7 +12,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const fixedExportDeclarations = createMap<true>();
+            const fixedExportDeclarations = new Map<string, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const exportSpecifier = getExportSpecifierForDiagnosticSpan(diag, context.sourceFile);
                 if (exportSpecifier && !addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {

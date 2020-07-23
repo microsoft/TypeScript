@@ -1164,6 +1164,22 @@
         "category": "Error",
         "code": 1384
     },
+    "Function type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1385
+    },
+    "Constructor type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1386
+    },
+    "Function type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1387
+    },
+    "Constructor type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1388
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3041,6 +3057,10 @@
         "category": "Error",
         "code": 4020
     },
+    "'extends' clause of exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4021
+    },
     "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4022
@@ -4449,6 +4469,10 @@
         "category": "Error",
         "code": 6234
     },
+    "Disable loading referenced projects.": {
+        "category": "Message",
+        "code": 6235
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -5826,6 +5850,22 @@
     "Switch each misused '{0}' to '{1}'": {
         "category": "Message",
         "code": 95138
+    },
+    "Convert to optional chain expression": {
+        "category": "Message",
+        "code": 95139
+    },
+    "Could not find convertible access expression": {
+        "category": "Message",
+        "code": 95140
+    },
+    "Could not find matching access expressions": {
+        "category": "Message",
+        "code": 95141
+    },
+    "Can only convert logical AND access chains": {
+        "category": "Message",
+        "code": 95142
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
