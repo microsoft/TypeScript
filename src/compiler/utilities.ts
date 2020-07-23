@@ -491,6 +491,10 @@ namespace ts {
             return getTokenPosOfNode(node.jsDoc![0], sourceFile);
         }
 
+        if (node.kind === SyntaxKind.JsxText) {
+            return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+        }
+
         // For a syntax list, it is possible that one of its children has JSDocComment nodes, while
         // the syntax list itself considers them as normal trivia. Therefore if we simply skip
         // trivia for the list, we may have skipped the JSDocComment as well. So we should process its
