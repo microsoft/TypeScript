@@ -51,14 +51,14 @@ Output::
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
 Program options: {"target":2,"importsNotUsedAsValues":2,"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
+/a/lib/lib.d.ts
 /b.ts
 /a.ts
-/a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /b.ts
 /a.ts
-/a/lib/lib.d.ts
 
 WatchedFiles::
 /tsconfig.json:
@@ -126,14 +126,14 @@ Output::
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
 Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
+/a/lib/lib.d.ts
 /b.ts
 /a.ts
-/a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /b.ts
 /a.ts
-/a/lib/lib.d.ts
 
 WatchedFiles::
 /tsconfig.json:
@@ -173,14 +173,14 @@ Output::
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
 Program options: {"target":2,"importsNotUsedAsValues":2,"experimentalDecorators":true,"emitDecoratorMetadata":true,"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
+/a/lib/lib.d.ts
 /b.ts
 /a.ts
-/a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /b.ts
 /a.ts
-/a/lib/lib.d.ts
 
 WatchedFiles::
 /tsconfig.json:

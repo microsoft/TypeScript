@@ -29,4 +29,4 @@
 // @Filename: /index.ts
 ////filter/**/
 
-verify.importFixModuleSpecifiers('', ['./object-literal', './jquery']);
+verify.importFixModuleSpecifiers('', ['./jquery', './object-literal']);

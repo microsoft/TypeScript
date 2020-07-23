@@ -61,13 +61,13 @@ Program root files: ["/user/username/projects/myproject/a.ts","/user/username/pr
 Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -119,8 +119,8 @@ Program root files: ["/user/username/projects/myproject/a.ts","/user/username/pr
 Program options: {"skipLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
@@ -179,8 +179,8 @@ Program root files: ["/user/username/projects/myproject/a.ts","/user/username/pr
 Program options: {"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
@@ -245,8 +245,8 @@ Program root files: ["/user/username/projects/myproject/a.ts","/user/username/pr
 Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
@@ -304,8 +304,8 @@ Program root files: ["/user/username/projects/myproject/a.ts","/user/username/pr
 Program options: {"skipDefaultLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
@@ -357,8 +357,8 @@ Program root files: ["/user/username/projects/myproject/a.ts","/user/username/pr
 Program options: {"skipLibCheck":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
@@ -423,8 +423,8 @@ Program root files: ["/user/username/projects/myproject/a.ts","/user/username/pr
 Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts

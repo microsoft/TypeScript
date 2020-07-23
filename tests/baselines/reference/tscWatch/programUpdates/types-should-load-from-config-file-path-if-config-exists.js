@@ -36,13 +36,13 @@ Program root files: ["/a/b/app.ts"]
 Program options: {"types":["node"],"typeRoots":[],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/a/b/app.ts
 /a/b/node_modules/@types/node/index.d.ts
+/a/b/app.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/a/b/app.ts
 /a/b/node_modules/@types/node/index.d.ts
+/a/b/app.ts
 
 WatchedFiles::
 /a/b/tsconfig.json:

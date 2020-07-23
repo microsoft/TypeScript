@@ -39,12 +39,12 @@ Output::
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"target":2,"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 WatchedFiles::
 /tsconfig.json:
@@ -100,12 +100,12 @@ Output::
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"target":2,"useDefineForClassFields":true,"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 WatchedFiles::
 /tsconfig.json:

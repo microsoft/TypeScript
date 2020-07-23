@@ -35,9 +35,9 @@ Output::
 Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
 Program options: {"out":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
 Program files::
+/a/lib/lib.d.ts
 /a/a.ts
 /a/b.ts
-/a/lib/lib.d.ts
 
 No cached semantic diagnostics in the builder::
 
@@ -86,9 +86,9 @@ Output::
 Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
 Program options: {"out":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
 Program files::
+/a/lib/lib.d.ts
 /a/a.ts
 /a/b.ts
-/a/lib/lib.d.ts
 
 No cached semantic diagnostics in the builder::
 

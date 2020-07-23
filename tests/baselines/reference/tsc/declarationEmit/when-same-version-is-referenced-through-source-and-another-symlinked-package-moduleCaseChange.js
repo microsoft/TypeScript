@@ -179,11 +179,11 @@ Resolving real path for '/user/username/projects/myProject/plugin-two/node_modul
 
 /user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
 
-/user/username/projects/myproject/plugin-one/action.ts
-
 /user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts
 
 /user/username/projects/myProject/plugin-two/index.d.ts
+
+/user/username/projects/myproject/plugin-one/action.ts
 
 /user/username/projects/myproject/plugin-one/index.ts
 
@@ -194,9 +194,9 @@ Program options: {"target":1,"declaration":true,"traceResolution":true,"project"
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
-/user/username/projects/myproject/plugin-one/action.ts
 /user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts
 /user/username/projects/myProject/plugin-two/index.d.ts
+/user/username/projects/myproject/plugin-one/action.ts
 /user/username/projects/myproject/plugin-one/index.ts
 
 WatchedFiles::

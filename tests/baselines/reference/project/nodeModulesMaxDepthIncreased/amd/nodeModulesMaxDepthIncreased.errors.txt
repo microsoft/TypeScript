@@ -9,6 +9,9 @@ maxDepthIncreased/root.ts(7,1): error TS2322: Type 'string' is not assignable to
       }
     }
     
+==== entry.d.ts (0 errors) ====
+    export declare var foo: number;
+    
 ==== index.js (0 errors) ====
     exports.person = {
         "name": "John Doe",
@@ -35,9 +38,6 @@ maxDepthIncreased/root.ts(7,1): error TS2322: Type 'string' is not assignable to
     };
     
     exports.f2 = m2;
-    
-==== entry.d.ts (0 errors) ====
-    export declare var foo: number;
     
 ==== maxDepthIncreased/root.ts (1 errors) ====
     import * as m1 from "m1";

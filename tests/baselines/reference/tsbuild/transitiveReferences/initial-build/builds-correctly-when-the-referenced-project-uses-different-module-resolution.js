@@ -63,9 +63,9 @@ Output::
 /src/a.d.ts
 /src/b.ts
 /lib/lib.d.ts
+/src/refs/a.d.ts
 /src/a.d.ts
 /src/b.d.ts
-/src/refs/a.d.ts
 /src/c.ts
 exitCode:: ExitStatus.Success
 

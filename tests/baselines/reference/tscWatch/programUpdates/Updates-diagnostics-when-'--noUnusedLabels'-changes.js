@@ -32,12 +32,12 @@ Output::
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
 Program files::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 WatchedFiles::
 /tsconfig.json:
@@ -85,12 +85,12 @@ Output::
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"allowUnusedLabels":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
 Program files::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 WatchedFiles::
 /tsconfig.json:
@@ -128,12 +128,12 @@ Output::
 Program root files: ["/a.ts","/a/lib/lib.d.ts"]
 Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
 Program files::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a.ts
 /a/lib/lib.d.ts
+/a.ts
 
 WatchedFiles::
 /tsconfig.json:

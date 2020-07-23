@@ -35,14 +35,14 @@ Output::
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
 Program options: {"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
+/a/lib/lib.d.ts
 /a.ts
 /b.ts
-/a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /a.ts
 /b.ts
-/a/lib/lib.d.ts
 
 WatchedFiles::
 /tsconfig.json:
@@ -105,9 +105,9 @@ Output::
 Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
 Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"configFilePath":"/tsconfig.json"}
 Program files::
+/a/lib/lib.d.ts
 /a.ts
 /b.ts
-/a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
 

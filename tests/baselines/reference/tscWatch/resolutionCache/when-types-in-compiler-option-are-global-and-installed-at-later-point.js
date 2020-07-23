@@ -89,13 +89,13 @@ Program root files: ["/user/username/projects/myproject/lib/app.ts"]
 Program options: {"module":0,"types":["@myapp/ts-types"],"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib/app.ts
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts
+/user/username/projects/myproject/lib/app.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/user/username/projects/myproject/lib/app.ts
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts
+/user/username/projects/myproject/lib/app.ts
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

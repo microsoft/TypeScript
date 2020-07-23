@@ -35,14 +35,14 @@ Output::
 Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
 Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
 Program files::
+/a/lib/lib.d.ts
 /a/a.ts
 /a/b.ts
-/a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /a/a.ts
 /a/b.ts
-/a/lib/lib.d.ts
 
 WatchedFiles::
 /a/tsconfig.json:
@@ -92,9 +92,9 @@ Output::
 Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
 Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
 Program files::
+/a/lib/lib.d.ts
 /a/a.ts
 /a/b.ts
-/a/lib/lib.d.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/a.ts

@@ -31,12 +31,12 @@ Output::
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
 Program files::
-/f.ts
 /a/lib/lib.d.ts
+/f.ts
 
 Semantic diagnostics in builder refreshed for::
-/f.ts
 /a/lib/lib.d.ts
+/f.ts
 
 WatchedFiles::
 /tsconfig.json:
@@ -76,8 +76,8 @@ Output::
 Program root files: ["/f.ts","/a/lib/lib.d.ts"]
 Program options: {"preserveWatchOutput":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
 Program files::
-/f.ts
 /a/lib/lib.d.ts
+/f.ts
 
 Semantic diagnostics in builder refreshed for::
 /f.ts

@@ -96,12 +96,12 @@ Program root files: ["/a/b/foo.ts"]
 Program options: {"watch":true}
 Program files::
 /a/lib/lib.d.ts
-/a/b/foo.ts
 /a/b/node_modules/@types/node/index.d.ts
+/a/b/foo.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/b/foo.ts
 /a/b/node_modules/@types/node/index.d.ts
+/a/b/foo.ts
 
 WatchedFiles::
 /a/b/foo.ts:
