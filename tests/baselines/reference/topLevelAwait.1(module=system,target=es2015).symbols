@@ -102,6 +102,21 @@ import { await as _await } from "./other";
 >await : Symbol(await, Decl(other.ts, 3, 8))
 >_await : Symbol(_await, Decl(index.ts, 50, 8))
 
+// newlines
+// await in throw
+throw await
+    1;
+
+// await in var
+let y = await
+>y : Symbol(y, Decl(index.ts, 58, 3))
+
+    1;
+
+// await in expression statement;
+await
+    1;
+
 === tests/cases/conformance/externalModules/other.ts ===
 const _await = 1;
 >_await : Symbol(_await, Decl(other.ts, 0, 5))

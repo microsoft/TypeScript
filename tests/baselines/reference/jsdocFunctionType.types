@@ -165,3 +165,29 @@ var y3 = id2(E);
 >id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
 >E : typeof E
 
+// Repro from #39229
+
+/**
+ * @type {(...args: [string, string] | [number, string, string]) => void}
+ */
+function foo(...args) {
+>foo : (...args: [string, string] | [number, string, string]) => void
+>args : [string, string] | [number, string, string]
+
+  args;
+>args : [string, string] | [number, string, string]
+}
+
+foo('abc', 'def');
+>foo('abc', 'def') : void
+>foo : (...args: [string, string] | [number, string, string]) => void
+>'abc' : "abc"
+>'def' : "def"
+
+foo(42, 'abc', 'def');
+>foo(42, 'abc', 'def') : void
+>foo : (...args: [string, string] | [number, string, string]) => void
+>42 : 42
+>'abc' : "abc"
+>'def' : "def"
+

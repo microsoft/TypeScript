@@ -25,12 +25,12 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: packageJsonInfo", () => {
         it("detects new package.json files that are added, caches them, and watches them", () => {
             // Initialize project without package.json
-            const { project, host } = setup([tsConfig]);
-            assert.isUndefined(project.packageJsonCache.getInDirectory("/" as Path));
+            const { projectService, host } = setup([tsConfig]);
+            assert.isUndefined(projectService.packageJsonCache.getInDirectory("/" as Path));
 
             // Add package.json
             host.writeFile(packageJson.path, packageJson.content);
-            let packageJsonInfo = project.packageJsonCache.getInDirectory("/" as Path)!;
+            let packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as Path)!;
             assert.ok(packageJsonInfo);
             assert.ok(packageJsonInfo.dependencies);
             assert.ok(packageJsonInfo.devDependencies);
@@ -42,40 +42,40 @@ namespace ts.projectSystem {
                 ...packageJsonContent,
                 dependencies: undefined
             }));
-            packageJsonInfo = project.packageJsonCache.getInDirectory("/" as Path)!;
+            packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as Path)!;
             assert.isUndefined(packageJsonInfo.dependencies);
         });
 
         it("finds package.json on demand, watches for deletion, and removes them from cache", () => {
             // Initialize project with package.json
-            const { project, host } = setup();
-            project.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
-            assert.ok(project.packageJsonCache.getInDirectory("/" as Path));
+            const { projectService, host } = setup();
+            projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            assert.ok(projectService.packageJsonCache.getInDirectory("/" as Path));
 
             // Delete package.json
             host.deleteFile(packageJson.path);
-            assert.isUndefined(project.packageJsonCache.getInDirectory("/" as Path));
+            assert.isUndefined(projectService.packageJsonCache.getInDirectory("/" as Path));
         });
 
         it("finds multiple package.json files when present", () => {
             // Initialize project with package.json at root
-            const { project, host } = setup();
+            const { projectService, host } = setup();
             // Add package.json in /src
             host.writeFile("/src/package.json", packageJson.content);
-            assert.lengthOf(project.getPackageJsonsVisibleToFile("/a.ts" as Path), 1);
-            assert.lengthOf(project.getPackageJsonsVisibleToFile("/src/b.ts" as Path), 2);
+            assert.lengthOf(projectService.getPackageJsonsVisibleToFile("/a.ts" as Path), 1);
+            assert.lengthOf(projectService.getPackageJsonsVisibleToFile("/src/b.ts" as Path), 2);
         });
 
         it("handles errors in json parsing of package.json", () => {
             const packageJsonContent = `{ "mod" }`;
-            const { project, host } = setup([tsConfig, { path: packageJson.path, content: packageJsonContent }]);
-            project.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
-            const packageJsonInfo = project.packageJsonCache.getInDirectory("/" as Path)!;
-            assert.isUndefined(packageJsonInfo);
+            const { projectService, host } = setup([tsConfig, { path: packageJson.path, content: packageJsonContent }]);
+            projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            const packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as Path)!;
+            assert.isFalse(packageJsonInfo.parseable);
 
             host.writeFile(packageJson.path, packageJson.content);
-            project.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
-            const packageJsonInfo2 = project.packageJsonCache.getInDirectory("/" as Path)!;
+            projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            const packageJsonInfo2 = projectService.packageJsonCache.getInDirectory("/" as Path)!;
             assert.ok(packageJsonInfo2);
             assert.ok(packageJsonInfo2.dependencies);
             assert.ok(packageJsonInfo2.devDependencies);

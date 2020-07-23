@@ -186,7 +186,7 @@ interface Symbol {
         }
     }
 
-    export function generateSourceMapBaselineFiles(sys: System & { writtenFiles: Map<any>; }) {
+    export function generateSourceMapBaselineFiles(sys: System & { writtenFiles: ReadonlyCollection<string>; }) {
         const mapFileNames = mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
         while (true) {
             const { value: mapFile, done } = mapFileNames.next();
@@ -237,7 +237,7 @@ interface Symbol {
 
     export function baselineBuildInfo(
         options: CompilerOptions,
-        sys: System & { writtenFiles: Map<any>; },
+        sys: System & { writtenFiles: ReadonlyCollection<string>; },
         originalReadCall?: System["readFile"]
     ) {
         const out = outFile(options);

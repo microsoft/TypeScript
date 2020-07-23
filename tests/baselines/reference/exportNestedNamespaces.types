@@ -18,7 +18,7 @@ exports.n.K = function () {
     this.x = 10;
 >this.x = 10 : 10
 >this.x : any
->this : typeof n
+>this : this
 >x : any
 >10 : 10
 }
