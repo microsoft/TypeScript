@@ -45,4 +45,4 @@ export = Container;
 declare class Container {
     usage: Obj;
 }
-import Obj = require(".");
+import Obj = require("./obj");

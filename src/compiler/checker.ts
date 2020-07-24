@@ -6685,7 +6685,7 @@ namespace ts {
                         case SyntaxKind.ImportEqualsDeclaration:
                             // Could be a local `import localName = ns.member` or
                             // an external `import localName = require("whatever")`
-                            const isLocalImport = !(target.flags & SymbolFlags.ValueModule);
+                            const isLocalImport = !(target.flags & SymbolFlags.ValueModule) && !isVariableDeclaration(node);
                             // TODO: It's very likely that this should always use target and using symbol was a bug
                             const naam = isVariableDeclaration(node)
                                 ? getSpecifierForModuleSymbol(target, context)
