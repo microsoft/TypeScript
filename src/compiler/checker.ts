@@ -21460,11 +21460,35 @@ namespace ts {
             }
 
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
+                const propName = escapeLeadingUnderscores(literal.text);
+
                 if (type.flags & (TypeFlags.Union | TypeFlags.Object) || isThisTypeParameter(type)) {
-                    const propName = escapeLeadingUnderscores(literal.text);
                     return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }
+                else{
+                    if (isSomeDirectSubtypeContainsPropName(type, propName)) {
+                        if (type.flags !== TypeFlags.Intersection) {
+                            const newObjType = createObjectType(ObjectFlags.Anonymous);
+                            const newSymbolObject = createSymbol(SymbolFlags.Property, propName, 0);
+                            newObjType.properties = [];
+                            newObjType.properties.push(newSymbolObject);
+                        }
+                    }
+                    // if type is intersection, get the first Object type to add new index to it.
+                    // else add a new object type and make the type become an intersection type.
+                    // Add a string index to the type.
+                }
                 return type;
+
+                function isSomeDirectSubtypeContainsPropName(type: Type, propName: __String) {
+                    // could not assume type is union or intersection, like (A|B)&C, C is added string object, this is intersection now, but we need judge it like Union.
+                    const prop = getPropertyOfType(type, propName);
+                    if (prop) {
+                        return true;
+                    }
+                    return false;
+                }
+
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
@@ -30064,12 +30088,12 @@ namespace ts {
                 return quickType;
             }
             // If a type has been cached for the node, return it.
-            if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
-                const cachedType = flowTypeCache[getNodeId(node)];
-                if (cachedType) {
-                    return cachedType;
-                }
-            }
+            // if (node.flags & NodeFlags.TypeCached && flowTypeCache) {
+            //     const cachedType = flowTypeCache[getNodeId(node)];
+            //     if (cachedType) {
+            //         return cachedType;
+            //     }
+            // }
             const startInvocationCount = flowInvocationCount;
             const type = checkExpression(node);
             // If control flow analysis was required to determine the type, it is worth caching.
