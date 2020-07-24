@@ -2102,6 +2102,7 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
+            const isInitialLoad = this.isInitialLoadPending();
             this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
             this.pendingReload = ConfigFileProgramReloadLevel.None;
@@ -2115,7 +2116,7 @@ namespace ts.server {
                     this.openFileWatchTriggered.clear();
                     const reason = Debug.checkDefined(this.pendingReloadReason);
                     this.pendingReloadReason = undefined;
-                    this.projectService.reloadConfiguredProject(this, reason);
+                    this.projectService.reloadConfiguredProject(this, reason, isInitialLoad);
                     result = true;
                     break;
                 default:
