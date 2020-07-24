@@ -2397,28 +2397,11 @@ namespace ts {
                 const immediate = resolveExternalModuleName(node, isVariableDeclaration(node)
                     ? (getFirstPropertyAccessExpression(node.initializer!) as CallExpression).arguments[0]
                     : getExternalModuleImportEqualsDeclarationExpression(node));
-                if (isVariableDeclaration(node)) {
-                    const typeTag = getJSDocTypeTag(node);
-                    if (node.initializer && isPropertyAccessExpression(node.initializer)) {
-                        if (!isIdentifier(node.initializer.name))
-                            return undefined;
-                        // TODO: Relies on old code in resolveCallExpression that special-cases `require("x")`
-                        const original = getPropertyOfType(checkExpression(node.initializer.expression), node.initializer.name.escapedText);
-                        if (typeTag && original) {
-                            const symbol: TransientSymbol = cloneSymbol(original) as TransientSymbol
-                            symbol.type = getTypeFromTypeNode(typeTag.typeExpression);
-                            return symbol;
-                        }
-                        // TODO: Might still want to resolveExternalModuleSymbol here?
-                        return original;
-                    }
-                    else if (typeTag && immediate) {
-                        // TODO: This is basically wrong.
-                        const symbol: TransientSymbol = cloneSymbol(immediate) as TransientSymbol
-                        symbol.type = getTypeFromTypeNode(typeTag.typeExpression);
-                        return symbol;
-                    }
-                    return resolveExternalModuleSymbol(immediate);
+                if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
+                    // Use the ad-hoc require-as-CallExpression code to create a fresh anonymous type and retrieve the property by name.
+                    return isIdentifier(node.initializer.name)
+                        ? getPropertyOfType(checkExpression(node.initializer.expression), node.initializer.name.escapedText)
+                        : undefined;
                 }
                 const resolved = resolveExternalModuleSymbol(immediate);
                 markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
@@ -32889,16 +32872,9 @@ namespace ts {
                 return;
             }
             // For a require binding element, validate the alias and exit
-            // TODO: Probably should mark the symbol so I don't have to keep rescanning this
             const symbol = getSymbolOfNode(node);
-            if (/*isBindingElement(node) && */isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true) && symbol.flags & SymbolFlags.Alias) {
+            if (symbol.flags & SymbolFlags.Alias && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
                 checkAliasSymbol(node);
-                const typeTag = getJSDocTypeTag(node);
-                const initializer = node.initializer;
-                if (typeTag) {
-                    const type = getTypeFromTypeNode(typeTag.typeExpression);
-                    checkTypeAssignableToAndOptionallyElaborate(checkExpressionCached(initializer), type, node, initializer, /*headMessage*/ undefined);
-                }
                 return;
             }
 

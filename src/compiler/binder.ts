@@ -3185,14 +3185,11 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isBlockOrCatchScoped(node)) {
-                    // TODO: This can probably come first, and be mutex with the succeeding 3 branches
-                    if (isInJSFile(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
-                        declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
-                    }
-                    else {
-                        bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
-                    }
+                if (isInJSFile(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true) && !getJSDocTypeTag(node)) {
+                    declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                }
+                else if (isBlockOrCatchScoped(node)) {
+                    bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
                 }
                 else if (isParameterDeclaration(node)) {
                     // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration
@@ -3207,12 +3204,7 @@ namespace ts {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
                 }
                 else {
-                    if (isInJSFile(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
-                        declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
-                    }
-                    else {
-                        declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
-                    }
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
                 }
             }
         }
