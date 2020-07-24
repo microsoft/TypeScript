@@ -1847,6 +1847,11 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
+    export function getExternalModuleRequireArgument(node: Node) {
+        return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
+            && (getFirstPropertyAccessExpression(node.initializer!) as CallExpression).arguments[0] as StringLiteral;
+    }
+
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
@@ -1910,7 +1915,6 @@ namespace ts {
     /**
      * Returns true if the node is a VariableDeclaration initialized to a require call (see `isRequireCall`).
      * This function does not test if the node is in a JavaScript file or not.
-     * TODO: But probably should???!
      */
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;

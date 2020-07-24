@@ -2394,9 +2394,9 @@ namespace ts {
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration | VariableDeclaration, dontResolveAlias: boolean): Symbol | undefined {
             if (isVariableDeclaration(node) || node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                const immediate = resolveExternalModuleName(node, isVariableDeclaration(node)
-                    ? (getFirstPropertyAccessExpression(node.initializer!) as CallExpression).arguments[0]
-                    : getExternalModuleImportEqualsDeclarationExpression(node));
+                const immediate = resolveExternalModuleName(
+                    node,
+                    getExternalModuleRequireArgument(node) || getExternalModuleImportEqualsDeclarationExpression(node));
                 if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
                     // Use the ad-hoc require-as-CallExpression code to create a fresh anonymous type and retrieve the property by name.
                     return isIdentifier(node.initializer.name)
@@ -2593,8 +2593,11 @@ namespace ts {
 
         function getExportOfModule(symbol: Symbol, specifier: ImportOrExportSpecifier | BindingElement, dontResolveAlias: boolean): Symbol | undefined {
             if (symbol.flags & SymbolFlags.Module) {
-                const name = ((specifier.propertyName ?? specifier.name) as Identifier).escapedText;
-                const exportSymbol = getExportsOfSymbol(symbol).get(name);
+                const name = specifier.propertyName ?? specifier.name;
+                if (!isIdentifier(name)) {
+                    return undefined;
+                }
+                const exportSymbol = getExportsOfSymbol(symbol).get(name.escapedText);
                 const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
                 markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false);
                 return resolved;
@@ -2611,10 +2614,12 @@ namespace ts {
         }
 
         function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, specifier: ImportOrExportSpecifier | BindingElement, dontResolveAlias = false): Symbol | undefined {
-            const moduleSpecifier = isVariableDeclaration(node) ? (getFirstPropertyAccessExpression(node.initializer!) as CallExpression).arguments[0] : node.moduleSpecifier!;
+            const moduleSpecifier = getExternalModuleRequireArgument(node) || (node as ImportDeclaration | ExportDeclaration).moduleSpecifier!;
             const moduleSymbol = resolveExternalModuleName(node, moduleSpecifier)!; // TODO: GH#18217
             const name = specifier.propertyName || specifier.name;
-            Debug.assert(isIdentifier(name)); // :eyes:
+            if (!isIdentifier(name)) {
+                return undefined;
+            }
             const suppressInteropError = name.escapedText === InternalSymbolName.Default && !!(compilerOptions.allowSyntheticDefaultImports || compilerOptions.esModuleInterop);
             const targetSymbol = resolveESModuleSymbol(moduleSymbol, moduleSpecifier, dontResolveAlias, suppressInteropError);
             if (targetSymbol) {
@@ -6638,33 +6643,29 @@ namespace ts {
                     includePrivateSymbol(target); // the target may be within the same scope - attempt to serialize it first
                     switch (node.kind) {
                         case SyntaxKind.VariableDeclaration:
-                            // commonjs require
+                            // commonjs require: const x = require('y')
                             if (isPropertyAccessExpression((node as VariableDeclaration).initializer!)) {
-                                // const x = require('x').x
-                                const access = (node as VariableDeclaration).initializer! as PropertyAccessExpression;
-                                const require = getFirstPropertyAccessExpression(access) as CallExpression;
-                                const moduleName = require.arguments[0] as StringLiteral;
-                                const tmp = factory.createUniqueName(moduleName.text);
-                                // import _x = require('x')
-                                let n = factory.createImportEqualsDeclaration(
+                                // const x = require('y').z --> import _x = require('y'); import z = _x.z
+                                const access = (node as VariableDeclaration).initializer! as PropertyAccessExpression; // require('y').z
+                                const moduleName = getExternalModuleRequireArgument(node) as StringLiteral; // 'y'
+                                const uniqueName = factory.createUniqueName(moduleName.text); // _x
+                                addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
-                                    tmp,
+                                    uniqueName,
                                     // TODO: Use target.parent here because alias resolution on post-property-access over-resolves to a module export
                                     // *probably* I should fix this in type-checking instead, but I'm not sure how to request an additional resolution step during checking
                                     factory.createExternalModuleReference(factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)))
-                                );
-                                addResult(n, ModifierFlags.None);
-                                // import x = _x.X
+                                ), ModifierFlags.None);
                                 addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     factory.createIdentifier(localName),
-                                    factory.createQualifiedName(tmp, access.name as Identifier), // TODO: symbolToName handles the recursive case (but may do some extra stuff we don't want)
+                                    factory.createQualifiedName(uniqueName, access.name as Identifier),
                                 ), modifierFlags);
                                 break;
                             }
-                            // else fall through and treat require just like import=
+                            // else fall through and treat commonjs require just like import=
                         case SyntaxKind.ImportEqualsDeclaration:
                              if (target.escapedName === InternalSymbolName.ExportEquals) {
                                 serializeMaybeAliasAssignment(symbol);
@@ -32871,7 +32872,7 @@ namespace ts {
                 }
                 return;
             }
-            // For a require binding element, validate the alias and exit
+            // For a commonjs `const x = require`, validate the alias and exit
             const symbol = getSymbolOfNode(node);
             if (symbol.flags & SymbolFlags.Alias && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
                 checkAliasSymbol(node);
