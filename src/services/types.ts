@@ -221,6 +221,12 @@ namespace ts {
         durationMs: number;
     }
 
+    export enum LanguageServiceMode {
+        Semantic,
+        ApproximateSemanticOnly,
+        SyntaxOnly,
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
