@@ -207,50 +207,54 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 // Inference between variadic tuple types
 
 type First<T extends readonly unknown[]> = T[0];
-type DropFirst<T extends readonly unknown[]> = T extends readonly [any, ...infer U] ? U : [...T];
+type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
 
-type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : undefined;
-type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any] ? U : [...T];
+type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
+type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
 
 type T00 = First<[number, symbol, string]>;
 type T01 = First<[symbol, string]>;
 type T02 = First<[string]>;
 type T03 = First<[number, symbol, ...string[]]>;
 type T04 = First<[symbol, ...string[]]>;
-type T05 = First<string[]>;
-type T06 = First<[]>;
-type T07 = First<any>;
-type T08 = First<never>;
+type T05 = First<[string?]>;
+type T06 = First<string[]>;
+type T07 = First<[]>;
+type T08 = First<any>;
+type T09 = First<never>;
 
 type T10 = DropFirst<[number, symbol, string]>;
 type T11 = DropFirst<[symbol, string]>;
 type T12 = DropFirst<[string]>;
 type T13 = DropFirst<[number, symbol, ...string[]]>;
 type T14 = DropFirst<[symbol, ...string[]]>;
-type T15 = DropFirst<string[]>;
-type T16 = DropFirst<[]>;
-type T17 = DropFirst<any>;
-type T18 = DropFirst<never>;
+type T15 = DropFirst<[string?]>;
+type T16 = DropFirst<string[]>;
+type T17 = DropFirst<[]>;
+type T18 = DropFirst<any>;
+type T19 = DropFirst<never>;
 
 type T20 = Last<[number, symbol, string]>;
 type T21 = Last<[symbol, string]>;
 type T22 = Last<[string]>;
 type T23 = Last<[number, symbol, ...string[]]>;
 type T24 = Last<[symbol, ...string[]]>;
-type T25 = Last<string[]>;
-type T26 = Last<[]>;  // unknown[], maybe should be []
-type T27 = Last<any>;  // unknown, maybe should be any
-type T28 = Last<never>;
+type T25 = Last<[string?]>;
+type T26 = Last<string[]>;
+type T27 = Last<[]>;  // unknown, maybe should undefined
+type T28 = Last<any>;  // unknown, maybe should be any
+type T29 = Last<never>;
 
 type T30 = DropLast<[number, symbol, string]>;
 type T31 = DropLast<[symbol, string]>;
 type T32 = DropLast<[string]>;
 type T33 = DropLast<[number, symbol, ...string[]]>;
 type T34 = DropLast<[symbol, ...string[]]>;
-type T35 = DropLast<string[]>;
-type T36 = DropLast<[]>;  // unknown[], maybe should be []
-type T37 = DropLast<any>;
-type T38 = DropLast<never>;
+type T35 = DropLast<[string?]>;
+type T36 = DropLast<string[]>;
+type T37 = DropLast<[]>;  // unknown[], maybe should be []
+type T38 = DropLast<any>;
+type T39 = DropLast<never>;
 
 type R00 = First<readonly [number, symbol, string]>;
 type R01 = First<readonly [symbol, string]>;
@@ -322,6 +326,15 @@ declare function fn10(a: string, b: number, c: boolean): string[];
 curry2(fn10, ['hello', 42], [true]);
 curry2(fn10, ['hello'], [42, true]);
 
+// Inference to [...T] has higher priority than inference to [...T, number?]
+
+declare function ft<T extends unknown[]>(t1: [...T], t2: [...T, number?]): T;
+
+ft([1, 2, 3], [1, 2, 3]);
+ft([1, 2], [1, 2, 3]);
+ft(['a', 'b'], ['c', 'd'])
+ft(['a', 'b'], ['c', 'd', 42])
+
 // Last argument is contextually typed
 
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
@@ -339,8 +352,8 @@ declare function f20<T extends unknown[] = []>(args: [...T, number?]): T;
 
 function f21<U extends string[]>(args: [...U, number?]) {
     let v1 = f20(args);  // U
-    let v2 = f20(["foo", "bar"]);  // []
-    let v3 = f20(["foo", 42]);  // []
+    let v2 = f20(["foo", "bar"]);  // [string]
+    let v3 = f20(["foo", 42]);  // [string]
 }
 
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
@@ -560,6 +573,10 @@ function curry2(f, t, u) {
 }
 curry2(fn10, ['hello', 42], [true]);
 curry2(fn10, ['hello'], [42, true]);
+ft([1, 2, 3], [1, 2, 3]);
+ft([1, 2], [1, 2, 3]);
+ft(['a', 'b'], ['c', 'd']);
+ft(['a', 'b'], ['c', 'd', 42]);
 call('hello', 32, function (a, b) { return 42; });
 // Would be nice to infer [...string[], (...args: string[]) => number] here
 // Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
@@ -572,8 +589,8 @@ call.apply(void 0, __spreadArrays(sa, [function () {
     }]));
 function f21(args) {
     var v1 = f20(args); // U
-    var v2 = f20(["foo", "bar"]); // []
-    var v3 = f20(["foo", 42]); // []
+    var v2 = f20(["foo", "bar"]); // [string]
+    var v3 = f20(["foo", 42]); // [string]
 }
 function f23(args) {
     var v1 = f22(args); // U
@@ -647,45 +664,49 @@ declare function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [..
 declare function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]): void;
 declare function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]): void;
 declare type First<T extends readonly unknown[]> = T[0];
-declare type DropFirst<T extends readonly unknown[]> = T extends readonly [any, ...infer U] ? U : [...T];
-declare type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : undefined;
-declare type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any] ? U : [...T];
+declare type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
+declare type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
+declare type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
 declare type T00 = First<[number, symbol, string]>;
 declare type T01 = First<[symbol, string]>;
 declare type T02 = First<[string]>;
 declare type T03 = First<[number, symbol, ...string[]]>;
 declare type T04 = First<[symbol, ...string[]]>;
-declare type T05 = First<string[]>;
-declare type T06 = First<[]>;
-declare type T07 = First<any>;
-declare type T08 = First<never>;
+declare type T05 = First<[string?]>;
+declare type T06 = First<string[]>;
+declare type T07 = First<[]>;
+declare type T08 = First<any>;
+declare type T09 = First<never>;
 declare type T10 = DropFirst<[number, symbol, string]>;
 declare type T11 = DropFirst<[symbol, string]>;
 declare type T12 = DropFirst<[string]>;
 declare type T13 = DropFirst<[number, symbol, ...string[]]>;
 declare type T14 = DropFirst<[symbol, ...string[]]>;
-declare type T15 = DropFirst<string[]>;
-declare type T16 = DropFirst<[]>;
-declare type T17 = DropFirst<any>;
-declare type T18 = DropFirst<never>;
+declare type T15 = DropFirst<[string?]>;
+declare type T16 = DropFirst<string[]>;
+declare type T17 = DropFirst<[]>;
+declare type T18 = DropFirst<any>;
+declare type T19 = DropFirst<never>;
 declare type T20 = Last<[number, symbol, string]>;
 declare type T21 = Last<[symbol, string]>;
 declare type T22 = Last<[string]>;
 declare type T23 = Last<[number, symbol, ...string[]]>;
 declare type T24 = Last<[symbol, ...string[]]>;
-declare type T25 = Last<string[]>;
-declare type T26 = Last<[]>;
-declare type T27 = Last<any>;
-declare type T28 = Last<never>;
+declare type T25 = Last<[string?]>;
+declare type T26 = Last<string[]>;
+declare type T27 = Last<[]>;
+declare type T28 = Last<any>;
+declare type T29 = Last<never>;
 declare type T30 = DropLast<[number, symbol, string]>;
 declare type T31 = DropLast<[symbol, string]>;
 declare type T32 = DropLast<[string]>;
 declare type T33 = DropLast<[number, symbol, ...string[]]>;
 declare type T34 = DropLast<[symbol, ...string[]]>;
-declare type T35 = DropLast<string[]>;
-declare type T36 = DropLast<[]>;
-declare type T37 = DropLast<any>;
-declare type T38 = DropLast<never>;
+declare type T35 = DropLast<[string?]>;
+declare type T36 = DropLast<string[]>;
+declare type T37 = DropLast<[]>;
+declare type T38 = DropLast<any>;
+declare type T39 = DropLast<never>;
 declare type R00 = First<readonly [number, symbol, string]>;
 declare type R01 = First<readonly [symbol, string]>;
 declare type R02 = First<readonly [string]>;
@@ -732,6 +753,7 @@ declare const c21: (...b: string[]) => number;
 declare const c22: (...b: string[]) => number;
 declare function curry2<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]): R;
 declare function fn10(a: string, b: number, c: boolean): string[];
+declare function ft<T extends unknown[]>(t1: [...T], t2: [...T, number?]): T;
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
 declare function f20<T extends unknown[] = []>(args: [...T, number?]): T;
 declare function f21<U extends string[]>(args: [...U, number?]): void;

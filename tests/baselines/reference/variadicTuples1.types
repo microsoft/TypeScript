@@ -775,13 +775,13 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 type First<T extends readonly unknown[]> = T[0];
 >First : First<T>
 
-type DropFirst<T extends readonly unknown[]> = T extends readonly [any, ...infer U] ? U : [...T];
+type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
 >DropFirst : DropFirst<T>
 
-type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : undefined;
+type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
 >Last : Last<T>
 
-type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any] ? U : [...T];
+type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
 >DropLast : DropLast<T>
 
 type T00 = First<[number, symbol, string]>;
@@ -799,17 +799,20 @@ type T03 = First<[number, symbol, ...string[]]>;
 type T04 = First<[symbol, ...string[]]>;
 >T04 : symbol
 
-type T05 = First<string[]>;
->T05 : string
+type T05 = First<[string?]>;
+>T05 : string | undefined
 
-type T06 = First<[]>;
->T06 : undefined
+type T06 = First<string[]>;
+>T06 : string
 
-type T07 = First<any>;
->T07 : any
+type T07 = First<[]>;
+>T07 : undefined
 
-type T08 = First<never>;
->T08 : never
+type T08 = First<any>;
+>T08 : any
+
+type T09 = First<never>;
+>T09 : never
 
 type T10 = DropFirst<[number, symbol, string]>;
 >T10 : [symbol, string]
@@ -826,17 +829,20 @@ type T13 = DropFirst<[number, symbol, ...string[]]>;
 type T14 = DropFirst<[symbol, ...string[]]>;
 >T14 : string[]
 
-type T15 = DropFirst<string[]>;
->T15 : string[]
+type T15 = DropFirst<[string?]>;
+>T15 : []
 
-type T16 = DropFirst<[]>;
->T16 : []
+type T16 = DropFirst<string[]>;
+>T16 : string[]
 
-type T17 = DropFirst<any>;
->T17 : unknown[] | any[]
+type T17 = DropFirst<[]>;
+>T17 : unknown[]
 
-type T18 = DropFirst<never>;
->T18 : never
+type T18 = DropFirst<any>;
+>T18 : unknown[] | any[]
+
+type T19 = DropFirst<never>;
+>T19 : never
 
 type T20 = Last<[number, symbol, string]>;
 >T20 : string
@@ -853,17 +859,20 @@ type T23 = Last<[number, symbol, ...string[]]>;
 type T24 = Last<[symbol, ...string[]]>;
 >T24 : string
 
-type T25 = Last<string[]>;
->T25 : string
+type T25 = Last<[string?]>;
+>T25 : string | undefined
 
-type T26 = Last<[]>;  // unknown[], maybe should be []
->T26 : unknown
+type T26 = Last<string[]>;
+>T26 : string
 
-type T27 = Last<any>;  // unknown, maybe should be any
+type T27 = Last<[]>;  // unknown, maybe should undefined
 >T27 : unknown
 
-type T28 = Last<never>;
->T28 : never
+type T28 = Last<any>;  // unknown, maybe should be any
+>T28 : unknown
+
+type T29 = Last<never>;
+>T29 : never
 
 type T30 = DropLast<[number, symbol, string]>;
 >T30 : [number, symbol]
@@ -880,17 +889,20 @@ type T33 = DropLast<[number, symbol, ...string[]]>;
 type T34 = DropLast<[symbol, ...string[]]>;
 >T34 : [symbol, ...string[]]
 
-type T35 = DropLast<string[]>;
->T35 : string[]
+type T35 = DropLast<[string?]>;
+>T35 : []
 
-type T36 = DropLast<[]>;  // unknown[], maybe should be []
->T36 : unknown[]
+type T36 = DropLast<string[]>;
+>T36 : string[]
 
-type T37 = DropLast<any>;
->T37 : unknown[] | any[]
+type T37 = DropLast<[]>;  // unknown[], maybe should be []
+>T37 : unknown[]
 
-type T38 = DropLast<never>;
->T38 : never
+type T38 = DropLast<any>;
+>T38 : unknown[] | any[]
+
+type T39 = DropLast<never>;
+>T39 : never
 
 type R00 = First<readonly [number, symbol, string]>;
 >R00 : number
@@ -932,7 +944,7 @@ type R15 = DropFirst<readonly string[]>;
 >R15 : string[]
 
 type R16 = DropFirst<readonly []>;
->R16 : []
+>R16 : unknown[]
 
 type R20 = Last<readonly [number, symbol, string]>;
 >R20 : string
@@ -1157,6 +1169,57 @@ curry2(fn10, ['hello'], [42, true]);
 >42 : 42
 >true : true
 
+// Inference to [...T] has higher priority than inference to [...T, number?]
+
+declare function ft<T extends unknown[]>(t1: [...T], t2: [...T, number?]): T;
+>ft : <T extends unknown[]>(t1: [...T], t2: [...T, number?]) => T
+>t1 : [...T]
+>t2 : [...T, (number | undefined)?]
+
+ft([1, 2, 3], [1, 2, 3]);
+>ft([1, 2, 3], [1, 2, 3]) : [number, number, number]
+>ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
+>[1, 2, 3] : [number, number, number]
+>1 : 1
+>2 : 2
+>3 : 3
+>[1, 2, 3] : [number, number, number]
+>1 : 1
+>2 : 2
+>3 : 3
+
+ft([1, 2], [1, 2, 3]);
+>ft([1, 2], [1, 2, 3]) : [number, number]
+>ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
+>[1, 2] : [number, number]
+>1 : 1
+>2 : 2
+>[1, 2, 3] : [number, number, number]
+>1 : 1
+>2 : 2
+>3 : 3
+
+ft(['a', 'b'], ['c', 'd'])
+>ft(['a', 'b'], ['c', 'd']) : [string, string]
+>ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
+>['a', 'b'] : [string, string]
+>'a' : "a"
+>'b' : "b"
+>['c', 'd'] : [string, string]
+>'c' : "c"
+>'d' : "d"
+
+ft(['a', 'b'], ['c', 'd', 42])
+>ft(['a', 'b'], ['c', 'd', 42]) : [string, string]
+>ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
+>['a', 'b'] : [string, string]
+>'a' : "a"
+>'b' : "b"
+>['c', 'd', 42] : [string, string, number]
+>'c' : "c"
+>'d' : "d"
+>42 : 42
+
 // Last argument is contextually typed
 
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
@@ -1202,17 +1265,17 @@ function f21<U extends string[]>(args: [...U, number?]) {
 >f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
 >args : [...U, (number | undefined)?]
 
-    let v2 = f20(["foo", "bar"]);  // []
->v2 : []
->f20(["foo", "bar"]) : []
+    let v2 = f20(["foo", "bar"]);  // [string]
+>v2 : [string]
+>f20(["foo", "bar"]) : [string]
 >f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
 >["foo", "bar"] : [string, string]
 >"foo" : "foo"
 >"bar" : "bar"
 
-    let v3 = f20(["foo", 42]);  // []
->v3 : []
->f20(["foo", 42]) : []
+    let v3 = f20(["foo", 42]);  // [string]
+>v3 : [string]
+>f20(["foo", 42]) : [string]
 >f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
 >["foo", 42] : [string, number]
 >"foo" : "foo"
