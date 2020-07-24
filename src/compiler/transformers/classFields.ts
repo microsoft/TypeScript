@@ -341,6 +341,7 @@ namespace ts {
                 const { thisArg, target } = factory.createCallBinding(node.expression, hoistVariableDeclaration, languageVersion);
                 return factory.updateCallExpression(
                     node,
+                    // #38503
                     isCallChain(node) ? visitNode(target, visitor) : factory.createPropertyAccessExpression(visitNode(target, visitor), "call"),
                     /*typeArguments*/ undefined,
                     [visitNode(thisArg, visitor, isExpression), ...visitNodes(node.arguments, visitor, isExpression)]
