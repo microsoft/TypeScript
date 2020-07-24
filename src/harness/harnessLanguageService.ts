@@ -126,7 +126,7 @@ namespace Harness.LanguageService {
 
     export abstract class LanguageServiceAdapterHost {
         public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
-        public typesRegistry: ts.Map<void> | undefined;
+        public typesRegistry: ts.ESMap<string, void> | undefined;
         private scriptInfos: collections.SortedMap<string, ScriptInfo>;
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
@@ -152,6 +152,19 @@ namespace Harness.LanguageService {
                 }
             });
             return fileNames;
+        }
+
+        public realpath(path: string): string {
+            try {
+                return this.vfs.realpathSync(path);
+            }
+            catch {
+                return path;
+            }
+        }
+
+        public directoryExists(path: string) {
+            return this.vfs.statSync(path).isDirectory();
         }
 
         public getScriptInfo(fileName: string): ScriptInfo | undefined {
@@ -588,6 +601,9 @@ namespace Harness.LanguageService {
         getProgram(): ts.Program {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
+        getAutoImportProvider(): ts.Program | undefined {
+            throw new Error("Program can not be marshaled across the shim layer.");
+        }
         getNonBoundSourceFile(): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
@@ -599,6 +615,18 @@ namespace Harness.LanguageService {
         }
         clearSourceMapperCache(): never {
             return ts.notImplemented();
+        }
+        toggleLineComment(fileName: string, textRange: ts.TextRange): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.toggleLineComment(fileName, textRange));
+        }
+        toggleMultilineComment(fileName: string, textRange: ts.TextRange): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.toggleMultilineComment(fileName, textRange));
+        }
+        commentSelection(fileName: string, textRange: ts.TextRange): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.commentSelection(fileName, textRange));
+        }
+        uncommentSelection(fileName: string, textRange: ts.TextRange): ts.TextChange[] {
+            return unwrapJSONCallResult(this.shim.uncommentSelection(fileName, textRange));
         }
         dispose(): void { this.shim.dispose({}); }
     }
@@ -705,8 +733,13 @@ namespace Harness.LanguageService {
                 fileName = Compiler.defaultLibFileName;
             }
 
-            const snapshot = this.host.getScriptSnapshot(fileName);
+            // System FS would follow symlinks, even though snapshots are stored by original file name
+            const snapshot = this.host.getScriptSnapshot(fileName) || this.host.getScriptSnapshot(this.realpath(fileName));
             return snapshot && ts.getSnapshotText(snapshot);
+        }
+
+        realpath(path: string) {
+            return this.host.realpath(path);
         }
 
         writeFile = ts.noop;
@@ -716,7 +749,7 @@ namespace Harness.LanguageService {
         }
 
         fileExists(path: string): boolean {
-            return !!this.host.getScriptSnapshot(path);
+            return this.host.fileExists(path);
         }
 
         directoryExists(): boolean {

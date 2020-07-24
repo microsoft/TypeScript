@@ -869,6 +869,72 @@ function narrowingNarrows(x: {} | undefined) {
     }
 }
 
+function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
+>narrowingNarrows2 : (x: true | 3 | 'hello' | undefined) => void
+>x : true | 3 | "hello" | undefined
+>true : true
+
+    switch (typeof x) {
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : true | 3 | "hello" | undefined
+
+        case 'number': assertNumber(x); return;
+>'number' : "number"
+>assertNumber(x) : number
+>assertNumber : (x: number) => number
+>x : 3
+
+        case 'boolean': assertBoolean(x); return;
+>'boolean' : "boolean"
+>assertBoolean(x) : boolean
+>assertBoolean : (x: boolean) => boolean
+>x : true
+
+        case 'function': assertNever(x); return;
+>'function' : "function"
+>assertNever(x) : never
+>assertNever : (x: never) => never
+>x : never
+
+        case 'symbol': assertNever(x); return;
+>'symbol' : "symbol"
+>assertNever(x) : never
+>assertNever : (x: never) => never
+>x : never
+
+        case 'object': const _: {} = assertNever(x); return;
+>'object' : "object"
+>_ : {}
+>assertNever(x) : never
+>assertNever : (x: never) => never
+>x : never
+
+        case 'string': assertString(x); return;
+>'string' : "string"
+>assertString(x) : string
+>assertString : (x: string) => string
+>x : "hello"
+
+        case 'undefined': assertUndefined(x); return;
+>'undefined' : "undefined"
+>assertUndefined(x) : undefined
+>assertUndefined : (x: undefined) => undefined
+>x : undefined
+
+        case 'number': assertNever(x); return;
+>'number' : "number"
+>assertNever(x) : never
+>assertNever : (x: never) => never
+>x : never
+
+        default: const _y: {} = assertNever(x); return;
+>_y : {}
+>assertNever(x) : never
+>assertNever : (x: never) => never
+>x : never
+    }
+}
+
 /* Template literals */
 
 function testUnionWithTempalte(x: Basic) {
@@ -1042,3 +1108,4 @@ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>
 >xy : (X & number) | (Y & number)
     }
 }
+

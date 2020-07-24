@@ -3,9 +3,9 @@
 // @allowJs: true
 // @checkJs: true
 // @filename: foo.js
-////const /*def1*/Foo = module./*def2*/exports = function () {}
+////const Foo = module./*def*/exports = function () {}
 ////Foo.prototype.bar = function() {}
 ////new [|Foo/*ref*/|]();
 
 goTo.file("foo.js");
-verify.goToDefinition("ref", ["def1", "def2"]);
+verify.goToDefinition("ref", "def");

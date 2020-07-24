@@ -58,8 +58,8 @@
 //// const test: { a: () => A } = { a: () => { bar: '1' } }
 
 verify.codeFixAll({
-    fixId: "fixRemoveBlockBodyBrace",
-    fixAllDescription: "Remove all incorrect body block braces",
+    fixId: "fixRemoveBracesFromArrowFunctionBody",
+    fixAllDescription: ts.Diagnostics.Remove_braces_from_all_arrow_function_bodies_with_relevant_issues.message,
     newFileContent:
 `interface A {
     bar: string

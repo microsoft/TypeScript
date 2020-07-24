@@ -3,7 +3,6 @@
 import childProcess = require("child_process");
 import fs = require("fs-extra");
 import path = require("path");
-import removeInternal = require("remove-internal");
 import glob = require("glob");
 
 const root = path.join(__dirname, "..");
@@ -15,6 +14,7 @@ async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
     await copyLibFiles();
     await copyLocalizedDiagnostics();
+    await copyTypesMap();
     await buildProtocol();
     await copyScriptOutputs();
     await copyDeclarationOutputs();
@@ -38,6 +38,10 @@ async function copyLocalizedDiagnostics() {
             await fs.copy(fileName, path.join(dest, d));
         }
     }
+}
+
+async function copyTypesMap() {
+    await copyFromBuiltLocal("typesMap.json"); // Cannot accommodate copyright header
 }
 
 async function buildProtocol() {

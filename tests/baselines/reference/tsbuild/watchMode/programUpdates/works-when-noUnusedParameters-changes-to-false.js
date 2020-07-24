@@ -1,4 +1,4 @@
-/a/lib/tsc.js -b -w
+Input::
 //// [/user/username/projects/myproject/index.ts]
 const fn = (a: string, b: string) => b;
 
@@ -19,6 +19,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+/a/lib/tsc.js -b -w
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
@@ -58,14 +59,12 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+
 Change:: Change tsconfig to set noUnusedParameters to false
 
+Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"noUnusedParameters":false}}
-
-//// [/user/username/projects/myproject/index.js]
-var fn = function (a, b) { return b; };
-
 
 
 Output::
@@ -100,3 +99,8 @@ FsWatchesRecursive::
   {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/index.js]
+var fn = function (a, b) { return b; };
+
+

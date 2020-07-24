@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /home/username/project/tsconfig.json
+Input::
 //// [/home/username/project/src/file1.ts]
 var a = 10;
 
@@ -18,11 +18,8 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/home/username/project/tsconfig.json]
 {}
 
-//// [/home/username/project/src/file1.js]
-var a = 10;
 
-
-
+/a/lib/tsc.js -w -p /home/username/project/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
@@ -60,14 +57,16 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/home/username/project/src/file1.js]
+var a = 10;
+
+
+
 Change:: Rename file1 to file2
 
+Input::
 //// [/home/username/project/src/file2.ts]
 var a = 10;
-
-//// [/home/username/project/src/file2.js]
-var a = 10;
-
 
 //// [/home/username/project/src/file1.ts] deleted
 
@@ -107,3 +106,8 @@ FsWatchesRecursive::
   {"directoryName":"/home/username/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/home/username/project/src/file2.js]
+var a = 10;
+
+

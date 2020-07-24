@@ -64,7 +64,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path, libFile.path]);
 
 
-            host.reloadFS([file1, configFile, file2, file3, libFile]);
+            host.writeFile(configFile.path, configFile.content);
             host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 1);
@@ -86,7 +86,7 @@ namespace ts.projectSystem {
             const proj = projectService.inferredProjects[0];
             assert.isDefined(proj);
 
-            assert.isFalse(proj.languageServiceEnabled);
+            assert.isTrue(proj.languageServiceEnabled);
         });
 
         it("project settings for inferred projects", () => {
@@ -365,8 +365,8 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             const originalSet = projectService.configuredProjects.set;
             const originalDelete = projectService.configuredProjects.delete;
-            const configuredCreated = createMap<true>();
-            const configuredRemoved = createMap<true>();
+            const configuredCreated = new Map<string, true>();
+            const configuredRemoved = new Map<string, true>();
             projectService.configuredProjects.set = (key, value) => {
                 assert.isFalse(configuredCreated.has(key));
                 configuredCreated.set(key, true);

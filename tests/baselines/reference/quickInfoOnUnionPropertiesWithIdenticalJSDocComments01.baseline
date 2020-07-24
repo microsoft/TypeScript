@@ -1,0 +1,60 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoOnUnionPropertiesWithIdenticalJSDocComments01.ts",
+      "position": 746
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "optional",
+      "textSpan": {
+        "start": 746,
+        "length": 8
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "language",
+          "kind": "propertyName"
+        },
+        {
+          "text": "?",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A language id, like `typescript`.",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

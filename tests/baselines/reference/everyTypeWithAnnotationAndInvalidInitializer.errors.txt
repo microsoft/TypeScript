@@ -1,7 +1,7 @@
-tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(34,5): error TS2322: Type '"this is a string"' is not assignable to type 'number'.
-tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(35,5): error TS2322: Type '9.9' is not assignable to type 'string'.
-tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(36,5): error TS2322: Type '9.9' is not assignable to type 'Date'.
-tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(38,5): error TS2322: Type '9.9' is not assignable to type 'void'.
+tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(34,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(35,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(36,5): error TS2322: Type 'number' is not assignable to type 'Date'.
+tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(38,5): error TS2322: Type 'number' is not assignable to type 'void'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(40,5): error TS2741: Property 'id' is missing in type 'D<unknown>' but required in type 'I'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(41,5): error TS2741: Property 'id' is missing in type 'D<unknown>' but required in type 'C'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(42,5): error TS2739: Type 'C' is missing the following properties from type 'D<string>': source, recurse, wrapped
@@ -60,17 +60,17 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
     
     var aNumber: number = 'this is a string';
         ~~~~~~~
-!!! error TS2322: Type '"this is a string"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     var aString: string = 9.9;
         ~~~~~~~
-!!! error TS2322: Type '9.9' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     var aDate: Date = 9.9;
         ~~~~~
-!!! error TS2322: Type '9.9' is not assignable to type 'Date'.
+!!! error TS2322: Type 'number' is not assignable to type 'Date'.
     
     var aVoid: void = 9.9;
         ~~~~~
-!!! error TS2322: Type '9.9' is not assignable to type 'void'.
+!!! error TS2322: Type 'number' is not assignable to type 'void'.
     
     var anInterface: I = new D();
         ~~~~~~~~~~~

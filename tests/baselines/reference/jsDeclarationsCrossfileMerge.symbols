@@ -13,7 +13,7 @@ module.exports = m.default;
 >default : Symbol(default, Decl(exporter.js, 0, 22))
 
 module.exports.memberName = "thing";
->module.exports.memberName : Symbol(memberName)
+>module.exports.memberName : Symbol(memberName, Decl(index.js, 2, 27))
 >module.exports : Symbol(memberName, Decl(index.js, 2, 27))
 >module : Symbol(module, Decl(index.js, 0, 32))
 >exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))

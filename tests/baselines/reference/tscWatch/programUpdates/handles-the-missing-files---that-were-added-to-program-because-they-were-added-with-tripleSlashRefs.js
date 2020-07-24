@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w /a/b/commonFile1.ts
+Input::
 //// [/a/b/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>
                     let x = y
@@ -16,12 +16,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/commonFile1.js]
-/// <reference path="commonFile2.ts"/>
-var x = y;
 
-
-
+/a/lib/tsc.js -w /a/b/commonFile1.ts
 Output::
 >> Screen clear
 [[90m12:00:13 AM[0m] Starting compilation in watch mode...
@@ -67,15 +63,17 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/commonFile1.js]
+/// <reference path="commonFile2.ts"/>
+var x = y;
+
+
+
 Change:: create file2
 
-//// [/a/b/commonFile1.js] file written with same contents
+Input::
 //// [/a/b/commonFile2.ts]
 let y = 1
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
 
 
 Output::
@@ -112,3 +110,9 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/commonFile1.js] file written with same contents
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+

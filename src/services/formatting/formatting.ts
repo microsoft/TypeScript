@@ -3,6 +3,7 @@ namespace ts.formatting {
     export interface FormatContext {
         readonly options: FormatCodeSettings;
         readonly getRules: RulesMap;
+        readonly host: FormattingHost;
     }
 
     export interface TextRangeWithKind<T extends SyntaxKind = SyntaxKind> extends TextRange {
@@ -394,7 +395,7 @@ namespace ts.formatting {
         initialIndentation: number,
         delta: number,
         formattingScanner: FormattingScanner,
-        { options, getRules }: FormatContext,
+        { options, getRules, host }: FormatContext,
         requestKind: FormattingRequestKind,
         rangeContainsError: (r: TextRange) => boolean,
         sourceFile: SourceFileLike): TextChange[] {
@@ -1091,10 +1092,6 @@ namespace ts.formatting {
             const nonWhitespaceColumnInFirstPart =
                 SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(startLinePos, parts[0].pos, sourceFile, options);
 
-            if (indentation === nonWhitespaceColumnInFirstPart.column && !jsxTextStyleIndent) {
-                return;
-            }
-
             let startIndex = 0;
             if (firstLineIsIndented) {
                 startIndex = 1;
@@ -1193,7 +1190,7 @@ namespace ts.formatting {
             previousRange: TextRangeWithKind,
             previousStartLine: number,
             currentRange: TextRangeWithKind,
-            currentStartLine: number,
+            currentStartLine: number
         ): LineAction {
             const onLaterLine = currentStartLine !== previousStartLine;
             switch (rule.action) {
@@ -1221,7 +1218,7 @@ namespace ts.formatting {
                     // edit should not be applied if we have one line feed between elements
                     const lineDelta = currentStartLine - previousStartLine;
                     if (lineDelta !== 1) {
-                        recordReplace(previousRange.end, currentRange.pos - previousRange.end, options.newLineCharacter!);
+                        recordReplace(previousRange.end, currentRange.pos - previousRange.end, getNewLineOrDefaultFromHost(host, options));
                         return onLaterLine ? LineAction.None : LineAction.LineAdded;
                     }
                     break;

@@ -1,14 +1,8 @@
-Exit Code: 1
+Exit Code: 2
 Standard output:
-lib/ExternalModule.js(305,28): error TS2554: Expected 1 arguments, but got 0.
-lib/Stats.js(68,31): error TS2554: Expected 3 arguments, but got 2.
-lib/library/SystemLibraryPlugin.js(127,35): error TS2554: Expected 1 arguments, but got 0.
-lib/optimize/ConcatenatedModule.js(205,32): error TS2554: Expected 1 arguments, but got 0.
-lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(36,15): error TS2304: Cannot find name 'Chunk'.
-lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(37,15): error TS2304: Cannot find name 'DependencyTemplates'.
-lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(38,15): error TS2304: Cannot find name 'RuntimeTemplate'.
-lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(39,15): error TS2304: Cannot find name 'ModuleGraph'.
-lib/wasm-async/AsyncWebAssemblyModulesPlugin.js(40,15): error TS2304: Cannot find name 'ChunkGraph'.
+lib/ContextModule.js(346,32): error TS2345: Argument of type 'Pick<ContextOptions & ContextModuleOptionsExtras, "include" | "regExp" | "chunkName" | "referencedExports" | "mode" | "recursive" | ... 7 more ... | "resourceFragment">' is not assignable to parameter of type 'ContextOptions & ContextModuleOptionsExtras'.
+  Property 'resolveOptions' is missing in type 'Pick<ContextOptions & ContextModuleOptionsExtras, "include" | "regExp" | "chunkName" | "referencedExports" | "mode" | "recursive" | ... 7 more ... | "resourceFragment">' but required in type 'ContextModuleOptionsExtras'.
+lib/dependencies/HarmonyExportImportedSpecifierDependency.js(86,37): error TS1016: A required parameter cannot follow an optional parameter.
 
 
 
