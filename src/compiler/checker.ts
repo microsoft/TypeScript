@@ -6315,7 +6315,7 @@ namespace ts {
                     if (symbol.flags & SymbolFlags.Alias) {
                         serializeAsAlias(symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
                     }
-                    if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) {
+                    if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) { // TODO: Delete this probably
                         serializeMaybeAliasAssignment(symbol);
                     }
                     if (symbol.flags & SymbolFlags.ExportStar) {
@@ -6683,6 +6683,10 @@ namespace ts {
                             }
                             // else fall through and treat require just like import=
                         case SyntaxKind.ImportEqualsDeclaration:
+                             if (target.escapedName === InternalSymbolName.ExportEquals) {
+                                serializeMaybeAliasAssignment(symbol);
+                                break;
+                            }
                             // Could be a local `import localName = ns.member` or
                             // an external `import localName = require("whatever")`
                             const isLocalImport = !(target.flags & SymbolFlags.ValueModule) && !isVariableDeclaration(node);
@@ -6797,6 +6801,7 @@ namespace ts {
                 }
 
                 /**
+                 * TODO: doesn't need to handle imports anymore
                  * Returns `true` if an export assignment or declaration was produced for the symbol
                  */
                 function serializeMaybeAliasAssignment(symbol: Symbol): boolean {
@@ -6877,7 +6882,11 @@ namespace ts {
                             const statement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                                 factory.createVariableDeclaration(varName, /*exclamationToken*/ undefined, serializeTypeForDeclaration(context, typeToSerialize, symbol, enclosingDeclaration, includePrivateSymbol, bundled))
                             ], NodeFlags.Const));
-                            addResult(statement, name === varName ? ModifierFlags.Export : ModifierFlags.None);
+
+                            addResult(statement,
+                                target && target.flags & SymbolFlags.Property && target.escapedName === InternalSymbolName.ExportEquals ? ModifierFlags.Ambient
+                                : name === varName ? ModifierFlags.Export
+                                : ModifierFlags.None);
                         }
                         if (isExportAssignment) {
                             results.push(factory.createExportAssignment(
