@@ -21467,8 +21467,8 @@ namespace ts {
                 if ((type.flags & (TypeFlags.Union | TypeFlags.Object) || isThisTypeParameter(type)) && isSomeDirectSubtypeContainsPropName(type, propName)) {
                     return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }
-                else if (assumeTrue && !isSomeDirectSubtypeContainsPropName(type, propName)) {
-                    // if type is intersection, we might have added type into it, and we just need to add into this type again rather than a new one. 
+                else if (assumeTrue && !isThisTypeParameter(type) && !isSomeDirectSubtypeContainsPropName(type, propName)) {
+                    // if type is intersection, we might have added type into it, and we just need to add into this type again rather than a new one.
                     // else add a new anonymous object type which contains the type and widden the origional type with it.
                     if (type.flags & TypeFlags.Intersection) {
                         // try to get the first Anonymous Object type to add new type to it.
