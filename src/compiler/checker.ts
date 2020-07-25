@@ -10997,12 +10997,13 @@ namespace ts {
         // these partial properties when identifying discriminant properties, but otherwise they are filtered out
         // and do not appear to be present in the union type.
         function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
-            const properties = type.propertyCache || (type.propertyCache = createSymbolTable());
+            const properties = skipObjectFunctionPropertyAugment ?
+                type.propertyCacheWithoutObjectFunctionPropertyAugment ||= createSymbolTable() :
+                type.propertyCache ||= createSymbolTable();
             let property = properties.get(name);
             if (!property) {
                 property = createUnionOrIntersectionProperty(type, name, skipObjectFunctionPropertyAugment);
-                // Dont set the result since it might not be correct if skipping lookup from property of Object and function type
-                if (property && !skipObjectFunctionPropertyAugment) {
+                if (property) {
                     properties.set(name, property);
                 }
             }
