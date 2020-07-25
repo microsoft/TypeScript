@@ -21459,30 +21459,71 @@ namespace ts {
                 return !assumeTrue;
             }
 
-            function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
+            function narrowOrWiddenTypeByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
                 const propName = escapeLeadingUnderscores(literal.text);
+                const addSymbol = createSymbol(SymbolFlags.Property, propName);
+                addSymbol.type = unknownType;
 
-                if (type.flags & (TypeFlags.Union | TypeFlags.Object) || isThisTypeParameter(type)) {
+                if ((type.flags & (TypeFlags.Union | TypeFlags.Object) || isThisTypeParameter(type)) && isSomeDirectSubtypeContainsPropName(type, propName)) {
                     return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }
-                else{
-                    if (isSomeDirectSubtypeContainsPropName(type, propName)) {
-                        if (type.flags !== TypeFlags.Intersection) {
-                            const newObjType = createObjectType(ObjectFlags.Anonymous);
-                            const newSymbolObject = createSymbol(SymbolFlags.Property, propName, 0);
-                            newObjType.properties = [];
-                            newObjType.properties.push(newSymbolObject);
+                else if (assumeTrue && !isSomeDirectSubtypeContainsPropName(type, propName)) {
+                    // if type is intersection, we might have added type into it, and we just need to add into this type again rather than a new one. 
+                    // else add a new anonymous object type which contains the type and widden the origional type with it.
+                    if (type.flags & TypeFlags.Intersection) {
+                        // try to get the first Anonymous Object type to add new type to it.
+                        const firstAnonymousObjectType: Type | undefined = (type as UnionOrIntersectionType).types.find(t => (t.flags & TypeFlags.Object) && (<ObjectType>t).objectFlags & ObjectFlags.Anonymous);
+                        if (firstAnonymousObjectType) {
+                            const members = createSymbolTable();
+                            members.set(propName, addSymbol);
+                            if ((firstAnonymousObjectType as ObjectType).members) {
+                                mergeSymbolTable(members, (firstAnonymousObjectType as ObjectType).members!);
+                            }
+                            (firstAnonymousObjectType as ObjectType).members = members;
+                            (firstAnonymousObjectType as ObjectType).properties = getNamedMembers(members);
+                        }
+                        else {
+                            const members = createSymbolTable();
+                            members.set(propName, addSymbol);
+                            const newObjType = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+                            return createIntersectionType([type, newObjType]);
                         }
                     }
-                    // if type is intersection, get the first Object type to add new index to it.
-                    // else add a new object type and make the type become an intersection type.
-                    // Add a string index to the type.
+                    else {
+                        const members = createSymbolTable();
+                        members.set(propName, addSymbol);
+                        const newObjType = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+                        return createIntersectionType([type, newObjType]);
+                    }
                 }
                 return type;
 
-                function isSomeDirectSubtypeContainsPropName(type: Type, propName: __String) {
+                function isSomeDirectSubtypeContainsPropName(type1: Type, name: __String) {
                     // could not assume type is union or intersection, like (A|B)&C, C is added string object, this is intersection now, but we need judge it like Union.
-                    const prop = getPropertyOfType(type, propName);
+
+                    let prop;
+                    const type = getReducedApparentType(type1);
+                    if (type.flags & TypeFlags.Object) {
+                        const resolved = resolveStructuredTypeMembers(<ObjectType>type);
+                        const symbol = resolved.members.get(name);
+                        if (symbol && symbolIsValue(symbol)) {
+                            prop = symbol;
+                        }
+                        const functionType = resolved === anyFunctionType ? globalFunctionType :
+                            resolved.callSignatures.length ? globalCallableFunctionType :
+                            resolved.constructSignatures.length ? globalNewableFunctionType :
+                            undefined;
+                        if (functionType) {
+                            const symbol = getPropertyOfObjectType(functionType, name);
+                            if (symbol) {
+                                prop= symbol;
+                            }
+                        }
+                        return getPropertyOfObjectType(globalObjectType, name);
+                    }
+                    if (type.flags & TypeFlags.UnionOrIntersection) {
+                        prop = getUnionOrIntersectionProperty(<UnionOrIntersectionType>type, name);
+                    }
                     if (prop) {
                         return true;
                     }
@@ -21543,7 +21584,7 @@ namespace ts {
                     case SyntaxKind.InKeyword:
                         const target = getReferenceCandidate(expr.right);
                         if (isStringLiteralLike(expr.left) && isMatchingReference(reference, target)) {
-                            return narrowByInKeyword(type, expr.left, assumeTrue);
+                            return narrowOrWiddenTypeByInKeyword(type, expr.left, assumeTrue);
                         }
                         break;
                     case SyntaxKind.CommaToken:
