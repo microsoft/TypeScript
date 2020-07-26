@@ -21467,7 +21467,8 @@ namespace ts {
                 if ((type.flags & (TypeFlags.Union | TypeFlags.Object) || isThisTypeParameter(type)) && isSomeDirectSubtypeContainsPropName(type, propName)) {
                     return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }
-                else if (assumeTrue && !isThisTypeParameter(type) && !isSomeDirectSubtypeContainsPropName(type, propName)) {
+                // only widden property when the type is not this/any/unknown and not contains string-index/propName in any of the constituents.
+                else if (assumeTrue && !isThisTypeParameter(type) && !isSomeDirectSubtypeContainsPropName(type, propName) && !getIndexInfoOfType(type, IndexKind.String) && !(type.flags & TypeFlags.AnyOrUnknown)) {
                     // if type is intersection, we might have added type into it, and we just need to add into this type again rather than a new one.
                     // else add a new anonymous object type which contains the type and widden the origional type with it.
                     if (type.flags & TypeFlags.Intersection) {
@@ -21493,6 +21494,9 @@ namespace ts {
                         const members = createSymbolTable();
                         members.set(propName, addSymbol);
                         const newObjType = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+                        if(type.flags & TypeFlags.Never){
+                            return newObjType;
+                        }
                         return createIntersectionType([type, newObjType]);
                     }
                 }

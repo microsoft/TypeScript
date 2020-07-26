@@ -146,13 +146,13 @@ function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWit
         x.a();
 >x.a() : any
 >x.a : any
->x : never
+>x : (AWithMethod | BWithMethod) & { c: unknown; }
 >a : any
 
         x.b();
 >x.b() : any
 >x.b : any
->x : never
+>x : (AWithMethod | BWithMethod) & { c: unknown; }
 >b : any
 
     } else {
@@ -290,10 +290,10 @@ class UnreachableCodeDetection {
 
         } else {
             let y = this.a;
->y : any
->this.a : any
->this : never
->a : any
+>y : string
+>this.a : string
+>this : this
+>a : string
         }
     }
 }
