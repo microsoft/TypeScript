@@ -6645,23 +6645,23 @@ namespace ts {
                         case SyntaxKind.VariableDeclaration:
                             // commonjs require: const x = require('y')
                             if (isPropertyAccessExpression((node as VariableDeclaration).initializer!)) {
-                                // const x = require('y').z --> import _x = require('y'); import z = _x.z
-                                const access = (node as VariableDeclaration).initializer! as PropertyAccessExpression; // require('y').z
-                                const moduleName = getExternalModuleRequireArgument(node) as StringLiteral; // 'y'
-                                const uniqueName = factory.createUniqueName(moduleName.text); // _x
+                                // const x = require('y').z
+                                const initializer = (node as VariableDeclaration).initializer! as PropertyAccessExpression; // require('y').z
+                                const uniqueName = factory.createUniqueName((getExternalModuleRequireArgument(node) as StringLiteral).text); // _y
+                                const specifier = getSpecifierForModuleSymbol(target.parent || target, context); // 'y'
+                                // import _y = require('y');
                                 addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     uniqueName,
-                                    // TODO: Use target.parent here because alias resolution on post-property-access over-resolves to a module export
-                                    // *probably* I should fix this in type-checking instead, but I'm not sure how to request an additional resolution step during checking
-                                    factory.createExternalModuleReference(factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)))
+                                    factory.createExternalModuleReference(factory.createStringLiteral(specifier))
                                 ), ModifierFlags.None);
+                                // import x = _y.z
                                 addResult(factory.createImportEqualsDeclaration(
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     factory.createIdentifier(localName),
-                                    factory.createQualifiedName(uniqueName, access.name as Identifier),
+                                    factory.createQualifiedName(uniqueName, initializer.name as Identifier),
                                 ), modifierFlags);
                                 break;
                             }
@@ -6674,20 +6674,14 @@ namespace ts {
                             // Could be a local `import localName = ns.member` or
                             // an external `import localName = require("whatever")`
                             const isLocalImport = !(target.flags & SymbolFlags.ValueModule) && !isVariableDeclaration(node);
-                            // TODO: It's very likely that this should always use target and using symbol was a bug
-                            const naam = isVariableDeclaration(node)
-                                ? getSpecifierForModuleSymbol(target, context)
-                                : getSpecifierForModuleSymbol(symbol, context)
-                            let n = factory.createImportEqualsDeclaration(
+                            addResult(factory.createImportEqualsDeclaration(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 factory.createIdentifier(localName),
                                 isLocalImport
                                     ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
-                                // TODO: make getSpecifierForModuleSymbol work with require Symbols
-                                    : factory.createExternalModuleReference(factory.createStringLiteral(naam))
-                            )
-                            addResult(n, isLocalImport ? modifierFlags : ModifierFlags.None);
+                                    : factory.createExternalModuleReference(factory.createStringLiteral(getSpecifierForModuleSymbol(target, context)))
+                            ), isLocalImport ? modifierFlags : ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceExportDeclaration:
                             // export as namespace foo
@@ -6723,9 +6717,6 @@ namespace ts {
                                 factory.createStringLiteral(getSpecifierForModuleSymbol(target, context))
                             ), ModifierFlags.None);
                             break;
-                        case SyntaxKind.BindingElement:
-                            // TODO: remember to handle postfix property access~~~
-                            // TODO: Actually write tests for this, there aren't any that I can see
                         case SyntaxKind.ImportSpecifier:
                             addResult(factory.createImportDeclaration(
                                 /*decorators*/ undefined,
