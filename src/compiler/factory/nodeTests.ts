@@ -784,6 +784,10 @@ namespace ts {
     export function isJSDocReturnTag(node: Node): node is JSDocReturnTag {
         return node.kind === SyntaxKind.JSDocReturnTag;
     }
+    
+    export function isJSDocConstTag(node: Node): node is JSDocConstTag {
+        return node.kind === SyntaxKind.JSDocConstTag;
+    }
 
     export function isJSDocThisTag(node: Node): node is JSDocThisTag {
         return node.kind === SyntaxKind.JSDocThisTag;

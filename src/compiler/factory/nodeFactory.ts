@@ -342,6 +342,8 @@ namespace ts {
             get updateJSDocTypeTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
             get createJSDocReturnTag() { return getJSDocTypeLikeTagCreateFunction<JSDocReturnTag>(SyntaxKind.JSDocReturnTag); },
             get updateJSDocReturnTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocReturnTag>(SyntaxKind.JSDocReturnTag); },
+            get createJSDocConstTag() { return getJSDocTypeLikeTagCreateFunction<JSDocConstTag>(SyntaxKind.JSDocConstTag); },
+            get updateJSDocConstTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocConstTag>(SyntaxKind.JSDocConstTag); },
             get createJSDocThisTag() { return getJSDocTypeLikeTagCreateFunction<JSDocThisTag>(SyntaxKind.JSDocThisTag); },
             get updateJSDocThisTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocThisTag>(SyntaxKind.JSDocThisTag); },
             get createJSDocEnumTag() { return getJSDocTypeLikeTagCreateFunction<JSDocEnumTag>(SyntaxKind.JSDocEnumTag); },

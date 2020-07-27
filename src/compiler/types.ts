@@ -387,6 +387,7 @@ namespace ts {
         JSDocReturnTag,
         JSDocThisTag,
         JSDocTypeTag,
+        JSDocConstTag,
         JSDocTemplateTag,
         JSDocTypedefTag,
         JSDocPropertyTag,
@@ -3187,6 +3188,11 @@ namespace ts {
     export interface JSDocTypeTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocTypeTag;
         readonly typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocConstTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocConstTag;
+        readonly typeExpression?: JSDocTypeExpression;
     }
 
     export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
@@ -6975,6 +6981,8 @@ namespace ts {
         updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocTypeTag;
         createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
         updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocReturnTag;
+        createJSDocConstTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocConstTag;
+        updateJSDocConstTag(node: JSDocConstTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocConstTag;
         createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag;
         updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocThisTag;
         createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag;

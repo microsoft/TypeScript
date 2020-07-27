@@ -510,11 +510,12 @@ namespace ts {
                     visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
                     visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
             case SyntaxKind.JSDocReturnTag:
+            case SyntaxKind.JSDocConstTag:
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocThisTag:
             case SyntaxKind.JSDocEnumTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression);
+                    visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocConstTag).typeExpression);
             case SyntaxKind.JSDocSignature:
                 return forEach((<JSDocSignature>node).typeParameters, cbNode) ||
                     forEach((<JSDocSignature>node).parameters, cbNode) ||
@@ -7415,6 +7416,9 @@ namespace ts {
                         case "returns":
                             tag = parseReturnTag(start, tagName, margin, indentText);
                             break;
+                        case "const":
+                            tag = parseConstTag(start, tagName, margin, indentText);
+                            break;
                         case "template":
                             tag = parseTemplateTag(start, tagName, margin, indentText);
                             break;
@@ -7644,6 +7648,16 @@ namespace ts {
                     const typeExpression = tryParseTypeExpression();
                     const end = getNodePos();
                     return finishNode(factory.createJSDocReturnTag(tagName, typeExpression, parseTrailingTagComments(start, end, indent, indentText)), start, end);
+                }
+
+                function parseConstTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocConstTag {
+                    if (some(tags, isJSDocConstTag)) {
+                        parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
+                    }
+
+                    const typeExpression = tryParseTypeExpression();
+                    const end = getNodePos();
+                    return finishNode(factory.createJSDocConstTag(tagName, typeExpression, parseTrailingTagComments(start, end, indent, indentText)), start, end);
                 }
 
                 function parseTypeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocTypeTag {
