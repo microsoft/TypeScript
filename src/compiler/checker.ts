@@ -33436,6 +33436,8 @@ namespace ts {
                         reportTypeNotIterableError(errorNode, type, !!(use & IterationUse.AllowsAsyncIterablesFlag));
                         errorNode = undefined;
                     }
+                    setCachedIterationTypes(type, cacheKey, noIterationTypes);
+                    return undefined;
                 }
                 else {
                     allIterationTypes = append(allIterationTypes, iterationTypes);
