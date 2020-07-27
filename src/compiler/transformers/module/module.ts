@@ -103,6 +103,7 @@ namespace ts {
             }
 
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
+            // hoist import declarations first, then transform others.
             addRange(statements, visitNodes(node.statements, importDeclarationOnlyVisitor, isStatement, statementOffset));
             addRange(statements, visitNodes(node.statements, sourceElementIgnoreImportDeclarationVisitor, isStatement, statementOffset));
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
@@ -430,7 +431,9 @@ namespace ts {
             if (moduleKind === ModuleKind.AMD) {
                 addRange(statements, mapDefined(currentModuleInfo.externalImports, getAMDImportExpressionForImport));
             }
-            addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
+            // hoist import declarations first, then transform others.
+            addRange(statements, visitNodes(node.statements, importDeclarationOnlyVisitor, isStatement, statementOffset));
+            addRange(statements, visitNodes(node.statements, sourceElementIgnoreImportDeclarationVisitor, isStatement, statementOffset));
 
             // Append the 'export =' statement if provided.
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
