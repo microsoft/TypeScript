@@ -6237,7 +6237,7 @@ namespace ts {
                                         ),
                                         ModifierFlags.None
                                     );
-                                    serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, includePrivateSymbol, bundled);
+                                    context.tracker.trackSymbol!(type.symbol, context.enclosingDeclaration, SymbolFlags.Value);
                                 }
                                 else {
                                     const statement = setTextRange(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
