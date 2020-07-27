@@ -2776,6 +2776,7 @@ declare namespace ts {
         keyofStringsOnly?: boolean;
         lib?: string[];
         locale?: string;
+        looseClassInheritanceStaticCheck?: boolean;
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;

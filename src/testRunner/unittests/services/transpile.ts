@@ -279,6 +279,10 @@ var x = 0;`, {
             options: { compilerOptions: { locale: "en-us" }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'looseClassInheritanceStaticCheck'", "x;", {
+            options: { compilerOptions: { looseClassInheritanceStaticCheck: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'module'", "x;", {
             options: { compilerOptions: { module: ModuleKind.CommonJS }, fileName: "input.js", reportDiagnostics: true }
         });
