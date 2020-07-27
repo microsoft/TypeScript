@@ -31,15 +31,15 @@ exports.m = exports.a;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_1 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
-var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_1.a;
 var es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_2 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
-var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_2.a;
 var es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_3 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
+var es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_4 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
+var es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_5 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
+var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_1.a;
+var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_2.a;
 var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_3.x;
 var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_3.a;
-var es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_4 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
 var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_4.x;
-var es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_5 = require("./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0");
 var x1 = es6ImportDefaultBindingFollowedWithNamedImportInEs5_0_5.m;
 
 

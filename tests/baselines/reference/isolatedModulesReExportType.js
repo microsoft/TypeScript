@@ -68,9 +68,9 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 }));
 exports.__esModule = true;
 exports.NS = exports.C = void 0;
-// OK, has a value side
-var exportValue_1 = require("./exportValue");
-__createBinding(exports, exportValue_1, "C");
 // OK, even though the namespace it exports is only types.
 var NS = require("./exportT");
 exports.NS = NS;
+// OK, has a value side
+var exportValue_1 = require("./exportValue");
+__createBinding(exports, exportValue_1, "C");

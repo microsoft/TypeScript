@@ -35,6 +35,8 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var file_1 = require("file");
 var other_file_1 = require("other_file");
+var file2_1 = require("file2");
+var file3_1 = require("file3");
 var Y = /** @class */ (function (_super) {
     __extends(Y, _super);
     function Y() {
@@ -42,8 +44,6 @@ var Y = /** @class */ (function (_super) {
     }
     return Y;
 }(other_file_1["default"]));
-var file2_1 = require("file2");
-var file3_1 = require("file3");
 var Q = /** @class */ (function (_super) {
     __extends(Q, _super);
     function Q() {

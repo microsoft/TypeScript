@@ -40,8 +40,8 @@ B.zzz;
 //// [index.js]
 "use strict";
 exports.__esModule = true;
+var OriginalB = require("./b");
 var x = { x: "" };
 B.zzz;
-var OriginalB = require("./b");
 OriginalB.zzz;
 var y = x;

@@ -150,9 +150,9 @@ export { default as bar } from './bar';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 var bar_1 = require("./bar");
-Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
 var bar_2 = require("./bar");
-bar_2.default("hello");
+Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_2.default; } });
+bar_1.default("hello");
 
 
 //// [/src/obj/tsconfig.tsbuildinfo]
@@ -413,9 +413,9 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 var bar_1 = require("./bar");
-Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
 var bar_2 = require("./bar");
-bar_2.default();
+Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_2.default; } });
+bar_1.default();
 
 
 //// [/src/obj/tsconfig.tsbuildinfo]

@@ -56,25 +56,25 @@ exports.aaaa = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var es6ImportNamedImportInEs5_0_1 = require("./es6ImportNamedImportInEs5_0");
-var xxxx = es6ImportNamedImportInEs5_0_1.a;
 var es6ImportNamedImportInEs5_0_2 = require("./es6ImportNamedImportInEs5_0");
-var xxxx = es6ImportNamedImportInEs5_0_2.a;
 var es6ImportNamedImportInEs5_0_3 = require("./es6ImportNamedImportInEs5_0");
+var es6ImportNamedImportInEs5_0_4 = require("./es6ImportNamedImportInEs5_0");
+var es6ImportNamedImportInEs5_0_5 = require("./es6ImportNamedImportInEs5_0");
+var es6ImportNamedImportInEs5_0_6 = require("./es6ImportNamedImportInEs5_0");
+var es6ImportNamedImportInEs5_0_7 = require("./es6ImportNamedImportInEs5_0");
+var es6ImportNamedImportInEs5_0_8 = require("./es6ImportNamedImportInEs5_0");
+var es6ImportNamedImportInEs5_0_9 = require("./es6ImportNamedImportInEs5_0");
+var xxxx = es6ImportNamedImportInEs5_0_1.a;
+var xxxx = es6ImportNamedImportInEs5_0_2.a;
 var xxxx = es6ImportNamedImportInEs5_0_3.x;
 var xxxx = es6ImportNamedImportInEs5_0_3.a;
-var es6ImportNamedImportInEs5_0_4 = require("./es6ImportNamedImportInEs5_0");
 var xxxx = es6ImportNamedImportInEs5_0_4.x;
-var es6ImportNamedImportInEs5_0_5 = require("./es6ImportNamedImportInEs5_0");
 var xxxx = es6ImportNamedImportInEs5_0_5.m;
-var es6ImportNamedImportInEs5_0_6 = require("./es6ImportNamedImportInEs5_0");
 var xxxx = es6ImportNamedImportInEs5_0_6.a1;
 var xxxx = es6ImportNamedImportInEs5_0_6.x1;
-var es6ImportNamedImportInEs5_0_7 = require("./es6ImportNamedImportInEs5_0");
 var xxxx = es6ImportNamedImportInEs5_0_7.a1;
 var xxxx = es6ImportNamedImportInEs5_0_7.x1;
-var es6ImportNamedImportInEs5_0_8 = require("./es6ImportNamedImportInEs5_0");
 var z111 = es6ImportNamedImportInEs5_0_8.z1;
-var es6ImportNamedImportInEs5_0_9 = require("./es6ImportNamedImportInEs5_0");
 var z2 = es6ImportNamedImportInEs5_0_9.z2; // z2 shouldn't give redeclare error
 
 
