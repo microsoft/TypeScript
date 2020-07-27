@@ -15,12 +15,17 @@ const a = ""
 /** @see {NS.Bar} ns.bar*/
 const b = ""
 
+/** @see {b} b */
+const c = ""
+
 
 //// [seeTag1.js]
 /** @see {Foo} foooo*/
 var a = "";
 /** @see {NS.Bar} ns.bar*/
 var b = "";
+/** @see {b} b */
+var c = "";
 
 
 //// [seeTag1.d.ts]
@@ -36,3 +41,5 @@ declare namespace NS {
 declare const a = "";
 /** @see {NS.Bar} ns.bar*/
 declare const b = "";
+/** @see {b} b */
+declare const c = "";

@@ -26,3 +26,7 @@ const a = ""
 const b = ""
 >b : Symbol(b, Decl(seeTag1.ts, 14, 5))
 
+/** @see {b} b */
+const c = ""
+>c : Symbol(c, Decl(seeTag1.ts, 17, 5))
+
