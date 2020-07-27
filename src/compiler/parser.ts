@@ -477,6 +477,11 @@ namespace ts {
                     visitNode(cbNode, (<JSDocFunctionType>node).type);
             case SyntaxKind.JSDocComment:
                 return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
+            case SyntaxKind.JSDocSeeTag:
+                return visitNode(cbNode, (node as JSDocSeeTag).tagName) ||
+                    visitNode(cbNode, (node as JSDocSeeTag).name);
+            case SyntaxKind.JSDocNameExpression:
+                return visitNode(cbNode, (node as JSDocNameExpression).name);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
@@ -7150,7 +7155,7 @@ namespace ts {
             export function parseJSDocNameExpression(mayOmitBraces?: boolean): JSDocNameExpression {
                 const pos = getNodePos();
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
-                const entityName = doInsideOfContext(NodeFlags.JSDoc, () => parseEntityName(/* allowReservedWords*/  true));
+                const entityName = doInsideOfContext(NodeFlags.JSDoc, () => parseEntityName(/* allowReservedWords*/ true));
                 if (!mayOmitBraces || hasBrace) {
                     parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
                 }

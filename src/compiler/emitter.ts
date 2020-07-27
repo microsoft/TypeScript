@@ -3516,7 +3516,7 @@ namespace ts {
             emit(node.name);
             writePunctuation("}");
         }
-        
+
         function emitJSDocHeritageTag(tag: JSDocImplementsTag | JSDocAugmentsTag) {
             emitJSDocTagName(tag.tagName);
             writeSpace();

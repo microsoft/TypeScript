@@ -4276,7 +4276,7 @@ namespace ts {
                 ? update(createJSDocSeeTag(tagName, name, comment), node)
                 : node;
         }
-        
+
         // @api
         function createJSDocNameExpression(name: EntityName): JSDocNameExpression {
             const node = createBaseNode<JSDocNameExpression>(SyntaxKind.JSDocNameExpression);
