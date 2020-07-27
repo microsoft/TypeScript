@@ -3005,7 +3005,6 @@ namespace ts {
         readonly name: Identifier;           // Declared name
     }
 
-    // TODO: Probably should now include BindingElement
     export type ImportOrExportSpecifier =
         | ImportSpecifier
         | ExportSpecifier

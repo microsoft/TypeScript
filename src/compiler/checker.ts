@@ -6223,19 +6223,20 @@ namespace ts {
                                 if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
                                     textRange = textRange.parent.parent;
                                 }
-                                const ex = find(symbol.declarations, isPropertyAccessExpression);
-                                if (ex && isBinaryExpression(ex.parent) && isIdentifier(ex.parent.right) && type.symbol && isSourceFile(type.symbol.valueDeclaration)) {
-                                    // TODO: Don't really need to do this, just whatever symbol-visiting code that this function actually calls, to mark it as used
-                                    serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, includePrivateSymbol, bundled);
+                                const propertyAccessRequire = find(symbol.declarations, isPropertyAccessExpression);
+                                if (propertyAccessRequire && isBinaryExpression(propertyAccessRequire.parent) && isIdentifier(propertyAccessRequire.parent.right)
+                                    && type.symbol && isSourceFile(type.symbol.valueDeclaration)) {
+                                    const alias = localName === propertyAccessRequire.parent.right.escapedText ? undefined : propertyAccessRequire.parent.right;
                                     addResult(
                                         factory.createExportDeclaration(
                                             /*decorators*/ undefined,
                                             /*modifiers*/ undefined,
                                             /*isTypeOnly*/ false,
-                                            factory.createNamedExports([factory.createExportSpecifier(localName === ex.parent.right.escapedText ? undefined : ex.parent.right, localName)])
+                                            factory.createNamedExports([factory.createExportSpecifier(alias, localName)])
                                         ),
                                         ModifierFlags.None
                                     );
+                                    serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, includePrivateSymbol, bundled);
                                 }
                                 else {
                                     const statement = setTextRange(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
@@ -6303,7 +6304,7 @@ namespace ts {
                     if (symbol.flags & SymbolFlags.Alias) {
                         serializeAsAlias(symbol, getInternalSymbolName(symbol, symbolName), modifierFlags);
                     }
-                    if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) { // TODO: Delete this probably
+                    if (symbol.flags & SymbolFlags.Property && symbol.escapedName === InternalSymbolName.ExportEquals) {
                         serializeMaybeAliasAssignment(symbol);
                     }
                     if (symbol.flags & SymbolFlags.ExportStar) {
@@ -6776,7 +6777,6 @@ namespace ts {
                 }
 
                 /**
-                 * TODO: doesn't need to handle imports anymore
                  * Returns `true` if an export assignment or declaration was produced for the symbol
                  */
                 function serializeMaybeAliasAssignment(symbol: Symbol): boolean {
@@ -6857,7 +6857,6 @@ namespace ts {
                             const statement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                                 factory.createVariableDeclaration(varName, /*exclamationToken*/ undefined, serializeTypeForDeclaration(context, typeToSerialize, symbol, enclosingDeclaration, includePrivateSymbol, bundled))
                             ], NodeFlags.Const));
-
                             addResult(statement,
                                 target && target.flags & SymbolFlags.Property && target.escapedName === InternalSymbolName.ExportEquals ? ModifierFlags.Ambient
                                 : name === varName ? ModifierFlags.Export
