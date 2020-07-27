@@ -2393,17 +2393,18 @@ namespace ts {
         }
 
         function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration | VariableDeclaration, dontResolveAlias: boolean): Symbol | undefined {
+            if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
+                // Use the ad-hoc require-as-CallExpression code to create a fresh anonymous type and retrieve the property by name.
+                const name = (node.initializer.expression as CallExpression).arguments[0] as StringLiteral;
+                return isIdentifier(node.initializer.name)
+                    ? getPropertyOfType(resolveExternalModuleTypeByLiteral(name), node.initializer.name.escapedText)
+                    : undefined;
+            }
             if (isVariableDeclaration(node) || node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
                 const immediate = resolveExternalModuleName(
                     node,
                     getExternalModuleRequireArgument(node) || getExternalModuleImportEqualsDeclarationExpression(node));
-                if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
-                    // Use the ad-hoc require-as-CallExpression code to create a fresh anonymous type and retrieve the property by name.
-                    return isIdentifier(node.initializer.name)
-                        ? getPropertyOfType(checkExpression(node.initializer.expression), node.initializer.name.escapedText)
-                        : undefined;
-                }
-                const resolved = resolveExternalModuleSymbol(immediate);
+               const resolved = resolveExternalModuleSymbol(immediate);
                 markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
                 return resolved;
             }

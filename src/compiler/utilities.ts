@@ -1849,7 +1849,7 @@ namespace ts {
 
     export function getExternalModuleRequireArgument(node: Node) {
         return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
-            && (getFirstPropertyAccessExpression(node.initializer!) as CallExpression).arguments[0] as StringLiteral;
+            && (getFirstPropertyAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
     }
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
