@@ -7147,6 +7147,19 @@ namespace ts {
                 return finishNode(result, pos);
             }
 
+            export function parseJSDocNameExpression(mayOmitBraces?: boolean): JSDocNameExpression {
+                const pos = getNodePos();
+                const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
+                const entityName = doInsideOfContext(NodeFlags.JSDoc, () => parseEntityName(/* allowReservedWords*/  true));
+                if (!mayOmitBraces || hasBrace) {
+                    parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
+                }
+
+                const result = factory.createJSDocNameExpression(entityName);
+                fixupParentReferences(result);
+                return finishNode(result, pos);
+            }
+
             export function parseIsolatedJSDocComment(content: string, start: number | undefined, length: number | undefined): { jsDoc: JSDoc, diagnostics: Diagnostic[] } | undefined {
                 initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
@@ -7427,6 +7440,9 @@ namespace ts {
                         case "callback":
                             tag = parseCallbackTag(start, tagName, margin, indentText);
                             break;
+                        case "see":
+                            tag = parseSeeTag(start, tagName, margin, indentText);
+                            break;
                         default:
                             tag = parseUnknownTag(start, tagName, margin, indentText);
                             break;
@@ -7655,6 +7671,13 @@ namespace ts {
                     const end = getNodePos();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, end, indent, indentText) : undefined;
                     return finishNode(factory.createJSDocTypeTag(tagName, typeExpression, comments), start, end);
+                }
+
+                function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
+                    const nameExpression = parseJSDocNameExpression(/*mayOmitBraces*/ true);
+                    const end = getNodePos();
+                    const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, end, indent, indentText) : undefined;
+                    return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start, end);
                 }
 
                 function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
