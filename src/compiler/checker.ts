@@ -21459,7 +21459,7 @@ namespace ts {
                 return !assumeTrue;
             }
 
-            function widdenTypeWithSymbol(type: Type, newSymbol: Symbol) {
+            function widdenTypeWithSymbol(type: Type, newSymbol: Symbol): Type {
                 // If type is this/any/unknown, it could not be widden.
                 if ((type.flags & TypeFlags.AnyOrUnknown) && isThisTypeParameter(type)) {
                     return type;
@@ -21474,7 +21474,7 @@ namespace ts {
                         const members = createSymbolTable();
                         members.set(propName, newSymbol);
                         if (firstAnonymousObjectType.members) {
-                            mergeSymbolTable(members, firstAnonymousObjectType.members!);
+                            mergeSymbolTable(members, firstAnonymousObjectType.members);
                         }
                         firstAnonymousObjectType.members = members;
                         firstAnonymousObjectType.properties = getNamedMembers(members);
@@ -21496,6 +21496,7 @@ namespace ts {
                     }
                     return createIntersectionType([type, newObjType]);
                 }
+                return type;
 
                 // I would be very glad to create a helper file like `nodeTests.ts` if feedback positive review.
                 function isIntersectionType(type: Type): type is IntersectionType {
