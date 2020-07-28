@@ -2867,9 +2867,21 @@ namespace ts {
         if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             return firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
-                || codefix.moduleSymbolToValidIdentifier(Debug.checkDefined(symbol.parent), scriptTarget);
+                || codefix.moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget);
         }
         return symbol.name;
+    }
+
+    function getSymbolParentOrFail(symbol: Symbol) {
+        return Debug.checkDefined(
+            symbol.parent,
+            `Symbol parent was undefined. Flags: ${Debug.formatSymbolFlags(symbol.flags)}. ` +
+            `Declarations: ${symbol.declarations?.map(d => {
+                const kind = Debug.formatSyntaxKind(d.kind);
+                const inJS = isInJSFile(d);
+                const { expression } = d as any;
+                return (inJS ? "[JS]" : "") + kind + (expression ? ` (expression: ${Debug.formatSyntaxKind(expression.kind)})` : "");
+            }).join(", ")}.`);
     }
 
     /**

@@ -23032,18 +23032,25 @@ namespace ts {
         function getContextualTypeForReturnExpression(node: Expression): Type | undefined {
             const func = getContainingFunction(node);
             if (func) {
-                const functionFlags = getFunctionFlags(func);
-                if (functionFlags & FunctionFlags.Generator) { // AsyncGenerator function or Generator function
-                    return undefined;
-                }
-
-                const contextualReturnType = getContextualReturnType(func);
+                let contextualReturnType = getContextualReturnType(func);
                 if (contextualReturnType) {
-                    if (functionFlags & FunctionFlags.Async) { // Async function
-                        const contextualAwaitedType = mapType(contextualReturnType, getAwaitedTypeOfPromise);
+                    const functionFlags = getFunctionFlags(func);
+                    if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
+                        const use = functionFlags & FunctionFlags.Async ? IterationUse.AsyncGeneratorReturnType : IterationUse.GeneratorReturnType;
+                        const iterationTypes = getIterationTypesOfIterable(contextualReturnType, use, /*errorNode*/ undefined);
+                        if (!iterationTypes) {
+                            return undefined;
+                        }
+                        contextualReturnType = iterationTypes.returnType;
+                        // falls through to unwrap Promise for AsyncGenerators
+                    }
+
+                    if (functionFlags & FunctionFlags.Async) { // Async function or AsyncGenerator function
+                        const contextualAwaitedType = mapType(contextualReturnType, getAwaitedType);
                         return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
                     }
-                    return contextualReturnType; // Regular function
+
+                    return contextualReturnType; // Regular function or Generator function
                 }
             }
             return undefined;
@@ -26486,7 +26493,7 @@ namespace ts {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
-            const reportErrors = !candidatesOutArray;
+            const reportErrors = !candidatesOutArray && produceDiagnostics;
 
             let typeArguments: NodeArray<TypeNode> | undefined;
 
