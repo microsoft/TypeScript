@@ -155,7 +155,7 @@ namespace ts {
             }
 
             public getBuffer() {
-                return this.buffer || (ts.sys.bufferFrom?.(this.text, "utf8") as Uint8Array);
+                return this.buffer || (sys.bufferFrom?.(this.text, "utf8") as Uint8Array); // TODO: very unsafe, disreregards `undefined` result
             }
 
             public getLength(): number {

@@ -95,7 +95,7 @@ namespace ts.wasm {
                 case ValueType.f32:
                 case ValueType.f64:
                     cursor.index++;
-                    return byte as ValueType;
+                    return byte;
                 default:
                     Debug.fail(`Unknown value type: ${byte}`); // TODO: Issue diagnostic
             }
@@ -163,7 +163,7 @@ namespace ts.wasm {
                 case ExportKind.Global:
                     cursor.index++;
                     const index = parseUnsignedLEB128u32(cursor);
-                    return { kind: byte as ExportKind, index };
+                    return { kind: byte, index };
                 default:
                     Debug.fail(`Unknown export kind: ${byte}`); // TODO: Issue diagnostic
             }
@@ -217,7 +217,7 @@ namespace ts.wasm {
                     return name;
                 },
                 get bytes() {
-                    this.name;
+                    void this.name; // intializes bytes
                     return bytes;
                 }
             };

@@ -371,7 +371,7 @@ namespace ts.server {
         }
 
         getBuffer() {
-            return ts.sys.bufferFrom?.(this.getText(0, this.index.getLength()), "utf8") as Uint8Array; // TODO: Very unsafe, discarding `undefined`
+            return sys.bufferFrom?.(this.getText(0, this.index.getLength()), "utf8") as Uint8Array; // TODO: Very unsafe, discarding `undefined`
         }
 
         getLength() {

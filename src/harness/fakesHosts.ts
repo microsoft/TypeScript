@@ -43,7 +43,7 @@ namespace fakes {
 
         public readFile(path: string) {
             try {
-                let content = this.vfs.readFileSync(path, "utf8");
+                const content = this.vfs.readFileSync(path, "utf8");
                 if (content === undefined) {
                     return undefined;
                 }
@@ -56,7 +56,7 @@ namespace fakes {
 
         public readFileBuffer(path: string) {
             try {
-                let content = this.vfs.readFileSync(path);
+                const content = this.vfs.readFileSync(path);
                 if (content === undefined) {
                     return undefined;
                 }
