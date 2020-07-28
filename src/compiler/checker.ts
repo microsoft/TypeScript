@@ -22160,7 +22160,7 @@ namespace ts {
                     error(node, Diagnostics.Cannot_assign_to_0_because_it_is_not_a_variable, symbolToString(symbol));
                     return errorType;
                 }
-                if (declaration && isInJSFile(declaration) && getEffectiveModifierFlags(declaration) & ModifierFlags.Const) {
+                if (declaration && isInJSFile(declaration) && getCombinedModifierFlags(declaration) & ModifierFlags.Const) {
                     error(node, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant, symbolToString(symbol));
                 }
                 if (isReadonlySymbol(localOrExportSymbol)) {
@@ -29811,7 +29811,7 @@ namespace ts {
         }
 
         function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
-            const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const || isDeclarationReadonly(declaration) || getCombinedModifierFlags(declaration) & ModifierFlags.Const ? type : getWidenedLiteralType(type);
+            const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const || isDeclarationReadonly(declaration) || (isInJSFile(declaration) && getCombinedModifierFlags(declaration) & ModifierFlags.Const) ? type : getWidenedLiteralType(type);
             if (isInJSFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
                     reportImplicitAny(declaration, anyType);
