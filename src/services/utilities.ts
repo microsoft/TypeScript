@@ -2878,8 +2878,9 @@ namespace ts {
             `Symbol parent was undefined. Flags: ${Debug.formatSymbolFlags(symbol.flags)}. ` +
             `Declarations: ${symbol.declarations?.map(d => {
                 const kind = Debug.formatSyntaxKind(d.kind);
+                const inJS = isInJSFile(d);
                 const { expression } = d as any;
-                return kind + (expression ? ` (expression: ${Debug.formatSyntaxKind(expression.kind)})` : "");
+                return (inJS ? "[JS]" : "") + kind + (expression ? ` (expression: ${Debug.formatSyntaxKind(expression.kind)})` : "");
             }).join(", ")}.`);
     }
 
