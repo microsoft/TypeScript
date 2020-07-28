@@ -23,7 +23,7 @@ namespace ts.wasm {
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*isTypeOnly*/ false,
-            finishNode(factory.createNamedExports([]))))] : map(exports.exports, createExportedStatement);
+            finishNode(factory.createNamedExports([]))))] : mapDefined(exports.exports, createExportedStatement);
         const eofToken = factory.createToken(SyntaxKind.EndOfFileToken);
         const result = factory.createSourceFile(statements, eofToken, NodeFlags.Ambient);
         result.referencedFiles = emptyArray;
@@ -77,7 +77,7 @@ namespace ts.wasm {
             return node;
         }
 
-        function createExportedStatement(e: WasmExport): Statement {
+        function createExportedStatement(e: WasmExport): Statement | undefined {
             switch(e.exportdesc.kind) {
                 case ExportKind.Func: {
                     const funcTypeSection = getSection(file, SectionKind.Type);
@@ -107,8 +107,9 @@ namespace ts.wasm {
                 case ExportKind.Global:
                 case ExportKind.Mem:
                 case ExportKind.Table:
+                    return undefined;
                 default:
-                    return Debug.fail("Unhandled export kind");
+                    return Debug.fail(`Unhandled wasm export kind: ${e.exportdesc.kind}`);
             }
         }
     }
