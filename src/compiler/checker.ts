@@ -21459,6 +21459,53 @@ namespace ts {
                 return !assumeTrue;
             }
 
+            function widdenTypeWithSymbol(type: Type, newSymbol: Symbol) {
+                // If type is this/any/unknown, it could not be widden.
+                if ((type.flags & TypeFlags.AnyOrUnknown) && isThisTypeParameter(type)) {
+                    return type;
+                }
+                const propName = newSymbol.escapedName;
+                // if type is intersection, we might have added type into it, and we just need to add into this type again rather than a new one.
+                // else add a new anonymous object type which contains the type and widden the origional type with it.
+                if (isIntersectionType(type)) {
+                    // try to get the first Anonymous Object type to add new type to it.
+                    const firstAnonymousObjectType: Type | undefined = type.types.find(t => isObjectType(t) && t.objectFlags & ObjectFlags.Anonymous);
+                    if (firstAnonymousObjectType && isObjectType(firstAnonymousObjectType)) {
+                        const members = createSymbolTable();
+                        members.set(propName, newSymbol);
+                        if (firstAnonymousObjectType.members) {
+                            mergeSymbolTable(members, firstAnonymousObjectType.members!);
+                        }
+                        firstAnonymousObjectType.members = members;
+                        firstAnonymousObjectType.properties = getNamedMembers(members);
+                    }
+                    else {
+                        const members = createSymbolTable();
+                        members.set(propName, newSymbol);
+                        const newObjType = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+                        return createIntersectionType([type, newObjType]);
+                    }
+                }
+                else {
+                    const members = createSymbolTable();
+                    members.set(propName, newSymbol);
+                    const newObjType = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
+                    // if `type` is never, just return the new anonymous object type.
+                    if (type.flags & TypeFlags.Never) {
+                        return newObjType;
+                    }
+                    return createIntersectionType([type, newObjType]);
+                }
+
+                // I would be very glad to create a helper file like `nodeTests.ts` if feedback positive review.
+                function isIntersectionType(type: Type): type is IntersectionType {
+                    return !!(type.flags & TypeFlags.Intersection);
+                }
+                function isObjectType(type: Type): type is ObjectType {
+                    return !!(type.flags & TypeFlags.Object);
+                }
+            }
+
             function narrowOrWiddenTypeByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
                 const propName = escapeLeadingUnderscores(literal.text);
                 const addSymbol = createSymbol(SymbolFlags.Property, propName);
@@ -21467,44 +21514,15 @@ namespace ts {
                 if ((type.flags & (TypeFlags.Union | TypeFlags.Object) || isThisTypeParameter(type)) && isSomeDirectSubtypeContainsPropName(type, propName)) {
                     return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
                 }
-                // only widden property when the type is not this/any/unknown and not contains string-index/propName in any of the constituents.
-                else if (assumeTrue && !isThisTypeParameter(type) && !isSomeDirectSubtypeContainsPropName(type, propName) && !getIndexInfoOfType(type, IndexKind.String) && !(type.flags & TypeFlags.AnyOrUnknown)) {
-                    // if type is intersection, we might have added type into it, and we just need to add into this type again rather than a new one.
-                    // else add a new anonymous object type which contains the type and widden the origional type with it.
-                    if (type.flags & TypeFlags.Intersection) {
-                        // try to get the first Anonymous Object type to add new type to it.
-                        const firstAnonymousObjectType: Type | undefined = (type as UnionOrIntersectionType).types.find(t => (t.flags & TypeFlags.Object) && (<ObjectType>t).objectFlags & ObjectFlags.Anonymous);
-                        if (firstAnonymousObjectType) {
-                            const members = createSymbolTable();
-                            members.set(propName, addSymbol);
-                            if ((firstAnonymousObjectType as ObjectType).members) {
-                                mergeSymbolTable(members, (firstAnonymousObjectType as ObjectType).members!);
-                            }
-                            (firstAnonymousObjectType as ObjectType).members = members;
-                            (firstAnonymousObjectType as ObjectType).properties = getNamedMembers(members);
-                        }
-                        else {
-                            const members = createSymbolTable();
-                            members.set(propName, addSymbol);
-                            const newObjType = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
-                            return createIntersectionType([type, newObjType]);
-                        }
-                    }
-                    else {
-                        const members = createSymbolTable();
-                        members.set(propName, addSymbol);
-                        const newObjType = createAnonymousType(undefined, members, emptyArray, emptyArray, undefined, undefined);
-                        if(type.flags & TypeFlags.Never){
-                            return newObjType;
-                        }
-                        return createIntersectionType([type, newObjType]);
-                    }
+                // only widden property when the type does not contain string-index/propName in any of the constituents.
+                else if (assumeTrue && !isSomeDirectSubtypeContainsPropName(type, propName) && !getIndexInfoOfType(type, IndexKind.String)) {
+                    return widdenTypeWithSymbol(type, addSymbol);
                 }
                 return type;
 
+                // This function is almost like function `getPropertyOfType`, except when type.flags contains `UnionOrIntersection`
+                // it would return the property rather than undefiend even when property is partial.
                 function isSomeDirectSubtypeContainsPropName(type1: Type, name: __String) {
-                    // could not assume type is union or intersection, like (A|B)&C, C is added string object, this is intersection now, but we need judge it like Union.
-
                     let prop;
                     const type = getReducedApparentType(type1);
                     if (type.flags & TypeFlags.Object) {
@@ -21515,12 +21533,12 @@ namespace ts {
                         }
                         const functionType = resolved === anyFunctionType ? globalFunctionType :
                             resolved.callSignatures.length ? globalCallableFunctionType :
-                            resolved.constructSignatures.length ? globalNewableFunctionType :
-                            undefined;
+                                resolved.constructSignatures.length ? globalNewableFunctionType :
+                                    undefined;
                         if (functionType) {
                             const symbol = getPropertyOfObjectType(functionType, name);
                             if (symbol) {
-                                prop= symbol;
+                                prop = symbol;
                             }
                         }
                         return getPropertyOfObjectType(globalObjectType, name);
@@ -21533,7 +21551,6 @@ namespace ts {
                     }
                     return false;
                 }
-
             }
 
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
