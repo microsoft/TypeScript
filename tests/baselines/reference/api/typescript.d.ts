@@ -430,17 +430,18 @@ declare namespace ts {
         JSDocReturnTag = 323,
         JSDocThisTag = 324,
         JSDocTypeTag = 325,
-        JSDocTemplateTag = 326,
-        JSDocTypedefTag = 327,
-        JSDocPropertyTag = 328,
-        SyntaxList = 329,
-        NotEmittedStatement = 330,
-        PartiallyEmittedExpression = 331,
-        CommaListExpression = 332,
-        MergeDeclarationMarker = 333,
-        EndOfDeclarationMarker = 334,
-        SyntheticReferenceExpression = 335,
-        Count = 336,
+        JSDocConstTag = 326,
+        JSDocTemplateTag = 327,
+        JSDocTypedefTag = 328,
+        JSDocPropertyTag = 329,
+        SyntaxList = 330,
+        NotEmittedStatement = 331,
+        PartiallyEmittedExpression = 332,
+        CommaListExpression = 333,
+        MergeDeclarationMarker = 334,
+        EndOfDeclarationMarker = 335,
+        SyntheticReferenceExpression = 336,
+        Count = 337,
         FirstAssignment = 62,
         LastAssignment = 77,
         FirstCompoundAssignment = 63,
@@ -469,9 +470,9 @@ declare namespace ts {
         LastStatement = 245,
         FirstNode = 156,
         FirstJSDocNode = 298,
-        LastJSDocNode = 328,
+        LastJSDocNode = 329,
         FirstJSDocTagNode = 310,
-        LastJSDocTagNode = 328,
+        LastJSDocTagNode = 329,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -1787,6 +1788,10 @@ declare namespace ts {
     export interface JSDocTypeTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocTypeTag;
         readonly typeExpression: JSDocTypeExpression;
+    }
+    export interface JSDocConstTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocConstTag;
+        readonly typeExpression?: JSDocTypeExpression;
     }
     export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
         readonly kind: SyntaxKind.JSDocTypedefTag;
@@ -3415,6 +3420,8 @@ declare namespace ts {
         updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocTypeTag;
         createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
         updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocReturnTag;
+        createJSDocConstTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocConstTag;
+        updateJSDocConstTag(node: JSDocConstTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocConstTag;
         createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag;
         updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocThisTag;
         createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag;
@@ -4091,6 +4098,8 @@ declare namespace ts {
     function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined;
     /** Gets the JSDoc type tag for the node if present and valid */
     function getJSDocTypeTag(node: Node): JSDocTypeTag | undefined;
+    /** Gets the JSDoc const tag for the node if present and valid */
+    function getJSDocConstTag(node: Node): JSDocConstTag | undefined;
     /**
      * Gets the type node for the node if provided via JSDoc.
      *
@@ -4444,8 +4453,10 @@ declare namespace ts {
     function isJSDocEnumTag(node: Node): node is JSDocEnumTag;
     function isJSDocParameterTag(node: Node): node is JSDocParameterTag;
     function isJSDocReturnTag(node: Node): node is JSDocReturnTag;
+    function isJSDocConstTag(node: Node): node is JSDocConstTag;
     function isJSDocThisTag(node: Node): node is JSDocThisTag;
     function isJSDocTypeTag(node: Node): node is JSDocTypeTag;
+    function isJSDocTypeOrConstTag(node: Node): node is JSDocTypeTag | JSDocConstTag;
     function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag;
     function isJSDocTypedefTag(node: Node): node is JSDocTypedefTag;
     function isJSDocUnknownTag(node: Node): node is JSDocUnknownTag;
