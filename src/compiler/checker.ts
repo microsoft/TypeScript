@@ -21461,7 +21461,7 @@ namespace ts {
 
             function widdenTypeWithSymbol(type: Type, newSymbol: Symbol): Type {
                 // If type is this/any/unknown, it could not be widden.
-                if ((type.flags & TypeFlags.AnyOrUnknown) && isThisTypeParameter(type)) {
+                if ((type.flags & TypeFlags.AnyOrUnknown) || isThisTypeParameter(type)) {
                     return type;
                 }
                 const propName = newSymbol.escapedName;
