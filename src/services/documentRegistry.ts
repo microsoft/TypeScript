@@ -185,7 +185,7 @@ namespace ts {
                 }
             }
 
-            if (!entry) {
+            if (!entry || endsWith(fileName, ".wasm")) {
                 // Have never seen this file with these settings.  Create a new source file for it.
                 const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget, version, /*setNodeParents*/ false, scriptKind);
                 if (externalCache) {

@@ -825,7 +825,7 @@ namespace ts {
                 return result;
             }
             else if (scriptKind === ScriptKind.Wasm) {
-                Debug.assert(!isString(sourceText));
+                Debug.assert(!isString(sourceText), `Got string source for wasm module ${fileName}`);
                 const result = wasm.declarationsFor(wasm.parse(fileName, sourceText));
                 if (setParentNodes) {
                     fixupParentReferences(result);
@@ -833,7 +833,7 @@ namespace ts {
                 return result;
             }
 
-            Debug.assert(isString(sourceText));
+            Debug.assert(isString(sourceText), `Got nonstring source for file ${fileName}`);
             initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind);
 
             const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind);
