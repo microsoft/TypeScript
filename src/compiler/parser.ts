@@ -7588,7 +7588,7 @@ namespace ts {
                     return lookAhead(() => {
                         parseOptional(SyntaxKind.OpenBraceToken);
                         return isIdentifier();
-                    })
+                    });
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
