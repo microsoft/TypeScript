@@ -7155,7 +7155,7 @@ namespace ts {
             export function parseJSDocNameExpression(mayOmitBraces?: boolean): JSDocNameExpression {
                 const pos = getNodePos();
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
-                const entityName = doInsideOfContext(NodeFlags.JSDoc, () => parseEntityName(/* allowReservedWords*/ true));
+                const entityName = doInsideOfContext(NodeFlags.JSDoc, () => parseEntityName(/* allowReservedWords*/ false));
                 if (!mayOmitBraces || hasBrace) {
                     parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
                 }
@@ -7580,6 +7580,17 @@ namespace ts {
                     return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
+                function tryParseJSDocNameExpression(): JSDocNameExpression | undefined {
+                    return isJSDocNameExpression() ? parseJSDocNameExpression() : undefined;
+                }
+
+                function isJSDocNameExpression(): boolean {
+                    return lookAhead(() => {
+                        parseOptional(SyntaxKind.OpenBraceToken);
+                        return isIdentifier();
+                    })
+                }
+
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
                     const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
@@ -7679,7 +7690,7 @@ namespace ts {
                 }
 
                 function parseSeeTag(start: number, tagName: Identifier, indent?: number, indentText?: string): JSDocSeeTag {
-                    const nameExpression = parseJSDocNameExpression(/*mayOmitBraces*/ true);
+                    const nameExpression = tryParseJSDocNameExpression();
                     const end = getNodePos();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, end, indent, indentText) : undefined;
                     return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start, end);

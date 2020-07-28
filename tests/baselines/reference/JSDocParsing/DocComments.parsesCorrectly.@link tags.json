@@ -8,7 +8,7 @@
     "comment": "{@link first link}\nInside {@link link text} thing",
     "tags": {
         "0": {
-            "kind": "JSDocTag",
+            "kind": "JSDocSeeTag",
             "pos": 63,
             "end": 68,
             "modifierFlagsCache": 0,
