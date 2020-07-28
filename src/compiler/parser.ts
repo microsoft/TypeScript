@@ -603,7 +603,7 @@ namespace ts {
         }
     }
 
-    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
+    export function createSourceFile(fileName: string, sourceText: string | Uint8Array, languageVersion: ScriptTarget, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
         performance.mark("beforeParse");
         let result: SourceFile;
 
@@ -810,9 +810,10 @@ namespace ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode = false;
 
-        export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
+        export function parseSourceFile(fileName: string, sourceText: string | Uint8Array, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
             if (scriptKind === ScriptKind.JSON) {
+                Debug.assert(isString(sourceText));
                 const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
                 convertToObjectWorker(result, result.parseDiagnostics, /*returnValue*/ false, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
                 result.referencedFiles = emptyArray;
@@ -824,13 +825,15 @@ namespace ts {
                 return result;
             }
             else if (scriptKind === ScriptKind.Wasm) {
-                const result = wasm.declarationsFor(wasm.parse(fileName, (sourceText as any).buffer));
+                Debug.assert(!isString(sourceText));
+                const result = wasm.declarationsFor(wasm.parse(fileName, sourceText));
                 if (setParentNodes) {
                     fixupParentReferences(result);
                 }
                 return result;
             }
 
+            Debug.assert(isString(sourceText));
             initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind);
 
             const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind);

@@ -431,6 +431,10 @@ namespace ts.server {
             return this.projectService.host.readFile(fileName);
         }
 
+        readFileBuffer(path: string): Uint8Array | undefined {
+            return this.projectService.host.readFileBuffer(path);
+        }
+
         writeFile(fileName: string, content: string): void {
             return this.projectService.host.writeFile(fileName, content);
         }
@@ -1649,6 +1653,7 @@ namespace ts.server {
                     realpath: this.program.realpath || this.projectService.host.realpath?.bind(this.projectService.host),
                     getCurrentDirectory: this.getCurrentDirectory.bind(this),
                     readFile: this.projectService.host.readFile.bind(this.projectService.host),
+                    readFileBuffer: this.projectService.host.readFileBuffer.bind(this.projectService.host),
                     getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
                     trace: this.projectService.host.trace?.bind(this.projectService.host),
                 };

@@ -1050,6 +1050,7 @@ namespace ts {
         write(s: string): void;
         writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
 
@@ -1190,6 +1191,7 @@ namespace ts {
                     return process.stdout.isTTY;
                 },
                 readFile,
+                readFileBuffer,
                 writeFile,
                 watchFile,
                 watchDirectory,
@@ -1576,7 +1578,9 @@ namespace ts {
                 return buffer.toString("utf8");
             }
 
-            function readFileWorker(fileName: string, _encoding?: string): string | undefined {
+            function readFileWorker(fileName: string, _encoding: undefined, bufferOutput: true): Buffer | undefined;
+            function readFileWorker(fileName: string, _encoding?: string): string | undefined;
+            function readFileWorker(fileName: string, _encoding?: string, bufferOutput?: true): string | Buffer | undefined {
                 let buffer: Buffer;
                 try {
                     buffer = _fs.readFileSync(fileName);
@@ -1584,15 +1588,19 @@ namespace ts {
                 catch (e) {
                     return undefined;
                 }
-                const result = decodeBuffer(buffer);
-                const wrapped = new String(result);
-                (wrapped as any).buffer = buffer;
-                return wrapped as string;
+                return bufferOutput ? buffer : decodeBuffer(buffer);
             }
 
             function readFile(fileName: string, _encoding?: string): string | undefined {
                 perfLogger.logStartReadFile(fileName);
                 const file = readFileWorker(fileName, _encoding);
+                perfLogger.logStopReadFile();
+                return file;
+            }
+
+            function readFileBuffer(fileName: string): Uint8Array | undefined {
+                perfLogger.logStartReadFile(fileName);
+                const file = readFileWorker(fileName, /*encoding*/ undefined, /*buffer*/ true);
                 perfLogger.logStopReadFile();
                 return file;
             }

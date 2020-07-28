@@ -84,6 +84,7 @@ namespace ts {
          * if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
          */
         readFile(path: string, encoding?: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
 
         /** If provided, used for module resolution as well as to handle directory structure */
         directoryExists?(path: string): boolean;

@@ -104,6 +104,7 @@ namespace ts {
          * Read arbitrary text files on disk, i.e. when resolution procedure needs the content of 'package.json' to determine location of bundled typings for node modules
          */
         readFile(fileName: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
         realpath?(path: string): string;
         trace(s: string): void;
         useCaseSensitiveFileNames?(): boolean;
@@ -539,6 +540,10 @@ namespace ts {
 
         public readFile(fileName: string): string | undefined {
             return this.shimHost.readFile(fileName);
+        }
+
+        public readFileBuffer(path: string): Uint8Array | undefined {
+            return this.shimHost.readFileBuffer(path);
         }
 
         public getDirectories(path: string): string[] {

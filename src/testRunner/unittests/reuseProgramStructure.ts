@@ -136,6 +136,7 @@ namespace ts {
                 const file = files.get(fileName);
                 return file && file.text;
             },
+            readFileBuffer: notImplemented,
         };
         if (useGetSourceFileByPath) {
             const filesByPath = mapEntries(files, (fileName, file) => [toPath(fileName, "", getCanonicalFileName), file]);

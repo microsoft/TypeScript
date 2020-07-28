@@ -31,6 +31,7 @@ function watchMain() {
 
         fileExists: ts.sys.fileExists,
         readFile: ts.sys.readFile,
+        readFileBuffer: ts.sys.readFileBuffer,
         directoryExists: ts.sys.directoryExists,
         getDirectories: ts.sys.getDirectories,
         readDirectory: ts.sys.readDirectory,
@@ -83,6 +84,7 @@ function watchMain() {
         getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); },
         fileExists: ts.sys.fileExists,
         readFile: ts.sys.readFile,
+        readFileBuffer: ts.sys.readFileBuffer,
         directoryExists: ts.sys.directoryExists,
         getDirectories: ts.sys.getDirectories,
         readDirectory: ts.sys.readDirectory,

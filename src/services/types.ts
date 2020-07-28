@@ -248,6 +248,7 @@ namespace ts {
          */
         readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
         readFile?(path: string, encoding?: string): string | undefined;
+        readFileBuffer?(path: string): Uint8Array | undefined;
         realpath?(path: string): string;
         fileExists?(path: string): boolean;
 

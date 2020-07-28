@@ -74,7 +74,8 @@ namespace RWC {
                             useCaseSensitiveFileNames: Harness.IO.useCaseSensitiveFileNames(),
                             fileExists: Harness.IO.fileExists,
                             readDirectory: Harness.IO.readDirectory,
-                            readFile: Harness.IO.readFile
+                            readFile: Harness.IO.readFile,
+                            readFileBuffer: Harness.IO.readFileBuffer,
                         };
                         const configParseResult = ts.parseJsonSourceFileConfigFileContent(parsedTsconfigFileContents, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;

@@ -283,10 +283,10 @@ namespace ts {
         const hostGetNewLine = memoize(() => host.getNewLine());
         return {
             getSourceFile: (fileName, languageVersion, onError) => {
-                let text: string | undefined;
+                let text: string | Uint8Array | undefined;
                 try {
                     performance.mark("beforeIORead");
-                    text = host.readFile(fileName, getCompilerOptions().charset);
+                    text = endsWith(fileName, ".wasm") ? host.readFileBuffer(fileName) : host.readFile(fileName, getCompilerOptions().charset);
                     performance.mark("afterIORead");
                     performance.measure("I/O Read", "beforeIORead", "afterIORead");
                 }
@@ -308,6 +308,7 @@ namespace ts {
             getNewLine: () => getNewLineCharacter(getCompilerOptions(), hostGetNewLine),
             fileExists: f => host.fileExists(f),
             readFile: f => host.readFile(f),
+            readFileBuffer: f => host.readFileBuffer(f),
             trace: maybeBind(host, host.trace),
             directoryExists: maybeBind(directoryStructureHost, directoryStructureHost.directoryExists),
             getDirectories: maybeBind(directoryStructureHost, directoryStructureHost.getDirectories),
@@ -368,6 +369,7 @@ namespace ts {
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
             fileExists: path => system.fileExists(path),
             readFile: (path, encoding) => system.readFile(path, encoding),
+            readFileBuffer: path => system.readFileBuffer?.(path),
             directoryExists: path => system.directoryExists(path),
             getDirectories: path => system.getDirectories(path),
             readDirectory: (path, extensions, exclude, include, depth) => system.readDirectory(path, extensions, exclude, include, depth),

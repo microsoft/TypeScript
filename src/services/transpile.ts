@@ -83,6 +83,7 @@ namespace ts {
             getNewLine: () => newLine,
             fileExists: (fileName): boolean => fileName === inputFileName,
             readFile: () => "",
+            readFileBuffer: () => new Uint8Array(0),
             directoryExists: () => true,
             getDirectories: () => []
         };

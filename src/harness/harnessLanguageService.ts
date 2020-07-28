@@ -283,6 +283,10 @@ namespace Harness.LanguageService {
             return this.sys.readFile(path);
         }
 
+        readFileBuffer(path: string): Uint8Array | undefined {
+            return this.sys.readFileBuffer(path);
+        }
+
         realpath(path: string): string {
             return this.sys.realpath(path);
         }
@@ -325,6 +329,9 @@ namespace Harness.LanguageService {
                     readFile: fileName => {
                         const scriptInfo = this.getScriptInfo(fileName);
                         return scriptInfo && scriptInfo.content;
+                    },
+                    readFileBuffer: fileName => {
+                        return this.readFileBuffer(fileName);
                     }
                 };
                 this.getModuleResolutionsForFile = (fileName) => {
@@ -387,6 +394,9 @@ namespace Harness.LanguageService {
         readFile(fileName: string) {
             const snapshot = this.nativeHost.getScriptSnapshot(fileName);
             return snapshot && ts.getSnapshotText(snapshot);
+        }
+        readFileBuffer(fileName: string) {
+            return this.nativeHost.readFileBuffer(fileName);
         }
         log(s: string): void { this.nativeHost.log(s); }
         trace(s: string): void { this.nativeHost.trace(s); }
@@ -736,6 +746,10 @@ namespace Harness.LanguageService {
             // System FS would follow symlinks, even though snapshots are stored by original file name
             const snapshot = this.host.getScriptSnapshot(fileName) || this.host.getScriptSnapshot(this.realpath(fileName));
             return snapshot && ts.getSnapshotText(snapshot);
+        }
+
+        readFileBuffer(fileName: string): Uint8Array | undefined {
+            return this.host.readFileBuffer(fileName);
         }
 
         realpath(path: string) {

@@ -19,6 +19,7 @@ namespace ts {
                         readDirectory() { return []; },
                         readFile: path =>
                             comparePaths(getNormalizedAbsolutePath(path, cwd), configPath) === Comparison.EqualTo ? configContents : undefined,
+                        readFileBuffer: () => undefined,
                     };
                     let commandLine = parseCommandLine(commandLinesArgs);
                     if (commandLine.options.project) {

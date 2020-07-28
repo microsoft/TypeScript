@@ -2003,6 +2003,7 @@ declare namespace ts {
          */
         fileExists(path: string): boolean;
         readFile(path: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
         trace?(s: string): void;
     }
     /**
@@ -2767,6 +2768,7 @@ declare namespace ts {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalWasmModules?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         importHelpers?: boolean;
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
@@ -2895,7 +2897,8 @@ declare namespace ts {
          * Used on extensions that doesn't define the ScriptKind but the content defines it.
          * Deferred extensions are going to be included in all project contexts.
          */
-        Deferred = 7
+        Deferred = 7,
+        Wasm = 8
     }
     export enum ScriptTarget {
         ES3 = 0,
@@ -2945,6 +2948,7 @@ declare namespace ts {
     export interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string | undefined;
+        readFileBuffer(fileName: string): Uint8Array | undefined;
         trace?(s: string): void;
         directoryExists?(directoryName: string): boolean;
         /**
@@ -3007,7 +3011,8 @@ declare namespace ts {
         Js = ".js",
         Jsx = ".jsx",
         Json = ".json",
-        TsBuildInfo = ".tsbuildinfo"
+        TsBuildInfo = ".tsbuildinfo",
+        Wasm = ".wasm"
     }
     export interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
@@ -3691,7 +3696,7 @@ declare namespace ts {
          * });
          * ```
          */
-        onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
+        onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void, getTextPos: () => number): void;
         /**
          * A hook used to check if an emit notification is required for a node.
          * @param node The node to emit.
@@ -3844,6 +3849,7 @@ declare namespace ts {
         write(s: string): void;
         writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
         /**
@@ -4471,7 +4477,7 @@ declare namespace ts {
      * that they appear in the source code. The language service depends on this property to locate nodes by position.
      */
     export function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
-    export function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
+    export function createSourceFile(fileName: string, sourceText: string | Uint8Array, languageVersion: ScriptTarget, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
     export function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName | undefined;
     /**
      * Parse json text into SyntaxTree and return node and parse errors if any
@@ -4611,6 +4617,99 @@ declare namespace ts {
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
+}
+declare namespace ts.wasm {
+    interface WasmSourceFile {
+        readonly fileName: string;
+        readonly magic: [number, number, number, number];
+        readonly version: number;
+        readonly sections: WasmSection[];
+    }
+    enum SectionKind {
+        Custom = 0,
+        Type = 1,
+        Import = 2,
+        Function = 3,
+        Table = 4,
+        Memory = 5,
+        Global = 6,
+        Export = 7,
+        Start = 8,
+        Element = 9,
+        Code = 10,
+        Data = 11
+    }
+    function parse(fileName: string, buf: Uint8Array): WasmSourceFile;
+    type WasmSection = CustomSection | TypeSection | ImportSection | FunctionSection | TableSection | MemorySection | GlobalSection | ExportSection | StartSection | ElementSection | CodeSection | DataSection;
+    interface SectionBase {
+        readonly id: SectionKind;
+        readonly start: number;
+        readonly size: number;
+    }
+    interface CustomSection extends SectionBase {
+        readonly id: SectionKind.Custom;
+        readonly name: string;
+        readonly bytes: Uint8Array;
+    }
+    interface TypeSection extends SectionBase {
+        readonly id: SectionKind.Type;
+        readonly funcs: [parameters: ValueType[], results: ValueType[]][];
+    }
+    interface ImportSection extends SectionBase {
+        readonly id: SectionKind.Import;
+    }
+    interface FunctionSection extends SectionBase {
+        readonly id: SectionKind.Function;
+        readonly indices: number[];
+    }
+    interface TableSection extends SectionBase {
+        readonly id: SectionKind.Table;
+    }
+    interface MemorySection extends SectionBase {
+        readonly id: SectionKind.Memory;
+    }
+    interface GlobalSection extends SectionBase {
+        readonly id: SectionKind.Global;
+    }
+    interface ExportSection extends SectionBase {
+        readonly id: SectionKind.Export;
+        readonly exports: WasmExport[];
+    }
+    interface StartSection extends SectionBase {
+        readonly id: SectionKind.Start;
+    }
+    interface ElementSection extends SectionBase {
+        readonly id: SectionKind.Element;
+    }
+    interface CodeSection extends SectionBase {
+        readonly id: SectionKind.Code;
+    }
+    interface DataSection extends SectionBase {
+        readonly id: SectionKind.Data;
+    }
+    enum ValueType {
+        i32 = 127,
+        i64 = 126,
+        f32 = 125,
+        f64 = 124
+    }
+    interface WasmExport {
+        readonly name: string;
+        readonly exportdesc: ExportDescription;
+    }
+    enum ExportKind {
+        Func = 0,
+        Table = 1,
+        Mem = 2,
+        Global = 3
+    }
+    interface ExportDescription {
+        readonly kind: ExportKind;
+        readonly index: number;
+    }
+}
+declare namespace ts.wasm {
+    function declarationsFor(file: WasmSourceFile): SourceFile;
 }
 declare namespace ts {
     /**
@@ -4945,6 +5044,7 @@ declare namespace ts {
          * if resolveModuleNames is not provided (complier is in charge of module resolution) then module files as well
          */
         readFile(path: string, encoding?: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
         /** If provided, used for module resolution as well as to handle directory structure */
         directoryExists?(path: string): boolean;
         /** If provided, used in resolutions as well as handling directory structure */
@@ -5332,6 +5432,7 @@ declare namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
         readFile?(path: string, encoding?: string): string | undefined;
+        readFileBuffer?(path: string): Uint8Array | undefined;
         realpath?(path: string): string;
         fileExists?(path: string): boolean;
         getTypeRootsVersion?(): number;
@@ -6163,7 +6264,8 @@ declare namespace ts {
         tsxModifier = ".tsx",
         jsModifier = ".js",
         jsxModifier = ".jsx",
-        jsonModifier = ".json"
+        jsonModifier = ".json",
+        wasmModifier = ".wasm"
     }
     enum ClassificationTypeNames {
         comment = "comment",
@@ -9172,6 +9274,7 @@ declare namespace ts.server {
         useCaseSensitiveFileNames(): boolean;
         readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
         readFile(fileName: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
         writeFile(fileName: string, content: string): void;
         fileExists(file: string): boolean;
         resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModuleFull | undefined)[];

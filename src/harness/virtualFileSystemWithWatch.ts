@@ -55,6 +55,7 @@ interface Array<T> { length: number; [n: number]: T; }`
     export interface File {
         path: string;
         content: string;
+        buffer?: Uint8Array;
         fileSize?: number;
     }
 
@@ -86,6 +87,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     interface FsFile extends FSEntryBase {
         content: string;
+        buffer?: Uint8Array;
         fileSize?: number;
     }
 
@@ -797,6 +799,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private toFsFile(file: File): FsFile {
             const fsFile = this.toFsEntry(file.path) as FsFile;
             fsFile.content = file.content;
+            fsFile.buffer = file.buffer;
             fsFile.fileSize = file.fileSize;
             return fsFile;
         }
@@ -873,6 +876,11 @@ interface Array<T> { length: number; [n: number]: T; }`
         readFile(s: string): string | undefined {
             const fsEntry = this.getRealFile(this.toFullPath(s));
             return fsEntry ? fsEntry.content : undefined;
+        }
+
+        readFileBuffer(s: string): Uint8Array | undefined {
+            const fsEntry = this.getRealFile(this.toFullPath(s));
+            return fsEntry ? fsEntry.buffer : undefined;
         }
 
         getFileSize(s: string) {

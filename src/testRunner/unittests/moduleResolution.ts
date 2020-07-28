@@ -31,6 +31,7 @@ namespace ts {
     interface File {
         name: string;
         content?: string;
+        buffer?: Uint8Array;
         symlinks?: string[];
     }
 
@@ -60,6 +61,7 @@ namespace ts {
             }
             return {
                 readFile,
+                readFileBuffer,
                 realpath,
                 directoryExists: path => directories.has(path),
                 fileExists: path => {
@@ -69,11 +71,15 @@ namespace ts {
             };
         }
         else {
-            return { readFile, realpath, fileExists: path => map.has(path) };
+            return { readFile, readFileBuffer, realpath, fileExists: path => map.has(path) };
         }
         function readFile(path: string): string | undefined {
             const file = map.get(path);
             return file && file.content;
+        }
+        function readFileBuffer(path: string): Uint8Array | undefined {
+            const file = map.get(path);
+            return file && file.buffer;
         }
         function realpath(path: string): string {
             return map.get(path)!.name;
@@ -478,6 +484,7 @@ namespace ts {
                     return files.has(path);
                 },
                 readFile: notImplemented,
+                readFileBuffer: notImplemented,
             };
 
             const program = createProgram(rootFiles, options, host);
@@ -573,6 +580,7 @@ export = C;
                     return files.has(path);
                 },
                 readFile: notImplemented,
+                readFileBuffer: notImplemented,
             };
             const program = createProgram(rootFiles, options, host);
             const diagnostics = sortAndDeduplicateDiagnostics([...program.getSemanticDiagnostics(), ...program.getOptionsDiagnostics()]);
@@ -1265,6 +1273,7 @@ import b = require("./moduleB");
         it("No 'fileExists' calls if containing directory is missing", () => {
             const host: ModuleResolutionHost = {
                 readFile: notImplemented,
+                readFileBuffer: notImplemented,
                 fileExists: notImplemented,
                 directoryExists: _ => false
             };
@@ -1382,6 +1391,7 @@ import b = require("./moduleB");
                     const file = sourceFiles.get(fileName);
                     return file && file.text;
                 },
+                readFileBuffer: notImplemented,
             };
             const program1 = createProgram(names, {}, compilerHost);
             const diagnostics1 = program1.getFileProcessingDiagnostics().getDiagnostics();
@@ -1418,6 +1428,7 @@ import b = require("./moduleB");
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
                 readFile: fileName => fileName === file.fileName ? file.text : undefined,
+                readFileBuffer: notImplemented,
                 resolveModuleNames: notImplemented,
             };
             createProgram([f.name], {}, compilerHost);
@@ -1447,6 +1458,7 @@ import b = require("./moduleB");
                 getNewLine: () => "\r\n",
                 useCaseSensitiveFileNames: () => false,
                 readFile: fileName => fileName === file.fileName ? file.text : undefined,
+                readFileBuffer: notImplemented,
                 resolveModuleNames(moduleNames: string[], _containingFile: string) {
                     assert.deepEqual(moduleNames, ["fs"]);
                     return [undefined!]; // TODO: GH#18217

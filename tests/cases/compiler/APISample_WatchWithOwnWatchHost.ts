@@ -35,6 +35,7 @@ function watchMain() {
 
         fileExists: ts.sys.fileExists,
         readFile: ts.sys.readFile,
+        readFileBuffer: ts.sys.readFileBuffer,
         directoryExists: ts.sys.directoryExists,
         getDirectories: ts.sys.getDirectories,
         readDirectory: ts.sys.readDirectory,

@@ -6,6 +6,7 @@ namespace ts {
     export interface DirectoryStructureHost {
         fileExists(path: string): boolean;
         readFile(path: string, encoding?: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
 
         // TODO: GH#18217 Optional methods are frequently used as non-optional
         directoryExists?(path: string): boolean;
@@ -50,6 +51,7 @@ namespace ts {
             useCaseSensitiveFileNames,
             fileExists,
             readFile: (path, encoding) => host.readFile(path, encoding),
+            readFileBuffer: path => host.readFileBuffer(path),
             directoryExists: host.directoryExists && directoryExists,
             getDirectories,
             readDirectory,

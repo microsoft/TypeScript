@@ -5,6 +5,7 @@ namespace ts.JsTyping {
         directoryExists(path: string): boolean;
         fileExists(fileName: string): boolean;
         readFile(path: string, encoding?: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
         readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
     }
 

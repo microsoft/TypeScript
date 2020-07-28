@@ -82,6 +82,7 @@ interface Array<T> { length: number; [n: number]: T; }
     /* Experimental Options */
     // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
+    // "experimentalWasmModules": true,       /* Enables experimental loading of type information from experimental wasm modules. */
 
     /* Advanced Options */
     "declarationDir": "decls",                /* Output directory for generated declaration files. */

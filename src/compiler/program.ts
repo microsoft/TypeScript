@@ -74,10 +74,10 @@ namespace ts {
         const existingDirectories = new Map<string, boolean>();
         const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined {
-            let text: string | undefined;
+            let text: string | Uint8Array | undefined;
             try {
                 performance.mark("beforeIORead");
-                text = compilerHost.readFile(fileName);
+                text = endsWith(fileName, ".wasm") ? compilerHost.readFileBuffer(fileName) : compilerHost.readFile(fileName);
                 performance.mark("afterIORead");
                 performance.measure("I/O Read", "beforeIORead", "afterIORead");
             }
@@ -179,6 +179,7 @@ namespace ts {
             getNewLine: () => newLine,
             fileExists: fileName => system.fileExists(fileName),
             readFile: fileName => system.readFile(fileName),
+            readFileBuffer: fileName => system.readFileBuffer(fileName),
             trace: (s: string) => system.write(s + newLine),
             directoryExists: directoryName => system.directoryExists(directoryName),
             getEnvironmentVariable: name => system.getEnvironmentVariable ? system.getEnvironmentVariable(name) : "",
@@ -3709,6 +3710,7 @@ namespace ts {
         getCurrentDirectory(): string;
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
         readDirectory?(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): string[];
         trace?(s: string): void;
         onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter;
@@ -3723,6 +3725,7 @@ namespace ts {
                 return directoryStructureHost.readDirectory(root, extensions, excludes, includes, depth);
             },
             readFile: f => directoryStructureHost.readFile(f),
+            readFileBuffer: f => directoryStructureHost.readFileBuffer(f),
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
             getCurrentDirectory: () => host.getCurrentDirectory(),
             onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic || returnUndefined,

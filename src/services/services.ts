@@ -1296,6 +1296,7 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists,
                 readFile,
+                readFileBuffer,
                 getSymlinkCache: maybeBind(host, host.getSymlinkCache),
                 realpath: maybeBind(host, host.realpath),
                 directoryExists: directoryName => {
@@ -1359,6 +1360,10 @@ namespace ts {
                     return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
                 }
                 return host.readFile && host.readFile(fileName);
+            }
+
+            function readFileBuffer(fileName: string): Uint8Array | undefined {
+                return host.readFileBuffer && host.readFileBuffer(fileName);
             }
 
             // Release any files we have acquired in the old program but are

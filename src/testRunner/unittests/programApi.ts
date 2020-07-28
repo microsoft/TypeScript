@@ -116,6 +116,7 @@ namespace ts {
                 useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
                 fileExists: fileName => fileName === "test.ts",
                 readFile: fileName => fileName === "test.ts" ? testSource : undefined,
+                readFileBuffer: () => undefined,
                 resolveModuleNames: (_moduleNames: string[], _containingFile: string) => { throw new Error("unsupported"); },
                 getDirectories: _path => { throw new Error("unsupported"); },
             };

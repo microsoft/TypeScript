@@ -6,6 +6,7 @@ namespace Harness {
         resolvePath(path: string): string | undefined;
         getFileSize(path: string): number;
         readFile(path: string): string | undefined;
+        readFileBuffer(path: string): Uint8Array | undefined;
         writeFile(path: string, contents: string): void;
         directoryName(path: string): string | undefined;
         getDirectories(path: string): string[];
@@ -136,6 +137,7 @@ namespace Harness {
             resolvePath: (path: string) => ts.sys.resolvePath(path),
             getFileSize: (path: string) => ts.sys.getFileSize!(path),
             readFile: path => ts.sys.readFile(path),
+            readFileBuffer: path => ts.sys.readFileBuffer(path),
             writeFile: (path, content) => ts.sys.writeFile(path, content),
             directoryName,
             getDirectories: path => ts.sys.getDirectories(path),
@@ -1256,7 +1258,8 @@ namespace Harness {
                 useCaseSensitiveFileNames: false,
                 readDirectory: () => [],
                 fileExists: () => true,
-                readFile: (name) => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined)
+                readFile: (name) => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined),
+                readFileBuffer: name => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? ts.sys.bufferFrom?.(data.content) : undefined)
             };
 
             // check if project has tsconfig.json in the list of files
