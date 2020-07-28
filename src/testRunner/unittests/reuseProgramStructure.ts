@@ -68,6 +68,8 @@ namespace ts {
             return this.getFullText().substring(start, end);
         }
 
+        getBuffer = notImplemented;
+
         getLength(): number {
             return this.getFullText().length;
         }

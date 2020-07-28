@@ -5378,6 +5378,10 @@ declare namespace ts {
     interface IScriptSnapshot {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
+        /**
+         * Gets the udnerlying buffer for the snapshot
+         */
+        getBuffer(): Uint8Array;
         /** Gets the length of this script snapshot. */
         getLength(): number;
         /**
@@ -5392,7 +5396,7 @@ declare namespace ts {
         dispose?(): void;
     }
     namespace ScriptSnapshot {
-        function fromString(text: string): IScriptSnapshot;
+        function fromString(text: string, buffer?: Uint8Array): IScriptSnapshot;
     }
     interface PreProcessedFileInfo {
         referencedFiles: FileReference[];

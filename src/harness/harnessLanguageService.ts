@@ -81,6 +81,8 @@ namespace Harness.LanguageService {
             return this.textSnapshot.substring(start, end);
         }
 
+        getBuffer = ts.notImplemented;
+
         public getLength(): number {
             return this.textSnapshot.length;
         }
