@@ -121,6 +121,11 @@ namespace ts {
         /** Gets a portion of the script snapshot specified by [start, end). */
         getText(start: number, end: number): string;
 
+        /**
+         * Gets the udnerlying buffer for the snapshot
+         */
+        getBuffer(): Uint8Array;
+
         /** Gets the length of this script snapshot. */
         getLength(): number;
 
@@ -140,13 +145,17 @@ namespace ts {
     export namespace ScriptSnapshot {
         class StringScriptSnapshot implements IScriptSnapshot {
 
-            constructor(private text: string) {
+            constructor(private text: string, private buffer: Uint8Array | undefined) {
             }
 
             public getText(start: number, end: number): string {
                 return start === 0 && end === this.text.length
                     ? this.text
                     : this.text.substring(start, end);
+            }
+
+            public getBuffer() {
+                return this.buffer || (ts.sys.bufferFrom?.(this.text, "utf8") as Uint8Array);
             }
 
             public getLength(): number {
@@ -160,8 +169,8 @@ namespace ts {
             }
         }
 
-        export function fromString(text: string): IScriptSnapshot {
-            return new StringScriptSnapshot(text);
+        export function fromString(text: string, buffer?: Uint8Array): IScriptSnapshot {
+            return new StringScriptSnapshot(text, buffer);
         }
     }
 

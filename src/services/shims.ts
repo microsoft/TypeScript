@@ -312,6 +312,8 @@ namespace ts {
             return this.scriptSnapshotShim.getText(start, end);
         }
 
+        getBuffer = notImplemented;
+
         public getLength(): number {
             return this.scriptSnapshotShim.getLength();
         }

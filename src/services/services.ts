@@ -1066,7 +1066,7 @@ namespace ts {
     }
 
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
-        const sourceFile = createSourceFile(fileName, getSnapshotText(scriptSnapshot), scriptTarget, setNodeParents, scriptKind);
+        const sourceFile = createSourceFile(fileName, endsWith(fileName, ".wasm") ? getSnapshotBuffer(scriptSnapshot) : getSnapshotText(scriptSnapshot), scriptTarget, setNodeParents, scriptKind);
         setSourceFileFields(sourceFile, scriptSnapshot, version);
         return sourceFile;
     }

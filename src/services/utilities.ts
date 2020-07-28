@@ -1723,6 +1723,10 @@ namespace ts {
         return snap.getText(0, snap.getLength());
     }
 
+    export function getSnapshotBuffer(snap: IScriptSnapshot): Uint8Array {
+        return snap.getBuffer();
+    }
+
     export function repeatString(str: string, count: number): string {
         let result = "";
         for (let i = 0; i < count; i++) {

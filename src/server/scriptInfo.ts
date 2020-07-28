@@ -20,6 +20,7 @@ namespace ts.server {
          * Only on edits to the script version cache, the text will be set to undefined
          */
         private text: string | undefined;
+        private buffer: Uint8Array | undefined;
         /**
          * Line map for the text when there is no script version cache present
          */
@@ -164,7 +165,7 @@ namespace ts.server {
         public getSnapshot(): IScriptSnapshot {
             return this.useScriptVersionCacheIfValidOrOpen()
                 ? this.svc!.getSnapshot()
-                : ScriptSnapshot.fromString(this.getOrLoadText());
+                : ScriptSnapshot.fromString(this.getOrLoadText(), this.buffer);
         }
 
         public getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
@@ -208,6 +209,9 @@ namespace ts.server {
             let text: string;
             const fileName = tempFileName || this.info.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
+            if (endsWith(fileName, ".wasm")) {
+                this.buffer = this.host.readFileBuffer(fileName);
+            }
             // Only non typescript files have size limitation
             if (!hasTSFileExtension(this.info.fileName)) {
                 const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
