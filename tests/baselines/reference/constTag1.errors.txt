@@ -1,0 +1,57 @@
+tests/cases/conformance/jsdoc/a.js(19,1): error TS2322: Type '2' is not assignable to type '1'.
+tests/cases/conformance/jsdoc/a.js(19,1): error TS2588: Cannot assign to 'a' because it is a constant.
+tests/cases/conformance/jsdoc/a.js(20,1): error TS2322: Type '2' is not assignable to type '1'.
+tests/cases/conformance/jsdoc/a.js(20,1): error TS2588: Cannot assign to 'b' because it is a constant.
+tests/cases/conformance/jsdoc/a.js(21,1): error TS2588: Cannot assign to 'c' because it is a constant.
+tests/cases/conformance/jsdoc/a.js(22,1): error TS2322: Type '2' is not assignable to type '1'.
+tests/cases/conformance/jsdoc/a.js(22,1): error TS2588: Cannot assign to 'd' because it is a constant.
+tests/cases/conformance/jsdoc/a.js(23,1): error TS2322: Type '2' is not assignable to type '1'.
+tests/cases/conformance/jsdoc/a.js(23,1): error TS2588: Cannot assign to 'e' because it is a constant.
+tests/cases/conformance/jsdoc/a.js(24,1): error TS2588: Cannot assign to 'f' because it is a constant.
+
+
+==== tests/cases/conformance/jsdoc/a.js (10 errors) ====
+    /** @const {1} */
+    var a = 1;
+    
+    /** @const {1} */
+    let b = 1;
+    
+    /** @const {1} */
+    const c = 1;
+    
+    /** @const */
+    var d = 1;
+    
+    /** @const */
+    let e = 1;
+    
+    /** @const */
+    const f = 1;
+    
+    a = 2;
+    ~
+!!! error TS2322: Type '2' is not assignable to type '1'.
+    ~
+!!! error TS2588: Cannot assign to 'a' because it is a constant.
+    b = 2;
+    ~
+!!! error TS2322: Type '2' is not assignable to type '1'.
+    ~
+!!! error TS2588: Cannot assign to 'b' because it is a constant.
+    c = 2;
+    ~
+!!! error TS2588: Cannot assign to 'c' because it is a constant.
+    d = 2;
+    ~
+!!! error TS2322: Type '2' is not assignable to type '1'.
+    ~
+!!! error TS2588: Cannot assign to 'd' because it is a constant.
+    e = 2;
+    ~
+!!! error TS2322: Type '2' is not assignable to type '1'.
+    ~
+!!! error TS2588: Cannot assign to 'e' because it is a constant.
+    f = 2;
+    ~
+!!! error TS2588: Cannot assign to 'f' because it is a constant.

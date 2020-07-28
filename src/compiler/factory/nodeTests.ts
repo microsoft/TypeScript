@@ -797,6 +797,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocTypeTag;
     }
 
+    export function isJSDocTypeOrConstTag(node: Node): node is JSDocTypeTag | JSDocConstTag {
+        return isJSDocTypeTag(node) || isJSDocConstTag(node);
+    }
+
     export function isJSDocTemplateTag(node: Node): node is JSDocTemplateTag {
         return node.kind === SyntaxKind.JSDocTemplateTag;
     }

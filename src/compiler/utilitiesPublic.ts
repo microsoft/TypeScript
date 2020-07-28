@@ -745,6 +745,11 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocReadonlyTag, /*noCache*/ true);
     }
 
+    /*@internal*/
+    export function getJSDocConstTagNoCache(node: Node): JSDocConstTag | undefined {
+        return getFirstJSDocTag(node, isJSDocConstTag, /*noCache*/ true);
+    }
+
     /** Gets the JSDoc deprecated tag for the node if present */
     export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined {
         return getFirstJSDocTag(node, isJSDocDeprecatedTag);
@@ -785,6 +790,16 @@ namespace ts {
         return undefined;
     }
 
+    /** Gets the JSDoc const tag for the node if present and valid */
+    export function getJSDocConstTag(node: Node): JSDocConstTag | undefined {
+        // We should have already issued an error if there were multiple type jsdocs, so just use the first one.
+        const tag = getFirstJSDocTag(node, isJSDocConstTag);
+        if (tag && tag.typeExpression && tag.typeExpression.type) {
+            return tag;
+        }
+        return undefined;
+    }
+
     /**
      * Gets the type node for the node if provided via JSDoc.
      *
@@ -797,7 +812,7 @@ namespace ts {
      * tag directly on the node would be returned.
      */
     export function getJSDocType(node: Node): TypeNode | undefined {
-        let tag: JSDocTypeTag | JSDocParameterTag | undefined = getFirstJSDocTag(node, isJSDocTypeTag);
+        let tag: JSDocTypeTag | JSDocParameterTag | JSDocConstTag | undefined = getFirstJSDocTag(node, isJSDocTypeOrConstTag);
         if (!tag && isParameter(node)) {
             tag = find(getJSDocParameterTags(node), tag => !!tag.typeExpression);
         }

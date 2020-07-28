@@ -1,0 +1,61 @@
+=== tests/cases/conformance/jsdoc/constTag2.ts ===
+/** @const {1} */
+var a = 1;
+>a : number
+>1 : 1
+
+/** @const {1} */
+let b = 1;
+>b : number
+>1 : 1
+
+/** @const {1} */
+const c = 1;
+>c : 1
+>1 : 1
+
+/** @const */
+var d = 1;
+>d : number
+>1 : 1
+
+/** @const */
+let e = 1;
+>e : number
+>1 : 1
+
+/** @const */
+const f = 1;
+>f : 1
+>1 : 1
+
+a = 2;
+>a = 2 : 2
+>a : number
+>2 : 2
+
+b = 2;
+>b = 2 : 2
+>b : number
+>2 : 2
+
+c = 2;
+>c = 2 : 2
+>c : any
+>2 : 2
+
+d = 2;
+>d = 2 : 2
+>d : number
+>2 : 2
+
+e = 2;
+>e = 2 : 2
+>e : number
+>2 : 2
+
+f = 2;
+>f = 2 : 2
+>f : any
+>2 : 2
+

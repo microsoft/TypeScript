@@ -22160,6 +22160,9 @@ namespace ts {
                     error(node, Diagnostics.Cannot_assign_to_0_because_it_is_not_a_variable, symbolToString(symbol));
                     return errorType;
                 }
+                if (declaration && isInJSFile(declaration) && getEffectiveModifierFlags(declaration) & ModifierFlags.Const) {
+                    error(node, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant, symbolToString(symbol));
+                }
                 if (isReadonlySymbol(localOrExportSymbol)) {
                     if (localOrExportSymbol.flags & SymbolFlags.Variable) {
                         error(node, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant, symbolToString(symbol));
@@ -29808,7 +29811,7 @@ namespace ts {
         }
 
         function widenTypeInferredFromInitializer(declaration: HasExpressionInitializer, type: Type) {
-            const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const || isDeclarationReadonly(declaration) ? type : getWidenedLiteralType(type);
+            const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const || isDeclarationReadonly(declaration) || getCombinedModifierFlags(declaration) & ModifierFlags.Const ? type : getWidenedLiteralType(type);
             if (isInJSFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
                     reportImplicitAny(declaration, anyType);
@@ -32024,7 +32027,7 @@ namespace ts {
             }
         }
 
-        function checkJSDocTypeTag(node: JSDocTypeTag) {
+        function checkJSDocTypeOrConstTag(node: JSDocTypeTag | JSDocConstTag) {
             checkSourceElement(node.typeExpression);
         }
 
@@ -35693,7 +35696,8 @@ namespace ts {
                 case SyntaxKind.JSDocTemplateTag:
                     return checkJSDocTemplateTag(node as JSDocTemplateTag);
                 case SyntaxKind.JSDocTypeTag:
-                    return checkJSDocTypeTag(node as JSDocTypeTag);
+                case SyntaxKind.JSDocConstTag:
+                    return checkJSDocTypeOrConstTag(node as JSDocTypeTag);
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocPropertyTag:
@@ -38579,7 +38583,7 @@ namespace ts {
                 let parent = walkUpParenthesizedTypes(node.parent);
                 if (isInJSFile(parent) && isJSDocTypeExpression(parent)) {
                     parent = parent.parent;
-                    if (isJSDocTypeTag(parent)) {
+                    if (isJSDocTypeTag(parent) || isJSDocConstTag(parent)) {
                         // walk up past JSDoc comment node
                         parent = parent.parent.parent;
                     }

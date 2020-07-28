@@ -1528,6 +1528,7 @@ namespace ts {
                     case SyntaxKind.JSDocTypeTag:
                     case SyntaxKind.JSDocThisTag:
                     case SyntaxKind.JSDocEnumTag:
+                    case SyntaxKind.JSDocConstTag:
                         return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
                     case SyntaxKind.JSDocImplementsTag:
                     case SyntaxKind.JSDocAugmentsTag:
