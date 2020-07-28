@@ -1,0 +1,21 @@
+=== tests/cases/conformance/wasm/imports/wasmImportsSimple.ts ===
+import * as mod from "test.wasm";
+>mod : Symbol(mod, Decl(wasmImportsSimple.ts, 0, 6))
+
+let running = 0;
+>running : Symbol(running, Decl(wasmImportsSimple.ts, 2, 3))
+
+for (let i = 0; i < 10; i++) {
+>i : Symbol(i, Decl(wasmImportsSimple.ts, 3, 8))
+>i : Symbol(i, Decl(wasmImportsSimple.ts, 3, 8))
+>i : Symbol(i, Decl(wasmImportsSimple.ts, 3, 8))
+
+    running += mod.addTwo(i, i);
+>running : Symbol(running, Decl(wasmImportsSimple.ts, 2, 3))
+>mod.addTwo : Symbol(mod.addTwo, Decl(test.wasm, 0, 0))
+>mod : Symbol(mod, Decl(wasmImportsSimple.ts, 0, 6))
+>addTwo : Symbol(mod.addTwo, Decl(test.wasm, 0, 0))
+>i : Symbol(i, Decl(wasmImportsSimple.ts, 3, 8))
+>i : Symbol(i, Decl(wasmImportsSimple.ts, 3, 8))
+}
+

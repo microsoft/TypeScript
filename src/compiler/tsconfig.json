@@ -38,6 +38,9 @@
         "commandLineParser.ts",
         "moduleNameResolver.ts",
 
+        "wasm/parser.ts",
+        "wasm/transform.ts",
+
         "binder.ts",
         "symbolWalker.ts",
         "checker.ts",

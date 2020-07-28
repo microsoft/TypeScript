@@ -1551,14 +1551,7 @@ namespace ts {
                 }
             }
 
-            function readFileWorker(fileName: string, _encoding?: string): string | undefined {
-                let buffer: Buffer;
-                try {
-                    buffer = _fs.readFileSync(fileName);
-                }
-                catch (e) {
-                    return undefined;
-                }
+            function decodeBuffer(buffer: Buffer) {
                 let len = buffer.length;
                 if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
                     // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
@@ -1581,6 +1574,20 @@ namespace ts {
                 }
                 // Default is UTF-8 with no byte order mark
                 return buffer.toString("utf8");
+            }
+
+            function readFileWorker(fileName: string, _encoding?: string): string | undefined {
+                let buffer: Buffer;
+                try {
+                    buffer = _fs.readFileSync(fileName);
+                }
+                catch (e) {
+                    return undefined;
+                }
+                const result = decodeBuffer(buffer);
+                const wrapped = new String(result);
+                (wrapped as any).buffer = buffer;
+                return wrapped as string;
             }
 
             function readFile(fileName: string, _encoding?: string): string | undefined {

@@ -757,6 +757,13 @@ namespace ts {
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
+        {
+            name: "experimentalWasmModules",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            category: Diagnostics.Experimental_Options,
+            description: Diagnostics.Enables_experimental_loading_of_type_information_from_experimental_wasm_modules
+        },
 
         // Advanced
         {

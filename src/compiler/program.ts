@@ -2843,7 +2843,7 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension);
+                    const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension) && resolution.extension !== Extension.Wasm;
                     const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                     const resolvedFileName = resolution.resolvedFileName;
 
@@ -3785,6 +3785,8 @@ namespace ts {
                 return needAllowJs();
             case Extension.Json:
                 return needResolveJsonModule();
+            case Extension.Wasm:
+                return needExperimentalWasmModules();
         }
 
         function needJsx() {
@@ -3795,6 +3797,9 @@ namespace ts {
         }
         function needResolveJsonModule() {
             return options.resolveJsonModule ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
+        }
+        function needExperimentalWasmModules() {
+            return options.experimentalWasmModules ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_experimentalWasmModules_is_not_used;
         }
     }
 

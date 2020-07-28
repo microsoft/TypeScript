@@ -823,6 +823,13 @@ namespace ts {
                 result.pragmas = emptyMap as ReadonlyPragmaMap;
                 return result;
             }
+            else if (scriptKind === ScriptKind.Wasm) {
+                const result = wasm.declarationsFor(wasm.parse(fileName, (sourceText as any).buffer));
+                if (setParentNodes) {
+                    fixupParentReferences(result);
+                }
+                return result;
+            }
 
             initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind);
 

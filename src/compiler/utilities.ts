@@ -6329,6 +6329,8 @@ namespace ts {
                 return ScriptKind.TSX;
             case Extension.Json:
                 return ScriptKind.JSON;
+            case Extension.Wasm:
+                return ScriptKind.Wasm;
             default:
                 return ScriptKind.Unknown;
         }
@@ -6344,7 +6346,6 @@ namespace ts {
     export const supportedJSExtensions: readonly Extension[] = [Extension.Js, Extension.Jsx];
     export const supportedJSAndJsonExtensions: readonly Extension[] = [Extension.Js, Extension.Jsx, Extension.Json];
     const allSupportedExtensions: readonly Extension[] = [...supportedTSExtensions, ...supportedJSExtensions];
-    const allSupportedExtensionsWithJson: readonly Extension[] = [...supportedTSExtensions, ...supportedJSExtensions, Extension.Json];
 
     export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[];
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]): readonly string[];
@@ -6364,10 +6365,8 @@ namespace ts {
     }
 
     export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[]): readonly string[] {
-        if (!options || !options.resolveJsonModule) { return supportedExtensions; }
-        if (supportedExtensions === allSupportedExtensions) { return allSupportedExtensionsWithJson; }
-        if (supportedExtensions === supportedTSExtensions) { return supportedTSExtensionsWithJson; }
-        return [...supportedExtensions, Extension.Json];
+        if (!options || (!options.resolveJsonModule && !options.experimentalWasmModules)) { return supportedExtensions; }
+        return [...supportedExtensions, ...(options.resolveJsonModule ? [Extension.Json] : []), ...(options.experimentalWasmModules ? [Extension.Wasm] : [])];
     }
 
     function isJSLike(scriptKind: ScriptKind | undefined): boolean {
@@ -6446,7 +6445,7 @@ namespace ts {
         }
     }
 
-    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx, Extension.Json];
+    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx, Extension.Json, Extension.Wasm];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
             const extensionless = tryRemoveExtension(path, ext);

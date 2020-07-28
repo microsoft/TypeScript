@@ -1340,6 +1340,7 @@ namespace ts {
         jsModifier = ".js",
         jsxModifier = ".jsx",
         jsonModifier = ".json",
+        wasmModifier = ".wasm",
     }
 
     export const enum ClassificationTypeNames {

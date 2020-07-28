@@ -4473,6 +4473,10 @@
         "category": "Message",
         "code": 6235
     },
+    "Enables experimental loading of type information from experimental wasm modules.": {
+        "category": "Message",
+        "code": 6236
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4871,6 +4875,10 @@
     "'{0}', which lacks return-type annotation, implicitly has an '{1}' yield type.": {
         "category": "Error",
         "code": 7055
+    },
+    "Module '{0}' was resolved to '{1}', but '--experimentalWasmModules' is not used.": {
+        "category": "Error",
+        "code": 7056
     },
 
     "You cannot rename this element.": {

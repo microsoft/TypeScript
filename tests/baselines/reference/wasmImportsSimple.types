@@ -1,0 +1,28 @@
+=== tests/cases/conformance/wasm/imports/wasmImportsSimple.ts ===
+import * as mod from "test.wasm";
+>mod : typeof mod
+
+let running = 0;
+>running : number
+>0 : 0
+
+for (let i = 0; i < 10; i++) {
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>i++ : number
+>i : number
+
+    running += mod.addTwo(i, i);
+>running += mod.addTwo(i, i) : number
+>running : number
+>mod.addTwo(i, i) : number
+>mod.addTwo : (arg0: number, arg1: number) => number
+>mod : typeof mod
+>addTwo : (arg0: number, arg1: number) => number
+>i : number
+>i : number
+}
+

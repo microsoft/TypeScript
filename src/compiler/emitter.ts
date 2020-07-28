@@ -1226,10 +1226,14 @@ namespace ts {
             return getPipelinePhase(currentPhase + 1, emitHint, node);
         }
 
+        function getTextPos() {
+            return writer.getTextPos();
+        }
+
         function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
             Debug.assert(lastNode === node);
             const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, hint, node);
-            onEmitNode(hint, node, pipelinePhase);
+            onEmitNode(hint, node, pipelinePhase, getTextPos);
             Debug.assert(lastNode === node);
         }
 
@@ -2903,7 +2907,7 @@ namespace ts {
 
                     emitSignatureHead(node);
                     if (onEmitNode) {
-                        onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
+                        onEmitNode(EmitHint.Unspecified, body, emitBlockCallback, getTextPos);
                     }
                     else {
                         emitBlockFunctionBody(body);

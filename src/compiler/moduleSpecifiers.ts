@@ -515,6 +515,7 @@ namespace ts.moduleSpecifiers {
             case Extension.Js:
             case Extension.Jsx:
             case Extension.Json:
+            case Extension.Wasm:
                 return ext;
             case Extension.TsBuildInfo:
                 return Debug.fail(`Extension ${Extension.TsBuildInfo} is unsupported:: FileName:: ${fileName}`);

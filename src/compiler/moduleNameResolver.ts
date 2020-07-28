@@ -67,6 +67,7 @@ namespace ts {
         TypeScript, /** '.ts', '.tsx', or '.d.ts' */
         JavaScript, /** '.js' or '.jsx' */
         Json,       /** '.json' */
+        Wasm,       /** '.wasm' */
         TSConfig,   /** '.json' with `tsconfig` used instead of `index` */
         DtsOnly /** Only '.d.ts' */
     }
@@ -912,7 +913,6 @@ namespace ts {
 
     const jsOnlyExtensions = [Extensions.JavaScript];
     const tsExtensions = [Extensions.TypeScript, Extensions.JavaScript];
-    const tsPlusJsonExtensions = [...tsExtensions, Extensions.Json];
     const tsconfigExtensions = [Extensions.TSConfig];
     function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
         return nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, jsOnlyExtensions, /*redirectedReferences*/ undefined);
@@ -921,7 +921,7 @@ namespace ts {
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     /* @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations {
-        return nodeModuleNameResolverWorker(moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, lookupConfig ? tsconfigExtensions : (compilerOptions.resolveJsonModule ? tsPlusJsonExtensions : tsExtensions), redirectedReference);
+        return nodeModuleNameResolverWorker(moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, lookupConfig ? tsconfigExtensions : [...tsExtensions, ...(compilerOptions.resolveJsonModule ? [Extensions.Json] : []), ...(compilerOptions.experimentalWasmModules ? [Extensions.Wasm] : [])], redirectedReference);
     }
 
     function nodeModuleNameResolverWorker(moduleName: string, containingDirectory: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache: ModuleResolutionCache | undefined, extensions: Extensions[], redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations {
@@ -1057,9 +1057,9 @@ namespace ts {
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
-        if (extensions === Extensions.Json || extensions === Extensions.TSConfig) {
-            const extensionLess = tryRemoveExtension(candidate, Extension.Json);
-            return (extensionLess === undefined && extensions === Extensions.Json) ? undefined : tryAddingExtensions(extensionLess || candidate, extensions, onlyRecordFailures, state);
+        if (extensions === Extensions.Json || extensions === Extensions.TSConfig || extensions === Extensions.Wasm) {
+            const extensionLess = tryRemoveExtension(candidate, Extension.Json) || tryRemoveExtension(candidate, Extension.Wasm);
+            return (extensionLess === undefined && (extensions === Extensions.Json || extensions === Extensions.Wasm)) ? undefined : tryAddingExtensions(extensionLess || candidate, extensions, onlyRecordFailures, state);
         }
 
         // First, try adding an extension. An import of "foo" could be matched by a file "foo.ts", or "foo.js" by "foo.js.ts"
@@ -1100,6 +1100,8 @@ namespace ts {
             case Extensions.TSConfig:
             case Extensions.Json:
                 return tryExtension(Extension.Json);
+            case Extensions.Wasm:
+                return tryExtension(Extension.Wasm);
         }
 
         function tryExtension(ext: Extension): PathAndExtension | undefined {
@@ -1168,6 +1170,7 @@ namespace ts {
             switch (extensions) {
                 case Extensions.JavaScript:
                 case Extensions.Json:
+                case Extensions.Wasm:
                     packageFile = readPackageJsonMainField(jsonContent, candidate, state);
                     break;
                 case Extensions.TypeScript:
@@ -1243,6 +1246,8 @@ namespace ts {
                 return extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Dts;
             case Extensions.DtsOnly:
                 return extension === Extension.Dts;
+            case Extensions.Wasm:
+                return extension === Extension.Wasm;
         }
     }
 

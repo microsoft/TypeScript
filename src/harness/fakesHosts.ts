@@ -43,8 +43,13 @@ namespace fakes {
 
         public readFile(path: string) {
             try {
-                const content = this.vfs.readFileSync(path, "utf8");
-                return content === undefined ? undefined : Utils.removeByteOrderMark(content);
+                let content = this.vfs.readFileSync(path, "utf8");
+                if (content === undefined) {
+                    return undefined;
+                }
+                const wrapped = new String(Utils.removeByteOrderMark(content));
+                (wrapped as any).buffer = this.vfs.readFileSync(path);
+                return wrapped as string;
             }
             catch {
                 return undefined;

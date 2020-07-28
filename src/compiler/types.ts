@@ -5675,6 +5675,7 @@ namespace ts {
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
+        experimentalWasmModules?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/generateCpuProfile?: string;
         /*@internal*/help?: boolean;
@@ -5830,6 +5831,7 @@ namespace ts {
         TSX = 4,
         External = 5,
         JSON = 6,
+        Wasm = 7,
         /**
          * Used on extensions that doesn't define the ScriptKind but the content defines it.
          * Deferred extensions are going to be included in all project contexts.
@@ -6177,7 +6179,8 @@ namespace ts {
         Js = ".js",
         Jsx = ".jsx",
         Json = ".json",
-        TsBuildInfo = ".tsbuildinfo"
+        TsBuildInfo = ".tsbuildinfo",
+        Wasm = ".wasm",
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
@@ -7601,7 +7604,7 @@ namespace ts {
          * });
          * ```
          */
-        onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void): void;
+        onEmitNode?(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node | undefined) => void, getTextPos: () => number): void;
 
         /**
          * A hook used to check if an emit notification is required for a node.
