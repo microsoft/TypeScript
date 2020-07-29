@@ -58,17 +58,17 @@ npmlog.x = 1
 
 module.exports.y = 2
 >module.exports.y = 2 : 2
->module.exports.y : number
+>module.exports.y : 2
 >module.exports : typeof EE
 >module : { "\"tests/cases/conformance/salsa/npmlog\"": typeof EE; }
 >exports : typeof EE
->y : number
+>y : 2
 >2 : 2
 
 npmlog.y
->npmlog.y : number
+>npmlog.y : 2
 >npmlog : typeof EE
->y : number
+>y : 2
 
 module.exports.x
 >module.exports.x : number

@@ -13,5 +13,5 @@ exports.y = 2;
 
 
 //// [assignmentToVoidZero1.d.ts]
-export var x: number;
-export var y: number;
+export var x: 1;
+export var y: 2;

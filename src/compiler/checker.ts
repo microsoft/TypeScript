@@ -8069,7 +8069,8 @@ namespace ts {
             if (containsSameNamedThisProperty(expression.left, expression.right)) {
                 return anyType;
             }
-            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+            const isDirectExport = kind === AssignmentDeclarationKind.ExportsProperty && (isPropertyAccessExpression(expression.left) || isElementAccessExpression(expression.left)) && (isModuleExportsAccessExpression(expression.left.expression) || (isIdentifier(expression.left.expression) && isExportsIdentifier(expression.left.expression)));
+            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : (isDirectExport ? getRegularTypeOfLiteralType : getWidenedLiteralType)(checkExpressionCached(expression.right));
             if (type.flags & TypeFlags.Object &&
                 kind === AssignmentDeclarationKind.ModuleExports &&
                 symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -14265,9 +14266,11 @@ namespace ts {
 
         function getESSymbolLikeTypeForNode(node: Node) {
             if (isValidESSymbolDeclaration(node)) {
-                const symbol = getSymbolOfNode(node);
-                const links = getSymbolLinks(symbol);
-                return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
+                const symbol = isCommonJsExportPropertyAssignment(node) ? getSymbolOfNode((node as BinaryExpression).left) : getSymbolOfNode(node);
+                if (symbol) {
+                    const links = getSymbolLinks(symbol);
+                    return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
+                }
             }
             return esSymbolType;
         }
@@ -29886,7 +29889,7 @@ namespace ts {
 
         function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
             const type = checkExpression(node, checkMode, forceTuple);
-            return isConstContext(node) ? getRegularTypeOfLiteralType(type) :
+            return isConstContext(node) || isCommonJsExportedExpresion(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
                 getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node) : contextualType, node));
         }

@@ -1,7 +1,7 @@
-tests/cases/conformance/salsa/a.js(4,17): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
-  Property 'toFixed' does not exist on type 'string'.
-tests/cases/conformance/salsa/a.js(5,16): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
-  Property 'toFixed' does not exist on type 'string'.
+tests/cases/conformance/salsa/a.js(4,17): error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+  Property 'toFixed' does not exist on type '"string"'.
+tests/cases/conformance/salsa/a.js(5,16): error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+  Property 'toFixed' does not exist on type '"string"'.
 
 
 ==== tests/cases/conformance/salsa/a.js (2 errors) ====
@@ -10,12 +10,12 @@ tests/cases/conformance/salsa/a.js(5,16): error TS2339: Property 'toFixed' does 
     mod1.justExport.toFixed()
     mod1.bothBefore.toFixed() // error, 'toFixed' not on 'string | number'
                     ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string | number'.
-!!! error TS2339:   Property 'toFixed' does not exist on type 'string'.
+!!! error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+!!! error TS2339:   Property 'toFixed' does not exist on type '"string"'.
     mod1.bothAfter.toFixed() // error, 'toFixed' not on 'string | number'
                    ~~~~~~~
-!!! error TS2339: Property 'toFixed' does not exist on type 'string | number'.
-!!! error TS2339:   Property 'toFixed' does not exist on type 'string'.
+!!! error TS2339: Property 'toFixed' does not exist on type 'number | "string"'.
+!!! error TS2339:   Property 'toFixed' does not exist on type '"string"'.
     mod1.justProperty.length
     
 ==== tests/cases/conformance/salsa/requires.d.ts (0 errors) ====
