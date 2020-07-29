@@ -1051,7 +1051,8 @@ namespace ts {
                                     factory.cloneNode(node.exportClause.name),
                                     getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
                                         createRequireCall(node) :
-                                        factory.createIdentifier(idText(node.exportClause.name)))
+                                        isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
+                                            factory.createIdentifier(idText(node.exportClause.name)))
                                 )
                             ),
                             node
