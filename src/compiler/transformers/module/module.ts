@@ -1206,7 +1206,24 @@ namespace ts {
                         variables = append(variables, variable);
                     }
                     else if (variable.initializer) {
-                        expressions = append(expressions, transformInitializedVariable(variable as InitializedVariableDeclaration));
+                        if (!isBindingPattern(variable.name) && [SyntaxKind.ArrowFunction, SyntaxKind.FunctionExpression].includes(variable.initializer.kind)) {
+                            const expression = factory.createAssignment(
+                                setTextRange(
+                                    factory.createPropertyAccessExpression(
+                                        factory.createIdentifier("exports"),
+                                        variable.name
+                                    ),
+                                    /*location*/ variable.name
+                                ),
+                                factory.createIdentifier(getTextOfIdentifierOrLiteral(variable.name))
+                            );
+
+                            variables = append(variables, variable);
+                            expressions = append(expressions, expression);
+                        }
+                        else {
+                            expressions = append(expressions, transformInitializedVariable(variable as InitializedVariableDeclaration));
+                        }
                     }
                 }
 
