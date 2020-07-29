@@ -5777,7 +5777,7 @@ namespace ts {
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     getEffectiveDotDotDotForParameter(p),
-                                    p.name || getEffectiveDotDotDotForParameter(p) ? `args` : `arg${i}`,
+                                    getNameForJSDocFunctionParameter(p, i),
                                     p.questionToken,
                                     visitNode(p.type, visitExistingNodeTreeSymbols),
                                     /*initializer*/ undefined
@@ -5792,7 +5792,7 @@ namespace ts {
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     getEffectiveDotDotDotForParameter(p),
-                                    p.name || getEffectiveDotDotDotForParameter(p) ? `args` : `arg${i}`,
+                                    getNameForJSDocFunctionParameter(p, i),
                                     p.questionToken,
                                     visitNode(p.type, visitExistingNodeTreeSymbols),
                                     /*initializer*/ undefined
@@ -5845,6 +5845,13 @@ namespace ts {
 
                     function getEffectiveDotDotDotForParameter(p: ParameterDeclaration) {
                         return p.dotDotDotToken || (p.type && isJSDocVariadicType(p.type) ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined);
+                    }
+
+                    /** Note that `new:T` parameters are not handled, but should be before calling this function. */
+                    function getNameForJSDocFunctionParameter(p: ParameterDeclaration, index: number) {
+                        return p.name && isIdentifier(p.name) && p.name.escapedText === "this" ? "this"
+                            : getEffectiveDotDotDotForParameter(p) ? `args`
+                            : `arg${index}`;
                     }
 
                     function rewriteModuleSpecifier(parent: ImportTypeNode, lit: StringLiteral) {
