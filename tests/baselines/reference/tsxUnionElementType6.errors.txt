@@ -1,8 +1,8 @@
 tests/cases/conformance/jsx/file.tsx(18,23): error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes'.
   Property 'x' does not exist on type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(19,27): error TS2322: Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(20,10): error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: boolean; }'.
-tests/cases/conformance/jsx/file.tsx(21,10): error TS2741: Property 'x' is missing in type '{ "data-prop": true; }' but required in type '{ x: boolean; }'.
+tests/cases/conformance/jsx/file.tsx(20,10): error TS2794: The 'x' attribute is missing, but is required for this 'SFC2AndEmptyComp' tag.
+tests/cases/conformance/jsx/file.tsx(21,10): error TS2794: The 'x' attribute is missing, but is required for this 'SFC2AndEmptyComp' tag.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
@@ -33,11 +33,11 @@ tests/cases/conformance/jsx/file.tsx(21,10): error TS2741: Property 'x' is missi
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:11:23: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & { x: boolean; }'
     let c = <SFC2AndEmptyComp />;
              ~~~~~~~~~~~~~~~~
-!!! error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: boolean; }'.
+!!! error TS2794: The 'x' attribute is missing, but is required for this 'SFC2AndEmptyComp' tag.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:23: 'x' is declared here.
     let d = <SFC2AndEmptyComp data-prop />;
              ~~~~~~~~~~~~~~~~
-!!! error TS2741: Property 'x' is missing in type '{ "data-prop": true; }' but required in type '{ x: boolean; }'.
+!!! error TS2794: The 'x' attribute is missing, but is required for this 'SFC2AndEmptyComp' tag.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:23: 'x' is declared here.
     
     

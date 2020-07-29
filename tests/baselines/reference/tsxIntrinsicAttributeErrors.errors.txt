@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx(29,2): error TS2741: Property 'key' is missing in type '{ x: number; }' but required in type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx(29,2): error TS2794: The 'key' attribute is missing, but is required for this 'E' tag.
 
 
 ==== tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx (1 errors) ====
@@ -32,6 +32,6 @@ tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx(29,2): error TS2741:
     var E: I;
     <E x={10} />
      ~
-!!! error TS2741: Property 'key' is missing in type '{ x: number; }' but required in type 'IntrinsicAttributes'.
+!!! error TS2794: The 'key' attribute is missing, but is required for this 'E' tag.
 !!! related TS2728 tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx:7:9: 'key' is declared here.
     

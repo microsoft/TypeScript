@@ -1,6 +1,6 @@
 tests/cases/conformance/jsx/file.tsx(10,8): error TS2322: Type 'boolean' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(11,8): error TS2322: Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(12,2): error TS2741: Property 'n' is missing in type '{}' but required in type '{ n: boolean; }'.
+tests/cases/conformance/jsx/file.tsx(12,2): error TS2794: The 'n' attribute is missing, but is required for this 'test2' tag.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -23,7 +23,7 @@ tests/cases/conformance/jsx/file.tsx(12,2): error TS2741: Property 'n' is missin
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:12: The expected type comes from property 'n' which is declared here on type '{ n?: boolean; s?: string; }'
     <test2 />;
      ~~~~~
-!!! error TS2741: Property 'n' is missing in type '{}' but required in type '{ n: boolean; }'.
+!!! error TS2794: The 'n' attribute is missing, but is required for this 'test2' tag.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:12: 'n' is declared here.
     
     // OK

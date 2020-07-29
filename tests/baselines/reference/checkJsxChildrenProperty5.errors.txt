@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(20,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
+tests/cases/conformance/jsx/file.tsx(20,10): error TS2794: The 'children' attribute is missing, but is required for this 'Comp' tag.
 tests/cases/conformance/jsx/file.tsx(25,9): error TS2740: Type 'Element' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
 tests/cases/conformance/jsx/file.tsx(29,10): error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
 
@@ -25,7 +25,7 @@ tests/cases/conformance/jsx/file.tsx(29,10): error TS2740: Type 'typeof Button' 
     // Error: no children specified
     let k = <Comp a={10} b="hi" />;
              ~~~~
-!!! error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
+!!! error TS2794: The 'children' attribute is missing, but is required for this 'Comp' tag.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:6:5: 'children' is declared here.
     
     // Error: JSX.element is not the same as JSX.ElementClass

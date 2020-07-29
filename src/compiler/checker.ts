@@ -17485,7 +17485,12 @@ namespace ts {
                 }
                 if (props.length === 1) {
                     const propName = symbolToString(unmatchedProperty);
-                    reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
+                    if (errorNode?.parent && isJsxOpeningLikeElement(errorNode.parent)) {
+                        reportError(Diagnostics.The_0_attribute_is_missing_but_is_required_for_this_1_tag, propName, (errorNode as Identifier).escapedText as string);
+                    }
+                    else {
+                        reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
+                    }
                     if (length(unmatchedProperty.declarations)) {
                         associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations[0], Diagnostics._0_is_declared_here, propName));
                     }
@@ -17495,10 +17500,20 @@ namespace ts {
                 }
                 else if (tryElaborateArrayLikeErrors(source, target, /*reportErrors*/ false)) {
                     if (props.length > 5) { // arbitrary cutoff for too-long list form
-                        reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, typeToString(source), typeToString(target), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
+                        if (errorNode?.parent && isJsxOpeningLikeElement(errorNode.parent)) {
+                            reportError(Diagnostics.This_0_tag_is_missing_the_following_attributes_Colon_1_and_2_more, (errorNode as Identifier).escapedText as string, map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
+                        }
+                        else {
+                            reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, typeToString(source), typeToString(target), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
+                        }
                     }
                     else {
-                        reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, typeToString(source), typeToString(target), map(props, p => symbolToString(p)).join(", "));
+                        if (errorNode?.parent && isJsxOpeningLikeElement(errorNode.parent)) {
+                            reportError(Diagnostics.This_0_tag_is_missing_the_following_attributes_Colon_1, (errorNode as Identifier).escapedText as string, map(props, p => symbolToString(p)).join(", "));
+                        }
+                        else {
+                            reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, typeToString(source), typeToString(target), map(props, p => symbolToString(p)).join(", "));
+                        }
                     }
                     if (shouldSkipElaboration && errorInfo) {
                         overrideNextErrorInfo++;

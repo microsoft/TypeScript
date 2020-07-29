@@ -3,11 +3,11 @@ tests/cases/conformance/jsx/inline/component.tsx(4,140): error TS2532: Object is
 tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(21,22): error TS2786: 'MySFC' cannot be used as a JSX component.
   Its return type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not a valid JSX element.
-    Property '__domBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
+    The '__domBrand' attribute is missing, but is required for this 'MySFC' tag.
 tests/cases/conformance/jsx/inline/index.tsx(21,40): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(21,41): error TS2786: 'MyClass' cannot be used as a JSX component.
   Its instance type 'MyClass' is not a valid JSX element.
-    Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
+    The '__domBrand' attribute is missing, but is required for this 'MyClass' tag.
 tests/cases/conformance/jsx/inline/index.tsx(21,63): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(21,64): error TS2786: 'MyClass' cannot be used as a JSX component.
   Its instance type 'MyClass' is not a valid JSX element.
@@ -107,14 +107,14 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
                          ~~~~~
 !!! error TS2786: 'MySFC' cannot be used as a JSX component.
 !!! error TS2786:   Its return type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not a valid JSX element.
-!!! error TS2786:     Property '__domBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
+!!! error TS2786:     The '__domBrand' attribute is missing, but is required for this 'MySFC' tag.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
                                            ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
                                             ~~~~~~~
 !!! error TS2786: 'MyClass' cannot be used as a JSX component.
 !!! error TS2786:   Its instance type 'MyClass' is not a valid JSX element.
-!!! error TS2786:     Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
+!!! error TS2786:     The '__domBrand' attribute is missing, but is required for this 'MyClass' tag.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.

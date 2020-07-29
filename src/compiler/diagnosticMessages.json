@@ -3012,6 +3012,18 @@
         "category": "Error",
         "code": 2791
     },
+    "This '{0}' tag is missing the following attributes: {1}.":{
+        "category": "Error",
+        "code": 2792
+    },
+    "This '{0}' tag is missing the following attributes: {1} and {2} more.":{
+        "category": "Error",
+        "code": 2793
+    },
+    "The '{0}' attribute is missing, but is required for this '{1}' tag.":{
+        "category": "Error",
+        "code": 2794
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
