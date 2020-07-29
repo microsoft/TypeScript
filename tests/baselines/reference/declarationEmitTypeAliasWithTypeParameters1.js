@@ -7,7 +7,8 @@ export const y = (x: Foo<string>) => 1
 "use strict";
 exports.__esModule = true;
 exports.y = void 0;
-exports.y = function (x) { return 1; };
+var y = function (x) { return 1; };
+exports.y = y;
 
 
 //// [declarationEmitTypeAliasWithTypeParameters1.d.ts]

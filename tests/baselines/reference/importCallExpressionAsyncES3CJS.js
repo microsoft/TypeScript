@@ -138,11 +138,11 @@ var cl2 = /** @class */ (function () {
     return cl2;
 }());
 exports.cl2 = cl2;
-exports.l = function () { return __awaiter(void 0, void 0, void 0, function () {
+var l = function () { return __awaiter(void 0, void 0, void 0, function () {
     var req;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('./test'); })]; // FIVE
+            case 0: return [4 /*yield*/, import('./test')]; // FIVE
             case 1:
                 req = _a.sent() // FIVE
                 ;
@@ -150,3 +150,4 @@ exports.l = function () { return __awaiter(void 0, void 0, void 0, function () {
         }
     });
 }); };
+exports.l = l;
