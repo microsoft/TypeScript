@@ -66,10 +66,6 @@ var foo = function (p) {
         bar2: function (s) { }
     };
 };
-/**
- * comment1
- * @param p
- */
 exports.foo = foo;
 var Foo = /** @class */ (function () {
     function Foo() {

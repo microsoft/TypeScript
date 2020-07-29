@@ -60,9 +60,6 @@ var Serializable = function (SuperClass) {
     var ResultClass = LocalMixin(SuperClass);
     return ResultClass;
 };
-/**
- * Plain mixin where the superclass must be Initable
- */
 exports.Serializable = Serializable;
 var AMixin = function (SuperClass) {
     var SomeHowOkay = /** @class */ (function (_super) {

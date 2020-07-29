@@ -79,7 +79,6 @@ var testRecFun = function (parent) {
         }
     };
 };
-// example from https://github.com/microsoft/TypeScript/issues/31605
 exports.testRecFun = testRecFun;
 var p1 = exports.testRecFun({ one: '1' });
 void p1.result.one;

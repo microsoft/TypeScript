@@ -1195,6 +1195,7 @@ namespace ts {
 
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 let modifiers: NodeArray<Modifier> | undefined;
+                let removeCommentsOnExpressions = false;
 
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
                 for (const variable of node.declarationList.declarations) {
@@ -1220,6 +1221,7 @@ namespace ts {
 
                             variables = append(variables, variable);
                             expressions = append(expressions, expression);
+                            removeCommentsOnExpressions = true;
                         }
                         else {
                             expressions = append(expressions, transformInitializedVariable(variable as InitializedVariableDeclaration));
@@ -1232,7 +1234,11 @@ namespace ts {
                 }
 
                 if (expressions) {
-                    statements = append(statements, setOriginalNode(setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node), node));
+                    const statement = setOriginalNode(setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node), node);
+                    if (removeCommentsOnExpressions) {
+                        removeAllComments(statement);
+                    }
+                    statements = append(statements, statement);
                 }
             }
             else {
