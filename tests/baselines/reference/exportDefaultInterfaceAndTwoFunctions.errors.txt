@@ -1,0 +1,13 @@
+tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts(2,1): error TS2393: Duplicate function implementation.
+tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts(3,1): error TS2393: Duplicate function implementation.
+
+
+==== tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts (2 errors) ====
+    export default interface A { a: string; }
+    export default function() { return 1; }
+    ~~~~~~
+!!! error TS2393: Duplicate function implementation.
+    export default function() { return 2; }
+    ~~~~~~
+!!! error TS2393: Duplicate function implementation.
+    
