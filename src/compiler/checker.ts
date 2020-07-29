@@ -5849,7 +5849,7 @@ namespace ts {
 
                     /** Note that `new:T` parameters are not handled, but should be before calling this function. */
                     function getNameForJSDocFunctionParameter(p: ParameterDeclaration, index: number) {
-                        return p.name && isIdentifier(p.name) && p.name.escapedText === 'this' ? 'this'
+                        return p.name && isIdentifier(p.name) && p.name.escapedText === "this" ? "this"
                             : getEffectiveDotDotDotForParameter(p) ? `args`
                             : `arg${index}`;
                     }
