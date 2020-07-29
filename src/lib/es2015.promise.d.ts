@@ -1,3 +1,5 @@
+type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+
 interface PromiseConstructor {
     /**
      * A reference to the prototype.
@@ -12,6 +14,13 @@ interface PromiseConstructor {
      */
     new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
 
+    /**
+     * Creates a Promise that is resolved with an array of results when all of the provided Promises
+     * resolve, or rejected when any Promise is rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    all<T extends unknown[]>(values: readonly [...T]): Promise<{ [P in keyof T]: Awaited<T[P]> }>;
     /**
      * Creates a Promise that is resolved with an array of results when all of the provided Promises
      * resolve, or rejected when any Promise is rejected.
