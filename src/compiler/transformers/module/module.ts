@@ -1207,7 +1207,7 @@ namespace ts {
                         variables = append(variables, variable);
                     }
                     else if (variable.initializer) {
-                        if (!isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer))) {
+                        if (!isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))) {
                             const expression = factory.createAssignment(
                                 setTextRange(
                                     factory.createPropertyAccessExpression(
