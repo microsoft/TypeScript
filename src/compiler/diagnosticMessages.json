@@ -4473,6 +4473,10 @@
         "category": "Message",
         "code": 6235
     },
+    "Arguments for the rest parameter '{0}' were not provided.": {
+        "category": "Error",
+        "code": 6236
+    },
 
     "Projects to reference": {
         "category": "Message",

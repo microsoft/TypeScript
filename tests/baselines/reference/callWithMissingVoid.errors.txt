@@ -119,7 +119,7 @@ tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(75,1): 
     call((x: number, y: number) => x + y) // error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 3 arguments, but got 1.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:73:5: An argument for 'args' was not provided.
+!!! related TS6236 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:73:5: Arguments for the rest parameter 'args' were not provided.
     call((x: number, y: number) => x + y, 4, 2) // ok
     
     call((x: number, y: void) => x, 4, void 0) // ok
