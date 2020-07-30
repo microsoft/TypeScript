@@ -22180,7 +22180,7 @@ namespace ts {
             if (assignmentKind) {
                 if (!(localOrExportSymbol.flags & SymbolFlags.Variable) &&
                     !(isInJSFile(node) && localOrExportSymbol.flags & SymbolFlags.ValueModule)) {
-                    error(node, Diagnostics.Cannot_assign_to_0_because_it_is_not_a_variable, symbolToString(symbol));
+                    error(node, Diagnostics.Cannot_assign_to_0_because_it_is_immutable, symbolToString(symbol));
                     return errorType;
                 }
                 if (isReadonlySymbol(localOrExportSymbol)) {

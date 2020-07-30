@@ -2138,7 +2138,7 @@
         "category": "Error",
         "code": 2538
     },
-    "Cannot assign to '{0}' because it is not a variable.": {
+    "Cannot assign to '{0}' because it is immutable.": {
         "category": "Error",
         "code": 2539
     },
