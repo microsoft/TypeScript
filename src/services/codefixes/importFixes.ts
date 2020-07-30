@@ -363,9 +363,8 @@ namespace ts.codefix {
     }
 
     function shouldUseRequire(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        return isSourceFileJS(sourceFile)
-            && !sourceFile.externalModuleIndicator
-            && (!!sourceFile.commonJsModuleIndicator || getEmitModuleKind(compilerOptions) < ModuleKind.ES2015);
+        if (!isSourceFileJS(sourceFile) || isExternalModule(sourceFile)) return false;
+        return isCommonJsModule(sourceFile) || getEmitModuleKind(compilerOptions) < ModuleKind.ES2015;
     }
 
     function getNewImportInfos(

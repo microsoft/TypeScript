@@ -1,0 +1,25 @@
+=== tests/cases/compiler/a.cjs ===
+export {}; // error
+import.meta; // error
+>import.meta : ImportMeta
+>meta : any
+
+=== tests/cases/compiler/c.cjs ===
+// this is not in strict mode but class definitions are always in strict mode
+
+class c {
+>c : c
+
+    a(eval) { //error
+>a : (eval: any) => void
+>eval : any
+    }
+    method() {
+>method : () => void
+
+        var let = 10; // error
+>let : number
+>10 : 10
+    }
+}
+

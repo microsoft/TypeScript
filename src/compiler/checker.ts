@@ -1382,7 +1382,7 @@ namespace ts {
             const useFile = getSourceFileOfNode(usage);
             const declContainer = getEnclosingBlockScopeContainer(declaration);
             if (declarationFile !== useFile) {
-                if ((moduleKind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
+                if ((moduleKind && (isExternalModule(declarationFile) || isExternalModule(useFile))) ||
                     (!outFile(compilerOptions)) ||
                     isInTypeQuery(usage) ||
                     declaration.flags & NodeFlags.Ambient) {
@@ -1717,7 +1717,7 @@ namespace ts {
                         isInExternalModule = true;
                         // falls through
                     case SyntaxKind.ModuleDeclaration:
-                        const moduleExports = getSymbolOfNode(location as SourceFile | ModuleDeclaration).exports || emptySymbols;
+                        const moduleExports = getSymbolOfNode(location as SourceFile | ModuleDeclaration)?.exports || emptySymbols;
                         if (location.kind === SyntaxKind.SourceFile || (isModuleDeclaration(location) && location.flags & NodeFlags.Ambient && !isGlobalScopeAugmentation(location))) {
 
                             // It's an external module. First see if the module has an export default and if the local
@@ -1751,7 +1751,7 @@ namespace ts {
 
                         // ES6 exports are also visible locally (except for 'default'), but commonjs exports are not (except typedefs)
                         if (name !== InternalSymbolName.Default && (result = lookup(moduleExports, name, meaning & SymbolFlags.ModuleMember))) {
-                            if (isSourceFile(location) && location.commonJsModuleIndicator && !result.declarations.some(isJSDocTypeAlias)) {
+                            if (isSourceFile(location) && isCommonJsModule(location) && !result.declarations.some(isJSDocTypeAlias)) {
                                 result = undefined;
                             }
                             else {
@@ -1945,7 +1945,7 @@ namespace ts {
             if (!result) {
                 if (lastLocation) {
                     Debug.assert(lastLocation.kind === SyntaxKind.SourceFile);
-                    if ((lastLocation as SourceFile).commonJsModuleIndicator && name === "exports" && meaning & lastLocation.symbol.flags) {
+                    if (isCommonJsModule(lastLocation as SourceFile) && name === "exports" && meaning & lastLocation.symbol.flags) {
                         return lastLocation.symbol;
                     }
                 }
@@ -2467,7 +2467,7 @@ namespace ts {
                 return hasExportAssignmentSymbol(moduleSymbol);
             }
             // JS files have a synthetic default if they do not contain ES2015+ module syntax (export = is not valid in js) _and_ do not have an __esModule marker
-            return !file.externalModuleIndicator && !resolveExportByName(moduleSymbol, escapeLeadingUnderscores("__esModule"), /*sourceNode*/ undefined, dontResolveAlias);
+            return !isExternalModule(file) && !resolveExportByName(moduleSymbol, escapeLeadingUnderscores("__esModule"), /*sourceNode*/ undefined, dontResolveAlias);
         }
 
         function getTargetOfImportClause(node: ImportClause, dontResolveAlias: boolean): Symbol | undefined {
@@ -8568,7 +8568,7 @@ namespace ts {
                      declaration.parent.kind === SyntaxKind.BinaryExpression)) {
                 return getWidenedTypeForAssignmentDeclaration(symbol);
             }
-            else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && declaration.commonJsModuleIndicator) {
+            else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && isCommonJsModule(declaration)) {
                 const resolvedModule = resolveExternalModuleSymbol(symbol);
                 if (resolvedModule !== symbol) {
                     if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -22523,11 +22523,11 @@ namespace ts {
 
             if (isSourceFile(container)) {
                 // look up in the source file's locals or exports
-                if (container.commonJsModuleIndicator) {
+                if (isCommonJsModule(container)) {
                     const fileSymbol = getSymbolOfNode(container);
                     return fileSymbol && getTypeOfSymbol(fileSymbol);
                 }
-                else if (container.externalModuleIndicator) {
+                else if (isExternalModule(container)) {
                     // TODO: Maybe issue a better error than 'object is possibly undefined'
                     return undefinedType;
                 }
@@ -22893,7 +22893,7 @@ namespace ts {
                         // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
                         if (inJs && isIdentifier(expression)) {
                             const sourceFile = getSourceFileOfNode(parent);
-                            if (sourceFile.commonJsModuleIndicator && getResolvedSymbol(expression) === sourceFile.symbol) {
+                            if (isCommonJsModule(sourceFile) && getResolvedSymbol(expression) === sourceFile.symbol) {
                                 return undefined;
                             }
                         }
@@ -27788,12 +27788,18 @@ namespace ts {
         }
 
         function checkImportMetaProperty(node: MetaProperty) {
-            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) {
-                error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_esnext_or_system);
-            }
             const file = getSourceFileOfNode(node);
+            if (fileExtensionIs(file.fileName, Extension.Cjs)) {
+                error(node, Diagnostics.The_import_meta_meta_property_is_not_allowed_in_CommonJS_module_files);
+                Debug.assert(file.externalModuleIndicator === undefined, "Containing `.cjs` file should not be a module.");
+            }
+            else {
+                if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) {
+                    error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_esnext_or_system);
+                }
+                Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
+            }
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
-            Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
             return node.name.escapedText === "meta" ? getGlobalImportMetaType() : errorType;
         }
 
@@ -35466,7 +35472,8 @@ namespace ts {
         }
 
         function checkGrammarModuleElementContext(node: Statement, errorMessage: DiagnosticMessage): boolean {
-            const isInAppropriateContext = node.parent.kind === SyntaxKind.SourceFile || node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.ModuleDeclaration;
+            const isInAppropriateContext = (node.parent.kind === SyntaxKind.SourceFile && !fileExtensionIs((<SourceFile>node.parent).fileName, Extension.Cjs))
+                || node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.ModuleDeclaration;
             if (!isInAppropriateContext) {
                 grammarErrorOnFirstToken(node, errorMessage);
             }

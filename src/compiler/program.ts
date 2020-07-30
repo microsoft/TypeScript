@@ -3119,7 +3119,10 @@ namespace ts {
 
             const languageVersion = options.target || ScriptTarget.ES3;
 
-            const firstNonAmbientExternalModuleSourceFile = find(files, f => isExternalModule(f) && !f.isDeclarationFile);
+            const firstNonAmbientExternalModuleSourceFile = find(files, f =>
+                // This can't use `isExternalModule(f)`, as that can return `.mjs` files that have an undefined `externalModuleIndicator`,
+                // and `firstNonAmbientExternalModuleSourceFile` is only used for `externalModuleIndicator`.
+                f.externalModuleIndicator !== undefined && !f.isDeclarationFile);
             if (options.isolatedModules) {
                 if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015) {
                     createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
@@ -3782,6 +3785,8 @@ namespace ts {
             case Extension.Jsx:
                 return needJsx() || needAllowJs();
             case Extension.Js:
+            case Extension.Cjs:
+            case Extension.Mjs:
                 return needAllowJs();
             case Extension.Json:
                 return needResolveJsonModule();

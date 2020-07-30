@@ -248,6 +248,16 @@ namespace ts {
 
             if (!file.locals) {
                 bind(file);
+                // `bindSourceFileAsExternalModule` is called in `setCommonJsModuleIndicator`,
+                // but if `setCommonJsModuleIndicator` was not called, as it won't be for `.cjs`
+                // files with no imports or exports, then `bindSourceFileAsExternalModule`
+                // will not have been called, which would cause the checker to crash.
+
+                // This also can't be moved to `bindSourceFileIfExternalModule`,
+                // as that gets called after CommonJS exports are bound.
+                if (isCommonJsModule(file) && !file.commonJsModuleIndicator) {
+                    bindSourceFileAsExternalModule();
+                }
                 file.symbolCount = symbolCount;
                 file.classifiableNames = classifiableNames;
                 delayedBindJSDocTypedefTag();
@@ -283,7 +293,7 @@ namespace ts {
                 return true;
             }
             else {
-                return !!file.externalModuleIndicator;
+                return isExternalModule(file);
             }
         }
 
@@ -2154,7 +2164,7 @@ namespace ts {
                 return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Class_definitions_are_automatically_in_strict_mode;
             }
 
-            if (file.externalModuleIndicator) {
+            if (isExternalModule(file)) {
                 return Diagnostics.Identifier_expected_0_is_a_reserved_word_in_strict_mode_Modules_are_automatically_in_strict_mode;
             }
 
@@ -2223,7 +2233,7 @@ namespace ts {
                 return Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
             }
 
-            if (file.externalModuleIndicator) {
+            if (isExternalModule(file)) {
                 return Diagnostics.Invalid_use_of_0_Modules_are_automatically_in_strict_mode;
             }
 
@@ -2244,7 +2254,7 @@ namespace ts {
                 return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Class_definitions_are_automatically_in_strict_mode;
             }
 
-            if (file.externalModuleIndicator) {
+            if (isExternalModule(file)) {
                 return Diagnostics.Function_declarations_are_not_allowed_inside_blocks_in_strict_mode_when_targeting_ES3_or_ES5_Modules_are_automatically_in_strict_mode;
             }
 
@@ -2460,7 +2470,7 @@ namespace ts {
                         bindSpecialPropertyDeclaration(expr);
                     }
                     if (isInJSFile(expr) &&
-                        file.commonJsModuleIndicator &&
+                        isCommonJsModule(file) &&
                         isModuleExportsAccessExpression(expr) &&
                         !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
                         declareSymbol(file.locals!, /*parent*/ undefined, expr.expression,
@@ -2743,7 +2753,7 @@ namespace ts {
         }
 
         function setCommonJsModuleIndicator(node: Node) {
-            if (file.externalModuleIndicator) {
+            if (isExternalModule(file)) {
                 return false;
             }
             if (!file.commonJsModuleIndicator) {
@@ -2866,7 +2876,7 @@ namespace ts {
                     if (hasDynamicName(node)) {
                         break;
                     }
-                    else if ((thisContainer as SourceFile).commonJsModuleIndicator) {
+                    else if (isCommonJsModule(thisContainer as SourceFile)) {
                         declareSymbol(thisContainer.symbol.exports!, thisContainer.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
                     }
                     else {
@@ -3133,7 +3143,7 @@ namespace ts {
         function bindCallExpression(node: CallExpression) {
             // We're only inspecting call expressions to detect CommonJS modules, so we can skip
             // this check if we've already seen the module indicator
-            if (!file.commonJsModuleIndicator && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ false)) {
+            if (!file.commonJsModuleIndicator && !fileExtensionIs(file.fileName || "", Extension.Mjs) && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ false)) {
                 setCommonJsModuleIndicator(node);
             }
         }

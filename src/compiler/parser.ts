@@ -636,7 +636,11 @@ namespace ts {
 
     // See also `isExternalOrCommonJsModule` in utilities.ts
     export function isExternalModule(file: SourceFile): boolean {
-        return file.externalModuleIndicator !== undefined;
+        return file.externalModuleIndicator !== undefined || fileExtensionIs(file.fileName || "", Extension.Mjs);
+    }
+
+    export function isCommonJsModule(file: SourceFile): boolean {
+        return file.commonJsModuleIndicator !== undefined || fileExtensionIs(file.fileName || "", Extension.Cjs);
     }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
@@ -1157,6 +1161,8 @@ namespace ts {
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
             let sourceFile = factory.createSourceFile(statements, endOfFileToken, flags);
             setTextRangePosWidth(sourceFile, 0, sourceText.length);
+
+            sourceFile.fileName = fileName;
             setExternalModuleIndicator(sourceFile);
 
             // If we parsed this as an external module, it may contain top-level await
@@ -1168,7 +1174,6 @@ namespace ts {
             sourceFile.bindDiagnostics = [];
             sourceFile.bindSuggestionDiagnostics = undefined;
             sourceFile.languageVersion = languageVersion;
-            sourceFile.fileName = fileName;
             sourceFile.languageVariant = getLanguageVariant(scriptKind);
             sourceFile.isDeclarationFile = isDeclarationFile;
             sourceFile.scriptKind = scriptKind;
@@ -7047,6 +7052,9 @@ namespace ts {
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
+            // `.cjs` files are never ECMAScript modules
+            if (fileExtensionIs(sourceFile.fileName, Extension.Cjs)) return;
+
             // Try to use the first top-level import/export when available, then
             // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
             sourceFile.externalModuleIndicator =

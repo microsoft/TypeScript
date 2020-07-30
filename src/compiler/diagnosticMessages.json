@@ -1180,6 +1180,10 @@
         "category": "Error",
         "code": 1388
     },
+    "The 'import.meta' meta-property is not allowed in CommonJS module files.": {
+        "category": "Error",
+        "code": 1389
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

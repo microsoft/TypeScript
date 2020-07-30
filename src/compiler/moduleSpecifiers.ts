@@ -17,6 +17,10 @@ namespace ts.moduleSpecifiers {
             ending: getEnding(),
         };
         function getEnding(): Ending {
+            // `.mjs` files must always use file extensions in import specifiers
+            if (fileExtensionIs(importingSourceFile.fileName || "", ".mjs")) {
+                return Ending.JsExtension;
+            }
             switch (importModuleSpecifierEnding) {
                 case "minimal": return Ending.Minimal;
                 case "index": return Ending.Index;
@@ -309,6 +313,8 @@ namespace ts.moduleSpecifiers {
         const relativePath = normalizedSourcePath !== undefined ? ensurePathIsNonModuleName(getRelativePathFromDirectory(normalizedSourcePath, normalizedTargetPath, getCanonicalFileName)) : normalizedTargetPath;
         return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs
             ? removeExtensionAndIndexPostFix(relativePath, ending, compilerOptions)
+            // `.cjs` and `.mjs` files must always be imported with the file extension:
+            : fileExtensionIsOneOf(relativePath, [Extension.Cjs, Extension.Mjs]) ? relativePath
             : removeFileExtension(relativePath);
     }
 
@@ -490,7 +496,8 @@ namespace ts.moduleSpecifiers {
     }
 
     function removeExtensionAndIndexPostFix(fileName: string, ending: Ending, options: CompilerOptions): string {
-        if (fileExtensionIs(fileName, Extension.Json)) return fileName;
+        // `.cjs` and `.mjs` files must always be imported with the file extension, as Node doesn't resolve them by default:
+        if (fileExtensionIsOneOf(fileName, [Extension.Cjs, Extension.Mjs, Extension.Json])) return fileName;
         const noExtension = removeFileExtension(fileName);
         switch (ending) {
             case Ending.Minimal:
@@ -513,6 +520,8 @@ namespace ts.moduleSpecifiers {
             case Extension.Tsx:
                 return options.jsx === JsxEmit.Preserve ? Extension.Jsx : Extension.Js;
             case Extension.Js:
+            case Extension.Cjs:
+            case Extension.Mjs:
             case Extension.Jsx:
             case Extension.Json:
                 return ext;

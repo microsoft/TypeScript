@@ -1,0 +1,29 @@
+tests/cases/compiler/a.cjs(1,1): error TS1233: An export declaration can only be used in a module.
+tests/cases/compiler/a.cjs(2,1): error TS1389: The 'import.meta' meta-property is not allowed in CommonJS module files.
+tests/cases/compiler/c.cjs(4,7): error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
+tests/cases/compiler/c.cjs(7,13): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+
+
+==== tests/cases/compiler/a.cjs (2 errors) ====
+    export {}; // error
+    ~~~~~~
+!!! error TS1233: An export declaration can only be used in a module.
+    import.meta; // error
+    ~~~~~~~~~~~
+!!! error TS1389: The 'import.meta' meta-property is not allowed in CommonJS module files.
+    
+==== tests/cases/compiler/c.cjs (2 errors) ====
+    // this is not in strict mode but class definitions are always in strict mode
+    
+    class c {
+        a(eval) { //error
+          ~~~~
+!!! error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
+        }
+        method() {
+            var let = 10; // error
+                ~~~
+!!! error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+        }
+    }
+    

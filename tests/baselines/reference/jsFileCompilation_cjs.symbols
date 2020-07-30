@@ -1,0 +1,22 @@
+=== tests/cases/compiler/a.cjs ===
+export {}; // error
+No type information for this code.import.meta; // error
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/c.cjs ===
+// this is not in strict mode but class definitions are always in strict mode
+
+class c {
+>c : Symbol(c, Decl(c.cjs, 0, 0))
+
+    a(eval) { //error
+>a : Symbol(c.a, Decl(c.cjs, 2, 9))
+>eval : Symbol(eval, Decl(c.cjs, 3, 6))
+    }
+    method() {
+>method : Symbol(c.method, Decl(c.cjs, 4, 5))
+
+        var let = 10; // error
+>let : Symbol(let, Decl(c.cjs, 6, 11))
+    }
+}
+

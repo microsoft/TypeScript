@@ -116,9 +116,11 @@ namespace ts {
             return Extension.Json;
         }
 
+        const { fileName } = sourceFile;
+
         if (options.jsx === JsxEmit.Preserve) {
             if (isSourceFileJS(sourceFile)) {
-                if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
+                if (fileExtensionIs(fileName, Extension.Jsx)) {
                     return Extension.Jsx;
                 }
             }
@@ -127,6 +129,16 @@ namespace ts {
                 return Extension.Jsx;
             }
         }
+
+        // Preserve the output extension for `.cjs` and `.mjs` files
+        if (fileExtensionIs(fileName, Extension.Cjs)) {
+            return Extension.Cjs;
+        }
+
+        if (fileExtensionIs(fileName, Extension.Mjs)) {
+            return Extension.Mjs;
+        }
+
         return Extension.Js;
     }
 

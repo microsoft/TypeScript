@@ -112,12 +112,12 @@ namespace ts.refactor {
     ) {
         const checker = program.getTypeChecker();
 
-        if (!oldFile.externalModuleIndicator && !oldFile.commonJsModuleIndicator) {
+        if (!isExternalOrCommonJsModule(oldFile)) {
             deleteMovedStatements(oldFile, toMove.ranges, changes);
             return toMove.all;
         }
 
-        const useEs6ModuleSyntax = !!oldFile.externalModuleIndicator;
+        const useEs6ModuleSyntax = isExternalModule(oldFile);
         const quotePreference = getQuotePreference(oldFile, preferences);
         const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEs6ModuleSyntax, quotePreference);
         if (importsFromNewFile) {

@@ -65,7 +65,7 @@ namespace ts {
      */
     enum Extensions {
         TypeScript, /** '.ts', '.tsx', or '.d.ts' */
-        JavaScript, /** '.js' or '.jsx' */
+        JavaScript, /** '.js', '.cjs', '.mjs' or '.jsx' */
         Json,       /** '.json' */
         TSConfig,   /** '.json' with `tsconfig` used instead of `index` */
         DtsOnly /** Only '.d.ts' */
@@ -1096,6 +1096,7 @@ namespace ts {
             case Extensions.TypeScript:
                 return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
             case Extensions.JavaScript:
+                // `.cjs` and `.mjs` file extensions must always have the file extension
                 return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
             case Extensions.TSConfig:
             case Extensions.Json:
@@ -1235,7 +1236,7 @@ namespace ts {
     function extensionIsOk(extensions: Extensions, extension: Extension): boolean {
         switch (extensions) {
             case Extensions.JavaScript:
-                return extension === Extension.Js || extension === Extension.Jsx;
+                return extension === Extension.Js || extension === Extension.Cjs || extension === Extension.Mjs || extension === Extension.Jsx;
             case Extensions.TSConfig:
             case Extensions.Json:
                 return extension === Extension.Json;

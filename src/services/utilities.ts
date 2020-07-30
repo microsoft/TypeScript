@@ -1743,10 +1743,10 @@ namespace ts {
     }
 
     export function programContainsModules(program: Program): boolean {
-        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!(s.externalModuleIndicator || s.commonJsModuleIndicator));
+        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && isExternalOrCommonJsModule(s));
     }
     export function programContainsEs6Modules(program: Program): boolean {
-        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
+        return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && isExternalModule(s));
     }
     export function compilerOptionsIndicateEs6Modules(compilerOptions: CompilerOptions): boolean {
         return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
@@ -2924,7 +2924,7 @@ namespace ts {
     export function isNonGlobalDeclaration(declaration: Declaration) {
         const sourceFile = declaration.getSourceFile();
         // If the file is not a module, the declaration is global
-        if (!sourceFile.externalModuleIndicator && !sourceFile.commonJsModuleIndicator) {
+        if (!isExternalOrCommonJsModule(sourceFile)) {
             return false;
         }
         // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation

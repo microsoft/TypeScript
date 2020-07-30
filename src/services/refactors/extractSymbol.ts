@@ -481,7 +481,7 @@ namespace ts.refactor.extractSymbol {
                         // falls through
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.FunctionDeclaration:
-                        if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
+                        if (isSourceFile(node.parent) && !isExternalModule(node.parent)) {
                             // You cannot extract global declarations
                             (errors || (errors = [] as Diagnostic[])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
                         }
@@ -772,7 +772,7 @@ namespace ts.refactor.extractSymbol {
     function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string | SpecialScope {
         return scope.kind === SyntaxKind.ModuleBlock
             ? `namespace '${scope.parent.name.getText()}'`
-            : scope.externalModuleIndicator ? SpecialScope.Module : SpecialScope.Global;
+            : isExternalModule(scope) ? SpecialScope.Module : SpecialScope.Global;
     }
 
     const enum SpecialScope {
