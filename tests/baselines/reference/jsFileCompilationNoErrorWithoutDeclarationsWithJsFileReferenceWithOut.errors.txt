@@ -1,0 +1,17 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    class c {
+    }
+    
+==== tests/cases/compiler/b.ts (0 errors) ====
+    /// <reference path="c.js"/>
+    //no  error on above reference since not emitting declarations
+    function foo() {
+    }
+    
+==== tests/cases/compiler/c.js (0 errors) ====
+    function bar() {
+    }

@@ -1,7 +1,9 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 error TS5053: Option 'out' cannot be specified with option 'outFile'.
 error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
 
 
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 !!! error TS5053: Option 'out' cannot be specified with option 'outFile'.
 !!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
 ==== tests/cases/compiler/a.ts (0 errors) ====

@@ -1,6 +1,8 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 tests/cases/compiler/a.ts(1,10): error TS2393: Duplicate function implementation.
 
 
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 ==== tests/cases/compiler/b.js (0 errors) ====
     function foo() {
         return 10;

@@ -28,7 +28,13 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m1[0m:[93m40[0m - [91merror[0m[90m TS1390: [0mThe `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+[7m1[0m {"compilerOptions":{"incremental":true,"outFile":"out.js"}}
+[7m [0m [91m                                       ~~~~~~~~~[0m
+
+
+[[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 
 

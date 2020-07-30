@@ -1,0 +1,13 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+==== tests/cases/compiler/a.js (0 errors) ====
+    function foo() {
+        var a = 10;
+        var b = "Hello";
+        return {
+            a,
+            b
+        };
+    }

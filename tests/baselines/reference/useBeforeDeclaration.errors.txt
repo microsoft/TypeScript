@@ -1,0 +1,23 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+==== tests/cases/compiler/A.ts (0 errors) ====
+    namespace ts {
+        export function printVersion():void {
+            log("Version: " + sys.version);  // the call of sys.version is deferred, should not report an error.
+        }
+    
+        export function log(info:string):void {
+    
+        }
+    }
+    
+==== tests/cases/compiler/B.ts (0 errors) ====
+    namespace ts {
+    
+        export let sys:{version:string} = {version: "2.0.5"};
+    
+    }
+    
+    

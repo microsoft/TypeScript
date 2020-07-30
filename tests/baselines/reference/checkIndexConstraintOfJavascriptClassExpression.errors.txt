@@ -1,8 +1,10 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 tests/cases/compiler/weird.js(1,1): error TS2304: Cannot find name 'someFunction'.
 tests/cases/compiler/weird.js(1,23): error TS7006: Parameter 'BaseClass' implicitly has an 'any' type.
 tests/cases/compiler/weird.js(9,17): error TS7006: Parameter 'error' implicitly has an 'any' type.
 
 
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 ==== tests/cases/compiler/weird.js (3 errors) ====
     someFunction(function(BaseClass) {
     ~~~~~~~~~~~~

@@ -1,0 +1,12 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+==== tests/cases/compiler/file1.ts (0 errors) ====
+    import * as b from './b.json';
+    
+==== tests/cases/compiler/b.json (0 errors) ====
+    {
+        "a": true,
+        "b": "hello"
+    }

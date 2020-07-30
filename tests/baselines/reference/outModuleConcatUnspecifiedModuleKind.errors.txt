@@ -1,6 +1,8 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 tests/cases/compiler/a.ts(1,14): error TS6131: Cannot compile modules using option 'outFile' unless the '--module' flag is 'amd' or 'system'.
 
 
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 ==== tests/cases/compiler/a.ts (1 errors) ====
     export class A { } // module
                  ~

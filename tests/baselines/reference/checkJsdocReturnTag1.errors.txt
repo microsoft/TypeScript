@@ -1,0 +1,26 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+==== tests/cases/conformance/jsdoc/returns.js (0 errors) ====
+    // @ts-check
+    /**
+     * @returns {string} This comment is not currently exposed
+     */
+    function f() {
+        return "hello";
+    }
+    
+    /**
+     * @returns {string=} This comment is not currently exposed
+     */
+    function f1() {
+        return "hello world";
+    }
+    
+    /**
+     * @returns {string|number} This comment is not currently exposed
+     */
+    function f2() {
+        return 5 || "hello";
+    }

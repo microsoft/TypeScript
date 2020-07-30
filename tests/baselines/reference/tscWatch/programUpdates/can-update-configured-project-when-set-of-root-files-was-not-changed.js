@@ -83,7 +83,13 @@ Output::
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 
-[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
+[96ma/b/tsconfig.json[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1390: [0mThe `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+[7m1[0m {"compilerOptions":{"outFile":"out.js"},"files":["f1.ts","f2.ts"]}
+[7m [0m [91m                    ~~~~~~~~~[0m
+
+
+[[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
 
 
 

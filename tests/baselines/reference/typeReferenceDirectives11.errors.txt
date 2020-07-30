@@ -1,6 +1,8 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 /mod1.ts(1,17): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
 
 
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 ==== /mod2.ts (0 errors) ====
     import {foo} from "./mod1";
     export const bar = foo();

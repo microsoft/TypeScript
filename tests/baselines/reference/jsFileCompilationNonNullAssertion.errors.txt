@@ -1,6 +1,8 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 /src/a.js(1,1): error TS8013: Non-null assertions can only be used in TypeScript files.
 
 
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
 ==== /src/a.js (1 errors) ====
     0!
     ~~

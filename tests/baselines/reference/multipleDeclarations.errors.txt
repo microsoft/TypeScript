@@ -1,0 +1,40 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+==== tests/cases/conformance/salsa/input.js (0 errors) ====
+    function C() {
+        this.m = null;
+    }
+    C.prototype.m = function() {
+        this.nothing();
+    }
+    class X {
+        constructor() {
+            this.m = this.m.bind(this);
+            this.mistake = 'frankly, complete nonsense';
+        }
+        m() {
+        }
+        mistake() {
+        }
+    }
+    let x = new X();
+    X.prototype.mistake = false;
+    x.m();
+    x.mistake;
+    class Y {
+        mistake() {
+        }
+        m() {
+        }
+        constructor() {
+            this.m = this.m.bind(this);
+            this.mistake = 'even more nonsense';
+        }
+    }
+    Y.prototype.mistake = true;
+    let y = new Y();
+    y.m();
+    y.mistake();
+    

@@ -1,0 +1,18 @@
+error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+
+
+!!! error TS1390: The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.
+==== A:/bar.ts (0 errors) ====
+    import {z} from "./foo";
+    export var x = z + z;
+    
+==== A:/foo.ts (0 errors) ====
+    import {pi} from "B:/baz";
+    export var i = Math.sqrt(-1);
+    export var z = pi * pi;
+    
+==== B:/baz.ts (0 errors) ====
+    import {x} from "A:/bar";
+    import {i} from "A:/foo";
+    export var pi = Math.PI;
+    export var y = x * i;
