@@ -3057,6 +3057,10 @@
         "category": "Error",
         "code": 4020
     },
+    "'extends' clause of exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4021
+    },
     "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4022
@@ -4465,9 +4469,13 @@
         "category": "Error",
         "code": 6234
     },
+    "Disable loading referenced projects.": {
+        "category": "Message",
+        "code": 6235
+    },
     "Arguments for the rest parameter '{0}' were not provided.": {
         "category": "Error",
-        "code": 6235
+        "code": 6236
     },
 
     "Projects to reference": {

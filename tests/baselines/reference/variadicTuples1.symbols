@@ -696,24 +696,28 @@ type First<T extends readonly unknown[]> = T[0];
 >T : Symbol(T, Decl(variadicTuples1.ts, 207, 11))
 >T : Symbol(T, Decl(variadicTuples1.ts, 207, 11))
 
-type DropFirst<T extends readonly unknown[]> = T extends readonly [any, ...infer U] ? U : [...T];
+type DropFirst<T extends readonly unknown[]> = T extends readonly [any?, ...infer U] ? U : [...T];
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 >T : Symbol(T, Decl(variadicTuples1.ts, 208, 15))
 >T : Symbol(T, Decl(variadicTuples1.ts, 208, 15))
->U : Symbol(U, Decl(variadicTuples1.ts, 208, 80))
->U : Symbol(U, Decl(variadicTuples1.ts, 208, 80))
+>U : Symbol(U, Decl(variadicTuples1.ts, 208, 81))
+>U : Symbol(U, Decl(variadicTuples1.ts, 208, 81))
 >T : Symbol(T, Decl(variadicTuples1.ts, 208, 15))
 
-type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : undefined;
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : T extends readonly [...infer _, (infer U)?] ? U | undefined : undefined;
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 >T : Symbol(T, Decl(variadicTuples1.ts, 210, 10))
 >T : Symbol(T, Decl(variadicTuples1.ts, 210, 10))
 >_ : Symbol(_, Decl(variadicTuples1.ts, 210, 70))
 >U : Symbol(U, Decl(variadicTuples1.ts, 210, 79))
 >U : Symbol(U, Decl(variadicTuples1.ts, 210, 79))
+>T : Symbol(T, Decl(variadicTuples1.ts, 210, 10))
+>_ : Symbol(_, Decl(variadicTuples1.ts, 210, 117))
+>U : Symbol(U, Decl(variadicTuples1.ts, 210, 127))
+>U : Symbol(U, Decl(variadicTuples1.ts, 210, 127))
 
-type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any] ? U : [...T];
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any?] ? U : [...T];
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 >T : Symbol(T, Decl(variadicTuples1.ts, 211, 14))
 >T : Symbol(T, Decl(variadicTuples1.ts, 211, 14))
 >U : Symbol(U, Decl(variadicTuples1.ts, 211, 74))
@@ -721,7 +725,7 @@ type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, an
 >T : Symbol(T, Decl(variadicTuples1.ts, 211, 14))
 
 type T00 = First<[number, symbol, string]>;
->T00 : Symbol(T00, Decl(variadicTuples1.ts, 211, 96))
+>T00 : Symbol(T00, Decl(variadicTuples1.ts, 211, 97))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
 type T01 = First<[symbol, string]>;
@@ -740,547 +744,586 @@ type T04 = First<[symbol, ...string[]]>;
 >T04 : Symbol(T04, Decl(variadicTuples1.ts, 216, 48))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
-type T05 = First<string[]>;
+type T05 = First<[string?]>;
 >T05 : Symbol(T05, Decl(variadicTuples1.ts, 217, 40))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
-type T06 = First<[]>;
->T06 : Symbol(T06, Decl(variadicTuples1.ts, 218, 27))
+type T06 = First<string[]>;
+>T06 : Symbol(T06, Decl(variadicTuples1.ts, 218, 28))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
-type T07 = First<any>;
->T07 : Symbol(T07, Decl(variadicTuples1.ts, 219, 21))
+type T07 = First<[]>;
+>T07 : Symbol(T07, Decl(variadicTuples1.ts, 219, 27))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
-type T08 = First<never>;
->T08 : Symbol(T08, Decl(variadicTuples1.ts, 220, 22))
+type T08 = First<any>;
+>T08 : Symbol(T08, Decl(variadicTuples1.ts, 220, 21))
+>First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
+
+type T09 = First<never>;
+>T09 : Symbol(T09, Decl(variadicTuples1.ts, 221, 22))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
 type T10 = DropFirst<[number, symbol, string]>;
->T10 : Symbol(T10, Decl(variadicTuples1.ts, 221, 24))
+>T10 : Symbol(T10, Decl(variadicTuples1.ts, 222, 24))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type T11 = DropFirst<[symbol, string]>;
->T11 : Symbol(T11, Decl(variadicTuples1.ts, 223, 47))
+>T11 : Symbol(T11, Decl(variadicTuples1.ts, 224, 47))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type T12 = DropFirst<[string]>;
->T12 : Symbol(T12, Decl(variadicTuples1.ts, 224, 39))
+>T12 : Symbol(T12, Decl(variadicTuples1.ts, 225, 39))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type T13 = DropFirst<[number, symbol, ...string[]]>;
->T13 : Symbol(T13, Decl(variadicTuples1.ts, 225, 31))
+>T13 : Symbol(T13, Decl(variadicTuples1.ts, 226, 31))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type T14 = DropFirst<[symbol, ...string[]]>;
->T14 : Symbol(T14, Decl(variadicTuples1.ts, 226, 52))
+>T14 : Symbol(T14, Decl(variadicTuples1.ts, 227, 52))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
-type T15 = DropFirst<string[]>;
->T15 : Symbol(T15, Decl(variadicTuples1.ts, 227, 44))
+type T15 = DropFirst<[string?]>;
+>T15 : Symbol(T15, Decl(variadicTuples1.ts, 228, 44))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
-type T16 = DropFirst<[]>;
->T16 : Symbol(T16, Decl(variadicTuples1.ts, 228, 31))
+type T16 = DropFirst<string[]>;
+>T16 : Symbol(T16, Decl(variadicTuples1.ts, 229, 32))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
-type T17 = DropFirst<any>;
->T17 : Symbol(T17, Decl(variadicTuples1.ts, 229, 25))
+type T17 = DropFirst<[]>;
+>T17 : Symbol(T17, Decl(variadicTuples1.ts, 230, 31))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
-type T18 = DropFirst<never>;
->T18 : Symbol(T18, Decl(variadicTuples1.ts, 230, 26))
+type T18 = DropFirst<any>;
+>T18 : Symbol(T18, Decl(variadicTuples1.ts, 231, 25))
+>DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
+
+type T19 = DropFirst<never>;
+>T19 : Symbol(T19, Decl(variadicTuples1.ts, 232, 26))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type T20 = Last<[number, symbol, string]>;
->T20 : Symbol(T20, Decl(variadicTuples1.ts, 231, 28))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>T20 : Symbol(T20, Decl(variadicTuples1.ts, 233, 28))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type T21 = Last<[symbol, string]>;
->T21 : Symbol(T21, Decl(variadicTuples1.ts, 233, 42))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>T21 : Symbol(T21, Decl(variadicTuples1.ts, 235, 42))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type T22 = Last<[string]>;
->T22 : Symbol(T22, Decl(variadicTuples1.ts, 234, 34))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>T22 : Symbol(T22, Decl(variadicTuples1.ts, 236, 34))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type T23 = Last<[number, symbol, ...string[]]>;
->T23 : Symbol(T23, Decl(variadicTuples1.ts, 235, 26))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>T23 : Symbol(T23, Decl(variadicTuples1.ts, 237, 26))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type T24 = Last<[symbol, ...string[]]>;
->T24 : Symbol(T24, Decl(variadicTuples1.ts, 236, 47))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>T24 : Symbol(T24, Decl(variadicTuples1.ts, 238, 47))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
-type T25 = Last<string[]>;
->T25 : Symbol(T25, Decl(variadicTuples1.ts, 237, 39))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+type T25 = Last<[string?]>;
+>T25 : Symbol(T25, Decl(variadicTuples1.ts, 239, 39))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
-type T26 = Last<[]>;  // unknown[], maybe should be []
->T26 : Symbol(T26, Decl(variadicTuples1.ts, 238, 26))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+type T26 = Last<string[]>;
+>T26 : Symbol(T26, Decl(variadicTuples1.ts, 240, 27))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
-type T27 = Last<any>;  // unknown, maybe should be any
->T27 : Symbol(T27, Decl(variadicTuples1.ts, 239, 20))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+type T27 = Last<[]>;  // unknown, maybe should undefined
+>T27 : Symbol(T27, Decl(variadicTuples1.ts, 241, 26))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
-type T28 = Last<never>;
->T28 : Symbol(T28, Decl(variadicTuples1.ts, 240, 21))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+type T28 = Last<any>;  // unknown, maybe should be any
+>T28 : Symbol(T28, Decl(variadicTuples1.ts, 242, 20))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
+
+type T29 = Last<never>;
+>T29 : Symbol(T29, Decl(variadicTuples1.ts, 243, 21))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type T30 = DropLast<[number, symbol, string]>;
->T30 : Symbol(T30, Decl(variadicTuples1.ts, 241, 23))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>T30 : Symbol(T30, Decl(variadicTuples1.ts, 244, 23))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type T31 = DropLast<[symbol, string]>;
->T31 : Symbol(T31, Decl(variadicTuples1.ts, 243, 46))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>T31 : Symbol(T31, Decl(variadicTuples1.ts, 246, 46))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type T32 = DropLast<[string]>;
->T32 : Symbol(T32, Decl(variadicTuples1.ts, 244, 38))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>T32 : Symbol(T32, Decl(variadicTuples1.ts, 247, 38))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type T33 = DropLast<[number, symbol, ...string[]]>;
->T33 : Symbol(T33, Decl(variadicTuples1.ts, 245, 30))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>T33 : Symbol(T33, Decl(variadicTuples1.ts, 248, 30))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type T34 = DropLast<[symbol, ...string[]]>;
->T34 : Symbol(T34, Decl(variadicTuples1.ts, 246, 51))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>T34 : Symbol(T34, Decl(variadicTuples1.ts, 249, 51))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
-type T35 = DropLast<string[]>;
->T35 : Symbol(T35, Decl(variadicTuples1.ts, 247, 43))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+type T35 = DropLast<[string?]>;
+>T35 : Symbol(T35, Decl(variadicTuples1.ts, 250, 43))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
-type T36 = DropLast<[]>;  // unknown[], maybe should be []
->T36 : Symbol(T36, Decl(variadicTuples1.ts, 248, 30))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+type T36 = DropLast<string[]>;
+>T36 : Symbol(T36, Decl(variadicTuples1.ts, 251, 31))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
-type T37 = DropLast<any>;
->T37 : Symbol(T37, Decl(variadicTuples1.ts, 249, 24))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+type T37 = DropLast<[]>;  // unknown[], maybe should be []
+>T37 : Symbol(T37, Decl(variadicTuples1.ts, 252, 30))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
-type T38 = DropLast<never>;
->T38 : Symbol(T38, Decl(variadicTuples1.ts, 250, 25))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+type T38 = DropLast<any>;
+>T38 : Symbol(T38, Decl(variadicTuples1.ts, 253, 24))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
+
+type T39 = DropLast<never>;
+>T39 : Symbol(T39, Decl(variadicTuples1.ts, 254, 25))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type R00 = First<readonly [number, symbol, string]>;
->R00 : Symbol(R00, Decl(variadicTuples1.ts, 251, 27))
+>R00 : Symbol(R00, Decl(variadicTuples1.ts, 255, 27))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
 type R01 = First<readonly [symbol, string]>;
->R01 : Symbol(R01, Decl(variadicTuples1.ts, 253, 52))
+>R01 : Symbol(R01, Decl(variadicTuples1.ts, 257, 52))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
 type R02 = First<readonly [string]>;
->R02 : Symbol(R02, Decl(variadicTuples1.ts, 254, 44))
+>R02 : Symbol(R02, Decl(variadicTuples1.ts, 258, 44))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
 type R03 = First<readonly [number, symbol, ...string[]]>;
->R03 : Symbol(R03, Decl(variadicTuples1.ts, 255, 36))
+>R03 : Symbol(R03, Decl(variadicTuples1.ts, 259, 36))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
 type R04 = First<readonly [symbol, ...string[]]>;
->R04 : Symbol(R04, Decl(variadicTuples1.ts, 256, 57))
+>R04 : Symbol(R04, Decl(variadicTuples1.ts, 260, 57))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
 type R05 = First<readonly string[]>;
->R05 : Symbol(R05, Decl(variadicTuples1.ts, 257, 49))
+>R05 : Symbol(R05, Decl(variadicTuples1.ts, 261, 49))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
 type R06 = First<readonly []>;
->R06 : Symbol(R06, Decl(variadicTuples1.ts, 258, 36))
+>R06 : Symbol(R06, Decl(variadicTuples1.ts, 262, 36))
 >First : Symbol(First, Decl(variadicTuples1.ts, 203, 1))
 
 type R10 = DropFirst<readonly [number, symbol, string]>;
->R10 : Symbol(R10, Decl(variadicTuples1.ts, 259, 30))
+>R10 : Symbol(R10, Decl(variadicTuples1.ts, 263, 30))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type R11 = DropFirst<readonly [symbol, string]>;
->R11 : Symbol(R11, Decl(variadicTuples1.ts, 261, 56))
+>R11 : Symbol(R11, Decl(variadicTuples1.ts, 265, 56))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type R12 = DropFirst<readonly [string]>;
->R12 : Symbol(R12, Decl(variadicTuples1.ts, 262, 48))
+>R12 : Symbol(R12, Decl(variadicTuples1.ts, 266, 48))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type R13 = DropFirst<readonly [number, symbol, ...string[]]>;
->R13 : Symbol(R13, Decl(variadicTuples1.ts, 263, 40))
+>R13 : Symbol(R13, Decl(variadicTuples1.ts, 267, 40))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type R14 = DropFirst<readonly [symbol, ...string[]]>;
->R14 : Symbol(R14, Decl(variadicTuples1.ts, 264, 61))
+>R14 : Symbol(R14, Decl(variadicTuples1.ts, 268, 61))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type R15 = DropFirst<readonly string[]>;
->R15 : Symbol(R15, Decl(variadicTuples1.ts, 265, 53))
+>R15 : Symbol(R15, Decl(variadicTuples1.ts, 269, 53))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type R16 = DropFirst<readonly []>;
->R16 : Symbol(R16, Decl(variadicTuples1.ts, 266, 40))
+>R16 : Symbol(R16, Decl(variadicTuples1.ts, 270, 40))
 >DropFirst : Symbol(DropFirst, Decl(variadicTuples1.ts, 207, 48))
 
 type R20 = Last<readonly [number, symbol, string]>;
->R20 : Symbol(R20, Decl(variadicTuples1.ts, 267, 34))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>R20 : Symbol(R20, Decl(variadicTuples1.ts, 271, 34))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type R21 = Last<readonly [symbol, string]>;
->R21 : Symbol(R21, Decl(variadicTuples1.ts, 269, 51))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>R21 : Symbol(R21, Decl(variadicTuples1.ts, 273, 51))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type R22 = Last<readonly [string]>;
->R22 : Symbol(R22, Decl(variadicTuples1.ts, 270, 43))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>R22 : Symbol(R22, Decl(variadicTuples1.ts, 274, 43))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type R23 = Last<readonly [number, symbol, ...string[]]>;
->R23 : Symbol(R23, Decl(variadicTuples1.ts, 271, 35))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>R23 : Symbol(R23, Decl(variadicTuples1.ts, 275, 35))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type R24 = Last<readonly [symbol, ...string[]]>;
->R24 : Symbol(R24, Decl(variadicTuples1.ts, 272, 56))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>R24 : Symbol(R24, Decl(variadicTuples1.ts, 276, 56))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type R25 = Last<readonly string[]>;
->R25 : Symbol(R25, Decl(variadicTuples1.ts, 273, 48))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>R25 : Symbol(R25, Decl(variadicTuples1.ts, 277, 48))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type R26 = Last<readonly []>;
->R26 : Symbol(R26, Decl(variadicTuples1.ts, 274, 35))
->Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 97))
+>R26 : Symbol(R26, Decl(variadicTuples1.ts, 278, 35))
+>Last : Symbol(Last, Decl(variadicTuples1.ts, 208, 98))
 
 type R30 = DropLast<readonly [number, symbol, string]>;
->R30 : Symbol(R30, Decl(variadicTuples1.ts, 275, 29))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>R30 : Symbol(R30, Decl(variadicTuples1.ts, 279, 29))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type R31 = DropLast<readonly [symbol, string]>;
->R31 : Symbol(R31, Decl(variadicTuples1.ts, 277, 55))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>R31 : Symbol(R31, Decl(variadicTuples1.ts, 281, 55))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type R32 = DropLast<readonly [string]>;
->R32 : Symbol(R32, Decl(variadicTuples1.ts, 278, 47))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>R32 : Symbol(R32, Decl(variadicTuples1.ts, 282, 47))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type R33 = DropLast<readonly [number, symbol, ...string[]]>;
->R33 : Symbol(R33, Decl(variadicTuples1.ts, 279, 39))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>R33 : Symbol(R33, Decl(variadicTuples1.ts, 283, 39))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type R34 = DropLast<readonly [symbol, ...string[]]>;
->R34 : Symbol(R34, Decl(variadicTuples1.ts, 280, 60))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>R34 : Symbol(R34, Decl(variadicTuples1.ts, 284, 60))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type R35 = DropLast<readonly string[]>;
->R35 : Symbol(R35, Decl(variadicTuples1.ts, 281, 52))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>R35 : Symbol(R35, Decl(variadicTuples1.ts, 285, 52))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 type R36 = DropLast<readonly []>;
->R36 : Symbol(R36, Decl(variadicTuples1.ts, 282, 39))
->DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 99))
+>R36 : Symbol(R36, Decl(variadicTuples1.ts, 286, 39))
+>DropLast : Symbol(DropLast, Decl(variadicTuples1.ts, 210, 161))
 
 // Inference to [...T, ...U] with implied arity for T
 
 function curry<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) {
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->T : Symbol(T, Decl(variadicTuples1.ts, 287, 15))
->U : Symbol(U, Decl(variadicTuples1.ts, 287, 35))
->R : Symbol(R, Decl(variadicTuples1.ts, 287, 56))
->f : Symbol(f, Decl(variadicTuples1.ts, 287, 60))
->args : Symbol(args, Decl(variadicTuples1.ts, 287, 64))
->T : Symbol(T, Decl(variadicTuples1.ts, 287, 15))
->U : Symbol(U, Decl(variadicTuples1.ts, 287, 35))
->R : Symbol(R, Decl(variadicTuples1.ts, 287, 56))
->a : Symbol(a, Decl(variadicTuples1.ts, 287, 92))
->T : Symbol(T, Decl(variadicTuples1.ts, 287, 15))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>T : Symbol(T, Decl(variadicTuples1.ts, 291, 15))
+>U : Symbol(U, Decl(variadicTuples1.ts, 291, 35))
+>R : Symbol(R, Decl(variadicTuples1.ts, 291, 56))
+>f : Symbol(f, Decl(variadicTuples1.ts, 291, 60))
+>args : Symbol(args, Decl(variadicTuples1.ts, 291, 64))
+>T : Symbol(T, Decl(variadicTuples1.ts, 291, 15))
+>U : Symbol(U, Decl(variadicTuples1.ts, 291, 35))
+>R : Symbol(R, Decl(variadicTuples1.ts, 291, 56))
+>a : Symbol(a, Decl(variadicTuples1.ts, 291, 92))
+>T : Symbol(T, Decl(variadicTuples1.ts, 291, 15))
 
     return (...b: U) => f(...a, ...b);
->b : Symbol(b, Decl(variadicTuples1.ts, 288, 12))
->U : Symbol(U, Decl(variadicTuples1.ts, 287, 35))
->f : Symbol(f, Decl(variadicTuples1.ts, 287, 60))
->a : Symbol(a, Decl(variadicTuples1.ts, 287, 92))
->b : Symbol(b, Decl(variadicTuples1.ts, 288, 12))
+>b : Symbol(b, Decl(variadicTuples1.ts, 292, 12))
+>U : Symbol(U, Decl(variadicTuples1.ts, 291, 35))
+>f : Symbol(f, Decl(variadicTuples1.ts, 291, 60))
+>a : Symbol(a, Decl(variadicTuples1.ts, 291, 92))
+>b : Symbol(b, Decl(variadicTuples1.ts, 292, 12))
 }
 
 const fn1 = (a: number, b: string, c: boolean, d: string[]) => 0;
->fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 291, 5))
->a : Symbol(a, Decl(variadicTuples1.ts, 291, 13))
->b : Symbol(b, Decl(variadicTuples1.ts, 291, 23))
->c : Symbol(c, Decl(variadicTuples1.ts, 291, 34))
->d : Symbol(d, Decl(variadicTuples1.ts, 291, 46))
+>fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 295, 5))
+>a : Symbol(a, Decl(variadicTuples1.ts, 295, 13))
+>b : Symbol(b, Decl(variadicTuples1.ts, 295, 23))
+>c : Symbol(c, Decl(variadicTuples1.ts, 295, 34))
+>d : Symbol(d, Decl(variadicTuples1.ts, 295, 46))
 
 const c0 = curry(fn1);  // (a: number, b: string, c: boolean, d: string[]) => number
->c0 : Symbol(c0, Decl(variadicTuples1.ts, 293, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 291, 5))
+>c0 : Symbol(c0, Decl(variadicTuples1.ts, 297, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 295, 5))
 
 const c1 = curry(fn1, 1);  // (b: string, c: boolean, d: string[]) => number
->c1 : Symbol(c1, Decl(variadicTuples1.ts, 294, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 291, 5))
+>c1 : Symbol(c1, Decl(variadicTuples1.ts, 298, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 295, 5))
 
 const c2 = curry(fn1, 1, 'abc');  // (c: boolean, d: string[]) => number
->c2 : Symbol(c2, Decl(variadicTuples1.ts, 295, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 291, 5))
+>c2 : Symbol(c2, Decl(variadicTuples1.ts, 299, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 295, 5))
 
 const c3 = curry(fn1, 1, 'abc', true);  // (d: string[]) => number
->c3 : Symbol(c3, Decl(variadicTuples1.ts, 296, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 291, 5))
+>c3 : Symbol(c3, Decl(variadicTuples1.ts, 300, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 295, 5))
 
 const c4 = curry(fn1, 1, 'abc', true, ['x', 'y']);  // () => number
->c4 : Symbol(c4, Decl(variadicTuples1.ts, 297, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 291, 5))
+>c4 : Symbol(c4, Decl(variadicTuples1.ts, 301, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn1 : Symbol(fn1, Decl(variadicTuples1.ts, 295, 5))
 
 const fn2 = (x: number, b: boolean, ...args: string[]) => 0;
->fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 299, 5))
->x : Symbol(x, Decl(variadicTuples1.ts, 299, 13))
->b : Symbol(b, Decl(variadicTuples1.ts, 299, 23))
->args : Symbol(args, Decl(variadicTuples1.ts, 299, 35))
+>fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 303, 5))
+>x : Symbol(x, Decl(variadicTuples1.ts, 303, 13))
+>b : Symbol(b, Decl(variadicTuples1.ts, 303, 23))
+>args : Symbol(args, Decl(variadicTuples1.ts, 303, 35))
 
 const c10 = curry(fn2);  // (x: number, b: boolean, ...args: string[]) => number
->c10 : Symbol(c10, Decl(variadicTuples1.ts, 301, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 299, 5))
+>c10 : Symbol(c10, Decl(variadicTuples1.ts, 305, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 303, 5))
 
 const c11 = curry(fn2, 1);  // (b: boolean, ...args: string[]) => number
->c11 : Symbol(c11, Decl(variadicTuples1.ts, 302, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 299, 5))
+>c11 : Symbol(c11, Decl(variadicTuples1.ts, 306, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 303, 5))
 
 const c12 = curry(fn2, 1, true);  // (...args: string[]) => number
->c12 : Symbol(c12, Decl(variadicTuples1.ts, 303, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 299, 5))
+>c12 : Symbol(c12, Decl(variadicTuples1.ts, 307, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 303, 5))
 
 const c13 = curry(fn2, 1, true, 'abc', 'def');  // (...args: string[]) => number
->c13 : Symbol(c13, Decl(variadicTuples1.ts, 304, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 299, 5))
+>c13 : Symbol(c13, Decl(variadicTuples1.ts, 308, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn2 : Symbol(fn2, Decl(variadicTuples1.ts, 303, 5))
 
 const fn3 = (...args: string[]) => 0;
->fn3 : Symbol(fn3, Decl(variadicTuples1.ts, 306, 5))
->args : Symbol(args, Decl(variadicTuples1.ts, 306, 13))
+>fn3 : Symbol(fn3, Decl(variadicTuples1.ts, 310, 5))
+>args : Symbol(args, Decl(variadicTuples1.ts, 310, 13))
 
 const c20 = curry(fn3);  // (...args: string[]) => number
->c20 : Symbol(c20, Decl(variadicTuples1.ts, 308, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn3 : Symbol(fn3, Decl(variadicTuples1.ts, 306, 5))
+>c20 : Symbol(c20, Decl(variadicTuples1.ts, 312, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn3 : Symbol(fn3, Decl(variadicTuples1.ts, 310, 5))
 
 const c21 = curry(fn3, 'abc', 'def');  // (...args: string[]) => number
->c21 : Symbol(c21, Decl(variadicTuples1.ts, 309, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn3 : Symbol(fn3, Decl(variadicTuples1.ts, 306, 5))
+>c21 : Symbol(c21, Decl(variadicTuples1.ts, 313, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn3 : Symbol(fn3, Decl(variadicTuples1.ts, 310, 5))
 
 const c22 = curry(fn3, ...sa);  // (...args: string[]) => number
->c22 : Symbol(c22, Decl(variadicTuples1.ts, 310, 5))
->curry : Symbol(curry, Decl(variadicTuples1.ts, 283, 33))
->fn3 : Symbol(fn3, Decl(variadicTuples1.ts, 306, 5))
+>c22 : Symbol(c22, Decl(variadicTuples1.ts, 314, 5))
+>curry : Symbol(curry, Decl(variadicTuples1.ts, 287, 33))
+>fn3 : Symbol(fn3, Decl(variadicTuples1.ts, 310, 5))
 >sa : Symbol(sa, Decl(variadicTuples1.ts, 29, 13))
 
 // No inference to [...T, ...U] when there is no implied arity
 
 function curry2<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) {
->curry2 : Symbol(curry2, Decl(variadicTuples1.ts, 310, 30))
->T : Symbol(T, Decl(variadicTuples1.ts, 314, 16))
->U : Symbol(U, Decl(variadicTuples1.ts, 314, 36))
->R : Symbol(R, Decl(variadicTuples1.ts, 314, 57))
->f : Symbol(f, Decl(variadicTuples1.ts, 314, 61))
->args : Symbol(args, Decl(variadicTuples1.ts, 314, 65))
->T : Symbol(T, Decl(variadicTuples1.ts, 314, 16))
->U : Symbol(U, Decl(variadicTuples1.ts, 314, 36))
->R : Symbol(R, Decl(variadicTuples1.ts, 314, 57))
->t : Symbol(t, Decl(variadicTuples1.ts, 314, 93))
->T : Symbol(T, Decl(variadicTuples1.ts, 314, 16))
->u : Symbol(u, Decl(variadicTuples1.ts, 314, 104))
->U : Symbol(U, Decl(variadicTuples1.ts, 314, 36))
+>curry2 : Symbol(curry2, Decl(variadicTuples1.ts, 314, 30))
+>T : Symbol(T, Decl(variadicTuples1.ts, 318, 16))
+>U : Symbol(U, Decl(variadicTuples1.ts, 318, 36))
+>R : Symbol(R, Decl(variadicTuples1.ts, 318, 57))
+>f : Symbol(f, Decl(variadicTuples1.ts, 318, 61))
+>args : Symbol(args, Decl(variadicTuples1.ts, 318, 65))
+>T : Symbol(T, Decl(variadicTuples1.ts, 318, 16))
+>U : Symbol(U, Decl(variadicTuples1.ts, 318, 36))
+>R : Symbol(R, Decl(variadicTuples1.ts, 318, 57))
+>t : Symbol(t, Decl(variadicTuples1.ts, 318, 93))
+>T : Symbol(T, Decl(variadicTuples1.ts, 318, 16))
+>u : Symbol(u, Decl(variadicTuples1.ts, 318, 104))
+>U : Symbol(U, Decl(variadicTuples1.ts, 318, 36))
 
     return f(...t, ...u);
->f : Symbol(f, Decl(variadicTuples1.ts, 314, 61))
->t : Symbol(t, Decl(variadicTuples1.ts, 314, 93))
->u : Symbol(u, Decl(variadicTuples1.ts, 314, 104))
+>f : Symbol(f, Decl(variadicTuples1.ts, 318, 61))
+>t : Symbol(t, Decl(variadicTuples1.ts, 318, 93))
+>u : Symbol(u, Decl(variadicTuples1.ts, 318, 104))
 }
 
 declare function fn10(a: string, b: number, c: boolean): string[];
->fn10 : Symbol(fn10, Decl(variadicTuples1.ts, 316, 1))
->a : Symbol(a, Decl(variadicTuples1.ts, 318, 22))
->b : Symbol(b, Decl(variadicTuples1.ts, 318, 32))
->c : Symbol(c, Decl(variadicTuples1.ts, 318, 43))
+>fn10 : Symbol(fn10, Decl(variadicTuples1.ts, 320, 1))
+>a : Symbol(a, Decl(variadicTuples1.ts, 322, 22))
+>b : Symbol(b, Decl(variadicTuples1.ts, 322, 32))
+>c : Symbol(c, Decl(variadicTuples1.ts, 322, 43))
 
 curry2(fn10, ['hello', 42], [true]);
->curry2 : Symbol(curry2, Decl(variadicTuples1.ts, 310, 30))
->fn10 : Symbol(fn10, Decl(variadicTuples1.ts, 316, 1))
+>curry2 : Symbol(curry2, Decl(variadicTuples1.ts, 314, 30))
+>fn10 : Symbol(fn10, Decl(variadicTuples1.ts, 320, 1))
 
 curry2(fn10, ['hello'], [42, true]);
->curry2 : Symbol(curry2, Decl(variadicTuples1.ts, 310, 30))
->fn10 : Symbol(fn10, Decl(variadicTuples1.ts, 316, 1))
+>curry2 : Symbol(curry2, Decl(variadicTuples1.ts, 314, 30))
+>fn10 : Symbol(fn10, Decl(variadicTuples1.ts, 320, 1))
+
+// Inference to [...T] has higher priority than inference to [...T, number?]
+
+declare function ft<T extends unknown[]>(t1: [...T], t2: [...T, number?]): T;
+>ft : Symbol(ft, Decl(variadicTuples1.ts, 325, 36))
+>T : Symbol(T, Decl(variadicTuples1.ts, 329, 20))
+>t1 : Symbol(t1, Decl(variadicTuples1.ts, 329, 41))
+>T : Symbol(T, Decl(variadicTuples1.ts, 329, 20))
+>t2 : Symbol(t2, Decl(variadicTuples1.ts, 329, 52))
+>T : Symbol(T, Decl(variadicTuples1.ts, 329, 20))
+>T : Symbol(T, Decl(variadicTuples1.ts, 329, 20))
+
+ft([1, 2, 3], [1, 2, 3]);
+>ft : Symbol(ft, Decl(variadicTuples1.ts, 325, 36))
+
+ft([1, 2], [1, 2, 3]);
+>ft : Symbol(ft, Decl(variadicTuples1.ts, 325, 36))
+
+ft(['a', 'b'], ['c', 'd'])
+>ft : Symbol(ft, Decl(variadicTuples1.ts, 325, 36))
+
+ft(['a', 'b'], ['c', 'd', 42])
+>ft : Symbol(ft, Decl(variadicTuples1.ts, 325, 36))
 
 // Last argument is contextually typed
 
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
->call : Symbol(call, Decl(variadicTuples1.ts, 321, 36))
->T : Symbol(T, Decl(variadicTuples1.ts, 325, 22))
->R : Symbol(R, Decl(variadicTuples1.ts, 325, 42))
->args : Symbol(args, Decl(variadicTuples1.ts, 325, 46))
->T : Symbol(T, Decl(variadicTuples1.ts, 325, 22))
->args : Symbol(args, Decl(variadicTuples1.ts, 325, 63))
->T : Symbol(T, Decl(variadicTuples1.ts, 325, 22))
->R : Symbol(R, Decl(variadicTuples1.ts, 325, 42))
->T : Symbol(T, Decl(variadicTuples1.ts, 325, 22))
->R : Symbol(R, Decl(variadicTuples1.ts, 325, 42))
+>call : Symbol(call, Decl(variadicTuples1.ts, 334, 30))
+>T : Symbol(T, Decl(variadicTuples1.ts, 338, 22))
+>R : Symbol(R, Decl(variadicTuples1.ts, 338, 42))
+>args : Symbol(args, Decl(variadicTuples1.ts, 338, 46))
+>T : Symbol(T, Decl(variadicTuples1.ts, 338, 22))
+>args : Symbol(args, Decl(variadicTuples1.ts, 338, 63))
+>T : Symbol(T, Decl(variadicTuples1.ts, 338, 22))
+>R : Symbol(R, Decl(variadicTuples1.ts, 338, 42))
+>T : Symbol(T, Decl(variadicTuples1.ts, 338, 22))
+>R : Symbol(R, Decl(variadicTuples1.ts, 338, 42))
 
 call('hello', 32, (a, b) => 42);
->call : Symbol(call, Decl(variadicTuples1.ts, 321, 36))
->a : Symbol(a, Decl(variadicTuples1.ts, 327, 19))
->b : Symbol(b, Decl(variadicTuples1.ts, 327, 21))
+>call : Symbol(call, Decl(variadicTuples1.ts, 334, 30))
+>a : Symbol(a, Decl(variadicTuples1.ts, 340, 19))
+>b : Symbol(b, Decl(variadicTuples1.ts, 340, 21))
 
 // Would be nice to infer [...string[], (...args: string[]) => number] here
 // Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
 
 call(...sa, (...x) => 42);
->call : Symbol(call, Decl(variadicTuples1.ts, 321, 36))
+>call : Symbol(call, Decl(variadicTuples1.ts, 334, 30))
 >sa : Symbol(sa, Decl(variadicTuples1.ts, 29, 13))
->x : Symbol(x, Decl(variadicTuples1.ts, 332, 13))
+>x : Symbol(x, Decl(variadicTuples1.ts, 345, 13))
 
 // No inference to ending optional elements (except with identical structure)
 
 declare function f20<T extends unknown[] = []>(args: [...T, number?]): T;
->f20 : Symbol(f20, Decl(variadicTuples1.ts, 332, 26))
->T : Symbol(T, Decl(variadicTuples1.ts, 336, 21))
->args : Symbol(args, Decl(variadicTuples1.ts, 336, 47))
->T : Symbol(T, Decl(variadicTuples1.ts, 336, 21))
->T : Symbol(T, Decl(variadicTuples1.ts, 336, 21))
+>f20 : Symbol(f20, Decl(variadicTuples1.ts, 345, 26))
+>T : Symbol(T, Decl(variadicTuples1.ts, 349, 21))
+>args : Symbol(args, Decl(variadicTuples1.ts, 349, 47))
+>T : Symbol(T, Decl(variadicTuples1.ts, 349, 21))
+>T : Symbol(T, Decl(variadicTuples1.ts, 349, 21))
 
 function f21<U extends string[]>(args: [...U, number?]) {
->f21 : Symbol(f21, Decl(variadicTuples1.ts, 336, 73))
->U : Symbol(U, Decl(variadicTuples1.ts, 338, 13))
->args : Symbol(args, Decl(variadicTuples1.ts, 338, 33))
->U : Symbol(U, Decl(variadicTuples1.ts, 338, 13))
+>f21 : Symbol(f21, Decl(variadicTuples1.ts, 349, 73))
+>U : Symbol(U, Decl(variadicTuples1.ts, 351, 13))
+>args : Symbol(args, Decl(variadicTuples1.ts, 351, 33))
+>U : Symbol(U, Decl(variadicTuples1.ts, 351, 13))
 
     let v1 = f20(args);  // U
->v1 : Symbol(v1, Decl(variadicTuples1.ts, 339, 7))
->f20 : Symbol(f20, Decl(variadicTuples1.ts, 332, 26))
->args : Symbol(args, Decl(variadicTuples1.ts, 338, 33))
+>v1 : Symbol(v1, Decl(variadicTuples1.ts, 352, 7))
+>f20 : Symbol(f20, Decl(variadicTuples1.ts, 345, 26))
+>args : Symbol(args, Decl(variadicTuples1.ts, 351, 33))
 
-    let v2 = f20(["foo", "bar"]);  // []
->v2 : Symbol(v2, Decl(variadicTuples1.ts, 340, 7))
->f20 : Symbol(f20, Decl(variadicTuples1.ts, 332, 26))
+    let v2 = f20(["foo", "bar"]);  // [string]
+>v2 : Symbol(v2, Decl(variadicTuples1.ts, 353, 7))
+>f20 : Symbol(f20, Decl(variadicTuples1.ts, 345, 26))
 
-    let v3 = f20(["foo", 42]);  // []
->v3 : Symbol(v3, Decl(variadicTuples1.ts, 341, 7))
->f20 : Symbol(f20, Decl(variadicTuples1.ts, 332, 26))
+    let v3 = f20(["foo", 42]);  // [string]
+>v3 : Symbol(v3, Decl(variadicTuples1.ts, 354, 7))
+>f20 : Symbol(f20, Decl(variadicTuples1.ts, 345, 26))
 }
 
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
->f22 : Symbol(f22, Decl(variadicTuples1.ts, 342, 1), Decl(variadicTuples1.ts, 344, 72))
->T : Symbol(T, Decl(variadicTuples1.ts, 344, 21))
->args : Symbol(args, Decl(variadicTuples1.ts, 344, 47))
->T : Symbol(T, Decl(variadicTuples1.ts, 344, 21))
->T : Symbol(T, Decl(variadicTuples1.ts, 344, 21))
+>f22 : Symbol(f22, Decl(variadicTuples1.ts, 355, 1), Decl(variadicTuples1.ts, 357, 72))
+>T : Symbol(T, Decl(variadicTuples1.ts, 357, 21))
+>args : Symbol(args, Decl(variadicTuples1.ts, 357, 47))
+>T : Symbol(T, Decl(variadicTuples1.ts, 357, 21))
+>T : Symbol(T, Decl(variadicTuples1.ts, 357, 21))
 
 declare function f22<T extends unknown[] = []>(args: [...T]): T;
->f22 : Symbol(f22, Decl(variadicTuples1.ts, 342, 1), Decl(variadicTuples1.ts, 344, 72))
->T : Symbol(T, Decl(variadicTuples1.ts, 345, 21))
->args : Symbol(args, Decl(variadicTuples1.ts, 345, 47))
->T : Symbol(T, Decl(variadicTuples1.ts, 345, 21))
->T : Symbol(T, Decl(variadicTuples1.ts, 345, 21))
+>f22 : Symbol(f22, Decl(variadicTuples1.ts, 355, 1), Decl(variadicTuples1.ts, 357, 72))
+>T : Symbol(T, Decl(variadicTuples1.ts, 358, 21))
+>args : Symbol(args, Decl(variadicTuples1.ts, 358, 47))
+>T : Symbol(T, Decl(variadicTuples1.ts, 358, 21))
+>T : Symbol(T, Decl(variadicTuples1.ts, 358, 21))
 
 function f23<U extends string[]>(args: [...U, number]) {
->f23 : Symbol(f23, Decl(variadicTuples1.ts, 345, 64))
->U : Symbol(U, Decl(variadicTuples1.ts, 347, 13))
->args : Symbol(args, Decl(variadicTuples1.ts, 347, 33))
->U : Symbol(U, Decl(variadicTuples1.ts, 347, 13))
+>f23 : Symbol(f23, Decl(variadicTuples1.ts, 358, 64))
+>U : Symbol(U, Decl(variadicTuples1.ts, 360, 13))
+>args : Symbol(args, Decl(variadicTuples1.ts, 360, 33))
+>U : Symbol(U, Decl(variadicTuples1.ts, 360, 13))
 
     let v1 = f22(args);  // U
->v1 : Symbol(v1, Decl(variadicTuples1.ts, 348, 7))
->f22 : Symbol(f22, Decl(variadicTuples1.ts, 342, 1), Decl(variadicTuples1.ts, 344, 72))
->args : Symbol(args, Decl(variadicTuples1.ts, 347, 33))
+>v1 : Symbol(v1, Decl(variadicTuples1.ts, 361, 7))
+>f22 : Symbol(f22, Decl(variadicTuples1.ts, 355, 1), Decl(variadicTuples1.ts, 357, 72))
+>args : Symbol(args, Decl(variadicTuples1.ts, 360, 33))
 
     let v2 = f22(["foo", "bar"]);  // [string, string]
->v2 : Symbol(v2, Decl(variadicTuples1.ts, 349, 7))
->f22 : Symbol(f22, Decl(variadicTuples1.ts, 342, 1), Decl(variadicTuples1.ts, 344, 72))
+>v2 : Symbol(v2, Decl(variadicTuples1.ts, 362, 7))
+>f22 : Symbol(f22, Decl(variadicTuples1.ts, 355, 1), Decl(variadicTuples1.ts, 357, 72))
 
     let v3 = f22(["foo", 42]);  // [string]
->v3 : Symbol(v3, Decl(variadicTuples1.ts, 350, 7))
->f22 : Symbol(f22, Decl(variadicTuples1.ts, 342, 1), Decl(variadicTuples1.ts, 344, 72))
+>v3 : Symbol(v3, Decl(variadicTuples1.ts, 363, 7))
+>f22 : Symbol(f22, Decl(variadicTuples1.ts, 355, 1), Decl(variadicTuples1.ts, 357, 72))
 }
 
 // Repro from #39327
 
 interface Desc<A extends unknown[], T> {
->Desc : Symbol(Desc, Decl(variadicTuples1.ts, 351, 1))
->A : Symbol(A, Decl(variadicTuples1.ts, 355, 15))
->T : Symbol(T, Decl(variadicTuples1.ts, 355, 35))
+>Desc : Symbol(Desc, Decl(variadicTuples1.ts, 364, 1))
+>A : Symbol(A, Decl(variadicTuples1.ts, 368, 15))
+>T : Symbol(T, Decl(variadicTuples1.ts, 368, 35))
 
     readonly f: (...args: A) => T;
->f : Symbol(Desc.f, Decl(variadicTuples1.ts, 355, 40))
->args : Symbol(args, Decl(variadicTuples1.ts, 356, 17))
->A : Symbol(A, Decl(variadicTuples1.ts, 355, 15))
->T : Symbol(T, Decl(variadicTuples1.ts, 355, 35))
+>f : Symbol(Desc.f, Decl(variadicTuples1.ts, 368, 40))
+>args : Symbol(args, Decl(variadicTuples1.ts, 369, 17))
+>A : Symbol(A, Decl(variadicTuples1.ts, 368, 15))
+>T : Symbol(T, Decl(variadicTuples1.ts, 368, 35))
 
     bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
->bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 356, 34))
->T : Symbol(T, Decl(variadicTuples1.ts, 357, 9))
->U : Symbol(U, Decl(variadicTuples1.ts, 357, 29))
->R : Symbol(R, Decl(variadicTuples1.ts, 357, 50))
->this : Symbol(this, Decl(variadicTuples1.ts, 357, 54))
->Desc : Symbol(Desc, Decl(variadicTuples1.ts, 351, 1))
->T : Symbol(T, Decl(variadicTuples1.ts, 357, 9))
->U : Symbol(U, Decl(variadicTuples1.ts, 357, 29))
->R : Symbol(R, Decl(variadicTuples1.ts, 357, 50))
->args : Symbol(args, Decl(variadicTuples1.ts, 357, 82))
->T : Symbol(T, Decl(variadicTuples1.ts, 357, 9))
->Desc : Symbol(Desc, Decl(variadicTuples1.ts, 351, 1))
->U : Symbol(U, Decl(variadicTuples1.ts, 357, 29))
->R : Symbol(R, Decl(variadicTuples1.ts, 357, 50))
+>bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 369, 34))
+>T : Symbol(T, Decl(variadicTuples1.ts, 370, 9))
+>U : Symbol(U, Decl(variadicTuples1.ts, 370, 29))
+>R : Symbol(R, Decl(variadicTuples1.ts, 370, 50))
+>this : Symbol(this, Decl(variadicTuples1.ts, 370, 54))
+>Desc : Symbol(Desc, Decl(variadicTuples1.ts, 364, 1))
+>T : Symbol(T, Decl(variadicTuples1.ts, 370, 9))
+>U : Symbol(U, Decl(variadicTuples1.ts, 370, 29))
+>R : Symbol(R, Decl(variadicTuples1.ts, 370, 50))
+>args : Symbol(args, Decl(variadicTuples1.ts, 370, 82))
+>T : Symbol(T, Decl(variadicTuples1.ts, 370, 9))
+>Desc : Symbol(Desc, Decl(variadicTuples1.ts, 364, 1))
+>U : Symbol(U, Decl(variadicTuples1.ts, 370, 29))
+>R : Symbol(R, Decl(variadicTuples1.ts, 370, 50))
 }
 
 declare const a: Desc<[string, number, boolean], object>;
->a : Symbol(a, Decl(variadicTuples1.ts, 360, 13))
->Desc : Symbol(Desc, Decl(variadicTuples1.ts, 351, 1))
+>a : Symbol(a, Decl(variadicTuples1.ts, 373, 13))
+>Desc : Symbol(Desc, Decl(variadicTuples1.ts, 364, 1))
 
 const b = a.bind("", 1);  // Desc<[boolean], object>
->b : Symbol(b, Decl(variadicTuples1.ts, 361, 5))
->a.bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 356, 34))
->a : Symbol(a, Decl(variadicTuples1.ts, 360, 13))
->bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 356, 34))
+>b : Symbol(b, Decl(variadicTuples1.ts, 374, 5))
+>a.bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 369, 34))
+>a : Symbol(a, Decl(variadicTuples1.ts, 373, 13))
+>bind : Symbol(Desc.bind, Decl(variadicTuples1.ts, 369, 34))
 
 // Repro from #39607
 
 declare function getUser(id: string, options?: { x?: string }): string;
->getUser : Symbol(getUser, Decl(variadicTuples1.ts, 361, 24))
->id : Symbol(id, Decl(variadicTuples1.ts, 365, 25))
->options : Symbol(options, Decl(variadicTuples1.ts, 365, 36))
->x : Symbol(x, Decl(variadicTuples1.ts, 365, 48))
+>getUser : Symbol(getUser, Decl(variadicTuples1.ts, 374, 24))
+>id : Symbol(id, Decl(variadicTuples1.ts, 378, 25))
+>options : Symbol(options, Decl(variadicTuples1.ts, 378, 36))
+>x : Symbol(x, Decl(variadicTuples1.ts, 378, 48))
 
 declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z?: boolean }): void;
->getOrgUser : Symbol(getOrgUser, Decl(variadicTuples1.ts, 365, 71))
->id : Symbol(id, Decl(variadicTuples1.ts, 367, 28))
->orgId : Symbol(orgId, Decl(variadicTuples1.ts, 367, 39))
->options : Symbol(options, Decl(variadicTuples1.ts, 367, 54))
->y : Symbol(y, Decl(variadicTuples1.ts, 367, 66))
->z : Symbol(z, Decl(variadicTuples1.ts, 367, 78))
+>getOrgUser : Symbol(getOrgUser, Decl(variadicTuples1.ts, 378, 71))
+>id : Symbol(id, Decl(variadicTuples1.ts, 380, 28))
+>orgId : Symbol(orgId, Decl(variadicTuples1.ts, 380, 39))
+>options : Symbol(options, Decl(variadicTuples1.ts, 380, 54))
+>y : Symbol(y, Decl(variadicTuples1.ts, 380, 66))
+>z : Symbol(z, Decl(variadicTuples1.ts, 380, 78))
 
 function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
->callApi : Symbol(callApi, Decl(variadicTuples1.ts, 367, 100))
->T : Symbol(T, Decl(variadicTuples1.ts, 369, 17))
->U : Symbol(U, Decl(variadicTuples1.ts, 369, 42))
->method : Symbol(method, Decl(variadicTuples1.ts, 369, 53))
->args : Symbol(args, Decl(variadicTuples1.ts, 369, 62))
->T : Symbol(T, Decl(variadicTuples1.ts, 369, 17))
->U : Symbol(U, Decl(variadicTuples1.ts, 369, 42))
+>callApi : Symbol(callApi, Decl(variadicTuples1.ts, 380, 100))
+>T : Symbol(T, Decl(variadicTuples1.ts, 382, 17))
+>U : Symbol(U, Decl(variadicTuples1.ts, 382, 42))
+>method : Symbol(method, Decl(variadicTuples1.ts, 382, 53))
+>args : Symbol(args, Decl(variadicTuples1.ts, 382, 62))
+>T : Symbol(T, Decl(variadicTuples1.ts, 382, 17))
+>U : Symbol(U, Decl(variadicTuples1.ts, 382, 42))
 
     return (...args: [...T]) => method(...args, {});
->args : Symbol(args, Decl(variadicTuples1.ts, 370, 12))
->T : Symbol(T, Decl(variadicTuples1.ts, 369, 17))
->method : Symbol(method, Decl(variadicTuples1.ts, 369, 53))
->args : Symbol(args, Decl(variadicTuples1.ts, 370, 12))
+>args : Symbol(args, Decl(variadicTuples1.ts, 383, 12))
+>T : Symbol(T, Decl(variadicTuples1.ts, 382, 17))
+>method : Symbol(method, Decl(variadicTuples1.ts, 382, 53))
+>args : Symbol(args, Decl(variadicTuples1.ts, 383, 12))
 }
 
 callApi(getUser);
->callApi : Symbol(callApi, Decl(variadicTuples1.ts, 367, 100))
->getUser : Symbol(getUser, Decl(variadicTuples1.ts, 361, 24))
+>callApi : Symbol(callApi, Decl(variadicTuples1.ts, 380, 100))
+>getUser : Symbol(getUser, Decl(variadicTuples1.ts, 374, 24))
 
 callApi(getOrgUser);
->callApi : Symbol(callApi, Decl(variadicTuples1.ts, 367, 100))
->getOrgUser : Symbol(getOrgUser, Decl(variadicTuples1.ts, 365, 71))
+>callApi : Symbol(callApi, Decl(variadicTuples1.ts, 380, 100))
+>getOrgUser : Symbol(getOrgUser, Decl(variadicTuples1.ts, 378, 71))
 

@@ -3165,12 +3165,12 @@ namespace ts {
     export interface JSDocEnumTag extends JSDocTag, Declaration {
         readonly kind: SyntaxKind.JSDocEnumTag;
         readonly parent: JSDoc;
-        readonly typeExpression?: JSDocTypeExpression;
+        readonly typeExpression: JSDocTypeExpression;
     }
 
     export interface JSDocThisTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocThisTag;
-        readonly typeExpression?: JSDocTypeExpression;
+        readonly typeExpression: JSDocTypeExpression;
     }
 
     export interface JSDocTemplateTag extends JSDocTag {
@@ -3687,6 +3687,8 @@ namespace ts {
         /* @internal */
         getRefFileMap(): MultiMap<Path, RefFile> | undefined;
         /* @internal */
+        getSkippedTrippleSlashReferences(): Set<Path> | undefined;
+        /* @internal */
         getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
         /**
@@ -3765,7 +3767,6 @@ namespace ts {
         /*@internal*/ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
         /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
-        /*@internal*/ getProbableSymlinks(): ReadonlyESMap<string, string>;
         /**
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
@@ -5048,6 +5049,8 @@ namespace ts {
         resolvedBaseConstructorType?: Type;               // Resolved base constructor type of class
         /* @internal */
         resolvedBaseTypes: BaseType[];                    // Resolved base types
+        /* @internal */
+        baseTypesResolved?: boolean;
     }
 
     // Object type or intersection of object types
@@ -5421,15 +5424,16 @@ namespace ts {
 
     export const enum InferencePriority {
         NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
-        HomomorphicMappedType        = 1 << 1,  // Reverse inference for homomorphic mapped type
-        PartialHomomorphicMappedType = 1 << 2,  // Partial reverse inference for homomorphic mapped type
-        MappedTypeConstraint         = 1 << 3,  // Reverse inference for mapped type
-        ContravariantConditional     = 1 << 4,  // Conditional type in contravariant position
-        ReturnType                   = 1 << 5,  // Inference made from return type of generic function
-        LiteralKeyof                 = 1 << 6,  // Inference made from a string literal to a keyof T
-        NoConstraints                = 1 << 7,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 8,  // Always use strict rules for contravariant inferences
-        MaxValue                     = 1 << 9,  // Seed for inference priority tracking
+        SpeculativeTuple             = 1 << 1,  // Speculative tuple inference
+        HomomorphicMappedType        = 1 << 2,  // Reverse inference for homomorphic mapped type
+        PartialHomomorphicMappedType = 1 << 3,  // Partial reverse inference for homomorphic mapped type
+        MappedTypeConstraint         = 1 << 4,  // Reverse inference for mapped type
+        ContravariantConditional     = 1 << 5,  // Conditional type in contravariant position
+        ReturnType                   = 1 << 6,  // Inference made from return type of generic function
+        LiteralKeyof                 = 1 << 7,  // Inference made from a string literal to a keyof T
+        NoConstraints                = 1 << 8,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                 = 1 << 9,  // Always use strict rules for contravariant inferences
+        MaxValue                     = 1 << 10, // Seed for inference priority tracking
 
         PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
         Circularity = -1,  // Inference circularity (value less than all other priorities)
@@ -5667,6 +5671,7 @@ namespace ts {
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
         disableSolutionSearching?: boolean;
+        disableReferencedProjectLoad?: boolean;
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -6227,6 +6232,7 @@ namespace ts {
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
+        /* @internal */ includeTripleslashReferencesFrom?(containingFile: string): boolean;
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
@@ -6237,7 +6243,7 @@ namespace ts {
 
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;
-        /*@internal*/getSymlinks?(): ReadonlyESMap<string, string>;
+        /*@internal*/getSymlinkCache?(): SymlinkCache;
     }
 
     /** true if --out otherwise source file name */
@@ -6970,9 +6976,9 @@ namespace ts {
         updateJSDocTypeTag(node: JSDocTypeTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocTypeTag;
         createJSDocReturnTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
         updateJSDocReturnTag(node: JSDocReturnTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocReturnTag;
-        createJSDocThisTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag;
+        createJSDocThisTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocThisTag;
         updateJSDocThisTag(node: JSDocThisTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment: string | undefined): JSDocThisTag;
-        createJSDocEnumTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag;
+        createJSDocEnumTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string): JSDocEnumTag;
         updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocEnumTag;
         createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag;
         updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag;
@@ -7751,8 +7757,10 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         fileExists(path: string): boolean;
         getCurrentDirectory(): string;
+        directoryExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
-        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyESMap<string, string>;
+        realpath?(path: string): string;
+        getSymlinkCache?(): SymlinkCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
 
         getSourceFiles(): readonly SourceFile[];

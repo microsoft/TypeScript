@@ -10053,7 +10053,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[A tag '{0}' espera no mínimo os argumentos '{1}', mas o alocador JSX '{2}' fornece no máximo '{3}'.]]></Val>
+            <Val><![CDATA[A tag '{0}' espera no mínimo '{1}' argumentos, mas o alocador JSX '{2}' fornece no máximo '{3}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
