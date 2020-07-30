@@ -20141,6 +20141,8 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
                     return isMatchingReference(source, (target as NonNullExpression | ParenthesizedExpression).expression);
+                case SyntaxKind.BinaryExpression:
+                    return isAssignmentExpression(target) && isMatchingReference(source, target.left);
             }
             switch (source.kind) {
                 case SyntaxKind.Identifier:
