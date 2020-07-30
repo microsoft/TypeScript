@@ -33788,6 +33788,13 @@ namespace ts {
                 return methodName === "next" ? anyIterationTypes : undefined;
             }
 
+            // If the method signature comes exclusively from the global iterator or generator type,
+            // create iteration types from its type arguments like `getIterationTypesOfIteratorFast`
+            // does (so as to remove `undefined` from the next and return types). We arrive here when
+            // a contextual type for a generator was not a direct reference to one of those global types,
+            // but looking up `methodType` referred to one of them (and nothing else). E.g., in
+            // `interface SpecialIterator extends Iterator<number> {}`, `SpecialIterator` is not a
+            // reference to `Iterator`, but its `next` member derives exclusively from `Iterator`.
             if (methodType?.symbol && methodSignatures.length === 1) {
                 const globalGeneratorType = resolver.getGlobalGeneratorType(/*reportErrors*/ false);
                 const globalIteratorType = resolver.getGlobalIteratorType(/*reportErrors*/ false);
