@@ -483,16 +483,13 @@ namespace ts {
             return node.pos;
         }
 
-        if (isJSDocNode(node)) {
+        if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
+            // JsxText cannot actually contain comments, even though the scanner will think it sees comments
             return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
         if (includeJsDoc && hasJSDocNodes(node)) {
             return getTokenPosOfNode(node.jsDoc![0], sourceFile);
-        }
-
-        if (node.kind === SyntaxKind.JsxText) {
-            return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
         // For a syntax list, it is possible that one of its children has JSDocComment nodes, while
