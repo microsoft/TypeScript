@@ -17485,8 +17485,8 @@ namespace ts {
                 }
                 if (props.length === 1) {
                     const propName = symbolToString(unmatchedProperty);
-                    if (errorNode?.parent && isJsxOpeningLikeElement(errorNode.parent)) {
-                        reportError(Diagnostics.The_0_attribute_is_missing_but_is_required_for_this_1_tag, propName, (errorNode as Identifier).escapedText as string);
+                    if (isJsxOpeningLikeElementAttributesError(errorNode)) {
+                        reportError(Diagnostics.The_0_attribute_is_missing_but_is_required_for_this_1_tag, propName, getPropertiesPathName(errorNode as JsxTagNameExpression, true)?.join("."));
                     }
                     else {
                         reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
@@ -17500,16 +17500,16 @@ namespace ts {
                 }
                 else if (tryElaborateArrayLikeErrors(source, target, /*reportErrors*/ false)) {
                     if (props.length > 5) { // arbitrary cutoff for too-long list form
-                        if (errorNode?.parent && isJsxOpeningLikeElement(errorNode.parent)) {
-                            reportError(Diagnostics.This_0_tag_is_missing_the_following_attributes_Colon_1_and_2_more, (errorNode as Identifier).escapedText as string, map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
+                        if (isJsxOpeningLikeElementAttributesError(errorNode)) {
+                            reportError(Diagnostics.This_0_tag_is_missing_the_following_attributes_Colon_1_and_2_more, getPropertiesPathName(errorNode as JsxTagNameExpression, true)?.join("."), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
                         }
                         else {
                             reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, typeToString(source), typeToString(target), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
                         }
                     }
                     else {
-                        if (errorNode?.parent && isJsxOpeningLikeElement(errorNode.parent)) {
-                            reportError(Diagnostics.This_0_tag_is_missing_the_following_attributes_Colon_1, (errorNode as Identifier).escapedText as string, map(props, p => symbolToString(p)).join(", "));
+                        if (isJsxOpeningLikeElementAttributesError(errorNode)) {
+                            reportError(Diagnostics.This_0_tag_is_missing_the_following_attributes_Colon_1, getPropertiesPathName(errorNode as JsxTagNameExpression, true)?.join("."), map(props, p => symbolToString(p)).join(", "));
                         }
                         else {
                             reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, typeToString(source), typeToString(target), map(props, p => symbolToString(p)).join(", "));
@@ -17520,6 +17520,12 @@ namespace ts {
                     }
                 }
                 // No array like or unmatched property error - just issue top level error (errorInfo = undefined)
+
+                function isJsxOpeningLikeElementAttributesError(node: Node | undefined) {
+                    return node && isJSXTagName(node);
+                    // node?.parent && isJsxOpeningLikeElement(node.parent) // node is Jsx opening like element
+                    //     && target !== getJsxElementClassTypeAt(node.parent);    // make sure error is caused by attributes
+                }
             }
 
             function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, excludedProperties: Set<__String> | undefined, intersectionState: IntersectionState): Ternary {
@@ -20173,6 +20179,24 @@ namespace ts {
             return isMatchingReference(source, target) ||
                 (target.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>target).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
                 (containsTruthyCheck(source, (<BinaryExpression>target).left) || containsTruthyCheck(source, (<BinaryExpression>target).right)));
+        }
+
+        function getPropertiesPathName(access: AccessExpression | Identifier, includeIdentifier = false): __String[] | undefined {
+            const result: __String[] = [];
+            let expression: LeftHandSideExpression = access;
+            while (isAccessExpression(expression)) {
+                const name = getAccessedPropertyName(expression);
+                if (name === undefined) {
+                    return undefined;
+                }
+                result.unshift(name);
+                expression = expression.expression;
+            }
+            Debug.assertNode(expression, isIdentifier);
+            if (includeIdentifier) {
+                result.unshift(expression.escapedText);
+            }
+            return result;
         }
 
         function getAccessedPropertyName(access: AccessExpression): __String | undefined {
