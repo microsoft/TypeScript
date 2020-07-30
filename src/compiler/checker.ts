@@ -20131,11 +20131,11 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
                     return isMatchingReference(source, (target as NonNullExpression | ParenthesizedExpression).expression);
-                // case SyntaxKind.BinaryExpression:
-                //     if (isAssignmentExpression(target)) {
-                //         return isMatchingReference(source, target.left);
-                //     }
-                //     break;
+                case SyntaxKind.BinaryExpression:
+                    if (isAssignmentExpression(target)) {
+                        return isMatchingReference(source, target.left);
+                    }
+                    break;
             }
             switch (source.kind) {
                 case SyntaxKind.Identifier:
