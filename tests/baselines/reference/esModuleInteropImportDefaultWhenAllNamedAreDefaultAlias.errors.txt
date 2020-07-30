@@ -1,9 +1,9 @@
-tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts(1,42): error TS2792: Cannot find module 'm'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts(1,42): error TS2307: Cannot find module 'm' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts (1 errors) ====
     import {default as a, default as b} from "m";
                                              ~~~
-!!! error TS2792: Cannot find module 'm'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'm' or its corresponding type declarations.
     void a;
     void b;

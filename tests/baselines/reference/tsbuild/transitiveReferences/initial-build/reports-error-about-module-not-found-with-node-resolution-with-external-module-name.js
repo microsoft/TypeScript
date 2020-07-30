@@ -54,7 +54,7 @@ Output::
 /lib/tsc --b /src/tsconfig.c.json --listFiles
 /lib/lib.d.ts
 /src/a.ts
-[96msrc/b.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+[96msrc/b.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
 
 [7m1[0m import {A} from 'a';
 [7m [0m [91m                ~~~[0m
@@ -146,9 +146,9 @@ exports.A = A;
             "file": "./b.ts",
             "start": 16,
             "length": 3,
-            "messageText": "Cannot find module 'a'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?",
+            "messageText": "Cannot find module 'a' or its corresponding type declarations.",
             "category": 1,
-            "code": 2792
+            "code": 2307
           }
         ]
       ]

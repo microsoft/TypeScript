@@ -1,16 +1,16 @@
-tests/cases/compiler/file1.ts(1,17): error TS2792: Cannot find module 'module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/compiler/file1.ts(2,18): error TS2792: Cannot find module 'module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/file1.ts(1,17): error TS2307: Cannot find module 'module' or its corresponding type declarations.
+tests/cases/compiler/file1.ts(2,18): error TS2307: Cannot find module 'module' or its corresponding type declarations.
 tests/cases/compiler/file1.ts(3,21): error TS2307: Cannot find module 'module' or its corresponding type declarations.
-tests/cases/compiler/file1.ts(11,18): error TS2792: Cannot find module 'module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/file1.ts(11,18): error TS2307: Cannot find module 'module' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/file1.ts (4 errors) ====
     import {c} from "module"
                     ~~~~~~~~
-!!! error TS2792: Cannot find module 'module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'module' or its corresponding type declarations.
     import {c2} from "module"
                      ~~~~~~~~
-!!! error TS2792: Cannot find module 'module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'module' or its corresponding type declarations.
     import * as ns from "module"
                         ~~~~~~~~
 !!! error TS2307: Cannot find module 'module' or its corresponding type declarations.
@@ -23,5 +23,5 @@ tests/cases/compiler/file1.ts(11,18): error TS2792: Cannot find module 'module'.
     
     export {c1} from "module";
                      ~~~~~~~~
-!!! error TS2792: Cannot find module 'module'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2307: Cannot find module 'module' or its corresponding type declarations.
     export var z = x;
