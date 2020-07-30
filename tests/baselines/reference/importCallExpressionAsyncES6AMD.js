@@ -72,7 +72,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.cl2 = cl2;
     const l = () => __awaiter(void 0, void 0, void 0, function* () {
-        const req = yield import('./test'); // FIVE
+        const req = yield new Promise((resolve_5, reject_5) => { require(['./test'], resolve_5, reject_5); }); // FIVE
     });
     exports.l = l;
 });

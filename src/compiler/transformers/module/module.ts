@@ -1218,8 +1218,14 @@ namespace ts {
                                 ),
                                 factory.createIdentifier(getTextOfIdentifierOrLiteral(variable.name))
                             );
+                            const updatedVariable = factory.createVariableDeclaration(
+                                variable.name,
+                                variable.exclamationToken,
+                                variable.type,
+                                visitNode(variable.initializer, moduleExpressionElementVisitor)
+                            );
 
-                            variables = append(variables, variable);
+                            variables = append(variables, updatedVariable);
                             expressions = append(expressions, expression);
                             removeCommentsOnExpressions = true;
                         }

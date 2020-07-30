@@ -71,6 +71,6 @@ class cl2 {
 }
 exports.cl2 = cl2;
 const l = () => __awaiter(void 0, void 0, void 0, function* () {
-    const req = yield import('./test'); // FIVE
+    const req = yield Promise.resolve().then(() => require('./test')); // FIVE
 });
 exports.l = l;

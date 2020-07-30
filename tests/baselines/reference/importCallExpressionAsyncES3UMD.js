@@ -152,7 +152,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         var req;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, import('./test')]; // FIVE
+                case 0: return [4 /*yield*/, __syncRequire ? Promise.resolve().then(function () { return require('./test'); }) : new Promise(function (resolve_5, reject_5) { require(['./test'], resolve_5, reject_5); })]; // FIVE
                 case 1:
                     req = _a.sent() // FIVE
                     ;
