@@ -1043,6 +1043,7 @@ namespace ts {
             else if (node.exportClause) {
                 const statements: Statement[] = [];
                 // export * as ns from "mod";
+                // export * as default from "mod";
                 statements.push(
                     setOriginalNode(
                         setTextRange(
