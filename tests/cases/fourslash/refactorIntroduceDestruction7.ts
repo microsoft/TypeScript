@@ -1,9 +1,10 @@
 /// <reference path='fourslash.ts' />
 
 //// const item = {
-////     a: 1, b: 2
+////     a: 1, b: () => void
 //// }
-//// call(/*a*/item/*b*/.a, item.b)
+//// item.a = 2
+//// call(/*a*/item/*b*/.a, item.b())
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -11,8 +12,9 @@ edit.applyRefactor({
     actionName: "Introduce Destruction",
     actionDescription: "Convert property access to Object destruction",
     newContent: `const item = {
-    a: 1, b: 2
+    a: 1, b: () => void
 }
-const { a, b } = item
-call(a, b)`,
+item.a = 2
+const { a } = item
+call(a, item.b())`,
 });

@@ -3,6 +3,7 @@
 //// const item = {
 ////     a: 1, b: 2
 //// }
+//// const a = false
 //// call(/*a*/item/*b*/.a, item.b)
 
 goTo.select("a", "b");
@@ -13,6 +14,7 @@ edit.applyRefactor({
     newContent: `const item = {
     a: 1, b: 2
 }
-const { a, b } = item
-call(a, b)`,
+const a = false
+const { a: a_1, b } = item
+call(a_1, b)`,
 });

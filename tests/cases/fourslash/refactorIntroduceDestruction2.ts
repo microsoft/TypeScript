@@ -3,7 +3,7 @@
 //// const item = {
 ////     a: 1, b: 2
 //// }
-//// call(/*a*/item/*b*/.a, item.b)
+//// call(item.a, /*a*/item/*b*/.b)
 
 goTo.select("a", "b");
 edit.applyRefactor({
