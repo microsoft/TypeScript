@@ -1831,6 +1831,8 @@ namespace ts.server {
     export class AutoImportProviderProject extends Project {
         private static readonly newName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
 
+        private static readonly maxDependencies = 10;
+
         /*@internal*/
         static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, compilerOptions: CompilerOptions): string[] {
             if (!dependencySelection) {
@@ -1862,6 +1864,10 @@ namespace ts.server {
                     const fileName = moduleResolutionHost.realpath?.(resolvedFileName) || resolvedFileName;
                     if (!hostProject.getCurrentProgram()!.getSourceFile(fileName) && !hostProject.getCurrentProgram()!.getSourceFile(resolvedFileName)) {
                         rootNames = append(rootNames, fileName);
+                        // Avoid creating a large project that would significantly slow down time to editor interactivity
+                        if (rootNames.length > this.maxDependencies) {
+                            return ts.emptyArray;
+                        }
                     }
                 }
             }
