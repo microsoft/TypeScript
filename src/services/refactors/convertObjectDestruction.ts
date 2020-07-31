@@ -192,9 +192,9 @@ namespace ts.refactor {
         if (resolveUniqueName) {
             forEach(referencedAccessExpression, ([, name]) => {
                 const symbol = checker.resolveName(name, /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false);
-                    if (symbol) {
-                        namesNeedUniqueName.add(name);
-                    }
+                if (symbol) {
+                    namesNeedUniqueName.add(name);
+                }
             });
         }
 
