@@ -8070,8 +8070,8 @@ namespace ts {
                 return anyType;
             }
             const isDirectExport = kind === AssignmentDeclarationKind.ExportsProperty && (isPropertyAccessExpression(expression.left) || isElementAccessExpression(expression.left)) && (isModuleExportsAccessExpression(expression.left.expression) || (isIdentifier(expression.left.expression) && isExportsIdentifier(expression.left.expression)));
-            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) 
-                : isDirectExport ? getRegularTypeOfLiteralType(checkExpressionCached(expression.right)) 
+            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol)
+                : isDirectExport ? getRegularTypeOfLiteralType(checkExpressionCached(expression.right))
                 : getWidenedLiteralType(checkExpressionCached(expression.right));
             if (type.flags & TypeFlags.Object &&
                 kind === AssignmentDeclarationKind.ModuleExports &&
