@@ -3825,9 +3825,9 @@ namespace ts.server {
         /*@internal*/
         includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
             switch (this.hostConfiguration.preferences.includePackageJsonAutoImports) {
-                case "none": return PackageJsonAutoImportPreference.None;
-                case "all": return PackageJsonAutoImportPreference.All;
-                default: return PackageJsonAutoImportPreference.ExcludeDevDependencies;
+                case "on": return PackageJsonAutoImportPreference.On;
+                case "off": return PackageJsonAutoImportPreference.Off;
+                default: return PackageJsonAutoImportPreference.Auto;
             }
         }
 

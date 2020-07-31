@@ -1631,11 +1631,11 @@ namespace ts.server {
 
         /*@internal*/
         includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
-            if (this.projectService.includePackageJsonAutoImports() === PackageJsonAutoImportPreference.None ||
+            if (this.projectService.includePackageJsonAutoImports() === PackageJsonAutoImportPreference.Off ||
                 !this.languageServiceEnabled ||
                 isInsideNodeModules(this.currentDirectory) ||
                 !this.isDefaultProjectForOpenFiles()) {
-                return PackageJsonAutoImportPreference.None;
+                return PackageJsonAutoImportPreference.Off;
             }
             return this.projectService.includePackageJsonAutoImports();
         }
@@ -1847,9 +1847,6 @@ namespace ts.server {
             for (const packageJson of packageJsons) {
                 packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
                 packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
-                if (dependencySelection === PackageJsonAutoImportPreference.All) {
-                    packageJson.devDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
-                }
             }
 
             if (dependencyNames) {
@@ -1884,7 +1881,7 @@ namespace ts.server {
 
         /*@internal*/
         static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
-            if (dependencySelection === PackageJsonAutoImportPreference.None) {
+            if (dependencySelection === PackageJsonAutoImportPreference.Off) {
                 return undefined;
             }
 
@@ -1981,7 +1978,7 @@ namespace ts.server {
 
         /*@internal*/
         includePackageJsonAutoImports() {
-            return PackageJsonAutoImportPreference.None;
+            return PackageJsonAutoImportPreference.Off;
         }
 
         getTypeAcquisition(): TypeAcquisition {

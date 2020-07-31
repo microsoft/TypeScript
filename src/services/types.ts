@@ -211,9 +211,9 @@ namespace ts {
 
     /* @internal */
     export const enum PackageJsonAutoImportPreference {
-        None,
-        ExcludeDevDependencies,
-        All
+        Off,
+        On,
+        Auto,
     }
 
     export interface PerformanceEvent {
