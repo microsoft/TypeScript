@@ -17522,9 +17522,8 @@ namespace ts {
                 // No array like or unmatched property error - just issue top level error (errorInfo = undefined)
 
                 function isJsxOpeningLikeElementAttributesError(node: Node | undefined) {
-                    return node && isJSXTagName(node);
-                    // node?.parent && isJsxOpeningLikeElement(node.parent) // node is Jsx opening like element
-                    //     && target !== getJsxElementClassTypeAt(node.parent);    // make sure error is caused by attributes
+                    return node?.parent && isJsxOpeningLikeElement(node.parent) // node is Jsx opening like element
+                        && target !== getJsxElementClassTypeAt(node.parent);    // make sure error is caused by attributes
                 }
             }
 
@@ -20181,7 +20180,7 @@ namespace ts {
                 (containsTruthyCheck(source, (<BinaryExpression>target).left) || containsTruthyCheck(source, (<BinaryExpression>target).right)));
         }
 
-        function getPropertiesPathName(access: AccessExpression | Identifier, includeIdentifier = false): __String[] | undefined {
+        function getPropertiesPathName(access: AccessExpression | Identifier | ThisExpression, includeIdentifier = false): __String[] | undefined {
             const result: __String[] = [];
             let expression: LeftHandSideExpression = access;
             while (isAccessExpression(expression)) {
@@ -20192,11 +20191,18 @@ namespace ts {
                 result.unshift(name);
                 expression = expression.expression;
             }
-            Debug.assertNode(expression, isIdentifier);
+            Debug.assertNode(expression, isIdentifierOrThisexpression);
+
             if (includeIdentifier) {
-                result.unshift(expression.escapedText);
+                if (isIdentifier(expression)) {
+                    result.unshift(expression.escapedText);
+                }
             }
             return result;
+
+            function isIdentifierOrThisexpression(node: Node): node is Identifier | ThisExpression {
+                return isIdentifier(node) || isThisExpression(node);
+            }
         }
 
         function getAccessedPropertyName(access: AccessExpression): __String | undefined {

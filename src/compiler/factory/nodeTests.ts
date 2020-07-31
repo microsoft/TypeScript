@@ -369,6 +369,10 @@ namespace ts {
         return node.kind === SyntaxKind.CommaListExpression;
     }
 
+    export function isThisExpression(node: Node): node is ThisExpression {
+        return node.kind === SyntaxKind.ThisKeyword;
+    }
+
     // Misc
 
     export function isTemplateSpan(node: Node): node is TemplateSpan {
