@@ -151,11 +151,9 @@ node_modules/npm/lib/config/core.js(19,1): error TS2323: Cannot redeclare export
 node_modules/npm/lib/config/core.js(77,7): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(87,3): error TS2323: Cannot redeclare exported variable 'usingBuiltin'.
 node_modules/npm/lib/config/core.js(88,12): error TS2323: Cannot redeclare exported variable 'rootConf'.
-node_modules/npm/lib/config/core.js(88,31): error TS2554: Expected 1 arguments, but got 0.
 node_modules/npm/lib/config/core.js(95,6): error TS2339: Property 'on' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(98,6): error TS2339: Property 'on' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(105,8): error TS2339: Property 'usingBuiltin' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(107,8): error TS2554: Expected 1 arguments, but got 0.
 node_modules/npm/lib/config/core.js(128,41): error TS2551: Property 'localPrefix' does not exist on type 'Conf'. Did you mean 'loadPrefix'?
 node_modules/npm/lib/config/core.js(130,35): error TS2339: Property 'get' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(131,15): error TS2339: Property 'get' does not exist on type 'Conf'.
@@ -366,7 +364,6 @@ node_modules/npm/lib/install.js(186,17): error TS2339: Property 'prefix' does no
 node_modules/npm/lib/install.js(190,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(192,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(200,36): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install.js(203,3): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/lib/install.js(224,24): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(226,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(227,20): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -418,7 +415,6 @@ node_modules/npm/lib/install/action/extract.js(39,40): error TS2339: Property 'l
 node_modules/npm/lib/install/action/extract.js(81,9): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/npm/lib/install/action/global-install.js(9,37): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/global-install.js(10,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install/action/global-install.js(11,17): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/lib/install/action/global-install.js(14,9): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/global-link.js(7,7): error TS2339: Property 'link' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/refresh-package-json.js(31,43): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -751,7 +747,6 @@ node_modules/npm/lib/search/all-package-metadata.js(241,22): error TS2345: Argum
   Value of type '(er: any, made: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/search/esearch.js(15,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/search/esearch.js(35,7): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/search/format-package-stream.js(130,31): error TS2339: Property 'fd' does not exist on type 'WriteStream'.
 node_modules/npm/lib/set.js(8,22): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/set.js(12,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/shrinkwrap.js(30,29): error TS2339: Property 'lockfileVersion' does not exist on type 'typeof EventEmitter'.
@@ -804,7 +799,6 @@ node_modules/npm/lib/uninstall.js(31,21): error TS2339: Property 'config' does n
 node_modules/npm/lib/uninstall.js(32,32): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(33,19): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(43,31): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/uninstall.js(53,5): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/lib/unpublish.js(17,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(23,31): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(26,11): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
@@ -818,7 +812,6 @@ node_modules/npm/lib/unpublish.js(97,70): error TS2339: Property 'registry' does
 node_modules/npm/lib/update.js(10,41): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/update.js(17,25): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/update.js(25,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/update.js(69,19): error TS2555: Expected at least 1 arguments, but got 0.
 node_modules/npm/lib/utils/completion/file-completion.js(11,15): error TS2345: Argument of type '(er: any) => any' is not assignable to parameter of type 'string | number | Options | undefined'.
   Value of type '(er: any) => any' has no properties in common with type 'Options'. Did you mean to call it?
 node_modules/npm/lib/utils/completion/installed-deep.js(9,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1770,7 +1763,6 @@ node_modules/npm/test/tap/umask-lifecycle.js(6,20): error TS2307: Cannot find mo
 node_modules/npm/test/tap/umask-lifecycle.js(24,21): error TS2554: Expected 1 arguments, but got 0.
 node_modules/npm/test/tap/uninstall-in-reverse.js(2,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/uninstall-in-reverse.js(3,29): error TS2307: Cannot find module 'require-inject' or its corresponding type declarations.
-node_modules/npm/test/tap/uninstall-in-reverse.js(28,14): error TS2555: Expected at least 4 arguments, but got 3.
 node_modules/npm/test/tap/uninstall-link-clean.js(3,40): error TS2339: Property 'existsSync' does not exist on type 'PlatformPath'.
 node_modules/npm/test/tap/uninstall-link-clean.js(7,20): error TS2307: Cannot find module 'tap' or its corresponding type declarations.
 node_modules/npm/test/tap/uninstall-package.js(5,18): error TS2307: Cannot find module 'npm-registry-mock' or its corresponding type declarations.

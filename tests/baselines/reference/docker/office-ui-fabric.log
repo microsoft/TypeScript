@@ -1,13 +1,29 @@
 Exit Code: 1
 Standard output:
-@uifabric/tslint-rules: yarn run vX.X.X
-@uifabric/tslint-rules: $ just-scripts build
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/tslint-rules/tsconfig.json
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/tslint-rules/tsconfig.json"
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/tslint-rules/tsconfig.json
-@uifabric/tslint-rules: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/tslint-rules/tsconfig.json"
-@uifabric/tslint-rules: Done in ?s.
+@microsoft/fast-components-msft: yarn run vX.X.X
+@microsoft/fast-components-msft: $ tsc -p ./tsconfig.json && rollup -c && npm run doc
+@microsoft/fast-components-msft: ┌───────────────────────────────────────────────┐
+@microsoft/fast-components-msft: │                                               │
+@microsoft/fast-components-msft: │   Destination: dist/fast-components-msft.js   │
+@microsoft/fast-components-msft: │   Bundle Size:  490.64 KB                     │
+@microsoft/fast-components-msft: │   Gzipped Size:  50.64 KB                     │
+@microsoft/fast-components-msft: │   Brotli size: 74.92 KB                       │
+@microsoft/fast-components-msft: │                                               │
+@microsoft/fast-components-msft: └───────────────────────────────────────────────┘
+@microsoft/fast-components-msft: ┌───────────────────────────────────────────────────┐
+@microsoft/fast-components-msft: │                                                   │
+@microsoft/fast-components-msft: │   Destination: dist/fast-components-msft.min.js   │
+@microsoft/fast-components-msft: │   Bundle Size:  201.49 KB                         │
+@microsoft/fast-components-msft: │   Gzipped Size:  46.05 KB                         │
+@microsoft/fast-components-msft: │   Brotli size: 39.62 KB                           │
+@microsoft/fast-components-msft: │                                                   │
+@microsoft/fast-components-msft: └───────────────────────────────────────────────────┘
+@microsoft/fast-components-msft: > @microsoft/fast-components-msft@X.X.X doc /office-ui-fabric-react/packages/web-components
+@microsoft/fast-components-msft: > api-extractor run --local
+@microsoft/fast-components-msft: api-extractor 7.7.1  - https://api-extractor.com/
+@microsoft/fast-components-msft: Using configuration from /office-ui-fabric-react/packages/web-components/api-extractor.json
+@microsoft/fast-components-msft: API Extractor completed successfully
+@microsoft/fast-components-msft: Done in ?s.
 @fluentui/ability-attributes: yarn run vX.X.X
 @fluentui/ability-attributes: $ npm run schema && gulp bundle:package:no-umd
 @fluentui/ability-attributes: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
@@ -26,6 +42,11 @@ Standard output:
 @uifabric/build: yarn run vX.X.X
 @uifabric/build: $ node ./just-scripts.js no-op
 @uifabric/build: Done in ?s.
+@fluentui/common-styles: yarn run vX.X.X
+@fluentui/common-styles: $ just-scripts build
+@fluentui/common-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/common-styles: [XX:XX:XX XM] ■ Copying [../../node_modules/office-ui-fabric-core/dist/sass/**/*, src/*.scss] to '/office-ui-fabric-react/packages/common-styles/dist/sass'
+@fluentui/common-styles: Done in ?s.
 @uifabric/example-data: yarn run vX.X.X
 @uifabric/example-data: $ just-scripts build
 @uifabric/example-data: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -58,6 +79,12 @@ Standard output:
 @uifabric/monaco-editor: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/monaco-editor/tsconfig.json
 @uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
 @uifabric/monaco-editor: Done in ?s.
+@fluentui/react-conformance: yarn run vX.X.X
+@fluentui/react-conformance: $ just-scripts build
+@fluentui/react-conformance: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/react-conformance: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-conformance/tsconfig.json
+@fluentui/react-conformance: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/react-conformance/tsconfig.json"
+@fluentui/react-conformance: Done in ?s.
 @uifabric/set-version: yarn run vX.X.X
 @uifabric/set-version: $ just-scripts build
 @uifabric/set-version: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
@@ -135,6 +162,14 @@ Standard output:
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
+@fluentui/react-flex: yarn run vX.X.X
+@fluentui/react-flex: $ just-scripts build
+@fluentui/react-flex: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/react-flex: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-flex/tsconfig.json
+@fluentui/react-flex: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-flex/tsconfig.json"
+@fluentui/react-flex: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-flex/tsconfig.json
+@fluentui/react-flex: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-flex/tsconfig.json"
+@fluentui/react-flex: Done in ?s.
 @fluentui/react-northstar-styles-renderer: yarn run vX.X.X
 @fluentui/react-northstar-styles-renderer: $ gulp bundle:package:no-umd
 @fluentui/react-northstar-styles-renderer: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
@@ -215,555 +250,592 @@ Standard output:
 
 Standard error:
 info cli using local version of lerna
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
-@uifabric/tslint-rules: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/tslint-rules: (node:29) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
-@uifabric/tslint-rules: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@microsoft/fast-components-msft: src/index-rollup.ts → dist/fast-components-msft.js, dist/fast-components-msft.min.js...
+@microsoft/fast-components-msft: created dist/fast-components-msft.js, dist/fast-components-msft.min.js in ?s
+@microsoft/fast-components-msft: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
 @fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
-@fluentui/ability-attributes: (node:87) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/ability-attributes: (Use `node --trace-deprecation ...` to show where the warning was created)
 @uifabric/build: warning package.json: "dependencies" has dependency "typescript" with range "3.7.2" that collides with a dependency in "devDependencies" of the same name with version "../typescript.tgz"
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/build: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/build: (node:146) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/build: (node:164) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/common-styles: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/common-styles: (node:183) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/example-data: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/example-data: (node:165) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/example-data: (node:206) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @fluentui/keyboard-key: (Use `node --trace-warnings ...` to show where the warning was created)
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@fluentui/keyboard-key: (node:204) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:245) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @fluentui/keyboard-key: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/migration: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/migration: (node:243) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/migration: (node:284) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/monaco-editor: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/monaco-editor: (node:274) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:315) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-conformance: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-conformance: (node:354) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/set-version: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/set-version: (node:313) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/set-version: (node:385) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/webpack-utils: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/webpack-utils: (node:352) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
-@fluentui/docs-components: (node:383) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/docs-components: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/react-component-event-listener: (node:414) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/react-component-event-listener: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/react-component-nesting-registry: (node:445) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/react-component-nesting-registry: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/react-component-ref: (node:476) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/react-component-ref: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/react-context-selector: (node:507) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/react-context-selector: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/react-proptypes: (node:538) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/react-proptypes: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/state: (node:569) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/state: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/styles: (node:600) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/styles: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/accessibility: (node:631) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/accessibility: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:424) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @fluentui/date-time-utilities: (Use `node --trace-warnings ...` to show where the warning was created)
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@fluentui/date-time-utilities: (node:662) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:734) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @fluentui/date-time-utilities: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/merge-styles: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/merge-styles: (node:701) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/merge-styles: (node:773) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@fluentui/react-northstar-styles-renderer: (node:740) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/react-northstar-styles-renderer: (Use `node --trace-deprecation ...` to show where the warning was created)
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-flex: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-flex: (node:812) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-flex: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/jest-serializer-merge-styles: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/jest-serializer-merge-styles: (node:771) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:882) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@fluentui/react-northstar-emotion-renderer: (node:810) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/react-northstar-emotion-renderer: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/react-northstar-fela-renderer: (node:841) [DEP0097] DeprecationWarning: Using a domain property in MakeCallback is deprecated. Use the async_context variant of MakeCallback or the AsyncResource class instead.
-@fluentui/react-northstar-fela-renderer: (Use `node --trace-deprecation ...` to show where the warning was created)
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @fluentui/react-stylesheets: (Use `node --trace-warnings ...` to show where the warning was created)
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@fluentui/react-stylesheets: (node:872) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:983) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @fluentui/react-stylesheets: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/test-utilities: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/test-utilities: (node:911) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1022) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/utilities: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/utilities: (node:950) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/utilities: (node:1061) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/utilities: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @fluentui/react-compose: (Use `node --trace-warnings ...` to show where the warning was created)
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@fluentui/react-compose: (node:989) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-compose: (node:1100) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @fluentui/react-compose: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @uifabric/react-hooks: (Use `node --trace-warnings ...` to show where the warning was created)
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@uifabric/react-hooks: (node:1028) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1139) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/react-hooks: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
 @fluentui/react-icons: (Use `node --trace-warnings ...` to show where the warning was created)
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
-@fluentui/react-icons: (node:1067) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-icons: (node:1178) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @fluentui/react-icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
 @fluentui/react-icons: [XX:XX:XX XM] x Error detected while running 'ts:esm'
 @fluentui/react-icons: [XX:XX:XX XM] x ------------------------------------
@@ -773,8 +845,7 @@ info cli using local version of lerna
 @fluentui/react-icons:     at ChildProcess.EventEmitter.emit (domain.js:548:15)
 @fluentui/react-icons:     at maybeClose (internal/child_process.js:1051:16)
 @fluentui/react-icons:     at Process.ChildProcess._handle.onexit (internal/child_process.js:287:5)
-@fluentui/react-icons:     at Process.topLevelDomainCallback (domain.js:138:15)
-@fluentui/react-icons:     at Process.callbackTrampoline (internal/async_hooks.js:121:14)
+@fluentui/react-icons:     at Process.callbackTrampoline (internal/async_hooks.js:129:14)
 @fluentui/react-icons: [XX:XX:XX XM] x stdout:
 @fluentui/react-icons: [XX:XX:XX XM] x src/utils/createSvgIcon.ts:3:26 - error TS2307: Cannot find module './SvgIcon.scss'.
 @fluentui/react-icons: 3 import * as classes from './SvgIcon.scss';
