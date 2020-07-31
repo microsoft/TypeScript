@@ -182,6 +182,7 @@ node_modules/lodash/_overRest.js(24,27): error TS2532: Object is possibly 'undef
 node_modules/lodash/_overRest.js(27,27): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_overRest.js(28,22): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_overRest.js(31,15): error TS2538: Type 'undefined' cannot be used as an index type.
+node_modules/lodash/_stackDelete.js(11,19): error TS2339: Property '__data__' does not exist on type 'stackDelete'.
 node_modules/lodash/_stackSet.js(21,22): error TS2339: Property '__data__' does not exist on type 'ListCache'.
 node_modules/lodash/_stackSet.js(24,26): error TS2339: Property 'size' does not exist on type 'ListCache'.
 node_modules/lodash/_unicodeWords.js(62,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
@@ -266,11 +267,7 @@ node_modules/lodash/core.js(3573,51): error TS2532: Object is possibly 'undefine
 node_modules/lodash/core.js(3590,63): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
 node_modules/lodash/core.js(3814,33): error TS2339: Property '__chain__' does not exist on type 'lodash'.
-node_modules/lodash/core.js(3830,14): error TS2304: Cannot find name 'define'.
-node_modules/lodash/core.js(3830,45): error TS2304: Cannot find name 'define'.
-node_modules/lodash/core.js(3830,71): error TS2304: Cannot find name 'define'.
-node_modules/lodash/core.js(3839,5): error TS2304: Cannot find name 'define'.
-node_modules/lodash/core.js(3846,35): error TS2339: Property '_' does not exist on type 'typeof lodash'.
+node_modules/lodash/core.js(3831,35): error TS2339: Property '_' does not exist on type 'typeof lodash'.
 node_modules/lodash/curry.js(47,29): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/curry.js(50,10): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/curryRight.js(44,34): error TS1016: A required parameter cannot follow an optional parameter.
@@ -306,7 +303,7 @@ node_modules/lodash/findKey.js(41,54): error TS2554: Expected 0-1 arguments, but
 node_modules/lodash/findLastIndex.js(56,55): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/findLastKey.js(41,54): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/fp.js(2,18): error TS2554: Expected 3-4 arguments, but got 2.
-node_modules/lodash/fp/_baseConvert.js(143,5): error TS2559: Type 'Function' has no properties in common with type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; }'.
+node_modules/lodash/fp/_baseConvert.js(143,5): error TS2559: Type 'Function' has no properties in common with type '{ cap?: boolean | undefined; curry?: boolean | undefined; fixed?: boolean | undefined; immutable?: boolean | undefined; rearg?: boolean | undefined; }'.
 node_modules/lodash/fp/_baseConvert.js(144,5): error TS2322: Type 'string' is not assignable to type 'Function'.
 node_modules/lodash/fp/_baseConvert.js(145,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
 node_modules/lodash/fp/_baseConvert.js(164,31): error TS2339: Property 'runInContext' does not exist on type 'Function'.
@@ -336,7 +333,7 @@ node_modules/lodash/fp/_baseConvert.js(194,27): error TS2339: Property 'toIntege
   Property 'toInteger' does not exist on type 'Function'.
 node_modules/lodash/fp/_baseConvert.js(195,24): error TS2339: Property 'toPath' does not exist on type 'Function | { ary: any; assign: any; clone: any; curry: any; forEach: any; isArray: any; isError: any; isFunction: any; isWeakMap: any; iteratee: any; keys: any; rearg: any; toInteger: any; toPath: any; }'.
   Property 'toPath' does not exist on type 'Function'.
-node_modules/lodash/fp/_baseConvert.js(262,57): error TS2345: Argument of type '{ cap?: boolean; curry?: boolean; fixed?: boolean; immutable?: boolean; rearg?: boolean; } | undefined' is not assignable to parameter of type 'Function'.
+node_modules/lodash/fp/_baseConvert.js(262,57): error TS2345: Argument of type '{ cap?: boolean | undefined; curry?: boolean | undefined; fixed?: boolean | undefined; immutable?: boolean | undefined; rearg?: boolean | undefined; } | undefined' is not assignable to parameter of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
 node_modules/lodash/fp/_baseConvert.js(378,14): error TS2339: Property 'runInContext' does not exist on type 'Function'.
 node_modules/lodash/fp/_baseConvert.js(513,31): error TS2339: Property 'placeholder' does not exist on type 'Function'.
@@ -383,6 +380,9 @@ node_modules/lodash/minBy.js(30,50): error TS2554: Expected 0-1 arguments, but g
 node_modules/lodash/mixin.js(45,24): error TS1016: A required parameter cannot follow an optional parameter.
 node_modules/lodash/mixin.js(49,49): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/mixin.js(66,61): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/lodash/next.js(27,36): error TS2339: Property 'value' does not exist on type 'wrapperNext'.
+node_modules/lodash/next.js(29,19): error TS2339: Property '__index__' does not exist on type 'wrapperNext'.
+node_modules/lodash/next.js(30,55): error TS2339: Property '__index__' does not exist on type 'wrapperNext'.
 node_modules/lodash/nthArg.js(28,26): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 node_modules/lodash/omit.js(48,32): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
@@ -428,8 +428,6 @@ node_modules/lodash/templateSettings.js(63,12): error TS2322: Type '{ escape: (s
   Object literal may only specify known properties, and ''escape'' does not exist in type 'Function'.
 node_modules/lodash/throttle.js(59,28): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/throttle.js(60,30): error TS2532: Object is possibly 'undefined'.
-node_modules/lodash/throttle.js(64,5): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
-  Type 'undefined' is not assignable to type 'number'.
 node_modules/lodash/toLower.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
 node_modules/lodash/toUpper.js(11,21): error TS8024: JSDoc '@param' tag has name 'string', but there is no parameter with that name.
 node_modules/lodash/transform.js(46,37): error TS2554: Expected 0-1 arguments, but got 2.
