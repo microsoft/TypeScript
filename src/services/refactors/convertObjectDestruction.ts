@@ -121,61 +121,82 @@ namespace ts.refactor {
         // Find only current file
         const references = FindAllReferences.getReferenceEntriesForNode(-1, node, program, [file], cancellationToken);
         let firstReferenced: Expression | undefined;
-        const referencedAccessExpression: [AccessExpression, string][] = mapDefined(references, reference => {
+        const referencedAccessExpression: [AccessExpression, string][] = [];
+        const allReferencedAcccessExpression: AccessExpression[] = [];
+        forEach(references, reference => {
             if (reference.kind !== FindAllReferences.EntryKind.Node) {
                 return undefined;
             }
-            if (node !== symbol.valueDeclaration && isExpression(node) && (!firstReferenced || node.pos < firstReferenced.pos)) {
-                firstReferenced = node;
-            }
 
-            let lastChild: Node | undefined;
-            const topReferencedAccessExpression = findAncestor(reference.node, n => {
-                if (isAccessExpression(n) && n.expression === lastChild) {
-                    return true;
+            let lastChild = reference.node;
+            const topReferencedAccessExpression = findAncestor(reference.node.parent, n => {
+                if (isAccessExpression(n) || isParenthesizedExpression(n)) {
+                    if (isAccessExpression(n) && n.expression === lastChild) {
+                        return true;
+                    }
+                    lastChild = n;
+                    return false;
                 }
-                lastChild = n;
-                return false;
+                return "quit";
             });
-            if (!topReferencedAccessExpression || isAssignmentTarget(topReferencedAccessExpression) || isCallLikeExpression(skipParenthesesUp(topReferencedAccessExpression.parent))) {
-                return undefined;
+            if (!topReferencedAccessExpression) {
+                return;
             }
 
             const accessExpression = cast(topReferencedAccessExpression, isAccessExpression);
-            if (isElementAccessExpression(accessExpression)) {
-                if (!isStringLiteralLike(accessExpression.argumentExpression)) {
-                    return undefined;
-                }
+            allReferencedAcccessExpression.push(accessExpression);
 
-                return [accessExpression, accessExpression.argumentExpression.text];
+            if (isAssignmentTarget(accessExpression)) {
+                return;
             }
 
-            return [accessExpression, accessExpression.name.text];
+            const referencedParentMaybeCall = skipParenthesesUp(accessExpression.parent);
+            if (isCallOrNewExpression(referencedParentMaybeCall) && !(referencedParentMaybeCall.arguments && rangeContainsRange(referencedParentMaybeCall.arguments, topReferencedAccessExpression))) {
+                return;
+            }
+
+            if (accessExpression !== symbol.valueDeclaration && isExpression(accessExpression) && (!firstReferenced || reference.node.pos < firstReferenced.pos)) {
+                firstReferenced = accessExpression;
+            }
+
+            if (isElementAccessExpression(accessExpression)) {
+                if (!isStringLiteralLike(accessExpression.argumentExpression)) {
+                    return;
+                }
+
+                referencedAccessExpression.push([accessExpression, accessExpression.argumentExpression.text]);
+                return;
+            }
+
+            referencedAccessExpression.push([accessExpression, accessExpression.name.text]);
         });
-        if (!referencedAccessExpression.length || !firstReferenced) return undefined;
+        if (!firstReferenced || !referencedAccessExpression.length || !some(referencedAccessExpression, ([r]) => rangeContainsRange(r, current))) return undefined;
 
         let hasUnconvertableReference = false;
         const namesNeedUniqueName = new Set<string>();
         const type = checker.getTypeOfSymbolAtLocation(symbol, firstReferenced);
-        forEach(referencedAccessExpression, ([expr, name]) => {
+        forEach(allReferencedAcccessExpression, expr => {
             const referenceType = checker.getTypeAtLocation(expr);
             if (referenceType !== type) {
+                const accessSymbol = checker.getSymbolAtLocation(expr);
                 const accessType = checker.getTypeAtLocation(expr);
-                const prop = checker.getPropertyOfType(type, name);
+                const prop = accessSymbol?.name && checker.getPropertyOfType(type, accessSymbol.name);
 
                 if (!prop || checker.getTypeOfSymbolAtLocation(prop, expr) !== accessType) {
                     hasUnconvertableReference = true;
                     return "quit";
                 }
             }
-
-            if (resolveUniqueName) {
-                const symbol = checker.resolveName(name, /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false);
-                if (symbol) {
-                    namesNeedUniqueName.add(name);
-                }
-            }
         });
+
+        if (resolveUniqueName) {
+            forEach(referencedAccessExpression, ([, name]) => {
+                const symbol = checker.resolveName(name, /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false);
+                    if (symbol) {
+                        namesNeedUniqueName.add(name);
+                    }
+            });
+        }
 
         if (hasUnconvertableReference) return undefined;
         return {
