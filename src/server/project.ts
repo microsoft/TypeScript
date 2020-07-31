@@ -1831,6 +1831,7 @@ namespace ts.server {
     export class AutoImportProviderProject extends Project {
         private static readonly newName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
 
+        /*@internal*/
         private static readonly maxDependencies = 10;
 
         /*@internal*/
