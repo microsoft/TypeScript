@@ -1863,7 +1863,7 @@ namespace ts.server {
                     if (!hostProject.getCurrentProgram()!.getSourceFile(fileName) && !hostProject.getCurrentProgram()!.getSourceFile(resolvedFileName)) {
                         rootNames = append(rootNames, fileName);
                         // Avoid creating a large project that would significantly slow down time to editor interactivity
-                        if (rootNames.length > this.maxDependencies) {
+                        if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
                             return ts.emptyArray;
                         }
                     }
