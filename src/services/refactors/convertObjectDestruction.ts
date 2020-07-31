@@ -178,9 +178,12 @@ namespace ts.refactor {
         forEach(allReferencedAcccessExpression, expr => {
             const referenceType = checker.getTypeAtLocation(expr);
             if (referenceType !== type) {
-                const accessSymbol = checker.getSymbolAtLocation(expr);
+                const propName = isElementAccessExpression(expr) ?
+                    cast(expr.argumentExpression, isStringLiteralLike).text :
+                    checker.getSymbolAtLocation(expr)?.name;
+
                 const accessType = checker.getTypeAtLocation(expr);
-                const prop = accessSymbol?.name && checker.getPropertyOfType(type, accessSymbol.name);
+                const prop = propName && checker.getPropertyOfType(type, propName);
 
                 if (!prop || checker.getTypeOfSymbolAtLocation(prop, expr) !== accessType) {
                     hasUnconvertableReference = true;

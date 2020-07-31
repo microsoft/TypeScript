@@ -13,6 +13,6 @@ edit.applyRefactor({
     newContent: `const item = {
     a: 1, b: 2
 }
-const { "a": a_1, b } = item
-call(a_1, b)`,
+const { "a": a, b } = item
+call(a, b)`,
 });
