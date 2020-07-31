@@ -544,7 +544,7 @@ namespace ts.projectSystem {
                 const otherFiles = [packageJson];
                 const host = createServerHost(projectFiles.concat(otherFiles));
                 const projectService = createProjectService(host);
-                projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "none" } });
+                projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
                 const { configFileName } = projectService.openClientFile(app.path);
                 assert.equal(configFileName, tsconfigJson.path as server.NormalizedPath, `should find config`); // TODO: GH#18217
                 const recursiveWatchedDirectories: string[] = [`${appFolder}`, `${appFolder}/node_modules`].concat(getNodeModuleDirectories(getDirectoryPath(appFolder)));
