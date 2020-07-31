@@ -130,7 +130,7 @@ namespace ts.projectSystem {
             })();
 
             const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
-            projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "none" } });
+            projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
             projectService.openClientFile(file1.path);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
