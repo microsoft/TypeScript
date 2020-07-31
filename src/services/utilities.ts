@@ -2863,6 +2863,11 @@ namespace ts {
         return isArray(valueOrArray) ? first(valueOrArray) : valueOrArray;
     }
 
+    /* @internal */
+    export function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
+        return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
+    }
+
     export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget) {
         if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.

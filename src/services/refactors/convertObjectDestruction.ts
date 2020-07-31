@@ -5,11 +5,11 @@ namespace ts.refactor {
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-        const { file, startPosition, program, cancellationToken } = context;
+        const { file, program, cancellationToken } = context;
         const isJSFile = isSourceFileJS(file);
         if (isJSFile || !cancellationToken) return emptyArray;
 
-        const info = getInfo(file, startPosition, program.getTypeChecker(), program, cancellationToken);
+        const info = getInfo(context, file, program.getTypeChecker(), program, cancellationToken, /*resolveUniqueName*/ false);
         if (!info) return emptyArray;
 
         return [{
@@ -24,13 +24,13 @@ namespace ts.refactor {
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorName);
-        const { file, startPosition, program, cancellationToken } = context;
+        const { file, program, cancellationToken } = context;
         const isJSFile = isSourceFileJS(file);
 
-        const emptyResult: RefactorEditInfo  = { edits: [] };
+        const emptyResult: RefactorEditInfo = { edits: [] };
         if (isJSFile || !cancellationToken) return emptyResult;
 
-        const info = getInfo(file, startPosition, program.getTypeChecker(), program, cancellationToken);
+        const info = getInfo(context, file, program.getTypeChecker(), program, cancellationToken, /*resolveUniqueName*/ true);
         if (!info) return emptyResult;
 
         const edits = textChanges.ChangeTracker.with(context, t => doChange(t, file, info));
@@ -42,11 +42,14 @@ namespace ts.refactor {
         const bindingElements: BindingElement[] = [];
         info.referencedAccessExpression.forEach(([expr, name]) => {
             if (!nameMap.has(name)) {
-                const temp = factory.createUniqueName(name, GeneratedIdentifierFlags.Optimistic);
-                nameMap.set(name, temp.text);
-                bindingElements.push(getUniqueDestructionName(expr, name, temp.text));
+                const needAlias = info.namesNeedUniqueName.has(name);
+                const uniqueName = needAlias ? getUniqueName(name, file) : name;
+                nameMap.set(name, uniqueName);
+                bindingElements.push(getUniqueDestructionName(expr, needAlias, uniqueName));
             }
-            const newName = nameMap.get(name)!;
+
+            const newName = nameMap.get(name);
+            Debug.assertIsDefined(newName);
 
             changeTracker.replaceNode(
                 file,
@@ -79,14 +82,13 @@ namespace ts.refactor {
         );
     }
 
-    function getUniqueDestructionName(expr: AccessExpression, name: string, newName: string) {
-        const needRename = name !== newName;
+    function getUniqueDestructionName(expr: AccessExpression, needAlias: boolean, newName: string) {
         if (isPropertyAccessExpression(expr)) {
             const bindingName = cast(expr.name, isIdentifier);
             return factory.createBindingElement(
                 /* dotDotDotToken*/ undefined,
-                needRename ? expr.name : undefined,
-                needRename ? newName : bindingName,
+                needAlias ? expr.name : undefined,
+                needAlias ? newName : bindingName,
             );
         }
         else {
@@ -103,11 +105,16 @@ namespace ts.refactor {
         replacementExpression: Expression,
         referencedAccessExpression: [AccessExpression, string][]
         firstReferenced: Expression
+        namesNeedUniqueName: Set<string>
     }
 
-    function getInfo(file: SourceFile, startPosition: number, checker: TypeChecker, program: Program, cancellationToken: CancellationToken): Info | undefined {
-        const node = getTouchingToken(file, startPosition);
-        if (!isAccessExpression(node.parent) || node.parent.expression !== node) return undefined;
+    function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean): Info | undefined {
+        const current = getTokenAtPosition(file, context.startPosition);
+        const range = createTextRangeFromSpan(getRefactorContextSpan(context));
+
+        const node = findAncestor(current, (node => node.parent && isAccessExpression(node.parent) && !rangeContainsSkipTrivia(range, node.parent, file)));
+
+        if (!node || !isAccessExpression(node.parent) || node.parent.expression !== node) return undefined;
         const symbol = checker.getSymbolAtLocation(node);
         if (!symbol || checker.isUnknownSymbol(symbol) || !symbol.valueDeclaration || !isVariableLike(symbol.valueDeclaration) || isEnumMember(symbol.valueDeclaration)) return undefined;
 
@@ -121,24 +128,35 @@ namespace ts.refactor {
             if (node !== symbol.valueDeclaration && isExpression(node) && (!firstReferenced || node.pos < firstReferenced.pos)) {
                 firstReferenced = node;
             }
-            if (!isAccessExpression(reference.node.parent) || reference.node.parent.expression !== reference.node) {
+
+            let lastChild: Node | undefined;
+            const topReferencedAccessExpression = findAncestor(reference.node, n => {
+                if (isAccessExpression(n) && n.expression === lastChild) {
+                    return true;
+                }
+                lastChild = n;
+                return false;
+            });
+            if (!topReferencedAccessExpression) {
                 return undefined;
             }
 
-            if (isElementAccessExpression(reference.node.parent)) {
-                if (!isStringLiteralLike(reference.node.parent.argumentExpression)) {
+            const accessExpression = cast(topReferencedAccessExpression, isAccessExpression);
+            if (isElementAccessExpression(accessExpression)) {
+                if (!isStringLiteralLike(accessExpression.argumentExpression)) {
                     return undefined;
                 }
 
-                return [reference.node.parent, reference.node.parent.argumentExpression.text];
+                return [accessExpression, accessExpression.argumentExpression.text];
             }
 
-            return [reference.node.parent, reference.node.parent.name.text];
+            return [accessExpression, accessExpression.name.text];
         });
         if (!referencedAccessExpression.length || !firstReferenced) return undefined;
 
-        const type = checker.getTypeOfSymbolAtLocation(symbol, firstReferenced);
         let hasUnconvertableReference = false;
+        const namesNeedUniqueName = new Set<string>();
+        const type = checker.getTypeOfSymbolAtLocation(symbol, firstReferenced);
         forEach(referencedAccessExpression, ([expr, name]) => {
             const referenceType = checker.getTypeAtLocation(expr);
             if (referenceType !== type) {
@@ -150,14 +168,21 @@ namespace ts.refactor {
                     return "quit";
                 }
             }
+
+            if (resolveUniqueName) {
+                const symbol = checker.resolveName(name, /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false);
+                if (symbol) {
+                    namesNeedUniqueName.add(name);
+                }
+            }
         });
 
         if (hasUnconvertableReference) return undefined;
-
         return {
             replacementExpression: node.parent.expression,
             firstReferenced,
             referencedAccessExpression,
+            namesNeedUniqueName
         };
     }
 }
