@@ -8070,7 +8070,9 @@ namespace ts {
                 return anyType;
             }
             const isDirectExport = kind === AssignmentDeclarationKind.ExportsProperty && (isPropertyAccessExpression(expression.left) || isElementAccessExpression(expression.left)) && (isModuleExportsAccessExpression(expression.left.expression) || (isIdentifier(expression.left.expression) && isExportsIdentifier(expression.left.expression)));
-            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : (isDirectExport ? getRegularTypeOfLiteralType : getWidenedLiteralType)(checkExpressionCached(expression.right));
+            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) 
+                : isDirectExport ? getRegularTypeOfLiteralType(checkExpressionCached(expression.right)) 
+                : getWidenedLiteralType(checkExpressionCached(expression.right));
             if (type.flags & TypeFlags.Object &&
                 kind === AssignmentDeclarationKind.ModuleExports &&
                 symbol.escapedName === InternalSymbolName.ExportEquals) {
@@ -29889,7 +29891,7 @@ namespace ts {
 
         function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
             const type = checkExpression(node, checkMode, forceTuple);
-            return isConstContext(node) || isCommonJsExportedExpresion(node) ? getRegularTypeOfLiteralType(type) :
+            return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
                 getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node) : contextualType, node));
         }

@@ -1345,7 +1345,7 @@ namespace ts {
             && node.parent.parent.kind === SyntaxKind.VariableStatement;
     }
 
-    export function isCommonJsExportedExpresion(node: Node) {
+    export function isCommonJsExportedExpression(node: Node) {
         if (!isInJSFile(node)) return false;
         return (isObjectLiteralExpression(node.parent) && isBinaryExpression(node.parent.parent) && getAssignmentDeclarationKind(node.parent.parent) === AssignmentDeclarationKind.ModuleExports) ||
             isCommonJsExportPropertyAssignment(node.parent);
