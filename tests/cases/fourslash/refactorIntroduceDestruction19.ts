@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts' />
 
 //// const item = {
-////     a: 1, b: 2
+////     "a-a-a": 1, b: 2
 //// }
-//// call(/*a*/item/*b*/["a"], item.b)
+//// call(/*a*/item/*b*/["a-a-a"], item.b)
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -13,6 +13,6 @@ edit.applyRefactor({
     newContent: `const item = {
     a: 1, b: 2
 }
-const { a, b } = item
+const { "a-a-a": a, b } = item
 call(a, b)`,
 });

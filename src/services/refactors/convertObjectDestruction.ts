@@ -95,7 +95,7 @@ namespace ts.refactor {
             const argExpr = cast(expr.argumentExpression, isPropertyName);
             return factory.createBindingElement(
                 /* dotDotDotToken*/ undefined,
-                argExpr,
+                getTextOfPropertyName(argExpr) !== newName ? argExpr : undefined,
                 newName,
             );
         }
