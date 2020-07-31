@@ -2708,7 +2708,7 @@ namespace ts {
         return skipOuterExpressions(node, OuterExpressionKinds.Parentheses);
     }
 
-    function skipParenthesesUp(node: Node): Node {
+    export function skipParenthesesUp(node: Node): Node {
         while (node.kind === SyntaxKind.ParenthesizedExpression) {
             node = node.parent;
         }

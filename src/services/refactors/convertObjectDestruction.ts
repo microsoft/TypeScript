@@ -137,7 +137,7 @@ namespace ts.refactor {
                 lastChild = n;
                 return false;
             });
-            if (!topReferencedAccessExpression) {
+            if (!topReferencedAccessExpression || isAssignmentTarget(topReferencedAccessExpression) || isCallLikeExpression(skipParenthesesUp(topReferencedAccessExpression.parent))) {
                 return undefined;
             }
 
