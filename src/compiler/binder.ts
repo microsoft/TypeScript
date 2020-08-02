@@ -3143,7 +3143,7 @@ namespace ts {
         function bindCallExpression(node: CallExpression) {
             // We're only inspecting call expressions to detect CommonJS modules, so we can skip
             // this check if we've already seen the module indicator
-            if (!file.commonJsModuleIndicator && !fileExtensionIs(file.fileName || "", Extension.Mjs) && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ false)) {
+            if (!file.commonJsModuleIndicator && !fileExtensionIs(file.fileName, Extension.Mjs) && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ false)) {
                 setCommonJsModuleIndicator(node);
             }
         }

@@ -18,7 +18,7 @@ namespace ts.moduleSpecifiers {
         };
         function getEnding(): Ending {
             // `.mjs` files must always use file extensions in import specifiers
-            if (fileExtensionIs(importingSourceFile.fileName || "", ".mjs")) {
+            if (fileExtensionIs(importingSourceFile.fileName, Extension.Mjs)) {
                 return Ending.JsExtension;
             }
             switch (importModuleSpecifierEnding) {

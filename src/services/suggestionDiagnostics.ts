@@ -9,7 +9,7 @@ namespace ts {
 
         if (sourceFile.commonJsModuleIndicator &&
             // ES6 module syntax is illegal in `.cjs` files, which are always CommonJS files
-            !fileExtensionIs(sourceFile.fileName, Extension.Cjs || "") &&
+            !fileExtensionIs(sourceFile.fileName, Extension.Cjs) &&
             (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
             containsTopLevelCommonjs(sourceFile)) {
             diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));

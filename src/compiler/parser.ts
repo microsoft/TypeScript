@@ -636,11 +636,11 @@ namespace ts {
 
     // See also `isExternalOrCommonJsModule` in utilities.ts
     export function isExternalModule(file: SourceFile): boolean {
-        return file.externalModuleIndicator !== undefined || fileExtensionIs(file.fileName || "", Extension.Mjs);
+        return file.externalModuleIndicator !== undefined || fileExtensionIs(file.fileName, Extension.Mjs);
     }
 
     export function isCommonJsModule(file: SourceFile): boolean {
-        return file.commonJsModuleIndicator !== undefined || fileExtensionIs(file.fileName || "", Extension.Cjs);
+        return file.commonJsModuleIndicator !== undefined || fileExtensionIs(file.fileName, Extension.Cjs);
     }
 
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
