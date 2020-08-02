@@ -1,0 +1,14 @@
+=== tests/cases/compiler/index.cjs ===
+const Blah = require("./blah");
+>Blah : any
+>require("./blah") : any
+>require : any
+>"./blah" : "./blah"
+
+const { util1, util2 } = require("./utils");
+>util1 : any
+>util2 : any
+>require("./utils") : any
+>require : any
+>"./utils" : "./utils"
+

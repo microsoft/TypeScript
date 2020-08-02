@@ -1,0 +1,26 @@
+=== tests/cases/compiler/blah.mjs ===
+export default class Blah {}
+>Blah : Symbol(Blah, Decl(blah.mjs, 0, 0))
+
+=== tests/cases/compiler/utils.cjs ===
+function util1() {}
+>util1 : Symbol(util1, Decl(utils.cjs, 0, 0))
+
+function util2() {}
+>util2 : Symbol(util2, Decl(utils.cjs, 0, 19))
+
+module.exports = { util1, util2 };
+>module.exports : Symbol("tests/cases/compiler/utils", Decl(utils.cjs, 0, 0))
+>module : Symbol(export=, Decl(utils.cjs, 1, 19))
+>exports : Symbol(export=, Decl(utils.cjs, 1, 19))
+>util1 : Symbol(util1, Decl(utils.cjs, 2, 18))
+>util2 : Symbol(util2, Decl(utils.cjs, 2, 25))
+
+=== tests/cases/compiler/index.mjs ===
+import Blah from "./blah";
+>Blah : Symbol(Blah, Decl(index.mjs, 0, 6))
+
+import { util1, util2 } from "./utils";
+>util1 : Symbol(util1, Decl(index.mjs, 1, 8))
+>util2 : Symbol(util2, Decl(index.mjs, 1, 15))
+

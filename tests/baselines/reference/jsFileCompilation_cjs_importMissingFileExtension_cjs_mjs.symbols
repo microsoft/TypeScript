@@ -1,0 +1,10 @@
+=== tests/cases/compiler/index.cjs ===
+const Blah = require("./blah");
+>Blah : Symbol(Blah, Decl(index.cjs, 0, 5))
+>require : Symbol(require)
+
+const { util1, util2 } = require("./utils");
+>util1 : Symbol(util1, Decl(index.cjs, 1, 7))
+>util2 : Symbol(util2, Decl(index.cjs, 1, 14))
+>require : Symbol(require)
+

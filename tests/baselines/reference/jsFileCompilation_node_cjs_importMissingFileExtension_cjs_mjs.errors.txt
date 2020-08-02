@@ -1,0 +1,20 @@
+tests/cases/compiler/index.cjs(1,22): error TS2307: Cannot find module './blah' or its corresponding type declarations.
+tests/cases/compiler/index.cjs(2,34): error TS2307: Cannot find module './utils' or its corresponding type declarations.
+
+
+==== tests/cases/compiler/index.cjs (2 errors) ====
+    const Blah = require("./blah");
+                         ~~~~~~~~
+!!! error TS2307: Cannot find module './blah' or its corresponding type declarations.
+    const { util1, util2 } = require("./utils");
+                                     ~~~~~~~~~
+!!! error TS2307: Cannot find module './utils' or its corresponding type declarations.
+    
+==== tests/cases/compiler/blah.mjs (0 errors) ====
+    export default class Blah {}
+    
+==== tests/cases/compiler/utils.cjs (0 errors) ====
+    function util1() {}
+    function util2() {}
+    module.exports = { util1, util2 };
+    
