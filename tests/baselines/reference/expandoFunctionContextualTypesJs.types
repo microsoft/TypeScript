@@ -70,9 +70,9 @@ function foo() {
      */
     this.props = { color: "red" };
 >this.props = { color: "red" } : { color: "red"; }
->this.props : any
->this : any
->props : any
+>this.props : { color: "red" | "blue"; }
+>this : this
+>props : { color: "red" | "blue"; }
 >{ color: "red" } : { color: "red"; }
 >color : "red"
 >"red" : "red"
@@ -80,7 +80,7 @@ function foo() {
     expectLiteral(this);
 >expectLiteral(this) : void
 >expectLiteral : (p: { props: { color: "red" | "blue"; }; }) => void
->this : any
+>this : this
 }
 
 /**

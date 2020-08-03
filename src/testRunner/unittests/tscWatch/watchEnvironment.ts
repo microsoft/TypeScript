@@ -12,7 +12,7 @@ namespace ts.tscWatch {
                     path: `${projectFolder}/typescript.ts`,
                     content: "var z = 10;"
                 };
-                const environmentVariables = createMap<string>();
+                const environmentVariables = new Map<string, string>();
                 environmentVariables.set("TSC_WATCHFILE", TestFSWithWatch.Tsc_WatchFile.DynamicPolling);
                 return createWatchedSystem([file1, libFile], { environmentVariables });
             },
@@ -88,7 +88,7 @@ namespace ts.tscWatch {
                     commandLineArgs: ["--w", "-p", configFile.path],
                     sys: () => {
                         const files = [file, configFile, libFile];
-                        const environmentVariables = createMap<string>();
+                        const environmentVariables = new Map<string, string>();
                         environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
                         return createWatchedSystem(files, { environmentVariables });
                     },
@@ -156,7 +156,7 @@ namespace ts.tscWatch {
                         symLink: `${cwd}/node_modules/a`
                     };
                     const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
-                    const environmentVariables = createMap<string>();
+                    const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
                     return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
                 },

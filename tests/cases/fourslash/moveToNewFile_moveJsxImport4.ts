@@ -20,6 +20,7 @@ React;`,
         // NB: A perfect implementation would not copy over the import
         "/tests/cases/fourslash/F.tsx":
 `import React = require('leftpad');
+
 function F() {
     const React = import("react");
     <div />;

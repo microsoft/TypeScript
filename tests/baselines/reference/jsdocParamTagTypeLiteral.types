@@ -23,18 +23,18 @@ normal(12);
  * @param {string} [opts1.w="hi"] doc5
  */
 function foo1(opts1) {
->foo1 : (opts1: {    x: string;    y?: string | undefined;    z: string;    w: string;}) => void
->opts1 : { x: string; y?: string | undefined; z?: string; w?: string; }
+>foo1 : (opts1: {    x: string;    y?: string | undefined;    z: string | undefined;    w: string | undefined;}) => void
+>opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
 
     opts1.x;
 >opts1.x : string
->opts1 : { x: string; y?: string | undefined; z?: string; w?: string; }
+>opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
 >x : string
 }
 
 foo1({x: 'abc'});
 >foo1({x: 'abc'}) : void
->foo1 : (opts1: { x: string; y?: string | undefined; z?: string; w?: string; }) => void
+>foo1 : (opts1: { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }) => void
 >{x: 'abc'} : { x: string; }
 >x : string
 >'abc' : "abc"
@@ -93,19 +93,19 @@ foo3({x: 'abc'});
  */
 function foo4(opts4) {
 >foo4 : (opts4: {    x: string;    y?: string | undefined;    z: string;    w: string;}) => void
->opts4 : { x: string; y?: string | undefined; z?: string; w?: string; }[]
+>opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
 
     opts4[0].x;
 >opts4[0].x : string
->opts4[0] : { x: string; y?: string | undefined; z?: string; w?: string; }
->opts4 : { x: string; y?: string | undefined; z?: string; w?: string; }[]
+>opts4[0] : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
+>opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
 >0 : 0
 >x : string
 }
 
 foo4([{ x: 'hi' }]);
 >foo4([{ x: 'hi' }]) : void
->foo4 : (opts4: { x: string; y?: string | undefined; z?: string; w?: string; }[]) => void
+>foo4 : (opts4: { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]) => void
 >[{ x: 'hi' }] : { x: string; }[]
 >{ x: 'hi' } : { x: string; }
 >x : string

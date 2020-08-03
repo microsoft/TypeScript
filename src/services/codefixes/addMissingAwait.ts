@@ -45,7 +45,7 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const { sourceFile, program, cancellationToken } = context;
             const checker = context.program.getTypeChecker();
-            const fixedDeclarations = createMap<true>();
+            const fixedDeclarations = new Set<number>();
             return codeFixAll(context, errorCodes, (t, diagnostic) => {
                 const expression = getFixableErrorSpanExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
                 if (!expression) {
@@ -58,7 +58,7 @@ namespace ts.codefix {
         },
     });
 
-    function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
+    function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
         const { sourceFile, program, cancellationToken } = context;
         const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
         if (awaitableInitializers) {
@@ -79,7 +79,7 @@ namespace ts.codefix {
         }
     }
 
-    function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
+    function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
         const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations));
         return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
     }
@@ -234,12 +234,12 @@ namespace ts.codefix {
                 ancestor.parent.kind === SyntaxKind.MethodDeclaration));
     }
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Map<true>) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
         if (isBinaryExpression(insertionSite)) {
             for (const side of [insertionSite.left, insertionSite.right]) {
                 if (fixedDeclarations && isIdentifier(side)) {
                     const symbol = checker.getSymbolAtLocation(side);
-                    if (symbol && fixedDeclarations.has(getSymbolId(symbol).toString())) {
+                    if (symbol && fixedDeclarations.has(getSymbolId(symbol))) {
                         continue;
                     }
                 }
@@ -251,7 +251,7 @@ namespace ts.codefix {
         else if (errorCode === propertyAccessCode && isPropertyAccessExpression(insertionSite.parent)) {
             if (fixedDeclarations && isIdentifier(insertionSite.parent.expression)) {
                 const symbol = checker.getSymbolAtLocation(insertionSite.parent.expression);
-                if (symbol && fixedDeclarations.has(getSymbolId(symbol).toString())) {
+                if (symbol && fixedDeclarations.has(getSymbolId(symbol))) {
                     return;
                 }
             }
@@ -264,7 +264,7 @@ namespace ts.codefix {
         else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
             if (fixedDeclarations && isIdentifier(insertionSite)) {
                 const symbol = checker.getSymbolAtLocation(insertionSite);
-                if (symbol && fixedDeclarations.has(getSymbolId(symbol).toString())) {
+                if (symbol && fixedDeclarations.has(getSymbolId(symbol))) {
                     return;
                 }
             }
@@ -274,7 +274,7 @@ namespace ts.codefix {
         else {
             if (fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)) {
                 const symbol = checker.getSymbolAtLocation(insertionSite.parent.name);
-                if (symbol && !addToSeen(fixedDeclarations, getSymbolId(symbol))) {
+                if (symbol && !tryAddToSet(fixedDeclarations, getSymbolId(symbol))) {
                     return;
                 }
             }

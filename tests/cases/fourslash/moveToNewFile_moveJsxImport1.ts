@@ -15,6 +15,7 @@ verify.moveToNewFile({
 `1;`,
         "/tests/cases/fourslash/newFile.tsx":
 `import React = require('react');
+
 <div />;
 `,
     }

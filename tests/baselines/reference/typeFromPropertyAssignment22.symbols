@@ -3,6 +3,8 @@ function Installer () {
 >Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
 
     this.args = 0
+>this.args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
+>this : Symbol(Installer, Decl(npm-install.js, 0, 0))
 >args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
 }
 Installer.prototype.loadArgMetadata = function (next) {

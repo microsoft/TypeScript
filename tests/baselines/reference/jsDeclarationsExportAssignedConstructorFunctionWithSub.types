@@ -13,7 +13,7 @@ module.exports = function (p) {
     this.t = 12 + p;
 >this.t = 12 + p : number
 >this.t : any
->this : { "\"tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub\"": typeof exports; }
+>this : this
 >t : any
 >12 + p : number
 >12 : 12
@@ -31,7 +31,7 @@ module.exports.Sub = function() {
     this.instance = new module.exports(10);
 >this.instance = new module.exports(10) : exports
 >this.instance : any
->this : typeof exports
+>this : this
 >instance : any
 >new module.exports(10) : exports
 >module.exports : typeof exports

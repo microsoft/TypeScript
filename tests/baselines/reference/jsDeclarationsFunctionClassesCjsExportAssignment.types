@@ -9,7 +9,7 @@ function Timer(timeout) {
     this.timeout = timeout;
 >this.timeout = timeout : number
 >this.timeout : any
->this : any
+>this : this
 >timeout : any
 >timeout : number
 }
@@ -34,7 +34,7 @@ function Hook(handle) {
     this.handle = handle;
 >this.handle = handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context")) => void
 >this.handle : any
->this : any
+>this : this
 >handle : any
 >handle : (arg: import("tests/cases/conformance/jsdoc/declarations/context")) => void
 }

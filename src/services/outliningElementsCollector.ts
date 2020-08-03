@@ -227,6 +227,31 @@ namespace ts.OutliningElementsCollector {
                 return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
             case SyntaxKind.ArrayBindingPattern:
                 return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isBindingElement(n.parent), SyntaxKind.OpenBracketToken);
+            case SyntaxKind.ArrowFunction:
+                return spanForArrowFunction(<ArrowFunction>n);
+            case SyntaxKind.CallExpression:
+                return spanForCallExpression(<CallExpression>n);
+        }
+
+        function spanForCallExpression(node: CallExpression): OutliningSpan | undefined {
+            if (!node.arguments.length) {
+                return undefined;
+            }
+            const openToken = findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile);
+            const closeToken = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
+            if (!openToken || !closeToken || positionsAreOnSameLine(openToken.pos, closeToken.pos, sourceFile)) {
+                return undefined;
+            }
+
+            return spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ false, /*useFullStart*/ true);
+        }
+
+        function spanForArrowFunction(node: ArrowFunction): OutliningSpan | undefined {
+            if (isBlock(node.body) || positionsAreOnSameLine(node.body.getFullStart(), node.body.getEnd(), sourceFile)) {
+                return undefined;
+            }
+            const textSpan = createTextSpanFromBounds(node.body.getFullStart(), node.body.getEnd());
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(node));
         }
 
         function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {

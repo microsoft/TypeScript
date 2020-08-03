@@ -350,11 +350,12 @@ const lintFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("lin
 /** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
 const eslint = (folder) => async () => {
 
+    const formatter = cmdLineOptions.ci ? "stylish" : "autolinkable-stylish";
     const args = [
         "node_modules/eslint/bin/eslint",
         "--cache",
         "--cache-location", `${folder}/.eslintcache`,
-        "--format", "autolinkable-stylish",
+        "--format", formatter,
         "--rulesdir", "scripts/eslint/built/rules",
         "--ext", ".ts",
     ];
@@ -367,7 +368,7 @@ const eslint = (folder) => async () => {
 
     log(`Linting: ${args.join(" ")}`);
     return exec(process.execPath, args);
-}
+};
 
 const lintScripts = eslint("scripts");
 lintScripts.displayName = "lint-scripts";
