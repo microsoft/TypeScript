@@ -26,14 +26,11 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            Foo = /** @class */ (() => {
-                let Foo = class Foo {
-                };
-                Foo = __decorate([
-                    decorator
-                ], Foo);
-                return Foo;
-            })();
+            Foo = class Foo {
+            };
+            Foo = __decorate([
+                decorator
+            ], Foo);
             exports_1("default", Foo);
         }
     };
@@ -52,14 +49,11 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            default_1 = /** @class */ (() => {
-                let default_1 = class {
-                };
-                default_1 = __decorate([
-                    decorator
-                ], default_1);
-                return default_1;
-            })();
+            default_1 = class {
+            };
+            default_1 = __decorate([
+                decorator
+            ], default_1);
             exports_1("default", default_1);
         }
     };

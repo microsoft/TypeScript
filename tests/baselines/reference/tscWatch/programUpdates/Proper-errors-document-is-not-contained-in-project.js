@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/app.ts]
 
 
@@ -18,10 +18,8 @@ interface Array<T> { length: number; [n: number]: T; }
 //// [/a/b/tsconfig.json]
 {
 
-//// [/a/b/app.js]
 
-
-
+/a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
@@ -69,3 +67,7 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/app.js]
+
+

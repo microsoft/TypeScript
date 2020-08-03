@@ -5,9 +5,9 @@ export class Foo {
     constructor() {
         this.foo = "Hello";
 >this.foo = "Hello" : "Hello"
->this.foo : string
+>this.foo : any
 >this : this
->foo : string
+>foo : any
 >"Hello" : "Hello"
     }
     slicey() {
@@ -52,11 +52,11 @@ function C() {
 >this : this
 >x : any
 >function() { this.x.toString(); } : () => void
->this.x.toString() : any
->this.x.toString : any
->this.x : any
+>this.x.toString() : string
+>this.x.toString : () => string
+>this.x : () => void
 >this : this
->x : any
->toString : any
+>x : () => void
+>toString : () => string
 }
 

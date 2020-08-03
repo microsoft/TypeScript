@@ -31,9 +31,9 @@ verify.codeFix({
     description: [ts.Diagnostics.Declare_method_0.message, "foo"],
     index: 0,
     newFileContent:
-`import { create, C } from "./c";
+`import { A } from "./a";
 import { B } from "./b";
-import { A } from "./a";
+import { C, create } from "./c";
 class D {
     bar() {
         create(args => this.foo(args));

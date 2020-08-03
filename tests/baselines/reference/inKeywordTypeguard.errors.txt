@@ -165,4 +165,11 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
             let n: never = x;
         }
     }
+    function negativeIntersectionTest() {
+        if ("ontouchstart" in window) {
+            window.ontouchstart
+        } else {
+            window.ontouchstart
+        }
+    }
     

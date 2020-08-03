@@ -1,4 +1,4 @@
-/a/lib/tsc.js -i
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -20,6 +20,31 @@ export const y = 20;
 
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"module":"amd"}}
+
+
+/a/lib/tsc.js -i
+Output::
+
+
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
+Program options: {"incremental":true,"module":2,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+WatchedFiles::
+
+FsWatches::
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
@@ -76,6 +101,13 @@ define(["require", "exports"], function (require, exports) {
 }
 
 
+Change::
+
+Input::
+//// [/users/username/projects/project/file2.ts]
+export const z = 10;
+
+
 Output::
 
 
@@ -87,8 +119,6 @@ Program files::
 /users/username/projects/project/file2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 
 WatchedFiles::
@@ -98,11 +128,6 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.Success
-
-Change::
-
-//// [/users/username/projects/project/file2.ts]
-export const z = 10;
 
 //// [/users/username/projects/project/file2.js]
 define(["require", "exports"], function (require, exports) {
@@ -149,24 +174,3 @@ define(["require", "exports"], function (require, exports) {
   "version": "FakeTSVersion"
 }
 
-
-Output::
-
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"module":2,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/file2.ts
-
-WatchedFiles::
-
-FsWatches::
-
-FsWatchesRecursive::
-
-exitCode:: ExitStatus.Success

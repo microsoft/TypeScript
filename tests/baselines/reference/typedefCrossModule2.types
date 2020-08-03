@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/use.js ===
 var mod = require('./mod1.js');
->mod : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
->require('./mod1.js') : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
+>mod : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
+>require('./mod1.js') : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >require : any
 >'./mod1.js' : "./mod1.js"
 
@@ -17,7 +17,7 @@ var bbb = new mod.Baz();
 >bbb : any
 >new mod.Baz() : any
 >mod.Baz : any
->mod : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
+>mod : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >Baz : any
 
 === tests/cases/conformance/jsdoc/mod1.js ===
@@ -31,16 +31,16 @@ class Foo { } // should error
 exports.Bar = class { }
 >exports.Bar = class { } : typeof Bar
 >exports.Bar : typeof Bar
->exports : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
+>exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >Bar : typeof Bar
 >class { } : typeof Bar
 
 /** @typedef {number} Baz */
 module.exports = {
->module.exports = {    Baz: class { }} : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
->module.exports : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }; }
->exports : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
+>module.exports = {    Baz: class { }} : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
+>module.exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
+>module : { "\"tests/cases/conformance/jsdoc/mod1\"": { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }; }
+>exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >{    Baz: class { }} : { Baz: typeof Baz; }
 
     Baz: class { }
@@ -59,16 +59,16 @@ var Qux = 2;
 exports.Quid = 2;
 >exports.Quid = 2 : 2
 >exports.Quid : number
->exports : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
+>exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >Quid : number
 >2 : 2
 
 /** @typedef {number} Quack */
 module.exports = {
->module.exports = {    Quack: 2} : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
->module.exports : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }; }
->exports : { Baz: any; Bar: typeof Bar; Quid: number; } | { Quack: any; Bar: typeof Bar; Quid: number; }
+>module.exports = {    Quack: 2} : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
+>module.exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
+>module : { "\"tests/cases/conformance/jsdoc/mod1\"": { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }; }
+>exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >{    Quack: 2} : { Quack: number; }
 
     Quack: 2

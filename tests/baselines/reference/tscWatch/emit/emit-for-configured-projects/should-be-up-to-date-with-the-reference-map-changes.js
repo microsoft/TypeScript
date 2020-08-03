@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w -p /a/b/tsconfig.json
+Input::
 //// [/a/b/moduleFile1.ts]
 export function Foo() { };
 
@@ -30,39 +30,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
 
-
-//// [/a/b/file1Consumer1.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = 10;
-
-
-//// [/a/b/file1Consumer2.js]
-"use strict";
-exports.__esModule = true;
-var z = 10;
-
-
-//// [/a/b/globalFile3.js]
-
-
-//// [/a/b/moduleFile2.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
-
-
-
+/a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
@@ -116,17 +85,44 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Change file1Consumer1 content to `export let y = Foo();`
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
 
-//// [/a/b/file1Consumer1.ts]
-export let y = Foo();
 
 //// [/a/b/file1Consumer1.js]
 "use strict";
 exports.__esModule = true;
 exports.y = void 0;
-exports.y = Foo();
+exports.y = 10;
 
+
+//// [/a/b/file1Consumer2.js]
+"use strict";
+exports.__esModule = true;
+var z = 10;
+
+
+//// [/a/b/globalFile3.js]
+
+
+//// [/a/b/moduleFile2.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo4 = void 0;
+exports.Foo4 = 10;
+
+
+
+Change:: Change file1Consumer1 content to `export let y = Foo();`
+
+Input::
+//// [/a/b/file1Consumer1.ts]
+export let y = Foo();
 
 
 Output::
@@ -183,21 +179,20 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+exports.y = void 0;
+exports.y = Foo();
+
+
+
 Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
 
+Input::
 //// [/a/b/moduleFile1.ts]
 export var T: number;export function Foo() { };
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.Foo = exports.T = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
-
-
-//// [/a/b/file1Consumer2.js] file written with same contents
 
 Output::
 >> Screen clear
@@ -254,17 +249,22 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Add the import statements back to file1Consumer1
-
-//// [/a/b/file1Consumer1.ts]
-import {Foo} from "./moduleFile1";let y = Foo();
-
-//// [/a/b/file1Consumer1.js]
+//// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-var moduleFile1_1 = require("./moduleFile1");
-var y = moduleFile1_1.Foo();
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
 
+
+//// [/a/b/file1Consumer2.js] file written with same contents
+
+Change:: Add the import statements back to file1Consumer1
+
+Input::
+//// [/a/b/file1Consumer1.ts]
+import {Foo} from "./moduleFile1";let y = Foo();
 
 
 Output::
@@ -315,20 +315,20 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/a/b/file1Consumer1.js]
+"use strict";
+exports.__esModule = true;
+var moduleFile1_1 = require("./moduleFile1");
+var y = moduleFile1_1.Foo();
+
+
+
 Change:: Change the content of moduleFile1 to `export var T: number;export var T2: string;export function Foo() { };`
 
+Input::
 //// [/a/b/moduleFile1.ts]
 export let y = Foo();
 
-//// [/a/b/moduleFile1.js]
-"use strict";
-exports.__esModule = true;
-exports.y = void 0;
-exports.y = Foo();
-
-
-//// [/a/b/file1Consumer1.js] file written with same contents
-//// [/a/b/file1Consumer2.js] file written with same contents
 
 Output::
 >> Screen clear
@@ -398,23 +398,23 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-Change:: Multiple file edits in one go
-
-//// [/a/b/moduleFile1.ts]
-export var T: number;export function Foo() { };
-
-//// [/a/b/file1Consumer1.ts] file written with same contents
 //// [/a/b/moduleFile1.js]
 "use strict";
 exports.__esModule = true;
-exports.Foo = exports.T = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
+exports.y = void 0;
+exports.y = Foo();
 
 
 //// [/a/b/file1Consumer1.js] file written with same contents
 //// [/a/b/file1Consumer2.js] file written with same contents
+
+Change:: Multiple file edits in one go
+
+Input::
+//// [/a/b/moduleFile1.ts]
+export var T: number;export function Foo() { };
+
+//// [/a/b/file1Consumer1.ts] file written with same contents
 
 Output::
 >> Screen clear
@@ -465,3 +465,15 @@ FsWatchesRecursive::
   {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/moduleFile1.js]
+"use strict";
+exports.__esModule = true;
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js] file written with same contents
+//// [/a/b/file1Consumer2.js] file written with same contents

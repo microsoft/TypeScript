@@ -1,7 +1,7 @@
 tests/cases/compiler/assignmentCompat1.ts(4,1): error TS2741: Property 'one' is missing in type '{ [index: string]: any; }' but required in type '{ one: number; }'.
 tests/cases/compiler/assignmentCompat1.ts(6,1): error TS2741: Property 'one' is missing in type '{ [index: number]: any; }' but required in type '{ one: number; }'.
-tests/cases/compiler/assignmentCompat1.ts(8,1): error TS2322: Type '"foo"' is not assignable to type '{ [index: string]: any; }'.
-tests/cases/compiler/assignmentCompat1.ts(10,1): error TS2322: Type 'false' is not assignable to type '{ [index: number]: any; }'.
+tests/cases/compiler/assignmentCompat1.ts(8,1): error TS2322: Type 'string' is not assignable to type '{ [index: string]: any; }'.
+tests/cases/compiler/assignmentCompat1.ts(10,1): error TS2322: Type 'boolean' is not assignable to type '{ [index: number]: any; }'.
 
 
 ==== tests/cases/compiler/assignmentCompat1.ts (4 errors) ====
@@ -20,10 +20,10 @@ tests/cases/compiler/assignmentCompat1.ts(10,1): error TS2322: Type 'false' is n
     z = x;  // Ok because index signature type is any
     y = "foo"; // Error
     ~
-!!! error TS2322: Type '"foo"' is not assignable to type '{ [index: string]: any; }'.
+!!! error TS2322: Type 'string' is not assignable to type '{ [index: string]: any; }'.
     z = "foo"; // OK, string has numeric indexer
     z = false; // Error
     ~
-!!! error TS2322: Type 'false' is not assignable to type '{ [index: number]: any; }'.
+!!! error TS2322: Type 'boolean' is not assignable to type '{ [index: number]: any; }'.
     
     

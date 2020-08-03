@@ -75,7 +75,7 @@ namespace ts {
         const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
         const descriptionColumn: string[] = [];
 
-        const optionsDescriptionMap = createMap<string[]>();  // Map between option.description and list of option.type if it is a kind
+        const optionsDescriptionMap = new Map<string, string[]>();  // Map between option.description and list of option.type if it is a kind
 
         for (const option of optionsList) {
             // If an option lacks a description,
@@ -100,7 +100,7 @@ namespace ts {
             if (option.name === "lib") {
                 description = getDiagnosticText(option.description);
                 const element = (<CommandLineOptionOfListType>option).element;
-                const typeMap = <Map<number | string>>element.type;
+                const typeMap = <ESMap<string, number | string>>element.type;
                 optionsDescriptionMap.set(description, arrayFrom(typeMap.keys()).map(key => `'${key}'`));
             }
             else {

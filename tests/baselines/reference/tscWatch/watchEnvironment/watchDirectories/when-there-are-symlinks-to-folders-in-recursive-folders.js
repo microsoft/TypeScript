@@ -1,4 +1,4 @@
-/a/lib/tsc.js --w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -28,12 +28,8 @@ export {}
 //// [/home/user/projects/myproject/node_modules/b] symlink(/home/user/projects/myproject/node_modules/realb)
 //// [/home/user/projects/myproject/node_modules/reala/node_modules/b] symlink(/home/user/projects/myproject/node_modules/b)
 //// [/home/user/projects/myproject/node_modules/realb/node_modules/a] symlink(/home/user/projects/myproject/node_modules/a)
-//// [/home/user/projects/myproject/src/file.js]
-"use strict";
-exports.__esModule = true;
 
-
-
+/a/lib/tsc.js --w
 Output::
 [[90m12:00:45 AM[0m] Starting compilation in watch mode...
 
@@ -145,3 +141,9 @@ FsWatches::
 FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
+
+//// [/home/user/projects/myproject/src/file.js]
+"use strict";
+exports.__esModule = true;
+
+

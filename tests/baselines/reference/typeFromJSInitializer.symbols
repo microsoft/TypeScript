@@ -4,13 +4,19 @@ function A () {
 
     // should get any on this-assignments in constructor
     this.unknown = null
+>this.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
+>this : Symbol(A, Decl(a.js, 0, 0))
 >unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
 
     this.unknowable = undefined
+>this.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
+>this : Symbol(A, Decl(a.js, 0, 0))
 >unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
 >undefined : Symbol(undefined)
 
     this.empty = []
+>this.empty : Symbol(A.empty, Decl(a.js, 3, 31))
+>this : Symbol(A, Decl(a.js, 0, 0))
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
 }
 var a = new A()
