@@ -74,6 +74,7 @@ namespace ts.refactor {
 
     function doChange(changeTracker: textChanges.ChangeTracker, file: SourceFile, info: Info) {
         const bindingPattern = getBindingPattern(info, file, changeTracker);
+        suppressLeadingAndTrailingTrivia(info.replacementExpression);
         const newBinding = factory.createVariableStatement(
             /* modifiers*/ undefined,
             factory.createVariableDeclarationList(
@@ -162,8 +163,6 @@ namespace ts.refactor {
 
     function replaceBindingPatternReferenced(file: SourceFile, changeTracker: textChanges.ChangeTracker, expression: Expression, newName: string) {
         const newIdentifier = factory.createIdentifier(newName);
-        suppressLeadingAndTrailingTrivia(expression);
-        copyComments(expression, newIdentifier);
 
         changeTracker.replaceNode(
             file,
