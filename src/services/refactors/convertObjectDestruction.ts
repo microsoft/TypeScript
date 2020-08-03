@@ -102,7 +102,7 @@ namespace ts.refactor {
             const [max, indexSet] = denseNumericInfo;
             return getdenseNumericBindingPattern(info, file, max, indexSet, changeTracker);
         }
-        return getObjectBindingPattern(info, file, changeTracker);
+        return getObjectBindingPattern(info, file, changeTracker);        
     }
 
     function getObjectBindingPattern(info: Info, file: SourceFile, changeTracker: textChanges.ChangeTracker) {
@@ -119,12 +119,7 @@ namespace ts.refactor {
 
             const newName = nameMap.get(name);
             Debug.assertIsDefined(newName);
-
-            changeTracker.replaceNode(
-                file,
-                expression,
-                factory.createIdentifier(newName)
-            );
+            replaceBindingPatternReferenced(file, changeTracker, expression, newName);
         });
         return factory.createObjectBindingPattern(bindingElements);
     }
@@ -159,15 +154,22 @@ namespace ts.refactor {
 
             const newName = nameMap.get(index);
             Debug.assertIsDefined(newName);
-
-            changeTracker.replaceNode(
-                file,
-                expression,
-                factory.createIdentifier(newName)
-            );
+            replaceBindingPatternReferenced(file, changeTracker, expression, newName);
         });
 
         return factory.createArrayBindingPattern(bindingElements);
+    }
+
+    function replaceBindingPatternReferenced(file: SourceFile, changeTracker: textChanges.ChangeTracker, expression: Expression, newName: string) {
+        const newIdentifier = factory.createIdentifier(newName);
+        suppressLeadingAndTrailingTrivia(expression);
+        copyComments(expression, newIdentifier);
+
+        changeTracker.replaceNode(
+            file,
+            expression,
+            newIdentifier
+        );
     }
 
     function getUniqueDestructionName(expr: AccessExpression, needAlias: boolean, newName: string) {
