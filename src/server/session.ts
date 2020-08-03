@@ -751,17 +751,17 @@ namespace ts.server {
             switch (this.projectService.serverMode) {
                 case LanguageServiceMode.Semantic:
                     break;
-                case LanguageServiceMode.ApproximateSemanticOnly:
+                case LanguageServiceMode.ApproximateSemantic:
                     invalidApproximateSemanticOnlyCommands.forEach(commandName =>
                         this.handlers.set(commandName, request => {
-                            throw new Error(`Request: ${request.command} not allowed on approximate semantic only server`);
+                            throw new Error(`Request: ${request.command} not allowed in LanguageServiceMode.ApproximateSemantic`);
                         })
                     );
                     break;
-                case LanguageServiceMode.SyntaxOnly:
+                case LanguageServiceMode.Syntactic:
                     invalidSyntaxOnlyCommands.forEach(commandName =>
                         this.handlers.set(commandName, request => {
-                            throw new Error(`Request: ${request.command} not allowed on syntax only server`);
+                            throw new Error(`Request: ${request.command} not allowed in LanguageServiceMode.Syntactic`);
                         })
                     );
                     break;

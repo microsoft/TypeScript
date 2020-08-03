@@ -36,7 +36,7 @@ import { something } from "something";
                 session.executeCommandSeq(request);
             }
             catch (e) {
-                assert.equal(e.message, `Request: ${request.command} not allowed on syntax only server`);
+                assert.equal(e.message, `Request: ${request.command} not allowed in LanguageServiceMode.Syntactic`);
                 hasException = true;
             }
             assert.isTrue(hasException);
@@ -119,7 +119,7 @@ import { something } from "something";
                 project.getLanguageService().getSemanticDiagnostics(file1.path);
             }
             catch (e) {
-                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed on syntax only server`);
+                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.Syntactic`);
                 hasException = true;
             }
             assert.isTrue(hasException);

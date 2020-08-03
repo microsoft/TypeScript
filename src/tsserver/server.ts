@@ -960,9 +960,9 @@ namespace ts.server {
             case "semantic":
                 return LanguageServiceMode.Semantic;
             case "approximatesemanticonly":
-                return LanguageServiceMode.ApproximateSemanticOnly;
+                return LanguageServiceMode.ApproximateSemantic;
             case "syntaxonly":
-                return LanguageServiceMode.SyntaxOnly;
+                return LanguageServiceMode.Syntactic;
             default:
                 unknownServerMode = mode;
                 return undefined;
