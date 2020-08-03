@@ -124,51 +124,15 @@ namespace ts.refactor {
         let firstReferencedStatement: Statement | undefined;
         const referencedAccessExpression: [AccessExpression, string][] = [];
         const allReferencedAcccessExpression: AccessExpression[] = [];
-        const container = isParameter(symbol.valueDeclaration) ?
-            symbol.valueDeclaration :
-            findAncestor(symbol.valueDeclaration, or(isStatement, isSourceFile));
+        const container = isParameter(symbol.valueDeclaration) ? symbol.valueDeclaration : findAncestor(symbol.valueDeclaration, or(isStatement, isSourceFile));
         Debug.assertIsDefined(container);
-
         forEach(references, reference => {
             if (reference.kind !== FindAllReferences.EntryKind.Node) {
-                return undefined;
-            }
-
-            let lastChild = reference.node;
-            const topReferencedAccessExpression = findAncestor(reference.node.parent, n => {
-                if (isParenthesizedExpression(n)) {
-                    lastChild = n;
-                    return false;
-                }
-                else if (isAccessExpression(n)) {
-                    if (n.expression === lastChild) {
-                        return true;
-                    }
-                    lastChild = n;
-                    return false;
-                }
-                return "quit";
-            });
-            if (!topReferencedAccessExpression) {
                 return;
             }
 
-            const accessExpression = cast(topReferencedAccessExpression, isAccessExpression);
-            allReferencedAcccessExpression.push(accessExpression);
-
-            if (isAssignmentTarget(accessExpression)) {
-                return;
-            }
-
-            const referencedParentMaybeCall = skipParenthesesUp(accessExpression.parent);
-            if (isCallOrNewExpression(referencedParentMaybeCall) && !(referencedParentMaybeCall.arguments && rangeContainsRange(referencedParentMaybeCall.arguments, topReferencedAccessExpression))) {
-                return;
-            }
-
-            if (reference.node.pos < symbol.valueDeclaration.pos) {
-                return;
-            }
-            if (isFunctionLikeDeclaration(container.parent) && container.parent.body && !rangeContainsRange(container.parent.body, reference.node)) {
+            const accessExpression = getAccessExpressionIfValidReference(reference.node, symbol, container, allReferencedAcccessExpression);
+            if (!accessExpression) {
                 return;
             }
 
@@ -223,6 +187,7 @@ namespace ts.refactor {
                 }
             }
         });
+        if (hasUnconvertableReference) return undefined;
 
         if (resolveUniqueName) {
             forEach(referencedAccessExpression, ([, name]) => {
@@ -233,7 +198,6 @@ namespace ts.refactor {
             });
         }
 
-        if (hasUnconvertableReference) return undefined;
         return {
             replacementExpression: node.parent.expression,
             firstReferenced,
@@ -241,5 +205,47 @@ namespace ts.refactor {
             referencedAccessExpression,
             namesNeedUniqueName
         };
+    }
+
+    function getAccessExpressionIfValidReference(node: Node, symbol: Symbol, container: Node, allReferencedAcccessExpression: Node[]): AccessExpression | undefined {
+        let lastChild = node;
+        const topReferencedAccessExpression = findAncestor(node.parent, n => {
+            if (isParenthesizedExpression(n)) {
+                lastChild = n;
+                return false;
+            }
+            else if (isAccessExpression(n)) {
+                if (n.expression === lastChild) {
+                    return true;
+                }
+                lastChild = n;
+                return false;
+            }
+            return "quit";
+        });
+        if (!topReferencedAccessExpression) {
+            return undefined;
+        }
+
+        const accessExpression = cast(topReferencedAccessExpression, isAccessExpression);
+        allReferencedAcccessExpression.push(accessExpression);
+
+        if (isAssignmentTarget(accessExpression)) {
+            return undefined;
+        }
+
+        const referencedParentMaybeCall = skipParenthesesUp(accessExpression.parent);
+        if (isCallOrNewExpression(referencedParentMaybeCall) && !(referencedParentMaybeCall.arguments && rangeContainsRange(referencedParentMaybeCall.arguments, topReferencedAccessExpression))) {
+            return undefined;
+        }
+
+        if (node.pos < symbol.valueDeclaration.pos) {
+            return undefined;
+        }
+        if (isFunctionLikeDeclaration(container.parent) && container.parent.body && !rangeContainsRange(container.parent.body, node)) {
+            return undefined;
+        }
+
+        return accessExpression;
     }
 }
