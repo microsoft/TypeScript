@@ -8,8 +8,8 @@
 //// }
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Introduce Destruction")
+verify.not.refactorAvailable("Introduce destruction")
 goTo.select("c", "d");
-verify.not.refactorAvailable("Introduce Destruction")
+verify.not.refactorAvailable("Introduce destruction")
 goTo.select("e", "f");
-verify.not.refactorAvailable("Introduce Destruction")
+verify.not.refactorAvailable("Introduce destruction")

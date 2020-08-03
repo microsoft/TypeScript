@@ -5,9 +5,9 @@
 
 goTo.select("a", "b");
 edit.applyRefactor({
-    refactorName: "Introduce Destruction",
-    actionName: "Introduce Destruction",
-    actionDescription: "Convert property access to Object destruction",
+    refactorName: "Introduce destruction",
+    actionName: "Introduce destruction",
+    actionDescription: "Convert access to destruction",
     newContent: `const item = [ 1, 2, 3 ] as const
 const [index_0, index_1, index_2] = item
 call(index_0, index_1, index_2)`,

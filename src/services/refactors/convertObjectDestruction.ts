@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.refactor {
-    const refactorName = "Introduce Destruction";
-    const actionNameIntroduceObjectDestruction = "Convert property access to Object destruction";
+    const refactorName = "Introduce destruction";
+    const actionNameIntroduceObjectDestruction = "Convert access to destruction";
     registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
@@ -102,7 +102,7 @@ namespace ts.refactor {
             const [max, indexSet] = denseNumericInfo;
             return getdenseNumericBindingPattern(info, file, max, indexSet, changeTracker);
         }
-        return getObjectBindingPattern(info, file, changeTracker);        
+        return getObjectBindingPattern(info, file, changeTracker);
     }
 
     function getObjectBindingPattern(info: Info, file: SourceFile, changeTracker: textChanges.ChangeTracker) {

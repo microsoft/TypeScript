@@ -8,9 +8,9 @@
 
 goTo.select("a", "b");
 edit.applyRefactor({
-    refactorName: "Introduce Destruction",
-    actionName: "Introduce Destruction",
-    actionDescription: "Convert property access to Object destruction",
+    refactorName: "Introduce destruction",
+    actionName: "Introduce destruction",
+    actionDescription: "Convert access to destruction",
     newContent: `function foo (item: { a: string, b: number }) {
     const { a, b } = item;
     function bar () {
