@@ -1631,11 +1631,11 @@ namespace ts.server {
 
         /*@internal*/
         includePackageJsonAutoImports(): PackageJsonAutoImportPreference {
-            if (this.projectService.includePackageJsonAutoImports() === PackageJsonAutoImportPreference.None ||
+            if (this.projectService.includePackageJsonAutoImports() === PackageJsonAutoImportPreference.Off ||
                 !this.languageServiceEnabled ||
                 isInsideNodeModules(this.currentDirectory) ||
                 !this.isDefaultProjectForOpenFiles()) {
-                return PackageJsonAutoImportPreference.None;
+                return PackageJsonAutoImportPreference.Off;
             }
             return this.projectService.includePackageJsonAutoImports();
         }
@@ -1832,6 +1832,9 @@ namespace ts.server {
         private static readonly newName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
 
         /*@internal*/
+        private static readonly maxDependencies = 10;
+
+        /*@internal*/
         static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, compilerOptions: CompilerOptions): string[] {
             if (!dependencySelection) {
                 return ts.emptyArray;
@@ -1844,9 +1847,6 @@ namespace ts.server {
             for (const packageJson of packageJsons) {
                 packageJson.dependencies?.forEach((_, dependenyName) => addDependency(dependenyName));
                 packageJson.peerDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
-                if (dependencySelection === PackageJsonAutoImportPreference.All) {
-                    packageJson.devDependencies?.forEach((_, dependencyName) => addDependency(dependencyName));
-                }
             }
 
             if (dependencyNames) {
@@ -1862,6 +1862,10 @@ namespace ts.server {
                     const fileName = moduleResolutionHost.realpath?.(resolvedFileName) || resolvedFileName;
                     if (!hostProject.getCurrentProgram()!.getSourceFile(fileName) && !hostProject.getCurrentProgram()!.getSourceFile(resolvedFileName)) {
                         rootNames = append(rootNames, fileName);
+                        // Avoid creating a large project that would significantly slow down time to editor interactivity
+                        if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
+                            return ts.emptyArray;
+                        }
                     }
                 }
             }
@@ -1877,7 +1881,7 @@ namespace ts.server {
 
         /*@internal*/
         static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
-            if (dependencySelection === PackageJsonAutoImportPreference.None) {
+            if (dependencySelection === PackageJsonAutoImportPreference.Off) {
                 return undefined;
             }
 
@@ -1974,7 +1978,7 @@ namespace ts.server {
 
         /*@internal*/
         includePackageJsonAutoImports() {
-            return PackageJsonAutoImportPreference.None;
+            return PackageJsonAutoImportPreference.Off;
         }
 
         getTypeAcquisition(): TypeAcquisition {
