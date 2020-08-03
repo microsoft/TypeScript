@@ -168,6 +168,9 @@ namespace ts.refactor {
             if (reference.node.pos < symbol.valueDeclaration.pos) {
                 return;
             }
+            if (isFunctionLikeDeclaration(container.parent) && container.parent.body && !rangeContainsRange(container.parent.body, reference.node)) {
+                return;
+            }
 
             if (accessExpression !== symbol.valueDeclaration && isExpression(accessExpression)) {
                 if (!firstReferenced || accessExpression.pos < firstReferenced.pos) {
