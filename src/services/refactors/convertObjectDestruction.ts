@@ -95,7 +95,7 @@ namespace ts.refactor {
             const argExpr = cast(expr.argumentExpression, isPropertyName);
             return factory.createBindingElement(
                 /* dotDotDotToken*/ undefined,
-                getTextOfPropertyName(argExpr) !== newName ? argExpr : undefined,
+                needAlias ? factory.cloneNode(argExpr) : undefined,
                 newName,
             );
         }
@@ -110,6 +110,7 @@ namespace ts.refactor {
 
     function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean): Info | undefined {
         const current = getTokenAtPosition(file, context.startPosition);
+        const compilerOptions = context.program.getCompilerOptions();
         const range = createTextRangeFromSpan(getRefactorContextSpan(context));
 
         const node = findAncestor(current, (node => node.parent && isAccessExpression(node.parent) && !rangeContainsSkipTrivia(range, node.parent, file)));
@@ -163,8 +164,14 @@ namespace ts.refactor {
                 if (!isStringLiteralLike(accessExpression.argumentExpression)) {
                     return;
                 }
+                if (!isIdentifierText(accessExpression.argumentExpression.text, compilerOptions.target, compilerOptions.jsx ? LanguageVariant.JSX : LanguageVariant.Standard)) {
+                    return;
+                }
 
                 referencedAccessExpression.push([accessExpression, accessExpression.argumentExpression.text]);
+                return;
+            }
+            if (!isIdentifierText(accessExpression.name.text, compilerOptions.target, compilerOptions.jsx ? LanguageVariant.JSX : LanguageVariant.Standard)) {
                 return;
             }
 
