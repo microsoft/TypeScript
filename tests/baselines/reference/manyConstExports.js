@@ -1,4 +1,4 @@
-//// [a.ts]
+//// [manyConstExports.ts]
 export const exp0 = "test";
 export const exp1 = "test";
 export const exp2 = "test";
@@ -5000,7 +5000,8 @@ export const exp4997 = "test";
 export const exp4998 = "test";
 export const exp4999 = "test";
 
-//// [a.js]
+
+//// [manyConstExports.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.exp49 = exports.exp48 = exports.exp47 = exports.exp46 = exports.exp45 = exports.exp44 = exports.exp43 = exports.exp42 = exports.exp41 = exports.exp40 = exports.exp39 = exports.exp38 = exports.exp37 = exports.exp36 = exports.exp35 = exports.exp34 = exports.exp33 = exports.exp32 = exports.exp31 = exports.exp30 = exports.exp29 = exports.exp28 = exports.exp27 = exports.exp26 = exports.exp25 = exports.exp24 = exports.exp23 = exports.exp22 = exports.exp21 = exports.exp20 = exports.exp19 = exports.exp18 = exports.exp17 = exports.exp16 = exports.exp15 = exports.exp14 = exports.exp13 = exports.exp12 = exports.exp11 = exports.exp10 = exports.exp9 = exports.exp8 = exports.exp7 = exports.exp6 = exports.exp5 = exports.exp4 = exports.exp3 = exports.exp2 = exports.exp1 = exports.exp0 = void 0;
