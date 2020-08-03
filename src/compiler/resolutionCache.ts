@@ -406,7 +406,7 @@ namespace ts {
                         perDirectoryResolution.set(name, resolution);
                     }
                     resolutionsInFile.set(name, resolution);
-                    watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName);
+                    watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName, noResolveResolution);
                     if (existingResolution) {
                         stopWatchFailedLookupLocationOfResolution(existingResolution, path, getResolutionWithResolvedFileName);
                     }
@@ -561,6 +561,7 @@ namespace ts {
             resolution: T,
             filePath: Path,
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+            noResolveResolution: T
         ) {
             if (resolution.refCount) {
                 resolution.refCount++;
@@ -568,7 +569,7 @@ namespace ts {
             }
             else {
                 resolution.refCount = 1;
-                Debug.assert(resolution.files === undefined);
+                Debug.assert(resolution.files === undefined || (resolution === noResolveResolution && length(noResolveResolution.files) === 0));
                 if (isExternalModuleNameRelative(name)) {
                     watchFailedLookupLocationOfResolution(resolution);
                 }
