@@ -2166,6 +2166,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Arguments_for_the_rest_parameter_0_were_not_provided_6236" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Arguments for the rest parameter '{0}' were not provided.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Array_element_destructuring_pattern_expected_1181" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Array element destructuring pattern expected.]]></Val>
@@ -2394,6 +2400,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Can_only_convert_logical_AND_access_chains_95142" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Can only convert logical AND access chains]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[논리적 AND 액세스 체인만 변환할 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Can_only_convert_property_with_modifier_95137" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Can only convert property with modifier]]></Val>
@@ -2601,6 +2616,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 모듈을 찾을 수 없습니다. '--resolveJsonModule'을 사용하여 '. json' 확장명이 포함된 모듈을 가져오는 것이 좋습니다.]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_th_2792" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3369,6 +3390,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Constructor_type_notation_must_be_parenthesized_when_used_in_a_union_type_1386" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Constructor type notation must be parenthesized when used in a union type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[공용 구조체 형식에 사용되는 경우 생성자 형식 표기법을 괄호로 묶어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Constructor_type_notation_must_be_parenthesized_when_used_in_an_intersection_type_1388" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Constructor type notation must be parenthesized when used in an intersection type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[교집합 형식에 사용되는 경우 생성자 형식 표기법을 괄호로 묶어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Constructors_for_derived_classes_must_contain_a_super_call_2377" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Constructors for derived classes must contain a 'super' call.]]></Val>
@@ -3675,6 +3714,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Convert_to_optional_chain_expression_95139" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert to optional chain expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[선택적 체인 식으로 변환합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Convert_to_template_string_95096" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Convert to template string]]></Val>
@@ -3729,6 +3777,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Could_not_find_convertible_access_expression_95140" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not find convertible access expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[변환 가능한 액세스 식을 찾을 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Could_not_find_export_statement_95129" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Could not find export statement]]></Val>
@@ -3743,6 +3800,15 @@
           <Val><![CDATA[Could not find import clause]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[import 절을 찾을 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Could_not_find_matching_access_expressions_95141" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Could not find matching access expressions]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[일치하는 액세스 식을 찾을 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4113,6 +4179,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Disable checking for this file.]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Disable_loading_referenced_projects_6235" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Disable loading referenced projects.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[참조된 프로젝트 로드를 사용하지 않습니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5480,6 +5555,24 @@
           <Val><![CDATA[Function overload must not be static.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[함수 오버로드는 정적이 아니어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Function_type_notation_must_be_parenthesized_when_used_in_a_union_type_1385" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Function type notation must be parenthesized when used in a union type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[공용 구조체 형식에 사용되는 경우 함수 형식 표기법을 괄호로 묶어야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Function_type_notation_must_be_parenthesized_when_used_in_an_intersection_type_1387" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Function type notation must be parenthesized when used in an intersection type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[교집합 형식에 사용되는 경우 함수 형식 표기법을 괄호로 묶어야 합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13082,6 +13175,15 @@
           <Val><![CDATA['extends' clause of exported class '{0}' has or is using private name '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[내보낸 클래스 '{0}'의 Extends 절이 프라이빗 이름 '{1}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";extends_clause_of_exported_class_has_or_is_using_private_name_0_4021" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['extends' clause of exported class has or is using private name '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[내보낸 클래스의 'extends' 절이 프라이빗 이름 '{0}'을(를) 가지고 있거나 사용 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
