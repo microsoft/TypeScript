@@ -97,7 +97,7 @@ namespace ts.refactor {
     }
 
     function getBindingPattern(info: Info, file: SourceFile, changeTracker: textChanges.ChangeTracker): BindingPattern {
-        const denseNumericInfo = getDenseNumericAccessInfo(info.referencedAccessExpression);
+        const denseNumericInfo = info.isArrayLikeType && getDenseNumericAccessInfo(info.referencedAccessExpression);
         if (denseNumericInfo) {
             const [max, indexSet] = denseNumericInfo;
             return getdenseNumericBindingPattern(info, file, max, indexSet, changeTracker);
@@ -201,6 +201,7 @@ namespace ts.refactor {
         firstReferenced: Expression
         firstReferencedStatement: Statement
         namesNeedUniqueName: Set<string>
+        isArrayLikeType: boolean
     }
 
     function getInfo(context: RefactorContext, file: SourceFile, checker: TypeChecker, program: Program, cancellationToken: CancellationToken, resolveUniqueName: boolean): Info | undefined {
@@ -276,8 +277,9 @@ namespace ts.refactor {
         let hasUnconvertableReference = false;
         const namesNeedUniqueName = new Set<string>();
         const type = checker.getTypeOfSymbolAtLocation(symbol, firstReferenced);
+        const isArrayLikeType = checker.isArrayLikeType(type);
         forEach(allReferencedAcccessExpression, expr => {
-            const referenceType = checker.getTypeAtLocation(expr);
+            const referenceType = checker.getTypeAtLocation(expr.expression);
             if (referenceType !== type) {
                 const propName = isElementAccessExpression(expr) ?
                     cast(expr.argumentExpression, isStringOrNumericLiteralLike).text :
@@ -308,7 +310,8 @@ namespace ts.refactor {
             firstReferenced,
             firstReferencedStatement,
             referencedAccessExpression,
-            namesNeedUniqueName
+            namesNeedUniqueName,
+            isArrayLikeType
         };
     }
 
