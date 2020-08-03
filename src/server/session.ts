@@ -585,7 +585,7 @@ namespace ts.server {
             undefined;
     }
 
-    const invalidSyntaxOnlyCommands: readonly CommandNames[] = [
+    const invalidApproximateSemanticOnlyCommands: readonly CommandNames[] = [
         CommandNames.OpenExternalProject,
         CommandNames.OpenExternalProjects,
         CommandNames.CloseExternalProject,
@@ -621,6 +621,36 @@ namespace ts.server {
         CommandNames.ProvideCallHierarchyOutgoingCalls,
     ];
 
+    const invalidSyntaxOnlyCommands: readonly CommandNames[] = [
+        ...invalidApproximateSemanticOnlyCommands,
+        CommandNames.Definition,
+        CommandNames.DefinitionFull,
+        CommandNames.DefinitionAndBoundSpan,
+        CommandNames.DefinitionAndBoundSpanFull,
+        CommandNames.TypeDefinition,
+        CommandNames.Implementation,
+        CommandNames.ImplementationFull,
+        CommandNames.References,
+        CommandNames.ReferencesFull,
+        CommandNames.Rename,
+        CommandNames.RenameLocationsFull,
+        CommandNames.RenameInfoFull,
+        CommandNames.Quickinfo,
+        CommandNames.QuickinfoFull,
+        CommandNames.CompletionInfo,
+        CommandNames.Completions,
+        CommandNames.CompletionsFull,
+        CommandNames.CompletionDetails,
+        CommandNames.CompletionDetailsFull,
+        CommandNames.SignatureHelp,
+        CommandNames.SignatureHelpFull,
+        CommandNames.Navto,
+        CommandNames.NavtoFull,
+        CommandNames.Occurrences,
+        CommandNames.DocumentHighlights,
+        CommandNames.DocumentHighlightsFull,
+    ];
+
     export interface SessionOptions {
         host: ServerHost;
         cancellationToken: ServerCancellationToken;
@@ -637,7 +667,9 @@ namespace ts.server {
         eventHandler?: ProjectServiceEventHandler;
         /** Has no effect if eventHandler is also specified. */
         suppressDiagnosticEvents?: boolean;
+        /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
+        serverMode?: LanguageServiceMode;
         throttleWaitMilliseconds?: number;
         noGetErrOnBackgroundUpdate?: boolean;
 
@@ -709,18 +741,32 @@ namespace ts.server {
                 allowLocalPluginLoads: opts.allowLocalPluginLoads,
                 typesMapLocation: opts.typesMapLocation,
                 syntaxOnly: opts.syntaxOnly,
+                serverMode: opts.serverMode,
             };
             this.projectService = new ProjectService(settings);
             this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
 
-            // Make sure to setup handlers to throw error for not allowed commands on syntax server;
-            if (this.projectService.syntaxOnly) {
-                invalidSyntaxOnlyCommands.forEach(commandName =>
-                    this.handlers.set(commandName, request => {
-                        throw new Error(`Request: ${request.command} not allowed on syntaxServer`);
-                    })
-                );
+            // Make sure to setup handlers to throw error for not allowed commands on syntax server
+            switch (this.projectService.serverMode) {
+                case LanguageServiceMode.Semantic:
+                    break;
+                case LanguageServiceMode.ApproximateSemanticOnly:
+                    invalidApproximateSemanticOnlyCommands.forEach(commandName =>
+                        this.handlers.set(commandName, request => {
+                            throw new Error(`Request: ${request.command} not allowed on approximate semantic only server`);
+                        })
+                    );
+                    break;
+                case LanguageServiceMode.SyntaxOnly:
+                    invalidSyntaxOnlyCommands.forEach(commandName =>
+                        this.handlers.set(commandName, request => {
+                            throw new Error(`Request: ${request.command} not allowed on syntax only server`);
+                        })
+                    );
+                    break;
+                default:
+                    Debug.assertNever(this.projectService.serverMode);
             }
         }
 

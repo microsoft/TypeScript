@@ -1171,7 +1171,7 @@ namespace ts {
         }
     }
 
-    const invalidOperationsOnSyntaxOnly: readonly (keyof LanguageService)[] = [
+    const invalidOperationsOnApproximateSemanticOnly: readonly (keyof LanguageService)[] = [
         "getSyntacticDiagnostics",
         "getSemanticDiagnostics",
         "getSuggestionDiagnostics",
@@ -1191,10 +1191,42 @@ namespace ts {
         "provideCallHierarchyOutgoingCalls",
     ];
 
+    const invalidOperationsOnSyntaxOnly: readonly (keyof LanguageService)[] = [
+        ...invalidOperationsOnApproximateSemanticOnly,
+        "getCompletionsAtPosition",
+        "getCompletionEntryDetails",
+        "getCompletionEntrySymbol",
+        "getSignatureHelpItems",
+        "getQuickInfoAtPosition",
+        "getDefinitionAtPosition",
+        "getDefinitionAndBoundSpan",
+        "getImplementationAtPosition",
+        "getTypeDefinitionAtPosition",
+        "getReferencesAtPosition",
+        "findReferences",
+        "getOccurrencesAtPosition",
+        "getDocumentHighlights",
+        "getNavigateToItems",
+        "getRenameInfo",
+        "findRenameLocations",
+        "getApplicableRefactors",
+    ];
     export function createLanguageService(
         host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
-        syntaxOnly = false): LanguageService {
+        syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode,
+    ): LanguageService {
+        let languageServiceMode: LanguageServiceMode;
+        if (syntaxOnlyOrLanguageServiceMode === undefined) {
+            languageServiceMode = LanguageServiceMode.Semantic;
+        }
+        else if (typeof syntaxOnlyOrLanguageServiceMode === "boolean") {
+            // languageServiceMode = SyntaxOnly
+            languageServiceMode = syntaxOnlyOrLanguageServiceMode ? LanguageServiceMode.SyntaxOnly : LanguageServiceMode.Semantic;
+        }
+        else {
+            languageServiceMode = syntaxOnlyOrLanguageServiceMode;
+        }
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
         let program: Program;
@@ -1244,6 +1276,7 @@ namespace ts {
         }
 
         function synchronizeHostData(): void {
+            Debug.assert(languageServiceMode !== LanguageServiceMode.SyntaxOnly);
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1429,6 +1462,11 @@ namespace ts {
 
         // TODO: GH#18217 frequently asserted as defined
         function getProgram(): Program | undefined {
+            if (languageServiceMode === LanguageServiceMode.SyntaxOnly) {
+                Debug.assert(program === undefined);
+                return undefined;
+            }
+
             synchronizeHostData();
 
             return program;
@@ -2504,14 +2542,26 @@ namespace ts {
             uncommentSelection,
         };
 
-        if (syntaxOnly) {
-            invalidOperationsOnSyntaxOnly.forEach(key =>
-                ls[key] = () => {
-                    throw new Error(`LanguageService Operation: ${key} not allowed on syntaxServer`);
-                }
-            );
+        switch (languageServiceMode) {
+            case LanguageServiceMode.Semantic:
+                break;
+            case LanguageServiceMode.ApproximateSemanticOnly:
+                invalidOperationsOnApproximateSemanticOnly.forEach(key =>
+                    ls[key] = () => {
+                        throw new Error(`LanguageService Operation: ${key} not allowed on approximate semantic only server`);
+                    }
+                );
+                break;
+            case LanguageServiceMode.SyntaxOnly:
+                invalidOperationsOnSyntaxOnly.forEach(key =>
+                    ls[key] = () => {
+                        throw new Error(`LanguageService Operation: ${key} not allowed on syntax only server`);
+                    }
+                );
+                break;
+            default:
+                Debug.assertNever(languageServiceMode);
         }
-
         return ls;
     }
 

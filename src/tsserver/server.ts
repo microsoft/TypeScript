@@ -516,6 +516,7 @@ namespace ts.server {
                 canUseEvents: true,
                 suppressDiagnosticEvents,
                 syntaxOnly,
+                serverMode,
                 noGetErrOnBackgroundUpdate,
                 globalPlugins,
                 pluginProbeLocations,
@@ -948,6 +949,26 @@ namespace ts.server {
         return arg.split(",").filter(name => name !== "");
     }
 
+    let unknownServerMode: string | undefined;
+    function parseServerMode(): LanguageServiceMode | undefined {
+        const mode = findArgument("--serverMode");
+        if (mode === undefined) {
+            return undefined;
+        }
+
+        switch (mode.toLowerCase()) {
+            case "semantic":
+                return LanguageServiceMode.Semantic;
+            case "approximatesemanticonly":
+                return LanguageServiceMode.ApproximateSemanticOnly;
+            case "syntaxonly":
+                return LanguageServiceMode.SyntaxOnly;
+            default:
+                unknownServerMode = mode;
+                return undefined;
+        }
+    }
+
     const globalPlugins = parseStringArray("--globalPlugins");
     const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
     const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
@@ -957,6 +978,7 @@ namespace ts.server {
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
     const syntaxOnly = hasArgument("--syntaxOnly");
+    const serverMode = parseServerMode();
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
     const noGetErrOnBackgroundUpdate = hasArgument("--noGetErrOnBackgroundUpdate");
 
@@ -964,6 +986,7 @@ namespace ts.server {
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${process.argv.join(" ")}`);
     logger.info(`Platform: ${os.platform()} NodeVersion: ${nodeVersion} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
+    logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode}`);
 
     const ioSession = new IOSession();
     process.on("uncaughtException", err => {

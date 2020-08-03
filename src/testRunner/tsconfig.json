@@ -145,6 +145,7 @@
         "unittests/tscWatch/watchApi.ts",
         "unittests/tscWatch/watchEnvironment.ts",
         "unittests/tsserver/applyChangesToOpenFiles.ts",
+        "unittests/tsserver/approximateSemanticOnlyServer.ts",
         "unittests/tsserver/autoImportProvider.ts",
         "unittests/tsserver/cachingFileSystemInformation.ts",
         "unittests/tsserver/cancellationToken.ts",

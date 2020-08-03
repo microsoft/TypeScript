@@ -396,7 +396,9 @@ namespace ts.server {
         pluginProbeLocations?: readonly string[];
         allowLocalPluginLoads?: boolean;
         typesMapLocation?: string;
+        /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
+        serverMode?: LanguageServiceMode;
     }
 
     interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
@@ -683,7 +685,9 @@ namespace ts.server {
 
         public readonly typesMapLocation: string | undefined;
 
-        public readonly syntaxOnly?: boolean;
+        /** @deprecated use serverMode instead */
+        public readonly syntaxOnly: boolean;
+        public readonly serverMode: LanguageServiceMode;
 
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = new Map<string, true>();
@@ -713,7 +717,18 @@ namespace ts.server {
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
-            this.syntaxOnly = opts.syntaxOnly;
+            if (opts.serverMode !== undefined) {
+                this.serverMode = opts.serverMode;
+                this.syntaxOnly = this.serverMode === LanguageServiceMode.SyntaxOnly;
+            }
+            else if (opts.syntaxOnly) {
+                this.serverMode = LanguageServiceMode.SyntaxOnly;
+                this.syntaxOnly = true;
+            }
+            else {
+                this.serverMode = LanguageServiceMode.Semantic;
+                this.syntaxOnly = false;
+            }
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
             if (this.host.realpath) {
@@ -749,7 +764,7 @@ namespace ts.server {
                 this.logger.loggingEnabled() ? WatchLogLevel.TriggerOnly : WatchLogLevel.None;
             const log: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => this.logger.info(s)) : noop;
             this.packageJsonCache = createPackageJsonCache(this);
-            this.watchFactory = this.syntaxOnly ?
+            this.watchFactory = this.serverMode !== LanguageServiceMode.Semantic ?
                 {
                     watchFile: returnNoopFileWatcher,
                     watchFilePath: returnNoopFileWatcher,
@@ -1727,7 +1742,7 @@ namespace ts.server {
          * the newly opened file.
          */
         private forEachConfigFileLocation(info: OpenScriptInfoOrClosedOrConfigFileInfo, action: (configFileName: NormalizedPath, canonicalConfigFilePath: string) => boolean | void) {
-            if (this.syntaxOnly) {
+            if (this.serverMode !== LanguageServiceMode.Semantic) {
                 return undefined;
             }
 
@@ -3014,7 +3029,7 @@ namespace ts.server {
             let retainProjects: ConfiguredProject[] | ConfiguredProject | undefined;
             let projectForConfigFileDiag: ConfiguredProject | undefined;
             let defaultConfigProjectIsCreated = false;
-            if (this.syntaxOnly) {
+            if (this.serverMode === LanguageServiceMode.ApproximateSemanticOnly) {
                 // Invalidate resolutions in the file since this file is now open
                 info.containingProjects.forEach(project => {
                     if (project.resolutionCache.removeRelativeNoResolveResolutionsOfFile(info.path)) {
@@ -3022,7 +3037,7 @@ namespace ts.server {
                     }
                 });
             }
-            else if (!project) { // Checking syntaxOnly is an optimization
+            else if (!project && this.serverMode === LanguageServiceMode.Semantic) { // Checking semantic mode is an optimization
                 configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
@@ -3109,7 +3124,7 @@ namespace ts.server {
                 Debug.assert(this.openFiles.has(info.path));
                 this.assignOrphanScriptInfoToInferredProject(info, this.openFiles.get(info.path));
             }
-            else if (this.syntaxOnly && info.cacheSourceFile?.sourceFile.referencedFiles.length) {
+            else if (this.serverMode === LanguageServiceMode.ApproximateSemanticOnly && info.cacheSourceFile?.sourceFile.referencedFiles.length) {
                 // This file was just opened and references in this file will previously not been resolved so schedule update
                 info.containingProjects.forEach(project => project.markAsDirty());
             }
@@ -3325,7 +3340,7 @@ namespace ts.server {
         }
 
         private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {
-            if (this.syntaxOnly || !this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
+            if (this.serverMode !== LanguageServiceMode.Semantic || !this.eventHandler || !scriptInfo.isJavaScript() || !addToSeen(this.allJsFilesForOpenFileTelemetry, scriptInfo.path)) {
                 return;
             }
 
@@ -3637,7 +3652,7 @@ namespace ts.server {
             for (const file of proj.rootFiles) {
                 const normalized = toNormalizedPath(file.fileName);
                 if (getBaseConfigFileName(normalized)) {
-                    if (!this.syntaxOnly && this.host.fileExists(normalized)) {
+                    if (this.serverMode === LanguageServiceMode.Semantic && this.host.fileExists(normalized)) {
                         (tsConfigFiles || (tsConfigFiles = [])).push(normalized);
                     }
                 }
