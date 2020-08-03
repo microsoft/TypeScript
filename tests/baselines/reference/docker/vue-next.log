@@ -72,7 +72,7 @@ Error: /vue-next/packages/compiler-sfc/src/parse.ts(179,14): semantic error TS27
     at forEach (/vue-next/node_modules/rollup-plugin-typescript2/node_modules/lodash/lodash.js:9342:14)
     at _.each (/vue-next/node_modules/rollup-plugin-typescript2/src/print-diagnostics.ts:9:2)
     at Object.transform (/vue-next/node_modules/rollup-plugin-typescript2/src/index.ts:242:5)
-(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1: rollup -c --environment COMMIT:fce2689,NODE_ENV:production,TARGET:compiler-sfc,TYPES:true
+(node:17) UnhandledPromiseRejectionWarning: Error: Command failed with exit code 1: rollup -c --environment COMMIT:411b203,NODE_ENV:production,TARGET:compiler-sfc,TYPES:true
     at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
     at handlePromise (/vue-next/node_modules/execa/index.js:114:26)
     at processTicksAndRejections (internal/process/task_queues.js:93:5)
