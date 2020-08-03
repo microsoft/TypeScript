@@ -73,11 +73,9 @@ namespace ts.refactor {
             ),
         );
 
-        const firstReferencedStatement = findAncestor(info.firstReferenced, isStatement);
-        Debug.assertIsDefined(firstReferencedStatement);
         changeTracker.insertNodeBefore(
             file,
-            firstReferencedStatement,
+            info.firstReferencedStatement,
             newBinding
         );
     }
@@ -105,6 +103,7 @@ namespace ts.refactor {
         replacementExpression: Expression,
         referencedAccessExpression: [AccessExpression, string][]
         firstReferenced: Expression
+        firstReferencedStatement: Statement
         namesNeedUniqueName: Set<string>
     }
 
@@ -122,8 +121,14 @@ namespace ts.refactor {
         // Find only current file
         const references = FindAllReferences.getReferenceEntriesForNode(-1, node, program, [file], cancellationToken);
         let firstReferenced: Expression | undefined;
+        let firstReferencedStatement: Statement | undefined;
         const referencedAccessExpression: [AccessExpression, string][] = [];
         const allReferencedAcccessExpression: AccessExpression[] = [];
+        const container = isParameter(symbol.valueDeclaration) ?
+            symbol.valueDeclaration :
+            findAncestor(symbol.valueDeclaration, or(isStatement, isSourceFile));
+        Debug.assertIsDefined(container);
+
         forEach(references, reference => {
             if (reference.kind !== FindAllReferences.EntryKind.Node) {
                 return undefined;
@@ -131,8 +136,12 @@ namespace ts.refactor {
 
             let lastChild = reference.node;
             const topReferencedAccessExpression = findAncestor(reference.node.parent, n => {
-                if (isAccessExpression(n) || isParenthesizedExpression(n)) {
-                    if (isAccessExpression(n) && n.expression === lastChild) {
+                if (isParenthesizedExpression(n)) {
+                    lastChild = n;
+                    return false;
+                }
+                else if (isAccessExpression(n)) {
+                    if (n.expression === lastChild) {
                         return true;
                     }
                     lastChild = n;
@@ -156,8 +165,21 @@ namespace ts.refactor {
                 return;
             }
 
-            if (accessExpression !== symbol.valueDeclaration && isExpression(accessExpression) && (!firstReferenced || reference.node.pos < firstReferenced.pos)) {
-                firstReferenced = accessExpression;
+            if (reference.node.pos < symbol.valueDeclaration.pos) {
+                return;
+            }
+
+            if (accessExpression !== symbol.valueDeclaration && isExpression(accessExpression)) {
+                if (!firstReferenced || accessExpression.pos < firstReferenced.pos) {
+                    firstReferenced = accessExpression;
+                }
+                const referencedStatement = findAncestor(accessExpression, n => {
+                    const parent = n.parent && isBlock(n.parent) && isFunctionLikeDeclaration(n.parent.parent) ? n.parent.parent : n.parent;
+                    return isStatement(n) && parent === container.parent;
+                });
+                if (referencedStatement && (!firstReferencedStatement || referencedStatement.pos < firstReferencedStatement.pos)) {
+                    firstReferencedStatement = cast(referencedStatement, isStatement);
+                }
             }
 
             if (isElementAccessExpression(accessExpression)) {
@@ -177,7 +199,7 @@ namespace ts.refactor {
 
             referencedAccessExpression.push([accessExpression, accessExpression.name.text]);
         });
-        if (!firstReferenced || !referencedAccessExpression.length || !some(referencedAccessExpression, ([r]) => rangeContainsRange(r, current))) return undefined;
+        if (!firstReferenced || !firstReferencedStatement || !referencedAccessExpression.length || !some(referencedAccessExpression, ([r]) => rangeContainsRange(r, current))) return undefined;
 
         let hasUnconvertableReference = false;
         const namesNeedUniqueName = new Set<string>();
@@ -212,6 +234,7 @@ namespace ts.refactor {
         return {
             replacementExpression: node.parent.expression,
             firstReferenced,
+            firstReferencedStatement,
             referencedAccessExpression,
             namesNeedUniqueName
         };
