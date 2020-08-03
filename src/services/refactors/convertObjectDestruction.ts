@@ -37,33 +37,49 @@ namespace ts.refactor {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function doChange(changeTracker: textChanges.ChangeTracker, file: SourceFile, info: Info) {
-        const nameMap = new Map<string, string>();
-        const bindingElements: BindingElement[] = [];
-        info.referencedAccessExpression.forEach(([expr, name]) => {
-            if (!nameMap.has(name)) {
-                const needAlias = info.namesNeedUniqueName.has(name);
-                const uniqueName = needAlias ? getUniqueName(name, file) : name;
-                nameMap.set(name, uniqueName);
-                bindingElements.push(getUniqueDestructionName(expr, needAlias, uniqueName));
+    function getUniqueNumericAccessVariable(name: string | number, file: SourceFile) {
+        const tempName = `index_${name}`;
+        return isFileLevelUniqueName(file, tempName) ? tempName : getUniqueName(tempName, file);
+    }
+
+    /**
+     * `Dense` means we use array literal pattern to destruction the expression.
+     * We allowed index up to 15 to avoid many omit expression.
+     */
+    function getDenseNumericAccessInfo(infos: ReferencedAccessInfo[]): [max: number, indexSet: Set<number>] | undefined {
+        let min = Infinity;
+        let max = -Infinity;
+        const indexSet = new Set<number>();
+        for (const info of infos) {
+            if (!info.isNumericAccess) {
+                return undefined;
             }
 
-            const newName = nameMap.get(name);
-            Debug.assertIsDefined(newName);
+            const value = parseInt(info.name);
+            min = Math.min(min, value);
+            max = Math.max(max, value);
+            indexSet.add(value);
 
-            changeTracker.replaceNode(
-                file,
-                expr,
-                factory.createIdentifier(newName)
-            );
-        });
+            if (isNaN(min) || isNaN(max) || min < 0 || max < 0) {
+                return undefined;
+            }
+        }
 
+        if (max > 15) {
+            return undefined;
+        }
+
+        return [max, indexSet];
+    }
+
+    function doChange(changeTracker: textChanges.ChangeTracker, file: SourceFile, info: Info) {
+        const bindingPattern = getBindingPattern(info, file, changeTracker);
         const newBinding = factory.createVariableStatement(
             /* modifiers*/ undefined,
             factory.createVariableDeclarationList(
                 [
                     factory.createVariableDeclaration(
-                        factory.createObjectBindingPattern(bindingElements),
+                        bindingPattern,
                         /*exclamationToken*/ undefined,
                         /*type*/ undefined,
                         info.replacementExpression
@@ -78,6 +94,80 @@ namespace ts.refactor {
             info.firstReferencedStatement,
             newBinding
         );
+    }
+
+    function getBindingPattern(info: Info, file: SourceFile, changeTracker: textChanges.ChangeTracker): BindingPattern {
+        const denseNumericInfo = getDenseNumericAccessInfo(info.referencedAccessExpression);
+        if (denseNumericInfo) {
+            const [max, indexSet] = denseNumericInfo;
+            return getdenseNumericBindingPattern(info, file, max, indexSet, changeTracker);
+        }
+        return getObjectBindingPattern(info, file, changeTracker);
+    }
+
+    function getObjectBindingPattern(info: Info, file: SourceFile, changeTracker: textChanges.ChangeTracker) {
+        const nameMap = new Map<string, string>();
+        const bindingElements: BindingElement[] = [];
+        info.referencedAccessExpression.forEach(({ expression, name, isNumericAccess }) => {
+            if (!nameMap.has(name)) {
+                const needAlias = isNumericAccess || info.namesNeedUniqueName.has(name);
+                const uniqueName = isNumericAccess ? getUniqueNumericAccessVariable(name, file) :
+                    needAlias ? getUniqueName(name, file) : name;
+                nameMap.set(name, uniqueName);
+                bindingElements.push(getUniqueDestructionName(expression, needAlias, uniqueName));
+            }
+
+            const newName = nameMap.get(name);
+            Debug.assertIsDefined(newName);
+
+            changeTracker.replaceNode(
+                file,
+                expression,
+                factory.createIdentifier(newName)
+            );
+        });
+        return factory.createObjectBindingPattern(bindingElements);
+    }
+
+    function getdenseNumericBindingPattern(info: Info, file: SourceFile, max: number, indexSet: Set<number>, changeTracker: textChanges.ChangeTracker): ArrayBindingPattern {
+        const nameMap = new Map<number, string>();
+        const bindingElements: ArrayBindingElement[] = [];
+
+        for (let i = 0; i <= max; ++i) {
+            if (indexSet.has(i)) {
+                if (!nameMap.has(i)) {
+                    const name = getUniqueNumericAccessVariable(i, file);
+                    nameMap.set(i, name);
+                }
+
+                const name = nameMap.get(i);
+                Debug.assertIsDefined(name);
+
+                bindingElements.push(factory.createBindingElement(
+                    /* dotDotDotToken*/ undefined,
+                    /*propertyName*/ undefined,
+                    factory.createIdentifier(name)
+                ));
+            }
+            else {
+                bindingElements.push(factory.createOmittedExpression());
+            }
+        }
+
+        info.referencedAccessExpression.forEach(({ expression, name }) => {
+            const index = parseInt(name);
+
+            const newName = nameMap.get(index);
+            Debug.assertIsDefined(newName);
+
+            changeTracker.replaceNode(
+                file,
+                expression,
+                factory.createIdentifier(newName)
+            );
+        });
+
+        return factory.createArrayBindingPattern(bindingElements);
     }
 
     function getUniqueDestructionName(expr: AccessExpression, needAlias: boolean, newName: string) {
@@ -99,9 +189,15 @@ namespace ts.refactor {
         }
     }
 
+    interface ReferencedAccessInfo {
+        expression: AccessExpression
+        name: string,
+        isNumericAccess: boolean
+    }
+
     interface Info {
         replacementExpression: Expression,
-        referencedAccessExpression: [AccessExpression, string][]
+        referencedAccessExpression: ReferencedAccessInfo[]
         firstReferenced: Expression
         firstReferencedStatement: Statement
         namesNeedUniqueName: Set<string>
@@ -122,7 +218,7 @@ namespace ts.refactor {
         const references = FindAllReferences.getReferenceEntriesForNode(-1, node, program, [file], cancellationToken);
         let firstReferenced: Expression | undefined;
         let firstReferencedStatement: Statement | undefined;
-        const referencedAccessExpression: [AccessExpression, string][] = [];
+        const referencedAccessExpression: ReferencedAccessInfo[] = [];
         const allReferencedAcccessExpression: AccessExpression[] = [];
         const container = isParameter(symbol.valueDeclaration) ? symbol.valueDeclaration : findAncestor(symbol.valueDeclaration, or(isStatement, isSourceFile));
         Debug.assertIsDefined(container);
@@ -150,23 +246,32 @@ namespace ts.refactor {
             }
 
             if (isElementAccessExpression(accessExpression)) {
-                if (!isStringLiteralLike(accessExpression.argumentExpression)) {
+                let isNumericAccess = false;
+                if (!isStringLiteralLike(accessExpression.argumentExpression) && !isNumericLiteral(accessExpression.argumentExpression)) {
                     return;
                 }
-                if (!isIdentifierText(accessExpression.argumentExpression.text, compilerOptions.target, compilerOptions.jsx ? LanguageVariant.JSX : LanguageVariant.Standard)) {
+                if (isNumericLiteral(accessExpression.argumentExpression)) {
+                    isNumericAccess = true;
+                }
+                else if (!isIdentifierText(accessExpression.argumentExpression.text, compilerOptions.target, compilerOptions.jsx ? LanguageVariant.JSX : LanguageVariant.Standard)) {
                     return;
                 }
 
-                referencedAccessExpression.push([accessExpression, accessExpression.argumentExpression.text]);
-                return;
-            }
-            if (!isIdentifierText(accessExpression.name.text, compilerOptions.target, compilerOptions.jsx ? LanguageVariant.JSX : LanguageVariant.Standard)) {
+                referencedAccessExpression.push({
+                    expression: accessExpression,
+                    name: accessExpression.argumentExpression.text,
+                    isNumericAccess
+                });
                 return;
             }
 
-            referencedAccessExpression.push([accessExpression, accessExpression.name.text]);
+            referencedAccessExpression.push({
+                expression: accessExpression,
+                name: accessExpression.name.text,
+                isNumericAccess: false
+            });
         });
-        if (!firstReferenced || !firstReferencedStatement || !referencedAccessExpression.length || !some(referencedAccessExpression, ([r]) => rangeContainsRange(r, current))) return undefined;
+        if (!firstReferenced || !firstReferencedStatement || !referencedAccessExpression.length || !some(referencedAccessExpression, ({ expression }) => rangeContainsRange(expression, current))) return undefined;
 
         let hasUnconvertableReference = false;
         const namesNeedUniqueName = new Set<string>();
@@ -175,7 +280,7 @@ namespace ts.refactor {
             const referenceType = checker.getTypeAtLocation(expr);
             if (referenceType !== type) {
                 const propName = isElementAccessExpression(expr) ?
-                    cast(expr.argumentExpression, isStringLiteralLike).text :
+                    cast(expr.argumentExpression, isStringOrNumericLiteralLike).text :
                     checker.getSymbolAtLocation(expr)?.name;
 
                 const accessType = checker.getTypeAtLocation(expr);
@@ -190,7 +295,7 @@ namespace ts.refactor {
         if (hasUnconvertableReference) return undefined;
 
         if (resolveUniqueName) {
-            forEach(referencedAccessExpression, ([, name]) => {
+            forEach(referencedAccessExpression, ({ name }) => {
                 const symbol = checker.resolveName(name, /*location*/ undefined, SymbolFlags.Value, /*excludeGlobals*/ false);
                 if (symbol) {
                     namesNeedUniqueName.add(name);
