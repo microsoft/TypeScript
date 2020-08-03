@@ -621,7 +621,7 @@ namespace ts.server {
         CommandNames.ProvideCallHierarchyOutgoingCalls,
     ];
 
-    const invalidSyntxOnlyCommands: readonly CommandNames[] = [
+    const invalidSyntaxOnlyCommands: readonly CommandNames[] = [
         ...invalidApproximateSemanticOnlyCommands,
         CommandNames.Definition,
         CommandNames.DefinitionFull,
@@ -759,7 +759,7 @@ namespace ts.server {
                     );
                     break;
                 case LanguageServiceMode.SyntaxOnly:
-                    invalidSyntxOnlyCommands.forEach(commandName =>
+                    invalidSyntaxOnlyCommands.forEach(commandName =>
                         this.handlers.set(commandName, request => {
                             throw new Error(`Request: ${request.command} not allowed on syntax only server`);
                         })
