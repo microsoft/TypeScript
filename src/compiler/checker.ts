@@ -35668,7 +35668,7 @@ namespace ts {
                 checkSourceElementWorker(node);
 
                 // Never report expensive statements in .d.ts files
-                if (!checkingDtsFile) {
+                if (!checkingDtsFile && maxExpensiveStatementCount > 0) {
                     if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement ||
                         node.kind === SyntaxKind.TypeAliasDeclaration ||
                         node.kind === SyntaxKind.InterfaceDeclaration) {
