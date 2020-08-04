@@ -35685,9 +35685,21 @@ namespace ts {
                         }
 
                         if (i < maxExpensiveStatementCount) {
-                            expensiveStatements.splice(i, 0, record);
-                            if (expensiveStatements.length > maxExpensiveStatementCount) {
-                                expensiveStatements.pop();
+                            let hasExpensiveDescendent = false;
+                            // Search forward since descendants cannot be more expensive
+                            for (let j = i; j < expensiveStatements.length; j++) {
+                                const candidate = expensiveStatements[j];
+                                if (isNodeDescendantOf(candidate.node, record.node)) {
+                                    // A node that isn't at least 50% more expensive than one of its descendants isn't interesting
+                                    hasExpensiveDescendent = (record.typeDelta / candidate.typeDelta) < 1.5;
+                                    break; // Stop looking since all subsequent nodes are less expensive
+                                }
+                            }
+                            if (!hasExpensiveDescendent) {
+                                expensiveStatements.splice(i, 0, record);
+                                if (expensiveStatements.length > maxExpensiveStatementCount) {
+                                    expensiveStatements.pop();
+                                }
                             }
                         }
                     }
