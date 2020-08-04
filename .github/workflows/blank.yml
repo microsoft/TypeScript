@@ -1,0 +1,35 @@
+name: Update LKG
+
+on:
+  workflow_dispatch:
+    inputs:
+      branchName:
+        description: "The name of the branch you'd like to update the Last Known Good (LKG) version of the compiler on."
+        required: true
+        default: "master"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.branchName }}
+    - name: Use node version 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+        registry-url: https://registry.npmjs.org/
+
+    - name: Configure Git and Update LKG
+      run: |
+        git config user.email "ts_bot@rcavanaugh.com"
+        git config user.name "TypeScript Bot"
+        npm install
+        gulp LKG
+        npm test
+        git diff
+        git add ./lib
+        git commit -m "Update LKG"
+        git push
