@@ -63,7 +63,7 @@ namespace ts.codefix {
     }
 
     function sortSpecifiers(specifiers: ExportSpecifier[]): readonly ExportSpecifier[] {
-        return stableSort(specifiers, function (s1, s2) {
+        return stableSort(specifiers, (s1, s2) => {
             return compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name) ||
                 compareIdentifiers(s1.name, s2.name);
         });
