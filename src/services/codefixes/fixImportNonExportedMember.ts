@@ -47,16 +47,26 @@ namespace ts.codefix {
         }
     }
 
-    function getNamedExportDeclaration(moduleSymbol: Symbol): ExportDeclaration | undefined {
+    function getNamedExportDeclaration(sourceFile: SourceFile): ExportDeclaration | undefined {
         let namedExport;
-        forEach(moduleSymbol.exports, symbol => {
-            const specifier = symbol.declarations[0];
-            if (specifier && isExportSpecifier(specifier) && specifier.parent && isNamedExports(specifier.parent)) {
-
-                namedExport = specifier.parent?.parent;
+        const statements = sourceFile.statements.filter(isExportDeclaration);
+        for (const statement of statements) {
+            if (statement.exportClause && isNamedExports(statement.exportClause)) {
+                namedExport = statement;
             }
-        });
+        }
         return namedExport;
+    }
+
+    function compareIdentifiers(s1: Identifier, s2: Identifier) {
+        return compareStringsCaseInsensitive(s1.text, s2.text);
+    }
+
+    function sortSpecifiers(specifiers: ExportSpecifier[]): readonly ExportSpecifier[] {
+        return stableSort(specifiers, function (s1, s2) {
+            return compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name) ||
+                compareIdentifiers(s1.name, s2.name);
+        });
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Identifier): void {
@@ -78,24 +88,27 @@ namespace ts.codefix {
             return;
         }
 
-        const namedExportDeclaration = getNamedExportDeclaration(moduleSymbol);
-        const exportSpecifier = createExportSpecifier(/*propertyName*/ undefined, node);
+        const namedExportDeclaration = getNamedExportDeclaration(sourceFile);
+        const exportSpecifier = factory.createExportSpecifier(/*propertyName*/ undefined, node);
         if (namedExportDeclaration?.exportClause && isNamedExports(namedExportDeclaration.exportClause)) {
-            return changes.replaceNode(sourceFile, namedExportDeclaration, updateExportDeclaration(
+            const sortedExportSpecifiers = sortSpecifiers(namedExportDeclaration.exportClause.elements.concat(exportSpecifier));
+            return changes.replaceNode(sourceFile, namedExportDeclaration, factory.updateExportDeclaration(
                 namedExportDeclaration,
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                updateNamedExports(namedExportDeclaration.exportClause, namedExportDeclaration.exportClause.elements.concat(exportSpecifier)),
-                /*moduleSpecifier*/ undefined,
-                /*isTypeOnly*/ false));
+                /*isTypeOnly*/ false,
+                factory.updateNamedExports(namedExportDeclaration.exportClause, sortedExportSpecifiers),
+                /*moduleSpecifier*/ undefined
+                ));
         }
         else {
-            return changes.insertNodeAtEndOfScope(sourceFile, sourceFile, createExportDeclaration(
+            return changes.insertNodeAtEndOfScope(sourceFile, sourceFile, factory.createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
-                createNamedExports([exportSpecifier]),
-                /*moduleSpecifier*/ undefined,
-                /*isTypeOnly*/ false));
+                /*isTypeOnly*/ false,
+                factory.createNamedExports([exportSpecifier]),
+                /*moduleSpecifier*/ undefined
+                ));
         }
     }
 }

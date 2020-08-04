@@ -22,6 +22,6 @@ verify.codeFix({
 let d = 4;
 export function whatever() {
 }
-export { d, a };`
+export { a, d };`
     }
 });
