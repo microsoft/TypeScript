@@ -255,7 +255,7 @@ The TypeScript type system enables programmers to express limits on the capabili
 var i = 0;
 ```
 
-TypeScript will infer from the following function definition that the function f has return type string.
+TypeScript will infer from the following function definition that the function 'f' has return type string.
 
 ```TypeScript
 function f() {  
@@ -965,7 +965,7 @@ The ***root container*** of an entity is defined as follows:
 
 Intuitively, the root container of an entity is the outermost module or namespace body from within which the entity is reachable.
 
-Interfaces, enums, and namespaces are "open ended," meaning that interface, enum, and namespace declarations with the same qualified name relative to a common root are automatically merged. For further details, see sections [7.2](#7.2), [9.3](#9.3), and [10.5](#10.5).
+Interfaces, enums, and namespaces are "open-ended" meaning that interface, enum, and namespace declarations with the same qualified name relative to a common root are automatically merged. For further details, see sections [7.2](#7.2), [9.3](#9.3), and [10.5](#10.5).
 
 Instance and static members in a class are in separate declaration spaces. Thus the following is permitted:
 
