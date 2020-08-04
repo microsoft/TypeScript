@@ -2140,8 +2140,8 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
-        const special = getAssignmentDeclarationKindWorker(expr);
+    export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression, thisAlias?: Identifier): AssignmentDeclarationKind {
+        const special = getAssignmentDeclarationKindWorker(expr, thisAlias);
         return special === AssignmentDeclarationKind.Property || isInJSFile(expr) ? special : AssignmentDeclarationKind.None;
     }
 
@@ -2192,7 +2192,7 @@ namespace ts {
         return expr.argumentExpression;
     }
 
-    function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
+    function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression, thisAlias?: Identifier): AssignmentDeclarationKind {
         if (isCallExpression(expr)) {
             if (!isBindableObjectDefinePropertyCall(expr)) {
                 return AssignmentDeclarationKind.None;
@@ -2213,7 +2213,7 @@ namespace ts {
             // F.prototype = { ... }
             return AssignmentDeclarationKind.Prototype;
         }
-        return getAssignmentDeclarationPropertyAccessKind(expr.left);
+        return getAssignmentDeclarationPropertyAccessKind(expr.left, thisAlias);
     }
 
     function isVoidZero(node: Node) {
@@ -2255,8 +2255,8 @@ namespace ts {
         return undefined;
     }
 
-    export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression): AssignmentDeclarationKind {
-        if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
+    export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression, thisAlias?: Identifier): AssignmentDeclarationKind {
+        if (lhs.expression.kind === SyntaxKind.ThisKeyword || isIdentifier(lhs.expression) && lhs.expression.escapedText === thisAlias?.escapedText) {
             return AssignmentDeclarationKind.ThisProperty;
         }
         else if (isModuleExportsAccessExpression(lhs)) {

@@ -188,6 +188,7 @@ namespace ts {
         let languageVersion: ScriptTarget;
         let parent: Node;
         let container: Node;
+        let thisAlias: Identifier | undefined;
         let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let lastContainer: Node;
@@ -2468,7 +2469,7 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.BinaryExpression:
-                    const specialKind = getAssignmentDeclarationKind(node as BinaryExpression);
+                    const specialKind = getAssignmentDeclarationKind(node as BinaryExpression, thisAlias);
                     switch (specialKind) {
                         case AssignmentDeclarationKind.ExportsProperty:
                             bindExportsPropertyAssignment(node as BindableStaticPropertyAssignmentExpression);
@@ -3186,6 +3187,9 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
+                if (isVariableDeclaration(node) && isIdentifier(node.name) && node.initializer?.kind === SyntaxKind.ThisKeyword) {
+                    thisAlias = node.name
+                }
                 if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
                 }
