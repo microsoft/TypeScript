@@ -2169,6 +2169,9 @@
       <Item ItemId=";Arguments_for_the_rest_parameter_0_were_not_provided_6236" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Arguments for the rest parameter '{0}' were not provided.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[未提供 rest 形参“{0}”的实参。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -2622,6 +2625,9 @@
       <Item ItemId=";Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_th_2792" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[找不到模块“{0}”。你的意思是要将 "moduleResolution" 选项设置为 "node"，还是要将别名添加到 "paths" 选项中?]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
