@@ -35709,7 +35709,7 @@ namespace ts {
                     const candidate = expensiveStatements[j];
                     if (isNodeDescendantOf(candidate.node, record.node)) {
                         // If a single descendant makes up the majority of the cost, this node isn't interesting
-                        hasExpensiveDescendent = (record.typeDelta / candidate.typeDelta) < 2
+                        hasExpensiveDescendent = (record.typeDelta / candidate.typeDelta) < 2;
                         break; // Stop looking since all subsequent nodes are less expensive
                     }
                 }
