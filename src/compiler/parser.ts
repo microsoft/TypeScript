@@ -1026,7 +1026,10 @@ namespace ts {
         let hasDeprecatedTag = false;
         function addJSDocComment<T extends HasJSDoc>(node: T): T {
             Debug.assert(!node.jsDoc); // Should only be called once per node
-            const jsDoc = mapDefined(getJSDocCommentRanges(node, sourceText), comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
+            const ranges = getJSDocCommentRanges(node, sourceText);
+            const jsDoc = ranges?.every(r => isTripleSlashComment(r, sourceText))
+                ? JSDocParser.parseTripleSlashes(node, ranges)
+                : mapDefined(ranges, comment => JSDocParser.parseJSDocComment(node, comment.pos, comment.end - comment.pos));
             if (jsDoc.length) node.jsDoc = jsDoc;
             if (hasDeprecatedTag) {
                 hasDeprecatedTag = false;
@@ -7158,6 +7161,26 @@ namespace ts {
                 return jsDoc ? { jsDoc, diagnostics } : undefined;
             }
 
+            export function parseTripleSlashes(parent: HasJSDoc, comments: CommentRange[]) {
+                const saveToken = currentToken;
+                const saveParseDiagnosticsLength = parseDiagnostics.length;
+                const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
+
+                const comment = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(comments, /*length*/ undefined));
+                setParent(comment, parent);
+
+                if (contextFlags & NodeFlags.JavaScriptFile) {
+                    if (!jsDocDiagnostics) {
+                        jsDocDiagnostics = [];
+                    }
+                    jsDocDiagnostics.push(...parseDiagnostics);
+                }
+                currentToken = saveToken;
+                parseDiagnostics.length = saveParseDiagnosticsLength;
+                parseErrorBeforeNextFinishedNode = saveParseErrorBeforeNextFinishedNode;
+                return comment ? [comment] : [];
+            }
+
             export function parseJSDocComment(parent: HasJSDoc, start: number, length: number): JSDoc | undefined {
                 const saveToken = currentToken;
                 const saveParseDiagnosticsLength = parseDiagnostics.length;
@@ -7191,8 +7214,33 @@ namespace ts {
                 CallbackParameter = 1 << 2,
             }
 
-            function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc | undefined {
-                const content = sourceText;
+            function parseJSDocCommentWorker(startOrRanges: number | CommentRange[] = 0, length: number | undefined): JSDoc | undefined {
+                const content = sourceText; // TODO: Why alias this?
+                const comments: string[] = [];
+                let tags: JSDocTag[];
+                let tagsPos: number;
+                let tagsEnd: number;
+                if (Array.isArray(startOrRanges)) {
+                    if (!startOrRanges.length) return undefined;
+                    const ranges = startOrRanges;
+                    for (const comment of ranges) {
+                        const { pos: start, end } = comment;
+                        const length = end - start;
+                        scanner.scanRange(start + 3, length - 3, () => {
+                            while (nextTokenJSDoc() !== SyntaxKind.EndOfFileToken) {
+                                if (token() === SyntaxKind.AtToken) {
+                                    addTag(parseTag(0));
+                                }
+                                else {
+                                    comments.push(scanner.getTokenText());
+                                }
+                            }
+                        });
+                    }
+                    return createJSDocComment(ranges[0].pos, ranges[ranges.length - 1].end);
+                }
+
+                const start = startOrRanges;
                 const end = length === undefined ? content.length : start + length;
                 length = end - start;
 
@@ -7205,10 +7253,6 @@ namespace ts {
                     return undefined;
                 }
 
-                let tags: JSDocTag[];
-                let tagsPos: number;
-                let tagsEnd: number;
-                const comments: string[] = [];
 
                 // + 3 for leading /**, - 5 in total for /** */
                 return scanner.scanRange(start + 3, length - 5, () => {
@@ -7292,7 +7336,7 @@ namespace ts {
                     }
                     removeLeadingNewlines(comments);
                     removeTrailingWhitespace(comments);
-                    return createJSDocComment();
+                    return createJSDocComment(start, end);
                 });
 
                 function removeLeadingNewlines(comments: string[]) {
@@ -7307,7 +7351,7 @@ namespace ts {
                     }
                 }
 
-                function createJSDocComment(): JSDoc {
+                function createJSDocComment(start: number, end: number): JSDoc {
                     const comment = comments.length ? comments.join("") : undefined;
                     const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
                     return finishNode(factory.createJSDocComment(comment, tagsArray), start, end);

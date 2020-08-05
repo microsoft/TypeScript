@@ -1094,6 +1094,10 @@ namespace ts {
         return node.kind !== SyntaxKind.JsxText ? getLeadingCommentRanges(sourceFileOfNode.text, node.pos) : undefined;
     }
 
+    export function isTripleSlashComment(comment: CommentRange, text: string) {
+        return text.charCodeAt(comment.pos + 1) === CharacterCodes.slash && text.charCodeAt(comment.pos + 2) === CharacterCodes.slash;
+    }
+
     export function getJSDocCommentRanges(node: Node, text: string) {
         const commentRanges = (node.kind === SyntaxKind.Parameter ||
             node.kind === SyntaxKind.TypeParameter ||
@@ -1102,11 +1106,12 @@ namespace ts {
             node.kind === SyntaxKind.ParenthesizedExpression) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRanges(text, node.pos);
-        // True if the comment starts with '/**' but not if it is '/**/'
+        // True if the comment starts with '///' or '/**' but not if it is '/**/'
         return filter(commentRanges, comment =>
             text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
             text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
-            text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
+            text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash
+            || isTripleSlashComment(comment, text));
     }
 
     export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;

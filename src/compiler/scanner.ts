@@ -1746,6 +1746,9 @@ namespace ts {
                         // Single-line comment
                         if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                             pos += 2;
+                            if (text.charCodeAt(pos + 2) === CharacterCodes.slash) {
+                                tokenFlags |= TokenFlags.PrecedingJSDocComment;
+                            }
 
                             while (pos < end) {
                                 if (isLineBreak(text.charCodeAt(pos))) {
