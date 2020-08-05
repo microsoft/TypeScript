@@ -1913,9 +1913,10 @@ namespace ts {
             for (const newImport of sortedNewImports) {
                 const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
                 if (insertionIndex === 0) {
-                    changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false, {
-                        leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
-                    });
+                    // If the first import is top-of-file, insert after the leading comment which is likely the header.
+                    const options = existingImportStatements[0] === sourceFile.statements[0] ?
+                    { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude } : {};
+                    changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false, options);
                 }
                 else {
                     const prevImport = existingImportStatements[insertionIndex - 1];
