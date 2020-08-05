@@ -213,5 +213,23 @@ function fooB() { }`
             assert.isFalse(project.dirty);
             checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
         });
+
+        it("should not crash when external module name resolution is reused", () => {
+            const { session, file1, file2, file3 } = setup();
+            const service = session.getProjectService();
+            openFilesForSession([file1], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]);
+
+            // Close the file that contains non relative external module name and open some file that doesnt have non relative external module import
+            closeFilesForSession([file1], session);
+            openFilesForSession([file3], session);
+            checkProjectActualFiles(project, [libFile.path, file3.path]);
+
+            // Open file with non relative external module name
+            openFilesForSession([file2], session);
+            checkProjectActualFiles(project, [libFile.path, file2.path, file3.path]);
+        });
     });
 }

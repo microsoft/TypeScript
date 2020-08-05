@@ -568,7 +568,7 @@ namespace ts {
             }
             else {
                 resolution.refCount = 1;
-                Debug.assert(resolution.files === undefined);
+                Debug.assert(length(resolution.files) === 0); // This resolution shouldnt be referenced by any file yet
                 if (isExternalModuleNameRelative(name)) {
                     watchFailedLookupLocationOfResolution(resolution);
                 }

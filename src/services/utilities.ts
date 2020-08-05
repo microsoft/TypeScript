@@ -1217,6 +1217,10 @@ namespace ts {
         }
 
         const children = n.getChildren(sourceFile);
+        if (children.length === 0) {
+            return n;
+        }
+
         const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
         return candidate && findRightmostToken(candidate, sourceFile);
     }
