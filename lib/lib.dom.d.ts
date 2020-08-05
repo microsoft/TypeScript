@@ -5712,7 +5712,7 @@ interface GlobalEventHandlersEventMap {
     "focusin": FocusEvent;
     "focusout": FocusEvent;
     "gotpointercapture": PointerEvent;
-    "input": Event;
+    "input": InputEvent;
     "invalid": Event;
     "keydown": KeyboardEvent;
     "keypress": KeyboardEvent;
