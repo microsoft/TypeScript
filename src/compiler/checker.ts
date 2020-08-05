@@ -309,6 +309,7 @@ namespace ts {
         const Signature = objectAllocator.getSignatureConstructor();
 
         let typeCount = 0;
+        let literalTypeCount = 0;
         let symbolCount = 0;
         let enumCount = 0;
         let totalInstantiationCount = 0;
@@ -3634,6 +3635,7 @@ namespace ts {
         function createType(flags: TypeFlags): Type {
             const result = new Type(checker, flags);
             typeCount++;
+            literalTypeCount += (flags & TypeFlags.Literal) ? 1 : 0;
             result.id = typeCount;
             return result;
         }
@@ -30169,8 +30171,7 @@ namespace ts {
 
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
             const saveCurrentNode = currentNode;
-            const oldTypeCount = typeCount;
-            const oldSymbolCount = symbolCount;
+            const oldCounts = getExpensiveStatementCounts();
 
             currentNode = node;
             instantiationCount = 0;
@@ -30180,11 +30181,7 @@ namespace ts {
                 checkConstEnumAccess(node, type);
             }
 
-            insertExpensiveStatement({
-                node,
-                typeDelta: typeCount - oldTypeCount,
-                symbolDelta: symbolCount - oldSymbolCount,
-            });
+            insertExpensiveStatement(node, oldCounts);
             currentNode = saveCurrentNode;
             return type;
         }
@@ -35671,24 +35668,42 @@ namespace ts {
                 currentNode = node;
                 instantiationCount = 0;
 
-                const oldTypeCount = typeCount;
-                const oldSymbolCount = symbolCount;
+                const oldCounts = getExpensiveStatementCounts();
 
                 checkSourceElementWorker(node);
 
-                insertExpensiveStatement({
-                    node,
-                    typeDelta: typeCount - oldTypeCount,
-                    symbolDelta: symbolCount - oldSymbolCount,
-                });
+                insertExpensiveStatement(node, oldCounts);
 
                 currentNode = saveCurrentNode;
             }
         }
 
-        function insertExpensiveStatement(record: ExpensiveStatement): void {
+        interface Counts {
+            typeCount: number;
+            literalTypeCount: number;
+            symbolCount: number;
+        }
+
+        function getExpensiveStatementCounts(): Counts {
+            return {
+                typeCount,
+                literalTypeCount,
+                symbolCount,
+            };
+        }
+
+        function insertExpensiveStatement(node: Node, oldCounts: Counts): void {
             // Never report expensive statements in .d.ts files
             if (checkingDtsFile || maxExpensiveStatementCount <= 0) {
+                return;
+            }
+
+            const newCounts = getExpensiveStatementCounts();
+            const typeDelta = (newCounts.typeCount - newCounts.literalTypeCount) -
+                (oldCounts.typeCount - oldCounts.literalTypeCount);
+            const symbolDelta = newCounts.symbolCount - oldCounts.symbolCount;
+
+            if (typeDelta === 0) {
                 return;
             }
 
@@ -35696,7 +35711,7 @@ namespace ts {
             for (const existing of expensiveStatements) {
                 // The = is important - we need to insert record before its
                 // descendants for the de-duping logic to work correctly.
-                if (existing.typeDelta <= record.typeDelta) {
+                if (existing.typeDelta <= typeDelta) {
                     break;
                 }
                 i++;
@@ -35707,14 +35722,14 @@ namespace ts {
                 // Search forward since descendants cannot be more expensive
                 for (let j = i; j < expensiveStatements.length; j++) {
                     const candidate = expensiveStatements[j];
-                    if (isNodeDescendantOf(candidate.node, record.node)) {
+                    if (isNodeDescendantOf(candidate.node, node)) {
                         // If a single descendant makes up the majority of the cost, this node isn't interesting
-                        hasExpensiveDescendent = (record.typeDelta / candidate.typeDelta) < 2;
+                        hasExpensiveDescendent = (typeDelta / candidate.typeDelta) < 2;
                         break; // Stop looking since all subsequent nodes are less expensive
                     }
                 }
                 if (!hasExpensiveDescendent) {
-                    expensiveStatements.splice(i, 0, record);
+                    expensiveStatements.splice(i, 0, { node, typeDelta, symbolDelta });
                     if (expensiveStatements.length > maxExpensiveStatementCount) {
                         expensiveStatements.pop();
                     }
