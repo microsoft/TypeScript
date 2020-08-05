@@ -283,7 +283,7 @@ namespace ts.server {
                 case LanguageServiceMode.Semantic:
                     this.languageServiceEnabled = true;
                     break;
-                case LanguageServiceMode.ApproximateSemantic:
+                case LanguageServiceMode.PartialSemantic:
                     this.languageServiceEnabled = true;
                     this.compilerOptions.types = [];
                     break;
@@ -471,7 +471,7 @@ namespace ts.server {
             switch (this.projectService.serverMode) {
                 case LanguageServiceMode.Semantic:
                     return true;
-                case LanguageServiceMode.ApproximateSemantic:
+                case LanguageServiceMode.PartialSemantic:
                     return this.fileIsOpen(this.toPath(containingFile));
                 case LanguageServiceMode.Syntactic:
                     return false;

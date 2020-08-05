@@ -26,7 +26,7 @@ import { something } from "something";
                 content: "{}"
             };
             const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-            const session = createSession(host, { serverMode: LanguageServiceMode.ApproximateSemantic, useSingleInferredProject: true });
+            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
             return { host, session, file1, file2, file3, something, configFile };
         }
 
@@ -138,7 +138,7 @@ import { something } from "something";
                 session.executeCommand(request);
             }
             catch (e) {
-                assert.equal(e.message, `Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.ApproximateSemantic`);
+                assert.equal(e.message, `Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.PartialSemantic`);
                 hasException = true;
             }
             assert.isTrue(hasException);
@@ -149,7 +149,7 @@ import { something } from "something";
                 project.getLanguageService().getSemanticDiagnostics(file1.path);
             }
             catch (e) {
-                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.ApproximateSemantic`);
+                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.PartialSemantic`);
                 hasException = true;
             }
             assert.isTrue(hasException);
@@ -195,7 +195,7 @@ function fooB() { }`
                 content: "{}"
             };
             const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-            const session = createSession(host, { serverMode: LanguageServiceMode.ApproximateSemantic, useSingleInferredProject: true });
+            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
             const service = session.getProjectService();
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });

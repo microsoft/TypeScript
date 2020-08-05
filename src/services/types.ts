@@ -223,7 +223,7 @@ namespace ts {
 
     export enum LanguageServiceMode {
         Semantic,
-        ApproximateSemantic,
+        PartialSemantic,
         Syntactic,
     }
 

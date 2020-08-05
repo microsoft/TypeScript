@@ -1171,7 +1171,7 @@ namespace ts {
         }
     }
 
-    const invalidOperationsOnApproximateSemanticOnly: readonly (keyof LanguageService)[] = [
+    const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[] = [
         "getSyntacticDiagnostics",
         "getSemanticDiagnostics",
         "getSuggestionDiagnostics",
@@ -1191,8 +1191,8 @@ namespace ts {
         "provideCallHierarchyOutgoingCalls",
     ];
 
-    const invalidOperationsOnSyntaxOnly: readonly (keyof LanguageService)[] = [
-        ...invalidOperationsOnApproximateSemanticOnly,
+    const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
+        ...invalidOperationsInPartialSemanticMode,
         "getCompletionsAtPosition",
         "getCompletionEntryDetails",
         "getCompletionEntrySymbol",
@@ -2545,15 +2545,15 @@ namespace ts {
         switch (languageServiceMode) {
             case LanguageServiceMode.Semantic:
                 break;
-            case LanguageServiceMode.ApproximateSemantic:
-                invalidOperationsOnApproximateSemanticOnly.forEach(key =>
+            case LanguageServiceMode.PartialSemantic:
+                invalidOperationsInPartialSemanticMode.forEach(key =>
                     ls[key] = () => {
-                        throw new Error(`LanguageService Operation: ${key} not allowed in LanguageServiceMode.ApproximateSemantic`);
+                        throw new Error(`LanguageService Operation: ${key} not allowed in LanguageServiceMode.PartialSemantic`);
                     }
                 );
                 break;
             case LanguageServiceMode.Syntactic:
-                invalidOperationsOnSyntaxOnly.forEach(key =>
+                invalidOperationsInSyntacticMode.forEach(key =>
                     ls[key] = () => {
                         throw new Error(`LanguageService Operation: ${key} not allowed in LanguageServiceMode.Syntactic`);
                     }

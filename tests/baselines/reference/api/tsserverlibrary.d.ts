@@ -5316,7 +5316,7 @@ declare namespace ts {
     }
     enum LanguageServiceMode {
         Semantic = 0,
-        ApproximateSemantic = 1,
+        PartialSemantic = 1,
         Syntactic = 2
     }
     interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
