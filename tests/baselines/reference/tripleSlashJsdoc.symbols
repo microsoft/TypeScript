@@ -1,0 +1,40 @@
+=== tests/cases/conformance/jsdoc/tripleSlash.js ===
+/// @type {number} - TODO this is still skipped for some reason
+var x;
+>x : Symbol(x, Decl(tripleSlash.js, 1, 3))
+
+/// Adds one
+/// @param {number} n - this is a long,
+/// multiline comment
+///
+/// @return {number}
+function add1(n) {
+>add1 : Symbol(add1, Decl(tripleSlash.js, 1, 6))
+>n : Symbol(n, Decl(tripleSlash.js, 8, 14))
+
+    return n + 1
+>n : Symbol(n, Decl(tripleSlash.js, 8, 14))
+}
+
+// Should be the same
+
+/**  Adds one
+ * @param {number} n - this is a long,
+ * multiline comment
+ *
+ * @return {number}
+*/
+function add2(n) {
+>add2 : Symbol(add2, Decl(tripleSlash.js, 10, 1))
+>n : Symbol(n, Decl(tripleSlash.js, 20, 14))
+
+    return n + 1
+>n : Symbol(n, Decl(tripleSlash.js, 20, 14))
+}
+
+/// I documented this const
+const documented = ""
+>documented : Symbol(documented, Decl(tripleSlash.js, 25, 5))
+
+
+

@@ -202,7 +202,7 @@
 ////class NoQuic/*50*/kInfoClass {
 ////}
 
-verify.signatureHelp({ marker: "1", docComment: "" });
+verify.signatureHelp({ marker: "1", docComment: " This is simple /// comments" });
 verify.quickInfoAt("1q", "function simple(): void");
 
 verify.signatureHelp({ marker: "2", docComment: "" });
