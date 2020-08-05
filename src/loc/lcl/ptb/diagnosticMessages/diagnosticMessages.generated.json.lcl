@@ -2162,6 +2162,9 @@
       <Item ItemId=";Arguments_for_the_rest_parameter_0_were_not_provided_6236" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Arguments for the rest parameter '{0}' were not provided.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Não foram fornecidos argumentos para o parâmetro REST '{0}'.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
