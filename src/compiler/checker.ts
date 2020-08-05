@@ -30169,6 +30169,9 @@ namespace ts {
 
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
             const saveCurrentNode = currentNode;
+            const oldTypeCount = typeCount;
+            const oldSymbolCount = symbolCount;
+
             currentNode = node;
             instantiationCount = 0;
             const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
@@ -30176,6 +30179,12 @@ namespace ts {
             if (isConstEnumObjectType(type)) {
                 checkConstEnumAccess(node, type);
             }
+
+            insertExpensiveStatement({
+                node,
+                typeDelta: typeCount - oldTypeCount,
+                symbolDelta: symbolCount - oldSymbolCount,
+            });
             currentNode = saveCurrentNode;
             return type;
         }
@@ -35667,45 +35676,49 @@ namespace ts {
 
                 checkSourceElementWorker(node);
 
-                // Never report expensive statements in .d.ts files
-                if (!checkingDtsFile && maxExpensiveStatementCount > 0) {
-                    if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement ||
-                        node.kind === SyntaxKind.TypeAliasDeclaration ||
-                        node.kind === SyntaxKind.InterfaceDeclaration) {
-                        const typeDelta = typeCount - oldTypeCount;
-                        const symbolDelta = symbolCount - oldSymbolCount;
-                        const record = { node, typeDelta, symbolDelta };
-
-                        let i = 0;
-                        for (const record of expensiveStatements) {
-                            if (record.typeDelta < typeDelta) {
-                                break;
-                            }
-                            i++;
-                        }
-
-                        if (i < maxExpensiveStatementCount) {
-                            let hasExpensiveDescendent = false;
-                            // Search forward since descendants cannot be more expensive
-                            for (let j = i; j < expensiveStatements.length; j++) {
-                                const candidate = expensiveStatements[j];
-                                if (isNodeDescendantOf(candidate.node, record.node)) {
-                                    // A node that isn't at least 50% more expensive than one of its descendants isn't interesting
-                                    hasExpensiveDescendent = (record.typeDelta / candidate.typeDelta) < 1.5;
-                                    break; // Stop looking since all subsequent nodes are less expensive
-                                }
-                            }
-                            if (!hasExpensiveDescendent) {
-                                expensiveStatements.splice(i, 0, record);
-                                if (expensiveStatements.length > maxExpensiveStatementCount) {
-                                    expensiveStatements.pop();
-                                }
-                            }
-                        }
-                    }
-                }
+                insertExpensiveStatement({
+                    node,
+                    typeDelta: typeCount - oldTypeCount,
+                    symbolDelta: symbolCount - oldSymbolCount,
+                });
 
                 currentNode = saveCurrentNode;
+            }
+        }
+
+        function insertExpensiveStatement(record: ExpensiveStatement): void {
+            // Never report expensive statements in .d.ts files
+            if (checkingDtsFile || maxExpensiveStatementCount <= 0) {
+                return;
+            }
+
+            let i = 0;
+            for (const existing of expensiveStatements) {
+                // The = is important - we need to insert record before its
+                // descendants for the de-duping logic to work correctly.
+                if (existing.typeDelta <= record.typeDelta) {
+                    break;
+                }
+                i++;
+            }
+
+            if (i < maxExpensiveStatementCount) {
+                let hasExpensiveDescendent = false;
+                // Search forward since descendants cannot be more expensive
+                for (let j = i; j < expensiveStatements.length; j++) {
+                    const candidate = expensiveStatements[j];
+                    if (isNodeDescendantOf(candidate.node, record.node)) {
+                        // If a single descendant makes up the majority of the cost, this node isn't interesting
+                        hasExpensiveDescendent = (record.typeDelta / candidate.typeDelta) < 2
+                        break; // Stop looking since all subsequent nodes are less expensive
+                    }
+                }
+                if (!hasExpensiveDescendent) {
+                    expensiveStatements.splice(i, 0, record);
+                    if (expensiveStatements.length > maxExpensiveStatementCount) {
+                        expensiveStatements.pop();
+                    }
+                }
             }
         }
 
