@@ -1913,7 +1913,9 @@ namespace ts {
             for (const newImport of sortedNewImports) {
                 const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
                 if (insertionIndex === 0) {
-                    changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false);
+                    changes.insertNodeBefore(sourceFile, existingImportStatements[0], newImport, /*blankLineBetween*/ false, {
+                        leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
+                    });
                 }
                 else {
                     const prevImport = existingImportStatements[insertionIndex - 1];
