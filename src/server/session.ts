@@ -585,7 +585,7 @@ namespace ts.server {
             undefined;
     }
 
-    const invalidApproximateSemanticOnlyCommands: readonly CommandNames[] = [
+    const invalidPartialSemanticModeCommands: readonly CommandNames[] = [
         CommandNames.OpenExternalProject,
         CommandNames.OpenExternalProjects,
         CommandNames.CloseExternalProject,
@@ -621,8 +621,8 @@ namespace ts.server {
         CommandNames.ProvideCallHierarchyOutgoingCalls,
     ];
 
-    const invalidSyntaxOnlyCommands: readonly CommandNames[] = [
-        ...invalidApproximateSemanticOnlyCommands,
+    const invalidSyntacticModeCommands: readonly CommandNames[] = [
+        ...invalidPartialSemanticModeCommands,
         CommandNames.Definition,
         CommandNames.DefinitionFull,
         CommandNames.DefinitionAndBoundSpan,
@@ -751,17 +751,17 @@ namespace ts.server {
             switch (this.projectService.serverMode) {
                 case LanguageServiceMode.Semantic:
                     break;
-                case LanguageServiceMode.ApproximateSemanticOnly:
-                    invalidApproximateSemanticOnlyCommands.forEach(commandName =>
+                case LanguageServiceMode.PartialSemantic:
+                    invalidPartialSemanticModeCommands.forEach(commandName =>
                         this.handlers.set(commandName, request => {
-                            throw new Error(`Request: ${request.command} not allowed on approximate semantic only server`);
+                            throw new Error(`Request: ${request.command} not allowed in LanguageServiceMode.PartialSemantic`);
                         })
                     );
                     break;
-                case LanguageServiceMode.SyntaxOnly:
-                    invalidSyntaxOnlyCommands.forEach(commandName =>
+                case LanguageServiceMode.Syntactic:
+                    invalidSyntacticModeCommands.forEach(commandName =>
                         this.handlers.set(commandName, request => {
-                            throw new Error(`Request: ${request.command} not allowed on syntax only server`);
+                            throw new Error(`Request: ${request.command} not allowed in LanguageServiceMode.Syntactic`);
                         })
                     );
                     break;

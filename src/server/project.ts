@@ -283,11 +283,11 @@ namespace ts.server {
                 case LanguageServiceMode.Semantic:
                     this.languageServiceEnabled = true;
                     break;
-                case LanguageServiceMode.ApproximateSemanticOnly:
+                case LanguageServiceMode.PartialSemantic:
                     this.languageServiceEnabled = true;
                     this.compilerOptions.types = [];
                     break;
-                case LanguageServiceMode.SyntaxOnly:
+                case LanguageServiceMode.Syntactic:
                     this.languageServiceEnabled = false;
                     this.compilerOptions.noResolve = true;
                     this.compilerOptions.types = [];
@@ -471,9 +471,9 @@ namespace ts.server {
             switch (this.projectService.serverMode) {
                 case LanguageServiceMode.Semantic:
                     return true;
-                case LanguageServiceMode.ApproximateSemanticOnly:
+                case LanguageServiceMode.PartialSemantic:
                     return this.fileIsOpen(this.toPath(containingFile));
-                case LanguageServiceMode.SyntaxOnly:
+                case LanguageServiceMode.Syntactic:
                     return false;
                 default:
                     Debug.assertNever(this.projectService.serverMode);
@@ -677,7 +677,7 @@ namespace ts.server {
         }
 
         enableLanguageService() {
-            if (this.languageServiceEnabled || this.projectService.serverMode === LanguageServiceMode.SyntaxOnly) {
+            if (this.languageServiceEnabled || this.projectService.serverMode === LanguageServiceMode.Syntactic) {
                 return;
             }
             this.languageServiceEnabled = true;
@@ -689,7 +689,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return;
             }
-            Debug.assert(this.projectService.serverMode !== LanguageServiceMode.SyntaxOnly);
+            Debug.assert(this.projectService.serverMode !== LanguageServiceMode.Syntactic);
             this.languageService.cleanupSemanticCache();
             this.languageServiceEnabled = false;
             this.lastFileExceededProgramSize = lastFileExceededProgramSize;
