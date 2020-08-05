@@ -40105,26 +40105,23 @@ namespace ts {
 
             if (forInOrOfStatement.kind === SyntaxKind.ForOfStatement && forInOrOfStatement.awaitModifier) {
                 if (!(forInOrOfStatement.flags & NodeFlags.AwaitContext)) {
-                    let diagnostic: DiagnosticWithLocation | null;
                     const sourceFile = getSourceFileOfNode(forInOrOfStatement);
                     if (isInTopLevelContext(forInOrOfStatement)) {
                         if (!hasParseDiagnostics(sourceFile)) {
                             if (!isEffectiveExternalModule(sourceFile, compilerOptions)) {
-                                diagnostic = createDiagnosticForNode(forInOrOfStatement.awaitModifier,
-                                    Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module);
-                                diagnostics.add(diagnostic);
+                                diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
+                                    Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module));
                             }
                             if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) || languageVersion < ScriptTarget.ES2017) {
-                                diagnostic = createDiagnosticForNode(forInOrOfStatement.awaitModifier,
-                                    Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_target_option_is_set_to_es2017_or_higher);
-                                diagnostics.add(diagnostic);
+                                diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
+                                    Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_target_option_is_set_to_es2017_or_higher));
                             }
                         }
                     }
                     else {
                         // use of 'for-await-of' in non-async function
                         if (!hasParseDiagnostics(sourceFile)) {
-                            diagnostic = createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.A_for_await_of_statement_is_only_allowed_within_an_async_function_or_async_generator);
+                            const diagnostic = createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.A_for_await_of_statement_is_only_allowed_within_an_async_function_or_async_generator);
                             const func = getContainingFunction(forInOrOfStatement);
                             if (func && func.kind !== SyntaxKind.Constructor) {
                                 Debug.assert((getFunctionFlags(func) & FunctionFlags.Async) === 0, "Enclosing function should never be an async function.");
