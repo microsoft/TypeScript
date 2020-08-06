@@ -3774,12 +3774,10 @@ namespace ts.server {
         /*@internal*/
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
-            const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
-            const toPath = this.toPath.bind(this);
-            const rootPath = rootDir && toPath(rootDir);
-            const filePath = toPath(fileName);
+            const rootPath = rootDir && this.toPath(rootDir);
+            const filePath = this.toPath(fileName);
             const result: PackageJsonInfo[] = [];
-            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
+            const processDirectory = (directory: Path): boolean | undefined => {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
                     // Sync and check same directory again
                     case Ternary.Maybe:
@@ -3788,15 +3786,16 @@ namespace ts.server {
                     // Check package.json
                     case Ternary.True:
                         const packageJsonFileName = combinePaths(directory, "package.json");
-                        watchPackageJsonFile(packageJsonFileName);
+                        this.watchPackageJsonFile(packageJsonFileName as Path);
                         const info = packageJsonCache.getInDirectory(directory);
                         if (info) result.push(info);
                 }
-                if (rootPath && rootPath === toPath(directory)) {
+                if (rootPath && rootPath === this.toPath(directory)) {
                     return true;
                 }
-            });
+            };
 
+            forEachAncestorDirectory(getDirectoryPath(filePath), processDirectory);
             return result;
         }
 
