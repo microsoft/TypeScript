@@ -4288,6 +4288,10 @@
         "category": "Error",
         "code": 6230
     },
+    "Generates an event trace and a list of types.": {
+        "category": "Message",
+        "code": 6237
+    },
 
     "Projects to reference": {
         "category": "Message",

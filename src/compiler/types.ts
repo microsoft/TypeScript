@@ -3216,6 +3216,8 @@ namespace ts {
 
         /* @internal */ getClassifiableNames(): UnderscoreEscapedMap<true>;
 
+        getTypeCatalog(): readonly Type[];
+
         getNodeCount(): number;
         getIdentifierCount(): number;
         getSymbolCount(): number;
@@ -3538,11 +3540,14 @@ namespace ts {
         /* @internal */ getGlobalDiagnostics(): Diagnostic[];
         /* @internal */ getEmitResolver(sourceFile?: SourceFile, cancellationToken?: CancellationToken): EmitResolver;
 
+        /* @internal */ getTypeCatalog(): readonly Type[];
+
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
         /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
+        /* @internal */ getRecursionIdentity(type: Type): object | undefined;
 
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
@@ -5055,6 +5060,7 @@ namespace ts {
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/generateCpuProfile?: string;
+        /*@internal*/generateTrace?: string;
         /*@internal*/help?: boolean;
         importHelpers?: boolean;
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
