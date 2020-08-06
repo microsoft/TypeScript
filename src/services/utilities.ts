@@ -2739,9 +2739,7 @@ namespace ts {
 
         type PackageJsonRaw = Record<typeof dependencyKeys[number], Record<string, string> | undefined>;
         const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
-        const stringContent = host.readFile(fileName);
-        if (!stringContent) return undefined;
-
+        const stringContent = host.readFile(fileName) || "";
         const content = tryParseJson(stringContent) as PackageJsonRaw | undefined;
         const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
         if (content) {

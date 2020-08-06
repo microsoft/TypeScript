@@ -82,6 +82,23 @@ namespace ts.projectSystem {
             assert.ok(packageJsonInfo2.peerDependencies);
             assert.ok(packageJsonInfo2.optionalDependencies);
         });
+
+        it("handles empty package.json", () => {
+            const packageJsonContent = "";
+            const { projectService, host } = setup([tsConfig, { path: packageJson.path, content: packageJsonContent }]);
+            projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            const packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as Path)!;
+            assert.isFalse(packageJsonInfo.parseable);
+
+            host.writeFile(packageJson.path, packageJson.content);
+            projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as Path);
+            const packageJsonInfo2 = projectService.packageJsonCache.getInDirectory("/" as Path)!;
+            assert.ok(packageJsonInfo2);
+            assert.ok(packageJsonInfo2.dependencies);
+            assert.ok(packageJsonInfo2.devDependencies);
+            assert.ok(packageJsonInfo2.peerDependencies);
+            assert.ok(packageJsonInfo2.optionalDependencies);
+        });
     });
 
     function setup(files: readonly File[] = [tsConfig, packageJson]) {
