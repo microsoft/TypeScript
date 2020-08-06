@@ -7898,7 +7898,7 @@ namespace ts {
                 if (links.isConstructorDeclaredProperty === undefined) {
                     links.isConstructorDeclaredProperty = !!getDeclaringConstructor(symbol) && every(symbol.declarations, declaration =>
                         isBinaryExpression(declaration) &&
-                        getAssignmentDeclarationKind(declaration) === AssignmentDeclarationKind.ThisProperty &&
+                        (getAssignmentDeclarationKind(declaration) === AssignmentDeclarationKind.ThisProperty ||  getAssignmentDeclarationKind(declaration) === AssignmentDeclarationKind.Property && isThisAlias(declaration)) &&
                         (declaration.left.kind !== SyntaxKind.ElementAccessExpression || isStringOrNumericLiteralLike((<ElementAccessExpression>declaration.left).argumentExpression)) &&
                         !getAnnotatedTypeForAssignmentDeclaration(/*declaredType*/ undefined, declaration, symbol, declaration));
                 }
@@ -7942,6 +7942,13 @@ namespace ts {
             return getFlowTypeOfReference(reference, autoType, initialType);
         }
 
+        function isThisAlias(expression: Expression) {
+            Debug.assert(isBinaryExpression(expression));
+            const symbol = resolveName(expression.left, ((expression.left as PropertyAccessExpression).expression as Identifier).escapedText, SymbolFlags.Value, undefined, undefined, /*isUse*/ true, /*excludeGlobals*/ true)
+            const decl = symbol?.valueDeclaration;
+            return !!decl && isVariableDeclaration(decl) && decl.initializer?.kind === SyntaxKind.ThisKeyword;
+        }
+
         function getWidenedTypeForAssignmentDeclaration(symbol: Symbol, resolvedSymbol?: Symbol) {
             // function/class/{} initializers are themselves containers, so they won't merge in the same way as other initializers
             const container = getAssignedExpandoInitializer(symbol.valueDeclaration);
@@ -7975,7 +7982,8 @@ namespace ts {
                     const kind = isAccessExpression(expression)
                         ? getAssignmentDeclarationPropertyAccessKind(expression)
                         : getAssignmentDeclarationKind(expression);
-                    if (kind === AssignmentDeclarationKind.ThisProperty) {
+                    // TODO: I'm not sure that `symbol` is right -- maybe should be symbol.parent or symbol of property access
+                    if (kind === AssignmentDeclarationKind.ThisProperty || kind === AssignmentDeclarationKind.Property && isThisAlias(expression)) {
                         if (isDeclarationInConstructor(expression)) {
                             definedInConstructor = true;
                         }
@@ -9638,6 +9646,7 @@ namespace ts {
                         const assignmentKind = getAssignmentDeclarationKind(member as BinaryExpression | CallExpression);
                         const isInstanceMember = assignmentKind === AssignmentDeclarationKind.PrototypeProperty
                             || assignmentKind === AssignmentDeclarationKind.ThisProperty
+                            || assignmentKind === AssignmentDeclarationKind.Property && isThisAlias(member as BinaryExpression | CallExpression) // TODO: remember to test this by finding the tests by breaking or blaming this code
                             || assignmentKind === AssignmentDeclarationKind.ObjectDefinePrototypeProperty
                             || assignmentKind === AssignmentDeclarationKind.Prototype; // A straight `Prototype` assignment probably can never have a computed name
                         if (isStatic === !isInstanceMember && hasLateBindableName(member)) {
@@ -23162,6 +23171,27 @@ namespace ts {
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.Prototype:
                 case AssignmentDeclarationKind.PrototypeProperty:
+                    if (kind === AssignmentDeclarationKind.Property) {
+                        if (isThisAlias(binaryExpression)) {
+                            if (!binaryExpression.symbol) return true;
+                            if (binaryExpression.symbol.valueDeclaration) {
+                                const annotated = getEffectiveTypeAnnotationNode(binaryExpression.symbol.valueDeclaration);
+                                if (annotated) {
+                                    const type = getTypeFromTypeNode(annotated);
+                                    if (type) {
+                                        return type;
+                                    }
+                                }
+                            }
+                            const thisAccess = cast(binaryExpression.left, isAccessExpression);
+                            if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
+                                return false;
+                            }
+                            const thisType = checkThisExpression(thisAccess.expression);
+                            const nameStr = getElementOrPropertyAccessName(thisAccess);
+                            return nameStr !== undefined && thisType && getTypeOfPropertyOfContextualType(thisType, nameStr) || false;
+                        }
+                    }
                     // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                     // See `bindStaticPropertyAssignment` in `binder.ts`.
                     if (!binaryExpression.left.symbol) {
@@ -36315,7 +36345,7 @@ namespace ts {
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.PrototypeProperty:
                     return getSymbolOfNode(entityName.parent);
-                case AssignmentDeclarationKind.ThisProperty:
+                case AssignmentDeclarationKind.ThisProperty: // TODO: not even sure what to do here
                 case AssignmentDeclarationKind.ModuleExports:
                 case AssignmentDeclarationKind.Property:
                     return getSymbolOfNode(entityName.parent.parent);

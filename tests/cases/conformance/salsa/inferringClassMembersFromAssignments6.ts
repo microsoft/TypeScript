@@ -7,9 +7,9 @@
 function Foonly() {
     var self = this
     self.x = 1
-    // self.m = function() {
-      //   console.log(self.x)
-    // }
+    self.m = function() {
+        console.log(self.x)
+    }
 }
 const foo = new Foonly()
 foo.x
