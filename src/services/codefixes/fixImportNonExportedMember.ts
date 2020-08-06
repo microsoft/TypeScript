@@ -27,9 +27,6 @@ namespace ts.codefix {
         readonly importDecl: ImportDeclaration;
         readonly originSourceFile: SourceFile
     }
-    function isImportDeclaration(node: Node): node is ImportDeclaration {
-        return node.kind === SyntaxKind.ImportDeclaration;
-    }
 
     function getInfo(sourceFile: SourceFile, context: CodeFixContext | CodeFixAllContext, pos: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
@@ -49,9 +46,9 @@ namespace ts.codefix {
 
     function getNamedExportDeclaration(sourceFile: SourceFile): ExportDeclaration | undefined {
         let namedExport;
-        const statements = sourceFile.statements.filter(isExportDeclaration);
-        for (const statement of statements) {
-            if (statement.exportClause && isNamedExports(statement.exportClause)) {
+        for (const statement of sourceFile.statements) {
+            if (isExportDeclaration(statement) && statement.exportClause &&
+                isNamedExports(statement.exportClause)) {
                 namedExport = statement;
             }
         }
@@ -64,8 +61,7 @@ namespace ts.codefix {
 
     function sortSpecifiers(specifiers: ExportSpecifier[]): readonly ExportSpecifier[] {
         return stableSort(specifiers, (s1, s2) => {
-            return compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name) ||
-                compareIdentifiers(s1.name, s2.name);
+            return compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name);
         });
     }
 
