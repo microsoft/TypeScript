@@ -3780,17 +3780,17 @@ namespace ts.server {
             const result: PackageJsonInfo[] = [];
             forEachAncestorDirectory(getDirectoryPath(filePath), directory => {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
-                    // Sync and check same directory again
                     case Ternary.Maybe:
+                        // Sync and check same directory again
                         packageJsonCache.searchDirectoryAndAncestors(directory);
                         const newResult = packageJsonCache.directoryHasPackageJson(directory);
                         if (newResult !== Ternary.True) {
                             Debug.assertEqual(newResult, Ternary.False);
                             break;
                         }
-                    // fall through 
-                    // Check the package.json
+                        // fall through
                     case Ternary.True:
+                        // Check the package.json
                         const packageJsonFileName = combinePaths(directory, "package.json");
                         watchPackageJsonFile(packageJsonFileName);
                         const info = packageJsonCache.getInDirectory(directory);
