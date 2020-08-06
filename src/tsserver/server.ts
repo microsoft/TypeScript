@@ -959,10 +959,10 @@ namespace ts.server {
         switch (mode.toLowerCase()) {
             case "semantic":
                 return LanguageServiceMode.Semantic;
-            case "approximatesemanticonly":
-                return LanguageServiceMode.ApproximateSemanticOnly;
-            case "syntaxonly":
-                return LanguageServiceMode.SyntaxOnly;
+            case "partialsemantic":
+                return LanguageServiceMode.PartialSemantic;
+            case "syntactic":
+                return LanguageServiceMode.Syntactic;
             default:
                 unknownServerMode = mode;
                 return undefined;
