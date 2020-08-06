@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
+    describe("unittests:: tsserver:: Semantic operations on Approximate Semantic only server", () => {
         function setup() {
             const file1: File = {
                 path: `${tscWatch.projectRoot}/a.ts`,
@@ -26,78 +26,99 @@ import { something } from "something";
                 content: "{}"
             };
             const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-            const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true });
+            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
             return { host, session, file1, file2, file3, something, configFile };
         }
 
-        function verifySessionException<T extends server.protocol.Request>(session: TestSession, request: Partial<T>) {
-            let hasException = false;
-            try {
-                session.executeCommandSeq(request);
-            }
-            catch (e) {
-                assert.equal(e.message, `Request: ${request.command} not allowed on syntax only server`);
-                hasException = true;
-            }
-            assert.isTrue(hasException);
-        }
-
-        it("open files are added to inferred project even if config file is present and semantic operations fail", () => {
+        it("open files are added to inferred project even if config file is present and semantic operations succeed", () => {
             const { host, session, file1, file2, file3, something } = setup();
             const service = session.getProjectService();
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]); // Relative import from open file is resolves but not non relative
             verifyCompletions();
             verifyGoToDefToB();
 
             openFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path]);
             verifyCompletions();
             verifyGoToDefToB();
             verifyGoToDefToC();
 
             openFilesForSession([file3], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path]);
 
             openFilesForSession([something], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
 
             // Close open files and verify resolutions
             closeFilesForSession([file3], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
 
             closeFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
 
             function verifyCompletions() {
-                assert.isFalse(project.languageServiceEnabled);
+                assert.isTrue(project.languageServiceEnabled);
                 checkWatchedFiles(host, emptyArray);
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                verifySessionException<protocol.CompletionsRequest>(session, {
+                const response = session.executeCommandSeq<protocol.CompletionsRequest>({
                     command: protocol.CommandTypes.Completions,
                     arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
-                });
+                }).response as protocol.CompletionEntry[];
+                assert.deepEqual(response, [
+                    completionEntry("foo", ScriptElementKind.memberFunctionElement),
+                    completionEntry("prop", ScriptElementKind.memberVariableElement),
+                ]);
+            }
+
+            function completionEntry(name: string, kind: ScriptElementKind): protocol.CompletionEntry {
+                return {
+                    name,
+                    kind,
+                    kindModifiers: "",
+                    sortText: Completions.SortText.LocationPriority,
+                    hasAction: undefined,
+                    insertText: undefined,
+                    isPackageJsonImport: undefined,
+                    isRecommended: undefined,
+                    replacementSpan: undefined,
+                    source: undefined
+                };
             }
 
             function verifyGoToDefToB() {
-                verifySessionException<protocol.DefinitionAndBoundSpanRequest>(session, {
+                const response = session.executeCommandSeq<protocol.DefinitionAndBoundSpanRequest>({
                     command: protocol.CommandTypes.DefinitionAndBoundSpan,
                     arguments: protocolFileLocationFromSubstring(file1, "y")
+                }).response as protocol.DefinitionInfoAndBoundSpan;
+                assert.deepEqual(response, {
+                    definitions: [{
+                        file: file2.path,
+                        ...protocolTextSpanWithContextFromSubstring({ fileText: file2.content, text: "y", contextText: "export const y = 10;" })
+                    }],
+                    textSpan: protocolTextSpanWithContextFromSubstring({ fileText: file1.content, text: "y" })
                 });
             }
 
             function verifyGoToDefToC() {
-                verifySessionException<protocol.DefinitionAndBoundSpanRequest>(session, {
+                const response = session.executeCommandSeq<protocol.DefinitionAndBoundSpanRequest>({
                     command: protocol.CommandTypes.DefinitionAndBoundSpan,
                     arguments: protocolFileLocationFromSubstring(file1, "cc")
+                }).response as protocol.DefinitionInfoAndBoundSpan;
+                assert.deepEqual(response, {
+                    definitions: [{
+                        file: file3.path,
+                        ...protocolTextSpanWithContextFromSubstring({ fileText: file3.content, text: "cc", contextText: "export const cc = 10;" })
+                    }],
+                    textSpan: protocolTextSpanWithContextFromSubstring({ fileText: file1.content, text: "cc" })
                 });
             }
         });
@@ -106,27 +127,36 @@ import { something } from "something";
             const { session, file1 } = setup();
             const service = session.getProjectService();
             openFilesForSession([file1], session);
-            verifySessionException<protocol.SemanticDiagnosticsSyncRequest>(session, {
+            let hasException = false;
+            const request: protocol.SemanticDiagnosticsSyncRequest = {
                 type: "request",
                 seq: 1,
                 command: protocol.CommandTypes.SemanticDiagnosticsSync,
                 arguments: { file: file1.path }
-            });
+            };
+            try {
+                session.executeCommand(request);
+            }
+            catch (e) {
+                assert.equal(e.message, `Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.PartialSemantic`);
+                hasException = true;
+            }
+            assert.isTrue(hasException);
 
-            let hasException = false;
+            hasException = false;
             const project = service.inferredProjects[0];
             try {
                 project.getLanguageService().getSemanticDiagnostics(file1.path);
             }
             catch (e) {
-                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed on syntax only server`);
+                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.PartialSemantic`);
                 hasException = true;
             }
             assert.isTrue(hasException);
         });
 
         it("should not include auto type reference directives", () => {
-            const { host, session, file1 } = setup();
+            const { host, session, file1, file2 } = setup();
             const atTypes: File = {
                 path: `/node_modules/@types/somemodule/index.d.ts`,
                 content: "export const something = 10;"
@@ -136,7 +166,7 @@ import { something } from "something";
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, emptyArray); // Should not contain atTypes
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]); // Should not contain atTypes
         });
 
         it("should not include referenced files from unopened files", () => {
@@ -165,23 +195,41 @@ function fooB() { }`
                 content: "{}"
             };
             const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-            const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true });
+            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
             const service = session.getProjectService();
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, something.path]); // Should not contains c
 
             openFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            assert.isFalse(project.dirty);
+            assert.isTrue(project.dirty);
             project.updateGraph();
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
 
             closeFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            assert.isTrue(project.dirty);
-            checkProjectActualFiles(project, emptyArray);
+            assert.isFalse(project.dirty);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
+        });
+
+        it("should not crash when external module name resolution is reused", () => {
+            const { session, file1, file2, file3 } = setup();
+            const service = session.getProjectService();
+            openFilesForSession([file1], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]);
+
+            // Close the file that contains non relative external module name and open some file that doesnt have non relative external module import
+            closeFilesForSession([file1], session);
+            openFilesForSession([file3], session);
+            checkProjectActualFiles(project, [libFile.path, file3.path]);
+
+            // Open file with non relative external module name
+            openFilesForSession([file2], session);
+            checkProjectActualFiles(project, [libFile.path, file2.path, file3.path]);
         });
     });
 }

@@ -1171,7 +1171,7 @@ namespace ts {
         }
     }
 
-    const invalidOperationsOnApproximateSemanticOnly: readonly (keyof LanguageService)[] = [
+    const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[] = [
         "getSyntacticDiagnostics",
         "getSemanticDiagnostics",
         "getSuggestionDiagnostics",
@@ -1191,8 +1191,8 @@ namespace ts {
         "provideCallHierarchyOutgoingCalls",
     ];
 
-    const invalidOperationsOnSyntaxOnly: readonly (keyof LanguageService)[] = [
-        ...invalidOperationsOnApproximateSemanticOnly,
+    const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
+        ...invalidOperationsInPartialSemanticMode,
         "getCompletionsAtPosition",
         "getCompletionEntryDetails",
         "getCompletionEntrySymbol",
@@ -1222,7 +1222,7 @@ namespace ts {
         }
         else if (typeof syntaxOnlyOrLanguageServiceMode === "boolean") {
             // languageServiceMode = SyntaxOnly
-            languageServiceMode = syntaxOnlyOrLanguageServiceMode ? LanguageServiceMode.SyntaxOnly : LanguageServiceMode.Semantic;
+            languageServiceMode = syntaxOnlyOrLanguageServiceMode ? LanguageServiceMode.Syntactic : LanguageServiceMode.Semantic;
         }
         else {
             languageServiceMode = syntaxOnlyOrLanguageServiceMode;
@@ -1276,7 +1276,7 @@ namespace ts {
         }
 
         function synchronizeHostData(): void {
-            Debug.assert(languageServiceMode !== LanguageServiceMode.SyntaxOnly);
+            Debug.assert(languageServiceMode !== LanguageServiceMode.Syntactic);
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1462,7 +1462,7 @@ namespace ts {
 
         // TODO: GH#18217 frequently asserted as defined
         function getProgram(): Program | undefined {
-            if (languageServiceMode === LanguageServiceMode.SyntaxOnly) {
+            if (languageServiceMode === LanguageServiceMode.Syntactic) {
                 Debug.assert(program === undefined);
                 return undefined;
             }
@@ -2545,17 +2545,17 @@ namespace ts {
         switch (languageServiceMode) {
             case LanguageServiceMode.Semantic:
                 break;
-            case LanguageServiceMode.ApproximateSemanticOnly:
-                invalidOperationsOnApproximateSemanticOnly.forEach(key =>
+            case LanguageServiceMode.PartialSemantic:
+                invalidOperationsInPartialSemanticMode.forEach(key =>
                     ls[key] = () => {
-                        throw new Error(`LanguageService Operation: ${key} not allowed on approximate semantic only server`);
+                        throw new Error(`LanguageService Operation: ${key} not allowed in LanguageServiceMode.PartialSemantic`);
                     }
                 );
                 break;
-            case LanguageServiceMode.SyntaxOnly:
-                invalidOperationsOnSyntaxOnly.forEach(key =>
+            case LanguageServiceMode.Syntactic:
+                invalidOperationsInSyntacticMode.forEach(key =>
                     ls[key] = () => {
-                        throw new Error(`LanguageService Operation: ${key} not allowed on syntax only server`);
+                        throw new Error(`LanguageService Operation: ${key} not allowed in LanguageServiceMode.Syntactic`);
                     }
                 );
                 break;
