@@ -1111,7 +1111,7 @@ namespace ts {
             text.charCodeAt(comment.pos + 1) === CharacterCodes.asterisk &&
             text.charCodeAt(comment.pos + 2) === CharacterCodes.asterisk &&
             text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash
-            || isTripleSlashComment(comment, text));
+            || isTripleSlashComment(comment, text) && !isRecognizedTripleSlashComment(text, comment.pos, comment.end));
     }
 
     export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;

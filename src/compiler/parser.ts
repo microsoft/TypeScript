@@ -7215,6 +7215,7 @@ namespace ts {
             }
 
             function parseJSDocCommentWorker(startOrRanges: number | CommentRange[] = 0, length: number | undefined): JSDoc | undefined {
+                // const isTripleSlash = Array.isArray(startOrRanges);
                 // TODO: Probably should save a boolean isTripleSlash at the beginning and make all the nested functions change their behaviour.
                 const content = sourceText; // TODO: Why alias this?
                 const comments: string[] = [];
@@ -7226,7 +7227,6 @@ namespace ts {
                     const ranges = startOrRanges;
                     let currentTag: JSDocTag | undefined; // TODO: Probably can use tags
                     for (const { pos: start, end } of ranges) {
-                        if (isRecognizedTripleSlashComment(content, start, end)) continue;
                         const length = end - start;
                         scanner.scanRange(start + 3, length - 3, () => {
                             while (nextTokenJSDoc() !== SyntaxKind.EndOfFileToken) {
