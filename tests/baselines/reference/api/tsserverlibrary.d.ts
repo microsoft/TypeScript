@@ -2053,6 +2053,7 @@ declare namespace ts {
          * Gets a type checker that can be used to semantically analyze source files in the program.
          */
         getTypeChecker(): TypeChecker;
+        getTypeCatalog(): readonly Type[];
         getNodeCount(): number;
         getIdentifierCount(): number;
         getSymbolCount(): number;
@@ -3840,11 +3841,13 @@ declare namespace ts {
         args: string[];
         newLine: string;
         useCaseSensitiveFileNames: boolean;
-        write(s: string): void;
+        write(s: string, fd?: number): void;
         writeOutputIsTTY?(): boolean;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+        openFile(path: string, mode: "w"): number | undefined;
+        closeFile(fd: number): void;
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching

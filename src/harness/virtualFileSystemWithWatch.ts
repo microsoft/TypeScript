@@ -1011,11 +1011,21 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
         }
 
+        openFile(_path: string, _mode: "w"): number | undefined {
+            assert.fail("NYI");
+            return undefined;
+        }
+
+        closeFile(_fd: number): void {
+            assert.fail("NYI");
+        }
+
         appendFile(path: string, content: string, options?: Partial<ReloadWatchInvokeOptions>): void {
             this.modifyFile(path, this.readFile(path) + content, options);
         }
 
-        write(message: string) {
+        write(message: string, fd?: number) {
+            assert.isUndefined(fd);
             this.output.push(message);
         }
 

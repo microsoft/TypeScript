@@ -476,7 +476,7 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
-        enableStatistics(sys, options);
+        enableStatisticsAndTracing(sys, options);
 
         const programOptions: CreateProgramOptions = {
             rootNames: fileNames,
@@ -504,7 +504,7 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         const { options, fileNames, projectReferences } = config;
-        enableStatistics(sys, options);
+        enableStatisticsAndTracing(sys, options);
         const host = createIncrementalCompilerHost(options, sys);
         const exitStatus = ts.performIncrementalCompilation({
             host,
@@ -541,7 +541,7 @@ namespace ts {
         host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
-                enableStatistics(sys, options);
+                enableStatisticsAndTracing(sys, options);
             }
             return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
@@ -610,15 +610,44 @@ namespace ts {
         return system === sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
     }
 
-    function enableStatistics(sys: System, compilerOptions: CompilerOptions) {
-        if (canReportDiagnostics(sys, compilerOptions)) {
+    let traceCount = 0;
+    let tracingFd: number | undefined;
+
+    function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions) {
+        if (canReportDiagnostics(system, compilerOptions)) {
             performance.enable();
+        }
+
+        Debug.assert(!tracingFd, "Tracing already started");
+        if (system === sys) {
+            const tracePath = compilerOptions.generateTrace;
+            if (tracePath) {
+                const extension = getAnyExtensionFromPath(tracePath);
+                tracingFd = sys.openFile(changeAnyExtension(tracePath, `${++traceCount}${extension}`), "w");
+                if (tracingFd) {
+                    tracing.startTracing(event => sys.write(event, tracingFd));
+                }
+            }
         }
     }
 
     function reportStatistics(sys: System, program: Program) {
-        let statistics: Statistic[];
         const compilerOptions = program.getCompilerOptions();
+
+        if (tracingFd) {
+            tracing.stopTracing();
+            sys.closeFile(tracingFd);
+            tracingFd = undefined;
+
+            const typesPath = changeAnyExtension(compilerOptions.generateTrace!, `${traceCount}.types.json`);
+            const typesFd = sys.openFile(typesPath, "w");
+            if (typesFd) {
+                tracing.dumpTypes(program.getTypeCatalog(), type => sys.write(type, typesFd));
+                sys.closeFile(typesFd);
+            }
+        }
+
+        let statistics: Statistic[];
         if (canReportDiagnostics(sys, compilerOptions)) {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;

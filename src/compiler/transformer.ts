@@ -222,7 +222,12 @@ namespace ts {
         state = TransformationState.Initialized;
 
         // Transform each node.
-        const transformed = map(nodes, allowDtsFiles ? transformation : transformRoot);
+        const transformed: T[] = [];
+        for (const node of nodes) {
+            tracing.begin(tracing.Phase.Emit, "transformNodes", node.kind === SyntaxKind.SourceFile ? { path: (node as any as SourceFile).path } : { kind: node.kind, pos: node.pos, end: node.end });
+            transformed.push((allowDtsFiles ? transformation : transformRoot)(node));
+            tracing.end();
+        }
 
         // prevent modification of the lexical environment.
         state = TransformationState.Completed;

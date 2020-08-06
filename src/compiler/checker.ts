@@ -317,6 +317,8 @@ namespace ts {
         let constraintDepth = 0;
         let currentNode: Node | undefined;
 
+        const typeCatalog: Type[] = []; // NB: id is index + 1
+
         const emptySymbols = createSymbolTable();
         const arrayVariances = [VarianceFlags.Covariant];
 
@@ -360,6 +362,7 @@ namespace ts {
             getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
             getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
             getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount") + symbolCount,
+            getTypeCatalog: () => typeCatalog,
             getTypeCount: () => typeCount,
             getInstantiationCount: () => totalInstantiationCount,
             getRelationCacheSizes: () => ({
@@ -3661,6 +3664,7 @@ namespace ts {
             const result = new Type(checker, flags);
             typeCount++;
             result.id = typeCount;
+            typeCatalog.push(result);
             return result;
         }
 
@@ -16031,6 +16035,7 @@ namespace ts {
             containingMessageChain?: () => DiagnosticMessageChain | undefined,
             errorOutputContainer?: { errors?: Diagnostic[], skipLogging?: boolean },
         ): boolean {
+
             let errorInfo: DiagnosticMessageChain | undefined;
             let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
             let maybeKeys: string[];
@@ -16093,6 +16098,8 @@ namespace ts {
             if (errorNode && errorOutputContainer && errorOutputContainer.skipLogging && result === Ternary.False) {
                 Debug.assert(!!errorOutputContainer.errors, "missed opportunity to interact with error.");
             }
+
+
             return result !== Ternary.False;
 
             function resetErrorInfo(saved: ReturnType<typeof captureErrorCalculationState>) {
@@ -16811,6 +16818,13 @@ namespace ts {
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
             function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+                tracing.begin(tracing.Phase.Check, "recursiveTypeRelatedTo", { sourceId: source.id, targetId: target.id });
+                const result = recursiveTypeRelatedToWorker(source, target, reportErrors, intersectionState);
+                tracing.end();
+                return result;
+            }
+
+            function recursiveTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
@@ -18082,6 +18096,7 @@ namespace ts {
         function getVariancesWorker<TCache extends { variances?: VarianceFlags[] }>(typeParameters: readonly TypeParameter[] = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): VarianceFlags[] {
             let variances = cache.variances;
             if (!variances) {
+                tracing.begin(tracing.Phase.Check, "getVariancesWorker", { arity: typeParameters.length, id: (cache as any).id ?? (cache as any).declaredType?.id ?? -1 });
                 // The emptyArray singleton is used to signal a recursive invocation.
                 cache.variances = emptyArray;
                 variances = [];
@@ -18116,6 +18131,7 @@ namespace ts {
                     variances.push(variance);
                 }
                 cache.variances = variances;
+                tracing.end();
             }
             return variances;
         }
@@ -19369,6 +19385,7 @@ namespace ts {
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type): void {
+
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
@@ -30257,6 +30274,7 @@ namespace ts {
         }
 
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
+            tracing.begin(tracing.Phase.Check, "checkExpression", { kind: node.kind, pos: node.pos, end: node.end });
             const saveCurrentNode = currentNode;
             currentNode = node;
             instantiationCount = 0;
@@ -30266,6 +30284,7 @@ namespace ts {
                 checkConstEnumAccess(node, type);
             }
             currentNode = saveCurrentNode;
+            tracing.end();
             return type;
         }
 
@@ -33032,8 +33051,10 @@ namespace ts {
         }
 
         function checkVariableDeclaration(node: VariableDeclaration) {
+            tracing.begin(tracing.Phase.Check, "checkVariableDeclaration", { kind: node.kind, pos: node.pos, end: node.end });
             checkGrammarVariableDeclaration(node);
-            return checkVariableLikeDeclaration(node);
+            checkVariableLikeDeclaration(node);
+            tracing.end();
         }
 
         function checkBindingElement(node: BindingElement) {
@@ -36069,10 +36090,12 @@ namespace ts {
         }
 
         function checkSourceFile(node: SourceFile) {
+            tracing.begin(tracing.Phase.Check, "checkSourceFile", { path: node.path });
             performance.mark("beforeCheck");
             checkSourceFileWorker(node);
             performance.mark("afterCheck");
             performance.measure("Check", "beforeCheck", "afterCheck");
+            tracing.end();
         }
 
         function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {
