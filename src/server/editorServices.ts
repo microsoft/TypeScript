@@ -3775,24 +3775,28 @@ namespace ts.server {
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
             const watchPackageJsonFile = this.watchPackageJsonFile.bind(this);
-            const toPath = this.toPath.bind(this);
-            const rootPath = rootDir && toPath(rootDir);
-            const filePath = toPath(fileName);
+            const rootPath = rootDir && this.toPath(rootDir);
+            const filePath = this.toPath(fileName);
             const result: PackageJsonInfo[] = [];
-            forEachAncestorDirectory(getDirectoryPath(filePath), function processDirectory(directory): boolean | undefined {
+            forEachAncestorDirectory(getDirectoryPath(filePath), directory => {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
                     // Sync and check same directory again
                     case Ternary.Maybe:
                         packageJsonCache.searchDirectoryAndAncestors(directory);
-                        return processDirectory(directory);
-                    // Check package.json
+                        const newResult = packageJsonCache.directoryHasPackageJson(directory);
+                        if (newResult !== Ternary.True) {
+                            Debug.assertEqual(newResult, Ternary.False);
+                            break;
+                        }
+                    // fall through 
+                    // Check the package.json
                     case Ternary.True:
                         const packageJsonFileName = combinePaths(directory, "package.json");
                         watchPackageJsonFile(packageJsonFileName);
                         const info = packageJsonCache.getInDirectory(directory);
                         if (info) result.push(info);
                 }
-                if (rootPath && rootPath === toPath(directory)) {
+                if (rootPath && rootPath === this.toPath(directory)) {
                     return true;
                 }
             });
