@@ -7982,7 +7982,6 @@ namespace ts {
                     const kind = isAccessExpression(expression)
                         ? getAssignmentDeclarationPropertyAccessKind(expression)
                         : getAssignmentDeclarationKind(expression);
-                    // TODO: I'm not sure that `symbol` is right -- maybe should be symbol.parent or symbol of property access
                     if (kind === AssignmentDeclarationKind.ThisProperty || kind === AssignmentDeclarationKind.Property && isThisAlias(expression)) {
                         if (isDeclarationInConstructor(expression)) {
                             definedInConstructor = true;
