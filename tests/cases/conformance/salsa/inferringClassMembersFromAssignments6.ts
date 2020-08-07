@@ -3,7 +3,7 @@
 // @checkJs: true
 // @noImplicitAny: true
 // @strictNullChecks: true
-// @Filename: inferringClassMembersFromAssignments5.js
+// @Filename: inferringClassMembersFromAssignments6.js
 function Foonly() {
     var self = this
     self.x = 1
@@ -11,21 +11,11 @@ function Foonly() {
         console.log(self.x)
     }
 }
+Foonly.prototype.mreal = function() {
+    var self = this
+    self.y = 2
+}
 const foo = new Foonly()
 foo.x
+foo.y
 foo.m()
-//class Base {
-    //m() {
-        //this.p = 1
-    //}
-//}
-//class Derived extends Base {
-    //constructor() {
-        //super();
-        //// should be OK, and p should have type number from this assignment
-        //this.p = 1
-    //}
-    //test() {
-        //return this.p
-    //}
-//}

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments5.js ===
+=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments6.js ===
 function Foonly() {
 >Foonly : typeof Foonly
 
@@ -8,16 +8,16 @@ function Foonly() {
 
     self.x = 1
 >self.x = 1 : 1
->self.x : number
+>self.x : any
 >self : this
->x : number
+>x : any
 >1 : 1
 
     self.m = function() {
 >self.m = function() {        console.log(self.x)    } : () => void
->self.m : () => void
+>self.m : any
 >self : this
->m : () => void
+>m : any
 >function() {        console.log(self.x)    } : () => void
 
         console.log(self.x)
@@ -30,6 +30,26 @@ function Foonly() {
 >x : number
     }
 }
+Foonly.prototype.mreal = function() {
+>Foonly.prototype.mreal = function() {    var self = this    self.y = 2} : () => void
+>Foonly.prototype.mreal : any
+>Foonly.prototype : any
+>Foonly : typeof Foonly
+>prototype : any
+>mreal : any
+>function() {    var self = this    self.y = 2} : () => void
+
+    var self = this
+>self : this
+>this : this
+
+    self.y = 2
+>self.y = 2 : 2
+>self.y : number | undefined
+>self : this
+>y : number | undefined
+>2 : 2
+}
 const foo = new Foonly()
 >foo : Foonly
 >new Foonly() : Foonly
@@ -40,25 +60,14 @@ foo.x
 >foo : Foonly
 >x : number
 
+foo.y
+>foo.y : number | undefined
+>foo : Foonly
+>y : number | undefined
+
 foo.m()
 >foo.m() : void
 >foo.m : () => void
 >foo : Foonly
 >m : () => void
-
-//class Base {
-    //m() {
-        //this.p = 1
-    //}
-//}
-//class Derived extends Base {
-    //constructor() {
-        //super();
-        //// should be OK, and p should have type number from this assignment
-        //this.p = 1
-    //}
-    //test() {
-        //return this.p
-    //}
-//}
 

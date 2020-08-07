@@ -59,9 +59,9 @@ my.predicate.query = function () {
 
     me.property = false;
 >me.property = false : false
->me.property : boolean
+>me.property : any
 >me : this
->property : boolean
+>property : any
 >false : false
 
 };

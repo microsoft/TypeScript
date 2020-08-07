@@ -7896,9 +7896,10 @@ namespace ts {
             if (symbol.valueDeclaration && isBinaryExpression(symbol.valueDeclaration)) {
                 const links = getSymbolLinks(symbol);
                 if (links.isConstructorDeclaredProperty === undefined) {
+                    links.isConstructorDeclaredProperty = false;
                     links.isConstructorDeclaredProperty = !!getDeclaringConstructor(symbol) && every(symbol.declarations, declaration =>
                         isBinaryExpression(declaration) &&
-                        (getAssignmentDeclarationKind(declaration) === AssignmentDeclarationKind.ThisProperty ||  getAssignmentDeclarationKind(declaration) === AssignmentDeclarationKind.Property && isThisAlias(declaration)) &&
+                        isPossiblyAliasedThisProperty(declaration) &&
                         (declaration.left.kind !== SyntaxKind.ElementAccessExpression || isStringOrNumericLiteralLike((<ElementAccessExpression>declaration.left).argumentExpression)) &&
                         !getAnnotatedTypeForAssignmentDeclaration(/*declaredType*/ undefined, declaration, symbol, declaration));
                 }
@@ -7942,9 +7943,15 @@ namespace ts {
             return getFlowTypeOfReference(reference, autoType, initialType);
         }
 
-        function isThisAlias(expression: Expression) {
-            Debug.assert(isBinaryExpression(expression));
-            const symbol = resolveName(expression.left, ((expression.left as PropertyAccessExpression).expression as Identifier).escapedText, SymbolFlags.Value, undefined, undefined, /*isUse*/ true, /*excludeGlobals*/ true)
+        function isPossiblyAliasedThisProperty(declaration: BinaryExpression, kind = getAssignmentDeclarationKind(declaration)) {
+            if (kind === AssignmentDeclarationKind.ThisProperty) {
+                return true;
+            }
+            if (!isInJSFile(declaration) || kind !== AssignmentDeclarationKind.Property || !isIdentifier((declaration.left as AccessExpression).expression)) {
+                return false;
+            }
+            const name = ((declaration.left as AccessExpression).expression as Identifier).escapedText;
+            const symbol = resolveName(declaration.left, name, SymbolFlags.Value, undefined, undefined, /*isUse*/ true, /*excludeGlobals*/ true);
             const decl = symbol?.valueDeclaration;
             return !!decl && isVariableDeclaration(decl) && decl.initializer?.kind === SyntaxKind.ThisKeyword;
         }
@@ -7982,7 +7989,7 @@ namespace ts {
                     const kind = isAccessExpression(expression)
                         ? getAssignmentDeclarationPropertyAccessKind(expression)
                         : getAssignmentDeclarationKind(expression);
-                    if (kind === AssignmentDeclarationKind.ThisProperty || kind === AssignmentDeclarationKind.Property && isThisAlias(expression)) {
+                    if (kind === AssignmentDeclarationKind.ThisProperty || isBinaryExpression(expression) && isPossiblyAliasedThisProperty(expression, kind)) {
                         if (isDeclarationInConstructor(expression)) {
                             definedInConstructor = true;
                         }
@@ -9644,8 +9651,7 @@ namespace ts {
                     for (const member of decls) {
                         const assignmentKind = getAssignmentDeclarationKind(member as BinaryExpression | CallExpression);
                         const isInstanceMember = assignmentKind === AssignmentDeclarationKind.PrototypeProperty
-                            || assignmentKind === AssignmentDeclarationKind.ThisProperty
-                            || assignmentKind === AssignmentDeclarationKind.Property && isThisAlias(member as BinaryExpression | CallExpression) // TODO: remember to test this by finding the tests by breaking or blaming this code
+                            || isBinaryExpression(member) && isPossiblyAliasedThisProperty(member, assignmentKind)
                             || assignmentKind === AssignmentDeclarationKind.ObjectDefinePrototypeProperty
                             || assignmentKind === AssignmentDeclarationKind.Prototype; // A straight `Prototype` assignment probably can never have a computed name
                         if (isStatic === !isInstanceMember && hasLateBindableName(member)) {
@@ -23170,30 +23176,12 @@ namespace ts {
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.Prototype:
                 case AssignmentDeclarationKind.PrototypeProperty:
-                    if (kind === AssignmentDeclarationKind.Property) {
-                        if (isThisAlias(binaryExpression)) {
-                            if (!binaryExpression.symbol) return true;
-                            if (binaryExpression.symbol.valueDeclaration) {
-                                const annotated = getEffectiveTypeAnnotationNode(binaryExpression.symbol.valueDeclaration);
-                                if (annotated) {
-                                    const type = getTypeFromTypeNode(annotated);
-                                    if (type) {
-                                        return type;
-                                    }
-                                }
-                            }
-                            const thisAccess = cast(binaryExpression.left, isAccessExpression);
-                            if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
-                                return false;
-                            }
-                            const thisType = checkThisExpression(thisAccess.expression);
-                            const nameStr = getElementOrPropertyAccessName(thisAccess);
-                            return nameStr !== undefined && thisType && getTypeOfPropertyOfContextualType(thisType, nameStr) || false;
-                        }
+                    if (isPossiblyAliasedThisProperty(binaryExpression, kind)) {
+                        // do nothing, fall through to ThisProperty case
                     }
                     // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                     // See `bindStaticPropertyAssignment` in `binder.ts`.
-                    if (!binaryExpression.left.symbol) {
+                    else if (!binaryExpression.left.symbol) {
                         return true;
                     }
                     else {
@@ -25087,7 +25075,8 @@ namespace ts {
         }
 
         function isThisPropertyAccessInConstructor(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol) {
-            return isThisProperty(node) && (isAutoTypedProperty(prop) || isConstructorDeclaredProperty(prop)) && getThisContainer(node, /*includeArrowFunctions*/ true) === getDeclaringConstructor(prop);
+            return (isConstructorDeclaredProperty(prop) || isThisProperty(node) && isAutoTypedProperty(prop))
+                && getThisContainer(node, /*includeArrowFunctions*/ true) === getDeclaringConstructor(prop);
         }
 
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, leftType: Type, right: Identifier | PrivateIdentifier) {
