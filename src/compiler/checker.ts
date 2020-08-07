@@ -36330,7 +36330,7 @@ namespace ts {
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.PrototypeProperty:
                     return getSymbolOfNode(entityName.parent);
-                case AssignmentDeclarationKind.ThisProperty: // TODO: not even sure what to do here
+                case AssignmentDeclarationKind.ThisProperty:
                 case AssignmentDeclarationKind.ModuleExports:
                 case AssignmentDeclarationKind.Property:
                     return getSymbolOfNode(entityName.parent.parent);
