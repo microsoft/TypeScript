@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/def.js ===
+/** @typedef {number} X */
+export let X = { a: 1, m: 1 };
+>X : Symbol(X, Decl(def.js, 1, 10), Decl(def.js, 0, 4))
+>a : Symbol(a, Decl(def.js, 1, 16))
+>m : Symbol(m, Decl(def.js, 1, 22))
+
+=== tests/cases/conformance/jsdoc/use.js ===
+import { X } from "./def";
+>X : Symbol(X, Decl(use.js, 0, 8))
+
+/** @type {X} */
+const n = 1;
+>n : Symbol(n, Decl(use.js, 3, 5))
+

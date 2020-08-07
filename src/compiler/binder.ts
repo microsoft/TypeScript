@@ -567,8 +567,10 @@ namespace ts {
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 if (isJSDocTypeAlias(node)) Debug.assert(isInJSFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
-                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypeAlias(node)) {
-                    if (!container.locals || (hasSyntacticModifier(node, ModifierFlags.Default) && !getDeclarationName(node))) {
+                const declarationName = getDeclarationName(node);
+                if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext))
+                    || (isJSDocTypeAlias(node) && !nameIsExported(container, declarationName))) {
+                    if (!container.locals || (hasSyntacticModifier(node, ModifierFlags.Default) && !declarationName)) {
                         return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                     }
                     const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
@@ -581,6 +583,17 @@ namespace ts {
                     return declareSymbol(container.locals!, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
                 }
             }
+        }
+
+        function nameIsExported(container: Node, name: __String | undefined): boolean {
+            if (!name) return false;
+            return arrayFrom(container.symbol.exports!.values()).some(sym =>
+              sym.declarations.some(decl => {
+                  const expSym = isExportAssignment(decl) ? decl.expression
+                      : isExportSpecifier(decl) ? decl.propertyName
+                      : undefined;
+                  return expSym && isIdentifier(expSym) && expSym.escapedText === name;
+              }));
         }
 
         // All container nodes are kept on a linked list in declaration order. This list is used by

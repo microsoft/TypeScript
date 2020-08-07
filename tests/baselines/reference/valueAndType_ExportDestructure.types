@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsdoc/def.js ===
+/** @typedef {number} X */
+export const { X, Y } = { X: { a: 1, m: 1 }, Y: "why" };
+>X : { a: number; m: number; }
+>Y : string
+>{ X: { a: 1, m: 1 }, Y: "why" } : { X: { a: number; m: number; }; Y: string; }
+>X : { a: number; m: number; }
+>{ a: 1, m: 1 } : { a: number; m: number; }
+>a : number
+>1 : 1
+>m : number
+>1 : 1
+>Y : string
+>"why" : "why"
+
+=== tests/cases/conformance/jsdoc/use.js ===
+import { X } from "./def";
+>X : { a: number; m: number; }
+
+/** @type {X} */
+const n = 1;
+>n : number
+>1 : 1
+

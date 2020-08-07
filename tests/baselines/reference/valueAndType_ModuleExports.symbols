@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsdoc/use.js ===
+const X = require("./def");
+>X : Symbol(X, Decl(use.js, 0, 5))
+>require : Symbol(require)
+>"./def" : Symbol("tests/cases/conformance/jsdoc/def", Decl(def.js, 0, 0))
+
+/** @type {X} */
+const n = 1;
+>n : Symbol(n, Decl(use.js, 3, 5))
+
+=== tests/cases/conformance/jsdoc/def.js ===
+/** @typedef {number} X */
+const X = { a: 1, m: 1 };
+>X : Symbol(X, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
+>a : Symbol(a, Decl(def.js, 1, 11))
+>m : Symbol(m, Decl(def.js, 1, 17))
+
+module.exports = X;
+>module.exports : Symbol("tests/cases/conformance/jsdoc/def", Decl(def.js, 0, 0))
+>module : Symbol(export=, Decl(def.js, 1, 25))
+>exports : Symbol(export=, Decl(def.js, 1, 25))
+>X : Symbol(X, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
+

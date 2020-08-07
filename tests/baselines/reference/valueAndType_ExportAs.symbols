@@ -1,0 +1,19 @@
+=== tests/cases/conformance/jsdoc/def.js ===
+/** @typedef {number} Y */
+const Y = { a: 1, m: 1 };
+>Y : Symbol(Y, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
+>a : Symbol(a, Decl(def.js, 1, 11))
+>m : Symbol(m, Decl(def.js, 1, 17))
+
+export { Y as X };
+>Y : Symbol(Y, Decl(def.js, 1, 5), Decl(def.js, 0, 4))
+>X : Symbol(X, Decl(def.js, 2, 8))
+
+=== tests/cases/conformance/jsdoc/use.js ===
+import { X } from "./def";
+>X : Symbol(X, Decl(use.js, 0, 8))
+
+/** @type {X} */
+const n = 1;
+>n : Symbol(n, Decl(use.js, 3, 5))
+

@@ -1,0 +1,29 @@
+=== tests/cases/conformance/jsdoc/use.js ===
+const X = require("./def");
+>X : { a: number; m: number; }
+>require("./def") : { a: number; m: number; }
+>require : any
+>"./def" : "./def"
+
+/** @type {X} */
+const n = 1;
+>n : error
+>1 : 1
+
+=== tests/cases/conformance/jsdoc/def.js ===
+/** @typedef {number} X */
+const X = { a: 1, m: 1 };
+>X : { a: number; m: number; }
+>{ a: 1, m: 1 } : { a: number; m: number; }
+>a : number
+>1 : 1
+>m : number
+>1 : 1
+
+module.exports = X;
+>module.exports = X : { a: number; m: number; }
+>module.exports : { a: number; m: number; }
+>module : { "\"tests/cases/conformance/jsdoc/def\"": { a: number; m: number; }; }
+>exports : { a: number; m: number; }
+>X : { a: number; m: number; }
+
