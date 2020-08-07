@@ -1614,6 +1614,10 @@ namespace ts {
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.ThisKeyword;
     }
 
+    export function isThisInitializedDeclaration(node: Node | undefined): boolean {
+        return !!node && isVariableDeclaration(node) && node.initializer?.kind === SyntaxKind.ThisKeyword;
+    }
+
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression | undefined {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
@@ -2140,8 +2144,8 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression, thisAlias?: Identifier): AssignmentDeclarationKind {
-        const special = getAssignmentDeclarationKindWorker(expr, thisAlias);
+    export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
+        const special = getAssignmentDeclarationKindWorker(expr);
         return special === AssignmentDeclarationKind.Property || isInJSFile(expr) ? special : AssignmentDeclarationKind.None;
     }
 
@@ -2192,7 +2196,7 @@ namespace ts {
         return expr.argumentExpression;
     }
 
-    function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression, thisAlias?: Identifier): AssignmentDeclarationKind {
+    function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
         if (isCallExpression(expr)) {
             if (!isBindableObjectDefinePropertyCall(expr)) {
                 return AssignmentDeclarationKind.None;
@@ -2213,7 +2217,7 @@ namespace ts {
             // F.prototype = { ... }
             return AssignmentDeclarationKind.Prototype;
         }
-        return getAssignmentDeclarationPropertyAccessKind(expr.left, thisAlias);
+        return getAssignmentDeclarationPropertyAccessKind(expr.left);
     }
 
     function isVoidZero(node: Node) {
@@ -2255,8 +2259,8 @@ namespace ts {
         return undefined;
     }
 
-    export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression, thisAlias?: Identifier): AssignmentDeclarationKind {
-        if (lhs.expression.kind === SyntaxKind.ThisKeyword || isIdentifier(lhs.expression) && lhs.expression.escapedText === thisAlias?.escapedText) {
+    export function getAssignmentDeclarationPropertyAccessKind(lhs: AccessExpression): AssignmentDeclarationKind {
+        if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
         else if (isModuleExportsAccessExpression(lhs)) {

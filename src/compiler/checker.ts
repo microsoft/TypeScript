@@ -7952,8 +7952,7 @@ namespace ts {
             }
             const name = ((declaration.left as AccessExpression).expression as Identifier).escapedText;
             const symbol = resolveName(declaration.left, name, SymbolFlags.Value, undefined, undefined, /*isUse*/ true, /*excludeGlobals*/ true);
-            const decl = symbol?.valueDeclaration;
-            return !!decl && isVariableDeclaration(decl) && decl.initializer?.kind === SyntaxKind.ThisKeyword;
+            return isThisInitializedDeclaration(symbol?.valueDeclaration);
         }
 
         function getWidenedTypeForAssignmentDeclaration(symbol: Symbol, resolvedSymbol?: Symbol) {

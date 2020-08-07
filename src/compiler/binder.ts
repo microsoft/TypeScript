@@ -188,7 +188,6 @@ namespace ts {
         let languageVersion: ScriptTarget;
         let parent: Node;
         let container: Node;
-        let thisAlias: Identifier | undefined;
         let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let lastContainer: Node;
@@ -2469,7 +2468,7 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.BinaryExpression:
-                    const specialKind = getAssignmentDeclarationKind(node as BinaryExpression, thisAlias);
+                    const specialKind = getAssignmentDeclarationKind(node as BinaryExpression);
                     switch (specialKind) {
                         case AssignmentDeclarationKind.ExportsProperty:
                             bindExportsPropertyAssignment(node as BindableStaticPropertyAssignmentExpression);
@@ -2487,6 +2486,14 @@ namespace ts {
                             bindThisPropertyAssignment(node as BindablePropertyAssignmentExpression);
                             break;
                         case AssignmentDeclarationKind.Property:
+                            const expression = ((node as BinaryExpression).left as AccessExpression).expression;
+                            if (isIdentifier(expression)) {
+                                const symbol = lookupSymbolForNameWorker(blockScopeContainer, expression.escapedText)
+                                if (isThisInitializedDeclaration(symbol?.valueDeclaration)) {
+                                    bindThisPropertyAssignment(node as BindablePropertyAssignmentExpression);
+                                    break;
+                                }
+                            }
                             bindSpecialPropertyAssignment(node as BindablePropertyAssignmentExpression);
                             break;
                         case AssignmentDeclarationKind.None:
@@ -3187,9 +3194,6 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isVariableDeclaration(node) && isIdentifier(node.name) && node.initializer?.kind === SyntaxKind.ThisKeyword) {
-                    thisAlias = node.name
-                }
                 if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
                 }
