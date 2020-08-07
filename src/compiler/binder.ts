@@ -2462,7 +2462,7 @@ namespace ts {
                     if (isInJSFile(expr) &&
                         file.commonJsModuleIndicator &&
                         isModuleExportsAccessExpression(expr) &&
-                        !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
+                        !lookupSymbolForName(blockScopeContainer, "module" as __String)) {
                         declareSymbol(file.locals!, /*parent*/ undefined, expr.expression,
                             SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
                     }
@@ -2488,7 +2488,7 @@ namespace ts {
                         case AssignmentDeclarationKind.Property:
                             const expression = ((node as BinaryExpression).left as AccessExpression).expression;
                             if (isIdentifier(expression)) {
-                                const symbol = lookupSymbolForNameWorker(blockScopeContainer, expression.escapedText)
+                                const symbol = lookupSymbolForName(blockScopeContainer, expression.escapedText)
                                 if (isThisInitializedDeclaration(symbol?.valueDeclaration)) {
                                     bindThisPropertyAssignment(node as BindablePropertyAssignmentExpression);
                                     break;
@@ -3112,7 +3112,7 @@ namespace ts {
 
         function lookupSymbolForPropertyAccess(node: BindableStaticNameExpression, lookupContainer: Node = container): Symbol | undefined {
             if (isIdentifier(node)) {
-                return lookupSymbolForNameWorker(lookupContainer, node.escapedText);
+                return lookupSymbolForName(lookupContainer, node.escapedText);
             }
             else {
                 const symbol = lookupSymbolForPropertyAccess(node.expression);
@@ -3412,7 +3412,7 @@ namespace ts {
                 return true;
             }
             else if (isIdentifier(node)) {
-                const symbol = lookupSymbolForNameWorker(sourceFile, node.escapedText);
+                const symbol = lookupSymbolForName(sourceFile, node.escapedText);
                 if (!!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && !!symbol.valueDeclaration.initializer) {
                     const init = symbol.valueDeclaration.initializer;
                     q.push(init);
@@ -3426,7 +3426,7 @@ namespace ts {
         return false;
     }
 
-    function lookupSymbolForNameWorker(container: Node, name: __String): Symbol | undefined {
+    function lookupSymbolForName(container: Node, name: __String): Symbol | undefined {
         const local = container.locals && container.locals.get(name);
         if (local) {
             return local.exportSymbol || local;
