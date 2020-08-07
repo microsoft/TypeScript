@@ -35323,9 +35323,7 @@ namespace ts {
                     error(node, Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type);
                 }
 
-                if (isImportSpecifier(node) &&
-                    (target.valueDeclaration && target.valueDeclaration.flags & NodeFlags.Deprecated
-                        || every(target.declarations, d => !!(d.flags & NodeFlags.Deprecated)))) {
+                if (isImportSpecifier(node) && every(target.declarations, d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated))) {
                     errorOrSuggestion(/* isError */ false, node.name, Diagnostics._0_is_deprecated, symbol.escapedName as string);
                 }
             }
