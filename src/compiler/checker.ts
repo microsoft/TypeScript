@@ -23210,6 +23210,7 @@ namespace ts {
                         }
                         return !isInJSFile(decl);
                     }
+                    // fall through to ThisProperty for this-aliases
                 case AssignmentDeclarationKind.ModuleExports:
                 case AssignmentDeclarationKind.ThisProperty:
                     if (!binaryExpression.symbol) return true;
