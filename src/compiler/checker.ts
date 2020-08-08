@@ -37940,6 +37940,9 @@ namespace ts {
                             if (flags & ModifierFlags.Private) {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "abstract");
                             }
+                            if (flags & ModifierFlags.Async && lastAsync) {
+                                return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "async", "abstract");
+                            }
                         }
                         if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.PrivateIdentifier) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "abstract");
@@ -37957,6 +37960,9 @@ namespace ts {
                         }
                         else if (node.kind === SyntaxKind.Parameter) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "async");
+                        }
+                        if (flags & ModifierFlags.Abstract) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "async", "abstract");
                         }
                         flags |= ModifierFlags.Async;
                         lastAsync = modifier;
