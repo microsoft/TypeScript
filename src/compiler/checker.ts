@@ -13809,11 +13809,11 @@ namespace ts {
                     if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
                         // Return union of trueType and falseType for 'any' since it matches anything
                         if (checkType.flags & TypeFlags.Any) {
-                            (extraTypes || (extraTypes = [])).push(instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper));
+                            (extraTypes || (extraTypes = [])).push(instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper));
                         }
                         // If falseType is an immediately nested conditional type that isn't distributive or has an
                         // identical checkType, switch to that type and loop.
-                        const falseType = root.falseType;
+                        const falseType = getTypeFromTypeNode(root.node.falseType);
                         if (falseType.flags & TypeFlags.Conditional) {
                             const newRoot = (<ConditionalType>falseType).root;
                             if (newRoot.node.parent === root.node && (!newRoot.isDistributive || newRoot.checkType === root.checkType)) {
@@ -13821,7 +13821,7 @@ namespace ts {
                                 continue;
                             }
                         }
-                        result = instantiateTypeWithoutDepthIncrease(falseType, mapper);
+                        result = instantiateType(falseType, mapper);
                         break;
                     }
                     // Return trueType for a definitely true extends check. We check instantiations of the two
@@ -13830,7 +13830,7 @@ namespace ts {
                     //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                     // doesn't immediately resolve to 'string' instead of being deferred.
                     if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                        result = instantiateTypeWithoutDepthIncrease(root.trueType, combinedMapper || mapper);
+                        result = instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper);
                         break;
                     }
                 }
@@ -13850,15 +13850,15 @@ namespace ts {
         }
 
         function getTrueTypeFromConditionalType(type: ConditionalType) {
-            return type.resolvedTrueType || (type.resolvedTrueType = instantiateType(type.root.trueType, type.mapper));
+            return type.resolvedTrueType || (type.resolvedTrueType = instantiateType(getTypeFromTypeNode(type.root.node.trueType), type.mapper));
         }
 
         function getFalseTypeFromConditionalType(type: ConditionalType) {
-            return type.resolvedFalseType || (type.resolvedFalseType = instantiateType(type.root.falseType, type.mapper));
+            return type.resolvedFalseType || (type.resolvedFalseType = instantiateType(getTypeFromTypeNode(type.root.node.falseType), type.mapper));
         }
 
         function getInferredTrueTypeFromConditionalType(type: ConditionalType) {
-            return type.resolvedInferredTrueType || (type.resolvedInferredTrueType = type.combinedMapper ? instantiateType(type.root.trueType, type.combinedMapper) : getTrueTypeFromConditionalType(type));
+            return type.resolvedInferredTrueType || (type.resolvedInferredTrueType = type.combinedMapper ? instantiateType(getTypeFromTypeNode(type.root.node.trueType), type.combinedMapper) : getTrueTypeFromConditionalType(type));
         }
 
         function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] | undefined {
@@ -13885,8 +13885,6 @@ namespace ts {
                     node,
                     checkType,
                     extendsType: getTypeFromTypeNode(node.extendsType),
-                    trueType: getTypeFromTypeNode(node.trueType),
-                    falseType: getTypeFromTypeNode(node.falseType),
                     isDistributive: !!(checkType.flags & TypeFlags.TypeParameter),
                     inferTypeParameters: getInferTypeParameters(node),
                     outerTypeParameters,
@@ -14874,17 +14872,6 @@ namespace ts {
             instantiationDepth++;
             const result = instantiateTypeWorker(type, mapper);
             instantiationDepth--;
-            return result;
-        }
-
-        /**
-         * This can be used to avoid the penalty on instantiation depth for types which result from immediate
-         * simplification. It essentially removes the depth increase done in `instantiateType`.
-         */
-        function instantiateTypeWithoutDepthIncrease(type: Type, mapper: TypeMapper | undefined) {
-            instantiationDepth--;
-            const result = instantiateType(type, mapper);
-            instantiationDepth++;
             return result;
         }
 
@@ -18199,56 +18186,44 @@ namespace ts {
         // has expanded into `[A<NonNullable<NonNullable<NonNullable<NonNullable<NonNullable<T>>>>>>]`
         // in such cases we need to terminate the expansion, and we do so here.
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
-            // We track all object types that have an associated symbol (representing the origin of the type)
-            if (depth >= 5 && type.flags & TypeFlags.Object) {
-                if (!isObjectOrArrayLiteralType(type)) {
-                    const symbol = type.symbol;
-                    if (symbol) {
-                        let count = 0;
-                        for (let i = 0; i < depth; i++) {
-                            const t = stack[i];
-                            if (t.flags & TypeFlags.Object && t.symbol === symbol) {
-                                count++;
-                                if (count >= 5) return true;
-                            }
-                        }
-                    }
-                }
-                if (getObjectFlags(type) && ObjectFlags.Reference && !!(type as TypeReference).node) {
-                    const root = (type as TypeReference).target;
+            if (depth >= 5) {
+                const identity = getRecursionIdentity(type);
+                if (identity) {
                     let count = 0;
                     for (let i = 0; i < depth; i++) {
-                        const t = stack[i];
-                        if (getObjectFlags(t) && ObjectFlags.Reference && !!(t as TypeReference).node && (t as TypeReference).target === root) {
+                        if (getRecursionIdentity(stack[i]) === identity) {
                             count++;
                             if (count >= 5) return true;
                         }
                     }
                 }
             }
-            if (depth >= 5 && type.flags & TypeFlags.IndexedAccess) {
-                const root = getRootObjectTypeFromIndexedAccessChain(type);
-                let count = 0;
-                for (let i = 0; i < depth; i++) {
-                    const t = stack[i];
-                    if (getRootObjectTypeFromIndexedAccessChain(t) === root) {
-                        count++;
-                        if (count >= 5) return true;
-                    }
-                }
-            }
             return false;
         }
 
-        /**
-         * Gets the leftmost object type in a chain of indexed accesses, eg, in A[P][Q], returns A
-         */
-        function getRootObjectTypeFromIndexedAccessChain(type: Type) {
-            let t = type;
-            while (t.flags & TypeFlags.IndexedAccess) {
-                t = (t as IndexedAccessType).objectType;
+        function getRecursionIdentity(type: Type) {
+            if (type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
+                if (type.symbol) {
+                    // We track all object types that have an associated symbol (representing the origin of the type)
+                    return type.symbol;
+                }
+                if (getObjectFlags(type) && ObjectFlags.Reference && (type as TypeReference).node || isTupleType(type)) {
+                    // Deferred type references and tuple types are tracked through their target type
+                    return (type as TypeReference).target;
+                }
             }
-            return t;
+            if (type.flags & TypeFlags.IndexedAccess) {
+                // Identity is the leftmost object type in a chain of indexed accesses, eg, in A[P][Q] it is A
+                do {
+                    type = (type as IndexedAccessType).objectType;
+                } while (type.flags & TypeFlags.IndexedAccess);
+                return type;
+            }
+            if (type.flags & TypeFlags.Conditional) {
+                // The root object represents the origin of the conditional type
+                return (type as ConditionalType).root;
+            }
+            return undefined;
         }
 
         function isPropertyIdenticalTo(sourceProp: Symbol, targetProp: Symbol): boolean {
@@ -19153,9 +19128,7 @@ namespace ts {
         function isTypeParameterAtTopLevel(type: Type, typeParameter: TypeParameter): boolean {
             return !!(type === typeParameter ||
                 type.flags & TypeFlags.UnionOrIntersection && some((<UnionOrIntersectionType>type).types, t => isTypeParameterAtTopLevel(t, typeParameter)) ||
-                type.flags & TypeFlags.Conditional && (
-                    isTypeParameterAtTopLevel(getTrueTypeFromConditionalType(<ConditionalType>type), typeParameter) ||
-                    isTypeParameterAtTopLevel(getFalseTypeFromConditionalType(<ConditionalType>type), typeParameter)));
+                type.flags & TypeFlags.Conditional && (getTrueTypeFromConditionalType(<ConditionalType>type) === typeParameter || getFalseTypeFromConditionalType(<ConditionalType>type) === typeParameter));
         }
 
         /** Create an object with properties named in the string literal type. Every property has type `any` */
@@ -19311,7 +19284,7 @@ namespace ts {
             let propagationType: Type;
             let inferencePriority = InferencePriority.MaxValue;
             let allowComplexConstraintInference = true;
-            let objectTypeComparisonDepth = 0;
+            let targetStackDepth = 0;
             const targetStack: Type[] = [];
             inferFromTypes(originalSource, originalTarget);
 
@@ -19471,18 +19444,8 @@ namespace ts {
                     inferFromTypes((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType);
                     inferFromTypes((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType);
                 }
-                else if (source.flags & TypeFlags.Conditional && target.flags & TypeFlags.Conditional) {
-                    inferFromTypes((<ConditionalType>source).checkType, (<ConditionalType>target).checkType);
-                    inferFromTypes((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType);
-                    inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
-                    inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
-                }
                 else if (target.flags & TypeFlags.Conditional) {
-                    const savePriority = priority;
-                    priority |= contravariant ? InferencePriority.ContravariantConditional : 0;
-                    const targetTypes = [getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)];
-                    inferToMultipleTypes(source, targetTypes, target.flags);
-                    priority = savePriority;
+                    invokeWithDepthLimit(<ConditionalType>source, <ConditionalType>target, inferToConditionalType);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, target.flags);
@@ -19739,6 +19702,22 @@ namespace ts {
                 return false;
             }
 
+            function inferToConditionalType(source: ConditionalType, target: ConditionalType) {
+                if (source.flags & TypeFlags.Conditional) {
+                    inferFromTypes(source.checkType, target.checkType);
+                    inferFromTypes(source.extendsType, target.extendsType);
+                    inferFromTypes(getTrueTypeFromConditionalType(source), getTrueTypeFromConditionalType(target));
+                    inferFromTypes(getFalseTypeFromConditionalType(source), getFalseTypeFromConditionalType(target));
+                }
+                else {
+                    const savePriority = priority;
+                    priority |= contravariant ? InferencePriority.ContravariantConditional : 0;
+                    const targetTypes = [getTrueTypeFromConditionalType(target), getFalseTypeFromConditionalType(target)];
+                    inferToMultipleTypes(source, targetTypes, target.flags);
+                    priority = savePriority;
+                }
+            }
+
             function inferFromObjectTypes(source: Type, target: Type) {
                 // If we are already processing another target type with the same associated symbol (such as
                 // an instantiation of the same generic type), we do not explore this target as it would yield
@@ -19749,28 +19728,31 @@ namespace ts {
                 const symbolOrType = getObjectFlags(target) & ObjectFlags.Reference && (target as TypeReference).node ? getNormalizedType(target, /*writing*/ false) : isNonConstructorObject ? isTupleType(target) ? target.target : target.symbol : undefined;
                 if (symbolOrType) {
                     if (contains(symbolOrTypeStack, symbolOrType)) {
-                        if (getObjectFlags(target) & ObjectFlags.Reference && (target as TypeReference).node) {
-                            // Don't set the circularity flag for re-encountered recursive type references just because we're already exploring them
-                            return;
+                        // Don't set the circularity flag for re-encountered recursive type references just because we're already exploring them
+                        if (!(getObjectFlags(target) & ObjectFlags.Reference && (target as TypeReference).node)) {
+                            inferencePriority = InferencePriority.Circularity;
                         }
-                        inferencePriority = InferencePriority.Circularity;
-                        return;
-                    }
-                    targetStack[objectTypeComparisonDepth] = target;
-                    objectTypeComparisonDepth++;
-                    if (isDeeplyNestedType(target, targetStack, objectTypeComparisonDepth)) {
-                        inferencePriority = InferencePriority.Circularity;
-                        objectTypeComparisonDepth--;
                         return;
                     }
                     (symbolOrTypeStack || (symbolOrTypeStack = [])).push(symbolOrType);
-                    inferFromObjectTypesWorker(source, target);
+                    invokeWithDepthLimit(source, target, inferFromObjectTypesWorker);
                     symbolOrTypeStack.pop();
-                    objectTypeComparisonDepth--;
                 }
                 else {
                     inferFromObjectTypesWorker(source, target);
                 }
+            }
+
+            function invokeWithDepthLimit(source: Type, target: Type, action: (source: Type, target: Type) => void) {
+                targetStack[targetStackDepth] = target;
+                targetStackDepth++;
+                if (!isDeeplyNestedType(target, targetStack, targetStackDepth)) {
+                    action(source, target);
+                }
+                else {
+                    inferencePriority = InferencePriority.Circularity;
+                }
+                targetStackDepth--;
             }
 
             function inferFromObjectTypesWorker(source: Type, target: Type) {
