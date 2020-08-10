@@ -28,10 +28,12 @@ var assert: typeof _chai.assert = _chai.assert;
     };
 }
 
+// tslint:disable-next-line function-constructor
 var global: NodeJS.Global = Function("return this").call(undefined);
 
 declare var window: {};
 declare var XMLHttpRequest: {
+    // tslint:disable-next-line callable-types
     new(): XMLHttpRequest;
 };
 interface XMLHttpRequest {

@@ -183,7 +183,9 @@ namespace compiler {
         }
 
         public getSourceMapRecord(): string | undefined {
+            // tslint:disable-next-line no-unnecessary-type-assertion
             if (this.result!.sourceMaps && this.result!.sourceMaps!.length > 0) {
+                // tslint:disable-next-line no-unnecessary-type-assertion
                 return Harness.SourceMapRecorder.getSourceMapRecord(this.result!.sourceMaps!, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
             }
         }

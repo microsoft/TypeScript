@@ -389,6 +389,7 @@ namespace ts.server {
                     this.inspectValuePromise = undefined;
                     break;
                 case EventInitializationFailed:
+                    // tslint:disable-next-line one-line
                     {
                         const body: protocol.TypesInstallerInitializationFailedEventBody = {
                             message: response.message
@@ -398,6 +399,7 @@ namespace ts.server {
                         break;
                     }
                 case EventBeginInstallTypes:
+                    // tslint:disable-next-line one-line
                     {
                         const body: protocol.BeginInstallTypesEventBody = {
                             eventId: response.eventId,
@@ -408,6 +410,7 @@ namespace ts.server {
                         break;
                     }
                 case EventEndInstallTypes:
+                    // tslint:disable-next-line one-line
                     {
                         if (this.telemetryEnabled) {
                             const body: protocol.TypingsInstalledTelemetryEventBody = {
@@ -432,11 +435,13 @@ namespace ts.server {
                         break;
                     }
                 case ActionInvalidate:
+                    // tslint:disable-next-line one-line
                     {
                         this.projectService.updateTypingsForProject(response);
                         break;
                     }
                 case ActionSet:
+                    // tslint:disable-next-line one-line
                     {
                         if (this.activeRequestCount > 0) {
                             this.activeRequestCount--;

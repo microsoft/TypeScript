@@ -143,6 +143,7 @@ namespace ts {
 
         let symbolCount = 0;
 
+        // tslint:disable-next-line callable-types
         let Symbol: { new (flags: SymbolFlags, name: __String): Symbol }; // tslint:disable-line variable-name
         let classifiableNames: UnderscoreEscapedMap<true>;
 
@@ -2754,7 +2755,9 @@ namespace ts {
 
             // If this is a property-parameter, then also declare the property symbol into the
             // containing class.
+            // tslint:disable-next-line no-unnecessary-type-assertion
             if (isParameterPropertyDeclaration(node)) {
+                // tslint:disable-next-line no-unnecessary-type-assertion
                 const classDeclaration = <ClassLikeDeclaration>node.parent.parent;
                 declareSymbol(classDeclaration.symbol.members!, classDeclaration.symbol, node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
             }

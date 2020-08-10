@@ -1,9 +1,8 @@
 language: node_js
 
 node_js:
-  - 'node'
+  - '8'
   - '10'
-  - '6'
 
 sudo: false
 
@@ -21,11 +20,12 @@ branches:
   - release-2.9
   - release-3.0
   - release-3.1
+  - release-3.2
 
 install:
   - npm uninstall typescript --no-save
   - npm uninstall tslint --no-save
-  - npm install
+  - npm ci
 
 cache:
   directories:

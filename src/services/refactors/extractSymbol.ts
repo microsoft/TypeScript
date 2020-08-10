@@ -450,6 +450,7 @@ namespace ts.refactor.extractSymbol {
                         rangeFacts |= RangeFacts.UsesThis;
                         break;
                     case SyntaxKind.LabeledStatement:
+                        // tslint:disable-next-line one-line
                         {
                             const label = (<LabeledStatement>node).label;
                             (seenLabels || (seenLabels = [])).push(label.escapedText);
@@ -459,6 +460,7 @@ namespace ts.refactor.extractSymbol {
                         }
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement:
+                        // tslint:disable-next-line one-line
                         {
                             const label = (<BreakStatement | ContinueStatement>node).label;
                             if (label) {

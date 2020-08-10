@@ -600,6 +600,7 @@ namespace FourSlash {
                 throw new Error("Expected exactly one output from emit of " + this.activeFile.fileName);
             }
 
+            // tslint:disable-next-line function-constructor
             const evaluation = new Function(`${emit.outputFiles[0].text};\r\nreturn (${expr});`)();
             if (evaluation !== value) {
                 this.raiseError(`Expected evaluation of expression "${expr}" to equal "${value}", but got "${evaluation}"`);
