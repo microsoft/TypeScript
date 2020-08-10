@@ -3651,20 +3651,7 @@ namespace ts {
         throwIfCancellationRequested(): void;
     }
 
-    /*@internal*/
-    export enum RefFileKind {
-        Import,
-        ReferenceFile,
-        TypeReferenceDirective
-    }
 
-    /*@internal*/
-    export interface RefFile {
-        referencedFileName: string;
-        kind: RefFileKind;
-        index: number;
-        file: Path;
-    }
 
     export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
@@ -3684,8 +3671,6 @@ namespace ts {
          */
         /* @internal */
         getMissingFilePaths(): readonly Path[];
-        /* @internal */
-        getRefFileMap(): MultiMap<Path, RefFile> | undefined;
         /* @internal */
         getSkippedTrippleSlashReferences(): Set<Path> | undefined;
         /* @internal */
@@ -3755,6 +3740,8 @@ namespace ts {
         /* @internal */ redirectTargetsMap: MultiMap<string, string>;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
+        /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+        /* @internal */ getCanonicalFileName(fileName: string): string;
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
@@ -5690,6 +5677,7 @@ namespace ts {
         lib?: string[];
         /*@internal*/listEmittedFiles?: boolean;
         /*@internal*/listFiles?: boolean;
+        /*@internal*/explainFiles?: boolean;
         /*@internal*/listFilesOnly?: boolean;
         locale?: string;
         mapRoot?: string;

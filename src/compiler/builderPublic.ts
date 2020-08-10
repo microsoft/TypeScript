@@ -53,6 +53,10 @@ namespace ts {
          * Get a list of files in the program
          */
         getSourceFiles(): readonly SourceFile[];
+        /*@internal*/
+        getSourceFileByPath(path: Path): SourceFile | undefined;
+        /*@internal*/
+        getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
         /**
          * Get the diagnostics for compiler options
          */
@@ -105,6 +109,8 @@ namespace ts {
          * Get the current directory of the program
          */
         getCurrentDirectory(): string;
+        /*@internal*/
+        getCanonicalFileName(fileName: string): string;
         /*@internal*/
         close(): void;
     }

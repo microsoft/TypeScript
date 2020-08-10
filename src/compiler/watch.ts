@@ -118,8 +118,11 @@ namespace ts {
      */
     export interface ProgramToEmitFilesAndReportErrors {
         getCurrentDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
         getCompilerOptions(): CompilerOptions;
         getSourceFiles(): readonly SourceFile[];
+        getSourceFileByPath(path: Path): SourceFile | undefined;
+        getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
         getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
         getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
@@ -130,12 +133,67 @@ namespace ts {
         emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
     }
 
-    export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
-        if (program.getCompilerOptions().listFiles || program.getCompilerOptions().listFilesOnly) {
+    export function listFiles(program: ProgramToEmitFilesAndReportErrors, write: (s: string) => void) {
+        const options = program.getCompilerOptions();
+        if (options.explainFiles) {
+            explainFiles(program, write);
+        }
+        else if (options.listFiles || options.listFilesOnly) {
             forEach(program.getSourceFiles(), file => {
-                writeFileName(file.fileName);
+                write(file.fileName);
             });
         }
+    }
+
+    function explainFiles(program: ProgramToEmitFilesAndReportErrors, write: (s: string) => void) {
+        const reasons = program.getFileIncludeReasons();
+        const filesByOrder = createMap<SourceFile[]>();
+        for (const file of program.getSourceFiles()) {
+            const order = reduceLeft(reasons.get(file.path), (memo, reason) => min(memo, reason.kind, compareValues), FileIncludeKind.AutomaticTypeDirectiveFile)!.toString();
+            const existing = filesByOrder.get(order);
+            if (existing) {
+                existing.push(file);
+            }
+            else {
+                filesByOrder.set(order, [file]);
+            }
+        }
+        for (let order = FileIncludeKind.RootFile; order <= FileIncludeKind.AutomaticTypeDirectiveFile; order++) {
+            const files = filesByOrder.get(order.toString());
+            if (!files) continue;
+            write(`${FileIncludeKind[order]}s::`);
+            for (const file of files) {
+
+                write(`${toFileName(program, file)}${file.redirectInfo ? " -> " + toFileName(program, file.redirectInfo.redirectTarget) : ""}`);
+                for (const reason of reasons.get(file.path)!) {
+                    if (reason.kind !== order ||
+                        isReferencedFileKind(order) ||
+                        (reason.kind === FileIncludeKind.AutomaticTypeDirectiveFile && !!reason.packageId)) {
+                        // Add information about the reason
+                        write(explainFileIncludeReason(program, reason));
+                    }
+                }
+            }
+            write("");
+        }
+    }
+
+    function toFileName(program: ProgramToEmitFilesAndReportErrors, file: SourceFile | string) {
+        return convertToRelativePath(isString(file) ? file : file.fileName, program.getCurrentDirectory(), fileName => program.getCanonicalFileName(fileName));
+    }
+
+    function explainFileIncludeReason(program: ProgramToEmitFilesAndReportErrors, reason: FileIncludeReason) {
+        if (isReferencedFile(reason)) {
+            const { file, pos, end, packageId } = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason, /*includePackageId*/ true);
+            return `  ${FileIncludeKind[reason.kind]}:: ${packageId? " " + packageIdToString(packageId) + ": " : ""}${file.text.substring(pos, end)} from ${toFileName(program, file)} ${reason.index}`;
+        }
+        if (reason.kind === FileIncludeKind.ProjectReferenceFile) {
+            return `  ${FileIncludeKind[reason.kind]}:: from ${toFileName(program, reason.config)}`;
+        }
+        if (reason.kind === FileIncludeKind.AutomaticTypeDirectiveFile && reason.packageId) {
+            return `  ${FileIncludeKind[reason.kind]}:: Package:: ${packageIdToString(reason.packageId)}`;
+        }
+        return `  ${FileIncludeKind[reason.kind]}`;
     }
 
     /**
@@ -144,7 +202,7 @@ namespace ts {
     export function emitFilesAndReportErrors(
         program: ProgramToEmitFilesAndReportErrors,
         reportDiagnostic: DiagnosticReporter,
-        writeFileName?: (s: string) => void,
+        write?: (s: string) => void,
         reportSummary?: ReportEmitErrorSummary,
         writeFile?: WriteFileCallback,
         cancellationToken?: CancellationToken,
@@ -181,13 +239,13 @@ namespace ts {
 
         const diagnostics = sortAndDeduplicateDiagnostics(allDiagnostics);
         diagnostics.forEach(reportDiagnostic);
-        if (writeFileName) {
+        if (write) {
             const currentDir = program.getCurrentDirectory();
             forEach(emittedFiles, file => {
                 const filepath = getNormalizedAbsolutePath(file, currentDir);
-                writeFileName(`TSFILE: ${filepath}`);
+                write(`TSFILE: ${filepath}`);
             });
-            listFiles(program, writeFileName);
+            listFiles(program, write);
         }
 
         if (reportSummary) {
@@ -203,7 +261,7 @@ namespace ts {
     export function emitFilesAndReportErrorsAndGetExitStatus(
         program: ProgramToEmitFilesAndReportErrors,
         reportDiagnostic: DiagnosticReporter,
-        writeFileName?: (s: string) => void,
+        write?: (s: string) => void,
         reportSummary?: ReportEmitErrorSummary,
         writeFile?: WriteFileCallback,
         cancellationToken?: CancellationToken,
@@ -213,7 +271,7 @@ namespace ts {
         const { emitResult, diagnostics } = emitFilesAndReportErrors(
             program,
             reportDiagnostic,
-            writeFileName,
+            write,
             reportSummary,
             writeFile,
             cancellationToken,
@@ -385,7 +443,7 @@ namespace ts {
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
     function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
-        const writeFileName = (s: string) => system.write(s + system.newLine);
+        const write = (s: string) => system.write(s + system.newLine);
         const result = createProgramHost(system, createProgram) as WatchCompilerHost<T>;
         copyProperties(result, createWatchHost(system, reportWatchStatus));
         result.afterProgramCreate = builderProgram => {
@@ -395,7 +453,7 @@ namespace ts {
             emitFilesAndReportErrors(
                 builderProgram,
                 reportDiagnostic,
-                writeFileName,
+                write,
                 errorCount => result.onWatchStatusChange!(
                     createCompilerDiagnostic(getWatchErrorSummaryDiagnosticMessage(errorCount), errorCount),
                     newLine,
