@@ -19278,14 +19278,12 @@ namespace ts {
         }
 
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
-            let symbolOrTypeStack: (Symbol | Type)[];
-            let visited: ESMap<string, number>;
             let bivariant = false;
             let propagationType: Type;
             let inferencePriority = InferencePriority.MaxValue;
             let allowComplexConstraintInference = true;
-            let targetStackDepth = 0;
-            const targetStack: Type[] = [];
+            let visited: ESMap<string, number>;
+            let targetStack: Type[];
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type): void {
@@ -19408,7 +19406,7 @@ namespace ts {
                         // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
                         const simplified = getSimplifiedType(target, /*writing*/ false);
                         if (simplified !== target) {
-                            invokeOnce(source, simplified, inferFromTypes);
+                            invokeWithDepthLimit(source, simplified, inferFromTypes);
                         }
                         else if (target.flags & TypeFlags.IndexedAccess) {
                             const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
@@ -19417,7 +19415,7 @@ namespace ts {
                             if (indexType.flags & TypeFlags.Instantiable) {
                                 const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType, /*writing*/ false), indexType, /*writing*/ false);
                                 if (simplified && simplified !== target) {
-                                    invokeOnce(source, simplified, inferFromTypes);
+                                    invokeWithDepthLimit(source, simplified, inferFromTypes);
                                 }
                             }
                         }
@@ -19478,7 +19476,7 @@ namespace ts {
                         source = apparentSource;
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
-                        invokeOnce(source, target, inferFromObjectTypes);
+                        invokeWithDepthLimit(source, target, inferFromObjectTypes);
                     }
                 }
                 if (source.flags & TypeFlags.Simplifiable) {
@@ -19496,7 +19494,7 @@ namespace ts {
                 priority = savePriority;
             }
 
-            function invokeOnce(source: Type, target: Type, action: (source: Type, target: Type) => void) {
+            function invokeWithDepthLimit(source: Type, target: Type, action: (source: Type, target: Type) => void) {
                 const key = source.id + "," + target.id;
                 const status = visited && visited.get(key);
                 if (status !== undefined) {
@@ -19506,7 +19504,17 @@ namespace ts {
                 (visited || (visited = new Map<string, number>())).set(key, InferencePriority.Circularity);
                 const saveInferencePriority = inferencePriority;
                 inferencePriority = InferencePriority.MaxValue;
-                action(source, target);
+                // It is possible for recursion to originate in generative types that create infinitely deep instantiations,
+                // with unique identities, for example 'type RecArray<T> = T | Array<RecArray<T>>'. We explore up to five
+                // nested instantiations of such types using the same isDeeplyNestedType check as recursiveTypeRelatedTo.
+                (targetStack || (targetStack = [])).push(target);
+                if (!isDeeplyNestedType(target, targetStack, targetStack.length)) {
+                    action(source, target);
+                }
+                else {
+                    inferencePriority = InferencePriority.Circularity;
+                }
+                targetStack.pop();
                 visited.set(key, inferencePriority);
                 inferencePriority = Math.min(inferencePriority, saveInferencePriority);
             }
@@ -19719,43 +19727,6 @@ namespace ts {
             }
 
             function inferFromObjectTypes(source: Type, target: Type) {
-                // If we are already processing another target type with the same associated symbol (such as
-                // an instantiation of the same generic type), we do not explore this target as it would yield
-                // no further inferences. We exclude the static side of classes from this check since it shares
-                // its symbol with the instance side which would lead to false positives.
-                const isNonConstructorObject = target.flags & TypeFlags.Object &&
-                    !(getObjectFlags(target) & ObjectFlags.Anonymous && target.symbol && target.symbol.flags & SymbolFlags.Class);
-                const symbolOrType = getObjectFlags(target) & ObjectFlags.Reference && (target as TypeReference).node ? getNormalizedType(target, /*writing*/ false) : isNonConstructorObject ? isTupleType(target) ? target.target : target.symbol : undefined;
-                if (symbolOrType) {
-                    if (contains(symbolOrTypeStack, symbolOrType)) {
-                        // Don't set the circularity flag for re-encountered recursive type references just because we're already exploring them
-                        if (!(getObjectFlags(target) & ObjectFlags.Reference && (target as TypeReference).node)) {
-                            inferencePriority = InferencePriority.Circularity;
-                        }
-                        return;
-                    }
-                    (symbolOrTypeStack || (symbolOrTypeStack = [])).push(symbolOrType);
-                    invokeWithDepthLimit(source, target, inferFromObjectTypesWorker);
-                    symbolOrTypeStack.pop();
-                }
-                else {
-                    inferFromObjectTypesWorker(source, target);
-                }
-            }
-
-            function invokeWithDepthLimit(source: Type, target: Type, action: (source: Type, target: Type) => void) {
-                targetStack[targetStackDepth] = target;
-                targetStackDepth++;
-                if (!isDeeplyNestedType(target, targetStack, targetStackDepth)) {
-                    action(source, target);
-                }
-                else {
-                    inferencePriority = InferencePriority.Circularity;
-                }
-                targetStackDepth--;
-            }
-
-            function inferFromObjectTypesWorker(source: Type, target: Type) {
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (
                     (<TypeReference>source).target === (<TypeReference>target).target || isArrayType(source) && isArrayType(target))) {
                     // If source and target are references to the same generic type, infer from type arguments
