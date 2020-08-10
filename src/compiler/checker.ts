@@ -23126,14 +23126,7 @@ namespace ts {
                 case SyntaxKind.AmpersandAmpersandEqualsToken:
                 case SyntaxKind.BarBarEqualsToken:
                 case SyntaxKind.QuestionQuestionEqualsToken:
-                    if (node !== right) {
-                        return undefined;
-                    }
-                    const contextSensitive = getIsContextSensitiveAssignmentOrContextType(binaryExpression);
-                    if (!contextSensitive) {
-                        return undefined;
-                    }
-                    return contextSensitive === true ? getTypeOfExpression(left) : contextSensitive;
+                    return node === right ? getContextualTypeForAssignmentDeclaration(binaryExpression) : undefined;
                 case SyntaxKind.BarBarToken:
                 case SyntaxKind.QuestionQuestionToken:
                     // When an || expression has a contextual type, the operands are contextually typed by that type, except
@@ -23154,27 +23147,27 @@ namespace ts {
 
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for assignment declarations unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
-        function getIsContextSensitiveAssignmentOrContextType(binaryExpression: BinaryExpression): boolean | Type {
+        function getContextualTypeForAssignmentDeclaration(binaryExpression: BinaryExpression): Type | undefined {
             const kind = getAssignmentDeclarationKind(binaryExpression);
             switch (kind) {
                 case AssignmentDeclarationKind.None:
-                    return true;
+                    return getTypeOfExpression(binaryExpression.left);
                 case AssignmentDeclarationKind.Property:
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.Prototype:
                 case AssignmentDeclarationKind.PrototypeProperty:
                     if (isPossiblyAliasedThisProperty(binaryExpression, kind)) {
-                        return getIsContextSensitiveOfThisProperty(binaryExpression, kind);
+                        return getContextualTypeForThisPropertyAssignment(binaryExpression, kind);
                     }
                     // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                     // See `bindStaticPropertyAssignment` in `binder.ts`.
                     else if (!binaryExpression.left.symbol) {
-                        return true;
+                        return getTypeOfExpression(binaryExpression.left);
                     }
                     else {
                         const decl = binaryExpression.left.symbol.valueDeclaration;
                         if (!decl) {
-                            return false;
+                            return undefined;
                         }
                         const lhs = cast(binaryExpression.left, isAccessExpression);
                         const overallAnnotation = getEffectiveTypeAnnotationNode(decl);
@@ -23189,18 +23182,17 @@ namespace ts {
                                 if (annotated) {
                                     const nameStr = getElementOrPropertyAccessName(lhs);
                                     if (nameStr !== undefined) {
-                                        const type = getTypeOfPropertyOfContextualType(getTypeFromTypeNode(annotated), nameStr);
-                                        return type || false;
+                                        return getTypeOfPropertyOfContextualType(getTypeFromTypeNode(annotated), nameStr);
                                     }
                                 }
-                                return false;
+                                return undefined;
                             }
                         }
-                        return !isInJSFile(decl);
+                        return isInJSFile(decl) ? undefined : getTypeOfExpression(binaryExpression.left);
                     }
                 case AssignmentDeclarationKind.ModuleExports:
                 case AssignmentDeclarationKind.ThisProperty:
-                    return getIsContextSensitiveOfThisProperty(binaryExpression, kind);
+                    return getContextualTypeForThisPropertyAssignment(binaryExpression, kind);
                 case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                 case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                 case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
@@ -23222,8 +23214,8 @@ namespace ts {
             return isThisInitializedDeclaration(symbol?.valueDeclaration);
         }
 
-        function getIsContextSensitiveOfThisProperty(binaryExpression: BinaryExpression, kind: AssignmentDeclarationKind) {
-            if (!binaryExpression.symbol) return true;
+        function getContextualTypeForThisPropertyAssignment(binaryExpression: BinaryExpression, kind: AssignmentDeclarationKind): Type | undefined {
+            if (!binaryExpression.symbol) return getTypeOfExpression(binaryExpression.left);
             if (binaryExpression.symbol.valueDeclaration) {
                 const annotated = getEffectiveTypeAnnotationNode(binaryExpression.symbol.valueDeclaration);
                 if (annotated) {
@@ -23233,14 +23225,14 @@ namespace ts {
                     }
                 }
             }
-            if (kind === AssignmentDeclarationKind.ModuleExports) return false;
+            if (kind === AssignmentDeclarationKind.ModuleExports) return undefined;
             const thisAccess = cast(binaryExpression.left, isAccessExpression);
             if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
-                return false;
+                return undefined;
             }
             const thisType = checkThisExpression(thisAccess.expression);
             const nameStr = getElementOrPropertyAccessName(thisAccess);
-            return nameStr !== undefined && thisType && getTypeOfPropertyOfContextualType(thisType, nameStr) || false;
+            return nameStr !== undefined && getTypeOfPropertyOfContextualType(thisType, nameStr) || undefined;
 
         }
 
