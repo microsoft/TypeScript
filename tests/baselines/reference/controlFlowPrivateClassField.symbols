@@ -1,0 +1,24 @@
+=== tests/cases/compiler/controlFlowPrivateClassField.ts ===
+class Example {
+>Example : Symbol(Example, Decl(controlFlowPrivateClassField.ts, 0, 0))
+
+    #test;
+>#test : Symbol(Example.#test, Decl(controlFlowPrivateClassField.ts, 0, 15))
+
+    constructor(test: number) {
+>test : Symbol(test, Decl(controlFlowPrivateClassField.ts, 3, 16))
+
+        this.#test = test;
+>this.#test : Symbol(Example.#test, Decl(controlFlowPrivateClassField.ts, 0, 15))
+>this : Symbol(Example, Decl(controlFlowPrivateClassField.ts, 0, 0))
+>test : Symbol(test, Decl(controlFlowPrivateClassField.ts, 3, 16))
+    }
+
+    get test() {
+>test : Symbol(Example.test, Decl(controlFlowPrivateClassField.ts, 5, 5))
+
+        return this.#test
+>this.#test : Symbol(Example.#test, Decl(controlFlowPrivateClassField.ts, 0, 15))
+>this : Symbol(Example, Decl(controlFlowPrivateClassField.ts, 0, 0))
+    }
+}

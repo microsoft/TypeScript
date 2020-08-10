@@ -1,0 +1,25 @@
+=== tests/cases/compiler/controlFlowPrivateClassField.ts ===
+class Example {
+>Example : Example
+
+    #test;
+>#test : number
+
+    constructor(test: number) {
+>test : number
+
+        this.#test = test;
+>this.#test = test : number
+>this.#test : number
+>this : this
+>test : number
+    }
+
+    get test() {
+>test : number
+
+        return this.#test
+>this.#test : number
+>this : this
+    }
+}
