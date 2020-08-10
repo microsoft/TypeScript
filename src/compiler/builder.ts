@@ -70,6 +70,7 @@ namespace ts {
         if (useOldState) {
             // Verify the sanity of old state
             if (!oldState!.currentChangedFilePath) {
+                // tslint:disable-next-line no-unnecessary-type-assertion
                 Debug.assert(!oldState!.affectedFiles && (!oldState!.currentAffectedFilesSignatures || !oldState!.currentAffectedFilesSignatures!.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
             }
             if (canCopySemanticDiagnostics) {

@@ -7785,12 +7785,15 @@ namespace ts {
                             context.hasNoDefaultLib = true;
                         }
                         else if (arg!.arguments.types) {
+                            // tslint:disable-next-line no-unnecessary-type-assertion
                             typeReferenceDirectives.push({ pos: arg!.arguments.types!.pos, end: arg!.arguments.types!.end, fileName: arg!.arguments.types!.value });
                         }
                         else if (arg!.arguments.lib) {
+                            // tslint:disable-next-line no-unnecessary-type-assertion
                             libReferenceDirectives.push({ pos: arg!.arguments.lib!.pos, end: arg!.arguments.lib!.end, fileName: arg!.arguments.lib!.value });
                         }
                         else if (arg!.arguments.path) {
+                            // tslint:disable-next-line no-unnecessary-type-assertion
                             referencedFiles.push({ pos: arg!.arguments.path!.pos, end: arg!.arguments.path!.end, fileName: arg!.arguments.path!.value });
                         }
                         else {

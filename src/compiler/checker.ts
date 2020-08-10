@@ -9226,6 +9226,7 @@ namespace ts {
                         break;
                 }
             }
+            // tslint:disable-next-line no-unnecessary-type-assertion
             return links.resolvedType!; // TODO: GH#18217
         }
 
@@ -24883,7 +24884,9 @@ namespace ts {
                 if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                     checkVarDeclaredNamesNotShadowed(node);
                 }
+                // tslint:disable-next-line no-unnecessary-type-assertion
                 checkCollisionWithRequireExportsInGeneratedCode(node, <Identifier>node.name);
+                // tslint:disable-next-line no-unnecessary-type-assertion
                 checkCollisionWithGlobalPromiseInGeneratedCode(node, <Identifier>node.name);
             }
         }
@@ -29493,9 +29496,11 @@ namespace ts {
                     node.kind === SyntaxKind.FunctionExpression ||
                     node.kind === SyntaxKind.MethodDeclaration);
                 if (node.flags & NodeFlags.Ambient) {
+                    // tslint:disable-next-line no-unnecessary-type-assertion
                     return grammarErrorOnNode(node.asteriskToken!, Diagnostics.Generators_are_not_allowed_in_an_ambient_context);
                 }
                 if (!node.body) {
+                    // tslint:disable-next-line no-unnecessary-type-assertion
                     return grammarErrorOnNode(node.asteriskToken!, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
                 }
             }
@@ -29536,6 +29541,7 @@ namespace ts {
 
                 // Modifiers are never allowed on properties except for 'async' on a method declaration
                 if (prop.modifiers) {
+                    // tslint:disable-next-line no-unnecessary-type-assertion
                     for (const mod of prop.modifiers!) { // TODO: GH#19955
                         if (mod.kind !== SyntaxKind.AsyncKeyword || prop.kind !== SyntaxKind.MethodDeclaration) {
                             grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
@@ -29922,13 +29928,16 @@ namespace ts {
                 const isConstOrReadonly = isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node);
                 if (isConstOrReadonly && !node.type) {
                     if (isInvalidInitializer) {
+                        // tslint:disable-next-line no-unnecessary-type-assertion
                         return grammarErrorOnNode(node.initializer!, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal_or_literal_enum_reference);
                     }
                 }
                 else {
+                    // tslint:disable-next-line no-unnecessary-type-assertion
                     return grammarErrorOnNode(node.initializer!, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                 }
                 if (!isConstOrReadonly || isInvalidInitializer) {
+                    // tslint:disable-next-line no-unnecessary-type-assertion
                     return grammarErrorOnNode(node.initializer!, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                 }
             }
