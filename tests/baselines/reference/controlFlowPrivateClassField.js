@@ -11,6 +11,21 @@ class Example {
     }
 }
 
+class Example2 {
+    #test;
+
+    constructor(test: number | undefined) {
+        this.#test = test;
+    }
+
+    get test() {
+        if (this.#test) {
+            return this.#test
+        }
+        return 0;
+    }
+}
+
 //// [controlFlowPrivateClassField.js]
 "use strict";
 class Example {
@@ -20,5 +35,17 @@ class Example {
     #test;
     get test() {
         return this.#test;
+    }
+}
+class Example2 {
+    constructor(test) {
+        this.#test = test;
+    }
+    #test;
+    get test() {
+        if (this.#test) {
+            return this.#test;
+        }
+        return 0;
     }
 }
