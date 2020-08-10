@@ -2607,6 +2607,10 @@
         "category": "Error",
         "code": 2689
     },
+    "'{0}' only refers to a type, but is being used as a value here. Did you mean to use '{1} in {0}'?": {
+        "category": "Error",
+        "code": 2690
+    },
     "An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.": {
         "category": "Error",
         "code": 2691

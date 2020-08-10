@@ -2246,12 +2246,28 @@ namespace ts {
                 }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
-                    const message = isES2015OrLaterConstructorName(name)
-                        ? Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later
-                        : Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here;
-                    error(errorLocation, message, unescapeLeadingUnderscores(name));
+                    const rawName = unescapeLeadingUnderscores(name);
+                    if (isES2015OrLaterConstructorName(name)) {
+                        error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later, rawName);
+                    }
+                    else if (maybeMappedType(errorLocation, symbol)) {
+                        error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Did_you_mean_to_use_1_in_0, rawName, rawName === "K" ? "P" : "K");
+                    }
+                    else {
+                        error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, rawName);
+                    }
                     return true;
                 }
+            }
+            return false;
+        }
+
+        function maybeMappedType(node: Node, symbol: Symbol) {
+            const container = findAncestor(node.parent, n =>
+                isComputedPropertyName(n) || isPropertySignature(n) ? false : isTypeLiteralNode(n) || "quit") as TypeLiteralNode | undefined;
+            if (container && container.members.length === 1) {
+                const type = getDeclaredTypeOfSymbol(symbol);
+                return !!(type.flags & TypeFlags.Union) && allTypesAssignableToKind(type, TypeFlags.StringOrNumberLiteral, /*strict*/ true);
             }
             return false;
         }
