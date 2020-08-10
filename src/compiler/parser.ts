@@ -6996,7 +6996,7 @@ namespace ts {
         }
 
         function parseNamespaceExport(pos: number): NamespaceExport {
-            return finishNode(factory.createNamespaceExport(parseIdentifier()), pos);
+            return finishNode(factory.createNamespaceExport(parseIdentifierName()), pos);
         }
 
         function parseExportDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ExportDeclaration {

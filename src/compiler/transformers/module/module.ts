@@ -1043,6 +1043,7 @@ namespace ts {
             else if (node.exportClause) {
                 const statements: Statement[] = [];
                 // export * as ns from "mod";
+                // export * as default from "mod";
                 statements.push(
                     setOriginalNode(
                         setTextRange(
@@ -1051,7 +1052,8 @@ namespace ts {
                                     factory.cloneNode(node.exportClause.name),
                                     getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
                                         createRequireCall(node) :
-                                        factory.createIdentifier(idText(node.exportClause.name)))
+                                        isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
+                                            factory.createIdentifier(idText(node.exportClause.name)))
                                 )
                             ),
                             node
