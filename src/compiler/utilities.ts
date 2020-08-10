@@ -3546,10 +3546,12 @@ namespace ts {
                         }
 
                         if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
+                            // tslint:disable-next-line no-unnecessary-type-assertion
                             getAccessor = <GetAccessorDeclaration>member;
                         }
 
                         if (member.kind === SyntaxKind.SetAccessor && !setAccessor) {
+                            // tslint:disable-next-line no-unnecessary-type-assertion
                             setAccessor = <SetAccessorDeclaration>member;
                         }
                     }
