@@ -36,7 +36,6 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -129,12 +128,10 @@ Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
@@ -198,12 +195,10 @@ Output::
 >> Screen clear
 [[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:00:53 AM[0m] Found 1 error. Watching for file changes.
 
@@ -271,7 +266,6 @@ Output::
 >> Screen clear
 [[90m12:00:57 AM[0m] File change detected. Starting incremental compilation...
 
-
 [[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -334,24 +328,20 @@ Output::
 >> Screen clear
 [[90m12:01:05 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/file1Consumer1.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
 [7m1[0m import {Foo} from "./moduleFile1";let y = Foo();
 [7m [0m [91m        ~~~[0m
-
 
 [96ma/b/file1Consumer2.ts[0m:[93m1[0m:[93m9[0m - [91merror[0m[90m TS2305: [0mModule '"./moduleFile1"' has no exported member 'Foo'.
 
 [7m1[0m import {Foo} from "./moduleFile1"; let z = 10;
 [7m [0m [91m        ~~~[0m
 
-
 [96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m1[0m export let y = Foo();
 [7m [0m [91m               ~~~[0m
-
 
 [[90m12:01:15 AM[0m] Found 3 errors. Watching for file changes.
 
@@ -419,7 +409,6 @@ export var T: number;export function Foo() { };
 Output::
 >> Screen clear
 [[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:01:32 AM[0m] Found 0 errors. Watching for file changes.
 
