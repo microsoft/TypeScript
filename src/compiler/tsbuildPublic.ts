@@ -14,6 +14,7 @@ namespace ts {
         /*@internal*/ preserveWatchOutput?: boolean;
         /*@internal*/ listEmittedFiles?: boolean;
         /*@internal*/ listFiles?: boolean;
+        /*@internal*/ explainFiles?: boolean;
         /*@internal*/ pretty?: boolean;
         incremental?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;

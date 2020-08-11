@@ -386,6 +386,13 @@ class someClass2 { }`),
                 commandLineArgs: ["--b", "/src/tests", "--listEmittedFiles"],
                 incrementalScenarios: coreChanges
             });
+            verifyTscSerializedIncrementalEdits({
+                scenario: "sample1",
+                subScenario: "explainFiles",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--explainFiles", "--v"],
+                incrementalScenarios: coreChanges
+            });
         });
 
         describe("emit output", () => {

@@ -4686,6 +4686,10 @@
         "category": "Error",
         "code": 6504
     },
+    "Print names of files and the reason they are part of the compilation.": {
+        "category": "Message",
+        "code": 6505
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

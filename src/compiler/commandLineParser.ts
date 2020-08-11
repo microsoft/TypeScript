@@ -161,8 +161,7 @@ namespace ts {
             name: "explainFiles",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
-            // TODO
-            description: Diagnostics.Print_names_of_files_part_of_the_compilation
+            description: Diagnostics.Print_names_of_files_and_the_reason_they_are_part_of_the_compilation
         },        {
             name: "listEmittedFiles",
             type: "boolean",
