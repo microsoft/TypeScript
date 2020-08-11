@@ -1001,7 +1001,6 @@ namespace ts {
 
             if (state.write) {
                 emittedOutputs.forEach(name => listEmittedFile(state, config, name));
-                if (program) listFiles(program, state.write);
             }
 
             // Update time stamps for rest of the outputs

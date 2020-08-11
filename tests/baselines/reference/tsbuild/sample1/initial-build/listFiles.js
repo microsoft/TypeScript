@@ -103,22 +103,9 @@ Output::
 /src/core/index.ts
 /src/core/some_decl.d.ts
 /lib/lib.d.ts
-/src/core/anotherModule.ts
-/src/core/index.ts
-/src/core/some_decl.d.ts
-/lib/lib.d.ts
 /src/core/index.d.ts
 /src/core/anotherModule.d.ts
 /src/logic/index.ts
-/lib/lib.d.ts
-/src/core/index.d.ts
-/src/core/anotherModule.d.ts
-/src/logic/index.ts
-/lib/lib.d.ts
-/src/core/index.d.ts
-/src/core/anotherModule.d.ts
-/src/logic/index.d.ts
-/src/tests/index.ts
 /lib/lib.d.ts
 /src/core/index.d.ts
 /src/core/anotherModule.d.ts
@@ -387,22 +374,9 @@ Output::
 /src/core/index.ts
 /src/core/some_decl.d.ts
 /lib/lib.d.ts
-/src/core/anotherModule.ts
-/src/core/index.ts
-/src/core/some_decl.d.ts
-/lib/lib.d.ts
 /src/core/index.d.ts
 /src/core/anotherModule.d.ts
 /src/logic/index.ts
-/lib/lib.d.ts
-/src/core/index.d.ts
-/src/core/anotherModule.d.ts
-/src/logic/index.ts
-/lib/lib.d.ts
-/src/core/index.d.ts
-/src/core/anotherModule.d.ts
-/src/logic/index.d.ts
-/src/tests/index.ts
 /lib/lib.d.ts
 /src/core/index.d.ts
 /src/core/anotherModule.d.ts
@@ -627,10 +601,6 @@ class someClass2 { }
 
 Output::
 /lib/tsc --b /src/tests --listFiles
-/lib/lib.d.ts
-/src/core/anotherModule.ts
-/src/core/index.ts
-/src/core/some_decl.d.ts
 /lib/lib.d.ts
 /src/core/anotherModule.ts
 /src/core/index.ts

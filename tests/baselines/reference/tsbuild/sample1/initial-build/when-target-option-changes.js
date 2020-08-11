@@ -83,11 +83,6 @@ TSFILE: /src/core/tsconfig.tsbuildinfo
 /src/core/anotherModule.ts
 /src/core/index.ts
 /src/core/some_decl.d.ts
-/lib/lib.esnext.d.ts
-/lib/lib.esnext.full.d.ts
-/src/core/anotherModule.ts
-/src/core/index.ts
-/src/core/some_decl.d.ts
 exitCode:: ExitStatus.Success
 
 
@@ -179,11 +174,6 @@ Output::
 TSFILE: /src/core/anotherModule.js
 TSFILE: /src/core/index.js
 TSFILE: /src/core/tsconfig.tsbuildinfo
-/lib/lib.d.ts
-/lib/lib.esnext.d.ts
-/src/core/anotherModule.ts
-/src/core/index.ts
-/src/core/some_decl.d.ts
 /lib/lib.d.ts
 /lib/lib.esnext.d.ts
 /src/core/anotherModule.ts
