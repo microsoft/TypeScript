@@ -87,7 +87,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -p plugin-one --listFiles
+/a/lib/tsc.js -p plugin-one --explainFiles
 Output::
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -145,15 +145,25 @@ File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/i
 File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts'.
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
-/a/lib/lib.d.ts
-/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts
-/user/username/projects/myproject/plugin-two/dist/commonjs/index.d.ts
-/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
-/user/username/projects/myproject/plugin-one/index.ts
+RootFiles::
+plugin-one/index.ts
+  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+
+Imports::
+plugin-two/node_modules/typescript-fsa/index.d.ts
+  Import::  typescript-fsa/index.d.ts@3.0.0-beta-2: "typescript-fsa" from plugin-two/dist/commonjs/index.d.ts 0
+plugin-two/dist/commonjs/index.d.ts
+  Import::  plugin-two/dist/commonjs/index.d.ts@0.1.3: "plugin-two" from plugin-one/index.ts 0
+plugin-one/node_modules/typescript-fsa/index.d.ts -> plugin-two/node_modules/typescript-fsa/index.d.ts
+  Import::  typescript-fsa/index.d.ts@3.0.0-beta-2: "typescript-fsa" from plugin-one/index.ts 1
+
+LibFiles::
+../../../../a/lib/lib.d.ts
+
 
 
 Program root files: ["/user/username/projects/myproject/plugin-one/index.ts"]
-Program options: {"target":1,"declaration":true,"traceResolution":true,"project":"/user/username/projects/myproject/plugin-one","listFiles":true,"configFilePath":"/user/username/projects/myproject/plugin-one/tsconfig.json"}
+Program options: {"target":1,"declaration":true,"traceResolution":true,"project":"/user/username/projects/myproject/plugin-one","explainFiles":true,"configFilePath":"/user/username/projects/myproject/plugin-one/tsconfig.json"}
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts

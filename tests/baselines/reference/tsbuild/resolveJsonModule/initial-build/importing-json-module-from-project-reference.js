@@ -70,7 +70,7 @@ console.log(foo);
 
 
 Output::
-/lib/tsc --b src/tsconfig.json --verbose
+/lib/tsc --b src/tsconfig.json --verbose --explainFiles
 [[90m12:01:00 AM[0m] Projects in this build: 
     * src/strings/tsconfig.json
     * src/main/tsconfig.json
@@ -80,9 +80,27 @@ Output::
 
 [[90m12:01:00 AM[0m] Building project '/src/strings/tsconfig.json'...
 
+RootFiles::
+src/strings/foo.json
+  RootFile:: Matched by include pattern 'foo.json' in tsconfig.json
+
+LibFiles::
+lib/lib.d.ts
+
 [[90m12:01:00 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/index.js' does not exist
 
 [[90m12:01:00 AM[0m] Building project '/src/main/tsconfig.json'...
+
+RootFiles::
+src/main/index.ts
+  RootFile:: Matched by include pattern './**/*.ts' in tsconfig.json
+
+Imports::
+src/strings/foo.json
+  Import:: '../strings/foo.json' from src/main/index.ts 0
+
+LibFiles::
+lib/lib.d.ts
 
 exitCode:: ExitStatus.Success
 
@@ -125,6 +143,7 @@ console.log(foo_json_1.foo);
       "resolveJsonModule": true,
       "strict": true,
       "esModuleInterop": true,
+      "explainFiles": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
@@ -165,6 +184,7 @@ console.log(foo_json_1.foo);
       "resolveJsonModule": true,
       "strict": true,
       "esModuleInterop": true,
+      "explainFiles": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
@@ -184,7 +204,7 @@ Input::
 
 
 Output::
-/lib/tsc --b src/tsconfig.json --verbose
+/lib/tsc --b src/tsconfig.json --verbose --explainFiles
 [[90m12:04:00 AM[0m] Projects in this build: 
     * src/strings/tsconfig.json
     * src/main/tsconfig.json

@@ -22,17 +22,27 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js -w /a/b/f1.ts
+/a/lib/tsc.js -w /a/b/f1.ts --explainFiles
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
+
+RootFiles::
+a/b/f1.ts
+
+Imports::
+a/b/f2.ts
+  Import:: "./f2" from a/b/f1.ts 0
+
+LibFiles::
+a/lib/lib.d.ts
 
 [[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"explainFiles":true}
 Program files::
 /a/lib/lib.d.ts
 /a/b/f2.ts
@@ -92,12 +102,24 @@ Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
+RootFiles::
+a/b/f1.ts
+
+Imports::
+a/c/f3.ts
+  Import:: "../c/f3" from a/b/f2.ts 0
+a/b/f2.ts
+  Import:: "./f2" from a/b/f1.ts 0
+
+LibFiles::
+a/lib/lib.d.ts
+
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true}
+Program options: {"watch":true,"explainFiles":true}
 Program files::
 /a/lib/lib.d.ts
 /a/c/f3.ts

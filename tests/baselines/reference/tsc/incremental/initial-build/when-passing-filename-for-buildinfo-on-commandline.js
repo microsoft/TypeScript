@@ -31,7 +31,14 @@ export const x = 10;
 
 
 Output::
-/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo
+/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
+RootFiles::
+src/project/src/main.ts
+  RootFile:: Matched by include pattern 'src/**/*.ts' in tsconfig.json
+
+LibFiles::
+lib/lib.d.ts
+
 exitCode:: ExitStatus.Success
 
 
@@ -56,6 +63,7 @@ exitCode:: ExitStatus.Success
       "incremental": true,
       "project": "./",
       "tsBuildInfoFile": "./.tsbuildinfo",
+      "explainFiles": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {},
@@ -82,7 +90,14 @@ Input::
 
 
 Output::
-/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo
+/lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
+RootFiles::
+src/project/src/main.ts
+  RootFile:: Matched by include pattern 'src/**/*.ts' in tsconfig.json
+
+LibFiles::
+lib/lib.d.ts
+
 exitCode:: ExitStatus.Success
 
 

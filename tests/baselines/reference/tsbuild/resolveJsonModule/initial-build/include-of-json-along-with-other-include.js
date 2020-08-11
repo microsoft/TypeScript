@@ -53,7 +53,24 @@ export default hello.hello
 
 
 Output::
-/lib/tsc --b /src/tsconfig_withIncludeOfJson.json
+/lib/tsc --b /src/tsconfig_withIncludeOfJson.json --v --explainFiles
+[[90m12:00:00 AM[0m] Projects in this build: 
+    * src/tsconfig_withIncludeOfJson.json
+
+[[90m12:00:00 AM[0m] Project 'src/tsconfig_withIncludeOfJson.json' is out of date because output file 'src/dist/src/index.js' does not exist
+
+[[90m12:00:00 AM[0m] Building project '/src/tsconfig_withIncludeOfJson.json'...
+
+RootFiles::
+src/src/hello.json
+  Import:: "./hello.json" from src/src/index.ts 0
+  RootFile:: Matched by include pattern 'src/**/*.json' in tsconfig.json
+src/src/index.ts
+  RootFile:: Matched by include pattern 'src/**/*' in tsconfig.json
+
+LibFiles::
+lib/lib.d.ts
+
 exitCode:: ExitStatus.Success
 
 
@@ -107,6 +124,7 @@ exports["default"] = hello_json_1["default"].hello;
       "allowSyntheticDefaultImports": true,
       "outDir": "./",
       "skipDefaultLibCheck": true,
+      "explainFiles": true,
       "configFilePath": "../tsconfig_withIncludeOfJson.json"
     },
     "referencedMap": {

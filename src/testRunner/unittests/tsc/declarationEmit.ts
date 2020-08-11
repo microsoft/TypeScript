@@ -19,7 +19,7 @@ namespace ts {
                     scenario: "declarationEmit",
                     subScenario,
                     sys: () => tscWatch.createWatchedSystem(files, { currentDirectory: tscWatch.projectRoot }),
-                    commandLineArgs: ["-p", rootProject, "--listFiles"],
+                    commandLineArgs: ["-p", rootProject, "--explainFiles"],
                     changes: emptyArray
                 });
             });
@@ -33,7 +33,7 @@ namespace ts {
                         files.map(f => changeCaseFile(f, changeCaseFileTestPath, str => str.replace("myproject", "myProject"))),
                         { currentDirectory: tscWatch.projectRoot }
                     ),
-                    commandLineArgs: ["-p", rootProject, "--listFiles"],
+                    commandLineArgs: ["-p", rootProject, "--explainFiles"],
                     changes: emptyArray
                 });
             });

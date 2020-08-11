@@ -56,7 +56,24 @@ export default hello.hello
 
 
 Output::
-/lib/tsc --b /src/tsconfig_withIncludeAndFiles.json
+/lib/tsc --b /src/tsconfig_withIncludeAndFiles.json --v --explainFiles
+[[90m12:00:00 AM[0m] Projects in this build: 
+    * src/tsconfig_withIncludeAndFiles.json
+
+[[90m12:00:00 AM[0m] Project 'src/tsconfig_withIncludeAndFiles.json' is out of date because output file 'src/dist/src/hello.json' does not exist
+
+[[90m12:00:00 AM[0m] Building project '/src/tsconfig_withIncludeAndFiles.json'...
+
+RootFiles::
+src/src/hello.json
+  RootFile:: Part of 'files' list in tsconfig.json
+  Import:: "./hello.json" from src/src/index.ts 0
+src/src/index.ts
+  RootFile:: Matched by include pattern 'src/**/*' in tsconfig.json
+
+LibFiles::
+lib/lib.d.ts
+
 exitCode:: ExitStatus.Success
 
 
@@ -110,6 +127,7 @@ exports["default"] = hello_json_1["default"].hello;
       "allowSyntheticDefaultImports": true,
       "outDir": "./",
       "skipDefaultLibCheck": true,
+      "explainFiles": true,
       "configFilePath": "../tsconfig_withIncludeAndFiles.json"
     },
     "referencedMap": {

@@ -117,7 +117,7 @@ namespace ts.tscWatch {
         verifyTscWatch({
             scenario,
             subScenario: "handle recreated files correctly",
-            commandLineArgs: ["-w", "-p", configFilePath],
+            commandLineArgs: ["-w", "-p", configFilePath, "--explainFiles"],
             sys: () => {
                 return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
             },
@@ -159,7 +159,7 @@ namespace ts.tscWatch {
         verifyTscWatch({
             scenario,
             subScenario: "should reflect change in config file",
-            commandLineArgs: ["-w", "-p", configFilePath],
+            commandLineArgs: ["-w", "-p", configFilePath, "--explainFiles"],
             sys: () => {
                 const configFile: File = {
                     path: configFilePath,
@@ -373,7 +373,7 @@ export class A {
         verifyTscWatch({
             scenario,
             subScenario: "changes in files are reflected in project structure",
-            commandLineArgs: ["-w", "/a/b/f1.ts"],
+            commandLineArgs: ["-w", "/a/b/f1.ts", "--explainFiles"],
             sys: () => {
                 const file1 = {
                     path: "/a/b/f1.ts",

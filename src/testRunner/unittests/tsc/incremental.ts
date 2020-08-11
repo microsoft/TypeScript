@@ -16,7 +16,7 @@ namespace ts {
                         ]
                     }`,
             }),
-            commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo"],
+            commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo", "--explainFiles"],
             incrementalScenarios: noChangeOnlyRuns
         });
 
