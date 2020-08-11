@@ -1,9 +1,9 @@
 language: node_js
 
 node_js:
-  - 'node'
+  - '14'
+  - '12'
   - '10'
-  - '8'
 
 env:
   - workerCount=3 timeout=600000
@@ -18,7 +18,7 @@ branches:
 
 install:
   - npm uninstall typescript --no-save
-  - npm install
+  - npm ci
 
 cache:
   directories:
