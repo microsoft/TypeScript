@@ -2487,7 +2487,7 @@ namespace ts {
                             break;
                         case AssignmentDeclarationKind.Property:
                             const expression = ((node as BinaryExpression).left as AccessExpression).expression;
-                            if (isIdentifier(expression)) {
+                            if (isInJSFile(node) && isIdentifier(expression)) {
                                 const symbol = lookupSymbolForName(blockScopeContainer, expression.escapedText);
                                 if (isThisInitializedDeclaration(symbol?.valueDeclaration)) {
                                     bindThisPropertyAssignment(node as BindablePropertyAssignmentExpression);
