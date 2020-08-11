@@ -32,6 +32,5 @@ jobs:
         npm uninstall tslint --no-save
     - name: npm install and test
       run: |
-        npm install
-        npm update
+        npm ci
         npm test
