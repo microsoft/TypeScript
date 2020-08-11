@@ -3012,6 +3012,11 @@
         "category": "Error",
         "code": 2791
     },
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+        "category": "Error",
+        "code": 2792
+    },
+
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4472,6 +4477,10 @@
     "Disable loading referenced projects.": {
         "category": "Message",
         "code": 6235
+    },
+    "Arguments for the rest parameter '{0}' were not provided.": {
+        "category": "Error",
+        "code": 6236
     },
 
     "Projects to reference": {

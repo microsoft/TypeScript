@@ -1,7 +1,7 @@
 Exit Code: 2
 Standard output:
 ../../../../built/local/lib.es5.d.ts(1451,11): error TS2300: Duplicate identifier 'ArrayLike'.
-../../../../node_modules/@types/node/globals.d.ts(60,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
+../../../../node_modules/@types/node/globals.d.ts(63,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(78,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -687,6 +687,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17089,45): error TS2339: Property '__proto__' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17501,1): error TS2322: Type 'any[]' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(18010,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19198,56): error TS2339: Property '_onRequestStarted' does not exist on type 'NetworkLog'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19499,6): error TS2339: Property 'Util' does not exist on type 'Window & typeof globalThis'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19585,1): error TS2322: Type 'Promise<void | { artifacts: any; auditResults: any[]; }>' is not assignable to type 'Promise<void>'.
   Type 'void | { artifacts: any; auditResults: any[]; }' is not assignable to type 'void'.
@@ -739,6 +740,8 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21186,36): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21269,7): error TS2339: Property 'errno' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21270,7): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21271,6): error TS2339: Property 'emit' does not exist on type 'Zlib'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21292,6): error TS2339: Property 'once' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21336,13): error TS2339: Property '_writableState' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21348,6): error TS2339: Property 'once' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21351,6): error TS2339: Property 'once' does not exist on type 'Zlib'.
@@ -750,7 +753,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21466,6): error TS2339: Property 'push' does not exist on type 'Zlib'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21690,5): error TS2339: Property '__proto__' does not exist on type 'Uint8Array'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21691,12): error TS2339: Property 'foo' does not exist on type 'Uint8Array'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21716,6): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22168,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22179,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22191,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
@@ -766,7 +768,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22542,38): error TS2339: Property '_arr' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22693,14): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22715,13): error TS2339: Property 'subarray' does not exist on type 'Buffer'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22719,8): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22739,49): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22755,36): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(22768,40): error TS2339: Property 'length' does not exist on type 'Buffer'.
@@ -796,7 +797,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,18): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,37): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23256,26): error TS2339: Property 'length' does not exist on type 'Buffer'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23268,13): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23459,1): error TS2323: Cannot redeclare exported variable 'isArray'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23464,1): error TS2323: Cannot redeclare exported variable 'isBoolean'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23469,1): error TS2323: Cannot redeclare exported variable 'isNull'.
@@ -821,6 +821,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24080,1): error TS2323: Cannot redeclare exported variable 'Buf32'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26059,1): error TS2323: Cannot redeclare exported variable 'deflate'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27956,16): error TS2323: Cannot redeclare exported variable 'parse'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28015,6): error TS2339: Property 'once' does not exist on type 'Duplex'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28222,51): error TS2300: Duplicate identifier '_read'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28457,20): error TS2339: Property 'emit' does not exist on type 'Readable'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28533,20): error TS2300: Duplicate identifier '_read'.
@@ -832,7 +833,10 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28746,19): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28797,6): error TS2339: Property 'emit' does not exist on type 'Readable'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28855,19): error TS2339: Property 'emit' does not exist on type 'Readable'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29109,6): error TS2339: Property '_readableState' does not exist on type 'Transform'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29114,6): error TS2339: Property '_readableState' does not exist on type 'Transform'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29117,47): error TS2300: Duplicate identifier '_transform'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29123,6): error TS2339: Property 'once' does not exist on type 'Transform'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29145,21): error TS2300: Duplicate identifier '_transform'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29155,13): error TS2339: Property '_readableState' does not exist on type 'Transform'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(29408,43): error TS2300: Duplicate identifier '_write'.
@@ -913,6 +917,8 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39986,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40005,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40015,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40016,11): error TS2339: Property '_didCreateTempFile' does not exist on type 'DeferredTempFile'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40016,46): error TS2339: Property '_failedToCreateTempFile' does not exist on type 'DeferredTempFile'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40019,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40050,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40165,1): error TS2304: Cannot find name 'WebInspector'.
@@ -926,6 +932,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40209,58): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40210,8): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40218,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40221,6): error TS2339: Property 'reset' does not exist on type 'TempFileBackingStorage'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40231,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40233,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(40346,16): error TS2304: Cannot find name 'WebInspector'.
@@ -1254,7 +1261,14 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44696,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44697,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44705,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44713,6): error TS2339: Property '_compatibilityConversionHeadToNodes' does not exist on type 'CPUProfileDataModel'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44718,22): error TS2339: Property '_convertTimeDeltas' does not exist on type 'CPUProfileDataModel'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44722,23): error TS2339: Property '_translateProfileTree' does not exist on type 'CPUProfileDataModel'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44723,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44724,6): error TS2339: Property '_extractMetaNodes' does not exist on type 'CPUProfileDataModel'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44726,6): error TS2339: Property '_buildIdToNodeMap' does not exist on type 'CPUProfileDataModel'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44727,6): error TS2339: Property '_sortSamples' does not exist on type 'CPUProfileDataModel'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44728,6): error TS2339: Property '_normalizeTimestamps' does not exist on type 'CPUProfileDataModel'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44732,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44816,19): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(44820,20): error TS2304: Cannot find name 'WebInspector'.
@@ -1268,9 +1282,12 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45095,14): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45113,55): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45113,127): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45114,31): error TS2339: Property '_containsInherited' does not exist on type 'CSSMatchedStyles'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45122,23): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45124,10): error TS2339: Property '_containsInherited' does not exist on type 'CSSMatchedStyles'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45143,20): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45154,49): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45156,6): error TS2339: Property 'resetActiveProperties' does not exist on type 'CSSMatchedStyles'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45173,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45344,30): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45406,28): error TS2304: Cannot find name 'WebInspector'.
@@ -1297,6 +1314,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45555,12): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45558,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45606,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45609,6): error TS2339: Property '_reinitialize' does not exist on type 'CSSMedia'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45612,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45624,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(45626,12): error TS2304: Cannot find name 'WebInspector'.
@@ -1359,6 +1377,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47116,22): error TS2304: Cannot find name 'CSSAgent'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47126,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47128,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47130,6): error TS2339: Property '_reinitializeSelectors' does not exist on type 'CSSStyleRule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47131,26): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47139,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47147,11): error TS2304: Cannot find name 'WebInspector'.
@@ -1379,6 +1398,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47324,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47342,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47357,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47361,6): error TS2339: Property '_reinitialize' does not exist on type 'CSSStyleDeclaration'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47366,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47372,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47395,26): error TS2304: Cannot find name 'WebInspector'.
@@ -1396,7 +1416,10 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47703,4): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47705,4): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47714,34): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47716,6): error TS2551: Property '_bypassServiceWorkerChanged' does not exist on type 'NetworkManager'. Did you mean '_bypassServiceWorkerSetting'?
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47717,57): error TS2551: Property '_bypassServiceWorkerChanged' does not exist on type 'NetworkManager'. Did you mean '_bypassServiceWorkerSetting'?
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47719,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47719,68): error TS2339: Property '_cacheDisabledSettingChanged' does not exist on type 'NetworkManager'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47723,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47731,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(47746,1): error TS2304: Cannot find name 'WebInspector'.
@@ -1456,6 +1479,8 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48339,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48340,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48344,22): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48345,45): error TS2339: Property '_updateBlockedURLs' does not exist on type 'MultitargetNetworkManager'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48347,6): error TS2339: Property '_updateBlockedURLs' does not exist on type 'MultitargetNetworkManager'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48353,25): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48357,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(48366,1): error TS2304: Cannot find name 'WebInspector'.
@@ -1505,6 +1530,9 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49565,25): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49656,14): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49676,8): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49696,20): error TS2339: Property '_pendingContentCallbacks' does not exist on type 'onResourceContent'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49699,6): error TS2339: Property '_pendingContentCallbacks' does not exist on type 'onResourceContent'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49700,13): error TS2339: Property '_contentRequested' does not exist on type 'onResourceContent'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49721,10): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49729,6): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49732,21): error TS2304: Cannot find name 'NetworkAgent'.
@@ -1521,9 +1549,12 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49872,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49890,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49936,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49939,6): error TS2339: Property '_assignDepthsAndParents' does not exist on type 'ProfileTreeModel'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49940,17): error TS2339: Property '_calculateTotals' does not exist on type 'ProfileTreeModel'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(49943,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50006,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50015,29): error TS2304: Cannot find name 'InspectorBackendClass'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50015,87): error TS2339: Property '_onDisconnect' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50016,10): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50025,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50034,1): error TS2304: Cannot find name 'WebInspector'.
@@ -1593,6 +1624,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50672,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50672,32): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50685,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50690,6): error TS2339: Property 'reset' does not exist on type 'TracingModel'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50696,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50719,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(50726,1): error TS2304: Cannot find name 'WebInspector'.
@@ -1648,6 +1680,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51379,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51387,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51389,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51390,6): error TS2339: Property 'addArgs' does not exist on type 'AsyncEvent'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51394,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51401,18): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51401,74): error TS2304: Cannot find name 'WebInspector'.
@@ -1657,12 +1690,14 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51449,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51468,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51470,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51471,6): error TS2339: Property '_setName' does not exist on type 'Process'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51479,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51496,12): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51534,8): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51537,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51546,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51548,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51550,6): error TS2339: Property '_setName' does not exist on type 'Thread'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51557,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51560,30): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51561,25): error TS2304: Cannot find name 'WebInspector'.
@@ -1675,7 +1710,9 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51658,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51673,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51681,13): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51687,6): error TS2339: Property '_totalSize' does not exist on type 'TimelineLoader'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51688,25): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51688,75): error TS2339: Property '_writeBalancedJSON' does not exist on type 'TimelineLoader'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51697,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51699,16): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51700,16): error TS2304: Cannot find name 'WebInspector'.
@@ -1710,14 +1747,22 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51938,28): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51953,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51955,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51956,6): error TS2339: Property 'element' does not exist on type 'TimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51959,21): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51964,6): error TS2339: Property '_populateColumns' does not exist on type 'TimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51966,18): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51967,6): error TS2339: Property '_populateToolbar' does not exist on type 'TimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51968,20): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51969,33): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51969,82): error TS2339: Property '_sortingChanged' does not exist on type 'TimelineTreeView'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51970,58): error TS2339: Property '_onMouseMove' does not exist on type 'TimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51971,32): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51974,23): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51975,29): error TS2339: Property 'element' does not exist on type 'TimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51978,23): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51981,33): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51981,80): error TS2339: Property '_updateDetailsForSelection' does not exist on type 'TimelineTreeView'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51984,6): error TS2339: Property '_lastSelectedNode' does not exist on type 'TimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(51987,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52034,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52076,18): error TS2304: Cannot find name 'WebInspector'.
@@ -1747,6 +1792,8 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52346,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52358,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52360,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52361,23): error TS2339: Property '_profileNode' does not exist on type 'TreeGridNode'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52361,50): error TS2339: Property '_profileNode' does not exist on type 'TreeGridNode'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52362,13): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52365,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52367,1): error TS2304: Cannot find name 'WebInspector'.
@@ -1759,9 +1806,11 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52399,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52400,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52401,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52403,6): error TS2339: Property '_filters' does not exist on type 'AggregatedTimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52403,24): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52404,21): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52405,34): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52405,94): error TS2339: Property '_onStackViewSelectionChanged' does not exist on type 'AggregatedTimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52408,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52416,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52425,19): error TS2304: Cannot find name 'WebInspector'.
@@ -1815,7 +1864,11 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52635,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52637,26): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52638,39): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52638,94): error TS2339: Property '_onFilterChanged' does not exist on type 'EventsTimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52639,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52641,6): error TS2339: Property '_filters' does not exist on type 'EventsTimelineTreeView'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52641,31): error TS2339: Property '_filters' does not exist on type 'EventsTimelineTreeView'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52642,6): error TS2339: Property '_dataGrid' does not exist on type 'EventsTimelineTreeView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52642,49): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52645,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52652,1): error TS2304: Cannot find name 'WebInspector'.
@@ -1827,12 +1880,15 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52767,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52774,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52776,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52777,17): error TS2339: Property 'element' does not exist on type 'TimelineStackView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52778,20): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52781,19): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52782,22): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52784,20): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52785,32): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52786,33): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52786,80): error TS2339: Property '_onSelectionChanged' does not exist on type 'TimelineStackView'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52787,37): error TS2339: Property 'element' does not exist on type 'TimelineStackView'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52791,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52795,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(52807,18): error TS2304: Cannot find name 'WebInspector'.
@@ -2228,6 +2284,8 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54020,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54036,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54038,1): error TS2304: Cannot find name 'TreeElement'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54040,6): error TS2339: Property 'listItemElement' does not exist on type 'InvalidationsGroupElement'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54047,17): error TS2339: Property '_createTitle' does not exist on type 'InvalidationsGroupElement'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54050,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54064,7): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54064,23): error TS2304: Cannot find name 'WebInspector'.
@@ -2382,11 +2440,13 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54715,62): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54720,8): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54727,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54730,20): error TS2339: Property '_createCell' does not exist on type 'TimelinePopupContentHelper'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54730,32): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54737,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54753,6): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54788,6): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54799,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54807,33): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54811,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54908,17): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(54908,40): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
@@ -2413,20 +2473,28 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55051,40): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55052,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55052,45): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55052,103): error TS2339: Property '_onMainFrameNavigated' does not exist on type 'LayerTreeModel'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55058,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55063,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55070,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55090,21): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55102,31): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55129,19): error TS2532: Object is possibly 'undefined'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55136,6): error TS2339: Property 'dispatchEventToListeners' does not exist on type 'onLayersSet'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55136,31): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55155,31): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55164,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55171,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55174,23): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55178,6): error TS2339: Property '_reset' does not exist on type 'LayerTreeBase'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55181,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55303,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55305,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55310,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55338,17): error TS2339: Property '_innerSetLayers' does not exist on type 'onBackendNodeIdsResolved'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55340,30): error TS2339: Property '_innerSetLayers' does not exist on type 'onBackendNodeIdsResolved'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55343,27): error TS2531: Object is possibly 'null'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55344,1): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55382,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55407,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55415,1): error TS2304: Cannot find name 'WebInspector'.
@@ -2437,6 +2505,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55497,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55501,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55619,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55622,6): error TS2339: Property '_reset' does not exist on type 'AgentLayer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55625,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55827,21): error TS2304: Cannot find name 'InspectorBackend'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(55863,21): error TS2304: Cannot find name 'InspectorBackend'.
@@ -2459,6 +2528,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(56294,24): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(56296,11): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(56335,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(56338,6): error TS2339: Property 'reset' does not exist on type 'TimelineFrameModel'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(56341,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(56342,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(56343,1): error TS2304: Cannot find name 'WebInspector'.
@@ -2560,6 +2630,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(57784,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(57785,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(57831,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(57834,6): error TS2339: Property 'reset' does not exist on type 'TimelineModel'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(57840,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(57963,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(57972,1): error TS2304: Cannot find name 'WebInspector'.
@@ -2665,6 +2736,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59084,17): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59101,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59103,29): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59107,6): error TS2339: Property 'addEvent' does not exist on type 'NetworkRequest'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59110,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59117,16): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59138,1): error TS2304: Cannot find name 'WebInspector'.
@@ -2715,6 +2787,12 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59580,19): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59600,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59605,1): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59608,6): error TS2339: Property 'totalTime' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59610,6): error TS2339: Property 'selfTime' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59612,6): error TS2339: Property 'id' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59614,6): error TS2339: Property 'event' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59616,6): error TS2339: Property 'children' does not exist on type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59618,6): error TS2339: Property 'parent' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59622,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59640,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59644,14): error TS2304: Cannot find name 'WebInspector'.
@@ -2753,6 +2831,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59990,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59992,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59994,23): error TS2304: Cannot find name 'WebInspector'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59995,6): error TS2339: Property 'setRootNode' does not exist on type 'SortableDataGrid'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59995,22): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(59999,1): error TS2304: Cannot find name 'WebInspector'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60006,1): error TS2304: Cannot find name 'WebInspector'.
@@ -2974,7 +3053,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66549,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66811,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67117,1): error TS2739: Type 'string[]' is missing the following properties from type 'RegExpExecArray': index, input
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67167,8): error TS2554: Expected 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,14): error TS2339: Property 'Channels' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,35): error TS2339: Property 'Channels' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67301,24): error TS2339: Property 'Channels' does not exist on type '{}'.
@@ -3036,9 +3114,9 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68409,16): error TS2339: Property 'height' does not exist on type 'constructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68410,25): error TS2339: Property 'width' does not exist on type 'constructor'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68410,39): error TS2339: Property 'height' does not exist on type 'constructor'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69037,13): error TS2339: Property 'displayName' does not exist on type '(image: any, quality: any) => any'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69550,21): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69799,1): error TS2323: Cannot redeclare exported variable 'parse'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70734,12): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,4): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,26): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70753,6): error TS2531: Object is possibly 'null'.
@@ -3323,13 +3401,6 @@ node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/BindingsTes
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/BindingsTestRunner.js(108,11): error TS2339: Property 'src' does not exist on type 'HTMLElement'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(45,27): error TS2339: Property 'events' does not exist on type 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(66,27): error TS2339: Property 'events' does not exist on type 'InspectorFrontendHostAPI'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(103,8): error TS2339: Property '_fileSystem' does not exist on type 'typeof TestFileSystem'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(104,8): error TS2540: Cannot assign to 'name' because it is a read-only property.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(105,8): error TS2339: Property '_children' does not exist on type 'typeof TestFileSystem'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(106,8): error TS2339: Property '_childrenMap' does not exist on type 'typeof TestFileSystem'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(107,8): error TS2339: Property 'isDirectory' does not exist on type 'typeof TestFileSystem'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(108,8): error TS2339: Property '_timestamp' does not exist on type 'typeof TestFileSystem'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(109,8): error TS2339: Property '_parent' does not exist on type 'typeof TestFileSystem'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(134,27): error TS2339: Property 'events' does not exist on type 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(145,11): error TS2551: Property 'parent' does not exist on type 'Entry'. Did you mean '_parent'?
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(153,11): error TS2551: Property 'parent' does not exist on type 'Entry'. Did you mean '_parent'?
@@ -3339,9 +3410,6 @@ node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFil
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(172,27): error TS2339: Property 'events' does not exist on type 'InspectorFrontendHostAPI'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(186,19): error TS2339: Property 'content' does not exist on type 'Entry'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(244,94): error TS2339: Property 'content' does not exist on type 'Entry'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(263,8): error TS2339: Property '_children' does not exist on type 'typeof TestFileSystem'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(275,8): error TS2551: Property '_entry' does not exist on type 'typeof TestFileSystem'. Did you mean 'Entry'?
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(276,8): error TS2339: Property '_modificationTimesDelta' does not exist on type 'typeof TestFileSystem'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(284,14): error TS2339: Property 'onwriteend' does not exist on type 'Writer'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(285,12): error TS2339: Property 'onwriteend' does not exist on type 'Writer'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(292,14): error TS2339: Property 'onwriteend' does not exist on type 'Writer'.
@@ -3376,11 +3444,11 @@ node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(170,28): 
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(172,26): error TS2339: Property 'pushAll' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(215,22): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(216,26): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(8,5): error TS2304: Cannot find name 'define'.
@@ -3393,15 +3461,81 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(44,23): error T
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(45,23): error TS2365: Operator '>=' cannot be applied to types 'RegExpMatchArray' and 'number'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(47,76): error TS2365: Operator '<' cannot be applied to types 'RegExpMatchArray' and 'number'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(94,25): error TS2339: Property 'createTextRange' does not exist on type 'HTMLElement'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(306,5): error TS2339: Property 'scrollbarFiller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(307,5): error TS2339: Property 'scrollbarFiller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(310,5): error TS2339: Property 'gutterFiller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(311,5): error TS2339: Property 'gutterFiller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(313,5): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(315,5): error TS2339: Property 'selectionDiv' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(316,5): error TS2339: Property 'cursorDiv' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(318,5): error TS2339: Property 'measure' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(320,5): error TS2339: Property 'lineMeasure' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(322,5): error TS2339: Property 'lineSpace' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(322,32): error TS2339: Property 'measure' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(322,43): error TS2339: Property 'lineMeasure' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(322,58): error TS2339: Property 'selectionDiv' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(322,74): error TS2339: Property 'cursorDiv' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(322,87): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(324,30): error TS2339: Property 'lineSpace' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(326,5): error TS2339: Property 'mover' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(328,5): error TS2339: Property 'sizer' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(328,27): error TS2339: Property 'mover' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(329,5): error TS2339: Property 'sizerWidth' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(333,5): error TS2339: Property 'heightForcer' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(335,5): error TS2339: Property 'gutters' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(336,5): error TS2339: Property 'lineGutter' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(338,5): error TS2339: Property 'scroller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(338,30): error TS2339: Property 'sizer' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(338,39): error TS2339: Property 'heightForcer' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(338,55): error TS2339: Property 'gutters' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(339,5): error TS2339: Property 'scroller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(341,5): error TS2339: Property 'wrapper' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(341,29): error TS2339: Property 'scrollbarFiller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(341,48): error TS2339: Property 'gutterFiller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(341,64): error TS2339: Property 'scroller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(344,33): error TS2339: Property 'gutters' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(344,62): error TS2339: Property 'scroller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(345,42): error TS2339: Property 'scroller' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(348,50): error TS2339: Property 'wrapper' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(349,20): error TS2339: Property 'wrapper' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(353,5): error TS2339: Property 'viewFrom' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(353,18): error TS2339: Property 'viewTo' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(354,5): error TS2339: Property 'reportedViewFrom' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(354,26): error TS2339: Property 'reportedViewTo' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(356,5): error TS2339: Property 'view' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(357,5): error TS2339: Property 'renderedView' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(360,5): error TS2339: Property 'externalMeasured' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(362,5): error TS2339: Property 'viewOffset' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(363,5): error TS2339: Property 'lastWrapHeight' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(363,24): error TS2339: Property 'lastWrapWidth' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(364,5): error TS2339: Property 'updateLineNumbers' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(366,5): error TS2339: Property 'nativeBarWidth' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(366,24): error TS2339: Property 'barHeight' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(366,38): error TS2339: Property 'barWidth' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(367,5): error TS2339: Property 'scrollbarsClipped' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(371,5): error TS2339: Property 'lineNumWidth' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(371,22): error TS2339: Property 'lineNumInnerWidth' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(371,44): error TS2339: Property 'lineNumChars' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(375,5): error TS2339: Property 'alignWidgets' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(377,5): error TS2339: Property 'cachedCharWidth' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(377,25): error TS2339: Property 'cachedTextHeight' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(377,46): error TS2339: Property 'cachedPaddingH' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(381,5): error TS2339: Property 'maxLine' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(382,5): error TS2339: Property 'maxLineLength' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(383,5): error TS2339: Property 'maxLineChanged' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(386,5): error TS2339: Property 'wheelDX' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(386,17): error TS2339: Property 'wheelDY' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(386,29): error TS2339: Property 'wheelStartX' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(386,45): error TS2339: Property 'wheelStartY' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(389,5): error TS2339: Property 'shift' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(393,5): error TS2339: Property 'selForContextMenu' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(395,5): error TS2339: Property 'activeTouch' does not exist on type 'Display'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(683,31): error TS2339: Property 'length' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(684,33): error TS2339: Property 'find' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(689,28): error TS2339: Property 'inclusiveLeft' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(690,25): error TS2345: Argument of type '{ from: any; to: any; }' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(691,26): error TS2339: Property 'inclusiveRight' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(692,25): error TS2345: Argument of type '{ from: any; to: any; }' is not assignable to parameter of type 'number'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1521,14): error TS2554: Expected 4 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1597,38): error TS2554: Expected 4 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(1600,64): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2428,8): error TS2551: Property 'lineN' does not exist on type 'LineView'. Did you mean 'line'?
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2429,20): error TS2339: Property 'built' does not exist on type 'LineView'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2601,32): error TS2339: Property 'logicalXDPI' does not exist on type 'Screen'.
@@ -3420,9 +3554,7 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2856,10): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,49): error TS2339: Property 'right' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3034,25): error TS2339: Property 'xRel' does not exist on type 'Pos'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4270,16): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4840,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5152,12): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5634,9): error TS2322: Type 'BranchChunk' is not assignable to type 'this'.
   'BranchChunk' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'BranchChunk'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5675,35): error TS2339: Property 'line' does not exist on type 'LineWidget'.
@@ -3473,18 +3605,31 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,57): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,78): error TS2339: Property 'endStyle' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5933,97): error TS2339: Property 'css' does not exist on type 'TextMarker'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5935,16): error TS2339: Property 'atomic' does not exist on type 'TextMarker'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6022,42): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6037,46): error TS2339: Property 'splitLines' does not exist on type 'Doc'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6164,32): error TS2322: Type 'string' is not assignable to type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6203,56): error TS2532: Object is possibly 'undefined'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6206,33): error TS2551: Property 'changeGeneration' does not exist on type 'markClean'. Did you mean 'cleanGeneration'?
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6222,43): error TS2532: Object is possibly 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6378,11): error TS2339: Property 'setHistory' does not exist on type 'Doc'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6385,21): error TS2339: Property 'first' does not exist on type 'linkedDoc'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6385,38): error TS2339: Property 'first' does not exist on type 'linkedDoc'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6385,51): error TS2339: Property 'size' does not exist on type 'linkedDoc'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6388,71): error TS2339: Property 'modeOption' does not exist on type 'linkedDoc'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6388,94): error TS2339: Property 'lineSep' does not exist on type 'linkedDoc'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6388,108): error TS2339: Property 'direction' does not exist on type 'linkedDoc'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6389,51): error TS2339: Property 'history' does not exist on type 'linkedDoc'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6391,10): error TS2339: Property 'linked' does not exist on type 'Doc'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6431,10): error TS2339: Property 'iter' does not exist on type '(Anonymous function)'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6432,14): error TS2339: Property 'cm' does not exist on type '(Anonymous function)'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6432,42): error TS2339: Property 'cm' does not exist on type '(Anonymous function)'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6464,44): error TS2345: Argument of type 'string | ArrayBuffer' is not assignable to parameter of type 'string'.
   Type 'ArrayBuffer' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6553,25): error TS2339: Property 'CodeMirror' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6987,44): error TS2554: Expected 3 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6989,17): error TS2554: Expected 3 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(6995,19): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7343,11): error TS2339: Property 'copy' does not exist on type '(...args: any[]) => any'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7777,11): error TS2339: Property 'wrapper' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7781,20): error TS2339: Property 'wrapper' does not exist on type 'Display'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7810,8): error TS2339: Property 'curOp' does not exist on type 'CodeMirror$1'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7813,46): error TS2339: Property 'hasFocus' does not exist on type 'CodeMirror$1'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7827,32): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7828,15): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7895,25): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -3517,25 +3662,25 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9372,12): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9446,9): error TS2339: Property 'contextMenuPending' does not exist on type 'TextareaInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9467,11): error TS2339: Property 'contextMenuPending' does not exist on type 'TextareaInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9527,40): error TS2339: Property 'getValue' does not exist on type 'CodeMirror$1'.
-node_modules/chrome-devtools-frontend/front_end/cm/comment.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm/comment.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm/comment.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/comment.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/comment.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(12,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(12,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(13,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(13,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(14,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(8,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(13,15): error TS2551: Property 'documentMode' does not exist on type 'Document'. Did you mean 'DOCUMENT_NODE'?
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(13,48): error TS2551: Property 'documentMode' does not exist on type 'Document'. Did you mean 'DOCUMENT_NODE'?
-node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(15,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(15,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(17,5): error TS2304: Cannot find name 'define'.
@@ -3556,81 +3701,76 @@ node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.j
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(154,13): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(155,24): error TS2339: Property 'token' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/DefaultCodeMirrorMimeMode.js(9,37): error TS8022: JSDoc '@implements' is not attached to a class.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(160,18): error TS2554: Expected 6 arguments, but got 5.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(11,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(11,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(13,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(10,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(10,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(11,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(11,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(12,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(41,3): error TS2740: Type 'RegExp' is missing the following properties from type 'string[]': length, pop, push, concat, and 28 more.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(282,24): error TS2339: Property 'exec' does not exist on type 'string[]'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,42): error TS2554: Expected 0-1 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,50): error TS2307: Cannot find module '../xml/xml' or its corresponding type declarations.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,73): error TS2307: Cannot find module '../javascript/javascript' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,50): error TS2792: Cannot find module '../xml/xml'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,73): error TS2792: Cannot find module '../javascript/javascript'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(127,26): error TS2554: Expected 4 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(11,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(11,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(13,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,42): error TS2554: Expected 0-1 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed' or its corresponding type declarations.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,85): error TS2307: Cannot find module '../clike/clike' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,50): error TS2792: Cannot find module '../htmlmixed/htmlmixed'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,85): error TS2792: Cannot find module '../clike/clike'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(8,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(172,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' must be of type 'string', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(174,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' must be of type 'string', but here has type 'any'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(8,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(8,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(10,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(218,23): error TS2554: Expected 4 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(658,20): error TS2554: Expected 4 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,42): error TS2554: Expected 0-1 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed' or its corresponding type declarations.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(7,17): error TS2307: Cannot find module '../../addon/mode/multiplex' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,50): error TS2792: Cannot find module '../htmlmixed/htmlmixed'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(7,17): error TS2792: Cannot find module '../../addon/mode/multiplex'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(8,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(8,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(9,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,42): error TS2554: Expected 0-1 arguments, but got 4.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,50): error TS2307: Cannot find module '../xml/xml' or its corresponding type declarations.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,73): error TS2307: Cannot find module '../javascript/javascript' or its corresponding type declarations.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,110): error TS2307: Cannot find module '../css/css' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,50): error TS2792: Cannot find module '../xml/xml'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,73): error TS2792: Cannot find module '../javascript/javascript'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,110): error TS2792: Cannot find module '../css/css'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(773,18): error TS2554: Expected 6 arguments, but got 4.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(6,17): error TS2792: Cannot find module '../../lib/codemirror'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(8,5): error TS2304: Cannot find name 'define'.
@@ -4907,11 +5047,6 @@ node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,411)
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,443): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,7): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,220): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,403): error TS2339: Property 'diffs' does not exist on type 'typeof diff_match_patch'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,417): error TS2339: Property 'start2' does not exist on type 'typeof diff_match_patch'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,429): error TS2339: Property 'start1' does not exist on type 'typeof diff_match_patch'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,446): error TS2339: Property 'length2' does not exist on type 'typeof diff_match_patch'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,459): error TS2339: Property 'length1' does not exist on type 'typeof diff_match_patch'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(39,16): error TS2339: Property 'rangeOfWord' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(71,19): error TS2339: Property 'traversePreviousNode' does not exist on type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(106,19): error TS2339: Property 'traverseNextNode' does not exist on type 'Node'.
@@ -6270,55 +6405,227 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,48): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(5,20): error TS2339: Property 'acorn' does not exist on type 'typeof import("/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn")'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(150,8): error TS2554: Expected 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(154,13): error TS2554: Expected 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(156,11): error TS2554: Expected 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(158,11): error TS2554: Expected 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(162,8): error TS2554: Expected 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(165,13): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(402,56): error TS2339: Property 'push' does not exist on type '(token: any) => any'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(478,38): error TS2339: Property 'curPosition' does not exist on type 'Parser'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(487,23): error TS2339: Property 'initialContext' does not exist on type 'Parser'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(505,10): error TS2339: Property 'skipLineComment' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(527,43): error TS2339: Property 'startNode' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(528,8): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(529,15): error TS2339: Property 'parseTopLevel' does not exist on type 'Parser'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1103,8): error TS2339: Property 'initFunction' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1104,12): error TS2339: Property 'options' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1105,27): error TS2339: Property 'eat' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1106,12): error TS2339: Property 'options' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1110,20): error TS2339: Property 'parseIdent' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1118,28): error TS2339: Property 'type' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1119,20): error TS2339: Property 'parseIdent' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1120,8): error TS2339: Property 'parseFunctionParams' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1121,8): error TS2339: Property 'parseFunctionBody' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1127,15): error TS2339: Property 'finishNode' does not exist on type 'parseFunction'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1674,55): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1719,12): error TS2339: Property 'inGenerator' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1719,32): error TS2339: Property 'isContextual' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1719,67): error TS2339: Property 'parseYield' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1726,23): error TS2339: Property 'start' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1726,46): error TS2339: Property 'startLoc' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1727,12): error TS2339: Property 'type' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1727,38): error TS2339: Property 'type' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1728,34): error TS2339: Property 'start' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1729,19): error TS2339: Property 'parseMaybeConditional' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1731,12): error TS2339: Property 'type' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1732,10): error TS2339: Property 'checkPatternErrors' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1734,21): error TS2339: Property 'startNodeAt' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1735,26): error TS2339: Property 'value' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1736,22): error TS2339: Property 'type' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1736,44): error TS2339: Property 'toAssignable' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1738,10): error TS2339: Property 'checkLVal' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1739,10): error TS2339: Property 'next' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1740,23): error TS2339: Property 'parseMaybeAssign' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1741,17): error TS2339: Property 'finishNode' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1743,38): error TS2339: Property 'checkExpressionErrors' does not exist on type 'parseMaybeAssign'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2004,23): error TS2339: Property 'start' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2004,46): error TS2339: Property 'startLoc' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2004,87): error TS2339: Property 'options' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2005,12): error TS2339: Property 'options' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2006,10): error TS2339: Property 'next' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2008,30): error TS2339: Property 'start' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2008,58): error TS2339: Property 'startLoc' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2013,17): error TS2339: Property 'type' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2014,38): error TS2339: Property 'expect' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2015,40): error TS2339: Property 'afterTrailingComma' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2018,25): error TS2339: Property 'type' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2019,30): error TS2339: Property 'start' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2020,30): error TS2339: Property 'parseParenItem' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2020,52): error TS2339: Property 'parseRest' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2021,20): error TS2339: Property 'type' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2021,46): error TS2339: Property 'raise' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2021,59): error TS2339: Property 'start' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2024,20): error TS2339: Property 'type' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2025,36): error TS2339: Property 'start' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2027,30): error TS2339: Property 'parseMaybeAssign' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2027,85): error TS2339: Property 'parseParenItem' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2030,28): error TS2339: Property 'start' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2030,54): error TS2339: Property 'startLoc' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2031,10): error TS2339: Property 'expect' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2033,29): error TS2339: Property 'canInsertSemicolon' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2033,58): error TS2339: Property 'eat' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2034,12): error TS2339: Property 'checkPatternErrors' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2035,12): error TS2339: Property 'checkYieldAwaitInDefaultParams' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2036,33): error TS2339: Property 'unexpected' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2039,19): error TS2339: Property 'parseParenArrowList' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2042,47): error TS2339: Property 'unexpected' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2042,63): error TS2339: Property 'lastTokStart' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2043,27): error TS2339: Property 'unexpected' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2044,10): error TS2339: Property 'checkExpressionErrors' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2049,18): error TS2339: Property 'startNodeAt' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2051,12): error TS2339: Property 'finishNodeAt' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2056,16): error TS2339: Property 'parseParenExpression' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2059,12): error TS2339: Property 'options' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2060,20): error TS2339: Property 'startNodeAt' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2062,17): error TS2339: Property 'finishNode' does not exist on type 'parseParenAndDistinguishExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2254,19): error TS2339: Property 'startNode' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2256,8): error TS2339: Property 'initFunction' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2257,12): error TS2339: Property 'options' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2259,12): error TS2339: Property 'options' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2267,8): error TS2339: Property 'expect' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2268,22): error TS2339: Property 'parseBindingList' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2268,62): error TS2339: Property 'options' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2269,8): error TS2339: Property 'checkYieldAwaitInDefaultParams' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2270,8): error TS2339: Property 'parseFunctionBody' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2276,15): error TS2339: Property 'finishNode' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2284,8): error TS2339: Property 'initFunction' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2285,12): error TS2339: Property 'options' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2293,22): error TS2339: Property 'toAssignableList' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2294,8): error TS2339: Property 'parseFunctionBody' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2300,15): error TS2339: Property 'finishNode' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2306,46): error TS2339: Property 'type' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2309,22): error TS2339: Property 'parseMaybeAssign' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2316,22): error TS2339: Property 'parseBlock' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2324,67): error TS2339: Property 'isUseStrict' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2325,25): error TS2339: Property 'options' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2325,59): error TS2339: Property 'isSimpleParamList' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2326,10): error TS2339: Property 'raiseRecoverable' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2332,12): error TS2339: Property 'checkLVal' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2333,10): error TS2339: Property 'checkParams' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2335,39): error TS2339: Property 'isSimpleParamList' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2336,10): error TS2339: Property 'checkParams' does not exist on type 'parseFunctionBody'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2416,44): error TS2339: Property 'start' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2418,19): error TS2339: Property 'startNode' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2419,8): error TS2339: Property 'next' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2420,12): error TS2339: Property 'type' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2420,36): error TS2339: Property 'canInsertSemicolon' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2420,66): error TS2339: Property 'type' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2420,91): error TS2339: Property 'type' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2424,26): error TS2339: Property 'eat' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2425,26): error TS2339: Property 'parseMaybeAssign' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2427,15): error TS2339: Property 'finishNode' does not exist on type 'parseYield'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2431,44): error TS2339: Property 'start' does not exist on type 'parseAwait'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2433,19): error TS2339: Property 'startNode' does not exist on type 'parseAwait'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2434,8): error TS2339: Property 'next' does not exist on type 'parseAwait'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2435,24): error TS2339: Property 'parseMaybeUnary' does not exist on type 'parseAwait'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2436,15): error TS2339: Property 'finishNode' does not exist on type 'parseAwait'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,7): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,22): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,37): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2468,16): error TS2554: Expected 3 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2521,11): error TS2554: Expected 4 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2522,11): error TS2554: Expected 4 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2523,11): error TS2554: Expected 4 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2524,11): error TS2554: Expected 4 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2525,11): error TS2554: Expected 4 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2527,11): error TS2554: Expected 4 arguments, but got 2.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2564,12): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2565,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2568,18): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2569,36): error TS2339: Property 'curContext' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2570,10): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2571,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2573,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2575,10): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2580,8): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2580,26): error TS2339: Property 'braceIsBlock' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2581,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2585,8): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2586,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2591,8): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2592,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2601,67): error TS2339: Property 'curContext' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2602,10): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2603,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2607,12): error TS2339: Property 'curContext' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2608,10): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2610,10): error TS2339: Property 'context' does not exist on type 'TokenType'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2611,8): error TS2339: Property 'exprAllowed' does not exist on type 'TokenType'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2552,27): error TS2339: Property 'type' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2564,12): error TS2339: Property 'context' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2568,18): error TS2339: Property 'context' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2569,36): error TS2339: Property 'curContext' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2570,10): error TS2339: Property 'context' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2580,8): error TS2339: Property 'context' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2580,26): error TS2339: Property 'braceIsBlock' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2585,8): error TS2339: Property 'context' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2591,8): error TS2339: Property 'context' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2601,67): error TS2339: Property 'curContext' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2602,10): error TS2339: Property 'context' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2607,12): error TS2339: Property 'curContext' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2608,10): error TS2339: Property 'context' does not exist on type 'updateContext'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2610,10): error TS2339: Property 'context' does not exist on type 'updateContext'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2634,22): error TS2304: Cannot find name 'Packages'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2634,77): error TS2304: Cannot find name 'Packages'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3353,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2639,12): error TS2339: Property 'options' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2640,10): error TS2339: Property 'options' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2642,26): error TS2339: Property 'end' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2643,28): error TS2339: Property 'start' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2644,29): error TS2339: Property 'endLoc' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2645,31): error TS2339: Property 'startLoc' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2646,8): error TS2339: Property 'nextToken' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2674,12): error TS2339: Property 'type' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2674,36): error TS2339: Property 'type' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2675,19): error TS2339: Property 'start' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2676,12): error TS2339: Property 'options' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2677,28): error TS2339: Property 'lineStart' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2678,14): error TS2339: Property 'lineStart' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2678,33): error TS2339: Property 'input' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2678,64): error TS2339: Property 'lineStart' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2679,16): error TS2339: Property 'curLine' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2682,8): error TS2339: Property 'nextToken' does not exist on type 'setStrict'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2693,25): error TS2339: Property 'curContext' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2694,54): error TS2339: Property 'skipSpace' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2696,21): error TS2339: Property 'pos' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2697,12): error TS2339: Property 'options' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2697,52): error TS2339: Property 'curPosition' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2698,12): error TS2339: Property 'pos' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2698,24): error TS2339: Property 'input' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2698,50): error TS2339: Property 'finishToken' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2701,13): error TS2339: Property 'readToken' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2701,28): error TS2339: Property 'fullCharCodeAtPos' does not exist on type 'nextToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2723,23): error TS2339: Property 'options' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2723,49): error TS2339: Property 'curPosition' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2724,36): error TS2339: Property 'input' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2724,56): error TS2365: Operator '+=' cannot be applied to types 'undefined' and '2'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2725,24): error TS2339: Property 'raise' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2725,30): error TS2532: Object is possibly 'undefined'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2727,12): error TS2339: Property 'options' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2730,42): error TS2339: Property 'input' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2731,16): error TS2339: Property 'curLine' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2732,14): error TS2339: Property 'lineStart' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2735,12): error TS2339: Property 'options' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2736,10): error TS2339: Property 'options' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2736,39): error TS2339: Property 'input' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2737,43): error TS2339: Property 'curPosition' does not exist on type 'skipBlockComment'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2806,19): error TS2339: Property 'pos' does not exist on type 'finishToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2807,12): error TS2339: Property 'options' does not exist on type 'finishToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2807,50): error TS2339: Property 'curPosition' does not exist on type 'finishToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2812,8): error TS2339: Property 'updateContext' does not exist on type 'finishToken'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3233,17): error TS2339: Property 'input' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3233,41): error TS2339: Property 'pos' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3234,10): error TS2339: Property 'pos' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3238,45): error TS2339: Property 'readHexChar' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3239,43): error TS2339: Property 'readCodePoint' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3244,21): error TS2339: Property 'input' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3244,43): error TS2339: Property 'pos' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3244,63): error TS2339: Property 'pos' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3246,14): error TS2339: Property 'options' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3246,57): error TS2339: Property 'pos' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3246,69): error TS2339: Property 'curLine' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3250,27): error TS2339: Property 'input' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3250,45): error TS2339: Property 'pos' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3256,37): error TS2339: Property 'strict' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3257,14): error TS2339: Property 'raise' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3257,25): error TS2339: Property 'pos' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3259,12): error TS2339: Property 'pos' does not exist on type 'readEscapedChar'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3285,50): error TS2339: Property 'pos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3286,21): error TS2339: Property 'options' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3287,15): error TS2339: Property 'pos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3287,26): error TS2339: Property 'input' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3288,21): error TS2339: Property 'fullCharCodeAtPos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3290,14): error TS2339: Property 'pos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3293,22): error TS2339: Property 'input' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3293,53): error TS2339: Property 'pos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3294,29): error TS2339: Property 'pos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3295,18): error TS2339: Property 'input' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3295,44): error TS2339: Property 'pos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3296,16): error TS2339: Property 'raise' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3296,29): error TS2339: Property 'pos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3297,16): error TS2339: Property 'pos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3298,24): error TS2339: Property 'readCodePoint' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3300,16): error TS2339: Property 'raise' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3302,27): error TS2339: Property 'pos' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3308,22): error TS2339: Property 'input' does not exist on type 'readWord1'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3308,51): error TS2339: Property 'pos' does not exist on type 'readWord1'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3362,5): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3363,12): error TS2339: Property 'parseExpression' does not exist on type 'Parser'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(3370,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,10): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,48): error TS2304: Cannot find name 'define'.
@@ -6328,6 +6635,18 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loo
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(85,10): error TS2339: Property 'next' does not exist on type 'LooseParser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(114,16): error TS2339: Property 'lookAhead' does not exist on type 'LooseParser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(115,42): error TS2339: Property 'next' does not exist on type 'LooseParser'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(186,12): error TS2339: Property 'ahead' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(187,21): error TS2339: Property 'ahead' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(189,21): error TS2339: Property 'readToken' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(191,30): error TS2339: Property 'nextLineStart' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(192,35): error TS2339: Property 'nextLineStart' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(193,14): error TS2339: Property 'curLineStart' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(193,36): error TS2339: Property 'nextLineStart' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(194,14): error TS2339: Property 'nextLineStart' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(194,37): error TS2339: Property 'lineEnd' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(194,52): error TS2339: Property 'curLineStart' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(196,27): error TS2339: Property 'indentationAfter' does not exist on type 'next'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(196,49): error TS2339: Property 'curLineStart' does not exist on type 'next'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(217,36): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(219,32): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(221,11): error TS2322: Type '{ start: any; end: any; type: any; value: any; }' is not assignable to type 'boolean'.
@@ -6343,6 +6662,42 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loo
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(255,19): error TS2339: Property 'loc' does not exist on type 'true'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(257,55): error TS2339: Property 'start' does not exist on type 'true'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(258,55): error TS2339: Property 'end' does not exist on type 'true'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(300,19): error TS2339: Property 'startNodeAt' does not exist on type 'parseTopLevel'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(300,36): error TS2339: Property 'options' does not exist on type 'parseTopLevel'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(300,85): error TS2339: Property 'input' does not exist on type 'parseTopLevel'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(302,15): error TS2339: Property 'tok' does not exist on type 'parseTopLevel'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(302,72): error TS2339: Property 'parseStatement' does not exist on type 'parseTopLevel'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(303,20): error TS2339: Property 'tok' does not exist on type 'parseTopLevel'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(304,12): error TS2339: Property 'options' does not exist on type 'parseTopLevel'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(305,28): error TS2339: Property 'options' does not exist on type 'parseTopLevel'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(307,15): error TS2339: Property 'finishNode' does not exist on type 'parseTopLevel'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(621,8): error TS2339: Property 'initFunction' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(622,12): error TS2339: Property 'options' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(623,27): error TS2339: Property 'eat' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(625,12): error TS2339: Property 'options' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(628,12): error TS2339: Property 'tok' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(628,63): error TS2339: Property 'parseIdent' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(629,49): error TS2339: Property 'dummyIdent' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(631,22): error TS2339: Property 'parseFunctionParams' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(632,20): error TS2339: Property 'parseBlock' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(634,15): error TS2339: Property 'finishNode' does not exist on type 'parseFunction'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1265,19): error TS2339: Property 'startNode' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1266,8): error TS2339: Property 'initFunction' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1267,12): error TS2339: Property 'options' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1269,12): error TS2339: Property 'options' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1272,22): error TS2339: Property 'parseFunctionParams' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1273,26): error TS2339: Property 'options' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1273,59): error TS2339: Property 'tok' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1274,38): error TS2339: Property 'parseMaybeAssign' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1274,64): error TS2339: Property 'parseBlock' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1276,15): error TS2339: Property 'finishNode' does not exist on type 'parseMethod'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1281,8): error TS2339: Property 'initFunction' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1282,12): error TS2339: Property 'options' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1285,22): error TS2339: Property 'toAssignableList' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1286,26): error TS2339: Property 'tok' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1287,38): error TS2339: Property 'parseMaybeAssign' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1287,64): error TS2339: Property 'parseBlock' does not exist on type 'parseArrowExpression'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1289,15): error TS2339: Property 'finishNode' does not exist on type 'parseArrowExpression'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1365,5): error TS2339: Property 'next' does not exist on type 'LooseParser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(1366,12): error TS2339: Property 'parseTopLevel' does not exist on type 'LooseParser'.
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(16,32): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
@@ -8016,12 +8371,13 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(402,8): er
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(403,23): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(412,16): error TS2339: Property 'isValid' does not exist on type 'Date'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(419,16): error TS2339: Property 'toISO8601Compact' does not exist on type 'Date'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(560,7): error TS2740: Type '{ value: (comparator: (arg0: number, arg1: number) => number, leftBound: number, rightBound: number, sortWindowLeft: number, sortWindowRight: number) => number[]; }' is missing the following properties from type 'number[]': length, pop, push, concat, and 28 more.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(635,32): error TS2339: Property 'partition' does not exist on type 'number[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(716,84): error TS2339: Property 'lowerBound' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(718,84): error TS2339: Property 'upperBound' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(720,83): error TS2339: Property 'lowerBound' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(722,83): error TS2339: Property 'upperBound' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(724,85): error TS2339: Property 'lowerBound' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(735,22): error TS2339: Property 'lowerBound' does not exist on type 'S[]'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(829,8): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(830,17): error TS2339: Property 'vsprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(835,49): error TS1110: Type expected.
@@ -8073,8 +8429,9 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1348,19): 
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1357,22): error TS2304: Cannot find name 'VALUE'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1358,32): error TS2304: Cannot find name 'VALUE'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1358,73): error TS2304: Cannot find name 'VALUE'.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1359,23): error TS2304: Cannot find name 'VALUE'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1361,15): error TS2339: Property 'diff' does not exist on type 'Map<any, any>'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1362,23): error TS2339: Property 'keysArray' does not exist on type 'Map<any, any>'.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1362,23): error TS2339: Property 'keysArray' does not exist on type 'Map<number, any>'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1363,25): error TS2339: Property 'keysArray' does not exist on type 'Map<number, any>'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1402,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(1424,31): error TS1110: Type expected.
@@ -9006,8 +9363,8 @@ node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(4
 node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(42,60): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(77,18): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(114,37): error TS2339: Property 'valuesArray' does not exist on type 'Set<any>'.
-node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(124,40): error TS2345: Argument of type '{ 0: boolean; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
-  Index signature is missing in type '{ 0: boolean; }'.
+node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(124,40): error TS2345: Argument of type '{ '0': boolean; }' is not assignable to parameter of type '{ [x: string]: boolean; }'.
+  Index signature is missing in type '{ '0': boolean; }'.
 node_modules/chrome-devtools-frontend/front_end/resources/DatabaseTableView.js(130,18): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/resources/IndexedDBModel.js(32,26): error TS2694: Namespace 'Protocol' has no exported member 'StorageDispatcher'.
 node_modules/chrome-devtools-frontend/front_end/resources/IndexedDBModel.js(41,12): error TS2339: Property 'registerStorageDispatcher' does not exist on type 'Target'.
@@ -11196,7 +11553,7 @@ node_modules/chrome-devtools-frontend/front_end/terminal/TerminalWidget.js(57,73
 node_modules/chrome-devtools-frontend/front_end/terminal/TerminalWidget.js(59,18): error TS2339: Property 'write' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/TerminalWidget.js(120,46): error TS2345: Argument of type '{ text: string; lineNumber: number; columnNumber: number; maxLengh: number; className: string; }' is not assignable to parameter of type '{ text: string; className: string; lineNumber: number; columnNumber: number; preventClick: boolean; maxLength: number; }'.
   Object literal may only specify known properties, but 'maxLengh' does not exist in type '{ text: string; className: string; lineNumber: number; columnNumber: number; preventClick: boolean; maxLength: number; }'. Did you mean to write 'maxLength'?
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(19,34): error TS2307: Cannot find module '../../xterm' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(19,34): error TS2792: Cannot find module '../../xterm'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(20,21): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(24,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(29,16): error TS2339: Property 'Terminal' does not exist on type 'Window & typeof globalThis'.
@@ -11243,6 +11600,24 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2721,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2732,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2766,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2789,10): error TS2339: Property 'browser' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2790,10): error TS2339: Property 'cancel' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2828,14): error TS2339: Property 'on' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2836,10): error TS2339: Property 'convertEol' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2852,10): error TS2339: Property 'decLocator' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2853,10): error TS2339: Property 'x10Mouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2854,10): error TS2339: Property 'vt200Mouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2855,10): error TS2339: Property 'vt300Mouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2856,10): error TS2339: Property 'normalMouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2857,10): error TS2339: Property 'mouseEvents' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2858,10): error TS2339: Property 'sendFocus' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2859,10): error TS2339: Property 'utfMouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2860,10): error TS2339: Property 'sgrMouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2861,10): error TS2339: Property 'urxvtMouse' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2866,10): error TS2339: Property 'savedX' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2867,10): error TS2339: Property 'savedY' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2868,10): error TS2339: Property 'savedCols' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2886,55): error TS2339: Property 'scrollback' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2925,9): error TS2322: Type 'number' is not assignable to type 'number[]'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3087,14): error TS2339: Property 'browser' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3151,54): error TS2339: Property 'theme' does not exist on type 'Terminal'.
@@ -13065,16 +13440,51 @@ node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1317,27): error TS
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1318,24): error TS2339: Property '_constructor' does not exist on type 'typeof CheckboxLabel'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1319,74): error TS2339: Property '_constructor' does not exist on type 'typeof CheckboxLabel'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1324,29): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1334,10): error TS2339: Property 'checkboxElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1335,10): error TS2339: Property 'checkboxElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1343,10): error TS2339: Property 'checkboxElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1346,10): error TS2551: Property '_shadowRoot' does not exist on type 'Element'. Did you mean 'shadowRoot'?
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1354,10): error TS2339: Property 'checkboxElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1355,10): error TS2339: Property 'checkboxElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1365,12): error TS2339: Property 'type' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1367,12): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1378,12): error TS2339: Property 'radioElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1378,32): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1379,12): error TS2339: Property 'radioElement' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1381,12): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1382,12): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1395,14): error TS2339: Property 'radioElement' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1395,43): error TS2339: Property 'radioElement' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1397,10): error TS2339: Property 'radioElement' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1398,10): error TS2339: Property 'radioElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1407,12): error TS2339: Property '_iconElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1408,12): error TS2339: Property '_iconElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1409,29): error TS2339: Property '_iconElement' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1410,12): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1418,12): error TS2339: Property '_iconElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1430,12): error TS2339: Property 'sliderElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1431,12): error TS2339: Property 'sliderElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1432,29): error TS2339: Property 'sliderElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1440,12): error TS2339: Property 'sliderElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1447,19): error TS2339: Property 'sliderElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1459,12): error TS2339: Property '_textElement' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1459,32): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1460,12): error TS2339: Property '_textElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1461,12): error TS2339: Property '_textElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1469,12): error TS2339: Property '_textElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1481,12): error TS2339: Property '_buttonElement' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1481,34): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1483,12): error TS2339: Property '_hoverIcon' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1484,12): error TS2339: Property '_activeIcon' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1485,12): error TS2339: Property '_buttonElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1486,12): error TS2339: Property '_buttonElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1486,44): error TS2339: Property '_hoverIcon' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1487,12): error TS2339: Property '_buttonElement' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1487,44): error TS2339: Property '_activeIcon' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1496,14): error TS2339: Property '_hoverIcon' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1497,14): error TS2339: Property '_activeIcon' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1499,14): error TS2339: Property '_hoverIcon' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1500,14): error TS2339: Property '_activeIcon' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1510,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1519,41): error TS2339: Property 'select' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1522,59): error TS2339: Property 'value' does not exist on type 'Element'.

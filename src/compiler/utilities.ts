@@ -483,7 +483,8 @@ namespace ts {
             return node.pos;
         }
 
-        if (isJSDocNode(node)) {
+        if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
+            // JsxText cannot actually contain comments, even though the scanner will think it sees comments
             return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
@@ -4782,7 +4783,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return isExportDefaultSymbol(symbol) ? symbol.declarations[0].localSymbol : undefined;
+        if (!isExportDefaultSymbol(symbol)) return undefined;
+        for (const decl of symbol.declarations) {
+            if (decl.localSymbol) return decl.localSymbol;
+        }
+        return undefined;
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
