@@ -27,7 +27,6 @@ Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
-
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -94,12 +93,10 @@ Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
-
 [96ma/b/file1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile' or its corresponding type declarations.
 
 [7m1[0m import * as T from "./moduleFile"; T.bar();
 [7m [0m [91m                   ~~~~~~~~~~~~~~[0m
-
 
 [[90m12:00:33 AM[0m] Found 1 error. Watching for file changes.
 
@@ -162,7 +159,6 @@ export function bar() { };
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
-
 
 [[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 
