@@ -1850,7 +1850,7 @@ namespace ts {
 
     export function getExternalModuleRequireArgument(node: Node) {
         return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
-            && (getFirstPropertyAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+            && (getLeftmostPropertyAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
     }
 
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
@@ -1921,7 +1921,7 @@ namespace ts {
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
         node = getRootDeclaration(node);
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getFirstPropertyAccessExpression(node.initializer), requireStringLiteralLikeArgument);
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostPropertyAccessExpression(node.initializer), requireStringLiteralLikeArgument);
     }
 
     export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
@@ -4733,13 +4733,6 @@ namespace ts {
         }
     }
 
-    export function getFirstPropertyAccessExpression(expr: Expression): Expression {
-        while (isPropertyAccessExpression(expr)) {
-            expr = expr.expression;
-        }
-        return expr;
-    }
-
     export function isDottedName(node: Expression): boolean {
         return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.ThisKeyword || node.kind === SyntaxKind.SuperKeyword ||
             node.kind === SyntaxKind.PropertyAccessExpression && isDottedName((<PropertyAccessExpression>node).expression) ||
@@ -5449,6 +5442,13 @@ namespace ts {
 
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
+    }
+
+    export function getLeftmostPropertyAccessExpression(expr: Expression): Expression {
+        while (isPropertyAccessExpression(expr)) {
+            expr = expr.expression;
+        }
+        return expr;
     }
 
     export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {
