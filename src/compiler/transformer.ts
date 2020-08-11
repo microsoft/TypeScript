@@ -222,7 +222,16 @@ namespace ts {
         state = TransformationState.Initialized;
 
         // Transform each node.
-        const transformed = map(nodes, allowDtsFiles ? transformation : transformRoot);
+        const transformed: T[] = [];
+        for (const node of nodes) {
+            const start = timestamp();
+            transformed.push((allowDtsFiles ? transformation : transformRoot)(node));
+            const end = timestamp();
+            const path = (node as any as SourceFile).path;
+            if (path) {
+                console.error(`Transformed ${path} in ${end - start}ms`);
+            }
+        }
 
         // prevent modification of the lexical environment.
         state = TransformationState.Completed;
