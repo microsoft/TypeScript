@@ -5,18 +5,18 @@
 //// export namespace foo {
 ////     /** @deprecated */
 ////     export function faff () { }
-////     [|faff()|]
+////     [|faff|]()
 //// }
-//// const [|a|] = [|foo.faff()|]
+//// const [|a|] = foo.[|faff|]()
 //// foo[[|"faff"|]]
 //// const { [|faff|] } = foo
-//// [|faff()|]
+//// [|faff|]()
 //// /** @deprecated */
 //// export function bar () {
-////     [|foo?.faff()|]
+////     foo?.[|faff|]()
 //// }
-//// [|foo?.["faff"]?.()|]
-//// [|bar()|];
+//// foo?.[[|"faff"|]]?.()
+//// [|bar|]();
 //// /** @deprecated */
 //// export interface Foo {
 ////     /** @deprecated */
@@ -37,8 +37,8 @@
 ////     constructor() {
 ////     }
 //// }
-//// var c = [|new C()|]
-//// [|c.m()|]
+//// var c = new [|C|]()
+//// c.[|m|]()
 //// c.[|m|]
 //// new [|D|]()
 //// C
@@ -51,26 +51,26 @@
 ////     return <div></div>
 //// }
 //// [|Compi|];
-//// [|<Compi />|];
-//// [|<Compi {...props}>|]<div></div></[|Compi|]>;
+//// <[|Compi|] />;
+//// <[|Compi|] {...props}><div></div></[|Compi|]>;
 //// /** @deprecated */
 //// function ttf(_x: unknown) {
 //// }
-//// [|ttf``|]
+//// [|ttf|]``
 //// [|ttf|]
 //// /** @deprecated */
 //// function dec(_c: unknown) { }
 //// [|dec|]
-//// [|@dec|]
+//// @[|dec|]
 //// class K { }
 
 // @Filename: b.ts
 //// // imports and aliases
 //// import * as f from './a';
 //// import { [|bar|], [|QW|] } from './a';
-//// [|f.bar()|];
-//// [|f.foo.faff()|];
-//// [|bar()|];
+//// f.[|bar|]();
+//// f.foo.[|faff|]();
+//// [|bar|]();
 //// type Z = [|QW|];
 //// type A = f.[|Foo|];
 //// type B = f.[|QW|];
@@ -79,7 +79,6 @@
 
 goTo.file('a.ts')
 const ranges = test.ranges();
-
 verify.getSuggestionDiagnostics([
     {
         "code": 6385,
