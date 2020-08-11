@@ -64,23 +64,24 @@ Output::
 
 RootFiles::
 pkg3/src/keys.ts
-  Import:: './keys' from pkg3/src/index.ts 0
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Imported via './keys' from file 'pkg3/src/index.ts'
+  Matched by include pattern '**/*' in tsconfig.json
 pkg3/src/index.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 
 Imports::
 pkg1/dist/types.d.ts
-  Import:: './types' from pkg1/dist/index.d.ts 0
+  Imported via './types' from file 'pkg1/dist/index.d.ts'
 pkg1/dist/index.d.ts
-  Import::  @raymondfeng/pkg1/dist/index.d.ts@1.0.0: '@raymondfeng/pkg1' from pkg2/dist/types.d.ts 0
+  Imported via '@raymondfeng/pkg1' from file 'pkg2/dist/types.d.ts', PackageId:: '@raymondfeng/pkg1/dist/index.d.ts@1.0.0'
 pkg2/dist/types.d.ts
-  Import:: './types' from pkg2/dist/index.d.ts 0
+  Imported via './types' from file 'pkg2/dist/index.d.ts'
 pkg2/dist/index.d.ts
-  Import::  @raymondfeng/pkg2/dist/index.d.ts@1.0.0: "@raymondfeng/pkg2" from pkg3/src/keys.ts 0
+  Imported via "@raymondfeng/pkg2" from file 'pkg3/src/keys.ts', PackageId:: '@raymondfeng/pkg2/dist/index.d.ts@1.0.0'
 
 LibFiles::
 ../../../../a/lib/lib.d.ts
+  Default library for target 'es5'
 
 
 Found 1 error.

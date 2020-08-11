@@ -34,10 +34,11 @@ Output::
 /lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 RootFiles::
 src/project/src/main.ts
-  RootFile:: Matched by include pattern 'src/**/*.ts' in tsconfig.json
+  Matched by include pattern 'src/**/*.ts' in tsconfig.json
 
 LibFiles::
 lib/lib.d.ts
+  Default library for target 'es5'
 
 exitCode:: ExitStatus.Success
 
@@ -93,10 +94,11 @@ Output::
 /lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
 RootFiles::
 src/project/src/main.ts
-  RootFile:: Matched by include pattern 'src/**/*.ts' in tsconfig.json
+  Matched by include pattern 'src/**/*.ts' in tsconfig.json
 
 LibFiles::
 lib/lib.d.ts
+  Default library for target 'es5'
 
 exitCode:: ExitStatus.Success
 

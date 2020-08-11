@@ -32,10 +32,11 @@ a/b/f1.ts
 
 Imports::
 a/b/f2.ts
-  Import:: "./f2" from a/b/f1.ts 0
+  Imported via "./f2" from file 'a/b/f1.ts'
 
 LibFiles::
 a/lib/lib.d.ts
+  Default library
 
 [[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -107,12 +108,13 @@ a/b/f1.ts
 
 Imports::
 a/c/f3.ts
-  Import:: "../c/f3" from a/b/f2.ts 0
+  Imported via "../c/f3" from file 'a/b/f2.ts'
 a/b/f2.ts
-  Import:: "./f2" from a/b/f1.ts 0
+  Imported via "./f2" from file 'a/b/f1.ts'
 
 LibFiles::
 a/lib/lib.d.ts
+  Default library
 
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 

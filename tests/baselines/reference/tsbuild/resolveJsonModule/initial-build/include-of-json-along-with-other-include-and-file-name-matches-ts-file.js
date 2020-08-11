@@ -61,13 +61,14 @@ Output::
 
 RootFiles::
 src/src/index.json
-  Import:: "./index.json" from src/src/index.ts 0
-  RootFile:: Matched by include pattern 'src/**/*.json' in tsconfig.json
+  Imported via "./index.json" from file 'src/src/index.ts'
+  Matched by include pattern 'src/**/*.json' in tsconfig.json
 src/src/index.ts
-  RootFile:: Matched by include pattern 'src/**/*' in tsconfig.json
+  Matched by include pattern 'src/**/*' in tsconfig.json
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 exitCode:: ExitStatus.Success
 

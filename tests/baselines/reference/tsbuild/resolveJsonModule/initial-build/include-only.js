@@ -68,25 +68,27 @@ Output::
 
 RootFiles::
 src/src/index.ts
-  RootFile:: Matched by include pattern 'src/**/*' in tsconfig.json
+  Matched by include pattern 'src/**/*' in tsconfig.json
 
 Imports::
 src/src/hello.json
-  Import:: "./hello.json" from src/src/index.ts 0
+  Imported via "./hello.json" from file 'src/src/index.ts'
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 RootFiles::
 src/src/index.ts
-  RootFile:: Matched by include pattern 'src/**/*' in tsconfig.json
+  Matched by include pattern 'src/**/*' in tsconfig.json
 
 Imports::
 src/src/hello.json
-  Import:: "./hello.json" from src/src/index.ts 0
+  Imported via "./hello.json" from file 'src/src/index.ts'
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 
 Found 1 error.

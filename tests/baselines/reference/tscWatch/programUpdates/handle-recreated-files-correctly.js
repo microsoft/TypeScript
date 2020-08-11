@@ -29,12 +29,13 @@ Output::
 
 RootFiles::
 a/b/commonFile1.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 a/b/commonFile2.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 
 LibFiles::
 a/lib/lib.d.ts
+  Default library
 
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -92,10 +93,11 @@ Output::
 
 RootFiles::
 a/b/commonFile1.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 
 LibFiles::
 a/lib/lib.d.ts
+  Default library
 
 [[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -143,12 +145,13 @@ Output::
 
 RootFiles::
 a/b/commonFile1.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 a/b/commonFile2.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 
 LibFiles::
 a/lib/lib.d.ts
+  Default library
 
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 

@@ -557,6 +557,7 @@ namespace ts {
     /*@internal*/
     export interface LibFile {
         kind: FileIncludeKind.LibFile;
+        lib?: string;
     }
 
     /*@internal*/
@@ -582,6 +583,7 @@ namespace ts {
     /*@internal*/
     export interface AutomaticTypeDirectiveFile {
         kind: FileIncludeKind.AutomaticTypeDirectiveFile;
+        typeReference: string;
         packageId: PackageId | undefined;
     }
 
@@ -969,7 +971,7 @@ namespace ts {
                     processTypeReferenceDirective(
                         typeReferences[i],
                         resolutions[i],
-                        { kind: FileIncludeKind.AutomaticTypeDirectiveFile, packageId: resolutions[i]?.packageId }
+                        { kind: FileIncludeKind.AutomaticTypeDirectiveFile, typeReference: typeReferences[i], packageId: resolutions[i]?.packageId }
                     );
                 }
             }
@@ -987,7 +989,7 @@ namespace ts {
                 }
                 else {
                     forEach(options.lib, libFileName => {
-                        processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile });
+                        processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile, lib: libFileName });
                     });
                 }
             }

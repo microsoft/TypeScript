@@ -63,13 +63,14 @@ Output::
 
 RootFiles::
 src/src/hello.json
-  Import:: "./hello.json" from src/src/index.ts 0
-  RootFile:: Part of 'files' list in tsconfig.json
+  Imported via "./hello.json" from file 'src/src/index.ts'
+  Part of 'files' list in tsconfig.json
 src/src/index.ts
-  RootFile:: Part of 'files' list in tsconfig.json
+  Part of 'files' list in tsconfig.json
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 exitCode:: ExitStatus.Success
 

@@ -109,14 +109,15 @@ Output::
 
 RootFiles::
 src/core/anotherModule.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 src/core/index.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 src/core/some_decl.d.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 [[90m12:01:00 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/index.js' does not exist
 
@@ -124,16 +125,17 @@ lib/lib.d.ts
 
 RootFiles::
 src/logic/index.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 
 Imports::
-src/core/index.d.ts
-  Import:: '../core/index' from src/logic/index.ts 0
-src/core/anotherModule.d.ts
-  Import:: '../core/anotherModule' from src/logic/index.ts 1
+src/core/index.d.ts, output of project reference source 'src/core/index.ts'
+  Imported via '../core/index' from file 'src/logic/index.ts'
+src/core/anotherModule.d.ts, output of project reference source 'src/core/anotherModule.ts'
+  Imported via '../core/anotherModule' from file 'src/logic/index.ts'
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 [[90m12:01:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output file 'src/tests/index.js' does not exist
 
@@ -141,19 +143,20 @@ lib/lib.d.ts
 
 RootFiles::
 src/tests/index.ts
-  RootFile:: Part of 'files' list in tsconfig.json
+  Part of 'files' list in tsconfig.json
 
 Imports::
-src/core/index.d.ts
-  Import:: '../core/index' from src/tests/index.ts 0
-src/core/anotherModule.d.ts
-  Import:: '../core/anotherModule' from src/logic/index.d.ts 0
-  Import:: '../core/anotherModule' from src/tests/index.ts 2
-src/logic/index.d.ts
-  Import:: '../logic/index' from src/tests/index.ts 1
+src/core/index.d.ts, output of project reference source 'src/core/index.ts'
+  Imported via '../core/index' from file 'src/tests/index.ts'
+src/core/anotherModule.d.ts, output of project reference source 'src/core/anotherModule.ts'
+  Imported via '../core/anotherModule' from file 'src/logic/index.d.ts'
+  Imported via '../core/anotherModule' from file 'src/tests/index.ts'
+src/logic/index.d.ts, output of project reference source 'src/logic/index.ts'
+  Imported via '../logic/index' from file 'src/tests/index.ts'
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 exitCode:: ExitStatus.Success
 
@@ -426,14 +429,15 @@ Output::
 
 RootFiles::
 src/core/anotherModule.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 src/core/index.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 src/core/some_decl.d.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 [[90m12:04:00 AM[0m] Project 'src/logic/tsconfig.json' is out of date because oldest output 'src/logic/index.js' is older than newest input 'src/core'
 
@@ -441,16 +445,17 @@ lib/lib.d.ts
 
 RootFiles::
 src/logic/index.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 
 Imports::
-src/core/index.d.ts
-  Import:: '../core/index' from src/logic/index.ts 0
-src/core/anotherModule.d.ts
-  Import:: '../core/anotherModule' from src/logic/index.ts 1
+src/core/index.d.ts, output of project reference source 'src/core/index.ts'
+  Imported via '../core/index' from file 'src/logic/index.ts'
+src/core/anotherModule.d.ts, output of project reference source 'src/core/anotherModule.ts'
+  Imported via '../core/anotherModule' from file 'src/logic/index.ts'
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 [[90m12:04:00 AM[0m] Project 'src/tests/tsconfig.json' is out of date because oldest output 'src/tests/index.js' is older than newest input 'src/core'
 
@@ -458,19 +463,20 @@ lib/lib.d.ts
 
 RootFiles::
 src/tests/index.ts
-  RootFile:: Part of 'files' list in tsconfig.json
+  Part of 'files' list in tsconfig.json
 
 Imports::
-src/core/index.d.ts
-  Import:: '../core/index' from src/tests/index.ts 0
-src/core/anotherModule.d.ts
-  Import:: '../core/anotherModule' from src/logic/index.d.ts 0
-  Import:: '../core/anotherModule' from src/tests/index.ts 2
-src/logic/index.d.ts
-  Import:: '../logic/index' from src/tests/index.ts 1
+src/core/index.d.ts, output of project reference source 'src/core/index.ts'
+  Imported via '../core/index' from file 'src/tests/index.ts'
+src/core/anotherModule.d.ts, output of project reference source 'src/core/anotherModule.ts'
+  Imported via '../core/anotherModule' from file 'src/logic/index.d.ts'
+  Imported via '../core/anotherModule' from file 'src/tests/index.ts'
+src/logic/index.d.ts, output of project reference source 'src/logic/index.ts'
+  Imported via '../logic/index' from file 'src/tests/index.ts'
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 exitCode:: ExitStatus.Success
 
@@ -704,14 +710,15 @@ Output::
 
 RootFiles::
 src/core/anotherModule.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 src/core/index.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 src/core/some_decl.d.ts
-  RootFile:: Matched by include pattern '**/*' in tsconfig.json
+  Matched by include pattern '**/*' in tsconfig.json
 
 LibFiles::
 lib/lib.d.ts
+  Default library
 
 [[90m12:07:00 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
 

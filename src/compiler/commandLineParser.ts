@@ -227,6 +227,31 @@ namespace ts {
     ];
 
     /* @internal */
+    export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
+        name: "target",
+        shortName: "t",
+        type: new Map(getEntries({
+            es3: ScriptTarget.ES3,
+            es5: ScriptTarget.ES5,
+            es6: ScriptTarget.ES2015,
+            es2015: ScriptTarget.ES2015,
+            es2016: ScriptTarget.ES2016,
+            es2017: ScriptTarget.ES2017,
+            es2018: ScriptTarget.ES2018,
+            es2019: ScriptTarget.ES2019,
+            es2020: ScriptTarget.ES2020,
+            esnext: ScriptTarget.ESNext,
+        })),
+        affectsSourceFile: true,
+        affectsModuleResolution: true,
+        affectsEmit: true,
+        paramType: Diagnostics.VERSION,
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Basic_Options,
+        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_or_ESNEXT,
+    };
+
+    /* @internal */
     export const optionDeclarations: CommandLineOption[] = [
         // CommandLine only options
         ...commonOptionsWithBuild,
@@ -288,29 +313,7 @@ namespace ts {
         },
 
         // Basic
-        {
-            name: "target",
-            shortName: "t",
-            type: new Map(getEntries({
-                es3: ScriptTarget.ES3,
-                es5: ScriptTarget.ES5,
-                es6: ScriptTarget.ES2015,
-                es2015: ScriptTarget.ES2015,
-                es2016: ScriptTarget.ES2016,
-                es2017: ScriptTarget.ES2017,
-                es2018: ScriptTarget.ES2018,
-                es2019: ScriptTarget.ES2019,
-                es2020: ScriptTarget.ES2020,
-                esnext: ScriptTarget.ESNext,
-            })),
-            affectsSourceFile: true,
-            affectsModuleResolution: true,
-            affectsEmit: true,
-            paramType: Diagnostics.VERSION,
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_or_ESNEXT,
-        },
+        targetOptionDeclaration,
         {
             name: "module",
             shortName: "m",

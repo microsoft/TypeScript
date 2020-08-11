@@ -32,12 +32,13 @@ Output::
 
 RootFiles::
 a/b/commonFile1.ts
-  RootFile:: Part of 'files' list in tsconfig.json
+  Part of 'files' list in tsconfig.json
 a/b/commonFile2.ts
-  RootFile:: Part of 'files' list in tsconfig.json
+  Part of 'files' list in tsconfig.json
 
 LibFiles::
 a/lib/lib.d.ts
+  Default library
 
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -98,10 +99,11 @@ Output::
 
 RootFiles::
 a/b/commonFile1.ts
-  RootFile:: Part of 'files' list in tsconfig.json
+  Part of 'files' list in tsconfig.json
 
 LibFiles::
 a/lib/lib.d.ts
+  Default library
 
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
