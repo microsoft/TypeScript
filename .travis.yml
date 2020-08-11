@@ -4,7 +4,6 @@ node_js:
   - '14'
   - '12'
   - '10'
-  - '8'
 
 env:
   - workerCount=3 timeout=600000
