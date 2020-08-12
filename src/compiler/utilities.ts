@@ -519,6 +519,10 @@ namespace ts {
         return !!findAncestor(node, isJSDocTypeExpression);
     }
 
+    export function isExportNamespaceAsDefaultDeclaration(node: Node): boolean {
+        return !!(isExportDeclaration(node) && node.exportClause && isNamespaceExport(node.exportClause) && node.exportClause.name.escapedText === "default");
+    }
+
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
         if (nodeIsMissing(node)) {
             return "";
@@ -1612,6 +1616,10 @@ namespace ts {
         const kind = node.kind;
         return (kind === SyntaxKind.PropertyAccessExpression || kind === SyntaxKind.ElementAccessExpression)
             && (<PropertyAccessExpression | ElementAccessExpression>node).expression.kind === SyntaxKind.ThisKeyword;
+    }
+
+    export function isThisInitializedDeclaration(node: Node | undefined): boolean {
+        return !!node && isVariableDeclaration(node) && node.initializer?.kind === SyntaxKind.ThisKeyword;
     }
 
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression | undefined {
