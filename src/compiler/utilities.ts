@@ -5867,6 +5867,20 @@ namespace ts {
         }
     }
 
+    export function getSingleFileUmdGlobalNamespace(options: CompilerOptions) {
+        const moduleKind = getEmitModuleKind(options);
+        if (moduleKind === ModuleKind.UMD && outFile(options)) {
+            return options.umdGlobal;
+        }
+    }
+
+    export function getSingleFileUmdExport(options: CompilerOptions) {
+        const moduleKind = getEmitModuleKind(options);
+        if (moduleKind === ModuleKind.UMD && outFile(options)) {
+            return options.umdExport;
+        }
+    }
+
     export function unreachableCodeIsError(options: CompilerOptions): boolean {
         return options.allowUnreachableCode === false;
     }

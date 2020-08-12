@@ -1699,6 +1699,7 @@ namespace ts {
             || kind === SyntaxKind.WhileStatement
             || kind === SyntaxKind.WithStatement
             || kind === SyntaxKind.NotEmittedStatement
+            || kind === SyntaxKind.EmbeddedSourceFileStatement
             || kind === SyntaxKind.EndOfDeclarationMarker
             || kind === SyntaxKind.MergeDeclarationMarker;
     }

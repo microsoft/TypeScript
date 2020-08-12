@@ -415,6 +415,8 @@ namespace ts {
             createSyntheticExpression,
             createSyntaxList,
             createNotEmittedStatement,
+            createEmbeddedSourceFileStatement,
+            updateEmbeddedSourceFileStatement,
             createPartiallyEmittedExpression,
             updatePartiallyEmittedExpression,
             createCommaListExpression,
@@ -4952,6 +4954,20 @@ namespace ts {
             node.original = original;
             setTextRange(node, original);
             return node;
+        }
+
+        // @api
+        function createEmbeddedSourceFileStatement(sourceFile: SourceFile) {
+            const node = createBaseNode<EmbeddedSourceFileStatement>(SyntaxKind.EmbeddedSourceFileStatement);
+            node.sourceFile = sourceFile;
+            return node;
+        }
+
+        // @api
+        function updateEmbeddedSourceFileStatement(node: EmbeddedSourceFileStatement, sourceFile: SourceFile) {
+            return sourceFile !== node.sourceFile
+                ? update(createEmbeddedSourceFileStatement(sourceFile), node)
+                : node;
         }
 
         /**

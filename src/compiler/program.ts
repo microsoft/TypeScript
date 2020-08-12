@@ -3091,6 +3091,35 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile");
             }
 
+            const languageVersion = getEmitScriptTarget(options);
+
+            if (options.umdExport) {
+                if (!options.out && !options.outFile) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "umdExport", "out", "outFile");
+                }
+                if (options.module !== ModuleKind.UMD) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_specified_when_module_code_generation_is_umd, "umdExport");
+                }
+                if (!isEntityNameText(options.umdExport, languageVersion)) {
+                    createOptionValueDiagnostic("umdExport", Diagnostics.Invalid_value_for_0_1_is_not_a_valid_identifier_or_qualified_name, options.umdExport);
+                }
+            }
+
+            if (options.umdGlobal) {
+                if (!options.umdExport) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "umdGlobal", "umdExport");
+                }
+                if (!isIdentifierText(options.umdGlobal, languageVersion)) {
+                    createOptionValueDiagnostic("umdGlobal", Diagnostics.Invalid_value_for_0_1_is_not_a_valid_identifier, options.umdGlobal);
+                }
+            }
+
+            if (options.umdGlobalAlways) {
+                if (!options.umdGlobal) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "umdGlobalAlways", "umdGlobal");
+                }
+            }
+
             if (options.mapRoot && !(options.sourceMap || options.declarationMap)) {
                 // Error to specify --mapRoot without --sourcemap
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "mapRoot", "sourceMap", "declarationMap");
@@ -3117,8 +3146,6 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
             }
 
-            const languageVersion = options.target || ScriptTarget.ES3;
-
             const firstNonAmbientExternalModuleSourceFile = find(files, f => isExternalModule(f) && !f.isDeclarationFile);
             if (options.isolatedModules) {
                 if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015) {
@@ -3139,7 +3166,7 @@ namespace ts {
 
             // Cannot specify module gen that isn't amd or system with --out
             if (outputFile && !options.emitDeclarationOnly) {
-                if (options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
+                if (options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System || options.module === ModuleKind.UMD)) {
                     createDiagnosticForOptionName(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile", "module");
                 }
                 else if (options.module === undefined && firstNonAmbientExternalModuleSourceFile) {
@@ -3200,20 +3227,20 @@ namespace ts {
                 if (options.reactNamespace) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory");
                 }
-                if (!parseIsolatedEntityName(options.jsxFactory, languageVersion)) {
-                    createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory);
+                if (!isEntityNameText(options.jsxFactory, languageVersion)) {
+                    createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_0_1_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory);
                 }
             }
             else if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
-                createOptionValueDiagnostic("reactNamespace", Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace);
+                createOptionValueDiagnostic("reactNamespace", Diagnostics.Invalid_value_for_0_1_is_not_a_valid_identifier, options.reactNamespace);
             }
 
             if (options.jsxFragmentFactory) {
                 if (!options.jsxFactory) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "jsxFragmentFactory", "jsxFactory");
                 }
-                if (!parseIsolatedEntityName(options.jsxFragmentFactory, languageVersion)) {
-                    createOptionValueDiagnostic("jsxFragmentFactory", Diagnostics.Invalid_value_for_jsxFragmentFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFragmentFactory);
+                if (!isEntityNameText(options.jsxFragmentFactory, languageVersion)) {
+                    createOptionValueDiagnostic("jsxFragmentFactory", Diagnostics.Invalid_value_for_0_1_is_not_a_valid_identifier_or_qualified_name, options.jsxFragmentFactory);
                 }
             }
 
@@ -3378,7 +3405,7 @@ namespace ts {
         }
 
         function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0: string) {
-            createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
+            createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, option1, arg0);
         }
 
         function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {
@@ -3807,5 +3834,33 @@ namespace ts {
             // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
         }
         return res;
+    }
+
+    function isEntityNameText(text: string, languageVersion: ScriptTarget) {
+        if (hasTriviaAt(0)) return false;
+
+        const entity = parseIsolatedEntityName(text, languageVersion);
+        if (!entity) return false;
+
+        let pos = 0;
+        return visit(entity);
+
+        function hasTriviaAt(pos: number) {
+            return skipTrivia(text, pos) !== pos;
+        }
+
+        function visit(node: EntityName): boolean {
+            if (pos !== node.pos) return false;
+            if (node.kind === SyntaxKind.QualifiedName) {
+                if (!visit(node.left)) return false;
+                pos++; // .
+                if (hasTriviaAt(pos)) return false;
+                return visit(node.right);
+            }
+            else {
+                pos = node.end;
+                return !hasTriviaAt(pos);
+            }
+        }
     }
 }

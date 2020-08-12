@@ -3016,7 +3016,10 @@
         "category": "Error",
         "code": 2792
     },
-
+    "Cannot find namespace '{0}' specified by 'umdExport' option.": {
+        "category": "Error",
+        "code": 2793
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3467,7 +3470,7 @@
         "category": "Error",
         "code": 5058
     },
-    "Invalid value for '--reactNamespace'. '{0}' is not a valid identifier.": {
+    "Invalid value for '{0}'. '{1}' is not a valid identifier.": {
         "category": "Error",
         "code": 5059
     },
@@ -3499,7 +3502,7 @@
         "category": "Error",
         "code": 5066
     },
-    "Invalid value for 'jsxFactory'. '{0}' is not a valid identifier or qualified-name.": {
+    "Invalid value for '{0}'. '{1}' is not a valid identifier or qualified-name.": {
         "category": "Error",
         "code": 5067
     },
@@ -3586,6 +3589,10 @@
     "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
         "category": "Error",
         "code": 5088
+    },
+    "Option '{0} can only be specified when module code generation is 'umd'.": {
+        "category": "Error",
+        "code": 5089
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4481,6 +4488,18 @@
     "Arguments for the rest parameter '{0}' were not provided.": {
         "category": "Error",
         "code": 6236
+    },
+    "Specifies the sole export for a single-file output UMD module.": {
+        "category": "Message",
+        "code": 6237
+    },
+    "Wraps a single-file output as a UMD module with specified name used as a global value for the sole export.": {
+        "category": "Message",
+        "code": 6238
+    },
+    "Always set the global value for a single-file output UMD module.": {
+        "category": "Message",
+        "code": 6239
     },
 
     "Projects to reference": {
@@ -5981,8 +6000,9 @@
         "category": "Message",
         "code": 18034
     },
-    "Invalid value for 'jsxFragmentFactory'. '{0}' is not a valid identifier or qualified-name.": {
+    "retired:18035": {
         "category": "Error",
-        "code": 18035
+        "code": 18035,
+        "retired": true
     }
 }

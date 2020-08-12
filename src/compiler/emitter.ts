@@ -1550,7 +1550,9 @@ namespace ts {
                     case SyntaxKind.JSDocComment:
                         return emitJSDoc(node as JSDoc);
 
-                    // Transformation nodes (ignored)
+                    // Transformation nodes
+                    case SyntaxKind.EmbeddedSourceFileStatement:
+                        return emitEmbeddedSourceFileStatement(node as EmbeddedSourceFileStatement);
                 }
 
                 if (isExpression(node)) {
@@ -3706,6 +3708,10 @@ namespace ts {
         }
 
         // Transformation nodes
+
+        function emitEmbeddedSourceFileStatement(node: EmbeddedSourceFileStatement) {
+            print(EmitHint.SourceFile, node.sourceFile, node.sourceFile);
+        }
 
         function emitPartiallyEmittedExpression(node: PartiallyEmittedExpression) {
             emitExpression(node.expression);

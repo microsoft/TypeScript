@@ -8,6 +8,7 @@ interface DiagnosticDetails {
     reportsDeprecated?: {};
     isEarly?: boolean;
     elidedInCompatabilityPyramid?: boolean;
+    retired?: boolean; // indicates the code has been retired and is present only to prevent reuse
 }
 
 type InputDiagnosticMessageTable = Map<string, DiagnosticDetails>;
@@ -34,6 +35,7 @@ function main(): void {
     const diagnosticMessages: InputDiagnosticMessageTable = new Map();
     for (const key in diagnosticMessagesJson) {
         if (Object.hasOwnProperty.call(diagnosticMessagesJson, key)) {
+            if (diagnosticMessagesJson[key].retired) continue;
             diagnosticMessages.set(key, diagnosticMessagesJson[key]);
         }
     }

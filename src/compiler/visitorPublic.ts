@@ -1079,6 +1079,10 @@ namespace ts {
                     visitLexicalEnvironment((<SourceFile>node).statements, visitor, context));
 
             // Transformation nodes
+            case SyntaxKind.EmbeddedSourceFileStatement:
+                return factory.updateEmbeddedSourceFileStatement(<EmbeddedSourceFileStatement>node,
+                    nodeVisitor((<EmbeddedSourceFileStatement>node).sourceFile, visitor, isSourceFile));
+
             case SyntaxKind.PartiallyEmittedExpression:
                 return factory.updatePartiallyEmittedExpression(<PartiallyEmittedExpression>node,
                     nodeVisitor((<PartiallyEmittedExpression>node).expression, visitor, isExpression));

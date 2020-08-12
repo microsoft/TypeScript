@@ -396,6 +396,7 @@ namespace ts {
 
         // Transformation nodes
         NotEmittedStatement,
+        EmbeddedSourceFileStatement,
         PartiallyEmittedExpression,
         CommaListExpression,
         MergeDeclarationMarker,
@@ -2534,6 +2535,15 @@ namespace ts {
     // not-emitted node.
     export interface NotEmittedStatement extends Statement {
         readonly kind: SyntaxKind.NotEmittedStatement;
+    }
+
+    /**
+     * Embeds a source file as a statement
+     */
+    /* @internal */
+    export interface EmbeddedSourceFileStatement extends Statement {
+        readonly kind: SyntaxKind.EmbeddedSourceFileStatement;
+        readonly sourceFile: SourceFile;
     }
 
     /**
@@ -5756,6 +5766,9 @@ namespace ts {
         esModuleInterop?: boolean;
         /* @internal */ showConfig?: boolean;
         useDefineForClassFields?: boolean;
+        umdGlobal?: string;
+        umdGlobalAlways?: boolean;
+        umdExport?: string;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
@@ -7096,6 +7109,8 @@ namespace ts {
         /* @internal */ updateSyntheticReferenceExpression(node: SyntheticReferenceExpression, expression: Expression, thisArg: Expression): SyntheticReferenceExpression;
         createCommaListExpression(elements: readonly Expression[]): CommaListExpression;
         updateCommaListExpression(node: CommaListExpression, elements: readonly Expression[]): CommaListExpression;
+        /* @internal */ createEmbeddedSourceFileStatement(sourceFile: SourceFile): EmbeddedSourceFileStatement;
+        /* @internal */ updateEmbeddedSourceFileStatement(node: EmbeddedSourceFileStatement, sourceFile: SourceFile): EmbeddedSourceFileStatement;
         createBundle(sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
         updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends?: readonly (UnparsedSource | InputFiles)[]): Bundle;
 

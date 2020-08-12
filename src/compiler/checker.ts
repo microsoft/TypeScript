@@ -323,6 +323,7 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
+        const umdExport = getSingleFileUmdExport(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
@@ -924,6 +925,7 @@ namespace ts {
 
         const diagnostics = createDiagnosticCollection();
         const suggestionDiagnostics = createDiagnosticCollection();
+        let hasReportedUmdExportDiagnostic = false;
 
         const typeofTypesByName: ReadonlyESMap<string, Type> = new Map(getEntries({
             string: stringType,
@@ -965,7 +967,7 @@ namespace ts {
                         if (jsxFragmentPragma) {
                             const chosenPragma = isArray(jsxFragmentPragma) ? jsxFragmentPragma[0] : jsxFragmentPragma;
                             file.localJsxFragmentFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
-                            visitNode(file.localJsxFragmentFactory, markAsSynthetic);
+                            markAsSynthetic(file.localJsxFragmentFactory);
                             if (file.localJsxFragmentFactory) {
                                 return file.localJsxFragmentNamespace = getFirstIdentifier(file.localJsxFragmentFactory).escapedText;
                             }
@@ -984,7 +986,7 @@ namespace ts {
                         if (jsxPragma) {
                             const chosenPragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
                             file.localJsxFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
-                            visitNode(file.localJsxFactory, markAsSynthetic);
+                            markAsSynthetic(file.localJsxFactory);
                             if (file.localJsxFactory) {
                                 return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
                             }
@@ -996,7 +998,7 @@ namespace ts {
                 _jsxNamespace = "React" as __String;
                 if (compilerOptions.jsxFactory) {
                     _jsxFactoryEntity = parseIsolatedEntityName(compilerOptions.jsxFactory, languageVersion);
-                    visitNode(_jsxFactoryEntity, markAsSynthetic);
+                    markAsSynthetic(_jsxFactoryEntity);
                     if (_jsxFactoryEntity) {
                         _jsxNamespace = getFirstIdentifier(_jsxFactoryEntity).escapedText;
                     }
@@ -1010,9 +1012,12 @@ namespace ts {
             }
             return _jsxNamespace;
 
-            function markAsSynthetic(node: Node): VisitResult<Node> {
+        }
+
+        function markAsSynthetic(node: Node | undefined) {
+            if (node) {
                 setTextRangePosEnd(node, -1, -1);
-                return visitEachChild(node, markAsSynthetic, nullTransformationContext);
+                forEachChild(node, markAsSynthetic);
             }
         }
 
@@ -36075,6 +36080,16 @@ namespace ts {
 
                 if (isExternalOrCommonJsModule(node)) {
                     checkExternalModuleExports(node);
+                }
+                else if (!node.isDeclarationFile && umdExport && !hasReportedUmdExportDiagnostic) {
+                    hasReportedUmdExportDiagnostic = true;
+                    const umdExportNamespace = parseIsolatedEntityName(umdExport, languageVersion);
+                    if (umdExportNamespace) {
+                        markAsSynthetic(umdExportNamespace);
+                        if (!resolveEntityName(umdExportNamespace, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, node)) {
+                            error(undefined, Diagnostics.Cannot_find_namespace_0_specified_by_umdExport_option, umdExport);
+                        }
+                    }
                 }
 
                 if (potentialThisCollisions.length) {

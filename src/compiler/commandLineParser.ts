@@ -1000,6 +1000,27 @@ namespace ts {
             description: Diagnostics.Resolve_keyof_to_string_valued_property_names_only_no_numbers_or_symbols,
         },
         {
+            name: "umdExport",
+            type: "string",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Specifies_the_sole_export_for_a_single_file_output_UMD_module
+        },
+        {
+            name: "umdGlobal",
+            type: "string",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Wraps_a_single_file_output_as_a_UMD_module_with_specified_name_used_as_a_global_value_for_the_sole_export
+        },
+        {
+            name: "umdGlobalAlways",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Always_set_the_global_value_for_a_single_file_output_UMD_module
+        },
+        {
             // A list of plugins to load in the language service
             name: "plugins",
             type: "list",

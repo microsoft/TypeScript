@@ -546,7 +546,8 @@ namespace ts {
             return factory.createStringLiteral(file.moduleName);
         }
         if (!file.isDeclarationFile && outFile(options)) {
-            return factory.createStringLiteral(getExternalModuleNameFromPath(host, file.fileName));
+            const moduleName = getExternalModuleNameFromPath(host, file.fileName);
+            return moduleName ? factory.createStringLiteral(moduleName) : undefined;
         }
         return undefined;
     }

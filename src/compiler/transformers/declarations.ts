@@ -86,6 +86,8 @@ namespace ts {
         let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
         const resolver = context.getEmitResolver();
         const options = context.getCompilerOptions();
+        const umdExport = getSingleFileUmdExport(options);
+        const umdGlobal = getSingleFileUmdGlobalNamespace(options);
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
@@ -235,7 +237,7 @@ namespace ts {
                 libs = new Map();
                 let hasNoDefaultLib = false;
                 const bundle = factory.createBundle(map(node.sourceFiles,
-                    sourceFile => {
+                    (sourceFile, index) => {
                         if (sourceFile.isDeclarationFile) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
                         hasNoDefaultLib = hasNoDefaultLib || sourceFile.hasNoDefaultLib;
                         currentSourceFile = sourceFile;
@@ -262,7 +264,19 @@ namespace ts {
                         }
                         needsDeclare = true;
                         const updated = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
-                        return factory.updateSourceFile(sourceFile, transformAndReplaceLatePaintedStatements(updated), /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
+                        let statements = transformAndReplaceLatePaintedStatements(updated);
+                        if (umdExport && index === node.sourceFiles.length - 1) {
+                            const umdExportNamespace = parseIsolatedEntityName(umdExport, ScriptTarget.ESNext);
+                            if (umdExportNamespace) {
+                                const statementsArray = [...statements];
+                                statementsArray.push(factory.createExportAssignment(/*decorators*/ undefined, /*modifiers*/ undefined, /*isExportEquals*/ true, createExpressionFromEntityName(factory, umdExportNamespace)));
+                                if (umdGlobal) {
+                                    statementsArray.push(factory.createNamespaceExportDeclaration(umdGlobal));
+                                }
+                                statements = setTextRange(factory.createNodeArray(statementsArray), statements);
+                            }
+                        }
+                        return factory.updateSourceFile(sourceFile, statements, /*isDeclarationFile*/ true, /*referencedFiles*/ [], /*typeReferences*/ [], /*hasNoDefaultLib*/ false, /*libReferences*/ []);
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {

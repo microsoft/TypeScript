@@ -41,13 +41,46 @@ namespace ts {
 
         const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
         const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
+        const umdExport = getSingleFileUmdExport(compilerOptions);
+        const umdGlobal = getSingleFileUmdGlobalNamespace(compilerOptions);
+        const umdGlobalAlways = !!umdGlobal && compilerOptions.umdGlobalAlways;
 
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
 
-        return chainBundle(context, transformSourceFile);
+        return transformSourceFileOrBundle;
+
+        function transformSourceFileOrBundle(node: SourceFile | Bundle) {
+            return node.kind === SyntaxKind.SourceFile ? transformSourceFile(node) : transformBundle(node);
+        }
+
+        function transformBundle(node: Bundle) {
+            if (umdExport) {
+                const statements: Statement[] = map(node.sourceFiles, factory.createEmbeddedSourceFileStatement);
+                const exportEqualsStatement = factory.createExportAssignment(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*isExportEquals*/ true,
+                    factory.createIdentifier(umdExport)
+                );
+                statements.push(exportEqualsStatement);
+                const wrapper = factory.createSourceFile(
+                    statements,
+                    factory.createToken(SyntaxKind.EndOfFileToken),
+                    NodeFlags.None
+                );
+                wrapper.moduleName = umdGlobal;
+                wrapper.externalModuleIndicator = exportEqualsStatement;
+                wrapper.amdDependencies = [];
+                for (const sourceFile of node.sourceFiles) {
+                    moveEmitHelpers(sourceFile, wrapper, helper => !helper.scoped);
+                }
+                return context.factory.createBundle([transformSourceFile(wrapper)], node.prepends);
+            }
+            return context.factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+        }
 
         /**
          * Transforms the module aspects of a SourceFile.
@@ -62,6 +95,9 @@ namespace ts {
                 return node;
             }
 
+            const savedCurrentSourceFile = currentSourceFile;
+            const savedCurrentModuleInfo = currentModuleInfo;
+            const savedNeedUMDDynamicImportHelper = needUMDDynamicImportHelper;
             currentSourceFile = node;
             currentModuleInfo = collectExternalModuleInfo(context, node, resolver, compilerOptions);
             moduleInfoMap[getOriginalNodeId(node)] = currentModuleInfo;
@@ -69,12 +105,11 @@ namespace ts {
             // Perform the transformation.
             const transformModule = getTransformModuleDelegate(moduleKind);
             const updated = transformModule(node);
-            currentSourceFile = undefined!;
-            currentModuleInfo = undefined!;
-            needUMDDynamicImportHelper = false;
+            currentSourceFile = savedCurrentSourceFile;
+            currentModuleInfo = savedCurrentModuleInfo;
+            needUMDDynamicImportHelper = savedNeedUMDDynamicImportHelper;
             return updated;
         }
-
 
         function shouldEmitUnderscoreUnderscoreESModule() {
             if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
@@ -207,12 +242,89 @@ namespace ts {
         function transformUMDModule(node: SourceFile) {
             const { aliasedModuleNames, unaliasedModuleNames, importAliasNames } = collectAsynchronousDependencies(node, /*includeNonAmdDependencies*/ false);
             const moduleName = tryGetModuleNameFromFile(factory, node, host, compilerOptions);
+
+            // Create an updated SourceFile:
+            // Without '--umdGlobal':
+            //
+            //  (function (factory) {
+            //      if (typeof module === "object" && typeof module.exports === "object") {
+            //          var v = factory(require, exports);
+            //          if (v !== undefined) module.exports = v;
+            //      }
+            //      else if (typeof define === 'function' && define.amd) {
+            //          define(["require", "exports"], factory);
+            //      }
+            //  })(function ...)
+            //
+            // With '--outFile foo.js --umdExport foo --umdGlobal foo' (single-file output with a single namespace export):
+            //
+            //  (function (root, factory) {
+            //      if (typeof module === "object" && typeof module.exports === "object") {
+            //          var v = factory(require, exports);
+            //          if (v !== undefined) module.exports = v;
+            //      }
+            //      else if (typeof define === 'function' && define.amd) {
+            //          define(["require", "exports"], factory);
+            //      }
+            //      else if (root) {
+            //          root.foo = factory();
+            //      }
+            //  })(typeof globalThis === "object" ? globalThis : typeof self === "object" ? self : this, function () {
+            //      ...
+            //      return foo;
+            //  })
+
+            let rootParameter: ParameterDeclaration | undefined;
+            let rootExpression: Expression | undefined;
+            let rootStatement: IfStatement | undefined;
+            if (umdGlobal) {
+                rootParameter = factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "root");
+                rootExpression = factory.createConditionalExpression(
+                    factory.createTypeCheck(factory.createIdentifier("globalThis"), "object"),
+                    /*questionToken*/ undefined,
+                    factory.createIdentifier("globalThis"),
+                    /*colonToken*/ undefined,
+                    factory.createConditionalExpression(
+                        factory.createTypeCheck(factory.createIdentifier("self"), "object"),
+                        /*questionToken*/ undefined,
+                        factory.createIdentifier("self"),
+                        /*colonToken*/ undefined,
+                        factory.createConditionalExpression(
+                            factory.createTypeCheck(factory.createIdentifier("global"), "object"),
+                            /*questionToken*/ undefined,
+                            factory.createIdentifier("global"),
+                            /*colonToken*/ undefined,
+                            factory.createThis()
+                        )
+                    )
+                );
+                rootStatement = factory.createIfStatement(
+                    factory.createIdentifier("root"),
+                    factory.createBlock([
+                        factory.createExpressionStatement(
+                            factory.createAssignment(
+                                factory.createPropertyAccessExpression(
+                                    factory.createIdentifier("root"),
+                                    factory.createIdentifier(umdGlobal)
+                                ),
+                                factory.createCallExpression(
+                                    factory.createIdentifier("factory"),
+                                    /*typeArguments*/ undefined,
+                                    []
+                                )
+                            )
+                        )
+                    ], true)
+                );
+            }
+
+            const factoryParameter = factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory");
             const umdHeader = factory.createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
+                rootParameter ? [rootParameter, factoryParameter] : [factoryParameter],
                 /*type*/ undefined,
                 setTextRange(
                     factory.createBlock(
@@ -255,7 +367,20 @@ namespace ts {
                                             )
                                         ),
                                         EmitFlags.SingleLine
-                                    )
+                                    ),
+                                    ...(umdGlobal && umdGlobalAlways ? [
+                                        factory.createIfStatement(
+                                            factory.createIdentifier("root"),
+                                            factory.createBlock([
+                                                factory.createExpressionStatement(
+                                                    factory.createAssignment(
+                                                        factory.createPropertyAccessExpression(factory.createIdentifier("root"), umdGlobal),
+                                                        factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports")
+                                                    )
+                                                )
+                                            ], true)
+                                        )
+                                    ] : [])
                                 ]),
                                 factory.createIfStatement(
                                     factory.createLogicalAnd(
@@ -276,11 +401,48 @@ namespace ts {
                                                         ...aliasedModuleNames,
                                                         ...unaliasedModuleNames
                                                     ]),
-                                                    factory.createIdentifier("factory")
+                                                    umdGlobal && umdGlobalAlways ? 
+                                                        factory.createFunctionExpression(
+                                                            /*modifiers*/ undefined,
+                                                            /*asteriskToken*/ undefined,
+                                                            /*name*/ undefined,
+                                                            /*typeParameters*/ undefined,
+                                                            /*parameters*/ undefined,
+                                                            /*type*/ undefined,
+                                                            factory.createBlock([
+                                                                factory.createVariableStatement(/*modifiers*/ undefined, [
+                                                                    factory.createVariableDeclaration("result",
+                                                                        /*exclamationToken*/ undefined,
+                                                                        /*type*/ undefined,
+                                                                        factory.createFunctionApplyCall(
+                                                                            factory.createIdentifier("factory"),
+                                                                            factory.createThis(),
+                                                                            factory.createIdentifier("arguments")
+                                                                        )
+                                                                    )
+                                                                ]),
+                                                                factory.createIfStatement(
+                                                                    factory.createIdentifier("root"),
+                                                                    factory.createBlock([
+                                                                        factory.createExpressionStatement(
+                                                                            factory.createAssignment(
+                                                                                factory.createPropertyAccessExpression(factory.createIdentifier("root"), umdGlobal),
+                                                                                factory.createIdentifier("result")
+                                                                            )
+                                                                        )
+                                                                    ], true)
+                                                                ),
+                                                                factory.createReturnStatement(
+                                                                    factory.createIdentifier("result")
+                                                                )
+                                                            ], true)
+                                                        ) : 
+                                                        factory.createIdentifier("factory")
                                                 ]
                                             )
                                         )
-                                    ])
+                                    ]),
+                                    rootStatement
                                 )
                             )
                         ],
@@ -290,17 +452,22 @@ namespace ts {
                 )
             );
 
-            // Create an updated SourceFile:
+            // Add the module body function argument:
             //
-            //  (function (factory) {
-            //      if (typeof module === "object" && typeof module.exports === "object") {
-            //          var v = factory(require, exports);
-            //          if (v !== undefined) module.exports = v;
-            //      }
-            //      else if (typeof define === 'function' && define.amd) {
-            //          define(["require", "exports"], factory);
-            //      }
-            //  })(function ...)
+            //     function (require, exports) ...
+            const bodyFunction = factory.createFunctionExpression(
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                [
+                    factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                    factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                    ...importAliasNames
+                ],
+                /*type*/ undefined,
+                transformAsynchronousModuleBody(node)
+            );
 
             const updated = factory.updateSourceFile(
                 node,
@@ -310,24 +477,7 @@ namespace ts {
                             factory.createCallExpression(
                                 umdHeader,
                                 /*typeArguments*/ undefined,
-                                [
-                                    // Add the module body function argument:
-                                    //
-                                    //     function (require, exports) ...
-                                    factory.createFunctionExpression(
-                                        /*modifiers*/ undefined,
-                                        /*asteriskToken*/ undefined,
-                                        /*name*/ undefined,
-                                        /*typeParameters*/ undefined,
-                                        [
-                                            factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                            factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
-                                            ...importAliasNames
-                                        ],
-                                        /*type*/ undefined,
-                                        transformAsynchronousModuleBody(node)
-                                    )
-                                ]
+                                rootExpression ? [rootExpression, bodyFunction] : [bodyFunction]
                             )
                         )
                     ]),
@@ -520,6 +670,9 @@ namespace ts {
 
                 case SyntaxKind.EndOfDeclarationMarker:
                     return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
+
+                case SyntaxKind.EmbeddedSourceFileStatement:
+                    return visitEmbeddedSourceFileStatement(<EmbeddedSourceFileStatement>node);
 
                 default:
                     return visitEachChild(node, moduleExpressionElementVisitor, context);
@@ -1360,6 +1513,10 @@ namespace ts {
             }
 
             return node;
+        }
+
+        function visitEmbeddedSourceFileStatement(node: EmbeddedSourceFileStatement) {
+            return factory.updateEmbeddedSourceFileStatement(node, transformSourceFile(node.sourceFile));
         }
 
         /**
