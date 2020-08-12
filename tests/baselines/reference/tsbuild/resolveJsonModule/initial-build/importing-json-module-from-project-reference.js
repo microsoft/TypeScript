@@ -80,30 +80,20 @@ Output::
 
 [[90m12:01:00 AM[0m] Building project '/src/strings/tsconfig.json'...
 
-RootFiles::
-src/strings/foo.json
-  Matched by include pattern 'foo.json' in tsconfig.json
-
-LibFiles::
 lib/lib.d.ts
   Default library for target 'es5'
-
+src/strings/foo.json
+  Matched by include pattern 'foo.json' in tsconfig.json
 [[90m12:01:00 AM[0m] Project 'src/main/tsconfig.json' is out of date because output file 'src/main/index.js' does not exist
 
 [[90m12:01:00 AM[0m] Building project '/src/main/tsconfig.json'...
 
-RootFiles::
-src/main/index.ts
-  Matched by include pattern './**/*.ts' in tsconfig.json
-
-Imports::
-src/strings/foo.json
-  Imported via '../strings/foo.json' from file 'src/main/index.ts'
-
-LibFiles::
 lib/lib.d.ts
   Default library for target 'es5'
-
+src/strings/foo.json
+  Imported via '../strings/foo.json' from file 'src/main/index.ts'
+src/main/index.ts
+  Matched by include pattern './**/*.ts' in tsconfig.json
 exitCode:: ExitStatus.Success
 
 

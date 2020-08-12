@@ -62,14 +62,8 @@ Output::
 [7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
 [7m [0m [91m             ~~~~~[0m
 
-RootFiles::
-pkg3/src/keys.ts
-  Imported via './keys' from file 'pkg3/src/index.ts'
-  Matched by include pattern '**/*' in tsconfig.json
-pkg3/src/index.ts
-  Matched by include pattern '**/*' in tsconfig.json
-
-Imports::
+../../../../a/lib/lib.d.ts
+  Default library for target 'es5'
 pkg1/dist/types.d.ts
   Imported via './types' from file 'pkg1/dist/index.d.ts'
 pkg1/dist/index.d.ts
@@ -78,11 +72,11 @@ pkg2/dist/types.d.ts
   Imported via './types' from file 'pkg2/dist/index.d.ts'
 pkg2/dist/index.d.ts
   Imported via "@raymondfeng/pkg2" from file 'pkg3/src/keys.ts', PackageId:: '@raymondfeng/pkg2/dist/index.d.ts@1.0.0'
-
-LibFiles::
-../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
-
+pkg3/src/keys.ts
+  Imported via './keys' from file 'pkg3/src/index.ts'
+  Matched by include pattern '**/*' in tsconfig.json
+pkg3/src/index.ts
+  Matched by include pattern '**/*' in tsconfig.json
 
 Found 1 error.
 

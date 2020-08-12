@@ -32,14 +32,10 @@ export const x = 10;
 
 Output::
 /lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
-RootFiles::
-src/project/src/main.ts
-  Matched by include pattern 'src/**/*.ts' in tsconfig.json
-
-LibFiles::
 lib/lib.d.ts
   Default library for target 'es5'
-
+src/project/src/main.ts
+  Matched by include pattern 'src/**/*.ts' in tsconfig.json
 exitCode:: ExitStatus.Success
 
 
@@ -92,14 +88,10 @@ Input::
 
 Output::
 /lib/tsc --incremental --p src/project --tsBuildInfoFile src/project/.tsbuildinfo --explainFiles
-RootFiles::
-src/project/src/main.ts
-  Matched by include pattern 'src/**/*.ts' in tsconfig.json
-
-LibFiles::
 lib/lib.d.ts
   Default library for target 'es5'
-
+src/project/src/main.ts
+  Matched by include pattern 'src/**/*.ts' in tsconfig.json
 exitCode:: ExitStatus.Success
 
 

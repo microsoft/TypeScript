@@ -148,18 +148,6 @@ namespace ts {
 
     export function explainFiles(program: ProgramToEmitFilesAndReportErrors, write: (s: string) => void) {
         const reasons = program.getFileIncludeReasons();
-        const filesByOrder = new Map<FileIncludeKind, SourceFile[]>();
-        for (const file of program.getSourceFiles()) {
-            const order = reduceLeft(reasons.get(file.path), (memo, reason) => min(memo, reason.kind, compareValues) as FileIncludeKind, FileIncludeKind.AutomaticTypeDirectiveFile);
-            const existing = filesByOrder.get(order);
-            if (existing) {
-                existing.push(file);
-            }
-            else {
-                filesByOrder.set(order, [file]);
-            }
-        }
-
         const options = program.getCompilerOptions();
         const { filesSpecs, validatedIncludeSpecs } = options.configFile?.configFileSpecs || {};
         const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
@@ -175,70 +163,64 @@ namespace ts {
             });
         });
 
-        for (let order = FileIncludeKind.RootFile; order <= FileIncludeKind.AutomaticTypeDirectiveFile; order++) {
-            const files = filesByOrder.get(order);
-            if (!files) continue;
-            write(`${FileIncludeKind[order]}s::`);
-            for (const file of files) {
-                write(`${toFileName(program, file)}${file.path !== file.resolvedPath ? `, output of project reference source '${toFileName(program, file.originalFileName)}'` : ""}${file.redirectInfo ? `, redirects to '${toFileName(program, file.redirectInfo.redirectTarget)}'` : ""}`);
-                const fileReasons = reasons.get(file.path)!;
-                for (const reason of fileReasons) {
-                    switch (reason.kind) {
-                        case FileIncludeKind.Import:
-                        case FileIncludeKind.ReferenceFile:
-                        case FileIncludeKind.TypeReferenceDirective:
-                        case FileIncludeKind.LibReferenceDirective:
-                            const { file: referecedFromFile, pos, end, packageId } = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason, /*includePackageId*/ true);
-                            let referenceText = referecedFromFile.text.substring(pos, end);
-                            if (reason.kind !== FileIncludeKind.Import) referenceText = `'${referenceText}'`;
-                            write(`${referecedFileReasonPrefix(reason.kind)}${referenceText} from file '${toFileName(program, referecedFromFile)}'${packageIdToString(packageId)}`);
-                            break;
-                        case FileIncludeKind.RootFile:
-                            if (!options.configFile?.configFileSpecs) break;
-                            if (includeSpecs) {
-                                const filePath = keyMapper(getNormalizedAbsolutePath(file.originalFileName, basePath));
-                                const matchedByFiles = forEach(filesSpecs, fileSpec => keyMapper(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
-                                if (!matchedByFiles) {
-                                    const fileName = getNormalizedAbsolutePath(file.originalFileName, basePath);
-                                    const isJsonFile = fileExtensionIs(file.originalFileName, Extension.Json);
-                                    const matchedByInclude = find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
-                                    if (matchedByInclude) {
-                                        write(`  Matched by include pattern '${matchedByInclude.include}' in tsconfig.json`);
-                                    }
-                                    else {
-                                        Debug.fail(`Did not find matching include for file  ${JSON.stringify({
-                                            fileName: file.fileName,
-                                            originalFileName: file.originalFileName,
-                                            filesSpecs,
-                                            validatedIncludeSpecs,
-                                        })}`);
-                                    }
-                                    break;
+        for (const file of program.getSourceFiles()) {
+            write(`${toFileName(program, file)}${file.path !== file.resolvedPath ? `, output of project reference source '${toFileName(program, file.originalFileName)}'` : ""}${file.redirectInfo ? `, redirects to '${toFileName(program, file.redirectInfo.redirectTarget)}'` : ""}`);
+            const fileReasons = reasons.get(file.path)!;
+            for (const reason of fileReasons) {
+                switch (reason.kind) {
+                    case FileIncludeKind.Import:
+                    case FileIncludeKind.ReferenceFile:
+                    case FileIncludeKind.TypeReferenceDirective:
+                    case FileIncludeKind.LibReferenceDirective:
+                        const { file: referecedFromFile, pos, end, packageId } = getReferencedFileLocation(path => program.getSourceFileByPath(path), reason, /*includePackageId*/ true);
+                        let referenceText = referecedFromFile.text.substring(pos, end);
+                        if (reason.kind !== FileIncludeKind.Import) referenceText = `'${referenceText}'`;
+                        write(`${referecedFileReasonPrefix(reason.kind)}${referenceText} from file '${toFileName(program, referecedFromFile)}'${packageIdToString(packageId)}`);
+                        break;
+                    case FileIncludeKind.RootFile:
+                        if (!options.configFile?.configFileSpecs) break;
+                        if (includeSpecs) {
+                            const filePath = keyMapper(getNormalizedAbsolutePath(file.originalFileName, basePath));
+                            const matchedByFiles = forEach(filesSpecs, fileSpec => keyMapper(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+                            if (!matchedByFiles) {
+                                const fileName = getNormalizedAbsolutePath(file.originalFileName, basePath);
+                                const isJsonFile = fileExtensionIs(file.originalFileName, Extension.Json);
+                                const matchedByInclude = find(includeSpecs, spec => (!isJsonFile || endsWith(spec.include, Extension.Json)) && spec.regExp.test(fileName));
+                                if (matchedByInclude) {
+                                    write(`  Matched by include pattern '${matchedByInclude.include}' in tsconfig.json`);
                                 }
+                                else {
+                                    Debug.fail(`Did not find matching include for file  ${JSON.stringify({
+                                        fileName: file.fileName,
+                                        originalFileName: file.originalFileName,
+                                        filesSpecs,
+                                        validatedIncludeSpecs,
+                                    })}`);
+                                }
+                                break;
                             }
-                            write(`  Part of 'files' list in tsconfig.json`);
-                            break;
-                        case FileIncludeKind.ProjectReferenceFile:
-                            write(`  ${file.isDeclarationFile ? "Output" : "Source"} from referenced project '${toFileName(program, reason.config)}' included because ${outFile(options) ? `'--${options.outFile ? "outFile" : "out"}' specified` : `'--module' is specified as 'none'`}`);
-                            break;
-                        case FileIncludeKind.AutomaticTypeDirectiveFile:
-                            write(`  ${options.types ? `Entry point of type library '${reason.typeReference}' specified in compilerOptions` : `Entry point for implicit type library '${reason.typeReference}'`}${packageIdToString(reason.packageId)}`);
-                            break;
-                        case FileIncludeKind.LibFile:
-                            if (reason.lib) {
-                                write(`  Library '${reason.lib}' specified in compilerOptions`);
-                            }
-                            else {
-                                const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
-                                write(`  Default library${target ? ` for target '${target}'` : ""}`);
-                            }
-                            break;
-                        default:
-                            Debug.assertNever(reason);
-                    }
+                        }
+                        write(`  Part of 'files' list in tsconfig.json`);
+                        break;
+                    case FileIncludeKind.ProjectReferenceFile:
+                        write(`  ${file.isDeclarationFile ? "Output" : "Source"} from referenced project '${toFileName(program, reason.config)}' included because ${outFile(options) ? `'--${options.outFile ? "outFile" : "out"}' specified` : `'--module' is specified as 'none'`}`);
+                        break;
+                    case FileIncludeKind.AutomaticTypeDirectiveFile:
+                        write(`  ${options.types ? `Entry point of type library '${reason.typeReference}' specified in compilerOptions` : `Entry point for implicit type library '${reason.typeReference}'`}${packageIdToString(reason.packageId)}`);
+                        break;
+                    case FileIncludeKind.LibFile:
+                        if (reason.lib) {
+                            write(`  Library '${reason.lib}' specified in compilerOptions`);
+                        }
+                        else {
+                            const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
+                            write(`  Default library${target ? ` for target '${target}'` : ""}`);
+                        }
+                        break;
+                    default:
+                        Debug.assertNever(reason);
                 }
             }
-            write("");
         }
     }
 

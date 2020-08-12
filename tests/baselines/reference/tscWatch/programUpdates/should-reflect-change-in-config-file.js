@@ -30,16 +30,12 @@ Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
-RootFiles::
+a/lib/lib.d.ts
+  Default library
 a/b/commonFile1.ts
   Part of 'files' list in tsconfig.json
 a/b/commonFile2.ts
   Part of 'files' list in tsconfig.json
-
-LibFiles::
-a/lib/lib.d.ts
-  Default library
-
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -97,14 +93,10 @@ Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
-RootFiles::
-a/b/commonFile1.ts
-  Part of 'files' list in tsconfig.json
-
-LibFiles::
 a/lib/lib.d.ts
   Default library
-
+a/b/commonFile1.ts
+  Part of 'files' list in tsconfig.json
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
 
 

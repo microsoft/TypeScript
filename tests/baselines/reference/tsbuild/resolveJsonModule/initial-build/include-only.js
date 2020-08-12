@@ -66,30 +66,18 @@ Output::
 [7m1[0m import hello from "./hello.json"
 [7m [0m [91m                  ~~~~~~~~~~~~~~[0m
 
-RootFiles::
-src/src/index.ts
-  Matched by include pattern 'src/**/*' in tsconfig.json
-
-Imports::
-src/src/hello.json
-  Imported via "./hello.json" from file 'src/src/index.ts'
-
-LibFiles::
 lib/lib.d.ts
   Default library
-
-RootFiles::
-src/src/index.ts
-  Matched by include pattern 'src/**/*' in tsconfig.json
-
-Imports::
 src/src/hello.json
   Imported via "./hello.json" from file 'src/src/index.ts'
-
-LibFiles::
+src/src/index.ts
+  Matched by include pattern 'src/**/*' in tsconfig.json
 lib/lib.d.ts
   Default library
-
+src/src/hello.json
+  Imported via "./hello.json" from file 'src/src/index.ts'
+src/src/index.ts
+  Matched by include pattern 'src/**/*' in tsconfig.json
 
 Found 1 error.
 

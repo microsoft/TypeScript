@@ -145,22 +145,16 @@ File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/i
 File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts'.
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
-RootFiles::
-plugin-one/index.ts
-  Matched by include pattern '**/*' in tsconfig.json
-
-Imports::
+../../../../a/lib/lib.d.ts
+  Default library for target 'es5'
 plugin-two/node_modules/typescript-fsa/index.d.ts
   Imported via "typescript-fsa" from file 'plugin-two/dist/commonjs/index.d.ts', PackageId:: 'typescript-fsa/index.d.ts@3.0.0-beta-2'
 plugin-two/dist/commonjs/index.d.ts
   Imported via "plugin-two" from file 'plugin-one/index.ts', PackageId:: 'plugin-two/dist/commonjs/index.d.ts@0.1.3'
 plugin-one/node_modules/typescript-fsa/index.d.ts, redirects to 'plugin-two/node_modules/typescript-fsa/index.d.ts'
   Imported via "typescript-fsa" from file 'plugin-one/index.ts', PackageId:: 'typescript-fsa/index.d.ts@3.0.0-beta-2'
-
-LibFiles::
-../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
-
+plugin-one/index.ts
+  Matched by include pattern '**/*' in tsconfig.json
 
 
 Program root files: ["/user/username/projects/myproject/plugin-one/index.ts"]

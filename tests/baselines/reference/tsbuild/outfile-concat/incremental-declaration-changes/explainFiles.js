@@ -26,38 +26,28 @@ Output::
 
 [[90m12:04:00 AM[0m] Building project '/src/first/tsconfig.json'...
 
-RootFiles::
+lib/lib.d.ts
+  Default library for target 'es5'
 src/first/first_PART1.ts
   Part of 'files' list in tsconfig.json
 src/first/first_part2.ts
   Part of 'files' list in tsconfig.json
 src/first/first_part3.ts
   Part of 'files' list in tsconfig.json
-
-LibFiles::
-lib/lib.d.ts
-  Default library for target 'es5'
-
 [[90m12:04:00 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than oldest output 'src/2/second-output.js'
 
 [[90m12:04:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because oldest output 'src/third/thirdjs/output/third-output.js' is older than newest input 'src/first'
 
 [[90m12:04:00 AM[0m] Building project '/src/third/tsconfig.json'...
 
-RootFiles::
-src/third/third_part1.ts
-  Part of 'files' list in tsconfig.json
-
-ProjectReferenceFiles::
+lib/lib.d.ts
+  Default library for target 'es5'
 src/first/bin/first-output.d.ts
   Output from referenced project 'src/first/tsconfig.json' included because '--outFile' specified
 src/2/second-output.d.ts
   Output from referenced project 'src/second/tsconfig.json' included because '--outFile' specified
-
-LibFiles::
-lib/lib.d.ts
-  Default library for target 'es5'
-
+src/third/third_part1.ts
+  Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success
 
 

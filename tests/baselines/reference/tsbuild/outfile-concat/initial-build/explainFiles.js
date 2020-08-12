@@ -140,50 +140,36 @@ Output::
 
 [[90m12:01:00 AM[0m] Building project '/src/first/tsconfig.json'...
 
-RootFiles::
+lib/lib.d.ts
+  Default library for target 'es5'
 src/first/first_PART1.ts
   Part of 'files' list in tsconfig.json
 src/first/first_part2.ts
   Part of 'files' list in tsconfig.json
 src/first/first_part3.ts
   Part of 'files' list in tsconfig.json
-
-LibFiles::
-lib/lib.d.ts
-  Default library for target 'es5'
-
 [[90m12:01:00 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.js' does not exist
 
 [[90m12:01:00 AM[0m] Building project '/src/second/tsconfig.json'...
 
-RootFiles::
+lib/lib.d.ts
+  Default library for target 'es5'
 src/second/second_part1.ts
   Matched by include pattern '**/*' in tsconfig.json
 src/second/second_part2.ts
   Matched by include pattern '**/*' in tsconfig.json
-
-LibFiles::
-lib/lib.d.ts
-  Default library for target 'es5'
-
 [[90m12:01:00 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
 
 [[90m12:01:00 AM[0m] Building project '/src/third/tsconfig.json'...
 
-RootFiles::
-src/third/third_part1.ts
-  Part of 'files' list in tsconfig.json
-
-ProjectReferenceFiles::
+lib/lib.d.ts
+  Default library for target 'es5'
 src/first/bin/first-output.d.ts
   Output from referenced project 'src/first/tsconfig.json' included because '--outFile' specified
 src/2/second-output.d.ts
   Output from referenced project 'src/second/tsconfig.json' included because '--outFile' specified
-
-LibFiles::
-lib/lib.d.ts
-  Default library for target 'es5'
-
+src/third/third_part1.ts
+  Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success
 
 

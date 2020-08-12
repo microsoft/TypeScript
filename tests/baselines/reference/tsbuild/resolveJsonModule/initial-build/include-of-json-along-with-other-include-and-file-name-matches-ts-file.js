@@ -59,17 +59,13 @@ Output::
 
 [[90m12:00:00 AM[0m] Building project '/src/tsconfig_withIncludeOfJson.json'...
 
-RootFiles::
+lib/lib.d.ts
+  Default library
 src/src/index.json
   Imported via "./index.json" from file 'src/src/index.ts'
   Matched by include pattern 'src/**/*.json' in tsconfig.json
 src/src/index.ts
   Matched by include pattern 'src/**/*' in tsconfig.json
-
-LibFiles::
-lib/lib.d.ts
-  Default library
-
 exitCode:: ExitStatus.Success
 
 

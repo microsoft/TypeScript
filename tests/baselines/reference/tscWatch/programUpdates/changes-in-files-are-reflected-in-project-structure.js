@@ -27,17 +27,11 @@ Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
-RootFiles::
-a/b/f1.ts
-
-Imports::
-a/b/f2.ts
-  Imported via "./f2" from file 'a/b/f1.ts'
-
-LibFiles::
 a/lib/lib.d.ts
   Default library
-
+a/b/f2.ts
+  Imported via "./f2" from file 'a/b/f1.ts'
+a/b/f1.ts
 [[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -103,19 +97,13 @@ Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
-RootFiles::
-a/b/f1.ts
-
-Imports::
+a/lib/lib.d.ts
+  Default library
 a/c/f3.ts
   Imported via "../c/f3" from file 'a/b/f2.ts'
 a/b/f2.ts
   Imported via "./f2" from file 'a/b/f1.ts'
-
-LibFiles::
-a/lib/lib.d.ts
-  Default library
-
+a/b/f1.ts
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
