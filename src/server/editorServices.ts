@@ -3029,15 +3029,7 @@ namespace ts.server {
             let retainProjects: ConfiguredProject[] | ConfiguredProject | undefined;
             let projectForConfigFileDiag: ConfiguredProject | undefined;
             let defaultConfigProjectIsCreated = false;
-            if (this.serverMode === LanguageServiceMode.PartialSemantic) {
-                // Invalidate resolutions in the file since this file is now open
-                info.containingProjects.forEach(project => {
-                    if (project.resolutionCache.removeRelativeNoResolveResolutionsOfFile(info.path)) {
-                        project.markAsDirty();
-                    }
-                });
-            }
-            else if (!project && this.serverMode === LanguageServiceMode.Semantic) { // Checking semantic mode is an optimization
+            if (!project && this.serverMode === LanguageServiceMode.Semantic) { // Checking semantic mode is an optimization
                 configFileName = this.getConfigFileNameForFile(info);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
@@ -3123,10 +3115,6 @@ namespace ts.server {
                 }
                 Debug.assert(this.openFiles.has(info.path));
                 this.assignOrphanScriptInfoToInferredProject(info, this.openFiles.get(info.path));
-            }
-            else if (this.serverMode === LanguageServiceMode.PartialSemantic && info.cacheSourceFile?.sourceFile.referencedFiles.length) {
-                // This file was just opened and references in this file will previously not been resolved so schedule update
-                info.containingProjects.forEach(project => project.markAsDirty());
             }
             Debug.assert(!info.isOrphan());
             return { configFileName, configFileErrors, retainProjects };
