@@ -11,7 +11,6 @@ namespace ts {
 
         invalidateResolutionsOfFailedLookupLocations(): boolean;
         invalidateResolutionOfFile(filePath: Path): void;
-        removeRelativeNoResolveResolutionsOfFile(filePath: Path): boolean;
         removeResolutionsOfFile(filePath: Path): void;
         removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
         setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: ESMap<Path, readonly string[]>): void;
@@ -142,21 +141,7 @@ namespace ts {
     type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
         (resolution: T) => R | undefined;
 
-    export enum ResolutionKind {
-        All,
-        RelativeReferencesInOpenFileOnly
-    }
-
-    const noResolveResolvedModule: ResolvedModuleWithFailedLookupLocations = {
-        resolvedModule: undefined,
-        failedLookupLocations: []
-    };
-    const noResolveResolvedTypeReferenceDirective: ResolvedTypeReferenceDirectiveWithFailedLookupLocations = {
-        resolvedTypeReferenceDirective: undefined,
-        failedLookupLocations: []
-    };
-
-    export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, resolutionKind: ResolutionKind, logChangesWhenResolvingModule: boolean): ResolutionCache {
+    export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
         let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
         let filesWithInvalidatedResolutions: Set<Path> | undefined;
         let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyESMap<Path, readonly string[]> | undefined;
@@ -221,7 +206,6 @@ namespace ts {
             hasChangedAutomaticTypeDirectiveNames: () => hasChangedAutomaticTypeDirectiveNames,
             invalidateResolutionOfFile,
             invalidateResolutionsOfFailedLookupLocations,
-            removeRelativeNoResolveResolutionsOfFile,
             setFilesWithInvalidatedNonRelativeUnresolvedImports,
             createHasInvalidatedResolution,
             updateTypeRootsWatch,
@@ -357,12 +341,11 @@ namespace ts {
             shouldRetryResolution: (t: T) => boolean;
             reusedNames?: readonly string[];
             logChanges?: boolean;
-            noResolveResolution: T;
         }
         function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
             names, containingFile, redirectedReference,
             cache, perDirectoryCacheWithRedirects,
-            loader, getResolutionWithResolvedFileName, noResolveResolution,
+            loader, getResolutionWithResolvedFileName,
             shouldRetryResolution, reusedNames, logChanges
         }: ResolveNamesWithLocalCacheInput<T, R>): (R | undefined)[] {
             const path = resolutionHost.toPath(containingFile);
@@ -399,10 +382,7 @@ namespace ts {
                         resolution = resolutionInDirectory;
                     }
                     else {
-                        resolution = resolutionKind === ResolutionKind.All ||
-                            (isExternalModuleNameRelative(name) && resolutionHost.fileIsOpen(path)) ?
-                            loader(name, containingFile, compilerOptions, resolutionHost.getCompilerHost?.() || resolutionHost, redirectedReference) :
-                            noResolveResolution;
+                        resolution = loader(name, containingFile, compilerOptions, resolutionHost.getCompilerHost?.() || resolutionHost, redirectedReference);
                         perDirectoryResolution.set(name, resolution);
                     }
                     resolutionsInFile.set(name, resolution);
@@ -461,7 +441,6 @@ namespace ts {
                 loader: resolveTypeReferenceDirective,
                 getResolutionWithResolvedFileName: getResolvedTypeReferenceDirective,
                 shouldRetryResolution: resolution => resolution.resolvedTypeReferenceDirective === undefined,
-                noResolveResolution: noResolveResolvedTypeReferenceDirective,
             });
         }
 
@@ -477,7 +456,6 @@ namespace ts {
                 shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
                 reusedNames,
                 logChanges: logChangesWhenResolvingModule,
-                noResolveResolution: noResolveResolvedModule,
             });
         }
 
@@ -761,31 +739,6 @@ namespace ts {
                 !prevHasChangedAutomaticTypeDirectiveNames) {
                 resolutionHost.onChangedAutomaticTypeDirectiveNames();
             }
-        }
-
-        function removeRelativeNoResolveResolutionsOfFileFromCache<T extends ResolutionWithFailedLookupLocations>(
-            cache: ESMap<Path, ESMap<string, T>>,
-            filePath: Path,
-            noResolveResolution: T,
-        ) {
-            Debug.assert(resolutionKind === ResolutionKind.RelativeReferencesInOpenFileOnly);
-            // Deleted file, stop watching failed lookups for all the resolutions in the file
-            const resolutions = cache.get(filePath);
-            if (!resolutions) return false;
-            let invalidated = false;
-            resolutions.forEach((resolution, name) => {
-                if (resolution === noResolveResolution && isExternalModuleNameRelative(name)) {
-                    resolutions.delete(name);
-                    invalidated = true;
-                }
-            });
-            return invalidated;
-        }
-
-        function removeRelativeNoResolveResolutionsOfFile(filePath: Path) {
-            let invalidated = removeRelativeNoResolveResolutionsOfFileFromCache(resolvedModuleNames, filePath, noResolveResolvedModule);
-            invalidated = removeRelativeNoResolveResolutionsOfFileFromCache(resolvedTypeReferenceDirectives, filePath, noResolveResolvedTypeReferenceDirective) || invalidated;
-            return invalidated;
         }
 
         function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyESMap<Path, readonly string[]>) {

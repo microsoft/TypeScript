@@ -285,6 +285,7 @@ namespace ts.server {
                     break;
                 case LanguageServiceMode.PartialSemantic:
                     this.languageServiceEnabled = true;
+                    this.compilerOptions.noResolve = true;
                     this.compilerOptions.types = [];
                     break;
                 case LanguageServiceMode.Syntactic:
@@ -310,7 +311,6 @@ namespace ts.server {
             this.resolutionCache = createResolutionCache(
                 this,
                 currentDirectory && this.currentDirectory,
-                projectService.serverMode === LanguageServiceMode.Semantic ? ResolutionKind.All : ResolutionKind.RelativeReferencesInOpenFileOnly,
                 /*logChangesWhenResolvingModule*/ true
             );
             this.languageService = createLanguageService(this, this.documentRegistry, this.projectService.serverMode);
@@ -464,20 +464,6 @@ namespace ts.server {
 
         resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[] {
             return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference);
-        }
-
-        /*@internal*/
-        includeTripleslashReferencesFrom(containingFile: string) {
-            switch (this.projectService.serverMode) {
-                case LanguageServiceMode.Semantic:
-                    return true;
-                case LanguageServiceMode.PartialSemantic:
-                    return this.fileIsOpen(this.toPath(containingFile));
-                case LanguageServiceMode.Syntactic:
-                    return false;
-                default:
-                    Debug.assertNever(this.projectService.serverMode);
-            }
         }
 
         directoryExists(path: string): boolean {
