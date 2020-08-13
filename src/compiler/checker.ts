@@ -18201,15 +18201,24 @@ namespace ts {
             return false;
         }
 
-        function getRecursionIdentity(type: Type) {
+        // Types with constituents that could circularly reference the type have a recursion identity. The recursion
+        // identity is some object that is common to instantiations of the type with the same origin.
+        function getRecursionIdentity(type: Type): object | undefined {
             if (type.flags & TypeFlags.Object && !isObjectOrArrayLiteralType(type)) {
-                if (type.symbol) {
-                    // We track all object types that have an associated symbol (representing the origin of the type)
+                if (getObjectFlags(type) && ObjectFlags.Reference && (type as TypeReference).node) {
+                    // Deferred type references are tracked through their associated AST node. This gives us finer
+                    // granularity than using their associated target because each manifest type reference has a
+                    // unique AST node.
+                    return (type as TypeReference).node;
+                }
+                if (type.symbol && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol.flags & SymbolFlags.Class)) {
+                    // We track all object types that have an associated symbol (representing the origin of the type), but
+                    // exclude the static side of classes from this check since it shares its symbol with the instance side.
                     return type.symbol;
                 }
-                if (getObjectFlags(type) && ObjectFlags.Reference && (type as TypeReference).node || isTupleType(type)) {
-                    // Deferred type references and tuple types are tracked through their target type
-                    return (type as TypeReference).target;
+                if (isTupleType(type)) {
+                    // Tuple types are tracked through their target type
+                    return type.target;
                 }
             }
             if (type.flags & TypeFlags.IndexedAccess) {
@@ -19283,7 +19292,9 @@ namespace ts {
             let inferencePriority = InferencePriority.MaxValue;
             let allowComplexConstraintInference = true;
             let visited: ESMap<string, number>;
-            let targetStack: Type[];
+            let sourceStack: object[];
+            let targetStack: object[];
+            let expandingFlags = ExpandingFlags.None;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type): void {
@@ -19406,7 +19417,7 @@ namespace ts {
                         // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
                         const simplified = getSimplifiedType(target, /*writing*/ false);
                         if (simplified !== target) {
-                            invokeWithDepthLimit(source, simplified, inferFromTypes);
+                            invokeOnce(source, simplified, inferFromTypes);
                         }
                         else if (target.flags & TypeFlags.IndexedAccess) {
                             const indexType = getSimplifiedType((target as IndexedAccessType).indexType, /*writing*/ false);
@@ -19415,7 +19426,7 @@ namespace ts {
                             if (indexType.flags & TypeFlags.Instantiable) {
                                 const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType, /*writing*/ false), indexType, /*writing*/ false);
                                 if (simplified && simplified !== target) {
-                                    invokeWithDepthLimit(source, simplified, inferFromTypes);
+                                    invokeOnce(source, simplified, inferFromTypes);
                                 }
                             }
                         }
@@ -19443,7 +19454,7 @@ namespace ts {
                     inferFromTypes((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType);
                 }
                 else if (target.flags & TypeFlags.Conditional) {
-                    invokeWithDepthLimit(<ConditionalType>source, <ConditionalType>target, inferToConditionalType);
+                    invokeOnce(source, target, inferToConditionalType);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     inferToMultipleTypes(source, (<UnionOrIntersectionType>target).types, target.flags);
@@ -19476,7 +19487,7 @@ namespace ts {
                         source = apparentSource;
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
-                        invokeWithDepthLimit(source, target, inferFromObjectTypes);
+                        invokeOnce(source, target, inferFromObjectTypes);
                     }
                 }
                 if (source.flags & TypeFlags.Simplifiable) {
@@ -19494,7 +19505,7 @@ namespace ts {
                 priority = savePriority;
             }
 
-            function invokeWithDepthLimit(source: Type, target: Type, action: (source: Type, target: Type) => void) {
+            function invokeOnce(source: Type, target: Type, action: (source: Type, target: Type) => void) {
                 const key = source.id + "," + target.id;
                 const status = visited && visited.get(key);
                 if (status !== undefined) {
@@ -19504,17 +19515,24 @@ namespace ts {
                 (visited || (visited = new Map<string, number>())).set(key, InferencePriority.Circularity);
                 const saveInferencePriority = inferencePriority;
                 inferencePriority = InferencePriority.MaxValue;
-                // It is possible for recursion to originate in generative types that create infinitely deep instantiations,
-                // with unique identities, for example 'type RecArray<T> = T | Array<RecArray<T>>'. We explore up to five
-                // nested instantiations of such types using the same isDeeplyNestedType check as recursiveTypeRelatedTo.
-                (targetStack || (targetStack = [])).push(target);
-                if (!isDeeplyNestedType(target, targetStack, targetStack.length)) {
+                // We stop inferring and report a circularity if we encounter duplicate recursion identities on both
+                // the source side and the target side.
+                const saveExpandingFlags = expandingFlags;
+                const sourceIdentity = getRecursionIdentity(source);
+                const targetIdentity = getRecursionIdentity(target);
+                if (sourceIdentity && contains(sourceStack, sourceIdentity)) expandingFlags |= ExpandingFlags.Source;
+                if (targetIdentity && contains(targetStack, targetIdentity)) expandingFlags |= ExpandingFlags.Target;
+                if (expandingFlags !== ExpandingFlags.Both) {
+                    if (sourceIdentity) (sourceStack || (sourceStack = [])).push(sourceIdentity);
+                    if (targetIdentity) (targetStack || (targetStack = [])).push(targetIdentity);
                     action(source, target);
+                    if (targetIdentity) targetStack.pop();
+                    if (sourceIdentity) sourceStack.pop();
                 }
                 else {
                     inferencePriority = InferencePriority.Circularity;
                 }
-                targetStack.pop();
+                expandingFlags = saveExpandingFlags;
                 visited.set(key, inferencePriority);
                 inferencePriority = Math.min(inferencePriority, saveInferencePriority);
             }
@@ -19710,12 +19728,12 @@ namespace ts {
                 return false;
             }
 
-            function inferToConditionalType(source: ConditionalType, target: ConditionalType) {
+            function inferToConditionalType(source: Type, target: ConditionalType) {
                 if (source.flags & TypeFlags.Conditional) {
-                    inferFromTypes(source.checkType, target.checkType);
-                    inferFromTypes(source.extendsType, target.extendsType);
-                    inferFromTypes(getTrueTypeFromConditionalType(source), getTrueTypeFromConditionalType(target));
-                    inferFromTypes(getFalseTypeFromConditionalType(source), getFalseTypeFromConditionalType(target));
+                    inferFromTypes((<ConditionalType>source).checkType, target.checkType);
+                    inferFromTypes((<ConditionalType>source).extendsType, target.extendsType);
+                    inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(target));
+                    inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(target));
                 }
                 else {
                     const savePriority = priority;
