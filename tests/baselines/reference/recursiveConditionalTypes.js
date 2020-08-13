@@ -7,7 +7,7 @@ type Awaited<T> =
     T;
 
 type MyPromise<T> = {
-    then<U>(f: ((value: T) => U | MyPromise<U>) | null | undefined): MyPromise<U>;
+    then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
 }
 
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
@@ -64,7 +64,7 @@ declare function foo<T>(x: Box1<Box1<T>>): T;
 
 declare let z: Box2<Box2<string>>;
 
-foo(z);  // string
+foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
 
 // Intersect tuple element types
 
@@ -105,7 +105,7 @@ function f22(tn, tm) {
     tm = tn;
 }
 f23(['a', 'b', 'c']); // string
-foo(z); // string
+foo(z); // unknown, but ideally would be string (requires unique recursion ID for each type reference)
 function f20(x, y) {
     x = y;
     y = x;
@@ -119,7 +119,7 @@ function f21(x, y) {
 //// [recursiveConditionalTypes.d.ts]
 declare type Awaited<T> = T extends null | undefined ? T : T extends PromiseLike<infer U> ? Awaited<U> : T;
 declare type MyPromise<T> = {
-    then<U>(f: ((value: T) => U | MyPromise<U>) | null | undefined): MyPromise<U>;
+    then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
 };
 declare type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 declare type P0 = Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;

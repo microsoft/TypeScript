@@ -23,14 +23,14 @@ type MyPromise<T> = {
 >MyPromise : Symbol(MyPromise, Decl(recursiveConditionalTypes.ts, 5, 6))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 7, 15))
 
-    then<U>(f: ((value: T) => U | MyPromise<U>) | null | undefined): MyPromise<U>;
+    then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
 >then : Symbol(then, Decl(recursiveConditionalTypes.ts, 7, 21))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 8, 9))
 >f : Symbol(f, Decl(recursiveConditionalTypes.ts, 8, 12))
 >value : Symbol(value, Decl(recursiveConditionalTypes.ts, 8, 17))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 7, 15))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 8, 9))
->MyPromise : Symbol(MyPromise, Decl(recursiveConditionalTypes.ts, 5, 6))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 8, 9))
 >MyPromise : Symbol(MyPromise, Decl(recursiveConditionalTypes.ts, 5, 6))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 8, 9))
@@ -243,7 +243,7 @@ declare let z: Box2<Box2<string>>;
 >Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 58, 28))
 >Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 58, 28))
 
-foo(z);  // string
+foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
 >foo : Symbol(foo, Decl(recursiveConditionalTypes.ts, 59, 28))
 >z : Symbol(z, Decl(recursiveConditionalTypes.ts, 63, 11))
 

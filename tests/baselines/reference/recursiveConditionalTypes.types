@@ -13,9 +13,9 @@ type Awaited<T> =
 type MyPromise<T> = {
 >MyPromise : MyPromise<T>
 
-    then<U>(f: ((value: T) => U | MyPromise<U>) | null | undefined): MyPromise<U>;
->then : <U>(f: ((value: T) => U | MyPromise<U>) | null | undefined) => MyPromise<U>
->f : ((value: T) => U | MyPromise<U>) | null | undefined
+    then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
+>then : <U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined) => MyPromise<U>
+>f : ((value: T) => U | PromiseLike<U>) | null | undefined
 >value : T
 >null : null
 }
@@ -152,8 +152,8 @@ declare function foo<T>(x: Box1<Box1<T>>): T;
 declare let z: Box2<Box2<string>>;
 >z : Box2<Box2<string>>
 
-foo(z);  // string
->foo(z) : string
+foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
+>foo(z) : unknown
 >foo : <T>(x: Box1<Box1<T>>) => T
 >z : Box2<Box2<string>>
 

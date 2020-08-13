@@ -41,7 +41,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(89,9): error TS2345: Argument 
         T;
     
     type MyPromise<T> = {
-        then<U>(f: ((value: T) => U | MyPromise<U>) | null | undefined): MyPromise<U>;
+        then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
     }
     
     type InfinitePromise<T> = Promise<InfinitePromise<T>>;
@@ -129,7 +129,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(89,9): error TS2345: Argument 
     
     declare let z: Box2<Box2<string>>;
     
-    foo(z);  // string
+    foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
     
     // Intersect tuple element types
     
