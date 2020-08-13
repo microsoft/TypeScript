@@ -2308,10 +2308,26 @@ namespace ts {
         };
 
         function getFileNames(): ExpandResult {
-            const filesSpecs = getSpecs("files")?.specs;
+            const referencesOfRaw = getPropFromRaw<ProjectReference>("references", element => typeof element === "object", "object");
+            if (isArray(referencesOfRaw)) {
+                for (const ref of referencesOfRaw) {
+                    if (typeof ref.path !== "string") {
+                        createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
+                    }
+                    else {
+                        (projectReferences || (projectReferences = [])).push({
+                            path: getNormalizedAbsolutePath(ref.path, basePath),
+                            originalPath: ref.path,
+                            prepend: ref.prepend,
+                            circular: ref.circular
+                        });
+                    }
+                }
+            }
+
+            const filesSpecs = toPropValue(getSpecsFromRaw("files"));
             if (filesSpecs) {
-                const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
-                const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
+                const hasZeroOrNoReferences = referencesOfRaw === "no-prop" || isArray(referencesOfRaw) && referencesOfRaw.length === 0;
                 const hasExtends = hasProperty(raw, "extends");
                 if (filesSpecs.length === 0 && hasZeroOrNoReferences && !hasExtends) {
                     if (sourceFile) {
@@ -2329,11 +2345,11 @@ namespace ts {
                 }
             }
 
-            let includeSpecs = getSpecs("include")?.specs;
+            let includeSpecs = toPropValue(getSpecsFromRaw("include"));
 
-            const excludeSpecResult = getSpecs("exclude");
-            let excludeSpecs = excludeSpecResult?.specs;
-            if (!excludeSpecResult && raw.compilerOptions) {
+            const excludeOfRaw = getSpecsFromRaw("exclude");
+            let excludeSpecs = toPropValue(excludeOfRaw);
+            if (excludeOfRaw === "no-prop" && raw.compilerOptions) {
                 const outDir = raw.compilerOptions.outDir;
                 const declarationDir = raw.compilerOptions.declarationDir;
 
@@ -2351,44 +2367,33 @@ namespace ts {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
             }
 
-            if (hasProperty(raw, "references") && !isNullOrUndefined(raw.references)) {
-                if (isArray(raw.references)) {
-                    for (const ref of raw.references) {
-                        if (typeof ref.path !== "string") {
-                            createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
-                        }
-                        else {
-                            (projectReferences || (projectReferences = [])).push({
-                                path: getNormalizedAbsolutePath(ref.path, basePath),
-                                originalPath: ref.path,
-                                prepend: ref.prepend,
-                                circular: ref.circular
-                            });
-                        }
-                    }
-                }
-                else {
-                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "references", "Array");
-                }
-            }
-
             return result;
         }
 
-        function getSpecs(prop: "files" | "include" | "exclude") {
+        type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
+        function toPropValue<T>(specResult: PropOfRaw<T>) {
+            return isArray(specResult) ? specResult : undefined;
+        }
+
+        function getSpecsFromRaw(prop: "files" | "include" | "exclude"): PropOfRaw<string> {
+            return getPropFromRaw(prop, isString, "string");
+        }
+
+        function getPropFromRaw<T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string): PropOfRaw<T> {
             if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
-                let specs: readonly string[] | undefined;
                 if (isArray(raw[prop])) {
-                    specs = <readonly string[]>raw[prop];
-                    if (!sourceFile && !every(specs, isString)) {
-                        errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, "string"));
+                    const result = raw[prop];
+                    if (!sourceFile && !every(result, validateElement)) {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, elementTypeName));
                     }
+                    return result;
                 }
                 else {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, "Array");
+                    return "not-array";
                 }
-                return { specs };
             }
+            return "no-prop";
         }
 
         function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, arg0?: string, arg1?: string) {
