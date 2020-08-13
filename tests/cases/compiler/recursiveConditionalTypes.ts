@@ -9,7 +9,7 @@ type Awaited<T> =
     T;
 
 type MyPromise<T> = {
-    then<U>(f: ((value: T) => U | MyPromise<U>) | null | undefined): MyPromise<U>;
+    then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
 }
 
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
@@ -66,7 +66,7 @@ declare function foo<T>(x: Box1<Box1<T>>): T;
 
 declare let z: Box2<Box2<string>>;
 
-foo(z);  // string
+foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
 
 // Intersect tuple element types
 
