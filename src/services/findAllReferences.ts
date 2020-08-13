@@ -553,6 +553,7 @@ namespace ts.FindAllReferences {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocFunctionTag:
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JsxAttribute:
             case SyntaxKind.ModuleDeclaration:

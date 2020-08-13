@@ -772,6 +772,7 @@ namespace ts {
     export function isDeclarationWithTypeParameters(node: DeclarationWithTypeParameters): node is DeclarationWithTypeParameters {
         switch (node.kind) {
             case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocFunctionTag:
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocSignature:
                 return true;
@@ -2423,11 +2424,11 @@ namespace ts {
         return !!name && name.escapedText === "new";
     }
 
-    export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag {
-        return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag || node.kind === SyntaxKind.JSDocEnumTag;
+    export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag | JSDocEnumTag {
+        return node.kind === SyntaxKind.JSDocTypedefTag || node.kind === SyntaxKind.JSDocCallbackTag || node.kind === SyntaxKind.JSDocFunctionTag || node.kind === SyntaxKind.JSDocEnumTag;
     }
 
-    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | TypeAliasDeclaration {
+    export function isTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag | JSDocEnumTag | TypeAliasDeclaration {
         return isJSDocTypeAlias(node) || isTypeAliasDeclaration(node);
     }
 

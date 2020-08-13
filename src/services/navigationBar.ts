@@ -761,6 +761,7 @@ namespace ts.NavigationBar {
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.JSDocFunctionTag:
                     return true;
 
                 case SyntaxKind.ArrowFunction:

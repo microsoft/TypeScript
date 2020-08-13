@@ -1,0 +1,8 @@
+=== tests/cases/conformance/jsdoc/cb.js ===
+/** @function Miracle
+ * @returns {string} What were you expecting
+ */
+/** @type {Miracle} smallId */
+var sid = () => "!";
+>sid : Symbol(sid, Decl(cb.js, 4, 3))
+

@@ -333,6 +333,8 @@ namespace ts {
             updateJSDocPropertyTag,
             createJSDocCallbackTag,
             updateJSDocCallbackTag,
+            createJSDocFunctionTag,
+            updateJSDocFunctionTag,
             createJSDocAugmentsTag,
             updateJSDocAugmentsTag,
             createJSDocImplementsTag,
@@ -4235,6 +4237,25 @@ namespace ts {
         }
 
         // @api
+        function createJSDocFunctionTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocFunctionTag {
+            const node = createBaseJSDocTag<JSDocFunctionTag>(SyntaxKind.JSDocFunctionTag, tagName ?? createIdentifier("function"), comment);
+            node.typeExpression = typeExpression;
+            node.fullName = fullName;
+            node.name = getJSDocTypeAliasName(fullName);
+            return node;
+        }
+
+        // @api
+        function updateJSDocFunctionTag(node: JSDocFunctionTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocFunctionTag {
+            return node.tagName !== tagName
+                || node.typeExpression !== typeExpression
+                || node.fullName !== fullName
+                || node.comment !== comment
+                ? update(createJSDocFunctionTag(tagName, typeExpression, fullName, comment), node)
+                : node;
+        }
+
+        // @api
         function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag {
             const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName ?? createIdentifier("augments"), comment);
             node.class = className;
@@ -5767,6 +5788,7 @@ namespace ts {
             case SyntaxKind.JSDocParameterTag: return "param";
             case SyntaxKind.JSDocPropertyTag: return "prop";
             case SyntaxKind.JSDocCallbackTag: return "callback";
+            case SyntaxKind.JSDocFunctionTag: return "function";
             case SyntaxKind.JSDocAugmentsTag: return "augments";
             case SyntaxKind.JSDocImplementsTag: return "implements";
             default:

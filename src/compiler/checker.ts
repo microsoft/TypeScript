@@ -1902,6 +1902,7 @@ namespace ts {
                         break;
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
+                    case SyntaxKind.JSDocFunctionTag:
                     case SyntaxKind.JSDocEnumTag:
                         // js type aliases do not resolve names from their host, so skip past it
                         location = getJSDocHost(location);
@@ -7323,6 +7324,7 @@ namespace ts {
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
                     case SyntaxKind.JSDocCallbackTag:
+                    case SyntaxKind.JSDocFunctionTag:
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocEnumTag:
                         // Top-level jsdoc type aliases are considered exported
@@ -8773,6 +8775,7 @@ namespace ts {
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocEnumTag:
                     case SyntaxKind.JSDocCallbackTag:
+                    case SyntaxKind.JSDocFunctionTag:
                     case SyntaxKind.MappedType:
                     case SyntaxKind.ConditionalType:
                         const outerTypeParameters = getOuterTypeParameters(node, includeThisTypes);
@@ -8817,7 +8820,7 @@ namespace ts {
                     node.kind === SyntaxKind.ClassExpression ||
                     isJSConstructor(node) ||
                     isTypeAlias(node)) {
-                    const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag>node;
+                    const declaration = <InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag>node;
                     result = appendTypeParameters(result, getEffectiveTypeParameterDeclarations(declaration));
                 }
             }
@@ -31522,6 +31525,7 @@ namespace ts {
                     // falls through
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:
+                    case SyntaxKind.JSDocFunctionTag:
                     case SyntaxKind.JSDocEnumTag:
                         return DeclarationSpaces.ExportType;
                     case SyntaxKind.ModuleDeclaration:
@@ -32097,7 +32101,7 @@ namespace ts {
             }
         }
 
-        function checkJSDocTypeAliasTag(node: JSDocTypedefTag | JSDocCallbackTag) {
+        function checkJSDocTypeAliasTag(node: JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag) {
             if (!node.typeExpression) {
                 // If the node had `@property` tags, `typeExpression` would have been set to the first property tag.
                 error(node.name, Diagnostics.JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags);
@@ -35778,6 +35782,7 @@ namespace ts {
                     return checkJSDocImplementsTag(node as JSDocImplementsTag);
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.JSDocFunctionTag:
                 case SyntaxKind.JSDocEnumTag:
                     return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocTemplateTag:
@@ -36258,7 +36263,7 @@ namespace ts {
                 getNameOfDeclaration(name.parent) === name;
         }
 
-        function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
+        function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
             switch (node.kind) {
                 case SyntaxKind.TypeParameter:
                 case SyntaxKind.ClassDeclaration:
@@ -36267,6 +36272,7 @@ namespace ts {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.JSDocFunctionTag:
                 case SyntaxKind.JSDocEnumTag:
                     return true;
                 case SyntaxKind.ImportClause:

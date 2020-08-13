@@ -47,7 +47,7 @@ const testFnTypes = {
  * @returns {number|null} Result.
  */
 function testFn(input) {
->testFn : Symbol(testFn, Decl(file2.js, 9, 2))
+>testFn : Symbol(testFn, Decl(file2.js, 9, 2), Decl(file2.js, 14, 3))
 >input : Symbol(input, Decl(file2.js, 19, 16))
 
     if (typeof input === 'number') {
@@ -62,6 +62,6 @@ function testFn(input) {
 }
 
 export {testFn, testFnTypes};
->testFn : Symbol(testFn, Decl(file2.js, 27, 8))
+>testFn : Symbol(testFn, Decl(file2.js, 27, 8), Decl(file2.js, 14, 3))
 >testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 15))
 

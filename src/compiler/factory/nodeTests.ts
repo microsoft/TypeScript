@@ -757,6 +757,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocCallbackTag;
     }
 
+    export function isJSDocFunctionTag(node: Node): node is JSDocFunctionTag {
+        return node.kind === SyntaxKind.JSDocFunctionTag;
+    }
+
     export function isJSDocPublicTag(node: Node): node is JSDocPublicTag {
         return node.kind === SyntaxKind.JSDocPublicTag;
     }

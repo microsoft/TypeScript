@@ -191,7 +191,7 @@ namespace ts {
         let thisParentContainer: Node; // Container one level up
         let blockScopeContainer: Node;
         let lastContainer: Node;
-        let delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
+        let delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag | JSDocEnumTag)[];
         let seenThisKeyword: boolean;
 
         // state used by control flow analysis
@@ -809,7 +809,7 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:
-                    bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
+                    bindJSDocTypeAlias(node as JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag | JSDocFunctionTag | JSDocEnumTag);
                     break;
                 // In source files and blocks, bind functions first to match hoisting that occurs at runtime
                 case SyntaxKind.SourceFile: {
@@ -1610,7 +1610,7 @@ namespace ts {
             }
         }
 
-        function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
+        function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag | JSDocEnumTag) {
             setParent(node.tagName, node);
             if (node.kind !== SyntaxKind.JSDocEnumTag && node.fullName) {
                 setParent(node.fullName, node);
@@ -1870,6 +1870,7 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.JSDocFunctionTag:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
                     // All the children of these container types are never visible through another
@@ -2672,8 +2673,9 @@ namespace ts {
                     return declareSymbolAndAddToSymbolTable(propTag, flags, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.JSDocFunctionTag:
                 case SyntaxKind.JSDocEnumTag:
-                    return (delayedTypeAliases || (delayedTypeAliases = [])).push(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
+                    return (delayedTypeAliases || (delayedTypeAliases = [])).push(node as JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag | JSDocEnumTag);
             }
         }
 

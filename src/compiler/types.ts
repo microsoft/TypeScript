@@ -382,6 +382,7 @@ namespace ts {
         JSDocProtectedTag,
         JSDocReadonlyTag,
         JSDocCallbackTag,
+        JSDocFunctionTag,
         JSDocEnumTag,
         JSDocParameterTag,
         JSDocReturnTag,
@@ -2756,6 +2757,7 @@ namespace ts {
         | DeclarationWithTypeParameterChildren
         | JSDocTypedefTag
         | JSDocCallbackTag
+        | JSDocFunctionTag
         | JSDocSignature
         ;
 
@@ -3199,6 +3201,14 @@ namespace ts {
 
     export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
         readonly kind: SyntaxKind.JSDocCallbackTag;
+        readonly parent: JSDoc;
+        readonly fullName?: JSDocNamespaceDeclaration | Identifier;
+        readonly name?: Identifier;
+        readonly typeExpression: JSDocSignature;
+    }
+
+    export interface JSDocFunctionTag extends JSDocTag, NamedDeclaration {
+        readonly kind: SyntaxKind.JSDocFunctionTag;
         readonly parent: JSDoc;
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
@@ -6979,6 +6989,8 @@ namespace ts {
         updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocEnumTag;
         createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag;
         updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag;
+        createJSDocFunctionTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocFunctionTag;
+        updateJSDocFunctionTag(node: JSDocFunctionTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocFunctionTag;
         createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag;
         updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | undefined): JSDocAugmentsTag;
         createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string): JSDocImplementsTag;

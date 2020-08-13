@@ -77,6 +77,7 @@ export namespace myTypes {
     type typeC = Function | typeB;
 }
 //// [file2.d.ts]
+export type testFn = () => any;
 /** @typedef {boolean|myTypes.typeC} testFnTypes.input */
 /**
  * @function testFn

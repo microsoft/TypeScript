@@ -1538,7 +1538,8 @@ namespace ts {
                     case SyntaxKind.JSDocTypedefTag:
                         return emitJSDocTypedefTag(node as JSDocTypedefTag);
                     case SyntaxKind.JSDocCallbackTag:
-                        return emitJSDocCallbackTag(node as JSDocCallbackTag);
+                    case SyntaxKind.JSDocFunctionTag:
+                        return emitJSDocCallbackOrFunctionTag(node as JSDocCallbackTag | JSDocFunctionTag);
                     case SyntaxKind.JSDocSignature:
                         return emitJSDocSignature(node as JSDocSignature);
                     case SyntaxKind.JSDocTypeLiteral:
@@ -3545,7 +3546,7 @@ namespace ts {
             }
         }
 
-        function emitJSDocCallbackTag(tag: JSDocCallbackTag) {
+        function emitJSDocCallbackOrFunctionTag(tag: JSDocCallbackTag | JSDocFunctionTag) {
             emitJSDocTagName(tag.tagName);
             if (tag.name) {
                 writeSpace();

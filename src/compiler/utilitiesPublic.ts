@@ -1661,6 +1661,7 @@ namespace ts {
             || kind === SyntaxKind.VariableDeclaration
             || kind === SyntaxKind.JSDocTypedefTag
             || kind === SyntaxKind.JSDocCallbackTag
+            || kind === SyntaxKind.JSDocFunctionTag
             || kind === SyntaxKind.JSDocPropertyTag;
     }
 

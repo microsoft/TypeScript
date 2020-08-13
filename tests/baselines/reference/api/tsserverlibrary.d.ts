@@ -425,22 +425,23 @@ declare namespace ts {
         JSDocProtectedTag = 318,
         JSDocReadonlyTag = 319,
         JSDocCallbackTag = 320,
-        JSDocEnumTag = 321,
-        JSDocParameterTag = 322,
-        JSDocReturnTag = 323,
-        JSDocThisTag = 324,
-        JSDocTypeTag = 325,
-        JSDocTemplateTag = 326,
-        JSDocTypedefTag = 327,
-        JSDocPropertyTag = 328,
-        SyntaxList = 329,
-        NotEmittedStatement = 330,
-        PartiallyEmittedExpression = 331,
-        CommaListExpression = 332,
-        MergeDeclarationMarker = 333,
-        EndOfDeclarationMarker = 334,
-        SyntheticReferenceExpression = 335,
-        Count = 336,
+        JSDocFunctionTag = 321,
+        JSDocEnumTag = 322,
+        JSDocParameterTag = 323,
+        JSDocReturnTag = 324,
+        JSDocThisTag = 325,
+        JSDocTypeTag = 326,
+        JSDocTemplateTag = 327,
+        JSDocTypedefTag = 328,
+        JSDocPropertyTag = 329,
+        SyntaxList = 330,
+        NotEmittedStatement = 331,
+        PartiallyEmittedExpression = 332,
+        CommaListExpression = 333,
+        MergeDeclarationMarker = 334,
+        EndOfDeclarationMarker = 335,
+        SyntheticReferenceExpression = 336,
+        Count = 337,
         FirstAssignment = 62,
         LastAssignment = 77,
         FirstCompoundAssignment = 63,
@@ -469,9 +470,9 @@ declare namespace ts {
         LastStatement = 245,
         FirstNode = 156,
         FirstJSDocNode = 298,
-        LastJSDocNode = 328,
+        LastJSDocNode = 329,
         FirstJSDocTagNode = 310,
-        LastJSDocTagNode = 328,
+        LastJSDocTagNode = 329,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -1490,7 +1491,7 @@ declare namespace ts {
         readonly block: Block;
     }
     export type ObjectTypeDeclaration = ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode;
-    export type DeclarationWithTypeParameters = DeclarationWithTypeParameterChildren | JSDocTypedefTag | JSDocCallbackTag | JSDocSignature;
+    export type DeclarationWithTypeParameters = DeclarationWithTypeParameterChildren | JSDocTypedefTag | JSDocCallbackTag | JSDocFunctionTag | JSDocSignature;
     export type DeclarationWithTypeParameterChildren = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
     export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
@@ -1797,6 +1798,13 @@ declare namespace ts {
     }
     export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
         readonly kind: SyntaxKind.JSDocCallbackTag;
+        readonly parent: JSDoc;
+        readonly fullName?: JSDocNamespaceDeclaration | Identifier;
+        readonly name?: Identifier;
+        readonly typeExpression: JSDocSignature;
+    }
+    export interface JSDocFunctionTag extends JSDocTag, NamedDeclaration {
+        readonly kind: SyntaxKind.JSDocFunctionTag;
         readonly parent: JSDoc;
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
@@ -3423,6 +3431,8 @@ declare namespace ts {
         updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | undefined): JSDocEnumTag;
         createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag;
         updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag;
+        createJSDocFunctionTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocFunctionTag;
+        updateJSDocFunctionTag(node: JSDocFunctionTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocFunctionTag;
         createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag;
         updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | undefined): JSDocAugmentsTag;
         createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string): JSDocImplementsTag;
@@ -4439,6 +4449,7 @@ declare namespace ts {
     function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag;
     function isJSDocClassTag(node: Node): node is JSDocClassTag;
     function isJSDocCallbackTag(node: Node): node is JSDocCallbackTag;
+    function isJSDocFunctionTag(node: Node): node is JSDocFunctionTag;
     function isJSDocPublicTag(node: Node): node is JSDocPublicTag;
     function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag;
     function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag;
@@ -10450,6 +10461,8 @@ declare namespace ts {
     const createJSDocTypedefTag: (tagName: Identifier | undefined, typeExpression?: JSDocTypeLiteral | JSDocTypeExpression | undefined, fullName?: Identifier | JSDocNamespaceDeclaration | undefined, comment?: string | undefined) => JSDocTypedefTag;
     /** @deprecated Use `factory.createJSDocCallbackTag` or the factory supplied by your transformation context instead. */
     const createJSDocCallbackTag: (tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration | undefined, comment?: string | undefined) => JSDocCallbackTag;
+    /** @deprecated Use `factory.createJSDocFunctionTag` or the factory supplied by your transformation context instead. */
+    const createJSDocFunctionTag: (tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration | undefined, comment?: string | undefined) => JSDocFunctionTag;
     /** @deprecated Use `factory.createJSDocSignature` or the factory supplied by your transformation context instead. */
     const createJSDocSignature: (typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag | undefined) => JSDocSignature;
     /** @deprecated Use `factory.createJSDocPropertyTag` or the factory supplied by your transformation context instead. */

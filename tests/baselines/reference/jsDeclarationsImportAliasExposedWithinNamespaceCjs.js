@@ -77,3 +77,4 @@ export const testFnTypes: {
 export namespace testFnTypes {
     type input = any;
 }
+export type testFn = () => any;

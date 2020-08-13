@@ -506,9 +506,10 @@ namespace ts {
                         : visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
                             visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression));
             case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocFunctionTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
-                    visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
+                    visitNode(cbNode, (node as JSDocCallbackTag | JSDocFunctionTag).fullName) ||
+                    visitNode(cbNode, (node as JSDocCallbackTag | JSDocFunctionTag).typeExpression);
             case SyntaxKind.JSDocReturnTag:
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocThisTag:
@@ -7426,7 +7427,8 @@ namespace ts {
                             tag = parseTypedefTag(start, tagName, margin, indentText);
                             break;
                         case "callback":
-                            tag = parseCallbackTag(start, tagName, margin, indentText);
+                        case "function":
+                            tag = parseCallbackOrFunctionTag(start, tagName, margin, indentText);
                             break;
                         default:
                             tag = parseUnknownTag(start, tagName, margin, indentText);
@@ -7866,7 +7868,7 @@ namespace ts {
                     return createNodeArray(parameters || [], pos);
                 }
 
-                function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
+                function parseCallbackOrFunctionTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag | JSDocFunctionTag {
                     const fullName = parseJSDocTypeNameWithNamespace();
                     skipWhitespace();
                     let comment = parseTagComments(indent);
@@ -7884,7 +7886,7 @@ namespace ts {
                     if (!comment) {
                         comment = parseTrailingTagComments(start, end, indent, indentText);
                     }
-                    return finishNode(factory.createJSDocCallbackTag(tagName, typeExpression, fullName, comment), start, end);
+                    return finishNode((tagName.escapedText === "callback" ? factory.createJSDocCallbackTag : factory.createJSDocFunctionTag)(tagName, typeExpression, fullName, comment), start, end);
                 }
 
                 function escapedTextsEqual(a: EntityName, b: EntityName): boolean {

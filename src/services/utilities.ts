@@ -377,6 +377,7 @@ namespace ts {
             case SyntaxKind.InterfaceDeclaration: return ScriptElementKind.interfaceElement;
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocFunctionTag:
             case SyntaxKind.JSDocTypedefTag:
                 return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;

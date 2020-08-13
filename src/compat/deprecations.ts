@@ -724,6 +724,9 @@ namespace ts {
     /** @deprecated Use `factory.createJSDocCallbackTag` or the factory supplied by your transformation context instead. */
     export const createJSDocCallbackTag = Debug.deprecate(factory.createJSDocCallbackTag, factoryDeprecation);
 
+     /** @deprecated Use `factory.createJSDocFunctionTag` or the factory supplied by your transformation context instead. */
+     export const createJSDocFunctionTag = Debug.deprecate(factory.createJSDocFunctionTag, factoryDeprecation);
+
     /** @deprecated Use `factory.createJSDocSignature` or the factory supplied by your transformation context instead. */
     export const createJSDocSignature = Debug.deprecate(factory.createJSDocSignature, factoryDeprecation);
 

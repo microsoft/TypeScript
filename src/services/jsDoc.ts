@@ -105,6 +105,7 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocPropertyTag:
                 return [declaration as JSDocPropertyTag];
             case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocFunctionTag:
             case SyntaxKind.JSDocTypedefTag:
                 return [(declaration as JSDocTypedefTag), (declaration as JSDocTypedefTag).parent];
             default:
@@ -136,6 +137,7 @@ namespace ts.JsDoc {
                 return withNode((tag as JSDocTypeTag).typeExpression);
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocFunctionTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
                 const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag;
