@@ -208,15 +208,6 @@ namespace ts.GoToDefinition {
                 return aliased;
             }
         }
-        if (symbol && isInJSFile(node)) {
-            const requireCall = forEach(symbol.declarations, d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ true) ? d.initializer : undefined);
-            if (requireCall) {
-                const moduleSymbol = checker.getSymbolAtLocation(requireCall.arguments[0]);
-                if (moduleSymbol) {
-                    return checker.resolveExternalModuleSymbol(moduleSymbol);
-                }
-            }
-        }
         return symbol;
     }
 
@@ -238,6 +229,9 @@ namespace ts.GoToDefinition {
                 return true;
             case SyntaxKind.ImportSpecifier:
                 return declaration.parent.kind === SyntaxKind.NamedImports;
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.VariableDeclaration:
+                return isInJSFile(declaration) && isRequireVariableDeclaration(declaration, /*requireStringLiteralLikeArgument*/ true);
             default:
                 return false;
         }
