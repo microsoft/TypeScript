@@ -1344,7 +1344,6 @@ namespace ts {
                 onReleaseOldSourceFile,
                 hasInvalidatedResolution,
                 hasChangedAutomaticTypeDirectiveNames,
-                includeTripleslashReferencesFrom: maybeBind(host, host.includeTripleslashReferencesFrom),
                 trace: maybeBind(host, host.trace),
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),

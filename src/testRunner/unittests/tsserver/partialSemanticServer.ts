@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("unittests:: tsserver:: Semantic operations on Approximate Semantic only server", () => {
+    describe("unittests:: tsserver:: Semantic operations on PartialSemantic server", () => {
         function setup() {
             const file1: File = {
                 path: `${tscWatch.projectRoot}/a.ts`,
@@ -31,38 +31,18 @@ import { something } from "something";
         }
 
         it("open files are added to inferred project even if config file is present and semantic operations succeed", () => {
-            const { host, session, file1, file2, file3, something } = setup();
+            const { host, session, file1, file2 } = setup();
             const service = session.getProjectService();
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]); // Relative import from open file is resolves but not non relative
+            checkProjectActualFiles(project, [libFile.path, file1.path]); // no imports are resolved
             verifyCompletions();
-            verifyGoToDefToB();
 
             openFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path]);
+            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]);
             verifyCompletions();
-            verifyGoToDefToB();
-            verifyGoToDefToC();
-
-            openFilesForSession([file3], session);
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path]);
-
-            openFilesForSession([something], session);
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
-
-            // Close open files and verify resolutions
-            closeFilesForSession([file3], session);
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
-
-            closeFilesForSession([file2], session);
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
 
             function verifyCompletions() {
                 assert.isTrue(project.languageServiceEnabled);
@@ -92,34 +72,6 @@ import { something } from "something";
                     replacementSpan: undefined,
                     source: undefined
                 };
-            }
-
-            function verifyGoToDefToB() {
-                const response = session.executeCommandSeq<protocol.DefinitionAndBoundSpanRequest>({
-                    command: protocol.CommandTypes.DefinitionAndBoundSpan,
-                    arguments: protocolFileLocationFromSubstring(file1, "y")
-                }).response as protocol.DefinitionInfoAndBoundSpan;
-                assert.deepEqual(response, {
-                    definitions: [{
-                        file: file2.path,
-                        ...protocolTextSpanWithContextFromSubstring({ fileText: file2.content, text: "y", contextText: "export const y = 10;" })
-                    }],
-                    textSpan: protocolTextSpanWithContextFromSubstring({ fileText: file1.content, text: "y" })
-                });
-            }
-
-            function verifyGoToDefToC() {
-                const response = session.executeCommandSeq<protocol.DefinitionAndBoundSpanRequest>({
-                    command: protocol.CommandTypes.DefinitionAndBoundSpan,
-                    arguments: protocolFileLocationFromSubstring(file1, "cc")
-                }).response as protocol.DefinitionInfoAndBoundSpan;
-                assert.deepEqual(response, {
-                    definitions: [{
-                        file: file3.path,
-                        ...protocolTextSpanWithContextFromSubstring({ fileText: file3.content, text: "cc", contextText: "export const cc = 10;" })
-                    }],
-                    textSpan: protocolTextSpanWithContextFromSubstring({ fileText: file1.content, text: "cc" })
-                });
             }
         });
 
@@ -156,7 +108,7 @@ import { something } from "something";
         });
 
         it("should not include auto type reference directives", () => {
-            const { host, session, file1, file2 } = setup();
+            const { host, session, file1 } = setup();
             const atTypes: File = {
                 path: `/node_modules/@types/somemodule/index.d.ts`,
                 content: "export const something = 10;"
@@ -166,7 +118,7 @@ import { something } from "something";
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]); // Should not contain atTypes
+            checkProjectActualFiles(project, [libFile.path, file1.path]); // Should not contain atTypes
         });
 
         it("should not include referenced files from unopened files", () => {
@@ -200,18 +152,7 @@ function fooB() { }`
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, something.path]); // Should not contains c
-
-            openFilesForSession([file2], session);
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            assert.isTrue(project.dirty);
-            project.updateGraph();
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
-
-            closeFilesForSession([file2], session);
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            assert.isFalse(project.dirty);
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path, file3.path, something.path]);
+            checkProjectActualFiles(project, [libFile.path, file1.path]); // no resolve
         });
 
         it("should not crash when external module name resolution is reused", () => {
@@ -220,7 +161,7 @@ function fooB() { }`
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, [libFile.path, file1.path, file2.path]);
+            checkProjectActualFiles(project, [libFile.path, file1.path]);
 
             // Close the file that contains non relative external module name and open some file that doesnt have non relative external module import
             closeFilesForSession([file1], session);
