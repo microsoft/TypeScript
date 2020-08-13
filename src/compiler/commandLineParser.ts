@@ -2308,53 +2308,32 @@ namespace ts {
         };
 
         function getFileNames(): ExpandResult {
-            let filesSpecs: readonly string[] | undefined;
-            if (hasProperty(raw, "files") && !isNullOrUndefined(raw.files)) {
-                if (isArray(raw.files)) {
-                    filesSpecs = <readonly string[]>raw.files;
-                    const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
-                    const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
-                    const hasExtends = hasProperty(raw, "extends");
-                    if (filesSpecs.length === 0 && hasZeroOrNoReferences && !hasExtends) {
-                        if (sourceFile) {
-                            const fileName = configFileName || "tsconfig.json";
-                            const diagnosticMessage = Diagnostics.The_files_list_in_config_file_0_is_empty;
-                            const nodeValue = firstDefined(getTsConfigPropArray(sourceFile, "files"), property => property.initializer);
-                            const error = nodeValue
-                                ? createDiagnosticForNodeInSourceFile(sourceFile, nodeValue, diagnosticMessage, fileName)
-                                : createCompilerDiagnostic(diagnosticMessage, fileName);
-                            errors.push(error);
-                        }
-                        else {
-                            createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
-                        }
+            const filesSpecs = getSpecs("files")?.specs;
+            if (filesSpecs) {
+                const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
+                const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
+                const hasExtends = hasProperty(raw, "extends");
+                if (filesSpecs.length === 0 && hasZeroOrNoReferences && !hasExtends) {
+                    if (sourceFile) {
+                        const fileName = configFileName || "tsconfig.json";
+                        const diagnosticMessage = Diagnostics.The_files_list_in_config_file_0_is_empty;
+                        const nodeValue = firstDefined(getTsConfigPropArray(sourceFile, "files"), property => property.initializer);
+                        const error = nodeValue
+                            ? createDiagnosticForNodeInSourceFile(sourceFile, nodeValue, diagnosticMessage, fileName)
+                            : createCompilerDiagnostic(diagnosticMessage, fileName);
+                        errors.push(error);
+                    }
+                    else {
+                        createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
                     }
                 }
-                else {
-                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "files", "Array");
-                }
             }
 
-            let includeSpecs: readonly string[] | undefined;
-            if (hasProperty(raw, "include") && !isNullOrUndefined(raw.include)) {
-                if (isArray(raw.include)) {
-                    includeSpecs = <readonly string[]>raw.include;
-                }
-                else {
-                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "include", "Array");
-                }
-            }
+            let includeSpecs = getSpecs("include")?.specs;
 
-            let excludeSpecs: readonly string[] | undefined;
-            if (hasProperty(raw, "exclude") && !isNullOrUndefined(raw.exclude)) {
-                if (isArray(raw.exclude)) {
-                    excludeSpecs = <readonly string[]>raw.exclude;
-                }
-                else {
-                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array");
-                }
-            }
-            else if (raw.compilerOptions) {
+            const excludeSpecResult = getSpecs("exclude");
+            let excludeSpecs = excludeSpecResult?.specs;
+            if (!excludeSpecResult && raw.compilerOptions) {
                 const outDir = raw.compilerOptions.outDir;
                 const declarationDir = raw.compilerOptions.declarationDir;
 
@@ -2394,6 +2373,22 @@ namespace ts {
             }
 
             return result;
+        }
+
+        function getSpecs(prop: "files" | "include" | "exclude") {
+            if (hasProperty(raw, prop) && !isNullOrUndefined(raw[prop])) {
+                let specs: readonly string[] | undefined;
+                if (isArray(raw[prop])) {
+                    specs = <readonly string[]>raw[prop];
+                    if (!sourceFile && !every(specs, isString)) {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, "string"));
+                    }
+                }
+                else {
+                    createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, prop, "Array");
+                }
+                return { specs };
+            }
         }
 
         function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, arg0?: string, arg1?: string) {
@@ -2941,7 +2936,15 @@ namespace ts {
         // new entries in these paths.
         const wildcardDirectories = getWildcardDirectories(validatedIncludeSpecs, validatedExcludeSpecs, basePath, host.useCaseSensitiveFileNames);
 
-        const spec: ConfigFileSpecs = { filesSpecs, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
+        const spec: ConfigFileSpecs = {
+            filesSpecs,
+            includeSpecs,
+            excludeSpecs,
+            validatedFilesSpec: filter(filesSpecs, isString),
+            validatedIncludeSpecs,
+            validatedExcludeSpecs,
+            wildcardDirectories
+        };
         return getFileNamesFromConfigSpecs(spec, basePath, options, host, extraFileExtensions);
     }
 
@@ -2980,7 +2983,7 @@ namespace ts {
         // file map with a possibly case insensitive key. We use this map to store paths matched
         // via wildcard of *.json kind
         const wildCardJsonFileMap = new Map<string, string>();
-        const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
+        const { validatedFilesSpec, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
@@ -2989,8 +2992,8 @@ namespace ts {
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
-        if (filesSpecs) {
-            for (const fileName of filesSpecs) {
+        if (validatedFilesSpec) {
+            for (const fileName of validatedFilesSpec) {
                 const file = getNormalizedAbsolutePath(fileName, basePath);
                 literalFileMap.set(keyMapper(file), file);
             }
@@ -3056,14 +3059,14 @@ namespace ts {
         useCaseSensitiveFileNames: boolean,
         currentDirectory: string
     ): boolean {
-        const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs } = spec;
+        const { validatedFilesSpec, validatedIncludeSpecs, validatedExcludeSpecs } = spec;
         if (!length(validatedIncludeSpecs) || !length(validatedExcludeSpecs)) return false;
 
         basePath = normalizePath(basePath);
 
         const keyMapper = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        if (filesSpecs) {
-            for (const fileName of filesSpecs) {
+        if (validatedFilesSpec) {
+            for (const fileName of validatedFilesSpec) {
                 if (keyMapper(getNormalizedAbsolutePath(fileName, basePath)) === pathToCheck) return false;
             }
         }
@@ -3077,6 +3080,7 @@ namespace ts {
 
     function validateSpecs(specs: readonly string[], errors: Push<Diagnostic>, allowTrailingRecursion: boolean, jsonSourceFile: TsConfigSourceFile | undefined, specKey: string): readonly string[] {
         return specs.filter(spec => {
+            if (!isString(spec)) return false;
             const diag = specToDiagnostic(spec, allowTrailingRecursion);
             if (diag !== undefined) {
                 errors.push(createDiagnostic(diag, spec));

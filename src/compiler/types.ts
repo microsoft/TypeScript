@@ -5880,13 +5880,14 @@ namespace ts {
         /**
          * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
          */
-        includeSpecs?: readonly string[];
+        includeSpecs: readonly string[] | undefined;
         /**
          * Present to report errors (user specified specs), validatedExcludeSpecs are used for file name matching
          */
-        excludeSpecs?: readonly string[];
-        validatedIncludeSpecs?: readonly string[];
-        validatedExcludeSpecs?: readonly string[];
+        excludeSpecs: readonly string[] | undefined;
+        validatedFilesSpec: readonly string[] | undefined;
+        validatedIncludeSpecs: readonly string[] | undefined;
+        validatedExcludeSpecs: readonly string[] | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
 
