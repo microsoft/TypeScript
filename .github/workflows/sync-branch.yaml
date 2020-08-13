@@ -3,6 +3,11 @@ name: Sync branch with master
 on:
   repository_dispatch:
     types: sync-branch
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: 'Target Branch Name'
+        required: true
 
 jobs:
   build:
@@ -15,7 +20,7 @@ jobs:
         node-version: 12.x
     - uses: actions/checkout@v2
       with:
-        ref: ${{ github.event.client_payload.branch_name }}
+        ref: ${{ github.event.inputs.branch_name || github.event.client_payload.branch_name }}
     # This does a test post-merge and only pushes the result if the test succeeds
     # required client_payload members:
     # branch_name - the target branch
@@ -23,7 +28,7 @@ jobs:
         git config user.email "ts_bot@rcavanaugh.com"
         git config user.name "TypeScript Bot"
         git fetch origin master
-        git merge master --no-ff
+        git merge origin/master --no-ff
         npm install
         npm test
         git push
