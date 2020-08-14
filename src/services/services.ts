@@ -1587,7 +1587,9 @@ namespace ts {
                     kind: ScriptElementKind.unknown,
                     kindModifiers: ScriptElementKindModifier.none,
                     textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
-                    displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
+                    displayParts: prefixWithApproximate(
+                        typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo)))
+                    ),
                     documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                     tags: type.symbol ? type.symbol.getJsDocTags() : undefined
                 };
@@ -1600,7 +1602,7 @@ namespace ts {
                 kind: symbolKind,
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
-                displayParts,
+                displayParts: prefixWithApproximate(displayParts),
                 documentation,
                 tags,
             };
@@ -1628,6 +1630,13 @@ namespace ts {
                 default:
                     return false;
             }
+        }
+
+        function prefixWithApproximate(displayParts: SymbolDisplayPart[]): SymbolDisplayPart[] {
+            if (languageServiceMode === LanguageServiceMode.Semantic) {
+                return displayParts;
+            }
+            return [textPart("(approximate)"), lineBreakPart(), ...displayParts];
         }
 
         /// Goto definition
