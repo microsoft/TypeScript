@@ -162,7 +162,7 @@ interface ObjectConstructor {
      * Creates an object that has the specified prototype or that has null prototype.
      * @param o Object to use as a prototype. May be null.
      */
-    create(o: object | null): any;
+    create<O extends object | null>(o: O): O;
 
     /**
      * Creates an object that has the specified prototype, and that optionally contains specified properties.
@@ -238,7 +238,7 @@ interface ObjectConstructor {
      * Returns the names of the enumerable string properties and methods of an object.
      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
      */
-    keys<O extends object = object, K extends keyof O = keyof O>(o: O): K[];
+    keys<O extends object, K extends keyof O>(o: O): K[];
 }
 
 /**
