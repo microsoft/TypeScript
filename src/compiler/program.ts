@@ -1757,9 +1757,17 @@ namespace ts {
                 return flatDiagnostics;
             }
 
+            const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
+            const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
+            const isTsNoCheck = sourceFile.checkJsDirective?.enabled === false;
+
             const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
 
             for (const errorExpectation of directives.getUnusedExpectations()) {
+                // don't report "unused ts-expect-error" in JS files that aren't being type-checked
+                // and also not in files with // @ts-nocheck
+                if (isTsNoCheck || (isJs && !isCheckJs)) continue;
+
                 diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
             }
 
