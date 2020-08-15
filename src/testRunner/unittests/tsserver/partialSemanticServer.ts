@@ -30,7 +30,7 @@ import { something } from "something";
             return { host, session, file1, file2, file3, something, configFile };
         }
 
-        it("adds '(approximate)' to the description of quick info", () => {
+        it("adds '(approximation)' to the description of quick info", () => {
             const file: File = {
                 path: `${tscWatch.projectRoot}/foo.ts`,
                 content: "export const foo = 100;"
@@ -39,11 +39,11 @@ import { something } from "something";
             const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
             openFilesForSession([file], session);
             const response = session.executeCommandSeq<protocol.QuickInfoRequest>({
-                command: ts.server.protocol.CommandTypes.Quickinfo,
+                command: protocol.CommandTypes.Quickinfo,
                 arguments: protocolFileLocationFromSubstring(file, "foo"),
             }).response as protocol.QuickInfoResponseBody;
 
-            assert(stringContainsAt(response.displayString, "(approximate)", 0));
+            assert(stringContainsAt(response.displayString, "(approximation)", 0));
         });
 
         it("open files are added to inferred project even if config file is present and semantic operations succeed", () => {
