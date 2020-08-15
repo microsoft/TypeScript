@@ -642,7 +642,7 @@ namespace ts.server {
         }
 
         public isJavaScript() {
-            return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
+            return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX || this.scriptKind === ScriptKind.MJS  || this.scriptKind === ScriptKind.CJS;
         }
 
         /*@internal*/

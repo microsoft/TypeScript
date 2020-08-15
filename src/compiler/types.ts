@@ -5833,7 +5833,9 @@ namespace ts {
          * Used on extensions that doesn't define the ScriptKind but the content defines it.
          * Deferred extensions are going to be included in all project contexts.
          */
-        Deferred = 7
+        Deferred = 7,
+        MJS = 8,
+        CJS = 9,
     }
 
     export const enum ScriptTarget {
@@ -6175,6 +6177,8 @@ namespace ts {
         Tsx = ".tsx",
         Dts = ".d.ts",
         Js = ".js",
+        Mjs = ".mjs",
+        Cjs = ".cjs",
         Jsx = ".jsx",
         Json = ".json",
         TsBuildInfo = ".tsbuildinfo"

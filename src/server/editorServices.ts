@@ -269,6 +269,8 @@ namespace ts.server {
 
     export function convertScriptKindName(scriptKindName: protocol.ScriptKindName) {
         switch (scriptKindName) {
+            case "CJS":
+            case "MJS":
             case "JS":
                 return ScriptKind.JS;
             case "JSX":

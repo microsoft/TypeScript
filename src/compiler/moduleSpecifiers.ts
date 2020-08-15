@@ -512,6 +512,9 @@ namespace ts.moduleSpecifiers {
                 return Extension.Js;
             case Extension.Tsx:
                 return options.jsx === JsxEmit.Preserve ? Extension.Jsx : Extension.Js;
+            //TODO: Add cjsEmit.Preserve
+            case Extension.Mjs:
+            case Extension.Cjs:
             case Extension.Js:
             case Extension.Jsx:
             case Extension.Json:

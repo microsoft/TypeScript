@@ -7566,7 +7566,7 @@ declare namespace ts.server.protocol {
          */
         projectRootPath?: string;
     }
-    type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
+    type ScriptKindName = "TS" | "JS" | "TSX" | "JSX" | "MJS" | "CJS";
     /**
      * Open request; value of command field is "open". Notify the
      * server that the client has file open.  The server will not

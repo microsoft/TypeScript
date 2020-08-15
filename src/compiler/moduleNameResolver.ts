@@ -1096,7 +1096,7 @@ namespace ts {
             case Extensions.TypeScript:
                 return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
             case Extensions.JavaScript:
-                return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
+                return tryExtension(Extension.Mjs) || tryExtension(Extension.Cjs) || tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
             case Extensions.TSConfig:
             case Extensions.Json:
                 return tryExtension(Extension.Json);
