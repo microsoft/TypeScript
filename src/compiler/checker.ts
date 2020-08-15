@@ -33354,18 +33354,8 @@ namespace ts {
                     // want to say that number is not an array type. But if the input was just
                     // number and string input is allowed, we want to say that number is not an
                     // array type or a string type.
-                    const yieldType = getIterationTypeOfIterable(use, IterationTypeKind.Yield, inputType, /*errorNode*/ undefined);
-                    const [defaultDiagnostic, maybeMissingAwait]: [DiagnosticMessage, boolean] = !(use & IterationUse.AllowsStringInputFlag) || hasStringConstituent
-                        ? downlevelIteration
-                            ? [Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
-                            : yieldType
-                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
-                                : [Diagnostics.Type_0_is_not_an_array_type, true]
-                        : downlevelIteration
-                            ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
-                            : yieldType
-                                ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false]
-                                : [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type, true];
+                    const disallowsStrings = !(use & IterationUse.AllowsStringInputFlag) || hasStringConstituent;
+                    const [defaultDiagnostic, maybeMissingAwait] = getIterationDiagnosticDetails(!disallowsStrings, downlevelIteration);
                     errorAndMaybeSuggestAwait(
                         errorNode,
                         maybeMissingAwait && !!getAwaitedTypeOfPromise(arrayType),
@@ -33386,6 +33376,44 @@ namespace ts {
             }
 
             return arrayElementType;
+
+            function getIterationDiagnosticDetails(allowsStrings: boolean, downlevelIteration?: boolean): [DiagnosticMessage, boolean] {
+                if (downlevelIteration) {
+                    return allowsStrings
+                        ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true]
+                        : [Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator, true];
+                }
+
+                const yieldType = getIterationTypeOfIterable(use, IterationTypeKind.Yield, inputType, /*errorNode*/ undefined);
+
+                if (yieldType) {
+                    return [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators, false];
+                }
+
+                if (isES2015OrLaterIterable(inputType.symbol?.escapedName)) {
+                    return [Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag, true];
+                }
+
+                return allowsStrings
+                    ? [Diagnostics.Type_0_is_not_an_array_type_or_a_string_type, true]
+                    : [Diagnostics.Type_0_is_not_an_array_type, true];
+            }
+        }
+
+        function isES2015OrLaterIterable(n: __String) {
+            switch (n) {
+                case "Float32Array":
+                case "Float64Array":
+                case "Int16Array":
+                case "Int32Array":
+                case "Int8Array":
+                case "Uint16Array":
+                case "Uint32Array":
+                case "Uint8Array":
+                case "Uint8ClampedArray":
+                    return true;
+            }
+            return false;
         }
 
         /**

@@ -3016,7 +3016,10 @@
         "category": "Error",
         "code": 2792
     },
-
+    "Type '{0}' can only be iterated through when using the '--downlevelIteration' flag.": {
+        "category": "Error",
+        "code": 2793
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
