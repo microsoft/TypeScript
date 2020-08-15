@@ -33391,7 +33391,7 @@ namespace ts {
                 }
 
                 if (isES2015OrLaterIterable(inputType.symbol?.escapedName)) {
-                    return [Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag, true];
+                    return [Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher, true];
                 }
 
                 return allowsStrings
