@@ -39,15 +39,15 @@ type MyPromise<T> = {
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 >InfinitePromise : Symbol(InfinitePromise, Decl(recursiveConditionalTypes.ts, 9, 1))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 11, 21))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >InfinitePromise : Symbol(InfinitePromise, Decl(recursiveConditionalTypes.ts, 9, 1))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 11, 21))
 
 type P0 = Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
 >P0 : Symbol(P0, Decl(recursiveConditionalTypes.ts, 11, 54))
 >Awaited : Symbol(Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >MyPromise : Symbol(MyPromise, Decl(recursiveConditionalTypes.ts, 5, 6))
 
 type P1 = Awaited<any>;
@@ -215,138 +215,253 @@ declare function f23<T>(t: TupleOf<T, 3>): T;
 f23(['a', 'b', 'c']);  // string
 >f23 : Symbol(f23, Decl(recursiveConditionalTypes.ts, 50, 1))
 
+// Inference to recursive type
+
+interface Box<T> { value: T };
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 58, 14))
+>value : Symbol(Box.value, Decl(recursiveConditionalTypes.ts, 58, 18))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 58, 14))
+
+type RecBox<T> = T | Box<RecBox<T>>;
+>RecBox : Symbol(RecBox, Decl(recursiveConditionalTypes.ts, 58, 30))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 59, 12))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 59, 12))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>RecBox : Symbol(RecBox, Decl(recursiveConditionalTypes.ts, 58, 30))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 59, 12))
+
+type InfBox<T> = Box<InfBox<T>>;
+>InfBox : Symbol(InfBox, Decl(recursiveConditionalTypes.ts, 59, 36))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 60, 12))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>InfBox : Symbol(InfBox, Decl(recursiveConditionalTypes.ts, 59, 36))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 60, 12))
+
+declare function unbox<T>(box: RecBox<T>): T
+>unbox : Symbol(unbox, Decl(recursiveConditionalTypes.ts, 60, 32))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 62, 23))
+>box : Symbol(box, Decl(recursiveConditionalTypes.ts, 62, 26))
+>RecBox : Symbol(RecBox, Decl(recursiveConditionalTypes.ts, 58, 30))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 62, 23))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 62, 23))
+
+type T1 = Box<string>;
+>T1 : Symbol(T1, Decl(recursiveConditionalTypes.ts, 62, 44))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+
+type T2 = Box<T1>;
+>T2 : Symbol(T2, Decl(recursiveConditionalTypes.ts, 64, 22))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>T1 : Symbol(T1, Decl(recursiveConditionalTypes.ts, 62, 44))
+
+type T3 = Box<T2>;
+>T3 : Symbol(T3, Decl(recursiveConditionalTypes.ts, 65, 18))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>T2 : Symbol(T2, Decl(recursiveConditionalTypes.ts, 64, 22))
+
+type T4 = Box<T3>;
+>T4 : Symbol(T4, Decl(recursiveConditionalTypes.ts, 66, 18))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>T3 : Symbol(T3, Decl(recursiveConditionalTypes.ts, 65, 18))
+
+type T5 = Box<T4>;
+>T5 : Symbol(T5, Decl(recursiveConditionalTypes.ts, 67, 18))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>T4 : Symbol(T4, Decl(recursiveConditionalTypes.ts, 66, 18))
+
+type T6 = Box<T5>;
+>T6 : Symbol(T6, Decl(recursiveConditionalTypes.ts, 68, 18))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>T5 : Symbol(T5, Decl(recursiveConditionalTypes.ts, 67, 18))
+
+declare let b1: Box<Box<Box<Box<Box<Box<string>>>>>>;
+>b1 : Symbol(b1, Decl(recursiveConditionalTypes.ts, 71, 11))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+>Box : Symbol(Box, Decl(recursiveConditionalTypes.ts, 54, 21))
+
+declare let b2: T6;
+>b2 : Symbol(b2, Decl(recursiveConditionalTypes.ts, 72, 11))
+>T6 : Symbol(T6, Decl(recursiveConditionalTypes.ts, 68, 18))
+
+declare let b3: InfBox<string>;
+>b3 : Symbol(b3, Decl(recursiveConditionalTypes.ts, 73, 11))
+>InfBox : Symbol(InfBox, Decl(recursiveConditionalTypes.ts, 59, 36))
+
+declare let b4: { value: { value: { value: typeof b4 }}};
+>b4 : Symbol(b4, Decl(recursiveConditionalTypes.ts, 74, 11))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 74, 17))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 74, 26))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 74, 35))
+>b4 : Symbol(b4, Decl(recursiveConditionalTypes.ts, 74, 11))
+
+unbox(b1);  // string
+>unbox : Symbol(unbox, Decl(recursiveConditionalTypes.ts, 60, 32))
+>b1 : Symbol(b1, Decl(recursiveConditionalTypes.ts, 71, 11))
+
+unbox(b2);  // string
+>unbox : Symbol(unbox, Decl(recursiveConditionalTypes.ts, 60, 32))
+>b2 : Symbol(b2, Decl(recursiveConditionalTypes.ts, 72, 11))
+
+unbox(b3);  // InfBox<string>
+>unbox : Symbol(unbox, Decl(recursiveConditionalTypes.ts, 60, 32))
+>b3 : Symbol(b3, Decl(recursiveConditionalTypes.ts, 73, 11))
+
+unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // number
+>unbox : Symbol(unbox, Decl(recursiveConditionalTypes.ts, 60, 32))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 79, 7))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 79, 16))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 79, 25))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 79, 34))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 79, 43))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 79, 52))
+
+unbox(b4);  // { value: { value: typeof b4 }}
+>unbox : Symbol(unbox, Decl(recursiveConditionalTypes.ts, 60, 32))
+>b4 : Symbol(b4, Decl(recursiveConditionalTypes.ts, 74, 11))
+
+unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
+>unbox : Symbol(unbox, Decl(recursiveConditionalTypes.ts, 60, 32))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 81, 7))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 81, 16))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 81, 25))
+
 // Inference from nested instantiations of same generic types
 
 type Box1<T> = { value: T };
->Box1 : Symbol(Box1, Decl(recursiveConditionalTypes.ts, 54, 21))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 58, 10))
->value : Symbol(value, Decl(recursiveConditionalTypes.ts, 58, 16))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 58, 10))
+>Box1 : Symbol(Box1, Decl(recursiveConditionalTypes.ts, 81, 60))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 85, 10))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 85, 16))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 85, 10))
 
 type Box2<T> = { value: T };
->Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 58, 28))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 59, 10))
->value : Symbol(value, Decl(recursiveConditionalTypes.ts, 59, 16))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 59, 10))
+>Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 85, 28))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 86, 10))
+>value : Symbol(value, Decl(recursiveConditionalTypes.ts, 86, 16))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 86, 10))
 
 declare function foo<T>(x: Box1<Box1<T>>): T;
->foo : Symbol(foo, Decl(recursiveConditionalTypes.ts, 59, 28))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 61, 21))
->x : Symbol(x, Decl(recursiveConditionalTypes.ts, 61, 24))
->Box1 : Symbol(Box1, Decl(recursiveConditionalTypes.ts, 54, 21))
->Box1 : Symbol(Box1, Decl(recursiveConditionalTypes.ts, 54, 21))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 61, 21))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 61, 21))
+>foo : Symbol(foo, Decl(recursiveConditionalTypes.ts, 86, 28))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 88, 21))
+>x : Symbol(x, Decl(recursiveConditionalTypes.ts, 88, 24))
+>Box1 : Symbol(Box1, Decl(recursiveConditionalTypes.ts, 81, 60))
+>Box1 : Symbol(Box1, Decl(recursiveConditionalTypes.ts, 81, 60))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 88, 21))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 88, 21))
 
 declare let z: Box2<Box2<string>>;
->z : Symbol(z, Decl(recursiveConditionalTypes.ts, 63, 11))
->Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 58, 28))
->Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 58, 28))
+>z : Symbol(z, Decl(recursiveConditionalTypes.ts, 90, 11))
+>Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 85, 28))
+>Box2 : Symbol(Box2, Decl(recursiveConditionalTypes.ts, 85, 28))
 
 foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
->foo : Symbol(foo, Decl(recursiveConditionalTypes.ts, 59, 28))
->z : Symbol(z, Decl(recursiveConditionalTypes.ts, 63, 11))
+>foo : Symbol(foo, Decl(recursiveConditionalTypes.ts, 86, 28))
+>z : Symbol(z, Decl(recursiveConditionalTypes.ts, 90, 11))
 
 // Intersect tuple element types
 
 type Intersect<U extends any[], R = unknown> = U extends [infer H, ...infer T] ? Intersect<T, R & H> : R;
->Intersect : Symbol(Intersect, Decl(recursiveConditionalTypes.ts, 65, 7))
->U : Symbol(U, Decl(recursiveConditionalTypes.ts, 69, 15))
->R : Symbol(R, Decl(recursiveConditionalTypes.ts, 69, 31))
->U : Symbol(U, Decl(recursiveConditionalTypes.ts, 69, 15))
->H : Symbol(H, Decl(recursiveConditionalTypes.ts, 69, 63))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 69, 75))
->Intersect : Symbol(Intersect, Decl(recursiveConditionalTypes.ts, 65, 7))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 69, 75))
->R : Symbol(R, Decl(recursiveConditionalTypes.ts, 69, 31))
->H : Symbol(H, Decl(recursiveConditionalTypes.ts, 69, 63))
->R : Symbol(R, Decl(recursiveConditionalTypes.ts, 69, 31))
+>Intersect : Symbol(Intersect, Decl(recursiveConditionalTypes.ts, 92, 7))
+>U : Symbol(U, Decl(recursiveConditionalTypes.ts, 96, 15))
+>R : Symbol(R, Decl(recursiveConditionalTypes.ts, 96, 31))
+>U : Symbol(U, Decl(recursiveConditionalTypes.ts, 96, 15))
+>H : Symbol(H, Decl(recursiveConditionalTypes.ts, 96, 63))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 96, 75))
+>Intersect : Symbol(Intersect, Decl(recursiveConditionalTypes.ts, 92, 7))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 96, 75))
+>R : Symbol(R, Decl(recursiveConditionalTypes.ts, 96, 31))
+>H : Symbol(H, Decl(recursiveConditionalTypes.ts, 96, 63))
+>R : Symbol(R, Decl(recursiveConditionalTypes.ts, 96, 31))
 
 type QQ = Intersect<[string[], number[], 7]>;
->QQ : Symbol(QQ, Decl(recursiveConditionalTypes.ts, 69, 105))
->Intersect : Symbol(Intersect, Decl(recursiveConditionalTypes.ts, 65, 7))
+>QQ : Symbol(QQ, Decl(recursiveConditionalTypes.ts, 96, 105))
+>Intersect : Symbol(Intersect, Decl(recursiveConditionalTypes.ts, 92, 7))
 
 // Infer between structurally identical recursive conditional types
 
 type Unpack1<T> = T extends (infer U)[] ? Unpack1<U> : T;
->Unpack1 : Symbol(Unpack1, Decl(recursiveConditionalTypes.ts, 71, 45))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 75, 13))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 75, 13))
->U : Symbol(U, Decl(recursiveConditionalTypes.ts, 75, 34))
->Unpack1 : Symbol(Unpack1, Decl(recursiveConditionalTypes.ts, 71, 45))
->U : Symbol(U, Decl(recursiveConditionalTypes.ts, 75, 34))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 75, 13))
+>Unpack1 : Symbol(Unpack1, Decl(recursiveConditionalTypes.ts, 98, 45))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 102, 13))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 102, 13))
+>U : Symbol(U, Decl(recursiveConditionalTypes.ts, 102, 34))
+>Unpack1 : Symbol(Unpack1, Decl(recursiveConditionalTypes.ts, 98, 45))
+>U : Symbol(U, Decl(recursiveConditionalTypes.ts, 102, 34))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 102, 13))
 
 type Unpack2<T> = T extends (infer U)[] ? Unpack2<U> : T;
->Unpack2 : Symbol(Unpack2, Decl(recursiveConditionalTypes.ts, 75, 57))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 76, 13))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 76, 13))
->U : Symbol(U, Decl(recursiveConditionalTypes.ts, 76, 34))
->Unpack2 : Symbol(Unpack2, Decl(recursiveConditionalTypes.ts, 75, 57))
->U : Symbol(U, Decl(recursiveConditionalTypes.ts, 76, 34))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 76, 13))
+>Unpack2 : Symbol(Unpack2, Decl(recursiveConditionalTypes.ts, 102, 57))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 103, 13))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 103, 13))
+>U : Symbol(U, Decl(recursiveConditionalTypes.ts, 103, 34))
+>Unpack2 : Symbol(Unpack2, Decl(recursiveConditionalTypes.ts, 102, 57))
+>U : Symbol(U, Decl(recursiveConditionalTypes.ts, 103, 34))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 103, 13))
 
 function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
->f20 : Symbol(f20, Decl(recursiveConditionalTypes.ts, 76, 57))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 78, 13))
->U : Symbol(U, Decl(recursiveConditionalTypes.ts, 78, 15))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 78, 13))
->x : Symbol(x, Decl(recursiveConditionalTypes.ts, 78, 29))
->Unpack1 : Symbol(Unpack1, Decl(recursiveConditionalTypes.ts, 71, 45))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 78, 13))
->y : Symbol(y, Decl(recursiveConditionalTypes.ts, 78, 43))
->Unpack2 : Symbol(Unpack2, Decl(recursiveConditionalTypes.ts, 75, 57))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 78, 13))
+>f20 : Symbol(f20, Decl(recursiveConditionalTypes.ts, 103, 57))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 105, 13))
+>U : Symbol(U, Decl(recursiveConditionalTypes.ts, 105, 15))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 105, 13))
+>x : Symbol(x, Decl(recursiveConditionalTypes.ts, 105, 29))
+>Unpack1 : Symbol(Unpack1, Decl(recursiveConditionalTypes.ts, 98, 45))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 105, 13))
+>y : Symbol(y, Decl(recursiveConditionalTypes.ts, 105, 43))
+>Unpack2 : Symbol(Unpack2, Decl(recursiveConditionalTypes.ts, 102, 57))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 105, 13))
 
     x = y;
->x : Symbol(x, Decl(recursiveConditionalTypes.ts, 78, 29))
->y : Symbol(y, Decl(recursiveConditionalTypes.ts, 78, 43))
+>x : Symbol(x, Decl(recursiveConditionalTypes.ts, 105, 29))
+>y : Symbol(y, Decl(recursiveConditionalTypes.ts, 105, 43))
 
     y = x;
->y : Symbol(y, Decl(recursiveConditionalTypes.ts, 78, 43))
->x : Symbol(x, Decl(recursiveConditionalTypes.ts, 78, 29))
+>y : Symbol(y, Decl(recursiveConditionalTypes.ts, 105, 43))
+>x : Symbol(x, Decl(recursiveConditionalTypes.ts, 105, 29))
 
     f20(y, x);
->f20 : Symbol(f20, Decl(recursiveConditionalTypes.ts, 76, 57))
->y : Symbol(y, Decl(recursiveConditionalTypes.ts, 78, 43))
->x : Symbol(x, Decl(recursiveConditionalTypes.ts, 78, 29))
+>f20 : Symbol(f20, Decl(recursiveConditionalTypes.ts, 103, 57))
+>y : Symbol(y, Decl(recursiveConditionalTypes.ts, 105, 43))
+>x : Symbol(x, Decl(recursiveConditionalTypes.ts, 105, 29))
 }
 
 type Grow1<T extends unknown[], N extends number> = T['length'] extends N ? T : Grow1<[number, ...T], N>;
->Grow1 : Symbol(Grow1, Decl(recursiveConditionalTypes.ts, 82, 1))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 84, 11))
->N : Symbol(N, Decl(recursiveConditionalTypes.ts, 84, 31))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 84, 11))
->N : Symbol(N, Decl(recursiveConditionalTypes.ts, 84, 31))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 84, 11))
->Grow1 : Symbol(Grow1, Decl(recursiveConditionalTypes.ts, 82, 1))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 84, 11))
->N : Symbol(N, Decl(recursiveConditionalTypes.ts, 84, 31))
+>Grow1 : Symbol(Grow1, Decl(recursiveConditionalTypes.ts, 109, 1))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 111, 11))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 111, 31))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 111, 11))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 111, 31))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 111, 11))
+>Grow1 : Symbol(Grow1, Decl(recursiveConditionalTypes.ts, 109, 1))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 111, 11))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 111, 31))
 
 type Grow2<T extends unknown[], N extends number> = T['length'] extends N ? T : Grow2<[string, ...T], N>;
->Grow2 : Symbol(Grow2, Decl(recursiveConditionalTypes.ts, 84, 105))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 85, 11))
->N : Symbol(N, Decl(recursiveConditionalTypes.ts, 85, 31))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 85, 11))
->N : Symbol(N, Decl(recursiveConditionalTypes.ts, 85, 31))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 85, 11))
->Grow2 : Symbol(Grow2, Decl(recursiveConditionalTypes.ts, 84, 105))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 85, 11))
->N : Symbol(N, Decl(recursiveConditionalTypes.ts, 85, 31))
+>Grow2 : Symbol(Grow2, Decl(recursiveConditionalTypes.ts, 111, 105))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 112, 11))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 112, 31))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 112, 11))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 112, 31))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 112, 11))
+>Grow2 : Symbol(Grow2, Decl(recursiveConditionalTypes.ts, 111, 105))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 112, 11))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 112, 31))
 
 function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
->f21 : Symbol(f21, Decl(recursiveConditionalTypes.ts, 85, 105))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 87, 13))
->x : Symbol(x, Decl(recursiveConditionalTypes.ts, 87, 31))
->Grow1 : Symbol(Grow1, Decl(recursiveConditionalTypes.ts, 82, 1))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 87, 13))
->y : Symbol(y, Decl(recursiveConditionalTypes.ts, 87, 47))
->Grow2 : Symbol(Grow2, Decl(recursiveConditionalTypes.ts, 84, 105))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 87, 13))
+>f21 : Symbol(f21, Decl(recursiveConditionalTypes.ts, 112, 105))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 114, 13))
+>x : Symbol(x, Decl(recursiveConditionalTypes.ts, 114, 31))
+>Grow1 : Symbol(Grow1, Decl(recursiveConditionalTypes.ts, 109, 1))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 114, 13))
+>y : Symbol(y, Decl(recursiveConditionalTypes.ts, 114, 47))
+>Grow2 : Symbol(Grow2, Decl(recursiveConditionalTypes.ts, 111, 105))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 114, 13))
 
     f21(y, x);  // Error
->f21 : Symbol(f21, Decl(recursiveConditionalTypes.ts, 85, 105))
->y : Symbol(y, Decl(recursiveConditionalTypes.ts, 87, 47))
->x : Symbol(x, Decl(recursiveConditionalTypes.ts, 87, 31))
+>f21 : Symbol(f21, Decl(recursiveConditionalTypes.ts, 112, 105))
+>y : Symbol(y, Decl(recursiveConditionalTypes.ts, 114, 47))
+>x : Symbol(x, Decl(recursiveConditionalTypes.ts, 114, 31))
 }
 

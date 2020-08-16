@@ -21,8 +21,8 @@ tests/cases/compiler/recursiveConditionalTypes.ts(50,5): error TS2322: Type 'Tup
   Type 'number extends N ? number[] : _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
     Type 'number[] | _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
       Type 'number[]' is not assignable to type 'TupleOf<number, M>'.
-tests/cases/compiler/recursiveConditionalTypes.ts(89,5): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/recursiveConditionalTypes.ts(89,9): error TS2345: Argument of type 'Grow2<[], T>' is not assignable to parameter of type 'Grow1<[], T>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(116,5): error TS2589: Type instantiation is excessively deep and possibly infinite.
+tests/cases/compiler/recursiveConditionalTypes.ts(116,9): error TS2345: Argument of type 'Grow2<[], T>' is not assignable to parameter of type 'Grow1<[], T>'.
   Type '[] | Grow2<[string], T>' is not assignable to type 'Grow1<[], T>'.
     Type '[]' is not assignable to type 'Grow1<[], T>'.
       Type 'Grow2<[string], T>' is not assignable to type 'Grow1<[number], T>'.
@@ -119,6 +119,33 @@ tests/cases/compiler/recursiveConditionalTypes.ts(89,9): error TS2345: Argument 
     declare function f23<T>(t: TupleOf<T, 3>): T;
     
     f23(['a', 'b', 'c']);  // string
+    
+    // Inference to recursive type
+    
+    interface Box<T> { value: T };
+    type RecBox<T> = T | Box<RecBox<T>>;
+    type InfBox<T> = Box<InfBox<T>>;
+    
+    declare function unbox<T>(box: RecBox<T>): T
+    
+    type T1 = Box<string>;
+    type T2 = Box<T1>;
+    type T3 = Box<T2>;
+    type T4 = Box<T3>;
+    type T5 = Box<T4>;
+    type T6 = Box<T5>;
+    
+    declare let b1: Box<Box<Box<Box<Box<Box<string>>>>>>;
+    declare let b2: T6;
+    declare let b3: InfBox<string>;
+    declare let b4: { value: { value: { value: typeof b4 }}};
+    
+    unbox(b1);  // string
+    unbox(b2);  // string
+    unbox(b3);  // InfBox<string>
+    unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // number
+    unbox(b4);  // { value: { value: typeof b4 }}
+    unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
     
     // Inference from nested instantiations of same generic types
     

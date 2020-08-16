@@ -55,6 +55,33 @@ declare function f23<T>(t: TupleOf<T, 3>): T;
 
 f23(['a', 'b', 'c']);  // string
 
+// Inference to recursive type
+
+interface Box<T> { value: T };
+type RecBox<T> = T | Box<RecBox<T>>;
+type InfBox<T> = Box<InfBox<T>>;
+
+declare function unbox<T>(box: RecBox<T>): T
+
+type T1 = Box<string>;
+type T2 = Box<T1>;
+type T3 = Box<T2>;
+type T4 = Box<T3>;
+type T5 = Box<T4>;
+type T6 = Box<T5>;
+
+declare let b1: Box<Box<Box<Box<Box<Box<string>>>>>>;
+declare let b2: T6;
+declare let b3: InfBox<string>;
+declare let b4: { value: { value: { value: typeof b4 }}};
+
+unbox(b1);  // string
+unbox(b2);  // string
+unbox(b3);  // InfBox<string>
+unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // number
+unbox(b4);  // { value: { value: typeof b4 }}
+unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
+
 // Inference from nested instantiations of same generic types
 
 type Box1<T> = { value: T };
@@ -105,6 +132,13 @@ function f22(tn, tm) {
     tm = tn;
 }
 f23(['a', 'b', 'c']); // string
+;
+unbox(b1); // string
+unbox(b2); // string
+unbox(b3); // InfBox<string>
+unbox({ value: { value: { value: { value: { value: { value: 5 } } } } } }); // number
+unbox(b4); // { value: { value: typeof b4 }}
+unbox({ value: { value: { get value() { return this; } } } }); // { readonly value: ... }
 foo(z); // unknown, but ideally would be string (requires unique recursion ID for each type reference)
 function f20(x, y) {
     x = y;
@@ -142,6 +176,28 @@ declare type TT3 = TupleOf<number, any>;
 declare type TT4 = TupleOf<number, 100>;
 declare function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>): void;
 declare function f23<T>(t: TupleOf<T, 3>): T;
+interface Box<T> {
+    value: T;
+}
+declare type RecBox<T> = T | Box<RecBox<T>>;
+declare type InfBox<T> = Box<InfBox<T>>;
+declare function unbox<T>(box: RecBox<T>): T;
+declare type T1 = Box<string>;
+declare type T2 = Box<T1>;
+declare type T3 = Box<T2>;
+declare type T4 = Box<T3>;
+declare type T5 = Box<T4>;
+declare type T6 = Box<T5>;
+declare let b1: Box<Box<Box<Box<Box<Box<string>>>>>>;
+declare let b2: T6;
+declare let b3: InfBox<string>;
+declare let b4: {
+    value: {
+        value: {
+            value: typeof b4;
+        };
+    };
+};
 declare type Box1<T> = {
     value: T;
 };

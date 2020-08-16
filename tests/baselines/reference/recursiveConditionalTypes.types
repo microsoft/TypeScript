@@ -135,6 +135,103 @@ f23(['a', 'b', 'c']);  // string
 >'b' : "b"
 >'c' : "c"
 
+// Inference to recursive type
+
+interface Box<T> { value: T };
+>value : T
+
+type RecBox<T> = T | Box<RecBox<T>>;
+>RecBox : RecBox<T>
+
+type InfBox<T> = Box<InfBox<T>>;
+>InfBox : InfBox<T>
+
+declare function unbox<T>(box: RecBox<T>): T
+>unbox : <T>(box: RecBox<T>) => T
+>box : RecBox<T>
+
+type T1 = Box<string>;
+>T1 : T1
+
+type T2 = Box<T1>;
+>T2 : T2
+
+type T3 = Box<T2>;
+>T3 : T3
+
+type T4 = Box<T3>;
+>T4 : T4
+
+type T5 = Box<T4>;
+>T5 : T5
+
+type T6 = Box<T5>;
+>T6 : T6
+
+declare let b1: Box<Box<Box<Box<Box<Box<string>>>>>>;
+>b1 : Box<Box<Box<Box<Box<Box<string>>>>>>
+
+declare let b2: T6;
+>b2 : T6
+
+declare let b3: InfBox<string>;
+>b3 : InfBox<string>
+
+declare let b4: { value: { value: { value: typeof b4 }}};
+>b4 : { value: {    value: {        value: typeof b4;    };}; }
+>value : { value: {    value: typeof b4;}; }
+>value : { value: typeof b4; }
+>value : { value: { value: { value: typeof b4; }; }; }
+>b4 : { value: { value: { value: any; }; }; }
+
+unbox(b1);  // string
+>unbox(b1) : string
+>unbox : <T>(box: RecBox<T>) => T
+>b1 : Box<Box<Box<Box<Box<Box<string>>>>>>
+
+unbox(b2);  // string
+>unbox(b2) : string
+>unbox : <T>(box: RecBox<T>) => T
+>b2 : T6
+
+unbox(b3);  // InfBox<string>
+>unbox(b3) : InfBox<string>
+>unbox : <T>(box: RecBox<T>) => T
+>b3 : InfBox<string>
+
+unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // number
+>unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}}) : number
+>unbox : <T>(box: RecBox<T>) => T
+>{ value: { value: { value: { value: { value: { value: 5 }}}}}} : { value: { value: { value: { value: { value: { value: number; }; }; }; }; }; }
+>value : { value: { value: { value: { value: { value: number; }; }; }; }; }
+>{ value: { value: { value: { value: { value: 5 }}}}} : { value: { value: { value: { value: { value: number; }; }; }; }; }
+>value : { value: { value: { value: { value: number; }; }; }; }
+>{ value: { value: { value: { value: 5 }}}} : { value: { value: { value: { value: number; }; }; }; }
+>value : { value: { value: { value: number; }; }; }
+>{ value: { value: { value: 5 }}} : { value: { value: { value: number; }; }; }
+>value : { value: { value: number; }; }
+>{ value: { value: 5 }} : { value: { value: number; }; }
+>value : { value: number; }
+>{ value: 5 } : { value: number; }
+>value : number
+>5 : 5
+
+unbox(b4);  // { value: { value: typeof b4 }}
+>unbox(b4) : { value: { value: { value: any; }; }; }
+>unbox : <T>(box: RecBox<T>) => T
+>b4 : { value: { value: { value: any; }; }; }
+
+unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
+>unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
+>unbox : <T>(box: RecBox<T>) => T
+>{ value: { value: { get value() { return this; } }}} : { value: { value: { readonly value: { readonly value: any; }; }; }; }
+>value : { value: { readonly value: { readonly value: any; }; }; }
+>{ value: { get value() { return this; } }} : { value: { readonly value: { readonly value: any; }; }; }
+>value : { readonly value: { readonly value: any; }; }
+>{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
+>value : { readonly value: any; }
+>this : { readonly value: any; } | { readonly value: { readonly value: any; }; } | Box<RecBox<{ readonly value: { readonly value: any; }; }>>
+
 // Inference from nested instantiations of same generic types
 
 type Box1<T> = { value: T };
