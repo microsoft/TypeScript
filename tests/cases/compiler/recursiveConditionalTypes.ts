@@ -1,5 +1,6 @@
 // @strict: true
 // @declaration: true
+// @target: esnext
 
 // Awaiting promises
 
@@ -56,6 +57,33 @@ function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<
 declare function f23<T>(t: TupleOf<T, 3>): T;
 
 f23(['a', 'b', 'c']);  // string
+
+// Inference to recursive type
+
+interface Box<T> { value: T };
+type RecBox<T> = T | Box<RecBox<T>>;
+type InfBox<T> = Box<InfBox<T>>;
+
+declare function unbox<T>(box: RecBox<T>): T
+
+type T1 = Box<string>;
+type T2 = Box<T1>;
+type T3 = Box<T2>;
+type T4 = Box<T3>;
+type T5 = Box<T4>;
+type T6 = Box<T5>;
+
+declare let b1: Box<Box<Box<Box<Box<Box<string>>>>>>;
+declare let b2: T6;
+declare let b3: InfBox<string>;
+declare let b4: { value: { value: { value: typeof b4 }}};
+
+unbox(b1);  // string
+unbox(b2);  // string
+unbox(b3);  // InfBox<string>
+unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // number
+unbox(b4);  // { value: { value: typeof b4 }}
+unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
 
 // Inference from nested instantiations of same generic types
 
