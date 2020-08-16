@@ -1686,6 +1686,10 @@
         "category": "Error",
         "code": 2418
     },
+    "Types of construct signatures are incompatible.": {
+        "category": "Error",
+        "code": 2419
+    },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
         "code": 2420
