@@ -1,13 +1,14 @@
 /* @internal */
 namespace ts.Completions {
     export enum SortText {
-        LocationPriority = "0",
-        OptionalMember = "1",
-        MemberDeclaredBySpreadAssignment = "2",
-        SuggestedClassMembers = "3",
-        GlobalsOrKeywords = "4",
-        AutoImportSuggestions = "5",
-        JavascriptIdentifiers = "6"
+        SameName = "0",
+        LocationPriority = "1",
+        OptionalMember = "2",
+        MemberDeclaredBySpreadAssignment = "3",
+        SuggestedClassMembers = "4",
+        GlobalsOrKeywords = "5",
+        AutoImportSuggestions = "6",
+        JavascriptIdentifiers = "7"
     }
     export type Log = (message: string) => void;
 
@@ -945,6 +946,7 @@ namespace ts.Completions {
         let isStartingCloseTag = false;
         let isJsxInitializer: IsJsxInitializer = false;
         let isJsxIdentifierExpected = false;
+        let contextPropertyName: string | undefined;
 
         let location = getTouchingPropertyName(sourceFile, position);
         if (contextToken) {
@@ -958,6 +960,8 @@ namespace ts.Completions {
             if (contextToken.kind === SyntaxKind.DotToken || contextToken.kind === SyntaxKind.QuestionDotToken) {
                 isRightOfDot = contextToken.kind === SyntaxKind.DotToken;
                 isRightOfQuestionDot = contextToken.kind === SyntaxKind.QuestionDotToken;
+                const propertyAssignment = tryCast(findAncestor(contextToken, n => rangeContainsRange(location, n) && isPropertyAssignment(n)), isPropertyAssignment);
+                contextPropertyName = tryCast(propertyAssignment?.name, isIdentifier)?.escapedText as string | undefined;
                 switch (parent.kind) {
                     case SyntaxKind.PropertyAccessExpression:
                         propertyAccessToConvert = parent as PropertyAccessExpression;
@@ -1208,7 +1212,7 @@ namespace ts.Completions {
                                     }
                                 }
                             }
-                            addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
+                            addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot, contextPropertyName);
                         }
 
                         return;
@@ -1238,11 +1242,11 @@ namespace ts.Completions {
                         }
                     }
                 }
-                addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot);
+                addTypeProperties(type, !!(node.flags & NodeFlags.AwaitContext), insertQuestionDot, contextPropertyName);
             }
         }
 
-        function addTypeProperties(type: Type, insertAwait: boolean, insertQuestionDot: boolean): void {
+        function addTypeProperties(type: Type, insertAwait: boolean, insertQuestionDot: boolean, contextPropertyName: string | undefined): void {
             isNewIdentifierLocation = !!type.getStringIndexType();
             if (isRightOfQuestionDot && some(type.getCallSignatures())) {
                 isNewIdentifierLocation = true;
@@ -1260,6 +1264,9 @@ namespace ts.Completions {
             else {
                 for (const symbol of type.getApparentProperties()) {
                     if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
+                        if (contextPropertyName && symbol.name === contextPropertyName) {
+                            symbolToSortTextMap[getSymbolId(symbol)] = SortText.SameName;
+                        }
                         addPropertySymbol(symbol, /*insertAwait*/ false, insertQuestionDot);
                     }
                 }
