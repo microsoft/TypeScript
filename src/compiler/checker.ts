@@ -2382,7 +2382,7 @@ namespace ts {
                     && isBinaryExpression(node.parent)
                     && node.parent.left === node
                     && node.parent.operatorToken.kind === SyntaxKind.EqualsToken
-                && isAliasableOrJsExpression(node.parent.right)
+                    && isAliasableOrJsExpression(node.parent.right)
                 || node.kind === SyntaxKind.ShorthandPropertyAssignment
                 || node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer)
                 || isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true);
@@ -6876,6 +6876,8 @@ namespace ts {
                             const statement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                                 factory.createVariableDeclaration(varName, /*exclamationToken*/ undefined, serializeTypeForDeclaration(context, typeToSerialize, symbol, enclosingDeclaration, includePrivateSymbol, bundled))
                             ], NodeFlags.Const));
+                            // Inlined JSON types exported with [module.]exports= will already emit an export=, so should use `declare`.
+                            // Otherwise, the type itself should be exported.
                             addResult(statement,
                                 target && target.flags & SymbolFlags.Property && target.escapedName === InternalSymbolName.ExportEquals ? ModifierFlags.Ambient
                                 : name === varName ? ModifierFlags.Export
