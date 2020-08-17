@@ -3937,7 +3937,8 @@ namespace ts {
          * This is necessary as an identifier in short-hand property assignment can contains two meaning: property name and property value.
          */
         getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
-        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+
+        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier | Identifier): Symbol | undefined;
         /**
          * If a symbol is a local symbol with an associated exported symbol, returns the exported symbol.
          * Otherwise returns its input.

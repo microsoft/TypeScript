@@ -1856,6 +1856,11 @@ namespace ts {
         return (<ExternalModuleReference>(<ImportEqualsDeclaration>node).moduleReference).expression;
     }
 
+    export function getExternalModuleRequireArgument(node: Node) {
+        return isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)
+            && (getLeftmostPropertyAccessExpression(node.initializer) as CallExpression).arguments[0] as StringLiteral;
+    }
+
     export function isInternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
@@ -1923,7 +1928,8 @@ namespace ts {
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: true): node is RequireVariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration;
     export function isRequireVariableDeclaration(node: Node, requireStringLiteralLikeArgument: boolean): node is VariableDeclaration {
-        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(node.initializer, requireStringLiteralLikeArgument);
+        node = getRootDeclaration(node);
+        return isVariableDeclaration(node) && !!node.initializer && isRequireCall(getLeftmostPropertyAccessExpression(node.initializer), requireStringLiteralLikeArgument);
     }
 
     export function isRequireVariableStatement(node: Node, requireStringLiteralLikeArgument = true): node is RequireVariableStatement {
@@ -5444,6 +5450,13 @@ namespace ts {
 
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
+    }
+
+    export function getLeftmostPropertyAccessExpression(expr: Expression): Expression {
+        while (isPropertyAccessExpression(expr)) {
+            expr = expr.expression;
+        }
+        return expr;
     }
 
     export function getLeftmostExpression(node: Expression, stopAtCallExpressions: boolean) {

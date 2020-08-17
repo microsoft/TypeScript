@@ -1919,11 +1919,8 @@ namespace ts {
                         if (lastLocation && (
                             lastLocation === (location as BindingElement).initializer ||
                             lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation))) {
-                            const root = getRootDeclaration(location);
-                            if (root.kind === SyntaxKind.Parameter) {
-                                if (!associatedDeclarationForContainingInitializerOrBindingName) {
-                                    associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
-                                }
+                            if (isParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
+                                associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
                             }
                         }
                         break;
@@ -2372,32 +2369,41 @@ namespace ts {
          * {name: <EntityNameExpression>}
          */
         function isAliasSymbolDeclaration(node: Node): boolean {
-            return node.kind === SyntaxKind.ImportEqualsDeclaration ||
-                node.kind === SyntaxKind.NamespaceExportDeclaration ||
-                node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name ||
-                node.kind === SyntaxKind.NamespaceImport ||
-                node.kind === SyntaxKind.NamespaceExport ||
-                node.kind === SyntaxKind.ImportSpecifier ||
-                node.kind === SyntaxKind.ExportSpecifier ||
-                node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
-                isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node) ||
-                isPropertyAccessExpression(node)
+            return node.kind === SyntaxKind.ImportEqualsDeclaration
+                || node.kind === SyntaxKind.NamespaceExportDeclaration
+                || node.kind === SyntaxKind.ImportClause && !!(<ImportClause>node).name
+                || node.kind === SyntaxKind.NamespaceImport
+                || node.kind === SyntaxKind.NamespaceExport
+                || node.kind === SyntaxKind.ImportSpecifier
+                || node.kind === SyntaxKind.ExportSpecifier
+                || node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node)
+                || isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node)
+                || isPropertyAccessExpression(node)
                     && isBinaryExpression(node.parent)
                     && node.parent.left === node
                     && node.parent.operatorToken.kind === SyntaxKind.EqualsToken
-                    && isAliasableOrJsExpression(node.parent.right) ||
-                node.kind === SyntaxKind.ShorthandPropertyAssignment ||
-                node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer);
+                    && isAliasableOrJsExpression(node.parent.right)
+                || node.kind === SyntaxKind.ShorthandPropertyAssignment
+                || node.kind === SyntaxKind.PropertyAssignment && isAliasableOrJsExpression((node as PropertyAssignment).initializer)
+                || isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true);
         }
 
         function isAliasableOrJsExpression(e: Expression) {
             return isAliasableExpression(e) || isFunctionExpression(e) && isJSConstructor(e);
         }
 
-        function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration, dontResolveAlias: boolean): Symbol | undefined {
-            if (node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
-                const immediate = resolveExternalModuleName(node, getExternalModuleImportEqualsDeclarationExpression(node));
-                const resolved = resolveExternalModuleSymbol(immediate);
+        function getTargetOfImportEqualsDeclaration(node: ImportEqualsDeclaration | VariableDeclaration, dontResolveAlias: boolean): Symbol | undefined {
+            if (isVariableDeclaration(node) && node.initializer && isPropertyAccessExpression(node.initializer)) {
+                const name = (node.initializer.expression as CallExpression).arguments[0] as StringLiteral;
+                return isIdentifier(node.initializer.name)
+                    ? getPropertyOfType(resolveExternalModuleTypeByLiteral(name), node.initializer.name.escapedText)
+                    : undefined;
+            }
+            if (isVariableDeclaration(node) || node.moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                const immediate = resolveExternalModuleName(
+                    node,
+                    getExternalModuleRequireArgument(node) || getExternalModuleImportEqualsDeclarationExpression(node));
+               const resolved = resolveExternalModuleSymbol(immediate);
                 markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
                 return resolved;
             }
@@ -2585,10 +2591,13 @@ namespace ts {
             return result;
         }
 
-        function getExportOfModule(symbol: Symbol, specifier: ImportOrExportSpecifier, dontResolveAlias: boolean): Symbol | undefined {
+        function getExportOfModule(symbol: Symbol, specifier: ImportOrExportSpecifier | BindingElement, dontResolveAlias: boolean): Symbol | undefined {
             if (symbol.flags & SymbolFlags.Module) {
-                const name = (specifier.propertyName ?? specifier.name).escapedText;
-                const exportSymbol = getExportsOfSymbol(symbol).get(name);
+                const name = specifier.propertyName ?? specifier.name;
+                if (!isIdentifier(name)) {
+                    return undefined;
+                }
+                const exportSymbol = getExportsOfSymbol(symbol).get(name.escapedText);
                 const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
                 markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false);
                 return resolved;
@@ -2604,11 +2613,15 @@ namespace ts {
             }
         }
 
-        function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration, specifier: ImportOrExportSpecifier, dontResolveAlias = false): Symbol | undefined {
-            const moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier!)!;
+        function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, specifier: ImportOrExportSpecifier | BindingElement, dontResolveAlias = false): Symbol | undefined {
+            const moduleSpecifier = getExternalModuleRequireArgument(node) || (node as ImportDeclaration | ExportDeclaration).moduleSpecifier!;
+            const moduleSymbol = resolveExternalModuleName(node, moduleSpecifier)!; // TODO: GH#18217
             const name = specifier.propertyName || specifier.name;
+            if (!isIdentifier(name)) {
+                return undefined;
+            }
             const suppressInteropError = name.escapedText === InternalSymbolName.Default && !!(compilerOptions.allowSyntheticDefaultImports || compilerOptions.esModuleInterop);
-            const targetSymbol = resolveESModuleSymbol(moduleSymbol, node.moduleSpecifier!, dontResolveAlias, suppressInteropError);
+            const targetSymbol = resolveESModuleSymbol(moduleSymbol, moduleSpecifier, dontResolveAlias, suppressInteropError);
             if (targetSymbol) {
                 if (name.escapedText) {
                     if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
@@ -2669,7 +2682,7 @@ namespace ts {
             }
         }
 
-        function reportNonExportedMember(node: ImportDeclaration | ExportDeclaration, name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
+        function reportNonExportedMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
             const localSymbol = moduleSymbol.valueDeclaration.locals?.get(name.escapedText);
             const exports = moduleSymbol.exports;
             if (localSymbol) {
@@ -2693,7 +2706,7 @@ namespace ts {
             }
         }
 
-        function reportInvalidImportEqualsExportMember(node: ImportDeclaration | ExportDeclaration, name: Identifier, declarationName: string, moduleName: string) {
+        function reportInvalidImportEqualsExportMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, name: Identifier, declarationName: string, moduleName: string) {
             if (moduleKind >= ModuleKind.ES2015) {
                 const message = compilerOptions.esModuleInterop ? Diagnostics._0_can_only_be_imported_by_using_a_default_import :
                     Diagnostics._0_can_only_be_imported_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import;
@@ -2713,8 +2726,8 @@ namespace ts {
             }
         }
 
-        function getTargetOfImportSpecifier(node: ImportSpecifier, dontResolveAlias: boolean): Symbol | undefined {
-            const resolved = getExternalModuleMember(node.parent.parent.parent, node, dontResolveAlias);
+        function getTargetOfImportSpecifier(node: ImportSpecifier | BindingElement, dontResolveAlias: boolean): Symbol | undefined {
+            const resolved = getExternalModuleMember(isBindingElement(node) ? getRootDeclaration(node) as VariableDeclaration : node.parent.parent.parent, node, dontResolveAlias);
             markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false);
             return resolved;
         }
@@ -2771,15 +2784,17 @@ namespace ts {
         function getTargetOfAliasDeclaration(node: Declaration, dontRecursivelyResolve = false): Symbol | undefined {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return getTargetOfImportEqualsDeclaration(<ImportEqualsDeclaration>node, dontRecursivelyResolve);
+                case SyntaxKind.VariableDeclaration:
+                    return getTargetOfImportEqualsDeclaration(node as ImportEqualsDeclaration | VariableDeclaration, dontRecursivelyResolve);
                 case SyntaxKind.ImportClause:
-                    return getTargetOfImportClause(<ImportClause>node, dontRecursivelyResolve);
+                    return getTargetOfImportClause(node as ImportClause, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceImport:
                     return getTargetOfNamespaceImport(<NamespaceImport>node, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceExport:
                     return getTargetOfNamespaceExport(<NamespaceExport>node, dontRecursivelyResolve);
                 case SyntaxKind.ImportSpecifier:
-                    return getTargetOfImportSpecifier(<ImportSpecifier>node, dontRecursivelyResolve);
+                case SyntaxKind.BindingElement:
+                    return getTargetOfImportSpecifier(node as ImportSpecifier | BindingElement, dontRecursivelyResolve);
                 case SyntaxKind.ExportSpecifier:
                     return getTargetOfExportSpecifier(<ExportSpecifier>node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, dontRecursivelyResolve);
                 case SyntaxKind.ExportAssignment:
@@ -6217,43 +6232,60 @@ namespace ts {
                                 if (textRange && isVariableDeclarationList(textRange.parent) && textRange.parent.declarations.length === 1) {
                                     textRange = textRange.parent.parent;
                                 }
-                                const statement = setTextRange(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
-                                    factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, includePrivateSymbol, bundled))
-                                ], flags)), textRange);
-                                addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
-                                if (name !== localName && !isPrivate) {
-                                    // We rename the variable declaration we generate for Property symbols since they may have a name which
-                                    // conflicts with a local declaration. For example, given input:
-                                    // ```
-                                    // function g() {}
-                                    // module.exports.g = g
-                                    // ```
-                                    // In such a situation, we have a local variable named `g`, and a separate exported variable named `g`.
-                                    // Naively, we would emit
-                                    // ```
-                                    // function g() {}
-                                    // export const g: typeof g;
-                                    // ```
-                                    // That's obviously incorrect - the `g` in the type annotation needs to refer to the local `g`, but
-                                    // the export declaration shadows it.
-                                    // To work around that, we instead write
-                                    // ```
-                                    // function g() {}
-                                    // const g_1: typeof g;
-                                    // export { g_1 as g };
-                                    // ```
-                                    // To create an export named `g` that does _not_ shadow the local `g`
+                                const propertyAccessRequire = find(symbol.declarations, isPropertyAccessExpression);
+                                if (propertyAccessRequire && isBinaryExpression(propertyAccessRequire.parent) && isIdentifier(propertyAccessRequire.parent.right)
+                                    && type.symbol && isSourceFile(type.symbol.valueDeclaration)) {
+                                    const alias = localName === propertyAccessRequire.parent.right.escapedText ? undefined : propertyAccessRequire.parent.right;
                                     addResult(
                                         factory.createExportDeclaration(
                                             /*decorators*/ undefined,
                                             /*modifiers*/ undefined,
                                             /*isTypeOnly*/ false,
-                                            factory.createNamedExports([factory.createExportSpecifier(name, localName)])
+                                            factory.createNamedExports([factory.createExportSpecifier(alias, localName)])
                                         ),
                                         ModifierFlags.None
                                     );
-                                    needsExportDeclaration = false;
-                                    needsPostExportDefault = false;
+                                    context.tracker.trackSymbol!(type.symbol, context.enclosingDeclaration, SymbolFlags.Value);
+                                }
+                                else {
+                                    const statement = setTextRange(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
+                                        factory.createVariableDeclaration(name, /*exclamationToken*/ undefined, serializeTypeForDeclaration(context, type, symbol, enclosingDeclaration, includePrivateSymbol, bundled))
+                                    ], flags)), textRange);
+                                    addResult(statement, name !== localName ? modifierFlags & ~ModifierFlags.Export : modifierFlags);
+                                    if (name !== localName && !isPrivate) {
+                                        // We rename the variable declaration we generate for Property symbols since they may have a name which
+                                        // conflicts with a local declaration. For example, given input:
+                                        // ```
+                                        // function g() {}
+                                        // module.exports.g = g
+                                        // ```
+                                        // In such a situation, we have a local variable named `g`, and a separate exported variable named `g`.
+                                        // Naively, we would emit
+                                        // ```
+                                        // function g() {}
+                                        // export const g: typeof g;
+                                        // ```
+                                        // That's obviously incorrect - the `g` in the type annotation needs to refer to the local `g`, but
+                                        // the export declaration shadows it.
+                                        // To work around that, we instead write
+                                        // ```
+                                        // function g() {}
+                                        // const g_1: typeof g;
+                                        // export { g_1 as g };
+                                        // ```
+                                        // To create an export named `g` that does _not_ shadow the local `g`
+                                        addResult(
+                                            factory.createExportDeclaration(
+                                                /*decorators*/ undefined,
+                                                /*modifiers*/ undefined,
+                                                /*isTypeOnly*/ false,
+                                                factory.createNamedExports([factory.createExportSpecifier(name, localName)])
+                                            ),
+                                            ModifierFlags.None
+                                        );
+                                        needsExportDeclaration = false;
+                                        needsPostExportDefault = false;
+                                    }
                                 }
                             }
                         }
@@ -6630,17 +6662,45 @@ namespace ts {
                     const targetName = getInternalSymbolName(target, verbatimTargetName);
                     includePrivateSymbol(target); // the target may be within the same scope - attempt to serialize it first
                     switch (node.kind) {
+                        case SyntaxKind.VariableDeclaration:
+                            // commonjs require: const x = require('y')
+                            if (isPropertyAccessExpression((node as VariableDeclaration).initializer!)) {
+                                // const x = require('y').z
+                                const initializer = (node as VariableDeclaration).initializer! as PropertyAccessExpression; // require('y').z
+                                const uniqueName = factory.createUniqueName((getExternalModuleRequireArgument(node) as StringLiteral).text); // _y
+                                const specifier = getSpecifierForModuleSymbol(target.parent || target, context); // 'y'
+                                // import _y = require('y');
+                                addResult(factory.createImportEqualsDeclaration(
+                                    /*decorators*/ undefined,
+                                    /*modifiers*/ undefined,
+                                    uniqueName,
+                                    factory.createExternalModuleReference(factory.createStringLiteral(specifier))
+                                ), ModifierFlags.None);
+                                // import x = _y.z
+                                addResult(factory.createImportEqualsDeclaration(
+                                    /*decorators*/ undefined,
+                                    /*modifiers*/ undefined,
+                                    factory.createIdentifier(localName),
+                                    factory.createQualifiedName(uniqueName, initializer.name as Identifier),
+                                ), modifierFlags);
+                                break;
+                            }
+                            // else fall through and treat commonjs require just like import=
                         case SyntaxKind.ImportEqualsDeclaration:
+                             if (target.escapedName === InternalSymbolName.ExportEquals) {
+                                serializeMaybeAliasAssignment(symbol);
+                                break;
+                            }
                             // Could be a local `import localName = ns.member` or
                             // an external `import localName = require("whatever")`
-                            const isLocalImport = !(target.flags & SymbolFlags.ValueModule);
+                            const isLocalImport = !(target.flags & SymbolFlags.ValueModule) && !isVariableDeclaration(node);
                             addResult(factory.createImportEqualsDeclaration(
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 factory.createIdentifier(localName),
                                 isLocalImport
                                     ? symbolToName(target, context, SymbolFlags.All, /*expectsIdentifier*/ false)
-                                    : factory.createExternalModuleReference(factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context)))
+                                    : factory.createExternalModuleReference(factory.createStringLiteral(getSpecifierForModuleSymbol(target, context)))
                             ), isLocalImport ? modifierFlags : ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceExportDeclaration:
@@ -6816,7 +6876,12 @@ namespace ts {
                             const statement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                                 factory.createVariableDeclaration(varName, /*exclamationToken*/ undefined, serializeTypeForDeclaration(context, typeToSerialize, symbol, enclosingDeclaration, includePrivateSymbol, bundled))
                             ], NodeFlags.Const));
-                            addResult(statement, name === varName ? ModifierFlags.Export : ModifierFlags.None);
+                            // Inlined JSON types exported with [module.]exports= will already emit an export=, so should use `declare`.
+                            // Otherwise, the type itself should be exported.
+                            addResult(statement,
+                                target && target.flags & SymbolFlags.Property && target.escapedName === InternalSymbolName.ExportEquals ? ModifierFlags.Ambient
+                                : name === varName ? ModifierFlags.Export
+                                : ModifierFlags.None);
                         }
                         if (isExportAssignment) {
                             results.push(factory.createExportAssignment(
@@ -12062,8 +12127,7 @@ namespace ts {
 
         /**
          * A JSdoc TypeReference may be to a value, but resolve it as a type anyway.
-         * Note: If the value is imported from commonjs, it should really be an alias,
-         * but this function's special-case code fakes alias resolution as well.
+         * Example: import('./b').ConstructorFunction
          */
         function getTypeFromJSDocValueReference(node: NodeWithTypeArguments, symbol: Symbol): Type | undefined {
             const links = getNodeLinks(node);
@@ -12071,19 +12135,9 @@ namespace ts {
                 const valueType = getTypeOfSymbol(symbol);
                 let typeType = valueType;
                 if (symbol.valueDeclaration) {
-                    const decl = getRootDeclaration(symbol.valueDeclaration);
-                    let isRequireAlias = false;
-                    if (isVariableDeclaration(decl) && decl.initializer) {
-                        let expr = decl.initializer;
-                        // skip past entity names, eg `require("x").a.b.c`
-                        while (isPropertyAccessExpression(expr)) {
-                            expr = expr.expression;
-                        }
-                        isRequireAlias = isCallExpression(expr) && isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !!valueType.symbol;
-                    }
                     const isImportTypeWithQualifier = node.kind === SyntaxKind.ImportType && (node as ImportTypeNode).qualifier;
                     // valueType might not have a symbol, eg, {import('./b').STRING_LITERAL}
-                    if (valueType.symbol && (isRequireAlias || isImportTypeWithQualifier)) {
+                    if (valueType.symbol && isImportTypeWithQualifier) {
                         typeType = getTypeReferenceType(node, valueType.symbol);
                     }
                 }
@@ -32822,7 +32876,7 @@ namespace ts {
                 forEach(node.name.elements, checkSourceElement);
             }
             // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
-            if (node.initializer && getRootDeclaration(node).kind === SyntaxKind.Parameter && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
+            if (node.initializer && isParameterDeclaration(node) && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
                 error(node, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
                 return;
             }
@@ -32854,7 +32908,13 @@ namespace ts {
                 }
                 return;
             }
+            // For a commonjs `const x = require`, validate the alias and exit
             const symbol = getSymbolOfNode(node);
+            if (symbol.flags & SymbolFlags.Alias && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true)) {
+                checkAliasSymbol(node);
+                return;
+            }
+
             const type = convertAutoToAny(getTypeOfSymbol(symbol));
             if (node === symbol.valueDeclaration) {
                 // Node is the primary declaration of the symbol, just validate the initializer
@@ -35300,7 +35360,7 @@ namespace ts {
             return true;
         }
 
-        function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier | NamespaceExport) {
+        function checkAliasSymbol(node: ImportEqualsDeclaration | VariableDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier | NamespaceExport) {
             let symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
@@ -36584,10 +36644,15 @@ namespace ts {
         }
 
         /** Returns the target of an export specifier without following aliases */
-        function getExportSpecifierLocalTargetSymbol(node: ExportSpecifier): Symbol | undefined {
-            return node.parent.parent.moduleSpecifier ?
-                getExternalModuleMember(node.parent.parent, node) :
-                resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+        function getExportSpecifierLocalTargetSymbol(node: ExportSpecifier | Identifier): Symbol | undefined {
+            if (isExportSpecifier(node)) {
+                return node.parent.parent.moduleSpecifier ?
+                    getExternalModuleMember(node.parent.parent, node) :
+                    resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+            }
+            else {
+                return resolveEntityName(node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+            }
         }
 
         function getTypeOfNode(node: Node): Type {

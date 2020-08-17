@@ -3209,7 +3209,10 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                if (isBlockOrCatchScoped(node)) {
+                if (isInJSFile(node) && isRequireVariableDeclaration(node, /*requireStringLiteralLikeArgument*/ true) && !getJSDocTypeTag(node)) {
+                    declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
+                }
+                else if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
                 }
                 else if (isParameterDeclaration(node)) {
