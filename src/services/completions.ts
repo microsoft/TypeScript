@@ -33,6 +33,7 @@ namespace ts.Completions {
         Export              = 1 << 2,
         Promise             = 1 << 3,
         Nullable            = 1 << 4,
+        Enum                = 1 << 5,
 
         SymbolMemberNoExport = SymbolMember,
         SymbolMemberExport   = SymbolMember | Export,
@@ -47,6 +48,11 @@ namespace ts.Completions {
         moduleSymbol: Symbol;
         isDefaultExport: boolean;
         isFromPackageJson?: boolean;
+    }
+
+    interface SymbolOriginInfoEnum extends SymbolOriginInfo {
+        kind: SymbolOriginInfoKind;
+        needCase: boolean;
     }
 
     function originIsThisType(origin: SymbolOriginInfo): boolean {
@@ -67,6 +73,10 @@ namespace ts.Completions {
 
     function originIsPromise(origin: SymbolOriginInfo): boolean {
         return !!(origin.kind & SymbolOriginInfoKind.Promise);
+    }
+
+    function originIsEnum(origin: SymbolOriginInfo): origin is SymbolOriginInfoEnum {
+        return !!(origin.kind & SymbolOriginInfoKind.Enum);
     }
 
     function originIsNullableMember(origin: SymbolOriginInfo): boolean {
@@ -418,6 +428,10 @@ namespace ts.Completions {
             awaitText += `(await ${propertyAccessToConvert.expression.getText()})`;
             insertText = needsConvertPropertyAccess ? `${awaitText}${insertText}` : `${awaitText}${insertQuestionDot ? "?." : "."}${insertText}`;
             replacementSpan = createTextSpanFromBounds(propertyAccessToConvert.getStart(sourceFile), propertyAccessToConvert.end);
+        }
+        if (origin && originIsEnum(origin) && symbol.parent) {
+            name = `${symbol.parent.name}.${symbol.name}`;
+            insertText = origin.needCase ? `case ${name}:` : name;
         }
 
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
@@ -940,6 +954,8 @@ namespace ts.Completions {
         let node = currentToken;
         let propertyAccessToConvert: PropertyAccessExpression | undefined;
         let isRightOfDot = false;
+        let isRightOfCase = false;
+        let isInsideSwitchBody = false;
         let isRightOfQuestionDot = false;
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
@@ -987,6 +1003,12 @@ namespace ts.Completions {
                         // or leading into a '...' token. Just bail out instead.
                         return undefined;
                 }
+            }
+            else if (contextToken.kind === SyntaxKind.CaseKeyword) {
+                isRightOfCase = true;
+            }
+            else if (location.kind === SyntaxKind.CaseBlock) {
+                isInsideSwitchBody = true;
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX) {
                 // <UI.Test /* completion position */ />
@@ -1085,6 +1107,9 @@ namespace ts.Completions {
         if (isRightOfDot || isRightOfQuestionDot) {
             getTypeScriptMemberSymbols();
         }
+        else if (isRightOfCase || isInsideSwitchBody) {
+            getSwitchCaseEnumSymbols();
+        }
         else if (isRightOfOpenTag) {
             const tagSymbols = typeChecker.getJsxIntrinsicTagNamesAt(location);
             Debug.assertEachIsDefined(tagSymbols, "getJsxIntrinsicTagNames() should all be defined");
@@ -1148,6 +1173,38 @@ namespace ts.Completions {
                     return true;
                 default:
                     return false;
+            }
+        }
+
+        function getSwitchCaseEnumSymbols(): void {
+            const containerSwitch = findAncestor(contextToken, isSwitchStatement);
+            if (!containerSwitch) {
+                return;
+            }
+
+            const type = typeChecker.getTypeAtLocation(containerSwitch.expression);
+            if (type && type.symbol && type.symbol.flags & SymbolFlags.Enum && type !== typeChecker.getAnyType()) {
+                const seens = new Set<number>();
+                containerSwitch.caseBlock.clauses.forEach(clause => {
+                    if (isDefaultClause(clause)) {
+                        return;
+                    }
+                    const existedSymbol = typeChecker.getSymbolAtLocation(clause.expression);
+                    if (existedSymbol) {
+                        seens.add(getSymbolId(existedSymbol));
+                    }
+                });
+
+                const symbol = skipAlias(type.symbol, typeChecker);
+                const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                for (const exportedSymbol of exportedSymbols) {
+                    if (seens.has(getSymbolId(exportedSymbol))) {
+                        continue;
+                    }
+
+                    symbolToOriginInfoMap[getSymbolId(exportedSymbol)] = { kind: SymbolOriginInfoKind.Enum, needCase: isInsideSwitchBody } as SymbolOriginInfoEnum;
+                    symbols.push(exportedSymbol);
+                }
             }
         }
 
