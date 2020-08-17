@@ -1854,7 +1854,7 @@ namespace ts {
                     switch (node.kind) {
                         case SyntaxKind.ImportClause:
                             if ((node as ImportClause).isTypeOnly) {
-                                diagnostics.push(createDiagnosticForNode(node.parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
+                                diagnostics.push(createDiagnosticForNode(parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
                                 return "skip";
                             }
                             break;
