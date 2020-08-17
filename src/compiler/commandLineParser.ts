@@ -2477,6 +2477,9 @@ namespace ts {
             parseOwnConfigOfJson(json, host, basePath, configFileName, errors) :
             parseOwnConfigOfJsonSourceFile(sourceFile!, host, basePath, configFileName, errors);
 
+        if (ownConfig.options?.paths) {
+            ownConfig.options.pathsBasePath = basePath;
+        }
         if (ownConfig.extendedConfigPath) {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
@@ -2506,6 +2509,15 @@ namespace ts {
 
         return ownConfig;
     }
+
+    // function resolvePathsToConfigFileLocation(paths: MapLike<string[]>, configFileName: string) {
+    //     const resolved: MapLike<string[]> = {};
+    //     const configFileDirectory = getDirectoryPath(configFileName);
+    //     for (const key in paths) {
+    //         resolved[key] = map(paths[key], path => pathIsRelative(path) ? getNormalizedAbsolutePath(path, configFileDirectory) : path);
+    //     }
+    //     return resolved;
+    // }
 
     function parseOwnConfigOfJson(
         json: any,

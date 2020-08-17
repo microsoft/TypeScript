@@ -3482,10 +3482,6 @@
         "category": "Error",
         "code": 5059
     },
-    "Option 'paths' cannot be used without specifying '--baseUrl' option.": {
-        "category": "Error",
-        "code": 5060
-    },
     "Pattern '{0}' can have at most one '*' character.": {
         "category": "Error",
         "code": 5061
@@ -3597,6 +3593,10 @@
     "The inferred type of '{0}' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.": {
         "category": "Error",
         "code": 5088
+    },
+    "Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?": {
+        "category": "Error",
+        "code": 5089
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

@@ -2986,10 +2986,6 @@ namespace ts {
                 }
             }
 
-            if (options.paths && options.baseUrl === undefined) {
-                createDiagnosticForOptionName(Diagnostics.Option_paths_cannot_be_used_without_specifying_baseUrl_option, "paths");
-            }
-
             if (options.composite) {
                 if (options.declaration === false) {
                     createDiagnosticForOptionName(Diagnostics.Composite_projects_may_not_disable_declaration_emit, "declaration");
@@ -3047,6 +3043,9 @@ namespace ts {
                             if (typeOfSubst === "string") {
                                 if (!hasZeroOrOneAsteriskCharacter(subst)) {
                                     createDiagnosticForOptionPathKeyValue(key, i, Diagnostics.Substitution_0_in_pattern_1_can_have_at_most_one_Asterisk_character, subst, key);
+                                }
+                                if (!options.baseUrl && !pathIsRelative(subst) && !pathIsAbsolute(subst) && subst[0] !== "*") {
+                                    createDiagnosticForOptionPathKeyValue(key, i, Diagnostics.Non_relative_paths_are_not_allowed_when_baseUrl_is_not_set_Did_you_forget_a_leading_Slash);
                                 }
                             }
                             else {
@@ -3308,7 +3307,7 @@ namespace ts {
             });
         }
 
-        function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, arg0: string | number, arg1: string | number, arg2?: string | number) {
+        function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
             let needCompilerDiagnostic = true;
             const pathsSyntax = getOptionPathsSyntax();
             for (const pathProp of pathsSyntax) {
