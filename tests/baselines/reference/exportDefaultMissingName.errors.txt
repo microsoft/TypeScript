@@ -1,10 +1,6 @@
-error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/exportDefaultMissingName.ts(1,16): error TS2304: Cannot find name 'xyzzy'.
 
 
-!!! error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2304 tests/cases/compiler/exportDefaultMissingName.ts:1:16: Cannot find name 'xyzzy'.
 ==== tests/cases/compiler/exportDefaultMissingName.ts (1 errors) ====
     export default xyzzy;
                    ~~~~~

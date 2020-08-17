@@ -35585,6 +35585,9 @@ namespace ts {
                         checkExpressionCached(node.expression);
                     }
                 }
+                else {
+                    checkExpressionCached(node.expression); // doesn't resolve, check as expression to mark as error
+                }
 
                 if (getEmitDeclarations(compilerOptions)) {
                     collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true);
