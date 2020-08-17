@@ -2478,6 +2478,10 @@ namespace ts {
             parseOwnConfigOfJsonSourceFile(sourceFile!, host, basePath, configFileName, errors);
 
         if (ownConfig.options?.paths) {
+            // If we end up needing to resolve relative paths from 'paths' relative to
+            // the config file location, we'll need to know where that config file was.
+            // Since 'paths' can be inherited from an extended config in another directory,
+            // we wouldn't know which directory to use unless we store it here.
             ownConfig.options.pathsBasePath = basePath;
         }
         if (ownConfig.extendedConfigPath) {
@@ -2509,15 +2513,6 @@ namespace ts {
 
         return ownConfig;
     }
-
-    // function resolvePathsToConfigFileLocation(paths: MapLike<string[]>, configFileName: string) {
-    //     const resolved: MapLike<string[]> = {};
-    //     const configFileDirectory = getDirectoryPath(configFileName);
-    //     for (const key in paths) {
-    //         resolved[key] = map(paths[key], path => pathIsRelative(path) ? getNormalizedAbsolutePath(path, configFileDirectory) : path);
-    //     }
-    //     return resolved;
-    // }
 
     function parseOwnConfigOfJson(
         json: any,
