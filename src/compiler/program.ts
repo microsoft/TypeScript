@@ -3044,7 +3044,7 @@ namespace ts {
                                 if (!hasZeroOrOneAsteriskCharacter(subst)) {
                                     createDiagnosticForOptionPathKeyValue(key, i, Diagnostics.Substitution_0_in_pattern_1_can_have_at_most_one_Asterisk_character, subst, key);
                                 }
-                                if (!options.baseUrl && !pathIsRelative(subst) && !pathIsAbsolute(subst) && subst[0] !== "*") {
+                                if (!options.baseUrl && !pathIsRelative(subst) && !pathIsAbsolute(subst)) {
                                     createDiagnosticForOptionPathKeyValue(key, i, Diagnostics.Non_relative_paths_are_not_allowed_when_baseUrl_is_not_set_Did_you_forget_a_leading_Slash);
                                 }
                             }
