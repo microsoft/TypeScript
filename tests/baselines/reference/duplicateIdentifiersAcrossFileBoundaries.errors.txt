@@ -1,3 +1,4 @@
+error TS-1: Pre-emit (6) and post-emit (7) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/file1.ts(3,7): error TS2300: Duplicate identifier 'C2'.
 tests/cases/compiler/file1.ts(4,10): error TS2300: Duplicate identifier 'f'.
 tests/cases/compiler/file1.ts(8,12): error TS2300: Duplicate identifier 'x'.
@@ -7,6 +8,9 @@ tests/cases/compiler/file2.ts(7,8): error TS2433: A namespace declaration cannot
 tests/cases/compiler/file2.ts(8,16): error TS2300: Duplicate identifier 'x'.
 
 
+!!! error TS-1: Pre-emit (6) and post-emit (7) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2300 tests/cases/compiler/file1.ts:3:7: Duplicate identifier 'C2'.
 ==== tests/cases/compiler/file1.ts (3 errors) ====
     interface I { }
     class C1 { }

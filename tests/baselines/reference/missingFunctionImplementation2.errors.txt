@@ -1,7 +1,11 @@
+error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/missingFunctionImplementation2_a.ts(3,19): error TS2384: Overload signatures must all be ambient or non-ambient.
 tests/cases/compiler/missingFunctionImplementation2_b.ts(1,17): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
+!!! error TS-1: Pre-emit (1) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2384 tests/cases/compiler/missingFunctionImplementation2_a.ts:3:19: Overload signatures must all be ambient or non-ambient.
 ==== tests/cases/compiler/missingFunctionImplementation2_a.ts (1 errors) ====
     export {};
     declare module "./missingFunctionImplementation2_b" {
