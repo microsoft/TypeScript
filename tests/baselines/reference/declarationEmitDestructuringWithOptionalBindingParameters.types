@@ -6,7 +6,7 @@ function foo([x,y,z]?: [string, number, boolean]) {
 >z : boolean
 }
 function foo1( { x, y, z }?: { x: string; y: number; z: boolean }) {
->foo1 : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => void
+>foo1 : ({ x, y, z }?: {    x: string;    y: number;    z: boolean;}) => void
 >x : string
 >y : number
 >z : boolean

@@ -16,14 +16,15 @@ namespace ts.codefix {
                 return undefined;
             }
 
+            const newLineCharacter = sourceFile.checkJsDirective ? "" : getNewLineOrDefaultFromHost(host, formatContext.options);
             const fixes: CodeFixAction[] = [
                 // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
-                createCodeFixActionNoFixId(
+                createCodeFixActionWithoutFixAll(
                     fixName,
                     [createFileTextChanges(sourceFile.fileName, [
                         createTextChange(sourceFile.checkJsDirective
                             ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
-                            : createTextSpan(0, 0), `// @ts-nocheck${getNewLineOrDefaultFromHost(host, formatContext.options)}`),
+                            : createTextSpan(0, 0), `// @ts-nocheck${newLineCharacter}`),
                     ])],
                     Diagnostics.Disable_checking_for_this_file),
             ];
@@ -36,7 +37,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => {
-            const seenLines = createMap<true>();
+            const seenLines = new Set<number>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 if (textChanges.isValidLocationToAddComment(diag.file, diag.start)) {
                     makeChange(changes, diag.file, diag.start, seenLines);
@@ -45,10 +46,10 @@ namespace ts.codefix {
         },
     });
 
-    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Map<true>) {
+    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Set<number>) {
         const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
         // Only need to add `// @ts-ignore` for a line once.
-        if (!seenLines || addToSeen(seenLines, lineNumber)) {
+        if (!seenLines || tryAddToSet(seenLines, lineNumber)) {
             changes.insertCommentBeforeLine(sourceFile, lineNumber, position, " @ts-ignore");
         }
     }

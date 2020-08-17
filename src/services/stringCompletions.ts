@@ -6,13 +6,13 @@ namespace ts.Completions.StringCompletions {
             return entries && convertPathCompletions(entries);
         }
         if (isInString(sourceFile, position, contextToken)) {
-            return !contextToken || !isStringLiteralLike(contextToken)
-                ? undefined
-                : convertStringLiteralCompletions(getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host), sourceFile, checker, log, preferences);
+            if (!contextToken || !isStringLiteralLike(contextToken)) return undefined;
+            const entries = getStringLiteralCompletionEntries(sourceFile, contextToken, position, checker, options, host);
+            return convertStringLiteralCompletions(entries, contextToken, sourceFile, checker, log, preferences);
         }
     }
 
-    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
+    function convertStringLiteralCompletions(completion: StringLiteralCompletion | undefined, contextToken: Node, sourceFile: SourceFile, checker: TypeChecker, log: Log, preferences: UserPreferences): CompletionInfo | undefined {
         if (completion === undefined) {
             return undefined;
         }
@@ -24,6 +24,7 @@ namespace ts.Completions.StringCompletions {
                 getCompletionEntriesFromSymbols(
                     completion.symbols,
                     entries,
+                    contextToken,
                     sourceFile,
                     sourceFile,
                     checker,
@@ -35,7 +36,13 @@ namespace ts.Completions.StringCompletions {
                 return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: completion.hasIndexSignature, entries };
             }
             case StringLiteralCompletionKind.Types: {
-                const entries = completion.types.map(type => ({ name: type.value, kindModifiers: ScriptElementKindModifier.none, kind: ScriptElementKind.string, sortText: "0" }));
+                const entries = completion.types.map(type => ({
+                    name: type.value,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.string,
+                    sortText: "0",
+                    replacementSpan: getReplacementSpanForContextToken(contextToken)
+                }));
                 return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: completion.isNewIdentifier, entries };
             }
             default:
@@ -200,7 +207,7 @@ namespace ts.Completions.StringCompletions {
     function getStringLiteralCompletionsFromSignature(argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes {
         let isNewIdentifier = false;
 
-        const uniques = createMap<true>();
+        const uniques = new Map<string, true>();
         const candidates: Signature[] = [];
         checker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
         const types = flatMap(candidates, candidate => {
@@ -214,10 +221,14 @@ namespace ts.Completions.StringCompletions {
     }
 
     function stringLiteralCompletionsFromProperties(type: Type | undefined): StringLiteralCompletionsFromProperties | undefined {
-        return type && { kind: StringLiteralCompletionKind.Properties, symbols: type.getApparentProperties(), hasIndexSignature: hasIndexSignature(type) };
+        return type && {
+            kind: StringLiteralCompletionKind.Properties,
+            symbols: filter(type.getApparentProperties(), prop => !(prop.valueDeclaration && isPrivateIdentifierPropertyDeclaration(prop.valueDeclaration))),
+            hasIndexSignature: hasIndexSignature(type)
+        };
     }
 
-    function getStringLiteralTypes(type: Type | undefined, uniques = createMap<true>()): readonly StringLiteralType[] {
+    function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
         if (!type) return emptyArray;
         type = skipConstraint(type);
         return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
@@ -352,7 +363,7 @@ namespace ts.Completions.StringCompletions {
              *
              * both foo.ts and foo.tsx become foo
              */
-            const foundFiles = createMap<Extension | undefined>(); // maps file to its extension
+            const foundFiles = new Map<string, Extension | undefined>(); // maps file to its extension
             for (let filePath of files) {
                 filePath = normalizePath(filePath);
                 if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
@@ -584,7 +595,7 @@ namespace ts.Completions.StringCompletions {
 
     function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, fragmentDirectory: string | undefined, extensionOptions: ExtensionOptions, result: NameAndKind[] = []): readonly NameAndKind[] {
         // Check for typings specified in compiler options
-        const seen = createMap<true>();
+        const seen = new Map<string, true>();
 
         const typeRoots = tryAndIgnoreErrors(() => getEffectiveTypeRoots(options, host)) || emptyArray;
 

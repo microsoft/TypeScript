@@ -5,7 +5,7 @@ interface I {
 >subs : number[]
 
     member: {
->member : new (s: string) => new (n: number) => new () => boolean
+>member : new (s: string) => new (n: number) => {    new (): boolean;}
 
         new (s: string): {
 >s : string

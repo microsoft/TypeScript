@@ -24,10 +24,10 @@ type T07 = [...string[], string];  // Error
 >T07 : T07
 
 type T08 = [...string];  // Error
->T08 : T08
+>T08 : any[]
 
 type T09 = [...string?];  // Error
->T09 : T09
+>T09 : any[]
 
 type T10 = [string, ...[...string[]]];
 >T10 : T10
@@ -57,11 +57,11 @@ assign<[...number[]], number[]>();
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], number[]>();  // Error
->assign<[number, ...number[]], number[]>() : any
+>assign<[number, ...number[]], number[]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], []>();  // Error
->assign<[number, ...number[]], []>() : any
+>assign<[number, ...number[]], []>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [number]>();
@@ -77,27 +77,27 @@ assign<[number, ...number[]], [number, number, ...number[]]>();
 >assign : <T, S extends T>() => void
 
 assign<[number], [...number[]]>();  // Error
->assign<[number], [...number[]]>() : any
+>assign<[number], [...number[]]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number], [number, ...number[]]>();  // Error
->assign<[number], [number, ...number[]]>() : any
+>assign<[number], [number, ...number[]]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [number, ...string[]]>();  // Error
->assign<[number, ...number[]], [number, ...string[]]>() : any
+>assign<[number, ...number[]], [number, ...string[]]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [string, ...number[]]>();  // Error
->assign<[number, ...number[]], [string, ...number[]]>() : any
+>assign<[number, ...number[]], [string, ...number[]]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [number, number, string]>();  // Error
->assign<[number, ...number[]], [number, number, string]>() : any
+>assign<[number, ...number[]], [number, number, string]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [number, number, number, string]>();  // Error
->assign<[number, ...number[]], [number, number, number, string]>() : any
+>assign<[number, ...number[]], [number, number, number, string]>() : void
 >assign : <T, S extends T>() => void
 
 type T20 = [number, string, ...boolean[]];
@@ -107,7 +107,7 @@ type T21 = T20[0];
 >T21 : number
 
 type T22 = T20[0 | 1];
->T22 : string | number
+>T22 : T22
 
 type T23 = T20[0 | 1 | 2];
 >T23 : string | number | boolean
@@ -116,7 +116,7 @@ type T24 = T20[0 | 1 | 2 | 3];
 >T24 : string | number | boolean
 
 type T25 = T20[1 | 2 | 3];
->T25 : string | boolean
+>T25 : T25
 
 type T26 = T20[2 | 3];
 >T26 : boolean
@@ -168,12 +168,12 @@ declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 >x : [T, ...U[]]
 
 f0([]);  // Error
->f0([]) : any
+>f0([]) : [unknown, unknown]
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->[] : never[]
+>[] : []
 
 f0([1]);
->f0([1]) : [number, number]
+>f0([1]) : [number, unknown]
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
 >[1] : [number]
 >1 : 1
@@ -187,7 +187,7 @@ f0([1, 2, 3]);
 >3 : 3
 
 f0([1, "hello", true]);
->f0([1, "hello", true]) : [number, string | boolean]
+>f0([1, "hello", true]) : [number, T25]
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
 >[1, "hello", true] : [number, string, true]
 >1 : 1

@@ -28,7 +28,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -38,7 +38,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.mixin = function (Base) {
+exports.mixin = void 0;
+var mixin = function (Base) {
     return /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
@@ -48,6 +49,7 @@ exports.mixin = function (Base) {
         return class_1;
     }(Base));
 };
+exports.mixin = mixin;
 
 
 //// [dom.d.ts]
@@ -55,11 +57,12 @@ export declare type DOMNode = Node;
 //// [custom.d.ts]
 export declare type Node = {};
 //// [index.d.ts]
+import { DOMNode } from './dom';
 declare type Constructor = new (...args: any[]) => any;
 export declare const mixin: (Base: Constructor) => {
     new (...args: any[]): {
         [x: string]: any;
-        get(domNode: globalThis.Node): void;
+        get(domNode: DOMNode): void;
     };
 };
 export {};

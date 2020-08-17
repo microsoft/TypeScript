@@ -11,6 +11,7 @@ export var x: b;
 //// [internalAliasInterfaceInsideTopLevelModuleWithExport.js]
 "use strict";
 exports.__esModule = true;
+exports.x = void 0;
 
 
 //// [internalAliasInterfaceInsideTopLevelModuleWithExport.d.ts]

@@ -61,6 +61,7 @@ import "./bar2";
 //// [cls.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -70,28 +71,44 @@ exports.Foo = Foo;
 //// [func.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.func = void 0;
 function func() { }
 exports.func = func;
 //// [bar.js]
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./cls"));
+__exportStar(require("./cls"), exports);
 //// [bar2.js]
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./func"));
-__export(require("./cls"));
+__exportStar(require("./func"), exports);
+__exportStar(require("./cls"), exports);
 //// [baz.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
 var cls_1 = require("./cls");
-exports.Foo = cls_1.Foo;
+Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return cls_1.Foo; } });
 //// [bat.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -100,11 +117,13 @@ exports.default = ns;
 //// [ban.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ns = void 0;
 var ns = require("./cls");
 exports.ns = ns;
 //// [bol.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.classContainer = void 0;
 var ns = require("./cls");
 exports.classContainer = ns;
 //// [cjs.js]

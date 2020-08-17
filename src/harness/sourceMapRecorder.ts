@@ -157,7 +157,7 @@ namespace Harness.SourceMapRecorder {
             const startPos = lineMap[line];
             const endPos = lineMap[line + 1];
             const text = code.substring(startPos, endPos);
-            return line === 0 ? utils.removeByteOrderMark(text) : text;
+            return line === 0 ? Utils.removeByteOrderMark(text) : text;
         }
 
         function writeJsFileLines(endJsLine: number) {
@@ -322,11 +322,11 @@ namespace Harness.SourceMapRecorder {
         return sourceMapRecorder.lines.join("\r\n");
     }
 
-    export function getSourceMapRecordWithVFS(fs: vfs.FileSystem, sourceMapFile: string) {
+    export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string) {
         const sourceMapRecorder = new Compiler.WriterAggregator();
         let prevSourceFile: documents.TextDocument | undefined;
-        const files = ts.createMap<documents.TextDocument>();
-        const sourceMap = ts.tryParseRawSourceMap(fs.readFileSync(sourceMapFile, "utf8"));
+        const files = new ts.Map<string, documents.TextDocument>();
+        const sourceMap = ts.tryParseRawSourceMap(sys.readFile(sourceMapFile, "utf8")!);
         if (sourceMap) {
             const mapDirectory = ts.getDirectoryPath(sourceMapFile);
             const sourceRoot = sourceMap.sourceRoot ? ts.getNormalizedAbsolutePath(sourceMap.sourceRoot, mapDirectory) : mapDirectory;
@@ -359,7 +359,7 @@ namespace Harness.SourceMapRecorder {
         function getFile(path: string) {
             const existing = files.get(path);
             if (existing) return existing;
-            const value = new documents.TextDocument(path, fs.readFileSync(path, "utf8"));
+            const value = new documents.TextDocument(path, sys.readFile(path, "utf8")!);
             files.set(path, value);
             return value;
         }

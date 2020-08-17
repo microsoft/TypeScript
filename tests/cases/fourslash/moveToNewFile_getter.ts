@@ -23,6 +23,7 @@ verify.moveToNewFile({
 
         "/g.ts":
 `import { C } from "./a";
+
 export const { g, h: i } = new C();
 `,
 

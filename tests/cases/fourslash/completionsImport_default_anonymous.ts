@@ -31,6 +31,7 @@ verify.completions(
             sourceDisplay: "./foo-bar",
             text: "(property) default: 0",
             kind: "property",
+            kindModifiers: "export",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },

@@ -10,12 +10,6 @@ namespace ts {
         return !!compilerOptions.traceResolution && host.trace !== undefined;
     }
 
-    /** Array that is only intended to be pushed to, never read. */
-    /* @internal */
-    export interface Push<T> {
-        push(value: T): void;
-    }
-
     function withPackageId(packageInfo: PackageJsonInfo | undefined, r: PathAndExtension | undefined): Resolved | undefined {
         let packageId: PackageId | undefined;
         if (r && packageInfo) {
@@ -90,7 +84,11 @@ namespace ts {
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
-    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
+    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean | undefined, failedLookupLocations: string[], resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined): ResolvedModuleWithFailedLookupLocations {
+        if (resultFromCache) {
+            resultFromCache.failedLookupLocations.push(...failedLookupLocations);
+            return resultFromCache;
+        }
         return {
             resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
             failedLookupLocations
@@ -102,6 +100,7 @@ namespace ts {
         compilerOptions: CompilerOptions;
         traceEnabled: boolean;
         failedLookupLocations: Push<string>;
+        resultFromCache?: ResolvedModuleWithFailedLookupLocations;
     }
 
     /** Just the fields that we use for module resolution. */
@@ -117,8 +116,6 @@ namespace ts {
         name?: string;
         version?: string;
     }
-
-    type MatchingKeys<TRecord, TMatch, K extends keyof TRecord = keyof TRecord> = K extends (TRecord[K] extends TMatch ? K : never) ? K : never;
 
     function readPackageJsonField<TMatch, K extends MatchingKeys<PackageJson, string | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined;
     function readPackageJsonField<K extends MatchingKeys<PackageJson, object | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "object", state: ModuleResolutionState): PackageJson[K] | undefined;
@@ -446,7 +443,7 @@ namespace ts {
      */
     export interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
         getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<ResolvedModuleWithFailedLookupLocations>;
-        /*@internal*/ directoryToModuleNameMap: CacheWithRedirects<Map<ResolvedModuleWithFailedLookupLocations>>;
+        /*@internal*/ directoryToModuleNameMap: CacheWithRedirects<ESMap<string, ResolvedModuleWithFailedLookupLocations>>;
     }
 
     /**
@@ -475,18 +472,18 @@ namespace ts {
 
     /*@internal*/
     export interface CacheWithRedirects<T> {
-        ownMap: Map<T>;
-        redirectsMap: Map<Map<T>>;
-        getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<T>;
+        ownMap: ESMap<string, T>;
+        redirectsMap: ESMap<Path, ESMap<string, T>>;
+        getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): ESMap<string, T>;
         clear(): void;
         setOwnOptions(newOptions: CompilerOptions): void;
-        setOwnMap(newOwnMap: Map<T>): void;
+        setOwnMap(newOwnMap: ESMap<string, T>): void;
     }
 
     /*@internal*/
     export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWithRedirects<T> {
-        let ownMap: Map<T> = createMap();
-        const redirectsMap: Map<Map<T>> = createMap();
+        let ownMap: ESMap<string, T> = new Map();
+        const redirectsMap = new Map<Path, ESMap<string, T>>();
         return {
             ownMap,
             redirectsMap,
@@ -500,7 +497,7 @@ namespace ts {
             options = newOptions;
         }
 
-        function setOwnMap(newOwnMap: Map<T>) {
+        function setOwnMap(newOwnMap: ESMap<string, T>) {
             ownMap = newOwnMap;
         }
 
@@ -512,7 +509,7 @@ namespace ts {
             let redirects = redirectsMap.get(path);
             if (!redirects) {
                 // Reuse map if redirected reference map uses same resolution
-                redirects = !options || optionsHaveModuleResolutionChanges(options, redirectedReference.commandLine.options) ? createMap() : ownMap;
+                redirects = !options || optionsHaveModuleResolutionChanges(options, redirectedReference.commandLine.options) ? new Map() : ownMap;
                 redirectsMap.set(path, redirects);
             }
             return redirects;
@@ -526,7 +523,7 @@ namespace ts {
 
     /*@internal*/
     export function createModuleResolutionCacheWithMaps(
-        directoryToModuleNameMap: CacheWithRedirects<Map<ResolvedModuleWithFailedLookupLocations>>,
+        directoryToModuleNameMap: CacheWithRedirects<ESMap<string, ResolvedModuleWithFailedLookupLocations>>,
         moduleNameToDirectoryMap: CacheWithRedirects<PerModuleNameCache>,
         currentDirectory: string,
         getCanonicalFileName: GetCanonicalFileName): ModuleResolutionCache {
@@ -535,7 +532,7 @@ namespace ts {
 
         function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
             const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
-            return getOrCreateCache<Map<ResolvedModuleWithFailedLookupLocations>>(directoryToModuleNameMap, redirectedReference, path, createMap);
+            return getOrCreateCache<ESMap<string, ResolvedModuleWithFailedLookupLocations>>(directoryToModuleNameMap, redirectedReference, path, () => new Map());
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string, redirectedReference?: ResolvedProjectReference): PerModuleNameCache {
@@ -554,7 +551,7 @@ namespace ts {
         }
 
         function createPerModuleNameCache(): PerModuleNameCache {
-            const directoryPathMap = createMap<ResolvedModuleWithFailedLookupLocations>();
+            const directoryPathMap = new Map<string, ResolvedModuleWithFailedLookupLocations>();
 
             return { get, set };
 
@@ -934,11 +931,7 @@ namespace ts {
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
 
         const result = forEach(extensions, ext => tryResolve(ext));
-        if (result && result.value) {
-            const { resolved, isExternalLibraryImport } = result.value;
-            return createResolvedModuleWithFailedLookupLocations(resolved, isExternalLibraryImport, failedLookupLocations);
-        }
-        return { resolvedModule: undefined, failedLookupLocations };
+        return createResolvedModuleWithFailedLookupLocations(result?.value?.resolved, result?.value?.isExternalLibraryImport, failedLookupLocations, state.resultFromCache);
 
         function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
@@ -1443,7 +1436,7 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
-            state.failedLookupLocations.push(...result.failedLookupLocations);
+            state.resultFromCache = result;
             return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
         }
     }
@@ -1456,7 +1449,7 @@ namespace ts {
 
         const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
         // No originalPath because classic resolution doesn't resolve realPath
-        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations, state.resultFromCache);
 
         function tryResolve(extensions: Extensions): SearchResult<Resolved> {
             const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loadModuleFromFileNoPackageId, state);
@@ -1503,7 +1496,7 @@ namespace ts {
         const failedLookupLocations: string[] = [];
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
         const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.DtsOnly, moduleName, globalCache, state, /*typesScopeOnly*/ false);
-        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations, state.resultFromCache);
     }
 
     /**

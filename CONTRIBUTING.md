@@ -63,15 +63,13 @@ TypeScript is currently accepting contributions in the form of bug fixes. A bug 
 
 ## Contributing features
 
-Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer) in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
+Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
 
 Design changes will not be accepted at this time. If you have a design change proposal, please log a suggestion issue.
 
 ## Legal
 
-You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright.
-
-Please submit a Contributor License Agreement (CLA) before submitting a pull request. You may visit https://cla.microsoft.com to sign digitally. Alternatively, download the agreement ([Microsoft Contribution License Agreement.pdf](https://opensource.microsoft.com/pdf/microsoft-contribution-license-agreement.pdf)), sign, scan, and email it back to <cla@microsoft.com>. Be sure to include your GitHub user name along with the agreement. Once we have received the signed CLA, we'll review the request.
+You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright. Upon submitting a pull request, you will automatically be given instructions on how to sign the CLA.
 
 ## Housekeeping
 
@@ -141,23 +139,10 @@ gulp runtests --tests=2dArrays
 
 ## Debugging the tests
 
-To debug the tests, invoke the `runtests-browser` task from gulp.
-You will probably only want to debug one test at a time:
+You can debug with VS Code or Node instead with `gulp runtests --inspect`:
 
 ```Shell
-gulp runtests-browser --tests=2dArrays
-```
-
-You can specify which browser to use for debugging. Currently, Chrome and IE are supported:
-
-```Shell
-gulp runtests-browser --tests=2dArrays --browser=chrome
-```
-
-You can debug with VS Code or Node instead with `gulp runtests --inspect=true`:
-
-```Shell
-gulp runtests --tests=2dArrays --inspect=true
+gulp runtests --tests=2dArrays --inspect
 ```
 
 You can also use the [provided VS Code launch configuration](./.vscode/launch.template.json) to launch a debug session for an open test file. Rename the file 'launch.json', open the test file of interest, and launch the debugger from the debug panel (or press F5).

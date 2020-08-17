@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @module: esnext
 // @allowJs: true
 // @checkJs: true
 

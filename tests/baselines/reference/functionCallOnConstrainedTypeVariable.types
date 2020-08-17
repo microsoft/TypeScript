@@ -23,7 +23,7 @@ function call0(p: A | B) {
 >p : A | B
 
   p.a("s"); // Error
->p.a("s") : any
+>p.a("s") : string
 >p.a : ((x: number) => string) | ((x: boolean) => string)
 >p : A | B
 >a : ((x: number) => string) | ((x: boolean) => string)
@@ -35,7 +35,7 @@ function callN<T extends A | B>(p: T) {
 >p : T
 
   p.a("s"); // Error
->p.a("s") : any
+>p.a("s") : string
 >p.a : ((x: number) => string) | ((x: boolean) => string)
 >p : T
 >a : ((x: number) => string) | ((x: boolean) => string)
@@ -48,12 +48,12 @@ function callN<T extends A | B>(p: T) {
 >a : ((x: number) => string) | ((x: boolean) => string)
 
   a(""); // Error
->a("") : any
+>a("") : string
 >a : T["a"]
 >"" : ""
 
   a("", "", "", ""); // Error
->a("", "", "", "") : any
+>a("", "", "", "") : string
 >a : T["a"]
 >"" : ""
 >"" : ""

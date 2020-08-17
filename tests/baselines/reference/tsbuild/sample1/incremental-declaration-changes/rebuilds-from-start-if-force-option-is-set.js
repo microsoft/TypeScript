@@ -1,21 +1,24 @@
-//// [/lib/incremental-declaration-changesOutput.txt]
+Input::
+
+
+Output::
 /lib/tsc --b /src/tests --verbose --force
-12:16:00 AM - Projects in this build: 
+[[90m12:16:00 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-12:16:00 AM - Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/anotherModule.js'
+[[90m12:16:00 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than oldest output 'src/core/anotherModule.js'
 
-12:16:00 AM - Building project '/src/core/tsconfig.json'...
+[[90m12:16:00 AM[0m] Building project '/src/core/tsconfig.json'...
 
-12:16:00 AM - Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:16:00 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-12:16:00 AM - Building project '/src/logic/tsconfig.json'...
+[[90m12:16:00 AM[0m] Building project '/src/logic/tsconfig.json'...
 
-12:16:00 AM - Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:16:00 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-12:16:00 AM - Building project '/src/tests/tsconfig.json'...
+[[90m12:16:00 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

@@ -63,9 +63,9 @@ namespace ts {
                         const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
                         const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
                         // If there isn't some include for this, add a new one.
-                        if (getRegexFromPattern(Debug.assertDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
-                            !getRegexFromPattern(Debug.assertDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
-                            changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), createStringLiteral(relativePath(newFileOrDirPath)));
+                        if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
+                            !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
+                            changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), factory.createStringLiteral(relativePath(newFileOrDirPath)));
                         }
                     }
                     break;
@@ -126,8 +126,8 @@ namespace ts {
     ): void {
         const allFiles = program.getSourceFiles();
         for (const sourceFile of allFiles) {
-            const newFromOld = oldToNew(sourceFile.path) as Path;
-            const newImportFromPath = newFromOld !== undefined ? newFromOld : sourceFile.path;
+            const newFromOld = oldToNew(sourceFile.fileName);
+            const newImportFromPath = newFromOld ?? sourceFile.fileName;
             const newImportFromDirectory = getDirectoryPath(newImportFromPath);
 
             const oldFromNew: string | undefined = newToOld(sourceFile.fileName);
@@ -157,7 +157,7 @@ namespace ts {
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), newImportFromPath, toImport.newFileName, host, allFiles, program.redirectTargetsMap, importLiteral.text)
+                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
                         : undefined;
                 });
         }

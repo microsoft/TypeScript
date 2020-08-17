@@ -9,10 +9,6 @@ interface AudioParam {
 interface AudioParamMap extends ReadonlyMap<string, AudioParam> {
 }
 
-interface AudioTrackList {
-    [Symbol.iterator](): IterableIterator<AudioTrack>;
-}
-
 interface BaseAudioContext {
     createIIRFilter(feedforward: Iterable<number>, feedback: Iterable<number>): IIRFilterNode;
     createPeriodicWave(real: Iterable<number>, imag: Iterable<number>, constraints?: PeriodicWaveConstraints): PeriodicWave;
@@ -225,7 +221,7 @@ interface SpeechRecognitionResultList {
 }
 
 interface StyleSheetList {
-    [Symbol.iterator](): IterableIterator<StyleSheet>;
+    [Symbol.iterator](): IterableIterator<CSSStyleSheet>;
 }
 
 interface TextTrackCueList {
@@ -258,10 +254,6 @@ interface URLSearchParams {
 
 interface VRDisplay {
     requestPresent(layers: Iterable<VRLayer>): Promise<void>;
-}
-
-interface VideoTrackList {
-    [Symbol.iterator](): IterableIterator<VideoTrack>;
 }
 
 interface WEBGL_draw_buffers {

@@ -1,8 +1,8 @@
 === tests/cases/conformance/expressions/optionalChaining/optionalChainingInference.ts ===
 // https://github.com/microsoft/TypeScript/issues/34579
 declare function unbox<T>(box: { value: T | undefined }): T;
->unbox : <T>(box: { value: T; }) => T
->box : { value: T; }
+>unbox : <T>(box: {    value: T | undefined;}) => T
+>box : { value: T | undefined; }
 >value : T
 
 declare const su: string | undefined;
@@ -49,7 +49,7 @@ const v2: number = unbox(b2);
 >b2 : { value: number; }
 
 const b3: { value: number | undefined } = { value: su?.length };
->b3 : { value: number; }
+>b3 : { value: number | undefined; }
 >value : number
 >{ value: su?.length } : { value: number; }
 >value : number

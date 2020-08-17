@@ -19,7 +19,9 @@ sayHello(username());
 //// [username.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.username = () => 'username';
+exports.username = void 0;
+const username = () => 'username';
+exports.username = username;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

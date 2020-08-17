@@ -23,8 +23,8 @@ namespace ts {
     export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         const currentDirectory = host.getCurrentDirectory();
-        const sourceFileLike = createMap<SourceFileLike | false>();
-        const documentPositionMappers = createMap<DocumentPositionMapper>();
+        const sourceFileLike = new Map<string, SourceFileLike | false>();
+        const documentPositionMappers = new Map<string, DocumentPositionMapper>();
         return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
 
         function toPath(fileName: string) {
@@ -76,7 +76,7 @@ namespace ts {
             }
 
             const options = program.getCompilerOptions();
-            const outPath = options.outFile || options.out;
+            const outPath = outFile(options);
 
             const declarationPath = outPath ?
                 removeFileExtension(outPath) + Extension.Dts :
@@ -180,6 +180,9 @@ namespace ts {
             // obviously invalid map
             return undefined;
         }
+
+        // Dont support sourcemaps that contain inlined sources
+        if (map.sourcesContent && map.sourcesContent.some(isString)) return undefined;
 
         return createDocumentPositionMapper(host, map, mapFileName);
     }

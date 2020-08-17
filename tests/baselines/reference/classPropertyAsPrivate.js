@@ -30,14 +30,14 @@ var C = /** @class */ (function () {
     Object.defineProperty(C.prototype, "y", {
         get: function () { return null; },
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.prototype.foo = function () { };
     Object.defineProperty(C, "b", {
         get: function () { return null; },
         set: function (x) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.foo = function () { };

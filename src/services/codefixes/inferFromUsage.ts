@@ -49,21 +49,21 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { sourceFile, program, span: { start }, errorCode, cancellationToken, host, formatContext, preferences } = context;
+            const { sourceFile, program, span: { start }, errorCode, cancellationToken, host, preferences } = context;
 
             const token = getTokenAtPosition(sourceFile, start);
-            let declaration!: Declaration | undefined;
-            const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeen*/ returnTrue, host, formatContext, preferences); });
+            let declaration: Declaration | undefined;
+            const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeen*/ returnTrue, host, preferences); });
             const name = declaration && getNameOfDeclaration(declaration);
             return !name || changes.length === 0 ? undefined
                 : [createCodeFixAction(fixId, changes, [getDiagnostic(errorCode, token), name.getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
-            const { sourceFile, program, cancellationToken, host, formatContext, preferences } = context;
+            const { sourceFile, program, cancellationToken, host, preferences } = context;
             const markSeen = nodeSeenTracker();
             return codeFixAll(context, errorCodes, (changes, err) => {
-                doChange(changes, sourceFile, getTokenAtPosition(err.file, err.start), err.code, program, cancellationToken, markSeen, host, formatContext, preferences);
+                doChange(changes, sourceFile, getTokenAtPosition(err.file, err.start), err.code, program, cancellationToken, markSeen, host, preferences);
             });
         },
     });
@@ -106,19 +106,21 @@ namespace ts.codefix {
         return errorCode;
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): Declaration | undefined {
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): Declaration | undefined {
         if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken && token.kind !== SyntaxKind.ThisKeyword) {
             return undefined;
         }
 
         const { parent } = token;
+        const importAdder = createImportAdder(sourceFile, program, preferences, host);
         errorCode = mapSuggestionDiagnostic(errorCode);
         switch (errorCode) {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
                 if ((isVariableDeclaration(parent) && markSeen(parent)) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
-                    annotateVariableDeclaration(changes, sourceFile, parent, program, host, cancellationToken, formatContext, preferences);
+                    annotateVariableDeclaration(changes, importAdder, sourceFile, parent, program, host, cancellationToken);
+                    importAdder.writeFixes(changes);
                     return parent;
                 }
                 if (isPropertyAccessExpression(parent)) {
@@ -126,9 +128,10 @@ namespace ts.codefix {
                     const typeNode = getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
                         // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
-                        const typeTag = createJSDocTypeTag(createJSDocTypeExpression(typeNode), /*comment*/ "");
+                        const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode), /*comment*/ "");
                         addJSDocTags(changes, sourceFile, cast(parent.parent.parent, isExpressionStatement), [typeTag]);
                     }
+                    importAdder.writeFixes(changes);
                     return parent;
                 }
                 return undefined;
@@ -136,7 +139,8 @@ namespace ts.codefix {
             case Diagnostics.Variable_0_implicitly_has_an_1_type.code: {
                 const symbol = program.getTypeChecker().getSymbolAtLocation(token);
                 if (symbol && symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && markSeen(symbol.valueDeclaration)) {
-                    annotateVariableDeclaration(changes, sourceFile, symbol.valueDeclaration, program, host, cancellationToken, formatContext, preferences);
+                    annotateVariableDeclaration(changes, importAdder, sourceFile, symbol.valueDeclaration, program, host, cancellationToken);
+                    importAdder.writeFixes(changes);
                     return symbol.valueDeclaration;
                 }
                 return undefined;
@@ -148,77 +152,80 @@ namespace ts.codefix {
             return undefined;
         }
 
+        let declaration: Declaration | undefined;
         switch (errorCode) {
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
                 if (isSetAccessorDeclaration(containingFunction)) {
-                    annotateSetAccessor(changes, sourceFile, containingFunction, program, host, cancellationToken, formatContext, preferences);
-                    return containingFunction;
+                    annotateSetAccessor(changes, importAdder, sourceFile, containingFunction, program, host, cancellationToken);
+                    declaration = containingFunction;
+                    break;
                 }
                 // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 if (markSeen(containingFunction)) {
                     const param = cast(parent, isParameter);
-                    annotateParameters(changes, sourceFile, param, containingFunction, program, host, cancellationToken, formatContext, preferences);
-                    return param;
+                    annotateParameters(changes, importAdder, sourceFile, param, containingFunction, program, host, cancellationToken);
+                    declaration = param;
                 }
-                return undefined;
+                break;
 
             // Get Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
             case Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code:
                 if (isGetAccessorDeclaration(containingFunction) && isIdentifier(containingFunction.name)) {
-                    annotate(changes, sourceFile, containingFunction, inferTypeForVariableFromUsage(containingFunction.name, program, cancellationToken), program, host, formatContext, preferences);
-                    return containingFunction;
+                    annotate(changes, importAdder, sourceFile, containingFunction, inferTypeForVariableFromUsage(containingFunction.name, program, cancellationToken), program, host);
+                    declaration = containingFunction;
                 }
-                return undefined;
+                break;
 
             // Set Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
                 if (isSetAccessorDeclaration(containingFunction)) {
-                    annotateSetAccessor(changes, sourceFile, containingFunction, program, host, cancellationToken, formatContext, preferences);
-                    return containingFunction;
+                    annotateSetAccessor(changes, importAdder, sourceFile, containingFunction, program, host, cancellationToken);
+                    declaration = containingFunction;
                 }
-                return undefined;
+                break;
 
             // Function 'this'
             case Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code:
                 if (textChanges.isThisTypeAnnotatable(containingFunction) && markSeen(containingFunction)) {
                     annotateThis(changes, sourceFile, containingFunction, program, host, cancellationToken);
-                    return containingFunction;
+                    declaration = containingFunction;
                 }
-                return undefined;
+                break;
 
             default:
                 return Debug.fail(String(errorCode));
         }
+
+        importAdder.writeFixes(changes);
+        return declaration;
     }
 
     function annotateVariableDeclaration(
         changes: textChanges.ChangeTracker,
+        importAdder: ImportAdder,
         sourceFile: SourceFile,
         declaration: VariableDeclaration | PropertyDeclaration | PropertySignature,
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
-        formatContext: formatting.FormatContext,
-        preferences: UserPreferences,
     ): void {
         if (isIdentifier(declaration.name)) {
-            annotate(changes, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken), program, host, formatContext, preferences);
+            annotate(changes, importAdder, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken), program, host);
         }
     }
 
     function annotateParameters(
         changes: textChanges.ChangeTracker,
+        importAdder: ImportAdder,
         sourceFile: SourceFile,
         parameterDeclaration: ParameterDeclaration,
         containingFunction: FunctionLike,
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
-        formatContext: formatting.FormatContext,
-        preferences: UserPreferences,
     ): void {
         if (!isIdentifier(parameterDeclaration.name)) {
             return;
@@ -232,13 +239,13 @@ namespace ts.codefix {
         }
         else {
             const needParens = isArrowFunction(containingFunction) && !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
-            if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), createToken(SyntaxKind.OpenParenToken));
+            if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), factory.createToken(SyntaxKind.OpenParenToken));
             for (const { declaration, type } of parameterInferences) {
                 if (declaration && !declaration.type && !declaration.initializer) {
-                    annotate(changes, sourceFile, declaration, type, program, host, formatContext, preferences);
+                    annotate(changes, importAdder, sourceFile, declaration, type, program, host);
                 }
             }
-            if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), createToken(SyntaxKind.CloseParenToken));
+            if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), factory.createToken(SyntaxKind.CloseParenToken));
         }
     }
 
@@ -263,19 +270,18 @@ namespace ts.codefix {
 
     function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: FunctionLike, typeNode: TypeNode) {
         addJSDocTags(changes, sourceFile, containingFunction, [
-            createJSDocThisTag(createJSDocTypeExpression(typeNode)),
+            factory.createJSDocThisTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode)),
         ]);
     }
 
     function annotateSetAccessor(
         changes: textChanges.ChangeTracker,
+        importAdder: ImportAdder,
         sourceFile: SourceFile,
         setAccessorDeclaration: SetAccessorDeclaration,
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
-        formatContext: formatting.FormatContext,
-        preferences: UserPreferences,
     ): void {
         const param = firstOrUndefined(setAccessorDeclaration.parameters);
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
@@ -287,12 +293,12 @@ namespace ts.codefix {
                 annotateJSDocParameters(changes, sourceFile, [{ declaration: param, type }], program, host);
             }
             else {
-                annotate(changes, sourceFile, param, type, program, host, formatContext, preferences);
+                annotate(changes, importAdder, sourceFile, param, type, program, host);
             }
         }
     }
 
-    function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, program: Program, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): void {
+    function annotate(changes: textChanges.ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, program: Program, host: LanguageServiceHost): void {
         const typeNode = getTypeNodeIfAccessible(type, declaration, program, host);
         if (typeNode) {
             if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
@@ -300,42 +306,28 @@ namespace ts.codefix {
                 if (!parent) {
                     return;
                 }
-                const typeExpression = createJSDocTypeExpression(typeNode);
-                const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeExpression, "") : createJSDocTypeTag(typeExpression, "");
+                const typeExpression = factory.createJSDocTypeExpression(typeNode);
+                const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, "") : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, "");
                 addJSDocTags(changes, sourceFile, parent, [typeTag]);
             }
-            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, changes, sourceFile, declaration, type, program, host, formatContext, preferences)) {
+            else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
                 changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
             }
         }
     }
 
-    function tryReplaceImportTypeNodeWithAutoImport(typeNode: TypeNode, changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, program: Program, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): boolean {
-        if (isLiteralImportTypeNode(typeNode) && typeNode.qualifier && type.symbol) {
-            // Replace 'import("./a").SomeType' with 'SomeType' and an actual import if possible
-            const moduleSymbol = find(type.symbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)?.getSourceFile().symbol;
-            // Symbol for the left-most thing after the dot
-            if (moduleSymbol) {
-                const symbol = getFirstIdentifier(typeNode.qualifier).symbol;
-                const action = getImportCompletionAction(
-                    symbol,
-                    moduleSymbol,
-                    sourceFile,
-                    symbol.name,
-                    host,
-                    program,
-                    formatContext,
-                    declaration.pos,
-                    preferences,
-                );
-                if (action.codeAction.changes.length && changes.tryInsertTypeAnnotation(sourceFile, declaration, createTypeReferenceNode(typeNode.qualifier, typeNode.typeArguments))) {
-                    for (const change of action.codeAction.changes) {
-                        const file = sourceFile.fileName === change.fileName ? sourceFile : Debug.assertDefined(program.getSourceFile(change.fileName));
-                        changes.pushRaw(file, change);
-                    }
-                    return true;
-                }
-            }
+    function tryReplaceImportTypeNodeWithAutoImport(
+        typeNode: TypeNode,
+        declaration: textChanges.TypeAnnotatable,
+        sourceFile: SourceFile,
+        changes: textChanges.ChangeTracker,
+        importAdder: ImportAdder,
+        scriptTarget: ScriptTarget
+    ): boolean {
+        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+        if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
+            forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
+            return true;
         }
         return false;
     }
@@ -351,14 +343,14 @@ namespace ts.codefix {
             if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) return;
 
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
-            const name = getSynthesizedClone(param.name);
+            const name = factory.cloneNode(param.name);
             setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-            return typeNode && createJSDocParamTag(name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
+            return typeNode && factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!inference.isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
 
-    function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
+    export function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
         const comments = mapDefined(parent.jsDoc, j => j.comment);
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
@@ -366,7 +358,7 @@ namespace ts.codefix {
             if (merged) oldTags[i] = merged;
             return !!merged;
         }));
-        const tag = createJSDocComment(comments.join("\n"), createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
+        const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
         const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
         jsDocNode.jsDoc = parent.jsDoc;
         jsDocNode.jsDocCache = parent.jsDocCache;
@@ -389,11 +381,11 @@ namespace ts.codefix {
                 const oldParam = oldTag as JSDocParameterTag;
                 const newParam = newTag as JSDocParameterTag;
                 return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                    ? createJSDocParamTag(newParam.name, newParam.isBracketed, newParam.typeExpression, oldParam.comment)
+                    ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
                     : undefined;
             }
             case SyntaxKind.JSDocReturnTag:
-                return createJSDocReturnTag((newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+                return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
         }
     }
 
@@ -403,7 +395,7 @@ namespace ts.codefix {
             entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
     }
 
-    function inferTypeForVariableFromUsage(token: Identifier, program: Program, cancellationToken: CancellationToken): Type {
+    function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, program: Program, cancellationToken: CancellationToken): Type {
         const references = getReferences(token, program, cancellationToken);
         return inferTypeFromReferences(program, references, cancellationToken).single();
     }
@@ -508,7 +500,7 @@ namespace ts.codefix {
         }
 
         function combineUsages(usages: Usage[]): Usage {
-            const combinedProperties = createUnderscoreEscapedMap<Usage[]>();
+            const combinedProperties = new Map<__String, Usage[]>();
             for (const u of usages) {
                 if (u.properties) {
                     u.properties.forEach((p, name) => {
@@ -519,7 +511,7 @@ namespace ts.codefix {
                     });
                 }
             }
-            const properties = createUnderscoreEscapedMap<Usage>();
+            const properties = new Map<__String, Usage>();
             combinedProperties.forEach((ps, name) => {
                 properties.set(name, combineUsages(ps));
             });
@@ -610,7 +602,7 @@ namespace ts.codefix {
 
             switch (node.parent.kind) {
                 case SyntaxKind.ExpressionStatement:
-                    addCandidateType(usage, checker.getVoidType());
+                    inferTypeFromExpressionStatement(node, usage);
                     break;
                 case SyntaxKind.PostfixUnaryExpression:
                     usage.isNumber = true;
@@ -666,6 +658,10 @@ namespace ts.codefix {
             if (isExpressionNode(node)) {
                 addCandidateType(usage, checker.getContextualType(node));
             }
+        }
+
+        function inferTypeFromExpressionStatement(node: Expression, usage: Usage): void {
+            addCandidateType(usage, isCallExpression(node) ? checker.getVoidType() : checker.getAnyType());
         }
 
         function inferTypeFromPrefixUnaryExpression(node: PrefixUnaryExpression, usage: Usage): void {
@@ -824,7 +820,7 @@ namespace ts.codefix {
         function inferTypeFromPropertyAccessExpression(parent: PropertyAccessExpression, usage: Usage): void {
             const name = escapeLeadingUnderscores(parent.name.text);
             if (!usage.properties) {
-                usage.properties = createUnderscoreEscapedMap<Usage>();
+                usage.properties = new Map();
             }
             const propertyUsage = usage.properties.get(name) || createEmptyUsage();
             calculateUsageOfNode(parent, propertyUsage);
@@ -899,13 +895,13 @@ namespace ts.codefix {
                     low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void))
                 },
                 {
-                    high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(checker.getObjectFlags(t) & ObjectFlags.Anonymous),
-                    low: t => !!(checker.getObjectFlags(t) & ObjectFlags.Anonymous)
+                    high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),
+                    low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous)
                 }];
             let good = removeLowPriorityInferences(inferences, priorities);
-            const anons = good.filter(i => checker.getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
+            const anons = good.filter(i => getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
             if (anons.length) {
-                good = good.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
+                good = good.filter(i => !(getObjectFlags(i) & ObjectFlags.Anonymous));
                 good.push(combineAnonymousTypes(anons));
             }
             return checker.getWidenedType(checker.getUnionType(good.map(checker.getBaseTypeOfLiteralType), UnionReduction.Subtype));
@@ -967,10 +963,7 @@ namespace ts.codefix {
             if (usage.numberIndex) {
                 types.push(checker.createArrayType(combineFromUsage(usage.numberIndex)));
             }
-            if (usage.properties && usage.properties.size
-                || usage.calls && usage.calls.length
-                || usage.constructs && usage.constructs.length
-                || usage.stringIndex) {
+            if (usage.properties?.size || usage.calls?.length || usage.constructs?.length || usage.stringIndex) {
                 types.push(inferStructuralType(usage));
             }
 
@@ -981,7 +974,7 @@ namespace ts.codefix {
         }
 
         function inferStructuralType(usage: Usage) {
-            const members = createUnderscoreEscapedMap<Symbol>();
+            const members = new Map<__String, Symbol>();
             if (usage.properties) {
                 usage.properties.forEach((u, name) => {
                     const symbol = checker.createSymbol(SymbolFlags.Property, name);
@@ -992,7 +985,7 @@ namespace ts.codefix {
             const callSignatures: Signature[] = usage.calls ? [getSignatureFromCalls(usage.calls)] : [];
             const constructSignatures: Signature[] = usage.constructs ? [getSignatureFromCalls(usage.constructs)] : [];
             const stringIndexInfo = usage.stringIndex && checker.createIndexInfo(combineFromUsage(usage.stringIndex), /*isReadonly*/ false);
-            return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
+            return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined);
         }
 
         function inferNamedTypesFromProperties(usage: Usage): Type[] {
@@ -1038,7 +1031,7 @@ namespace ts.codefix {
             usage.properties.forEach((propUsage, name) => {
                 const genericPropertyType = checker.getTypeOfPropertyOfType(generic, name as string);
                 Debug.assert(!!genericPropertyType, "generic should have all the properties of its reference.");
-                types.push(...inferTypeParameters(genericPropertyType!, combineFromUsage(propUsage), singleTypeParameter));
+                types.push(...inferTypeParameters(genericPropertyType, combineFromUsage(propUsage), singleTypeParameter));
             });
             return builtinConstructors[type.symbol.escapedName as string](combineTypes(types));
         }
@@ -1096,7 +1089,7 @@ namespace ts.codefix {
         }
 
         function getFunctionFromCalls(calls: CallUsage[]) {
-            return checker.createAnonymousType(undefined!, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+            return checker.createAnonymousType(/*symbol*/ undefined, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
         }
 
         function getSignatureFromCalls(calls: CallUsage[]): Signature {

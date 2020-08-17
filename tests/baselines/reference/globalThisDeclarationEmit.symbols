@@ -1,0 +1,13 @@
+=== tests/cases/compiler/index.ts ===
+import { variable } from "./variable";
+>variable : Symbol(variable, Decl(index.ts, 0, 8))
+
+export const globalThis = variable;
+>globalThis : Symbol(globalThis, Decl(index.ts, 1, 12))
+>variable : Symbol(variable, Decl(index.ts, 0, 8))
+
+=== tests/cases/compiler/variable.ts ===
+export const variable = globalThis;
+>variable : Symbol(variable, Decl(variable.ts, 0, 12))
+>globalThis : Symbol(globalThis)
+

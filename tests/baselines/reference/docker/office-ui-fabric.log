@@ -1,43 +1,75 @@
 Exit Code: 1
 Standard output:
+@microsoft/fast-components-msft: yarn run vX.X.X
+@microsoft/fast-components-msft: $ tsc -p ./tsconfig.json && rollup -c && npm run doc
+@microsoft/fast-components-msft: ┌───────────────────────────────────────────────┐
+@microsoft/fast-components-msft: │                                               │
+@microsoft/fast-components-msft: │   Destination: dist/fast-components-msft.js   │
+@microsoft/fast-components-msft: │   Bundle Size:  490.64 KB                     │
+@microsoft/fast-components-msft: │   Gzipped Size:  50.64 KB                     │
+@microsoft/fast-components-msft: │   Brotli size: 74.92 KB                       │
+@microsoft/fast-components-msft: │                                               │
+@microsoft/fast-components-msft: └───────────────────────────────────────────────┘
+@microsoft/fast-components-msft: ┌───────────────────────────────────────────────────┐
+@microsoft/fast-components-msft: │                                                   │
+@microsoft/fast-components-msft: │   Destination: dist/fast-components-msft.min.js   │
+@microsoft/fast-components-msft: │   Bundle Size:  201.49 KB                         │
+@microsoft/fast-components-msft: │   Gzipped Size:  46.05 KB                         │
+@microsoft/fast-components-msft: │   Brotli size: 39.62 KB                           │
+@microsoft/fast-components-msft: │                                                   │
+@microsoft/fast-components-msft: └───────────────────────────────────────────────────┘
+@microsoft/fast-components-msft: > @microsoft/fast-components-msft@X.X.X doc /office-ui-fabric-react/packages/web-components
+@microsoft/fast-components-msft: > api-extractor run --local
+@microsoft/fast-components-msft: api-extractor 7.7.1  - https://api-extractor.com/
+@microsoft/fast-components-msft: Using configuration from /office-ui-fabric-react/packages/web-components/api-extractor.json
+@microsoft/fast-components-msft: API Extractor completed successfully
+@microsoft/fast-components-msft: Done in ?s.
+@fluentui/ability-attributes: yarn run vX.X.X
+@fluentui/ability-attributes: $ npm run schema && gulp bundle:package:no-umd
+@fluentui/ability-attributes: > @fluentui/ability-attributes@X.X.X schema /office-ui-fabric-react/packages/fluentui/ability-attributes
+@fluentui/ability-attributes: > allyschema -c "process.env.NODE_ENV !== 'production'" schema.json > ./src/schema.ts
+@fluentui/ability-attributes: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/ability-attributes: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/ability-attributes/gulpfile.ts
+@fluentui/ability-attributes: Done in ?s.
+@fluentui/digest: yarn run vX.X.X
+@fluentui/digest: $ just-scripts build
+@fluentui/digest: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/fluentui/digest/tsconfig.json
+@fluentui/digest: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --module esnext --outDir lib --project "/office-ui-fabric-react/packages/fluentui/digest/tsconfig.json"
+@fluentui/digest: [XX:XX:XX XM] ■ Running Webpack
+@fluentui/digest: [XX:XX:XX XM] ■ Webpack Config Path: null
+@fluentui/digest: [XX:XX:XX XM] ■ webpack.config.js not found, skipping webpack
+@fluentui/digest: Done in ?s.
 @uifabric/build: yarn run vX.X.X
 @uifabric/build: $ node ./just-scripts.js no-op
 @uifabric/build: Done in ?s.
+@fluentui/common-styles: yarn run vX.X.X
+@fluentui/common-styles: $ just-scripts build
+@fluentui/common-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/common-styles: [XX:XX:XX XM] ■ Copying [../../node_modules/office-ui-fabric-core/dist/sass/**/*, src/*.scss] to '/office-ui-fabric-react/packages/common-styles/dist/sass'
+@fluentui/common-styles: Done in ?s.
 @uifabric/example-data: yarn run vX.X.X
 @uifabric/example-data: $ just-scripts build
 @uifabric/example-data: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/example-data: [XX:XX:XX XM] ■ Running tslint
-@uifabric/example-data: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/example-data/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
-@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
-@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
 @uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
 @uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
-@uifabric/example-data: [XX:XX:XX XM] ■ Running webpack-cli as a node process
-@uifabric/example-data: [XX:XX:XX XM] ■ webpack-cli arguments: /usr/local/bin/node --max-old-space-size=4096 /office-ui-fabric-react/node_modules/webpack-cli/bin/cli.js
-@uifabric/example-data: Webpack version: 4.X.X
-@uifabric/example-data: Hash: [redacted]
-@uifabric/example-data: Version: webpack 4.X.X
-@uifabric/example-data: Child
-@uifabric/example-data:     Hash: [redacted]
-@uifabric/example-data:     Time: ?s
-@uifabric/example-data:     Built at: XX/XX/XX XX:XX:XX XM
-@uifabric/example-data:                   Asset      Size        Chunks             Chunk Names
-@uifabric/example-data:         example-data.js  X KiB  example-data  [emitted]  example-data
-@uifabric/example-data:     example-data.js.map  X KiB  example-data  [emitted]  example-data
-@uifabric/example-data:     Entrypoint example-data = example-data.js example-data.js.map
-@uifabric/example-data:     [./lib/facepile.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/index.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/listItems.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/lorem.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/people.js] X KiB {example-data} [built]
-@uifabric/example-data:     [./lib/testImages.js] X KiB {example-data} [built]
+@uifabric/example-data: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/example-data/tsconfig.json
+@uifabric/example-data: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/example-data/tsconfig.json"
 @uifabric/example-data: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/example-data/lib/index.d.ts'
 @uifabric/example-data: Done in ?s.
+@fluentui/keyboard-key: yarn run vX.X.X
+@fluentui/keyboard-key: $ just-scripts build
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/keyboard-key/tsconfig.json
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/keyboard-key/tsconfig.json"
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/keyboard-key/tsconfig.json
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/keyboard-key/tsconfig.json"
+@fluentui/keyboard-key: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/keyboard-key/lib/index.d.ts'
+@fluentui/keyboard-key: Done in ?s.
 @uifabric/migration: yarn run vX.X.X
 @uifabric/migration: $ just-scripts build
 @uifabric/migration: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/migration: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/migration/tsconfig.json
-@uifabric/migration: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/migration/tsconfig.json"
+@uifabric/migration: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/packages/migration/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/migration/tsconfig.json
+@uifabric/migration: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/packages/migration/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/migration/tsconfig.json"
 @uifabric/migration: Done in ?s.
 @uifabric/monaco-editor: yarn run vX.X.X
 @uifabric/monaco-editor: $ just-scripts build
@@ -47,207 +79,780 @@ Standard output:
 @uifabric/monaco-editor: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/monaco-editor/tsconfig.json
 @uifabric/monaco-editor: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/monaco-editor/tsconfig.json"
 @uifabric/monaco-editor: Done in ?s.
+@fluentui/react-conformance: yarn run vX.X.X
+@fluentui/react-conformance: $ just-scripts build
+@fluentui/react-conformance: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/react-conformance: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-conformance/tsconfig.json
+@fluentui/react-conformance: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/react-conformance/tsconfig.json"
+@fluentui/react-conformance: Done in ?s.
 @uifabric/set-version: yarn run vX.X.X
 @uifabric/set-version: $ just-scripts build
 @uifabric/set-version: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/set-version: [XX:XX:XX XM] ■ Running tslint
-@uifabric/set-version: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/set-version/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
-@uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
-@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
 @uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
 @uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
+@uifabric/set-version: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/set-version/tsconfig.json
+@uifabric/set-version: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/set-version/tsconfig.json"
 @uifabric/set-version: Done in ?s.
 @uifabric/webpack-utils: yarn run vX.X.X
 @uifabric/webpack-utils: $ just-scripts build
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ Running tslint
-@uifabric/webpack-utils: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/webpack-utils/tsconfig.json
 @uifabric/webpack-utils: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module commonjs --project "/office-ui-fabric-react/packages/webpack-utils/tsconfig.json"
 @uifabric/webpack-utils: Done in ?s.
+@fluentui/docs-components: yarn run vX.X.X
+@fluentui/docs-components: $ gulp bundle:package:no-umd
+@fluentui/docs-components: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/docs-components: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/docs-components/gulpfile.ts
+@fluentui/docs-components: Done in ?s.
+@fluentui/react-component-event-listener: yarn run vX.X.X
+@fluentui/react-component-event-listener: $ gulp bundle:package:no-umd
+@fluentui/react-component-event-listener: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-component-event-listener: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-component-event-listener/gulpfile.ts
+@fluentui/react-component-event-listener: Done in ?s.
+@fluentui/react-component-nesting-registry: yarn run vX.X.X
+@fluentui/react-component-nesting-registry: $ gulp bundle:package:no-umd
+@fluentui/react-component-nesting-registry: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-component-nesting-registry: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-component-nesting-registry/gulpfile.ts
+@fluentui/react-component-nesting-registry: Done in ?s.
+@fluentui/react-component-ref: yarn run vX.X.X
+@fluentui/react-component-ref: $ gulp bundle:package:no-umd
+@fluentui/react-component-ref: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-component-ref: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-component-ref/gulpfile.ts
+@fluentui/react-component-ref: Done in ?s.
+@fluentui/react-context-selector: yarn run vX.X.X
+@fluentui/react-context-selector: $ gulp bundle:package:no-umd
+@fluentui/react-context-selector: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-context-selector: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-context-selector/gulpfile.ts
+@fluentui/react-context-selector: Done in ?s.
+@fluentui/react-proptypes: yarn run vX.X.X
+@fluentui/react-proptypes: $ gulp bundle:package:no-umd
+@fluentui/react-proptypes: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-proptypes: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-proptypes/gulpfile.ts
+@fluentui/react-proptypes: Done in ?s.
+@fluentui/state: yarn run vX.X.X
+@fluentui/state: $ gulp bundle:package:no-umd
+@fluentui/state: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/state: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/state/gulpfile.ts
+@fluentui/state: Done in ?s.
+@fluentui/styles: yarn run vX.X.X
+@fluentui/styles: $ gulp bundle:package:no-umd
+@fluentui/styles: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/styles: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/styles/gulpfile.ts
+@fluentui/styles: Done in ?s.
+@fluentui/accessibility: yarn run vX.X.X
+@fluentui/accessibility: $ gulp bundle:package:no-umd
+@fluentui/accessibility: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/accessibility: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/accessibility/gulpfile.ts
+@fluentui/accessibility: Done in ?s.
+@fluentui/date-time-utilities: yarn run vX.X.X
+@fluentui/date-time-utilities: $ just-scripts build
+@fluentui/date-time-utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/date-time-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/date-time-utilities/tsconfig.json
+@fluentui/date-time-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/date-time-utilities/tsconfig.json"
+@fluentui/date-time-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/date-time-utilities/tsconfig.json
+@fluentui/date-time-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/date-time-utilities/tsconfig.json"
+@fluentui/date-time-utilities: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/date-time-utilities/lib/index.d.ts'
+@fluentui/date-time-utilities: Done in ?s.
 @uifabric/merge-styles: yarn run vX.X.X
 @uifabric/merge-styles: $ just-scripts build
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Running tslint
-@uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Running Jest
-@uifabric/merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/merge-styles/jest.config.js" --passWithNoTests --colors --forceExit
-@uifabric/merge-styles: [XX:XX:XX XM] ■ Running webpack-cli as a node process
-@uifabric/merge-styles: [XX:XX:XX XM] ■ webpack-cli arguments: /usr/local/bin/node --max-old-space-size=4096 /office-ui-fabric-react/node_modules/webpack-cli/bin/cli.js
-@uifabric/merge-styles: Webpack version: 4.X.X
-@uifabric/merge-styles: Hash: [redacted]
-@uifabric/merge-styles: Version: webpack 4.X.X
-@uifabric/merge-styles: Child
-@uifabric/merge-styles:     Hash: [redacted]
-@uifabric/merge-styles:     Time: ?s
-@uifabric/merge-styles:     Built at: XX/XX/XX XX:XX:XX XM
-@uifabric/merge-styles:                   Asset      Size        Chunks             Chunk Names
-@uifabric/merge-styles:         merge-styles.js  X KiB  merge-styles  [emitted]  merge-styles
-@uifabric/merge-styles:     merge-styles.js.map  X KiB  merge-styles  [emitted]  merge-styles
-@uifabric/merge-styles:     Entrypoint merge-styles = merge-styles.js merge-styles.js.map
-@uifabric/merge-styles:     [../set-version/lib/index.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [../set-version/lib/setVersion.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/StyleOptionsState.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/Stylesheet.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/concatStyleSets.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/concatStyleSetsWithProps.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/extractStyleParts.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/fontFace.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/index.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/keyframes.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/mergeStyleSets.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/mergeStyles.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/styleToClassName.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/transforms/kebabRules.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:     [./lib/version.js] X KiB {merge-styles} [built]
-@uifabric/merge-styles:         + 5 hidden modules
-@uifabric/merge-styles: Child
-@uifabric/merge-styles:     Hash: [redacted]
-@uifabric/merge-styles:     Time: ?s
-@uifabric/merge-styles:     Built at: XX/XX/XX XX:XX:XX XM
-@uifabric/merge-styles:                       Asset      Size  Chunks             Chunk Names
-@uifabric/merge-styles:         merge-styles.min.js  X KiB       0  [emitted]  merge-styles
-@uifabric/merge-styles:     merge-styles.min.js.map  X KiB       0  [emitted]  merge-styles
-@uifabric/merge-styles:     Entrypoint merge-styles = merge-styles.min.js merge-styles.min.js.map
-@uifabric/merge-styles:     [0] ./lib/index.js + 19 modules X KiB {0} [built]
-@uifabric/merge-styles:         | ./lib/index.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/Stylesheet.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/StyleOptionsState.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/mergeStyles.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/concatStyleSets.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/mergeStyleSets.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/concatStyleSetsWithProps.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/fontFace.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/keyframes.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/version.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/extractStyleParts.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/styleToClassName.js X KiB [built]
-@uifabric/merge-styles:         | ../set-version/lib/index.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/transforms/kebabRules.js X KiB [built]
-@uifabric/merge-styles:         | ./lib/transforms/prefixRules.js X KiB [built]
-@uifabric/merge-styles:         |     + 5 hidden modules
-@uifabric/merge-styles:  PASS  src/styleToClassName.test.ts
-@uifabric/merge-styles:  PASS  src/mergeStyleSets.test.ts
-@uifabric/merge-styles:  PASS  src/mergeStyles.test.ts
-@uifabric/merge-styles:  PASS  src/concatStyleSets.test.ts
-@uifabric/merge-styles:  PASS  src/transforms/rtlifyRules.test.ts
-@uifabric/merge-styles:  PASS  src/mergeCssSets.test.ts
-@uifabric/merge-styles:  PASS  src/transforms/prefixRules.test.ts
-@uifabric/merge-styles:  PASS  src/transforms/provideUnits.test.ts
-@uifabric/merge-styles:  PASS  src/keyframes.test.ts
-@uifabric/merge-styles:  PASS  src/mergeCss.test.ts
-@uifabric/merge-styles:  PASS  src/server.test.ts
-@uifabric/merge-styles:  PASS  src/Stylesheet.test.ts
-@uifabric/merge-styles:  PASS  src/extractStyleParts.test.ts
-@uifabric/merge-styles:  PASS  src/concatStyleSetsWithProps.test.ts
-@uifabric/merge-styles:  PASS  src/fontFace.test.ts
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/merge-styles/tsconfig.json
+@uifabric/merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/merge-styles/tsconfig.json"
 @uifabric/merge-styles: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/merge-styles/lib/index.d.ts'
 @uifabric/merge-styles: Done in ?s.
+@fluentui/react-flex: yarn run vX.X.X
+@fluentui/react-flex: $ just-scripts build
+@fluentui/react-flex: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/react-flex: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-flex/tsconfig.json
+@fluentui/react-flex: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-flex/tsconfig.json"
+@fluentui/react-flex: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-flex/tsconfig.json
+@fluentui/react-flex: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-flex/tsconfig.json"
+@fluentui/react-flex: Done in ?s.
+@fluentui/react-northstar-styles-renderer: yarn run vX.X.X
+@fluentui/react-northstar-styles-renderer: $ gulp bundle:package:no-umd
+@fluentui/react-northstar-styles-renderer: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-northstar-styles-renderer: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-northstar-styles-renderer/gulpfile.ts
+@fluentui/react-northstar-styles-renderer: Done in ?s.
 @uifabric/jest-serializer-merge-styles: yarn run vX.X.X
 @uifabric/jest-serializer-merge-styles: $ just-scripts build
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
 @uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running Jest
-@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/jest-serializer-merge-styles/jest.config.js" --passWithNoTests --colors --forceExit
-@uifabric/jest-serializer-merge-styles:  PASS  src/index.test.tsx
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/jest-serializer-merge-styles/tsconfig.json"
 @uifabric/jest-serializer-merge-styles: Done in ?s.
+@fluentui/react-northstar-emotion-renderer: yarn run vX.X.X
+@fluentui/react-northstar-emotion-renderer: $ gulp bundle:package:no-umd
+@fluentui/react-northstar-emotion-renderer: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-northstar-emotion-renderer: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-northstar-emotion-renderer/gulpfile.ts
+@fluentui/react-northstar-emotion-renderer: Done in ?s.
+@fluentui/react-northstar-fela-renderer: yarn run vX.X.X
+@fluentui/react-northstar-fela-renderer: $ gulp bundle:package:no-umd
+@fluentui/react-northstar-fela-renderer: [XX:XX:XX] Requiring external module @uifabric/build/babel/register
+@fluentui/react-northstar-fela-renderer: [XX:XX:XX] Using gulpfile /office-ui-fabric-react/packages/fluentui/react-northstar-fela-renderer/gulpfile.ts
+@fluentui/react-northstar-fela-renderer: Done in ?s.
+@fluentui/react-stylesheets: yarn run vX.X.X
+@fluentui/react-stylesheets: $ just-scripts build
+@fluentui/react-stylesheets: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/react-stylesheets: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-stylesheets/tsconfig.json
+@fluentui/react-stylesheets: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-stylesheets/tsconfig.json"
+@fluentui/react-stylesheets: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-stylesheets/tsconfig.json
+@fluentui/react-stylesheets: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-stylesheets/tsconfig.json"
+@fluentui/react-stylesheets: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/react-stylesheets/lib/index.d.ts'
+@fluentui/react-stylesheets: Done in ?s.
 @uifabric/test-utilities: yarn run vX.X.X
 @uifabric/test-utilities: $ just-scripts build
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
-@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
-@uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
 @uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/test-utilities/tsconfig.json
+@uifabric/test-utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/test-utilities/tsconfig.json"
 @uifabric/test-utilities: Done in ?s.
 @uifabric/utilities: yarn run vX.X.X
 @uifabric/utilities: $ just-scripts build
 @uifabric/utilities: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
-@uifabric/utilities: [XX:XX:XX XM] ■ Running tslint
-@uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/tslint/lib/tslintCli.js" --project "/office-ui-fabric-react/packages/utilities/tsconfig.json" -t stylish -r /office-ui-fabric-react/node_modules/tslint-microsoft-contrib
-@uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
-@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
 @uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
 @uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
-@uifabric/utilities: [XX:XX:XX XM] ■ Running Jest
-@uifabric/utilities: [XX:XX:XX XM] ■ /usr/local/bin/node "/office-ui-fabric-react/node_modules/jest/bin/jest.js" --config "/office-ui-fabric-react/packages/utilities/jest.config.js" --passWithNoTests --colors --forceExit
-@uifabric/utilities:  PASS  src/warn/warnControlledUsage.test.ts
-@uifabric/utilities:  PASS  src/focus.test.tsx
-@uifabric/utilities:  PASS  src/styled.test.tsx
-@uifabric/utilities:  PASS  src/customizations/Customizer.test.tsx
-@uifabric/utilities:  PASS  src/EventGroup.test.ts
-@uifabric/utilities:  PASS  src/array.test.ts
-@uifabric/utilities:  PASS  src/math.test.ts
-@uifabric/utilities:  PASS  src/warn/warn.test.ts
-@uifabric/utilities:  PASS  src/dom/dom.test.ts
-@uifabric/utilities:  PASS  src/customizations/customizable.test.tsx
-@uifabric/utilities:  PASS  src/initials.test.ts
-@uifabric/utilities:  PASS  src/selection/Selection.test.ts
-@uifabric/utilities:  PASS  src/initializeFocusRects.test.ts
-@uifabric/utilities:  PASS  src/memoize.test.ts
-@uifabric/utilities:  PASS  src/osDetector.test.ts
-@uifabric/utilities:  PASS  src/mobileDetector.test.ts
-@uifabric/utilities:  PASS  src/aria.test.ts
-@uifabric/utilities:  PASS  src/rtl.test.ts
-@uifabric/utilities:  PASS  src/setFocusVisibility.test.ts
-@uifabric/utilities:  PASS  src/properties.test.ts
-@uifabric/utilities:  PASS  src/asAsync.test.tsx
-@uifabric/utilities:  PASS  src/object.test.ts
-@uifabric/utilities:  PASS  src/classNamesFunction.test.ts
-@uifabric/utilities:  PASS  src/merge.test.ts
-@uifabric/utilities:  PASS  src/customizations/Customizations.test.ts
-@uifabric/utilities:  PASS  src/safeSetTimeout.test.tsx
-@uifabric/utilities:  PASS  src/safeRequestAnimationFrame.test.tsx
-@uifabric/utilities:  PASS  src/overflow.test.ts
-@uifabric/utilities:  PASS  src/appendFunction.test.ts
-@uifabric/utilities:  PASS  src/controlled.test.ts
-@uifabric/utilities:  PASS  src/extendComponent.test.tsx
-@uifabric/utilities:  PASS  src/initializeComponentRef.test.tsx
-@uifabric/utilities:  PASS  src/BaseComponent.test.tsx
-@uifabric/utilities:  PASS  src/keyboard.test.ts
+@uifabric/utilities: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/utilities/tsconfig.json
+@uifabric/utilities: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/utilities/tsconfig.json"
 @uifabric/utilities: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/utilities/lib/index.d.ts'
-@uifabric/utilities: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+@uifabric/utilities: Done in ?s.
+@fluentui/react-compose: yarn run vX.X.X
+@fluentui/react-compose: $ just-scripts build
+@fluentui/react-compose: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/react-compose: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-compose/tsconfig.json
+@fluentui/react-compose: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-compose/tsconfig.json"
+@fluentui/react-compose: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-compose/tsconfig.json
+@fluentui/react-compose: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-compose/tsconfig.json"
+@fluentui/react-compose: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/react-compose/lib/index.d.ts'
+@fluentui/react-compose: Done in ?s.
+@uifabric/react-hooks: yarn run vX.X.X
+@uifabric/react-hooks: $ just-scripts build
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-hooks/tsconfig.json
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-hooks/tsconfig.json"
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-hooks/tsconfig.json
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-hooks/tsconfig.json"
+@uifabric/react-hooks: [XX:XX:XX XM] ■ Extracting Public API surface from '/office-ui-fabric-react/packages/react-hooks/lib/index.d.ts'
+@uifabric/react-hooks: Done in ?s.
+@fluentui/react-icons: yarn run vX.X.X
+@fluentui/react-icons: $ just-scripts build
+@fluentui/react-icons: [XX:XX:XX XM] ■ Removing [lib, temp, dist, lib-amd, lib-commonjs, lib-es2015, coverage, src/**/*.scss.ts]
+@fluentui/react-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-icons/tsconfig.json
+@fluentui/react-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-icons/tsconfig.json"
+@fluentui/react-icons: [XX:XX:XX XM] ■ Running /office-ui-fabric-react/node_modules/typescript/lib/tsc.js with /office-ui-fabric-react/packages/react-icons/tsconfig.json
+@fluentui/react-icons: [XX:XX:XX XM] ■ Executing: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib-commonjs --module commonjs --project "/office-ui-fabric-react/packages/react-icons/tsconfig.json"
+@fluentui/react-icons: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 
 
 Standard error:
 info cli using local version of lerna
-lerna notice cli vX.X.X
-lerna info Executing command in 42 packages: "yarn run build"
+@microsoft/fast-components-msft: src/index-rollup.ts → dist/fast-components-msft.js, dist/fast-components-msft.min.js...
+@microsoft/fast-components-msft: created dist/fast-components-msft.js, dist/fast-components-msft.min.js in ?s
+@microsoft/fast-components-msft: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
+@fluentui/ability-attributes: npm WARN lifecycle The node binary used for scripts is  but npm is using /usr/local/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
+@uifabric/build: warning package.json: "dependencies" has dependency "typescript" with range "3.7.2" that collides with a dependency in "devDependencies" of the same name with version "../typescript.tgz"
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/build: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/build: (node:166) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/common-styles: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/common-styles: (node:185) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/example-data: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/example-data: (node:208) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/example-data: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/keyboard-key: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/keyboard-key: (node:247) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/keyboard-key: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/migration: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/migration: (node:286) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/monaco-editor: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/monaco-editor: (node:317) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-conformance: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-conformance: (node:356) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/set-version: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/set-version: (node:387) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/set-version: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/webpack-utils: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/webpack-utils: (node:426) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/date-time-utilities: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/date-time-utilities: (node:736) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/date-time-utilities: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/merge-styles: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/merge-styles: (node:775) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/merge-styles: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/merge-styles: Force exiting Jest
-@uifabric/merge-styles: 
-@uifabric/merge-styles: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
-@uifabric/jest-serializer-merge-styles: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/jest-serializer-merge-styles: Force exiting Jest
-@uifabric/jest-serializer-merge-styles: 
-@uifabric/jest-serializer-merge-styles: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-flex: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-flex: (node:814) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-flex: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: (node:884) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/jest-serializer-merge-styles: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-stylesheets: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-stylesheets: (node:985) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-stylesheets: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/test-utilities: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/test-utilities: (node:1024) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/utilities: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/utilities: (node:1063) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
 @uifabric/utilities: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
-@uifabric/utilities: ts-jest[versions] (WARN) Version X.X.X-insiders.xxxxxxxx of typescript installed has not been tested with ts-jest. If you're experiencing issues, consider using a supported version (>=2.7.0 <4.0.0). Please do not report issues in ts-jest if you are using unsupported versions.
-@uifabric/utilities: Force exiting Jest
-@uifabric/utilities: 
-@uifabric/utilities: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
-@uifabric/utilities: Warning: You have changed the public API signature for this project. Please copy the file "temp/utilities.api.md" to "etc/utilities.api.md", or perform a local build (which does this automatically). See the Git repo documentation for more info.
-@uifabric/utilities: [XX:XX:XX XM] x Error detected while running '_wrapFunction'
-@uifabric/utilities: [XX:XX:XX XM] x ------------------------------------
-@uifabric/utilities: [XX:XX:XX XM] x Error: The public API file is out of date. Please run the API snapshot and commit the updated API file.
-@uifabric/utilities:     at apiExtractorVerify (/office-ui-fabric-react/node_modules/just-scripts/lib/tasks/apiExtractorTask.js:26:19)
-@uifabric/utilities:     at _wrapFunction (/office-ui-fabric-react/node_modules/just-task/lib/wrapTask.js:13:36)
-@uifabric/utilities:     at verify-api-extractor (/office-ui-fabric-react/node_modules/undertaker/lib/set-task.js:13:15)
-@uifabric/utilities:     at _wrapFunction (/office-ui-fabric-react/node_modules/just-task/lib/wrapTask.js:10:16)
-@uifabric/utilities:     at bound (domain.js:419:14)
-@uifabric/utilities:     at runBound (domain.js:432:12)
-@uifabric/utilities:     at asyncRunner (/office-ui-fabric-react/node_modules/async-done/index.js:55:18)
-@uifabric/utilities:     at processTicksAndRejections (internal/process/task_queues.js:75:11)
-@uifabric/utilities: [XX:XX:XX XM] x ------------------------------------
-@uifabric/utilities: [XX:XX:XX XM] x Error previously detected. See above for error messages.
-@uifabric/utilities: error Command failed with exit code 1.
-lerna ERR! yarn run build exited 1 in '@uifabric/utilities'
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-compose: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-compose: (node:1102) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-compose: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@uifabric/react-hooks: (Use `node --trace-warnings ...` to show where the warning was created)
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@uifabric/react-hooks: (node:1141) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@uifabric/react-hooks: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'cat' of module exports inside circular dependency
+@fluentui/react-icons: (Use `node --trace-warnings ...` to show where the warning was created)
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'cd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'chmod' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'cp' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'dirs' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'pushd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'popd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'echo' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'tempdir' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'pwd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'exec' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'ls' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'find' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'grep' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'head' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'ln' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'mkdir' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'rm' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'mv' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'sed' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'set' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'sort' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'tail' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'test' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'to' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'toEnd' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'touch' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'uniq' of module exports inside circular dependency
+@fluentui/react-icons: (node:1180) Warning: Accessing non-existent property 'which' of module exports inside circular dependency
+@fluentui/react-icons: [XX:XX:XX XM] ▲ One of these [node-sass, postcss, autoprefixer] is not installed, so this task has no effect
+@fluentui/react-icons: [XX:XX:XX XM] x Error detected while running 'ts:esm'
+@fluentui/react-icons: [XX:XX:XX XM] x ------------------------------------
+@fluentui/react-icons: [XX:XX:XX XM] x Error: Command failed: /usr/local/bin/node "/office-ui-fabric-react/node_modules/typescript/lib/tsc.js" --pretty --target es5 --outDir lib --module esnext --project "/office-ui-fabric-react/packages/react-icons/tsconfig.json"
+@fluentui/react-icons:     at ChildProcess.exithandler (child_process.js:308:12)
+@fluentui/react-icons:     at ChildProcess.emit (events.js:314:20)
+@fluentui/react-icons:     at ChildProcess.EventEmitter.emit (domain.js:548:15)
+@fluentui/react-icons:     at maybeClose (internal/child_process.js:1051:16)
+@fluentui/react-icons:     at Process.ChildProcess._handle.onexit (internal/child_process.js:287:5)
+@fluentui/react-icons:     at Process.callbackTrampoline (internal/async_hooks.js:129:14)
+@fluentui/react-icons: [XX:XX:XX XM] x stdout:
+@fluentui/react-icons: [XX:XX:XX XM] x src/utils/createSvgIcon.ts:3:26 - error TS2307: Cannot find module './SvgIcon.scss'.
+@fluentui/react-icons: 3 import * as classes from './SvgIcon.scss';
+@fluentui/react-icons:                            ~~~~~~~~~~~~~~~~
+@fluentui/react-icons: Found 1 error.
+@fluentui/react-icons: [XX:XX:XX XM] x ------------------------------------
+@fluentui/react-icons: [XX:XX:XX XM] x Error previously detected. See above for error messages.
+@fluentui/react-icons: [XX:XX:XX XM] x Other tasks that did not complete: [ts:commonjs]
+@fluentui/react-icons: error Command failed with exit code 1.
+lerna ERR! yarn run build exited 1 in '@fluentui/react-icons'

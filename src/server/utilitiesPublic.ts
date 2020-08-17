@@ -36,6 +36,7 @@ namespace ts.server {
             projectName: project.getProjectName(),
             fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true).concat(project.getExcludedFiles() as NormalizedPath[]),
             compilerOptions: project.getCompilationSettings(),
+            watchOptions: project.projectService.getWatchOptions(project),
             typeAcquisition,
             unresolvedImports,
             projectRootPath: project.getCurrentDirectory() as Path,
@@ -79,7 +80,7 @@ namespace ts.server {
     }
 
     export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
-        const map = createMap<T>();
+        const map = new Map<string, T>();
         return {
             get(path) {
                 return map.get(path);
@@ -114,6 +115,11 @@ namespace ts.server {
 
     export function makeInferredProjectName(counter: number) {
         return `/dev/null/inferredProject${counter}*`;
+    }
+
+    /*@internal*/
+    export function makeAutoImportProviderProjectName(counter: number) {
+        return `/dev/null/autoImportProviderProject${counter}*`;
     }
 
     export function createSortedArray<T>(): SortedArray<T> {

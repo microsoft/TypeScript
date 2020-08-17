@@ -1,0 +1,48 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameInLhsReceiverExpression.ts ===
+class Test {
+>Test : Test
+
+    #y = 123;
+>#y : number
+>123 : 123
+
+    static something(obj: { [key: string]: Test }) {
+>something : (obj: { [key: string]: Test; }) => void
+>obj : { [key: string]: Test; }
+>key : string
+
+        obj[(new class { #x = 1; readonly s = "prop"; }).s].#y = 1;
+>obj[(new class { #x = 1; readonly s = "prop"; }).s].#y = 1 : 1
+>obj[(new class { #x = 1; readonly s = "prop"; }).s].#y : number
+>obj[(new class { #x = 1; readonly s = "prop"; }).s] : Test
+>obj : { [key: string]: Test; }
+>(new class { #x = 1; readonly s = "prop"; }).s : "prop"
+>(new class { #x = 1; readonly s = "prop"; }) : (Anonymous class)
+>new class { #x = 1; readonly s = "prop"; } : (Anonymous class)
+>class { #x = 1; readonly s = "prop"; } : typeof (Anonymous class)
+>#x : number
+>1 : 1
+>s : "prop"
+>"prop" : "prop"
+>s : "prop"
+>1 : 1
+
+        obj[(new class { #x = 1; readonly s = "prop"; }).s].#y += 1;
+>obj[(new class { #x = 1; readonly s = "prop"; }).s].#y += 1 : number
+>obj[(new class { #x = 1; readonly s = "prop"; }).s].#y : number
+>obj[(new class { #x = 1; readonly s = "prop"; }).s] : Test
+>obj : { [key: string]: Test; }
+>(new class { #x = 1; readonly s = "prop"; }).s : "prop"
+>(new class { #x = 1; readonly s = "prop"; }) : (Anonymous class)
+>new class { #x = 1; readonly s = "prop"; } : (Anonymous class)
+>class { #x = 1; readonly s = "prop"; } : typeof (Anonymous class)
+>#x : number
+>1 : 1
+>s : "prop"
+>"prop" : "prop"
+>s : "prop"
+>1 : 1
+    }
+}
+
+

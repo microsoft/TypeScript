@@ -5,8 +5,9 @@ tests/cases/compiler/weakType.ts(18,13): error TS2559: Type '12' has no properti
 tests/cases/compiler/weakType.ts(19,13): error TS2559: Type '"completely wrong"' has no properties in common with type 'Settings'.
 tests/cases/compiler/weakType.ts(20,13): error TS2559: Type 'false' has no properties in common with type 'Settings'.
 tests/cases/compiler/weakType.ts(37,18): error TS2559: Type '{ error?: number; }' has no properties in common with type 'ChangeOptions'.
-tests/cases/compiler/weakType.ts(62,5): error TS2326: Types of property 'properties' are incompatible.
-  Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
+tests/cases/compiler/weakType.ts(62,5): error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
+  Types of property 'properties' are incompatible.
+    Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
 
 
 ==== tests/cases/compiler/weakType.ts (8 errors) ====
@@ -90,7 +91,8 @@ tests/cases/compiler/weakType.ts(62,5): error TS2326: Types of property 'propert
     }
     let weak: Weak & Spoiler = propertiesWrong
         ~~~~
-!!! error TS2326: Types of property 'properties' are incompatible.
-!!! error TS2326:   Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
+!!! error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
+!!! error TS2322:   Types of property 'properties' are incompatible.
+!!! error TS2322:     Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
     
     

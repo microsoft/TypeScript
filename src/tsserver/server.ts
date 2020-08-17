@@ -31,6 +31,7 @@ namespace ts.server {
             }
             case "openbsd":
             case "freebsd":
+            case "netbsd":
             case "darwin":
             case "linux":
             case "android": {
@@ -211,7 +212,7 @@ namespace ts.server {
             if (this.fd >= 0) {
                 const buf = sys.bufferFrom!(s);
                 // eslint-disable-next-line no-null/no-null
-                fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
+                fs.writeSync(this.fd, buf as globalThis.Buffer, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
             if (this.traceToConsole) {
                 console.warn(s);
@@ -229,10 +230,10 @@ namespace ts.server {
         private projectService!: ProjectService;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
-        private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
+        private requestMap = new Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
         private requestedRegistry = false;
-        private typesRegistryCache: Map<MapLike<string>> | undefined;
+        private typesRegistryCache: ESMap<string, MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang
@@ -373,7 +374,7 @@ namespace ts.server {
 
             switch (response.kind) {
                 case EventTypesRegistry:
-                    this.typesRegistryCache = createMapFromTemplate(response.typesRegistry);
+                    this.typesRegistryCache = new Map(getEntries(response.typesRegistry));
                     break;
                 case ActionPackageInstalled: {
                     const { success, message } = response;
@@ -515,6 +516,7 @@ namespace ts.server {
                 canUseEvents: true,
                 suppressDiagnosticEvents,
                 syntaxOnly,
+                serverMode,
                 noGetErrOnBackgroundUpdate,
                 globalPlugins,
                 pluginProbeLocations,
@@ -792,7 +794,7 @@ namespace ts.server {
             // //server/location
             //         ^ <- from 0 to this position
             const firstSlash = path.indexOf(directorySeparator, 2);
-            return firstSlash !== -1 ? path.substring(0, firstSlash).toLowerCase() : path;
+            return firstSlash !== -1 ? toFileNameLowerCase(path.substring(0, firstSlash)) : path;
         }
         const rootLength = getRootLength(path);
         if (rootLength === 0) {
@@ -801,7 +803,7 @@ namespace ts.server {
         }
         if (path.charCodeAt(1) === CharacterCodes.colon && path.charCodeAt(2) === CharacterCodes.slash) {
             // rooted path that starts with c:/... - extract drive letter
-            return path.charAt(0).toLowerCase();
+            return toFileNameLowerCase(path.charAt(0));
         }
         if (path.charCodeAt(0) === CharacterCodes.slash && path.charCodeAt(1) !== CharacterCodes.slash) {
             // rooted path that starts with slash - /somename - use key for current drive
@@ -825,9 +827,9 @@ namespace ts.server {
     const noopWatcher: FileWatcher = { close: noop };
     // This is the function that catches the exceptions when watching directory, and yet lets project service continue to function
     // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
-    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+    function watchDirectorySwallowingException(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher {
         try {
-            return originalWatchDirectory(path, callback, recursive);
+            return originalWatchDirectory(path, callback, recursive, options);
         }
         catch (e) {
             logger.info(`Exception when creating directory watcher: ${e.message}`);
@@ -837,8 +839,8 @@ namespace ts.server {
 
     if (useWatchGuard) {
         const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
-        const statusCache = createMap<boolean>();
-        sys.watchDirectory = (path, callback, recursive) => {
+        const statusCache = new Map<string, boolean>();
+        sys.watchDirectory = (path, callback, recursive, options) => {
             const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
             let status = cacheKey && statusCache.get(cacheKey);
             if (status === undefined) {
@@ -871,7 +873,7 @@ namespace ts.server {
             }
             if (status) {
                 // this drive is safe to use - call real 'watchDirectory'
-                return watchDirectorySwallowingException(path, callback, recursive);
+                return watchDirectorySwallowingException(path, callback, recursive, options);
             }
             else {
                 // this drive is unsafe - return no-op watcher
@@ -884,7 +886,7 @@ namespace ts.server {
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8"));
+    sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8") as globalThis.Buffer);
     sys.watchFile = (fileName, callback) => {
         const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
         return {
@@ -947,6 +949,26 @@ namespace ts.server {
         return arg.split(",").filter(name => name !== "");
     }
 
+    let unknownServerMode: string | undefined;
+    function parseServerMode(): LanguageServiceMode | undefined {
+        const mode = findArgument("--serverMode");
+        if (mode === undefined) {
+            return undefined;
+        }
+
+        switch (mode.toLowerCase()) {
+            case "semantic":
+                return LanguageServiceMode.Semantic;
+            case "partialsemantic":
+                return LanguageServiceMode.PartialSemantic;
+            case "syntactic":
+                return LanguageServiceMode.Syntactic;
+            default:
+                unknownServerMode = mode;
+                return undefined;
+        }
+    }
+
     const globalPlugins = parseStringArray("--globalPlugins");
     const pluginProbeLocations = parseStringArray("--pluginProbeLocations");
     const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
@@ -956,6 +978,7 @@ namespace ts.server {
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
     const syntaxOnly = hasArgument("--syntaxOnly");
+    const serverMode = parseServerMode();
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
     const noGetErrOnBackgroundUpdate = hasArgument("--noGetErrOnBackgroundUpdate");
 
@@ -963,6 +986,7 @@ namespace ts.server {
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${process.argv.join(" ")}`);
     logger.info(`Platform: ${os.platform()} NodeVersion: ${nodeVersion} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
+    logger.info(`ServerMode: ${serverMode} syntaxOnly: ${syntaxOnly} hasUnknownServerMode: ${unknownServerMode}`);
 
     const ioSession = new IOSession();
     process.on("uncaughtException", err => {

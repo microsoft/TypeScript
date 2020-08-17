@@ -89,10 +89,10 @@ namespace ts {
     }
 
     /** Parses config file using System interface */
-    export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, system: System, reportDiagnostic: DiagnosticReporter) {
+    export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
         const host: ParseConfigFileHost = <any>system;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
-        const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host);
+        const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, /*extendedConfigCache*/ undefined, watchOptionsToExtend);
         host.onUnRecoverableConfigFileDiagnostic = undefined!; // TODO: GH#18217
         return result;
     }
@@ -124,8 +124,10 @@ namespace ts {
         getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[];
         getConfigFileParsingDiagnostics(): readonly Diagnostic[];
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+        emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
     }
 
     export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
@@ -152,20 +154,20 @@ namespace ts {
         const isListFilesOnly = !!program.getCompilerOptions().listFilesOnly;
 
         // First get and report any syntactic errors.
-        const diagnostics = program.getConfigFileParsingDiagnostics().slice();
-        const configFileParsingDiagnosticsLength = diagnostics.length;
-        addRange(diagnostics, program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+        const allDiagnostics = program.getConfigFileParsingDiagnostics().slice();
+        const configFileParsingDiagnosticsLength = allDiagnostics.length;
+        addRange(allDiagnostics, program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
 
         // If we didn't have any syntactic errors, then also try getting the global and
         // semantic errors.
-        if (diagnostics.length === configFileParsingDiagnosticsLength) {
-            addRange(diagnostics, program.getOptionsDiagnostics(cancellationToken));
+        if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
+            addRange(allDiagnostics, program.getOptionsDiagnostics(cancellationToken));
 
             if (!isListFilesOnly) {
-                addRange(diagnostics, program.getGlobalDiagnostics(cancellationToken));
+                addRange(allDiagnostics, program.getGlobalDiagnostics(cancellationToken));
 
-                if (diagnostics.length === configFileParsingDiagnosticsLength) {
-                    addRange(diagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
+                if (allDiagnostics.length === configFileParsingDiagnosticsLength) {
+                    addRange(allDiagnostics, program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken));
                 }
             }
         }
@@ -175,9 +177,10 @@ namespace ts {
             ? { emitSkipped: true, diagnostics: emptyArray }
             : program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
         const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
-        addRange(diagnostics, emitDiagnostics);
+        addRange(allDiagnostics, emitDiagnostics);
 
-        sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
+        const diagnostics = sortAndDeduplicateDiagnostics(allDiagnostics);
+        diagnostics.forEach(reportDiagnostic);
         if (writeFileName) {
             const currentDir = program.getCurrentDirectory();
             forEach(emittedFiles, file => {
@@ -231,25 +234,36 @@ namespace ts {
     }
 
     export const noopFileWatcher: FileWatcher = { close: noop };
+    export const returnNoopFileWatcher = () => noopFileWatcher;
 
     export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
         const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
         return {
             onWatchStatusChange,
-            watchFile: maybeBind(system, system.watchFile) || (() => noopFileWatcher),
-            watchDirectory: maybeBind(system, system.watchDirectory) || (() => noopFileWatcher),
+            watchFile: maybeBind(system, system.watchFile) || returnNoopFileWatcher,
+            watchDirectory: maybeBind(system, system.watchDirectory) || returnNoopFileWatcher,
             setTimeout: maybeBind(system, system.setTimeout) || noop,
             clearTimeout: maybeBind(system, system.clearTimeout) || noop
         };
     }
 
-    export const enum WatchType {
-        ConfigFile = "Config file",
-        SourceFile = "Source file",
-        MissingFile = "Missing file",
-        WildcardDirectory = "Wild card directory",
-        FailedLookupLocations = "Failed Lookup Locations",
-        TypeRoots = "Type roots"
+    export type WatchType = WatchTypeRegistry[keyof WatchTypeRegistry];
+    export const WatchType: WatchTypeRegistry = {
+        ConfigFile: "Config file",
+        SourceFile: "Source file",
+        MissingFile: "Missing file",
+        WildcardDirectory: "Wild card directory",
+        FailedLookupLocations: "Failed Lookup Locations",
+        TypeRoots: "Type roots"
+    };
+
+    export interface WatchTypeRegistry {
+        ConfigFile: "Config file",
+        SourceFile: "Source file",
+        MissingFile: "Missing file",
+        WildcardDirectory: "Wild card directory",
+        FailedLookupLocations: "Failed Lookup Locations",
+        TypeRoots: "Type roots"
     }
 
     interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
@@ -346,10 +360,6 @@ namespace ts {
      */
     export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
         const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
-        let host: DirectoryStructureHost = system;
-        // TODO: `host` is unused!
-        // eslint-disable-next-line no-unused-expressions
-        host;
         return {
             useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,
@@ -366,7 +376,6 @@ namespace ts {
             trace: s => system.write(s + system.newLine),
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
-            onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
             createHash: maybeBind(system, system.createHash),
             createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>
         };
@@ -406,25 +415,53 @@ namespace ts {
         system.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
+    export interface CreateWatchCompilerHostInput<T extends BuilderProgram> {
+        system: System;
+        createProgram?: CreateProgram<T>;
+        reportDiagnostic?: DiagnosticReporter;
+        reportWatchStatus?: WatchStatusReporter;
+    }
+
+    export interface CreateWatchCompilerHostOfConfigFileInput<T extends BuilderProgram> extends CreateWatchCompilerHostInput<T> {
+        configFileName: string;
+        optionsToExtend?: CompilerOptions;
+        watchOptionsToExtend?: WatchOptions;
+        extraFileExtensions?: readonly FileExtensionInfo[];
+    }
     /**
      * Creates the watch compiler host from system for config file in watch mode
      */
-    export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile<T> {
+    export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+        configFileName, optionsToExtend, watchOptionsToExtend, extraFileExtensions,
+        system, createProgram, reportDiagnostic, reportWatchStatus
+    }: CreateWatchCompilerHostOfConfigFileInput<T>): WatchCompilerHostOfConfigFile<T> {
         const diagnosticReporter = reportDiagnostic || createDiagnosticReporter(system);
         const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, diagnosticReporter, diagnostic);
         host.configFileName = configFileName;
         host.optionsToExtend = optionsToExtend;
+        host.watchOptionsToExtend = watchOptionsToExtend;
+        host.extraFileExtensions = extraFileExtensions;
         return host;
     }
 
+    export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends BuilderProgram> extends CreateWatchCompilerHostInput<T> {
+        rootFiles: string[];
+        options: CompilerOptions;
+        watchOptions: WatchOptions | undefined;
+        projectReferences?: readonly ProjectReference[];
+    }
     /**
      * Creates the watch compiler host from system for compiling root files and options in watch mode
      */
-    export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: readonly ProjectReference[]): WatchCompilerHostOfFilesAndCompilerOptions<T> {
+    export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+        rootFiles, options, watchOptions, projectReferences,
+        system, createProgram, reportDiagnostic, reportWatchStatus
+    }: CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
         const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
         host.rootFiles = rootFiles;
         host.options = options;
+        host.watchOptions = watchOptions;
         host.projectReferences = projectReferences;
         return host;
     }

@@ -3,6 +3,7 @@ var x: "p" = "p"
 class A {
     a = this.y
     b
+    public c;
     ["computed"] = 13
     ;[x] = 14
     m() { }
@@ -11,8 +12,10 @@ class A {
     declare notEmitted;
 }
 class B {
+    public a;
 }
 class C extends B {
+    declare public a;
     z = this.ka
     constructor(public ka: number) {
         super()
@@ -26,7 +29,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -52,6 +55,12 @@ var A = /** @class */ (function () {
             value: this.y
         });
         Object.defineProperty(this, "b", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "c", {
             enumerable: true,
             configurable: true,
             writable: true,
@@ -87,6 +96,12 @@ var A = /** @class */ (function () {
 _a = x;
 var B = /** @class */ (function () {
     function B() {
+        Object.defineProperty(this, "a", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
     }
     return B;
 }());

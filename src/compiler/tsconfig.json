@@ -1,11 +1,12 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/compiler.js"
+        "outFile": "../../built/local/compiler.js",
+        "types": ["node"]
     },
 
     "references": [
-        { "path": "../shims" },
+        { "path": "../shims" }
     ],
 
     "files": [
@@ -24,6 +25,15 @@
         "scanner.ts",
         "utilitiesPublic.ts",
         "utilities.ts",
+        "factory/baseNodeFactory.ts",
+        "factory/parenthesizerRules.ts",
+        "factory/nodeConverters.ts",
+        "factory/nodeFactory.ts",
+        "factory/emitNode.ts",
+        "factory/emitHelpers.ts",
+        "factory/nodeTests.ts",
+        "factory/utilities.ts",
+        "factory/utilitiesPublic.ts",
         "parser.ts",
         "commandLineParser.ts",
         "moduleNameResolver.ts",
@@ -31,18 +41,17 @@
         "binder.ts",
         "symbolWalker.ts",
         "checker.ts",
-        "factoryPublic.ts",
-        "factory.ts",
         "visitorPublic.ts",
-        "visitor.ts",
         "sourcemap.ts",
         "transformers/utilities.ts",
         "transformers/destructuring.ts",
+        "transformers/taggedTemplate.ts",
         "transformers/ts.ts",
         "transformers/classFields.ts",
         "transformers/es2017.ts",
         "transformers/es2018.ts",
         "transformers/es2019.ts",
+        "transformers/es2020.ts",
         "transformers/esnext.ts",
         "transformers/jsx.ts",
         "transformers/es2016.ts",
@@ -51,7 +60,7 @@
         "transformers/generators.ts",
         "transformers/module/module.ts",
         "transformers/module/system.ts",
-        "transformers/module/es2015.ts",
+        "transformers/module/esnextAnd2015.ts",
         "transformers/declarations/diagnostics.ts",
         "transformers/declarations.ts",
         "transformer.ts",
@@ -67,6 +76,6 @@
         "watch.ts",
         "watchPublic.ts",
         "tsbuild.ts",
-        "tsbuildPublic.ts",
+        "tsbuildPublic.ts"
     ]
 }

@@ -3,17 +3,30 @@ namespace ts.refactor {
     const refactorName = "Convert export";
     const actionNameDefaultToNamed = "Convert default export to named export";
     const actionNameNamedToDefault = "Convert named export to default export";
+
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const info = getInfo(context);
+            const info = getInfo(context, context.triggerReason === "invoked");
             if (!info) return emptyArray;
-            const description = info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
-            const actionName = info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
-            return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+
+            if (info.error === undefined) {
+                const description = info.info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
+                const actionName = info.info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
+                return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+            }
+
+            if (context.preferences.provideRefactorNotApplicableReason) {
+                return [
+                    { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message, actions: [{ name: actionNameDefaultToNamed, description: Diagnostics.Convert_default_export_to_named_export.message, notApplicableReason: info.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_named_export_to_default_export.message, actions: [{ name: actionNameNamedToDefault, description: Diagnostics.Convert_named_export_to_default_export.message, notApplicableReason: info.error }] },
+                ];
+            }
+
+            return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameDefaultToNamed || actionName === actionNameNamedToDefault, "Unexpected action name");
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, Debug.assertDefined(getInfo(context), "context must have info"), t, context.cancellationToken));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, Debug.checkDefined(getInfo(context)?.info, "context must have info"), t, context.cancellationToken));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         },
     });
@@ -27,22 +40,30 @@ namespace ts.refactor {
         readonly exportingModuleSymbol: Symbol;
     }
 
-    function getInfo(context: RefactorContext): Info | undefined {
+    type InfoOrError = {
+        info: Info,
+        error?: never
+    } | {
+        info?: never,
+        error: string
+    };
+
+    function getInfo(context: RefactorContext, considerPartialSpans = true): InfoOrError | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        const exportNode = getParentNodeInSpan(token, file, span);
+        const exportNode = !!(token.parent && getSyntacticModifierFlags(token.parent) & ModifierFlags.Export) && considerPartialSpans ? token.parent : getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
-            return undefined;
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_export_statement) };
         }
 
         const exportingModuleSymbol = isSourceFile(exportNode.parent) ? exportNode.parent.symbol : exportNode.parent.parent.symbol;
 
-        const flags = getModifierFlags(exportNode);
+        const flags = getSyntacticModifierFlags(exportNode);
         const wasDefault = !!(flags & ModifierFlags.Default);
         // If source file already has a default export, don't offer refactor.
         if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {
-            return undefined;
+            return { error: getLocaleSpecificMessage(Diagnostics.This_file_already_has_a_default_export) };
         }
 
         switch (exportNode.kind) {
@@ -53,7 +74,7 @@ namespace ts.refactor {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.ModuleDeclaration: {
                 const node = exportNode as FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | TypeAliasDeclaration | NamespaceDeclaration;
-                return node.name && isIdentifier(node.name) ? { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol } : undefined;
+                return node.name && isIdentifier(node.name) ? { info: { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol } } : undefined;
             }
             case SyntaxKind.VariableStatement: {
                 const vs = exportNode as VariableStatement;
@@ -64,7 +85,7 @@ namespace ts.refactor {
                 const decl = first(vs.declarationList.declarations);
                 if (!decl.initializer) return undefined;
                 Debug.assert(!wasDefault, "Can't have a default flag here");
-                return isIdentifier(decl.name) ? { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } : undefined;
+                return isIdentifier(decl.name) ? { info: { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } } : undefined;
             }
             default:
                 return undefined;
@@ -78,21 +99,21 @@ namespace ts.refactor {
 
     function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: Info, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
         if (wasDefault) {
-            changes.delete(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
+            changes.delete(exportingSourceFile, Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
         }
         else {
-            const exportKeyword = Debug.assertDefined(findModifier(exportNode, SyntaxKind.ExportKeyword), "Should find an export keyword in modifier list");
+            const exportKeyword = Debug.checkDefined(findModifier(exportNode, SyntaxKind.ExportKeyword), "Should find an export keyword in modifier list");
             switch (exportNode.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
-                    changes.insertNodeAfter(exportingSourceFile, exportKeyword, createToken(SyntaxKind.DefaultKeyword));
+                    changes.insertNodeAfter(exportingSourceFile, exportKeyword, factory.createToken(SyntaxKind.DefaultKeyword));
                     break;
                 case SyntaxKind.VariableStatement:
                     // If 'x' isn't used in this file, `export const x = 0;` --> `export default 0;`
                     if (!FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile)) {
                         // We checked in `getInfo` that an initializer exists.
-                        changes.replaceNode(exportingSourceFile, exportNode, createExportDefault(Debug.assertDefined(first(exportNode.declarationList.declarations).initializer, "Initializer was previously known to be present")));
+                        changes.replaceNode(exportingSourceFile, exportNode, factory.createExportDefault(Debug.checkDefined(first(exportNode.declarationList.declarations).initializer, "Initializer was previously known to be present")));
                         break;
                     }
                     // falls through
@@ -101,7 +122,7 @@ namespace ts.refactor {
                 case SyntaxKind.ModuleDeclaration:
                     // `export type T = number;` -> `type T = number; export default T;`
                     changes.deleteModifier(exportingSourceFile, exportKeyword);
-                    changes.insertNodeAfter(exportingSourceFile, exportNode, createExportDefault(createIdentifier(exportName.text)));
+                    changes.insertNodeAfter(exportingSourceFile, exportNode, factory.createExportDefault(factory.createIdentifier(exportName.text)));
                     break;
                 default:
                     Debug.assertNever(exportNode, `Unexpected exportNode kind ${(exportNode as ExportToConvert).kind}`);
@@ -111,7 +132,7 @@ namespace ts.refactor {
 
     function changeImports(program: Program, { wasDefault, exportName, exportingModuleSymbol }: Info, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
         const checker = program.getTypeChecker();
-        const exportSymbol = Debug.assertDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
+        const exportSymbol = Debug.checkDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
         FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName.text, wasDefault, ref => {
             const importingSourceFile = ref.getSourceFile();
             if (wasDefault) {
@@ -128,7 +149,7 @@ namespace ts.refactor {
         switch (parent.kind) {
             case SyntaxKind.PropertyAccessExpression:
                 // `a.default` --> `a.foo`
-                changes.replaceNode(importingSourceFile, ref, createIdentifier(exportName));
+                changes.replaceNode(importingSourceFile, ref, factory.createIdentifier(exportName));
                 break;
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier: {
@@ -144,7 +165,7 @@ namespace ts.refactor {
                 const { namedBindings } = clause;
                 if (!namedBindings) {
                     // `import foo from "./a";` --> `import { foo } from "./a";`
-                    changes.replaceNode(importingSourceFile, ref, createNamedImports([spec]));
+                    changes.replaceNode(importingSourceFile, ref, factory.createNamedImports([spec]));
                 }
                 else if (namedBindings.kind === SyntaxKind.NamespaceImport) {
                     // `import foo, * as a from "./a";` --> `import * as a from ".a/"; import { foo } from "./a";`
@@ -170,12 +191,12 @@ namespace ts.refactor {
         switch (parent.kind) {
             case SyntaxKind.PropertyAccessExpression:
                 // `a.foo` --> `a.default`
-                changes.replaceNode(importingSourceFile, ref, createIdentifier("default"));
+                changes.replaceNode(importingSourceFile, ref, factory.createIdentifier("default"));
                 break;
             case SyntaxKind.ImportSpecifier: {
                 // `import { foo } from "./a";` --> `import foo from "./a";`
                 // `import { foo as bar } from "./a";` --> `import bar from "./a";`
-                const defaultImport = createIdentifier(parent.name.text);
+                const defaultImport = factory.createIdentifier(parent.name.text);
                 if (parent.parent.elements.length === 1) {
                     changes.replaceNode(importingSourceFile, parent.parent, defaultImport);
                 }
@@ -200,10 +221,10 @@ namespace ts.refactor {
     }
 
     function makeImportSpecifier(propertyName: string, name: string): ImportSpecifier {
-        return createImportSpecifier(propertyName === name ? undefined : createIdentifier(propertyName), createIdentifier(name));
+        return factory.createImportSpecifier(propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
     }
 
     function makeExportSpecifier(propertyName: string, name: string): ExportSpecifier {
-        return createExportSpecifier(propertyName === name ? undefined : createIdentifier(propertyName), createIdentifier(name));
+        return factory.createExportSpecifier(propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
     }
 }

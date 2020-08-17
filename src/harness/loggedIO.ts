@@ -1,89 +1,89 @@
-interface FileInformation {
-    contents?: string;
-    contentsPath?: string;
-    codepage: number;
-    bom?: string;
-}
-
-interface FindFileResult {
-}
-
-interface IoLogFile {
-    path: string;
-    codepage: number;
-    result?: FileInformation;
-}
-
-interface IoLog {
-    timestamp: string;
-    arguments: string[];
-    executingPath: string;
-    currentDirectory: string;
-    useCustomLibraryFile?: boolean;
-    filesRead: IoLogFile[];
-    filesWritten: {
-        path: string;
-        contents?: string;
-        contentsPath?: string;
-        bom: boolean;
-    }[];
-    filesDeleted: string[];
-    filesAppended: {
-        path: string;
-        contents?: string;
-        contentsPath?: string;
-    }[];
-    fileExists: {
-        path: string;
-        result?: boolean;
-    }[];
-    filesFound: {
-        path: string;
-        pattern: string;
-        result?: FindFileResult;
-    }[];
-    dirs: {
-        path: string;
-        re: string;
-        re_m: boolean;
-        re_g: boolean;
-        re_i: boolean;
-        opts: { recursive?: boolean; };
-        result?: string[];
-    }[];
-    dirExists: {
-        path: string;
-        result?: boolean;
-    }[];
-    dirsCreated: string[];
-    pathsResolved: {
-        path: string;
-        result?: string;
-    }[];
-    directoriesRead: {
-        path: string,
-        extensions: readonly string[] | undefined,
-        exclude: readonly string[] | undefined,
-        include: readonly string[] | undefined,
-        depth: number | undefined,
-        result: readonly string[],
-    }[];
-    useCaseSensitiveFileNames?: boolean;
-}
-
-interface PlaybackControl {
-    startReplayFromFile(logFileName: string): void;
-    startReplayFromString(logContents: string): void;
-    startReplayFromData(log: IoLog): void;
-    endReplay(): void;
-    startRecord(logFileName: string): void;
-    endRecord(): void;
-}
-
 namespace Playback {
+    interface FileInformation {
+        contents?: string;
+        contentsPath?: string;
+        codepage: number;
+        bom?: string;
+    }
+
+    interface FindFileResult {
+    }
+
+    interface IoLogFile {
+        path: string;
+        codepage: number;
+        result?: FileInformation;
+    }
+
+    export interface IoLog {
+        timestamp: string;
+        arguments: string[];
+        executingPath: string;
+        currentDirectory: string;
+        useCustomLibraryFile?: boolean;
+        filesRead: IoLogFile[];
+        filesWritten: {
+            path: string;
+            contents?: string;
+            contentsPath?: string;
+            bom: boolean;
+        }[];
+        filesDeleted: string[];
+        filesAppended: {
+            path: string;
+            contents?: string;
+            contentsPath?: string;
+        }[];
+        fileExists: {
+            path: string;
+            result?: boolean;
+        }[];
+        filesFound: {
+            path: string;
+            pattern: string;
+            result?: FindFileResult;
+        }[];
+        dirs: {
+            path: string;
+            re: string;
+            re_m: boolean;
+            re_g: boolean;
+            re_i: boolean;
+            opts: { recursive?: boolean; };
+            result?: string[];
+        }[];
+        dirExists: {
+            path: string;
+            result?: boolean;
+        }[];
+        dirsCreated: string[];
+        pathsResolved: {
+            path: string;
+            result?: string;
+        }[];
+        directoriesRead: {
+            path: string,
+            extensions: readonly string[] | undefined,
+            exclude: readonly string[] | undefined,
+            include: readonly string[] | undefined,
+            depth: number | undefined,
+            result: readonly string[],
+        }[];
+        useCaseSensitiveFileNames?: boolean;
+    }
+
+    interface PlaybackControl {
+        startReplayFromFile(logFileName: string): void;
+        startReplayFromString(logContents: string): void;
+        startReplayFromData(log: IoLog): void;
+        endReplay(): void;
+        startRecord(logFileName: string): void;
+        endRecord(): void;
+    }
+
     let recordLog: IoLog | undefined;
     let replayLog: IoLog | undefined;
-    let replayFilesRead: ts.Map<IoLogFile> | undefined;
+    let replayFilesRead: ts.ESMap<string, IoLogFile> | undefined;
     let recordLogFileNameBase = "";
 
     interface Memoized<T> {
@@ -219,7 +219,7 @@ namespace Playback {
             replayLog = log;
             // Remove non-found files from the log (shouldn't really need them, but we still record them for diagnostic purposes)
             replayLog.filesRead = replayLog.filesRead.filter(f => f.result!.contents !== undefined);
-            replayFilesRead = ts.createMap();
+            replayFilesRead = new ts.Map();
             for (const file of replayLog.filesRead) {
                 replayFilesRead.set(ts.normalizeSlashes(file.path).toLowerCase(), file);
             }

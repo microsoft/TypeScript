@@ -3,7 +3,7 @@ namespace ts.codefix {
     const fixName = "fixCannotFindModule";
     const fixIdInstallTypesPackage = "installTypesPackage";
 
-    const errorCodeCannotFindModule = Diagnostics.Cannot_find_module_0.code;
+    const errorCodeCannotFindModule = Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code;
     const errorCodes = [
         errorCodeCannotFindModule,
         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type.code,

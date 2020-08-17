@@ -27,6 +27,7 @@ class D extends C<IHasVisualizationModel> {
 //// [aliasUsageInTypeArgumentOfExtendsClause_backbone.js]
 "use strict";
 exports.__esModule = true;
+exports.Model = void 0;
 var Model = /** @class */ (function () {
     function Model() {
     }
@@ -39,7 +40,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -49,6 +50,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
+exports.VisualizationModel = void 0;
 var Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 var VisualizationModel = /** @class */ (function (_super) {
     __extends(VisualizationModel, _super);
@@ -64,7 +66,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {

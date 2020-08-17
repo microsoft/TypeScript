@@ -29,7 +29,7 @@ interface Obj {
 }
 
 async function fIndexedTypeForStringProp(obj: Obj): Promise<Obj["stringProp"]> {
->fIndexedTypeForStringProp : (obj: Obj) => Promise<string>
+>fIndexedTypeForStringProp : (obj: Obj) => Promise<Obj["stringProp"]>
 >obj : Obj
 
     return obj.stringProp;
@@ -39,7 +39,7 @@ async function fIndexedTypeForStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 }
 
 async function fIndexedTypeForPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
->fIndexedTypeForPromiseOfStringProp : (obj: Obj) => Promise<string>
+>fIndexedTypeForPromiseOfStringProp : (obj: Obj) => Promise<Obj["stringProp"]>
 >obj : Obj
 
     return Promise.resolve(obj.stringProp);
@@ -53,7 +53,7 @@ async function fIndexedTypeForPromiseOfStringProp(obj: Obj): Promise<Obj["string
 }
 
 async function fIndexedTypeForExplicitPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
->fIndexedTypeForExplicitPromiseOfStringProp : (obj: Obj) => Promise<string>
+>fIndexedTypeForExplicitPromiseOfStringProp : (obj: Obj) => Promise<Obj["stringProp"]>
 >obj : Obj
 
     return Promise.resolve<Obj["stringProp"]>(obj.stringProp);
@@ -67,7 +67,7 @@ async function fIndexedTypeForExplicitPromiseOfStringProp(obj: Obj): Promise<Obj
 }
 
 async function fIndexedTypeForAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
->fIndexedTypeForAnyProp : (obj: Obj) => Promise<any>
+>fIndexedTypeForAnyProp : (obj: Obj) => Promise<Obj["anyProp"]>
 >obj : Obj
 
     return obj.anyProp;
@@ -77,7 +77,7 @@ async function fIndexedTypeForAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 }
 
 async function fIndexedTypeForPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
->fIndexedTypeForPromiseOfAnyProp : (obj: Obj) => Promise<any>
+>fIndexedTypeForPromiseOfAnyProp : (obj: Obj) => Promise<Obj["anyProp"]>
 >obj : Obj
 
     return Promise.resolve(obj.anyProp);
@@ -91,7 +91,7 @@ async function fIndexedTypeForPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]
 }
 
 async function fIndexedTypeForExplicitPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
->fIndexedTypeForExplicitPromiseOfAnyProp : (obj: Obj) => Promise<any>
+>fIndexedTypeForExplicitPromiseOfAnyProp : (obj: Obj) => Promise<Obj["anyProp"]>
 >obj : Obj
 
     return Promise.resolve<Obj["anyProp"]>(obj.anyProp);

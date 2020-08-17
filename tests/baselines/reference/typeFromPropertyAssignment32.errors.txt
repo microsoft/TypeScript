@@ -1,5 +1,5 @@
-tests/cases/conformance/salsa/expando.ts(12,1): error TS2322: Type 'false' is not assignable to type 'number'.
-tests/cases/conformance/salsa/expando.ts(13,1): error TS2322: Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/salsa/expando.ts(12,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+tests/cases/conformance/salsa/expando.ts(13,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 tests/cases/conformance/salsa/ns.ts(1,11): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 tests/cases/conformance/salsa/ns.ts(10,11): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 
@@ -18,10 +18,10 @@ tests/cases/conformance/salsa/ns.ts(10,11): error TS2433: A namespace declaratio
     ExpandoMerge.p7 = 777777;
     ExpandoMerge.p8 = false; // type error
     ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'false' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     ExpandoMerge.p9 = false; // type error
     ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'false' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001);
     
 ==== tests/cases/conformance/salsa/ns.ts (2 errors) ====

@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts {
-    const visitedNestedConvertibleFunctions = createMap<true>();
+    const visitedNestedConvertibleFunctions = new Map<string, true>();
 
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
@@ -37,23 +37,8 @@ namespace ts {
 
         function check(node: Node) {
             if (isJsFile) {
-                switch (node.kind) {
-                    case SyntaxKind.FunctionExpression:
-                        const decl = getDeclarationOfExpando(node);
-                        if (decl) {
-                            const symbol = decl.symbol;
-                            if (symbol && (symbol.exports && symbol.exports.size || symbol.members && symbol.members.size)) {
-                                diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
-                                break;
-                            }
-                        }
-                    // falls through if no diagnostic was created
-                    case SyntaxKind.FunctionDeclaration:
-                        const symbol = node.symbol;
-                        if (symbol.members && (symbol.members.size > 0)) {
-                            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
-                        }
-                        break;
+                if (canBeConvertedToClass(node)) {
+                    diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration));
                 }
             }
             else {
@@ -148,7 +133,7 @@ namespace ts {
         return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
     }
 
-    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement {
+    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement & { expression: CallExpression } {
         return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
     }
 
@@ -171,7 +156,18 @@ namespace ts {
     }
 
     function isPromiseHandler(node: Node): node is CallExpression {
-        return isCallExpression(node) && (hasPropertyAccessExpressionWithName(node, "then") || hasPropertyAccessExpressionWithName(node, "catch"));
+        return isCallExpression(node) && (
+            hasPropertyAccessExpressionWithName(node, "then") && hasSupportedNumberOfArguments(node) ||
+            hasPropertyAccessExpressionWithName(node, "catch"));
+    }
+
+    function hasSupportedNumberOfArguments(node: CallExpression) {
+        if (node.arguments.length > 2) return false;
+        if (node.arguments.length < 2) return true;
+        return some(node.arguments, arg => {
+            return arg.kind === SyntaxKind.NullKeyword ||
+                isIdentifier(arg) && arg.text === "undefined";
+        });
     }
 
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
@@ -192,5 +188,23 @@ namespace ts {
 
     function getKeyFromNode(exp: FunctionLikeDeclaration) {
         return `${exp.pos.toString()}:${exp.end.toString()}`;
+    }
+
+    function canBeConvertedToClass(node: Node): boolean {
+        if (node.kind === SyntaxKind.FunctionExpression) {
+            if (isVariableDeclaration(node.parent) && node.symbol.members?.size) {
+                return true;
+            }
+
+            const decl = getDeclarationOfExpando(node);
+            const symbol = decl?.symbol;
+            return !!(symbol && (symbol.exports?.size || symbol.members?.size));
+        }
+
+        if (node.kind === SyntaxKind.FunctionDeclaration) {
+            return !!node.symbol.members?.size;
+        }
+
+        return false;
     }
 }

@@ -65,12 +65,12 @@ namespace ts {
         });
 
         describe("clean builds", () => {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "removes all files it built",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--clean"],
-                incrementalScenarios: [noChangeRun]
+                incrementalScenarios: noChangeOnlyRuns
             });
 
             it("cleans till project specified", () => {
@@ -98,12 +98,12 @@ namespace ts {
         });
 
         describe("force builds", () => {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "always builds under with force option",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--force"],
-                incrementalScenarios: [noChangeRun]
+                incrementalScenarios: noChangeOnlyRuns
             });
         });
 
@@ -201,7 +201,7 @@ namespace ts {
                 );
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "rebuilds when extended config file changes",
                 fs: () => projFs,
@@ -316,7 +316,7 @@ namespace ts {
                 tick();
                 appendText(fs, "/src/logic/index.ts", "function foo() {}");
                 const originalWriteFile = fs.writeFileSync;
-                const writtenFiles = createMap<true>();
+                const writtenFiles = new Map<string, true>();
                 fs.writeFileSync = (path, data, encoding) => {
                     writtenFiles.set(path, true);
                     originalWriteFile.call(fs, path, data, encoding);
@@ -358,23 +358,38 @@ export class cNew {}`);
             });
         });
 
+        const coreChanges: TscIncremental[] = [
+            {
+                buildKind: BuildKind.IncrementalDtsChange,
+                modifyFs: fs => appendText(fs, "/src/core/index.ts", `
+export class someClass { }`),
+            },
+            {
+                buildKind: BuildKind.IncrementalDtsUnchanged,
+                modifyFs: fs => appendText(fs, "/src/core/index.ts", `
+class someClass2 { }`),
+            }
+        ];
+
         describe("lists files", () => {
-            verifyTsc({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "listFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listFiles"],
+                incrementalScenarios: coreChanges
             });
-            verifyTsc({
+            verifyTscSerializedIncrementalEdits({
                 scenario: "sample1",
                 subScenario: "listEmittedFiles",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--listEmittedFiles"],
+                incrementalScenarios: coreChanges
             });
         });
 
         describe("emit output", () => {
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "sample",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -382,16 +397,7 @@ export class cNew {}`);
                 baselineSourceMap: true,
                 baselineReadFileCalls: true,
                 incrementalScenarios: [
-                    {
-                        buildKind: BuildKind.IncrementalDtsChange,
-                        modifyFs: fs => appendText(fs, "/src/core/index.ts", `
-export class someClass { }`),
-                    },
-                    {
-                        buildKind: BuildKind.IncrementalDtsUnchanged,
-                        modifyFs: fs => appendText(fs, "/src/core/index.ts", `
-class someClass { }`),
-                    },
+                    ...coreChanges,
                     {
                         subScenario: "when logic config changes declaration dir",
                         buildKind: BuildKind.IncrementalDtsChange,
@@ -413,7 +419,7 @@ class someClass { }`),
                 baselineReadFileCalls: true
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "when declaration option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -430,7 +436,7 @@ class someClass { }`),
                 }],
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "when target option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -456,7 +462,7 @@ class someClass { }`),
                 }],
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "when module option changes",
                 fs: () => projFs,
                 scenario: "sample1",
@@ -473,7 +479,7 @@ class someClass { }`),
                 }],
             });
 
-            verifyTscIncrementalEdits({
+            verifyTscSerializedIncrementalEdits({
                 subScenario: "when esModuleInterop option changes",
                 fs: () => projFs,
                 scenario: "sample1",

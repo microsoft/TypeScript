@@ -1,0 +1,95 @@
+=== tests/cases/conformance/jsdoc/jsdocAccessibilityTagDeclarations.js ===
+class Protected {
+>Protected : Protected
+
+    /** @protected */
+    constructor(c) {
+>c : any
+
+        /** @protected */
+        this.c = c
+>this.c = c : any
+>this.c : any
+>this : this
+>c : any
+>c : any
+    }
+    /** @protected */
+    m() {
+>m : () => any
+
+        return this.c
+>this.c : any
+>this : this
+>c : any
+    }
+    /** @protected */
+    get p() { return this.c }
+>p : any
+>this.c : any
+>this : this
+>c : any
+
+    /** @protected */
+    set p(value) { this.c = value }
+>p : any
+>value : any
+>this.c = value : any
+>this.c : any
+>this : this
+>c : any
+>value : any
+}
+
+class Private {
+>Private : Private
+
+    /** @private */
+    constructor(c) {
+>c : any
+
+        /** @private */
+        this.c = c
+>this.c = c : any
+>this.c : any
+>this : this
+>c : any
+>c : any
+    }
+    /** @private */
+    m() {
+>m : () => any
+
+        return this.c
+>this.c : any
+>this : this
+>c : any
+    }
+    /** @private */
+    get p() { return this.c }
+>p : any
+>this.c : any
+>this : this
+>c : any
+
+    /** @private */
+    set p(value) { this.c = value }
+>p : any
+>value : any
+>this.c = value : any
+>this.c : any
+>this : this
+>c : any
+>value : any
+}
+
+// https://github.com/microsoft/TypeScript/issues/38401
+class C {
+>C : C
+
+    constructor(/** @public */ x, /** @protected */ y, /** @private */ z) {
+>x : any
+>y : any
+>z : any
+    }
+}

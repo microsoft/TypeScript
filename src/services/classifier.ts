@@ -135,7 +135,7 @@ namespace ts {
                             const lastTemplateStackToken = lastOrUndefined(templateStack);
 
                             if (lastTemplateStackToken === SyntaxKind.TemplateHead) {
-                                token = scanner.reScanTemplateToken();
+                                token = scanner.reScanTemplateToken(/* isTaggedTemplate */ false);
 
                                 // Only pop on a TemplateTail; a TemplateMiddle indicates there is more for us.
                                 if (token === SyntaxKind.TemplateTail) {
@@ -392,6 +392,9 @@ namespace ts {
             case SyntaxKind.EqualsToken:
             case SyntaxKind.CommaToken:
             case SyntaxKind.QuestionQuestionToken:
+            case SyntaxKind.BarBarEqualsToken:
+            case SyntaxKind.AmpersandAmpersandEqualsToken:
+            case SyntaxKind.QuestionQuestionEqualsToken:
                 return true;
             default:
                 return false;
@@ -449,7 +452,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: UnderscoreEscapedMap<true>, span: TextSpan): ClassifiedSpan[] {
+    export function getSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): ClassifiedSpan[] {
         return convertClassificationsToSpans(getEncodedSemanticClassifications(typeChecker, cancellationToken, sourceFile, classifiableNames, span));
     }
 
@@ -469,12 +472,15 @@ namespace ts {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
                 cancellationToken.throwIfCancellationRequested();
         }
     }
 
     /* @internal */
-    export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: UnderscoreEscapedMap<true>, span: TextSpan): Classifications {
+    export function getEncodedSemanticClassifications(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, classifiableNames: ReadonlySet<__String>, span: TextSpan): Classifications {
         const spans: number[] = [];
         sourceFile.forEachChild(function cb(node: Node): void {
             // Only walk into nodes that intersect the requested span.
@@ -682,7 +688,7 @@ namespace ts {
                 const docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
                 if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDoc) {
                     // TODO: This should be predicated on `token["kind"]` being compatible with `HasJSDoc["kind"]`
-                    docCommentAndDiagnostics.jsDoc.parent = token as HasJSDoc;
+                    setParent(docCommentAndDiagnostics.jsDoc, token as HasJSDoc);
                     classifyJSDocComment(docCommentAndDiagnostics.jsDoc);
                     return;
                 }

@@ -7,9 +7,19 @@
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
-        "types": ["node"],
-        "lib": ["esnext", "dom"],
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "esnext",
+            "dom"
+        ]
     },
-    "include": ["node_modules/lodash"],
-    "exclude": ["node_modules/lodash/lodash.js"]
+    "include": [
+        "node_modules/lodash",
+        "index.ts"
+    ],
+    "exclude": [
+        "node_modules/lodash/lodash.js"
+    ]
 }

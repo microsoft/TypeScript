@@ -69,9 +69,16 @@ enum E11 {
 >C : E11
 >window : Window & typeof globalThis
 
-    D = {}
+    D = {},
 >D : E11
 >{} : {}
+
+    E = (() => 'foo')(),
+>E : E11
+>(() => 'foo')() : string
+>(() => 'foo') : () => string
+>() => 'foo' : () => string
+>'foo' : "foo"
 }
 
 // Enum with string valued member and computed member initializers
@@ -100,6 +107,13 @@ enum E12 {
 >1 + 1 : number
 >1 : 1
 >1 : 1
+
+    F = (() => 'foo')(),
+>F : E12.B
+>(() => 'foo')() : string
+>(() => 'foo') : () => string
+>() => 'foo' : () => string
+>'foo' : "foo"
 }
 
 // Enum with incorrect syntax

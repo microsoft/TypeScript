@@ -3,30 +3,61 @@ namespace ts.refactor {
     const refactorName = "Convert import";
     const actionNameNamespaceToNamed = "Convert namespace import to named imports";
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
+
+    type NamedImportBindingsOrError = {
+        info: NamedImportBindings,
+        error?: never
+    } | {
+        info?: never,
+        error: string
+    };
+
     registerRefactor(refactorName, {
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            const i = getImportToConvert(context);
+            const i = getImportToConvert(context, context.triggerReason === "invoked");
             if (!i) return emptyArray;
-            const description = i.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
-            const actionName = i.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
-            return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+
+            if (i.error === undefined) {
+                const description = i.info.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
+                const actionName = i.info.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
+                return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
+            }
+
+            if (context.preferences.provideRefactorNotApplicableReason) {
+                return [
+                    { name: refactorName, description: Diagnostics.Convert_namespace_import_to_named_imports.message, actions: [{ name: actionNameNamespaceToNamed, description: Diagnostics.Convert_namespace_import_to_named_imports.message, notApplicableReason: i.error }] },
+                    { name: refactorName, description: Diagnostics.Convert_named_imports_to_namespace_import.message, actions: [{ name: actionNameNamedToNamespace, description: Diagnostics.Convert_named_imports_to_namespace_import.message, notApplicableReason: i.error }] }
+                ];
+            }
+
+            return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === actionNameNamespaceToNamed || actionName === actionNameNamedToNamespace, "Unexpected action name");
-            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.assertDefined(getImportToConvert(context), "Context must provide an import to convert")));
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, Debug.checkDefined(getImportToConvert(context)?.info, "Context must provide an import to convert")));
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
     });
 
     // Can convert imports of the form `import * as m from "m";` or `import d, { x, y } from "m";`.
-    function getImportToConvert(context: RefactorContext): NamedImportBindings | undefined {
+    function getImportToConvert(context: RefactorContext, considerPartialSpans = true): NamedImportBindingsOrError | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
         const token = getTokenAtPosition(file, span.start);
-        const importDecl = getParentNodeInSpan(token, file, span);
-        if (!importDecl || !isImportDeclaration(importDecl)) return undefined;
+        const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
+        if (!importDecl || !isImportDeclaration(importDecl)) return { error: "Selection is not an import declaration." };
+        if (importDecl.getEnd() < span.start + span.length) return undefined;
+
         const { importClause } = importDecl;
-        return importClause && importClause.namedBindings;
+        if (!importClause) {
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_import_clause) };
+        }
+
+        if (!importClause.namedBindings) {
+            return { error: getLocaleSpecificMessage(Diagnostics.Could_not_find_namespace_import_or_named_imports) };
+        }
+
+        return { info: importClause.namedBindings };
     }
 
     function doChange(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImportBindings): void {
@@ -43,7 +74,7 @@ namespace ts.refactor {
         let usedAsNamespaceOrDefault = false;
 
         const nodesToReplace: PropertyAccessExpression[] = [];
-        const conflictingNames = createMap<true>();
+        const conflictingNames = new Map<string, true>();
 
         FindAllReferences.Core.eachSymbolReferenceInFile(toConvert.name, checker, sourceFile, id => {
             if (!isPropertyAccessExpression(id.parent)) {
@@ -61,7 +92,7 @@ namespace ts.refactor {
         });
 
         // We may need to change `mod.x` to `_x` to avoid a name conflict.
-        const exportNameToImportName = createMap<string>();
+        const exportNameToImportName = new Map<string, string>();
 
         for (const propertyAccess of nodesToReplace) {
             const exportName = propertyAccess.name.text;
@@ -69,12 +100,12 @@ namespace ts.refactor {
             if (importName === undefined) {
                 exportNameToImportName.set(exportName, importName = conflictingNames.has(exportName) ? getUniqueName(exportName, sourceFile) : exportName);
             }
-            changes.replaceNode(sourceFile, propertyAccess, createIdentifier(importName));
+            changes.replaceNode(sourceFile, propertyAccess, factory.createIdentifier(importName));
         }
 
         const importSpecifiers: ImportSpecifier[] = [];
         exportNameToImportName.forEach((name, propertyName) => {
-            importSpecifiers.push(createImportSpecifier(name === propertyName ? undefined : createIdentifier(propertyName), createIdentifier(name)));
+            importSpecifiers.push(factory.createImportSpecifier(name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)));
         });
 
         const importDecl = toConvert.parent.parent;
@@ -83,7 +114,7 @@ namespace ts.refactor {
             changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers));
         }
         else {
-            changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? createIdentifier(toConvert.name.text) : undefined, importSpecifiers));
+            changes.replaceNode(sourceFile, importDecl, updateImport(importDecl, usedAsNamespaceOrDefault ? factory.createIdentifier(toConvert.name.text) : undefined, importSpecifiers));
         }
     }
 
@@ -102,13 +133,13 @@ namespace ts.refactor {
         for (const element of toConvert.elements) {
             const propertyName = (element.propertyName || element.name).text;
             FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
-                const access = createPropertyAccess(createIdentifier(namespaceImportName), propertyName);
+                const access = factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), propertyName);
                 if (isShorthandPropertyAssignment(id.parent)) {
-                    changes.replaceNode(sourceFile, id.parent, createPropertyAssignment(id.text, access));
+                    changes.replaceNode(sourceFile, id.parent, factory.createPropertyAssignment(id.text, access));
                 }
                 else if (isExportSpecifier(id.parent) && !id.parent.propertyName) {
                     if (!neededNamedImports.some(n => n.name === element.name)) {
-                        neededNamedImports.push(createImportSpecifier(element.propertyName && createIdentifier(element.propertyName.text), createIdentifier(element.name.text)));
+                        neededNamedImports.push(factory.createImportSpecifier(element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
                     }
                 }
                 else {
@@ -117,14 +148,14 @@ namespace ts.refactor {
             });
         }
 
-        changes.replaceNode(sourceFile, toConvert, createNamespaceImport(createIdentifier(namespaceImportName)));
+        changes.replaceNode(sourceFile, toConvert, factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)));
         if (neededNamedImports.length) {
             changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, neededNamedImports));
         }
     }
 
     function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
-        return createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
-            createImportClause(defaultImportName, elements && elements.length ? createNamedImports(elements) : undefined), old.moduleSpecifier);
+        return factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined,
+            factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier);
     }
 }

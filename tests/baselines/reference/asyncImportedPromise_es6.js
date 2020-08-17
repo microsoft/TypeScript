@@ -12,6 +12,7 @@ class Test {
 //// [task.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Task = void 0;
 class Task extends Promise {
 }
 exports.Task = Task;

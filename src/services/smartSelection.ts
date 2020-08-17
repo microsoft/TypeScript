@@ -144,7 +144,7 @@ namespace ts.SmartSelectionRange {
         // few keystrokes.
         if (isMappedTypeNode(node)) {
             const [openBraceToken, ...children] = node.getChildren();
-            const closeBraceToken = Debug.assertDefined(children.pop());
+            const closeBraceToken = Debug.checkDefined(children.pop());
             Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
             Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
             // Group `-/+readonly` and `-/+?`
@@ -252,9 +252,7 @@ namespace ts.SmartSelectionRange {
 
     function createSyntaxList(children: Node[]): SyntaxList {
         Debug.assertGreaterThanOrEqual(children.length, 1);
-        const syntaxList = createNode(SyntaxKind.SyntaxList, children[0].pos, last(children).end) as SyntaxList;
-        syntaxList._children = children;
-        return syntaxList;
+        return setTextRangePosEnd(parseNodeFactory.createSyntaxList(children), children[0].pos, last(children).end);
     }
 
     function isListOpener(token: Node | undefined): token is Node {

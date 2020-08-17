@@ -1,0 +1,11 @@
+/a.js(1,16): error TS2322: Type 'boolean' is not assignable to type 'number'.
+
+
+==== /a.js (1 errors) ====
+    function C() { this.x = false; };
+                   ~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
+    /** @type {number} */
+    C.prototype.x;
+    new C().x;
+    

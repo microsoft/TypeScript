@@ -1,0 +1,15 @@
+=== tests/cases/compiler/substituteReturnTypeSatisfiesConstraint.ts ===
+type M = { p: string };
+>M : M
+>p : string
+
+type O = { m: () => M };
+>O : O
+>m : () => M
+
+type X<T extends M> = T;
+>X : T
+
+type FFG<T> = T extends O ? X<ReturnType<T['m']>> : never; // error!
+>FFG : FFG<T>
+

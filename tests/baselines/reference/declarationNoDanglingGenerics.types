@@ -5,7 +5,7 @@ const kindCache: { [kind: string]: boolean } = {};
 >{} : {}
 
 function register(kind: string): void | never {
->register : (kind: string) => void
+>register : (kind: string) => void | never
 >kind : string
 
   if (kindCache[kind]) {

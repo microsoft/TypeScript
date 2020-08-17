@@ -17,6 +17,7 @@
         "configurePrerelease.ts",
         "buildProtocol.ts",
         "produceLKG.ts",
-        "word2md.ts"
+        "word2md.ts",
+        "request-pr-review.ts"
     ]
 }
