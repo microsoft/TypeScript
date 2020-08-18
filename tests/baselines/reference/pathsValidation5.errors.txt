@@ -1,8 +1,14 @@
+error TS-1: Pre-emit (1) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 tests/cases/compiler/tsconfig.json(5,26): error TS5089: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 tests/cases/compiler/tsconfig.json(6,19): error TS5089: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 tests/cases/compiler/tsconfig.json(7,23): error TS5089: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 
 
+!!! error TS-1: Pre-emit (1) and post-emit (3) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS5089 tests/cases/compiler/tsconfig.json:5:26: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+!!! related TS5089 tests/cases/compiler/tsconfig.json:6:19: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
+!!! related TS5089 tests/cases/compiler/tsconfig.json:7:23: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 ==== tests/cases/compiler/tsconfig.json (3 errors) ====
     {
       "compilerOptions": {
