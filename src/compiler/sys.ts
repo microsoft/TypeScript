@@ -1125,6 +1125,26 @@ namespace ts {
         return parseInt(version.substring(1, dot));
     }
 
+    function wrapStacktraceReduction(mod: any): any {
+        const result = {} as any;
+        for (const key in mod) {
+            if (!(mod[key] instanceof Function)) continue;
+            result[key] = (...args: any[]) => {
+                // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
+                // the CPU time performance.
+                const originalStackTraceLimit = Error.stackTraceLimit;
+                Error.stackTraceLimit = 0;
+                try {
+                    return mod[key](...args);
+                }
+                finally {
+                    Error.stackTraceLimit = originalStackTraceLimit;
+                }
+            };
+        }
+        return result;
+    }
+
     // TODO: GH#18217 this is used as if it's certainly defined in many places.
     // eslint-disable-next-line prefer-const
     export let sys: System = (() => {
@@ -1135,7 +1155,7 @@ namespace ts {
 
         function getNodeSystem(): System {
             const nativePattern = /^native |^\([^)]+\)$|^(internal[\\/]|[a-zA-Z0-9_\s]+(\.js)?$)/;
-            const _fs: typeof import("fs") = require("fs");
+            const _fs: typeof import("fs") = wrapStacktraceReduction(require("fs"));
             const _path: typeof import("path") = require("path");
             const _os = require("os");
             // crypto can be absent on reduced node installations
@@ -1662,11 +1682,6 @@ namespace ts {
             }
 
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {
-                // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
-                // the CPU time performance.
-                const originalStackTraceLimit = Error.stackTraceLimit;
-                Error.stackTraceLimit = 0;
-
                 try {
                     const stat = _fs.statSync(path);
                     switch (entryKind) {
@@ -1677,9 +1692,6 @@ namespace ts {
                 }
                 catch (e) {
                     return false;
-                }
-                finally {
-                    Error.stackTraceLimit = originalStackTraceLimit;
                 }
             }
 
