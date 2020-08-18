@@ -22983,7 +22983,11 @@ namespace ts {
                     return getContextuallyTypedParameterType(declaration);
                 case SyntaxKind.BindingElement:
                     return getContextualTypeForBindingElement(declaration);
-                // By default, do nothing and return undefined - only parameters and binding elements have context implied by a parent
+                case SyntaxKind.PropertyDeclaration:
+                    if (hasSyntacticModifier(declaration, ModifierFlags.Static)) {
+                        return getContextualTypeForStaticPropertyDeclaration(declaration);
+                    }
+                // By default, do nothing and return undefined - only the above cases have context implied by a parent
             }
         }
 
@@ -22999,6 +23003,12 @@ namespace ts {
                     return getTypeOfPropertyOfType(parentType, text);
                 }
             }
+        }
+
+        function getContextualTypeForStaticPropertyDeclaration(declaration: PropertyDeclaration): Type | undefined {
+            const parentType = isExpression(declaration.parent) && getContextualType(declaration.parent);
+            if (!parentType) return undefined;
+            return getTypeOfPropertyOfContextualType(parentType, getSymbolOfNode(declaration).escapedName);
         }
 
         // In a variable, parameter or property declaration with a type annotation,
