@@ -2356,7 +2356,7 @@ namespace ts {
 
         // Returns true if we should abort parsing.
         function abortParsingListOrMoveToNextToken(kind: ParsingContext) {
-            parseErrorAtCurrentToken(parsingContextErrors(kind));
+            parseErrorAtCurrentToken(...parsingContextErrors(kind));
             if (isInSomeParsingContext()) {
                 return true;
             }
@@ -2365,33 +2365,37 @@ namespace ts {
             return false;
         }
 
-        function parsingContextErrors(context: ParsingContext): DiagnosticMessage {
+        function parsingContextErrors(context: ParsingContext): [DiagnosticMessage, string?] {
             switch (context) {
-                case ParsingContext.SourceElements: return Diagnostics.Declaration_or_statement_expected;
-                case ParsingContext.BlockStatements: return Diagnostics.Declaration_or_statement_expected;
-                case ParsingContext.SwitchClauses: return Diagnostics.case_or_default_expected;
-                case ParsingContext.SwitchClauseStatements: return Diagnostics.Statement_expected;
+                case ParsingContext.SourceElements: return [Diagnostics.Declaration_or_statement_expected];
+                case ParsingContext.BlockStatements: return [Diagnostics.Declaration_or_statement_expected];
+                case ParsingContext.SwitchClauses: return [Diagnostics.case_or_default_expected];
+                case ParsingContext.SwitchClauseStatements: return [Diagnostics.Statement_expected];
                 case ParsingContext.RestProperties: // fallthrough
-                case ParsingContext.TypeMembers: return Diagnostics.Property_or_signature_expected;
-                case ParsingContext.ClassMembers: return Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected;
-                case ParsingContext.EnumMembers: return Diagnostics.Enum_member_expected;
-                case ParsingContext.HeritageClauseElement: return Diagnostics.Expression_expected;
-                case ParsingContext.VariableDeclarations: return Diagnostics.Variable_declaration_expected;
-                case ParsingContext.ObjectBindingElements: return Diagnostics.Property_destructuring_pattern_expected;
-                case ParsingContext.ArrayBindingElements: return Diagnostics.Array_element_destructuring_pattern_expected;
-                case ParsingContext.ArgumentExpressions: return Diagnostics.Argument_expression_expected;
-                case ParsingContext.ObjectLiteralMembers: return Diagnostics.Property_assignment_expected;
-                case ParsingContext.ArrayLiteralMembers: return Diagnostics.Expression_or_comma_expected;
-                case ParsingContext.JSDocParameters: return Diagnostics.Parameter_declaration_expected;
-                case ParsingContext.Parameters: return Diagnostics.Parameter_declaration_expected;
-                case ParsingContext.TypeParameters: return Diagnostics.Type_parameter_declaration_expected;
-                case ParsingContext.TypeArguments: return Diagnostics.Type_argument_expected;
-                case ParsingContext.TupleElementTypes: return Diagnostics.Type_expected;
-                case ParsingContext.HeritageClauses: return Diagnostics.Unexpected_token_expected;
-                case ParsingContext.ImportOrExportSpecifiers: return Diagnostics.Identifier_expected;
-                case ParsingContext.JsxAttributes: return Diagnostics.Identifier_expected;
-                case ParsingContext.JsxChildren: return Diagnostics.Identifier_expected;
-                default: return undefined!; // TODO: GH#18217 `default: Debug.assertNever(context);`
+                case ParsingContext.TypeMembers: return [Diagnostics.Property_or_signature_expected];
+                case ParsingContext.ClassMembers: return [Diagnostics.Unexpected_token_A_constructor_method_accessor_or_property_was_expected];
+                case ParsingContext.EnumMembers: return [Diagnostics.Enum_member_expected];
+                case ParsingContext.HeritageClauseElement: return [Diagnostics.Expression_expected];
+                case ParsingContext.VariableDeclarations:
+                    const tokenString = tokenToString(token());
+                    return tokenString && /\w+/.test(tokenString[0])
+                        ? [Diagnostics._0_is_not_allowed_as_a_variable_declaration_name, tokenString]
+                        : [Diagnostics.Variable_declaration_expected];
+                case ParsingContext.ObjectBindingElements: return [Diagnostics.Property_destructuring_pattern_expected];
+                case ParsingContext.ArrayBindingElements: return [Diagnostics.Array_element_destructuring_pattern_expected];
+                case ParsingContext.ArgumentExpressions: return [Diagnostics.Argument_expression_expected];
+                case ParsingContext.ObjectLiteralMembers: return [Diagnostics.Property_assignment_expected];
+                case ParsingContext.ArrayLiteralMembers: return [Diagnostics.Expression_or_comma_expected];
+                case ParsingContext.JSDocParameters: return [Diagnostics.Parameter_declaration_expected];
+                case ParsingContext.Parameters: return [Diagnostics.Parameter_declaration_expected];
+                case ParsingContext.TypeParameters: return [Diagnostics.Type_parameter_declaration_expected];
+                case ParsingContext.TypeArguments: return [Diagnostics.Type_argument_expected];
+                case ParsingContext.TupleElementTypes: return [Diagnostics.Type_expected];
+                case ParsingContext.HeritageClauses: return [Diagnostics.Unexpected_token_expected];
+                case ParsingContext.ImportOrExportSpecifiers: return [Diagnostics.Identifier_expected];
+                case ParsingContext.JsxAttributes: return [Diagnostics.Identifier_expected];
+                case ParsingContext.JsxChildren: return [Diagnostics.Identifier_expected];
+                default: return [undefined!]; // TODO: GH#18217 `default: Debug.assertNever(context);`
             }
         }
 
