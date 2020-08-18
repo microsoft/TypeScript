@@ -1371,7 +1371,7 @@ namespace ts {
             const resolved = forEach(paths[matchedPatternText], subst => {
                 const path = matchedStar ? subst.replace("*", matchedStar) : subst;
                 // When baseUrl is not specified, the command line parser resolves relative paths to the config file location.
-                const candidate = normalizePath(combinePaths(baseDirectory || "", path));
+                const candidate = normalizePath(combinePaths(baseDirectory, path));
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
                 }
