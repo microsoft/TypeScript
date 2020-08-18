@@ -54,6 +54,16 @@ const int8Array = new Int8Array(1);
 >...int8Array : any
 >int8Array : Int8Array
 
+const nodeList = new NodeList();
+>nodeList : NodeList
+>new NodeList() : NodeList
+>NodeList : { new (): NodeList; prototype: NodeList; }
+
+[...nodeList];
+>[...nodeList] : any[]
+>...nodeList : any
+>nodeList : NodeList
+
 const uint16Array = new Uint16Array(1);
 >uint16Array : Uint16Array
 >new Uint16Array(1) : Uint16Array
@@ -97,4 +107,6 @@ const uint8ClampedArray = new Uint8ClampedArray(1);
 >[...uint8ClampedArray] : any[]
 >...uint8ClampedArray : any
 >uint8ClampedArray : Uint8ClampedArray
+
+
 

@@ -14,6 +14,9 @@ const int32Array = new Int32Array(1);
 const int8Array = new Int8Array(1);
 [...int8Array];
 
+const nodeList = new NodeList();
+[...nodeList];
+
 const uint16Array = new Uint16Array(1);
 [...uint16Array];
 
@@ -25,6 +28,8 @@ const uint8Array = new Uint8Array(1);
 
 const uint8ClampedArray = new Uint8ClampedArray(1);
 [...uint8ClampedArray];
+
+
 
 
 //// [typedArrays-es5.js]
@@ -45,6 +50,8 @@ var int32Array = new Int32Array(1);
 __spreadArrays(int32Array);
 var int8Array = new Int8Array(1);
 __spreadArrays(int8Array);
+var nodeList = new NodeList();
+__spreadArrays(nodeList);
 var uint16Array = new Uint16Array(1);
 __spreadArrays(uint16Array);
 var uint32Array = new Uint32Array(1);

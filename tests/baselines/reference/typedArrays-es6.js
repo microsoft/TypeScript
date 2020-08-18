@@ -14,6 +14,9 @@ const int32Array = new Int32Array(1);
 const int8Array = new Int8Array(1);
 [...int8Array];
 
+const nodeList = new NodeList();
+[...nodeList];
+
 const uint16Array = new Uint16Array(1);
 [...uint16Array];
 
@@ -38,6 +41,8 @@ const int32Array = new Int32Array(1);
 [...int32Array];
 const int8Array = new Int8Array(1);
 [...int8Array];
+const nodeList = new NodeList();
+[...nodeList];
 const uint16Array = new Uint16Array(1);
 [...uint16Array];
 const uint32Array = new Uint32Array(1);

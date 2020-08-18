@@ -33407,6 +33407,7 @@ namespace ts {
                 case "Int16Array":
                 case "Int32Array":
                 case "Int8Array":
+                case "NodeList":
                 case "Uint16Array":
                 case "Uint32Array":
                 case "Uint8Array":
