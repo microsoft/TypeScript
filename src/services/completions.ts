@@ -1184,6 +1184,13 @@ namespace ts.Completions {
 
             const type = typeChecker.getTypeAtLocation(containerSwitch.expression);
             if (type && type.symbol && type.symbol.flags & SymbolFlags.Enum && type !== typeChecker.getAnyType()) {
+                const symbol = skipAlias(type.symbol, typeChecker);
+                const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                if (!exportedSymbols.length) {
+                    symbols.push(symbol);
+                    return;
+                }
+
                 const seens = new Set<number>();
                 containerSwitch.caseBlock.clauses.forEach(clause => {
                     if (isDefaultClause(clause)) {
@@ -1195,8 +1202,6 @@ namespace ts.Completions {
                     }
                 });
 
-                const symbol = skipAlias(type.symbol, typeChecker);
-                const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                 for (const exportedSymbol of exportedSymbols) {
                     if (seens.has(getSymbolId(exportedSymbol))) {
                         continue;

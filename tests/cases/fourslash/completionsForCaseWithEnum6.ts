@@ -13,12 +13,8 @@
 
 verify.completions({
     marker: ["1", "2"],
-    includes: [{
-        name: "E.A", insertText: "E.A"
-    }, {
-        name: "E.B", insertText: "E.B"
-    }],
+    excludes: ["E.A", "E.B"],
     preferences: {
-        includeInsertTextCompletions: true
+        includeInsertTextCompletions: false
     }
 });
