@@ -11,10 +11,19 @@ namespace ts.codefix {
         Diagnostics.Override_modifier_must_be_used_with_pedanticOverride_compiler_option.code
     ];
 
-    const errorCodeFixIdMap = {
-        [Diagnostics.Class_member_must_have_override_modifier_because_it_s_override_the_base_class_0.code]: fixAddOverrideId,
-        [Diagnostics.Class_member_cannot_have_override_modifier_because_class_0_does_not_extended_another_class.code]: fixRemoveOverrideId,
-        [Diagnostics.Class_member_cannot_have_override_modifier_because_it_s_not_existed_in_the_base_class_0.code]: fixRemoveOverrideId,
+    const errorCodeFixIdMap: Record<number, [DiagnosticMessage, string | undefined, DiagnosticMessage | undefined]> = {
+        [Diagnostics.Class_member_must_have_override_modifier_because_it_s_override_the_base_class_0.code]: [
+            Diagnostics.Add_override_modifier, fixAddOverrideId, Diagnostics.Add_all_override_modifier,
+        ],
+        [Diagnostics.Class_member_cannot_have_override_modifier_because_class_0_does_not_extended_another_class.code]: [
+            Diagnostics.Remove_override_modifier, fixRemoveOverrideId, Diagnostics.Remove_all_override_modifier
+        ],
+        [Diagnostics.Class_member_cannot_have_override_modifier_because_it_s_not_existed_in_the_base_class_0.code]: [
+            Diagnostics.Remove_override_modifier, fixRemoveOverrideId, Diagnostics.Remove_all_override_modifier
+        ],
+        [Diagnostics.Override_modifier_must_be_used_with_pedanticOverride_compiler_option.code]: [
+            Diagnostics.Enable_the_pedanticOverride_flag_in_your_configuration_file, undefined, undefined
+        ]
     };
 
     registerCodeFix({
@@ -22,8 +31,11 @@ namespace ts.codefix {
         getCodeActions: context => {
             const { errorCode, span } = context;
 
-            const [changeFactory, descriptions, fixId, fixAllDescriptions] = dispatchChanges(context, errorCode, span.start);
-            const changes = textChanges.ChangeTracker.with(context, changeFactory);
+            const info = errorCodeFixIdMap[errorCode];
+            if (!info) return emptyArray;
+
+            const [ descriptions, fixId, fixAllDescriptions ] = info;
+            const changes = textChanges.ChangeTracker.with(context, changes => dispatchChanges(changes, context, errorCode, span.start));
 
             return [
                 createCodeFixActionMaybeFixAll(fixName, changes, descriptions, fixId, fixAllDescriptions)
@@ -33,47 +45,28 @@ namespace ts.codefix {
         getAllCodeActions: context =>
             codeFixAll(context, errorCodes, (changes, diag) => {
                 const { code, start } = diag;
-                if (errorCodeFixIdMap[code] !== context.fixId) {
+                const info = errorCodeFixIdMap[code];
+                if (!info || info[1] !== context.fixId) {
                     return;
                 }
 
-                const [changeFactory] = dispatchChanges(context, code, start);
-                changeFactory(changes);
+                dispatchChanges(changes, context, code, start);
             })
     });
 
     function dispatchChanges(
+        changeTracker: textChanges.ChangeTracker,
         context: CodeFixContext | CodeFixAllContext,
         errorCode: number,
-        pos: number): [
-            changeFactory: (changeTracker: textChanges.ChangeTracker) => void,
-            descriptions: DiagnosticMessage,
-            fixId: string | undefined,
-            fixAllDescriptions: DiagnosticMessage | undefined
-        ] {
+        pos: number) {
         switch (errorCode) {
             case Diagnostics.Class_member_must_have_override_modifier_because_it_s_override_the_base_class_0.code:
-                return [
-                    (changeTracker: textChanges.ChangeTracker) => doAddOverrideModifierChange(changeTracker, context.sourceFile, pos),
-                    Diagnostics.Add_override_modifier,
-                    fixAddOverrideId,
-                    Diagnostics.Add_all_override_modifier,
-                ];
+                return doAddOverrideModifierChange(changeTracker, context.sourceFile, pos);
             case Diagnostics.Class_member_cannot_have_override_modifier_because_class_0_does_not_extended_another_class.code:
             case Diagnostics.Class_member_cannot_have_override_modifier_because_it_s_not_existed_in_the_base_class_0.code:
-                return [
-                    (changeTracker: textChanges.ChangeTracker) => doRemoveOverrideModifierChange(changeTracker, context.sourceFile, pos),
-                    Diagnostics.Remove_override_modifier,
-                    fixRemoveOverrideId,
-                    Diagnostics.Remove_all_override_modifier
-                ];
+                return doRemoveOverrideModifierChange(changeTracker, context.sourceFile, pos);
             case Diagnostics.Override_modifier_must_be_used_with_pedanticOverride_compiler_option.code:
-                return [
-                    (changeTracker: textChanges.ChangeTracker) => doAddFlagChange(changeTracker, context.program),
-                    Diagnostics.Enable_the_pedanticOverride_flag_in_your_configuration_file,
-                    undefined,
-                    undefined
-                ];
+                return doAddFlagChange(changeTracker, context.program);
             default:
                 Debug.fail("Unexpected error code: " + errorCode);
         }
