@@ -29,6 +29,6 @@ jobs:
         git config user.name "TypeScript Bot"
         git fetch origin master
         git merge origin/master --no-ff
-        npm install
+        npm ci
         npm test
         git push
