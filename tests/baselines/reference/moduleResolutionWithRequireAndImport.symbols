@@ -1,0 +1,24 @@
+=== /index.ts ===
+declare const require: any;
+>require : Symbol(require, Decl(index.ts, 0, 13))
+
+const a: typeof import('./other') = null as any
+>a : Symbol(a, Decl(index.ts, 1, 5))
+
+function foo() {
+>foo : Symbol(foo, Decl(index.ts, 1, 47))
+
+    const a = require('../outside-of-rootdir/foo');
+>a : Symbol(a, Decl(index.ts, 3, 9))
+>require : Symbol(require, Decl(index.ts, 0, 13))
+
+    const { other }: { other: string } = require('./other');
+>other : Symbol(other, Decl(index.ts, 4, 11))
+>other : Symbol(other, Decl(index.ts, 4, 22))
+>require : Symbol(require, Decl(index.ts, 0, 13))
+}
+
+=== /other.ts ===
+export const other = 123;
+>other : Symbol(other, Decl(other.ts, 0, 12))
+

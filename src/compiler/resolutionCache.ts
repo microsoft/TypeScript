@@ -455,7 +455,7 @@ namespace ts {
                 getResolutionWithResolvedFileName: getResolvedModule,
                 shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
                 reusedNames,
-                logChanges: logChangesWhenResolvingModule
+                logChanges: logChangesWhenResolvingModule,
             });
         }
 
@@ -546,7 +546,7 @@ namespace ts {
             }
             else {
                 resolution.refCount = 1;
-                Debug.assert(resolution.files === undefined);
+                Debug.assert(length(resolution.files) === 0); // This resolution shouldnt be referenced by any file yet
                 if (isExternalModuleNameRelative(name)) {
                     watchFailedLookupLocationOfResolution(resolution);
                 }
@@ -724,7 +724,7 @@ namespace ts {
                 for (const containingFilePath of Debug.assertDefined(resolution.files)) {
                     (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = new Set())).add(containingFilePath);
                     // When its a file with inferred types resolution, invalidate type reference directive resolution
-                    hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || containingFilePath.endsWith(inferredTypesContainingFile);
+                    hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || endsWith(containingFilePath, inferredTypesContainingFile);
                 }
             }
             return invalidated;

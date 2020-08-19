@@ -1,0 +1,12 @@
+=== tests/cases/conformance/jsdoc/declarations/bug38550.js ===
+export class Clazz {
+>Clazz : Symbol(Clazz, Decl(bug38550.js, 0, 0))
+
+  /**
+   * @param {function(this:Object, ...*):*} functionDeclaration
+   */
+  method(functionDeclaration) {}
+>method : Symbol(Clazz.method, Decl(bug38550.js, 0, 20))
+>functionDeclaration : Symbol(functionDeclaration, Decl(bug38550.js, 4, 9))
+}
+

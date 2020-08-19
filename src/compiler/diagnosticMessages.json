@@ -659,7 +659,7 @@
         "category": "Error",
         "code": 1207
     },
-    "All files must be modules when the '--isolatedModules' flag is provided.": {
+    "'{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.": {
         "category": "Error",
         "code": 1208
     },
@@ -1163,6 +1163,22 @@
     "A 'new' expression with type arguments must always be followed by a parenthesized argument list.": {
         "category": "Error",
         "code": 1384
+    },
+    "Function type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1385
+    },
+    "Constructor type notation must be parenthesized when used in a union type.": {
+        "category": "Error",
+        "code": 1386
+    },
+    "Function type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1387
+    },
+    "Constructor type notation must be parenthesized when used in an intersection type.": {
+        "category": "Error",
+        "code": 1388
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2996,6 +3012,11 @@
         "category": "Error",
         "code": 2791
     },
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+        "category": "Error",
+        "code": 2792
+    },
+
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3040,6 +3061,10 @@
     "'extends' clause of exported class '{0}' has or is using private name '{1}'.": {
         "category": "Error",
         "code": 4020
+    },
+    "'extends' clause of exported class has or is using private name '{0}'.": {
+        "category": "Error",
+        "code": 4021
     },
     "'extends' clause of exported interface '{0}' has or is using private name '{1}'.": {
         "category": "Error",
@@ -4464,6 +4489,14 @@
     "This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?": {
         "category": "Error",
         "code": 6234
+    },
+    "Disable loading referenced projects.": {
+        "category": "Message",
+        "code": 6235
+    },
+    "Arguments for the rest parameter '{0}' were not provided.": {
+        "category": "Error",
+        "code": 6236
     },
 
     "Projects to reference": {

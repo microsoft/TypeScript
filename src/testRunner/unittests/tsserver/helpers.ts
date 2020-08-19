@@ -449,11 +449,11 @@ namespace ts.projectSystem {
     }
 
     export function checkProjectActualFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
     }
 
     export function checkProjectRootFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
     export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {

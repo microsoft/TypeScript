@@ -1,8 +1,7 @@
 Exit Code: 2
 Standard output:
-lib/ContextModule.js(346,32): error TS2345: Argument of type 'Pick<ContextOptions & ContextModuleOptionsExtras, "include" | "regExp" | "chunkName" | "referencedExports" | "mode" | "recursive" | ... 7 more ... | "resourceFragment">' is not assignable to parameter of type 'ContextOptions & ContextModuleOptionsExtras'.
-  Property 'resolveOptions' is missing in type 'Pick<ContextOptions & ContextModuleOptionsExtras, "include" | "regExp" | "chunkName" | "referencedExports" | "mode" | "recursive" | ... 7 more ... | "resourceFragment">' but required in type 'ContextModuleOptionsExtras'.
-lib/dependencies/HarmonyExportImportedSpecifierDependency.js(86,37): error TS1016: A required parameter cannot follow an optional parameter.
+lib/ExportsInfo.js(949,28): error TS1016: A required parameter cannot follow an optional parameter.
+lib/dependencies/HarmonyExportImportedSpecifierDependency.js(94,37): error TS1016: A required parameter cannot follow an optional parameter.
 
 
 

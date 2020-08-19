@@ -154,6 +154,19 @@ namespace Harness.LanguageService {
             return fileNames;
         }
 
+        public realpath(path: string): string {
+            try {
+                return this.vfs.realpathSync(path);
+            }
+            catch {
+                return path;
+            }
+        }
+
+        public directoryExists(path: string) {
+            return this.vfs.statSync(path).isDirectory();
+        }
+
         public getScriptInfo(fileName: string): ScriptInfo | undefined {
             return this.scriptInfos.get(vpath.resolve(this.vfs.cwd(), fileName));
         }
@@ -720,8 +733,13 @@ namespace Harness.LanguageService {
                 fileName = Compiler.defaultLibFileName;
             }
 
-            const snapshot = this.host.getScriptSnapshot(fileName);
+            // System FS would follow symlinks, even though snapshots are stored by original file name
+            const snapshot = this.host.getScriptSnapshot(fileName) || this.host.getScriptSnapshot(this.realpath(fileName));
             return snapshot && ts.getSnapshotText(snapshot);
+        }
+
+        realpath(path: string) {
+            return this.host.realpath(path);
         }
 
         writeFile = ts.noop;
@@ -731,7 +749,7 @@ namespace Harness.LanguageService {
         }
 
         fileExists(path: string): boolean {
-            return !!this.host.getScriptSnapshot(path);
+            return this.host.fileExists(path);
         }
 
         directoryExists(): boolean {

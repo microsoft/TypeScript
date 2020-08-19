@@ -1,22 +1,33 @@
 namespace ts.projectSystem {
-    describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
+    describe("unittests:: tsserver:: Semantic operations on PartialSemantic server", () => {
         function setup() {
             const file1: File = {
                 path: `${tscWatch.projectRoot}/a.ts`,
-                content: `import { y } from "./b";
+                content: `import { y, cc } from "./b";
+import { something } from "something";
 class c { prop = "hello"; foo() { return this.prop; } }`
             };
             const file2: File = {
                 path: `${tscWatch.projectRoot}/b.ts`,
-                content: "export const y = 10;"
+                content: `export { cc } from "./c";
+import { something } from "something";
+                export const y = 10;`
+            };
+            const file3: File = {
+                path: `${tscWatch.projectRoot}/c.ts`,
+                content: `export const cc = 10;`
+            };
+            const something: File = {
+                path: `${tscWatch.projectRoot}/node_modules/something/index.d.ts`,
+                content: "export const something = 10;"
             };
             const configFile: File = {
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: "{}"
             };
-            const host = createServerHost([file1, file2, libFile, configFile]);
-            const session = createSession(host, { syntaxOnly: true, useSingleInferredProject: true });
-            return { host, session, file1, file2, configFile };
+            const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
+            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
+            return { host, session, file1, file2, file3, something, configFile };
         }
 
         it("open files are added to inferred project even if config file is present and semantic operations succeed", () => {
@@ -25,7 +36,7 @@ class c { prop = "hello"; foo() { return this.prop; } }`
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, [libFile.path, file1.path]); // Import is not resolved
+            checkProjectActualFiles(project, [libFile.path, file1.path]); // no imports are resolved
             verifyCompletions();
 
             openFilesForSession([file2], session);
@@ -79,7 +90,7 @@ class c { prop = "hello"; foo() { return this.prop; } }`
                 session.executeCommand(request);
             }
             catch (e) {
-                assert.equal(e.message, `Request: semanticDiagnosticsSync not allowed on syntaxServer`);
+                assert.equal(e.message, `Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.PartialSemantic`);
                 hasException = true;
             }
             assert.isTrue(hasException);
@@ -90,7 +101,7 @@ class c { prop = "hello"; foo() { return this.prop; } }`
                 project.getLanguageService().getSemanticDiagnostics(file1.path);
             }
             catch (e) {
-                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed on syntaxServer`);
+                assert.equal(e.message, `LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.PartialSemantic`);
                 hasException = true;
             }
             assert.isTrue(hasException);
@@ -108,6 +119,58 @@ class c { prop = "hello"; foo() { return this.prop; } }`
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
             checkProjectActualFiles(project, [libFile.path, file1.path]); // Should not contain atTypes
+        });
+
+        it("should not include referenced files from unopened files", () => {
+            const file1: File = {
+                path: `${tscWatch.projectRoot}/a.ts`,
+                content: `///<reference path="b.ts"/>
+///<reference path="${tscWatch.projectRoot}/node_modules/something/index.d.ts"/>
+function fooA() { }`
+            };
+            const file2: File = {
+                path: `${tscWatch.projectRoot}/b.ts`,
+                content: `///<reference path="./c.ts"/>
+///<reference path="${tscWatch.projectRoot}/node_modules/something/index.d.ts"/>
+function fooB() { }`
+            };
+            const file3: File = {
+                path: `${tscWatch.projectRoot}/c.ts`,
+                content: `function fooC() { }`
+            };
+            const something: File = {
+                path: `${tscWatch.projectRoot}/node_modules/something/index.d.ts`,
+                content: "function something() {}"
+            };
+            const configFile: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: "{}"
+            };
+            const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
+            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
+            const service = session.getProjectService();
+            openFilesForSession([file1], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [libFile.path, file1.path]); // no resolve
+        });
+
+        it("should not crash when external module name resolution is reused", () => {
+            const { session, file1, file2, file3 } = setup();
+            const service = session.getProjectService();
+            openFilesForSession([file1], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [libFile.path, file1.path]);
+
+            // Close the file that contains non relative external module name and open some file that doesnt have non relative external module import
+            closeFilesForSession([file1], session);
+            openFilesForSession([file3], session);
+            checkProjectActualFiles(project, [libFile.path, file3.path]);
+
+            // Open file with non relative external module name
+            openFilesForSession([file2], session);
+            checkProjectActualFiles(project, [libFile.path, file2.path, file3.path]);
         });
     });
 }

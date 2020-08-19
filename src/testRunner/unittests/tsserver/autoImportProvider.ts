@@ -229,6 +229,26 @@ namespace ts.projectSystem {
             host.writeFile(packageJson.path, packageJson.content);
             assert.ok(projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         });
+
+        it("Does not create an auto import provider if there are too many dependencies", () => {
+            const createPackage = (i: number): File[] => ([
+                { path: `/node_modules/package${i}/package.json`, content: `{ "name": "package${i}" }` },
+                { path: `/node_modules/package${i}/index.d.ts`, content: `` }
+            ]);
+
+            const packages = [];
+            for (let i = 0; i < 11; i++) {
+                packages.push(createPackage(i));
+            }
+
+            const dependencies = packages.reduce((hash, p) => ({ ...hash, [JSON.parse(p[0].content).name]: "*" }), {});
+            const packageJson: File = { path: "/package.json", content: JSON.stringify(dependencies) };
+            const { projectService, session } = setup([ ...flatten(packages), indexTs, tsconfig, packageJson ]);
+
+            openFilesForSession([indexTs], session);
+            const project = projectService.configuredProjects.get(tsconfig.path)!;
+            assert.isUndefined(project.getPackageJsonAutoImportProvider());
+        });
     });
 
     describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {

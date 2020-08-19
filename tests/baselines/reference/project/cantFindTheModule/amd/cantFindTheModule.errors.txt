@@ -1,18 +1,18 @@
-decl.ts(1,26): error TS2307: Cannot find module './foo/bar.tx' or its corresponding type declarations.
-decl.ts(2,26): error TS2307: Cannot find module 'baz' or its corresponding type declarations.
-decl.ts(3,26): error TS2307: Cannot find module './baz' or its corresponding type declarations.
+decl.ts(1,26): error TS2792: Cannot find module './foo/bar.tx'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+decl.ts(2,26): error TS2792: Cannot find module 'baz'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+decl.ts(3,26): error TS2792: Cannot find module './baz'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
 
 ==== decl.ts (3 errors) ====
     import modErr  = require("./foo/bar.tx");
                              ~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module './foo/bar.tx' or its corresponding type declarations.
+!!! error TS2792: Cannot find module './foo/bar.tx'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     import modErr1 = require("baz");
                              ~~~~~
-!!! error TS2307: Cannot find module 'baz' or its corresponding type declarations.
+!!! error TS2792: Cannot find module 'baz'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     import modErr2 = require("./baz");
                              ~~~~~~~
-!!! error TS2307: Cannot find module './baz' or its corresponding type declarations.
+!!! error TS2792: Cannot find module './baz'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
     
     //import modErr1 = require("\bar");
     
