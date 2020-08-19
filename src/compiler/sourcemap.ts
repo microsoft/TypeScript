@@ -13,7 +13,6 @@ namespace ts {
         const rawSources: string[] = [];
         const sources: string[] = [];
         const sourceToSourceIndexMap = new Map<string, number>();
-        const fileNameToSourceIndexMap = new Map<string, number>();
         let sourcesContent: (string | null)[] | undefined;
 
         const names: string[] = [];
@@ -52,10 +51,6 @@ namespace ts {
 
         function addSource(fileName: string) {
             enter();
-            const sourceIndexByFileName = fileNameToSourceIndexMap.get(fileName);
-            if (sourceIndexByFileName !== undefined) {
-                return sourceIndexByFileName;
-            }
             const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
                 fileName,
                 host.getCurrentDirectory(),
@@ -69,7 +64,6 @@ namespace ts {
                 rawSources.push(fileName);
                 sourceToSourceIndexMap.set(source, sourceIndex);
             }
-            fileNameToSourceIndexMap.set(fileName, sourceIndex);
             exit();
             return sourceIndex;
         }
