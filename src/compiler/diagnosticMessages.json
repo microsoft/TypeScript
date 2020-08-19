@@ -3373,7 +3373,7 @@
         "category": "Error",
         "code": 4113
     },
-    "'Override' modifier must be used with 'pedanticOverride ' compiler option": {
+    "'Override' modifier must be used with 'pedanticOverride' compiler option": {
         "category": "Error",
         "code": 4114
     },
@@ -5862,6 +5862,26 @@
     "Can only convert logical AND access chains": {
         "category": "Message",
         "code": 95142
+    },
+    "Enable the '--pedanticOverride' flag in your configuration file": {
+        "category": "Message",
+        "code": 95143
+    },
+    "Add 'override' modifier": {
+        "category": "Message",
+        "code": 95144
+    },
+    "Remove 'override' modifier": {
+        "category": "Message",
+        "code": 95145
+    },
+    "Add all 'override' modifier": {
+        "category": "Message",
+        "code": 95146
+    },
+    "Remove all 'override' modifier": {
+        "category": "Message",
+        "code": 95147
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
