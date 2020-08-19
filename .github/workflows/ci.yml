@@ -30,7 +30,7 @@ jobs:
       run: |
         npm uninstall typescript --no-save
         npm uninstall tslint --no-save
-    - run:  npm install
+    - run:  npm ci
     - run:  npm update
 
     # Re: https://github.com/actions/setup-node/pull/125
@@ -45,4 +45,4 @@ jobs:
 
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration
-    
+
