@@ -19,7 +19,7 @@ jobs:
 
     - name: Configure git and update package-lock.json
       run: |
-        git config user.email "ts_bot@rcavanaugh.com"
+        git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
         npm install --package-lock-only
         git add -f package-lock.json
