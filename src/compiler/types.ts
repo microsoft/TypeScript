@@ -4907,9 +4907,6 @@ namespace ts {
         /* @internal */ checker: TypeChecker;
         symbol: Symbol;                  // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
-        aliasSymbol?: Symbol;            // Alias associated with type
-        aliasTypeArguments?: readonly Type[]; // Alias type arguments (if any)
-        /* @internal */ aliasTypeArgumentsContainsMarker?: boolean; // Alias type arguments (if any)
         /* @internal */
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
         /* @internal */
@@ -5295,8 +5292,6 @@ namespace ts {
         inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
         instantiations?: Map<Type>;
-        aliasSymbol?: Symbol;
-        aliasTypeArguments?: Type[];
     }
 
     // T extends U ? X : Y (TypeFlags.Conditional)
@@ -8063,5 +8058,25 @@ namespace ts {
     export interface PseudoBigInt {
         negative: boolean;
         base10Value: string;
+    }
+
+    export type TypeAlias = AliasReference | AliasKeyof;
+
+    export enum AliasKind {
+        Reference,
+        Keyof, // Unimplemented
+    }
+
+    export interface AliasReference {
+        kind: AliasKind.Reference;
+        symbol: Symbol;
+        typeArguments?: readonly Type[];
+        /* @internal */
+        typeArgumentsContainMarker?: boolean;
+    }
+
+    export interface AliasKeyof {
+        kind: AliasKind.Keyof;
+        type: Type;
     }
 }
